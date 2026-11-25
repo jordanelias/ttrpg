@@ -35,7 +35,7 @@ def test_head_of_valorsmark_is_the_king_and_the_other_seated_heads_are_their_sea
     assert faction_q.head(w, "fac_hafenmark") == "p_npc_050"
     assert faction_q.head(w, "fac_varfell") == "p_npc_052"
     assert faction_q.head(w, "fac_church_of_solmund") == "p_npc_021"
-    assert len(HEAD_SEAT) == 4 and set(HEAD_SEAT) <= set(FACTIONS)
+    assert len(HEAD_SEAT) == 6 and set(HEAD_SEAT) <= set(FACTIONS)
 
 
 def test_head_controls_a_faction_without_a_head_seat_is_none_and_a_vacant_seat_has_no_head():

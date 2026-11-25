@@ -693,7 +693,7 @@ def test_a_move_reads_each_record_s_about_key_and_no_other():
         "proposition": "prop_x", "members": [], "holdings": [], "seats": [], "head": None})
     w.records["rec_cover"] = Record("rec_cover", "S", "cover", subject_matter={"terms": "S3"})
     w.records["rec_disp"] = Record("rec_disp", "S", "dispensation", subject_matter={"terms": "S2", "to": "p_low",
-                                                                                     "at": "S"})
+                                                                                     "at": "S", "force": None})
     assert ABOUT_KEYS["faction_sheet"] != "terms" and "cover" not in ABOUT_KEYS
     rd = W._StrifeReading(w)
     got = {rid: W._move_referents(rd, Event(f"e_{rid}", "record.seized",

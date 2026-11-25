@@ -190,7 +190,9 @@ rosters:
       load rather than letting one reading silently shadow the other.
     values:
       text:         []
-      dispensation: [terms, to, at]
+      # `force` (B21.56, BIND_D commit D3 edit 9): how strongly the writ binds, the band its `issue` reached, written by
+      # `loop/effects_information.py::_eff_issue` alone; `None` on a covenant's instrument (`_eff_covenant`, undrawn).
+      dispensation: [terms, to, at, force]
       petition:     [terms, to, from]
       works:        [plan, at]
       faction_sheet: [proposition, members, holdings, seats, head]
@@ -603,10 +605,10 @@ rosters:
       (`queries/world_q.py::holdings_to_found` -- a rung on one of his own live `hold` edges that
       `founds_over` admits through a seat of his granting an act `establish` is eligible by,
       `data/verbs.py::FOUNDING_REMIT_ACTS`: held, in that seat's purview, below its rank, the seat on its
-      parent), stamped directly after the larders and never twice; `establish` declares the class, so its
-      `subject` binds the holding `loop/predicates.py::office_founded_by` derives the office from. Shared, as
-      above: the other `Rung` rows form on a stamped holding too, and `establish` on a place named or a
-      larder; the fold disposes. `RUNG_REMIT_ACTS` gains `confer`.
+      parent), stamped directly after the larders and never twice. Since B21.08 (VB-A) only a holding whose office is not
+      yet founded is stamped, and it is stamped twice, as `Rung` (the other `Rung` rows form on it, and the fold disposes)
+      and as `Holding` (below), the class `establish` alone declares, so `establish` forms on no place named, no larder
+      and no founded holding. `RUNG_REMIT_ACTS` no longer holds `confer`.
       v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
       and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
       occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
@@ -652,7 +654,9 @@ rosters:
       question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only).
       `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as
       `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337).
-    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant]
+      `Holding` (VB-A): a rung the person holds and may found an office over, not yet founded (`world_q.holdings_to_found`); not a
+      collection, stamped explicitly; `establish` declares it.
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
@@ -1451,6 +1455,7 @@ rosters:
       oblige:           {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write"}
       convene:          {why: "a sitting is scheduled; what it decides is its members' acts [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       dispatch:         {why: "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      comply:           {why: "`brute: own` -- the man's own going: he moves his own legs and no one else's (B21.57, A-24) [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       petition:         {why: "filing; the addressee's answer is his act"}
       give:             {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
       transfer:         {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
@@ -1463,7 +1468,7 @@ rosters:
       forgive:          {why: "a person releases his own grievance; nothing of anyone else's moves [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       "tie / knot":     {why: "a person records a tie he holds himself [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       open_case:        {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
-      issue:            {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
+      # `issue` left this class at B21.56 (BIND_D commit D3): it is drawn (`contests: "a standing"`), and a row is exactly one class.
       destroy_record:   {why: "`brute: own` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
 
   # B07.01 (18-A item 1): THE `Person` CELLS A `bookkeeping` ROW MAY NOT WRITE WITHOUT `brute:` -- another's body or being.
@@ -1487,10 +1492,6 @@ rosters:
       only in `_E`; `release` in `_A`, not `_B`); each other verb's file is the one naming it most]
     keys: [verb_table]
     values:
-      confer:    "14_VERBS_BINDING_C_turnover"
-      revoke:    "14_VERBS_BINDING_C_turnover"
-      succeed:   "14_VERBS_BINDING_C_turnover"
-      establish: "14_VERBS_BINDING_A_formation"
       pardon:    "14_VERBS_BINDING_B_sittings"
       release:   "14_VERBS_BINDING_A_formation"
       surrender: "14_VERBS_BINDING_E_war_seats"
@@ -1729,16 +1730,25 @@ rosters:
       is opposite (never absent); `standard` -- what the room demands (OBS §2 member 3; B05.21): for an act a bench hears on a
       docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed
       under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act
-      opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `regard` -- the
+      opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `rank_gap` -- how
+      far the person acted on or for stands above the actor's exercised seat (member 6; B21.09, landed with its first reader,
+      `establish`): `rank_step x` the `rung_kinds` steps from the rung of the seat `Act.via` names up to the subject's (a rung's own
+      kind; a person's highest held seat's rung), 0 where the subject stands at or below it; `regard` -- the
       counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he
       holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is
       leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS §2 member 8; B05.17): a bench that regards the speaker
       ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears,
       0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of
       `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships,
-      so it stands at 0). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
-      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes` and `regard`
-      are listed only where they weigh, so a world whose three are at their control sizes carries the terms it carried before them
+      so it stands at 0); `cross_chain` -- a conferral across chains of seats (OBS §2 member 29; B21.61, `confer`'s): `cross_chain_step x` 1 where the
+      seat the act names and the seat it is exercised through are of different factions (`gate.across_chains`; the seat is read off a prize row
+      saying its act names one, `loop/sides.py::seat_named_by`); `faction_power` -- the power of the holder's faction against the host's (B21.69,
+      `IS-B3-FA-07`, A-105; the act is `revoke`, a reduction of a sitting holder's grant included, or any act whose prize says it names a seat and is opposed
+      by that seat's holder): `faction_power_step x` 1 where the faction the live holder coheres under outweighs the faction of the seat the act is
+      exercised through (the band above 1 of `faction_q.weight` of the one over the other, read as a comparison so a faction with no members divides
+      nothing), and nothing where it is the same faction or the weaker (`sigma.py::_faction_power_of`). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
+      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap`, `regard`,
+      `cross_chain` and `faction_power` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them
       (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
       B24p.05: EVERY MEMBER IS BOUND (`bound:` below) to ONE reader, never both and never neither. `host` -- read by its function in
@@ -1751,8 +1761,8 @@ rosters:
       module's `TERMS` lacks. `standard` stays `host`: inside a proceeding the venue's standard is Grace's `esteem` on the leverage, never
       an obstacle (B24p.19 omits it for an act on the `proceeds=` path). No leverage source is module-bound.
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, regard, reception, capability, weary, standing, press, gravity]
-    # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after `capability`, so the proceeding's terms follow the
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity]
+    # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after the host's members, so the proceeding's terms follow the
     # host's in composition order; revert: the four rows and their `bound:` cells.]
     bound:
       even: host
@@ -1760,9 +1770,12 @@ rosters:
       opposition: host
       standard: host
       stakes: host
+      rank_gap: host
       regard: host
       reception: host
       capability: host
+      cross_chain: host
+      faction_power: host
       weary: module
       standing: module
       press: module
@@ -1880,13 +1893,14 @@ rosters:
         heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
       # B07.04 (`U5c_VERBS_residue` §2 edit 3): the two governance prizes, with the room each is heard in (`seam/wrappers/sigma.py::audience_of`'s table
-      # keyed by room). No verb row names either yet: a row naming one lands with its verb (`a seat`: confer, revoke, succeed, establish; `a holding`: surrender).
+      # keyed by room). A row naming one lands with its verb (`a seat`: `establish` since B21.09, `confer`, `revoke` and `succeed` since B21.14; `a holding`: surrender).
       "a seat":
         module:   "social_contest"
         person_inputs: "pool"
         provider: "social_contest"   # as `a proposition`'s
         module_entry: "social_contest.roll"   # as `a proposition`'s
         heard_by: "seat_body"   # the members of the body the act's seat belongs to, else the seated persons at that seat's rung (`audience_of`).
+        opposed_by: "holder"   # B21.14 (BIND_C C3): where the act names a seat (`loop/predicates.py::office_named_by`), who stands opposite is that seat's live holder, nobody where it is vacant; an act naming no seat (`establish`'s holding) keeps its own opponent operand. Read by `loop/sides.py::sides_of` alone (`manifest/registry.py::_check_opposed_by`).
         cite:     "U5c_VERBS_residue §2 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
       "a holding":
         module:   "social_contest"
@@ -2194,13 +2208,22 @@ rosters:
     from_names: faction   # via engine/substrate/names.py. Edit the naming index, not here.
     # CR-86 (ED-IN-0342): the seat whose live holder heads the faction (`queries/faction_q.py::head`). Keyed by the
     # canonical faction name (Valorsmark is the Crown's: "Crown" is its alias). A faction absent here has no head
-    # seat authored (the Löwenritter, the Guilds, the Restoration Movement, Altonia, Schoenland) and `head` is None.
+    # seat authored and `head` is None. HEADLESS, three: the Guilds by design (a council, its seats co-equal), and
+    # Altonia and Schoenland, which are WR's content (a foreign faction's head is authored with its seats, not here).
     # [ASSUMPTION; medium; Jordan to correct; revert: the Church's head a Holy See seat if one is authored]
     head_seat:
       "Valorsmark": off_king
       "Hafenmark": off_duchess_hafenmark
       "Varfell": off_duke_varfell
       "Church of Solmund": off_confessor
+      "Löwenritter": off_grand_master
+      "Restoration Movement": off_restoration_leader
+    # B21.63 (`16_PESSIMIST_FA_B` edit 3): THE EXCEPTIONS to the default "two different factions are incompatible" -- `faction name:
+    # [faction names]`, a pair listed in either direction may be held by one person. The RULE is `data/rosters.py::factions_compatible`
+    # (stated once, in code); this key carries no rule and ships EMPTY: no pair is authored compatible. Read by `queries/world_q.py::admitted_to`,
+    # which will not admit into a faction a person who belongs to an incompatible one (he leaves it first: his own `release`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: delete this key and `COMPATIBLE_WITH`, and any admitted person may belong to any number]
+    compatible_with: {}
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
@@ -2539,15 +2562,35 @@ rosters:
     source: >-
       B11 lane A (the duel chain's third link; `14_VERBS_PHYSICAL_A_custody_and_force.md` A4's *heard of*).
     note: >-
-      THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a list of `record_kinds` members. WITNESS deposits a
+      THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a map from a `record_kinds` member to the verbs whose mint
+      of that kind is put to its addressee. WITNESS deposits a
       document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the
       document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads
       what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the
       addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him
       in person; without this deposit `accept` could not tell it from any other document. A writ or a petition
-      is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import for a member that is no record
-      kind. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]
-    values: [challenge]
+      is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import (`data/rosters.py::
+      check_record_verb_rosters`, `data/verbs.py::_check_record_verb_minting`) for a key that is no record kind, a key
+      whose content keys hold no addressee key, a verb that is no `verb_table.yaml` row or whose effect does not mint
+      that kind, and a kind also in `proclaimed`. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.]
+    values:
+      challenge: [challenge]
+
+  proclaimed:
+    source: >-
+      B21.17 (`06_FA_decree_binds` edit 1; ruling A-21; D-U1-05's sibling-list precedent, `covert_kinds`, `forgeable_kinds`).
+    note: >-
+      THE RECORD KINDS WHOSE MINT IS MADE PUBLIC -- `read_to_addressee`'s shape (a `record_kinds` member to the verbs whose mint
+      of it is covered), the other property. A-21 rules a decree proclaimed: its content reaches EVERYONE who learns of the mint,
+      addressee or not, where `read_to_addressee` reaches only the addressee. The verb qualifier is the point: `covenant`
+      also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in
+      person), so `dispensation` is carried for `issue` and, from B21.57, `dispatch` (an order is a decree to the man it sends,
+      `_eff_dispatch`), and for `covenant` not at all. No record kind is in both rosters (refused at import), and no
+      `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Read by
+      `loop/witness.py::proclaimed` (through `addressee_reads`, since B21.18). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium;
+      Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]
+    values:
+      dispensation: [issue, dispatch]
 
   record_sourced_operands:
     source: >-
@@ -2821,6 +2864,38 @@ rosters:
       pairs at seeds 0-2, 243 of them at lap 0.
     values: [forgive]
 
+  command_declines:
+    source: >-
+      B21.55 (`14_VERBS_BINDING_D` commit D2, A-22 *command*; `16_PESSIMIST_FA_C` edits 1-3): a seat's writ or order reaches only the
+      persons it commands (`queries/world_q.py::commands`, the one body), and a person forms the act only on a man he can read as
+      commanded.
+    note: >-
+      WHICH UNTYPED VERBS FORM ONLY ON A `subject` THE ACTOR READS AS COMMANDED -- a list of verbs. A TYPED row says it in its cell (a
+      `basis` conjunct under the `command` rule: `issue`'s `to`, which `VerbRow.commanded_operand` reads off the cell), so this roster
+      names only a row no cell can carry: `dispatch`, whose predicate (`loop/predicates.py::_req_dispatch`) asks the same
+      `world_q.commands` in the fold. Read in `decision/options.py::operand_bags`, person-side and World-free (AX-2), against
+      `queries/person_q.py::commanded_read` -- what his own ledger names. THE ROSTER NARROWS FORMATION AND WIDENS NOTHING, and `commands` still decides at the fold: what he cannot read is refused there when formed, and an unseated, unsworn resident the fold would admit is never formed (`person_q.py::commanded_read`, limit 3). ONE LOADER, `data/verbs.py::COMMAND_DECLINES`,
+      refused at import when a member names a verb the table lacks, a typed row, or a row whose `referent_class` is not `Person`.
+      [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and `operand_bags` fans `dispatch` over every referent again.]
+    values: [dispatch]
+
+  write_optional:
+    source: >-
+      B21.57 (`IS-B3-FA-05`, CP-T09-08; ruling A-24 -- *the man's going is his own answer*): `comply` is the act that relocates the man
+      a `dispatch` ordered, and it is also the answer to every other writ, which names nothing to perform.
+    note: >-
+      WHICH VERBS MAY LAWFULLY WRITE NOTHING, AND WHAT THEY EMIT WHEN THEY DO -- a map `verb: [Event kind, ...]`. A writing row whose
+      effect declines (`NO_CHANGE`) is REFUSED at the fold (`loop/resolve.py::_fold`, F9: a success Event for a write that did not
+      happen is `ID-9`); a verb listed here is the one kind of row whose decline is not a failure, because the act it is also is
+      answered without a write: `comply` on a writ that names no place is the answer given, `compliance.given`, with nothing to go
+      to. Read in `_fold` beside the `NoOpReceipt` it catches, which then emits exactly the kinds listed (never the kinds the write
+      earns, which did not happen). ONE LOADER, `data/verbs.py::WRITE_OPTIONAL`, refused at import when a member names a verb the
+      table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit.
+      [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused
+      `compliance.impossible`, and `comply`'s write is `[]` again.]
+    values:
+      comply: [compliance.given]
+
   lie_verbs:
     source: >-
       v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.
@@ -2870,6 +2945,30 @@ rosters:
       it. Without the roster `succeed` forms on 196, 193 and 299 more (person, question) pairs at seeds 0-2, all at lap 1
       or later (none at lap 0, where no heir yet holds a title he was told of).
     values: [succeed]
+
+  own_edge_declines:
+    source: >-
+      VB-A (`proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_BINDING_A_formation.md`, commit A1; VRES §4 edits 1-2,
+      A-37); `own_title_declines`' shape (above), one carrier over: any live Tenure of a kind the row closes. (`own_hold_declines`,
+      the sibling the source names, was deleted at B10.61.)
+    note: >-
+      WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE IS TIED TO BY A LIVE EDGE OF A KIND THE ROW'S OWN
+      `domain:` NAMES. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the
+      objects of his own live Tenures whose kind is in the row's `domain:`. It NARROWS the referents a
+      question carries and widens nothing. ONE LOADER, `data/verbs.py::OWN_EDGE_DECLINES`, refused at
+      import when a member names a verb the table lacks, one that is not `own`-eligible, or one with no
+      `domain:`. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `release` forms on
+      every plain referent.]
+      `disposal:` IS THE SECOND DECLINE'S SOURCE (A-37: a party does not release an edge a bench imposed), `{verb: the Event
+      kind that verb's disposal edge earns}`. The FOLD half (`loop/predicates.py::_req_release`) refuses a release whose
+      edge's opening Event was caused by an Act of a verb named here, read through `state/attribution.py::causing_act`; the
+      FORMATION half drops a referent he holds a claim of that kind on, naming his own edge to it (the deposit is the generic
+      Event claim, `Claim(subject=<the edge's id>, predicate=<the kind>, value=True)`, `loop/witness.py`; it names the
+      judge and the edge, never the party, so the party is the edge's own owner). ONE LOADER, `data/verbs.py::DISPOSAL_EVENTS`,
+      refused at import for a verb the table lacks or a kind its row does not emit. The fold is the check and the formation
+      only spares the scene (a party who never heard the finding still forms the candidate and is refused).
+    values: [release]
+    disposal: {determine: matter.determined}
 
   held_edge_declines:
     source: >-
@@ -3380,19 +3479,26 @@ rosters:
       2026-10-14, *"designated heir is not a verb but a status or title. the heir still has to claim their
       throne"*. RS-29 ratified the title carrier (2026-10-14).
     note: >-
-      WHICH TITLE A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: title}`, both
-      `offices.yaml` row ids (realm seat ids equal their row ids since CP-T02-02). The title is an ordinary
-      seat, filled by `confer` (`off_heir`, `appointed`): designation is no verb. The seat is claimed by the
-      title's holder through `succeed` (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py::
-      _eff_succeed`, the write gate's claim basis), admitted only while the seat has no live `hold`; the claim
-      opens EVERY vacant seat this mapping gives the same title and closes the title, in one act. LIMITS: the
-      route only awards a vacant seat; the first valid claim wins; one title deep (the heir's own title,
-      closed by his claim, passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when
-      a key or value is no `offices.yaml` row, a key's row is not `inheritance`, or an `inheritance` row has
-      no key (a seat nobody could ever fill). `off_duke_valorsmark` gets its row at CP-T09-06 (B10-17), not
-      here. [ASSUMPTION; medium; Jordan to correct; revert: drop the row, `inheritance` and `succeed`'s row
-      back to its decline.]
-    values: {off_king: off_heir}
+      WHICH TITLES A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: [title, ...]}`, every
+      member an `offices.yaml` row id (realm seat ids equal their row ids since CP-T02-02); a bare string reads as
+      a one-title list. THE TITLES WHOSE HOLDERS MAY CLAIM THE SEAT; A LIST IS ELIGIBILITY, NEVER AN ORDER
+      (HAPPENINGS-B, A-19): who takes the seat is `succeed`'s draw, and the founding order is a head start, never
+      a right. A title is an ordinary seat, filled by `confer` (`off_heir`, `appointed`) or, for the two houses'
+      heads, by their own basis: designation is no verb. The seat is claimed by a title's holder through `succeed`
+      (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed`, the write gate's claim
+      basis), admitted only while the seat has no live `hold`; the claim opens EVERY vacant seat that lists a title
+      he holds and lays down each such title that exists only to pass a seat (`conferral: appointed`, an empty
+      remit -- `state/gate.py::passes_a_seat`), in one act: a duke who takes the throne keeps his duchy. LIMITS:
+      the route only awards a vacant seat; the first valid claim wins; one title deep (a title laid down by a
+      claim passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when a key or a member is
+      no `offices.yaml` row, a list is empty, a key's row is not `inheritance`, or an `inheritance` row has no key
+      (a seat nobody could ever fill). `off_duke_valorsmark`'s row (B21.51, `16_PESSIMIST_FA_A` edit 1) lists
+      `off_king`'s own titles: whoever wins the deed race for the throne takes the Crown's duchy in the same write.
+      [ASSUMPTION; medium; Jordan to correct; revert: the single title (`off_king: off_heir`), the claim closing
+      the heir's title alone; for the duchy, drop its row and its `conferral: inheritance`.]
+    values:
+      off_king: [off_heir, off_widow_regent, off_princess, off_duchess_hafenmark, off_duke_varfell]
+      off_duke_valorsmark: [off_heir, off_widow_regent, off_princess, off_duchess_hafenmark, off_duke_varfell]
 
   continuation_ties:
     source: >-
@@ -3403,8 +3509,8 @@ rosters:
     ordered: true
     note: >-
       WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed
-      ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holder of the
-      `successions` title of a seat the person holds (the registry above; one title per seat). `sworn`:
+      ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holders of the
+      `successions` titles of a seat the person holds (the registry above; the list's order is the offer's only). `sworn`:
       a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk
       `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH
       TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties`
@@ -3855,7 +3961,7 @@ rosters:
               detention.ended, ban.ended, record.given, transfer.made, record.destroyed, tenure.closed,
               tenure.opened, office.established, rung.founded, army.recruited, army.formed, army.assigned]
       never: [argument.lost, argument.won, commitment.ended, commitment.made, date.scheduled, duty.refused,
-              duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved]
+              duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved, travel.ordered]
       concludes: [army.arrived, succession.claimed, petition.filed, petition.carried, covenant.offered,
                   matter.determined, dispensation.issued, rung.ceded, record.given, transfer.made,
                   record.destroyed, tenure.opened]
@@ -4018,7 +4124,7 @@ rosters:
       are the proposal's reading of each source's docstring in `queries/world_q.py::questions_for`.]
     values:
       Office:      [tenure.closed, office.established]
-      Record:      [dispensation.issued, petition.filed, record.created]
+      Record:      [dispensation.issued, dispensation.ignored, petition.filed, record.created]   # B21.56: a writ exists at every band, so its Failure kind opens it too
       Person:      [body.changed]              # `wounded_with`
       Detainee:    [person.captured, arrest.made]
       Rung:        [stores.changed, rung.seized]
@@ -4062,6 +4168,14 @@ tables:
       # draw reads the body band alone.]
       - {use: mortal,            role: edge,      key: attr.body.endurance, side: actor, level: minor, per: mid}
       - {use: mortal,            role: edge,      key: healing,          side: ally,  level: minor, per: rank}
+
+  # B21.68 (`U5d_FA_owed_edits` §4, U1 ledger F-12): the political weight of a territory, `{territory id: weight}`, the geography file's ids
+  # (`T1` ...). Read by `queries/faction_q.py::weight`, which scales each member's `Person.weight` by the weight of the territory he LIVES in
+  # (`world_q.residence_of`); an absent key reads 1.0. Loaded and refused at import by `data/rosters.py::_load_territory_weight` (a key that is
+  # no territory of the geography file; a value that is not a positive number). It ships EMPTY: every territory reads 1.0, so the weight is the
+  # unweighted sum. [ASSUMPTION; Jordan to author: the numbers are content -- e.g. lowered for the southern Einhir territories; revert: none, an
+  # empty table is the control.] No `Rung` field carries it (`04` §B.3, "NEVER: any social aggregate" on a Rung).
+  territory_weight: {}
 
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."

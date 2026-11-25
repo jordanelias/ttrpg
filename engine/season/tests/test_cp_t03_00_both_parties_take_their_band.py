@@ -20,16 +20,19 @@ and its band is minted by the seam's own `degree_of`, not written into the test.
 """
 from __future__ import annotations
 
+import pytest
+
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..boot.realm import build_realm
+from ._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q, world_q
 from ..seam import Resolution, combat_degree, degree_of, party_degree
 from ..state.carriers import Act, Tenure
 from ._field_outcomes import field_outcome
 from ._scar_helpers import party_state
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_cp_t02_01_death_names_seats import CHURCH, CROWN, _march, _won_total
 
 ACTOR, SUBJECT = "p_low", "p_mid"      # `tiny_world`: co-located, so a `fight` between them is admitted
@@ -203,6 +206,7 @@ def test_a_felled_actors_own_death_reaches_the_co_located_subject_at_the_shipped
         "the co-located subject does not hold the attacker's death")
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the receipts each kind carries, at Success; the draw is C3's test
 def test_a_confer_onto_a_held_seat_puts_each_hold_on_its_own_kind_only():
     """Per-kind carriage beyond `fight`/`march` (item 4): a `confer` displacing an incumbent emits
     `tenure.opened` carrying ONLY the new hold and `tenure.closed` carrying ONLY the closed one. Before

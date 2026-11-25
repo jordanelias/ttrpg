@@ -115,6 +115,7 @@ def test_a_covenant_mints_a_dispensation_naming_the_proposition_held_by_its_make
     assert rec.kind == "dispensation"
     assert rec.subject_matter["terms"] == pid
     assert list(rec.subject_matter["to"]) == [OTHER]
+    assert rec.subject_matter["force"] is None, "B21.56: `force` is the issuing draw's band, written by `_eff_issue` alone"
     assert rec.rung == w.offices[SEAT].rung, "drawn up at the exercised seat's rung"
     assert rec.stages, "the term is wound (H-80's default for an act declaring none)"
     assert hold_force(w, "rec:cv_c").subject == DUKE, "the mint holds only the maker (K-54)"

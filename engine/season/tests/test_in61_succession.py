@@ -28,8 +28,13 @@ from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..state import gate as G
-from ..state.carriers import Act, Tenure
+from ..decision import assemble
+from ..decision.options import opening_set
+from ..queries import world_q
+from ..state.carriers import Act, Claim, Proposition, Tenure
 from ..state.ids import H
+from ._seat_at_success import seat_at_success, writ_at_success  # noqa: F401  (the fixtures; their reason is in their module)
+from .test_u7_remit import DUKE, PARTY, SEAT, _act as _u7_act, _fold, _world
 from .test_in61_heir_hears_vacancy import _holder, _one_season
 
 THRONE, TITLE, DUCHY = "off_king", "off_heir", "off_duke_valorsmark"
@@ -64,6 +69,7 @@ def _live_hold(w, who, seat):
 
 # --- THE CLAIM EXECUTES (the exit), AND THE TITLE IS SPENT BY IT ---------------------------------
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the claim's write, not its draw (C3's test)
 def test_the_heir_claims_the_vacant_throne_and_his_title_closes_in_the_same_act():
     """EXIT: the throne vacated, the title-holder's `succeed` opens the throne's `hold` for him, through
     the real fold. FALSIFIER: *the claimant's `off_heir` hold still live after the claim* -- asserted
@@ -98,8 +104,11 @@ def test_a_claim_by_anyone_but_the_title_holder_is_refused_at_the_fold_and_at_th
     refusing every opening)."""
     w, d, king, heir = _realm()
     _vacate_by_release(w, d, king)
+    # B21.16: THE LISTED TITLES' HOLDERS MAY NOW CLAIM TOO (HAPPENINGS-B), so "anyone but" is anyone who holds none of them
+    titled = {t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in SUCCESSIONS[THRONE]}
+    assert heir in titled and len(titled) >= 2, titled
     others = sorted({t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices
-                     and t.subject not in (heir,)})
+                     and t.subject not in titled})
     assert len(others) >= 5, others
     for i, p in enumerate(others):
         assert _act(w, d, p, "succeed", f"other{i}", subject=THRONE) == ["succession.refused"], p
@@ -148,23 +157,43 @@ def test_no_seat_may_confer_the_vacant_throne():
         off.conferral = "inheritance"
 
 
+def test_with_king_and_heir_removed_someone_may_claim_the_throne():
+    """B21.16 (`U5d_FA_owed_edits` §1, restating `pf1_static.py`): THE BUILT REALM WITH THE KING AND THE HEIR REMOVED THROUGH `_die`:
+    at least one person may claim `off_king` (`G.may_claim`, over the seats each holds), and none of them is the dead heir. Before
+    `successions` listed more than the heir this read zero eligible claimants (F-PES-FA-11)."""
+    w, d, king, heir = _realm()
+    throne = w.offices[THRONE]
+
+    def claimants():
+        return sorted(p for p in w.persons if G.may_claim(w, p, throne, {t.object for t in w.seat_holds(p)}))
+    # B21.67's CONTROL: with the King alive the throne is not claimable (no vacancy), so the read below is the vacancy's, not a
+    # predicate that is true of everyone.
+    assert _holder(w, THRONE) == king and claimants() == [], "the throne is claimable with its King alive"
+    w.step = Step.MATTER
+    w._emitted_by_write = []
+    for who in (king, heir):
+        _die(w, mint_token(w, WriteClass.MATTER), who)
+    assert _holder(w, THRONE) is None and heir not in w.persons
+    assert claimants(), "zero eligible claimants: the throne is stranded"
+
+
 # --- THE ONE-ACT CLAIM: TWO SEATS, ONE TITLE ----------------------------------------------------
 
-def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_title(monkeypatch):
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the claim's write, not its draw (C3's test)
+def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_title():
     """THE ONE-ACT FALSIFIER (the second decision round's): the King dies holding BOTH `off_king` and
-    `off_duke_valorsmark`, and both seats name the heir's title (`off_duke_valorsmark`'s row is CP-T09-06's,
-    B10-17, so it is planted here, in place, on this world and the shared roster dict only). ONE `succeed`
+    `off_duke_valorsmark`, and both seats name the heir's title (`off_duke_valorsmark`'s row shipped at B21.51,
+    so nothing is planted here; it was, until then). ONE `succeed`
     on the throne opens both seats and closes the title: one act, one write. A second claim, now that both
     are held, is refused (first valid claim wins)."""
     w, d, king, heir = _realm()
     assert _holder(w, DUCHY) == king, "fixture: the King no longer holds the Crown's duchy"
-    monkeypatch.setitem(SUCCESSIONS, DUCHY, TITLE)
-    monkeypatch.setattr(w.offices[DUCHY], "conferral", "inheritance")
+    assert TITLE in SUCCESSIONS[DUCHY] and w.offices[DUCHY].conferral == "inheritance", "fixture: the duchy passes with the throne"
     w.step = Step.MATTER
     w._emitted_by_write = []
     _die(w, mint_token(w, WriteClass.MATTER), king)
     assert king not in w.persons and _holder(w, THRONE) is None and _holder(w, DUCHY) is None
-    assert G.claimable_seats(w, heir, TITLE) == tuple(sorted((THRONE, DUCHY)))
+    assert G.claimable_seats(w, heir, {TITLE}) == tuple(sorted((THRONE, DUCHY)))
     kinds = _act(w, d, heir, "succeed", "both", subject=THRONE)
     assert "succession.refused" not in kinds, kinds
     assert _holder(w, THRONE) == heir and _holder(w, DUCHY) == heir, "one claim did not open both seats"
@@ -203,9 +232,10 @@ def test_a_throne_released_by_its_holder_reaches_the_heir_and_he_forms_the_claim
         formed.extend((p.id, c.subject) for c in out if c.verb == "succeed")
         return out
     monkeypatch.setattr(CH, "opening_set", spy)
+    titled = {t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in SUCCESSIONS[THRONE]}
     _one_season(w, d)
     assert (heir, THRONE) in formed, f"the heir never formed the claim; formed: {formed}"
-    assert {pid for pid, _ in formed} == {heir}, f"somebody but the heir formed a claim: {formed}"
+    assert {pid for pid, _ in formed} <= titled, f"somebody who holds no listed title formed a claim: {formed}"   # B21.16: any listed title
     claimed = _holder(w, THRONE) == heir
     print(f"\nIN-61 RELEASE ARM: heir {heir} formed `succeed` on {THRONE} {formed.count((heir, THRONE))} "
           f"time(s); executed in the season: {'yes' if claimed else 'no'}")
@@ -220,7 +250,7 @@ def test_a_banned_heir_is_refused_the_claim_and_admitted_once_the_ban_ends():
     from ..queries.world_q import BAN_KIND
     w, d, king, heir = _realm()
     _vacate_by_release(w, d, king)
-    ban = Tenure("t_ban_heir", heir, "off_duke_valorsmark", BAN_KIND, 0)
+    ban = Tenure("t_ban_heir", heir, "off_king", BAN_KIND, 0)
     w.add_tenure(ban)
     assert _act(w, d, heir, "succeed", "banned", subject=THRONE) == ["succession.refused"]
     assert _holder(w, THRONE) is None and _live_hold(w, heir, TITLE)
@@ -319,10 +349,106 @@ def test_a_filled_by_naming_a_basis_that_opens_no_seat_is_refused(monkeypatch):
 def test_a_succession_on_a_seat_the_claim_does_not_open_is_refused(monkeypatch):
     """`successions` against `offices.yaml`: a key whose row is `appointed` (the claim does not open it),
     and an `inheritance` row with no key (a seat nobody can ever fill), each refuse."""
-    monkeypatch.setitem(SUCCESSIONS, "off_widow_regent", TITLE)
+    monkeypatch.setitem(SUCCESSIONS, "off_widow_regent", (TITLE,))
     with pytest.raises(Unspecified, match="the claim does not open it"):
         G.check_successions()
     monkeypatch.delitem(SUCCESSIONS, "off_widow_regent")
     monkeypatch.delitem(SUCCESSIONS, THRONE)
     with pytest.raises(Unspecified, match="no title passes it"):
         G.check_successions()
+
+
+# --- B21.66 (`IS-B3-FA-06`): A SUCCESSOR CONFIRMS HIS PREDECESSOR'S WRITS OR LETS THEM LAPSE ----------------
+
+HEIR_OF_DUCHY, TERMS = "p_low", "prop_w"
+
+
+def _writ_then_succession(heard=True):
+    """`test_u7_remit._world` (the Duke on `off_duke`, whose remit grants `issue`): the Duke issues a writ ordering the Proposition
+    `prop_w` of `p_mid`, then his hold closes and `p_low` takes the seat. `heard` plants the content claim a hearer of the decree holds
+    (A-21), a claim on `prop_w` itself (`issue`'s `terms` conjunct asks one) and a duty-taken claim on `p_mid` (`commanded_read`).
+    Returns `(w, d, rid)`."""
+    w, d = _world()
+    w.propositions[TERMS] = Proposition(TERMS, "OUGHT", "subj_w", "prop_w ought", True, 0)
+    w.persons[DUKE].ledger.append(Claim("c_terms", DUKE, TERMS, "proposition.uttered", True, 0, "firsthand", 100, "own", doer="p_x"))
+    out = _fold(w, d, _u7_act("w1", "issue", subject=TERMS, to=PARTY))
+    rid = next(c.subject for c in out[0].changes if c.subject in w.records)
+    _hand_over(w)
+    if heard:
+        heir = w.persons[HEIR_OF_DUCHY]
+        heir.ledger += [Claim("c_writ", HEIR_OF_DUCHY, rid, "content:dispensation", dict(w.records[rid].subject_matter), 0, "told", 100,
+                              "own", doer=DUKE, chain=(DUKE,)),
+                        Claim("c_terms_h", HEIR_OF_DUCHY, TERMS, "proposition.uttered", True, 0, "firsthand", 100, "own", doer="p_x"),
+                        Claim("c_knows", HEIR_OF_DUCHY, PARTY, "exists:Person", 1, 0, "firsthand", 100, "own"),
+                        Claim("c_sworn", HEIR_OF_DUCHY, PARTY, "duty.taken", True, 0, "firsthand", 100, "own")]
+    return w, d, rid
+
+
+def _hand_over(w):
+    """The Duke's hold on the seat closes and `p_low` opens one."""
+    for t in w.persons[DUKE].tenures:
+        if t.kind == "hold" and t.object == SEAT:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_heir", HEIR_OF_DUCHY, SEAT, "hold", since=w.tick))
+
+
+def _confirming_issues(w, pid):
+    """`[(subject, to)]` of every `issue` `pid` forms over his whole `questions_for`, and the `(id, class)` pairs the questions stamp."""
+    p = w.persons[pid]
+    qs = world_q.questions_for(w, p)
+    formed = [(c.subject, c.operands["to"]) for q in qs for c in opening_set(p, assemble(p, q, 12), q, w.fixtures) if c.verb == "issue"]
+    return formed, {pair for q in qs for pair in q.classes}
+
+
+@pytest.mark.usefixtures("writ_at_success")
+def test_an_heir_is_asked_about_the_writs_of_the_seat_he_took():
+    """B21.66 G (1)-(3): the predecessor's writ is listed for the man who now holds its issuing seat and heard it; `questions_for` stamps the
+    Proposition it orders and the existing `issue` row forms on it, to the man his ledger reads as sworn. CONTROLS: the predecessor, who holds
+    the seat no longer, is listed nothing, nor is a man who holds no seat; and an heir who gives the seat up is asked no more."""
+    w, d, rid = _writ_then_succession()
+    heir = w.persons[HEIR_OF_DUCHY]
+    assert world_q.issuing_seat(w, rid) == SEAT
+    assert world_q.writs_inherited(w, heir) == (rid,)
+    assert world_q.writs_inherited(w, w.persons[DUKE]) == (), "the man who issued it, and holds no seat, is offered his own writ"
+    assert world_q.writs_inherited(w, w.persons[PARTY]) == ()
+    formed, classes = _confirming_issues(w, HEIR_OF_DUCHY)
+    assert (TERMS, "Proposition") in classes
+    assert formed == [(TERMS, PARTY)], formed
+    for t in heir.tenures:
+        if t.kind == "hold" and t.object == SEAT:
+            t.until = w.tick
+    assert world_q.writs_inherited(w, heir) == (), "a man who gave up the seat is still asked about its writs"
+
+
+@pytest.mark.usefixtures("writ_at_success")
+def test_an_heir_who_heard_of_no_writ_is_asked_about_none():
+    """B21.66 G: the occasion is his LEDGER's, not the world's. The same seat, the same writ in the store, an heir whose ledger holds no
+    claim of it: nothing listed, nothing stamped, no `issue` formed. CONTROL: a seat that changes hands with no writ issued through it
+    stamps nothing either."""
+    w, d, rid = _writ_then_succession(heard=False)
+    assert rid in w.records and world_q.issuing_seat(w, rid) == SEAT
+    assert world_q.writs_inherited(w, w.persons[HEIR_OF_DUCHY]) == ()
+    formed, classes = _confirming_issues(w, HEIR_OF_DUCHY)
+    assert formed == [] and (TERMS, "Proposition") not in classes
+    w2, d2 = _world()
+    _hand_over(w2)
+    w2.persons[HEIR_OF_DUCHY].ledger.append(Claim("c_sworn", HEIR_OF_DUCHY, PARTY, "duty.taken", True, 0, "firsthand", 100, "own"))
+    assert world_q.writs_inherited(w2, w2.persons[HEIR_OF_DUCHY]) == ()
+    assert world_q.inherited_terms(w2, w2.persons[HEIR_OF_DUCHY]) == ()
+
+
+@pytest.mark.usefixtures("writ_at_success")
+def test_a_confirmed_writ_is_his_and_an_unconfirmed_one_has_no_holder():
+    """B21.66 G (3): the writ is not passed on (`04` §C.2): before he acts he holds no `hold` on it. His `issue` of the same terms is the
+    confirmation -- a NEW Record, issued through the seat by his own act, his to hold -- and the predecessor's writ stays the
+    predecessor's (it is still the one listed, and the new one never is)."""
+    w, d, rid = _writ_then_succession()
+    held = lambda who: {t.object for t in w.tenures if t.kind == "hold" and t.live and t.subject == who and t.object in w.records}
+    assert rid not in held(HEIR_OF_DUCHY)
+    out = _fold(w, d, _u7_act("w2", "issue", actor=HEIR_OF_DUCHY, subject=TERMS, to=PARTY))
+    assert [e.kind for e in out] == ["dispensation.issued"], [e.kind for e in out]
+    new = next(c.subject for c in out[0].changes if c.subject in w.records)
+    assert new != rid and w.records[new].subject_matter["terms"] == w.records[rid].subject_matter["terms"] == TERMS
+    assert held(HEIR_OF_DUCHY) == {new}
+    assert world_q.issuing_seat(w, new) == SEAT
+    assert world_q.writs_inherited(w, w.persons[HEIR_OF_DUCHY]) == (rid,), "his own writ is listed as inherited, or the old one was passed on"

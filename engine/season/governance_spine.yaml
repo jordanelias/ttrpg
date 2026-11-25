@@ -72,20 +72,26 @@ version: 1
 
 # The rung ladder, parent-first. `kind` must be a `rung_kinds` member; `under` is the parent rung,
 # and `null` only for the realm.
+#
+# `conferral:` and `revocation:` (B21.71) are how the seat is filled and who may strip it, each a member of
+# `rosters.yaml: conferral_bases` / `revocation_bases`, handed to `Office` by `harness/governance_spine.py::build`.
+# The realm row says `null` twice: nothing stands above it to confer or strip it. Every other row is the generic
+# case of ED-IN-0256 (2) and (3): appointed, and stripped by the rung above in the same faction (all thirteen seats
+# are `faction x`). [ASSUMPTION; medium; Jordan to correct; revert: drop the two keys from every row and from `build`.]
 rungs:
-  - {id: lr_realm,        kind: realm,      under: null,            post: "Sovereign"}
-  - {id: lr_duchy_a,      kind: duchy,      under: lr_realm,        post: "Duke"}
-  - {id: lr_duchy_b,      kind: duchy,      under: lr_realm,        post: "Duke"}
-  - {id: lr_province_a,   kind: province,   under: lr_duchy_a,      post: "Count"}
-  - {id: lr_province_b,   kind: province,   under: lr_duchy_b,      post: "Count"}
-  - {id: lr_territory_a,  kind: territory,  under: lr_province_a,   post: "Lord"}
-  - {id: lr_territory_b,  kind: territory,  under: lr_province_b,   post: "Lord"}
-  - {id: lr_settlement_a, kind: settlement, under: lr_territory_a,  post: "Mayor"}
-  - {id: lr_settlement_b, kind: settlement, under: lr_territory_b,  post: "Mayor"}
-  - {id: lr_community_a,  kind: community,  under: lr_settlement_a, post: "Community Leader"}
-  - {id: lr_community_b,  kind: community,  under: lr_settlement_b, post: "Community Leader"}
-  - {id: lr_hearth_a,     kind: hearth,     under: lr_community_a,  post: "Hearth Head"}
-  - {id: lr_hearth_b,     kind: hearth,     under: lr_community_b,  post: "Hearth Head"}
+  - {id: lr_realm,        kind: realm,      under: null,            post: "Sovereign",        conferral: null,      revocation: null}
+  - {id: lr_duchy_a,      kind: duchy,      under: lr_realm,        post: "Duke",             conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_duchy_b,      kind: duchy,      under: lr_realm,        post: "Duke",             conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_province_a,   kind: province,   under: lr_duchy_a,      post: "Count",            conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_province_b,   kind: province,   under: lr_duchy_b,      post: "Count",            conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_territory_a,  kind: territory,  under: lr_province_a,   post: "Lord",             conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_territory_b,  kind: territory,  under: lr_province_b,   post: "Lord",             conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_settlement_a, kind: settlement, under: lr_territory_a,  post: "Mayor",            conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_settlement_b, kind: settlement, under: lr_territory_b,  post: "Mayor",            conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_community_a,  kind: community,  under: lr_settlement_a, post: "Community Leader", conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_community_b,  kind: community,  under: lr_settlement_b, post: "Community Leader", conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_hearth_a,     kind: hearth,     under: lr_community_a,  post: "Hearth Head",      conferral: appointed, revocation: rung_above_same_faction}
+  - {id: lr_hearth_b,     kind: hearth,     under: lr_community_b,  post: "Hearth Head",      conferral: appointed, revocation: rung_above_same_faction}
 
 # ⚠ `post:` ABOVE IS A GENERIC LABEL AND NOT A CANON POST. Jordan: *"cardinal is a post / king is
 # a post / confessor is a post"*, and `Office.post` does not currently hold a normalised post at
@@ -101,10 +107,9 @@ rungs:
 # every settlement here is a single `Mayor`, and the shapes are recorded rather than half-built.
 #
 # ⚠⚠ DO NOT READ THE SENTENCE ABOVE AS "NO VOCABULARY WAS EVER RULED" — ONE WAS, THE SAME DAY, AND
-# IT IS NOT THE 2x2 AN EARLIER DRAFT OF THIS HEADER INFERRED FROM IT. `ED-IN-0256` records Jordan's
-# ruling that `conferral` is **appointed, elected, annex** — THREE values, not the two
-# ("elected/assigned") that reading the four settlement shapes as a 2x2 produced, and `annex` is
-# not a shape a settlement offers at all. Revocation was ruled alongside it: the **rung above, of
-# the same faction**. Neither has a code-readable owner yet, which is what `H-109` is for; until it
-# does, `ED-IN-0256` is where the ruled set lives and this comment is the pointer to it, so a later
-# session does not re-derive a 2x2 from the settlement sentence and re-ask a settled question.
+# IT IS NOT THE 2x2 AN EARLIER DRAFT OF THIS HEADER INFERRED FROM IT. `ED-IN-0256` ruled that
+# `conferral` is **appointed, elected, annex** — THREE values, not the two ("elected/assigned") that
+# reading the four settlement shapes as a 2x2 produced — and revocation alongside it: the **rung
+# above, of the same faction**. Both now have a code-readable owner: `rosters.yaml: conferral_bases`
+# and `revocation_bases`, which `Office` refuses a value off. Each row of `rungs:` above carries its
+# two (B21.71), so a later session does not re-derive a 2x2 from the settlement sentence.

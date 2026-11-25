@@ -1165,6 +1165,45 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected and swept 0 / 0.5 / 1.0 / 2.0]
     regard_step=1.0,                   # `H-426`, swept 0 (control) / 0.5 / 1.0 (live, SHIPPED, B05.23: C5) / 2.0
+    # `H-610` (B21.09; OBS §2 member 6, OBS §4 step 6+; `14_VERBS_BINDING_A` commit A3). HOW MUCH ONE RUNG OF RANK STANDING AGAINST THE ACT WEIGHS, in
+    # obstacle: the term `rank_gap` is `rank_step x` the count of `rung_kinds` steps by which the person (or holding) acted on or for stands above
+    # the rung of the seat the actor exercises (`sigma.py::_rank_gap_of`, `_rank_gap_term`). `0` is the CONTROL ("equal at control"): the term
+    # reads nothing and is not listed, so every roll composes the obstacle it had before.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-610 -- site: Fixtures rank_step, graded `assumption`; OBS proposes 0.25 and no document derives it, so it is injected at the control and swept 0 / 0.25 / 0.5]
+    rank_step=0.0,                     # `H-610`, swept 0 (control, SHIPPED) / 0.25 / 0.5
+    # `H-613` (B21.61; OBS §2 member 29, OBS §4 step 6+; `16_PESSIMIST_FA_B` edit 2, A-105). HOW MUCH A SEAT OF ANOTHER CHAIN OF SEATS WEIGHS AGAINST A
+    # CONFERRAL, in obstacle: the term `cross_chain` is `cross_chain_step x` 1 where the seat the act names and the seat it is exercised through are of
+    # different factions (`gate.across_chains`; `sigma.py::_cross_chain_term`), so a foreign holder stays uncommon (A-105). `0` is the CONTROL ("equal at
+    # control"): the term reads nothing and is not listed, so every roll composes the obstacle it had before.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-613 -- site: Fixtures cross_chain_step, graded `assumption`; the source proposes 2 and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
+    cross_chain_step=0.0,              # `H-613`, swept 0 (control, SHIPPED) / 1 / 2 (proposed)
+    # `H-614` (B21.69; `IS-B3-FA-07`, A-105). HOW MUCH THE POWER OF A HOLDER'S FACTION OVER THE HOST'S WEIGHS AGAINST AN ACT ON HIS SEAT, in obstacle: the
+    # term `faction_power` is `faction_power_step x` 1 where the faction the seat's live holder coheres under outweighs the faction of the seat the act is
+    # exercised through (`faction_q.weight`, compared; `sigma.py::_faction_power_of`, `_faction_power_term`), so a foreign officer of a stronger faction is
+    # the harder to unseat or to cut down: "the king's appointee stays in place unless the king is convinced otherwise" (A-105). `0` is the CONTROL ("equal
+    # at control"): the term reads nothing and is not listed, so every roll composes the obstacle it had before.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-614 -- site: Fixtures faction_power_step, graded `assumption`; `IS-B3-FA-07` leaves the value to "Jordan or the B21 calibration" and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
+    faction_power_step=0.0,            # `H-614`, swept 0 (control, SHIPPED) / 1 / 2
+    # `H-611` (B21.12; `14_VERBS_BINDING_C` commit C1, edit 1). THE LENGTH, IN SEASONS, OF THE TERM A PARTIAL `succeed`/`revoke` OPENS A HOLD FOR (the one
+    # `provisional_term`; the BYZANTINE files cite it and ship no second value). Read at ONE place, `loop/effects_shared.py::_provisional_term`.
+    # `2` SHIPS since B21.73 (BIND_C's flip; UNDECIDED u-1 reading (a)): a Partial `confer` or `succeed` opens its hold for two seasons, and MATTER
+    # closes it at the barrier of tick `+ 2` (`T-n`), so the seat falls vacant and is offered again. `None` is the CONTROL and the REVERT: a Partial opens an
+    # untermed hold, exactly as a Success does, so the two differ by nothing. The value is BIND_C's proposed one; no document derives it.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-611 -- site: Fixtures provisional_term, graded `assumption`; BIND_C proposes 2 and no document derives it, so it ships at the proposed 2 (B21.73) and is swept None (control) / 1 / 2 / 4]
+    provisional_term=2,                # `H-611`, swept None (control) / 1 / 2 (proposed, SHIPPED) / 4
+    # `H-612` (B21.23; `06_FA_decree_binds` edit 4). HOW MANY SEASONS OF SUSPICION OPEN A WRIT-MAKER'S RECALL: `queries/person_q.py::suspicions`
+    # (his own ledger's count of the seasons a person withheld compliance on a writ he made, less those he only obeyed in, floored at zero)
+    # reaching this number puts the person and each seat of his that `may_revoke` admits on the maker's question as classed referents
+    # (`queries/world_q.py::recalls`). It opens the question and decides nothing: the recall is `revoke`'s resistible draw (A-24, A-47).
+    # `None` is the REVERT: the occasion is off and no question carries a recall. The design names a threshold and no number; its audit
+    # escape is worth two, so the threshold is read as above two.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`, the occasion off.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-612 -- site: Fixtures recall_suspicion, graded `assumption`; the design names a threshold and gives no number, so it ships at 3 (above its audit escape's two) and is swept 1 / 3 / 5, with None the revert]
+    recall_suspicion=3,                # `H-612`, swept 1 / 3 (SHIPPED) / 5; `None` the revert (the occasion off)
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
     # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).

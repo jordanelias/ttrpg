@@ -19,12 +19,13 @@ from engine.season.data.matrix import WriteClass
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
-from engine.season.state.carriers import Act, Proposition, Site, Tenure
+from engine.season.state.carriers import Act, Office, Proposition, Site, Tenure
 import pytest
 
 pytestmark = pytest.mark.flat_fold
 
 FACTION, COHORT, HOME, COMMANDER = "fac_valorsmark", "c1", "Hh", "p_high"
+SEAT_OF = {"p_high": "off_duke"}                     # the tiny world's Duke: a Crown seat granting `dispatch` over the duchy D, which holds Hh
 
 
 def _world():
@@ -58,8 +59,10 @@ def _mint(w, d, key="army1", faction=FACTION, content=None, actor=COMMANDER):
                                     "subject_matter": A.new(faction) if content is None else content}))
 
 
-def _do(w, d, verb, act_id, actor=COMMANDER, subject="army1", **payload):
-    return _fold(w, d, Act(id=act_id, actor=actor, verb=verb, payload={"subject": subject, **payload}))
+def _do(w, d, verb, act_id, actor=COMMANDER, subject="army1", via=None, **payload):
+    # B21.59: `recruit` and `discharge_troops` are exercised through a seat (`remit:dispatch`): the Duke's, unless a test names another
+    via = via or (SEAT_OF.get(actor) if verb in ("recruit", "discharge_troops") else None)
+    return _fold(w, d, Act(id=act_id, actor=actor, verb=verb, payload={"subject": subject, **payload}, via=via))
 
 
 def _army(w, key="army1"):
@@ -243,6 +246,8 @@ def test_an_army_whose_holder_is_gone_frees_its_factions_slot():
             t.until = w.tick
     assert world_q.army_of(w, FACTION) is None, "an army nobody holds is nobody's army"
     w.add_tenure(Tenure("t_heir_commit", "p_mid", FACTION, "commit", since=w.tick))      # an heir of the same faction
+    w.offices["off_marshal"] = Office("off_marshal", "Marshal", "D", ["dispatch"], faction="Valorsmark")
+    w.add_tenure(Tenure("t_heir_seat", "p_mid", "off_marshal", "hold", since=w.tick))    # B21.59: he mints through a muster seat of it
     out = _mint(w, d, key="army2", actor="p_mid")
     assert _kinds(out) == ["record.created"] and world_q.army_of(w, FACTION) == "army2", _kinds(out)
 
@@ -261,5 +266,10 @@ def test_only_a_member_of_the_faction_raises_or_commands_its_army():
     refused = _do(w, d, "recruit", "r_out", actor="p_mid", cohort=COHORT, troop_type="levy", count=5)
     assert "recruit.refused" in _kinds(refused) and _army(w)["trained"] == (), "a holder who is no member commanded it"
     w.add_tenure(Tenure("t_mid_commit", "p_mid", FACTION, "commit", since=w.tick))
-    ok = _do(w, d, "recruit", "r_in", actor="p_mid", cohort=COHORT, troop_type="levy", count=5)
+    # B21.59: a member who holds the Record still levies only THROUGH A SEAT: seated in a Crown muster seat over the duchy he does
+    w.offices["off_marshal"] = Office("off_marshal", "Marshal", "D", ["dispatch"], faction="Valorsmark")
+    unseated = _do(w, d, "recruit", "r_unseated", actor="p_mid", cohort=COHORT, troop_type="levy", count=5)
+    assert "recruit.refused" in _kinds(unseated) and _army(w)["trained"] == (), "a member who sits in no seat levied men"
+    w.add_tenure(Tenure("t_mid_seat", "p_mid", "off_marshal", "hold", since=w.tick))
+    ok = _do(w, d, "recruit", "r_in", actor="p_mid", via="off_marshal", cohort=COHORT, troop_type="levy", count=5)
     assert "army.recruited" in _kinds(ok), _kinds(ok)

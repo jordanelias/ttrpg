@@ -28,7 +28,7 @@ import ast
 from dataclasses import dataclass, field, fields, replace
 from typing import Optional
 
-from . import files
+from . import files, rosters as _rosters
 from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
 from .arrangements import ARRANGEMENTS, _DISPOSES_LITERALS
@@ -38,10 +38,10 @@ from .requires import (
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    CONTEXT_KEY, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    CONTEXT_KEY, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
-    RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
+    STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
     table_meta,
@@ -93,31 +93,6 @@ class VerbRow:
     emits: tuple
     emits_on_refusal: tuple
     grade: str
-    # ⚠ THE SCALE THE ACT REACHES — a `rung_kinds` member (Jordan, 2026-09-02: *"we also need
-    # stratum that concern governance and management re different scales of factions/governing
-    # bodies"*). It is a SEPARATE AXIS from `stratum`, crossed with it: the stratum says what KIND
-    # of act this is and orders resolution; the scale says WHOSE BODY it reaches. Five strata x
-    # eight scales covers the governance surface without multiplying strata.
-    #
-    # ⚠ AND THE SCALE LADDER ALREADY EXISTED — `rung_kinds`: person, hearth, community,
-    # settlement, territory, province, duchy, realm. Minting a second roster for it would be §8
-    # broken on the exact axis this column is about.
-    #
-    # ⚠ A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION.
-    # `ARCHITECTURE_V2.md:93` lists *"a **faction acting** as an actor"* in its REFUSAL table, at
-    # `L1`; `H-21` completes it — *"a faction's treasury is matter at the rung or office that
-    # holds it"*. So a faction never acts: a PERSON HOLDING AN OFFICE acts, and the scale is the
-    # rung that office reaches. Governance at faction scale is `binding_decision x <rung>`, not a
-    # faction verb.
-    #
-    # ⚠ SAME NAME AS A RETIRED FIELD. `04_CODE_ARCHITECTURE.md` §A.3 row 4 (`04:173`) and §B.13
-    # invariant 10 (`04:470`) say a `scale:` key is "deleted; the loader rejects the key" — but
-    # that row describes THE CHAIN's `scale:` (a per-module/per-verb-row concept, ID-13). This
-    # field is an unrelated ruling under the same word (`CLAUDE.md` §4's hazard: one spelling, two
-    # meanings). `04` is ratified and this comment does not edit it (`CLAUDE.md` §0.05) — it names
-    # the ambiguity at the site that would otherwise be misread, per the layer-conformance
-    # skill's B4.
-    scale: str = "person"
     # ⚠ PART E'S `contests:` COLUMN. `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> |
     # none` — if set, ROUTES TO THE SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound`
     # (*"`contests: the body` → the seam"*). Jordan, 2026-09-02: *"that…would trigger the personal
@@ -272,6 +247,10 @@ class VerbRow:
     # `()` is the declared absence, every row but five; `seam/contest.py::contest` reads it (B24p.19) and the provider runs the proceeding for such a row, so
     # a row that proceeds names no `governing:` and no `opposed_attribute:` (refused by `_check_proceeds`).
     proceeds: tuple = ()
+    # B21.07 (VB-A commit A1): THE TENURE KINDS THIS ROW CLOSES, its `domain:` column (`release`'s, asserted against `RELEASABLE_KINDS` below;
+    # `pardon`'s `[detain, ban]`); `()` for a row that closes nothing. The loader already read the column for loader invariant 6 and kept it
+    # nowhere; `OWN_EDGE_DECLINES` is its first reader after the load, so the row carries it rather than a second parse of the file.
+    domain: tuple = ()
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -323,6 +302,17 @@ class VerbRow:
             return self.requires_typed.known_person_operands()
         return ((self.counterparty,)
                 if self.counterparty and self.counterparty in KNOWN_PERSON_OPERANDS else ())
+
+    def commanded_operand(self) -> Optional[str]:
+        """THE OPERAND THIS ROW ORDERS -- the person the seat must command (B21.55, A-22) -- or `None` for a row that orders nobody.
+        The ONE owner `decision/options.py::operand_bags` reads. A TYPED row answers its cell's: the operand of a `basis`
+        conjunct under the `command` rule (`issue`'s `to`). An UNTYPED row, whose cell no clause can carry, answers `subject`
+        when `rosters.yaml: command_declines` names it (`dispatch`, whose predicate asks the same rule in the fold). Read off the
+        cell and the roster; no verb name."""
+        if self.requires_typed is not None:
+            ops = self.requires_typed.command_operands()
+            return ops[0] if ops else None
+        return "subject" if self.verb in COMMAND_DECLINES else None
 
     def precondition_evaluable(self, predicates) -> bool:
         """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
@@ -387,6 +377,14 @@ class VerbRow:
                 f"failable clause, so a clause arriving here unkeyed is a refusal point the fold "
                 f"added without declaring it (04 §B.13 #4, F7)")
         return self.refusals_by_clause[clause]
+
+    @property
+    def party_gap_at_write(self) -> bool:
+        """IS THIS ROW'S PARTY GAP REFUSED AT ITS `write` CLAUSE? True where nobody is opposite on the act's own face -- a row naming no
+        `counterparty:` (a `task` row, B07.01, names none: its `draw` key, `draw_kinds`; so do `establish` and `revoke`, B21.81) -- and the row
+        keys `write`: its party gap is an act that did not take, so it emits the `write` key's kinds, never the union. The ONE
+        answer the loader's contested-row rule (`_load_verb_table`) and the fold (`loop/resolve.py::_refuse_party_gap`) read."""
+        return not self.counterparty and WRITE_CLAUSE in self.refusals_by_clause
 
     @property
     def draw_kinds(self) -> tuple:
@@ -507,39 +505,12 @@ ROUTE_FORMS = (FORM_INQUIRY, FORM_TASK)
 BOOKKEEPING_FORBIDDEN_CELLS = frozenset(roster("bookkeeping_forbidden_cells"))
 
 
-def _derive_openers_from_effects() -> dict:
-    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`). The
-    single owner of "which verb opens which kind" is the `Tenure(...)` construction itself, inside
-    the function `@effect_for` registers for that verb (`CLAUDE.md` §8's every-rule-lives-once):
-    every site names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
-    positional, or a `kind=` keyword -- so an AST walk over the effect modules' own source (read as
-    TEXT, never imported -- no `data` -> `loop` import edge) reads the fact with no second copy to
-    fall behind.
-
-    Returns EVERY tenure kind, including the ones no effect opens -- an empty list, the "declared
-    means present" contract -- because a kind with a `writes: Tenure.since` cell and no opener
-    (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a real, disclosed hole, not an absent
-    declaration. Run this function for the current set.
-
-    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS. `create_record`, `issue`
-    and `petition` share ONE mint, `_mint_document`, and the `hold` it opens is constructed there
-    rather than in any decorated body -- so a walk confined to the decorated function would DROP
-    `create_record` from `hold`'s openers, a derived fact going quietly wrong in the direction
-    nobody reads. A call to a function defined at the top of the SAME FILE, or imported from a
-    SIBLING `effects_*.py`, is walked as if inlined (transitively, each helper once).
-
-    ⚠⚠ SEVERAL FILES, NOT ONE. `effects.py` is a thin aggregator -- no `@effect_for`, no
-    `Tenure(...)` -- and every decorated function lives in one of its `effects_*.py` siblings
-    (`files.effects_modules()`, discovered by name rather than hand-listed). Every sibling is
-    parsed first and a decorated function's helpers are resolved through its OWN file's namespace:
-    the top-level functions it defines plus the ones it imports from a sibling (`from .effects_x
-    import name`), so a shared helper that constructs a Tenure is walked from every sibling that
-    reaches it (v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for
-    `march` in `effects_combat.py`). A call through anything but a bare name, or a `Tenure` whose
-    `kind` is not a literal, is not read.
-    """
-    openers: dict = {k: set() for k in TENURE_KINDS}
-
+def _effect_calls() -> list:
+    """EVERY `Call` NODE EACH REGISTERED EFFECT REACHES, as `(verb, call)` -- the one walk over `files.effects_modules()` that
+    `_derive_openers_from_effects` (which `Tenure(...)` a verb opens) and `_derive_minted_record_kinds` (which `Record` kind a verb
+    mints, B21.17) both read, so the namespace and helper resolution described on the first live once. Source is read as TEXT,
+    never imported (no `data` -> `loop` edge); a helper is walked as if inlined, transitively, each once."""
+    calls: list = []
     # Every sibling is parsed FIRST, so a helper one file imports from another is walked in ITS OWN
     # file's namespace. `namespace[stem]` = the top-level functions of `stem` plus the ones it brings in
     # with `from .<sibling> import name` (level 1, a sibling stem), the import binding the name the
@@ -588,17 +559,54 @@ def _derive_openers_from_effects() -> dict:
             if verb is None:
                 continue
             for call in (c for f in _reached(node) for c in ast.walk(f)):
-                if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
-                        and call.func.id == "Tenure"):
-                    continue
-                kind = None
-                if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
-                    kind = call.args[3].value
-                else:
-                    kind = next((kw.value.value for kw in call.keywords
-                                if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
-                if kind is not None:
-                    openers.setdefault(kind, set()).add(verb)
+                if isinstance(call, ast.Call):
+                    calls.append((verb, call))
+    return calls
+
+
+def _derive_openers_from_effects() -> dict:
+    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`). The
+    single owner of "which verb opens which kind" is the `Tenure(...)` construction itself, inside
+    the function `@effect_for` registers for that verb (`CLAUDE.md` §8's every-rule-lives-once):
+    every site names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
+    positional, or a `kind=` keyword -- so an AST walk over the effect modules' own source (read as
+    TEXT, never imported -- no `data` -> `loop` import edge) reads the fact with no second copy to
+    fall behind.
+
+    Returns EVERY tenure kind, including the ones no effect opens -- an empty list, the "declared
+    means present" contract -- because a kind with a `writes: Tenure.since` cell and no opener
+    (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a real, disclosed hole, not an absent
+    declaration. Run this function for the current set.
+
+    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS. `create_record`, `issue`
+    and `petition` share ONE mint, `_mint_document`, and the `hold` it opens is constructed there
+    rather than in any decorated body -- so a walk confined to the decorated function would DROP
+    `create_record` from `hold`'s openers, a derived fact going quietly wrong in the direction
+    nobody reads. A call to a function defined at the top of the SAME FILE, or imported from a
+    SIBLING `effects_*.py`, is walked as if inlined (transitively, each helper once).
+
+    ⚠⚠ SEVERAL FILES, NOT ONE. `effects.py` is a thin aggregator -- no `@effect_for`, no
+    `Tenure(...)` -- and every decorated function lives in one of its `effects_*.py` siblings
+    (`files.effects_modules()`, discovered by name rather than hand-listed). Every sibling is
+    parsed first and a decorated function's helpers are resolved through its OWN file's namespace:
+    the top-level functions it defines plus the ones it imports from a sibling (`from .effects_x
+    import name`), so a shared helper that constructs a Tenure is walked from every sibling that
+    reaches it (v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for
+    `march` in `effects_combat.py`). A call through anything but a bare name, or a `Tenure` whose
+    `kind` is not a literal, is not read.
+    """
+    openers: dict = {k: set() for k in TENURE_KINDS}
+    for verb, call in _effect_calls():
+        if not (isinstance(call.func, ast.Name) and call.func.id == "Tenure"):
+            continue
+        kind = None
+        if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
+            kind = call.args[3].value
+        else:
+            kind = next((kw.value.value for kw in call.keywords
+                         if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
+        if kind is not None:
+            openers.setdefault(kind, set()).add(verb)
     return {k: sorted(v) for k, v in openers.items()}
 
 
@@ -846,9 +854,9 @@ def _load_verb_table() -> dict:
         # LOADER INVARIANT 10, VERB HALF (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED.
         # A column is either one this loader reads or an annotation spelled `*_note`; anything else
         # is a column that silently does nothing.
-        # ⚠ #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS NOT ENFORCED, BECAUSE IT
-        # IS ABOUT A DIFFERENT FIELD: the chain's retired per-module `scale:`, not the ruled
-        # rung-kind column `VerbRow.scale` carries (see the comment on that field above).
+        # #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS ENFORCED BY THIS SAME RULE: `scale` is
+        # no `VerbRow` field (B21.84 cut the stored column; a scale is the scope of the seat exercised,
+        # `Act.via`'s seat), so a `scale:` key is an unknown key and refuses the load naming the row.
         unknown = sorted(k for k in r if k not in _VERB_ROW_KEYS and not str(k).endswith("_note"))
         if unknown:
             raise SystemExit(
@@ -885,7 +893,6 @@ def _load_verb_table() -> dict:
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
                       flat, flat_emits,
                       flat_refusals, r["grade"],
-                      str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip(),
                       by_degree, emits_by_degree,
                       build_typed_requires(name, r.get("requires_typed")),
@@ -907,7 +914,8 @@ def _load_verb_table() -> dict:
                       brute_note=str(r.get("brute_note") or "").strip(),
                       difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
                       regard_sign=r.get("regard_sign"),
-                      proceeds=_proceeds_entries(name, r.get("proceeds")))
+                      proceeds=_proceeds_entries(name, r.get("proceeds")),
+                      domain=tuple(r.get("domain") or ()))
         # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
         # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
         if row.regard_sign is None:
@@ -1201,12 +1209,6 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} has eligibility kind {k!r}, which is not one of "
                     f"{ELIGIBILITY_KINDS}. §E4 admits exactly four and a fifth would be a new "
                     "way to make a verb unavailable -- which is a design change, not a table edit.")
-        # The scale must be a rung kind, and `rung_kinds` owns which. An unrostered scale RAISES
-        # rather than defaulting to `person`: a governance verb quietly filed at person scale is
-        # the silent-wrong-answer shape this file refuses everywhere else.
-        if row.scale not in RUNG_KINDS:
-            raise SystemExit(f"verb_table.yaml: {name!r} has scale {row.scale!r}, which is not a "
-                             f"`rung_kinds` member: {sorted(RUNG_KINDS)}")
         # The stratum must be one of the five, and the roster owns which five.
         if row.stratum not in STRATA:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
@@ -1292,9 +1294,11 @@ def _load_verb_table() -> dict:
             # B07.01 (UNDECIDED (11) (i)): the count is of REFUSAL kinds (`emits_on_refusal`, which holds no `draw` kind), and a
             # `form: task` row -- nobody opposite, so no counterparty clause -- names the kind its refused roll emits by keying
             # `write`: its party gap emits that key's kinds (`loop/resolve.py::_refuse_party_gap`), as an act that did not take.
+            # B21.81: THE SAME HOLDS FOR A CONTESTED ROW THAT NAMES NO `counterparty:` (`establish`, `revoke`): nobody is opposite
+            # on the act's own face, so its party gap is likewise an act that did not take, and emits the `write` key's kinds.
             if ((row.contests or _graded) and len(row.emits_on_refusal) > 1
                     and COUNTERPARTY_CLAUSE not in by_clause
-                    and not (_form == FORM_TASK and WRITE_CLAUSE in by_clause)):
+                    and not row.party_gap_at_write):
                 _defects.append("declares `contests:` or a `graded_tasks` route, whose "
                                 "party-gap refusal no clause names, keys no `counterparty` "
                                 "refusal for it (nor, as a task, a `write` one), "
@@ -1561,6 +1565,44 @@ for _v, _k in WARRANT_SOURCED.items():
             f"such verb or `record_sourced_operands.{_k}` maps no `subject`", "rosters.yaml",
             needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
+
+def _derive_minted_record_kinds() -> dict:
+    """`{verb: {record kind}}` -- WHICH `record_kinds` MEMBER EACH VERB'S EFFECT MINTS (B21.17), derived as `OPENERS-DERIVE` derives
+    openers: from `_mint_document(w, a, <kind>, ...)`, the one mint, inside the function `@effect_for` registers for the verb or a
+    helper it reaches (`_effect_calls`). The kind is read where it is a string literal or a name `data/rosters.py` binds to one
+    (`CHALLENGE_KIND`); a kind passed through a variable (`create_record`'s) or from another module's attribute is not read, so a
+    verb minting only those has no entry. `covenant` reaches `issue`'s body, so it mints `dispensation`."""
+    minted: dict = {}
+    for verb, call in _effect_calls():
+        if not (isinstance(call.func, ast.Name) and call.func.id == "_mint_document"):
+            continue
+        arg = call.args[2] if len(call.args) > 2 else next((kw.value for kw in call.keywords if kw.arg == "kind"), None)
+        kind = (arg.value if isinstance(arg, ast.Constant) else
+                getattr(_rosters, arg.id, None) if isinstance(arg, ast.Name) else None)
+        if isinstance(kind, str):
+            minted.setdefault(verb, set()).add(kind)
+    return {v: frozenset(ks) for v, ks in minted.items()}
+
+
+def _check_record_verb_minting(name: str, mapping: dict, table: dict, minted: dict) -> None:
+    """REFUSAL (c) OF `rosters.yaml: read_to_addressee` AND `proclaimed` (`data/rosters.py::check_record_verb_rosters` has (a), (b)
+    and (d)): every verb a kind lists is a `verb_table.yaml` row whose effect mints that kind. A function, so a test can plant a
+    bad line and watch it refuse. ⚠ IT CANNOT TELL `covenant` FROM `issue` ON `dispensation`: both mint one, which is why the
+    verb list, and not the kind, is the roster's content."""
+    for kind, verbs in mapping.items():
+        for verb in sorted(verbs):
+            if verb not in table or kind not in minted.get(verb, ()):
+                raise Forbidden(
+                    f"`rosters.yaml: {name}` lists {verb!r} for {kind!r}, and either the verb table carries no such verb or "
+                    f"its effect does not mint a {kind!r} Record", "rosters.yaml",
+                    needs=f"a `verb_table.yaml` verb whose effect mints a {kind!r} document (`_mint_document`)",
+                    law="B21.17 (c) -- the verb qualifier names the mint the roster covers, so a verb that mints something "
+                        "else would be covered by a line that reads as covering it")
+
+
+_MINTED_RECORD_KINDS = _derive_minted_record_kinds()
+for _n, _m in (("read_to_addressee", READ_TO_ADDRESSEE), ("proclaimed", PROCLAIMED)):
+    _check_record_verb_minting(_n, _m, VERB_TABLE, _MINTED_RECORD_KINDS)
 
 # CP-T03-09: `{verb: term}` -- the terms a verb's personal-combat scene is fought under (`rosters.yaml:
 # duel_terms`), read by `seam/wrappers/combat.py::combat_input`. REFUSED AT IMPORT for a verb the table lacks or
@@ -2138,6 +2180,50 @@ def _load_held_document_declines(values: dict) -> dict:
 HELD_DOCUMENT_DECLINES = _load_held_document_declines(roster_map("held_document_declines", "values"))
 
 
+# B21.55 (`14_VERBS_BINDING_D` commit D2, A-22): the UNTYPED verbs whose `subject` is a person the seat must command
+# (`rosters.yaml: command_declines`, read in `decision/options.py::operand_bags` through `VerbRow.commanded_operand`;
+# `dispatch`). REFUSED AT IMPORT when a member names a verb the table lacks, one whose row is TYPED (its cell's `basis`
+# conjunct is the one owner of whom it orders) or one whose referent class is not `Person` (the subject is the man ordered).
+def _load_command_declines(values) -> frozenset:
+    """`rosters.yaml: command_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or row.requires_typed is not None or row.referent_class != "Person":
+            raise Forbidden(
+                f"`rosters.yaml: command_declines` names {v!r}, and the verb table carries no such verb, or its row is typed "
+                "or forms on no `Person` referent", "rosters.yaml",
+                needs="an untyped `verb_table.yaml` verb with `referent_class: Person`, whose subject is the man it orders",
+                law="B21.55 -- a typed row's `basis: command` conjunct says whom it orders; an untyped row's subject is the person")
+    return out
+
+
+COMMAND_DECLINES = _load_command_declines(roster("command_declines"))
+
+
+# B21.57 (`IS-B3-FA-05`, A-24): the verbs whose WRITING ROW MAY LAWFULLY WRITE NOTHING, and the kinds each emits when it does
+# (`rosters.yaml: write_optional`, read in `loop/resolve.py::_fold`'s `NoOpReceipt` branch; `comply`). REFUSED AT IMPORT when a
+# member names a verb the table lacks, a row that writes nothing (no write to decline) or a kind the row does not emit.
+def _load_write_optional(values: dict) -> dict:
+    """`rosters.yaml: write_optional`'s `values`, checked and frozen -- refused per member (above). A function, so a test can plant
+    a bad line and watch it refuse."""
+    out: dict = {}
+    for verb, kinds in (values or {}).items():
+        row = VERB_TABLE.get(verb)
+        kinds = tuple(kinds) if isinstance(kinds, (list, tuple)) else ()
+        if row is None or not row.writes or not kinds or not set(kinds) <= set(row.emits):
+            raise Forbidden(
+                f"`rosters.yaml: write_optional` names {verb!r}: {list(kinds)}, and the verb table carries no such verb, its row "
+                "writes nothing, or it lists a kind the row does not emit", "rosters.yaml",
+                needs="a writing `verb_table.yaml` verb and a non-empty list of kinds its `emits:` declares",
+                law="B21.57 -- a decline is the row's refusal (F9) unless the roster says the verb is also answered without a write")
+        out[verb] = kinds
+    return out
+
+
+WRITE_OPTIONAL = _load_write_optional(roster_map("write_optional", "values"))
+
+
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own
 # `Person.stance` rows naming it with a valence below zero (`rosters.yaml: own_stance_declines`, read in
 # `opening_set`; `forgive`). Keyed on the row's `writes:`: REFUSED AT IMPORT when a member names a verb the
@@ -2206,6 +2292,50 @@ def _load_own_title_declines(values) -> frozenset:
 
 
 OWN_TITLE_DECLINES = _load_own_title_declines(roster("own_title_declines"))
+
+
+# VB-A commit A1 (B21.07): `{verb: the Tenure kinds its row's `domain:` names}` -- the verbs a person forms only on a referent
+# he is tied to by a live edge of such a kind (`rosters.yaml: own_edge_declines`, read in `opening_set`; `release`).
+# `own_title_declines`' shape one carrier over. REFUSED AT IMPORT when a member names a verb the table lacks, one that is
+# not `own`-eligible (an edge a person ends is his own act's), or one with no `domain:` (no kind to read the edges against).
+def _load_own_edge_declines(values) -> dict:
+    """`rosters.yaml: own_edge_declines`' `values`, as `{verb: frozenset(row.domain)}` -- refused per member (above)."""
+    out: dict = {}
+    for v in sorted(str(v or "") for v in (values or ())):
+        row = VERB_TABLE.get(v)
+        if row is None or "own" not in row.eligibility or not row.domain:
+            raise Forbidden(
+                f"`rosters.yaml: own_edge_declines` names {v!r}, and the verb table carries no such verb, or its row is "
+                "not `own`-eligible, or it declares no `domain:`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb with `eligibility: [own]` and a `domain:` of Tenure kinds",
+                law="VB-A -- an own-edge decline reads the kinds the row's own `domain:` names")
+        out[v] = frozenset(row.domain)
+    return out
+
+
+OWN_EDGE_DECLINES = _load_own_edge_declines(roster("own_edge_declines"))
+
+
+# VRES §4 (A-37): `{verb: the Event kind its disposal edge earns}` -- the verbs whose edge a party does not release
+# (`rosters.yaml: own_edge_declines: disposal`; `determine` -> `matter.determined`). The fold's half
+# (`loop/predicates.py::_req_release`) reads the VERB through `causing_act`, the formation half (`opening_set`) reads the KIND off
+# the person's own ledger. REFUSED AT IMPORT for a verb the table lacks or a kind its row does not emit: a stale pair would
+# decline for nobody, and must not read as a live decline.
+def _load_disposal_events(values: dict) -> dict:
+    """`rosters.yaml: own_edge_declines: disposal`, checked and frozen -- refused per line (above)."""
+    out = {str(v): str(k or "") for v, k in (values or {}).items()}
+    for v, k in out.items():
+        row = VERB_TABLE.get(v)
+        if row is None or k not in row.emits:
+            raise Forbidden(
+                f"`rosters.yaml: own_edge_declines: disposal` names {v!r}: {k!r}, and the verb table carries no such verb, "
+                f"or its row does not emit {k!r}", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and an Event kind its `emits:` declares",
+                law="A-37 -- a party does not release an edge a bench imposed; the kind is the claim the bench's finding earns")
+    return out
+
+
+DISPOSAL_EVENTS = _load_disposal_events(roster_map("own_edge_declines", "disposal"))
 
 
 # B10-09 close one, D3: `{verb: tenure kind}` -- the verbs a person does not form on an object he already
@@ -2407,6 +2537,16 @@ if DISPUTANT_CLASS not in REFERENT_CLASSES:
     raise Forbidden(f"{DISPUTANT_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
                     needs="the dispute-context class in the closed roster",
                     law="B11 lane A -- a class stamped by name must be one the roster declares")
+
+# B21.08 (VB-A commit A2 [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s `referent_class: Rung`, drop the
+# value and the `Holding` term in `queries/world_q.py::questions_for`]): THE UNFOUNDED HOLDING, `Detainee`'s shape -- no
+# collection, stamped by name by the standing occasion `queries/world_q.py::holdings_to_found` (through `questions_for`), and
+# refused at import off `rosters.yaml: referent_classes`. `establish` declares it.
+HOLDING_CLASS = "Holding"
+if HOLDING_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{HOLDING_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the founding-holding class in the closed roster",
+                    law="B21.08 -- a class stamped by name must be one the roster declares")
 
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off

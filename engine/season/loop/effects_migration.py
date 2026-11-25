@@ -11,8 +11,9 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 from __future__ import annotations
 
 from ..data.rosters import ARRIVAL_ONLY_KINDS
-from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, place_of, residence_of, restrained
-from ..state.carriers import Tenure
+from ..queries.person_q import addressed_to
+from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, order_destination, place_of, residence_of, restrained
+from ..state.carriers import Tenure, subject_of
 from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -66,6 +67,33 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if where is None:
         return NO_CHANGE
     return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
+
+
+@effect_for("comply")
+def _eff_comply(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21.57 (`IS-B3-FA-05`, CP-T09-08; ruling A-24): THE MAN'S GOING IS HIS OWN ANSWER. A `comply` on an ORDER whose content
+    names a destination -- a `dispensation` whose `at` key is a Rung (`_eff_dispatch` mints it, `order_destination` reads it) --
+    is the act that relocates him: `_relocate(w, a, dest, mover=a.actor)`, `move`'s one journey body, which closes his live
+    `contain` legs, opens one to the destination and appends it to his `travel_leg` (the leg `budget`'s distance penalty
+    reads), so the order charges him the journey. The sender's `dispatch` moved nobody.
+
+    ⚠ A `comply` ON ANYTHING ELSE WRITES NOTHING, AND THAT IS LAWFUL: a writ that names no place (every `issue`, a dest-less
+    order) is answered by the emission alone, as it was before this effect existed (`writes_note`: what compliance performs is
+    the separate act the writ names). It declines (`NO_CHANGE`), and `rosters.yaml: write_optional` is what lets the fold read
+    that decline as an answer given with nothing to perform, rather than as the refusal every other row's decline is. A
+    destination he cannot go to declines the same way (`move`'s own refusals, asked of the same legs): in custody, a rung only
+    an arriving army is placed at, one the §10 ladder will not seat him in, or the place he is already at. Declining there
+    leaves him complying and staying, which is what a man who cannot go does; the refusal of a place outside the seat's
+    purview is `_req_dispatch`'s, at the sender's act. G4: NAMES THE TRAVELLER, WHOLE, `_eff_move`'s one subject."""
+    writ = subject_of(a)
+    rec = w.records.get(writ) if isinstance(writ, str) else None
+    # Only an ADDRESSEE is sent by the order: the fold's `comply` cell asks a claim of the terms in the actor's own ledger, which every
+    # witness of a proclaimed `dispatch` holds (B21.18), so the addressee test is asked here, `person_q.addressed_to`'s, the one owner.
+    dest = order_destination(w, writ) if rec is not None and addressed_to(rec.subject_matter, a.actor) else None
+    if (dest is None or restrained(w, a.actor, DETAIN_KIND) or _arrival_only(w, dest) or dest == place_of(w, a.actor)
+            or not w.contain_ascends(a.actor, dest)):
+        return NO_CHANGE
+    return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, dest, mover=a.actor))
 
 
 def _reached(w: "World", a: "Act", dest: str, res: "Resolution | None") -> "str | None":

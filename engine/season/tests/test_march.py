@@ -52,7 +52,6 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import faction_prop_id
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
-from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries import person_q as PQ
@@ -62,6 +61,7 @@ from engine.season.state import gate as G
 from engine.season.state.carriers import Act, Person, Question, Rung, Sensation, Tenure, View
 from engine.season.state.ids import H, draw_factory
 
+from ._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03 fixture edit, named there
 from ._field_outcomes import SCALE, field_outcome
 
 
@@ -1169,3 +1169,47 @@ def test_in13_regard_a_witness_reads_a_won_field_on_the_winning_side(monkeypatch
     """The same falsifier on `field.won` (the DEFENDERS' lost field): the marcher is now the WINNING
     side, and the witness at the field reads a changed regard toward him."""
     _regard_falsifier(monkeypatch, won=True)
+
+
+# ---- B21.79 -- THE SEAT'S OBLIGEES PRESENT ARE ITS PEOPLE (CP-T09-07 (b), AM-F-13) ---------------------
+
+def _swear(w, pid, seat, tid):
+    """`pid` holds a live `oblige` to `seat`: the edge `_eff_oblige` opens, planted outside any write (this file observes who
+    marches, never how a man comes to serve)."""
+    w.add_tenure(Tenure(tid, pid, seat, "oblige", w.tick))
+
+
+def test_a_seats_obligee_at_home_marches_in_its_army():
+    """FALSIFIER (2) of CP-T09-07: `p_npc_006` (the Löwenritter, no member of the Crown) lives at the Crown's `set_s_014`, where the
+    Spymaster's `march` musters its army (`p_npc_033`, `p_npc_035`). Sworn to the Spymaster's seat, he is one larger than the base;
+    the base is the same call with no oath. CONTROLS: an obligee who is not in the origin's subtree (`p_npc_041`, sworn to the
+    seat) adds nobody, and an obligee who is already a member (`p_npc_035`) stands once, so the union is a union and not a sum."""
+    from engine.season.loop.sides import sides_of
+    w = build_realm(0)
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
+    base = sides_of(w, act, "set_s_036", "a field")[0]
+    assert base == ["p_npc_033", "p_npc_035"], "fixture moved: re-read it"
+    assert world_q.faction_holding(w, "p_npc_006") != CROWN, "fixture: p_npc_006 must not be a Crown member"
+    _swear(w, "p_npc_041", "off_spymaster", "t_b2179_away")
+    _swear(w, "p_npc_035", "off_spymaster", "t_b2179_member")
+    assert sides_of(w, act, "set_s_036", "a field")[0] == base
+    assert world_q.seat_people_at(w, "off_spymaster", "set_s_014") == base
+    _swear(w, "p_npc_006", "off_spymaster", "t_b2179_home")
+    claimants = sides_of(w, act, "set_s_036", "a field")[0]
+    assert len(claimants) == len(base) + 1 and set(claimants) == set(base) | {"p_npc_006"}, claimants
+    assert claimants[:len(base)] == base, "the faction's own people keep their order"
+
+
+def test_a_seats_obligee_standing_in_a_town_is_its_occupation():
+    """`occupying_faction` reads the same people: the Crown has nobody mustered at the Church's cathedral `set_s_036` (the resident
+    Crown member is re-housed), so the licence fails; the Spymaster's obligee `p_npc_006`, standing at that settlement, is the
+    presence that makes it the Crown's to take. CONTROL: the same man, unsworn, licenses nothing."""
+    from engine.season.loop.effects_shared import occupying_faction
+    w = _no_resident_crown(build_realm(0))
+    for t in w.persons["p_npc_006"].tenures:
+        if t.kind == "contain" and t.live:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_b2179_006_at", "p_npc_006", "set_s_036", "contain", w.tick))
+    assert occupying_faction(w, "off_spymaster", "set_s_036") is None
+    _swear(w, "p_npc_006", "off_spymaster", "t_b2179_oath")
+    assert occupying_faction(w, "off_spymaster", "set_s_036") == CROWN

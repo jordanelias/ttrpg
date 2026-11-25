@@ -21,7 +21,7 @@ from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, bin
 from ..data.arrangements import ARRANGEMENTS, DISPOSAL
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, DISPOSAL_WRITES, EFFECT_NONE, EFFECT_STRIKE, EFFECT_YIELD, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, PROCEEDING_MOVES,
-    READ_TO_ADDRESSEE, RECORD_CONTENT, SITTING_CLAIMS, SITTING_PREDICATES, SITTING_SOURCE, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
+    PROCLAIMED, READ_TO_ADDRESSEE, RECORD_CONTENT, SITTING_CLAIMS, SITTING_PREDICATES, SITTING_SOURCE, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
 from ..data.verbs import VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
@@ -89,12 +89,23 @@ def content_value(subject_matter):
     return subject_matter
 
 
-def addressee_reads(rec, pid: str) -> bool:
-    """B11 lane A: DOES WITNESS `pid` READ DOCUMENT `rec` AS ITS ADDRESSEE -- its kind is one whose making is put to the
-    addressee's face (`rosters.yaml: read_to_addressee`) and he is among its addressees (`person_q.addressed_to`, the one
-    owner). The content deposit's second reader beside the holder (below, in `witness`). [ASSUMPTION; medium; Jordan to
-    correct; revert: the roster `[]`.]"""
-    return rec.kind in READ_TO_ADDRESSEE and addressed_to(rec.subject_matter, pid)
+def addressee_reads(rec, pid: str, verb) -> bool:
+    """B11 lane A: DOES WITNESS `pid` READ DOCUMENT `rec` WITHOUT HOLDING IT -- two branches over `verb`, the verb of the
+    act that made it (`world_q.minting_verb`): its kind and verb are proclaimed (`rosters.yaml: proclaimed`, B21.18, A-21:
+    a decree's terms reach EVERY witness of its making), or they are put to the addressee's face (`rosters.yaml:
+    read_to_addressee`) and he is among its addressees (`person_q.addressed_to`, the one owner). The content deposit's
+    second reader beside the holder (below, in `witness`). The verb is what keeps a `covenant`'s dispensation in person:
+    it is made by `issue`'s body, and only `issue`'s is listed. [ASSUMPTION; medium; Jordan to correct; revert: both
+    rosters `{}`.]"""
+    if proclaimed(rec, verb):
+        return True
+    return verb in READ_TO_ADDRESSEE.get(rec.kind, ()) and addressed_to(rec.subject_matter, pid)
+
+
+def proclaimed(rec, verb) -> bool:
+    """B21.18 (A-21): IS DOCUMENT `rec`, MADE BY `verb`, PROCLAIMED -- its kind and minting verb in `rosters.yaml:
+    proclaimed`. `addressee_reads`' first branch, and the told branch's test (a telling of it carries its terms)."""
+    return verb in PROCLAIMED.get(rec.kind, ())
 
 
 def _told_content(act):
@@ -582,6 +593,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 h = hold_force(w, rec.id)
                 if h is not None and h.since == w.tick:
                     newly_held.setdefault(e.id, {})[rec.id] = (h.subject, rec)
+    # B21.18: THE VERB THAT MADE each newly held document of a kind `read_to_addressee` or `proclaimed` names (`world_q.
+    # minting_verb`, a log scan), read once per Record here, before the parallel map, and handed to `addressee_reads`.
+    made_by = {rid: world_q.minting_verb(w, rid) for held_by in newly_held.values() for rid, (_h, rec) in held_by.items()
+               if rec.kind in READ_TO_ADDRESSEE or rec.kind in PROCLAIMED}
     # v9 IN-22 (#457 `CARRY-SHORTFALL`, `H-160` limit 2): AN ACTORLESS EVENT'S READS REACH THE SEATS
     # WHOSE PURVIEW CONTAINS WHAT WAS READ. MATTER's larder pass is the one actorless writer of
     # `observed` (`loop/matter.py`, `19d`): a drained larder's `(rung, "shortfall:<kind>", units)`.
@@ -851,8 +866,11 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # a challenge is put to the challenged's face (its cell asks him present, `with`), so he learns what it says
         # as its maker does, while the Record stays in the maker's hand (no mint into the addressee's, ED-IN-0292 (1)
         # stands). An addressee who did not witness the making learns nothing here.
+        # B21.18 (A-21): AND TO EVERY WITNESS OF A PROCLAIMED MINT (`addressee_reads`' first branch) -- a decree's terms reach
+        # whoever learns it was made, by whatever channel admitted him (the chronicle's `told_by` witness learns them with
+        # the news, at that source); a covenant's do not (its verb is not listed).
         for holder, rec in ((newly_held.get(e.id) or {}) if only is None else {}).values():
-            if holder != pid and not addressee_reads(rec, pid):
+            if holder != pid and not addressee_reads(rec, pid, made_by.get(rec.id)):
                 continue
             pred = f"{content_stem}:{rec.kind}"
             said = content_value(rec.subject_matter)
@@ -980,6 +998,25 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     if regime:
                         tc = _credit(w, tc, pid, _act.actor, regime, conf)
                     _deposit(p, tc, e)
+                # B21.18 (A-21; the entry's ASSUMPTION, read here: this branch passes the one `Said` and no content beside
+                # it): A TELLING ABOUT A PROCLAIMED DOCUMENT CARRIES ITS TERMS -- a second told claim on the same telling,
+                # `(record, "content:<kind>", <subject_matter, frozen>)` read off the Record as the fourth deposit reads it,
+                # with the first claim's chain, confidence, circle, refraction and credit, under the fourth deposit's
+                # exact-triple guard. Not for a telling OF the terms (the first claim is that), nor for `read_to_addressee`'s
+                # kinds (a challenge is put to a man's face, not told).
+                _rec = w.records.get(_held.subject) if isinstance(_held.subject, str) else None
+                if (_rec is not None and _rec.subject_matter is not None and _held_stem != content_stem
+                        and _rec.kind in PROCLAIMED and proclaimed(_rec, world_q.minting_verb(w, _rec.id))):
+                    _pred, _terms = f"{content_stem}:{_rec.kind}", content_value(_rec.subject_matter)
+                    if not any(c.subject == _rec.id and c.predicate == _pred and c.value == _terms for c in p.ledger):
+                        dc = Claim(H(w.world_seed, w.tick, pid, f"told_content:{e.id}:{_rec.id}"),
+                                   pid, _rec.id, _pred, _terms, w.tick, "told_by", _held.confidence,
+                                   _circle_of(w, _act, privacy) or "own", self.lap, chain=_held.chain + (_act.actor,))
+                        if refracting:
+                            dc = _refract(dc, p, channel, gain, fx=cfx)
+                        if regime:
+                            dc = _credit(w, dc, pid, _act.actor, regime, conf)
+                        _deposit(p, dc, e)
         if len(p.ledger) > cap:
             _cap(p)
     # B24p.22: A DEPOSIT BESIDE THE FAN'S AND THE FINDER'S -- WHAT A SITTING SHOWED, INTO THE OWN LEDGER OF EACH PERSON IN ITS ROOM (V2 p2 §J). One sitting is read once, off the first of

@@ -40,7 +40,7 @@ from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
-    may_warrant,
+    may_warrant, may_wage,
 )
 from ..state.ids import H
 
@@ -101,13 +101,16 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
 def _army_mintable(w: "World", actor: str, content) -> bool:
     """ED-IN-0306 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
     faction Proposition the world holds, BY A MEMBER OF THAT FACTION (`faction_holding`: anyone else minting it
-    would lock the faction out of its own army), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
+    would lock the faction out of its own army) WHO SITS IN A MUSTER SEAT OF IT (B21.59, `06_FA_levy_through_the_seat_B` edit 4:
+    `gate.may_wage`, B21.58 -- a faction's army is not its first minter's), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
     only): a second would leave two records claiming to be one faction's army, with no rule for which the battle
     reads."""
     if not isinstance(content, dict) or not isinstance(content.get("faction"), str) \
             or content["faction"] not in FACTION_BY_PROP or content["faction"] not in w.propositions:
         return False
     if faction_holding(w, actor) != content["faction"]:        # a faction's army is raised by one of its own
+        return False
+    if not may_wage(w, actor, content["faction"]):             # B21.59 (edit 4): ... through a muster seat of it (`may_wage`, B21.58)
         return False
     if army_of(w, content["faction"]) is not None:
         return False
@@ -261,8 +264,25 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ `terms` IS THE REFERENT AND `to` AN EXECUTOR: since plan position IN-10 `to` fans over the
     persons the issuer knows (the row's `terms` conjunct binds `subject`, #453 §10.1).
-    `petition`'s row keeps the single-referent limit (`H-94`)."""
-    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+    `petition`'s row keeps the single-referent limit (`H-94`).
+
+    B21.56 (`14_VERBS_BINDING_D` commit D3, edit 9; A-81): THE WRIT IS DRAWN (`contests: "a standing"`) AND MINTED AT EVERY
+    BAND; the band its draw reached is written into the content as `force` (`rosters.yaml: record_kinds.dispensation`), so how
+    strongly it binds travels with the document and with every claim of its content. Written HERE and nowhere else: a hand-built
+    act's own `force` operand is overwritten, and an undrawn fold (`res` None) writes `None`."""
+    return _mint_dispensation(w, a, None if res is None else res.degree)
+
+
+#: B21.56: the `dispensation` content key the issuing draw's band is written to (`rosters.yaml: record_kinds.dispensation`).
+FORCE_KEY = "force"
+if FORCE_KEY not in RECORD_KIND_KEYS["dispensation"]:
+    raise Forbidden(f"`rosters.yaml: record_kinds.dispensation` lacks {FORCE_KEY!r}, which `_eff_issue` writes (B21.56)")
+
+
+def _mint_dispensation(w: "World", a: "Act", force) -> Change:
+    """`issue`'s and `covenant`'s one body: a `dispensation` read off the act, its `force` the caller's."""
+    content = {**(_content_of(a, "dispensation") or {}), FORCE_KEY: force}
+    return _mint_document(w, a, "dispensation", content, _seat_rung(w, a))
 
 
 @effect_for("covenant")
@@ -278,8 +298,10 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     acceptance is his own `commit` to the Proposition, formed from the held dispensation
     (`rosters.yaml: terms_sourced`, `decision/options.py::opening_set`). The instrument is in force
     when both holders are committed -- a reading nothing performs yet: its readers (tribute through
-    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
-    return _eff_issue(w, a, res)
+    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7).
+
+    B21.56: an instrument carries no `force` (`None`): the key is the issuing draw's band, which `_eff_issue` alone writes."""
+    return _mint_dispensation(w, a, None)
 
 
 @effect_for("conceal")
@@ -536,9 +558,13 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         for `arbitration`, `detain` and `ban` for the SC-03a rows); the other two dispose a `Record`.
         This bullet is the `oblige` case: C-1 (`21_RECONCILIATION.md:167`,
         RULED A there): *"who owns the Tenure a determiner opens: its SUBJECT ... exactly `confer`,
-        which opens a `hold` whose subject is the conferee"*, and its price, stated: *"the subject
-        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"* --
-        `oblige` is in `release`'s domain, so that price is paid as ruled. The kind is a LITERAL
+        which opens a `hold` whose subject is the conferee"*. ⚠ THE PRICE C-1 STATED (*"the subject
+        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"*, `oblige`
+        being in `release`'s domain) IS OVERWRITTEN BY A-37 (Jordan; VRES §4 edit 2): an imposed service ends
+        by its term maturing at MATTER (`_eff_pardon` closes only a restraint, never an `oblige`), and a party
+        does not release it -- `loop/predicates.py::_req_release` refuses an edge this act opened, and
+        `opening_set` forms no `release` on one (`rosters.yaml: own_edge_declines`). The gate basis for
+        closing a disposal stays `determination`, through the seat that is the edge's object. The kind is a LITERAL
         here because `data/verbs.py::_derive_openers_from_effects` reads a `Tenure(...)` site's kind
         off its string literal (`_eff_commit`'s docstring records what factoring it cost), and
         that derivation is what `data/verbs.py::arrangements_without_a_disposal_opener`

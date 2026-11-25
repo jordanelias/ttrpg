@@ -1907,6 +1907,13 @@ def content_kind(c) -> "str | None":
     return kind or None
 
 
+def addressees_of(said) -> tuple:
+    """THE ADDRESSEE IDS OF A DOCUMENT SAYING `said` -- the list under the addressee key (`rosters.yaml: record_kinds.content.addressee`, `to`) as a
+    tuple; `()` for anything that is not a dict or carries no list there. The one reader of that value's shape: `addressed_to` and `suspicions` ask it."""
+    v = said.get(RECORD_CONTENT.get("addressee")) if isinstance(said, dict) else None
+    return tuple(v) if isinstance(v, (list, tuple)) else ()
+
+
 def addressed_to(said, pid) -> bool:
     """IS `pid` AMONG THE ADDRESSEES OF A DOCUMENT SAYING `said` -- the id list under the addressee key
     (`rosters.yaml: record_kinds.content.addressee`, `to`), which the mint stores as a list
@@ -1914,10 +1921,52 @@ def addressed_to(said, pid) -> bool:
     lifted out of `world_q.writs_held` (which asks it of a Record's `subject_matter`) so
     `decision/options.py::opening_set`'s terms-sourced reader asks the same rule of the holder's own
     content claim (`content_said`), World-free. `False` for anything that is not a dict."""
-    if not isinstance(said, dict):
-        return False
-    v = said.get(RECORD_CONTENT.get("addressee"))
-    return pid in (tuple(v) if isinstance(v, (list, tuple)) else ())
+    return pid in addressees_of(said)
+
+
+#: THE TWO ANSWERS TO A WRIT, as the kinds `comply` and `evade / defy` emit (the claims a witness of the answer holds). The one home:
+#: `world_q.WRIT_ANSWERED_KINDS` is these two.
+COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD = "compliance.given", "compliance.withheld"
+
+
+def suspicions(p: Person, admit=None) -> dict:
+    """SUSPICION AS A FOLD (B21.23, `06_FA_decree_binds` edit 4; D5 ED-IN-0046, D6 ED-IN-0047, E11; ED-IN-0343 to ED-IN-0345 --
+    a quantity that accumulates from events is a fold of them, not a stored value): `{other: suspicion}` for every person whose
+    answer to a writ `p` MADE `p`'s own ledger holds a claim of. Nothing is written, nothing is carried between reads.
+
+    A writ `p` made is one on which his ledger holds a content claim of his own doing (`Claim.doer`, stamped by WITNESS on the
+    maker's own deposits) naming exactly ONE addressee: the answer claim (`compliance.given` / `.withheld`) names the writ and not
+    its answerer, so a writ to several is attributed to no one (the pairing never guesses, `deed_doer`'s rule). Per person, over
+    SEASONS (`Claim.when`): plus one for each season in which he holds a claim that the person withheld compliance (at most one a
+    season, the ruled cap of D5), minus one for each season in which he holds a claim that the person complied and none that he
+    withheld (E11: *"a way to reduce suspicion by over-compliance"*), the sum floored at zero.
+    ONE ANSWER IS ONE EVENT, WHOEVER REPEATS IT (ED-IN-0322, *"one origin repeating itself doesn't carry more weight"*, read at the
+    count): claims of one writ's one answer from several origins (his own sighting, a told copy) are one answer, at the earliest
+    season he holds it [ASSUMPTION; medium; Jordan to correct; revert: count each origin's claim, `chain[0]` or the holder].
+    `admit(other, writ_id) -> bool`, when given, drops an answer it refuses: `world_q.recalls` passes the command basis, so a writ to
+    someone the issuing seat does not command enters no count (A-22; the Reconciled line of `06_FA_decree_binds`). Person-side
+    and World-free (AX-2), so the caller that holds a World supplies it; omitted, every answer counts."""
+    made = {}
+    for c in p.ledger:
+        if c.doer == p.id:
+            to = addressees_of(content_said(c))
+            if len(to) == 1:
+                made[c.subject] = to[0]
+    if not made:
+        return {}
+    answered: dict = {}          # (writ, kind) -> the earliest season he holds the answer from
+    for c in p.ledger:
+        if c.subject in made and c.predicate in (COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD) and c.doer != p.id:
+            key = (c.subject, c.predicate)
+            answered[key] = min(answered.get(key, c.when), c.when)
+    given: dict = {}
+    withheld: dict = {}
+    for (writ, kind), when in answered.items():
+        other = made[writ]
+        if admit is None or admit(other, writ):
+            (withheld if kind == COMPLIANCE_WITHHELD else given).setdefault(other, set()).add(when)
+    return {o: max(0, len(withheld.get(o, ())) - len(given.get(o, set()) - withheld.get(o, set())))
+            for o in sorted(set(given) | set(withheld))}
 
 
 #: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:
@@ -1945,6 +1994,43 @@ def ledger_names(claims) -> frozenset:
             v = said.get(ABOUT_KEYS.get(content_kind(c)))
             if isinstance(v, str):
                 out.add(v)
+    return frozenset(out)
+
+
+#: THE OATH'S KIND, as `oblige`'s row emits it (`(sworn man, duty.taken, True)` is the claim a witness of an oath holds). The one
+#: spelling `commanded_read` reads and `boot/realm.py::seed_command_knowledge` writes, read off the row so a renamed emit moves both.
+DUTY_TAKEN, = _verbs.VERB_TABLE["oblige"].emits
+
+
+def commanded_read(p: Person) -> frozenset:
+    """WHOM `p` CAN READ AS COMMANDED -- the persons a seat of his may order, as his OWN state names them (B21.55, A-22; the
+    formation half of `queries/world_q.py::commands`, which decides at the fold). Person-side, `p.tenures` and `p.ledger` only (AX-2).
+
+    Empty for a person who holds no live `hold` (no seat, no one to order). Otherwise two readings, each over a claim he holds that
+    was not told him (`chain` empty: a retelling is a rumour, not what he saw):
+
+      * THE MEN SWORN -- a `(x, duty.taken, True)` claim: the oath's Event is anchored on the man who swore, so the claim names him;
+      * THE HOLDERS HE NAMES OF OTHER SEATS -- a `(S, hold, x)` claim (the shape `sworn_to_holder` and the gate's `Subject.seat` write),
+        for a seat `S` that is not one he sits in.
+
+    ⚠ THREE LIMITS, STATED; (1) AND (2) ARE OVER-INCLUSIONS THE FOLD CORRECTS, (3) IS AN UNDER-INCLUSION THE FOLD CANNOT. (3) Only the first two classes of `commands` are read (sworn men, holders of seats he may revoke), so `issue` and `dispatch` are never FORMED on an unseated, unsworn resident, A-22's third class, though the fold would admit one (`test_vb_d_orders.py` pins this). (1) An oath's claim names the man and never the seat he swore to
+    (the Event's one change is the Tenure edge, whose id a person cannot read), so a man seen swearing to ANOTHER seat is read as
+    sworn here. (2) *Beneath his* is the rung's containment, the World's (`may_revoke`'s rule), so every other seat's named holder is
+    read, and an order up the chain is refused at the fold (`commands` is False for it) and not declined here. Neither widens the
+    fold: it narrows who is OFFERED an order. [ASSUMPTION; medium; Jordan to correct; revert: drop this reader and
+    `rosters.yaml: command_declines`, and `operand_bags` fans over every known person again.] A person is never his own man."""
+    seats = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    if not seats:
+        return frozenset()
+    out = set()
+    for c in p.ledger:
+        if c.chain:
+            continue
+        if c.predicate == DUTY_TAKEN and c.value is True:
+            out.add(c.subject)
+        elif c.predicate == "hold" and c.subject not in seats and isinstance(c.value, str):
+            out.add(c.value)
+    out.discard(p.id)
     return frozenset(out)
 
 

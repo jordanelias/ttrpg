@@ -41,7 +41,7 @@ T2_FIRST_VALUES = {"arbitration": "plain", "examination": "plain", "negotiation"
                    "parliamentary_debate": "routine", "council_of_state": "routine", "legal_trial": "routine",
                    "tribunal": "demanding", "excommunication_deliberation": "demanding", "inquisition_hearing": "hard"}
 #: T1 row values at commit 2 (T13 edit 7): `interrogate` `demanding`, every other rolled row (the inquiries with them) `routine`.
-COMMIT_2_DIFFICULTY = {verb: ("demanding" if verb == "interrogate" else "routine") for verb in TOF.ROLLED}
+COMMIT_2_DIFFICULTY = {verb: ("demanding" if verb in ("interrogate", "establish") else "routine") for verb in TOF.ROLLED}   # `establish`: B21.09
 #: Two opposite temperaments, as the pursuits a person holds (the realm's projection target).
 TEMPERAMENTS = ({PURSUITS[1]: 1.0, PURSUITS[3]: 0.8}, {PURSUITS[4]: 1.0, PURSUITS[5]: 0.9})
 
@@ -141,7 +141,12 @@ def test_a_bench_seat_modifier_is_one_level_for_its_own_bench_only():
     w = _realm()
     authored = {sid: row.get("modifier") for sid, row in rosters.SEAT_ROW_BY_ID.items() if row.get("modifier") is not None}
     benches = _bench_seats(w)
-    assert benches and set(authored) == benches & set(rosters.SEAT_ROW_BY_ID), (sorted(authored), sorted(benches))
+    # B21 left two departures from the rule, named so the pin stays exact: the three ducal seats gained `determine` (B21.53) and so sit a
+    # bench with no `modifier:` authored, and the widow regent's remit was emptied (B21.16) so her `modifier:` names no bench. Authoring or
+    # removing either moves the realm's content hash (an office's modifier is in it), so neither is done here.
+    ducal = {"off_duke_valorsmark", "off_duchess_hafenmark", "off_duke_varfell"}
+    assert benches and set(authored) == ((benches & set(rosters.SEAT_ROW_BY_ID)) - ducal) | {"off_widow_regent"}, (sorted(authored), sorted(benches))
+    assert ducal <= benches and "off_widow_regent" not in benches, "a named departure ended: author or remove the modifier and drop it from this pin"
     assert set(authored.values()) == {"minor"}, authored
     assert all(w.offices[s].modifier == "minor" for s in authored)
     rungs = sorted({o.scope_rung for o in w.offices.values() if o.scope_rung} | {o.rung for o in w.offices.values() if o.rung})

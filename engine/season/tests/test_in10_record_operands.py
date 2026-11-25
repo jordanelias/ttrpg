@@ -44,6 +44,8 @@ MUTATIONS, run at the build 2026-10-16 (each RED, then restored byte-exact and G
 
 from __future__ import annotations
 
+import pytest
+
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.rosters import RECORD_CONTENT
@@ -58,6 +60,7 @@ from ..queries import world_q
 from ..state.carriers import Act, Claim, Question, Record, Tenure
 from ..state.ids import H
 
+from ._seat_at_success import seat_at_success, writ_at_success  # noqa: F401  (the fixtures; their reason is in their module)
 from .test_g3_not_yours import _gov_world, _hold
 
 SEAT, DUKE = "off_duke", "p_high"
@@ -85,6 +88,12 @@ def _knows(p, *who):
         p.ledger.append(Claim(f"k{p.id}{i}", p.id, x, "exists:Person", 1, 0, "firsthand", 100, "own"))
 
 
+def _reads_sworn(p, *who):
+    """B21.55: `issue`'s `to` fans over the persons the issuer reads as commanded (`person_q.commanded_read`), the men whose oath he saw."""
+    for i, x in enumerate(who):
+        p.ledger.append(Claim(f"sw{p.id}{i}", p.id, x, "duty.taken", True, 0, "firsthand", 100, "own"))
+
+
 def _formed(w, pid, q):
     p = w.persons[pid]
     return opening_set(p, assemble(p, q, 12), q, w.fixtures)
@@ -109,7 +118,7 @@ def _resolve(w, d, *acts):
 def test_in10_a_held_dispensations_terms_answers_subject_in_derive_operand():
     w = P.tiny_world()
     p = w.persons[DUKE]
-    c = _hold_document(w, p, "dispensation", {"terms": "off_dicastery", "to": ["p_mid"], "at": None})
+    c = _hold_document(w, p, "dispensation", {"terms": "off_dicastery", "to": ["p_mid"], "at": None, "force": None})
     (held,) = held_record_claims(p)
     assert held is c
     q = Question("q:other", "claim_landed", ("S",), None)        # a question about something else
@@ -144,7 +153,7 @@ def test_in10_a_held_petition_answers_too_and_never_from():
 def test_in10_held_record_claims_reads_only_live_holds_of_mapped_kinds():
     w = P.tiny_world()
     p = w.persons[DUKE]
-    sm = {"terms": "p_mid", "to": ["p_low"], "at": None}
+    sm = {"terms": "p_mid", "to": ["p_low"], "at": None, "force": None}
     _hold_document(w, p, "dispensation", sm, rec_id="rec_seen", held=False)   # witnessed only
     _hold_document(w, p, "text", {}, rec_id="rec_text")                        # kind not mapped
     assert held_record_claims(p) == []
@@ -167,7 +176,7 @@ def test_in10_what_a_document_is_about_has_one_owner_per_kind():
     w = P.tiny_world()
     p = w.persons[DUKE]
     writ = _content_claim("c_w", p.id, "rec_w", "dispensation",
-                          {"terms": "off_reeve", "to": ["p_low"], "at": None})
+                          {"terms": "off_reeve", "to": ["p_low"], "at": None, "force": None})
     sheet = _content_claim("c_s", p.id, "rec_s", "faction_sheet",
                            {"proposition": "prop_crown", "members": ["p_mid"], "holdings": [],
                             "seats": [], "head": "p_other"})
@@ -183,7 +192,7 @@ def test_in10_held_record_claims_picks_by_the_ledger_readers_comparator():
     2026-10-16): the old `c.when >= best.when` pick restored -> the later, less confident claim."""
     w = P.tiny_world()
     p = w.persons[DUKE]
-    sm = {"terms": "p_mid", "to": ["p_low"], "at": None}
+    sm = {"terms": "p_mid", "to": ["p_low"], "at": None, "force": None}
     sure = _hold_document(w, p, "dispensation", sm, rec_id="rec_two")
     unsure = _content_claim("c_rec_two_b", p.id, "rec_two", "dispensation", sm)
     unsure.confidence = 50
@@ -203,20 +212,26 @@ def _issue_world():
     return w, d
 
 
+# B21.54 (`14_VERBS_BINDING_D` D1): a writ's `terms` is a Proposition (`issue`'s `referent_class`), so the two blocks below
+# form `issue` on one the question carries as such, where they formed it on a plain referent (a stores report, "S") before.
+PROP = "prop_s"
+
+
 def test_in10_issue_fans_over_known_persons_so_terms_and_executor_separate():
     w, _ = _issue_world()
     p = w.persons[DUKE]
     _knows(p, "p_mid", "p_low")
-    p.ledger.append(Claim("c_s", p.id, "S", "stores:grain", 8, 0, "firsthand", 100, "own"))
-    q = Question("q:s", "claim_landed", ("S",), None)
+    _reads_sworn(p, "p_mid", "p_low")
+    p.ledger.append(Claim("c_s", p.id, PROP, "exists:Proposition", 1, 0, "firsthand", 100, "own"))
+    q = Question("q:s", "claim_landed", (PROP,), None, classes=((PROP, "Proposition"),))
     got = [c for c in _formed(w, DUKE, q) if c.verb == "issue"]
     assert sorted(c.operands["to"] for c in got) == ["p_low", "p_mid"], got
-    assert all(c.subject == c.operands["subject"] == "S" for c in got)
-    assert {act_key("issue", c.subject, c.operands) for c in got} == {"S>p_low", "S>p_mid"}
+    assert all(c.subject == c.operands["subject"] == PROP for c in got)
+    assert {act_key("issue", c.subject, c.operands) for c in got} == {f"{PROP}>p_low", f"{PROP}>p_mid"}
     assert VERB_TABLE["issue"].known_person_operands() == ("to",)
     # CONTROLS: knowing nobody forms no writ (an act with a hole); knowing them but holding
     # nothing on the terms forms none either (the `terms` conjunct's `said`).
-    for mk in (lambda x: x.ledger.append(Claim("c_s", x.id, "S", "stores:grain", 8, 0, "firsthand",
+    for mk in (lambda x: x.ledger.append(Claim("c_s", x.id, PROP, "exists:Proposition", 1, 0, "firsthand",
                                                100, "own")),
                lambda x: _knows(x, "p_mid", "p_low")):
         w2, _ = _issue_world()
@@ -224,26 +239,29 @@ def test_in10_issue_fans_over_known_persons_so_terms_and_executor_separate():
         assert not [c for c in _formed(w2, DUKE, q) if c.verb == "issue"]
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the clauses and the mint, not the draw (D3's test)
 def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not_its_executor():
     w, d = _issue_world()
     duke = w.persons[DUKE]
     _knows(duke, "p_mid")
-    duke.ledger.append(Claim("c_s", DUKE, "S", "stores:grain", 8, 0, "firsthand", 100, "own"))
-    q = Question("q:s", "claim_landed", ("S",), None)
+    _reads_sworn(duke, "p_mid")
+    duke.ledger.append(Claim("c_s", DUKE, PROP, "exists:Proposition", 1, 0, "firsthand", 100, "own"))
+    q = Question("q:s", "claim_landed", (PROP,), None, classes=((PROP, "Proposition"),))
     (a,) = [a for a in _acts(w, DUKE, _formed(w, DUKE, q)) if a.verb == "issue"]
     assert a.via == SEAT, a                                       # the falsifier's `Act.via`
     # CONTROL, FIRST and one change (B-K close, LOG 9): the same act with no seat, folded before the
     # treatment so it shares nothing with it, is refused on the eligibility clause -- the seat is
     # load-bearing. Exact, as block 4's `confer.refused` control is.
     bare = Act(id="is_bare", actor=DUKE, verb="issue", via=None, payload=dict(a.payload))
-    assert [e.kind for e in _resolve(w, d, bare)] == ["issue.unauthorized"]
+    assert [e.kind for e in _resolve(w, d, bare)] == ["issue.refused"]   # B21.56: `issue.unauthorized` retired into it
     assert not [r for r in w.records.values() if r.kind == "dispensation"]
     kinds = [e.kind for e in _resolve(w, d, a)]
     assert kinds == ["dispensation.issued"], kinds
     (rec,) = [r for r in w.records.values() if r.kind == "dispensation"]
-    assert rec.subject_matter["terms"] == "S" and rec.subject_matter["to"] == ["p_mid"], rec
+    assert rec.subject_matter["terms"] == PROP and rec.subject_matter["to"] == ["p_mid"], rec
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the clauses and the mint, not the draw (D3's test)
 def test_in10_the_terms_conjunct_refuses_a_writ_whose_issuer_holds_nothing_on_it():
     w, d = _issue_world()
     unknown = Act(id="is_unknown", actor=DUKE, verb="issue", via=SEAT,
@@ -264,7 +282,7 @@ def test_in10_the_terms_conjunct_refuses_a_writ_whose_issuer_holds_nothing_on_it
 
 def _commission(w, pid, seat, to, rec_id="rec_cm"):
     """`pid` holds (and has read) a dispensation whose `terms` is `seat`, addressed to `to`."""
-    return _hold_document(w, w.persons[pid], "dispensation", {"terms": seat, "to": [to], "at": None},
+    return _hold_document(w, w.persons[pid], "dispensation", {"terms": seat, "to": [to], "at": None, "force": None},
                           rec_id=rec_id)
 
 
@@ -306,11 +324,12 @@ def test_in10_a_held_commission_saying_nothing_of_the_referent_forms_no_bag():
     confer_of_its_seat_on_its_addressee`, the same commission WITH `terms`."""
     w, _ = _gov_world()
     _hold_document(w, w.persons["p_king"], "dispensation",
-                   {"terms": None, "to": ["p_low"], "at": None}, rec_id="rec_cm")
+                   {"terms": None, "to": ["p_low"], "at": None, "force": None}, rec_id="rec_cm")
     _, got = _confers_on(w, "p_king", "off_reeve")
     assert {c.operands.get("to") for c in got} == {"p_king"}, got
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the channel's conferral executes at Success; the draw is C3's test
 def test_in10_the_channels_confer_carries_its_seat_and_executes():
     """THE ENTRY'S FALSIFIER, FIRST HALF: an execution the channel forms carries `Act.via`. The act
     `pack_scenes` mints from the commission's Candidate names the seat it is exercised through and
@@ -334,6 +353,7 @@ def test_in10_the_channels_confer_carries_its_seat_and_executes():
 # 5 -- H-71's LEAK: RE-SEATING DEPOSITS NO CLAIM ABOUT THE OUTGOING HOLDER'S TENURE
 # ======================================================================================
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: what the conferral deposits, at Success; the draw is C3's test
 def test_in10_a_channel_confer_onto_a_held_office_deposits_no_claim_about_the_outgoing_tenure():
     """THE ENTRY'S FALSIFIER, SECOND HALF. `off_reeve` is held by `p_mid` (no live commit). The duke,
     whose seat sits on `D` (S's parent, same faction: he may fill AND revoke the reeve), holds a

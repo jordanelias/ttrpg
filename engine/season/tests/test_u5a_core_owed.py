@@ -28,7 +28,7 @@ def test_contest_error_at_depth_zero_emits_one_refusal():
     rolls. FALSIFIER: the fold returns `[]` (the act has no Event). The declaration beforehand is the control that the
     act was admitted and reached the contest at all, and the kind read is the row's own `emits_on_refusal`."""
     w = build_realm(0)
-    act = Act(id="m1", actor="p_npc_033", verb="march", payload={"subject": "set_s_036"}, via="off_spymaster")
+    act = Act(id="m1", actor="p_npc_036", verb="march", payload={"subject": "set_s_036"}, via="off_royal_marshal")   # a seat granting `dispatch` (the Spymaster's grant is `issue` alone, B21.03)
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False

@@ -63,7 +63,7 @@ def _content_claim(cid, holder, rec_id, kind, subject_matter, when=0):
 # ======================================================================================
 
 def test_named_reads_the_addressee_key_record_kinds_declares():
-    sm = {"terms": "prop_x", "to": ["p_a", "p_b"], "at": None}
+    sm = {"terms": "prop_x", "to": ["p_a", "p_b"], "at": None, "force": None}
     c = _content_claim("c1", "holder", "rec1", "dispensation", sm)
     assert named(c) == ("p_a", "p_b")
 
@@ -92,7 +92,7 @@ def test_ar5_a_writ_names_you_into_a_question_and_the_control_does_not():
     w = P.tiny_world()
     named_person = w.persons["p_low"]
     other = w.persons["p_other"]
-    sm = {"terms": "prop_x", "to": ["p_low"], "at": None}
+    sm = {"terms": "prop_x", "to": ["p_low"], "at": None, "force": None}
     # `rec:elsewhere` is not in `w.records`, `w.persons`, `w.sites`, `w.dates` or `w.rungs` --
     # `place_of` returns `None` for it and clause 2 cannot fire; it is also not in either
     # person's `reach()`, so clause 1 cannot fire either. Only clause 3 can admit this claim.
@@ -138,7 +138,7 @@ def _held_writ_question(w, p, kind, sm, rec_id="rec_writ"):
 def test_to_is_read_off_a_held_dispensation_ahead_of_the_referent():
     w = P.tiny_world()
     p = w.persons["p_low"]
-    sm = {"terms": "prop_x", "to": ["p_mid"], "at": "S"}
+    sm = {"terms": "prop_x", "to": ["p_mid"], "at": "S", "force": None}
     rec, q = _held_writ_question(w, p, "dispensation", sm)
     assert _from_content_claim(p, q, "to") == "p_mid"
     assert _derive_operand(p, "to", q, rec.id, w.fixtures) == "p_mid", (
@@ -159,7 +159,7 @@ def test_kind_and_amount_decline_today_and_fall_back_unchanged():
     position, which this pins."""
     w = P.tiny_world()
     p = w.persons["p_low"]
-    sm = {"terms": "prop_x", "to": ["p_mid"], "at": "S"}
+    sm = {"terms": "prop_x", "to": ["p_mid"], "at": "S", "force": None}
     rec, q = _held_writ_question(w, p, "dispensation", sm)
     assert "kind" not in RECORD_KIND_KEYS["dispensation"]
     assert "amount" not in RECORD_KIND_KEYS["dispensation"]
@@ -211,7 +211,7 @@ def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_
     # there is no branch, and an operand with no branch declines (`ID-13`).
     w = P.tiny_world()
     p = w.persons["p_low"]
-    sm = {"terms": "prop_x", "to": ["p_mid"], "at": "S"}
+    sm = {"terms": "prop_x", "to": ["p_mid"], "at": "S", "force": None}
     rec, q = _held_writ_question(w, p, "dispensation", sm)
     assert _derive_operand(p, "at", q, rec.id, w.fixtures) is None
 
@@ -223,7 +223,7 @@ def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_
 def test_two_addressees_decline_rather_than_guess_which_one():
     w = P.tiny_world()
     p = w.persons["p_low"]
-    sm = {"terms": "prop_x", "to": ["p_mid", "p_other"], "at": "S"}
+    sm = {"terms": "prop_x", "to": ["p_mid", "p_other"], "at": "S", "force": None}
     rec, q = _held_writ_question(w, p, "dispensation", sm)
     assert _from_content_claim(p, q, "to") is None, (
         "two addressees must not silently pick one -- that is a choice nobody has ruled")
@@ -232,7 +232,7 @@ def test_two_addressees_decline_rather_than_guess_which_one():
 def test_zero_addressees_decline():
     w = P.tiny_world()
     p = w.persons["p_low"]
-    sm = {"terms": "prop_x", "to": [], "at": "S"}
+    sm = {"terms": "prop_x", "to": [], "at": "S", "force": None}
     rec, q = _held_writ_question(w, p, "dispensation", sm)
     assert _from_content_claim(p, q, "to") is None
 

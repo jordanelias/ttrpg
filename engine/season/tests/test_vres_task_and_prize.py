@@ -62,7 +62,9 @@ def test_a_heard_by_outside_the_rooms_and_an_unclaimed_prize_are_refused(monkeyp
     """Gate (1). CONTROL first: the shipped roster, with `a seat` and `a holding` claimed by no verb, boots and passes the prize check
     (`check_contest_prizes` binds a prize row to no verb, only a verb to a prize row); then each plant is refused naming itself."""
     assert {"a seat", "a holding"} <= set(PRIZES)
-    assert not [v for v, r in VERB_TABLE.items() if set(registry._as_list(r.contests or [])) & {"a seat", "a holding"}], "a verb names the new prizes"
+    # B21.09/B21.14 re-read: `establish`, `confer`, `revoke` and `succeed` now draw on `a seat` (the prize is claimed); `a holding` is still claimed by none
+    assert {v for v, r in VERB_TABLE.items() if "a seat" in set(registry._as_list(r.contests or []))} == {"confer", "establish", "revoke", "succeed"}
+    assert not [v for v, r in VERB_TABLE.items() if "a holding" in set(registry._as_list(r.contests or []))], "a verb names the new prize"
     assert registry.check_rows()
     assert registry.check_contest_prizes(VERB_TABLE)
     monkeypatch.setitem(PRIZES["a seat"], "heard_by", "nobody")

@@ -39,7 +39,10 @@ from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 # p_npc_033 at the full scale and p_npc_035 cut) is read at marcher weight 6 against defender weight 2: seeds 1 and 32 (p_npc_035 at
 # 989 and 990); seed 1 is the first. Was (9, 10, 3).
 SEED, WEIGHT, DEFENDER_WEIGHT = 1, 6, 2
-MARCHERS = ("p_npc_033", "p_npc_035")
+# B21.03 narrowed `off_spymaster` to `issue`, and `march` asks `remit:dispatch`: the marching seat is the Royal Marshal's
+# (a Crown seat granting `dispatch`), so the Crown army is the one standing at his home `ORIGIN`, not the barracks'.
+ACTOR, SEAT, ORIGIN = "p_npc_036", "off_royal_marshal", "set_s_001"
+MARCHERS = ("p_npc_036", "p_npc_009", "p_npc_030", "p_npc_031", "p_npc_083")
 
 
 def _mb():
@@ -70,7 +73,7 @@ def _fold(arm="engine", *, model=None, units="person"):
             w.fixtures = w.fixtures.sweep("field_casualty_model", model)
         before = {pid: w.persons[pid].body for pid in w.persons}
         stance = {pid: list(w.persons[pid].stance or []) for pid in w.persons}
-        events = _fold_one(w, _march_act(MARCHERS[0], "set_s_036", "off_spymaster"), contest_max_depth=2)
+        events = _fold_one(w, _march_act(ACTOR, "set_s_036", SEAT), contest_max_depth=2)
     finally:
         mb._grade = real
     return w, events, before, stance, seen

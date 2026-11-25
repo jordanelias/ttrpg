@@ -181,9 +181,12 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             *, verb: str = "", subject: Optional[str] = None,
             rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None,
-            act: Optional[Any] = None, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0):
+            act: Optional[Any] = None, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0, seat: Optional[str] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
 
+    `seat` (B21.61) is the seat the act names, where its prize says an act names one (`loop/sides.py::seat_named_by`), passed to the
+    provider as `via` is: the social roll's `cross_chain` term compares its faction with the exercised seat's; the other providers accept
+    and ignore it.
     `arranger` and `rig` (B24p.24) are the arrangement the docket gave the sitting (V2 p2 §H), passed to the provider with `proceeds=` and read on that path alone.
     `act` and `topic` (B24p.19) are the act the verb row's `proceeds:` cell is read for, and the matter it is about. WHERE THE ACT'S VERB ROW CARRIES
     `proceeds:`, the seam resolves `world_q.proceeding_row(w, act)` and hands the provider `proceeds=` and `topic=`, and the provider runs the
@@ -270,7 +273,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
                         raise
                     return ContestRefused("REFUSED", no_row.what)
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
-                       effort=effort, host=host, via=via, **proceeds)
+                       effort=effort, host=host, via=via, seat=seat, **proceeds)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "

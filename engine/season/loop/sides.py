@@ -29,9 +29,11 @@ from typing import Optional
 from .. import manifest
 from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS
 from ..data.verbs import VerbRow
+from ..manifest.registry import OPPOSED_BY_HOLDER
 from ..queries.world_q import (
-    DETAIN_KIND, holder_faction_of, march_origin, mustered, place_of, restrained, standing_at,
+    DETAIN_KIND, hold_force, holder_faction_of, march_origin, place_of, restrained, seat_people_at, standing_at,
 )
+from .predicates import office_named_by
 from ..state.carriers import Act
 from ..state.gate import seat_faction
 from ..state.world import World
@@ -50,6 +52,17 @@ def _contests_of(a: Act, row: "VerbRow | None") -> list:
     return list(a.contests or ()) or ([row.contests] if row and row.contests else [])
 
 
+def seat_named_by(w: World, a: Act, prize: str) -> Optional[str]:
+    """THE SEAT AN ACT NAMES, where its prize is one that says so (B21.61; B21.14's reading, shared): the prize row's `opposed_by: holder`
+    (`a seat`'s) marks a prize whose act names a seat (`office_named_by`: `office`, else `subject`; the reader `_req_*` and `_eff_*` share),
+    and the answer is that seat's id where the world holds it, else `None` -- an act naming no seat (`establish`'s holding), or a prize
+    whose row says nothing of one. Read off the prize row, never the verb. ONE OWNER of the reading, for `sides_of` (the live holder who
+    stands opposite) and the roll's `cross_chain` term (`seam/wrappers/sigma.py`, through `loop/resolve.py` and `odds_of`)."""
+    row = manifest.resolve("contest", prize)
+    seat = office_named_by(a) if row is not None and row.get("opposed_by") == OPPOSED_BY_HOLDER else None
+    return seat if isinstance(seat, str) and seat in w.offices else None
+
+
 def sides_of(w: World, a: Act, target: Optional[str],
              prize: str) -> tuple[list[str], Optional[str], Optional[str]]:
     """`(claimants, subject, rung)` for `contest()`, given `target` -- the act's
@@ -65,7 +78,8 @@ def sides_of(w: World, a: Act, target: Optional[str],
     - `mass_battle` (`a field`, `march`'s prize): `claimants` is the MUSTERED ARMY at the actor's
       own nearest settlement, under the FACTION OF THE OFFICE THE ACT WAS EXERCISED THROUGH --
       `a.via`, `seat_of`'s own field (`decision/options.py`), read here rather than
-      re-derived, because the chooser already computed which seat granted the act and the fold
+      re-derived (at a settlement the army is the seat's PEOPLE, `world_q.seat_people_at`: that faction's members and the
+      seat's sworn men present, B21.79), because the chooser already computed which seat granted the act and the fold
       trusts the same value everywhere else it appears (`_eligible`'s `remit:` branch,
       `loop/resolve.py`). `subject` is the DEFENDING faction -- `world_q.holder_faction_of(w,
       target)`, which walks `target`'s own ancestry to the nearest HELD rung (a settlement is
@@ -129,11 +143,15 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # there (`world_q.march_origin`, the one owner since CP-T04-02, which reads the standing order about it). A
         # settlement is mustered by subtree (its people stand in buildings beneath it), a territory by who is
         # standing AT it, so a parked army can march on and a territory does not muster its whole realm.
+        # B21.79 (CP-T09-07 (b)): THE SEAT'S PEOPLE AT A SETTLEMENT are its faction's members AND the seat's sworn men present
+        # (`world_q.seat_people_at`), retainers fighting beside the faction. A TERRITORY ORIGIN IS NOT WIDENED: it keeps
+        # `standing_at`'s faction-only reading, so an army that has arrived at one carries its members on and leaves its
+        # sworn men behind -- named, not settled (the item's WHERE is the settlement union).
         origin = march_origin(w, a.actor)
         if not (origin and faction):
             claimants = []
         elif w.rungs[origin].kind in SUBTREE_OCCUPATION_KINDS:
-            claimants = mustered(w, origin, faction)
+            claimants = seat_people_at(w, a.via, origin)
         else:
             claimants = standing_at(w, origin, faction)
         # v9 SC-03a (#453 §10.4 step 3, K-53): A PRISONER IS NOT IN THE ARMY. Every claimant holding
@@ -163,5 +181,16 @@ def sides_of(w: World, a: Act, target: Optional[str],
     # provider reads it as the room whose bench hears the speaker, when the prize row says `heard_by:
     # bench` (v9 SC-02 `22a`): the SPEAKER'S place, where `determine`'s quorum reads the PARTY's
     # (`world_q`'s `bench.size` stem) -- a recorded difference (`hole_register.yaml` H-215), not a ruling.
+    # B21.14 (BIND_C commit C3): A PRIZE WHOSE ROW SAYS WHO STANDS OPPOSITE (`opposed_by: holder`, `a seat`'s) -- where the act names a
+    # seat (`office_named_by`: `office`, else `subject`; the reader `_req_*` and `_eff_*` share), the opponent is that seat's LIVE
+    # HOLDER (`hold_force`), and nobody where it is vacant: `revoke` is opposed by the man it would unseat, a `confer` by the man it
+    # would displace and by nobody on a vacancy, a claim (`succeed`, a vacant seat by `requires`) by nobody. Read off the prize row,
+    # never the verb; an act naming no seat (`establish`'s holding) keeps its own opponent operand, as before. The act's operands are
+    # untouched: the effect still reads the seat and the conferee off the payload. [ASSUMPTION; medium; Jordan to correct; revert:
+    # drop the cell and this block -- `confer` is then opposed by its conferee, `revoke` by no person (a seat id is no claimant)]
+    seat = seat_named_by(w, a, prize)
+    if seat is not None:
+        held = hold_force(w, seat)
+        target = held.subject if held is not None else None
     return ([a.actor] + ([target] if target and target != a.actor else []), target,
             place_of(w, a.actor))

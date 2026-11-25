@@ -42,7 +42,10 @@ from ..state.carriers import DETERMINED_BY, Act, Claim, Office, Tenure
 from .test_in10_record_operands import _hold_document
 import pytest
 
-pytestmark = pytest.mark.flat_fold
+from ._seat_at_success import writ_at_success  # noqa: F401,E402  (the fixture; its reason is in its module)
+
+# B21.56: the writ a test plants is folded at Success (its admission and mint are read here, not `issue`'s draw, D3's test)
+pytestmark = [pytest.mark.flat_fold, pytest.mark.usefixtures("writ_at_success")]
 
 COURT, SEAT, DUKE = "S", "off_duke", "p_high"
 MOVER = "p_mid"                                  # seatless, sworn to nobody, at `Hh`
@@ -90,7 +93,7 @@ def _writ_to_mover(w, d, key="w1", issuer=DUKE, seat=SEAT):
         if t.kind == "hold" and t.object == rid and t.live:
             t.until = w.tick
     w.add_tenure(Tenure(f"t_{key}_mover", MOVER, rid, "hold", since=w.tick))
-    assert world_q.writs_held(w, w.persons[MOVER]) == (rid,)
+    assert world_q.writs_addressed(w, w.persons[MOVER]) == (rid,)
     return rid
 
 
@@ -119,8 +122,8 @@ def test_in59b_falsifier_1_a_guarded_court_refuses_a_stranger_and_admits_seat_wr
 
     def planted_writ(w, d):                      # a writ no Event made has no issuing seat
         _hold_document(w, w.persons[MOVER], "dispensation",
-                       {"terms": MOVER, "to": [MOVER], "at": None}, rec_id="rec_planted")
-        assert world_q.writs_held(w, w.persons[MOVER]) == ("rec_planted",)
+                       {"terms": MOVER, "to": [MOVER], "at": None, "force": None}, rec_id="rec_planted")
+        assert world_q.writs_addressed(w, w.persons[MOVER]) == ("rec_planted",)
         return MOVER, "travel.blocked"
 
     def _warden_seat(w, rung="Hx"):              # a seat on a hearth reaches nothing at `S`

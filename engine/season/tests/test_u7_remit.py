@@ -56,6 +56,8 @@ from ..state.gate import DETERMINATION, NotYours
 
 pytestmark = pytest.mark.flat_fold
 
+from ._seat_at_success import writ_at_success  # noqa: F401,E402  (the fixture; its reason is in its module)
+
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
 PARTY, OUTSIDER = "p_mid", "p_king"          # inside the duchy (Hh) / outside it (R)
 REMIT = ("requisition", "open_case", "determine", "issue")
@@ -192,6 +194,7 @@ def test_19_a_flat_row_refuses_exactly_as_before():
 # 1 -- THE PLAN'S FALSIFIER: NONE OF THE FOUR EXECUTES WITH `via=None`
 # ======================================================================================
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the seat's admission is read here; `issue`'s draw is D3's test
 @pytest.mark.parametrize("verb", REMIT)
 def test_19_none_of_the_four_executes_with_via_none(verb):
     """The same well-formed act, seated and seatless. Through the seat it EXECUTES (the control);
@@ -520,9 +523,10 @@ def test_19_judging_set_and_the_gate_read_one_bench():
 # 6 -- ISSUE: THE PRECONDITION `15`'s EFFECT WAITED FOR
 # ======================================================================================
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the mint and its clauses, not the draw
 def test_19_issue_mints_the_dispensation_at_the_seats_rung_for_an_executor_in_its_purview():
     """`15`'s effect, reached: a `dispensation` Record at the issuing seat's rung, addressed to the
-    executor. Outside the seat's purview: `issue.unauthorized`. Addressed to a PLACE: `issue.refused`
+    executor. Outside the seat's purview: `issue.refused` (on `authority`; `issue.unauthorized` until B21.56). Addressed to a PLACE: `issue.refused`
     on `executors` -- *"scope enumerates executors, not places"*."""
     w, d = _world()
     out = _fold(w, d, _issue("is"))
@@ -530,10 +534,11 @@ def test_19_issue_mints_the_dispensation_at_the_seats_rung_for_an_executor_in_it
     rec = w.records[out[0].changes[0].subject]
     assert (rec.kind, rec.rung) == ("dispensation", TREASURY)
     assert rec.subject_matter["to"] == [PARTY]
-    assert _kinds(_fold(w, d, _issue("is2", to=OUTSIDER))) == ["issue.unauthorized"]
+    assert _kinds(_fold(w, d, _issue("is2", to=OUTSIDER))) == ["issue.refused"]   # B21.56: `issue.unauthorized` retired into it
     assert _kinds(_fold(w, d, _issue("is3", to="S"))) == ["issue.refused"]
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the control's mint, not the draw
 def test_19_a_writ_naming_several_executors_refuses_rather_than_ending_the_season():
     """r2 §A.3 types the addressee as a LIST; the cell asks about ONE executor. A hand-built writ
     naming two reached `WorldReader.read` with an unhashable subject and raised `TypeError` from
@@ -728,9 +733,10 @@ def test_sc03a_open_case_declines_an_arrangement_it_cannot_dispose_and_a_malform
 def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_refused_on_it():
     """#453 §10.4 step 3's observable, and §8.3's reason for the kind: the bench opens the kind the
     docketed row `disposes:` -- a `ban`, owned by the party, on the seat exercised, and no `oblige` --
-    and the party's own `release` of it is refused (`RELEASABLE_KINDS` excludes it). CONTROL: the same
-    party's `release` of an `oblige` (the undeclared disposal) closes it -- the convict's price C-1
-    ruled -- so the refusal is the kind's and not the actor's."""
+    and the party's own `release` of it is refused (`RELEASABLE_KINDS` excludes it). B21.07 (A-37, which
+    overwrites the convict's price C-1 ruled): the same party's `release` of an `oblige` (the undeclared
+    disposal) is refused too, by `_req_release`'s clause on an edge a bench imposed (`test_vb_a_formation.py`
+    runs it with its controls), so the two refusals are one rule reached by two doors."""
     w, d = _sentenced(BAN_KIND)
     ban, = _edges(w, BAN_KIND)
     assert ban.live and not _edges(w, "oblige"), w.tenures
@@ -740,8 +746,10 @@ def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_ref
     assert ban.live
     w, d = _ready("determine")
     assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    oblige, = _edges(w, "oblige")
     assert _kinds(_fold(w, d, Act(id="rl", actor=PARTY, verb="release",
-                                  payload={"subject": SEAT}))) == ["tenure.closed"]
+                                  payload={"subject": SEAT}))) == ["release.refused"]
+    assert oblige.live
 
 
 def test_sc03a_move_is_refused_while_a_detain_is_live():
@@ -912,7 +920,7 @@ def test_sc03a_a_ban_holder_is_refused_service_and_seating():
         w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", ["issue"], faction="Crown",
                                         conferral="appointed", revocation="rung_above_same_faction")
         if banned:
-            w.add_tenure(Tenure("t_ban", PARTY, "off_dicastery", BAN_KIND, since=w.tick))
+            w.add_tenure(Tenure("t_ban", PARTY, SEAT, BAN_KIND, since=w.tick))
         return w, d
     confer = Act(id="cf", actor=DUKE, verb="confer", payload={"office": "off_reeve", "to": PARTY},
                  via=SEAT)
@@ -926,15 +934,15 @@ def test_sc03a_a_ban_holder_is_refused_service_and_seating():
     assert "tenure.opened" not in out and set(out) <= set(VERB_TABLE["confer"].emits_on_refusal), out
     assert not [t for t in w.tenures if t.object == "off_reeve" and t.live]
     w, d = world(banned=True)
-    assert _kinds(_fold(w, d, oblige)) == ["duty.refused"]
+    assert _kinds(_fold(w, d, oblige)) == ["duty.banned"]      # B21.83: the `banned` clause's kind
 
 
 def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
     """The `detain`'s third reader: `sides_of`'s army is the muster at the actor's settlement less
-    every person in custody. `mustered` is stubbed to a known list so the read under test is the
+    every person in custody. `seat_people_at` (the seat's people, B21.79) is stubbed to a known list so the read under test is the
     exclusion alone; CONTROL: with nobody detained the list passes through unchanged."""
     w, _ = _world()
-    monkeypatch.setattr(_sides, "mustered", lambda *a, **k: [DUKE, PARTY, "p_low"])
+    monkeypatch.setattr(_sides, "seat_people_at", lambda *a, **k: [DUKE, PARTY, "p_low"])
     march = Act(id="mr", actor=DUKE, verb="march", payload={"subject": "S"}, via=SEAT)
     claimants, _, _ = _sides.sides_of(w, march, "S", "a field")
     assert claimants == [DUKE, PARTY, "p_low"], claimants

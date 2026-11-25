@@ -92,13 +92,21 @@ def _tell_formers(w) -> int:
     return n
 
 
+def _oath_knowers(w) -> set:
+    """The persons the B21.55 repair's build step (`boot/realm.py::seed_command_knowledge`) tells of the men sworn to their seats,
+    in BOTH arms (an oath is not CR-81's ruling): each holds a `duty.taken` claim and knows those men exist."""
+    return {pid for pid, p in w.persons.items() if any(c.predicate == "duty.taken" for c in p.ledger)}
+
+
 def test_the_realm_starts_with_acquaintances_on_every_seed(worlds):
     """EXIT: every faction co-member pair and every pair among the high-status seats is known, at build, on
     seeds 0-2; the count of persons who know no one falls from 83 of 83 (the control) to the pin."""
     checked = 0
     for s, (on, off) in worlds.items():
         assert len(on.persons) == len(off.persons) == 83
-        assert _know_none(off) == 83
+        knowers = _oath_knowers(off)
+        assert knowers, "the step-off arm holds no oath claim: the subtraction below observes nothing"
+        assert _know_none(off) == 83 - len(knowers), (_know_none(off), sorted(knowers))
         checked += _assert_acquainted(on)
         assert sorted(on._acquaintances) == sorted(f"c_acq_{a}_{b}" for a, b in _expected_pairs(on))
     assert checked == 3 * 236, checked
@@ -116,9 +124,10 @@ def test_the_high_status_set_is_the_throne_its_consort_and_the_duchy_seats(world
 
 
 def test_tell_forms_for_persons_it_formed_for_none(worlds):
-    """CR-03's base: `tell` forms for 0 persons at build. With the step it forms for the measured 37."""
+    """CR-03's base: `tell` forms at build for none but the oath step's knowers (`_oath_knowers`: the King, who knows his
+    sworn men, forms it; the measured 1). With the step it forms for the measured 37."""
     on, off = worlds[0]
-    assert _tell_formers(off) == 0
+    assert _tell_formers(off) == 1
     assert _tell_formers(on) == 37
 
 
@@ -135,11 +144,17 @@ def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_ou
         cap = on.fixtures.get("ledger_cap")
         added = set(on._acquaintances)
         for pid, p in on.persons.items():
-            base = [c for c in p.ledger if c.id not in added]
-            assert base == off.persons[pid].ledger, pid
+            # the oath step (B21.55 repair, `seed_command_knowledge`) runs in both arms and registers the same
+            # `c_acq_<knower>_<sworn>` ids in the on arm's `_acquaintances`: a claim the control also holds is not the
+            # step's addition
+            held_off = {c.id for c in off.persons[pid].ledger}
+            base = [c for c in p.ledger if c.id not in added or c.id in held_off]
+            # claim by claim, order aside: the oath step writes the same `exists:Person` claim at a different point of
+            # the build in the arm that did not already hold it from the acquaintance step
+            assert sorted(base, key=lambda c: c.id) == sorted(off.persons[pid].ledger, key=lambda c: c.id), pid
             assert len(p.ledger) <= cap, (pid, len(p.ledger))
             for c in p.ledger:
-                if c.id in added:
+                if c.id in added and c.id not in held_off:
                     assert c.holder == pid and c.predicate == KNOWN_PERSON_CLAIM["predicate"] and c.value
             persons += 1
     assert persons == 3 * 83

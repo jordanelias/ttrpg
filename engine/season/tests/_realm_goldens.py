@@ -63,31 +63,36 @@ once on the closing tree (`PYTHONHASHSEED=0`, twice equal); seed 0, one season: 
 
 RE-PINNED AT THE B24p MERGE WITH MAIN (BA1.99 and B15.99 landed on main while B24p was open; every `SHIPPED` and `CENSUS` value, BUILD unmoved: `f8f4cb23..`, main's, at seed 0): the merged realm is a third state. Seed 0, one season,
 read twice equal at `PYTHONHASHSEED=0`: main `4aab36db..` (B15.99) and the B24p tree `acdee97d..` -> `1e3cd6db..`.
+
+RE-PINNED AT B21.99 (every value below, BUILD too), ONCE for the batch B21-fa-governance (57 commits since `c21e451`, 144 files; `git diff --stat c21e451..a390628` reaches `engine/season/loop`, `queries`, `state`, `data`, `decision`, `boot/realm.py`, `offices.yaml`, `rosters.yaml` and `verb_table.yaml`, which every pin below reads). The movers are the batch's declared behaviour movers (B21.51 to B21.57, B21.63, B21.65, B21.66, B21.69, B21.73, B21.79, B21.80 to B21.83) and the first half's (B21.02 to B21.23). Seed 0, one season, hash (BUILD) acts/log: `c8e57653..` (`4c6a3a99..`) 563/12966 at `c21e451` (the B10.99 tree, before the batch) -> `e279b27a..` (`f8f4cb23..`) 570/13315 at the BA1.99 pin (`ce61cbf`) -> `fbc82e79..` (`7eb6293a..`) 425/9290 at `a390628` (the closing tree). Seeds 1 and 2 and the two-season spans were read on the closing tree. The BA1.99 values these replace are in `git log`.
+
+RE-PINNED AT THE B24p MERGE WITH B21 (B21-fa-governance landed on main while B24p was open; every `SHIPPED` and `CENSUS` value, BUILD unmoved: `7eb6293a..` at seed 0): the merged realm is a fourth state. Seed 0, one
+season, read twice equal at `PYTHONHASHSEED=0`: main `fbc82e79..` (B21.99) and the B24p tree `1e3cd6db..` -> `38044624..`. The B24p tree's shipped values are in `git log`.
 """
 
-BUILD = {0: "f8f4cb234a523f56d6a912625cb3046f"}                      # build_realm(seed), unplayed
+BUILD = {0: "7eb6293a334184ec6d7fd9798858cb5f"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "1e3cd6db48ed7c5518aa3e36606d38e4",   # B24p merge re-record: 4aab36db.. -> 1e3cd6db.. (the B24p tree alone: acdee97d..)
-           (1, 1): "c59f3f3f1f2b710059f27216e7da24d5",   # B24p merge re-record: 20fe61b8.. -> c59f3f3f.. (the B24p tree alone: 48c76e3f..)
-           (2, 1): "2400da0b04fa90d99965ee8838116431",   # B24p merge re-record: cc07d471.. -> 2400da0b.. (the B24p tree alone: eb92a171..)
-           (0, 2): "c9bba3fafb2262524af9eb30179977fe",   # B24p merge re-record: e6466cf7.. -> c9bba3fa.. (the B24p tree alone: ba059cf7..)
-           (1, 2): "c27bb192d458d1e2981d7de4cf1f5c27",   # B24p merge re-record: ab117da3.. -> c27bb192.. (the B24p tree alone: e22aedb8..)
-           (2, 2): "66216a487ee49ee85befca9c6dab50fc"}    # B24p merge re-record: 810c688f.. -> 66216a48.. (the B24p tree alone: 0d941347..); the earlier values are in `git log`
+SHIPPED = {(0, 1): "380446248fd513030ca5cdc3e08e59e9",
+           (0, 2): "f313e280bd3836abeccf660a5ae71f4b",
+           (1, 1): "2c25947f7f50caf2732a7ed1920e89b4",
+           (1, 2): "beacd436c62cfc5d87a5bbaf9cc8c032",
+           (2, 1): "21e7e0e5abbd45a35be6e59bd349a689",
+           (2, 2): "1e01060dfb17b1dfdd9e7567cb2b6fa6"}    # B24p merge with B21 re-record (the docstring); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=584, log=14310,   # B24p merge re-record: acts 583 -> 584, log 13525 -> 14310, census 1f2426e6.. -> 51923d09..
-                 census="51923d09e9b1bec9725c5834c72a14dbb21d657b43f68b789fdccede145c1698"),
-    (1, 1): dict(acts=595, log=11347,   # B24p merge re-record: acts 593 -> 595, log 11304 -> 11347, census 0439b04c.. -> c9f31a69..
-                 census="c9f31a691cbc408a9a81d7afb305c3e480a296d13b7a1cfc72afed5588a2a729"),
-    (2, 1): dict(acts=557, log=11538,   # B24p merge re-record: acts 561 -> 557, log 12097 -> 11538, census 800444a0.. -> 6bca6431..
-                 census="6bca6431e395f402463232f6a7075cbed6c8ce45981a1e47beffe159329cbdd2"),
-    (0, 2): dict(acts=1204, log=33920,   # B24p merge re-record: acts 1192 -> 1204, log 32794 -> 33920, census d55dac81.. -> 06a39a58..
-                 census="06a39a58a006504713a0e55a21156d96c6de0e5b55514ba05daa2b325fcfcf15"),
-    (1, 2): dict(acts=1227, log=39789,   # B24p merge re-record: acts 1230 -> 1227, log 38677 -> 39789, census b6f4878c.. -> 9de042f8..
-                 census="9de042f87a9d2517ca335854b78fd50ebfdbe2167e3707a3638dbb7c7345d3bf"),
-    (2, 2): dict(acts=1239, log=31374,   # B24p merge re-record: acts 1230 -> 1239, log 33701 -> 31374, census 425e91e7.. -> 9de7afed..
-                 census="9de7afedb9b39b57fd20de532e2f0b8518d052ec53315a6e35b36e89daca44d6"),
+    (0, 1): dict(acts=432, log=9148,
+                 census="b314c0b240e134c614fc435122ff17d344effabb1e878b2b94faa679d77fe9e7"),
+    (0, 2): dict(acts=896, log=25835,
+                 census="ffa99e0e8fe65ae28cc4cb26537f71d6695ae01c64a6809f5f70bf9a8d3f5aed"),
+    (1, 1): dict(acts=467, log=8809,
+                 census="1457bf8d0b29ecda9edefc799b4fe8ef7acd045fc13248d5ac288d03aa01afff"),
+    (1, 2): dict(acts=994, log=32551,
+                 census="02cac767134c596e32ef448ec22d61b9952043caddd01931700f2ea5d5a2f3f7"),
+    (2, 1): dict(acts=444, log=8525,
+                 census="19ca965512fd61a2d89e3f05f41e725a1c492e1fc0b3bf663532d14669e073e6"),
+    (2, 2): dict(acts=972, log=28722,
+                 census="6cd18026a46566d72a0d267277bab7d5b408a102f0cbcef7433733aa926ab840"),
 }

@@ -86,9 +86,9 @@ def test_war_context_an_enemy_stamp_forms_fight():
 def test_crime_context_a_warrant_addressed_to_him_forms_fight_and_one_he_only_made_does_not():
     w = P.tiny_world()
     kind = next(iter(set(V.WARRANT_SOURCED.values())))
-    _hold(w, A, "rec:w1", kind, {"terms": B, "to": (B,), "at": None})       # he made it; it charges B's addressee
+    _hold(w, A, "rec:w1", kind, {"terms": B, "to": (B,), "at": None, "force": None})       # he made it; it charges B's addressee
     assert not _fights(w, _q()), "the maker of a writ about B is not charged with it (the addressee test)"
-    _hold(w, A, "rec:w2", kind, {"terms": B, "to": (A,), "at": None})
+    _hold(w, A, "rec:w2", kind, {"terms": B, "to": (A,), "at": None, "force": None})
     assert _fights(w, _q())
 
 

@@ -9,7 +9,7 @@ The cell, all three: `existence` of `subject` kind `dispensation` + `own_ledger`
 (`construe` does NOT carry the checkpoint's third conjunct, `relation` `held_by`: on the current loader a
 `Record` row asking `held_by` is a HOLDING row, `data/verbs.py::HOLDING_RECORD_KINDS`, which would stamp
 every holder's dispensation for every `Record` row -- (5)'s custodian test is its control.) Formation:
-`queries/world_q.py::writs_held` stamps the dispensations on a person's live `hold` edges that NAME HIM
+`queries/world_q.py::writs_addressed` stamps the dispensations on a person's live `hold` edges that NAME HIM
 onto the question he answers as `Record` (IN-53 D1's partition), and the three rows declare
 `referent_class: Record` + `referent_named: true` (IN-10 (a)'s column), so a Candidate forms only on a
 held writ his own ledger names.
@@ -21,7 +21,7 @@ held writ his own ledger names.
   (3) a claim on a person, or on a text, answers no writ (the `existence` conjunct);
   (4) the cell does not ask for the writ in hand: a reader of its terms who does not hold it is admitted
       by the fold (formation (5) is what offers it to the holder alone in computed play);
-  (5) FORMATION: `writs_held`/`questions_for` stamp a held writ and nothing else; the three form on it
+  (5) FORMATION: `writs_addressed`/`questions_for` stamp a held writ and nothing else; the three form on it
       only once his ledger names it; a witness or a custodian who is not its addressee is offered none;
       with no writ held the questions are unchanged (the control);
   (6) THE CROWD-OUT CONTROL AT FORMATION (`test_in53v_a_the_partition_moves_no_other_rows_formations`'
@@ -32,7 +32,7 @@ held writ his own ledger names.
       when seed 0's trajectory held an attempt; (2) and (5) prove the held-writ and own-ledger
       conditions on built worlds. The restore's realm reading is `aperture 1 s` / `aperture 4 0`.
 
-MUTATIONS, run at the build on the unit tests (the realm half not re-run under them): `writs_held`
+MUTATIONS, run at the build on the unit tests (the realm half not re-run under them): `writs_addressed`
 returning `()` reddens (5) twice and (6); the `own_ledger` conjunct deleted from `comply` reddens (2);
 `referent_named` dropped reddens (1) and (5)'s 'not before his ledger names it'. Run again at v10 REM-2B
 for the two restored rows (the commit body).
@@ -65,7 +65,7 @@ REFUSAL = {"comply": "compliance.impossible", "evade / defy": "compliance.imposs
 HOLDER, OTHER = "p_low", "p_mid"                  # `tiny_world`: both in Hh
 WRIT = "rec_writ"
 _CONTENT = RECORD_CONTENT["predicate"]
-TERMS = {"terms": OTHER, "to": [HOLDER], "at": None}
+TERMS = {"terms": OTHER, "to": [HOLDER], "at": None, "force": None}
 
 
 def _with_writ(kind="dispensation"):
@@ -111,17 +111,23 @@ def test_in09_each_row_is_typed_resolvable_classed_and_emission_only(verb):
     assert row.requires_typed is not None, f"{verb}: the cell is still untyped"
     assert not row.requires_decline_note, f"{verb}: a stale `requires_decline_note:`"
     assert verb in resolvable_verbs(), f"{verb}: the fold still cannot carry it"
-    assert row.writes == (), f"{verb}: declares writes {row.writes} -- not emission-only"
-    assert verb not in EFFECTS, f"{verb}: an effect the fold never calls (`ID-13`)"
+    # B21.57 (A-24): `comply` alone writes -- the man's own legs, when the writ it answers names a place (`_eff_comply`) -- and emits
+    # `travel.ordered` beside its answer; `evade / defy` and `construe` stay emission-only, with no effect the fold never calls.
+    if verb == "comply":
+        assert row.writes == ("Person.travel_leg", "Tenure.until", "Tenure.since") and verb in EFFECTS
+    else:
+        assert row.writes == (), f"{verb}: declares writes {row.writes} -- not emission-only"
+        assert verb not in EFFECTS, f"{verb}: an effect the fold never calls (`ID-13`)"
     assert (row.referent_class, row.referent_named) == ("Record", True)
     # B10.24: `evade / defy` and `construe` also declare `scruple.overridden` (the refusable rows, kept only where the fold finds the act's scruple overridden)
-    assert (tuple(k for k in row.emits if k != "scruple.overridden"), row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
+    emitted = tuple(k for k in row.emits if k not in ("scruple.overridden", "travel.ordered"))
+    assert (emitted, row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
 
 
 def test_in09_the_record_class_is_declared_by_the_three_alone_and_answers_dispensations():
     # RE-RECORDED AT v10 REM-25 (B10-05): `carry`, `found` and `build` declare `Record` too, so the rows
     # declaring it were `{comply}` and are `{comply, carry, found, build}`. WHAT THIS TEST MEANT -- the
-    # writ occasion is `comply`'s alone, and `RECORD_REFERENT_KINDS` (the kinds `writs_held` stamps, with its
+    # writ occasion is `comply`'s alone, and `RECORD_REFERENT_KINDS` (the kinds `writs_addressed` stamps, with its
     # addressee test) is `dispensation` alone -- is asserted on the rows whose cell asks no `held_by` of
     # `subject` (the three others ask it: their kinds are `HOLDING_RECORD_KINDS`, a separate set stamped by
     # `records_held_for_holding_rows`; `test_referent_class_stamps.py::test_rem25_the_two_record_terms_...`).
@@ -162,7 +168,7 @@ def test_in09_the_record_class_is_declared_by_the_three_alone_and_answers_dispen
 def test_in09_the_loader_refuses_a_record_row_naming_no_record_kind(monkeypatch, verb, cell, match):
     """Batch B-I close, layer-conformance (A7): a `referent_class: Record` row whose cell names no
     `existence` kind of `subject` that `rosters.yaml: record_kinds` holds would leave
-    `RECORD_REFERENT_KINDS` without its kind, so `writs_held` stamps nothing for it and the row never
+    `RECORD_REFERENT_KINDS` without its kind, so `writs_addressed` stamps nothing for it and the row never
     forms -- a declared row read by nothing (`04` §A.1, ID-13). Planted on each of the three; the
     shipped rows are the control (they load, above)."""
     from engine.season.data import verbs as _verbs
@@ -212,14 +218,14 @@ def test_in09_a_reader_of_the_terms_who_does_not_hold_the_writ_is_admitted(verb)
 
 # (5) FORMATION -------------------------------------------------------------------------------------
 
-def test_in09_writs_held_stamps_a_held_dispensation_and_nothing_else():
+def test_in09_writs_addressed_stamps_a_held_dispensation_and_nothing_else():
     w, _ = _with_writ()
-    assert world_q.writs_held(w, w.persons[HOLDER]) == (WRIT,)
-    assert world_q.writs_held(w, w.persons[OTHER]) == ()
+    assert world_q.writs_addressed(w, w.persons[HOLDER]) == (WRIT,)
+    assert world_q.writs_addressed(w, w.persons[OTHER]) == ()
     wt, _ = _with_writ(kind="text")
-    assert world_q.writs_held(wt, wt.persons[HOLDER]) == (), "a held text is no writ"
+    assert world_q.writs_addressed(wt, wt.persons[HOLDER]) == (), "a held text is no writ"
     hold_force(w, WRIT).until = w.tick            # given away / ended: no longer his
-    assert world_q.writs_held(w, w.persons[HOLDER]) == ()
+    assert world_q.writs_addressed(w, w.persons[HOLDER]) == ()
 
 
 def test_in09_the_three_form_on_the_held_writ_once_his_ledger_names_it():
@@ -240,14 +246,14 @@ def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_none_of_the_three(
     """B10-05 close (REM-2C released `Record` to the own-referent term): a person who merely SAW the writ
     issued holds a claim on it (`claim_subject_rule: both`), so his question names it and each row's cell
     -- a claim on the writ, nothing about being its addressee -- would pass the fold (test (4) above).
-    The own-referent term skips a Record of a writ kind, so `writs_held`'s addressee test stays the whole
+    The own-referent term skips a Record of a writ kind, so `writs_addressed`'s addressee test stays the whole
     formation. The control is the same witness with the skip switched off: he then IS offered all three, so
     the assertion could have failed (and the non-holder control below holds an empty ledger, which has no
     question to answer at all)."""
     w, _ = _with_writ()
     _claim(w, OTHER, WRIT, "record.created", True, "c_witness")
     witness = w.persons[OTHER]
-    assert world_q.writs_held(w, witness) == (), "fixture: he is the writ's addressee"
+    assert world_q.writs_addressed(w, witness) == (), "fixture: he is the writ's addressee"
     (q, *_) = world_q.questions_for(w, witness)
     assert WRIT in q.referents, "fixture: the question is not about the writ"
     assert (WRIT, "Record") not in q.classes, q.classes
@@ -265,16 +271,16 @@ def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_none_of_the_three(
 def test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three(monkeypatch):
     """The reason `construe` carries no `held_by` conjunct (the module docstring). The MAKER holds a writ
     naming ANOTHER person, and his own ledger names it: he holds the writ and is not its addressee, so
-    `writs_held` stamps nothing and he is offered none of the three. The control plants what a `held_by`
+    `writs_addressed` stamps nothing and he is offered none of the three. The control plants what a `held_by`
     conjunct on `construe` would do on the current loader -- `dispensation` joins `HOLDING_RECORD_KINDS`, the set
     `records_held_for_holding_rows` stamps for every holder with no addressee test -- and he is then offered
     all three, so the assertion could have failed."""
     w, _ = _with_writ()
-    w.records[WRIT].subject_matter = {"terms": HOLDER, "to": [OTHER], "at": None}
+    w.records[WRIT].subject_matter = {"terms": HOLDER, "to": [OTHER], "at": None, "force": None}
     _read_terms(w, HOLDER)
     maker = w.persons[HOLDER]
     assert hold_force(w, WRIT).subject == HOLDER, "fixture: he does not hold the writ"
-    assert world_q.writs_held(w, maker) == (), "fixture: he is the writ's addressee"
+    assert world_q.writs_addressed(w, maker) == (), "fixture: he is the writ's addressee"
     (q, *_) = world_q.questions_for(w, maker)
     assert (WRIT, "Record") not in q.classes, q.classes
     assert not [c for c in _formed(w, HOLDER, q) if c.verb in THREE]
@@ -312,7 +318,7 @@ def test_in09_the_partition_moves_no_other_rows_formations():
             out = d._fold(w, mint_token(w, WriteClass.ACTS),
                           Act(id=f"mk{i}", actor=pid, verb="create_record",
                               payload={"record": rid, "kind": "dispensation",
-                                       "subject_matter": {"terms": pid, "to": [pid], "at": None}}))
+                                       "subject_matter": {"terms": pid, "to": [pid], "at": None, "force": None}}))
             assert [e.kind for e in out] == ["record.created"]
         _claim(w, pid, rid, f"{_CONTENT}:dispensation", content_value(w.records[rid].subject_matter),
                f"c_t{i}")

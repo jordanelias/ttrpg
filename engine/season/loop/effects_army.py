@@ -27,7 +27,7 @@ from engine.substrate import composition
 from ..queries import world_q
 from ..queries.world_q import faction_holding
 from ..queries.inputs import ArmyCommand
-from ..state.gate import NO_CHANGE, Change, Subject
+from ..state.gate import NO_CHANGE, Change, Subject, may_levy
 from .effects_shared import _operand, _scaled, effect_for
 
 
@@ -80,8 +80,12 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
         return NO_CHANGE
     args = _payload(a, "cohort", "troop_type", "count")
     cohort = w.persons.get(args.get("cohort")) if isinstance(args.get("cohort"), str) else None
+    # B21.59 (`06_FA_levy_through_the_seat_B` edit 3): men are levied THROUGH A SEAT -- the seat the act names (`a.via`) is a muster seat of the
+    # army's faction whose purview reaches where the cohort lives (`may_levy`), beside `raisable_by` (the faction governs that ground, or the
+    # cohort is committed to it: a Query, which the gate may not import).
+    faction = rec.subject_matter["faction"]
     if (len(args) != 3 or cohort is None or not cohort.weight > 1
-            or not world_q.raisable_by(w, cohort.id, rec.subject_matter["faction"])):
+            or not may_levy(w, a.actor, a.via, cohort.id, faction) or not world_q.raisable_by(w, cohort.id, faction)):
         return NO_CHANGE
     # B07.02 (18-A edit 5): the turnout is the band's share of the `count` asked for (`_scaled`; no band, or a full one, is all of it).
     # [ASSUMPTION: `14_VERBS_MILITARY`'s own recruit map is B22's; until it lands the one `task_fraction` table reads here]
@@ -114,7 +118,12 @@ def _eff_disband_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> 
 @effect_for("discharge_troops")
 def _eff_discharge_troops(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """DISCHARGE TROOPS: send `count` trained, unassigned troops of `troop_type` from `cohort` home; they leave the army
-    and stop counting against the cohort's cap."""
+    and stop counting against the cohort's cap. B21.59: through a seat, as `recruit` is -- the act's `via` must be a muster seat of the army's
+    faction whose purview reaches where the cohort lives (`may_levy`); `raisable_by` is not asked, so a lord can send home men whose ground
+    his faction has since lost."""
+    rec, cohort = _army(w, a), _payload(a, "cohort").get("cohort")
+    if rec is None or not isinstance(cohort, str) or not may_levy(w, a.actor, a.via, cohort, rec.subject_matter["faction"]):
+        return NO_CHANGE
     return _apply(w, a, "discharge", _payload(a, "cohort", "troop_type", "count"), "army.discharged")
 
 

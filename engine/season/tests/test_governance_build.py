@@ -23,6 +23,8 @@ import pytest
 
 from collections import Counter
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
+
 from ..data import files
 from ..data.matrix import MATRIX, Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
@@ -44,6 +46,10 @@ from ..state.carriers import (
     Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, View,
     matrix_rows_without_a_field, refuse_a_title_in_a_body, subject_of,
 )
+from ..seam import Resolution
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
+
+SUCCESS = DEGREE_LABEL[Degree.SUCCESS]   # B21.09: the writing band `_establish` folds a founding at
 
 
 # ---------------------------------------------------------------------------
@@ -1108,10 +1114,15 @@ def _establish(w, d, aid: str, payload, actor: str = "p_high", via: str = "off_d
     """G3 (plan position 6): the act names the seat it is exercised through. `establish` is
     `remit:confer`-eligible, and `off_duke` -- a Crown seat at `D`, over every rung `_founding` uses
     -- is the duke's seat whose grant carries `confer`; since G3 `_eligible` asks THAT seat, and the
-    write gate asks its purview before a sitting holder's grant may be re-stamped."""
-    return d.resolve(mint_token(d.w, WriteClass.ACTS),
-                     [Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)],
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+    write gate asks its purview before a sitting holder's grant may be re-stamped.
+
+    B21.09: `establish` is DRAWN (`contests: a seat`); these tests read the founding's admission, gate and effect, not its draw,
+    so the act is folded at Success through the real `_fold` (its `_admits`, the gate, the effect), as `test_aperture.py` folds
+    a band. The draw is `test_vb_a_formation.py::test_a3_establish_bands_on_a_hand_built_holding`'s."""
+    act = Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)
+    w.step = Step.RESOLVE
+    w.acts.append(act)
+    return d._fold(w, mint_token(d.w, WriteClass.ACTS), act, Resolution(SUCCESS, {}))
 
 
 def _seat_reeve(w, remit):
@@ -1254,7 +1265,7 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     # cannot meet over its own rung; clause 5's own refusal is told from the retired precondition below.)
     out = _establish(w, d, "e_self", _founding(remit=["confer", "dispatch"]),
                      actor="p_mid", via="off_reeve")
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
     assert w.offices["off_reeve"].remit_acts == ["confer"], (
         "the refused act still re-stamped the remit")
 
@@ -1280,6 +1291,7 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
                     for t in w.tenures)
         return not others or PR.may_fill(w, a.actor, a.via, off)
 
+    retired_req_establish.clauses = PR.REQUIRES_PREDICATES["establish"].clauses      # B21.81: the keyed row is admitted only while the predicate declares its keys
     monkeypatch.setitem(PR.REQUIRES_PREDICATES, "establish", retired_req_establish)
     # H-291 (B03.81): the effect reads `office_founded_by`, which now asks `founds_over` of an overlay act as
     # well, and a seat cannot found over its own rung -- so, as the retired precondition predates that
@@ -1339,27 +1351,27 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
         f"{change}: the payload did not describe a constructible Office at all")
 
     out = _establish(w, d, "e_refound", changed_payload)
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.refounding"], [e.kind for e in out]      # B21.81: the `re-founding` clause's kind
     assert w.offices["off_reeve"].remit_acts == ["issue"]
     assert t.granted_acts == ("issue",)
 
 
 # `raises` marks the payloads the CONSTRUCTOR itself rejects, so each refusal below is shown to
 # have intercepted a real raise rather than to have been a no-op nothing would have tripped.
-@pytest.mark.parametrize("payload,raises", [
-    ({}, False),
-    (_founding(faction=None), True),                                   # belongs to nothing
-    (_founding(faction="Nowhere Brotherhood"), True),                  # an unknown faction
-    (_founding(faction=None, body="Office of Nothing"), True),         # an unknown body
-    (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
-    (_founding(remit=["issue", "requisition"]), True),                        # off `REMIT_ACTS`
-    (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
-    (_founding(rung="nowhere"), False),                                # a rung the world lacks: no constructor raise; refused by `founds_over`'s own guard (`rung not in w.rungs`, H-291)
-    (_founding(conferral=None), False),                                # no conferral basis
-    (_founding(office="p_low"), False),                                # an id a person holds
+@pytest.mark.parametrize("payload,raises,kind", [
+    ({}, False, "establish.no_office"),
+    (_founding(faction=None), True, "establish.no_office"),                                   # belongs to nothing
+    (_founding(faction="Nowhere Brotherhood"), True, "establish.no_office"),                  # an unknown faction
+    (_founding(faction=None, body="Office of Nothing"), True, "establish.no_office"),         # an unknown body
+    (_founding(body="Imperial Court", faction="Church of Solmund"), True, "establish.no_office"),   # a mismatch
+    (_founding(remit=["issue", "requisition"]), True, "establish.no_office"),                        # off `REMIT_ACTS`
+    (_founding(post="Duke", faction=None, body="Imperial Court"), True, "establish.no_office"),     # a title in a body
+    (_founding(rung="nowhere"), False, "establish.no_office"),                                # a rung the world lacks: no constructor raise; refused by `founds_over`'s own guard (`rung not in w.rungs`, H-291)
+    (_founding(conferral=None), False, "establish.no_basis"),                                # no conferral basis
+    (_founding(office="p_low"), False, "establish.refounding"),                                # an id a person holds
 ], ids=["empty", "no-belonging", "unknown-faction", "unknown-body", "mismatch", "off-roster-remit",
         "title-in-body", "unknown-rung", "no-basis", "person-id"])
-def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_nothing(payload, raises):
+def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_nothing(payload, raises, kind):
     """The fold's FIRST refusal path: the precondition returns False and the fold emits
     `emits_on_refusal`. Asserted on the Event -- the fold is called bare, so a raise escaping it
     fails this test as an error rather than passing silently."""
@@ -1372,7 +1384,7 @@ def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_noth
         with pytest.raises((Unowned, Unspecified, Forbidden)):
             office_described_by(act)
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == [kind], [e.kind for e in out]      # B21.81: the clause's own kind (`office resolves`, `conferral basis`, `re-founding`)
     assert w.offices == before, f"an office was constructed: {sorted(set(w.offices) - set(before))}"
 
 
@@ -1389,7 +1401,7 @@ def test_13f_a_computed_establish_carries_no_operands_and_refuses():
     assert person_side_eligible(duke, row), "fixture: the duke cannot form `establish` at all"
     assert operands_for(duke, row, None, "p_low", w.fixtures) == {}
     out = _establish(w, d, "e_computed", {"subject": "p_low"})
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
 
 
 def test_13f_confer_and_establish_ask_one_basis_test(monkeypatch):
@@ -1563,8 +1575,10 @@ def _remit_acts_attribute_reads_outside_allowlist() -> list:
             # remit of the office THE ACT DESCRIBES (clause 5's H-132 (b) reduction test, against the sitting
             # holders' `granted_acts`), never a stored office's remit as an eligibility fact. Its derivation
             # (`office_founded_by`) reads the founder's grant, not `remit_acts`, and stays outside the list.
+            # B21.16: `state/gate.py::passes_a_seat` joins them -- it asks whether a SEAT'S OWN design is a bare title
+            # (`appointed`, an empty remit) for the claim to lay it down, never whether an act is eligible.
             if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish",
-                                                                   "_req_establish"):
+                                                                   "_req_establish", "passes_a_seat"):
                 allowed_spans.append((node.lineno, node.end_lineno))
             elif isinstance(node, ast.ClassDef) and node.name == "Office":
                 allowed_spans += [(sub.lineno, sub.end_lineno) for sub in node.body
@@ -1642,8 +1656,8 @@ def _seat_of(w, actor):
 
 
 def _may_revoke(w, actor, office) -> bool:
-    return _preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",
-                                     payload={"office": office}, via=_seat_of(w, actor)))
+    return bool(_preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",      # B21.82: the answer is `Answer(ok, clause)`; these read only whether it passed
+                                          payload={"office": office}, via=_seat_of(w, actor))))
 
 
 def test_13d_i_lb10c_a_titled_seat_is_revocable_only_by_the_seat_above_in_its_faction():
@@ -1829,7 +1843,7 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
     with pytest.raises(Unspecified):
         office_described_by(act)
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
     assert "off_reeve" not in w.offices
     # v10 IN-61 (B10-09 close): a seat only the heir's claim opens is founded only as the seat a title passes
     # (`SUCCESSIONS`, `gate.has_filler`); the same basis on a seat no title passes is refused (CONTROL below).
@@ -1844,7 +1858,7 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
         founded += 1
         if claim_only:
             out = _establish(w, d, f"e_orphan_{i}", _founding(office=f"off_orphan_{i}", conferral=basis))
-            assert [e.kind for e in out] == ["establish.refused"], (basis, [e.kind for e in out])
+            assert [e.kind for e in out] == ["establish.no_filler"], (basis, [e.kind for e in out])      # B21.81: the `filler` clause's kind
             assert f"off_orphan_{i}" not in w.offices
             refused += 1
     assert founded == len(CONFERRAL_BASES) >= 3 and refused >= 1, (founded, refused)
@@ -1871,6 +1885,7 @@ def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
     assert Office("off_t", "Chancellor", None, [], body="Imperial Court").faction == "Valorsmark"
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the revocation basis is read here at Success; the draw is C3's test
 def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_other_faction():
     """§0.2 -- DONE MEANS IT RUNS. Planted `revoke` acts through the resolver, both revokers seated
     with `revoke` in their grant so eligibility passes and the PREDICATE decides: the other
@@ -1890,7 +1905,7 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
                  via=_seat_of(w, actor))],
             contest_max_depth=w.fixtures.get("contest_max_depth"))]
 
-    assert run("rv_rival", "c_rival_king") == ["revoke.refused"]
+    assert run("rv_rival", "c_rival_king") == ["revoke.unauthorized"]      # B21.82: the `authority` clause's kind
     assert held(), "the other faction's King closed the duke's hold"
     kinds = run("rv_king", "c_king")
     assert "tenure.closed" in kinds and "revoke.refused" not in kinds, kinds
@@ -1974,7 +1989,7 @@ def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_pat
     row id and skips a row already in that dict, so a second row under one id was collapsed without a
     sound (the test above asserts uniqueness of the CHECKED-IN file, which a loader refusal does not
     depend on). The loader is pointed at a throwaway copy; the unchanged copy is the positive control
-    (it loads, all 29 rows), so a loader that refused every file cannot pass."""
+    (it loads, every row), so a loader that refused every file cannot pass."""
     import yaml
     from ..data import rosters
 
@@ -1983,7 +1998,7 @@ def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_pat
     monkeypatch.setattr(rosters, "OFFICES_YAML", path)
 
     path.write_text(yaml.safe_dump(real), encoding="utf-8")
-    assert len(rosters._load_offices()["seats"]) == 31
+    assert len(rosters._load_offices()["seats"]) == 32
 
     first = real["seats"][0]
     for twin in (dict(first), dict(first, holder="NPC-999", post="Somebody Else")):
@@ -2024,7 +2039,7 @@ def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
         checked += 1
         checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
         checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
-    assert checked == len(doc["seats"]) == 31, checked
+    assert checked == len(doc["seats"]) == 32, checked
     assert checked_a_real_conferral and checked_a_real_revocation, (
         "every seat checked had a None basis -- this test cannot tell the overlay ran")
 
@@ -2099,7 +2114,7 @@ def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind
             f"stands at {off.rung!r}")
         by_kind[kind] += 1
         new_resolved += row["note"].startswith("[NEW]")
-    assert sum(by_kind.values()) == len(_seat_rows()) == 31, by_kind
+    assert sum(by_kind.values()) == len(_seat_rows()) == 32, by_kind
     assert set(by_kind) == {"realm", "duchy", "territory"}, (
         f"{by_kind}: a form no row uses is not observed here -- the settlement form has its own test")
     assert new_resolved == 10, f"{new_resolved} `[NEW]`-marked rows resolved; r2 `03` marks ten"
@@ -2172,19 +2187,19 @@ def test_13d_iii_a_stale_index_entry_is_refused_not_trusted(_realm13):
 def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeypatch):
     """A MINTED seat is one no loop-built seat stands for, so its id must be fresh. A row carrying
     the id of a seat the loop already built used to REPLACE that seat without a sound. The probe
-    renames the first minted row to the id of the loop-built `off_npc_084` (NPC-084's `guild leader`, the
-    one seat no row stands for, so the one loop-built seat that still carries a slug id; since CP-T02-02 a
-    seat a row overlays stands under the ROW's id, and a minted row carrying that id is skipped as authored);
-    the realm must refuse, naming the id. The build with the real rows
-    is the control (`_realm13`, and every other test here, build it)."""
-    from ..boot import realm as boot_realm
-    from ..data.rosters import OFFICES_SEATS
+    takes NPC-084's row (`off_guild_leader`) out of the roster and its by-holder index, so the loop builds
+    NPC-084's `guild leader` with no row, the one loop-built seat that carries a slug id (`off_npc_084`; since
+    CP-T02-02 a seat a row overlays stands under the ROW's id, and a minted row carrying that id is skipped as
+    authored), and renames the first minted row to that id; the realm must refuse, naming the id. The build with
+    the real rows is the control (`_realm13`, and every other test here, build it)."""
+    from ..data.rosters import OFFICES_BY_HOLDER, OFFICES_SEATS
 
-    real = OFFICES_SEATS
     minted_id = _realm13._office_census["minted"][0]
-    rows = [dict(r, id="off_npc_084") if r["id"] == minted_id else r for r in real]
+    rows = [dict(r, id="off_npc_084") if r["id"] == minted_id else r
+            for r in OFFICES_SEATS if r["id"] != "off_guild_leader"]
     assert sum(r["id"] == "off_npc_084" for r in rows) == 1
-    monkeypatch.setattr(boot_realm, "OFFICES_SEATS", rows)
+    by_holder = {h: [r for r in rs if r["id"] != "off_guild_leader"] for h, rs in OFFICES_BY_HOLDER.items()}
+    _populated_rows(monkeypatch, rows, by_holder)
     with pytest.raises(Forbidden) as red:
         build_realm(seed=0)
     assert "off_npc_084" in str(red.value) and "minted" in str(red.value), str(red.value)
@@ -2299,7 +2314,7 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
     assert ids.index(obligee) >= cap, "the obligee is inside the cap: this probe cannot drop it"
     w = build_realm(seed=0, cap=cap)
     kept = {r["id"] for r in OFFICES_SEATS if f"p_{r['holder'].lower().replace('-', '_')}" in w.persons}
-    assert 0 < len(kept) < len(OFFICES_SEATS) == 31, len(kept)
+    assert 0 < len(kept) < len(OFFICES_SEATS) == 32, len(kept)
     assert set(w._office_census["authored"]) == kept, sorted(set(w._office_census["authored"]) ^ kept)
     assert row["id"] in w._office_census["authored"]
     assert f"p_{obligee.lower().replace('-', '_')}" not in w.persons
@@ -2368,14 +2383,14 @@ def test_13d_iii_a_titled_seat_must_stand_at_the_rung_kind_its_title_governs(_re
     assert w.rungs[ok].kind == title_domain("Duke")
 
 
-def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exception(_realm13):
+def test_13d_iii_every_seat_the_realm_builds_has_a_rung(_realm13):
     """`H-163` limit 1 was *16 of 19 seats carry no rung*; measured at this position's start, 21 of
     the 24 the loop builds. Now every seat stands at its row's rung, `scope_rung` the same one (a
-    bench's ground, `H-32`), save the seat the registry derives and no row authors: NPC-084's
-    `guild leader`, which has no anchor and is given none."""
+    bench's ground, `H-32`): B21.03 gave NPC-084's `guild leader`, the last seat no row authored,
+    its row (`off_guild_leader`), so none is left without an anchor."""
     w = _realm13
     cen = w._office_census
-    assert cen["unauthored"] == ["off_npc_084"], cen["unauthored"]
+    assert cen["unauthored"] == [], cen["unauthored"]
     assert len(w.offices) == cen["seated"] and w.offices, (len(w.offices), cen["seated"])
     anchored = 0
     for oid, off in w.offices.items():
@@ -2433,31 +2448,25 @@ def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
             assert t.term is None and t.live
 
 
-def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act(_realm13):
-    """The row's `remit_acts` IS a seat's remit, `[]` included: an authored empty list is NOT filled
-    by `rosters.yaml: remit_default` (a testing fixture). The one thing a seat keeps beyond its row
-    is an act `offices.yaml: meta: remit_unruled` names (`dispatch`, J-8) -- and only if it held it
-    before. The unauthored seat is the control: with no row, the default still fills."""
-    from ..data.rosters import OFFICES_REMIT_UNRULED, REMIT_DEFAULT
-
+def test_13d_iii_a_seat_holds_a_remit_act_if_and_only_if_its_row_names_it(_realm13):
+    """The row's `remit_acts` IS a seat's remit, `[]` included (B21.03): an authored empty list is NOT
+    filled by `rosters.yaml: remit_default` (a testing fixture), and nothing a loop-built seat was seated
+    with survives the overlay. Each seat's grant equals its row's; `dispatch` is among the grants of
+    exactly the rows that name it, and NPC-084's seat reads `convene` only."""
     w = _realm13
-    assert OFFICES_REMIT_UNRULED, "the unruled set is empty: the overlay below would strip J-8's act"
     cen = w._office_census
-    empty_rows = checked = 0
+    empty_rows = dispatchers = checked = 0
     for row in _seat_rows():
         off = w.offices[cen["authored"][row["id"]]]
-        have, authored = set(off.remit_acts), set(row["remit_acts"])
-        assert authored <= have, f"{row['id']}: authored {sorted(authored)} not all granted {sorted(have)}"
-        assert have - authored <= OFFICES_REMIT_UNRULED, (
-            f"{row['id']} holds {sorted(have - authored)} beyond its row: the testing default leaked "
-            "past the overlay")
-        if not authored:
-            empty_rows += 1
+        assert set(off.remit_acts) == set(row["remit_acts"]), (
+            f"{row['id']}: grant {sorted(off.remit_acts)} is not its row's {sorted(row['remit_acts'])}")
+        assert ("dispatch" in off.remit_acts) == ("dispatch" in row["remit_acts"]), row["id"]
+        empty_rows += not row["remit_acts"]
+        dispatchers += "dispatch" in off.remit_acts
         checked += 1
-    assert checked == 31 and empty_rows >= 1, (checked, empty_rows)
-    assert set(w.offices["off_npc_084"].remit_acts) == set(REMIT_DEFAULT), (
-        "the seat no row authors lost the testing default -- the fill path the overlay replaces "
-        "only where a row exists")
+    assert checked == 32 and dispatchers >= 1, (checked, dispatchers)
+    assert cen["unauthored"] == [], "a seat no row authors would be filled from the testing default"
+    assert sorted(w.offices["off_guild_leader"].remit_acts) == ["convene"]
 
 
 # ⚠ RETIRED (B-K close, ACC 7 / FID 4; v9 §0.5, 2026-10-13: no test asserts a verb executed in the
@@ -2923,7 +2932,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
     # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
     # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (584, 583), (      # B24p merge re-record: (583, 582) -> (584, 583), the proceeding's five verbs move the act mix (B15.99: (570, 568) -> (583, 582), the fight calibration)
+    assert (out["acts"], cout["acts"]) == (432, 431), (      # B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what

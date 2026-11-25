@@ -101,49 +101,31 @@
 #     `Office.rung` (purview, `04:330`'s `via.scope`) AND its `Office.scope_rung` (a bench's ground,
 #     `H-32`). No row authors a `settlement` anchor today; the resolver does not care which form a
 #     row uses, only that it names exactly one live rung of the kind it says.
-#   * `remit_acts` REPLACES what the loop would have granted (a declared `[]` is NOT filled from
-#     `rosters.yaml: remit_default`), EXCEPT for the acts named in `meta: remit_unruled`, which a
-#     LOOP-BUILT seat keeps if it held it before the overlay. `dispatch` is that act.
-#     ⚠ SO `dispatch` IS GRANTED, NOT LEFT ALONE, AND NOT ONLY WHERE A ROW IS `[]`. The loop seats
-#     with `remit_default` (every remit act, `dispatch` included) unless the case's own overlay
-#     declares a remit, so a loop-built seat's `held` names `dispatch` and the overlay keeps it.
-#     MEASURED, `build_realm(0)`, 2026-10-02: `dispatch` is held by 22 of the 29 authored seats --
-#     22 of the 23 LOOP-BUILT and 0 of the 6 MINTED. Of the 22, seven are the rows whose
-#     `remit_acts` is `[]` (`off_heir`, `off_princess`, `off_guard_captain`, `off_archbishops_rep`,
-#     `off_legal_advisor_hm`, `off_commune_rep_hm`, `off_guild_comptroller`), where `dispatch` is
-#     the seat's WHOLE remit; the other fifteen carry it alongside the acts their row names. The
-#     one loop-built seat without it is `off_parliamentary_clerk`: NPC-008's overlay declares
-#     `remit: [issue]`, so its `held` is that rather than the default. The seat no row authors,
-#     `off_npc_084`, holds it too (23 of 30 offices). `march` (eligibility `remit:dispatch`) is
-#     eligible to every one of those holders. A MINTED row holds only what it names, because a
-#     minted seat has no `held`: identical rows diverge by BUILD ROUTE. J-8 (whether `dispatch` is
-#     a remit act at all) is Jordan's, and stripping it -- delete the `remit_unruled` line, which
-#     strips it from all 22 in one edit, or name it in the rows that should carry it -- is a GRANT
-#     decision, not a code fix; the strip would leave the seven `[]`-row seats with no remit,
-#     which `test_season_shape.py`'s remit-default test (`assert not ungranted`) would then report.
+#   * A SEAT'S REMIT IS ITS ROW'S (B21.03): `remit_acts` is the whole grant, `[]` included, and a loop-built
+#     seat keeps nothing it held before the overlay. A seat holds a remit act if and only if its row names it.
 #   * MEASURED, `build_realm(0)`, 2026-10-01: the per-case loop seats 24, not r2 `03`'s 19. Four
 #     `[NEW]`-marked holders (NPC-007, NPC-013, NPC-021, NPC-070) are already seated by it under a
 #     registry-derived post, so those four are OVERLAID, not minted; six rows are MINTED
 #     (`off_duke_valorsmark` -- the King's second seat -- `off_lord_steward`, `off_cardinal_fortitude`,
-#     `off_cardinal_temperance`, `off_senior_inquisitor`, `off_restoration_leader`). And ONE seat
-#     the loop builds has no row at all: NPC-084's (`off_npc_084`, "guild leader"). It stays
-#     rungless, a declared exception -- authoring it a row, or dropping the seat, is a content
-#     decision, not a resolver's.
+#     `off_cardinal_temperance`, `off_senior_inquisitor`, `off_restoration_leader`). NPC-084's
+#     seat, which the loop builds with no row, took one at B21.03 (`off_guild_leader`).
 #   * `obligees` become `oblige` Tenures on the seat, with no term (`04 §B.8`'s `term?`, lawful
 #     null): a seat seeded at world-gen has no opening act to declare one.
 #   * A loop-built seat keeps its derived post/body/faction (a post normalisation is a separate unit --
 #     `rosters.yaml: remit_default`'s own note); only a MINTED seat carries this file's `post`, `body`
 #     and `faction`. Every seat a row stands for, loop-built or minted, is under the row's `id`
 #     (`harness/populated.py::_seat_id`, CP-T02-02); a seat with no row keeps `off_<holder>`.
+#   * A SEAT ROW MAY CARRY `term: <positive int> | null` (seasons; B21.01) -- the DEFAULT length a `confer` onto the seat writes onto
+#     the hold's `term?` where the act declares none (`loop/effects_governance.py::_declared_term`). A TERM IS AUTHORED ONLY ON A SEAT
+#     WHOSE BODY ROTATES (B21.04; of the `conferral: elected` rows, three carry one): `off_guild_comptroller`,
+#     `off_guild_leader` and `off_commune_rep_hm`, 4 seasons each (one year, the declared year being four seasons -- a later edit
+#     adds that year; until then the value is read in seasons). A life or heritable seat (Confessor, a Duke, a Jarl, the Skald-Chief,
+#     the Restoration leader) carries no `term:` key. [ASSUMPTION; medium; Jordan to correct; revert: no `term:` keys; swept {4, 8}.]
 
 meta:
-  source: "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64)."
+  source: "engine/season/offices.yaml -- the governance ladder's titles, and 32 authored seats (29, then the two Riskbreakers rows at v9 IN-64, then NPC-084's at B21.03)."
   derivation: "proposals/2026-09-16-term-ownership/offices_draft.yaml, per r2 03_SEATS_AND_CONTENT.md §A.13-§A.15, with conferral/revocation recomputed against ED-IN-0256 (see the header above)"
   rule: "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` §5's hand-transcription hazard, one layer earlier."
-  # J-8, Jordan's open ruling: is `dispatch` a remit act at all? r2 `03`'s remit column assumed it
-  # deleted; the tree carries it and `ED-IN-0256` is silent. UNRULED, so the overlay of `remit_acts`
-  # below leaves it exactly where it is: a seat that held it before the overlay holds it after.
-  remit_unruled: [dispatch]
 
 # ⚠ MOVED FROM `rosters.yaml: titles`, VERBATIM CONTENT, NOT RE-DERIVED. Jordan, 2026-09-02,
 # quoted in full at the roster's original site (kept there as residue -- see the header above):
@@ -191,7 +173,7 @@ founding:
   conferral: appointed
   revocation: rung_above_in_holdings
 
-# THE THIRTY-ONE SEATS (29 until IN-64 added the Riskbreakers' two) -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
+# THE THIRTY-TWO SEATS (29 until IN-64 added the Riskbreakers' two, B21.03 NPC-084's) -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
 # holder (a case id in the 46-row cast), obligees, source. `[LIVE]` / `[NEW]` are r2 `03` §A.15's
 # marks, kept as written: `[LIVE]` = the per-case loop seated this holder when r2 was drafted;
 # `[NEW]` = r2 authored the seat. They are NOT the builder's partition -- four `[NEW]` holders are
@@ -202,7 +184,7 @@ seats:
     rung:       {realm: true}
     body:       null
     faction:    "Valorsmark"
-    remit_acts: [issue, determine, confer, revoke, convene]
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]
     modifier:   minor   # B05.23, T13 edit 5 (T4, A-12): a bench seat (its `determine` grant seats its holder on the bench `world_q.judging_set` reads) -- one level for an act through it before its own bench [ASSUMPTION; medium; Jordan to correct; revert: no `modifier:`]
     conferral:  inheritance   # v10 IN-61 (RS-27): claimed by the holder of `rosters.yaml: successions`' title (`off_heir`), never conferred [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null   # no rung above the realm
@@ -216,8 +198,8 @@ seats:
     rung:       {duchy: "Valorsmark"}
     body:       null
     faction:    "Valorsmark"
-    remit_acts: [issue, confer, revoke, convene]
-    conferral:  null
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]   # B21.53 (`16_PESSIMIST_FA_A` edit 3, A-37): a seat that dismisses may also pardon -- `pardon` asks the grant (`remit:determine`) and the ban's object (this seat), and the ban `revoke` opens is on this seat [ASSUMPTION; medium; Jordan to correct; revert: drop `determine`]
+    conferral:  inheritance   # B21.51 (`16_PESSIMIST_FA_A` edit 1, A-19): the duchy passes with the throne -- `rosters.yaml: successions` lists `off_king`'s titles for it, and the one `succeed` that opens the throne opens it [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-020"
     obligees:   []
@@ -229,7 +211,7 @@ seats:
     rung:       {duchy: "Hafenmark"}
     body:       null
     faction:    "Hafenmark"
-    remit_acts: [issue, confer, revoke, convene]
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]   # B21.53 (A-37): a seat that dismisses may also pardon [ASSUMPTION; medium; Jordan to correct; revert: drop `determine`]
     conferral:  null
     revocation: rung_above_in_holdings   # Jordan 2026-10-12: strippable by the monarch only if the duchy is in their holdings
     holder:     "NPC-050"
@@ -242,7 +224,7 @@ seats:
     rung:       {duchy: "Varfell"}
     body:       null
     faction:    "Varfell"
-    remit_acts: [issue, confer, revoke, convene]
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]   # B21.53 (A-37): a seat that dismisses may also pardon [ASSUMPTION; medium; Jordan to correct; revert: drop `determine`]
     conferral:  elected
     revocation: rung_above_in_holdings   # Jordan 2026-10-12: strippable by the monarch only if the duchy is in their holdings
     holder:     "NPC-052"
@@ -255,14 +237,14 @@ seats:
     rung:       {realm: true}
     body:       null
     faction:    "Valorsmark"
-    remit_acts: [issue, determine, confer, revoke, convene]
+    remit_acts: []   # B21.16 (REMIT edit 1, R-16; HAPPENINGS-B A-19): the consort's powers arrive with a regency (a termed `confer`, or the heir's claim), never a standing grant; her own claim in the race closes this seat only because its remit is empty (`_eff_succeed`) [ASSUMPTION; medium; Jordan to correct; revert: restore `[issue, determine, confer, revoke, convene]`, one re-pin]
     modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
-    conferral:  null
+    conferral:  appointed   # B21.15 (HAPPENINGS-B edit 1, A-19): a title of the royal house, conferred through `off_king` [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-032"
     obligees:   []
     source:     "harness/populated.py -- post normalised from the live \"Queen (Widow Regent if Almud eliminated)\", which is not on `titles.domains` verbatim; the condition moves to this note"
-    note:       "[LIVE]. r2 03 §A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post."
+    note:       "[LIVE]. r2 03 §A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B. B21.16: the consort's powers arrive with a regency, which is a termed `confer` or the heir's claim, never a standing grant; or a claim in the race by the consort herself (A-19 lists her among those who may claim)."
 
   - id:         off_heir
     post:       "Prince (Heir Apparent)"
@@ -283,19 +265,19 @@ seats:
     body:       null
     faction:    "Valorsmark"
     remit_acts: []
-    conferral:  null
+    conferral:  appointed   # B21.15 (HAPPENINGS-B edit 1, A-19): as `off_widow_regent` [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-030"
     obligees:   []
     source:     "harness/populated.py -- no draft row; kept as one of the two Royal Family succession seats"
-    note:       "[LIVE]. No `offices_draft.yaml` row; r2 03 §A.13.2 argues the Royal Family seats stay against the draft's silence."
+    note:       "[LIVE]. No `offices_draft.yaml` row; r2 03 §A.13.2 argues the Royal Family seats stay against the draft's silence. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B."
 
   - id:         off_royal_marshal
     post:       "Royal Marshal"
     rung:       {territory: "T1"}
     body:       "Inner Circle"
     faction:    null
-    remit_acts: [issue, convene]
+    remit_acts: [issue, convene, dispatch]
     conferral:  appointed
     revocation: rung_above_same_faction
     holder:     "NPC-036"
@@ -347,7 +329,7 @@ seats:
     rung:       {territory: "T1"}
     body:       null
     faction:    "Valorsmark"
-    remit_acts: []
+    remit_acts: [dispatch]
     conferral:  appointed
     revocation: rung_above_same_faction
     holder:     "NPC-035"
@@ -373,7 +355,7 @@ seats:
     rung:       {territory: "T1"}
     body:       null
     faction:    "Church of Solmund"
-    remit_acts: []
+    remit_acts: [issue]
     conferral:  appointed
     revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-034"
@@ -413,7 +395,7 @@ seats:
     rung:       {territory: "T9"}
     body:       "Cardinal of Justice"
     faction:    null
-    remit_acts: [issue, determine, convene]
+    remit_acts: [issue, determine, convene, dispatch]
     modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  appointed
     revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
@@ -453,7 +435,7 @@ seats:
     rung:       {territory: "T9"}
     body:       "Cardinal of Justice"
     faction:    null
-    remit_acts: [determine]
+    remit_acts: [determine, dispatch]
     modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  appointed
     revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
@@ -462,9 +444,11 @@ seats:
     source:     "faction_politics_v30.md -- \"Cardinal Justice (alternate) / Senior Inquisitor\""
     note:       "[NEW]. Two seats on one body is lawful -- a body is not a seat."
 
+  # B21.52 (A-58, C3-L7): anchored on `T8` (Gransol, Hafenmark's constitutional capital): its `revocation:` is `rung_above_same_faction`, not
+  # `holder_of_rung`, so a seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_legal_advisor_hm
     post:       "Legal Advisor to Baralta"
-    rung:       {duchy: "Hafenmark"}
+    rung:       {territory: "T8"}
     body:       "Inner Council"
     faction:    null
     remit_acts: []
@@ -475,12 +459,14 @@ seats:
     source:     "faction_canon_v30.md; npc_behavior_v30.md §2.16 (one of Hafenmark's ruled two)"
     note:       "[LIVE]."
 
+  # B21.52 (A-58, C3-L7): anchored on `T8` (Gransol): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a seizure
+  # of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_military_commander_hm
     post:       "Military Commander"
-    rung:       {duchy: "Hafenmark"}
+    rung:       {territory: "T8"}
     body:       "Inner Council"
     faction:    null
-    remit_acts: [convene]
+    remit_acts: [convene, dispatch]
     conferral:  appointed
     revocation: rung_above_same_faction
     holder:     "NPC-072"
@@ -488,12 +474,15 @@ seats:
     source:     "faction_canon_v30.md; npc_behavior_v30.md §2.16 (the second of Hafenmark's ruled two)"
     note:       "[LIVE]. `convene`: a muster is a sitting."
 
+  # B21.52 (A-58, C3-L7): anchored on `T8` (Gransol): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a seizure
+  # of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_commune_rep_hm
     post:       "Commune Representative (Banneret)"
-    rung:       {duchy: "Hafenmark"}
+    rung:       {territory: "T8"}
     body:       "Inner Council"
     faction:    null
     remit_acts: []
+    term:       4   # B21.04 [ASSUMPTION; medium; Jordan to correct; revert: null -- the design does not describe this post]
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-081"
@@ -507,6 +496,7 @@ seats:
     body:       "Guild"
     faction:    null
     remit_acts: []
+    term:       4   # B21.04 (the Guild rotates) [ASSUMPTION; medium; Jordan to correct; revert: no `term:` key]
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-007"
@@ -514,9 +504,29 @@ seats:
     source:     "faction_canon_v30.md; the 2026-09-13 ruling drops Feldhaus from Hafenmark's COUNCIL, not the world -- her registry primary role is \"Guilds Representative\""
     note:       "[NEW]. Re-seated on `Guild` (live roster, faction Guilds), not on Hafenmark's council. `conferral: elected` -- the Guild Forum. r2 03 §A.15 flags this row for attack first; carried forward unattacked here."
 
+  # B21.03 (`06_FA_remit_grant_by_row` edit 1): NPC-084's seat, the one the per-case loop builds with no row (it stood
+  # rungless as `off_npc_084`). `convene` only: a guild leader calls the Forum, and sends and musters no army.
+  # [ASSUMPTION; medium; Jordan to correct; revert: restore the `remit_unruled` line, one re-pin]
+  - id:         off_guild_leader
+    post:       "Guild Leader"
+    rung:       {duchy: "Hafenmark"}
+    body:       "Guild"
+    faction:    null
+    remit_acts: [convene]
+    term:       4   # B21.04 (the Guild rotates) [ASSUMPTION; medium; Jordan to correct; revert: no `term:` key]
+    conferral:  elected
+    revocation: rung_above_same_faction
+    holder:     "NPC-084"
+    obligees:   []
+    source:     "references/npc_registry.yaml NPC-084 (`guild leader`); `06_FA_remit_grant_by_row` edit 1"
+    note:       "[LIVE]. Loop-built from the registry cell; this row overlays rung, remit and bases. `conferral: elected` -- the Guild Forum, as `off_guild_comptroller`'s."
+
+  # B21.52 (A-58, C3-L7): anchored on `T12` (Sigurdshelm, the ducal seat; [ASSUMPTION: the ducal seat's territory -- Jordan may move this
+  # row onto the Western Highlands' own territory; the rule reaches him either way]): its `revocation:` is `rung_above_same_faction`, not
+  # `holder_of_rung`, so a seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_senior_jarl_west
     post:       "Senior Jarl of the Western Highlands"
-    rung:       {duchy: "Varfell"}
+    rung:       {territory: "T12"}
     body:       "Jarl Council"
     faction:    null
     remit_acts: [determine]
@@ -528,9 +538,11 @@ seats:
     source:     "faction_politics_v30.md; ED-637 rename to Björn Holdar"
     note:       "[LIVE]. draft body `Council of the Highlands` and draft `rung_kind: province` are both dropped -- the world has zero `province` rungs."
 
+  # B21.52 (A-58, C3-L7): anchored on `T12` (Sigurdshelm): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a
+  # seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_skald_chief
     post:       "Skald-Chief"
-    rung:       {duchy: "Varfell"}
+    rung:       {territory: "T12"}
     body:       "Jarl Council"
     faction:    null
     remit_acts: [determine]
@@ -542,12 +554,14 @@ seats:
     source:     "faction_politics_v30.md; ED-638 rename to Ingrid Stenskald"
     note:       "[LIVE]. `determine` remit is canon: the draft's own note -- \"any Deed-Claim succession in Varfell needs the Skald-Chief's endorsement\"."
 
+  # B21.52 (A-58, C3-L7): anchored on `T12` (Sigurdshelm): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a
+  # seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_military_jarl
     post:       "Military Jarl"
-    rung:       {duchy: "Varfell"}
+    rung:       {territory: "T12"}
     body:       "Jarl Council"
     faction:    null
-    remit_acts: [convene]
+    remit_acts: [convene, dispatch]
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-082"
@@ -560,7 +574,7 @@ seats:
     rung:       {territory: "T1"}
     body:       "Lions' Table"
     faction:    null
-    remit_acts: [convene]
+    remit_acts: [convene, dispatch]
     conferral:  appointed
     revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-070"
@@ -574,8 +588,8 @@ seats:
   # (`territory: null` / absent), so the plan's "the rung its holder's registry row names" has
   # nothing to read; each takes `off_grand_master`'s anchor by precedent (the Löwenritter hold no
   # territory of their own; T1 is the capital, where the royal family and monarch the office
-  # guards sit) [ASSUMPTION; medium; Jordan to correct]. `remit_acts: []` follows
-  # `off_guard_captain` (a subordinate guard seat; `dispatch` is kept through `remit_unruled`).
+  # guards sit) [ASSUMPTION; medium; Jordan to correct]. `remit_acts: [dispatch]`
+  # (B21.03) follows `off_guard_captain`'s (a subordinate guard seat): operatives who are sent and who take people.
   # `revocation: null` follows `off_grand_master`'s ruled null (Jordan 2026-10-11): a Löwenritter
   # seat at T1 whose parent rung holds only Crown seats is strippable by nobody either way.
   - id:         off_riskbreaker_covert
@@ -583,7 +597,7 @@ seats:
     rung:       {territory: "T1"}
     body:       "Riskbreakers"
     faction:    null
-    remit_acts: []
+    remit_acts: [dispatch]
     conferral:  appointed
     revocation: null   # precedent: `off_grand_master` (Jordan 2026-10-11, "null")
     holder:     "NPC-005"
@@ -596,7 +610,7 @@ seats:
     rung:       {territory: "T1"}
     body:       "Riskbreakers"
     faction:    null
-    remit_acts: []
+    remit_acts: [dispatch]
     conferral:  appointed
     revocation: null   # precedent: `off_grand_master` (Jordan 2026-10-11, "null")
     holder:     "NPC-080"
