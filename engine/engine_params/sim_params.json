@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 424,
-    "uncited": 299,
+    "total": 430,
+    "uncited": 305,
     "of_which_assumption_grade": 8
   },
-  "count": 424,
+  "count": 430,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 30,
+    "engine.season": 31,
     "mass_battle": 160,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 129,
+    "engine.season.settings": 134,
     "engine.season.realm": 8
   },
   "params": [
@@ -340,6 +340,19 @@
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/harness/decision_spread.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.LINGER_AFTER_UNSEATED",
+      "name": "LINGER_AFTER_UNSEATED",
+      "value": {
+        "recall": 2
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/governance_spine.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -5056,6 +5069,61 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-426`, swept 0 (control) / 0.5 / 1.0 (live, SHIPPED, B05.23: C5) / 2.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rank_step",
+      "name": "rank_step",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-610`, swept 0 (control, SHIPPED) / 0.25 / 0.5",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.cross_chain_step",
+      "name": "cross_chain_step",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-613`, swept 0 (control, SHIPPED) / 1 / 2 (proposed)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.faction_power_step",
+      "name": "faction_power_step",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-614`, swept 0 (control, SHIPPED) / 1 / 2",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.provisional_term",
+      "name": "provisional_term",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-611`, swept None (control) / 1 / 2 (proposed, SHIPPED) / 4",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.recall_suspicion",
+      "name": "recall_suspicion",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-612`, swept 1 / 3 (SHIPPED) / 5; `None` the revert (the occasion off)",
       "citation": null,
       "citation_grade": null
     },

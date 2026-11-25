@@ -6,7 +6,7 @@ cohorts present on the field at their body fraction. Casualties need no write of
 losing side's bodies, so the next field is smaller by exactly that. THIS file asks what only the season can: who is
 on the field, how fit, which side's faction, and that a field with no army Record is the field it always was.
 
-Fixture: `test_levy_feed.py`'s realm (`build_realm(0)`), the Crown marching `set_s_014` -> `set_s_036` where the
+Fixture: `test_levy_feed.py`'s realm (`build_realm(0)`), the Crown (its Royal Marshal, whose seat grants `dispatch`; the Spymaster no longer does, B21) marching `set_s_001` -> `set_s_036` where the
 Church of Solmund stands, plus one cohort of weight 12 planted on each side and committed to its faction, and an
 army Record for each whose one unit holds that cohort's whole 120.
 """
@@ -28,7 +28,7 @@ from engine.season.queries import world_q
 from engine.season.seam.wrappers.mass_battle import field_input, resolve
 from engine.season.state.carriers import Act, Record, Tenure
 
-ACTOR, SEAT, ORIGIN, TARGET = "p_npc_033", "off_spymaster", "set_s_014", "set_s_036"
+ACTOR, SEAT, ORIGIN, TARGET = "p_npc_036", "off_royal_marshal", "set_s_001", "set_s_036"
 ATTACKER, DEFENDER = "fac_valorsmark", "fac_church_of_solmund"
 CA, CD = "c_att", "c_def"
 
