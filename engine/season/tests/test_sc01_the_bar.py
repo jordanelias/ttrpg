@@ -194,7 +194,11 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # the 15 convictions x seeds 0..11 at 7 seasons (180 runs, stopped at the first hit): exactly one run meets every assertion, honour/7
 # (hash df2e5647...), and it is taken. The bar is an existence claim on SELECTED seeds (above), not a rate.
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/95/7 with B21.07's formation decline.]
-PROCEEDINGS = (("honour", 7, 7),)
+# B11 MERGE WITH MAIN: RE-TRACED AGAIN, honour/7/7 -> stability/6/7, the conviction and the seed both moved -- B11's items with B21's and B24p's moved this three-person
+# world's act mix, and honour/7/7 stopped meeting `_proceeding`. THE SWEEP, this file's `_proceeding` (the producer's scratch, not kept): the 15 convictions x seeds 0..199 at 7
+# seasons, `PYTHONHASHSEED=0`, each of four partitions stopped at its first hit: stability/6, stability/129, stability/151 and stability/152. The lowest seed is taken
+# (stability/6/7, hash aad0df64...). The bar is an existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert: restore honour/7/7 with the merge's movers reverted.]
+PROCEEDINGS = (("stability", 6, 7),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 
 

@@ -2355,11 +2355,19 @@ HOLD_CLOSE_KINDS = _HOLD_EMITS & _emitted_by(v for v, r in _verbs.VERB_TABLE.ite
 MOVE_KINDS = _kinds_of_tenure("contain")[1]
 
 
+#: THE KINDS A SEAT'S FOUNDING EMITS (`rosters.yaml: seat_founding_kinds`): a claim of one about a seat says it exists with no holder, so `vacant_named` reads it as a
+#: ceasing. Each must be a kind a verb that writes `Office.exists` emits, or the load refuses (a kind nothing emits would never be held).
+SEAT_FOUNDING_KINDS = frozenset(roster("seat_founding_kinds"))
+_FOUNDING_EMITS = _emitted_by(v for v, r in _verbs.VERB_TABLE.items() if "Office.exists" in r.writes)
+if not SEAT_FOUNDING_KINDS or not SEAT_FOUNDING_KINDS <= _FOUNDING_EMITS:
+    raise SystemExit(f"rosters.yaml: seat_founding_kinds {sorted(SEAT_FOUNDING_KINDS)} is empty or names kinds no verb writing `Office.exists` emits ({sorted(_FOUNDING_EMITS)})")
+
+
 def _seat_news(ledger, obj) -> list:
     """`[(when, lap, predicate)]` OF EVERY CLAIM IN `ledger` ABOUT `obj` THAT SAYS SOMEBODY CAME TO HOLD IT OR CEASED
-    TO, in ledger order. `holders_named` and `vacant_named`'s one read."""
+    TO, or THAT IT WAS FOUNDED EMPTY (`SEAT_FOUNDING_KINDS`), in ledger order. `vacant_named`'s read; `holders_named` reads its own."""
     return [(c.when, c.lap, c.predicate) for c in ledger
-            if c.subject == obj and (c.predicate in HOLD_OPEN_KINDS or c.predicate in HOLD_CLOSE_KINDS)]
+            if c.subject == obj and (c.predicate in HOLD_OPEN_KINDS or c.predicate in HOLD_CLOSE_KINDS or c.predicate in SEAT_FOUNDING_KINDS)]
 
 
 def holders_named(ledger, obj) -> tuple:

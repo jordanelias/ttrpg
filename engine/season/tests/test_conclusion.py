@@ -7,6 +7,8 @@ the act and fold it through the real driver.
 """
 from __future__ import annotations
 
+from ..data.verbs import VERB_TABLE
+
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..decision.choose import make_ranker
@@ -67,7 +69,7 @@ def test_a_cite_the_utterer_does_not_hold_leaves_no_support():
     w = _world()
     for aid, cites in (("u_his_claim", ["c_mine", "c_his"]), ("u_his_record", ["r_his"]), ("u_nothing", ["c_nowhere"])):
         kinds = _utter(w, aid, cites)
-        assert "act.refused" in kinds and "proposition.uttered" not in kinds, (aid, kinds)
+        assert all(k in kinds for k in VERB_TABLE["utter"].emits_on_refusal) and "proposition.uttered" not in kinds, (aid, kinds)     # B21.16: `utter` refuses with its own kind
         assert f"prop_{aid}" not in w.propositions, aid
         assert not [t for t in w.persons[UTTERER].tenures if t.object == f"prop_{aid}"], aid
     assert "proposition.uttered" in _utter(w, "u_control", ["c_mine"])

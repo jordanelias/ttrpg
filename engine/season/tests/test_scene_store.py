@@ -28,7 +28,7 @@ from ..state.carriers import Act, Question, Scene
 # The realm pin at seed 0, two seasons: `build_realm(0)` played by `populated.run`'s composition (`test_choose_watch._play`).
 # It is `_realm_goldens.SHIPPED[(0, 2)]` (B09.99 re-recorded it with the other realm pins; B09.15 took the first reading of
 # this world), the same world, held here as a literal.
-REALM_PIN_SEED_0_TWO_SEASONS = "f313e280bd3836abeccf660a5ae71f4b"        # B24p merge with B21 re-record: c9bba3fa.. -> f313e280..; B24p merge re-record: e6466cf7.. -> c9bba3fa..; B15.99 re-record: aea26494.. -> e6466cf7..; BA1.99 re-pin, second time, manner rows held back (the cast's content, `_realm_goldens.SHIPPED[(0, 2)]`): was e66b5058.. with them; before: f18fd036..; B10.99 re-pin: was e03202af..
+REALM_PIN_SEED_0_TWO_SEASONS = "ba502b3073d53024751b6026986e6002"        # B11 merge with main re-record (`_realm_goldens.SHIPPED[(0, 2)]`): f313e280.. -> ba502b30..; B24p merge with B21 re-record: c9bba3fa.. -> f313e280..; B24p merge re-record: e6466cf7.. -> c9bba3fa..; B15.99 re-record: aea26494.. -> e6466cf7..; BA1.99 re-pin, second time, manner rows held back (the cast's content, `_realm_goldens.SHIPPED[(0, 2)]`): was e66b5058.. with them; before: f18fd036..; B10.99 re-pin: was e03202af..
 
 
 def _play_headless(seasons: int = 2):

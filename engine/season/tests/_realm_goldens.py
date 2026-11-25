@@ -68,31 +68,33 @@ RE-PINNED AT B21.99 (every value below, BUILD too), ONCE for the batch B21-fa-go
 
 RE-PINNED AT THE B24p MERGE WITH B21 (B21-fa-governance landed on main while B24p was open; every `SHIPPED` and `CENSUS` value, BUILD unmoved: `7eb6293a..` at seed 0): the merged realm is a fourth state. Seed 0, one
 season, read twice equal at `PYTHONHASHSEED=0`: main `fbc82e79..` (B21.99) and the B24p tree `1e3cd6db..` -> `38044624..`. The B24p tree's shipped values are in `git log`.
+
+RE-PINNED AT THE B11 MERGE WITH MAIN (B24p and B21 landed on main while B11-fi-readers was open; every value below, BUILD too: B11's encoding movers B11.08, B11.17 and B11.74 move the build hash, `7eb6293a..` -> `08a3ac1534672c8c4f1f0576a11dc1e7` at seed 0): the merged realm is a fifth state, read twice equal at `PYTHONHASHSEED=0` on the merged tree: main `380446248fd513..` (B24p merge with B21, seed 0, one season), the B11 tree `793f29fd..` (this branch before the merge) and the merged tree `94dc5293c35bb143d905e35098a0319d` (acts 392, log 9320). The merge also needed `rosters.yaml: seat_founding_kinds`: B11.08's ledger-sourced vacancy left a seat nobody has held unnamed, so B21's founded office was never offered to the man who founded it; it now reads as vacant from its founding. The B11.99 values are in `git log`.
 """
 
-BUILD = {0: "7eb6293a334184ec6d7fd9798858cb5f"}                      # build_realm(seed), unplayed
+BUILD = {0: "08a3ac1534672c8c4f1f0576a11dc1e7"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "380446248fd513030ca5cdc3e08e59e9",
-           (0, 2): "f313e280bd3836abeccf660a5ae71f4b",
-           (1, 1): "2c25947f7f50caf2732a7ed1920e89b4",
-           (1, 2): "beacd436c62cfc5d87a5bbaf9cc8c032",
-           (2, 1): "21e7e0e5abbd45a35be6e59bd349a689",
-           (2, 2): "1e01060dfb17b1dfdd9e7567cb2b6fa6"}    # B24p merge with B21 re-record (the docstring); the earlier values are in `git log`
+SHIPPED = {(0, 1): "94dc5293c35bb143d905e35098a0319d",
+           (0, 2): "ba502b3073d53024751b6026986e6002",
+           (1, 1): "f2b715d10e8697084607e8c96ed6ec86",
+           (1, 2): "6703a00ff1fafdf41b7c899893d5f9d2",
+           (2, 1): "c30707ca5390daca8bff5497ccb42979",
+           (2, 2): "2b121693b474892c49cbdd0ecd043362"}    # B11 merge with main re-record (the docstring); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=432, log=9148,
-                 census="b314c0b240e134c614fc435122ff17d344effabb1e878b2b94faa679d77fe9e7"),
-    (0, 2): dict(acts=896, log=25835,
-                 census="ffa99e0e8fe65ae28cc4cb26537f71d6695ae01c64a6809f5f70bf9a8d3f5aed"),
-    (1, 1): dict(acts=467, log=8809,
-                 census="1457bf8d0b29ecda9edefc799b4fe8ef7acd045fc13248d5ac288d03aa01afff"),
-    (1, 2): dict(acts=994, log=32551,
-                 census="02cac767134c596e32ef448ec22d61b9952043caddd01931700f2ea5d5a2f3f7"),
-    (2, 1): dict(acts=444, log=8525,
-                 census="19ca965512fd61a2d89e3f05f41e725a1c492e1fc0b3bf663532d14669e073e6"),
-    (2, 2): dict(acts=972, log=28722,
-                 census="6cd18026a46566d72a0d267277bab7d5b408a102f0cbcef7433733aa926ab840"),
+    (0, 1): dict(acts=392, log=9320,
+                 census="652a204f51ec02cfbd66e33bb9727903b3465ce0bf654ca48a7aa67853763e9f"),
+    (0, 2): dict(acts=826, log=20433,
+                 census="beb4405e72129cabc560139450e68312fe25ddc1c4f4ccd6487d6b2d33ae3561"),
+    (1, 1): dict(acts=440, log=8942,
+                 census="406d2a9e03cf251701420bab68cd3445b7a8c55f81b4ba15cb94fe8837ae3610"),
+    (1, 2): dict(acts=919, log=21536,
+                 census="3227a3b555632510898ef78aa3f3f450b60292ac844d145b0b5fe54ab4624460"),
+    (2, 1): dict(acts=401, log=9080,
+                 census="bb67725443cf950f66f5b289b28e7f6d47df0a9b96c5d239b249b410b290c603"),
+    (2, 2): dict(acts=882, log=20307,
+                 census="0569201fae5a7de2122f944ac15d000a721d60cbd90fa885acc2dfcb2b5be42e"),
 }

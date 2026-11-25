@@ -4305,9 +4305,12 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # the arms reach by different routes). RE-MEASURED at the B11 close (seed 0, three seasons, as above) it is TWO AGAIN: `presence_only` and `all_five` resolve
     # the identical 19-member `(actor, verb)` set and `total` a different 25-member one -- the `11a` state above -- so the three-set reading no longer holds.
     # EXACT, because `>= 2` passes on the three-set state and the two-set one alike and observes neither; the property is that the fan-out matters to ACTS.
-    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) == 2, (
-        f"the resolved-act sets by arm: {got}. Expected exactly two distinct sets (the narrow pair identical, `total` apart) -- one would mean the "
-        "fan-out stopped mattering to ACTS at all, three that the narrow pair separated again; re-measure rather than re-pin the count")
+    # ⚠⚠ RE-MEASURED AT THE B11 MERGE WITH MAIN (B24p and B21 landed while B11 was open; seed 0, three seasons, as above) it is THREE: `total` 23 acts, `presence_only` 18,
+    # `all_five` 23, no two of the sets equal -- the proceeding's verbs and the command basis give the narrow pair different witnesses again, so the fan-out matters to ACTS between the
+    # narrow arms too. Exactly three, for the reason above: `>= 2` passes on this state and the two-set one alike and observes neither.
+    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) == 3, (
+        f"the resolved-act sets by arm: {got}. Expected exactly three distinct sets (measured at the B11 merge) -- two would mean the narrow pair collapsed again, "
+        "one that the fan-out stopped mattering to ACTS at all; re-measure rather than re-pin the count")
 
 
 # ===========================================================================

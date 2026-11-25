@@ -427,6 +427,18 @@ rosters:
       `event_reach` (`epistemic.py` refuses at import).
     values: [tenure.opened, tenure.closed, succession.claimed]
 
+  seat_founding_kinds:
+    source: "v12 B11 close, the merge with B21 (A-32's `vacant_named` against `establish`: a founded seat is empty from the moment it exists)"
+    note: >-
+      THE KINDS A SEAT'S FOUNDING EMITS. `queries/person_q.py::vacant_named` reads a seat as vacant from the claims a person holds of it,
+      and a seat NO ONE HAS HELD has none that say somebody came to hold it or ceased to, so a founder was never offered `confer` on
+      the office he had just founded (the world-sourced vacancy read it as empty at once; B11.08 moved the read to the ledger). A claim
+      of one of these kinds about a seat says it exists and nobody holds it: it reads as a ceasing, the newest news until a
+      `tenure.opened` follows. `epistemic.py::claim_subjects` already deposits it about the new office to the founder and to those
+      who witness it. Every member must be an Event kind a verb writing `Office.exists` emits (`person_q.py` refuses at import).
+      [ASSUMPTION; medium; Jordan to correct; revert: an empty list, and a founded seat is offered only after someone has held and left it.]
+    values: [office.established]
+
   seat_news_arms:
     source: >-
       v11 CR-29 (A-32: one reach row for seat changes at `realm`, B -- the seat-change kinds left out of the map -- the

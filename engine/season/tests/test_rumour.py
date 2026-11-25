@@ -12,6 +12,7 @@ reading; B98 takes it with `notice_arm`. No hole row carries it (the reading nam
 from __future__ import annotations
 
 import functools
+from collections import Counter
 
 from ..boot.realm import build_realm
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -32,7 +33,12 @@ def reading(seed: int, arm: bool) -> dict:
     populated.run(2, seed, w=w)
     held = [c for p in w.persons.values() for c in p.ledger]
     kinds = [e.kind for e in w.log]
+    # the told claims each `news.told` EVENT deposited (a `claim.deposited` Event caused by it), not the ones a ledger still holds at the end: the cap evicts a told claim
+    # and the end-state count then reads a telling that landed as one that did not (B11 merge with main: 18 held of 19 told, every one of the 19 deposited)
+    caused = Counter(c for e in w.log if e.kind == "claim.deposited" for c in e.causes)
+    told_events = [e for e in w.log if e.kind == "news.told"]
     return {"two_hop": sum(1 for c in held if len(c.chain) >= 2), "told": sum(1 for c in held if c.chain),
+            "told_landed": sum(1 for e in told_events if caused[e.id] >= 1),
             "news_told": kinds.count("news.told"), "news_untold": kinds.count("news.untold"), "refused": kinds.count("tell.refused")}
 
 
@@ -55,7 +61,7 @@ def test_told_claims_per_news_told_at_least_one():
         r = reading(s, True)
         if r["news_told"]:
             checked += 1
-            assert r["told"] / r["news_told"] >= 1, (s, r)
+            assert r["told_landed"] == r["news_told"], (s, r)       # every telling deposited at least one told claim
     assert checked >= 1
 
 

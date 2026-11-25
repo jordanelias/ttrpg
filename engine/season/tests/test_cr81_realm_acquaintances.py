@@ -125,10 +125,13 @@ def test_the_high_status_set_is_the_throne_its_consort_and_the_duchy_seats(world
 
 def test_tell_forms_for_persons_it_formed_for_none(worlds):
     """CR-03's base: `tell` forms at build for none but the oath step's knowers (`_oath_knowers`: the King, who knows his
-    sworn men, forms it; the measured 1). With the step it forms for the measured 37."""
+    sworn men, forms it, and so does the one other man who holds a `duty.taken` claim; the measured 2). With the step it forms for the
+    measured 42. RE-RECORDED AT THE B11 MERGE WITH MAIN (said plainly): off 1 -> 2 (derived now from `_oath_knowers`, so a third knower moves both
+    sides of it), on 37 -> 42: every person is told of every seat of his realm (`seed_seat_news`, B11.08), which gives five more of them something
+    to tell; B21's oath step is unmoved."""
     on, off = worlds[0]
-    assert _tell_formers(off) == 1
-    assert _tell_formers(on) == 37
+    assert _tell_formers(off) == len(_oath_knowers(off)) == 2, (_tell_formers(off), sorted(_oath_knowers(off)))
+    assert _tell_formers(on) == 42
 
 
 def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_out(worlds):
