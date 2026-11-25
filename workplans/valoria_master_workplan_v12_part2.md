@@ -67,7 +67,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 
-| S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
+| S13 | B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
@@ -84,7 +84,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B08-scene-order | IN | W6 → **W9** | S13 | 9 | 23 | 7 (B7) | MOVER (behaviour 3) | 5.3 | B00, B01, B02, B03a, B04 +R, B05 +R, B06 +R |
 | B11F1-flow-se | SE | W16 | S16 | 2 | 29_cont | 8 (B4 H1 C2 DF1) | MOVER (behaviour 3) | 5.7 | B12c |
 | B11F2-flow-in | IN | W17 | S17 | 2 | 32_cont | 12 (B8 P2 H2) | MOVER (conditional 1) | 7.3 | B09, B10, B11F1 |
 | B12a-world-motion-and-ground | SE+WR | W13 | S13 | 0 | 19, 20 | 40 (B36 P2 H1 DF1; H3: B12a.07 "BUILD (with a CONTENT value)" read as BUILD) | MOVER (behaviour 12, conditional 1) | 18.5 | B00, B01, B02, B04, B05, B07, B10, B11 |
@@ -136,7 +135,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B08-scene-order | 23:484 | yes | 7 | yes | none | — |
 | B11F1-flow-se | 29_cont:328 | yes | 1 | yes | none | — |
 | B11F2-flow-in | 32_cont:264 | yes | 3 | yes | none | — |
 | B12a-world-motion-and-ground | 20:543 | yes | 8 | yes | none | — |
@@ -188,7 +186,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
 
-| S13 | B08 | 03, 04, 05 | — | — | `B08.99` | 1 of 5 movers |
 | S13 | B12a | 03, 05, 06, 08, 14, 15, 54, 55, 56, 62, 66, 69 | — | 09 | `B12a.99` | 2 of 5 movers |
 | S13 | B16 | 03 | — | — | `B16.99` | 3 of 5 movers |
 | S13 | B21b | 01, 02, 04, 06, 08, 10, 11, 12, 13, 14, 16, 18, 21, 25, 26 | — | 05 | `B21b.99` | 4 of 5 movers |
