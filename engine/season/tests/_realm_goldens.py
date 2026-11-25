@@ -70,31 +70,33 @@ RE-PINNED AT THE B24p MERGE WITH B21 (B21-fa-governance landed on main while B24
 season, read twice equal at `PYTHONHASHSEED=0`: main `fbc82e79..` (B21.99) and the B24p tree `1e3cd6db..` -> `38044624..`. The B24p tree's shipped values are in `git log`.
 
 RE-PINNED AT THE B11 MERGE WITH MAIN (B24p and B21 landed on main while B11-fi-readers was open; every value below, BUILD too: B11's encoding movers B11.08, B11.17 and B11.74 move the build hash, `7eb6293a..` -> `08a3ac1534672c8c4f1f0576a11dc1e7` at seed 0): the merged realm is a fifth state, read twice equal at `PYTHONHASHSEED=0` on the merged tree: main `380446248fd513..` (B24p merge with B21, seed 0, one season), the B11 tree `793f29fd..` (this branch before the merge) and the merged tree `94dc5293c35bb143d905e35098a0319d` (acts 392, log 9320). The merge also needed `rosters.yaml: seat_founding_kinds`: B11.08's ledger-sourced vacancy left a seat nobody has held unnamed, so B21's founded office was never offered to the man who founded it; it now reads as vacant from its founding. The B11.99 values are in `git log`.
+
+RE-PINNED AT THE B21b PARTIAL CLOSE (every value below, BUILD too; a partial batch, so B21b.99 re-pins the rest later): B21b.01's march cap (every march event now carries its `march.nth` and `march.cap` reads in `observed`, but no march forms at seeds 0 to 2 in these spans, so it moved nothing here), B21b.02's `guards` default flip (the guard cohorts are seated at build: BUILD `08a3ac15..` -> `a0d8c06a..`, seed 0 one season `94dc5293..` -> `08db956b..`) and B21b.04's plurality licence (called zero times at seed 0 one season). Read once on the closing tree (`PYTHONHASHSEED=0`). The control: `build_realm(0, guards=False)` reads the B11 values (seed 0 one season `94dc5293..`).
 """
 
-BUILD = {0: "08a3ac1534672c8c4f1f0576a11dc1e7"}                      # build_realm(seed), unplayed
+BUILD = {0: "a0d8c06aa1a7a7dc5704ea2ec64cb364"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "94dc5293c35bb143d905e35098a0319d",
-           (0, 2): "ba502b3073d53024751b6026986e6002",
-           (1, 1): "f2b715d10e8697084607e8c96ed6ec86",
-           (1, 2): "6703a00ff1fafdf41b7c899893d5f9d2",
-           (2, 1): "c30707ca5390daca8bff5497ccb42979",
-           (2, 2): "2b121693b474892c49cbdd0ecd043362"}    # B11 merge with main re-record (the docstring); the earlier values are in `git log`
+SHIPPED = {(0, 1): "08db956bebf7b05c9e58262eec156380",
+           (0, 2): "d7b8cdfff89fa995957db566a99c1d51",
+           (1, 1): "0b73a9c47a9efc2d9c7df5e33cee6d92",
+           (1, 2): "07e63c2ffb10b2e5aa120ae1c5c4d1ab",
+           (2, 1): "453a1ba8fef1234adf48ac328f22f800",
+           (2, 2): "2ebe41f9ad794c0c3cb98ecc44076c2f"}    # B21b partial re-record (the docstring); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=392, log=9320,
-                 census="652a204f51ec02cfbd66e33bb9727903b3465ce0bf654ca48a7aa67853763e9f"),
-    (0, 2): dict(acts=826, log=20433,
-                 census="beb4405e72129cabc560139450e68312fe25ddc1c4f4ccd6487d6b2d33ae3561"),
-    (1, 1): dict(acts=440, log=8942,
-                 census="406d2a9e03cf251701420bab68cd3445b7a8c55f81b4ba15cb94fe8837ae3610"),
-    (1, 2): dict(acts=919, log=21536,
-                 census="3227a3b555632510898ef78aa3f3f450b60292ac844d145b0b5fe54ab4624460"),
-    (2, 1): dict(acts=401, log=9080,
-                 census="bb67725443cf950f66f5b289b28e7f6d47df0a9b96c5d239b249b410b290c603"),
-    (2, 2): dict(acts=882, log=20307,
-                 census="0569201fae5a7de2122f944ac15d000a721d60cbd90fa885acc2dfcb2b5be42e"),
+    (0, 1): dict(acts=415, log=10191,
+                 census="feb192c0a5208d32e9a1f985a624613f7ee52a877f645c68bcbada02f178238f"),
+    (0, 2): dict(acts=891, log=22326,
+                 census="85d9bf2c3b448b8b50c52f9f6d6b8acd4cfd1972031017551dfeccaed97d010e"),
+    (1, 1): dict(acts=464, log=10470,
+                 census="764330842c5277e55cb4057f1085e40f0135fb03a9b6ec601ba4ea8dd7de07b8"),
+    (1, 2): dict(acts=947, log=24530,
+                 census="466b76cd4ecf189164111785e52a457a8ad629505c244f582fe932bbe607609a"),
+    (2, 1): dict(acts=418, log=9577,
+                 census="7b082aa347932d062b09e82c6d619712523fb4a80f5fcc061379753cb79e02f4"),
+    (2, 2): dict(acts=922, log=22043,
+                 census="34ec6217f04fbb926cfa8e7841cbe9174cbb80f016dbeb155300d4787d71d436"),
 }
