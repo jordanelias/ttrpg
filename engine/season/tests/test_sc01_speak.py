@@ -184,21 +184,21 @@ def test_sc01_s12_the_loader_control_the_shipped_row_loads():
 
 
 def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash(monkeypatch):
-    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `speak` by a speaker whose
-    `copying` pool is under 1D comes back as the verb's refusal kind, where it used to raise an
-    uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves.
+    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `determine` (B24p.99: `speak` proceeds, and its draw is the proceeding's, so
+    the single roll's refusal is read through the verb still on it) by a bench whose pool is under 1D comes back as the verb's refusal kind,
+    where it used to raise an uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves.
     B05.99 rewrite: B05.09 floors a held rank at the untrained score and B05.25/B05.23 make the pool the governing score + rank +
-    the base 6 (floor 5), so no held `copying` gives a pool under one die; the pool is PLANTED at the one pool reader the record
-    reads (`sigma.faculty`) for the speaker alone (was: `copying` held at 0, 0.5, 1)."""
+    the base 6 (floor 5), so no held rank gives a pool under one die; the pool is PLANTED at the one pool reader the record
+    reads (`sigma.faculty`) for the judge alone (was: `copying` held at 0, 0.5, 1)."""
     from ..seam.wrappers import sigma
     real = sigma.faculty
     checked = 0
     for pool, refused in ((0, True), (0.5, True), (1, False)):
         w, d = _world()
         _docket(w, d)
-        monkeypatch.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == SPEAKER else real(w_, p, verb))
-        out = _fold(w, d, _speak(f"zpool{pool}"))
-        assert bool(out) and (_kinds(out) == ["speech.unheard"]) is refused, (pool, _kinds(out))
+        monkeypatch.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == DUKE else real(w_, p, verb))
+        out = _fold(w, d, Act(id=f"zpool{pool}", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY}))
+        assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
         checked += 1
     assert checked == 3
 

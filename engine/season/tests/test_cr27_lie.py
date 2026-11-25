@@ -29,7 +29,8 @@ from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
 from ..loop import witness as W
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
-from ..manifest import MODULE_ENTRIES
+from ..seam.wrappers import sigma
+from engine.substrate import composition
 from ..queries import person_q as PQ
 from ..queries.inputs import Margin
 from ..queries.person_q import drifted, lie_said_of, said_of
@@ -67,9 +68,27 @@ def _candidate(w, verb, to):
     return got[0] if got else None
 
 
+def force_sitting(m, net, ob=2):
+    """B24p.99: `lie` and `tell` proceed, so the margin the single roll's entry was planted with is planted on the sitting's own verdicts: each
+    verdict of the real sitting becomes `Margin(net, ob)`, which the host grades on the one ladder as it grades any. `m` is a `monkeypatch`."""
+    real = composition.require
+
+    def forced(role):
+        proceed = real(role)
+        if role != sigma.PROCEEDING_ROLE:
+            return proceed
+
+        def entry(inp, rng):
+            out = proceed(inp, rng)
+            return dataclasses.replace(out, verdicts=tuple((i, Margin(net=net, ob=ob)) for i, _ in out.verdicts))
+        entry.__module__ = proceed.__module__           # `_proceeding_module` reads the module off the entry
+        return entry
+    m.setattr(composition, "require", forced)
+
+
 def _season(monkeypatch, w, verb, to, net=3):
     """One season in which T is handed the ONE act the offered candidate makes (payload as `pack_scenes` builds
-    it) and nobody else chooses; the contest is forced to `net` against obstacle 2. Returns the events."""
+    it) and nobody else chooses; the sitting's verdicts are forced to `net` against obstacle 2. Returns the events."""
     cand = _candidate(w, verb, to)
     assert cand is not None, f"`{verb}` to {to} was not offered"
     d = SeasonDriver(w)                  # constructed first: the registrar fills the module table
@@ -84,8 +103,7 @@ def _season(monkeypatch, w, verb, to, net=3):
                       [Act(aid, p.id, verb, payload={"subject": cand.subject, **cand.operands})])]
 
     with monkeypatch.context() as m:
-        m.setitem(MODULE_ENTRIES, "social_contest.roll", dataclasses.replace(
-            MODULE_ENTRIES["social_contest.roll"], fn=lambda inp, rng: Margin(net=net, ob=2)))
+        force_sitting(m, net)
         d.season(dispatching_chooser(P.NOCHOOSE, {T: choose}), question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert asked, "the teller was never asked"

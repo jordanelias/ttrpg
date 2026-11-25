@@ -41,13 +41,15 @@ from ..data.rosters import DOMINANCE_KINDS, REMOVE_ORDINAL, SEEN_PREDICATE
 from ..data import verbs as _verbs
 from ..epistemic import Seen
 from ..queries import person_q, world_q
+from ..seam import ladder
 from ..seam.wrappers import sigma
-from ..state.carriers import Act, Claim
+from ..state.carriers import Claim
 from .test_sc01_obstacle_ceiling import _module
-from .test_u7_remit import _fold, _kinds, _open, _world
+from .test_u7_remit import _fold, _kinds, _open, _world  # noqa: F401  (`test_odds_of` reads `_fold`, `_kinds`, `_open` from here)
 
 SPEAKER, PARTY, HEARER, NOBODY = "p_low", "p_mid", "p_high", "p_other"
 PRIZE = "a matter"
+VERB = "determine"      # B24p.99: the single roll's own verb the bench-hearing is exercised through (`speak` now proceeds)
 SEASON_DIR = Path(__file__).resolve().parents[1]
 
 # The pursuit the hearer is given: the tiny world's persons hold none, so every valence reads 0 and
@@ -86,15 +88,17 @@ def _kind_with_lean(w, sign=+1, among=None):
 
 
 def _ob(w, actor=SPEAKER, subject=PARTY):
-    """The composed obstacle of one `speak`'s draw, through the real adapter and module entry."""
-    out = sigma.resolve(w, [actor, subject], ["root"], PRIZE, verb="speak", subject=subject,
+    """The composed obstacle of one draw of a roll whose prize a bench hears, through the real adapter and module entry. B24p.99: the verb
+    that lends the pool is `determine` (still on the single roll; `speak` proceeds and is never pooled here), the prize row `a matter`'s
+    own `heard_by: bench` is what the seam reads."""
+    out = sigma.resolve(w, [actor, subject], ["root"], PRIZE, verb=VERB, subject=subject,
                         rng=draw.seeded(draw.H2("test_sc02_reception", 0)), rung=world_q.place_of(w, actor))
     assert out["status"] == "RESOLVED", out
     return out["ob"]
 
 
 def _input(w, actor=SPEAKER, subject=PARTY):
-    return sigma.contest_input(w, [actor, subject], verb="speak", subject=subject,
+    return sigma.contest_input(w, [actor, subject], verb=VERB, subject=subject,
                                room=world_q.place_of(w, actor))
 
 
@@ -104,7 +108,7 @@ def _input(w, actor=SPEAKER, subject=PARTY):
 
 def test_sc02_17_two_benches_differing_only_in_one_ledger_band_differently_for_the_same_draw():
     """`19_PLAN.md` step 17's artifact: identical seats and convictions, one member's ledger differs, and
-    the same seeded `speak` resolves at different bands. FALSIFIER: the obstacle invariant under the
+    the same seeded roll (a bench-heard prize) resolves at different bands. FALSIFIER: the obstacle invariant under the
     ledger change (asserted on every draw, and on the band over the sweep)."""
     plain, d_plain = _judging_world()
     heard, d_heard = _judging_world()
@@ -112,19 +116,17 @@ def test_sc02_17_two_benches_differing_only_in_one_ledger_band_differently_for_t
     n = math.ceil(1.0 / _lean(heard, kind)) + 1        # enough favour to reach the Ob floor from 2
     for i in range(n):
         heard.persons[HEARER].ledger.append(_claim(f"fav{i}", HEARER, SPEAKER, kind))
-    for w, d in ((plain, d_plain), (heard, d_heard)):
-        assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     assert world_q.reception(plain, SPEAKER, world_q.judging_set(plain, "Hh")) == 0.0
     assert world_q.reception(heard, SPEAKER, world_q.judging_set(heard, "Hh")) > 0.0
     # B05.17: the favourable bench is LEVERAGE (`favour`), not a lower obstacle: what the speaker brings rises, what stands against him does not.
     assert _input(heard).leverage > _input(plain).leverage, (_input(heard).leverage, _input(plain).leverage)
     assert _ob(heard) == _ob(plain), (_ob(heard), _ob(plain))
     differ = checked = 0
-    for i in range(40):
-        a = _fold(plain, d_plain, Act(id=f"sp{i}", actor=SPEAKER, verb="speak", payload={"subject": PARTY}))
-        b = _fold(heard, d_heard, Act(id=f"sp{i}", actor=SPEAKER, verb="speak", payload={"subject": PARTY}))
-        assert len(a) == len(b) == 1 and a[0].degree and b[0].degree, (_kinds(a), _kinds(b))
-        differ += a[0].degree != b[0].degree
+    for i in range(40):                       # B24p.99: the same seeded roll through the seam, graded on the one ladder (`speak` proceeds)
+        a, b = (sigma.resolve(w, [SPEAKER, PARTY], ["root"], PRIZE, verb=VERB, subject=PARTY,
+                              rng=draw.seeded(draw.H2("test_sc02_reception_band", i)), rung="Hh") for w in (plain, heard))
+        assert a["status"] == b["status"] == "RESOLVED", (a, b)
+        differ += ladder.degree_of(a) != ladder.degree_of(b)
         checked += 1
     assert checked == 40
     assert differ >= 1, "no draw banded differently: the bench's ledger did not reach the outcome"
@@ -203,7 +205,7 @@ def test_sc02_17_reception_and_proofs_take_the_world_first():
 
 
 def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
-    """`heard_by: bench` is on `a matter` alone: a `tell` (`a standing`) or an inquiry by the same actor
+    """`heard_by: bench` is on `a matter` alone: an `arrest` (`a standing`) or an inquiry by the same actor
     at the same rung carries the record's no-room defaults, so every other social roll is as it was."""
     w, _d = _judging_world()
     kind = _kind_with_lean(w, +1)
@@ -216,11 +218,11 @@ def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
         seen[kw.get("verb")] = built[0]
         return built
     monkeypatch.setattr(sigma, "_read_social_roll", spy)
-    for prize, verb in ((PRIZE, "speak"), ("a standing", "tell")):
+    for prize, verb in ((PRIZE, "determine"), ("a standing", "arrest")):       # B24p.99: both still on the single roll (`speak`, `tell` proceed)
         sigma.resolve(w, [SPEAKER, PARTY], ["root"], prize, verb=verb, subject=PARTY,
                       rng=draw.seeded(draw.H2("test_sc02_reception", 0)), rung="Hh")
-    assert seen["speak"].reception > 0.0
-    assert seen["tell"].reception == 0.0 and seen["tell"].reception_gain == 0.0, seen["tell"]
+    assert seen["determine"].reception > 0.0
+    assert seen["arrest"].reception == 0.0 and seen["arrest"].reception_gain == 0.0, seen["arrest"]
 
 
 def test_sc02_17_a_misspelled_room_refuses_at_boot_naming_the_row(monkeypatch):
