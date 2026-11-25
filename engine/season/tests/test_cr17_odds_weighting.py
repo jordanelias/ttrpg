@@ -272,6 +272,13 @@ def test_the_shipped_arms_are_the_falsified_ones():
     assert CH.ODDS_WEIGHTINGS == frozenset({"none", "believed"})
 
 
+def _split(tau: float, seed: int = 0) -> dict:
+    from ..harness import decision_spread as DS
+    w = DS._build(seed, False)
+    w.fixtures = w.fixtures.sweep("choice_temperature", tau)
+    return DS.read_decisions(w)["split"]
+
+
 def _strict_top_share(tau: float, seed: int = 0) -> tuple:
     """REM-12's split at the built realm (`decision_spread --decisions`), `(strict-top-decided, readings)` among persons holding a
     pursuit vector: the readings the draw did NOT decide (neither a tie it ordered nor a leader it overruled)."""
@@ -286,7 +293,8 @@ def _strict_top_share(tau: float, seed: int = 0) -> tuple:
 def test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zero_is_the_argmax(seed):
     """H-96's re-derivation, executed at seeds 0-2 as the card reads them: the shipped tau reads MORE THAN ONE HALF of the
     vectored readings strict-top-decided, every grid value above it reads LESS, and tau 0 collapses to the argmax (every
-    reading decided, no tie and no overruled leader). MEASURED, 0.05 -> 271 / 297 / 273 of 498, 0.1 -> 142 / 162 / 141.
+    reading decided, no tie and no overruled leader). MEASURED (B21b.02, three guard cohorts: 516 readings, 18 of them vectorless
+    `field_zero`, so 498 vectored), 0.05 -> 261 / 268 / 276 of 498, 0.1 -> 173 / 188 / 168.
     The test_u4 half of the rule is `test_season_shape.py::test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control`."""
     shipped = float(DEFAULT_FIXTURES.get("choice_temperature"))
     grid = [0.0, 0.01, 0.02, 0.03, 0.05, 0.1, 0.25, 0.5, 1.0]
@@ -298,5 +306,8 @@ def test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zer
     for g in hotter:
         d, m = _strict_top_share(g, seed)
         assert d * 2 <= m, f"tau {g}, above the shipped {shipped}, also reads above one half ({d} / {m}): the rule picks the largest"
-    d0, n0 = _strict_top_share(0.0, seed)
-    assert d0 == n0 > 0, f"tau 0 is not the argmax: {d0} of {n0} readings decided"
+    # B21b.02: the guard cohorts hold no pursuit vector, so their 18 readings are `field_zero` (counted in `n`'s subtraction, not in the
+    # tie / outvoted counts at tau 0): "every reading decided" is read off the draw's two counts directly, no tie and no overruled leader.
+    _d0, n0 = _strict_top_share(0.0, seed)
+    sp0 = _split(0.0, seed)
+    assert n0 > 0 and sp0["tie"] == 0 and sp0["outvoted"] == 0, f"tau 0 is not the argmax: {sp0['tie']} ties, {sp0['outvoted']} overruled of {sp0['read']} readings"

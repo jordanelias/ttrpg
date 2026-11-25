@@ -309,6 +309,7 @@ def test_a_second_levy_into_the_same_treasury_raises_the_next_fields_troops(monk
     one troop and the field eats it; levy 2 (grain 4) provisions two, and the next field fields two."""
     seen = _recording(monkeypatch)
     w = _world(True, treasury_a={"salt": 10})
+    w.fixtures = w.fixtures.sweep("march_cap_per_territory", 0)   # B21b.01: two marches into one territory in one tick; the cap off (control), this test is not about it
     w.rungs[LARDER].stores = {"grain": 20}
     assert [e.kind for e in _fold(w, _requisition("rq1", 2))] == ["requisition.taken"]
     assert w.rungs[TREASURY_A].stores == {"salt": 10, "grain": 2}
