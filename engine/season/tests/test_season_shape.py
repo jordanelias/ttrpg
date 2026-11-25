@@ -29,6 +29,7 @@ from pathlib import Path
 import pytest
 
 from ._flat_fold import flat_fold, flat_fold_fixtures
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .. import decision
 from .. import seam
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -4266,47 +4267,8 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
 
 # ===========================================================================
 # THE GOVERNANCE SLICE — Jordan, 2026-09-02: strata that concern governance and management across
-# scales of factions/governing bodies. The `scale:` axis, crossed with the five strata.
+# scales of factions/governing bodies. A scale is the scope of the seat exercised (`Act.via`), stored on no verb row.
 # ===========================================================================
-
-def test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum():
-    """`scale:` is a SEPARATE AXIS from `stratum`, not more strata. The stratum says what KIND of
-    act this is and orders resolution; the scale says WHOSE BODY it reaches.
-
-    ⚠ THE LADDER ALREADY EXISTED — `rung_kinds`, person through realm — so this reads that roster
-    rather than minting a second one, which on this exact axis would be §8 broken.
-
-    ⚠ AND A FACTION IS NOT A SCALE, WHICH IS A RULING AND NOT AN OMISSION.
-    `ARCHITECTURE_V2.md:93` lists *"a faction acting as an actor"* in its REFUSAL table at `L1`,
-    with three corpus cases that wanted it, and `H-21` completes it: *"a faction's treasury is
-    matter at the rung or office that holds it."* Governance above the person is a PERSON HOLDING
-    AN OFFICE acting at a rung."""
-    scales = {r.scale for r in VERB_TABLE.values()}
-    assert scales <= set(RUNG_KINDS), (
-        f"a verb's scale is not a rung kind: {sorted(scales - set(RUNG_KINDS))}")
-    assert "faction" not in RUNG_KINDS, (
-        "`faction` has become a rung kind. `ARCHITECTURE_V2.md:93` REFUSES a faction acting as an "
-        "actor at `L1`; if that has been overturned, this test is the wrong place to find out")
-    # THE AXES ARE GENUINELY CROSSED: one stratum spans several scales, and one scale spans
-    # several strata. Either alone would mean `scale` is just `stratum` under another name.
-    by_stratum, by_scale = {}, {}
-    for v, r in VERB_TABLE.items():
-        by_stratum.setdefault(r.stratum, set()).add(r.scale)
-        by_scale.setdefault(r.scale, set()).add(r.stratum)
-    assert any(len(v) > 1 for v in by_stratum.values()), (
-        f"every stratum sits at exactly one scale — then `scale` adds nothing: {by_stratum}")
-    # ⚠ THE DEFAULT BUCKET IS EXCLUDED, AND WITHOUT THAT THIS CANNOT FAIL. Delete every `scale:`
-    # line from `verb_table.yaml` and all 32 rows fall to the `"person"` default — `by_scale`
-    # becomes `{"person": {all five strata}}` and `any(len(v) > 1)` PASSES, satisfied entirely by
-    # the unauthored bucket. The property is about AUTHORED scales. Found by the governance-slice
-    # adversarial pass.
-    authored = {k: v for k, v in by_scale.items() if k != "person"}
-    assert authored, "no verb carries an authored scale; the column is entirely default"
-    assert any(len(v) > 1 for v in authored.values()), (
-        f"every AUTHORED scale carries exactly one stratum — then the two are the same axis "
-        f"under another name: {authored}")
-    print(f"\n  scales in use: { {k: sorted(v) for k, v in sorted(by_scale.items())} }")
-
 
 def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     """§0.2 — the slice is done when it RUNS. Four `binding_decision` verbs execute here, at
@@ -4371,11 +4333,7 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
                for t in w.tenures), "the conferral emitted but seated no live tenure"
     assert "date.scheduled" in kinds, f"`convene` scheduled no sitting: {sorted(kinds)}"
     assert "order.given" in kinds, f"`dispatch` gave no order: {sorted(kinds)}"
-    # AND THE SCALE IS CARRIED, not merely declared: each of these reaches a rung above the person.
-    # ⚠ `convene` DROPPED OUT OF THIS LOOP (plan position `18`/PROC-A): its `scale:` key is
-    # deleted (`03_PARAMETERS.md` §C.1) and the ordinal check below is the row's own falsifier now.
-    assert VERB_TABLE["confer"].scale == "settlement", VERB_TABLE["confer"].scale
-    assert VERB_TABLE["dispatch"].scale == "territory"
+    # AND THE SCALE IS CARRIED by the seat, not by the verb row: the ordinal check below is `convene`'s own falsifier.
     assert RUNG_KINDS.index(w.rungs["S"].kind) > 0, (
         "`convene`'s ordinal read `S` (settlement) as at or below the person tier")
     print(f"\n  governance slice — emitted {sorted(kinds)}; "
@@ -4472,6 +4430,7 @@ def test_the_title_ladder_is_total_over_the_rungs():
 # section; the `sovereign` assertion moved to `test_the_title_ladder_is_total_over_the_rungs`.
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the revocation branch's write, at Success; the draw is C3's test
 def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate():
     """§0.2 — DONE MEANS IT RUNS. Every other assertion about `_req_revoke` calls the predicate
     DIRECTLY out of `REQUIRES_PREDICATES`, which is a claim about a function, not about a
@@ -5171,17 +5130,14 @@ def test_a_holder_can_now_choose_the_governance_verbs_their_office_grants():
         "no remit-only governance verb is offerable to a person who holds the office granting it "
         "-- `H-71` has REGRESSED. Check that `add_tenure` still calls `_grant_remit`")
     assert "confer" in offered, "the duke's office grants `confer` and the person cannot form it"
-    # ⚠ THIS ASSERTS THE MECHANISM, NOT A SIDE OF `H-91`. It pins that the grant is read off the
-    # office that granted it rather than admitting blanket -- an over-admission would be `G4`.
-    # It is NOT a ruling that `remit:` should stay NECESSARY: `H-91` holds that keeping
-    # `remit:revoke` necessary may be an over-REFUSAL against Jordan's 2026-09-02 ruling that
-    # purview is SUFFICIENT, and that row says the conflict *"becomes live the moment H-71
-    # closes"* -- which is now. `H-91` is `grade: absent` and reserves the call; closing `H-71`
-    # moved it from unreachable to reachable and this line must not be read as answering it.
+    # ⚠ THIS ASSERTS THE MECHANISM: the grant is read off the office that granted it rather than
+    # admitting blanket -- an over-admission would be `G4`. `H-91` is CLOSED (`ruled`, B21.64): the
+    # grant is what a seat may do and purview is where it reaches, so `remit:revoke` stays necessary,
+    # as every remit verb's grant is -- one rule, not a collision with Jordan's 2026-09-02 *"so long as"*.
     assert "revoke" not in offered, (
         "`revoke` is offerable to a holder whose office does NOT grant it -- the grant is "
         "admitting on something other than its own office, which is an over-admission (G4). "
-        "If this is being changed deliberately under `H-91`, rule that row first")
+        "`H-91` (ruled, B21.64) keeps the grant necessary; reopen that row before changing this")
     # AND THE FOUR ARE STILL IN THE FOLD'S SET. The two halves now agree, which is the whole
     # point of closing the hole rather than the half the slice built.
     assert {"confer", "revoke", "dispatch", "convene"} <= resolvable_verbs(), (
@@ -5244,15 +5200,24 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     w = build_realm(0)
     offices = list(w.offices.values())
     # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
-    # [RE-CITED 2026-10-01, `13d-iii`, `python -c "from engine.season.harness.populated import build_realm as b; w=b(0); print(len(w.offices), w._office_census['unauthored'])"` -- 30 offices; `remit_default` now fills ONE of them (`off_npc_084`, the seat no `offices.yaml` row authors) and the other 29 carry their row's `remit_acts` plus whatever `remit_unruled` lets a loop-built seat keep, so this assertion no longer observes the default's reach -- `test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act` does. ⚠ `assert not ungranted` BELOW PASSES ONLY THROUGH THAT LEAK, NOT BECAUSE A DECLARED `[]` GRANTS ANYTHING. MEASURED, `build_realm(0)`, 2026-10-02: `dispatch` is held by 22 of the 29 authored seats -- 22 of the 23 loop-built (`held` is the testing default; the one exception, `off_parliamentary_clerk`, has an overlay declaring `remit: [issue]`) and 0 of the 6 minted -- so `march` (eligible on `remit:dispatch`) is eligible to all 22. The seven `remit_acts: []` rows are only the seats where `dispatch` is the WHOLE remit, which is why they are the ones this assertion would report; the same `[]` on a MINTED row would hold nothing. Stripping `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix, and would turn this assertion red on those seven seats]
+    # B21.03: a seat holds a remit act iff its row names it, so a seat's grant is its row's and no seat is filled from the
+    # testing default (every shipped seat has a row). A row naming nothing leaves its seat with an empty remit, lawfully.
     assert len(offices) >= 19, f"the realm seats {len(offices)} offices; the fixture has moved"
-    ungranted = [o.id for o in offices if not o.remit_acts]
-    assert not ungranted, f"offices with no remit after the default: {ungranted}"
+    from ..data.rosters import SEAT_ROW_BY_ID
+    assert w._office_census["unauthored"] == [], w._office_census["unauthored"]
+    checked = 0
+    for oid in w._office_census["authored"].values():
+        off = w.offices[oid]
+        assert set(off.remit_acts) == set(SEAT_ROW_BY_ID[off.id]["remit_acts"]), (
+            f"{off.id}: grant {sorted(off.remit_acts)} is not its row's {SEAT_ROW_BY_ID[off.id]['remit_acts']}")
+        checked += 1
+    assert checked == len(offices), (checked, len(offices))
 
     held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices]
     assert held, "no office is held; `_grant_remit` has nothing to stamp"
-    assert all(t.granted_acts for t in held), (
-        "a seated holder carries no grant — `add_tenure` is not stamping, or the office is empty")
+    assert any(t.granted_acts for t in held), "no seated holder carries a grant"
+    assert all(set(t.granted_acts) == set(w.offices[t.object].remit_acts) for t in held), (
+        "a seated holder's grant is not his seat's remit — `add_tenure` is not stamping it")
 
     gov = [v for v, r in VERB_TABLE.items()
            if any(a.startswith("remit:") for a in (r.eligibility or ()))]
@@ -5707,7 +5672,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # restored in its place: the depth is the act mix's number, not a discriminator (the COUNT is).
 
 
-def _h79_bailiff_subjects() -> dict:
+def _h79_bailiff_subjects(seed: int = 0) -> dict:
     """`H-79`'s sweep: per `claim_subject_rule`, the distinct subjects of the bailiff's non-`seen` claims after two
     seasons of `build_world(0)` (`test_w9_the_sweeps_...`'s reading, factored out at v10 REM-2C so the shipped
     table and the blanked one read it alike)."""
@@ -5716,7 +5681,7 @@ def _h79_bailiff_subjects() -> dict:
     for rule in sorted(CLAIM_SUBJECT_RULES):
         # B07.99: the relation is read with `task_draw_arm` swept off (the REM-2C precedent above: evaluated in process, assertion unchanged);
         # with the arm on the act mix moves again (actor 13 / both 12 / per_change 10) and the shipped-table test below reads the shipped arm.
-        w = HL.build_world(0, flat_fold_fixtures(DEFAULT_FIXTURES.sweep("claim_subject_rule", rule)))
+        w = HL.build_world(seed, flat_fold_fixtures(DEFAULT_FIXTURES.sweep("claim_subject_rule", rule)))
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
@@ -5742,7 +5707,12 @@ def test_w9_h79_per_change_changes_what_the_bailiffs_ledger_holds_at_the_shipped
     `actor` arm's act mix (`test_w9_the_sweeps_...` reads the count relation with that class blanked); the sets
     still differ on both trees, in the direction the rule names."""
     from ..harness import headless as HL
-    s = _h79_bailiff_subjects()
+    # B21.54 (a writ's terms are a Proposition: the act mix moves) RE-TRACED, seed 0 -> 1 -- a selected-seed existence claim, not a rate. At seed 0 the bailiff
+    # is now the SUBJECT of a `per_change` claim as well (actor 10 / per_change 16, `HL.BAILIFF` in both), so he is no longer only under `actor`. THE SWEEP
+    # (`build_world(seed)`, 2 seasons, the shipped table, run once, not kept; this test's own assertions): seeds 0..5 hold at 1, 2, 3 and 5, fail at 0 and 4
+    # (the bailiff under `per_change` too); the first is taken. The default `seed=0` stays for `test_w9_the_sweeps_the_register_declares_are_executed`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: seed 0, with B21.54's `issue` class dropped.]
+    s = _h79_bailiff_subjects(seed=1)
     assert {HL.CARIN, HL.BAILIFF} <= s["actor"] - s["per_change"], s
     assert s["per_change"] - s["actor"], s
 
@@ -6520,6 +6490,10 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # operands knows one. The verdicts below are read off `empty`, a reader over NO claims, so the
     # arm still observes an empty ledger.
     p0.ledger.append(Claim("c_wa_knows", p0.id, "p_mid", "exists:Person", 1, 0, "firsthand", 100, "own"))
+    # B21.55: `issue` forms only on a person he reads as commanded (`commanded_read`: a seat he holds, an untold `duty.taken` claim on the man), so the
+    # derivation of the operands sits him in a seat and reads `p_mid` as sworn (the verdicts are still read off `empty`, so the ledger arm is unchanged).
+    p0.tenures.append(Tenure("t_wa_seat", p0.id, "off_wa", "hold", since=0))
+    p0.ledger.append(Claim("c_wa_sworn", p0.id, "p_mid", "duty.taken", True, 0, "firsthand", 100, "own"))
     forms, checked = set(), 0
     for verb, row in sorted(VERB_TABLE.items()):
         if row.requires_typed is None:
@@ -7337,10 +7311,14 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # remit verb's clause 4 can move.
     duke.ledger.append(Claim("c_wc_seen_duke", duke.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
                              "firsthand", 100, "own"))
+    # B21.55: `issue` forms only on a person he reads as commanded (`commanded_read`), so the seated duke reads `p_mid` as sworn to him.
+    duke.ledger.append(Claim("c_wc_sworn_duke", duke.id, "p_mid", "duty.taken", True, 0, "firsthand", 100, "own"))
+    # B21.54: `issue` forms only on a `Proposition`-classed referent (`prop_wc`, in `q`'s classes) the issuer holds a claim on (its `terms` conjunct).
+    duke.ledger.append(Claim("c_wc_terms_duke", duke.id, "prop_wc", "proposition.uttered", True, 0, "firsthand", 100, "own"))
     # v9 IN-12 step 6: A WARRANT IN THE DUKE'S HAND naming `Hh` (a referent of `q`), so the warrant-sourced
     # verb forms and is walked with the four -- the seat is present on both sides for `seize` too.
     from .test_in10_record_operands import _hold_document
-    _hold_document(w, duke, "dispensation", {"terms": "Hh", "to": ["p_mid"], "at": None},
+    _hold_document(w, duke, "dispensation", {"terms": "Hh", "to": ["p_mid"], "at": None, "force": None},
                    rec_id="rec_wc_warrant")
     remit = [c for c in decision.opening_set(duke, View(duke.id, [], w.fixtures.get("view_k"), q),
                                              q, w.fixtures) if c.verb in WALK_REMIT | WALK_WARRANT]
@@ -7368,7 +7346,8 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # `march`, `raze` and `capture` are (excluded from the first walk above for the same reason): `p_low` holds no office, so
     # neither forms for him even at the sink arm. DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
     WALK_HELD_OFFICE: frozenset = frozenset(vb for vb in WALK_HELD if VERB_TABLE[vb].eligibility == ("remit:dispatch",))
-    assert WALK_HELD_OFFICE == {"marshal", "surrender"}, sorted(WALK_HELD_OFFICE)
+    # B21.59 re-read (men are levied through a seat): `recruit` and `discharge_troops` joined them, each `remit:dispatch`-only and withheld.
+    assert WALK_HELD_OFFICE == {"marshal", "surrender", "recruit", "discharge_troops"}, sorted(WALK_HELD_OFFICE)
     assert {c.verb for c in held_walk} == WALK_HELD - WALK_HELD_OFFICE, sorted({c.verb for c in held_walk})
     for c in held_walk:
         act = [a for sc in pack_scenes(p, [c], 5, sink, mint, occasion=qh) for a in sc.acts][0]
@@ -8715,11 +8694,23 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # fought under `rosters.yaml: duel_terms`; `engine/season/tests/test_cp_t03_09_capture.py` folds it.
     # v11 CR-27 (re-recorded at the B10-13 pin commit, P15): `lie` IS contested (`a standing`, `tell`'s prize and contest), the
     # eleventh entry; it shares `tell`'s cell and contest and emits `tell`'s kinds.
+    # v12 B21.09 (`14_VERBS_BINDING_A` commit A3): `establish` IS contested (`a seat`, B07's prize row, its first verb), the twelfth
+    # entry, with its own measurement: `engine/season/tests/test_vb_a_formation.py::test_a3_establish_bands_on_a_hand_built_holding`
+    # folds it through the real seam over 40 seeds (all four bands; Partial founds half the remit, Failure writes nothing).
+    # v12 B21.14 (`14_VERBS_BINDING_C` commit C3): `confer`, `revoke` and `succeed` ARE contested (`a seat`, opposed by the named
+    # seat's live holder), the thirteenth to fifteenth entries, with their own measurement:
+    # `engine/season/tests/test_vb_c_turnover.py::test_c3_confer_revoke_succeed_band_on_a_hand_built_world` folds each through the
+    # real seam over 40 seeds (all four bands for `confer` and `succeed`; a withstood `revoke` leaves the holder seated).
+    # v12 B21.56 (`14_VERBS_BINDING_D` commit D3): `issue` IS contested (`a standing`, `tell`'s prize, against its executor `to`), the
+    # sixteenth entry, with its own measurement: `engine/season/tests/test_vb_d_orders.py::test_d3_a_writ_is_minted_at_every_band_with_its_force`
+    # folds it through the real seam over 40 seeds (all four bands; the writ minted at each, its `force` the band).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
-                         "capture": "the body", "lie": "a standing"}, (
+                         "capture": "the body", "lie": "a standing", "establish": "a seat",
+                         "confer": "a seat", "revoke": "a seat", "succeed": "a seat",
+                         "issue": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -10245,6 +10236,11 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # pre-T4 derivation), with `tell` the row the fan was built for. The size of the set is not pinned.
     assert {"tell", "issue"} <= fanned and "petition" not in fanned, sorted(fanned)
     w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
+    # B21.55: `issue`'s `to` fans over the persons the issuer reads as commanded, so he sits in a seat and reads each as sworn (the control
+    # `petition` is unaffected, which is the point of this control).
+    p.tenures.append(Tenure("t_t4_seat", p.id, "off_t4", "hold", since=0))
+    for i, k in enumerate(("p_mid", "p_high", "p_king")):
+        p.ledger.append(Claim(f"c_sw{i}", p.id, k, "duty.taken", True, 0, "firsthand", 100, "own"))
     q = Question("q:t4c", "need", ("p_mid",))
     checked = 0
     for verb in ("petition",):
@@ -10259,10 +10255,11 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     assert all(b["subject"] == "p_mid" for b in issue_bags), issue_bags
     assert sorted(b["to"] for b in issue_bags) == sorted(
         x for x in ("p_mid", "p_high", "p_king") if x != p.id), issue_bags
-    assert VERB_TABLE["issue"].counterparty == "to" and not VERB_TABLE["issue"].contests
+    # B21.56: `issue` is now contested (`a standing`), against its executor `to` -- its opponent operand is the fanned `to`.
+    assert VERB_TABLE["issue"].counterparty == "to" and VERB_TABLE["issue"].opponent_operand() == "to"
     checked += 1
     assert checked == 2
     # The contested rows with a counterparty are a growing set (each new contested row joins it); what this control reads
-    # is `tell` and `determine`, which are in it, and the two rows that are not contested: `petition` and `issue`.
+    # is `tell`, `determine` and (B21.56) `issue`, which are in it, and the row that is not contested: `petition`.
     contested = {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty}
-    assert {"tell", "determine"} <= contested and not ({"petition", "issue"} & contested), sorted(contested)
+    assert {"tell", "determine", "issue"} <= contested and "petition" not in contested, sorted(contested)

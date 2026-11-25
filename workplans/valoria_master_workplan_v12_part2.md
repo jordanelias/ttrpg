@@ -66,7 +66,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S12 | B24p (SC), B11 (FI), B21 (FA); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
+| S12 | B24p (SC), B11 (FI); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
@@ -96,7 +96,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B19a-mb-contact-instrument | MB | W14 | S14 | 0 | 24_cont | 4 (B4) | EQUAL | 6.1 | B00, B01, B01a (B01a.05), B02, B16M, B14, B15, B16, B17 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
-| B21-fa-governance | FA | W12 | S12 | 0 | 14, 14_cont, 15, 15_cont | 57 (B51 P3 R1 H2) | MOVER (behaviour 35) | 25.3 | B00, B01, B02, B05, B07, B10 |
 | B21b-fa-war | FA | W13 | S13 | 0 | 21, 21_cont | 28 (B21 P6 DF1; H3: B21b.07, .17 "BUILD (reading)" read as BUILD) | MOVER (behaviour 15, conditional 1) | 13.7 | B11, B21 |
 | B21c-fa-seats | FA | W14 | S14 | 0 | 25 | 10 (B6 P1 H2 DF1) | MOVER (behaviour 4) | 6.5 | B21b |
 | B21d-fa-arc | FA | W14 | S15 | 5 | 29 | 10 (B9 DF1) | MOVER (behaviour 4) | 6.5 | B11, B21b |
@@ -152,7 +151,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B19a-mb-contact-instrument | 24_cont:564 | yes | 9 | yes | none | B01a (B01a.05) |
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
 | B20-mb-orders | 30:514 | yes | 10 | yes | none | — |
-| B21-fa-governance | 15_cont:193 | yes | 6 | yes | none | — |
 | B21b-fa-war | 21_cont:182 | yes | 2 | yes | none | — |
 | B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
 | B21d-fa-arc | 29:231 | yes | 2 | yes | none | — |
@@ -195,7 +193,6 @@ One row per batch in schedule order: the position handles (the part after the do
 |---|---|---|---|---|---|---|
 | S12 | B24p | 19, 24, 20, 22, 23 | — | — | `B24p.99` | 1 of 5 movers |
 | S12 | B11 | 04, 08, 12, 13, 14, 15, 16, 22, 51, 52, 53, 54, 55, 85, 58, 59, 60, 61, 83, 84, 63, 64, 67, 69, 71, 72, 73, 75, 78 | 17, 74 | — | `B11.99` | 3 of 5 movers |
-| S12 | B21 | 02, 03, 04, 05, 07, 08, 09, 11, 13, 14, 15, 16, 18, 20, 21, 22, 23, 51, 52, 53, 54, 55, 56, 79, 57, 63, 65, 66, 69, 71, 73, 80, 81, 82, 83 | — | — | `B21.99` | 5 of 5 movers |
 | S13 | B08 | 03, 04, 05 | — | — | `B08.99` | 1 of 5 movers |
 | S13 | B12a | 03, 05, 06, 08, 14, 15, 54, 55, 56, 62, 66, 69 | — | 09 | `B12a.99` | 2 of 5 movers |
 | S13 | B16 | 03 | — | — | `B16.99` | 3 of 5 movers |

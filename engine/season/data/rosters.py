@@ -124,6 +124,11 @@ _ROSTERS, _TABLES = _load_rosters()
 OFFICES_YAML = files.OFFICES_YAML
 
 
+def is_season_count(n) -> bool:
+    """Is `n` a positive whole number of seasons? `True` is no whole number here (a bool is an int to Python and not to a term)."""
+    return isinstance(n, int) and not isinstance(n, bool) and n >= 1
+
+
 def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
     """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE: test a runtime value against a bound roster,
     and on a miss raise `Unspecified` naming the hole, the accepted members and the law.
@@ -209,6 +214,19 @@ def _load_offices() -> dict:
                 "offices.yaml -- seats",
                 needs="one of " + ", ".join(_LEVELS) + " or `null`",
                 law="D-U1-01 -- a seat's modifier is one named level of `sigma_leverage.LEVEL_SIGMA`, the only ladder of levels")
+    # A SEAT ROW MAY NAME ITS TERM (B21.01): `term: <positive whole number of seasons> | null`, row data and not an `Office` field. It is
+    # the DEFAULT a `confer` onto the seat writes onto the hold's `term?` (`loop/effects_governance.py::_declared_term`), never a second
+    # store. `True` is no whole number here (a bool is an int to Python and not to this row), so it is refused with the rest.
+    for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
+        if isinstance(row, dict) and row.get("term") is not None:
+            term = row["term"]
+            if not is_season_count(term):
+                raise Unspecified(
+                    f"offices.yaml row {row.get('id')!r} names `term: {term!r}`, which is not a positive whole number of seasons",
+                    "offices.yaml -- seats",
+                    needs="a positive whole number of seasons, or `null`",
+                    law="`Tenure.term` is `Term(tick + n, act)` and `n` is a whole number of seasons >= 1 (`_declared_term`); a seat row's "
+                        "`term:` is the default that `n` takes, so a malformed one would fabricate a term nobody declared")
     # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
     # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
     # defaulted: a founding that defaulted would silently found a seat the data never described.
@@ -516,6 +534,41 @@ def territory_id_of(rung_id: "str | None") -> "str | None":
     return s.removeprefix(_TERRITORY_RUNG_PREFIX) or None
 
 
+def _load_territory_weight(raw) -> dict:
+    """B21.68 (`U5d_FA_owed_edits` §4): `rosters.yaml: tables.territory_weight`, `{territory id: weight}`, REFUSED at import for a key that is no
+    territory of the geography file's `provinces:` (its rows are the territories) and for a value that is not a positive number (a `bool` is not
+    one). The geography file is read only when the table names a key, so the shipped empty table costs no parse. A territory the table does not
+    name reads 1.0 at `territory_weight_of`, the one reader of the default."""
+    where = "rosters.yaml -- tables.territory_weight"
+    if raw is None:
+        raw = {}
+    if not isinstance(raw, dict):
+        raise Unspecified(f"`tables.territory_weight` is a {type(raw).__name__}, not a mapping", where,
+                          needs="a `{territory id: weight}` mapping (`{}` for none)",
+                          law="U5d_FA_owed_edits §4 -- the table is keyed by territory id")
+    if raw:
+        known = set((load_yaml(files.GEOGRAPHY_YAML.read_text(encoding="utf-8")) or {}).get("provinces") or {})
+        for k, v in raw.items():
+            if k not in known:
+                raise Unspecified(f"`territory_weight` key {k!r} is no territory of the geography file", where,
+                                  needs=f"a key from `valoria_geography_v30.yaml: provinces` ({sorted(known)})",
+                                  law="U5d_FA_owed_edits §4 -- a key that is no territory of the geography is refused")
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not v > 0:
+                raise Unspecified(f"`territory_weight[{k!r}]` is {v!r}, not a positive number", where,
+                                  needs="a number above 0 (1.0 is the default an absent key reads)",
+                                  law="U5d_FA_owed_edits §4 -- a value that is not a positive number is refused")
+    return {k: float(v) for k, v in raw.items()}
+
+
+_TERRITORY_WEIGHT = _load_territory_weight(_TABLES.get("territory_weight"))
+
+
+def territory_weight_of(territory: "str | None") -> float:
+    """The political weight of one territory (its geography id, `'T1'`), 1.0 where the table does not name it or where there is no territory
+    (`None`). THE ONE READER of `tables.territory_weight` and of its default; `queries/faction_q.py::weight` reads it per member."""
+    return _TERRITORY_WEIGHT.get(territory, 1.0)
+
+
 def table_meta(name: str) -> dict:
     """The table's own declarations -- `default_cell`, `row`, `keys`. Read rather than assumed, so
     a data edit that changes the sparse default cannot leave a stale constant in a body."""
@@ -619,14 +672,65 @@ if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY
             "`reserve` and `general` are not keys")
 ORDER_ROLES = roster("order_roles", ordered=True)
 ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
-# B11 lane A: the record kinds whose making is put to the addressee's face (`rosters.yaml: read_to_addressee`), read by
-# `loop/witness.py::addressee_reads`. Refused at import for a member that is no `record_kinds` member.
-READ_TO_ADDRESSEE = frozenset(roster("read_to_addressee"))
-if not READ_TO_ADDRESSEE <= RECORD_KINDS:
-    raise Unspecified(
-        f"`rosters.yaml: read_to_addressee` names {sorted(READ_TO_ADDRESSEE - RECORD_KINDS)}, no record kind",
-        "rosters.yaml -- read_to_addressee", needs="`record_kinds` members only",
-        law="B11 lane A -- only a document can be read to the man it is addressed to")
+# THE TWO ROSTERS OF WHO LEARNS A DOCUMENT'S CONTENT WITHOUT HOLDING IT, one shape: `{record_kinds member: verbs whose mint of
+# that kind the roster covers}`. `read_to_addressee` (B11 lane A) is "put to the addressee's face": the content reaches a witness
+# the document is ADDRESSED TO. `proclaimed` (B21.17, A-21) is "made public": the content reaches EVERYONE who learns of the
+# mint. Read by `loop/witness.py::addressee_reads` (`proclaimed` through `witness.py::proclaimed`, since B21.18). Both refused at import
+# by `check_record_verb_rosters` below (refusals (a), (b), (d)) and `data/verbs.py::_check_record_verb_minting` (refusal (c), which
+# needs the verb table this module loads before).
+def check_record_verb_rosters(named: dict, kinds=None, keys=None, addressee=None) -> dict:
+    """THE LOAD CHECK OF `read_to_addressee` AND `proclaimed`, on the raw maps `{roster name: {kind: [verb, ...]}}`; returns each as
+    `{kind: frozenset(verbs)}`. Refuses (a) a key that is no `record_kinds` member, (b) a key whose content keys hold no
+    addressee key (`record_kinds.content.addressee`), (d) a kind named in two of the rosters (a kind is read to its addressee or
+    proclaimed, never both), and an entry that is no non-empty list of verb names. (c), a verb that is no `verb_table.yaml` row
+    or whose effect does not mint the kind, is `data/verbs.py`'s. The three arguments default to the live rosters and are
+    parameters only so a test can plant a bad line and watch it refuse."""
+    kinds = RECORD_KINDS if kinds is None else kinds
+    keys = RECORD_KIND_KEYS if keys is None else keys
+    addressee = RECORD_CONTENT.get("addressee") if addressee is None else addressee
+    out: dict = {}
+    for name, raw in named.items():
+        if not isinstance(raw, dict):
+            raise Unspecified(
+                f"`rosters.yaml: {name}` is no `{{record kind: [verb, ...]}}` mapping", f"rosters.yaml -- {name}",
+                needs="a mapping from a `record_kinds` member to the verbs whose mint of that kind it covers",
+                law="B21.17 -- the two document-reach rosters share one shape, so one loader reads them")
+        for kind, verbs in raw.items():
+            if kind not in kinds:
+                raise Unspecified(
+                    f"`rosters.yaml: {name}` names {kind!r}, no record kind", f"rosters.yaml -- {name}",
+                    needs=f"`record_kinds` members only ({sorted(kinds)})",
+                    law="B21.17 (a) -- only a document can be read to the man it is addressed to or proclaimed")
+            if addressee not in keys.get(kind, ()):
+                raise Unspecified(
+                    f"`rosters.yaml: {name}` names {kind!r}, whose content keys {list(keys.get(kind, ()))} hold no "
+                    f"addressee key {addressee!r}", f"rosters.yaml -- {name}",
+                    needs="a kind that names whom it addresses (`record_kinds.content.addressee`)",
+                    law="B21.17 (b) -- the addressee key is what `addressed_to` reads and what the answer to the "
+                        "document is offered by")
+            if not isinstance(verbs, (list, tuple)) or not verbs or not all(isinstance(v, str) and v for v in verbs):
+                raise Unspecified(
+                    f"`rosters.yaml: {name}.{kind}` is no non-empty list of verb names ({verbs!r})",
+                    f"rosters.yaml -- {name}", needs="the verbs whose mint of this kind the roster covers",
+                    law="B21.17 -- the verb qualifier is what keeps `covenant`'s dispensation out of `proclaimed`")
+        out[name] = {kind: frozenset(verbs) for kind, verbs in raw.items()}
+    names = list(out)
+    for i, n1 in enumerate(names):
+        for n2 in names[i + 1:]:
+            both = sorted(set(out[n1]) & set(out[n2]))
+            if both:
+                raise Unspecified(
+                    f"`rosters.yaml`: {both} named in both `{n1}` and `{n2}`", "rosters.yaml",
+                    needs="each record kind in one of them: read to its addressee, or proclaimed",
+                    law="B21.17 (d) -- a kind is carried by one document-reach roster, so which reader reaches a "
+                        "witness never depends on read order")
+    return out
+
+
+_DOCUMENT_REACH = check_record_verb_rosters(
+    {n: roster_map(n, "values") for n in ("read_to_addressee", "proclaimed")})
+READ_TO_ADDRESSEE = _DOCUMENT_REACH["read_to_addressee"]
+PROCLAIMED = _DOCUMENT_REACH["proclaimed"]
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by
@@ -891,13 +995,15 @@ REVOCATION_BASES = roster("revocation_bases")
 FOUNDER_KEEPS = tuple(_OFFICES_DOC["founding"]["keeps"])
 FOUNDED_CONFERRAL = _OFFICES_DOC["founding"]["conferral"]
 FOUNDED_REVOCATION = _OFFICES_DOC["founding"]["revocation"]
-# v10 IN-61 (RS-27): `{seat: title}` -- which title a seat of conferral basis `inheritance` passes to
-# (`rosters.yaml: successions`). Read IN PLACE (never copied) by `state/gate.py`'s claim basis,
-# `loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed` and
-# `decision/options.py::opening_set`, so one dict answers all four. Its cross-check against `offices.yaml`
+# v10 IN-61 (RS-27), B21.16 (HAPPENINGS-B edit 3): `{seat: (title, ...)}` -- the titles whose holders may claim a seat of
+# conferral basis `inheritance` (`rosters.yaml: successions`); the tuple is eligibility, never an order, and a bare string
+# in the file reads as a one-title tuple. Read IN PLACE (never copied) by `state/gate.py`'s claim basis,
+# `loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed`, `queries/world_q.py::_heir_title_holders` and
+# `decision/options.py::opening_set`, so one dict answers all five. Its cross-check against `offices.yaml`
 # and `state/gate.py::FILLED_BY` is the gate's (`check_successions`), since the claim basis lives there
 # and `data/` may not import `state/`.
-SUCCESSIONS = {str(k): str(v) for k, v in roster_map("successions", "values").items()}
+SUCCESSIONS = {str(k): ((str(v),) if isinstance(v, str) else tuple(str(t) for t in v))
+               for k, v in roster_map("successions", "values").items()}
 # v10 CP-T02-06 (B10-10): WHO CARRIES ON A SEATED PERSON'S LINE, in the order they are offered
 # (`rosters.yaml: continuation_ties`, ORDERED). The reader per member is `queries/world_q.py::_TIE_READERS`,
 # cross-checked there at import (`data/` may not import `queries/`, `SUCCESSIONS`' reason).
@@ -918,7 +1024,7 @@ def remit_or_default(declared) -> list[str]:
     ⚠ IT FILLS AN EMPTY REMIT AND NEVER OVERWRITES A DECLARED ONE. The three grounded overlays
     (NPC-008/033/038) keep exactly what their case text supports; `remit_default` reaches only the
     seats that carry `[]`. Every seat with an `offices.yaml` row takes the row's remit through
-    `authored_remit` (below), so only the seat no row authors (`off_npc_084`), the spine and the
+    `authored_remit` (below), so only a seat no row authors, the spine and the
     fixtures fall through to this default.
 
     ⚠⚠ THE DEFAULT IS NOT CANON — see `rosters.yaml: remit_default`'s own note for why a
@@ -939,40 +1045,17 @@ def remit_or_default(declared) -> list[str]:
     return declared if declared else sorted(REMIT_DEFAULT)
 
 
-# `offices.yaml: meta: remit_unruled` -- the remit acts whose standing as an act is an OPEN RULING
-# (J-8: `dispatch`), so the overlay of an authored `remit_acts` leaves them exactly where they were.
-# Read once at import and checked against `REMIT_ACTS` HERE, for the reason every roster above is
-# bound at import: an unrecognised name would match no seat's remit and be dropped without a sound.
-OFFICES_REMIT_UNRULED = frozenset(((_OFFICES_DOC.get("meta") or {}).get("remit_unruled")) or ())
-if not OFFICES_REMIT_UNRULED <= REMIT_ACTS:
-    raise Unspecified(
-        f"offices.yaml `meta: remit_unruled` names {sorted(OFFICES_REMIT_UNRULED - REMIT_ACTS)}, "
-        "which are not remit acts", "offices.yaml",
-        needs="a member of `rosters.yaml: remit_acts`",
-        law="a remit act off the closed roster matches no seat's remit -- the one that is named "
-            "unruled would be silently granted to nobody, which is a ruling, not a typo")
-
-
-def authored_remit(row: dict, held=()) -> list[str]:
+def authored_remit(row: dict) -> list[str]:
     """A seat's remit from its authored `offices.yaml` row -- the ONE owner of the overlay rule,
     beside `remit_or_default`, which it supersedes wherever a row exists.
 
-    ⚠ THE ROW'S `remit_acts` IS THE REMIT, `[]` INCLUDED, EXCEPT FOR WHAT `held` BRINGS. A declared
-    empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row
-    was authored from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
-    But it does NOT grant nothing on a loop-built seat -- see `held`.
-
-    ⚠ `held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY, and only the acts in `OFFICES_REMIT_UNRULED`
-    survive from it -- `dispatch` today, an open ruling (J-8). THIS GRANTS IT, it does not stay
-    neutral: a loop-built seat was seated with `remit_default` (every act) unless its case's own
-    overlay declares a remit, so its `held` carries `dispatch` and it keeps it, and `march`,
-    eligible on `remit:dispatch`, is eligible to every such holder. A seat the loop did not build
-    (a MINTED row) passes nothing and so does NOT gain it: two identical rows diverge by build
-    route. Stripping
-    `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix. `sorted`, for
-    `remit_or_default`'s reason: a set's order is per-process and the grant folds into
+    A seat holds a remit act if and only if its row names it (B21.03): the row's `remit_acts` IS the
+    remit, `[]` included, and a loop-built seat keeps nothing it held before the overlay. A declared
+    empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row was
+    authored from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
+    `sorted`, for `remit_or_default`'s reason: a set's order is per-process and the grant folds into
     `World.content_hash`."""
-    return sorted(set(row["remit_acts"]) | (set(held) & OFFICES_REMIT_UNRULED))
+    return sorted(set(row["remit_acts"]))
 
 
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
@@ -1511,6 +1594,23 @@ for _hf, _hs in HEAD_SEAT.items():
     require_member(_hs, SEAT_ROW_BY_ID, f"`factions.head_seat` names the seat {_hs!r}, which no row of offices.yaml authors",
                    "rosters.yaml -- factions", law="CR-86 -- a head seat is an `offices.yaml` seat",
                    needs="a seat id from `offices.yaml: seats`")
+#: `{faction name: [faction names]}` -- B21.63 (`16_PESSIMIST_FA_B` edit 3): the EXCEPTIONS to the default below, and the only data the
+#: rule carries (`04` PART D 27a: a proper noun in the content layer is a declaration, never a rule). Shipped empty.
+COMPATIBLE_WITH = roster_map("factions", "compatible_with")
+for _name in {n for _cf, _others in COMPATIBLE_WITH.items() for n in (_cf, *(_others or ()))}:
+    require_member(_name, FACTIONS, f"`factions.compatible_with` names {_name!r}, which is not a faction",
+                   "rosters.yaml -- factions", law="B21.63 -- a compatibility exception pairs two factions the roster names",
+                   needs="a `token_class: faction` name, as key and in each list")
+
+
+def factions_compatible(a: str, b: str) -> bool:
+    """MAY ONE PERSON BELONG TO BOTH `a` AND `b`? (B21.63, `16_PESSIMIST_FA_B` edit 3.) The two are FACTION NAMES, the roster's own
+    (`FACTION_BY_PROP` turns a Proposition id into one). THE DEFAULT IS INCOMPATIBLE for two different rostered factions, and a
+    pair is compatible only where one row lists the other (`COMPATIBLE_WITH`, either direction): the rule is stated here once and the
+    data carries only the exceptions. A faction is compatible with itself (a re-commit is no second membership)."""
+    return a == b or b in (COMPATIBLE_WITH.get(a) or ()) or a in (COMPATIBLE_WITH.get(b) or ())
+
+
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")

@@ -597,6 +597,7 @@ def _world_from(frames: dict, fixtures: Fixtures) -> "World":
     w._covers_logged.update(frames["covers_logged"])
     w._last_by_anchor.clear()
     w._last_by_subject.clear()
+    w._first_by_subject.clear()
     for e in frames["log"]:
         w._index_logged(e)
     return w
@@ -650,6 +651,9 @@ class World:
         # commits) and by `test_in56`'s oracle against a log scan. Grade: CONVENTION.
         self._last_by_anchor: dict[tuple, str] = {}
         self._last_by_subject: dict[tuple, str] = {}
+        # `{subject: the FIRST logged Event naming it}`, for `queries/world_q.py::_creating_act` (the act that made a Record): the same derived,
+        # unhashed index of the log as the two above, written by the same `_index_logged`, so it replaces a forward scan of the whole log per call.
+        self._first_by_subject: dict[str, Event] = {}
         # v9 IN-12 step 10: `{event id: cover id}` for every logged Event whose actor held a live cover
         # WHEN IT WAS LOGGED (`state/attribution.py::cover_at_logging`, written in `_on_logged` below),
         # which `anchor_of` reads for a logged Event -- so a logged Event's anchor cannot change after
@@ -1115,7 +1119,7 @@ class World:
         self._staged = {}
         return out
 
-    def _grant_remit(self, t: Tenure, force: bool = False) -> bool:
+    def _grant_remit(self, t: Tenure, force: bool = False, acts: Optional[tuple] = None) -> bool:
         """`H-71` arm 2, THE WRITE HALF: seating a holder writes the office's remit acts into the
         `hold` Tenure's `payload`, so the grant rides on the thing the holder owns.
 
@@ -1169,7 +1173,9 @@ class World:
                 TRACE.note(f"`hold` {t.id!r} opened on {t.object!r}, which the world does not "
                            f"hold yet -- no remit granted until an `establish` founds it")
             return False
-        grant = tuple(off.remit_acts)
+        # B21.69: `acts` is the grant a PARTIAL REVOCATION leaves the holder (`revoke`'s `keeps`), written through the one writer of the key; it
+        # is read as given, never widened by the office's own remit, and is meaningful with `force` only (an existing grant is left alone without it).
+        grant = tuple(off.remit_acts) if acts is None else tuple(acts)
         # `H-160` limit 1 / `H-158`: THE GRANT ALSO SAYS WHERE THE SEAT'S TREASURY IS -- the seat's
         # rung, read person-side by `Tenure.seat_rung` (its one reader of the key), so a holder paying
         # through his seat can name the rung he pays out of without a `World`. Written with the acts,
@@ -1799,6 +1805,10 @@ class World:
         # is the last-appended Event of `kind` that matches -- what the reverse scan returned.
         return (self._last_by_subject if written else self._last_by_anchor).get((kind, subject))
 
+    def first_event_naming(self, subject: str) -> Optional[Event]:
+        """The first logged Event whose changes name `subject`, or `None`: a lookup of `_first_by_subject`, what a forward scan of `log` returned."""
+        return self._first_by_subject.get(subject)
+
     def _on_logged(self, e: Event) -> None:
         """IN-56. The log calls this after EVERY append (`EventLog(on_append=...)`), so a probe's
         direct `w.log.append` is indexed as surely as `write()`'s own emission. `anchor_of` is read
@@ -1818,10 +1828,11 @@ class World:
         self._index_logged(e)
 
     def _index_logged(self, e: Event) -> None:
-        """The two last-emission maps' one writer: `_on_logged` calls it per append and `decode` per restored Event."""
+        """The two last-emission maps' (and the first-naming map's) one writer: `_on_logged` calls it per append and `decode` per restored Event."""
         self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id
         for subj in {c.subject for c in e.changes}:
             self._last_by_subject[(e.kind, subj)] = e.id
+            self._first_by_subject.setdefault(subj, e)
 
     def discard_caches(self) -> None:
         self._barrier_cache.clear()

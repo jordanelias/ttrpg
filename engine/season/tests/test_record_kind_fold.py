@@ -41,6 +41,8 @@ from engine.season.loop.witness import content_value
 from engine.season.queries.world_q import WorldReader, hold_force
 from engine.season.state.carriers import Question, Record, View
 
+from ._seat_at_success import writ_at_success  # noqa: F401  (the fixture; its reason is in its module)
+
 _CONTENT = RECORD_CONTENT["predicate"]
 
 
@@ -181,6 +183,7 @@ def test_a_filed_petition_deposits_its_content_in_the_petitioners_own_ledger():
     assert d.resolved, "no act reached RESOLVE"
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the artifact is the fold's at Success; `issue`'s draw is D3's test
 def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatch):
     """r2 `05:1245`'s artifact -- *a season log showing a `content:dispensation` claim in the
     issuer's ledger*. ⚠ PLAN POSITION `19` RETIRED THE STAND-IN THIS TEST PLANTED (an always-true
@@ -189,7 +192,7 @@ def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatc
     executor is a person and `off_duke`'s purview reaches his home -- and everything after it is the
     shipped fold, effect and WITNESS, as before. THE CONTROL moved with it: the unpatched run used
     to refuse to EVALUATE the prose cell (`Unspecified`); now the same writ through NO seat is
-    evaluated and refused (`issue.unauthorized`), and mints nothing. ⚠ `to` IS ONE ID, NOT A LIST:
+    evaluated and refused (`issue.refused`, `issue.unauthorized` until B21.56), and mints nothing. ⚠ `to` IS ONE ID, NOT A LIST:
     the cell's `existence` conjunct asks about one executor (the row's `requires_typed_note`); the
     mint still stores the addressee as a list, which the assertions below read."""
     def choose_for(w, via="off_duke"):
@@ -202,7 +205,7 @@ def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatc
 
     w = P.tiny_world()
     P._run_d(w, choose_for(w, via=None))
-    assert "issue.unauthorized" in [e.kind for e in w.log], [e.kind for e in w.log]
+    assert "issue.refused" in [e.kind for e in w.log], [e.kind for e in w.log]   # B21.56: `issue.unauthorized` retired into it
     assert not [r for r in w.records.values() if r.kind == "dispensation"]
 
     w = P.tiny_world()
@@ -211,11 +214,11 @@ def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatc
     writs = [r for r in w.records.values() if r.kind == "dispensation"]
     assert len(writs) == 1, writs
     writ = writs[0]
-    assert writ.subject_matter == {"terms": "prop_x", "to": ["p_low"], "at": None}, writ
+    assert writ.subject_matter == {"terms": "prop_x", "to": ["p_low"], "at": None, "force": "Success"}, writ
     assert writ.rung == "D"
     got = _content_claims(w.persons["p_high"], writ.id)
     assert [c.predicate for c in got] == [f"{_CONTENT}:dispensation"], got
-    assert dict(got[0].value) == {"terms": "prop_x", "to": ("p_low",), "at": None}, got[0].value
+    assert dict(got[0].value) == {"terms": "prop_x", "to": ("p_low",), "at": None, "force": "Success"}, got[0].value
     assert got[0].source.startswith("firsthand")
 
 

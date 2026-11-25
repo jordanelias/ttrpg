@@ -26,7 +26,7 @@ GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
-GATE: Batch B21-fa-governance
+GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B21b-fa-war
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c1 (`train`); `BUILT OUT`: `train`, `recruit`, `discharge_troops`, `form_unit`, `assign_troops`, `disband_unit`, `order_unit`, `raze`, and `march` with posture `besiege` (`IS-MB-02`, read through `IS-A-09`); `ENGINES`: `mass_battle.army` and `mass_battle.army_order` → each built out; both `ENGINES` rows above 0 (IS-A §12.2 row B22). Milestones: M3 (every verb), M4 (every scale).

@@ -178,8 +178,13 @@ def find_trail(w: World, a: Any, e: Any) -> tuple:
 def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             *, verb: str = "", subject: Optional[str] = None,
-            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None):
+            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None,
+            seat: Optional[str] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
+
+    `seat` (B21.61) is the seat the act names, where its prize says an act names one (`loop/sides.py::seat_named_by`), passed to the
+    provider as `via` is: the social roll's `cross_chain` term compares its faction with the exercised seat's; the other providers accept
+    and ignore it.
 
     `via` (B05.20) is the seat the act is exercised through (`Act.via`), passed to the provider as `effort` is: the social roll's
     `office` source reads that seat's `modifier` (`rosters.yaml: advantage_sources`); the other providers accept and ignore it.
@@ -253,7 +258,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             # row saying `heard_by: bench`; every other provider accepts and ignores it (`combat.py`'s own
             # note on `rng` is the precedent).
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
-                       effort=effort, host=host, via=via)
+                       effort=effort, host=host, via=via, seat=seat)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "

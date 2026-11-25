@@ -55,11 +55,12 @@ def _commander(w, faction: str) -> Optional[str]:
     return next((p for p in world_q.leaders(w, faction) if _army_mintable(w, p, empty)), None)
 
 
-def plan_for(w, faction: str) -> tuple:
-    """The commands the doctrine gives `faction` now, `((verb, payload), ...)`, without folding any. Every army already in
-    the world counts against the cohorts: the plan is for an army that does not exist yet."""
+def plan_for(w, who: str) -> tuple:
+    """The commands the doctrine gives the faction `who` commits to, now, `((verb, payload), ...)`, without folding any: the cohorts it
+    may raise are those one of `who`'s seats may levy (B21.59). Every army already in the world counts against the cohorts: the plan is
+    for an army that does not exist yet."""
     return composition.require(world_q.ARMY_PRESET)(ArmyPresetQuery(
-        faction, military_menu.cohorts_raisable(w, faction), w.fixtures.get("condition_scale"),
+        world_q.faction_holding(w, who), military_menu.cohorts_raisable(w, who), w.fixtures.get("condition_scale"),
         world_q.other_army_records(w, "")))
 
 
@@ -76,7 +77,7 @@ def install(w, factions: Optional[Iterable[str]] = None, strategy: str = "line")
         who = _commander(w, faction)
         if who is None:
             continue
-        commands = plan_for(w, faction)
+        commands = plan_for(w, who)
         if not commands:
             continue                                     # nothing to raise: no empty army is minted for nothing
         kinds = _fold(w, driver, military_menu.act_for(w, who, "create_record", strategy=strategy))

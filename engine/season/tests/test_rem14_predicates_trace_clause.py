@@ -78,15 +78,16 @@ def test_revoke_names_the_clause_it_refused_on():
     w, _ = _gov_world()
     rv = lambda via, office, actor="p_king": Act(
         id=f"rv_{via}_{office}", actor=actor, verb="revoke", payload={"office": office}, via=via)
+    # B21.82: `_req_revoke` answers `Answer(ok, clause)`; this test reads the bool and the trace rows
     # control: the King revokes the duke through the seat above him -- admitted, no row
-    ok, rows = _rows_of(lambda: _preds._req_revoke(w, rv("off_crown", "off_duke")))
+    ok, rows = _rows_of(lambda: bool(_preds._req_revoke(w, rv("off_crown", "off_duke"))))
     assert ok is True and rows == [], rows
     # (1) no such office
-    out, rows = _rows_of(lambda: _preds._req_revoke(w, rv("off_crown", "off_nowhere")))
+    out, rows = _rows_of(lambda: bool(_preds._req_revoke(w, rv("off_crown", "off_nowhere"))))
     assert out is False and [_clause(r) for r in rows] == [
         "a revoke names no office the world holds"], rows
     # (3) the seat exercised (`off_mayor`, below the duchy) has no authority over the duke's seat
-    out, rows = _rows_of(lambda: _preds._req_revoke(w, rv("off_mayor", "off_duke")))
+    out, rows = _rows_of(lambda: bool(_preds._req_revoke(w, rv("off_mayor", "off_duke"))))
     assert out is False and [_clause(r) for r in rows] == [
         "a revoke the seat exercised has no revocation authority over the seat"], rows
     assert rows[0].what.endswith("p_king via 'off_mayor' on 'off_duke'"), rows[0].what
@@ -94,13 +95,13 @@ def test_revoke_names_the_clause_it_refused_on():
     w.offices["off_vacant"] = Office("off_vacant", "Duke", "D", ["issue"], faction="Crown",
                                      conferral="appointed", revocation="rung_above_same_faction")
     assert _preds.may_revoke(w, "p_king", "off_crown", w.offices["off_vacant"]), "fixture"
-    out, rows = _rows_of(lambda: _preds._req_revoke(w, rv("off_crown", "off_vacant")))
+    out, rows = _rows_of(lambda: bool(_preds._req_revoke(w, rv("off_crown", "off_vacant"))))
     assert out is False and [_clause(r) for r in rows] == [
         "a revoke of a seat nobody holds"], rows
     assert all(r.detail["chose"] == "refuse" for r in rows)
     # (2) authority holds, but the duke's seat has a conferral basis with no revocation disposal
     w.offices["off_duke"].conferral = "purchased"
-    out, rows = _rows_of(lambda: _preds._req_revoke(w, rv("off_crown", "off_duke")))
+    out, rows = _rows_of(lambda: bool(_preds._req_revoke(w, rv("off_crown", "off_duke"))))
     assert out is False and [_clause(r) for r in rows] == [
         "a revoke of a seat whose conferral basis has no revocation disposal"], rows
 
@@ -108,7 +109,7 @@ def test_revoke_names_the_clause_it_refused_on():
 def test_dispatch_names_no_person_the_world_holds():
     w = P.tiny_world()
     ok, rows = _rows_of(lambda: _preds._req_dispatch(
-        w, Act(id="d_ok", actor="p_high", verb="dispatch", payload={"subject": "p_low"})))
+        w, Act(id="d_ok", actor="p_high", verb="dispatch", via="off_duke", payload={"subject": "p_low"})))   # B21.21: `via` is the seat that commands him
     assert ok is True and rows == [], rows
     out, rows = _rows_of(lambda: _preds._req_dispatch(
         w, Act(id="d_no", actor="p_high", verb="dispatch", payload={"subject": "p_nobody"})))

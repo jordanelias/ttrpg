@@ -28,11 +28,11 @@ from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
 from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK,
-                          VERB_TABLE, WRITE_CLAUSE, VerbRow)
+                          VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
-from ..loop.sides import _contests_of, sides_of     # `_contests_of` lives in sides.py (B10-08 close)
+from ..loop.sides import _contests_of, seat_named_by, sides_of    # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
 from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMENT`, `_aff.INCOMPATIBLE`): a rebound table is what is read
@@ -47,7 +47,7 @@ from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..seam.ladder import is_margin_result
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
-from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, seat_hold
+from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, _seat_grants
 from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
@@ -124,8 +124,11 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             # act naming no seat (`via=None`) is the actor acting as themselves and has no remit
             # at all. `decision/choose.py` sets `via` person-side from the same grant, so a
             # COMPUTED act is admitted exactly as before; a hand-built one names its seat.
-            t = seat_hold(w, a.actor, a.via)
-            if t is not None and arg in t.granted_acts:
+            # B21 close (B21.11, A-23): asked through `state/gate.py::_seat_grants`, the gate's one reading of "sits in `via`, the
+            # grant carries the act, and is not in custody", so a detained holder exercises no remit here either -- `seat_hold`
+            # alone admitted a hand-built `issue` / `confer` / `revoke` through a detained man's seat. A computed act of his
+            # already carries `via=None` (`decision/options.py::seat_of`), so this refuses nothing computed play forms.
+            if _seat_grants(w, a.actor, a.via, arg):
                 return True
         elif kind == "hold":
             # ⚠ THE ARGUMENT IS COMPARED, as it is person-side: admitting anyone holding ANY
@@ -533,11 +536,20 @@ def _fold(self, w: "World", token: Token, a: Act,
         # act emits. The WRITE is refused too: the trace records it as refused (`F9`). A refused
         # first pair leaves the later pairs unchecked: a refused write authorizes nothing after it.
         except NoOpReceipt:
-            TRACE.decision(f"{a.verb} wrote nothing", "E3",
-                           chose="emit the refusal, not the success",
-                           alternatives=["emit `emits:` anyway (publishes an event for a "
-                                         "state change that did not happen)"])
-            return refuse(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+            # B21.57 (A-24): A VERB THAT `rosters.yaml: write_optional` NAMES IS ALSO ANSWERED WITHOUT A WRITE (`comply` on a writ
+            # naming no place), so its decline is the answer given with nothing to perform: it earns exactly the kinds the roster
+            # lists, never the write's, and nothing was changed. Every other row's decline is the refusal below.
+            if a.verb in WRITE_OPTIONAL:
+                TRACE.decision(f"{a.verb} had nothing to write", "E3",
+                               chose="emit the kinds `write_optional` lists, a write declined being no refusal for this verb",
+                               alternatives=["emit the refusal (a `comply` on any writ naming no place would be impossible)"])
+                earned.update(WRITE_OPTIONAL[a.verb])
+            else:
+                TRACE.decision(f"{a.verb} wrote nothing", "E3",
+                               chose="emit the refusal, not the success",
+                               alternatives=["emit `emits:` anyway (publishes an event for a "
+                                             "state change that did not happen)"])
+                return refuse(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
         # ⚠ H-143 (B03.76): THE GATE'S REFUSAL EMITS TOO, `04 §C`'s row *"a refusal emits, never
         # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
         # precondition that admitted what the gate then refuses would end the season here, where
@@ -1032,9 +1044,11 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
         declared = ()
     elif COUNTERPARTY_CLAUSE in row.refusals_by_clause:
         declared = row.refusal_for(COUNTERPARTY_CLAUSE)
-    elif row.draw_kinds and WRITE_CLAUSE in row.refusals_by_clause:
+    elif row.party_gap_at_write:
         # B07.01 (UNDECIDED (11) (i)): a `task` row has nobody opposite, so no counterparty clause; its refused roll is an
         # act that did not take, its `write` key's kinds (the loader accepts its two refusal kinds on that ground).
+        # B21.81: a contested row that names no `counterparty:` (`establish`, `revoke`) is the same case: `VerbRow.party_gap_at_write`,
+        # the loader's rule and this branch's one owner.
         declared = row.refusal_for(WRITE_CLAUSE)
     else:
         declared = row.emits_on_refusal
@@ -1124,7 +1138,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # here would have to re-enumerate all of them to stay in sync.
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng, effort=effort_of(a), host=host, via=a.via)
+                rng=_rng, effort=effort_of(a), host=host, via=a.via, seat=seat_named_by(w, a, contests[0]))
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a

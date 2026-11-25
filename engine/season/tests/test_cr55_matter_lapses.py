@@ -329,7 +329,9 @@ def _realm(lapse):
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
-    for _ in range(2):
+    # B21 re-traced two seasons -> three: season one docketed nothing (the offices' `dispatch` and `confer` attempts that opened cases are
+    # gone, B21.03), so the first items are docketed in season two and lapse at season three's MATTER (measured: 4 lapses at season three).
+    for _ in range(3):
         d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w
 

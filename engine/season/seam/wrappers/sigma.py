@@ -73,11 +73,11 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
 from ...data.arrangements import ARRANGEMENTS
-from ...data.rosters import STANCE_MAX
+from ...data.rosters import RUNG_KINDS, STANCE_MAX
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...gaps import InstrumentDefect, Unspecified
-from ...loop.sides import _contests_of, sides_of
+from ...loop.sides import _contests_of, seat_named_by, sides_of
 from ...queries.person_q import believed_capability, stance_toward
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -88,9 +88,10 @@ from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS,
                                   resolve as _prize_row)
 from ...queries.inputs import Margin, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import docketed_under, hold_force, judging_set, proofs, reception, residence_of
+from ...queries.faction_q import weight as faction_weight
+from ...queries.world_q import docketed_under, faction_of, hold_force, judging_set, proofs, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
-from ...state.gate import UNDECLARED_DISPOSAL, sits_over
+from ...state.gate import UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
@@ -469,17 +470,17 @@ def _levels_count(levels: tuple) -> tuple:
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
                   examined: Optional[str] = None, effort: int = 0, via: Optional[str] = None,
-                  heard_by: str = BENCH, toward: Optional[str] = None) -> SocialContestInput:
+                  heard_by: str = BENCH, toward: Optional[str] = None, seat: Optional[str] = None) -> SocialContestInput:
     """THE HOST INPUT BUILDER's record alone: `_read_social_roll`'s first return (see it for the body, for the
     rows' reads and for the levels, which `resolve` takes from the same call)."""
     return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort, via=via,
-                             heard_by=heard_by, toward=toward)[0]
+                             heard_by=heard_by, toward=toward, seat=seat)[0]
 
 
 def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
                       subject: Optional[str] = None, room: Optional[str] = None,
                       examined: Optional[str] = None, effort: int = 0, via: Optional[str] = None,
-                      heard_by: str = BENCH, toward: Optional[str] = None) -> tuple:
+                      heard_by: str = BENCH, toward: Optional[str] = None, seat: Optional[str] = None) -> tuple:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads. Returns
     `(record, reads, levels)`: the record `contest_input` hands out, for each `social_roll` row of `tables.capability_uses`
     (table order), `(row, value)` -- the value the row's reader read, so the record `resolve` returns names what fed the
@@ -500,6 +501,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     honest form while nothing supplies it: a fabricated leverage would be a number nobody chose.
     `effort` is the act's own (`state/carriers.py::effort_of`), passed by the adapter. `via` is the seat the act is exercised through
     (`Act.via`), passed by the adapter: the `office` source reads its `modifier` where the room's bench is over it (`_seat_modifier`).
+    `seat` is the seat the act names where its prize says an act names one (`loop/sides.py::seat_named_by`; B21.61): the `cross_chain` term
+    prices the act where it and `via` are of different chains of seats (`gate.across_chains`).
     The obstacle's operands are carried RAW (`even`'s `pool_add`,
     `difficulty`, `opposition` with `pool_default` and `opposition_rate`, `obstacle_ceiling`: `obstacle_operands` below); the module composes them.
 
@@ -550,8 +553,11 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     office = _seat_modifier(w, via, room)                                       # the seat's own level, where its bench is over the room (B05.20)
     regard = _regard_of(w, claimants[0], subject, room)                         # the counterparty's stance toward the actor, signed, in the clamp unit (B05.21)
     bodies = (_body_of(actor), _body_of(other))                                 # the `wounds` source's operands: his own body, and a person subject's (B05.60)
+    counts = dict(rank_gap=_rank_gap_of(w, via, subject),                       # the subject's rank above the exercised seat (B21.09)
+                  cross_chain=int(across_chains(w, via, seat)),                 # the named seat is of another chain than the exercised one (B21.61)
+                  faction_power=_faction_power_of(w, via, subject) if seat is not None else 0)     # the holder's faction against the host's, where the act names a seat (B21.69)
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
-                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies)
+                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts)
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
@@ -696,10 +702,73 @@ def _regard_term(fx: Any, facts: dict) -> dict:
     return _weighing("regard", max(0.0, -x) if x is not None else 0.0, fx.get("regard_step"))
 
 
+def _rung_rank(w: Any, rung: Optional[str]) -> Optional[int]:
+    """A rung's rank: its kind's ordinal in the ordered `rung_kinds` roster (`person` first, rank 0) -- the reading the gate's `rank` stem
+    makes (`queries/world_q.py`, the `rank` stem). `None` for no rung or one the world does not hold."""
+    r = w.rungs.get(rung) if rung is not None else None
+    return None if r is None else RUNG_KINDS.index(r.kind)
+
+
+def _rank_gap_of(w: Any, via: Optional[str], subject: Optional[str]) -> int:
+    """HOW FAR THE ONE ACTED ON OR FOR STANDS ABOVE THE ACTOR'S EXERCISED SEAT (OBS §2 member 6; B21.09), in `rung_kinds` steps, never below 0.
+    The actor's side is the rung of the seat `Act.via` names (rank 0 where he exercises none: he acts as a person). The subject's side is a
+    rung's own rank where the subject is a rung (`establish`'s holding), and the highest rank among the rungs of the seats a person subject
+    holds (rank 0 for a person holding none). 0 for no subject, or one that is neither. Read by `_rank_gap_term` through `rank_step`."""
+    seat = w.offices.get(via) if via is not None else None
+    own = (_rung_rank(w, seat.rung) or 0) if seat is not None else 0
+    if subject in w.persons:
+        theirs = max((_rung_rank(w, w.offices[t.object].rung) or 0 for t in w.seat_holds(subject)), default=0)
+    else:
+        theirs = _rung_rank(w, subject) or 0
+    return max(0, theirs - own)
+
+
+def _rank_gap_term(fx: Any, facts: dict) -> dict:
+    """`rank_gap`: how far the one acted on or for stands above the actor's exercised seat (OBS §2 member 6; B21.09, landed with its first reader,
+    `establish`): `rank_step x` the gap `_rank_gap_of` counts (`facts["rank_gap"]`; 0 where the record's builder read none). Not listed at
+    `rank_step` 0 (the control: "equal at control", OBS §4 step 6+) or where the subject stands at or below the seat."""
+    return _weighing("rank_gap", float(facts.get("rank_gap") or 0), fx.get("rank_step"))
+
+
+def _cross_chain_term(fx: Any, facts: dict) -> dict:
+    """`cross_chain`: a conferral across chains of seats is a step harder (OBS §2 member 29; B21.61, `16_PESSIMIST_FA_B` edit 2, A-105):
+    `cross_chain_step x` 1 where the seat the act names and the seat it is exercised through are of different factions (`facts["cross_chain"]`,
+    `gate.across_chains`; 0 where the record's builder read none). Not listed at `cross_chain_step` 0 (the control: "equal at control", OBS §4
+    step 6+) or inside one chain. A foreign holder stays uncommon by this price; a conferrer seating HIMSELF across chains is refused outright
+    (`loop/predicates.py::_req_confer`, `self_across_chains`)."""
+    return _weighing("cross_chain", float(facts.get("cross_chain") or 0), fx.get("cross_chain_step"))
+
+
+def _faction_power_of(w: Any, via: Optional[str], holder: Optional[str]) -> int:
+    """THE BAND OF THE HOLDER'S FACTION'S WEIGHT AGAINST THE HOST'S (B21.69, `IS-B3-FA-07`, A-105): `+1` where the faction the
+    holder (the roll's subject, the live holder `sides_of` stood opposite) coheres under outweighs the faction of the seat the act is exercised
+    through (`gate.seat_faction`), `0` where they weigh the same or are the SAME faction, `-1` where it weighs less. The weights are
+    `faction_q.weight`, the one owner (political weight, not armed strength: A-105, `U5d_FA` §4). THE RATIO'S BAND IS READ AS THE COMPARISON OF THE TWO
+    WEIGHTS, never their quotient, so a host faction with no members (weight 0.0, B21.68) reads as outweighed by any faction with some, and two
+    empty ones as equal, and nothing divides by zero. `0` for no holder, a holder committed to no faction, or a seat carrying none."""
+    host = seat_faction(w, via)
+    theirs = faction_of(w, holder) if holder is not None and holder in w.persons else None
+    if host is None or theirs is None or theirs == host:
+        return 0
+    mine, yours = faction_weight(w, host), faction_weight(w, theirs)
+    return (yours > mine) - (yours < mine)
+
+
+def _faction_power_term(fx: Any, facts: dict) -> dict:
+    """`faction_power`: how far the power of the holder's faction stands over the host's against the act (B21.69, A-105: *"the
+    amount of power over the foreign officer is determined by the power dynamics between the foreign faction and the host faction"*):
+    `faction_power_step x` the signed band `_faction_power_of` read (`facts["faction_power"]`; 0 where the record's builder read none). Nothing
+    lowers an obstacle (`roll.py::obstacle`), so only the stronger holder's side is listed, as harder: where the holder's faction is the weaker
+    the member reads nothing, as where it is the same, and the host's own faction is never priced. Not listed at `faction_power_step` 0 (the
+    control: "equal at control", OBS §4 step 6+)."""
+    return _weighing("faction_power", float(max(0, facts.get("faction_power") or 0)), fx.get("faction_power_step"))
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
-    _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _regard_term, _reception_term, _capability_term)},
+    _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _rank_gap_term, _regard_term, _reception_term,
+    _capability_term, _cross_chain_term, _faction_power_term)},
                            "obstacle_terms")
 
 
@@ -721,7 +790,7 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
-           regard: Optional[float] = None, bodies: tuple = (None, None)) -> SocialContestInput:
+           regard: Optional[float] = None, bodies: tuple = (None, None), counts: Optional[dict] = None) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -737,7 +806,8 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
         forgery_quality=forgery_quality,
         **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
-                                     reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard)),
+                                     reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard,
+                                     **(counts or {}))),
         **room_terms)
 
 
@@ -869,7 +939,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
-    """`(claimants, subject, room, examined, prize)` exactly as the fold hands the act to `resolve` (`prize` the contested prize's row, or `None`), or `None`
+    """`(claimants, subject, room, examined, prize, seat)` exactly as the fold hands the act to `resolve` (`prize` the contested prize's row, or `None`; `seat` the
+    seat the act names where its prize says one does, `loop/sides.py::seat_named_by`, else `None`), or `None`
     when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
     gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
     own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_tasks` route (`data/rosters.py::graded_route`: `None` for a route armed by a fixture that reads `off`) for an inquiry or a task. `loop.sides`
@@ -888,11 +959,11 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
         parties, subject, rung = sides_of(w, act, target, contests[0])
         if not parties:
             return None
-        return parties, subject, (rung if prize.get("heard_by") else None), None, prize
+        return parties, subject, (rung if prize.get("heard_by") else None), None, prize, seat_named_by(w, act, contests[0])
     route = graded_route(act.verb, w.fixtures)          # B07.01: the fold's own reading of the route (`task_draw_arm`)
     if route is not None and route.get("provider") == owner:
         subject = payload.get("subject")
-        return [act.actor], subject, None, subject, None
+        return [act.actor], subject, None, subject, None, None
     return None
 
 
@@ -972,7 +1043,7 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     called = _rolled_as(w, act)
     if called is None:
         return None
-    parties, subject, room, examined, prize = called
+    parties, subject, room, examined, prize, seat = called
     effort = effort_of(act)                 # the act's own, as the fold hands it to `resolve`
     if w.persons.get(parties[0]) is None:
         return None
@@ -981,7 +1052,9 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     if believer is None:
         hearing = {} if prize is None else dict(heard_by=prize.get("heard_by") or BENCH, toward=prize.get("toward"))
         return _odds_of_input(contest_input(w, parties, verb=act.verb, subject=subject, room=room,
-                                            examined=examined, effort=effort, via=act.via, **hearing))
+                                            examined=examined, effort=effort, via=act.via,
+                                            seat=seat,
+                                            **hearing))
     inp = believed_input(believer, act.verb, subject, w.fixtures,
                          pool=faculty(w, believer, act.verb),
                          person_subject=bool(subject) and subject in w.persons,
@@ -1039,7 +1112,8 @@ def believed_odds_query(w: Any, holder: Any):
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             verb: str = "", subject: Optional[str] = None,
             rung: Optional[str] = None,
-            module_entry: Optional[str] = None, effort: int = 0, host: Any = None, via: Optional[str] = None) -> dict:
+            module_entry: Optional[str] = None, effort: int = 0, host: Any = None, via: Optional[str] = None,
+            seat: Optional[str] = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
@@ -1110,7 +1184,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
     inp, reads, levels = _read_social_roll(w, claimants, verb=verb, subject=subject, room=heard,
                                    examined=subject if prize is None else None, effort=effort, via=via,
-                                   heard_by=(row or {}).get("heard_by") or BENCH, toward=(row or {}).get("toward"))
+                                   heard_by=(row or {}).get("heard_by") or BENCH, toward=(row or {}).get("toward"), seat=seat)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal

@@ -56,6 +56,9 @@ from .test_cp_t03_09_capture import ACTOR as CAPTOR, CAPTIVE, _world as _capture
 from .test_in10_record_operands import _acts, _formed
 from .test_in12_arrest import DUKE, PRISONER, WATCH, WATCHMAN, _act, _fold_at, _warrant_to_watchman
 from .test_in12_arrest import _world as _arrest_world
+from ._seat_at_success import writ_at_success  # noqa: F401  (the fixture; its reason is in its module)
+
+pytestmark = pytest.mark.usefixtures("writ_at_success")   # B21.56: the arrest world's warrant is issued at Success; this file's question is `fight` on a held party, not `issue`'s draw
 
 HEARTH = "Hh"          # `tiny_world`: where the prisoner / captive lives, inside the settlement `S` where the Duke stands
 

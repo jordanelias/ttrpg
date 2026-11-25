@@ -59,7 +59,7 @@ def revert_b11a(monkeypatch) -> None:
     if "fight" in O.VIOLENCE_CONTEXTS:       # an earlier item's revert (CR-87's) may have emptied the block: keep it so
         monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {**O.VIOLENCE_CONTEXTS,
                                                      "fight": ("war", "crime", "duel", "defence")})
-    monkeypatch.setattr(WIT, "addressee_reads", lambda rec, pid: False)
+    monkeypatch.setattr(WIT, "addressee_reads", lambda rec, pid, *_: False)   # B21.18 added the minting verb
     monkeypatch.setattr(O, "RECORD_SUBKINDS_HELD", frozenset())
 
 

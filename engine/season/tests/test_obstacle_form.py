@@ -52,12 +52,14 @@ def _fold(terms):
 
 
 ROSTER = roster("obstacle_terms", ordered=True)
-CONDITIONAL = ("standard", "stakes", "regard")      # B05.21: members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
+CONDITIONAL = ("standard", "stakes", "rank_gap", "regard", "cross_chain", "faction_power")      # B05.21 (B21.09: `rank_gap`; B21.61: `cross_chain`; B21.69: `faction_power`): members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
 STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
 LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
-ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil")
+ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil", "establish",   # B21.09: `establish`
+          "confer", "revoke", "succeed",                                                                                          # B21.14
+          "issue")                                                                                                                # B21.56
 #: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control, and
 #: the ceiling's form at its control (`hard`, B05.53), so the arm reads the flat bound whatever form ships (H-213, H-430).
 CONTROL_ARM = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, attribute_level=None, difficulty_ob=DIFFICULTY_OB_CONTROL, regard_step=0,
@@ -162,7 +164,7 @@ def test_the_difficulty_levels_are_sized_and_closed():
     assert tuple(sizes) == levels, (sizes, levels)
     assert list(sizes.values()) == sorted(sizes.values()) and min(sizes.values()) == 0 and len(set(sizes.values())) == len(levels)
     assert ({v: r.difficulty for v, r in V.VERB_TABLE.items() if v in ROLLED}                     # T13 edit 7 (commit 2, B05.23): `interrogate`
-            == {v: ("demanding" if v == "interrogate" else "routine") for v in ROLLED})           # `demanding`, every other rolled row `routine`
+            == {v: ("demanding" if v in ("interrogate", "establish") else "routine") for v in ROLLED})   # and `establish` (B21.09) `demanding`, every other rolled row `routine`
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -183,14 +185,14 @@ def _load_with(monkeypatch, tmp_path, verb, **cell):
 
 def test_a_rolled_row_with_no_difficulty_is_refused(monkeypatch, tmp_path):
     armed = {v for v, r in V.GRADED_TASKS.items() if r.get("armed_by")}                            # B07.01: the task rows, dealt once their arm is on
-    assert set(V.social_roll_verbs()) == set(ROLLED) | armed, sorted(V.social_roll_verbs())      # the ten rows and the armed routes, derived from the prizes and routes
+    assert set(V.social_roll_verbs()) == set(ROLLED) | armed, sorted(V.social_roll_verbs())      # the fifteen rows (B21.56) and the armed routes, derived from the prizes and routes
     assert _load_with(monkeypatch, tmp_path, "tell", difficulty="routine")["tell"].difficulty == "routine"       # CONTROL: the shipped cell loads
     for verb in ROLLED:                                                                           # contested rows and graded rows both
         with pytest.raises(SystemExit, match=f"{verb!r} is dealt by the social roll and declares no `difficulty:`"):
             _load_with(monkeypatch, tmp_path, verb, difficulty=None)
     with pytest.raises(SystemExit, match="not a member of `rosters.yaml: difficulty_levels`"):
         _load_with(monkeypatch, tmp_path, "tell", difficulty="easy")
-    assert set(V.GRADED_TASKS) - armed and set(V.GRADED_TASKS) - armed <= set(ROLLED)  # the live graded rows are among the ten, and were refused above
+    assert set(V.GRADED_TASKS) - armed and set(V.GRADED_TASKS) - armed <= set(ROLLED)  # the live graded rows are among the fourteen, and were refused above
     unrolled = next(v for v, r in V.VERB_TABLE.items() if v not in ROLLED and r.brute)
     with pytest.raises(SystemExit, match=f"{unrolled!r} declares `difficulty: 'routine'` and the social roll does not deal it"):
         _load_with(monkeypatch, tmp_path, unrolled, difficulty="routine")
@@ -233,7 +235,8 @@ def test_step_1a_composes_todays_obstacle_at_control():
     gave; an act against a person composes `1 + 0.5 x (his opposing attribute + his skill score)`: the stand-in's 2.0 for a person
     opposite at the untrained score on an UNHELD attribute no longer exists, so the move is exactly the attribute's half. FALSIFIER: the
     attribute dropped from the opposition (a person's term would equal `0.5 x score`), or a non-person act off 2.0. Read at `CONTROL_ARM`
-    (B05.23 ships the calibrated arm), so `interrogate` is the one row whose level is not `routine`: its difficulty is the control's `demanding`."""
+    (B05.23 ships the calibrated arm), so `interrogate` and `establish` (B21.09) are the rows whose level is not `routine`: their difficulty is the
+    control's `demanding`."""
     w = _world(**CONTROL_ARM)
     default = float(w.fixtures.get("pool_default"))
     checked = moved = 0
@@ -585,3 +588,24 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     held = 4 * world_q.remove_weight("firsthand")
     assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=()) == 0.0
     assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=("testimony",)) == held
+
+
+def test_a_subject_above_the_exercised_seat_is_a_rank_gap_term_by_each_branch():
+    """B21.09's `rank_gap` (`sigma._rank_gap_of`), observed nonzero on a rolled `revoke` at `rank_step` 1.0 (set in this test only; shipped 0):
+    a reeve's seat at the settlement `S` (`rung_kinds` rank 3) acting on the duke, who holds `off_duke` at the duchy `D` (rank 6), reads a gap of
+    3; the same act exercised through no seat (the actor's side rank 0) reads 6; a rung subject (`D` itself, the holding branch) reads 3.
+    CONTROL: the duke through `off_duke` on the reeve, who stands below him, lists no `rank_gap` term (the gap is never below 0)."""
+    from ..state.carriers import Office, Tenure
+    w = _world(rank_step=1.0)
+    w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", ["revoke"], faction="Crown")
+    w.add_tenure(Tenure("t_reeve_rank", "p_low", "off_reeve", "hold", 0))
+    checked = 0
+    for actor, via, subject, gap in (("p_low", "off_reeve", "p_high", 3), ("p_low", None, "p_high", 6),
+                                     ("p_low", "off_reeve", "D", 3), ("p_high", "off_duke", "p_low", 0)):
+        out = sigma.resolve(w, [actor], ["c"], V.VERB_TABLE["revoke"].contests, verb="revoke", subject=subject, via=via, seat="off_duke",
+                            rng=draw.seeded(draw.H2("test_obstacle_form_rank_gap", 0)))
+        assert out["status"] == "RESOLVED", out
+        terms = dict(out["terms"])
+        assert terms.get("rank_gap") == (float(gap) if gap else None), (actor, via, subject, terms)
+        checked += 1
+    assert checked == 4, checked

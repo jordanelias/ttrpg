@@ -39,7 +39,10 @@ What each block proves, and the control that stops it passing vacuously:
      the same mechanism `test_governance_build.py`'s LB-1 tests use, rather than constructing a
      `Tenure`/`Proposition` by hand. FOUR observables: the control before the commit is `False`;
      after it, both `at_war(w, A, B)` and the symmetric `at_war(w, B, A)` are `True`; after
-     `release`-ing the commit (peace, `T-m`'s own discretion) it is `False` again.
+     `release`-ing the commit (peace, `T-m`'s own discretion) it is `False` again. B21.58 (A-20) adds the seat: a
+     commit wages only from a seat granted `dispatch` (`gate.may_wage`), so the declarer's own `release` of his seat's
+     `hold` ends the war with his commit live, an unseated member's or a treasurer's commit keeps none alive, and a
+     second holder's commit does.
 """
 from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
@@ -115,7 +118,11 @@ def test_purview_is_the_set_form_of_purview_reaches_over_every_seated_office():
 
 def test_purview_of_a_rungless_or_unknown_seat_is_empty():
     w = build_realm(0)
-    rungless = next(oid for oid, off in w.offices.items() if off.rung is None)
+    # B21.03: every shipped seat now has a row, so none is built rungless; plant the S6.2 cluster case on one.
+    # CONTROL: the seat's purview reaches its own rung before the plant.
+    rungless = next(oid for oid, off in w.offices.items() if off.rung is not None)
+    assert faction_q.purview(w, rungless) != []
+    w.offices[rungless].rung = None
     assert faction_q.purview(w, rungless) == []
     assert faction_q.purview(w, "no_such_seat_in_this_world") == []
 
@@ -215,10 +222,31 @@ def _resolve_one(w, d, act):
     return [e.kind for e in out]
 
 
+def _wagers(w, fac):
+    """The persons holding a live seat of `fac` whose grant carries `dispatch` (`gate.MUSTER_ACT`), id order. Read off
+    `Tenure.granted_acts` directly, not by `gate.may_wage`, so the choice is independent of the rule under test."""
+    return sorted(pid for pid, p in w.persons.items()
+                  if any(t.kind == "hold" and t.live and t.object in w.offices and gate.MUSTER_ACT in t.granted_acts
+                         and gate.seat_faction(w, t.object) == fac for t in p.tenures))
+
+
 def test_at_war_through_the_real_fold_utter_then_commit_then_release():
+    """B21.58 (A-20): a war lives in the seats that wage it. The declarer is a Valorsmark holder of a `dispatch` seat
+    (one only: the Captain of the Guard), so releasing that seat's `hold` leaves his `commit` live and the war dead."""
     w = build_realm(0)
     d = SeasonDriver(w)
-    declarer = world_q.members(w, "fac_valorsmark")[0]
+    wagers = _wagers(w, "fac_valorsmark")
+    declarer = next(p for p in wagers
+                    if sum(t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures) == 1)
+    seat = next(t.object for t in w.persons[declarer].tenures
+                if t.kind == "hold" and t.live and t.object in w.offices)
+    second = next(p for p in wagers if p != declarer)
+    # A seated Valorsmark member whose seat carries no `dispatch` (the Lord Treasurer), and an unseated one.
+    treasurer = next(p for p in world_q.members(w, "fac_valorsmark") if p not in wagers and any(
+        t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures))
+    unseated = next(p for p in world_q.members(w, "fac_valorsmark") if not any(
+        t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures))
+    assert len({declarer, second, treasurer, unseated}) == 4
 
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "control failed -- fac_valorsmark/fac_guilds already read at_war before anything was uttered")
@@ -253,3 +281,113 @@ def test_at_war_through_the_real_fold_utter_then_commit_then_release():
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "at_war stayed True after the declaring commit was released -- peace is not being read")
     assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is False
+
+    # Re-declare, then the seat goes: his `commit` stays live and the war does not (step 2).
+    kinds = _resolve_one(w, d, Act(id="c_58_commit2", actor=declarer, verb="commit", payload={"subject": prop_id}))
+    assert kinds == ["commitment.made"], kinds
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is True, "control: the seated declarer's commit wages"
+    kinds = _resolve_one(w, d, Act(id="c_58_quit", actor=declarer, verb="release", payload={"subject": seat}))
+    assert kinds == ["tenure.closed"], f"the seat's hold did not close cleanly: {kinds}"
+    assert any(t.kind == "commit" and t.object == prop_id and t.live for t in w.persons[declarer].tenures), (
+        "control: his commit is still live, so only the seat decides")
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False
+    assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is False
+
+    # Step 3: neither an unseated member's commit nor a seated treasurer's (a seat whose grant lacks `dispatch`) wages.
+    for who in (unseated, treasurer):
+        kinds = _resolve_one(w, d, Act(id=f"c_58_{who}", actor=who, verb="commit", payload={"subject": prop_id}))
+        assert kinds == ["commitment.made"], kinds
+        assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, f"{who} keeps a war alive without a seat"
+
+    # Step 4: a second holder of a `dispatch` seat commits: True; he releases his commit: False.
+    kinds = _resolve_one(w, d, Act(id="c_58_second", actor=second, verb="commit", payload={"subject": prop_id}))
+    assert kinds == ["commitment.made"], kinds
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is True
+    assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is True
+    _resolve_one(w, d, Act(id="c_58_second_rel", actor=second, verb="release", payload={"subject": prop_id}))
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False
+
+
+# ---------------------------------------------------------------------------------------------
+# B21.05 -- the Löwenritter and the Restoration Movement get a head (`rosters.yaml: factions.head_seat`).
+# ---------------------------------------------------------------------------------------------
+
+def test_head_is_a_person_for_the_lowenritter_and_the_restoration_movement_and_none_for_the_guilds():
+    """The Grand Master heads the Löwenritter and the Restoration leader heads the Movement; the Guilds (a council),
+    Altonia and Schoenland have no head seat authored and stay `None`. Control: the four heads already authored."""
+    w = build_realm(0)
+    assert faction_q.head(w, "fac_löwenritter") == "p_npc_070"
+    assert faction_q.head(w, "fac_restoration_movement") == "p_npc_003"
+    assert faction_q.resolve(w, "fac_löwenritter").head == "p_npc_070"
+    assert faction_q.head(w, "fac_guilds") is None
+    for prop, who in (("fac_valorsmark", "p_npc_020"), ("fac_hafenmark", "p_npc_050"), ("fac_varfell", "p_npc_052"),
+                      ("fac_church_of_solmund", "p_npc_021")):
+        assert faction_q.head(w, prop) == who, prop
+
+
+# ---------------------------------------------------------------------------------------------
+# B21.65 -- a person's opinion of a faction regards its PRESENT head (`world_q.opinion_of`).
+# ---------------------------------------------------------------------------------------------
+
+def _with_a_regarding_observer(w, whom):
+    """A person who stands at `+5` toward `whom` and toward nobody else, so the regard term of his opinion of a
+    faction is `whom`'s alone when `whom` is the one regarded."""
+    from engine.season.state.carriers import Person
+    o = Person("o_b21_65", "o_b21_65")
+    o.stance = [(whom, 5, 5)]
+    w.persons[o.id] = o
+    return o
+
+
+def test_after_a_succession_opinion_of_regards_the_successor():
+    """Hand-built: the King's `hold` of the head seat closes and another person's opens. The observer who regards the
+    successor reads a higher opinion of the Crown's faction than before; the creed's authored subject is no longer
+    the one regarded. Control: a faction whose head seat is unchanged (the Hafenmark) reads the same opinion as before
+    the succession."""
+    from engine.season.data.rosters import HEAD_SEAT
+    w = build_realm(0)
+    old, other = "p_npc_020", "p_npc_050"
+    assert faction_q.head(w, "fac_valorsmark") == old
+    successor = next(p for p in sorted(w.persons) if p not in (old, other) and p != "o_b21_65")
+    o = _with_a_regarding_observer(w, successor)
+    before = world_q.opinion_of(w, o, "fac_valorsmark")
+    hafen_before = world_q.opinion_of(w, o, "fac_hafenmark")
+    seat = HEAD_SEAT["Valorsmark"]
+    held = next(t for t in w.tenures if t.kind == "hold" and t.live and t.object == seat and t.subject == old)
+    held.until = w.tick + 1
+    w.add_tenure(Tenure("t_b21_65_succession", successor, seat, "hold", w.tick + 1))
+    assert faction_q.head(w, "fac_valorsmark") == successor
+    assert w.propositions["fac_valorsmark"].subject == old, "the creed's authored subject is the stale reading"
+    after = world_q.opinion_of(w, o, "fac_valorsmark")
+    assert after > before, (before, after)
+    assert world_q.opinion_of(w, o, "fac_hafenmark") == hafen_before
+
+
+# ---------------------------------------------------------------------------------------------
+# B21.68 (`U5d_FA_owed_edits` §4): `faction_q.weight`, a faction's members counted by where they live
+# ---------------------------------------------------------------------------------------------
+
+def test_faction_weight_at_unit_territory_weights_is_the_unweighted_sum(monkeypatch):
+    """The control: the table ships empty, so every territory reads 1.0 and each rostered faction's weight is the summed
+    `Person.weight` of its members. The falsifier of a reader that ignores the table: plant one territory at 3.0 and the weight
+    of a faction with a member living there rises by exactly 2.0 times the weights of the members who live in it."""
+    from engine.season.data import rosters
+    w = build_realm(0)
+    assert not rosters._TERRITORY_WEIGHT, "the shipped table is empty (the control)"
+    checked = 0
+    for fid in (f for f in w.propositions if f.startswith("fac_")):
+        mem = world_q.members(w, fid)
+        if not mem:
+            continue
+        assert faction_q.weight(w, fid) == sum(w.persons[m].weight for m in mem), fid
+        checked += 1
+    assert checked >= 3, "too few rostered factions with members to call the control observed"
+    lives = world_q.residence_of(w)
+    crown = world_q.members(w, "fac_valorsmark")
+    terr = world_q.enclosing_territory(w, lives[crown[0]])
+    tid = rosters.territory_id_of(terr)
+    here = [m for m in crown if world_q.enclosing_territory(w, lives.get(m)) == terr]
+    assert here, "the planted territory holds a member by construction"
+    before = faction_q.weight(w, "fac_valorsmark")
+    monkeypatch.setitem(rosters._TERRITORY_WEIGHT, tid, 3.0)
+    assert faction_q.weight(w, "fac_valorsmark") == before + 2.0 * sum(w.persons[m].weight for m in here)

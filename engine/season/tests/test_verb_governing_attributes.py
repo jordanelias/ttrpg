@@ -77,7 +77,7 @@ def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem()
         checked += 1
     assert checked == len(VERB_TABLE) == 67, checked
     kinds = [_kinds_of(r)[0] for r in VERB_TABLE.values()]
-    assert (kinds.count("a"), kinds.count("b"), kinds.count("c")) == (32, 31, 4), kinds   # B05.24's count of the interim cells
+    assert (kinds.count("a"), kinds.count("b"), kinds.count("c")) == (27, 36, 4), kinds   # B05.24's count of the interim cells; B21.09 moved `establish` from (a) to (b) (it is drawn), B21.14 `confer`, `revoke`, `succeed`, B21.56 `issue`
     assert _check() is None                                                    # the shipped table passes the loader's own check
 
 
@@ -94,12 +94,12 @@ def test_a_brute_row_carrying_governing_or_a_difficulty_is_refused():
         _check({**VERB_TABLE, "give": dataclasses.replace(give, contests="a standing")})
     graded = {**GRADED_TASKS}
     assert "give" not in graded
-    with pytest.raises(Unspecified, match="issue"):                            # a `brute:` row carrying `opposed_attribute`
-        _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], opposed_attribute=ACUITY)})
+    with pytest.raises(Unspecified, match="covenant"):                         # a `brute:` row carrying `opposed_attribute` (B21.56: was `issue`, now drawn)
+        _check({**VERB_TABLE, "covenant": dataclasses.replace(VERB_TABLE["covenant"], opposed_attribute=ACUITY)})
 
 
 def test_a_brute_verb_twice_on_one_state_is_one_outcome_and_no_draw(monkeypatch):
-    """`confer`, `utter`, `transfer` and `dispatch`, hand-built, each resolved on two deep copies of one built world: the
+    """`convene` (B21.14: `confer` until it was drawn), `utter`, `transfer` and `dispatch`, hand-built, each resolved on two deep copies of one built world: the
     Event lists and `content_hash()` are equal, and no `roll:` stream is minted (the counter wraps `draw_factory`'s returned `draw`,
     the one stream every roll at `loop/resolve.py`'s two `"roll:..."` sites comes from) with `faculty` and `score` patched to raise.
     `engine/season/state/draw.py` does not exist; B06's keyed draw owner (`engine/dice_engine/draw.py`) re-points this counter."""
@@ -132,7 +132,8 @@ def test_a_brute_verb_twice_on_one_state_is_one_outcome_and_no_draw(monkeypatch)
     low_w = P.tiny_world()
     low = (low_w, SeasonDriver(low_w))
     cases = (
-        (gov, Act(id="b_confer", actor="p_high", verb="confer", payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke")),
+        # B21.14: `confer` is drawn (`contests: a seat`), so the seat-authorised brute case is `convene`
+        (gov, Act(id="b_convene", actor="p_high", verb="convene", payload={"subject": "S"}, via="off_duke")),
         (low, Act(id="b_utter", actor="p_low", verb="utter")),
         (low, Act(id="b_transfer", actor="p_low", verb="transfer", payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})),
         (gov, Act(id="b_dispatch", actor="p_high", verb="dispatch", via="off_duke", payload={"subject": "p_mid"})),
@@ -185,8 +186,8 @@ def test_a_row_naming_none_is_refused_at_load():
             _check({**VERB_TABLE, "tell": dataclasses.replace(VERB_TABLE["tell"], governing=bad)})
     with pytest.raises(Unspecified, match="tell"):                              # contested against a person with no opposed attribute
         _check({**VERB_TABLE, "tell": dataclasses.replace(VERB_TABLE["tell"], opposed_attribute=None)})
-    with pytest.raises(Unspecified, match="issue"):                             # `seat` where there is no `remit:` and no Office
-        _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], eligibility=("own",), referent_class="")})
+    with pytest.raises(Unspecified, match="covenant"):                          # `seat` where there is no `remit:` and no Office (B21.56: was `issue`)
+        _check({**VERB_TABLE, "covenant": dataclasses.replace(VERB_TABLE["covenant"], eligibility=("own",), referent_class="")})
     with pytest.raises(Unspecified, match="a standing"):                        # a prize row with no `person_inputs`, or another value
         _check(prizes={**PRIZES, "a standing": {k: v for k, v in PRIZES["a standing"].items() if k != "person_inputs"}})
     with pytest.raises(Unspecified, match="a standing"):

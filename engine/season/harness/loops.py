@@ -107,11 +107,14 @@ STEM_READS = {
     "individual":   (("Person.weight", "-"),),            # v10 CP-T03-01: `Person.is_cohort`, read off `weight`
     # v10 PC-10b: `record_names` -- a Record's content under the key its kind maps for the operand (minted with it)
     "names":        (("Record.exists", "+"), ("Record.subject_matter", "?")),
+    # B21.63: `admitted_to` -- the live commits to a faction and to the admission Proposition that names a joiner (an `OUGHT`), and the seats that admit
+    "admitted":     _TENURE + (("Proposition.exists", "?"), ("Office.exists", "?")),
     "claim.held":   (("Person.claim_ledger", "+"),),
     # v11 CR-87: `person_q.holds_dispute` -- the actor's own deed claims, judged by his own pursuits (`deeds_judged`)
     "dispute":      (("Person.claim_ledger", "?"),),
     "rank":         (("Rung.exists", "?"),),
     "purview":      (("Office.exists", "?"),) + _TENURE,
+    "command":      (("Office.exists", "?"),) + _TENURE,   # B21.20: `world_q.commands`, over oaths, seat holds and place
     "bench":        (("Office.exists", "?"),) + _TENURE,
     "bench.size":   _TENURE,
     # v11 CR-34: the live commits of the bench's members to an OUGHT about the party (`declared_votes`), and the row's `quorum:`

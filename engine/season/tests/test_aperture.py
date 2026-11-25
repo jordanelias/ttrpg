@@ -779,8 +779,11 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # gains 7.0; the pools are still many in one season, persons apart.
     # BA1.99 re-pin (BA1.01: the cast's authored `stats:` and `capabilities:` give those persons their own attributes and skill scores;
     # read with `PYTHONHASHSEED=0`, seed 0, one season, the delta in `git log`): still many pools in one season, persons apart.
+    # B21 close re-pin (B21.99 left it; 55 commits under engine/season/ since ce61cbf moved who acts and which task each rolls; seed 0,
+    # one season, equal at PYTHONHASHSEED 0, 1, 2): was {..., 11.7, 12.5, ...} with no 7.7, 8.7, 9.3, 12.3, 13.7, 14.0, 16.0.
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 9.7, 10.0, 10.3, 10.5, 11.0, 11.3, 11.5, 11.7, 12.0, 12.5, 13.0, 13.5, 15.5, 15.7}
+        7.0, 7.5, 7.7, 8.0, 8.5, 8.7, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 11.0, 11.3, 11.5, 12.0, 12.3, 13.0, 13.5, 13.7,
+        14.0, 15.5, 15.7, 16.0}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")
@@ -890,7 +893,8 @@ def test_built_out_reads_a_write_less_band_as_not_having_written_and_a_seat_as_v
     `march`, whose `Declared` band writes nothing and whose `Won` band writes, does not read as write-less
     through its empty band. `kinds` takes the LAST keyed band an act's Events name and every kind of it.
     `via` counts the clean executions that exercised a seat."""
-    assert not VERB_TABLE["tell"].writes and not VERB_TABLE["comply"].writes
+    assert not VERB_TABLE["tell"].writes     # B21.57 re-read: `comply` writes now (the order deposited, the addressee moves), so `tell` alone is the write-less witness
+    assert VERB_TABLE["comply"].writes
     assert VERB_TABLE["march"].writes and VERB_TABLE["utter"].writes
     row = VERB_TABLE["tell"]
     ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)

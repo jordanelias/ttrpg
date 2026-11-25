@@ -61,7 +61,7 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 34 | `(when, round)` → `(when, lap)` | B09.02 | B11.08, B12a.69, B38.04 |
 | 35 | `_bond(p, patient, lean)` → `_bond(p, counterparty, lean)` | B10.20 | — |
 | 36 | `TURN_CHOICES` → `ROUND_CHOICES` | B10.57 | B16.02, B34.07, B34.15, B18.09 |
-| 37 | `populated.build_realm` → `boot/realm.py::build_realm` | B11.03 | B11.05, B21.72, B21.74, B21.76, B34.01, B35.22 and 1 more |
+| 37 | `populated.build_realm` → `boot/realm.py::build_realm` | B11.03 | B11.05, B21.72, B21.74, B23.19, B34.01, B35.22 and 1 more |
 | 38 | `harness/probes.py::chooser` → `boot/chooser.py::chooser` | B11.03 | B11.05, B39.10 |
 | 39 | `build_realm` → `boot/realm.py::build_realm` | B11.04 | — |
 | 40 | `build_realm` → `boot/realm.py` | B11.08 | — |
@@ -257,7 +257,7 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 179 | `engine/season/tests/test_governance_spine_play.py` | test file | B21.72 | — |
 | 180 | `situation` | key or symbol | B21.72 | — |
 | 181 | `loop_closed` | key or symbol | B21.74 | — |
-| 182 | `situated` | key or symbol | B21.76 | — |
+| 182 | `situated` | key or symbol | B23.19 | — |
 | 183 | `engine/season/tests/test_npc_effort_attribution.py` | test file | B08.01 | — |
 | 184 | `engine/season/tests/test_scene_sequence.py` | test file | B08.02 | — |
 | 185 | `engine/season/tests/test_rival_precedence.py` | test file | B08.05 | — |

@@ -150,7 +150,7 @@ def test_14_an_oblige_to_a_bare_string_opens_no_edge_and_one_to_a_seat_does(seat
     if ok:          # CONTROL: a real seat the actor does not hold
         assert [t.object for t in edges] == [seat] and "duty.taken" in kinds, (edges, kinds)
     else:
-        assert not edges and "duty.refused" in kinds and "duty.taken" not in kinds, (edges, kinds)
+        assert not edges and "duty.no_seat" in kinds and "duty.taken" not in kinds, (edges, kinds)      # B21.83: the `seat` clause's kind
 
 
 # ======================================================================================

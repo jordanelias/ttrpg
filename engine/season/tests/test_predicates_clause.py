@@ -102,7 +102,7 @@ def test_every_branch_names_a_declared_clause_and_every_declared_clause_has_a_br
         assert set(declared) <= set(used), (verb, sorted(set(declared) - set(used)))
         assert len(set(declared)) == len(declared), verb
         checked += 1
-    assert checked == 4, f"the four naming predicates (confer, establish, oblige, succeed): saw {checked}"
+    assert checked == 6, f"the six naming predicates (confer, establish, oblige, revoke, succeed, utter): saw {checked}"    # B21.82: `revoke` joins
     # the walk observes what it excludes
     def _planted(w, a):
         return PR._refuse_at("undeclared", "x")
@@ -118,7 +118,7 @@ def test_a_predicate_refusing_at_a_name_it_did_not_declare_is_an_instrument_defe
 
     def drifted(w, a):
         return PR.Answer(False, "bogus")
-    drifted.clauses = ("declared",)
+    drifted.clauses = PR.REQUIRES_PREDICATES["confer"].clauses    # the shipped row is keyed (B21.80): its keys must still equal them
     monkeypatch.setitem(PR.REQUIRES_PREDICATES, "confer", drifted)
     w, d = _gov_world()
     with pytest.raises(InstrumentDefect):
@@ -142,8 +142,8 @@ def test_the_shared_read_returns_a_string_or_empty():
 # B09.19 -- STEP TWO'S CHANNEL: THE REFUSED CLAUSE REACHES THE EVENT'S KIND
 # ======================================================================================
 # `requires_predicate(verb, clauses=...)` declares the clause names; a predicate answers `(ok, clause)`; `_admits` hands the
-# clause to `row.refusal_for`. NO shipped row is keyed (the four authored rows are B21's), so each test PLANTS a keyed `confer`
-# row in its own table, over kinds the roster already holds.
+# clause to `row.refusal_for`. The four rows that take it are B21's, one commit each; B21.80's `confer` is the first shipped keyed
+# row, so the first test reads it and the key-checking test PLANTS variants of it in its own table.
 
 import dataclasses  # noqa: E402
 
@@ -153,28 +153,36 @@ from ..gaps import Unspecified  # noqa: E402
 from ..loop.driver import mint_token  # noqa: E402
 from ..manifest import check_preconditions  # noqa: E402
 
-_PURVIEW_KIND, _HELD_KIND, _DISPLACE_KIND = "case.unauthorized", "confer.refused", "issue.unauthorized"
+_FLAT = ("confer.refused",)
 
 
 def _keyed_confer(clause_kinds: dict):
-    """`confer`'s shipped row, keyed: the three fold clauses it fails at (eligibility, write, counterparty), plus the predicate
-    clauses `clause_kinds` names. The fold clauses keep the kind the flat row emitted, so only the predicate's clauses move."""
+    """`confer`'s row with its predicate clauses re-keyed to `clause_kinds` (planted: the shipped row has been keyed since B21.80,
+    so a test that needs other keys or kinds builds its own). The fold clauses keep the one flat kind."""
     row = VERB_TABLE["confer"]
-    flat = row.emits_on_refusal
-    by_clause = {ELIGIBILITY_CLAUSE: flat, WRITE_CLAUSE: flat, COUNTERPARTY_CLAUSE: flat,
+    by_clause = {ELIGIBILITY_CLAUSE: _FLAT, WRITE_CLAUSE: _FLAT, COUNTERPARTY_CLAUSE: _FLAT,
                  **{c: (k,) for c, k in clause_kinds.items()}}
     union = tuple(dict.fromkeys(k for ks in by_clause.values() for k in ks))
     return dataclasses.replace(row, emits_on_refusal=union, refusals_by_clause=by_clause)
 
 
+def _flat_confer():
+    """The row before B21.80: one kind for every refusal, as the control for what keying changes."""
+    return dataclasses.replace(VERB_TABLE["confer"], emits_on_refusal=_FLAT, refusals_by_clause={})
+
+
 def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
+    """B21.80: THE SHIPPED `confer` ROW. A refusal at the purview clause, the held clause and the displacement clause emits
+    three kinds, where the flat row (the control) emitted `confer.refused` for all three."""
     from .test_g3_not_yours import _gov_world
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
-    assert declared == ("office", "basis", "conferee", "purview", "held", "displacement"), declared
-    kinds = {c: _HELD_KIND for c in declared}
-    kinds.update(purview=_PURVIEW_KIND, displacement=_DISPLACE_KIND)
-    keyed = _keyed_confer(kinds)
-    assert keyed.precondition_evaluable(PR.REQUIRES_PREDICATES), "the planted row is not admitted: the fixture is wrong"
+    assert declared == ("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"), declared
+    shipped = VERB_TABLE["confer"]
+    assert shipped.refusals_by_clause, "the shipped confer row is flat: B21.80 keys it"
+    assert shipped.precondition_evaluable(PR.REQUIRES_PREDICATES), "the shipped row's keys are not the predicate's clauses"
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
 
     def run(world, driver, aid, actor, via, to):
         out = driver.resolve(mint_token(world, WriteClass.ACTS),
@@ -194,20 +202,146 @@ def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
         return got
 
     w, d = _gov_world()
+    monkeypatch.setitem(VERB_TABLE, "confer", _flat_confer())
     flat = arms(w, d)
-    assert flat == {c: ["confer.refused"] for c in ("purview", "held", "displacement")}, flat    # CONTROL: the shipped flat row
+    assert flat == {c: ["confer.refused"] for c in ("purview", "held", "displacement")}, flat    # CONTROL: the flat row
 
+    monkeypatch.undo()
     w, d = _gov_world()
-    monkeypatch.setitem(VERB_TABLE, "confer", keyed)
     got = arms(w, d)
-    assert got == {"purview": [_PURVIEW_KIND], "held": [_HELD_KIND], "displacement": [_DISPLACE_KIND]}, got
+    assert got == {"purview": ["confer.unauthorized"], "held": ["confer.held"],
+                   "displacement": ["confer.displacement_unauthorized"]}, got
     assert len({k for ks in got.values() for k in ks}) == 3, "two clauses emitted one kind on a keyed row"
     # the actor's ledger holds a claim keyed by the purview kind, so §F1 clause 4 can decline the same act next round
-    refused = [e for e in w.log if e.kind == _PURVIEW_KIND]
+    refused = [e for e in w.log if e.kind == "confer.unauthorized"]
     assert len(refused) == 1, refused
     d.witness(mint_token(w, WriteClass.INTERIOR), refused)
-    assert any(c.predicate == _PURVIEW_KIND and c.subject == "p_other" for c in w.persons["p_other"].ledger), (
+    assert any(c.predicate == "confer.unauthorized" and c.subject == "p_other" for c in w.persons["p_other"].ledger), (
         [(c.predicate, c.subject) for c in w.persons["p_other"].ledger])
+
+
+def _flat_row(verb: str, kind: str):
+    """A shipped row as it stood flat: one kind for every refusal (the control for what keying changes)."""
+    return dataclasses.replace(VERB_TABLE[verb], emits_on_refusal=(kind,), refusals_by_clause={})
+
+
+def test_a_refused_establish_says_which_clause_refused_in_its_kind(monkeypatch):
+    """B21.81: THE SHIPPED `establish` ROW. Hand-built acts refused at `conferral basis`, `re-founding` and `reduction is
+    revocation` emit three kinds where the flat row (the control) emitted `establish.refused` for all three, and the actor's
+    ledger holds a claim keyed by each. (`rung held` is not reachable by a hand-built act: clause 1's `founds_over` refuses a
+    rung the world does not hold first, as `office resolves`.)"""
+    from .test_governance_build import _establish, _establish_world, _founding, _seat_reeve
+    declared = PR.REQUIRES_PREDICATES["establish"].clauses
+    assert declared == ("office resolves", "rung held", "conferral basis", "filler", "re-founding", "may fill",
+                        "reduction is revocation"), declared
+    shipped = VERB_TABLE["establish"]
+    assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
+
+    def arms(world, driver):
+        got = {}
+        got["conferral basis"] = [e for e in _establish(world, driver, "e0", _founding(conferral=None))]
+        _seat_reeve(world, ["confer", "issue", "dispatch"])      # a sitting holder whose grant is the three
+        got["re-founding"] = [e for e in _establish(world, driver, "e1", _founding(post="Other"))]
+        got["reduction is revocation"] = [e for e in _establish(world, driver, "e2",
+                                                                 _founding(remit=["confer", "issue"]))]
+        return got
+
+    w, d = _establish_world()
+    monkeypatch.setitem(VERB_TABLE, "establish", _flat_row("establish", "establish.refused"))
+    flat = {c: [e.kind for e in es] for c, es in arms(w, d).items()}
+    assert flat == {c: ["establish.refused"] for c in ("conferral basis", "re-founding", "reduction is revocation")}, flat
+    monkeypatch.undo()
+    w, d = _establish_world()
+    got = arms(w, d)
+    names = {c: [e.kind for e in es] for c, es in got.items()}
+    assert names == {"conferral basis": ["establish.no_basis"], "re-founding": ["establish.refounding"],
+                     "reduction is revocation": ["establish.reduces_grant"]}, names
+    # the actor's ledger holds a claim keyed by each kind, so §F1 clause 4 can decline the same act next round
+    for clause, events in got.items():
+        w.log.extend(events)
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+        assert any(c.predicate == names[clause][0] for c in w.persons["p_high"].ledger), (
+            clause, [(c.predicate, c.subject) for c in w.persons["p_high"].ledger])
+
+
+def test_a_refused_revoke_says_which_clause_refused_in_its_kind(monkeypatch):
+    """B21.82: THE SHIPPED `revoke` ROW. Hand-built acts refused at `authority` (the mayor's seat has none over the duke) and at
+    `held` (a seat nobody holds) emit two kinds where the flat row (the control) emitted `revoke.refused` for both, and the
+    actor's ledger holds a claim keyed by each."""
+    from .test_g3_not_yours import _SUCCESS, _gov_world
+    declared = PR.REQUIRES_PREDICATES["revoke"].clauses
+    assert declared == ("office", "disposal", "authority", "keeps", "held"), declared
+    shipped = VERB_TABLE["revoke"]
+    assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
+
+    def arms(world, driver):
+        world.offices["off_duke"].remit_acts.append("revoke")       # the duke's seat revokes too (`remit:revoke`, eligibility)
+        world._grant_remit(next(t for t in world.tenures if t.kind == "hold" and t.object == "off_duke"), force=True)
+        got = {}
+        for clause, actor, via, office in (("authority", "p_king", "off_mayor", "off_duke"),
+                                           ("held", "p_high", "off_duke", "off_reeve")):
+            act = Act(id=f"rv_{clause}", actor=actor, verb="revoke", payload={"office": office}, via=via)
+            world.acts.append(act)
+            got[clause] = driver._fold(world, mint_token(world, WriteClass.ACTS), act, _SUCCESS)
+        return got
+
+    w, d = _gov_world()
+    monkeypatch.setitem(VERB_TABLE, "revoke", _flat_row("revoke", "revoke.refused"))
+    flat = {c: [e.kind for e in es] for c, es in arms(w, d).items()}
+    assert flat == {"authority": ["revoke.refused"], "held": ["revoke.refused"]}, flat       # CONTROL: the flat row
+    monkeypatch.undo()
+    w, d = _gov_world()
+    got = arms(w, d)
+    names = {c: [e.kind for e in es] for c, es in got.items()}
+    assert names == {"authority": ["revoke.unauthorized"], "held": ["revoke.no_holder"]}, names
+    actors = {"authority": "p_king", "held": "p_high"}
+    for clause, events in got.items():
+        w.log.extend(events)
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+        assert any(c.predicate == names[clause][0] for c in w.persons[actors[clause]].ledger), (
+            clause, [(c.predicate, c.subject) for c in w.persons[actors[clause]].ledger])
+
+
+def test_a_refused_oblige_says_which_clause_refused_in_its_kind(monkeypatch):
+    """B21.83: THE SHIPPED `oblige` ROW. Hand-built acts refused at `own_seat` (the duke obliging himself to his own seat) and at
+    `banned` (a person holding a live `ban` at the seat) emit two kinds where the flat row (the control) emitted `duty.refused` for
+    both, and the actor's ledger holds a claim keyed by each."""
+    from .test_u7_remit import BAN_KIND, DUKE, PARTY, SEAT, Tenure, _fold, _world
+    declared = PR.REQUIRES_PREDICATES["oblige"].clauses
+    assert declared == ("seat", "binds", "own_seat", "one_edge", "banned"), declared
+    shipped = VERB_TABLE["oblige"]
+    assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
+
+    def arms(world, driver):
+        world.add_tenure(Tenure("t_ban", PARTY, SEAT, BAN_KIND, since=world.tick))
+        got = {}
+        for clause, actor in (("own_seat", DUKE), ("banned", PARTY)):
+            got[clause] = _fold(world, driver, Act(id=f"ob_{clause}", actor=actor, verb="oblige", payload={"subject": SEAT}))
+        return got
+
+    w, d = _world()
+    monkeypatch.setitem(VERB_TABLE, "oblige", _flat_row("oblige", "duty.refused"))
+    flat = {c: [e.kind for e in es] for c, es in arms(w, d).items()}
+    assert flat == {"own_seat": ["duty.refused"], "banned": ["duty.refused"]}, flat       # CONTROL: the flat row
+    monkeypatch.undo()
+    w, d = _world()
+    got = arms(w, d)
+    names = {c: [e.kind for e in es] for c, es in got.items()}
+    assert names == {"own_seat": ["duty.own_seat"], "banned": ["duty.banned"]}, names
+    actors = {"own_seat": DUKE, "banned": PARTY}
+    for clause, events in got.items():
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+        assert any(c.predicate == names[clause][0] for c in w.persons[actors[clause]].ledger), (
+            clause, [(c.predicate, c.subject) for c in w.persons[actors[clause]].ledger])
 
 
 def test_a_keyed_predicate_row_with_unknown_keys_is_refused(monkeypatch):

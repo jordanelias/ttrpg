@@ -971,12 +971,9 @@
     },
     "engine/season/offices.yaml": {
       "meta": {
-        "source": "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64).",
+        "source": "engine/season/offices.yaml -- the governance ladder's titles, and 32 authored seats (29, then the two Riskbreakers rows at v9 IN-64, then NPC-084's at B21.03).",
         "derivation": "proposals/2026-09-16-term-ownership/offices_draft.yaml, per r2 03_SEATS_AND_CONTENT.md \u00a7A.13-\u00a7A.15, with conferral/revocation recomputed against ED-IN-0256 (see the header above)",
-        "rule": "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` \u00a75's hand-transcription hazard, one layer earlier.",
-        "remit_unruled": [
-          "dispatch"
-        ]
+        "rule": "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` \u00a75's hand-transcription hazard, one layer earlier."
       },
       "titles": {
         "source": "JORDAN, 2026-09-02, VERBATIM. `H-90`. Folded from `rosters.yaml: titles` per r2 05 RULED (c) -- see this file's header.",
@@ -1017,7 +1014,8 @@
             "determine",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "modifier": "minor",
           "conferral": "inheritance",
@@ -1041,11 +1039,13 @@
           "faction": "Valorsmark",
           "remit_acts": [
             "issue",
+            "determine",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
-          "conferral": null,
+          "conferral": "inheritance",
           "revocation": null,
           "holder": "NPC-020",
           "obligees": [],
@@ -1062,9 +1062,11 @@
           "faction": "Hafenmark",
           "remit_acts": [
             "issue",
+            "determine",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": null,
           "revocation": "rung_above_in_holdings",
@@ -1083,9 +1085,11 @@
           "faction": "Varfell",
           "remit_acts": [
             "issue",
+            "determine",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "elected",
           "revocation": "rung_above_in_holdings",
@@ -1102,20 +1106,14 @@
           },
           "body": null,
           "faction": "Valorsmark",
-          "remit_acts": [
-            "issue",
-            "determine",
-            "confer",
-            "revoke",
-            "convene"
-          ],
+          "remit_acts": [],
           "modifier": "minor",
-          "conferral": null,
+          "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-032",
           "obligees": [],
           "source": "harness/populated.py -- post normalised from the live \"Queen (Widow Regent if Almud eliminated)\", which is not on `titles.domains` verbatim; the condition moves to this note",
-          "note": "[LIVE]. r2 03 \u00a7A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post."
+          "note": "[LIVE]. r2 03 \u00a7A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B. B21.16: the consort's powers arrive with a regency, which is a termed `confer` or the heir's claim, never a standing grant; or a claim in the race by the consort herself (A-19 lists her among those who may claim)."
         },
         {
           "id": "off_heir",
@@ -1142,12 +1140,12 @@
           "body": null,
           "faction": "Valorsmark",
           "remit_acts": [],
-          "conferral": null,
+          "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-030",
           "obligees": [],
           "source": "harness/populated.py -- no draft row; kept as one of the two Royal Family succession seats",
-          "note": "[LIVE]. No `offices_draft.yaml` row; r2 03 \u00a7A.13.2 argues the Royal Family seats stay against the draft's silence."
+          "note": "[LIVE]. No `offices_draft.yaml` row; r2 03 \u00a7A.13.2 argues the Royal Family seats stay against the draft's silence. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B."
         },
         {
           "id": "off_royal_marshal",
@@ -1159,7 +1157,8 @@
           "faction": null,
           "remit_acts": [
             "issue",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "appointed",
           "revocation": "rung_above_same_faction",
@@ -1230,7 +1229,9 @@
           },
           "body": null,
           "faction": "Valorsmark",
-          "remit_acts": [],
+          "remit_acts": [
+            "dispatch"
+          ],
           "conferral": "appointed",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-035",
@@ -1264,7 +1265,9 @@
           },
           "body": null,
           "faction": "Church of Solmund",
-          "remit_acts": [],
+          "remit_acts": [
+            "issue"
+          ],
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-034",
@@ -1325,7 +1328,8 @@
           "remit_acts": [
             "issue",
             "determine",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "modifier": "minor",
           "conferral": "appointed",
@@ -1380,7 +1384,8 @@
           "body": "Cardinal of Justice",
           "faction": null,
           "remit_acts": [
-            "determine"
+            "determine",
+            "dispatch"
           ],
           "modifier": "minor",
           "conferral": "appointed",
@@ -1394,7 +1399,7 @@
           "id": "off_legal_advisor_hm",
           "post": "Legal Advisor to Baralta",
           "rung": {
-            "duchy": "Hafenmark"
+            "territory": "T8"
           },
           "body": "Inner Council",
           "faction": null,
@@ -1410,12 +1415,13 @@
           "id": "off_military_commander_hm",
           "post": "Military Commander",
           "rung": {
-            "duchy": "Hafenmark"
+            "territory": "T8"
           },
           "body": "Inner Council",
           "faction": null,
           "remit_acts": [
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "appointed",
           "revocation": "rung_above_same_faction",
@@ -1428,11 +1434,12 @@
           "id": "off_commune_rep_hm",
           "post": "Commune Representative (Banneret)",
           "rung": {
-            "duchy": "Hafenmark"
+            "territory": "T8"
           },
           "body": "Inner Council",
           "faction": null,
           "remit_acts": [],
+          "term": 4,
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-081",
@@ -1449,6 +1456,7 @@
           "body": "Guild",
           "faction": null,
           "remit_acts": [],
+          "term": 4,
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-007",
@@ -1457,10 +1465,29 @@
           "note": "[NEW]. Re-seated on `Guild` (live roster, faction Guilds), not on Hafenmark's council. `conferral: elected` -- the Guild Forum. r2 03 \u00a7A.15 flags this row for attack first; carried forward unattacked here."
         },
         {
+          "id": "off_guild_leader",
+          "post": "Guild Leader",
+          "rung": {
+            "duchy": "Hafenmark"
+          },
+          "body": "Guild",
+          "faction": null,
+          "remit_acts": [
+            "convene"
+          ],
+          "term": 4,
+          "conferral": "elected",
+          "revocation": "rung_above_same_faction",
+          "holder": "NPC-084",
+          "obligees": [],
+          "source": "references/npc_registry.yaml NPC-084 (`guild leader`); `06_FA_remit_grant_by_row` edit 1",
+          "note": "[LIVE]. Loop-built from the registry cell; this row overlays rung, remit and bases. `conferral: elected` -- the Guild Forum, as `off_guild_comptroller`'s."
+        },
+        {
           "id": "off_senior_jarl_west",
           "post": "Senior Jarl of the Western Highlands",
           "rung": {
-            "duchy": "Varfell"
+            "territory": "T12"
           },
           "body": "Jarl Council",
           "faction": null,
@@ -1479,7 +1506,7 @@
           "id": "off_skald_chief",
           "post": "Skald-Chief",
           "rung": {
-            "duchy": "Varfell"
+            "territory": "T12"
           },
           "body": "Jarl Council",
           "faction": null,
@@ -1498,12 +1525,13 @@
           "id": "off_military_jarl",
           "post": "Military Jarl",
           "rung": {
-            "duchy": "Varfell"
+            "territory": "T12"
           },
           "body": "Jarl Council",
           "faction": null,
           "remit_acts": [
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
@@ -1521,7 +1549,8 @@
           "body": "Lions' Table",
           "faction": null,
           "remit_acts": [
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "appointed",
           "revocation": null,
@@ -1538,7 +1567,9 @@
           },
           "body": "Riskbreakers",
           "faction": null,
-          "remit_acts": [],
+          "remit_acts": [
+            "dispatch"
+          ],
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-005",
@@ -1554,7 +1585,9 @@
           },
           "body": "Riskbreakers",
           "faction": null,
-          "remit_acts": [],
+          "remit_acts": [
+            "dispatch"
+          ],
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-080",
@@ -1670,7 +1703,8 @@
             "dispensation": [
               "terms",
               "to",
-              "at"
+              "at",
+              "force"
             ],
             "petition": [
               "terms",
@@ -1882,7 +1916,7 @@
         "referent_classes": {
           "source": "v9 IN-53 (H-207 'VACANCY AS NEED', DECISION 2026-10-13 D1)",
           "open": false,
-          "note": "THE CLASSES A QUESTION MAY CARRY A REFERENT AS, and the closed set a verb row's `referent_class:` column may name (`verb_table.yaml`, validated by `data/verbs.py`). A CLASSED referent is a second partition of a question's referents (`state/carriers.py::Question.classes`), beside its plain `referents`: a row declaring a class forms ONLY on referents carried as that class, and a row declaring none forms ONLY on the plain ones, exactly as before IN-53 (`decision/options.py::opening_set`, through `VerbRow.referents_of`). It exists because `opening_set` has no World (L2) and cannot ask what kind of thing an id is. `Office`: the vacant seats a person may fill (`queries/world_q.py::vacancies`, IN-53) AND the seats he has been told of (`seats_named`, v9 IN-10 (a)), which `questions_for` adds to the question the person answers (`_stamped`); `confer` and `oblige` declare it, and since v10 REM-28 `revoke` (which the column keeps from forming on anything but a seat, and which still executes nothing: its `verb_table.yaml` note); a class is the carrier's own type name, so a stamp of a type this roster does not name is refused at the Question's construction. `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which `questions_for` adds to the question he answers beside his seats; `comply` declares it, and since v10 REM-2B `evade / defy` and `construe` do too (H-203). REVERT: drop the value and the row's column. v10 REM-25 (B10-05, AM-A-10, [ASSUMPTION; medium; Jordan to correct]): WIDENED. `carry`, `found` and `build` declare it too, and the term gains its second half beside the writs (`queries/world_q.py::records_held_for_holding_rows`: the Records on a person's live `hold` edges of a kind in `data/verbs.py::HOLDING_RECORD_KINDS`, which that module derives from the `Record` rows whose cell also asks `held_by` of `subject` -- a petition, a works -- with no addressee test, since those rows ask only that the actor hold the document). The class is a collection and not a sub-kind, so it is SHARED: a held petition is a `Record` for all four rows and the fold refuses it on the kind the three others ask (`verb_table.yaml`'s `carry` note has the readings). REVERT: the three rows' columns and the term. v10 REM-2C (B10-05, AM-A-11, [ASSUMPTION; medium; Jordan to correct]): `research` declares it too, asking `existence` of the collection itself (any document, `data/verbs.py::_record_subkinds_answered` adds no kind to either set), and the class leaves `occasion_only_classes` (below), so the question's own Records are stamped as well (`own_referents_of_class`). REVERT: `research`'s column and `Record` back in `occasion_only_classes`. `Rung` (v9 IN-45 `migrate`, H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): the places a person has been told of and could settle in (`queries/world_q.py::places_named` -- a Rung his own ledger names, the \u00a710 ladder seats him in, and he does not already live under), which `questions_for` adds to the question he answers beside his seats and writs; `migrate` declares it (and `requisition`, below, and since v10 REM-27 `march`, whose `subject` binds a stamped Rung as its field, and since v10 REM-28 `convene`, whose `subject` binds one as its venue), so its `to` binds ANOTHER place rather than the single referent of whatever he was asked about (most often his own residence). The destination channel H-168 names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind. REVERT: drop the value, `migrate`'s column and `places_named`'s splice. v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND the larders a seat may requisition (`queries/world_q.py::larders_in_purview` -- a Rung his own ledger names, holding the fixtures' requisition of their matter, inside the purview of a seat of his granting the remit act of a row declaring this class, `data/verbs.py::RUNG_REMIT_ACTS`, and not that seat's own rung, its treasury), stamped after the places and never twice; `requisition` declares it beside `migrate`, so its `subject` binds a stocked rung in purview rather than whatever he was asked about. The class is shared, as `Office` is between `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s column (which removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows) and `larders_in_purview`'s splice. v11 CR-25 (CR-11's design, [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s column and `holdings_to_found`'s splice]): AND the holdings a seat may found an office over (`queries/world_q.py::holdings_to_found` -- a rung on one of his own live `hold` edges that `founds_over` admits through a seat of his granting an act `establish` is eligible by, `data/verbs.py::FOUNDING_REMIT_ACTS`: held, in that seat's purview, below its rank, the seat on its parent), stamped directly after the larders and never twice; `establish` declares the class, so its `subject` binds the holding `loop/predicates.py::office_founded_by` derives the office from. Shared, as above: the other `Rung` rows form on a stamped holding too, and `establish` on a place named or a larder; the fold disposes. `RUNG_REMIT_ACTS` gains `confer`. v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition` and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s splice, stamps the PLAIN referents of the question the person answers whose collection (`World.class_of`) is a class some verb row declares (`data/verbs.py::DECLARED_CLASSES`) and that `occasion_only_classes` (below) does not hold back. It reads the question and never the ledger, so a person who knows fifty people is offered none of them unless his question is about one. `Site`: a worked or built place standing on a rung (`w.sites`, `state/carriers.py::Site` -- a harbour, a seam, a works, a dwelling). `Proposition`: a stated thing a person may commit to, assert or dispute (`w.propositions`, `state/carriers.py::Proposition` -- an OUGHT, a covenant's term). `Person`: a person or cohort by his own id (`w.persons`, `state/carriers.py::Person`); his `person`-kind rung shares the id and `class_of` answers `Person` for it; `open_case` and `petition` declare it, and since v10 REM-28 `dispatch`. While no row declares one of the three, the term stamps nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the term stamp it. REVERT: drop the three values and the term. v11 CR-28 (G-04 (a), B10-09 close two; CP-T02-05's re-take, [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`]): `Proposition` GAINS A STANDING OCCASION beside the own-referent term -- `queries/world_q.py::propositions_heard`, the Propositions among `person_q.ledger_names` of the claims in a person's own ledger that do not record his own act (`Claim.doer`, the own-act screen's test): an `utter` he witnessed or was told of, another's commitment, a document whose terms name one. `questions_for` appends it last to its splice; `commit` and `argue` form on what it stamps, and `held_edge_declines` (below) declines `commit` on a cause he already holds. The class stays out of `occasion_only_classes`, so a question's own Propositions are still stamped by the own-referent term. `Detainee` (v10 IN-12 step 5, H-226 route (a) with the decline H-232 names [ASSUMPTION; medium; Jordan to correct; revert: drop the value, `interrogate` declares `Person`]): THE RESTRAINED-PERSONS CLASS -- a person held by a live `detain` whose object is a seat the asker holds, stamped by the standing occasion `queries/world_q.py::detainees_held` onto the question he answers. THE ONE CLASS THAT IS NO COLLECTION: the id is a `Person`, so `World.class_of` never answers it and the stamp names it (`data/verbs.py::DETAINEE_CLASS`); it is occasion-only (below). It exists because `Person` is filled with every person a question names, so custody could not be told apart in it. `interrogate` declares it. Empty while no live `detain` exists. `Enemy` (v11 CR-87, the WAR context of `violence_contexts` [ASSUMPTION; medium; Jordan to correct; revert: drop the value, and `war` has no reader]): A PERSON OF A FACTION AT WAR WITH THE ASKER'S, stamped by the standing occasion `queries/world_q.py::enemies_heard` onto the question he answers, `Detainee`'s shape (no collection; named by `data/verbs.py::ENEMY_CLASS`; occasion-only). No row declares it, so no verb FORMS on it: `decision/options.py::opening_set` reads it as the war context of the `fight` decline. Empty while no war Proposition is live, which is every buildable world before CR-91. `Disputant` (B11 lane A, the duel chain's second link [ASSUMPTION; medium; Jordan to correct; revert: drop the value, `challenge` declares `Person`]): A PERSON BESIDE THE ASKER WHOM HE HOLDS A DISPUTE WITH, stamped by the standing occasion `queries/world_q.py::disputes_held` (over `person_q.holds_dispute`, the one owner) onto the question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only). `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337).",
+          "note": "THE CLASSES A QUESTION MAY CARRY A REFERENT AS, and the closed set a verb row's `referent_class:` column may name (`verb_table.yaml`, validated by `data/verbs.py`). A CLASSED referent is a second partition of a question's referents (`state/carriers.py::Question.classes`), beside its plain `referents`: a row declaring a class forms ONLY on referents carried as that class, and a row declaring none forms ONLY on the plain ones, exactly as before IN-53 (`decision/options.py::opening_set`, through `VerbRow.referents_of`). It exists because `opening_set` has no World (L2) and cannot ask what kind of thing an id is. `Office`: the vacant seats a person may fill (`queries/world_q.py::vacancies`, IN-53) AND the seats he has been told of (`seats_named`, v9 IN-10 (a)), which `questions_for` adds to the question the person answers (`_stamped`); `confer` and `oblige` declare it, and since v10 REM-28 `revoke` (which the column keeps from forming on anything but a seat, and which still executes nothing: its `verb_table.yaml` note); a class is the carrier's own type name, so a stamp of a type this roster does not name is refused at the Question's construction. `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which `questions_for` adds to the question he answers beside his seats; `comply` declares it, and since v10 REM-2B `evade / defy` and `construe` do too (H-203). REVERT: drop the value and the row's column. v10 REM-25 (B10-05, AM-A-10, [ASSUMPTION; medium; Jordan to correct]): WIDENED. `carry`, `found` and `build` declare it too, and the term gains its second half beside the writs (`queries/world_q.py::records_held_for_holding_rows`: the Records on a person's live `hold` edges of a kind in `data/verbs.py::HOLDING_RECORD_KINDS`, which that module derives from the `Record` rows whose cell also asks `held_by` of `subject` -- a petition, a works -- with no addressee test, since those rows ask only that the actor hold the document). The class is a collection and not a sub-kind, so it is SHARED: a held petition is a `Record` for all four rows and the fold refuses it on the kind the three others ask (`verb_table.yaml`'s `carry` note has the readings). REVERT: the three rows' columns and the term. v10 REM-2C (B10-05, AM-A-11, [ASSUMPTION; medium; Jordan to correct]): `research` declares it too, asking `existence` of the collection itself (any document, `data/verbs.py::_record_subkinds_answered` adds no kind to either set), and the class leaves `occasion_only_classes` (below), so the question's own Records are stamped as well (`own_referents_of_class`). REVERT: `research`'s column and `Record` back in `occasion_only_classes`. `Rung` (v9 IN-45 `migrate`, H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): the places a person has been told of and could settle in (`queries/world_q.py::places_named` -- a Rung his own ledger names, the \u00a710 ladder seats him in, and he does not already live under), which `questions_for` adds to the question he answers beside his seats and writs; `migrate` declares it (and `requisition`, below, and since v10 REM-27 `march`, whose `subject` binds a stamped Rung as its field, and since v10 REM-28 `convene`, whose `subject` binds one as its venue), so its `to` binds ANOTHER place rather than the single referent of whatever he was asked about (most often his own residence). The destination channel H-168 names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind. REVERT: drop the value, `migrate`'s column and `places_named`'s splice. v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND the larders a seat may requisition (`queries/world_q.py::larders_in_purview` -- a Rung his own ledger names, holding the fixtures' requisition of their matter, inside the purview of a seat of his granting the remit act of a row declaring this class, `data/verbs.py::RUNG_REMIT_ACTS`, and not that seat's own rung, its treasury), stamped after the places and never twice; `requisition` declares it beside `migrate`, so its `subject` binds a stocked rung in purview rather than whatever he was asked about. The class is shared, as `Office` is between `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s column (which removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows) and `larders_in_purview`'s splice. v11 CR-25 (CR-11's design, [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s column and `holdings_to_found`'s splice]): AND the holdings a seat may found an office over (`queries/world_q.py::holdings_to_found` -- a rung on one of his own live `hold` edges that `founds_over` admits through a seat of his granting an act `establish` is eligible by, `data/verbs.py::FOUNDING_REMIT_ACTS`: held, in that seat's purview, below its rank, the seat on its parent), stamped directly after the larders and never twice. Since B21.08 (VB-A) only a holding whose office is not yet founded is stamped, and it is stamped twice, as `Rung` (the other `Rung` rows form on it, and the fold disposes) and as `Holding` (below), the class `establish` alone declares, so `establish` forms on no place named, no larder and no founded holding. `RUNG_REMIT_ACTS` no longer holds `confer`. v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition` and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s splice, stamps the PLAIN referents of the question the person answers whose collection (`World.class_of`) is a class some verb row declares (`data/verbs.py::DECLARED_CLASSES`) and that `occasion_only_classes` (below) does not hold back. It reads the question and never the ledger, so a person who knows fifty people is offered none of them unless his question is about one. `Site`: a worked or built place standing on a rung (`w.sites`, `state/carriers.py::Site` -- a harbour, a seam, a works, a dwelling). `Proposition`: a stated thing a person may commit to, assert or dispute (`w.propositions`, `state/carriers.py::Proposition` -- an OUGHT, a covenant's term). `Person`: a person or cohort by his own id (`w.persons`, `state/carriers.py::Person`); his `person`-kind rung shares the id and `class_of` answers `Person` for it; `open_case` and `petition` declare it, and since v10 REM-28 `dispatch`. While no row declares one of the three, the term stamps nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the term stamp it. REVERT: drop the three values and the term. v11 CR-28 (G-04 (a), B10-09 close two; CP-T02-05's re-take, [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`]): `Proposition` GAINS A STANDING OCCASION beside the own-referent term -- `queries/world_q.py::propositions_heard`, the Propositions among `person_q.ledger_names` of the claims in a person's own ledger that do not record his own act (`Claim.doer`, the own-act screen's test): an `utter` he witnessed or was told of, another's commitment, a document whose terms name one. `questions_for` appends it last to its splice; `commit` and `argue` form on what it stamps, and `held_edge_declines` (below) declines `commit` on a cause he already holds. The class stays out of `occasion_only_classes`, so a question's own Propositions are still stamped by the own-referent term. `Detainee` (v10 IN-12 step 5, H-226 route (a) with the decline H-232 names [ASSUMPTION; medium; Jordan to correct; revert: drop the value, `interrogate` declares `Person`]): THE RESTRAINED-PERSONS CLASS -- a person held by a live `detain` whose object is a seat the asker holds, stamped by the standing occasion `queries/world_q.py::detainees_held` onto the question he answers. THE ONE CLASS THAT IS NO COLLECTION: the id is a `Person`, so `World.class_of` never answers it and the stamp names it (`data/verbs.py::DETAINEE_CLASS`); it is occasion-only (below). It exists because `Person` is filled with every person a question names, so custody could not be told apart in it. `interrogate` declares it. Empty while no live `detain` exists. `Enemy` (v11 CR-87, the WAR context of `violence_contexts` [ASSUMPTION; medium; Jordan to correct; revert: drop the value, and `war` has no reader]): A PERSON OF A FACTION AT WAR WITH THE ASKER'S, stamped by the standing occasion `queries/world_q.py::enemies_heard` onto the question he answers, `Detainee`'s shape (no collection; named by `data/verbs.py::ENEMY_CLASS`; occasion-only). No row declares it, so no verb FORMS on it: `decision/options.py::opening_set` reads it as the war context of the `fight` decline. Empty while no war Proposition is live, which is every buildable world before CR-91. `Disputant` (B11 lane A, the duel chain's second link [ASSUMPTION; medium; Jordan to correct; revert: drop the value, `challenge` declares `Person`]): A PERSON BESIDE THE ASKER WHOM HE HOLDS A DISPUTE WITH, stamped by the standing occasion `queries/world_q.py::disputes_held` (over `person_q.holds_dispute`, the one owner) onto the question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only). `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337). `Holding` (VB-A): a rung the person holds and may found an office over, not yet founded (`world_q.holdings_to_found`); not a collection, stamped explicitly; `establish` declares it.",
           "values": [
             "Office",
             "Record",
@@ -1892,7 +1926,8 @@
             "Person",
             "Detainee",
             "Enemy",
-            "Disputant"
+            "Disputant",
+            "Holding"
           ]
         },
         "occasion_only_classes": {
@@ -2394,6 +2429,9 @@
             "dispatch": {
               "why": "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"
             },
+            "comply": {
+              "why": "`brute: own` -- the man's own going: he moves his own legs and no one else's (B21.57, A-24) [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
             "petition": {
               "why": "filing; the addressee's answer is his act"
             },
@@ -2430,9 +2468,6 @@
             "open_case": {
               "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
             },
-            "issue": {
-              "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
-            },
             "destroy_record": {
               "why": "`brute: own` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
             }
@@ -2456,10 +2491,6 @@
             "verb_table"
           ],
           "values": {
-            "confer": "14_VERBS_BINDING_C_turnover",
-            "revoke": "14_VERBS_BINDING_C_turnover",
-            "succeed": "14_VERBS_BINDING_C_turnover",
-            "establish": "14_VERBS_BINDING_A_formation",
             "pardon": "14_VERBS_BINDING_B_sittings",
             "release": "14_VERBS_BINDING_A_formation",
             "surrender": "14_VERBS_BINDING_E_war_seats",
@@ -2688,7 +2719,7 @@
         },
         "obstacle_terms": {
           "source": "B05.14, B05.15, B05.17, B05.21 (`proposals/U5c_SC_one_obstacle_form.md` \u00a71, \u00a72; 29_DICE Item 29-4 step 4; PES-A; `proposals/13_SC_tuning_tables.md` T2-T4): the members the obstacle is composed of, in OBS \u00a72's order",
-          "note": "THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the document's lane A step, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add` (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person is opposite (never absent); `standard` -- what the room demands (OBS \u00a72 member 3; B05.21): for an act a bench hears on a docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `regard` -- the counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS \u00a72 member 8; B05.17): a bench that regards the speaker ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears, 0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships, so it stands at 0). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`, `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes` and `regard` are listed only where they weigh, so a world whose three are at their control sizes carries the terms it carried before them (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS \u00a72's table).",
+          "note": "THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the document's lane A step, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add` (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person is opposite (never absent); `standard` -- what the room demands (OBS \u00a72 member 3; B05.21): for an act a bench hears on a docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `rank_gap` -- how far the person acted on or for stands above the actor's exercised seat (member 6; B21.09, landed with its first reader, `establish`): `rank_step x` the `rung_kinds` steps from the rung of the seat `Act.via` names up to the subject's (a rung's own kind; a person's highest held seat's rung), 0 where the subject stands at or below it; `regard` -- the counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS \u00a72 member 8; B05.17): a bench that regards the speaker ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears, 0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships, so it stands at 0); `cross_chain` -- a conferral across chains of seats (OBS \u00a72 member 29; B21.61, `confer`'s): `cross_chain_step x` 1 where the seat the act names and the seat it is exercised through are of different factions (`gate.across_chains`; the seat is read off a prize row saying its act names one, `loop/sides.py::seat_named_by`); `faction_power` -- the power of the holder's faction against the host's (B21.69, `IS-B3-FA-07`, A-105; the act is `revoke`, a reduction of a sitting holder's grant included, or any act whose prize says it names a seat and is opposed by that seat's holder): `faction_power_step x` 1 where the faction the live holder coheres under outweighs the faction of the seat the act is exercised through (the band above 1 of `faction_q.weight` of the one over the other, read as a comparison so a faction with no members divides nothing), and nothing where it is the same faction or the weaker (`sigma.py::_faction_power_of`). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`, `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap`, `regard`, `cross_chain` and `faction_power` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS \u00a72's table).",
           "ordered": true,
           "values": [
             "even",
@@ -2696,9 +2727,12 @@
             "opposition",
             "standard",
             "stakes",
+            "rank_gap",
             "regard",
             "reception",
-            "capability"
+            "capability",
+            "cross_chain",
+            "faction_power"
           ]
         },
         "lifepaths": {
@@ -2791,6 +2825,7 @@
               "provider": "social_contest",
               "module_entry": "social_contest.roll",
               "heard_by": "seat_body",
+              "opposed_by": "holder",
               "cite": "U5c_VERBS_residue \u00a72 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
             },
             "a holding": {
@@ -2971,8 +3006,11 @@
             "Valorsmark": "off_king",
             "Hafenmark": "off_duchess_hafenmark",
             "Varfell": "off_duke_varfell",
-            "Church of Solmund": "off_confessor"
-          }
+            "Church of Solmund": "off_confessor",
+            "L\u00f6wenritter": "off_grand_master",
+            "Restoration Movement": "off_restoration_leader"
+          },
+          "compatible_with": {}
         },
         "role_templates": {
           "source": "`systems/factions/reference/faction_canon_v30.md` \u00a74 'Role Templates and Expected Convictions', per PP-686 \u00a73.3.1 over the PP-684 13-Conviction taxonomy.",
@@ -3160,10 +3198,22 @@
         },
         "read_to_addressee": {
           "source": "B11 lane A (the duel chain's third link; `14_VERBS_PHYSICAL_A_custody_and_force.md` A4's *heard of*).",
-          "note": "THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a list of `record_kinds` members. WITNESS deposits a document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him in person; without this deposit `accept` could not tell it from any other document. A writ or a petition is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import for a member that is no record kind. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]",
-          "values": [
-            "challenge"
-          ]
+          "note": "THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a map from a `record_kinds` member to the verbs whose mint of that kind is put to its addressee. WITNESS deposits a document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him in person; without this deposit `accept` could not tell it from any other document. A writ or a petition is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import (`data/rosters.py:: check_record_verb_rosters`, `data/verbs.py::_check_record_verb_minting`) for a key that is no record kind, a key whose content keys hold no addressee key, a verb that is no `verb_table.yaml` row or whose effect does not mint that kind, and a kind also in `proclaimed`. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.]",
+          "values": {
+            "challenge": [
+              "challenge"
+            ]
+          }
+        },
+        "proclaimed": {
+          "source": "B21.17 (`06_FA_decree_binds` edit 1; ruling A-21; D-U1-05's sibling-list precedent, `covert_kinds`, `forgeable_kinds`).",
+          "note": "THE RECORD KINDS WHOSE MINT IS MADE PUBLIC -- `read_to_addressee`'s shape (a `record_kinds` member to the verbs whose mint of it is covered), the other property. A-21 rules a decree proclaimed: its content reaches EVERYONE who learns of the mint, addressee or not, where `read_to_addressee` reaches only the addressee. The verb qualifier is the point: `covenant` also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in person), so `dispensation` is carried for `issue` and, from B21.57, `dispatch` (an order is a decree to the man it sends, `_eff_dispatch`), and for `covenant` not at all. No record kind is in both rosters (refused at import), and no `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Read by `loop/witness.py::proclaimed` (through `addressee_reads`, since B21.18). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium; Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]",
+          "values": {
+            "dispensation": [
+              "issue",
+              "dispatch"
+            ]
+          }
         },
         "record_sourced_operands": {
           "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a710.1, *the shared enabler*, plan position IN-10 (`workplans/valoria_master_workplan_v9_part5.md`); it replaces plan position `15c`'s flat `writ_sourced_operands` (`to, kind, amount`), whose source was r2 `02_THE_WRIT_AND_THE_WORD.md` \u00a7A.13.",
@@ -3252,6 +3302,22 @@
             "forgive"
           ]
         },
+        "command_declines": {
+          "source": "B21.55 (`14_VERBS_BINDING_D` commit D2, A-22 *command*; `16_PESSIMIST_FA_C` edits 1-3): a seat's writ or order reaches only the persons it commands (`queries/world_q.py::commands`, the one body), and a person forms the act only on a man he can read as commanded.",
+          "note": "WHICH UNTYPED VERBS FORM ONLY ON A `subject` THE ACTOR READS AS COMMANDED -- a list of verbs. A TYPED row says it in its cell (a `basis` conjunct under the `command` rule: `issue`'s `to`, which `VerbRow.commanded_operand` reads off the cell), so this roster names only a row no cell can carry: `dispatch`, whose predicate (`loop/predicates.py::_req_dispatch`) asks the same `world_q.commands` in the fold. Read in `decision/options.py::operand_bags`, person-side and World-free (AX-2), against `queries/person_q.py::commanded_read` -- what his own ledger names. THE ROSTER NARROWS FORMATION AND WIDENS NOTHING, and `commands` still decides at the fold: what he cannot read is refused there when formed, and an unseated, unsworn resident the fold would admit is never formed (`person_q.py::commanded_read`, limit 3). ONE LOADER, `data/verbs.py::COMMAND_DECLINES`, refused at import when a member names a verb the table lacks, a typed row, or a row whose `referent_class` is not `Person`. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and `operand_bags` fans `dispatch` over every referent again.]",
+          "values": [
+            "dispatch"
+          ]
+        },
+        "write_optional": {
+          "source": "B21.57 (`IS-B3-FA-05`, CP-T09-08; ruling A-24 -- *the man's going is his own answer*): `comply` is the act that relocates the man a `dispatch` ordered, and it is also the answer to every other writ, which names nothing to perform.",
+          "note": "WHICH VERBS MAY LAWFULLY WRITE NOTHING, AND WHAT THEY EMIT WHEN THEY DO -- a map `verb: [Event kind, ...]`. A writing row whose effect declines (`NO_CHANGE`) is REFUSED at the fold (`loop/resolve.py::_fold`, F9: a success Event for a write that did not happen is `ID-9`); a verb listed here is the one kind of row whose decline is not a failure, because the act it is also is answered without a write: `comply` on a writ that names no place is the answer given, `compliance.given`, with nothing to go to. Read in `_fold` beside the `NoOpReceipt` it catches, which then emits exactly the kinds listed (never the kinds the write earns, which did not happen). ONE LOADER, `data/verbs.py::WRITE_OPTIONAL`, refused at import when a member names a verb the table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused `compliance.impossible`, and `comply`'s write is `[]` again.]",
+          "values": {
+            "comply": [
+              "compliance.given"
+            ]
+          }
+        },
         "lie_verbs": {
           "source": "v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.",
           "note": "WHICH VERBS SAY A FALSE VALUE OF A CLAIM THE SPEAKER HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): a listed row copies `queries/person_q.py::lie_said_of` onto the Act where an unlisted row copies `said_of`, and is formed only while `Fixtures lie_offered` is True. The roster names the verb and the loader VALIDATES it against the row's typed cell: no verb name is spelt in code. ONE LOADER, `data/verbs.py::LIE_VERBS`, refused at import when a member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the `lie` row, its alignment cells and `lie_offered`.] B10.61 READING, KEPT: it is a setting, not a decline (it picks the false-value reader and gates `lie` on `lie_offered`). Without it `lie` forms on 2405, 2394 and 2606 more (person, question) pairs at seeds 0-2 and carries the claim as held, not a false value, on 1858, 1828 and 1884 others (191 pairs at lap 0 on each seed).",
@@ -3277,6 +3343,16 @@
           "values": [
             "succeed"
           ]
+        },
+        "own_edge_declines": {
+          "source": "VB-A (`proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_BINDING_A_formation.md`, commit A1; VRES \u00a74 edits 1-2, A-37); `own_title_declines`' shape (above), one carrier over: any live Tenure of a kind the row closes. (`own_hold_declines`, the sibling the source names, was deleted at B10.61.)",
+          "note": "WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE IS TIED TO BY A LIVE EDGE OF A KIND THE ROW'S OWN `domain:` NAMES. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his own live Tenures whose kind is in the row's `domain:`. It NARROWS the referents a question carries and widens nothing. ONE LOADER, `data/verbs.py::OWN_EDGE_DECLINES`, refused at import when a member names a verb the table lacks, one that is not `own`-eligible, or one with no `domain:`. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `release` forms on every plain referent.] `disposal:` IS THE SECOND DECLINE'S SOURCE (A-37: a party does not release an edge a bench imposed), `{verb: the Event kind that verb's disposal edge earns}`. The FOLD half (`loop/predicates.py::_req_release`) refuses a release whose edge's opening Event was caused by an Act of a verb named here, read through `state/attribution.py::causing_act`; the FORMATION half drops a referent he holds a claim of that kind on, naming his own edge to it (the deposit is the generic Event claim, `Claim(subject=<the edge's id>, predicate=<the kind>, value=True)`, `loop/witness.py`; it names the judge and the edge, never the party, so the party is the edge's own owner). ONE LOADER, `data/verbs.py::DISPOSAL_EVENTS`, refused at import for a verb the table lacks or a kind its row does not emit. The fold is the check and the formation only spares the scene (a party who never heard the finding still forms the candidate and is refused).",
+          "values": [
+            "release"
+          ],
+          "disposal": {
+            "determine": "matter.determined"
+          }
         },
         "held_edge_declines": {
           "source": "B10-09 close one, D3 (the batch-close antagonist's ruling on the duplicate-commit decline); `held_document_declines`' shape (above), one carrier over: a live Tenure instead of a held document.",
@@ -3586,16 +3662,29 @@
         },
         "successions": {
           "source": "v10 IN-61 (RS-27, B10-09; `workplans/valoria_master_workplan_v10_part4.md` IN-61, part (1)): Jordan 2026-10-14, *\"designated heir is not a verb but a status or title. the heir still has to claim their throne\"*. RS-29 ratified the title carrier (2026-10-14).",
-          "note": "WHICH TITLE A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: title}`, both `offices.yaml` row ids (realm seat ids equal their row ids since CP-T02-02). The title is an ordinary seat, filled by `confer` (`off_heir`, `appointed`): designation is no verb. The seat is claimed by the title's holder through `succeed` (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py:: _eff_succeed`, the write gate's claim basis), admitted only while the seat has no live `hold`; the claim opens EVERY vacant seat this mapping gives the same title and closes the title, in one act. LIMITS: the route only awards a vacant seat; the first valid claim wins; one title deep (the heir's own title, closed by his claim, passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when a key or value is no `offices.yaml` row, a key's row is not `inheritance`, or an `inheritance` row has no key (a seat nobody could ever fill). `off_duke_valorsmark` gets its row at CP-T09-06 (B10-17), not here. [ASSUMPTION; medium; Jordan to correct; revert: drop the row, `inheritance` and `succeed`'s row back to its decline.]",
+          "note": "WHICH TITLES A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: [title, ...]}`, every member an `offices.yaml` row id (realm seat ids equal their row ids since CP-T02-02); a bare string reads as a one-title list. THE TITLES WHOSE HOLDERS MAY CLAIM THE SEAT; A LIST IS ELIGIBILITY, NEVER AN ORDER (HAPPENINGS-B, A-19): who takes the seat is `succeed`'s draw, and the founding order is a head start, never a right. A title is an ordinary seat, filled by `confer` (`off_heir`, `appointed`) or, for the two houses' heads, by their own basis: designation is no verb. The seat is claimed by a title's holder through `succeed` (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed`, the write gate's claim basis), admitted only while the seat has no live `hold`; the claim opens EVERY vacant seat that lists a title he holds and lays down each such title that exists only to pass a seat (`conferral: appointed`, an empty remit -- `state/gate.py::passes_a_seat`), in one act: a duke who takes the throne keeps his duchy. LIMITS: the route only awards a vacant seat; the first valid claim wins; one title deep (a title laid down by a claim passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when a key or a member is no `offices.yaml` row, a list is empty, a key's row is not `inheritance`, or an `inheritance` row has no key (a seat nobody could ever fill). `off_duke_valorsmark`'s row (B21.51, `16_PESSIMIST_FA_A` edit 1) lists `off_king`'s own titles: whoever wins the deed race for the throne takes the Crown's duchy in the same write. [ASSUMPTION; medium; Jordan to correct; revert: the single title (`off_king: off_heir`), the claim closing the heir's title alone; for the duchy, drop its row and its `conferral: inheritance`.]",
           "values": {
-            "off_king": "off_heir"
+            "off_king": [
+              "off_heir",
+              "off_widow_regent",
+              "off_princess",
+              "off_duchess_hafenmark",
+              "off_duke_varfell"
+            ],
+            "off_duke_valorsmark": [
+              "off_heir",
+              "off_widow_regent",
+              "off_princess",
+              "off_duchess_hafenmark",
+              "off_duke_varfell"
+            ]
           }
         },
         "continuation_ties": {
           "source": "v10 CP-T02-06 (B10-10; M7 taken (b), `workplans/valoria_master_workplan_v11_part6.md` DECISION: *title, then oath*). The seated person's line CONTINUES or ENDS (`-02` \u00a72 CP-T02-06, P30 heir transfer, P42 a dead line).",
           "open": false,
           "ordered": true,
-          "note": "WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holder of the `successions` title of a seat the person holds (the registry above; one title per seat). `sworn`: a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties` REFUSES AT IMPORT a member with no reader and a reader with no member, and `continuations` iterates this roster, so a `Continuation` tagged with a kind off this list is never returned. THE CLIENT HOLDS NO COPY: which persons may be chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in the design's draft and is NOT taken; appending it is one member here and one reader there. [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in this order without offering a choice (`carry_on` takes `offer[0]`), or drop `sworn`, or append `follower`.]",
+          "note": "WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holders of the `successions` titles of a seat the person holds (the registry above; the list's order is the offer's only). `sworn`: a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties` REFUSES AT IMPORT a member with no reader and a reader with no member, and `continuations` iterates this roster, so a `Continuation` tagged with a kind off this list is never returned. THE CLIENT HOLDS NO COPY: which persons may be chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in the design's draft and is NOT taken; appending it is one member here and one reader there. [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in this order without offering a choice (`carry_on` takes `offer[0]`), or drop `sworn`, or append `follower`.]",
           "values": [
             "heir_title",
             "sworn"
@@ -3892,7 +3981,8 @@
               "order.given",
               "residence.changed",
               "stance.moved",
-              "travel.moved"
+              "travel.moved",
+              "travel.ordered"
             ],
             "concludes": [
               "army.arrived",
@@ -3984,6 +4074,7 @@
             ],
             "Record": [
               "dispensation.issued",
+              "dispensation.ignored",
               "petition.filed",
               "record.created"
             ],
@@ -4097,6 +4188,7 @@
             }
           ]
         },
+        "territory_weight": {},
         "site_yield": {
           "source": "`W8` / `H-93`. #353 \u00a725 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (\u00a722.3); it never says what a place produces.",
           "row": "H-93",
@@ -5397,7 +5489,7 @@
           "eligibility": [
             "remit:dispatch"
           ],
-          "eligibility_note": "v9 IN-12 step 5 (#453 \u00a79.1): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. Built on `remit_default` (\u00a7A v9).",
+          "eligibility_note": "v9 IN-12 step 5 (#453 \u00a79.1): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis read one grant. J-8 (whether `dispatch` is a remit act at all) is ANSWERED by B21.03: a seat grants `dispatch` only where its row names it, and `offices.yaml`'s `meta: remit_unruled` is gone; this row moves with `WARRANT_ACT` and the ruling. Built on `remit_default` (\u00a7A v9).",
           "beneficiary": "none",
           "governing": [
             "attr.body.strength",
@@ -5477,13 +5569,22 @@
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "referent_class": "Proposition",
           "referent_class_note": "v10 REM-23 (B10-05, AM-A-08; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds a Proposition and never a person, a Site, a Record or a rung. The class removes wrong-kind formations only: this row's cell, its eligibility and who may commit are unchanged, and it does NOT answer IN-57's own-act screen (ED-IN-0296 (3)); B10-09's CR-10 does that. No `commit` is formed on a goal Proposition (`data/goals.py::goal`): a person's own goals are not among the referents a question carries. v11 CR-28: `queries/world_q.py::propositions_heard` stamps the Propositions a person's own ledger names through a claim not of his own act, so `commit` forms on a cause another uttered; `rosters.yaml: held_edge_declines` declines it on one he already holds (`tests/test_cr28_propositions_heard.py`, through the real fold). REVERT: delete this column.",
-          "requires": "the Proposition exists (immutable, \u00a714)",
+          "requires": "the Proposition exists (immutable, \u00a714), and a commit to a rostered faction's Proposition is a joining the faction answers: the actor is already a member, or the faction has none, or an admission stands (B21.63)",
           "requires_typed": {
-            "form": "existence",
-            "of": "subject",
-            "kind": "Proposition"
+            "all": [
+              {
+                "form": "existence",
+                "of": "subject",
+                "kind": "Proposition"
+              },
+              {
+                "form": "relation",
+                "of": "subject",
+                "relation": "admitted"
+              }
+            ]
           },
-          "requires_typed_note": "\u00a7E3 `:426` \u2014 *the Proposition exists (immutable, \u00a714)*. Definite article: the one the act commits to, which is the act's `subject`. \u00a714 makes a Proposition immutable and `utter` is the only verb that creates one, so this is the clause that makes `utter` a precondition of the social layer rather than a formality.",
+          "requires_typed_note": "\u00a7E3 `:426` \u2014 *the Proposition exists (immutable, \u00a714)*. Definite article: the one the act commits to, which is the act's `subject`. \u00a714 makes a Proposition immutable and `utter` is the only verb that creates one, so this is the clause that makes `utter` a precondition of the social layer rather than a formality. B21.63 (`16_PESSIMIST_FA_B` edit 3, G3; R-04 membership, R-02 an admission sought, granted, refused; [ASSUMPTION; medium; Jordan to correct; revert: drop the second conjunct, which restores the single `existence` cell) ADDED THE SECOND, `relation` of `subject`, `admitted` (`data/requires.py`; `queries/world_q.py::admitted_to`): joining is an offer the faction's side answers, not a sentence the joiner speaks. It is true of every Proposition that is no rostered faction's (a cause, a covenant: `commit` is unchanged there), of a faction nobody belongs to, of a member's re-commit, and of a joiner an admission stands for -- an `OUGHT` naming him and the faction, `commit`ted to by a member who may admit (`state/gate.py::may_admit`: the faction's `head_seat` holder, or a member whose seat's grant carries `confer`; any member where the faction has no such seat) -- unless he belongs to a rostered faction incompatible with it (`rosters.yaml: factions.compatible_with` names the exceptions; the default is incompatible, `data/rosters.py::factions_compatible`). WORLD-ONLY, so a person forms the Candidate on anyone he knows of and the fold refuses a joining no one answered (`commitment.refused`); `world_q.propositions_heard` carries a faction's Proposition into the question of a man an admission names, so he forms the joining the admission offers.",
           "writes": [
             "Tenure.since"
           ],
@@ -5494,7 +5595,7 @@
             "commitment.refused"
           ],
           "grade": "ruled",
-          "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: the Proposition does not exist (\u00a714 -- it is immutable and must be uttered first)",
+          "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal conditions: the Proposition does not exist (\u00a714 -- it is immutable and must be uttered first); or it is a rostered faction's, the actor belongs to none of it, and no admission of him stands (B21.63)",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {
@@ -5525,16 +5626,21 @@
               }
             ]
           },
-          "requires_typed_note": "v9 IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. \u00a7E3 `:430` \u2014 *a claim of the dispensation's terms is in the actor's **own** ledger*. \u00a7F.24a form 6, `tell`'s form, and THE OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled; the closed roster stands). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a person, a rung or another kind of document is refused; `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ (the `F8` carve-out, `claim.held`). \u26a0 LIMIT: `claim.held` accepts ANY claim on the writ, not only its `content:` claim, so a person who saw the writ issued and never read it passes the fold; a predicate-typed ledger read is a grammar change. In computed play the formation (`referent_class` above) offers it only to a writ's addressee who holds it (`writs_held`), who holds the content claim; the own-referent term never stamps a writ (the B10-05 close), so a non-addressee whose question names it is offered no `comply`, though this cell would admit him (`test_in09_dispensation_answer.py`'s fourth test). \u26a0 ARM (A)'s `dispatch`ed ORDER IS NOT ANSWERED: an order mints no Record, so there is no writ to bind.",
-          "writes": [],
+          "requires_typed_note": "v9 IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. \u00a7E3 `:430` \u2014 *a claim of the dispensation's terms is in the actor's **own** ledger*. \u00a7F.24a form 6, `tell`'s form, and THE OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled; the closed roster stands). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a person, a rung or another kind of document is refused; `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ (the `F8` carve-out, `claim.held`). \u26a0 LIMIT: `claim.held` accepts ANY claim on the writ, not only its `content:` claim, so a person who saw the writ issued and never read it passes the fold; a predicate-typed ledger read is a grammar change. In computed play the formation (`referent_class` above) offers it only to a writ's addressee who holds it (`writs_held`), who holds the content claim; the own-referent term never stamps a writ (the B10-05 close), so a non-addressee whose question names it is offered no `comply`, though this cell would admit him (`test_in09_dispensation_answer.py`'s fourth test). ARM (A)'s `dispatch`ed ORDER IS ANSWERED SINCE B21.57: `_eff_dispatch` mints it as a `dispensation`, so it is a writ to bind, and `comply` on one that names a place relocates the man (`writes_note`).",
+          "writes": [
+            "Person.travel_leg",
+            "Tenure.until",
+            "Tenure.since"
+          ],
           "emits": [
-            "compliance.given"
+            "compliance.given",
+            "travel.ordered"
           ],
           "emits_on_refusal": [
             "compliance.impossible"
           ],
           "grade": "ruled",
-          "writes_note": "per the term's own row. \u26a0 v9 IN-09: EMISSION-ONLY, #453's hook (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`): `comply` writes nothing itself and emits `compliance.given`; what compliance PERFORMS is the separate act the writ names (`transfer`, ...). The fold calls an effect only for a declared write and `effect_carried` answers a row writing nothing without one, so no `_eff_comply` exists (it would be a body nothing calls, `ID-13`). Which acts a dispensation's `terms` may name stays `H-44`'s (re-scoped).",
+          "writes_note": "B21.57 (`IS-B3-FA-05`, CP-T09-08, A-24; [ASSUMPTION; medium; Jordan to correct; revert: `writes: []`, delete `_eff_comply` and `rosters.yaml: write_optional`]): A BRANCH ON AN ORDER WHOSE CONTENT NAMES A DESTINATION. `move`'s three cells, written by `loop/effects_migration.py::_eff_comply` through `_relocate(w, a, dest, mover=a.actor)` -- his own legs, so the gate admits them as `T-m`, and the journey charges him its leg (`Person.travel_leg`) -- ONLY when the writ answered is a `dispensation` whose `at` names a Rung (`world_q.order_destination`, the order a `dispatch` mints), and then the act also emits `travel.ordered`, the journey's own Event kind: not `move`'s `travel.moved`, which a second emitter would pair (`person_q.PAIRED_KINDS`, `KIND_VERB`) and so move every reading of a plain `move` (the realm's one-season hash did). Every other comply writes nothing and emits `compliance.given` alone, as below, and `rosters.yaml: write_optional` is what makes that the answer rather than a refusal. THE REST IS THE ROW AS IT STOOD: per the term's own row. \u26a0 v9 IN-09: EMISSION-ONLY, #453's hook (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`): `comply` writes nothing itself and emits `compliance.given`; what compliance PERFORMS is the separate act the writ names (`transfer`, ...). Before B21.57 the row declared no write, the fold called no effect, and none existed; `_eff_comply` is now called, and returns `NO_CHANGE` for a writ naming no place. Which acts a dispensation's `terms` may name stays `H-44`'s (re-scoped).",
           "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
@@ -5591,8 +5697,6 @@
         },
         {
           "verb": "confer",
-          "scale": "settlement",
-          "scale_note": "conferral seats an office, and an office sits at a rung",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:confer"
@@ -5604,23 +5708,90 @@
           "counterparty_may_be_self": true,
           "counterparty_may_be_self_note": "IN-53 (H-207, DECISION 2026-10-13 D2) [ASSUMPTION; medium; Jordan to correct]. THE CONFERRER MAY CONFER ON HIMSELF: the lord who assumes a vacant seat (the cast already has one person holding several). `decision/options.py::operand_bags` ranges `to` over the persons he knows PLUS himself -- he knows himself from his own state, so `known_persons` keeps its three sources (AX-2, ED-IN-0282) -- and both counterparty sites (`opening_set`, `loop/resolve.py::_admits`) waive the self-exclusion for this row alone (`VerbRow.self_counterparty_refused`). ED-IN-0210 ruling 1 (*verbs are not fiats*) is not crossed: a self-conferral writes `Tenure(actor, office)`, not the `Tenure(X,X)` self-loop; it can fail on the world's terms (`may_fill` through `Act.via`, 1-per-object) and be undone by `revoke`; the write gate opens a seat-`hold` under `conferral` even for the actor's own (`state/gate.py::tenure_write_basis`). REVERT: delete this column.",
           "beneficiary": "subject",
-          "brute": "seat",
-          "brute_note": "the conferral basis and 1-per-object (`requires`); Grace's pull on who is chosen (AR-35) weighs the choice (AR-04), not a roll",
-          "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
+          "governing": [
+            "attr.social.charisma"
+          ],
+          "opposed_attribute": "attr.spirit.will",
+          "governing_note": "B21.14 (VB-C commit C3): the conferral is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls, `data/verbs.py::_check_governing_attributes`) for the efficacy kind, whole, in one commit. [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `confer`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `establish`'s cells (B21.09), copied from `seize`'s, the sibling seat-authorised acts on the same prize: Presence leads a choice the seat's room must accept, and `opposed_attribute` is read only where a person stands opposite -- here the seat's displaced holder. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`.]",
+          "contests": "a seat",
+          "contests_note": "B21.14 (`14_VERBS_BINDING_C_turnover.md` commit C3, edit 5; audit \u00a70.2: an appointment can be resisted): the prize `a seat` (`rosters.yaml: contest_subsystems.prizes`, `heard_by: seat_body`, `opposed_by: holder`), rolled by the social contest module. `counterparty: to` STAYS -- the conferee is the second side the fold admits -- and the opposition is the seat's present live holder, read host-side by `loop/sides.py::sides_of` through `opposed_by: holder` only when a live hold would be displaced, else absent (the untrained score, `roll.py::obstacle`). The obstacle is `difficulty` `routine` + the `reception` of the conferring seat's body (`sigma.py::audience_of`) + `rank_gap` (`rank_step`, control 0) + `stakes` + `cross_chain` (`cross_chain_step`, control 0, B21.61: a step harder where the seat conferred and the seat exercised are of different factions). `emits_on_refusal` was flat here and is keyed per clause since B21.80 (`refusal_note`; the row keys `counterparty`, so more than one kind is lawful on a contested row). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.14.]",
+          "difficulty": "routine",
+          "capability": "none",
+          "capability_note": "B21.14 [ASSUMPTION; medium; Jordan to correct -- basis: `establish`'s cell (B21.09): no skill of `descriptor_registry.yaml: capabilities` is named for a conferral by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`) until one is; revert: the row with no `capability:`].",
           "requires": "the office's conferral basis, the conferee is a living person, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (\u00a754 it. 20)",
-          "writes": [
-            "Tenure.until",
-            "Tenure.since",
-            "Tenure.term"
-          ],
-          "writes_note": "IN-10 (b) (#453 \u00a77.2 `:1382`, \u00a79.6 `:2071`: 'the edits are `_eff_confer` and the row's `writes:`'): `Tenure.term` ADDED, on `oblige`'s precedent (plan position `17b`) -- `_eff_confer` opens the seat-hold WITH the term the act declares (`loop/effects_governance.py::_declared_term`, the payload's `term`, a length in seasons; `Term(tick + n, act)`), so undeclared that write would ride under `Tenure.since`'s gate. Check-only, like the second pair. A computed `confer` declares none and opens an untermed hold exactly as before; a termed one is REGENCY or a TERM-LIMITED SEAT, matured at MATTER (`loop/matter.py`'s term branch) under `T-n`, which leaves the seat vacant. The conferral basis admits the opened edge whole (`state/gate.py`). LIMIT carried from #453: the effect still closes EVERY live hold on the seat, so a termed regent displaces the principal; delegation without a hold is IN-48's. [ASSUMPTION; medium; Jordan to correct -- the term's source: an act-declared payload length, `create_record`'s `stages` precedent, since no operand of the closed roster and no live Record kind carries one. REVERT: drop this pair and `_declared_term`.]",
-          "emits": [
-            "tenure.opened",
-            "tenure.closed"
-          ],
-          "emits_on_refusal": [
-            "confer.refused"
-          ],
+          "writes": {
+            "Overwhelming": [
+              "Tenure.until",
+              "Tenure.since",
+              "Tenure.term"
+            ],
+            "Success": [
+              "Tenure.until",
+              "Tenure.since",
+              "Tenure.term"
+            ],
+            "Partial": [
+              "Tenure.until",
+              "Tenure.since",
+              "Tenure.term"
+            ],
+            "Failure": []
+          },
+          "writes_note": "DEGREE-KEYED since B21.14 (edit 5): Overwhelming, Success and Partial seat the conferee (Partial with the provisional term, `loop/effects_governance.py::_eff_confer`, unless the act or the seat's row declares a shorter one; at the control, `provisional_term` None, a Partial seats him as a Success does); Failure writes nothing, so the seat stays as it was and the act may form again. IN-10 (b) (#453 \u00a77.2 `:1382`, \u00a79.6 `:2071`: 'the edits are `_eff_confer` and the row's `writes:`'): `Tenure.term` ADDED, on `oblige`'s precedent (plan position `17b`) -- `_eff_confer` opens the seat-hold WITH the term the act declares (`loop/effects_governance.py::_declared_term`, the payload's `term`, a length in seasons; `Term(tick + n, act)`), so undeclared that write would ride under `Tenure.since`'s gate. Check-only, like the second pair. A computed `confer` declares none and opens an untermed hold exactly as before; a termed one is REGENCY or a TERM-LIMITED SEAT, matured at MATTER (`loop/matter.py`'s term branch) under `T-n`, which leaves the seat vacant. The conferral basis admits the opened edge whole (`state/gate.py`). LIMIT carried from #453: the effect still closes EVERY live hold on the seat, so a termed regent displaces the principal; delegation without a hold is IN-48's. [ASSUMPTION; medium; Jordan to correct -- the term's source: an act-declared payload length, `create_record`'s `stages` precedent, since no operand of the closed roster and no live Record kind carries one. REVERT: drop this pair and `_declared_term`.]",
+          "emits": {
+            "Overwhelming": [
+              "tenure.opened",
+              "tenure.closed"
+            ],
+            "Success": [
+              "tenure.opened",
+              "tenure.closed"
+            ],
+            "Partial": [
+              "tenure.opened",
+              "tenure.closed"
+            ],
+            "Failure": [
+              "appointment.resisted"
+            ]
+          },
+          "emits_note": "B21.14 (edit 5, edit 8a; A-81, C3-C11, the durable write of every band): `appointment.resisted` is the Failure band's kind, emitted by this row alone (`data/verbs.py::KIND_VERB` is derived from the rows' emits) -- the conferral was attempted and the seat's room did not accept it, which a witness reads differently from a refusal (`confer.refused`: the act never reached the draw). It writes nothing; WITNESS deposits it as any Event (a `binding_decision` row's kinds reach every living ledger through `epistemic.py::_ch_chronicle`, the seat's body and the conferee among them, beside `co_located`), so the resisted appointment is a remembered deed.",
+          "emits_on_refusal": {
+            "eligibility": [
+              "confer.refused"
+            ],
+            "office": [
+              "confer.no_office"
+            ],
+            "basis": [
+              "confer.no_basis"
+            ],
+            "term": [
+              "confer.bad_term"
+            ],
+            "conferee": [
+              "confer.bad_conferee"
+            ],
+            "purview": [
+              "confer.unauthorized"
+            ],
+            "self_across_chains": [
+              "confer.across_chains"
+            ],
+            "held": [
+              "confer.held"
+            ],
+            "displacement": [
+              "confer.displacement_unauthorized"
+            ],
+            "write": [
+              "confer.refused"
+            ],
+            "counterparty": [
+              "confer.refused"
+            ]
+          },
+          "refusal_note": "B21.80 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_confer` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the eight names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `confer` says WHICH clause refused and a person who holds a seat can read it. The predicate's kinds, in branch order: `office` (the act names no office the world holds) `confer.no_office`; `basis` (the office has no conferral basis) `confer.no_basis`; `term` (the declared term is no positive whole number) `confer.bad_term`; `conferee` (no living person, or a cohort) `confer.bad_conferee`; `purview` (the seat exercised does not reach the office conferred) `confer.unauthorized`, the SEAT's kind as `seize.unauthorized` is; `self_across_chains` (the conferrer seats himself on a seat of another chain) `confer.across_chains`; `held` (1-per-object: the seat is held, and the conferral is to its holder or displaces one who carries a live `commit`) `confer.held`; `displacement` (the seat exercised has no revocation authority over the incumbent) `confer.displacement_unauthorized`. The fold's own three clauses keep the kind the flat row emitted: `eligibility`, `write` and `counterparty` (which is also the seam's party gap, `loop/resolve.py::_refuse_party_gap`, so a contested row keying two or more kinds is lawful) are `confer.refused`. [ASSUMPTION: the spelling follows an existing keyed typed row, `seize`'s and `arrest`'s `<verb>.<word>` kinds, `<verb>.unauthorized` for the seat's refusal -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"confer.refused\"]`.]",
           "grade": "ruled",
           "eligibility_note": "\u00a7E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:confer + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster.",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
@@ -5776,8 +5947,6 @@
         {
           "verb": "determine",
           "difficulty": "routine",
-          "scale": "settlement",
-          "scale_note": "a sitting decides at the venue's rung",
           "stratum": "binding_decision",
           "capability": "argue",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
@@ -5907,8 +6076,6 @@
         },
         {
           "verb": "dispatch",
-          "scale": "territory",
-          "scale_note": "a dispatch sends a person across rungs; its reach is the territory, not the sender",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -5919,9 +6086,11 @@
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "an order is given TO the named person and taken FOR the issuing remit; the remit is an Office and no Candidate carries it.",
           "referent_class": "Person",
-          "referent_class_note": "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE NAMED PERSON. FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person or a cohort (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`, as `open_case` and `petition` use it: `Person` is not `occasion_only`, and a person's own `person`-kind rung is a `Person` there, `World.class_of`) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a rung, a Record or a Site. `loop/predicates.py::_req_dispatch` ('the named person exists': `subject` in `w.persons`) is the only reader of the referent -- the row writes nothing and has no effect function, so what is ordered rides `order.given`. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:dispatch`), its cell and whom a seat may order are unchanged. THE LIMIT, STATED: `dispatch` is an UNTYPED PREDICATE row, so a refusal records no `observed` read -- REM-11 files its refusals under 'other', and REM-22's test shape for the typed rows (a refusal on an `exists:<kind>` read) cannot observe it; the kind failure is read off the predicate's own refusal clause (REM-14's `_refuse` trace) and `tests/test_referent_class_stamps.py` holds the untyped row to that. The class is shared with `open_case` and `petition` and moves no derived set: `DECLARED_CLASSES` already holds `Person`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. A computed `dispatch` forms only on an id `World.class_of` holds, so `person.demanded` (SE-01's census individuation trigger, `loop/census.py`) is reachable only by a hand-built act. REVERT: delete this column.",
-          "requires": "the named person exists",
-          "writes": [],
+          "referent_class_note": "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE NAMED PERSON. FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person or a cohort (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`, as `open_case` and `petition` use it: `Person` is not `occasion_only`, and a person's own `person`-kind rung is a `Person` there, `World.class_of`) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a rung, a Record or a Site. `loop/predicates.py::_req_dispatch` is the fold's reader of the referent: the named person exists (`subject` in `w.persons`) AND the seat he is sent by commands him (B21.21, `queries/world_q.py::commands`, the basis `issue` asks: his sworn man, the holder of a seat it may revoke, or an unseated person in its land) -- B21.57 (`IS-B3-FA-05`, CP-T09-08; [ASSUMPTION; medium; Jordan to correct; revert: `writes: []`, delete `_eff_dispatch`, `rosters.yaml: proclaimed`'s `dispatch` and `comply`'s write]): THE ROW DEPOSITS THE ORDER -- `loop/effects_governance.py::_eff_dispatch` mints a `dispensation` addressed to the man, `at` the optional destination operand `dest` (a Rung `_req_dispatch` holds inside the seat's purview), and the row moves nobody: the man's own `comply` relocates him (A-24). No contest sits on the row (`14_VERBS_BINDING_D` UNDECIDED (U2): a draw on the sender's act beside the man's own answer would be two ladders for one quantity), so `contests:` is not added and `grade: ruled` stands. B21.55 (14_VERBS_BINDING_D commit D2, A-22; [ASSUMPTION; medium; Jordan to correct; revert: empty `rosters.yaml: command_declines`]): FORMATION ASKS THE SAME RULE PERSON-SIDE. `decision/options.py::operand_bags` forms a `dispatch` only on a `subject` the sender can read as commanded (`queries/person_q.py::commanded_read`, the men his ledger names as sworn and the holders it names of other seats; `VerbRow.commanded_operand` reads the row off `rosters.yaml: command_declines`, one body with `issue`'s `to` fan), so no order is offered to a stranger the fold would refuse and nobody orders himself; what he cannot read stays the fold's refusal. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:dispatch`) and its cell are unchanged; whom a seat may order is `commands`, at formation by what the sender reads and at the fold by the world. THE LIMIT, STATED: `dispatch` is an UNTYPED PREDICATE row, so a refusal records no `observed` read -- REM-11 files its refusals under 'other', and REM-22's test shape for the typed rows (a refusal on an `exists:<kind>` read) cannot observe it; the kind failure is read off the predicate's own refusal clause (REM-14's `_refuse` trace) and `tests/test_referent_class_stamps.py` holds the untyped row to that. The class is shared with `open_case` and `petition` and moves no derived set: `DECLARED_CLASSES` already holds `Person`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. A computed `dispatch` forms only on an id `World.class_of` holds, so `person.demanded` (SE-01's census individuation trigger, `loop/census.py`) is reachable only by a hand-built act. REVERT: delete this column.",
+          "requires": "the named person exists, the seat he is sent by commands him, and a destination, where the order names one, lies inside its purview",
+          "writes": [
+            "Record.exists"
+          ],
           "emits": [
             "order.given"
           ],
@@ -5931,39 +6100,100 @@
           ],
           "refusal_note": "v9 SE-01 (`24g`) / `H-51` -- P3, INDIVIDUATION IS A REFUSAL (`04_CODE_ARCHITECTURE.md` F.1's default: *a refusal Event kind `person.demanded`*). `person.demanded` is DECLARED here and EARNED only by the precondition refusal of an act whose `subject` names an id the world does not hold (`queries/world_q.py::demanded_person`), kept or dropped in `loop/resolve.py::_admits` -- `confidence.broken`'s shape on `tell`, applied to a refusal (declared on the row, emitted only when the act earns it). Every other refusal of this row -- ineligible, naming no subject, or naming a rung, site or record the world holds -- emits `dispatch.refused` alone, byte for byte as before. CENSUS reads the season's `person.demanded` Events and individuates the id each names (`loop/census.py`), citing it.",
           "grade": "ruled",
-          "writes_note": "\u2014 (\u00a711.1: it names a person; their own choose decides)",
+          "writes_note": "`Record.exists` -- the order it deposits (`_eff_dispatch`, B21.57); \u00a711.1: it names a person, and their own choose decides whether he goes",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {
           "verb": "establish",
-          "scale": "settlement",
-          "scale_note": "founding an office is an act on the rung that will hold it",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:confer"
           ],
           "beneficiary": "none",
-          "brute": "seat",
-          "brute_note": "the conferral basis and a rung (`requires`)",
-          "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "referent_class": "Rung",
-          "referent_class_note": "v11 CR-25 (CR-11's design; [ASSUMPTION; medium; Jordan to correct; revert: drop the column and `holdings_to_found`]): THE HOLDING A FOUNDING STANDS ON. FORMED ONLY ON A `Rung`-CLASSED REFERENT -- chiefly a holding his seat may found over (`queries/world_q.py::holdings_to_found`, stamped after `larders_in_purview`), so `subject` binds the rung `office_founded_by` derives the office from, and the row no longer forms on whatever plain referent his question names (the base's computed `establish` acts, every one refused at clause 1). The class is shared: `establish` also forms on the places named and the larders in purview, and the fold disposes. \u26a0 THE DERIVED WIDENING (`data/verbs.py::RUNG_REMIT_ACTS`, the union over the `Rung` rows) gains `confer`, so `larders_in_purview` is asked of `confer` holders too.",
+          "governing": [
+            "attr.social.charisma"
+          ],
+          "opposed_attribute": "attr.spirit.will",
+          "governing_note": "B21.09 (VB-A commit A3): the founding is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls, `data/verbs.py::_check_governing_attributes`) for the efficacy kind, whole, in one commit. [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `establish`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `seize`'s cells, the other seat-authorised act contested on the social roll, are copied: Presence leads a claim the seat's room must accept, and `opposed_attribute` is read only where a person stands opposite, which for this row is never (no `counterparty:`, a holding `subject`), so it moves no roll. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`.]",
+          "contests": "a seat",
+          "contests_note": "B21.09 (`14_VERBS_BINDING_A_formation.md` commit A3, edit 12; audit \u00a70.2, the standing rule: a founding is drawn, graded and recoverable): the prize `a seat` (`rosters.yaml: contest_subsystems.prizes`, B07's row, `heard_by: seat_body`), rolled by the social contest module (`social_contest.roll`). NO COUNTERPARTY: the opposition is the untrained score (`roll.py::obstacle`, never absent; SC-B: absent for a non-person subject); the obstacle is `difficulty` `demanding` + the `reception` of the seat's body or the seated persons at its rung (`sigma.py::audience_of`) + `rank_gap` (`rank_step`, at control 0, B21.09). `emits_on_refusal` was flat here and is keyed per clause since B21.81 (`refusal_note`; the row names no counterparty, so its party gap takes the `write` key's kind). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.09.]",
+          "difficulty": "demanding",
+          "capability": "none",
+          "capability_note": "B21.09 [ASSUMPTION; medium; Jordan to correct -- basis: `found`'s cell, the sibling founding: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) is named for a founding by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`) until one is; revert: `law`].",
+          "referent_class": "Holding",
+          "referent_class_note": "B21.08 (VB-A commit A2, [ASSUMPTION; medium; Jordan to correct; revert: `referent_class: Rung`]): THE UNFOUNDED HOLDING A FOUNDING STANDS ON. FORMED ONLY ON A `Holding`-CLASSED REFERENT -- a holding his seat may found an office over whose office is not yet founded (`queries/world_q.py::holdings_to_found`, which `questions_for` stamps by name as `Holding`, `data/verbs.py::HOLDING_CLASS`; no collection holds the class), so `subject` binds the rung `office_founded_by` derives the office from, and the row no longer forms on a place named, a larder in purview, or a holding already founded (the repeat the fold refused at clause 4). The `Rung` stamp of `holdings_to_found` is KEPT, so `migrate`, `requisition`, `march` and `convene` are unmoved. v11 CR-25 (CR-11's design) had this row on `Rung`, shared with those rows, where the fold disposed. THE DERIVED NARROWING, NAMED: `data/verbs.py::RUNG_REMIT_ACTS` (the union over the `Rung` rows) loses `confer`, no other `Rung` row being eligible by it, so `larders_in_purview` is no longer asked of a `confer`-only seat. REVERT: `referent_class: Rung` (`RUNG_REMIT_ACTS` regains `confer`).",
           "requires": "the establishing office's conferral basis, and a rung to establish it at",
           "requires_note": "Evaluated as `_req_establish` in `loop/predicates.py` (`13f`), AND THE READING IS STATED THERE: *the establishing office* is the office the act describes -- the one being founded, or re-remitted on an id that exists -- NOT the office the actor sits in. That office's declared `conferral` must pass the SAME basis test `_req_confer` asks (`has_conferral_basis`), so an establish can never found a seat `confer` would refuse forever. Operands ride on the payload when an act carries them: `office`, `post`, `rung`, `remit`, `body` and/or `faction`, `conferral`, optional `revocation` -- the office overlay's own keys; otherwise (v11 CR-25, CR-11's design, decision 3) `loop/predicates.py::office_founded_by` (the World-taking sibling of `office_described_by`, read by `_req_establish` and `_eff_establish` alike) DERIVES the office from `subject` (a holding, admitted by `queries/world_q.py::founds_over`'s four conjuncts) and `Act.via` (the seat exercised): post from `offices.yaml: titles.domains`, faction and body the seat's, remit the seat's less `confer` and `revoke`, conferral `appointed`, revocation `rung_above_in_holdings`. Clause 5 carries H-144 (b) (any existing office asks `may_fill`) and H-132 (b) (a reduction of a sitting holder's grant asks `may_revoke`). No operand is added.",
-          "writes": [
-            "Office.exists",
-            "Office.remit_acts",
-            "Tenure.payload"
-          ],
-          "writes_note": "`Office.remit_acts` is the key reconciled at the matrix row (see that row). `Tenure.payload` is declared because the effect re-stamps the grant on every live `hold` on the office it writes, through `World._grant_remit`, and the fold gates exactly the pairs a verb declares -- undeclared, that write would ride under the `Office` pair's gate. `Office.establishment` is NOT a pair: who serves a seat is `world_q.establishment_of`, a Query over live `oblige` Tenures, which this verb does not write (r2 `05:214-221`).",
-          "emits": [
-            "office.established",
-            "remit.changed",
-            "tenure.payload_set"
-          ],
-          "emits_on_refusal": [
-            "establish.refused"
-          ],
+          "writes": {
+            "Overwhelming": [
+              "Office.exists",
+              "Office.remit_acts",
+              "Tenure.payload"
+            ],
+            "Success": [
+              "Office.exists",
+              "Office.remit_acts",
+              "Tenure.payload"
+            ],
+            "Partial": [
+              "Office.exists",
+              "Office.remit_acts",
+              "Tenure.payload"
+            ],
+            "Failure": []
+          },
+          "writes_note": "DEGREE-KEYED since B21.09 (edit 12): Overwhelming, Success and Partial write the office (Partial with the first half of the derived remit, `loop/effects_governance.py::_eff_establish`, edit 13); Failure writes nothing, so the holding stays unfounded and the act may form again. `Office.remit_acts` is the key reconciled at the matrix row (see that row). `Tenure.payload` is declared because the effect re-stamps the grant on every live `hold` on the office it writes, through `World._grant_remit`, and the fold gates exactly the pairs a verb declares -- undeclared, that write would ride under the `Office` pair's gate. `Office.establishment` is NOT a pair: who serves a seat is `world_q.establishment_of`, a Query over live `oblige` Tenures, which this verb does not write (r2 `05:214-221`).",
+          "emits": {
+            "Overwhelming": [
+              "office.established",
+              "remit.changed",
+              "tenure.payload_set"
+            ],
+            "Success": [
+              "office.established",
+              "remit.changed",
+              "tenure.payload_set"
+            ],
+            "Partial": [
+              "office.established",
+              "remit.changed",
+              "tenure.payload_set"
+            ],
+            "Failure": [
+              "office.unrecognised"
+            ]
+          },
+          "emits_note": "B21.09 (edit 12; A-81, C3-C11, the durable write of every band): `office.unrecognised` is the Failure band's kind -- the founding was attempted and the seat's room did not accept it, which a witness reads differently from a refusal (`establish.refused`: the act never reached the draw). It writes nothing; WITNESS deposits it as any Event, so the refused founding is a remembered deed of its actor.",
+          "emits_on_refusal": {
+            "eligibility": [
+              "establish.refused"
+            ],
+            "office resolves": [
+              "establish.no_office"
+            ],
+            "rung held": [
+              "establish.no_rung"
+            ],
+            "conferral basis": [
+              "establish.no_basis"
+            ],
+            "filler": [
+              "establish.no_filler"
+            ],
+            "re-founding": [
+              "establish.refounding"
+            ],
+            "may fill": [
+              "establish.unauthorized"
+            ],
+            "reduction is revocation": [
+              "establish.reduces_grant"
+            ],
+            "write": [
+              "establish.refused"
+            ]
+          },
+          "refusal_note": "B21.81 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_establish` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the seven names, spelled there with their spaces; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `establish` says WHICH clause refused. The predicate's kinds, in branch order: `office resolves` (the constructor refused it, an overlay act the seat does not found over, or an operand missing) `establish.no_office`; `rung held` (no rung the world holds) `establish.no_rung`; `conferral basis` (the office declares none) `establish.no_basis`; `filler` (a seat only the heir's claim opens, no title passing it) `establish.no_filler`; `re-founding` (an id some other class holds, or a different belonging for an existing office) `establish.refounding`; `may fill` (an existing office the seat exercised does not reach) `establish.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `reduction is revocation` (a re-stamp that drops from a sitting holder's grant an act, which is `revoke`'s) `establish.reduces_grant`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `establish.refused`; the row names no `counterparty:`, so the seam's party gap (S27.4's pool under 1D, a contest that reached its depth cap) takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81, on the `task` row's precedent). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal, itself on `seize`'s and `arrest`'s) -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"establish.refused\"]`.]",
           "grade": "assumption",
           "source": "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
         },
@@ -6004,14 +6234,12 @@
             "compliance.impossible"
           ],
           "grade": "ruled",
-          "writes_note": "per the term's own row. \u26a0 EMISSION-ONLY (v9 IN-09, restored at v10 REM-2B), as `comply`: `compliance.withheld` is the whole act (#453 `:511`, *'disobedience others see or miss'*); no `_eff_evade_defy` exists (the fold calls an effect only for a declared write, `ID-13`). \u26a0 NO CONSEQUENCE IS BUILT: `ED-FA-0021`'s D6 (cumulative per-Defy-season suspicion accrual, `ED-IN-0047`) is the intent behind defiance's cost and is conditioned on a suspicion carrier `engine/season/` does not have.",
+          "writes_note": "per the term's own row. \u26a0 EMISSION-ONLY (v9 IN-09, restored at v10 REM-2B), as `comply`: `compliance.withheld` is the whole act (#453 `:511`, *'disobedience others see or miss'*); no `_eff_evade_defy` exists (the fold calls an effect only for a declared write, `ID-13`). THE CONSEQUENCE IS A READ, NOT A WRITE (B21.23): a witnessed defiance is folded into the issuer's suspicion of the defier by `queries/person_q.py::suspicions` (`ED-FA-0021`'s D6, `ED-IN-0047`), and `queries/world_q.py::recalls` opens a recall occasion at the threshold; the act writes nothing for it.",
           "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: as `comply`",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {
           "verb": "exchange",
-          "scale": "settlement",
-          "scale_note": "as `requisition` -- it writes `Rung.stores`",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -6403,17 +6631,24 @@
         },
         {
           "verb": "issue",
-          "scale": "province",
-          "scale_note": "a Dispensation's `scope` enumerates executors -- \u00a737.1 -- so its reach is the domain the issuer governs",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:issue"
           ],
           "beneficiary": "none",
-          "brute": "seat",
-          "brute_note": "`remit:issue`; execution is each executor's own act",
-          "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "scope enumerates executors, not places (\u00a737.1)",
+          "governing": [
+            "attr.social.charisma"
+          ],
+          "opposed_attribute": "attr.spirit.will",
+          "governing_note": "B21.56 (14_VERBS_BINDING_D commit D3): the writ is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls, `data/verbs.py::_check_governing_attributes`) for the efficacy kind, whole, in one commit, and leaves `rosters.yaml: bookkeeping_verbs` (a row is exactly one class; 18-A's UNDECIDED (10) had classed it bookkeeping as a brute row). [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `issue`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `establish`'s and `confer`'s cells, the other seat-authorised acts drawn on the social roll, are copied: Presence leads a command a man must heed, and his Will (`opposed_attribute`) is what he resists it with, read because a person (`to`) stands opposite. revert: `brute: seat` with its note `remit:issue; execution is each executor's own act`, the row back in `bookkeeping_verbs`, and no `contests:`, `difficulty:` or `capability:`.]",
+          "contests": "a standing",
+          "contests_note": "B21.56 (`14_VERBS_BINDING_D_orders.md` commit D3, edit 8; A-21, A-30, A-81): the prize `a standing` (`rosters.yaml: contest_subsystems.prizes`, `tell`'s prize; no new prize, no new provider), rolled by the social contest module (`social_contest.roll`), OPPOSED BY THE EXECUTOR: the row's `counterparty: to` is the opponent operand (`data/verbs.py::VerbRow.opponent_operand`), so the obstacle is the one composer's (`roll.py::obstacle`): `difficulty` `routine`, `opposition` (his skill score plus his Will, `sigma.py::_opposing`), `regard` (his stance toward the issuer, the hostile half, `regard_step`) and `rank_gap` (how far his seats stand above the issuing seat, `rank_step`, at control 0). The pool is the one pool rule (`pool_of`) on the issuer's score, the governing attribute as levels, a wound a level against him, and the exercised seat as the `office` level. THE DRAW KEY IS `_contest`'s, `roll:a standing:<act id>` (`loop/resolve.py`), the shape every contested row draws on, not the source's `H(.., \"issue.standing\")`: a second key for one prize would be a second shape (B21.09's and B21.14's reading). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.56.]",
+          "difficulty": "routine",
+          "capability": "none",
+          "capability_note": "B21.56 [ASSUMPTION; medium; Jordan to correct -- basis: `establish`'s and `confer`'s cell (B21.09, B21.14): no skill of `descriptor_registry.yaml: capabilities` is named for a writ by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`), and the executor opposes at the untrained score plus his Will, until one is; revert: the row with no `capability:`].",
+          "referent_class": "Proposition",
+          "referent_class_note": "B21.54 (14_VERBS_BINDING_D commit D1, A-21, A-22; [ASSUMPTION; medium; Jordan to correct; revert: delete this column, and `issue` forms on the question's plain referent again, so a writ's `terms` names a person]): WHAT A WRIT ORDERS IS A PROPOSITION. FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`), the Propositions he has heard of (`propositions_heard`) and the Propositions he is committed to as an OUGHT (`ambitions`, stamped by `questions_for` beside them) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), so `subject` (the writ's `terms`) binds a Proposition and never a person, while `to` still fans over the persons the seat commands (the typed cell is unchanged: `executors`, `authority`, `terms`). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the row's eligibility, its cell and whom a seat may address are unchanged. DECLARED WIDENING, shared with `argue` (the other `Proposition`-classed row): both form on the Propositions their person is committed to; `commit` does not, `rosters.yaml: held_edge_declines` declining a cause he already holds.",
+          "requires": "scope enumerates executors, not places (\u00a737.1); the issuing seat commands each executor (A-22)",
           "requires_note": "EVALUABLE (plan position `19`), AND SO `issue` IS RESOLVABLE. r2 `02` \u00a7A.6's proposal -- `commit`'s `existence of subject kind Proposition` -- is NOT taken: the prose says nothing about the terms, and a computed act binds `subject` and `to` to the question's ONE referent (`H-94`), so the Proposition conjunct and the executor conjunct could never hold at once and every computed `issue` would refuse -- `confer`'s 100% at `\u2605`, for a clause the row does not state. IN-10 separated the two (`requires_typed_note`: `to` fans over known persons), and the Proposition conjunct is STILL not taken: a writ's `terms` may name a person or a Record (a warrant), not only a Proposition (#453 \u00a710.1).",
           "requires_typed": {
             "all": [
@@ -6426,7 +6661,7 @@
               {
                 "form": "basis",
                 "of": "to",
-                "basis": "purview",
+                "basis": "command",
                 "conjunct": "authority"
               },
               {
@@ -6436,24 +6671,47 @@
               }
             ]
           },
-          "requires_typed_note": "PLAN POSITION IN-10 (#453 \u00a710.1, *`issue` joins the known-person fan for `to`*): `terms` IS THE CELL'S THIRD CONJUNCT (with `executors` and `authority`, below), AND ITS JOB IS TO BIND `subject`. A computed `issue` would otherwise bind `subject` and `to` to the question's ONE referent, so every writ's `terms` would name its own executor (`loop/effects_information.py::_eff_issue`) -- and a warrant read off such a writ would have the holder arrest himself. A cell binding `subject` beside `to` puts `to` in `TypedRequires.known_person_operands` (`data/requires.py`: the fan is empty for a cell binding `to` alone), so `decision/options.py::operand_bags` forms one `issue` per person the issuer knows and `data/verbs.py::act_key` keys each act by `subject>to`: the referent is the writ's `terms`, a known person its executor. [ASSUMPTION; medium; Jordan to correct; revert: an unpriced `terms` clause, which the grammar cannot write (a keyed row names every conjunct, and no form holds of every referent)] WHAT THE CONJUNCT ASKS: the issuer HOLDS A CLAIM ON THE TERMS (`own_ledger`, \u00a7F.24a form 6, `tell`'s form) -- a writ is about something its issuer knows of. It is the weakest clause the grammar can write on a referent of any class: a `claim_landed` referent is a claim the issuer holds, so it never refuses one. Refused, it is `issue.refused` -- the issuer, not the seat, said no. \u26a0 TWO SHAPES CONSIDERED AND NOT TAKEN: the seat's purview over the terms (`Basis` `purview`) REFUSES A PROPOSITION, which has no place -- so a covenant dispensation, whose `terms` is a Proposition (#453 K-54, `commit`'s route), could never be issued; and r2 `02` \u00a7A.6's `existence of subject kind Proposition` refuses a warrant, whose `terms` is a person (#453 \u00a710.1, `arrest`/`seize`). \u26a0 A NAMED `own_ledger` CONJUNCT CARRIES `said` (`decision/options.py::opening_set`, telling `T4`), and a Candidate with nothing to say is declined: an `issue` act's payload holds the issuer's newest claim on the terms. Nothing reads it off an `issue` -- WITNESS reads `said` on `news.told` only, and the mint reads the kind's keys -- except `decision/choose.py::declare_intents`, which treats any act carrying `said` as a telling at a swept `intent_disclosure` > 0 (shipped 0). The Person clause stays on the executor alone: `terms` may name a person, a Record, a place or a Proposition. THE OTHER TWO CONJUNCTS, which the fold refuses (\u00a7F.24a calls this cell *'a constraint on the well-formedness of the Act'*). `executors` -- *scope enumerates EXECUTORS, not places*: the addressee (`to`, the dispensation's addressee key) exists and is a PERSON, so a writ addressed to a rung is refused. `authority` -- `Basis` (\u00a7F.24a form 7) with the `purview` rule: the issuing seat's purview reaches where the executor lives -- the row's `scale_note`, *'its reach is the domain the issuer governs'*, and `04:330`, purview asked of the seat exercised. \u26a0 ONE EXECUTOR PER ACT: `existence` reads one id, and `decision/options.py::_from_content_claim` collapses a held writ's addressee list to its one member or declines; a hand-built act naming several is outside what this cell can ask.",
+          "requires_typed_note": "PLAN POSITION IN-10 (#453 \u00a710.1, *`issue` joins the known-person fan for `to`*): `terms` IS THE CELL'S THIRD CONJUNCT (with `executors` and `authority`, below), AND ITS JOB IS TO BIND `subject`. A computed `issue` would otherwise bind `subject` and `to` to the question's ONE referent, so every writ's `terms` would name its own executor (`loop/effects_information.py::_eff_issue`) -- and a warrant read off such a writ would have the holder arrest himself. A cell binding `subject` beside `to` puts `to` in `TypedRequires.known_person_operands` (`data/requires.py`: the fan is empty for a cell binding `to` alone), so `decision/options.py::operand_bags` forms one `issue` per person the issuer knows and `data/verbs.py::act_key` keys each act by `subject>to`: the referent is the writ's `terms`, a known person its executor. [ASSUMPTION; medium; Jordan to correct; revert: an unpriced `terms` clause, which the grammar cannot write (a keyed row names every conjunct, and no form holds of every referent)] WHAT THE CONJUNCT ASKS: the issuer HOLDS A CLAIM ON THE TERMS (`own_ledger`, \u00a7F.24a form 6, `tell`'s form) -- a writ is about something its issuer knows of. It is the weakest clause the grammar can write on a referent of any class: a `claim_landed` referent is a claim the issuer holds, so it never refuses one. Refused, it is `issue.refused` -- the issuer, not the seat, said no. \u26a0 TWO SHAPES CONSIDERED AND NOT TAKEN: the seat's purview over the terms (`Basis` `purview`) REFUSES A PROPOSITION, which has no place -- so a covenant dispensation, whose `terms` is a Proposition (#453 K-54, `commit`'s route), could never be issued; and r2 `02` \u00a7A.6's `existence of subject kind Proposition` refuses a warrant, whose `terms` is a person (#453 \u00a710.1, `arrest`/`seize`). \u26a0 A NAMED `own_ledger` CONJUNCT CARRIES `said` (`decision/options.py::opening_set`, telling `T4`), and a Candidate with nothing to say is declined: an `issue` act's payload holds the issuer's newest claim on the terms. Nothing reads it off an `issue` -- WITNESS reads `said` on `news.told` only, and the mint reads the kind's keys -- except `decision/choose.py::declare_intents`, which treats any act carrying `said` as a telling at a swept `intent_disclosure` > 0 (shipped 0). The Person clause stays on the executor alone: `terms` may name a person, a Record, a place or a Proposition. THE OTHER TWO CONJUNCTS, which the fold refuses (\u00a7F.24a calls this cell *'a constraint on the well-formedness of the Act'*). `executors` -- *scope enumerates EXECUTORS, not places*: the addressee (`to`, the dispensation's addressee key) exists and is a PERSON, so a writ addressed to a rung is refused. `authority` -- `Basis` (\u00a7F.24a form 7) with the `command` rule (B21.20, `16_PESSIMIST_FA_C` edit 2, A-22): the issuing seat COMMANDS the executor (`queries/world_q.py::commands`: sworn to the seat, the holder of a seat it may revoke, or unseated in its land), asked of the seat exercised, not whoever lives in its land. REVERT: `basis: purview`, the issuing seat's purview reaching where the executor lives (`04:330`). \u26a0 ONE EXECUTOR PER ACT: `existence` reads one id, and `decision/options.py::_from_content_claim` collapses a held writ's addressee list to its one member or declines; a hand-built act naming several is outside what this cell can ask.",
           "counterparty": "to",
           "counterparty_note": "PLAN POSITION `19`: THE EXECUTOR IS THE SECOND SIDE, AND AN ISSUER IS NOT HIS OWN. `petition`'s precedent exactly: its typed cell binds `to`, and `opening_set` forms no Candidate whose `to` is the person -- a writ a man addresses to himself would EXECUTE (he is a person, and his seat's purview reaches his own home) and mint a document that orders nobody, a constant scene tax the fold could never refuse.",
-          "writes": [
-            "Record.exists"
-          ],
-          "emits": [
-            "dispensation.issued"
-          ],
+          "writes": {
+            "Overwhelming": [
+              "Record.exists"
+            ],
+            "Success": [
+              "Record.exists"
+            ],
+            "Partial": [
+              "Record.exists"
+            ],
+            "Failure": [
+              "Record.exists"
+            ]
+          },
+          "emits": {
+            "Overwhelming": [
+              "dispensation.issued"
+            ],
+            "Success": [
+              "dispensation.issued"
+            ],
+            "Partial": [
+              "dispensation.issued"
+            ],
+            "Failure": [
+              "dispensation.ignored"
+            ]
+          },
+          "emits_note": "B21.56 (edit 8): `dispensation.ignored` is the Failure band's kind, emitted by this row alone (`data/verbs.py::KIND_VERB` is derived from the rows' emits) -- the writ was made and its executor is not moved by it, which a witness reads differently from a refusal (`issue.refused`: the act never reached the draw). It opens a held writ's standing occasion as `dispensation.issued` does (`rosters.yaml: standing_occasion_opened_by`), since the Record exists at every band.",
           "emits_on_refusal": {
             "eligibility": [
-              "issue.unauthorized"
+              "issue.refused"
             ],
             "executors": [
               "issue.refused"
             ],
             "authority": [
-              "issue.unauthorized"
+              "issue.refused"
             ],
             "terms": [
               "issue.refused"
@@ -6465,9 +6723,9 @@
               "issue.refused"
             ]
           },
-          "refusal_note": "PLAN POSITION `19`: KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half). `issue.unauthorized` -- the SEAT: none exercised grants `issue`, or its purview does not reach the executor. `issue.refused` -- the WORLD: the addressee is no person, the issuer holds no claim on the terms (`terms`, plan position IN-10), or the mint moved nothing. `unauthorized` is `determine`'s word for the same refusal, and its note says why it is not `unseated`. \u26a0 PLAN POSITION `14`: `counterparty` -- the writ names no executor or names its issuer -- is the fold's own clause (`loop/resolve.py::_admits`), keyed `issue.refused`.",
+          "refusal_note": "PLAN POSITION `19`: KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half), BUT ONE KIND: `issue.refused` under every key since B21.56 (edit 8). The row is contested, and the loader refuses a contested row keying more than one refusal kind unless it keys `counterparty` (`data/verbs.py`; `determine`'s v9 SC-03b precedent). `issue.unauthorized` (the SEAT: none exercised grants `issue`, or it does not command the executor, B21.20) is retired into it; the refusal's `observed` reads still say which clause failed -- `eligibility` or `authority` for the seat, `executors` for an addressee who is no person, `terms` for an issuer holding no claim on the terms (plan position IN-10), `write` for a mint that moved nothing. \u26a0 PLAN POSITION `14`: `counterparty` -- the writ names no executor or names its issuer -- is the fold's own clause (`loop/resolve.py::_admits`).",
           "grade": "ruled",
-          "writes_note": "\u2014 (a Dispensation is not a state write \u2014 \u00a737.3)  ||  \u26a0 W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass \u00a71.4 hole 4 names, not a licence for one.  ||  \u26a0 PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` \u00a7B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load).",
+          "writes_note": "B21.56 (edit 8; A-81, C3-C11, THE DURABLE WRITE OF THE FAILURE BAND): THE WRIT EXISTS AT EVERY BAND. The band is not whether a dispensation is made but how strongly it binds: `loop/effects_information.py::_eff_issue` writes it into the Record's content as `force` (`rosters.yaml: record_kinds.dispensation`), and the writ is proclaimed at every band (`rosters.yaml: proclaimed`, A-21), so whoever learns of the issue holds a claim of it and of its `force` -- a dead letter (Failure) is itself a remembered deed against the issuing seat. What answers a writ reading its `force` (the answer rows' obstacles, the source's edit 10) is cross-lane and not edited here.  ||  \u2014 (a Dispensation is not a state write \u2014 \u00a737.3)  ||  \u26a0 W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass \u00a71.4 hole 4 names, not a licence for one.  ||  \u26a0 PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` \u00a7B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load).",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {
@@ -6559,7 +6817,7 @@
           "eligibility": [
             "remit:dispatch"
           ],
-          "eligibility_note": "`arrest`'s, for `arrest`'s reason (v9 IN-12 step 5): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis (which admits the `detain` this row opens) read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. A person holding no seat that grants it forms no `capture`.",
+          "eligibility_note": "`arrest`'s, for `arrest`'s reason (v9 IN-12 step 5): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis (which admits the `detain` this row opens) read one grant. J-8 (whether `dispatch` is a remit act at all) is ANSWERED by B21.03: a seat grants `dispatch` only where its row names it, and `offices.yaml`'s `meta: remit_unruled` is gone; this row moves with `WARRANT_ACT` and the ruling. A person holding no seat that grants it forms no `capture`.",
           "beneficiary": "none",
           "beneficiary_note": "`arrest`'s column and reason: custody is taken AGAINST the captive and FOR the seat the act is exercised through, an Office no Candidate carries. (The writes land on the SUBJECT, as `fight`'s do, and a harm is not a benefit to the person harmed.)",
           "referent_class": "Person",
@@ -6804,8 +7062,6 @@
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `requisition`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
-          "scale": "settlement",
-          "scale_note": "a requisition moves a Rung's stores -- the rung IS the subject",
           "stratum": "uncontested_material",
           "eligibility": [
             "remit:issue",
@@ -6839,7 +7095,7 @@
               }
             ]
           },
-          "requires_typed_note": "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the row's own `scale_note` makes the requisitioned rung THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (\u00a7F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`).",
+          "requires_typed_note": "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the requisitioned rung is THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (\u00a7F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`).",
           "writes": [
             "Rung.stores",
             "Rung.stores"
@@ -6874,8 +7130,6 @@
         },
         {
           "verb": "march",
-          "scale": "settlement",
-          "scale_note": "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor.",
           "stratum": "contested_physical",
           "capability": "none",
           "capability_note": "undeclared at authoring; every person rolls the untrained default. The field's skill enters at the `field` site, on the commander's record (`27_MB_A`).",
@@ -6968,8 +7222,6 @@
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `marshal`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
-          "scale": "settlement",
-          "scale_note": "a standing order is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -7021,8 +7273,6 @@
         },
         {
           "verb": "surrender",
-          "scale": "settlement",
-          "scale_note": "a place is yielded where it stands: the settlement IS the subject, as `march`'s and `marshal`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -7228,11 +7478,31 @@
           "emits": [
             "duty.taken"
           ],
-          "emits_on_refusal": [
-            "duty.refused"
-          ],
+          "emits_on_refusal": {
+            "seat": [
+              "duty.no_seat"
+            ],
+            "binds": [
+              "duty.bad_binds"
+            ],
+            "own_seat": [
+              "duty.own_seat"
+            ],
+            "one_edge": [
+              "duty.already"
+            ],
+            "banned": [
+              "duty.banned"
+            ],
+            "write": [
+              "duty.refused"
+            ],
+            "counterparty": [
+              "duty.refused"
+            ]
+          },
           "grade": "ruled",
-          "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel (W3's rule; plan position `17a`). Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it.",
+          "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel (W3's rule; plan position `17a`). Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it. B21.83 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_oblige` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the five names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `oblige` says WHICH clause refused. The kinds take the row's own `duty` stem (`duty.taken`, `duty.refused`), in branch order: `seat` (the subject is no seat) `duty.no_seat`; `binds` (the seat's `binds` is off the roster) `duty.bad_binds`; `own_seat` (the actor holds the seat) `duty.own_seat`; `one_edge` (a live `oblige` from the actor to it already) `duty.already`; `banned` (the actor holds a live `ban` at the seat's rung) `duty.banned`. The fold's own two clauses keep the kind the flat row emitted: `write` and `counterparty` are `duty.refused` (the row's eligibility is `own`, which cannot decline, so it keys no `eligibility`). [ASSUMPTION: the spelling follows B21.80's `confer` (`<stem>.<word>`), on the row's existing `duty` stem rather than the verb's name -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"duty.refused\"]`.]",
           "formation_decline_note": "A typed `existence` of `subject` kind `Office` is not authored: of the referents `questions_for` stamps none was a seat and no ledger held a claim about an office (plan position `14`, U7-own; `populated.build_realm(0)`), so the cell would form on every referent and refuse on every one, growing the always-refused set. `T4`'s bags supply known PERSONS, not seats, and a known-seat source is a second binding mechanism; formation is the `Office` class's (`referent_class` above). The fold's `counterparty` clause covers the hand-built act.",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed; body, precondition and refusal from r2 item 9 / `03` \u00a7A.9 at plan position `17a`"
         },
@@ -7292,8 +7562,6 @@
         },
         {
           "verb": "pardon",
-          "scale": "settlement",
-          "scale_note": "#453 \u00a79.1: *'settlement'* -- a pardon is the bench's act at the seat that owns the restraint, `determine`'s scale",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:determine"
@@ -7463,7 +7731,7 @@
           "emits_note": "v9 IN-11 (#453 \u00a710.4 step 2, R-3 (b) adopted): `repudiate` IS CUT and its row deleted -- it was a second closer of one edge, since `commit` is in this row's `domain:` -- so the vow-break is witnessed HERE: `_eff_release` earns `commitment.ended` when an edge it closes is a `commit` -- WHOLE-ACT earning: when any closed edge is a `commit`, every edge it closes earns the row's every kind (`earns=None`) -- and `tenure.closed` alone otherwise. \u26a0 THE VOW-BREAK IS NOT UNPRICED: `commitment.ended` now has ONE emitter, this row, so `data/verbs.py::KIND_VERB` maps it to `release` and a witnessed vow-break is judged (`queries/person_q.py::deed_valence` -> `align_kind`) at `release`'s own alignment cells -- see `rosters.yaml: tables.alignment` -- until a `deed:commitment.ended` cell is authored (the IN-11 entry, `workplans/valoria_master_workplan_v9_part5.md` `### IN-11` WHAT: its pricing becomes a `deed:` cell, IN-08). None is authored here.",
           "requires_typed_note": "\u26a0 `none` WITH A REASON, AND THE REASON IS THE GRAMMAR, NOT NEGLECT \u2014 the third admissible ground (`data/verbs.py`: *an operand the closed `requires_operands` roster has no name for*), reached from the other side: the cell this row needs is a DISJUNCTION OVER KINDS and the grammar has none. `data/requires.py:542` carries `all` and no `any`, and \u00a7F.24a form 1 `existence` takes ONE `kind:`, so the six releasable kinds cannot be spelled: `all` of them would mean *a live edge of every kind at once*, which is the opposite requirement, and `existence` of one kind would silently narrow the verb to that kind. Adding an `any` combinator is a GRAMMAR CHANGE \u2014 `REQUIRES_STEMS` is closed and refuses an unknown stem at load \u2014 and `04 \u00a7A.3` row 14 asks for a verb, not a new form. So this row takes `revoke`'s route: a prose `requires:` read by a registered predicate, with the domain declared above and asserted at load. \u26a0 IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE.",
           "domain_note": "\u26a0 THE `domain:` COLUMN EXISTS FOR THIS ROW AND IS CHECKED AT LOAD \u2014 `04_CODE_ARCHITECTURE.md` PART D row 15: *`release` generic; the loader asserts its domain equals `tenure_kinds \\ {contain}` (invariant 6, as corrected for F4)*. It is DECLARED here rather than derived so the assertion has content: `data/verbs.py` compares this list against `rosters.yaml: tenure_kinds` minus `contain`, so adding an eighth tenure kind and forgetting its closer FAILS THE LOAD instead of shipping an open-without-close. A derived domain would make the check compare the roster to itself, which is `CLAUDE.md` \u00a70.1 pt 2 \u2014 an assertion that cannot observe the failure it excludes.",
-          "requires_note": "PROSE + A REGISTERED PREDICATE, LIKE `revoke`, AND NOT `requires_typed` (the reason is `requires_typed_note`'s): `_req_release` reads the same roster the loader asserts against.",
+          "requires_note": "PROSE + A REGISTERED PREDICATE, LIKE `revoke`, AND NOT `requires_typed` (the reason is `requires_typed_note`'s): `_req_release` reads the same roster the loader asserts against. VB-A: formed only on a referent the actor is tied to by a live edge of a kind in `domain:` (`rosters.yaml: own_edge_declines`); the predicate stays the fold's check, and since A-37 it also refuses an edge a bench's `determine` opened (`rosters.yaml: own_edge_declines: disposal`).",
           "source": "`04_CODE_ARCHITECTURE.md` \u00a7A.3 row 14, QUOTED WHOLE: *four closing verbs missing | one `release` verb, eligibility `own`, generic over kind; `Tenure.term?` for declared ends | T-m, T-n, ID-14*. \u26a0 THE CLAUSE AFTER THE SEMICOLON IS NOT DELIVERED HERE AND EARLIER RENDERINGS OF THIS CELL STOPPED BEFORE IT WITH NO ELLIPSIS, WHICH IS CONCEALMENT RATHER THAN SCOPE. `Tenure` carries no `term` field (`state/carriers.py`), so `T-n`'s declared-ends half \u2014 a tenure that ENDS BY ITS OWN TERMS rather than by somebody releasing it \u2014 is unbuilt and is recorded here as unbuilt. \u26a0 AMENDED 2026-09-29 (plan position `17b`): THAT HALF IS NOW BUILT for the one kind given a term, `oblige` \u2014 `Tenure.term` exists (`state/carriers.py::Term`), `_eff_oblige` declares it, MATTER matures it (`loop/matter.py`, gate basis `T-n`), and a `transfer` paying the seat's `upkeep` renews it. `release` itself is unchanged: it is still the owner's early way out, and T-m still admits it. The scope taken is `architecture/meta/HANDOFF_NEXT.md` \u00a72a's, which asks for the verb: *the design says a person may resign; the verb table does not let them. Fix the table, and do not re-open the design.* The same shape one level up: `04:464-465` states loader invariant 6 as TWO conjuncts, the domain and *every kind's OPENER set is declared too*, and `data/verbs.py` implements the first \u2014 the second is HANDOFF_NEXT item 1e and is open. Also PART D row 15.",
           "disposal_release_note": "PLAN POSITION `22` (PROC-B): `oblige` IS IN THIS ROW'S DOMAIN, AND THAT ALREADY COVERS A DISPOSAL -- `determine`'s finding (plan position `19`) opens an `oblige` owned by the party it binds (`21_RECONCILIATION.md` C-1, RULED A), so the same `own`/T-m route this row gives every obligee lets that party end it: *'A convict can discharge his own penance.'* `19_PLAN.md` PART H, D-5 (RULED 2026-09-06 by Jordan, *'second-person lever stays refused'*) is why this is the ONLY route: no creditor verb, no `call_in`, no obligee-side closer on an obligation exists or will (`ED-SC-0035`) -- the bench that bound him cannot force the term to run, and cannot force it to end either. C-1's own price for the same ruling: *'That is not a hole \u2014 it is public, witnessed, priced by reception, and accepted by ruling.'* `RELEASABLE_KINDS`/`domain:` carry `oblige`, so a disposal releases exactly as any other `oblige` does."
         },
@@ -7536,30 +7804,83 @@
         },
         {
           "verb": "revoke",
-          "scale": "settlement",
-          "scale_note": "as `confer` -- it unseats the same office",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:revoke"
           ],
           "beneficiary": "none",
-          "brute": "seat",
-          "brute_note": "the revocation basis and a live hold (`requires`); a holder who resists answers by his own acts",
-          "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
+          "governing": [
+            "attr.social.charisma"
+          ],
+          "opposed_attribute": "attr.spirit.will",
+          "governing_note": "B21.14 (VB-C commit C3): the revocation is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls) for the efficacy kind, whole, in one commit. [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `revoke`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `establish`'s cells (B21.09), copied from `seize`'s: Presence presses the seat's room, and the holder resists on his Will. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`.]",
+          "contests": "a seat",
+          "contests_note": "B21.14 (`14_VERBS_BINDING_C_turnover.md` commit C3, edit 6; audit \u00a70.2: a revocation can be withstood): the prize `a seat` (`heard_by: seat_body`, `opposed_by: holder`), rolled by the social contest module. The act's opponent operand is `subject`, the seat (the default, `VerbRow.opponent_operand`), RESOLVED TO ITS LIVE HOLDER host-side by `loop/sides.py::sides_of` through `opposed_by: holder`, where `_contest` reads the counterparty; the obstacle is `difficulty` `routine` + the holder's opposition + the `reception` of the revoking seat's body + `rank_gap` (`rank_step`, control 0) + `stakes`; no `regard` (a room hears it, C-35: `sigma.py::_regard_of` reads none where a room hears); B21.69 adds `faction_power` (`faction_power_step`, control 0: a step harder where the holder's faction outweighs the host's, `faction_q.weight`, A-105) and the one optional payload key `keeps` (`predicates.KEEPS_KEY`; no `requires_operands` member, the roster being closed): the acts the holder keeps, a PARTIAL REVOCATION drawn as the whole strip is (`IS-B3-FA-07`: *a reduction is judged as a revocation*), so a reduction of a sitting holder's grant is this verb and `establish` refuses it. \u26a0 DEPARTURE FROM EDIT 6, NAMED: `counterparty: subject` is NOT declared. The opponent is `subject` without it; declaring it would add the fold's counterparty clause, which refuses every hand-built act naming the seat on `office` alone (B21.13 kept those admissible, `test_vb_c_turnover.py::test_c2_a_computed_revoke_reaches_the_roll`), and `opposed_by: holder` reads the seat through `office_named_by`, so such an act is opposed by the holder all the same. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.14.]",
+          "difficulty": "routine",
+          "capability": "none",
+          "capability_note": "B21.14 [ASSUMPTION; medium; Jordan to correct -- basis: `establish`'s cell (B21.09): no skill of `descriptor_registry.yaml: capabilities` is named for a revocation by any source; revert: the row with no `capability:`].",
           "beneficiary_note": "revocation is taken AGAINST the holder and FOR the revoking remit -- an Office, which no Candidate carries. Same shape as `dispatch`.",
           "referent_class": "Office",
-          "referent_class_note": "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE SEAT REVOKED. FORMED ONLY ON AN `Office`-CLASSED REFERENT -- the seats the standing occasions already stamp onto the question he answers, the stamp `confer` and `oblige` use (`queries/world_q.py::vacancies`, the vacant seats a conferrer may fill, and `seats_named`, the seats his own ledger names; `Office` is `occasion_only`, so the question's own referent is NOT carried as one) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a person, a rung, a Record or a Site. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:revoke`), its cell, `may_revoke` and the disposal (`state/gate.py::REVOCATION_DISPOSAL`) are unchanged. THE LIMIT, STATED IN PLAIN WORDS: THIS COLUMN EXECUTES NOTHING. `_req_revoke` and `_eff_revoke` read `payload['office']`, every computed act carries `subject` (a hand-built one supplies `office`), `loop/predicates.py::office_named_by` says `revoke` IS NOT A CALLER (IN-53 D1, DECISION 2026-10-13) and H-207 ruling (A) says a computed `revoke` is not driven; so every formation that survives is refused on that same clause until a caller reads `subject`, and that edit is H-207 (A)'s. The class is shared with `confer` and `oblige` and moves no derived set: `DECLARED_CLASSES` already holds `Office`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. REVERT: delete this column.",
+          "referent_named": true,
+          "referent_class_note": "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE SEAT REVOKED. FORMED ONLY ON AN `Office`-CLASSED REFERENT -- the seats the standing occasions already stamp onto the question he answers, the stamp `confer` and `oblige` use (`queries/world_q.py::vacancies`, the vacant seats a conferrer may fill, and `seats_named`, the seats his own ledger names; `Office` is `occasion_only`, so the question's own referent is NOT carried as one) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a person, a rung, a Record or a Site. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:revoke`), its cell, `may_revoke` and the disposal (`state/gate.py::REVOCATION_DISPOSAL`) are unchanged. B21.13 (BIND_C commit C2): `_req_revoke` and `_eff_revoke` read the seat through `loop/predicates.py::office_named_by` (`office`, else the computed act's `subject`), so a computed `revoke` is no longer refused at its first clause (H-207 (A) honoured: nothing scores `revoke` specially). The class is shared with `confer` and `oblige` and moves no derived set: `DECLARED_CLASSES` already holds `Office`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. REVERT: delete this column.",
           "requires": "the office's revocation basis, and a live hold exists, and the seat's conferral basis has a revocation disposal",
-          "writes": [
-            "Tenure.until",
-            "Tenure.since"
-          ],
-          "emits": [
-            "tenure.closed"
-          ],
-          "emits_on_refusal": [
-            "revoke.refused"
-          ],
+          "writes": {
+            "Overwhelming": [
+              "Tenure.until",
+              "Tenure.since",
+              "Tenure.payload"
+            ],
+            "Success": [
+              "Tenure.until",
+              "Tenure.since",
+              "Tenure.payload"
+            ],
+            "Partial": [
+              "Tenure.until",
+              "Tenure.payload"
+            ],
+            "Failure": []
+          },
+          "writes_note": "B21.69: `Tenure.payload` is the grant a `keeps` act re-stamps to the acts kept (`loop/effects_governance.py::_eff_revoke`), the holder staying seated, nothing closed and no disposal charged. DEGREE-KEYED since B21.14 (edit 6): Overwhelming and Success unseat the holder and charge the ruled disposal (`Tenure.since`, the ban's opening; `disposal_note`); Partial unseats him WITHOUT it (`loop/effects_governance.py::_eff_revoke`: a Partial is an unseating short of a completed revocation, so the ruled cost is not charged) [ASSUMPTION; medium; Jordan to correct -- basis: R4 \u00a72 (BYZ_E conflict) takes BIND_C's Partial; revert: one clause in `_eff_revoke` and `Tenure.since` at Partial]; Failure writes nothing, so the holder keeps his seat.",
+          "emits": {
+            "Overwhelming": [
+              "tenure.closed"
+            ],
+            "Success": [
+              "tenure.closed"
+            ],
+            "Partial": [
+              "tenure.closed"
+            ],
+            "Failure": [
+              "revocation.resisted"
+            ]
+          },
+          "emits_note": "B21.14 (edit 6, edit 8a; A-81, C3-C11): `revocation.resisted` is the Failure band's kind, emitted by this row alone (`KIND_VERB`, derived): the holder withstood it. Deposited at WITNESS as any Event (`_ch_chronicle` reaches every living ledger for a `binding_decision` row, the seat's body and the holder among them), so a withstood revocation is a remembered deed and a lasting grievance.",
+          "emits_on_refusal": {
+            "eligibility": [
+              "revoke.refused"
+            ],
+            "office": [
+              "revoke.no_office"
+            ],
+            "disposal": [
+              "revoke.no_disposal"
+            ],
+            "authority": [
+              "revoke.unauthorized"
+            ],
+            "keeps": [
+              "revoke.bad_keeps"
+            ],
+            "held": [
+              "revoke.no_holder"
+            ],
+            "write": [
+              "revoke.refused"
+            ]
+          },
+          "refusal_note": "B21.82 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_revoke` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the five names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `revoke` says WHICH clause refused. The predicate's kinds, in branch order: `office` (the act names no office the world holds) `revoke.no_office`; `disposal` (the seat's conferral basis has no revocation disposal) `revoke.no_disposal`; `authority` (the seat exercised has no revocation authority over the seat) `revoke.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `keeps` (the `keeps` operand is no list of acts, B21.69) `revoke.bad_keeps`; `held` (a seat nobody holds) `revoke.no_holder`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `revoke.refused`; the row names no `counterparty:`, so the seam's party gap takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal) -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"revoke.refused\"]`.]",
           "grade": "ruled",
           "disposal_note": "v9 IN-31 (H-100): WHAT A REVOCATION COSTS THE MAN REVOKED, read off the SEAT'S conferral basis (`Office.conferral`, ED-IN-0256 (2)). The one owner is `state/gate.py::REVOCATION_DISPOSAL` (JORDAN, 2026-10-21, answering the IN-31 design's A1: `appointed` -> a PERMANENT `ban : him -> Act.via`, SC-03a's restraint, which `confer`, `oblige` and the fold's readers already refuse; `elected`, `annex`, `None` -> nothing). `Tenure.since` is the ban's opening (`determine`'s precedent). `emits` STAYS `tenure.closed`: the ban earns no event of its own (`determine`'s disposal earns only `matter.determined`), and `tenure.opened` here would make it a second emitter of a kind `data/verbs.py::KIND_VERB` maps to `confer`, unpricing every `confer` deed. The ban carries no term and no effect closes one, so only death ends it. NOT REVOCATIONS, and so costing nothing: a termed hold maturing at MATTER (`T-n`), a `release` or a self-revocation of one's own seat (`T-m`; no self-ban), a `confer` displacing an incumbent (A1), a death (`cascade`). \u26a0 It is the seat's basis, not the route by which the man came to sit: `confer` fills all three bases. A computed `revoke` executes 0 times on `build_realm(0)` (H-207 ruling (A)), so the outcome is observed by hand-built acts (`tests/test_in31_revocation_cost.py`).",
           "eligibility_note": "\u00a7E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:revoke + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster.",
@@ -7646,13 +7967,11 @@
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `raze`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
-          "scale": "settlement",
-          "scale_note": "#453 \u00a79.2: a razing ends the settlement it names -- the place IS the subject, `march`'s and `seize`'s scale for the same reason.",
           "stratum": "contested_physical",
           "eligibility": [
             "remit:dispatch"
           ],
-          "eligibility_note": "v9 IN-12 step 11 (#453 \u00a79.2, the `raze` row): `remit:dispatch`, the act that musters the army (`march`'s eligibility, `state/gate.py::MUSTER_ACT`'s grant) -- the seat that can put an army on a town is the seat that can level it. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with the ruling. Built on `remit_default` (\u00a7A v9, J-8 partly answered), `arrest`'s precedent.",
+          "eligibility_note": "v9 IN-12 step 11 (#453 \u00a79.2, the `raze` row): `remit:dispatch`, the act that musters the army (`march`'s eligibility, `state/gate.py::MUSTER_ACT`'s grant) -- the seat that can put an army on a town is the seat that can level it. J-8 (whether `dispatch` is a remit act at all) is ANSWERED by B21.03: a seat grants `dispatch` only where its row names it, and `offices.yaml`'s `meta: remit_unruled` is gone; this row moves with the ruling. Built on `remit_default` (\u00a7A v9, J-8 partly answered), `arrest`'s precedent.",
           "beneficiary": "none",
           "governing": [
             "attr.social.charisma"
@@ -7697,8 +8016,6 @@
         },
         {
           "verb": "seize",
-          "scale": "settlement",
-          "scale_note": "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives",
           "stratum": "uncontested_material",
           "eligibility": [
             "remit:issue"
@@ -7803,16 +8120,21 @@
         },
         {
           "verb": "succeed",
-          "scale": "person",
-          "scale_note": "succession is one person taking another's tenure; the office's rung does not change",
           "stratum": "binding_decision",
           "eligibility": [
             "own"
           ],
           "beneficiary": "actor",
-          "brute": "seat",
-          "brute_note": "no live hold and the title its `successions` names (`requires`); rival claims are other men's acts",
-          "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
+          "governing": [
+            "attr.social.charisma"
+          ],
+          "opposed_attribute": "attr.spirit.will",
+          "governing_note": "B21.14 (VB-C commit C3): the claim is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls) for the efficacy kind, whole, in one commit. [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `succeed`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `establish`'s cells (B21.09), copied from `seize`'s: Presence carries a claim the seat's room must accept; `opposed_attribute` is read only where a person stands opposite, which on a vacant seat is never. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`.]",
+          "contests": "a seat",
+          "contests_note": "B21.14 (`14_VERBS_BINDING_C_turnover.md` commit C3, edit 7; audit \u00a70.2: a claim can be contested): the prize `a seat` (`heard_by: seat_body`, `opposed_by: holder`), rolled by the social contest module. The seat is vacant by `requires`, so its live holder is nobody and the opposition is the untrained score (`roll.py::obstacle`); A-19's docketed rival claimant has no docket to stand on until CR-35's `succession` arrangement (H-217), and the entry's own reading is then 'else none'. The obstacle is `difficulty` `routine` + `reception` + `rank_gap` (`rank_step`, control 0). \u26a0 THE AUDIENCE, NAMED: `seat_body` is the body of the seat the act is EXERCISED through (`Act.via`, `sigma.py::audience_of`), and a claim is exercised through none (`eligibility: own`), so it hears nobody and `reception` reads 0 until `15_INSTITUTIONS_BYZANTINE_E` e1's `legitimacy` audiences (B32). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.14.]",
+          "difficulty": "routine",
+          "capability": "none",
+          "capability_note": "B21.14 [ASSUMPTION; medium; Jordan to correct -- basis: `establish`'s cell (B21.09): no skill of `descriptor_registry.yaml: capabilities` is named for a claim by any source; revert: the row with no `capability:`].",
           "beneficiary_note": "v10 IN-61: THE CLAIMANT -- he takes the seat; the seat (`subject`) is what he claims, and acts for nobody.",
           "referent_class": "Office",
           "referent_class_note": "v10 IN-61 (RS-27, B10-09): FORMED ONLY ON AN `Office`-CLASSED REFERENT -- `confer`'s machinery (IN-53): the seats the question he answers carries as `Office`, which for the heir is the vacant throne he was told of (`queries/world_q.py::seats_named`, the death's or the release's `tenure.closed` claim naming the seat, CP-T02-01; executed by `engine/season/tests/test_in61_heir_hears_vacancy.py`). NARROWED person-side to the seats whose `successions` title he holds (`rosters.yaml: own_title_declines`), so nobody else told of a seat forms a claim on it.",
@@ -7820,16 +8142,41 @@
           "requires_typed": "none",
           "requires_typed_note": "\u26a0 `none` FOR THE GRAMMAR'S REASON, `oblige`'s and `confer`'s route (v10 IN-61): a prose `requires:` read by the registered predicate `loop/predicates.py::_req_succeed`, which asks the write gate's own `state/gate.py::may_claim`. The closed grammar has no cell for the ABSENCE of a live `hold` on the subject (it has no negation), nor for a `successions` lookup from the subject to the title the actor must hold, so neither conjunct types.",
           "requires_note": "v10 IN-61 (RS-27; Jordan 2026-10-14: *'designated heir is not a verb but a status or title. the heir still has to claim their throne'*): RE-SPECIFIED AS THE HEIR'S CLAIM -- admitted iff the throne has no live `hold` and the actor holds `successions[throne]` (the heir's title, `off_heir`, itself filled by an ordinary `confer`). UNTYPED (`requires_typed_note`). The W3 cell it replaces (`relation` of `subject` `held_by` -- the actor holds the office whose heir he designates) is retired with the designation reading: a title is designated by `confer`, not by this verb. LIMITS: the route only awards a vacant seat; the first valid claim wins; one title deep; `off_duke_valorsmark` has no `successions` row yet (CP-T09-06, B10-17). The contested-succession arms and H-217's `succession` arrangement are CR-35's (B10-17). [ASSUMPTION; medium; Jordan to correct; revert: the W3 cell and the effect decline below.]",
-          "writes": [
-            "Tenure.until",
-            "Tenure.since"
-          ],
-          "writes_note": "v10 IN-61: ONE ACT, ONE WRITE (`loop/effects_governance.py::_eff_succeed`): it opens the claimant's `hold` on EVERY vacant seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats`) -- `Tenure.since`, the write gate's claim basis -- and closes his `hold` on that title -- `Tenure.until`, `T-m`. The claim basis is licensed by that closure in the same write, so the two cannot be split. The opened `hold` is a literal `Tenure(..., \"hold\")`, so `data/verbs.py::_derive_openers_from_effects` lists `succeed` among `hold`'s openers and `world_q.endings_reached` credits a seat taken by claim. It writes no `succeed` Tenure: that kind (`rosters.yaml: tenure_kinds`) keeps no opener.",
-          "emits": [
-            "succession.claimed",
-            "tenure.closed"
-          ],
-          "emits_note": "v10 IN-61: each earned per edge (`Subject.edge`): `succession.claimed` by each seat taken, `tenure.closed` by the title laid down. A `binding_decision` row's kinds are broadcast by `epistemic.py::_ch_chronicle`, and WITNESS expands each `hold` Tenure id to the seat it is on (keyed on the Tenure's kind, never the event's), so the realm hears who took the throne. \u26a0 ITS OWN SUCCESS KIND, NOT `confer`'s `tenure.opened`,: `data/verbs.py::KIND_VERB` maps a kind to a verb only where ONE row emits it, so a second emitter of `tenure.opened` would zero the deed alignment of every `tenure.opened` claim in every ledger (`align_kind`). `tenure.closed` is already shared (seven rows), so the title's closure moves nothing.",
+          "writes": {
+            "Overwhelming": [
+              "Tenure.until",
+              "Tenure.since"
+            ],
+            "Success": [
+              "Tenure.until",
+              "Tenure.since"
+            ],
+            "Partial": [
+              "Tenure.until",
+              "Tenure.since",
+              "Tenure.term"
+            ],
+            "Failure": []
+          },
+          "writes_note": "DEGREE-KEYED since B21.14 (edit 7): Overwhelming and Success take every claimable seat and lay the title down; Partial does the same with each seat opened termed (`_provisional_term`, `loop/effects_governance.py::_eff_succeed`; the title laid down, as at Success, so the claim basis is licensed by the closure in the same write -- the variant that kept the title needed a `state/gate.py` clause `04` \u00a7C.2 does not list and is not built); at the control, `provisional_term` None, a Partial takes the seat as a Success does. Failure writes nothing: the seat stays vacant, the title held, and the claim may form again. v10 IN-61: ONE ACT, ONE WRITE (`loop/effects_governance.py::_eff_succeed`): it opens the claimant's `hold` on EVERY vacant seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats`) -- `Tenure.since`, the write gate's claim basis -- and closes his `hold` on that title -- `Tenure.until`, `T-m`. The claim basis is licensed by that closure in the same write, so the two cannot be split. The opened `hold` is a literal `Tenure(..., \"hold\")`, so `data/verbs.py::_derive_openers_from_effects` lists `succeed` among `hold`'s openers and `world_q.endings_reached` credits a seat taken by claim. It writes no `succeed` Tenure: that kind (`rosters.yaml: tenure_kinds`) keeps no opener.",
+          "emits": {
+            "Overwhelming": [
+              "succession.claimed",
+              "tenure.closed"
+            ],
+            "Success": [
+              "succession.claimed",
+              "tenure.closed"
+            ],
+            "Partial": [
+              "succession.claimed",
+              "tenure.closed"
+            ],
+            "Failure": [
+              "succession.contested"
+            ]
+          },
+          "emits_note": "B21.14 (edit 7, edit 8a; A-81, C3-C11): `succession.contested` is the Failure band's kind, emitted by this row alone (`KIND_VERB`, derived): the claim was made and the seat's room did not accept it. Deposited at WITNESS as any Event (`_ch_chronicle` reaches every living ledger for a `binding_decision` row), so a contested claim is a remembered deed. v10 IN-61: each earned per edge (`Subject.edge`): `succession.claimed` by each seat taken, `tenure.closed` by the title laid down. A `binding_decision` row's kinds are broadcast by `epistemic.py::_ch_chronicle`, and WITNESS expands each `hold` Tenure id to the seat it is on (keyed on the Tenure's kind, never the event's), so the realm hears who took the throne. \u26a0 ITS OWN SUCCESS KIND, NOT `confer`'s `tenure.opened`,: `data/verbs.py::KIND_VERB` maps a kind to a verb only where ONE row emits it, so a second emitter of `tenure.opened` would zero the deed alignment of every `tenure.opened` claim in every ledger (`align_kind`). `tenure.closed` is already shared (seven rows), so the title's closure moves nothing.",
           "emits_on_refusal": [
             "succession.refused"
           ],
@@ -8476,8 +8823,9 @@
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `recruit`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
-            "own"
+            "remit:dispatch"
           ],
+          "eligibility_note": "B21.59 (`06_FA_levy_through_the_seat_B` edit 2; ED-IN-0256 (4)): men are levied THROUGH A SEAT, as `march` is ordered through one: the act names the seat it is exercised through (`Act.via`), whose grant carries the muster act; `state/gate.py::may_levy` asks the rest in the effect (its faction, and its purview over where the cohort lives). The actor must also hold the army Record (the typed cell below).",
           "beneficiary": "none",
           "governing": [
             "attr.social.charisma",
@@ -8511,6 +8859,9 @@
             "army.recruited"
           ],
           "emits_on_refusal": {
+            "eligibility": [
+              "recruit.refused"
+            ],
             "exists": [
               "recruit.refused"
             ],
@@ -8527,7 +8878,7 @@
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "grade_note": "ED-IN-0306 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell.",
-          "refusal_note": "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
+          "refusal_note": "FLAT. Refusal conditions: the act names no seat that licenses it (`via` is not a seat the actor sits in whose grant carries `dispatch`), or the seat is not the army's faction's or does not reach where the cohort lives (`may_levy`); the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
           "source": "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
         },
         {
@@ -8660,8 +9011,9 @@
           "verb": "discharge_troops",
           "stratum": "uncontested_material",
           "eligibility": [
-            "own"
+            "remit:dispatch"
           ],
+          "eligibility_note": "B21.59 (`06_FA_levy_through_the_seat_B` edit 2): as `recruit` -- sending men home is the seat's exercise over the ground they live on (`state/gate.py::may_levy`, asked in `_eff_discharge_troops`).",
           "beneficiary": "none",
           "brute": "own",
           "brute_note": "as `form_unit`",
@@ -8695,7 +9047,7 @@
           ],
           "grade": "assumption",
           "grade_note": "ED-IN-0306 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell.",
-          "refusal_note": "FLAT. Refusal conditions: the subject is no army, or the actor does not command it (the cell, and the effect's own faction check); the payload discharges more troops than the cohort has trained and unassigned (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
+          "refusal_note": "FLAT. Refusal conditions: the act names no seat that licenses it, or the seat is not the army's faction's or does not reach where the cohort lives (`may_levy`, B21.59); the subject is no army, or the actor does not command it (the cell, and the effect's own faction check); the payload discharges more troops than the cohort has trained and unassigned (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
           "source": "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
         },
         {
@@ -8789,7 +9141,9 @@
           "brute": "own",
           "brute_note": "it makes a Proposition exist; belief in it is a later `tell` or `argue`",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "\u2014",
+          "requires": "a WAR utterance names two distinct factions with members, and its declarer is a member of one who sits in a seat that wages for it (B21.62); every other mood is unconditioned",
+          "requires_typed": "none",
+          "requires_typed_note": "B21.62 (`16_PESSIMIST_FA_B` edit 4, G4; A-20): `none` FOR THE GRAMMAR'S REASON -- the conditions bind only a `WAR` utterance and read the payload's `mood` and `value`, which are no `requires_operands` member, and a typed cell asked of every utterance would refuse every other mood. They are `loop/predicates.py::_req_utter`'s (`world_q.members` of each party, `gate.may_wage` of the declarer; `subject != value` beside them). [ASSUMPTION; medium; Jordan to correct; revert: delete the predicate, the `requires:` and `emits_on_refusal:`.]",
           "writes": [
             "Proposition.exists"
           ],
@@ -8797,7 +9151,9 @@
           "emits": [
             "proposition.uttered"
           ],
-          "emits_on_refusal": [],
+          "emits_on_refusal": [
+            "utter.refused"
+          ],
           "grade": "assumption",
           "source": "W3 -- #353 names it and Part E omits it. WITHOUT IT NO PROPOSITION EXISTS, and `commit`, `petition` and `issue` all `require` one, so the season cannot start. Register row H-42. \u00a714 makes a Proposition IMMUTABLE, so this row admits its CREATION and nothing else -- there is no verb that alters one."
         },

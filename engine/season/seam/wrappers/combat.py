@@ -535,8 +535,9 @@ def _wound_state(lifted: Optional[PartyWounds], mortal: Optional[MortalResult] =
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[Draw] = None, rung: Optional[str] = None,
-            effort: int = 0, host: Optional[PlayHost] = None, via: Optional[str] = None) -> dict:
-    """CALL the personal-combat engine. Returns what it said; decides nothing itself.
+            effort: int = 0, host: Optional[PlayHost] = None, via: Optional[str] = None, seat: Optional[str] = None) -> dict:
+    """CALL the personal-combat engine. Returns what it said; decides nothing itself. `seat` (B21.61) is accepted and NOT USED HERE, as `via`
+    is not: the seam's call is uniform.
 
     ⚠ `host` (v10 REM-31, IN-46) IS A SECOND INPUT BESIDE §A.2's adapter row's "the projection" (the persons it plays and
     a decider), named here as that row's departure (B4, third disposition) and picked for the reason A-25 gives.

@@ -11,40 +11,68 @@ cross-file helpers this file's effects call (`_exercised_office`, `_new_oblige_t
 
 from __future__ import annotations
 
+import math
+from dataclasses import replace
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SUCCESSIONS
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
-from ..loop.predicates import office_founded_by, office_named_by
+from ..loop.predicates import KEEPS_KEY, TERM_KEY, office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
-from ..state.carriers import Tenure, Term
+from ..state.carriers import Tenure, Term, subject_of
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
-                          revocation_disposal)
+                          passes_a_seat, revocation_disposal)
 from ..state.ids import H
 
-from .effects_shared import _exercised_office, _new_oblige_term, _operand, _scaled, _shift, effect_for
-
-# --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
-# order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
-# person, it tells one, and whether they go is their own act next season.
-
-#: IN-10 (b): THE PAYLOAD KEY A `confer` DECLARES ITS SEAT-HOLD'S TERM UNDER -- the carrier's own field
-#: name (`Tenure.term`), not a `requires_operands` member: no typed cell binds it (the row is untyped),
-#: exactly as `create_record`'s act-declared `stages` and a hand-built `confer`'s `office` are payload
-#: keys the effect reads and no cell does. A computed act carries none.
-TERM_KEY = "term"
+from .effects_information import _mint_document, _seat_rung
+from .effects_shared import (_exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _share, _shift,
+                             effect_for)
 
 
-def _declared_term(w: "World", a: "Act") -> "Optional[Term]":
-    """THE TERM A `confer` DECLARES ON THE HOLD IT OPENS (IN-10 (b), #453 `:1382`/`:2071`): `None`
-    when the act declares none -- every computed act, and every conferral before IN-10, so an
-    untermed seat is what it was -- else `Term(w.tick + n, a.id)` for a declared length `n` in
-    seasons, `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing
-    this act (AX-5). A declared length that is not a positive whole number is a CALLER defect,
-    raised as `_operand` raises for a missing operand, never a guessed term."""
+def _provisional(res: "Resolution | None") -> bool:
+    """B21.14 (BIND_C commit C3, "the bands"): IS THE SEAT TURNED OVER PROVISIONALLY? True where the act's band lands only part of
+    its effect -- read through the one band table (`data/rosters.py::task_share`, so no band is named here): the middle band,
+    Partial. An undrawn act (no degree) and the two full bands are not; Failure writes nothing (the rows' `writes:` are empty there),
+    so the effect never runs at it."""
+    return _share(res) < 1
+
+# --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` DOES NOT MOVE A PERSON, IT TELLS ONE, and whether he goes is his own act
+# (`L1` in one row, A-24): B21.57's `_eff_dispatch` below deposits the order as a document the man may answer, and his `comply`
+# (`effects_migration.py::_eff_comply`) is what relocates him.
+
+@effect_for("dispatch")
+def _eff_dispatch(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21.57 (`IS-B3-FA-05`, CP-T09-08; rulings A-21, A-24): A DISPATCH IS AN ORDER DEPOSITED, NOT A MAN MOVED. It mints a
+    `dispensation` -- `issue`'s one document, through `_mint_document`, the one mint -- drawn up at the seat's rung and held by
+    the sender: `terms` the man ordered (the act's `subject`), `to` the same man as its ADDRESSEE, `at` the place he is sent to
+    (the act's `dest`, `_req_dispatch`'s Rung inside the seat's purview), `force` `None` (an order is not drawn: no contest sits on
+    `dispatch`, `14_VERBS_BINDING_D` UNDECIDED (U2)). `rosters.yaml: proclaimed` lists `dispatch` beside `issue`, so WITNESS
+    deposits its content to whoever learns it was given and the man answers it as he answers a decree: `comply` relocates him
+    (`_eff_comply`), `evade / defy` withholds, and the recall occasion reads the second.
+
+    ⚠ AN ORDER WITH NO `dest` MINTS TOO, WITH `at` NONE: it moves no one, answered or not, and emits `order.given` as before.
+    A row that writes must write on every act the fold admits (a decline is the row's refusal), so the one document is minted
+    either way rather than a second path that wrote nothing [ASSUMPTION; medium; Jordan to correct; revert: `writes: []` and
+    delete this effect, and the order is the emission alone it was]."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    man = subject_of(a)
+    return _mint_document(w, a, "dispensation", {"terms": man, "to": man, "at": d.get("dest"), "force": None}, _seat_rung(w, a))
+
+
+def _declared_term(w: "World", a: "Act", off: "Office") -> "Optional[Term]":
+    """THE TERM A `confer` DECLARES ON THE HOLD IT OPENS (IN-10 (b), #453 `:1382`/`:2071`; B21.01): the act's declared length
+    where its payload names one (`predicates.TERM_KEY`), else the seat row's own `term:` (`offices.yaml`, through
+    `SEAT_ROW_BY_ID`; a founded seat has no row and reads `None`), else `None` -- every computed act onto a row with no
+    term, and every conferral before IN-10, so an untermed seat is what it was. A length `n` is `Term(w.tick + n, a.id)`,
+    `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5), so a row's term is
+    the default and the conferring act its author, not a second store. A declared length that is not a positive whole number
+    is a CALLER defect, raised as `_operand` raises for a missing operand, never a guessed term (the row's own is refused at
+    load, `data/rosters.py::_load_offices`; `_req_confer` refuses the act's before this runs, and this is its backstop)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     n = d.get(TERM_KEY)
+    if n is None:
+        n = (SEAT_ROW_BY_ID.get(off.id) or {}).get(TERM_KEY)
     if n is None:
         return None
     if isinstance(n, bool) or not isinstance(n, int) or n < 1:
@@ -92,17 +120,24 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # conferee holds a live `ban` (`world_q.restrained`, the restraint's one read), so the act
     # declines and the fold emits the row's refusal. An EFFECT decline and not `may_fill`: that
     # predicate decides the CONFERRER's authority through his seat, never the conferee's standing
-    # (#453 K-53). ANY seat [ASSUMPTION; medium; revert: ask the banning seat's purview of
-    # `obj`'s rung].
-    if restrained(w, to, BAN_KIND):
+    # (#453 K-53). B21.02: the ban bars only a seat within the banning seat's reach -- `restrained`
+    # asked `at` `obj`'s rung [ASSUMPTION; medium; Jordan to correct; revert: drop the argument].
+    if restrained(w, to, BAN_KIND, at=w.offices[obj].rung):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     # IN-10 (b) (#453 §7.2/§9.6 `:1382`, `:2071`): A SEAT-HOLD MAY CARRY A TERM -- regency, the
     # term-limited seat. The term is the OPENING ACT's declaration (T-n, *'the opening act declares
     # the terms'*), read off the act as `create_record` reads its act-declared `stages`; MATTER
     # matures it and closes the hold under `T-n`, so the seat falls vacant when the term comes.
-    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick,
-                term=_declared_term(w, a))
+    term = _declared_term(w, a, w.offices[obj])
+    # B21.14 (BIND_C edit 5): A PARTIAL CONFERRAL SEATS HIM PROVISIONALLY -- the hold opens with `_provisional_term` unless the
+    # act or the seat's row declares a shorter one (the earlier maturity wins). At the control (`provisional_term` None) the
+    # provisional term is none, so a Partial seats him exactly as a Success does.
+    if _provisional(res):
+        provisional = _provisional_term(w, a)
+        if provisional is not None and (term is None or provisional.matures_at < term.matures_at):
+            term = provisional
+    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick, term=term)
 
     def perform() -> None:
         for t in closed:
@@ -132,8 +167,9 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 @effect_for("succeed")
 def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v10 IN-61 (RS-27): THE HEIR'S CLAIM, ONE ACT, ONE WRITE. Opens the claimant's `hold` on EVERY vacant
-    seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats` -- the King
-    who dies holding two such seats leaves both to one claim), then closes his `hold` on that title.
+    seat whose `successions` titles include one he holds (`state/gate.py::claimable_seats` -- the King
+    who dies holding two such seats leaves both to one claim), then closes his `hold` on each such title that
+    exists to pass a seat (B21.16: `passes_a_seat`; a duke keeps his duchy).
 
     THE GATE ADMITS EACH EDGE BY NAME: the title's closure is `T-m` (his own seat-`hold`, laid down -- a
     pure closure, which `T-m`'s seat carve-out keeps), and each opened seat-`hold` is the CLAIM basis,
@@ -148,14 +184,24 @@ def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     stamped by `World.add_tenure`, as for every seat-`hold`. Limits: one title deep -- the title it
     closes passes to nobody; the first valid claim wins (a later one finds the seat held)."""
     seat = _operand(a, "subject")
-    title = SUCCESSIONS.get(seat) if isinstance(seat, str) else None
-    if title is None:
+    listed = SUCCESSIONS.get(seat) if isinstance(seat, str) else None
+    if not listed:
         return NO_CHANGE
-    held = [t for t in w.seat_holds(a.actor) if t.object == title]   # the title is a seat (`check_successions`)
-    seats = claimable_seats(w, a.actor, title) if held else ()
+    # B21.16 (HAPPENINGS-B edit 3): ANY LISTED TITLE MAY CLAIM, and the claim is by the ones he holds (a title is a seat,
+    # `check_successions`). It lays down each of those that exists only to pass a seat (`passes_a_seat`) and keeps the rest: a duke
+    # who takes the throne keeps his duchy, a consort whose seat still carries a grant keeps hers. Every such title is the licence
+    # of the opened seats (`tenure_write_basis`'s claim arm counts a title not laid down as still held).
+    by = [t for t in w.seat_holds(a.actor) if t.object in listed]
+    seats = claimable_seats(w, a.actor, {t.object for t in by}) if by else ()
+    # B21.02: the ban is asked per seat opened, as `_eff_confer` asks it (`_req_succeed` asks only the named seat's rung)
+    seats = tuple(s for s in seats if not restrained(w, a.actor, BAN_KIND, at=w.offices[s].rung))
     if seat not in seats:
         return NO_CHANGE
-    opened = [Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{s}"), a.actor, s, "hold", w.tick)
+    held = [t for t in by if passes_a_seat(w.offices[t.object])]
+    # B21.14 (BIND_C edit 7): A PARTIAL CLAIM TAKES EACH SEAT PROVISIONALLY -- opened with `_provisional_term`, under the same claim
+    # basis and the title laid down in the same write, exactly as at Success. At the control the term is none (Partial = Success).
+    term = _provisional_term(w, a) if _provisional(res) else None
+    opened = [Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{s}"), a.actor, s, "hold", w.tick, term=term)
               for s in seats]
 
     def perform() -> None:
@@ -213,7 +259,18 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     off = office_founded_by(w, a)
     if off is None:
         return NO_CHANGE
+    # B21.09 (VB-A edit 13): THE FOUNDING IS DRAWN, AND ITS BAND SAYS HOW MUCH OF THE REMIT TAKES. The office is still built once, by
+    # `office_founded_by`; this narrows the copy it writes to the first `ceil(n x share)` acts of the derived remit in authored order,
+    # the share read through the one band table (`data/rosters.py::task_share`, so no band is named here): Partial founds with the
+    # first half (`(n + 1) // 2`), Success and Overwhelming with all of it, an undrawn act (no degree) with all of it, as before.
+    # Failure writes nothing (`verb_table.yaml`: its `writes:` is empty), so the effect never runs at it. No branch on an entity.
+    # B21 close: ONLY A FOUNDING IS NARROWED. On an office that already exists a narrower copy would cut the sitting holders' grant
+    # through the re-stamp below, a revocation outside `revoke`, B21.69's one verb and one draw for every cut; there the band
+    # decides only whether the re-grant lands (Failure writes nothing), never how much of it.
     cur = w.offices.get(off.id)
+    share = _share(res)
+    if cur is None and share < 1:
+        off = replace(off, remit_acts=list(off.remit_acts)[: math.ceil(len(off.remit_acts) * share)])
     holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
 
     def perform() -> None:
@@ -308,17 +365,39 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     death (the cascade). Both edges earn `None` -- the row's one kind, `tenure.closed` -- so an
     appointed and an elected revocation emit the same Event, and the ban is no event of its own
     (`determine`'s precedent: its disposal edge earns only `matter.determined`). The write gate admits
-    the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`)."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
-    off = w.offices.get(obj)
+    the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`).
+
+    B21.69: WITH A `keeps` OPERAND IT IS A PARTIAL REVOCATION (below): the holder keeps his seat and the acts of his grant `keeps` names."""
+    obj = office_named_by(a)               # B21.13: `office`, else the computed act's `subject`
+    off = w.offices.get(obj) if isinstance(obj, str) else None
     if off is not None and not has_revocation_disposal(off):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
+    # B21.69 (`IS-B3-FA-07`, A-105): A REDUCTION IS A REVOCATION, DRAWN AS ONE. Where the act declares `keeps` (the acts the holder keeps), the bands that
+    # unseat re-stamp each holder's grant to the acts of it he already carried that `keeps` names, in his own order -- never an act he did not have --
+    # through `World._grant_remit`, the one writer of the grant, and close nothing: he stays seated, with less. A holder whose grant loses nothing is
+    # not touched, so a `keeps` that names the whole grant writes nothing (`NoOpReceipt`, `revoke.refused`). The re-stamp is a `T-o` write of
+    # the gate (`tenure_write_basis`: a payload change that drops an act), asked of the same `may_revoke`; no disposal is charged, for no one is unseated.
+    # A Failure never reaches this effect (the row writes nothing): `revocation.resisted`, as for a whole strip. Each narrowed hold earns the row's
+    # one kind, `tenure.closed` [ASSUMPTION; medium; Jordan to correct -- basis: `tenure.payload_set` is `establish`'s alone (`KIND_VERB`), and a second
+    # emitter would unprice every `establish` deed, as `tenure.opened` would for `confer`; revert: add `tenure.payload_set` to this row's `emits:`].
+    d = a.payload if isinstance(a.payload, dict) else {}
+    if KEEPS_KEY in d and off is not None:
+        keep = set(d[KEEPS_KEY])
+        cut = [(t, tuple(x for x in t.granted_acts if x in keep)) for t in closed]
+        cut = [(t, grant) for t, grant in cut if len(grant) < len(t.granted_acts)]
+
+        def narrow() -> None:
+            for t, grant in cut:
+                w._grant_remit(t, force=True, acts=grant)
+        return Change(tuple(Subject.edge(t) for t, _ in cut), narrow)
     bans: list = []
-    if off is not None and a.via in w.offices and revocation_disposal(off) == BAN_KIND:
+    # B21.14 (BIND_C edit 6): A PARTIAL REVOCATION UNSEATS HIM WITHOUT THE DISPOSAL (`bans = []`) -- an unseating short of a completed
+    # revocation, so the ruled cost is not charged [ASSUMPTION; medium; Jordan to correct -- basis: R4 §2 (BYZ_E conflict) takes
+    # BIND_C's Partial; revert: drop `not _provisional(res)` below]. At Overwhelming and Success (and an undrawn act) it is charged.
+    if off is not None and a.via in w.offices and revocation_disposal(off) == BAN_KIND and not _provisional(res):
         for h in dict.fromkeys(t.subject for t in closed):
-            if h != a.actor and h in w.persons and not restrained(w, h, BAN_KIND):
+            if h != a.actor and h in w.persons and not restrained(w, h, BAN_KIND, at=w.offices[a.via].rung):
                 bans.append(Tenure(H(w.world_seed, w.tick, h, f"ban:{a.via}:{a.id}"), h, a.via,
                                    "ban", w.tick))
     if not bans:
@@ -483,8 +562,8 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
 @effect_for("requisition")
 def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """PLAN POSITION `19` -- A REQUISITION MOVES A RUNG'S STORES INTO THE REQUISITIONING SEAT'S TREASURY. The row's
-    `scale_note`, *"a requisition moves a Rung's stores -- the rung IS the subject"*; the retirement plan's
+    """PLAN POSITION `19` -- A REQUISITION MOVES A RUNG'S STORES INTO THE REQUISITIONING SEAT'S TREASURY. A requisition
+    moves a Rung's stores, and the rung IS the subject; the retirement plan's
     G2 names where it goes, *"treasury = `Rung.stores` at the office's own rung"* -- the rung of the
     seat the act exercises (`Act.via`), the same treasury `_renewals` pays upkeep OUT of. So a requisition is
     `transfer`'s shape with both sides fixed by the act's seat and subject rather than by the actor's

@@ -344,8 +344,9 @@ def _fed(w: Any, inp: MassBattleInput, treasuries: tuple) -> list:
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[Draw] = None, rung: Optional[str] = None,
-            effort: int = 0, host: Any = None, via: Optional[str] = None) -> dict:
-    """CALL the mass-battle engine. Returns what it said; decides nothing itself.
+            effort: int = 0, host: Any = None, via: Optional[str] = None, seat: Optional[str] = None) -> dict:
+    """CALL the mass-battle engine. Returns what it said; decides nothing itself. `seat` (B21.61) is accepted and NOT USED HERE: the seam's
+    call is uniform.
 
     `effort` (CP-T01-05) is accepted and NOT USED HERE: the seam's call is uniform, and a field battle has no
     scene slots to spend. `host` (v10 REM-31) is accepted

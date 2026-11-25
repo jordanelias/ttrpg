@@ -36,6 +36,7 @@ import dataclasses
 
 import pytest
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from engine.season.data import verbs as _verbs
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import REFERENT_CLASSES
@@ -113,7 +114,9 @@ def test_in53v_a_the_first_question_carries_them_and_keeps_its_id_source_and_ref
     qs = world_q.questions_for(w, p)
     assert [(q.id, q.source, q.referents) for q in qs] == [
         ("q:need:prop_a", "need", ("S",)), ("q:need:prop_b", "need", ("R",))], qs
-    assert qs[0].classes == tuple((o, "Office") for o in vac) and qs[1].classes == (), qs
+    # B21.54: his ambitions ride the first question as `Proposition` (`issue`'s and `argue`'s referents), beside the vacancies
+    offices = lambda q: tuple(c for c in q.classes if c[1] == "Office")
+    assert offices(qs[0]) == tuple((o, "Office") for o in vac) and offices(qs[1]) == (), qs
 
 
 def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkeypatch):
@@ -133,7 +136,7 @@ def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkey
     monkeypatch.setattr(world_q, "vacancies", lambda w, p: ())
     stub = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
     assert real == stub and repr(real) == repr(stub)
-    assert all(q.classes == () for qs in real.values() for q in qs)
+    assert all(c[1] != "Office" for qs in real.values() for q in qs for c in q.classes)   # B21.54: ambitions ride as `Proposition`
 
 
 def _sig(cands):
@@ -201,7 +204,9 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     checked = other = 0
     for pid, p in w.persons.items():
         for q in world_q.questions_for(w, p):
-            only_classed = {r for r, _ in q.classes} - set(q.referents)
+            # B21.54: his own ambitions ride the question as `Proposition` (`issue`'s and `argue`'s referents); `release` forms
+            # on his own ambition through the claim route he held before, so it is not a classed-only id for this partition
+            only_classed = {r for r, _ in q.classes} - set(q.referents) - set(world_q.ambitions(w, p))
             for c in _formed(w, pid, q):
                 if c.verb in classed_rows:
                     assert (c.subject, VERB_TABLE[c.verb].referent_class) in q.classes, (pid, q.id, c)
@@ -293,6 +298,7 @@ def _fold_confer(w, d, payload, via, aid="cf"):
         contest_max_depth=w.fixtures.get("contest_max_depth"))]
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the computed act's admission and write, not its draw
 @pytest.mark.parametrize("to", ["p_mid", "p_king"])
 def test_in53v_d_a_computed_confer_fills_the_vacant_seat(to):
     """The Candidate `opening_set` forms (subject the vacancy, `to` a known person or the conferrer
@@ -308,6 +314,7 @@ def test_in53v_d_a_computed_confer_fills_the_vacant_seat(to):
     assert "tenure.opened" in kinds and _hold(w, "off_reeve").subject == to, kinds
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the fold's refusal, not the draw
 @pytest.mark.parametrize("to", ["p_mid", "p_king"])
 def test_in53v_g_conferring_a_seat_on_its_own_holder_is_refused(to):
     """B-I close, Phase 3 F1: a seat conferred on the person who already holds it changes nothing but
@@ -319,22 +326,23 @@ def test_in53v_g_conferring_a_seat_on_its_own_holder_is_refused(to):
     first = _hold(w, "off_reeve")
     assert first.subject == to
     again = _fold_confer(w, d, {"subject": "off_reeve", "to": to}, "off_crown", aid="cf2")
-    assert again == ["confer.refused"], again
+    assert again == ["confer.held"], again          # B21.80: the clause's own kind
     assert _hold(w, "off_reeve") is first and first.live        # untouched: no close, no reopen
 
 
 def test_in53v_g_a_list_valued_subject_is_refused_never_raised():
     """Sibling of the unhashable `to`: a hand-built `confer` whose subject is a list refuses."""
     w, d = _gov_world()
-    assert _fold_confer(w, d, {"subject": ["off_reeve"], "to": "p_mid"}, "off_crown") == ["confer.refused"]
+    assert _fold_confer(w, d, {"subject": ["off_reeve"], "to": "p_mid"}, "off_crown") == ["confer.no_office"]
 
 
 def test_in53v_d_a_confer_naming_nobody_is_refused():
     w, d = _gov_world()
     kinds = _fold_confer(w, d, {"subject": "off_reeve"}, "off_crown")
-    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    assert kinds == ["confer.bad_conferee"] and _hold(w, "off_reeve") is None, kinds
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the causes the fold cites, not the draw
 def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     """A vacancy rides on whatever question the person answers (D1), so a `confer` can be packed in
     a scene whose occasion is a `claim_landed` question about something else. Its occasion is the
@@ -373,7 +381,7 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
     is refused at the precondition (`_req_confer`), never filed as a seat held by nobody."""
     w, d = _gov_world()
     kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_ghost"}, "off_crown")
-    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    assert kinds == ["confer.bad_conferee"] and _hold(w, "off_reeve") is None, kinds
     w, d = _gov_world()
     w.step = Step.MATTER                    # a death, in `loop/matter.py`'s own write shape
     w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_mid"),
@@ -382,7 +390,7 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
     w.step = Step.RESOLVE
     assert "p_mid" not in w.persons
     kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_mid"}, "off_crown")
-    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    assert kinds == ["confer.bad_conferee"] and _hold(w, "off_reeve") is None, kinds
 
 
 # ======================================================================================
@@ -491,6 +499,7 @@ def _the_heir_claims(w, heir, n="cause"):
     return a, out
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the causes the claim's Events cite, not the claim's draw
 @pytest.mark.parametrize("route", ["hazard", "plant"])
 def test_a_succession_names_the_tenure_closed_that_opened_it(route):
     """FALSIFIER: the branch returning `[]` (the code before B09.12) leaves `succession.claimed` citing `[act]` alone.
