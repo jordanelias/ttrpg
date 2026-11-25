@@ -12,7 +12,8 @@ import importlib
 from dataclasses import replace
 
 from ..decision import options as OP
-from ..queries import person_q
+from ..queries import person_q, world_q
+from ..seam.wrappers import sigma
 from ..state.carriers import Claim
 
 CELL = "stores.level"                       # a cell predicate (`requires.CELL_STEMS`)
@@ -170,3 +171,74 @@ def test_a_struck_item_adds_no_proofs_level():
     struck, stood = roll.proof_levels(_roll_rec(answered("Overwhelming"))), roll.proof_levels(_roll_rec(answered("Failure")))
     assert struck == (3, 1) and stood == (4, 1)                              # the struck one adds none; the answered-and-failed one stands
     assert roll.leverage(_roll_rec(four, proof_level=None)) == 0.0            # `proof_level` None is the control arm: no level, the counts still reported
+
+
+# ---- B24.21: the host passes the case file's exhibits, with their relations (EVID_B edit 5) --------------------------------------------------
+
+def test_the_sittings_board_and_the_rolls_exhibits_count_one_quantity_one_way():
+    """B24.21 (c): the sitting's closing leverage (`proceeding._lever`) and the roll's (`roll.leverage`) price one board of standing weight with ONE rounding, half up, each side's weight
+    counted in whole units on its own. On a board of 0.5 + 0.4 for and 0.4 against the roll counts (1, 0), and so must the sitting: the old truncation of the NET (0.5) read no level there.
+    FALSIFIER: the sitting's lever 0 where the roll's is a level."""
+    from .test_sc_proceeding_module import _inp, _p, _rite, _sit
+    proceeding, roll = importlib.import_module("modules.social_contest.proceeding"), importlib.import_module("modules.social_contest.roll")
+    checked = 0
+    for weights in (((0.5, "for"), (0.4, "for"), (0.4, "against")), ((1.6, "for"), (0.6, "against")), ((0.4, "for"), (0.4, "against")), ((2.0, "for"), (1.0, "against"))):
+        items = [_it(f"i{k}", side, w, f"o{k}", cell=("s1", "stores.level", k)) for k, (w, side) in enumerate(weights)]
+        inp = _inp([_p("a", "for"), _p("b", "against"), _p("j0", decides=True, precedence=1)], _rite(close="bench"))
+        lever = proceeding._lever(inp, _sit(inp, board=tuple((it, "stands") for it in items)))
+        assert lever == roll.leverage(_roll_rec(items)), weights
+        checked += 1
+        if weights[0] == (0.5, "for"):
+            assert lever == 0.25                                              # one level `minor`, where the net's truncation read none
+    assert checked == 4
+
+
+def _planted_case(w, matter, stages):
+    """`matter` docketed under `arbitration`, its case file a Record holding `stages`."""
+    from ..state.carriers import Record
+    w.records["case1"] = Record("case1", "Hh", "text", stages=list(stages))
+    w.docket.append({"date": None, "matter": matter, world_q.DOCKET_ARRANGEMENT: "arbitration", world_q.DOCKET_PETITION: None, world_q.DOCKET_CASE: "case1"})
+
+
+def test_the_case_file_is_the_proofs_of_a_docketed_matter_and_the_ledger_is_not():
+    """B24.21 (EVID_B edit 5; falsifier: the proofs read BOTH from exhibits and from `world_q.proofs` for one matter). The speaker holds four ledger proofs against the party; the matter's case
+    file holds five `filed` stages, a failed one (`excluded`) and a sitting's `entered`. At `evidence_from: case_file` the roll's `proofs` levels are the exhibits' alone -- two stand for the
+    speaker (the third is the other side's identical claim as well, which counts for neither), one against him (a cell the other side put differently, unanswered so standing) -- and his ledger adds
+    none; at `ledger` (the control) they are the ledger's and no exhibit is built; a matter with no case file reads the ledger at either arm. The obstacle is the same at both, to the term (A-25)."""
+    from engine.dice_engine import draw
+    from engine.dice_engine.sigma_leverage import levels_to_net_sigma
+    from ..data import verbs as _verbs
+    from ..state.carriers import Said
+    from . import test_sc02_reception as R
+    from .test_sc01_obstacle_ceiling import _module
+    deed = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
+    stages = [(1, "filed", "for", "fact", Said("s1", CELL, 3, 5), 1.0, "o1", "a1"),
+              (1, "filed", "for", "fact", Said("s1", "stores.tier", 1, 5), 1.0, "o2", "a1"),
+              (1, "filed", "for", "fact", Said(R.PARTY, deed, True, 5), 1.0, "o3", "a1"),
+              (2, "filed", "against", "fact", Said("s1", CELL, 4, 5), 1.0, "o4", "a2"),          # the first's cell, a different value
+              (2, "filed", "against", "fact", Said(R.PARTY, deed, True, 5), 1.0, "o5", "a2"),    # the third's own claim, from the other side
+              (3, "excluded", "for", Said("s1", "stores.tier", 9, 5), "a3"), ("entered", "x")]
+
+    def read(arm, case=True):
+        w, _d = R._judging_world(evidence_from=arm)
+        R._proofs(w, 4)
+        if case:
+            _planted_case(w, R.PARTY, stages)
+        else:
+            w.docket.append({"date": None, "matter": R.PARTY, world_q.DOCKET_ARRANGEMENT: "arbitration", world_q.DOCKET_PETITION: None, world_q.DOCKET_CASE: None})
+        room = world_q.place_of(w, R.SPEAKER)
+        inp = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="arrest", subject=R.PARTY, room=room)
+        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="arrest", subject=R.PARTY, rng=draw.seeded(draw.H2("b24_21", 0)), rung=room)
+        return inp, out, next((f, a) for n, f, a in out["levels"] if n == "proofs")
+    ledger_inp, ledger_out, ledger = read("ledger")
+    case_inp, case_out, case = read("case_file")
+    bare_inp, _o, bare = read("case_file", case=False)
+    assert ledger_inp.exhibits == () and ledger[0] > 0 and ledger[1] == 0                                    # the control: the ledger's proofs, no exhibit built
+    assert case == (2, 1) and len(case_inp.exhibits) == 5 and case_inp.proofs == 0.0 < ledger_inp.proofs     # the case file's, and the ledger read for the matter by nothing
+    assert bare_inp.exhibits == () and bare == ledger and bare_inp.proofs == ledger_inp.proofs               # a matter with no case file keeps the ledger at the case_file arm
+    first, tier, own, foe, twin = case_inp.exhibits
+    assert dict(first.pairs) == {foe.id: "contradicts"} and dict(tier.pairs) == {} and dict(own.pairs) == {twin.id: "agrees"} and dict(twin.pairs) == {own.id: "agrees"}
+    assert (first.side, first.rung, first.weight, first.origin, first.cell) == ("for", "fact", 1.0, "o1", ("s1", CELL, 3)) and first.id == "case1#0"
+    assert dict(_module().obstacle(ledger_inp)[1]) == dict(_module().obstacle(case_inp)[1]), "the exhibits are leverage, never an obstacle term"
+    assert case_out["leverage"] - case_inp.leverage == levels_to_net_sigma(["minor"] * 2, ["minor"]) == 0.25    # what the roll applied is what the record names
+    assert ledger_out["leverage"] == ledger_inp.leverage

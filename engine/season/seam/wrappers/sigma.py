@@ -63,7 +63,7 @@ from __future__ import annotations
 import copy
 import functools
 import sys
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from types import MappingProxyType, SimpleNamespace
 from typing import Any, Mapping, NamedTuple, Optional
 
@@ -86,8 +86,8 @@ from ...epistemic import trail_concealment
 from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
-from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, conflict, false_items, stance_toward, strain_carried,
-                                 takes_side, tie)
+from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, conflict, contradicts, false_items, proof_kind, stance_toward,
+                                 strain_carried, takes_side, tie)
 from ...queries.person_q import care as person_care
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -101,8 +101,8 @@ from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Choice, Input, Item, Marg
                                other_side)
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.faction_q import weight as faction_weight
-from ...queries.world_q import declared_votes_by_member, docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
-from ...state.carriers import EFFORT, effort_of
+from ...queries.world_q import case_file_of, declared_votes_by_member, docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
+from ...state.carriers import EFFORT, Said, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ...state.ids import draw_factory
 from ...state.ledgers import present_confidence
@@ -256,7 +256,9 @@ def _units(x: float) -> int:
 
 
 def _proof_levels(fx: Any, operands: dict) -> tuple:
-    """`proofs`' levels: one `proof_level` per whole unit of `operands["proofs"]` -- FOR the roller: `(levels, [])`. Empty where the fixture is `None`."""
+    """`proofs`' levels: one `proof_level` per whole unit of `operands["proofs"]` -- FOR the roller: `(levels, [])`. Empty where the fixture is `None`.
+    B24.21: THE LEDGER'S LEVELS ONLY. For a docketed matter whose case file is the source (`evidence_from: case_file`) `_read_social_roll` hands it `proofs` 0.0, so it brings nothing, and the case file's
+    exhibits bring theirs through the roll (`roll.proof_levels`, counted onto `resolve`'s `levels` by `_with_exhibits`): one matter's proofs are never read from both."""
     level = fx.get("proof_level")
     return ([] if level is None else [level] * _units(operands.get("proofs", 0.0))), []
 
@@ -502,12 +504,15 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     fx = w.fixtures
     docketed = _docketed_row(w, subject)                                        # the arrangement row the act's matter is heard under, if one is docketed (B05.21)
     room_terms = {}
+    # B24.21 (EVID_B edit 5): WHERE THE PROOFS COME FROM. At `evidence_from: case_file` a matter whose docket item names a case file in the world has its exhibits filed there as its proofs, so the ledger is read for
+    # it by nothing (`proofs` 0.0: `_proof_levels` brings no level, and the exhibits' levels are the roll's own, `roll.proof_levels`); at `ledger` (the control) and for a matter with no case file, `world_q.proofs` as before.
+    case = _case_file_of_matter(w, subject) if room is not None and fx.get("evidence_from") == "case_file" else None
     if room is not None:
         audience = audience_of(w, HeardAct(claimants[0], via, room), heard_by)
         # `toward: to` (U5c §2 edit 4): the room is asked about the receiver, here the act's person counterparty [ASSUMPTION: `to` is the roll's `subject`; no row declares it until `a holding`'s verb lands].
         room_terms = dict(reception=reception(w, subject if toward == TOWARD_TO else claimants[0], audience, claimants[0]),
                           reception_gain=fx.get("reception_gain"),
-                          proofs=proofs(w, claimants[0], subject, audience, admitted=_admitted_proofs(fx, docketed)))
+                          proofs=0.0 if case is not None else proofs(w, claimants[0], subject, audience, admitted=_admitted_proofs(fx, docketed)))
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
@@ -539,7 +544,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     concealed = max(doc.forgery_quality if doc is not None else 0.0,
                     trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
     inp = _frame(fx, pool, opposition, concealed, room_terms, effort, verb, edge, circumstance, office,
-                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts)
+                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts,
+                 exhibits=_exhibits_of(w, case) if case is not None else (), side=_side_of(claimants[0], subject))
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
@@ -637,6 +643,73 @@ def _docketed_row(w: Any, subject: Optional[str]) -> Optional[dict]:
 def _admitted_proofs(fx: Any, docketed: Optional[dict]) -> Optional[tuple]:
     """The proof kinds the docketed row admits, for `world_q.proofs`' filter -- or `None` for no filter: nothing docketed, or `proof_admission` `off`."""
     return tuple(docketed["admits"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+
+
+# ---------------------------------------------------------------------------------------------
+# THE CASE FILE'S EXHIBITS (B24.21; EVID_B "Exact edits" 5). Where `Fixtures.evidence_from` is `case_file`, the `proofs` a docketed matter's act brings are the exhibits filed on the matter's
+# case file, not the speaker's ledger: this reader turns the file's `filed` stages into the `Item`s `SocialContestInput.exhibits` carries, each with its relation to the others, and
+# nothing else. The host does NOT call `standing` and imports nothing of the evidence module: the roll counts them (`roll.proof_levels`, reached by its composition row, `_with_exhibits`).
+# ---------------------------------------------------------------------------------------------
+#: THE FILED STAGE, `(tick, "filed", side, rung, ref, weight, origin, act)` on a case file's `Record.stages` (ADM's four-band table): `ref` is the cited claim as the citer said it (a `Said`) or
+#: the id of the cited Record; `weight` is what it was entered at (half at the band that halves it); `origin` the root of its chain. B24.25 writes it; this is the one reader. An `excluded` stage
+#: (a citation that failed) and a sitting's own two-cell `entered`/`struck` stages (`inputs.EXCHANGE_CELLS`, the sitting's receipt) are no exhibit.
+FILED_STAGE, FILED_CELLS = "filed", 8
+_CONTRADICTS, _AGREES = "contradicts", "agrees"       # the two relations `Item.pairs` names; the module reads the words, the host does not import it
+
+
+def _case_file_of_matter(w: Any, subject: Optional[str]) -> Optional[str]:
+    """The case file a matter's docket item names (`world_q.case_file_of`, the one reader) where the world still holds it, else `None`: a computed or calendar item names none."""
+    return next((c for c in (case_file_of(w, i) for i in _world_q.docketed(w, subject)) if c in w.records), None)
+
+
+def _relation(a: Said, b: Said) -> Optional[str]:
+    """How two filed claims stand: `contradicts` where the pairing rule's owner says so (`person_q.contradicts`, the one call of `_pair`), `agrees` where they are of the same cell and do
+    not, else `None` (another cell). The same cell is `(subject, predicate)`, the key the owner pairs on."""
+    if contradicts(a, b):
+        return _CONTRADICTS
+    return _AGREES if (a.subject, a.predicate) == (b.subject, b.predicate) else None
+
+
+def _exhibits_of(w: Any, case: str) -> tuple:
+    """THE EXHIBITS OF A CASE FILE, in the order filed: one `Item` for each `filed` stage, its id the stage's place on the file (`<case>#<index>`, the index an answer names), its `side`, `rung`,
+    `weight` and `origin` the stage's, its `kind` what the claim is as proof (`person_q.proof_kind`; a Record's is the kind its `matters` carrier names, as `_items_of`), its `cell` the claim's own, and
+    its `pairs` the relation to every other filed claim (`_relation`). EVERY FILED STAGE IS AN EXHIBIT: the filing admitted it (B24.25 refuses a kind the row does not admit before the draw), so a
+    claim `proof_kind` has no kind for (a cell, which the hearing's gates file) is a `testimony`, the kind of a claim a person holds and tells [ASSUMPTION; Jordan to correct; revert: drop such a stage;
+    basis: `kind` is read by the sitting's admission and by neither the roll nor `standing`]. `answered_band` and `forged_found` are not read here: no stage carries either yet
+    (B24.25 files the answering act)."""
+    refs, items = {}, []
+    for i, st in enumerate(w.records[case].stages):
+        if len(st) != FILED_CELLS or st[1] != FILED_STAGE:
+            continue
+        _, _, side, rung, ref, weight, origin, _ = st
+        rec = None if isinstance(ref, Said) else w.records.get(ref)
+        kind = (proof_kind(ref) or "testimony") if isinstance(ref, Said) else _RECORD_MATTER.get(rec.kind, "record") if rec is not None else "record"
+        iid = f"{case}#{i}"
+        refs[iid] = ref if isinstance(ref, Said) else None
+        items.append(Item(iid, kind, float(weight), about=ref.subject if isinstance(ref, Said) else ref, side=side, rung=rung, origin=origin,
+                          cell=(ref.subject, ref.predicate, ref.value) if isinstance(ref, Said) else ()))
+    return tuple(replace(it, pairs=tuple((o.id, how) for o in items if o.id != it.id and refs[it.id] is not None and refs[o.id] is not None
+                                         and (how := _relation(refs[it.id], refs[o.id])) is not None)) for it in items)
+
+
+def _side_of(actor: str, subject: Optional[str]) -> str:
+    """The roller's own side of the case the exhibits are read against (`SocialContestInput.side`): the accused's where he speaks to his own matter (the self-plea), else `for`, the bearer's -- and
+    the docket's `for` for a determiner's draw. [ASSUMPTION; Jordan to correct; revert: always `for`. Basis: `proceeding_input` seats the first claimant as `for` and the matter's other party as `against`.]"""
+    return "against" if subject == actor else "for"
+
+
+PROOF_LEVELS_ROLE = "social_contest.proof_levels"   # the composition row whose module counts the filed exhibits' levels (`roll.proof_levels`)
+
+
+def _with_exhibits(inp: SocialContestInput, levels: tuple) -> tuple:
+    """`(levels, leverage)` AS ROLLED: the record's own `levels` (`_levels_count`) and `leverage` with the filed exhibits' levels added, the counts the roll's own reader gives (`roll.proof_levels`,
+    by role) put on the `proofs` member and one `proof_level` each through the one level table -- exactly what `roll.leverage` applies, so the record names what was rolled. Unchanged where nothing is
+    filed or `proof_level` names no level (the control)."""
+    n_for, n_against = composition.require(PROOF_LEVELS_ROLE)(inp) if inp.exhibits and inp.proof_level is not None else (0, 0)
+    if not (n_for or n_against):
+        return levels, inp.leverage
+    return (tuple((name, f + n_for, a + n_against) if name == "proofs" else (name, f, a) for name, f, a in levels),
+            inp.leverage + levels_to_net_sigma([inp.proof_level] * n_for, [inp.proof_level] * n_against))
 
 
 def _regard_of(w: Any, actor: str, subject: Optional[str], room: Optional[str]) -> Optional[float]:
@@ -799,7 +872,8 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
-           regard: Optional[float] = None, bodies: tuple = (None, None), counts: Optional[dict] = None) -> SocialContestInput:
+           regard: Optional[float] = None, bodies: tuple = (None, None), counts: Optional[dict] = None,
+           exhibits: tuple = (), side: str = "for") -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -814,6 +888,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
         forgery_quality=forgery_quality,
+        exhibits=exhibits, proof_level=fx.get("proof_level"), side=side, evidence_cap=fx.get("evidence_cap"),     # B24.21: the four the roll's `proof_levels` reads, carried RAW; leverage, never an obstacle operand
         **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
                                      reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard,
                                      **(counts or {}))),
@@ -827,7 +902,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
 # `queries/person_q.py`'s (B04.22: the read the confer term also makes). NOTHING DEPOSITS ONE TODAY, so a believed
 # opposition is `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
-QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at driver construction (`registrar.require_entries`)
+QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"), (PROOF_LEVELS_ROLE, "query"))  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
 
 def _composed_obstacle(inp: SocialContestInput) -> float:
@@ -944,7 +1019,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"), proofs=room["proofs"])
     return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance, office,
-                  docketed=docketed, heard=heard, bodies=(_body_of(p), None))      # his own body is his to know; another person's is not without a claim (B05.60)
+                  docketed=docketed, heard=heard, bodies=(_body_of(p), None), side=_side_of(p.id, subject))      # his own body is his to know; another person's is not without a claim (B05.60)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
@@ -1239,6 +1314,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     # B05.14: every term of the obstacle, named, on the roll's record -- `Margin.terms`, the entry's own (`roll.py::obstacle`); it replaces
     # lane A's `ob_terms` dict (C3-L5). A stub entry's `()` is a margin with no composition behind it.
     terms = margin.terms
+    levels, leverage = _with_exhibits(inp, levels)      # B24.21: the filed exhibits' levels the roll applied (`roll.proof_levels`), named on the record beside the host's own sources
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, terms=terms,
@@ -1249,7 +1325,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     settled = margin.net - margin.ob
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage, settled_margin=settled,
+                **asdict(margin), leverage=leverage, settled_margin=settled,
                 levels=levels, fed_by=_fed_by(reads, inp, terms))
 
 
@@ -1466,7 +1542,8 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
         for c in p.ledger:
             kind = PROOF_KIND_OF_SOURCE.get(c.source)
             if c.subject == ctx.topic and kind is not None:
-                out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject))
+                out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject,
+                                cell=(c.subject, c.predicate, c.value)))      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)
         if side is not None:
             out.extend(false_items(p, ctx.topic, side, ctx.fx, w.tick))
     return tuple(it for it in out if it.kind in ctx.admits)

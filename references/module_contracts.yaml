@@ -64,6 +64,10 @@ composition_roles:
     target: "modules.social_contest.roll:obstacle"
     entry: query
     needed_by: "engine/season/seam/wrappers/sigma.py — `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  social_contest.proof_levels:
+    target: "modules.social_contest.roll:proof_levels"
+    entry: query
+    needed_by: "engine/season/seam/wrappers/sigma.py — `_with_exhibits` (B24.21): the `(n_for, n_against)` levels the filed exhibits bring, which the host adds to `resolve`'s `levels` and applied `leverage` beside the module's own roll, so the record names what was rolled. `modules/social_contest/evidence.py` stays no role (called by the roll inside the module); this is the roll's own reader of it. Declared in `sigma.QUERY_ENTRIES`."
 
   combat.resolve:
     target: "modules.combat.core:resolve"

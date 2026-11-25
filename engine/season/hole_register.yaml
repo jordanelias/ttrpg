@@ -8531,6 +8531,19 @@ rows:
     cite:      "EVID_B `standing` rule 4 and 'Exact edits' 1: `evidence_cap` proposed 2.0, NUMBER row, three-point sweep. [ASSUMPTION: the sweep 1.0 / 2.0 / 3.0 -- basis: the proposed value +/- 1]. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.14's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
     source:    "workplan v12 B24.17 (EVID_B 'Exact edits' 1; B24's H block slot 6; slot 5, H-665, is the struck `argument_step` and is returned unused)"
 
+  - id:        H-667
+    tier:      1
+    hole:      "WHERE A DOCKETED MATTER'S `proofs` LEVELS COME FROM -- `evidence_from`, `ledger` or `case_file` (EVID_B 'Exact edits' 5: 'the control arm (`evidence_from: ledger`, a fixture) keeps `world_q.proofs` through the host's `proofs` source'). `ledger`: the speaker's own unmirrored deed claims (`world_q.proofs`), as before. `case_file`: the exhibits filed on the matter's case file, which the roll's `proof_levels` counts; the ledger is then read for that matter by nothing, so one matter's proofs are never read from both. No document says which ships."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_from` the one home (`EVIDENCE_ARMS` its closed set, refused by `load`). READER: `engine/season/seam/wrappers/sigma.py::_read_social_roll`, which fills `SocialContestInput.exhibits` (`_exhibits_of`) and leaves `proofs` at 0 for a matter whose case file is the source; B24.37 flips the shipped value"
+    grade:     "assumption"
+    default:   "ledger -- THE CONTROL, SHIPPED at B24.21 [ASSUMPTION; Jordan to correct; revert: ledger]: every docketed matter reads `world_q.proofs` and no exhibit is built, so every roll and every hash is what it was. B24.37 sets `case_file`"
+    site:      "Fixtures evidence_from, read ONLY by `seam/wrappers/sigma.py::_read_social_roll` (the dealt roll of a prize a room hears); `believed_input` reads no exhibit and stays on the ledger until the flip"
+    sweep:     ["ledger", "case_file", "case_file with evidence_cap 3.0"]
+    unblocks:  "the case file's filed exhibits being the proofs of a docketed matter (R-04.c3), and B98's sweep of the arm"
+    cite:      "EVID_B 'Exact edits' 5. [ASSUMPTION: a switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line] [ASSUMPTION: the sweep's third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: the register's R2 refuses fewer than 3 DISTINCT points]. CONTROL: at `ledger` the realm hashes at seeds 0 to 2 read equal to B24.22's. FALSIFIER: `engine/season/tests/test_sc_hearing_evidence.py::test_the_case_file_is_the_proofs_of_a_docketed_matter_and_the_ledger_is_not` (a matter whose case file holds one filed item rolls with that item's level and none from its ledger at `case_file`; the same world at `ledger` rolls the ledger's) and `python tools/ci_sim_fabrication_check.py`."
+    source:    "workplan v12 B24.21 (EVID_B 'Exact edits' 5; B24's H block slot 7)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

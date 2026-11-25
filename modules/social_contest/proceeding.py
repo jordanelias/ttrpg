@@ -42,7 +42,7 @@ from engine.dice_engine.sigma_leverage import (M_MAX, MU_PER_DIE, SD_PER_DIE, ba
 from engine.season.queries.inputs import (SIDE_SIGN, Beat, Choice, Cond, Input, JudgeView, Margin, Option, Outcome, Point, Sitting,
                                           SocialContestInput, View, other_side as _other)
 from .evidence import CONTRADICTS, band_of, newly_owed, pair_of, standing
-from .roll import obstacle
+from .roll import obstacle, standing_levels
 
 
 def DRAWS_PER_EXCHANGE(G: int) -> int:
@@ -290,13 +290,13 @@ def _cost(inp, n) -> float:
 
 
 def _lever(inp, st) -> float:
-    """THE BOARD ON THE CLOSING DRAW'S LEVERAGE CHANNEL (HEAR_B "How a sitting runs" 4; A-25): one `proof_level` per whole unit of net standing weight toward
-    `for`, less `fault_step` levels per level owed against `for` (toward it, per level owed against `against`). It reaches the leverage and never the
-    obstacle: nothing favourable is subtracted. `0.0` for an empty board, whatever the settings."""
+    """THE BOARD ON THE CLOSING DRAW'S LEVERAGE CHANNEL (HEAR_B "How a sitting runs" 4; A-25): one `proof_level` per whole unit of the standing weight toward
+    `for` (rounded half up) less one per whole unit toward `against` -- `roll.standing_levels`, the same counter the roll's own exhibits are read with (B24.21: the net was once truncated here, two ladders for one quantity) -- less `fault_step` levels per level owed against `for` (toward it, per level
+    owed against `against`). It reaches the leverage and never the obstacle: nothing favourable is subtracted. `0.0` for an empty board, whatever the settings."""
     D = inp.dials
-    net = _wsum(_sg(it.side) * it.weight for it in _standing(inp, st.board))
+    n_for, n_against = standing_levels(_standing(inp, st.board), "for")      # the roll's own counter (B24.21): one rounding for one quantity
     owed = _wsum(_sg(side) * n for side, n in st.levels)
-    return _lv(D["proof_level"]) * math.trunc(net) - _lv(D["fault_step"]) * owed
+    return _lv(D["proof_level"]) * (n_for - n_against) - _lv(D["fault_step"]) * owed
 
 
 def mood(inp, st, viewer=None) -> float:

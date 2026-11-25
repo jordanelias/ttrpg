@@ -175,8 +175,15 @@ def proof_levels(inp: SocialContestInput) -> tuple:
     if not inp.exhibits:
         return 0, 0
     held, _, _ = standing(tuple(inp.exhibits), tuple(it.id for it in inp.exhibits if it.forged_found), inp.evidence_cap)
-    mine = sum(it.weight for it in held if it.side == inp.side)
-    theirs = sum(it.weight for it in held if it.side is not None and it.side != inp.side)
+    return standing_levels(held, inp.side)
+
+
+def standing_levels(held, side: str) -> tuple:
+    """`(n_for, n_against)`: THE ONE COUNTER OF WHAT STANDING WEIGHT IS WORTH IN LEVELS (B24.21): whole units of the weight `held` (items `standing` left) puts for `side` and,
+    separately, of the weight it puts for the other side, each rounded half up (`_units`; OBS §3). `proof_levels` counts the roll's exhibits with it and `proceeding.py::_lever`
+    the sitting's board, so one quantity has one rounding. An item with no side counts for neither."""
+    mine = sum(it.weight for it in held if it.side == side)
+    theirs = sum(it.weight for it in held if it.side is not None and it.side != side)
     return _units(mine), _units(theirs)
 
 

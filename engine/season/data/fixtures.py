@@ -1707,7 +1707,16 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points are the alternatives). EVID_B proposes 2.0 -- basis: none; the sweep's points are the proposed value +/- 1.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-666 -- `site: Fixtures evidence_cap`, graded `assumption`; EVID_B proposes 2.0 and no document derives it, so it is injected at 2.0 and swept 1.0 / 2.0 / 3.0]
     evidence_cap=2.0,                 # `H-666`, swept 1.0 / 2.0 (proposed, SHIPPED) / 3.0
+    # `evidence_from`: WHERE A DOCKETED MATTER'S `proofs` LEVELS COME FROM (B24.21; EVID_B edit 5), an arm of `EVIDENCE_ARMS`: `ledger` -- `world_q.proofs`, the speaker's own unmirrored deed claims, the
+    # control and as it was; `case_file` -- the exhibits filed on the matter's case file (`seam/wrappers/sigma.py::_exhibits_of`), which `modules/social_contest/roll.py::proof_levels` counts, and the
+    # ledger is then read for that matter by nothing. A matter with no case file reads the ledger at either arm. Nothing files an exhibit in computed play until B24.25, so the arm moves no run before B24.37 sets it.
+    # [ASSUMPTION; Jordan to correct; revert: `ledger`. A switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-667 -- `site: Fixtures evidence_from`, graded `assumption`; EVID_B gives the two arms and no document says which ships, so it is injected at the control and swept ledger / case_file / case_file at a larger `evidence_cap`]
+    evidence_from="ledger",           # `H-667`, swept ledger (control, SHIPPED) / case_file / case_file with `evidence_cap` 3.0
 )
+
+#: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_read_social_roll` reads the setting).
+EVIDENCE_ARMS = ("ledger", "case_file")
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
@@ -1729,6 +1738,9 @@ def load() -> None:
         raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
                         needs=f"roles of the composition registry {sorted(composition.ROLES)}",
                         law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
+    if DEFAULT_FIXTURES.get("evidence_from") not in EVIDENCE_ARMS:
+        raise Forbidden(f"`Fixtures evidence_from` is {DEFAULT_FIXTURES.get('evidence_from')!r}", "data/fixtures.py", needs=f"one of {list(EVIDENCE_ARMS)}",
+                        law="B24.21 -- the arm names where a docketed matter's proofs levels are read from; an unknown name would read the ledger silently")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
