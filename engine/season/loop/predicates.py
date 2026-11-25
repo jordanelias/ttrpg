@@ -714,8 +714,8 @@ def _req_utter(w: "World", a: "Act") -> Answer:
         no Act-construction refusal and a refusal is an Event, never a raise);
       * `parties` -- each party is a faction with members (`world_q.members`; the source's `Existence(members(subject))` and `(value)`);
       * `declarer` -- the declarer is a member of one of them;
-      * `seat` -- and sits in a seat of one of them whose grant carries `MUSTER_ACT` (`gate.may_wage`, B21.58, the rule `world_q.at_war` asks of
-        each commit): a member's `WAR` utterance without such a seat is a call for war, an ordinary utterance, and no declaration.
+      * `seat` -- and sits in a seat of a party he belongs to whose grant carries `MUSTER_ACT` (`gate.may_wage`, B21.58, the rule `world_q.at_war` asks of
+        each commit): a member's `WAR` utterance without such a seat of HIS OWN party is refused here (`seat`), never admitted as an ordinary utterance.
     The source types these as `requires_typed` clauses; that grammar binds closed operands and cannot read a payload's `mood` or `value`, and
     a cell asked of every utterance would refuse each other mood, so the conditions are this predicate's [ASSUMPTION; medium; Jordan to
     correct; revert: delete this predicate, the row's `requires:` and `emits_on_refusal:`]."""
@@ -734,7 +734,8 @@ def _req_utter(w: "World", a: "Act") -> Answer:
         return _refuse_at("parties", f"{a.actor} {subject!r} against {value!r}", "a war between parties of which one has no members")
     if a.actor not in sides[0] and a.actor not in sides[1]:
         return _refuse_at("declarer", f"{a.actor} {subject!r} against {value!r}", "a war declared by a member of neither party")
-    if not (may_wage(w, a.actor, subject) or may_wage(w, a.actor, value)):
+    # ONE party the declarer belongs to AND wages for: a man of one party holding the other's war seat declares nothing
+    if not any(a.actor in side and may_wage(w, a.actor, f) for side, f in zip(sides, (subject, value))):
         return _refuse_at("seat", f"{a.actor} {subject!r} against {value!r}", "a war declared by a member who sits in no seat that wages it")
     return ADMITTED
 

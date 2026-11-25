@@ -550,7 +550,7 @@ verbs:
     emits:       ["compliance.withheld", "scruple.overridden"]
     emits_on_refusal: ["compliance.impossible"]
     grade:       "ruled"
-    writes_note: "per the term's own row. ⚠ EMISSION-ONLY (v9 IN-09, restored at v10 REM-2B), as `comply`: `compliance.withheld` is the whole act (#453 `:511`, *'disobedience others see or miss'*); no `_eff_evade_defy` exists (the fold calls an effect only for a declared write, `ID-13`). ⚠ NO CONSEQUENCE IS BUILT: `ED-FA-0021`'s D6 (cumulative per-Defy-season suspicion accrual, `ED-IN-0047`) is the intent behind defiance's cost and is conditioned on a suspicion carrier `engine/season/` does not have."
+    writes_note: "per the term's own row. ⚠ EMISSION-ONLY (v9 IN-09, restored at v10 REM-2B), as `comply`: `compliance.withheld` is the whole act (#453 `:511`, *'disobedience others see or miss'*); no `_eff_evade_defy` exists (the fold calls an effect only for a declared write, `ID-13`). THE CONSEQUENCE IS A READ, NOT A WRITE (B21.23): a witnessed defiance is folded into the issuer's suspicion of the defier by `queries/person_q.py::suspicions` (`ED-FA-0021`'s D6, `ED-IN-0047`), and `queries/world_q.py::recalls` opens a recall occasion at the threshold; the act writes nothing for it."
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: as `comply`"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "exchange"

@@ -325,5 +325,8 @@ def test_in62_under_control_the_temperature_zero_column_reads_fewer_distinct_mul
     shipped = DS.play_season(build_realm(0), 1)
     with DS.no_goals():
         control = DS.play_season(DS._build(0, True), 1, rebuild=lambda: DS._build(0, True))
-    assert shipped["acts"] >= 500 and control["acts"] >= 500, (shipped["acts"], control["acts"])
+    # the floor keeps the count from being read off a handful of acts. B21 re-traced it 500 -> 350 (measured 425 shipped / 392 control, from
+    # 500+ at the open commit): seat grants narrowed to each row's named acts (B21.03) remove the `dispatch` and `confer` attempts offices
+    # used to mint, so a season has fewer acts to spread; the spread comparison below is the assertion that can fail.
+    assert shipped["acts"] >= 350 and control["acts"] >= 350, (shipped["acts"], control["acts"])
     assert control["distinct_multisets_t0"] < shipped["distinct_multisets"], (control["distinct_multisets_t0"], shipped["distinct_multisets"])

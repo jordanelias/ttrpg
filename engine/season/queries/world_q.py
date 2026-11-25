@@ -3137,8 +3137,9 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
     inside = set(members(w, faction))
     creed = w.propositions.get(faction)
     present = head(w, faction)
+    # the creed's subject leads only a faction with NO head seat; a headed faction whose seat stands vacant has no leader (B21.65)
     leader = (present if present is not None and present in w.persons
-              else creed.subject if creed is not None and creed.subject in w.persons else None)
+              else creed.subject if (creed is not None and HEAD_SEAT.get(name) is None and creed.subject in w.persons) else None)
     regarded = tuple(x for x in dict.fromkeys(
         ((leader,) if leader is not None else ())
         + tuple(d for d in deed_doers(p.ledger, {"kinds": DEED_KINDS}, p.id) if d in inside))
