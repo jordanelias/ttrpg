@@ -5749,8 +5749,9 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     A content opener's earlier same-matter moves that no strand holds are taken into the strand it opens (the
     first petition belongs to the movement the second makes), whether the opener started a strand or linked to
     one; and every other strand a taken earlier move links to is merged in, as `_attach` merges for the move
-    itself. A move that content-opens, and each earlier move it takes, is an OPENING move and is never terminal,
-    though its kind is in `concludes` (two petitions start the movement; neither ends it). A strand is read at the lowest rung
+    itself. An OPENING move (by kind, by side, by death verb or by content), and each earlier move a content
+    opener takes, is never terminal, though its kind may be in `concludes` (two petitions start the movement;
+    neither ends it). An authority's march (side A) does not open and stays terminal where its code is. A strand is read at the lowest rung
     covering its moves (it zooms).
 
     A STATED LIMIT: a march's side (`march_side`) and every referent's parent (`_StrifeReading.parent`) are read
@@ -5780,8 +5781,9 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
         matter = _content_matter(rd, e, a)
         prior = earlier.setdefault(matter, []) if matter is not None else None
         content_opens = bool(prior)
-        m = Move(e.id, i, e.kind, a.actor if a is not None else None, refs, None, opens or content_opens,
-                 bool(term(e, a)) and not content_opens)
+        opening = opens or content_opens
+        m = Move(e.id, i, e.kind, a.actor if a is not None else None, refs, None, opening,
+                 bool(term(e, a)) and not opening)
         s0 = _attach(rd, live, m)
         if s0 is None:
             if prior is not None:

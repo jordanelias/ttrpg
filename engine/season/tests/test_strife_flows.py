@@ -152,7 +152,7 @@ def test_a_strand_never_concludes_on_its_own_opening_move():
     ev(w, "e1", "rung.seized", ["S"])
     fl = W.flows_in(w, terminal=lambda e, a: True)
     (s,) = fl.strands
-    assert len(s.moves) == 1 and s.moves[0].terminal and not W.concluded(w, s)
+    assert len(s.moves) == 1 and not s.moves[0].terminal and not W.concluded(w, s)   # B12a.04: opening is never terminal
 
 
 def test_a_move_outside_the_realm_is_within_no_era():
@@ -177,10 +177,12 @@ def test_a_terminal_at_a_duchy_does_not_conclude_the_era():
 
 
 def test_a_one_move_realm_wide_terminal_leaves_the_era_open():
+    """B12a.04: the move that opens a strand is never terminal, so a one-move strand is never concluded, even
+    where the stand-in reads every kind as terminal."""
     w = _world()
     ev(w, "e1", "field.lost", ["S", "S2"])
     fl = W.flows_in(w, terminal=lambda e, a: True)
-    assert fl.strands[0].moves[0].terminal and fl.strands[0].moves[0].place == "R"
+    assert fl.strands[0].moves[0].opens and not fl.strands[0].moves[0].terminal and fl.strands[0].moves[0].place == "R"
     assert [e.concluded for e in fl.eras] == [False]
 
 
@@ -354,6 +356,35 @@ def test_a_pulled_earlier_move_is_an_opening_move_and_never_closes_the_era():
     assert [m.event for m in s.moves] == ["e_rec_1", "e_rec_2"] and s.moves[0].place == "R"   # at the realm
     assert [(e.id, e.concluded) for e in fl.eras] == [("e1", False)]
     assert not s.moves[0].terminal
+
+
+def test_a_planted_petition_petition_march_r_strand_does_not_read_concluded(monkeypatch):
+    """B12a.04: an OPENING move is never terminal by ANY route (by kind, side, death verb or content), not only a
+    content opener. The march of a challenger (side R) opens, and at code level (`H.terminal_for`: WN, `ends` 1) it
+    is terminal; the strand two petitions make and it joins must not read concluded on it."""
+    w = _world()
+    _petition(w, "rec_1", "p_low", "S", 1)
+    _petition(w, "rec_2", "p_mid", "S", 2)
+    monkeypatch.setattr(W, "march_side", lambda w_, a: "R" if a is not None and a.verb == "march" else None)
+    ev(w, "e_march", "march.declared", ["S"], actor="p_low", verb="march", payload={"subject": "S"}, tick=3)
+    fl = W.flows_in(w, H.terminal_for(w))
+    (s,) = fl.strands
+    march = s.moves[-1]
+    assert [m.event for m in s.moves] == ["e_rec_1", "e_rec_2", "e_march"]
+    assert march.opens and H.terminal_for(w)(w.log[-1], W.causing_act(w, w.log[-1]))      # the kind-and-side test says terminal
+    assert not march.terminal and not W.concluded(w, s)
+
+
+def test_a_planted_requisition_to_matter_determined_strand_with_no_open_referent_reads_concluded():
+    """The control of the same edit: a strand an opening kind starts still concludes on a later non-opening
+    terminal move (`matter.determined`) when no referent stands open."""
+    w = _world()
+    ev(w, "e_req", "requisition.taken", ["S"])
+    (s,) = W.flows_in(w, H.terminal_for(w)).strands
+    assert s.moves[0].opens and not s.moves[0].terminal and not W.concluded(w, s)
+    ev(w, "e_det", "matter.determined", ["S"], tick=2)
+    (s,) = W.flows_in(w, H.terminal_for(w)).strands
+    assert s.moves[-1].kind == "matter.determined" and s.moves[-1].terminal and W.concluded(w, s)
 
 
 @pytest.mark.parametrize("a, b, want", [
@@ -609,19 +640,20 @@ def test_lacking_the_terminal_claim_he_reads_the_strand_open_while_concluded_rea
     assert reading(w, "p_low") == [(frozenset({"S"}), True)]
 
 
-def test_holding_only_a_field_won_he_reads_the_strand_open_while_concluded_reads_it_closed():
+def test_holding_only_a_non_concluding_kind_he_reads_the_strand_open_while_concluded_reads_it_closed():
+    """B12a.04: `field.won` is an opening kind and so never terminal in the world reading; the stand-in for a
+    code-level terminal is a joining kind outside `concludes` (`detention.ended`, a pardon's code)."""
     w = _world()
     ev(w, "e1", "field.lost", ["S"])
-    ev(w, "e2", "field.won", ["S"], tick=2)
-    # the world's terminal test is code-level (`harness/strife.py::terminal_for`: WA, the authority winning
-    # the field, ends cases); a stand-in reads this `field.won` as that code.
-    (s,) = W.flows_in(w, terminal=lambda e, a: e.kind == "field.won").strands
+    ev(w, "e2", "detention.ended", ["S"], tick=2)
+    # the world's terminal test is code-level (`harness/strife.py::terminal_for`); a stand-in reads this kind as terminal
+    (s,) = W.flows_in(w, terminal=lambda e, a: e.kind == "detention.ended").strands
     assert W.concluded(w, s)
-    hold(w, "p_low", "S", "field.won", when=2)
+    hold(w, "p_low", "S", "field.lost", when=1)
     assert reading(w, "p_low") == [(frozenset({"S"}), False)]
-    hold(w, "p_low", "S", "field.lost", when=1)                       # both outcomes: still no `concludes` kind
+    hold(w, "p_low", "S", "detention.ended", when=2)                  # both held: still no `concludes` kind
     assert reading(w, "p_low") == [(frozenset({"S"}), False)]
-    assert "field.won" not in W.CONCLUDING_KINDS
+    assert "detention.ended" not in W.CONCLUDING_KINDS
 
 
 def test_his_restraint_arm_reads_the_custody_edge_and_never_the_arrester():
