@@ -54,7 +54,7 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
@@ -637,6 +637,31 @@ def is_deed(c) -> bool:
     WITNESS's first deposit writes, or a told copy of it (a `Claim` or a `Said`). A kind some row
     emits on refusal (`REFUSAL_KINDS`) is no deed: it reports an act that did not happen."""
     return c.value is True and c.predicate in _verbs.DEED_KINDS
+
+
+# THE FAMILY OF EVENT KINDS A QUESTIONING EMITS (`verb_table.yaml: interrogate`'s `emits`: `confession.full`, `.made`, `.partial`, `.withheld`): a deed claim
+# of one is a confession, not testimony. A family prefix and not a list, so a kind the table adds to it is read as one without an edit here.
+CONFESSION_FAMILY = "confession."
+
+
+def proof_kind(c) -> Optional[str]:
+    """WHAT KIND OF PROOF A HELD CLAIM IS -- A `matters` MEMBER, DERIVED FROM THE CLAIM AND NEVER DECLARED (FI_05_B E-1; the one reader, World-free). A DEED CLAIM (`is_deed`, a `Claim`
+    or a told `Said`) of the `confession.` family is `confession`; any other deed claim is `testimony`, told or not: how far it has travelled is `decision/options.py::teller_weight`'s
+    WEIGHT (`told_weight ** hops`), never a kind. A claim that is no deed (a cell, a refusal kind, a value that is not `True`) is no proof: `None`.
+    A Record's kind (`record`) and an edge's (`oath`, cited by its Tenure id) are the host's hold check, not a claim's, so this reader never answers them.
+    [ASSUMPTION: E-1's "about its own subject" is not tested -- the claim carries no second subject to compare, so a `confession.*` deed is `confession` wherever held; B24.23 narrows it]
+    ⚠ `rosters.yaml: proof_kind_of_source` also names a kind per claim, by SOURCE (`world_q.proofs`' admission filter, `dossier`'s `proof_kind` column): the two disagree
+    (a `told_by` claim is `record` there, `testimony` here), and which one the host's admission reads is B24.25's to decide."""
+    if not is_deed(c):
+        return None
+    return "confession" if c.predicate.startswith(CONFESSION_FAMILY) else "testimony"
+
+
+def impeaches(c, record_id: str) -> bool:
+    """DOES A HELD CLAIM IMPEACH THE DOCUMENT `record_id`? A deed claim (`is_deed`) whose subject is the Record and whose kind is a `rosters.yaml: covert_kinds` member
+    (today `record.forged`, which a finder who graded `Partial` or better deposits, `loop/witness.py::_found_claims`). World-free: it reads the claim and the id. The told
+    copy keeps its subject (the kind is unpaired), so a hearer of the finder's telling impeaches too."""
+    return is_deed(c) and c.subject == record_id and c.predicate in COVERT_KINDS
 
 
 def deed_valence(axis_w: dict, c) -> float:
