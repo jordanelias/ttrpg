@@ -1,24 +1,26 @@
 """v9 SC-02 `22a`, piece 1 -- proceedings PHASE 3 steps 17, 18 and 20 (`19_PLAN.md`, intent only):
-`reception` (the bench's ledgers about the speaker, resolver-side), `proofs` (weighed by remove, discounted
-by the mirror) and route erosion (the single called bluff, inside reception).
+`reception` (the room's reading of the speaker, resolver-side), `proofs` (weighed by remove, discounted
+by the mirror) and route erosion (the single called bluff, inside reception). B24.02 (F8, option B): neither Query reads
+a ledger but the ACTOR'S OWN; what the rest of the bench and the opponent have said in public is read off their live `commit` edges.
 
 WHAT IS BUILT, asked of the real host builder (`seam/wrappers/sigma.py`), the real module
 (`modules/social_contest/roll.py::obstacle`) and the real fold on a HAND-BUILT world (`probes.tiny_world`
 through `test_u7_remit._world`: `p_high` holds `off_duke`, whose bench sits over `Hh`; the speaker `p_low`
 and his party `p_mid` live in `Hh`; `p_other` lives there and sits on no bench):
-  * `world_q.reception(w, speaker, audience)` -- each bench member's own deed claims about the speaker,
-    weighted by `remove_weight(source)` x decayed confidence x the member's valence (arm 1, the alignment
-    table; arm 2 was never authored and the sweep is open, `hole_register.yaml` H-215), summed; `reception_gain` scales it: its
-    hostile half into the obstacle (the `reception` member), its favourable half into `favour` levels (`H-215`, B05.17);
-  * `world_q.proofs(w, speaker, opponent, audience)` -- the speaker's deed claims about the opponent weighed by
-    remove, zero for any the opponent mirrors (same subject and predicate); `proof_level` (`H-216`, B05.17: a proof is a
-    named level of leverage, never an obstacle reduction);
-  * route erosion -- `rosters.yaml: standing_routes`: a hearer who saw a dominance-route deed done TO the
-    speaker zeroes every dominance-route deed of his no newer than it.
+  * `world_q.reception(w, target, audience, actor)` -- the own term: the actor's own deed claims about the target when he sits in the
+    audience (`remove_weight(source)` x decayed confidence x his valence, arm 1, the alignment table; arm 2 was never authored and the sweep
+    is open, `hole_register.yaml` H-215), plus the commit term: each other member's live HOLDS commits to a Proposition about the target,
+    each at `deed_valence` alone; summed; `reception_gain` scales it: its hostile half into the obstacle (the `reception` member), its
+    favourable half into `favour` levels (`H-215`, B05.17);
+  * `world_q.proofs(w, actor, opponent, audience)` -- the actor's deed claims about the opponent weighed by
+    remove, zero for any the opponent mirrors (a live commit of his to a Proposition of the same subject and predicate); `proof_level`
+    (`H-216`, B05.17: a proof is a named level of leverage, never an obstacle reduction);
+  * route erosion -- `rosters.yaml: standing_routes`: an ACTOR who saw a dominance-route deed done TO the
+    target zeroes every dominance-route deed of his no newer than it (the own term only).
 
 THE FALSIFIERS (`19_PLAN.md` :537, :550, :578), each an assertion below that observes its failure:
-  * step 17: a bench's obstacle invariant under a change to a member's ledger; the Query reachable from a
-    decision -- `test_sc02_17_...`;
+  * step 17: a bench's obstacle invariant under a change to a member's commits; the Query reachable from a
+    decision -- `test_sc02_17_...`; B24.02: no other judge's LEDGER moves it (`test_sc02_world_a_*`);
   * step 18: the mirrored proof moves the obstacle -- `test_sc02_18_...`;
   * step 20: a called bluff leaves the weight unchanged -- `test_sc02_20_...`.
 """
@@ -43,7 +45,7 @@ from ..epistemic import Seen
 from ..queries import person_q, world_q
 from ..seam import ladder
 from ..seam.wrappers import sigma
-from ..state.carriers import Claim
+from ..state.carriers import Claim, Office, Proposition, Tenure
 from .test_sc01_obstacle_ceiling import _module
 from .test_u7_remit import _world
 
@@ -87,6 +89,52 @@ def _kind_with_lean(w, sign=+1, among=None):
     return best
 
 
+_PROP = [0]
+
+
+def _commit(w, judge, subject, kind, *, value=True, mood="HOLDS", live=True):
+    """`judge` publicly commits (a live `commit` edge, `_eff_commit`'s shape) to a Proposition that `subject` did `kind`: the room's route."""
+    _PROP[0] += 1
+    pid = f"prop_{_PROP[0]}"
+    w.propositions[pid] = Proposition(pid, mood, subject, kind, value, 0)
+    w.add_tenure(Tenure(f"t_{pid}", judge, pid, "commit", 0, None if live else 1))
+    return w.propositions[pid]
+
+
+def _kinds_leaning(w, sign, n=None):
+    """The unpaired deed kinds the hearer leans on in `sign`'s direction, strongest first (`n` of them, or all)."""
+    kinds = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)
+    ranked = sorted((k for k in kinds if sign * _lean(w, k) > 0), key=lambda k: (-sign * _lean(w, k), k))
+    return ranked if n is None else ranked[:n]
+
+
+def _hearer_commits(w, sign, n):
+    """The bench's commit term, `n` distinct kinds (a judge's commits to one kind count once): the hearer's HOLDS commits about the speaker."""
+    kinds = _kinds_leaning(w, sign, n)
+    assert len(kinds) == n, f"only {len(kinds)} kinds lean {sign:+d}"
+    for k in kinds:
+        _commit(w, HEARER, SPEAKER, k)
+    return kinds
+
+
+def _hearer_commits_to(w, sign, total):
+    """Commits, strongest kind first, until the hearer's commit term reaches at least `total` (and under `total + 1`)."""
+    got = 0.0
+    for k in _kinds_leaning(w, sign):
+        if got >= total:
+            break
+        _commit(w, HEARER, SPEAKER, k)
+        got += abs(_lean(w, k))
+    assert total <= got < total + 1.0, (total, got)
+    return got
+
+
+def _rec(w, target=SPEAKER, actor=HEARER):
+    """`reception` of `target` by the bench over `Hh`, asked as `actor` acts. The default is the HEARER, the one whose own ledger it may read (the
+    own term); `actor=SPEAKER` is a `speak` or `determine` by the target, where only the bench's commits are read."""
+    return world_q.reception(w, target, world_q.judging_set(w, "Hh"), actor)
+
+
 def _ob(w, actor=SPEAKER, subject=PARTY):
     """The composed obstacle of one draw of a roll whose prize a bench hears, through the real adapter and module entry. B24p.99: the verb
     that lends the pool is `determine` (still on the single roll; `speak` proceeds and is never pooled here), the prize row `a matter`'s
@@ -106,18 +154,15 @@ def _input(w, actor=SPEAKER, subject=PARTY):
 # STEP 17 -- RECEPTION
 # ================================================================================================
 
-def test_sc02_17_two_benches_differing_only_in_one_ledger_band_differently_for_the_same_draw():
-    """`19_PLAN.md` step 17's artifact: identical seats and convictions, one member's ledger differs, and
+def test_sc02_17_two_benches_differing_only_in_one_commit_band_differently_for_the_same_draw():
+    """`19_PLAN.md` step 17's artifact: identical seats and convictions, one member's public commits differ, and
     the same seeded roll (a bench-heard prize) resolves at different bands. FALSIFIER: the obstacle invariant under the
-    ledger change (asserted on every draw, and on the band over the sweep)."""
+    commit change (asserted on every draw, and on the band over the sweep)."""
     plain, d_plain = _judging_world()
     heard, d_heard = _judging_world()
-    kind = _kind_with_lean(heard, +1)
-    n = math.ceil(1.0 / _lean(heard, kind)) + 1        # enough favour to reach the Ob floor from 2
-    for i in range(n):
-        heard.persons[HEARER].ledger.append(_claim(f"fav{i}", HEARER, SPEAKER, kind))
-    assert world_q.reception(plain, SPEAKER, world_q.judging_set(plain, "Hh")) == 0.0
-    assert world_q.reception(heard, SPEAKER, world_q.judging_set(heard, "Hh")) > 0.0
+    _hearer_commits_to(heard, +1, 2.0)                  # enough favour to reach the Ob floor from 2
+    assert _rec(plain, actor=SPEAKER) == 0.0
+    assert _rec(heard, actor=SPEAKER) > 0.0
     # B05.17: the favourable bench is LEVERAGE (`favour`), not a lower obstacle: what the speaker brings rises, what stands against him does not.
     assert _input(heard).leverage > _input(plain).leverage, (_input(heard).leverage, _input(plain).leverage)
     assert _ob(heard) == _ob(plain), (_ob(heard), _ob(plain))
@@ -132,50 +177,48 @@ def test_sc02_17_two_benches_differing_only_in_one_ledger_band_differently_for_t
     assert differ >= 1, "no draw banded differently: the bench's ledger did not reach the outcome"
 
 
-def test_sc02_17_a_ledger_off_the_bench_moves_nothing():
-    """THE CONTROL: the same claims in a person who sits on no bench over `Hh` leave reception at 0 and
-    the obstacle at its base, so what moved it above is the BENCH's ledger, not any ledger."""
+def test_sc02_17_a_commit_off_the_bench_moves_nothing():
+    """THE CONTROL: the same commits by a person who sits on no bench over `Hh` leave reception at 0 and
+    the obstacle at its base, so what moved it above is the BENCH's commits, not any commit."""
     w, _d = _judging_world()
     w.persons[NOBODY].pursuits = {PURSUIT: 1.0}
-    kind = _kind_with_lean(w, +1)
     base = _ob(w)
-    for i in range(5):
-        w.persons[NOBODY].ledger.append(_claim(f"off{i}", NOBODY, SPEAKER, kind))
-    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) == 0.0
+    for kind in _kinds_leaning(w, +1, 5):
+        _commit(w, NOBODY, SPEAKER, kind)
+    assert _rec(w, actor=SPEAKER) == 0.0
     assert _ob(w) == base
 
 
-def test_sc02_17_a_told_claim_moves_the_obstacle_strictly_less_than_the_same_claim_firsthand():
+def test_sc02_17_a_told_claim_counts_strictly_less_in_the_own_term_than_the_same_claim_firsthand():
     """Step 17's second artifact, over the ordinal of remove: firsthand > knot-sourced > told > inferred,
-    each strictly, and every rank still counts (B05.17: read as the speaker's LEVERAGE, `favour` levels, above the
-    no-claim base; the name keeps its first word, the reading moved from the obstacle). A unit of favour is whole, so
-    the bench holds enough claims that each rank's weight is whole units apart."""
-    lev = {}
+    each strictly, and every rank still counts. B24.02: the claim is the ACTOR'S OWN (the own term, the one route a ledger reaches
+    `reception` by), so the actor is the hearer and the target the speaker."""
+    got = {}
     for source in REMOVE_ORDINAL:
         w, _d = _judging_world()
         kind = _kind_with_lean(w, +1)
         chain = ("p_king",) if source == "told_by" else ()
-        for i in range(math.ceil(8.0 / _lean(w, kind))):
-            w.persons[HEARER].ledger.append(_claim(f"c{i}", HEARER, SPEAKER, kind, source=source, chain=chain))
-        lev[source] = _input(w).leverage
-    w0, _d = _judging_world()
-    base = _input(w0).leverage
-    ranked = [lev[s] for s in REMOVE_ORDINAL]
-    assert ranked == sorted(ranked, reverse=True) and len(set(ranked)) == len(ranked), lev
-    assert lev["firsthand"] > lev["told_by"] > base, (lev, base)
-    assert min(ranked) > base, (lev, base)                                   # even the most removed rank counts
+        w.persons[HEARER].ledger.append(_claim("c", HEARER, SPEAKER, kind, source=source, chain=chain))
+        got[source] = _rec(w)
+    ranked = [got[s] for s in REMOVE_ORDINAL]
+    assert ranked == sorted(ranked, reverse=True) and len(set(ranked)) == len(ranked), got
+    assert got["firsthand"] > got["told_by"] > 0.0, got
+    assert min(ranked) > 0.0, got                                            # even the most removed rank counts
 
 
 def test_sc02_17_decayed_confidence_counts_less_and_a_hostile_bench_reads_negative():
     w, _d = _judging_world()
     kind = _kind_with_lean(w, +1)
     w.persons[HEARER].ledger.append(_claim("full", HEARER, SPEAKER, kind))
-    full = world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh"))
+    full = _rec(w)
     w.persons[HEARER].ledger[-1] = _claim("half", HEARER, SPEAKER, kind, conf=50)
-    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) == full / 2
+    assert _rec(w) == full / 2                                               # the own term: a decayed claim of the actor's own
     hostile = _kind_with_lean(w, -1)
     w.persons[HEARER].ledger[-1] = _claim("bad", HEARER, SPEAKER, hostile)
-    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) < 0.0
+    assert _rec(w) < 0.0
+    w, _d = _judging_world()                                                # and the same hostile reading, as the bench's commit
+    _commit(w, HEARER, SPEAKER, hostile)
+    assert _rec(w, actor=SPEAKER) == _lean(w, hostile) < 0.0
     # Under the FIXED ceiling (`H-213`, 2) a hostile room cannot raise the
     # obstacle; one notch up it does; and under the shipped per-pool arm (CP-T01-06) it raises it up to
     # the pool's cap (pool 2: 2.842). Stated in `roll.obstacle`'s docstring and in H-215.
@@ -200,16 +243,18 @@ def test_sc02_17_reception_and_proofs_take_the_world_first():
     for node in tree.body:
         if isinstance(node, ast.FunctionDef) and node.name in ("reception", "proofs"):
             first = node.args.args[0]
-            found[node.name] = (first.arg, ast.unparse(first.annotation) if first.annotation else None)
-    assert found == {"reception": ("w", "World"), "proofs": ("w", "World")}, found
+            found[node.name] = (first.arg, ast.unparse(first.annotation) if first.annotation else None,
+                                [a.arg for a in node.args.args])
+    # B24.02: the ACTOR is a parameter of both, so a call passing any other person reads as a defect at the site
+    assert found == {"reception": ("w", "World", ["w", "target", "audience", "actor"]),
+                     "proofs": ("w", "World", ["w", "actor", "opponent", "audience", "admitted"])}, found
 
 
 def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
     """`heard_by: bench` is on `a matter` alone: an `arrest` (`a standing`) or an inquiry by the same actor
     at the same rung carries the record's no-room defaults, so every other social roll is as it was."""
     w, _d = _judging_world()
-    kind = _kind_with_lean(w, +1)
-    w.persons[HEARER].ledger.append(_claim("c1", HEARER, SPEAKER, kind))
+    _commit(w, HEARER, SPEAKER, _kind_with_lean(w, +1))
     seen = {}
     real = sigma._read_social_roll
 
@@ -248,7 +293,8 @@ def test_sc02_18_a_mirrored_proof_moves_the_obstacle_by_exactly_zero_and_an_unmi
     """`19_PLAN.md` step 18's artifact, re-pointed at B05.17: a proof is LEVERAGE (`proofs`: one `proof_level` per whole unit of
     `world_q.proofs`), so what it moves is `leverage`, and it moves the obstacle by exactly nothing. The speaker holds four deed
     claims about his opponent at each remove (a unit is whole, so one claim at the lowest rank would round to none); the hearer
-    holds nothing, so reception is 0 and only the proofs source moves the leverage.
+    holds nothing, so reception is 0 and only the proofs source moves the leverage. B24.02: the opponent mirrors a proof by a live COMMIT of his
+    to a Proposition of the proof's subject and predicate (his ledger mirrors nothing).
     FALSIFIER: the mirrored proof moves the leverage (exact equality with the base, no tolerance), or an unmirrored one moves the obstacle."""
     kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
     checked = 0
@@ -260,18 +306,21 @@ def test_sc02_18_a_mirrored_proof_moves_the_obstacle_by_exactly_zero_and_an_unmi
         assert level is not None and base == 0.0, "the shipped level is the control: the falsifier could not see a move"
         for i in range(4):
             w.persons[SPEAKER].ledger.append(_claim(f"pf{i}", SPEAKER, PARTY, kind, source=source, chain=chain))
-        assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) == 0.0
+        assert _rec(w, actor=SPEAKER) == 0.0
         owed = levels_to_net_sigma([level] * int(4 * world_q.remove_weight(source) + 0.5))
         assert owed > 0.0 and _input(w).leverage == base + owed, (source, _input(w).leverage, owed)
         assert _ob(w) == base_ob, (source, _ob(w), base_ob)                 # the obstacle is not where a proof acts
         # NEAR-MISSES DO NOT MIRROR: the same predicate about another subject, and the same subject
-        # under another predicate, leave the proof standing (the mirror keys on BOTH).
+        # under another predicate, leave the proof standing (the mirror keys on BOTH); nor does his LEDGER, nor a commit he has ended.
         other_kind = next(k for k in sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS) if k != kind)
-        w.persons[PARTY].ledger += [_claim("near_a", PARTY, NOBODY, kind),
-                                    _claim("near_b", PARTY, PARTY, other_kind)]
+        _commit(w, PARTY, NOBODY, kind)
+        _commit(w, PARTY, PARTY, other_kind)
+        _commit(w, PARTY, PARTY, kind, live=False)
+        w.persons[PARTY].ledger.append(_claim("his_own_deed", PARTY, PARTY, kind))
         assert _input(w).leverage == base + owed, "a near-miss mirrored a proof"
-        # THE MIRROR: the opponent holds a claim of the same subject and predicate -> exactly zero.
-        w.persons[PARTY].ledger.append(_claim("mirror", PARTY, PARTY, kind))
+        # THE MIRROR: the opponent has committed, live, to a Proposition of the same subject and predicate (any value: a denial answers the
+        # proof on the record) -> exactly zero.
+        _commit(w, PARTY, PARTY, kind, value=False)
         assert world_q.proofs(w, SPEAKER, PARTY, world_q.judging_set(w, "Hh")) == 0.0
         assert _input(w).leverage == base, (source, _input(w).leverage, base)
         assert _ob(w) == base_ob, (source, _ob(w), base_ob)
@@ -320,9 +369,9 @@ def test_sc02_17_a_man_does_not_receive_himself():
     w, _d = _judging_world()
     kind = _kind_with_lean(w, +1)
     w.persons[HEARER].ledger.append(_claim("mine", HEARER, HEARER, kind))
-    assert world_q.reception(w, HEARER, world_q.judging_set(w, "Hh")) == 0.0
+    assert _rec(w, HEARER) == 0.0
     w.persons[HEARER].ledger.append(_claim("his", HEARER, SPEAKER, kind))
-    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) != 0.0
+    assert _rec(w, SPEAKER) != 0.0
 
 
 # ================================================================================================
@@ -351,7 +400,7 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     assert wound in DOMINANCE_KINDS and wound in person_q.PAIRED_KINDS
     before_w, _ = _judging_world()
     _feared_lord(before_w)
-    before = world_q.reception(before_w, SPEAKER, world_q.judging_set(before_w, "Hh"))
+    before = _rec(before_w, SPEAKER)
     assert before != 0.0
 
     won, _ = _judging_world()
@@ -359,11 +408,11 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     won.persons[HEARER].ledger += [_claim("hit", HEARER, SPEAKER, wound, when=1),
                                    _seen("saw", HEARER, SPEAKER, NOBODY, when=1)]
     assert [c.id for c in person_q.suffered_deeds(won.persons[HEARER].ledger, SPEAKER)] == ["hit"]
-    assert world_q.reception(won, SPEAKER, world_q.judging_set(won, "Hh")) == 0.0, "a called bluff left the dominance weight"
+    assert _rec(won, SPEAKER) == 0.0, "a called bluff left the dominance weight"
     # "NO NEWER THAN" is inclusive: a dominance deed deposited at exactly the bluff's tick is eroded too.
     kind_eq = _feared_lord(_judging_world()[0])
     won.persons[HEARER].ledger.append(_claim("eq", HEARER, SPEAKER, kind_eq, when=1))
-    assert world_q.reception(won, SPEAKER, world_q.judging_set(won, "Hh")) == 0.0, "a deed at the bluff's own tick escaped erosion"
+    assert _rec(won, SPEAKER) == 0.0, "a deed at the bluff's own tick escaped erosion"
 
     lost, _ = _judging_world()
     _feared_lord(lost)
@@ -373,10 +422,10 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     only_new, _ = _judging_world()
     only_new.persons[HEARER].ledger += [_claim("hit", HEARER, NOBODY, wound, when=1),
                                         _seen("saw", HEARER, NOBODY, SPEAKER, when=1)]
-    assert world_q.reception(only_new, SPEAKER, world_q.judging_set(only_new, "Hh")) != 0.0, "the wound is not one more deed of his"
+    assert _rec(only_new, SPEAKER) != 0.0, "the wound is not one more deed of his"
     # Additive: the lord keeps his whole prior weight plus the new deed's (float sum order differs).
-    assert math.isclose(world_q.reception(lost, SPEAKER, world_q.judging_set(lost, "Hh")),
-                        before + world_q.reception(only_new, SPEAKER, world_q.judging_set(only_new, "Hh")), rel_tol=1e-12)
+    assert math.isclose(_rec(lost, SPEAKER),
+                        before + _rec(only_new, SPEAKER), rel_tol=1e-12)
 
 
 def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again():
@@ -385,10 +434,10 @@ def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again(
     wound = "body.changed"
     told, _ = _judging_world()
     _feared_lord(told)
-    before = world_q.reception(told, SPEAKER, world_q.judging_set(told, "Hh"))
+    before = _rec(told, SPEAKER)
     told.persons[HEARER].ledger.append(_claim("hit", HEARER, SPEAKER, wound, source="told_by",
                                               chain=(NOBODY,), when=1))
-    assert world_q.reception(told, SPEAKER, world_q.judging_set(told, "Hh")) == before
+    assert _rec(told, SPEAKER) == before
 
     later, _ = _judging_world()
     kind = _feared_lord(later)
@@ -396,14 +445,14 @@ def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again(
                                      _seen("saw", HEARER, SPEAKER, NOBODY, when=1),
                                      _claim("again", HEARER, SPEAKER, kind, when=2)]
     # Only the re-earned deed counts: one firsthand claim at full confidence is its valence exactly.
-    assert world_q.reception(later, SPEAKER, world_q.judging_set(later, "Hh")) == _lean(later, kind) != 0.0
+    assert _rec(later, SPEAKER) == _lean(later, kind) != 0.0
 
     other, _ = _judging_world()
     gentle = _kind_with_lean(other, +1, among=_verbs.DEED_KINDS - DOMINANCE_KINDS)
     other.persons[HEARER].ledger += [_claim("g", HEARER, SPEAKER, gentle, when=0),
                                      _claim("hit", HEARER, SPEAKER, wound, when=1),
                                      _seen("saw", HEARER, SPEAKER, NOBODY, when=1)]
-    assert world_q.reception(other, SPEAKER, world_q.judging_set(other, "Hh")) == _lean(other, gentle)
+    assert _rec(other, SPEAKER) == _lean(other, gentle)
 
 
 # ================================================================================================
@@ -418,11 +467,9 @@ def _sweep_of(hid):
 
 
 def _bench(w, sign, count):
-    """`count` claims of the hearer's about the speaker, each of the kind he leans on hardest in `sign`'s direction."""
-    kind = _kind_with_lean(w, sign)
-    for i in range(count):
-        w.persons[HEARER].ledger.append(_claim(f"bench{sign:+d}_{i}", HEARER, SPEAKER, kind))
-    return kind
+    """The bench's commit term at `count` kinds: the hearer's HOLDS commits about the speaker, the `count` kinds he leans on hardest in
+    `sign`'s direction (a judge's commits to one kind count once, so a bigger room is more kinds, not more commits of one)."""
+    return _hearer_commits(w, sign, count)
 
 
 def _proofs(w, count, source="firsthand"):
@@ -529,8 +576,7 @@ def test_favour_strictly_raises_partial_or_better():
         for units in (0, 1, 3, 6):
             w, _d = _judging_world(favour_level="major")
             if units:
-                kind = _kind_with_lean(w, +1)
-                _bench(w, +1, math.ceil(units / _lean(w, kind)))            # a reception of at least `units`, under `units + 1`
+                _hearer_commits_to(w, +1, units)                             # a reception of at least `units`, under `units + 1`
             odds.append(_partial_or_better(w, pool))
         assert odds[0] < odds[1] < odds[2] < odds[3], (pool, odds)
         checked += 1
@@ -545,8 +591,8 @@ def test_hostile_bench_raises_the_obstacle_only():
     friendly, _d = _judging_world()
     _bench(hostile, -1, 1)
     _bench(friendly, +1, 3)
-    r = world_q.reception(hostile, SPEAKER, world_q.judging_set(hostile, "Hh"))
-    assert r < 0.0 < world_q.reception(friendly, SPEAKER, world_q.judging_set(friendly, "Hh"))
+    r = _rec(hostile, SPEAKER, SPEAKER)
+    assert r < 0.0 < _rec(friendly, SPEAKER, SPEAKER)
     gain = hostile.fixtures.get("reception_gain")
     (ob_n, t_n), (ob_h, t_h), (ob_f, t_f) = (_obstacle_at(w, 8) for w in (neutral, hostile, friendly))
     assert dict(t_n)["reception"] == 0.0 and dict(t_f)["reception"] == 0.0, (t_n, t_f)
@@ -567,7 +613,7 @@ def test_control_levels_none_moves_nothing():
     live, _d = _judging_world()
     _bench(live, +1, 12)
     _proofs(live, 4)
-    assert world_q.proofs(held, SPEAKER, PARTY, world_q.judging_set(held, "Hh")) == 4.0 and world_q.reception(held, SPEAKER, world_q.judging_set(held, "Hh")) > 1.0
+    assert world_q.proofs(held, SPEAKER, PARTY, world_q.judging_set(held, "Hh")) == 4.0 and _rec(held, SPEAKER, SPEAKER) > 1.0
     assert _input(held).leverage == _input(bare).leverage == 0.0
     assert _ob(held) == _ob(bare)
     for pool in _pools():
@@ -578,3 +624,114 @@ def test_control_levels_none_moves_nothing():
 def test_sc02_20_the_route_roster_names_only_deed_kinds():
     assert DOMINANCE_KINDS and DOMINANCE_KINDS <= _verbs.DEED_KINDS, sorted(DOMINANCE_KINDS)
     assert DOMINANCE_KINDS & person_q.PAIRED_KINDS, "no dominance kind has a patient: no bluff is callable"
+
+
+# ================================================================================================
+# B24.02 (F8, option B) -- THE ROOM READS THE ACTOR'S OWN LEDGER AND THE BENCH'S PUBLIC COMMITS, NEVER ANOTHER LEDGER
+# ================================================================================================
+
+J1, J2 = HEARER, NOBODY            # the two seats of the bench over `Hh`; `speaker` S = p_low, `opponent` O = p_mid
+
+
+def _worlds_bench():
+    """`_judging_world` with a second seat at the Duke's rung: the bench over `Hh` is {J1, J2}, both with the pursuit that makes a deed lean."""
+    w, _d = _judging_world()
+    w.offices["off_second"] = Office("off_second", "Duke", "D", ["determine"], faction="Valorsmark")
+    w.add_tenure(Tenure("t_second", J2, "off_second", "hold", since=0))
+    w.persons[J2].pursuits = {PURSUIT: 1.0}
+    assert sorted(world_q.judging_set(w, "Hh")) == sorted([J1, J2]), world_q.judging_set(w, "Hh")
+    return w
+
+
+def _world_a():
+    """WORLD A (the opponent's ledger and the judges' ledgers only; nobody has committed): J1 and J2 each hold one firsthand deed claim of S's
+    that they disvalue, and O holds a claim with the same (subject, predicate) as S's one proof against O."""
+    w = _worlds_bench()
+    hostile = _kind_with_lean(w, -1)
+    proof_kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
+    for j in (J1, J2):
+        w.persons[j].ledger.append(_claim(f"a_{j}", j, SPEAKER, hostile))
+    w.persons[SPEAKER].ledger.append(_claim("a_proof", SPEAKER, PARTY, proof_kind))
+    w.persons[PARTY].ledger.append(_claim("a_mirror", PARTY, PARTY, proof_kind))
+    return w, hostile, proof_kind
+
+
+def _shifted_axes(w, who):
+    fx = w.fixtures
+    return person_q.projected_axes(w.persons[who], fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass"))
+
+
+def _room(w):
+    bench = tuple(world_q.judging_set(w, "Hh"))
+    return world_q.reception(w, SPEAKER, bench, SPEAKER), world_q.proofs(w, SPEAKER, PARTY, bench)
+
+
+def test_sc02_world_a_no_ledger_but_the_actors_own_moves_the_room():
+    """WORLD A: the judges' ledgers hold S's deeds (a hostile bench by the base's reading) and O's ledger mirrors S's proof, and no one has
+    committed. S is the actor of a `speak` (the speaker, off the bench): `reception == 0.0` exactly and `proofs == remove_weight`, unmirrored.
+    FALSIFIER: A's reception non-zero (a judge's ledger read) or A's proofs zero (the opponent's ledger read); a planted `h.ledger` in the
+    commit term's place reddens it."""
+    w, hostile, _pk = _world_a()
+    assert all(person_q.deed_valence(_shifted_axes(w, j), _claim("p", j, SPEAKER, hostile)) < 0.0 for j in (J1, J2))   # the control: both judges' ledgers lean, so a read of them would move it
+    reception, proofs = _room(w)
+    assert reception == 0.0
+    assert proofs == world_q.remove_weight("firsthand") > 0.0
+
+
+def test_sc02_world_b_the_bench_commit_moves_the_room_and_the_opponents_commit_mirrors_the_proof():
+    """WORLD B: A plus J1's live HOLDS commit to a Proposition that S did the hostile kind (value True) and O's live commit to a Proposition on the
+    proof's (subject, predicate), a denial. `reception == deed_valence(projected_axes(J1, shift), P) < 0` exactly; `proofs == 0.0`.
+    FALSIFIER: B's room equal to A's."""
+    w, hostile, proof_kind = _world_a()
+    a = _room(w)
+    p = _commit(w, J1, SPEAKER, hostile)
+    _commit(w, PARTY, PARTY, proof_kind, value=False)
+    reception, proofs = _room(w)
+    assert reception == person_q.deed_valence(_shifted_axes(w, J1), p) < 0.0
+    assert proofs == 0.0
+    assert (reception, proofs) != a
+
+
+def test_sc02_world_c_the_actors_own_ledger_counts_through_the_own_term_and_a_second_judges_ledger_moves_nothing():
+    """WORLD C: A with the actor J1 himself (a `determine` by J1, CP-T05-01 not yet moving the prize: the Query is called directly). J1's own
+    claim counts through the own term at `deed_term`'s value; J2's identical ledger claim does not move the total."""
+    w, hostile, _pk = _world_a()
+    bench = tuple(world_q.judging_set(w, "Hh"))
+    own = world_q.reception(w, SPEAKER, bench, J1)
+    assert own == person_q.deed_term(w.persons[J1], _shifted_axes(w, J1), next(c for c in w.persons[J1].ledger if c.id == f"a_{J1}")) == _lean(w, hostile) < 0.0
+    w.persons[J2].ledger.append(_claim("c_j2_more", J2, SPEAKER, hostile))
+    assert world_q.reception(w, SPEAKER, bench, J1) == own, "a second judge's ledger moved the room"
+    assert world_q.reception(w, SPEAKER, bench, J2) != own and world_q.reception(w, SPEAKER, bench, SPEAKER) == 0.0   # the control: it is the ACTOR's own ledger that is read
+
+
+def test_sc02_an_ended_commit_reads_as_no_commit():
+    """The ended commit: World B with J1's and O's commits closed (`until` set) reads as World A."""
+    w, hostile, proof_kind = _world_a()
+    a = _room(w)
+    _commit(w, J1, SPEAKER, hostile, live=False)
+    _commit(w, PARTY, PARTY, proof_kind, value=False, live=False)
+    assert _room(w) == a == (0.0, world_q.remove_weight("firsthand"))
+
+
+def test_sc02_one_judge_two_propositions_of_one_key_count_once():
+    """One judge's commits to two Propositions of the same (subject, predicate, value) count once; a second judge's commit counts as his own."""
+    w, hostile, _pk = _world_a()
+    one = _commit(w, J1, SPEAKER, hostile)
+    _commit(w, J1, SPEAKER, hostile)
+    assert _room(w)[0] == person_q.deed_valence(_shifted_axes(w, J1), one) < 0.0
+    _commit(w, J2, SPEAKER, hostile)
+    assert _room(w)[0] == person_q.deed_valence(_shifted_axes(w, J1), one) + person_q.deed_valence(_shifted_axes(w, J2), one)
+
+
+def test_sc02_only_a_holds_deed_of_value_true_by_a_person_about_the_target_counts_in_the_room():
+    """The commit term's own rules: an `OUGHT` commit, a denial (value False), a predicate outside `DEED_KINDS`, a commit about someone else and a
+    commit to a Proposition that does not exist count 0; the HOLDS deed about the target beside them counts."""
+    w, hostile, _pk = _world_a()
+    _commit(w, J1, SPEAKER, hostile, mood="OUGHT")
+    _commit(w, J1, SPEAKER, hostile, value=False)
+    _commit(w, J1, SPEAKER, "not_a_deed_kind")
+    _commit(w, J1, PARTY, hostile)
+    w.add_tenure(Tenure("t_ghost", J1, "prop_nowhere", "commit", 0))
+    assert _room(w)[0] == 0.0
+    p = _commit(w, J1, SPEAKER, hostile)
+    assert _room(w)[0] == person_q.deed_valence(_shifted_axes(w, J1), p) < 0.0

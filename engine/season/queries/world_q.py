@@ -898,57 +898,81 @@ def remove_weight(source: str) -> float:
 _UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)
 
 
-def reception(w: World, speaker: str, audience: tuple) -> float:
-    """HOW THE `audience` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
-    who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
+def _live_commit_propositions(w: World, who: str) -> list:
+    """THE PROPOSITIONS `who` IS PUBLICLY BOUND TO: the object of each live `commit` Tenure he owns, in edge order, that names a Proposition the world holds
+    (a commit to a faction or to nothing names none). A World edge, read off the committer's own edge list and in nobody's ledger
+    (`_eff_commit` writes it; `Proposition` is immutable), so reading it reads no person's ledger: `reception` and `proofs` ask no other."""
+    p = w.persons.get(who)
+    if p is None:
+        return []
+    return [w.propositions[t.object] for t in p.tenures if t.kind == "commit" and t.live and t.object in w.propositions]
 
-        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · present_confidence(c)/full · v_h(c)
 
-      * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room
-        the prize row says hears the act (B07.04; the bench is `judging_set(w, venue)`, the one owner of
-        who sits over a rung) -- each person once, never the speaker himself (a man does not receive
+def reception(w: World, target: str, audience: tuple, actor: str) -> float:
+    """HOW THE `audience` RECEIVES `target` -- `19_PLAN.md` step 17, the room reading the person it is asked about (for a `speak`, the speaker; `actor`
+    is `claimants[0]`, `contest_input`'s). Signed: above zero the bench is disposed toward him, below it against him. It stores nothing.
+
+    F8 HOLDS (`04_CODE_ARCHITECTURE.md` §B.2; SC-02, option B, ED-SC-0040; B24.02): THE FOLD MAY ASK THE ACTOR'S OWN LEDGER AND NO OTHER, so the
+    sum has two terms and no judge's ledger is read for any `h != actor`:
+
+        reception = Σ_h∈bench, h≠actor  Σ_P∈commits_h(target)  deed_valence(projected_axes(h), P)        THE COMMIT TERM
+                  + Σ_c∈deeds_actor(target)  remove_weight(c.source) · present_confidence(c)/full · v_actor(c)      THE OWN TERM
+
+      * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room the prize row says hears the act (B07.04; the
+        bench is `judging_set(w, venue)`, the one owner of who sits over a rung) -- each person once, never the target himself (a man does not receive
         himself);
-      * `deeds_h(speaker)` is `person_q.attributed_deeds` over `h`'s OWN ledger: the deed claims that
-        record an act of the speaker's, a paired kind's doer read off its sighting's `seen.who`
-        (R8.1's struct, `21_RECONCILIATION.md` PHASE 3's correction), never a bare subject;
-      * `v_h(c)` is `person_q.deed_term` -- `h`'s own projected pursuits against the alignment of the
-        act's kind (`data/verbs.py::align_kind`), the valence `regard` already reads. ⚠ THE VALENCE
-        SOURCE IS ARM 1 (step 17's swept choice), the existing alignment table, SHIPPED BY DEFAULT,
-        NOT BY WINNING. Arm 2, the dedicated regard table the plan names, is not authored;
-        `hole_register.yaml` H-215 carries the sweep's numbers and says it is open. The conflation
-        arm 1 names -- what a hearer prefers to DO standing in for how he REGARDS a doer -- is
-        recorded there, not resolved;
-      * `full` is `confidence_default`, so a claim decayed to half counts half.
+      * THE COMMIT TERM: each other member's LIVE `commit` Tenures (`_live_commit_propositions`) whose Proposition is `mood == "HOLDS"` and has
+        `subject == target` -- *he did `predicate`*, bound to in public -- each valued by `person_q.deed_valence`, the one valuation owner (it reads a
+        Proposition's `.predicate` and `.value` as it reads a claim's), so a predicate outside `DEED_KINDS`, a `value` other than `True` and a
+        `PAIRED_KINDS` predicate count 0 as they do for a claim. A live commit is a firsthand claim at full confidence: weight 1 (`remove_weight("firsthand")`).
+        One judge's commits to two Propositions of one `(predicate, value)` count once. An `OUGHT` commit counts 0 (it is what he wants done, and `determine`'s
+        `vote` conjunct counts it: one commit in two operands of one verdict is refused). No reconstruction from the log, and no sighting, so no erosion.
+        [ASSUMPTION; medium; Jordan to correct; revert: the commit term counts 0 -- `reception` reads the own term alone.]
+      * THE OWN TERM is the actor's, where he sits in the audience and is not the target (for a `speak` the speaker is the target, so it is empty):
+        `person_q.attributed_deeds` over `w.persons[actor].ledger`, each claim `remove_weight(c.source) · present_confidence(...)/full · v(c)` with `v` =
+        `person_q.deed_term` -- the actor's own projected pursuits against the alignment of the act's kind (`data/verbs.py::align_kind`), the valence
+        `regard` already reads. ⚠ THE VALENCE SOURCE IS ARM 1 (step 17's swept choice), the existing alignment table, SHIPPED BY DEFAULT, NOT BY WINNING.
+        Arm 2, the dedicated regard table the plan names, is not authored; `hole_register.yaml` H-215 carries the sweep's numbers and says it is open.
+        `full` is `confidence_default`, so a claim decayed to half counts half.
 
-    STEP 20, ROUTE EROSION, INSIDE THE SUM: a hearer who holds, UNTOLD, a `dominance`-route deed done
-    TO the speaker by somebody else (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has
-    called his bluff: every `dominance`-route deed of the speaker's that hearer holds no newer
-    (`(when, lap)`) than the latest such sighting counts zero. ⚠ `(when, lap)` IS THE CLAIM'S
-    DEPOSIT TIME, NOT THE DEED'S: a told or found copy is stamped with the tick it was deposited
-    (`loop/witness.py`), so a hearer told after the bluff of a deed from before it keeps that copy
-    at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One
-    success against him is enough, and only the witnesses who saw it are moved; a challenger who
-    fails suffers the deed himself, so the speaker's weight stands. A later coercive deed counts
-    again.
+    STEP 20, ROUTE EROSION, INSIDE THE OWN TERM ALONE: an actor who holds, UNTOLD, a `dominance`-route deed done TO the target by somebody else
+    (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has called his bluff: every `dominance`-route deed of the target's that actor holds no
+    newer (`(when, lap)`) than the latest such sighting counts zero. ⚠ `(when, lap)` IS THE CLAIM'S DEPOSIT TIME, NOT THE DEED'S: a told or found copy
+    is stamped with the tick it was deposited (`loop/witness.py`), so an actor told after the bluff of a deed from before it keeps that copy at full
+    weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One success against him is enough, and only the witnesses who saw it
+    are moved. A later coercive deed counts again. COST, STATED: a commit is not a sighting, so step 20 no longer reaches a `speak`'s bench.
 
-    An empty audience (a placeless speaker has no bench) -> 0.0: nobody is in the room."""
+    An empty audience (a placeless target has no bench), an unknown target -> 0.0: nobody is in the room."""
     TRACE.query("reception", "resolver")
-    if speaker not in w.persons:
+    if target not in w.persons:
+        return 0.0
+    bench = [h for h in dict.fromkeys(audience) if h in w.persons and h != target]
+    if not bench:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
     decay = w.fixtures.claim_decay()
     shift, hold, mass = w.fixtures.get("scar_weight_shift"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     total = 0.0
-    for hid in dict.fromkeys(audience):
-        h = w.persons.get(hid)
-        if h is None or hid == speaker:
-            continue
-        called = _UNREAD            # the latest bluff called, read on the first dominance-route deed
+    for hid in bench:
+        h = w.persons[hid]
         axis_w = None
-        for c in attributed_deeds(h.ledger, speaker):
+        if hid != actor:                       # THE COMMIT TERM: what `h` has bound himself to in public, never `h.ledger`
+            counted = set()
+            for prop in _live_commit_propositions(w, hid):
+                if prop.mood != "HOLDS" or prop.subject != target or (prop.predicate, prop.value) in counted:
+                    continue
+                if axis_w is None:
+                    axis_w = projected_axes(h, shift, hold=hold, mass=mass)
+                v = deed_valence(axis_w, prop)
+                if v:
+                    counted.add((prop.predicate, prop.value))
+                    total += v
+            continue
+        called = _UNREAD                       # THE OWN TERM: the actor's own ledger. The latest bluff called, read on the first dominance-route deed
+        for c in attributed_deeds(h.ledger, target):
             if c.predicate in DOMINANCE_KINDS:
                 if called is _UNREAD:
-                    called = max(((s.when, s.lap) for s in suffered_deeds(h.ledger, speaker)
+                    called = max(((s.when, s.lap) for s in suffered_deeds(h.ledger, target)
                                   if s.predicate in DOMINANCE_KINDS), default=None)
                 if called is not None and (c.when, c.lap) <= called:
                     continue
@@ -958,15 +982,17 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
     return total
 
 
-def proofs(w: World, speaker: str, opponent: Optional[str], audience: tuple, admitted: Optional[tuple] = None) -> float:
-    """THE PROOFS `speaker` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
-    -- `19_PLAN.md` step 18, a Query over two ledgers. Each deed claim in the speaker's OWN ledger
-    recording an act of the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`,
-    UNLESS THE OPPONENT CAN MIRROR IT: he holds a claim with the same subject and predicate
-    (`18_FINDINGS.md`'s mirror test, *does the opponent hold a claim with the same subject and
-    predicate?*), and then it counts exactly zero. A non-person opponent holds no ledger and mirrors
-    nothing. `audience` is the persons of the room that hears the speaker (`reception`'s): with nobody in it
-    besides him there is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
+def proofs(w: World, actor: str, opponent: Optional[str], audience: tuple, admitted: Optional[tuple] = None) -> float:
+    """THE PROOFS `actor` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
+    -- `19_PLAN.md` step 18. Each deed claim in the actor's OWN ledger (`actor` is `claimants[0]`: for a `speak` the speaker) recording an act of
+    the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`, UNLESS THE OPPONENT CAN MIRROR IT.
+
+    F8 HOLDS (SC-02, option B; B24.02): THE MIRROR IS THE OPPONENT'S COMMITS, NOT HIS LEDGER. He mirrors a proof by having answered it on the record: a live
+    `commit` Tenure of his (`_live_commit_propositions`) to a Proposition with the proof's `(subject, predicate)`, any value (a denial answers a charge as
+    well as an assent does) and any mood, and then it counts exactly zero. A non-person opponent owns no edges and mirrors nothing. THE MIRROR IS NO LONGER
+    TOTAL: at the base WITNESS deposited a doer's own act to him, so it zeroed every proof in computed play (`H-216` (4)); now it zeroes only a pair
+    he has committed on. `audience` is the persons of the room that hears the actor (`reception`'s): with nobody in it besides him there is no one to
+    spend a proof on, and the answer is 0.0, the rule `reception` states.
 
     `admitted` (B05.21, T13 edit 4; `H-427`) is the docketed row's `proofs:` column, PASSED IN by the host builder -- this query reads no
     arrangement itself -- or `None` (no filter: nothing docketed, or `Fixtures.proof_admission` `off`). Given, a claim counts only if the kind of
@@ -975,19 +1001,18 @@ def proofs(w: World, speaker: str, opponent: Optional[str], audience: tuple, adm
     ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
     docketed (the plan's text asks for neither); and the mirror keys on (subject, predicate) alone.
 
-    ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE SPEAKER HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
+    ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE ACTOR HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
     design spends proofs one at a time inside a nested run (`21_RECONCILIATION.md` step 15, unbuilt),
     which is where hoarding one becomes a choice; one `speak` is one act, so it spends its whole
-    inventory. The mirror is still hidden from him -- nothing person-side reads it."""
+    inventory."""
     TRACE.query("proofs", "resolver")
-    who = w.persons.get(speaker)
-    if who is None or opponent is None or opponent == speaker:
+    who = w.persons.get(actor)
+    if who is None or opponent is None or opponent == actor:
         return 0.0
     held = list(attributed_deeds(who.ledger, opponent))
-    if not held or not any(hid != speaker for hid in audience):
+    if not held or not any(hid != actor for hid in audience):
         return 0.0
-    opp = w.persons.get(opponent)
-    mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
+    mirror = {(prop.subject, prop.predicate) for prop in _live_commit_propositions(w, opponent)}
     return ltr_sum(remove_weight(c.source) for c in held
                if (c.subject, c.predicate) not in mirror
                and (admitted is None or PROOF_KIND_OF_SOURCE[c.source] in admitted))

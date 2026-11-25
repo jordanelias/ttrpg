@@ -8,10 +8,10 @@ name, ED-SC-0033 clause (2)). The file keeps its name because its automated mode
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
 DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and reads the obstacle's raw
 operands from what the actor and the subject genuinely have -- for a prize a room hears (`heard_by:`),
-that includes the bench's and the opponent's LEDGERS through `queries/world_q.py`'s `reception` and
-`proofs`, a read `04_CODE_ARCHITECTURE.md` §B.2:250 (F8) words for the fold's own ledger query and
-§A.2:168 permits `world_q` ("any store, via World"): the tension is recorded in `hole_register.yaml`
-H-215/H-216, not resolved here -- and freezes them into `queries/inputs.py::SocialContestInput` (the hostile half as the obstacle's
+that includes the room's reading of the actor and the actor's unmirrored proofs through `queries/world_q.py`'s `reception` and
+`proofs`. F8 HOLDS for both (`04_CODE_ARCHITECTURE.md` §B.2:250; B24.02, option B): each reads the ACTOR'S OWN ledger (`claimants[0]`, passed as `actor`) and
+no other, and what the rest of the bench and the opponent have said in public is read off their live `commit` edges, which are World edges
+and in no ledger (`hole_register.yaml` H-215 (7), H-216 (7)) -- and freezes them into `queries/inputs.py::SocialContestInput` (the hostile half as the obstacle's
 `reception` term, what the speaker brings -- `proofs`, a friendly bench's `favour` -- as leverage, B05.17);
 `resolve` (the adapter) calls the module entry the prize row names (`module_entry:`, registered in
 `manifest.MODULE_ENTRIES` from its composition row), keeps S27.4's refusal on the pair it returns, and
@@ -467,8 +467,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     and with no `dice` row a pool of 0 (nothing read the actor's score).
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject), `w.fixtures`, `w.records` (the
-    Record an inquiry examines) and, for a prize a room hears, the bench's and the opponent's ledgers
-    through `queries/world_q.py::reception` and `proofs`; the module that consumes the record never sees
+    Record an inquiry examines) and, for a prize a room hears, the actor's own ledger and the bench's and the opponent's live commits
+    through `queries/world_q.py::reception` and `proofs` (the actor, `claimants[0]`, is the one whose ledger they may read); the module that consumes the record never sees
     `World`. §A.2's wrapper row types the column *"the projection"*: this builder reads `World`, the
     deviation named above (`combat.resolve` is its precedent), CONVENTION. Its precondition is the adapter's
     PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
@@ -503,7 +503,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     if room is not None:
         audience = audience_of(w, HeardAct(claimants[0], via, room), heard_by)
         # `toward: to` (U5c §2 edit 4): the room is asked about the receiver, here the act's person counterparty [ASSUMPTION: `to` is the roll's `subject`; no row declares it until `a holding`'s verb lands].
-        room_terms = dict(reception=reception(w, subject if toward == TOWARD_TO else claimants[0], audience),
+        room_terms = dict(reception=reception(w, subject if toward == TOWARD_TO else claimants[0], audience, claimants[0]),
                           reception_gain=fx.get("reception_gain"),
                           proofs=proofs(w, claimants[0], subject, audience, admitted=_admitted_proofs(fx, docketed)))
     doc = w.records.get(examined) if examined is not None else None
@@ -884,8 +884,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         difficulty (the verb row's, public).
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
         -> unknown.
-      * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
-        passes his own believed `room` (`{"reception": .., "proofs": ..}`).
+      * the room's terms (`reception`, `proofs`) read the bench's and the opponent's public commits, which are not the believer's own
+        claims: unknown unless the caller passes his own believed `room` (`{"reception": .., "proofs": ..}`).
     His `effort` is his own act's, held with certainty like his pool (CP-T01-05), and so is the level of the seat he acts through
     (`office`, B05.20): the caller's, read off the seat's own row (`_seat_modifier`), as `person_subject` is the caller's. So is the arrangement
     row the matter is docketed under (`docketed`, B05.21): the docket is public, the caller reads it. THE COUNTERPARTY'S STANCE TOWARD THE ACTOR IS
