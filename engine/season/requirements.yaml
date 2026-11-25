@@ -255,15 +255,15 @@ rows:
         expects: "three seeds green; the witness-cut control reads 0"
         holds: "yes"
         reading:
-          tree: "ce09a54c205afc8354ea7dd35a05df8aebcb04f4"
+          tree: "000d1779612c29f594e8c2649a17997c8a5b852e"
           date: "2026-11-25"
           seed: "0, 1, 2"
           seasons: 1
-          line: "4 passed, 9 deselected in 57.78s"
+          line: "4 passed, 9 deselected in 57.48s"
           control: >-
             `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut) is one of the four and passed
-            (its `landed > 0` and `hit == 0` assertions held); read on the code tree of `ce09a54` (B08.06); B08.99 edits test pin literals, `results.json`
-            and this file and `hole_register.yaml` only
+            (its `landed > 0` and `hit == 0` assertions held); read on the code tree of `000d177` (B08's close, Phase 1); B08.99 edits test pin literals, `results.json`,
+            `sim_params.json` and this file and `hole_register.yaml` only
           does_not_show: >-
             one season a seed; the shipped policy `probes.chooser` and not the game's play; a count above 0, not a share;
             run with `-p no:cacheprovider` added; 13 tests in the file, 9 deselected by `-k r01` (the earlier reading deselected 8)
@@ -354,17 +354,17 @@ rows:
         expects: "all pass, the one-lap arm among them"
         holds: "yes"
         reading:
-          tree: "ce09a54c205afc8354ea7dd35a05df8aebcb04f4"
+          tree: "000d1779612c29f594e8c2649a17997c8a5b852e"
           date: "2026-11-25"
           seed: "per test"
           seasons: "per test"
-          line: "3 passed, 3109 deselected in 454.91s (0:07:34)"
+          line: "3 passed, 3113 deselected in 457.15s (0:07:37)"
           control: >-
             the one-lap arm resolves acts (`test_u2_the_one_round_arm_resolves_acts`), one of the three (four at f22b1b6; five at 72c28861;
             four at efc9eb0, B04's open): the drop from four to three is `43da21c` (the `test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`
             test is no longer in the tree, which `B08.06` met), and the S13 base `8142371` reads three too, so B08 moved no count; it is no
-            comparison against the pre-tick loop (the census that made it one was deleted, B02.01 D); read on the code tree of `ce09a54` (B08.06), B08.99 edits
-            test pin literals, `results.json` and this file and `hole_register.yaml` only
+            comparison against the pre-tick loop (the census that made it one was deleted, B02.01 D); read on the code tree of `000d177` (B08's close, Phase 1), B08.99 edits
+            test pin literals, `results.json`, `sim_params.json` and this file and `hole_register.yaml` only
           does_not_show: >-
             a test reading on corpus-case worlds, not the shipped realm; no test of the three observes order inside a scene (R-03.c does); run with
             `-p no:cacheprovider` added, one process (no `-n`)
@@ -374,13 +374,13 @@ rows:
         expects: "exits 0, prints `rounds=` per season"
         holds: "yes"
         reading:
-          tree: "ce09a54c205afc8354ea7dd35a05df8aebcb04f4"
+          tree: "000d1779612c29f594e8c2649a17997c8a5b852e"
           date: "2026-11-25"
           seed: 0
           seasons: 2
           line: "  season 0: rounds=5 acts=18 events=20 deposits=98"
           control: >-
-            the run exits 0 (`rc 0`, `PYTHONHASHSEED=0`, 1.3 s) and prints the same key for season 1
+            the run exits 0 (`rc 0`, `PYTHONHASHSEED=0`, 1.2 s) and prints the same key for season 1
             (`rounds=5 acts=29 events=35 deposits=138`); its last line is `CONTENT HASH: 7c80987c9a24a82cb14778d2267b1672`, and the S13
             base `8142371` prints the same season lines with `459f6b08c6543257fbeae192e307e0c1` (a case world's hash moved, its acts and Events did not)
           does_not_show: >-
@@ -392,25 +392,31 @@ rows:
           `[ASSUMPTION: the row needs the new conjunct to stay met after B08 — basis: R-03.a and .b read laps, not the scene A-9 defines.
           Revert: drop R-03.c; the row is then unmoved by B08.]`
         argv: ["python", "-m", "pytest", "engine/season/tests/test_scene_sequence.py", "-q"]
-        expects: "five pass; control `interactions_per_scene = 1` reproduces the pre-edit hash"
+        expects: "all pass (the plan wrote five; the file holds eight at the close, B08.02 to B08.04 and the close's ruling having added three); control `interactions_per_scene = 1` reproduces the pre-edit hash"
         holds: "yes"
         reading:
-          tree: "ce09a54c205afc8354ea7dd35a05df8aebcb04f4"
+          tree: "000d1779612c29f594e8c2649a17997c8a5b852e"
           date: "2026-11-25"
           seed: "0 (the control: `build_realm(0)`; the four others are hand-built worlds)"
           seasons: "1 (the control); the four others fold one lap"
-          line: "5 passed in 25.05s"
+          line: "8 passed in 63.25s"
           control: >-
-            `test_one_interaction_per_scene_hash_equals_today` is one of the five and passed: `interactions_per_scene = 1` after one season at seed 0 reads the
-            S13 base's own value, which the file pins as a test-local literal and no B08 item moved. The realm itself (seed 0, two seasons, a counter that
-            draws nothing, its hash equal to `_realm_goldens.SHIPPED[(0, 2)]`): 388 scenes with two or three folded interactions, 388 folded in the chooser's
-            own order and contiguous (100 %; 97 of 369, 26.3 %, and 2 contiguous, at `8142371`), 238 acts with `after` set, 230 skipped with a refusal Event
-            at clause `sequence`
+            `test_one_interaction_per_scene_hash_equals_today` is one of the eight and passed: `interactions_per_scene = 1` after one season at seed 0 reads the
+            S13 base's own value (`0325a351..`; seeds 1 and 2 `710d4161..`, `e90b1a4f..`, read in a scratch run with `rival_precedence: hash`, equal to the base's), which the file
+            pins as a test-local literal and no B08 item moved. The plan wrote five tests; the file held five at c32da4e and holds eight now (the close's Phase 1
+            split the skip test in two, added the admission-refusal arm and the realm arm `test_realm_scenes_fold_contiguously_in_chooser_order_over_two_seasons`). THE REALM (seed 0, two
+            seasons, a counter that draws nothing, its hash equal to `_realm_goldens.SHIPPED[(0, 2)]`, `3e017756..`): 371 scenes with two or three folded interactions (314 of three, 57 of two),
+            371 folded in the chooser's own order and contiguous (100 %; 97 of 369, 26.3 %, and 2 contiguous, at `8142371`); acts with `after` set 0 (238 at c32da4e, before the close's ruling
+            that `hangs_on` also requires the same counterparty), so skipped at clause `sequence` 0 (230 at c32da4e: 28 band misses and 202 no-band skips, 192 of those an `argue` refused at
+            admission); band-miss skips 0, no-band skips 0, cross-hearer hangs 0 (`argue` to one hearer no longer hangs on `argue` to another). The refusal-at-`sequence` path is therefore read
+            by `test_second_step_skipped_when_first_misses_band_logs_sequence_refusal` and `test_second_step_skipped_when_first_was_refused_at_admission` on hand-built worlds, not by the realm
           does_not_show: >-
-            three of the five read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata), not the chooser's own, one reads the
-            verb table and one the realm at one interaction per scene; the realm figures above are one seed, two seasons and a counter run outside
-            the test; whether a skipped second interaction was the better act is not read; `rival_precedence` is not read (no rivalry
-            group forms at seeds 0, 1, 2 in two seasons: 0, 0, 0)
+            the realm does not exercise `after`: no act in two seasons at seed 0 carries one when it reaches the fold, so "acts with `after` set are skipped when the prior misses its band"
+            is read only on planted scenes (a hand-built `_argue_world`, one arguer, one hearer, a keyed act id), and the realm arm reads the scene ORDER alone;
+            `test_npc_effort_attribution` reads 3 of 761 `pack_scenes` calls in that run holding an act with `after`, none of which reached the fold with it set (observed, cause unread);
+            five of the eight read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata; the two argue arms), one reads the verb table, one the realm at one interaction
+            per scene and one the realm's fold order; the realm figures above are one seed, two seasons and a counter run outside the test; whether a skipped second interaction was the better act is not read;
+            `rival_precedence` is not read (no rivalry group forms at seeds 0, 1, 2 in two seasons: 0, 0, 0, read at c32da4e; not re-read here, the ruling does not reach the draw)
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene landed; this row is met)
 

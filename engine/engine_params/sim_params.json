@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 525,
-    "uncited": 393,
+    "total": 527,
+    "uncited": 395,
     "of_which_assumption_grade": 9
   },
-  "count": 525,
+  "count": 527,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 40,
+    "engine.season": 41,
     "mass_battle": 160,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 220,
+    "engine.season.settings": 221,
     "engine.season.realm": 8
   },
   "params": [
@@ -547,6 +547,17 @@
       "module": "engine.season",
       "file": "engine/season/harness/strife.py",
       "note": "[JUSTIFIED: the study's own window for a windowed link, inherited and not fitted; magnitude is the study's]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.PRECEDENCE_REDRAW_CAP",
+      "name": "PRECEDENCE_REDRAW_CAP",
+      "value": 32,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/loop/resolve.py",
+      "note": "",
       "citation": null,
       "citation_grade": null
     },
@@ -4381,6 +4392,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-76`, swept 1 / 3 / unbounded",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rival_precedence",
+      "name": "rival_precedence",
+      "value": "draw",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "swept hash (control; revert) / draw (SHIPPED)",
       "citation": null,
       "citation_grade": null
     },

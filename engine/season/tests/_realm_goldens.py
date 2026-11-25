@@ -72,31 +72,33 @@ season, read twice equal at `PYTHONHASHSEED=0`: main `fbc82e79..` (B21.99) and t
 RE-PINNED AT THE B11 MERGE WITH MAIN (B24p and B21 landed on main while B11-fi-readers was open; every value below, BUILD too: B11's encoding movers B11.08, B11.17 and B11.74 move the build hash, `7eb6293a..` -> `08a3ac1534672c8c4f1f0576a11dc1e7` at seed 0): the merged realm is a fifth state, read twice equal at `PYTHONHASHSEED=0` on the merged tree: main `380446248fd513..` (B24p merge with B21, seed 0, one season), the B11 tree `793f29fd..` (this branch before the merge) and the merged tree `94dc5293c35bb143d905e35098a0319d` (acts 392, log 9320). The merge also needed `rosters.yaml: seat_founding_kinds`: B11.08's ledger-sourced vacancy left a seat nobody has held unnamed, so B21's founded office was never offered to the man who founded it; it now reads as vacant from its founding. The B11.99 values are in `git log`.
 
 RE-PINNED AT B08.99 (every `SHIPPED` and `CENSUS` value; BUILD read `08a3ac15..` unmoved, as at the S13 base `8142371`), ONCE for the batch B08-scene-order. The movers are B08.03 (a scene is folded in its own order) and B08.04 (the chooser sets `after` from the row, so a skipped second interaction logs a refusal at clause `sequence`); B08.05 (the precedence draw) reads equal here, since no rivalry group forms at seeds 0, 1, 2 in two seasons; B08.01, B08.02 and B08.06 are EQUAL. Seed 0, one season (`PYTHONHASHSEED=0`), hash acts/log: `94dc5293..` 392/9320 (`reading @8142371`, the S13 base) -> `0f7f42a3..` (B08.03, that item's reading) -> `6a394d86..` 377/7804 (B08.04, which B08.05 and B08.06 leave; `reading @ce09a54`). Seeds 1 and 2 and the two-season spans were read on `ce09a54` and on `8142371`. The B11 merge values these replace are in `git log`.
+
+RE-PINNED A SECOND TIME AT B08.99 (every `SHIPPED` and `CENSUS` value; BUILD unmoved), after the batch's close applied an antagonist's ruling (`44cdf60`): `decision/choose.py::hangs_on` also requires the same counterparty, so an `argue` to one hearer no longer hangs on an `argue` to another. That removes every hang in the realm over two seasons at seed 0 (acts with `after` set 238 -> 0, skipped at clause `sequence` 230 -> 0): the realm reads B08.03's value again at seed 0, one season (`0f7f42a3..`, which c32da4e's body records for B08.03), and no longer carries the B08.04 values above. Seed 0, one season (`PYTHONHASHSEED=0`): `6a394d86..` 377/7804 (`reading @c32da4e`) -> `0f7f42a3..` 392/9319 (`reading @000d177` plus this edit). The values above are in `git log`.
 """
 
 BUILD = {0: "08a3ac1534672c8c4f1f0576a11dc1e7"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "6a394d8615e7a004b6a2c6557133f39a",
-           (0, 2): "47aef4c0c6c91c2f6cdf7a7cda4369a8",
-           (1, 1): "3e17484e76b04f1e9c0007673311ec21",
-           (1, 2): "4ecb13d928ff627e7668330c37adf234",
-           (2, 1): "81c1fc141c95f524b6defcbce2620719",
-           (2, 2): "e81886eeb2141b7322ab6863b8448caa"}    # B08.99 re-record (the docstring); the earlier values are in `git log`
+SHIPPED = {(0, 1): "0f7f42a3ed5970c7e3d8216acc6f14fc",
+           (0, 2): "3e017756f5a92010810254cade728505",
+           (1, 1): "0264011cf04432fe89a5c42599d9c26f",
+           (1, 2): "888f365efa0ea61f94bc4a747d1fcbb8",
+           (2, 1): "bcfe37b0085d36aba81336f222cbeb55",
+           (2, 2): "2a568b9fadbcd64248a9ab0790253b72"}    # B08.99 re-record (the docstring); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=377, log=7804,
-                 census="f00a71f978e9a2a5428dcffc90291231bc3d4922fe482dd2c9e207fa0e5c0d48"),
-    (0, 2): dict(acts=807, log=19390,
-                 census="a0e028697ee6ae95c8dcf93ecfdce307f8239b0c3aa65e9db7a40186bbe47f18"),
-    (1, 1): dict(acts=439, log=7746,
-                 census="01fa53517ee8db2facfef1c8581a487d5a277d2bb28fc400331559692b1c9f88"),
-    (1, 2): dict(acts=904, log=18359,
-                 census="68fd38f68e34fd179ea6d4490a66a6b1942a77dc77042f952f23c74794fbcf60"),
-    (2, 1): dict(acts=398, log=8372,
-                 census="e4047abbbbf66fb8b977766cf514ff10339369440548d8810efda0b295e77bac"),
-    (2, 2): dict(acts=844, log=18207,
-                 census="79d313c6fef52194bb98a68fa4413cdb7f0b3176491941277b2d9973b283a477"),
+    (0, 1): dict(acts=392, log=9319,
+                 census="3cb7dbe3b5bada6e8159608a780263ffe0fbc7b234c5fd9cff74aded7eb79376"),
+    (0, 2): dict(acts=829, log=20644,
+                 census="b142f7a67e75676261a28ec1c19ecf3e43188308b2cebbccfea02d913d09ae89"),
+    (1, 1): dict(acts=439, log=9166,
+                 census="f66363dfee55e393ea96358d868913e834ae77c6e067f4ba33e1b7bcde8bc6d3"),
+    (1, 2): dict(acts=920, log=21783,
+                 census="81f633dc9640ae9fc55d4a6e05f6e63857f77ef4e9193247cfe50fe243f63115"),
+    (2, 1): dict(acts=406, log=9117,
+                 census="7d3f024a5a755eb0e05803d7370665c22d6ca3079e78977e1f50c2d2acb5a162"),
+    (2, 2): dict(acts=886, log=19987,
+                 census="3a3e8de7e1caab0a56a9a54630c95f3fd5b00cfc64c5993697bc1cf77196d120"),
 }
