@@ -96,7 +96,10 @@ def _pool_dice(c, cfg, addends=None):
     return core.resolution_pool(c.score, getattr(c, "pool_addends", 0) if addends is None else addends, **kw)
 
 
-def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0):
+# An approach as its lean: the position in `V.APPROACHES` minus one (-1 defensive, 0 normal, +1 aggressive). The lean is what a gate reads; the name is what a plan says.
+_LEAN_OF = {a: i - 1 for i, a in enumerate(V.APPROACHES)}
+
+def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, plans=None):
     """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
     object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
     Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
@@ -105,7 +108,16 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     objects throughout — never swapped. `terms` is `fight`'s non-lethal duel terms (RS-25), or None under lethal
     ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop.
     `turn` is this round's index in the fight (1-based, the `round_start` count) and `scene` the fight's `rng.n` where it began:
-    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`)."""
+    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`).
+    `plans` is the round's approach per party, `({phase: approach}, {phase: approach})` in A, B order (`fight_round`: the claimants' order); `None`, a missing
+    party's entry or a missing phase is `normal`, lean 0. The wrapper reads it into `c.lean[phase]` at the CONSULT POINTS (B16.05, PB 03 §4): the round's start
+    (the measure open: `measure`; opening closed: `exchange`), the measure closing (`exchange`) and a bind entered (`bind`). No decider is asked here; the leans
+    are the plan given in advance. Only the `exchange` lean is read by a gate yet (`S.commit_depth`, `S.counter_select`)."""
+    plans = plans or ({}, {})
+    def _consult(phase):
+        """A phase is entered: each party's approach for it, from the round's plans, becomes his `lean[phase]`. A pure write: it draws nothing."""
+        for c, plan in zip((A, B), plans):
+            c.lean[phase] = _LEAN_OF[plan.get(phase, 'normal')]
     blow = 0
     def _strike(attacker, defender, deg, **kw):
         """`core.strike` with the blow's keyed coverage-gap draw (PC_D, A-30). Returns (damage, bare) for the caller to carry to
@@ -199,6 +211,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     beats=0; exchanges=0
     reopen_moment=False; push_avail=False   # distance-creating-moment state for re-opening (corrections 1+3)
     # (feint_streak removed — feint dissolved into the attack, WS-5)
+    for c in (A, B): c.lean = {ph: 0 for ph in V.PHASES}   # nothing entered yet: no stale lean of an earlier round (the workbench loop reuses its Combatants)
+    _consult('exchange' if closed else 'measure')   # the round opens at measure, or already closed (the measure has closed: the exchange is entered)
     _emit('engagement_start', aggressor=first.label, defender=(B if first is A else A).label,
           longer=longer.label, shorter=shorter.label, weapon_A=A.weapon, weapon_B=B.weapon,
           reach_A=round(erA,2), reach_B=round(erB,2), measure_gap=round(measure_gap,2), closed=closed)
@@ -316,6 +330,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
             measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
             just_closed = (measure_gap<=cfg['CLOSE_GAP_REF'])
             if just_closed:
+                _consult('exchange')   # the measure closes: the exchange is entered
                 closed=True; ready=_carry(ready,cfg)   # carry the cadence RESIDUAL (ED-PC-0037): no banked whole action, but no re-synchronised restart either
             _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
                   close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
@@ -483,6 +498,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         elif hit_bare is False:   # a blow struck against the harness that dealt nothing: the blade was turned (PC_D)
             _emit('turned', by=aggressor.label, victim=defender.label, source='exchange')
         if bind:
+            _consult('bind')   # a bind is entered
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
             # contact — once, at bind entry, scaled by their tactile+leverage. Not gated on the visual read.

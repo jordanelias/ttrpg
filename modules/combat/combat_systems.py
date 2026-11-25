@@ -989,7 +989,7 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     the DEEP and LUNGE tiers are stated in this window (`deep_commit`, `lunge_commit`), not in [2,5]."""
     ln=disp_lean(aggressor)
     wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
-    g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
+    g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary + cfg['APPROACH_COMMIT_K']*aggressor.lean['exchange'])   # the `exchange` lean (B16.05, PB 03 §3): the aggressor's, a prior on this one Beta; 0 (`normal`) adds nothing and `ln` stays disposition's alone
     ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
     span=_commit_span(aggressor, cfg)
     commit=2.0+span*float(rng.beta(ba,bb))   # Beta draw (`Draw.beta`)
@@ -1046,7 +1046,7 @@ def indes_steal_amount(aggressor, defender, wind, commit, read_d, read_a, cfg, T
 def counter_select(defender, cfg, rng, TR):
     """Whether the defender reaches for the single-time counter (tempo-driven SELECTION; SUCCESS is gated later, a
     miss punished). Consumes one rng.random."""
-    return rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*disp_lean(defender))*TR.ability_factor(defender,'counter_select')
+    return rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*disp_lean(defender))*max(0.0, 1-cfg['APPROACH_COUNTER_K']*defender.lean['exchange'])*TR.ability_factor(defender,'counter_select')
 
 def overcommit_exposure(aggressor, commit, fat_a, cfg, TR):
     """The aggressor's exposure to the riposte from over-committing: commit-depth x irrecoverability, minus the

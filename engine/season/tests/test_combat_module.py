@@ -851,3 +851,46 @@ def test_round_outcome_names_how_it_ended():
     assert checked >= 100, checked
     assert felled_rounds > 0 and recovered_rounds > 0 and len(ends_seen) >= 4, (
         f"the fights ended rounds by {sorted(ends_seen)} only ({felled_rounds} felled, {recovered_rounds} recovered): the comparison cannot tell endings apart")
+
+
+# What each fight below drew and traced at B16.03 (c11b2a91f, before the lean was read): the round's `Draw.n` after each round, and the head of the md5 of
+# the rounds' traces' reprs. Read off the tree before B16.05's edit; an all-`normal` fight that draws one more or one fewer number moves a count.
+_AS_AT_B1603 = {("duel", 3): ((29, 21), "945b5f19e931"), ("duel", 11): ((33, 32, 22, 33), "7d81b312451d"),
+                ("reach", 3): ((69, 12), "0d0ccb9b7d8d"), ("reach", 11): ((57, 49), "bb5e527c1a3f"),
+                ("fast", 3): ((27, 14, 15), "d9ffc6e3d8b3"), ("fast", 11): ((25, 19, 15, 44), "8f39c7a671b9")}
+_KIT_SETS = {"duel": (("longsword", "heavy"), ("arming", "light")), "reach": (("spear", "light"), ("mace", "medium")),
+             "fast": (("rapier", "none"), ("longsword", "heavy"))}
+
+
+def test_all_normal_plans_draw_the_same_count_as_today():
+    """B16.05 (PB step 3a, "all-`normal` byte-identical to step 2"): six fights, played round by round on the round's own `Draw`. Each is played twice, with
+    `plans=({}, {})` and with every phase named `normal` for both parties, and the two are one fight event for event; each fight's per-round `Draw.n` and its
+    traces' digest are the literals read at B16.03, before the lean was built. A `normal` lean draws nothing and reorders nothing. FALSIFIER: a draw taken (or
+    skipped) by an all-`normal` round moves a count; a lean read where `normal` is lean 0 moves a trace."""
+    import hashlib
+    from engine.substrate import composition
+    from ..queries.inputs import DuelRoundInput, DuelState
+    from modules.combat import wrapper
+    fight_round = composition.require("combat.round")
+    normal = {ph: "normal" for ph in ("measure", "exchange", "bind")}
+
+    def play(name, seed, plans):
+        inp = _round_inp(seed, kits=_KIT_SETS[name])
+        fkey = wrapper.fight_draw(draw.seeded(draw.H2("b16.05", f"{name}:{seed}")))
+        states, closed, counts, digest, trace = (DuelState(), DuelState()), False, [], hashlib.md5(), []
+        for r in range(1, 13):
+            rng = wrapper.round_draw(fkey, r)
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=plans, round=r, prev_closed=closed), rng)
+            counts.append(rng.n); digest.update(repr(out.trace).encode()); trace.extend(out.trace)
+            states, closed = out.states, out.closed
+            if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
+                break
+        return tuple(counts), digest.hexdigest()[:12], trace
+    checked = 0
+    for (name, seed), (counts, head) in _AS_AT_B1603.items():
+        empty = play(name, seed, ({}, {}))
+        named = play(name, seed, (dict(normal), dict(normal)))
+        assert empty[:2] == (counts, head), f"{name}/{seed}: an all-normal fight draws or traces other than it did at B16.03: {empty[:2]} != {(counts, head)}"
+        assert named == empty, f"{name}/{seed}: naming `normal` in every phase is not the same fight as naming nothing"
+        checked += 1
+    assert checked == len(_AS_AT_B1603) == 6

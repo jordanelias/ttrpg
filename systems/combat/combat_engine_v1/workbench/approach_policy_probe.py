@@ -56,8 +56,7 @@ from modules.combat import fight as entry
 import fight_record
 
 WILSON_Z = 1.96
-APPROACHES = ('defensive', 'normal', 'aggressive')   # PB §3's vocabulary; written here until `modules/combat/vocabulary.py` owns it (B16.05)
-PHASES = ('measure', 'exchange', 'bind')
+from modules.combat.vocabulary import APPROACHES, PHASES   # PB §3's vocabulary, owned once (B16.05)
 
 # THE MATCHUPS -- see the table in the docstring. (name, L's spec, O's spec)
 MATCHUPS = (

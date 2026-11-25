@@ -5,7 +5,8 @@ fix for the frame-mapping bug class: roles are objects, not positional/dict keys
 # The weapons DICTIONARY + GEOMETRY live in weapons.py (the data layer); the DERIVATION in weapon_physics.py.
 # Re-exported here so existing `from .combatant import WEAPONS` call-sites keep working (the canonical home is weapons.py).
 from .weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F401  (data lives in weapons.py)
-from . import attributes as _A   # the attribute spec, the one owner of which attributes exist (PC-14)
+from . import vocabulary as _V   # the closed PHASES `lean` is keyed by (a leaf: imports nothing)
+from . import attributes as _A   #the attribute spec, the one owner of which attributes exist (PC-14)
 from .config import CFG    # conc_max's coefficients when rederive() is given no cfg
 
 # ---- COMBAT-STATE KERNEL (ED-1085 container de-leak) ----
@@ -155,6 +156,7 @@ class Combatant:
         # nowhere; the live readiness state is the wrapper's LOCAL `ready={A:..,B:..}` dict. Carried state that resets
         # to no effect is worse than absent state: it reads as though the engine tracks it.
         self.initiative=0.0                  # the Vor/Nach state (signed; +ve = holds initiative). Reset/managed by wrapper.
+        self.lean={ph: 0 for ph in _V.PHASES}   # the approach in force per phase, as a lean (-1 defensive, 0 normal, +1 aggressive). Written only by the wrapper (`engagement`'s consult points), like `initiative`; 0 everywhere is every fighter's own temperament and nothing leaned.
         self.poise=1.0                   # kuzushi/balance (1.0=balanced, broken downward). Reset/managed by wrapper.
     # weapon vector accessors
     @property
