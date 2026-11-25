@@ -268,10 +268,10 @@ def _transmit(mode, mat, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=
         # thrust_auth=1.0 (short-lever/half-sword/dagger).
         # THIS RETURN IS BEFORE THE COVERAGE-GAP LINE BELOW: the ranking average (`gap_on=True`) never contained a `COVERAGE_GAP` term for a thrust
         # (its gap is GAP_EXPOSURE's, above), while `strike` draws `bare` for every head and a bare blow is paid as `none`. So the ranker's average
-        # and a drawn thrust differ in mean: cloth +2%, mail 0.6175 -> 0.675, plate 0.585 -> 0.647 at gap_prec 0.65 (held for a ruling; no hole row names it yet).
+        # and a drawn thrust differ in mean: cloth +2%, mail 0.6175 -> 0.675, plate 0.585 -> 0.647 at gap_prec 0.65 (held for a ruling: hole row H-579).
         return max(t, GAP_EXPOSURE[mat]*gap_prec*thrust_auth)
     if mode=='percussion':                                          # FIX-1b, extended U2/ED-PC-0011: authority-scaled
-        # KNOWN DEPARTURE FROM "EQUAL EXPECTATION", held for a ruling (no hole row names it yet): a bare percussion blow paid as `none` keeps
+        # KNOWN DEPARTURE FROM "EQUAL EXPECTATION", held for a ruling (hole row H-579): a bare percussion blow paid as `none` keeps
         # `max(PERC_TRANSMIT_FLOOR, perc/PERC_AUTH_REF_SOFT)`, so it is not the blow's expectation across the material it was ranked against.
         ref = PERC_AUTH_REF if mat in ('mail', 'plate') else PERC_AUTH_REF_SOFT   # rigid armour keeps the original, pre-existing reference; none/cloth uses the softer one (see comment above)
         t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/ref))

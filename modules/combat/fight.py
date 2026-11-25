@@ -50,7 +50,7 @@ def _fight_cfg(inp: PersonalCombatInput, cfg: Optional[dict] = None) -> Optional
     """The engine's `cfg` carrying the record's operands: `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them) and
     `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`), laid over `cfg`
     (the workbench's config overlay; `config.CFG` where it passes none); or `cfg` itself (`None`: the engine's own `CFG`, so
-    `core.OPPOSITION_RATE`, the control 0.5) where the record carries none. A copy: neither dict is ever written."""
+    `core.OPPOSITION_RATE`, `MU_PER_DIE` since B15.03) where the record carries none. A copy: neither dict is ever written."""
     carried = {k: v for k, v in (("BASE_POOL", inp.pool_add), ("POOL_FLOOR", inp.pool_floor),
                                  ("OPPOSITION_RATE", inp.opposition_rate)) if v is not None}
     return {**(CFG if cfg is None else cfg), **carried} if carried else cfg
