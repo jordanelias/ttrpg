@@ -8453,6 +8453,19 @@ rows:
     cite:      "NOT A RULING: each part has one defensible fix that moves nothing it does not name, and none is made here because the batch's gate rows read this very state: changing the spine fixture or the formation fan after the gate read would move the instrument the gate is graded by. MEASURED, not inferred: the counts above are from the close's premise-check runs; (1) reproduces by folding a King `issue` per (to, via) pair on `build_realm(0)` and reading the refusal clause."
     source:    "workplan v12 B21's close (the premise-check over each batch item); `R-04.a`, `R-04.c2` in `engine/season/requirements.yaml`"
 
+  - id:        H-620
+    tier:      1
+    hole:      "HOW OFTEN THE REALM MARCHES -- the natural-play march frequency (H-233) is answered in kind by a test cap (ED-IN-0317, A-103): `march_cap_per_territory`, the most marches the loop ADMITS in one season (one `w.tick`) into each territory, a march on a settlement counted against the territory that contains it, uniform for every marcher, civil-war marches included. It is the second conjunct of `march`'s cell (`march.nth <= march.cap`, `scalar_threshold`), read by `loop/resolve.py::_admits` and refused on `march.refused`; the count is `queries/world_q.py::marches_into`, over the `march.declared` Events of the current tick in `w.log`. No document derives the live value. STATED REACH: the log takes a lap's Events at the lap's end, so the cap sees the marches of the tick's EARLIER laps, not of its own lap."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.march_cap_per_territory` the one home. READER: `engine/season/queries/world_q.py::marches_into`, through `WorldReader.read`'s `march.nth` and `march.cap` stems (`data/requires.py`), asked by `march`'s second `requires_typed` conjunct"
+    grade:     "assumption"
+    default:   "1 -- SHIPPED, the ruled test limit (ED-IN-0317, A-103; IN-36 (a)) [ASSUMPTION; medium; Jordan to correct; revert: 0, no cap]: at most one march a season into each territory. THE CONTROL is 0 or unset: `march.nth` and `march.cap` both read 0, `0 <= 0` holds, and nothing is counted"
+    site:      "Fixtures march_cap_per_territory, read by `queries/world_q.py::marches_into` once per `march.nth` or `march.cap` read, which `_admits` makes once per `march` act it folds; at 0 or unset it returns before the log is read"
+    sweep:     [0, 1, 2]
+    unblocks:  "a march that is rare enough to read (H-233's frequency half answered by a limit, not by the convictions or IN-08's march cells); the strife and aperture readings of a war that cannot send two armies into one territory in one season"
+    cite:      "IN-36 (a) (`master/eval/E1.md` §Carry-forward IN-36, 'REMAINING UNBUILT' (a)); ED-IN-0317 (its 2026-11-12 row, `registers/editorial_ledger_in.jsonl`); A-103: a claim to a territory is an occasion, never a gate (`IS-B3-FA-04` (4)). CONTROL: the cap at 0 reads `(0, 0)` and admits every march. FALSIFIER: `engine/season/tests/test_in36_march_cap.py` (a second march into one territory in one tick is refused on `march.refused` with `march.nth` 2 against `march.cap` 1, a settlement counts against its territory, the next season admits again). [ASSUMPTION; medium; Jordan to correct: that the cap counts ADMITTED marches (a `march.declared` in the log), so a march admitted and refused later at ENCOUNTER still counts against its territory; that a target with no territory above it counts for itself.]"
+    source:    "workplan v12 B21b.01 (IN-36 (a); B21b's H block slot 1)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
