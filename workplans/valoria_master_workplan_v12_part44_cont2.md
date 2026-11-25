@@ -301,6 +301,18 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `va
 - DEPENDS ON: V12 Batch B10 (B10.21 to B10.25; B10.32's reading, `22ae6e5c9`); Batch BA1-cast-content (the alignment cells, H-66).
 - COST and TIER: edit (one flip) with a reading; `sonnet`, high; the some-not-all reading is a judgment node, read by `opus` (U8). LANDS IT: B98's producer; `Item: B98.88`, `[skip ci]`.
 
+### B98.89 — the telling ships `unshared_first` and `seen_since_move`, if the two-hop gate reads · B11.85 (not made); `proposals/U5c_FI_residue.md` §6 and §2 row 3; `proposals/08_FI_02_rumour-that-travels.md` edits 4 and 5 · BUILD (flip, two settings, conditional) · HASH MOVER(behaviour)
+- SOURCE: no row of part 2 §4: B11.85 was the flip's position and was not made, because its gate read {0, 0, 0} at B11's close (`git log --grep 'Item: B11.99'`, the reading; `test_rumour.py::test_two_hop_chains_at_two_of_three_seeds` red since). B11.85's instruction handed both settings here: "if it does not read, neither value moves, both stay at control, and the commit is not made: B98 takes both with this target" (`V12_STRUCTURE_part4.md` E-14, D-22). `U5c_FI_residue.md` §6: "`Fixtures.said_slant` is swept `newest` (control), `unshared`, `unshared_first`; it ships `unshared_first` when §2 step 3's gate reads, and `valoria` stays an arm."
+- SETTINGS: `engine/season/data/fixtures.py` (`said_slant` = `newest`, B11.09; `telling_hearers` = `known`, B11.09). New values, one commit: `said_slant` = `unshared_first`; `telling_hearers` = `seen_since_move`.
+- CONDITION: read the gate first, on this base (`PYTHONHASHSEED=0`): `python -m pytest engine/season/tests/test_rumour.py -q -k "two_hop or control"` with both arms set in the test. If two-hop chains are above 0 at two of seeds 0 to 2 (two seasons), the flip runs. If they read 0 again, the flip is NOT made: 08_FI_02's falsifier holds ("both arms on and two-hop chains still 0: then the binding attrition is the roll (edit 6's question), and this proposal moved formation without moving traffic. Report it as such; do not tune the slant further"); the reading is quoted in R2 as "not flipped", and the open question (what drops a told claim before it is told again) goes to the hole register as one row, not to a second attempt here.
+- INSTRUCTION: the flip and nothing else, in one commit with the readings; `test_two_hop_chains_at_two_of_three_seeds` then reads the shipped fixtures, which is what its module docstring promised.
+- FALSIFIER and CONTROL: 08_FI_02's, as above. Control arm: `HASH(0, 2; said_slant = newest, telling_hearers = known)` equals the last committed flip's after-reading (the nearest earlier flip's).
+- GATE: `python -m pytest engine/season/tests/test_rumour.py -q` → pass at the shipped fixtures; the realm hash (`HASH READING`) at seed 0, one season → moved (declared).
+- HASH MOVERS: every seeded world with a telling (the slant and the hearers change who is told what). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
+- REVERT: `said_slant` → `newest`, `telling_hearers` → `known` (one commit).
+- DEPENDS ON: V12 Batch B11 (B11.09, B11.51 to B11.53, closed at `8e30e94629ea3a9f6f28b8542021226283bcaadc`; B11.85 not made).
+- COST and TIER: edit (one flip) with a reading; `sonnet`, high; whether the gate reads is a judgment node, read by `opus`. LANDS IT: B98's producer; `Item: B98.89`, `[skip ci]`.
+
 ## Readings
 
 (E-10. This batch has no source text to copy here byte for byte: each position's source text is in its own body. R1 and R2 are what B98.99 assembles, from the positions' commit bodies, for the close and for B99.)
@@ -353,7 +365,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `va
 - FALSIFIER and CONTROL: a pin a flip moved and this commit did not re-record (the full suite reds on it); a `status:` line edited; a flip in R1 with no control-arm reading. Control: each BLOCKED position's value read at its control on this tree (R2).
 - GATE: the head's BATCH GATE, read once on this commit's tree; the realm hash (`HASH READING`) at seeds 0 to 2, one season → the re-pinned values (each run once: the suite's `test_go07_control_the_world_did_not_move_only_its_digest` reads the same `SHIPPED` pins in its own process, head P17 (5)); no pytest beyond the readings: the one full-suite run (`python -m pytest tests/valoria -q -n auto` and the engine suites `python tools/tests_for_diff.py --base <batch-start-sha>` names; CLAUDE.md §0.4: this batch edits engine fixtures, so the local run can observe what CI will) is BATCH-CLOSE's, on a snapshot of this commit (head P16 (4), P17 (1)).
 - HASH MOVERS: the re-pin itself.
-- DEPENDS ON: V12 B98.01 to B98.88.
+- DEPENDS ON: V12 B98.01 to B98.89.
 - GLOSSARY: none (no term introduced, renamed or retired).
 - COST and TIER: edit (the re-pin) and reading; `sonnet`, high (R1 is read by Phase 3's terminal critique, once).
 - LANDS IT: B98's producer; `Item: B98.99`, no `[skip ci]` (the batch's last `Item:` push, which opens BATCH-CLOSE).

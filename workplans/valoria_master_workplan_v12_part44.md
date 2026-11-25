@@ -211,7 +211,8 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.86 | an empty founded place may be abandoned | row 105; B39.30; `STORY_C` gates 2, 3; A-55 | BUILD (flip) | MOVER(behaviour) | Batch B39 |
 | B98.87 | the six roles' fifty-five settings are re-read on the finished realm | row 106; B24p.23; V2 p2 §K | READING | EQUAL | Batch B24p-sc-proceeding @ba108d1 |
 | B98.88 | a man will not do what he holds wrong, and gives way by a draw: `refusal_axis` and `scruple_temperature` leave control | no row of §4; B10.32 (the reading only); B10.22 gate 2; `U5a_CHAR_owed_amendments` §8 item 2; `16_PESSIMIST_CHAR_C` | BUILD (flip, two settings) | MOVER(behaviour) | Batch B10; Batch BA1 |
-| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.88 |
+| B98.89 | the telling ships `unshared_first` and `seen_since_move`, if the two-hop gate reads | no row of §4; B11.85 (not made); `U5c_FI_residue` §6 and §2 row 3; `08_FI_02` edits 4 and 5 | BUILD (flip, two settings, conditional) | MOVER(behaviour) | Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc |
+| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.89 |
 
 ---
 
