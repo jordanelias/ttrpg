@@ -9085,6 +9085,66 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
 # ---------------------------------------------------------------------------
 
 
+def _u2_bailiff_plant_reads(plant_lap, stamp: bool = True):
+    """One season of `build_world(0)`: `(tick, reads)`, `reads` the `(since, n)` of each of `p_bailiff`'s `questions_for`
+    reads at a barrier, `n` the count of `claim_landed` questions the planted claim raised on that read (`plant_lap` None
+    plants nothing). The plant rides `SeasonDriver.witness` and lands at the end of `plant_lap`, stamped with that lap
+    (`stamp`) or with 0. It is read at the QUESTION, upstream of `opening_set`: the candidate set cannot tell a stamped
+    claim from an unstamped one on this fixture (`hole_register.yaml` H-172, since `11a`), the question can."""
+    from ..harness import headless as HL
+    from ..loop import driver as DRV
+
+    w = HL.build_world(0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    reads: list = []
+    tick = w.tick                       # the tick advances when the season ends
+    real_q, real_witness = DRV.questions_for, SeasonDriver.witness
+
+    def spy_q(world, p, since=None):
+        out = real_q(world, p, since)
+        if p.id == HL.BAILIFF:
+            mine = {f"q:claim:{c.id}" for c in p.ledger if c.subject == "hearth_ostvik" and c.predicate == "stores:grain"}
+            reads.append((since, sum(q.id in mine for q in out)))
+        return out
+
+    def witness_then_plant(self, token, events):
+        n = real_witness(self, token, events)
+        if plant_lap is not None and self.lap == plant_lap:
+            w.persons[HL.BAILIFF].ledger.append(Claim(
+                H(w.world_seed, w.tick, HL.BAILIFF, "plant:u2"), HL.BAILIFF,
+                "hearth_ostvik", "stores:grain", 0, w.tick, "told_by", 100, "own",
+                self.lap if stamp else 0))
+        return n
+
+    DRV.questions_for, SeasonDriver.witness = spy_q, witness_then_plant
+    try:
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                              draw=draw_factory(w.world_seed, lambda: w.tick)),
+                 None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    finally:
+        DRV.questions_for, SeasonDriver.witness = real_q, real_witness
+    return tick, reads
+
+
+def test_u2_a_deposit_in_one_lap_is_new_to_exactly_the_next_read_and_only_if_stamped_with_its_lap():
+    """GAME STATE, lane `season_loop`, ~2 s. R-03's general claim and `Claim.lap`'s own (`H-172`): a claim landing at the end
+    of lap L is NEW to the next read of a person (`since = (tick, L)`) and to no read before it or after it; stamped 0 it sorts
+    before `since` and is never new. The reads are `questions_for`'s own, so the arm is not masked by `opening_set`'s crowding.
+    ⚠ The un-landed arm is the control: no plant, no question on any read."""
+    tick, control = _u2_bailiff_plant_reads(None)
+    assert len(control) >= 4 and not any(n for _, n in control), control
+    _, lap0 = _u2_bailiff_plant_reads(0)
+    assert [s for s, n in lap0 if n] == [(tick, 0)], (
+        f"R-03's general claim: a deposit at the end of lap 0 is new to exactly the read that follows it: {lap0}")
+    _, stamped = _u2_bailiff_plant_reads(2)
+    assert [s for s, n in stamped if n] == [(tick, 2)], (
+        f"stamped with lap 2 the deposit is new to the read after lap 2 and to no read before or after it: {stamped}")
+    _, unstamped = _u2_bailiff_plant_reads(2, stamp=False)
+    assert not any(n for _, n in unstamped) and [s for s, _ in unstamped] == [s for s, _ in stamped], (
+        f"stamped 0 the same claim sorts before `since = (tick, 2)` and is never new: {unstamped}")
+
+
 def test_u2_the_one_round_arm_resolves_acts():
     """**U2's ONE-LAP ARM RESOLVES ACTS; ITS EQUALITY WITH THE PRE-TICK LOOP WAS MEASURED, NOT KEPT (B02.01 D).** At
     `scene_budget = 1` the season is ONE lap, so the laps loop and
