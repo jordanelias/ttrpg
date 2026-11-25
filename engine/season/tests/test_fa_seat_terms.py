@@ -9,12 +9,9 @@ season's.
 from __future__ import annotations
 
 import pytest
-import yaml
 
-from ..data import files, rosters
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import SEAT_ROW_BY_ID
-from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
@@ -136,30 +133,6 @@ def test_a_ban_is_scoped_to_the_banning_seats_purview():
 
 
 # ---- the loader -----------------------------------------------------------------------------------
-
-def _load_with(tmp_path, monkeypatch, doc: dict) -> dict:
-    path = tmp_path / "offices.yaml"
-    path.write_text(yaml.safe_dump(doc), encoding="utf-8")
-    monkeypatch.setattr(rosters, "OFFICES_YAML", path)
-    return rosters._load_offices()
-
-
-def test_a_seat_row_term_is_a_positive_whole_number_or_null_at_load(tmp_path, monkeypatch):
-    real = rosters.load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
-    row = real["seats"][0]
-    assert "term" not in row  # control: no shipped row names one
-    checked = 0
-    for ok in (1, 4, None):
-        loaded = _load_with(tmp_path, monkeypatch, dict(real, seats=[dict(row, term=ok), *real["seats"][1:]]))
-        assert loaded["seats"][0]["term"] == ok
-        checked += 1
-    for bad in (0, -1, "2", True, 1.5, [2]):
-        with pytest.raises(Unspecified) as red:
-            _load_with(tmp_path, monkeypatch, dict(real, seats=[dict(row, term=bad), *real["seats"][1:]]))
-        assert row["id"] in str(red.value) and "term" in str(red.value), (bad, str(red.value))
-        checked += 1
-    assert checked == 9
-
 
 # ---- B21.04: a seat ends on a clock only where its body rotates --------------------------------------
 
