@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 432,
-    "uncited": 307,
+    "total": 434,
+    "uncited": 309,
     "of_which_assumption_grade": 8
   },
-  "count": 432,
+  "count": 434,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 30,
+    "engine.season": 32,
     "mass_battle": 160,
     "characters": 5,
     "fieldwork": 15,
@@ -455,6 +455,28 @@
       "module": "engine.season",
       "file": "engine/season/harness/scarce.py",
       "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.CASE_OPENS",
+      "name": "CASE_OPENS",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/scenarios.py",
+      "note": "the tick `inquiry_world` returns at (asserted there): the premise's forging at 0, its handover at 1",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.COLD_SEASONS",
+      "name": "COLD_SEASONS",
+      "value": 4,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/scenarios.py",
+      "note": "`08_FI_03` §5: \"four seasons pass\"",
       "citation": null,
       "citation_grade": null
     },
@@ -4166,11 +4188,11 @@
     {
       "key": "engine.season.settings.carried_wound_model",
       "name": "carried_wound_model",
-      "value": "endurance_cut",
+      "value": "level",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-434`, swept endurance_cut (control, SHIPPED until B15) / level",
+      "note": "`H-434`, swept endurance_cut (control) / level (SHIPPED since B15.11)",
       "citation": null,
       "citation_grade": null
     },
@@ -4538,7 +4560,7 @@
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control) [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped]",
+      "note": "[JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped] `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control)",
       "citation": null,
       "citation_grade": null
     },

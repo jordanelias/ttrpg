@@ -35,8 +35,8 @@ from . import weapon_physics as WP   # percussion authority lives ONCE in WP (th
 
 TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
-BASE_POOL = 6      # [class-C: armature — faculty-driven pool base; pool = max(5, faculty+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
-OPPOSITION_RATE = 0.5   # control (today's half-score); flips to DE.MU_PER_DIE at item 29-3 (A-71)
+BASE_POOL = 6      # [class-C: armature — score-driven pool base; pool = max(5, score+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
+OPPOSITION_RATE = DE.MU_PER_DIE   # A-71, live (item 29-3): the owner's mean net per die per point of the opponent's score; read from `dice_engine`, never retyped. The control, 0.5 (the half-score), is an arm's override `cfg['OPPOSITION_RATE']`
 
 def resolution_pool(score, addends=0, add=BASE_POOL, floor=POOL_FLOOR):
     """THE FIGHT'S POOL: `sigma_leverage.pool_of(score, addends, add, floor)` = `max(floor, score + addends + add)` (A-6, D-U1-08,
@@ -68,7 +68,7 @@ def band_floor(band, ob):
     The workbench's displayed distribution and `strike()`'s overwhelming tail both need an edge, so the edge is
     DERIVED here rather than copied. Exact to the float: `degree(band_floor(b, ob), ob)` is `b` and the next float down is not.
     The +/-64 bracket around `ob` is asserted, not assumed (the owner's edges sit within 3 of `ob`). Pure; cached
-    per (band, ob) — Ob is `opposed_ob(faculty, rate)`, so a fight touches a handful of values. `band` is 'partial', 'success' or
+    per (band, ob) — Ob is `opposed_ob(score, rate)`, so a fight touches a handful of values. `band` is 'partial', 'success' or
     'overwhelming': 'fail' is the lowest band and has no edge (it fails the bracket assert)."""
     k = DE.DEGREE_ORDINAL[_DEGREE_OF[band]]
     rank = lambda x: DE.DEGREE_ORDINAL[DE.degree_from_net(x, ob)]
@@ -86,14 +86,14 @@ def band_floor(band, ob):
 def ob_from_defender(defender, cfg):
     """The obstacle a struck party presents: `sigma_leverage.opposed_ob(his skill score, rate)`, the one owner of the opposition
     (A-26, A-71), where the rate is `cfg['OPPOSITION_RATE']` (an arm's override; the record's `opposition_rate`, `fight.py`) or,
-    absent, this module's `OPPOSITION_RATE` (the control, 0.5). RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB
+    absent, this module's `OPPOSITION_RATE` (`DE.MU_PER_DIE`, A-71). RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB
     for combat is stupid as hell and is dead because Ob should be determined by your opponent more than anything" --
     tests/valoria/test_degree_ladder_single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence").
-    The operand is `defender.faculty`, the party's SKILL SCORE for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
+    The operand is `defender.score`, the party's SKILL SCORE for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
     in through `PersonalCombatInput.scores` (CR-85, ED-IN-0330; B05.57) -- the SAME score `resolution_pool()` derives dice from
     (ED-901); one value per party feeds his pool and the Ob he is attacked against. His registered addends
     (`PersonalCombatInput.addends`) feed his pool alone, never the Ob.
-    [ASSUMPTION; medium; Jordan to correct; revert: the faculty value feeds the pool only and the Ob reads the class
+    [ASSUMPTION; medium; Jordan to correct; revert: the score feeds the pool only and the Ob reads the class
     default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
@@ -102,7 +102,7 @@ def ob_from_defender(defender, cfg):
     by dsig, which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill)").
     A genuine per-instance Ob modifier would be a NEW term with its own owner, not folded into this function
     silently. Pure."""
-    return SL.opposed_ob(defender.faculty, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))
+    return SL.opposed_ob(defender.score, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))
 
 
 def resolve(pool, net_sigma, rng, ob):
@@ -140,7 +140,7 @@ QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_mo
 # graze/bind rather than a damage call, and damage() gates on the LITERAL tuple ('graze','success','overwhelming'),
 # not on QUAL membership. A quality table that omits a member of its own domain is a worse artifact than an unused row.
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
-DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
+DMG_SCALE=1.07                                                      # even Success = 1 WI at the season default kit (holds for 0.99..1.08); A-31
 # PENETRATION THRESHOLD (ED-PC-0032): armour resists up to a floor — a blow whose coupling-
 # reduced impact does not clear the tier's resistance inflicts little LASTING WOUND (it is stopped/deflected), so a
 # weapon that CANNOT defeat the harness cannot win by VOLUME of sub-penetration pokes. Applied as a SOFT knee
@@ -252,7 +252,7 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # PERC_AUTH_REF_SOFT is NOT bound: it is a DIFFERENT anchor (bec_de_corbin's 6.51 live authority, the weakest
 # dedicated hammer — see the U2 block above), not the scale top.
 PERC_AUTH_REF=WP.PERC_CAP; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
-def _transmit(mode, mat, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0):
+def _transmit(mode, mat, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0, gap_on=True):
     t=1.0-RESIST[mat][mode]
     if mode=='puncture':                                           # SITUATIONAL GAP GAME: a thrust takes through-
         # material OR the reach-ladder gap it seeks. The gap term is GAP-SEEKING: the material's thrust-accessible gap
@@ -266,13 +266,18 @@ def _transmit(mode, mat, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=
         # NOT scaled: a thrust that lands on flesh/cloth (none/cloth: t=1.0/0.88) is lethal regardless of lever — reach
         # weapons stay deadly vs soft targets, they only lose the GAP-penetration edge vs mail/plate. Inert at
         # thrust_auth=1.0 (short-lever/half-sword/dagger).
+        # THIS RETURN IS BEFORE THE COVERAGE-GAP LINE BELOW: the ranking average (`gap_on=True`) never contained a `COVERAGE_GAP` term for a thrust
+        # (its gap is GAP_EXPOSURE's, above), while `strike` draws `bare` for every head and a bare blow is paid as `none`. So the ranker's average
+        # and a drawn thrust differ in mean: cloth +2%, mail 0.6175 -> 0.675, plate 0.585 -> 0.647 at gap_prec 0.65 (held for a ruling: hole row H-579).
         return max(t, GAP_EXPOSURE[mat]*gap_prec*thrust_auth)
     if mode=='percussion':                                          # FIX-1b, extended U2/ED-PC-0011: authority-scaled
+        # KNOWN DEPARTURE FROM "EQUAL EXPECTATION", held for a ruling (hole row H-579): a bare percussion blow paid as `none` keeps
+        # `max(PERC_TRANSMIT_FLOOR, perc/PERC_AUTH_REF_SOFT)`, so it is not the blow's expectation across the material it was ranked against.
         ref = PERC_AUTH_REF if mat in ('mail', 'plate') else PERC_AUTH_REF_SOFT   # rigid armour keeps the original, pre-existing reference; none/cloth uses the softer one (see comment above)
         t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/ref))
-    if mat!='none':
-        g=COVERAGE_GAP; return t*(1-g)+1.0*g                       # some blows reach a bare zone
-    return t
+    if mat!='none' and gap_on:
+        g=COVERAGE_GAP; return t*(1-g)+1.0*g                       # the EXPECTATION of a bare zone (PC_D): for the callers that RANK (select_mode, cut_thrust_arm, adef_cap); a landed blow draws it (`bare_zone`)
+    return t                                                       # gap_on=False: the harness blow, the gap term absent
 # CUT_AUTH_REF [U2/ED-PC-0011]: the bare 'cut' token key is NEVER a weapon's own native head: no weapon is authored
 # as native 'cut' (dedicated cutters use 'straight_cut'/'curved_cut', which this constant does NOT touch).
 # The 'cut' key is populated ONLY by systems.element_afforded's graded secondary-affordance check (a weapon
@@ -354,7 +359,7 @@ def thrust_authority(head_len):
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
     if head_len is None or head_len<=0: return 1.0
     return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
-def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0, impact=None):
+def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0, impact=None, gap_on=True):
     """SINGLE OWNER of the cut-and-thrust versatility contest. Returns `(value, mode)` — the winning arm's coupling and
     which arm won ('shear' | 'puncture') — so the DAMAGE and the REPORTED MODE can never disagree (ED-PC-0036).
 
@@ -375,8 +380,8 @@ def cut_thrust_arm(mat, gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, th
     `select_mode`'s cross-head comparator ranks every head on coupling alone and so reaches this contest without it,
     as does a weapon-only probe with no wielder (None keeps the coupling-only contest). The returned value is
     the winning arm's COUPLING either way (impact is paid separately, in `damage`). Pure."""
-    cut_arm = DELIVERY['cut']*_transmit('shear',mat)
-    thr_arm = DELIVERY['point']*_transmit('puncture',mat,gap_prec=gap_prec,thrust_auth=thrust_auth)
+    cut_arm = DELIVERY['cut']*_transmit('shear',mat,gap_on=gap_on)
+    thr_arm = DELIVERY['point']*_transmit('puncture',mat,gap_prec=gap_prec,thrust_auth=thrust_auth,gap_on=gap_on)
     # PER-ARM quality [ED-PC-0037]. Each arm is de-rated by ITS OWN derived magnitude — the edge by geo['cut'], the
     # point by geo['thrust'] — not by the element's blended sel_eff = max(cut, thrust), which would credit an incidental
     # edge with a dedicated point's quality (a ranseur's cut 0.30 sits squarely inside the 0.20-0.50 band CUT_AUTH_REF's
@@ -393,7 +398,7 @@ def cut_thrust_impacts(w, strength, grip=0.0, sel_pc=None):
     return tuple(strike_impact(strength, h, V.HEAD_CUT_THRUST)
                  for h in WP.heft_by_arm(w, grip=grip, sel_head=V.HEAD_CUT_THRUST, sel_pc=sel_pc))
 
-def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, ct_impact=None):
+def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, ct_impact=None, gap_on=True):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
@@ -409,7 +414,9 @@ def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, t
     half-sword thrust) by the point-to-hand lever authority (thrust_authority(head_len)). It scopes to the gap game vs
     a harness ONLY — a thrust that lands on soft targets (through-material) is untouched, so reach weapons stay lethal
     vs the unarmoured. 1.0 (the default) is neutral; inert for shear/percussion.
-    `ct_impact` [ED-PC-0050]: cut_thrust_arm's `impact` pair (price the arm contest on damage); inert for other heads."""
+    `ct_impact` [ED-PC-0050]: cut_thrust_arm's `impact` pair (price the arm contest on damage); inert for other heads.
+    `gap_on` [PC_D]: True (default) is the EXPECTED coverage gap, the form every ranking caller reads; False is the harness blow,
+    the gap term absent (`strike` passes it after the blow's bare-zone draw missed)."""
     mat=TIER2MAT[armor]
     if head=='cut_thrust':
         # VERSATILE: better of the edge (shear — a cut is not pommel-pressed, no lever term) or the half-sword/gap
@@ -423,7 +430,7 @@ def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, t
         # sword's cut IS a cut and has no reason to be weaker than a dedicated cutter's. On its own token the shift is
         # REAL and matches the doctrine stated above: cut the unarmoured man (1.500 > 1.450), half-sword-thrust anything
         # armoured — because padding and plate resist an edge far more than they resist a point.
-        return cut_thrust_arm(mat, gap_prec, eff_cut, eff_thrust, thrust_auth, impact=ct_impact)[0]
+        return cut_thrust_arm(mat, gap_prec, eff_cut, eff_thrust, thrust_auth, impact=ct_impact, gap_on=gap_on)[0]
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
@@ -439,7 +446,7 @@ def coupling(head, armor, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, t
         d *= (1.0 + (rel-1.0)*_shear_yield(mat)) if rel >= 1.0 else rel
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
-    return d*_transmit(HEAD_MODE.get(head,'shear'),mat,perc,gap_prec,thrust_auth=thrust_auth)
+    return d*_transmit(HEAD_MODE.get(head,'shear'),mat,perc,gap_prec,thrust_auth=thrust_auth,gap_on=gap_on)
 def _puncture_adef(w, cfg, grip, room):
     """SINGLE OWNER of the percussion-driven puncture armour-defeat term: a concentrated beak/spike defeats a harness
     by the ENERGY behind it, scored against ADEF_PERC_REF. Used by adef_cap's native-blunt max() and (ED-PC-0049) the
@@ -520,7 +527,7 @@ def strike_impact(strength, heft_units, weapon_head, perc=PERC_AUTH_REF):
     # with it, is an unresolved design question (value-collision reasoning, CLAUDE.md §7, would not settle it).
     return K_STR_HEAD[weapon_head]*strength + heft              # additive force (damage_model design: Str+Heft)
 
-def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0, ct_impact=None):
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0, ct_impact=None, gap_on=True):
     """Linear: (K_STR_HEAD[head]*strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob. `gap` (the weapon's derived
     gap_precision, w['gap']) threads into coupling's puncture path (the situational gap game): the SELECTED thrust's
@@ -530,11 +537,12 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     coupling's DELIVERY scaling (the 'cut' token only, see CUT_AUTH_REF); it does NOT touch `heft` above, which
     stays the separate weight-class quantity (WP.heft()).
     `ct_impact` [ED-PC-0050] is the cut_thrust arm contest's (shear, puncture) impact pair, passed through `coupling`
-    to `cut_thrust_arm` so the coupling paid here is the arm `strike` priced on damage; None for every other head."""
+    to `cut_thrust_arm` so the coupling paid here is the arm `strike` priced on damage; None for every other head.
+    `gap_on` [PC_D] rides to `coupling`: True is the averaged coverage gap, False the harness blow with the gap term absent."""
     if deg not in ('graze','success','overwhelming'): return 0
     qf = q if q is not None else QUAL[deg]
     impact = strike_impact(strength, heft_units, weapon_head, perc)
-    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust, ct_impact=ct_impact) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
+    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust, ct_impact=ct_impact, gap_on=gap_on) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
     # PENETRATION THRESHOLD (ED-PC-0032), CAPABILITY-RELATIVE (ED-PC-0038). The knee keys on the weapon's armour-defeat
     # capability, not RAW magnitude alone, which would let a heavy-headed weapon buy its way through a harness it
     # demonstrably cannot defeat (a guandao's adef_cap sits far below a spear's against plate): the damage path
@@ -554,7 +562,16 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
         raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
     return max(0, int(round(raw)))
 
-def strike(attacker, defender, deg, cfg, net=None, pool=None):
+def bare_zone(draw, armor):
+    """The ONE draw of the coverage gap (PC_D, A-30): does this landed blow reach a bare zone of the harness? `draw` is the blow's
+    keyed `Draw` (one uniform, the wrapper forms it per round and blow); True with probability COVERAGE_GAP. Returns None, and
+    takes no uniform, against `none` (no harness, nothing to find a gap in) and when no draw is given (a caller that is not a
+    fight, a ranking reader): `strike` reads None as the averaged blow, as before."""
+    if draw is None or armor == 'none':
+        return None
+    return draw.u() < COVERAGE_GAP
+
+def strike(attacker, defender, deg, cfg, net=None, pool=None, bare=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
     DEFENDER, returning the int damage. Single call-site for every blow so the 9-arg positional surface (the
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
@@ -565,7 +582,10 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     native whole-weapon fallback only when unset — the canonical single source of truth (a composite routed to a
     blunt sub-element is damaged on THAT element's percussion, not the whole-weapon value). `heft_resp` reads the
     attacker's current grip_position + the selected head/pc so the thrust-protected, mode-split Phi_grip degrades
-    the SAME grip the wielder actually holds."""
+    the SAME grip the wielder actually holds.
+    `bare` [PC_D] is the blow's coverage-gap draw (`bare_zone`): True, the blow reached a bare zone, so it is paid against
+    material `none` (no resistance, no knee); False, it met the harness, so it is paid with the gap term absent and the knee as
+    shipped; None (a direct caller with no fight), the averaged blow. Armour turns a blade by this draw, not by an average."""
     q=None
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
         # severity beyond the overwhelming bar THIS roll was banded at: the owner's edge at the defender's Ob (PC-03).
@@ -590,21 +610,23 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     # puncture arm must be paid the axial thrust lever, not the swing moment. None for every other head.
     # [ED-PC-0050, E5/M7] The contest is priced on DAMAGE: `_imp` is the Str+Heft each arm is paid, and the same pair
     # rides into damage() -> coupling() -> cut_thrust_arm, so the coupling paid is the arm chosen here.
+    armor = 'none' if bare else defender.armor                   # PC_D: a bare-zone blow is the unarmoured blow, arm contest and knee included
+    gap_on = bare is None                                        # PC_D: the harness blow (bare False) carries no gap term
     if head == V.HEAD_CUT_THRUST:
         # both arms' heft in ONE grip evaluation (WP.heft_by_arm); the impact pair and the paid heft come from it
         _hefts = WP.heft_by_arm(attacker.w, grip=grip, sel_head=head, sel_pc=sel_pc)
         _imp = tuple(strike_impact(attacker.strength, h, head) for h in _hefts)
-        _arm = cut_thrust_arm(TIER2MAT[defender.armor], gap,
+        _arm = cut_thrust_arm(TIER2MAT[armor], gap,
                               eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                               eff_thrust=(_et if _et is not None else _geo.get('thrust')),
-                              thrust_auth=tauth, impact=_imp)[1]
+                              thrust_auth=tauth, impact=_imp, gap_on=gap_on)[1]
         _heft = _hefts[0] if _arm == V.MODE_SHEAR else _hefts[1]
     else:
         _imp = None
         _heft = heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc)
     return damage(deg, _heft, head, attacker.strength,
-                  defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
+                  armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
                   eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                   eff_thrust=(_et if _et is not None else _geo.get('thrust')),
                   weapon_geo=attacker.w, cfg_adef=cfg, grip=grip, room=getattr(attacker,'range_avail',1.0),
-                  ct_impact=_imp)   # [ED-PC-0039] same grip/room the sigma path threads, so the two cannot disagree about the same question
+                  ct_impact=_imp, gap_on=gap_on)   # [ED-PC-0039] same grip/room the sigma path threads, so the two cannot disagree about the same question

@@ -46,7 +46,7 @@ schema:
   # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
   # `manner:` (B10.58, A-108) is `{<axis>: <number>}`, a person's own stored offset on a manner axis, over `engine/season/rosters.yaml: manner_offset_axes`, each within
   # `+-Fixtures.manner_offset_bound`; read by `cast.py::manner_offset_of` into `Person.manner_offset`, which RAISES on any other axis or a value outside the bound. No row
-  # authors one: BA1.02 drafted ten (the IS-A-11 draft's `manner:` column, commit 27ab0bb3b) and they are HELD BACK for Jordan, because they take R-06.d's strict-top share at seed 0 from 255 to 249 of 498 (one half, not above it); silence is no key. Sign when they land: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
+  # authors one: BA1.02 drafted ten (the IS-A-11 draft's table (a) `manner:` column, `proposals/2026-11-12-subsystem-audit-suite/proposals/IS_A_11_cast_values_draft.md`) and they are HELD BACK for Jordan, because they take R-06.d's strict-top share at seed 0 from 255 to 249 of 498 (one half, not above it); silence is no key. Sign when they land: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
   # `relations:` (B10.62) is a list of `{to: <registry case id>, ground: <a `engine/season/rosters.yaml: relation_grounds` member>, valence: -1 or +1,
   # weight: <whole number 0-5>}`, read by `engine/season/data/cast.py::relations_of`, which RAISES on an unknown id, ground or valence and on a weight outside the
   # stance row's own bound. A relation is authored on the side that HOLDS it: a symmetric one is two rows, one on each person, and they need not agree. At build

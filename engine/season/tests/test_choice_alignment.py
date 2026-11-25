@@ -3,7 +3,7 @@ read by `decision/choose.py::score_terms`' `pursuit` for each `choice_sourced` k
 
 THE FALSIFIER: two persons of opposite weight on one axis ranking two `retreat_at` values of one `marshal` question the same way with a cell authored
 on that axis (the term does not reach the score), or differently with no cell (the order is not content-blind where no cell is authored). The cell is
-PLANTED here through the loader's own `choices=`; the shipped roster carries two `retreat_at` cells (BA1.04: `none`, and `"0.5"` on `rigid_flexible` and `selfish_selfless`); the weights here sit on `grandiose_humble` only, so the shipped `"0.5"` cell adds nothing to the bare arm below, which holds only while no shipped cell is on this test's axis.
+PLANTED here through the loader's own `choices=`; the shipped roster carries two `retreat_at` cells (BA1.04: `none` on `rigid_flexible` and `grandiose_humble`, and `"0.5"` on `rigid_flexible` and `selfish_selfless`); the weights here sit on `grandiose_humble` only, so the shipped `"0.5"` cell adds nothing to the bare arm below; the pair read here is `'0.5'` and `'0.25'` (`ORDER_RETREAT_AT`), so the `none` cell, which IS on this axis, is outside it. That holds only while no shipped cell of the pair is on this test's axis.
 """
 from __future__ import annotations
 

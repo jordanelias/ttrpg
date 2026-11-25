@@ -22,7 +22,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
-GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
+GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.a (`establish`, `confer`, `revoke`, `dispatch`, `issue`, `requisition`), R-04.c2; `BUILT OUT`: `confer`, `revoke`, `succeed` → each named verb's `via` at least 1; the governance test world's loop closes (IS-A `_part2` §12.2, B21's row). No `status:` edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; E-2: seeds 0 to 2 are read here, an item reads seed 0):
