@@ -4429,12 +4429,16 @@ def wounded_with(w: World, p: Person) -> tuple:
     where the others stand. So it does not repeat the AX-7 tension `vacancies` carries (H-207): a wounded man whom
     nobody saw hurt is stamped only for himself. Ceiling, not scale, for himself (he knows his own mark); scale for
     another (a believed value names no ceiling).
-    ⚠ STATED LIMIT -- NOTHING CLEARS A BELIEVED WOUND. Only `_eff_kill` writes a `(pid, "body", v)` Observation;
-    `_eff_tend` and MATTER write none. So a healed man stays stamped for every believer, and so does a MARKED
-    survivor sitting at his ceiling (his written body is clamped at or under the mark while this comparison is
-    against `condition_scale`): `tend` forms on him and is refused at its write as a no-op (`_eff_tend`'s
-    `NoOpReceipt`) each season. The believed-body arm forms near zero today. Carrying the ceiling with the body
-    Observation is the repair, deferred. [GAP: a believed ceiling is not carried] Stamped by `questions_for`
+    ⚠ STATED LIMIT -- A TEND CLEARS A BELIEVED WOUND AND MATTER'S RECOVERY DOES NOT YET. `_eff_kill` and (B12a.69,
+    U5d_WR §3) `_eff_tend` write a `(pid, "body", v)` Observation, a tend's `v` the MENDED body, so the tender's claim of
+    the wound is superseded by a claim of the mended body (newest by `(when, lap)`); a recovery MATTER writes (CP-T10-04,
+    unbuilt) writes none. A MARKED survivor sitting at his ceiling stays stamped for his believers (his written body is
+    clamped at or under the mark while this comparison is against `condition_scale`): `tend` forms on him and is refused at
+    its write as a no-op (`_eff_tend`'s `NoOpReceipt`) each season. Carrying the ceiling with the body Observation is the
+    repair, deferred. [GAP: a believed ceiling is not carried] MEASURED (realm, seeds 0 to 2, PYTHONHASHSEED=0), `tend`
+    executions on a man already whole by another person (one season / two): 1, 0, 0 / 1, 0, 1 before and after B12a.69,
+    and no `tend` heals anybody in either arm (`body.tended` 0 at every seed), so the Observation is never written in the
+    realm and the pairs forming `tend` on a healed man read 0 at every seed (the earlier 0, 3, 9 is not reproduced). Stamped by `questions_for`
     as `Person` (`World.class_of`), so `tend` (`referent_class: Person`) forms on it -- and so do the other rows
     declaring `Person` (the shared class; the fold disposes). Resolver-side and read-only. `()` for a whole man who
     holds no belief of a wounded body beside him."""
