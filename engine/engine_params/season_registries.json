@@ -4148,6 +4148,7 @@
             }
           ]
         },
+        "territory_weight": {},
         "site_yield": {
           "source": "`W8` / `H-93`. #353 \u00a725 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (\u00a722.3); it never says what a place produces.",
           "row": "H-93",

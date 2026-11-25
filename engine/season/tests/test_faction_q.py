@@ -361,3 +361,33 @@ def test_after_a_succession_opinion_of_regards_the_successor():
     after = world_q.opinion_of(w, o, "fac_valorsmark")
     assert after > before, (before, after)
     assert world_q.opinion_of(w, o, "fac_hafenmark") == hafen_before
+
+
+# ---------------------------------------------------------------------------------------------
+# B21.68 (`U5d_FA_owed_edits` §4): `faction_q.weight`, a faction's members counted by where they live
+# ---------------------------------------------------------------------------------------------
+
+def test_faction_weight_at_unit_territory_weights_is_the_unweighted_sum(monkeypatch):
+    """The control: the table ships empty, so every territory reads 1.0 and each rostered faction's weight is the summed
+    `Person.weight` of its members. The falsifier of a reader that ignores the table: plant one territory at 3.0 and the weight
+    of a faction with a member living there rises by exactly 2.0 times the weights of the members who live in it."""
+    from engine.season.data import rosters
+    w = build_realm(0)
+    assert not rosters._TERRITORY_WEIGHT, "the shipped table is empty (the control)"
+    checked = 0
+    for fid in (f for f in w.propositions if f.startswith("fac_")):
+        mem = world_q.members(w, fid)
+        if not mem:
+            continue
+        assert faction_q.weight(w, fid) == sum(w.persons[m].weight for m in mem), fid
+        checked += 1
+    assert checked >= 3, "too few rostered factions with members to call the control observed"
+    lives = world_q.residence_of(w)
+    crown = world_q.members(w, "fac_valorsmark")
+    terr = world_q.enclosing_territory(w, lives[crown[0]])
+    tid = rosters.territory_id_of(terr)
+    here = [m for m in crown if world_q.enclosing_territory(w, lives.get(m)) == terr]
+    assert here, "the planted territory holds a member by construction"
+    before = faction_q.weight(w, "fac_valorsmark")
+    monkeypatch.setitem(rosters._TERRITORY_WEIGHT, tid, 3.0)
+    assert faction_q.weight(w, "fac_valorsmark") == before + 2.0 * sum(w.persons[m].weight for m in here)

@@ -3880,6 +3880,14 @@ tables:
       # substitute; revert: delete this row, and the crisis reads no attribute.]
       - {use: crisis,            role: edge,      key: attr.spirit.will, side: actor, level: minor, per: mid}
 
+  # B21.68 (`U5d_FA_owed_edits` §4, U1 ledger F-12): the political weight of a territory, `{territory id: weight}`, the geography file's ids
+  # (`T1` ...). Read by `queries/faction_q.py::weight`, which scales each member's `Person.weight` by the weight of the territory he LIVES in
+  # (`world_q.residence_of`); an absent key reads 1.0. Loaded and refused at import by `data/rosters.py::_load_territory_weight` (a key that is
+  # no territory of the geography file; a value that is not a positive number). It ships EMPTY: every territory reads 1.0, so the weight is the
+  # unweighted sum. [ASSUMPTION; Jordan to author: the numbers are content -- e.g. lowered for the southern Einhir territories; revert: none, an
+  # empty table is the control.] No `Rung` field carries it (`04` §B.3, "NEVER: any social aggregate" on a Rung).
+  territory_weight: {}
+
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."
     row: H-93

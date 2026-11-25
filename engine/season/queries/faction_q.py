@@ -55,9 +55,9 @@ from __future__ import annotations
 from dataclasses import dataclass, fields
 
 from .world_q import WAR_MOOD, at_war, establishment_of, members  # noqa: F401 -- v11 CR-87: the first two MOVED to `world_q` (the war context's `enemies_heard` reads `at_war`, and this module imports `world_q`, so the reverse import would be a cycle); re-exported so every `faction_q.at_war` caller reads the one owner
-from .world_q import density, footprint, provinces_of, sovereign_fraction
+from .world_q import density, enclosing_territory, footprint, provinces_of, residence_of, sovereign_fraction
 from .world_q import head  # noqa: F401 -- B21.65: MOVED to `world_q` (`opinion_of` regards the present head and this module imports `world_q`, so a definition here is a cycle); re-exported, the `at_war` precedent above, so `faction_q.head` is the one owner's function object
-from ..data.rosters import RECORD_KIND_KEYS
+from ..data.rosters import RECORD_KIND_KEYS, territory_id_of, territory_weight_of
 from ..gaps import Unspecified
 from ..state.containment import descendants
 from ..state.world import World
@@ -208,3 +208,18 @@ def _check_sheet_keys(keys) -> None:
 
 
 _check_sheet_keys(RECORD_KIND_KEYS.get(SHEET_KIND))
+
+
+def weight(w: World, prop: str) -> float:
+    """B21.68 (`U5d_FA_owed_edits` §4, A-41, A-42): HOW MUCH A FACTION'S MEMBERS COUNT -- the summed `Person.weight` of its members, each
+    multiplied by the political weight of the territory he LIVES in (`rosters.yaml: tables.territory_weight`, read through
+    `rosters.territory_weight_of`; an absent key, or a member with no residence or none inside a territory, reads 1.0). THE ONE OWNER of a
+    faction's weight: it is a Query, computed on demand and stored nowhere (no `Rung` field, `04` §B.3's *"NEVER: any social aggregate"*), so a
+    reader that wants a faction's power asks here and keeps no second copy. Residence, not presence: `world_q.residence_of` (where a person
+    LIVES, which only `migrate` changes), not `home_of` (where he is). With every territory at 1.0 -- the table ships empty -- this is the
+    unweighted sum of the members' `Person.weight`. It takes no token and emits nothing, and has no `TRACE.query` row of its own, `standing`'s
+    precedent (a read-only step moves no committed artifact; the inner Queries keep theirs). First readers: instruments, then the councils and
+    elections whose weight sets a voter's draw (A-14), never a count."""
+    lives = residence_of(w)
+    return float(sum(w.persons[m].weight * territory_weight_of(territory_id_of(enclosing_territory(w, lives.get(m))))
+                     for m in members(w, prop)))

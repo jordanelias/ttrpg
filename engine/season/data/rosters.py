@@ -529,6 +529,41 @@ def territory_id_of(rung_id: "str | None") -> "str | None":
     return s.removeprefix(_TERRITORY_RUNG_PREFIX) or None
 
 
+def _load_territory_weight(raw) -> dict:
+    """B21.68 (`U5d_FA_owed_edits` §4): `rosters.yaml: tables.territory_weight`, `{territory id: weight}`, REFUSED at import for a key that is no
+    territory of the geography file's `provinces:` (its rows are the territories) and for a value that is not a positive number (a `bool` is not
+    one). The geography file is read only when the table names a key, so the shipped empty table costs no parse. A territory the table does not
+    name reads 1.0 at `territory_weight_of`, the one reader of the default."""
+    where = "rosters.yaml -- tables.territory_weight"
+    if raw is None:
+        raw = {}
+    if not isinstance(raw, dict):
+        raise Unspecified(f"`tables.territory_weight` is a {type(raw).__name__}, not a mapping", where,
+                          needs="a `{territory id: weight}` mapping (`{}` for none)",
+                          law="U5d_FA_owed_edits §4 -- the table is keyed by territory id")
+    if raw:
+        known = set((load_yaml(files.GEOGRAPHY_YAML.read_text(encoding="utf-8")) or {}).get("provinces") or {})
+        for k, v in raw.items():
+            if k not in known:
+                raise Unspecified(f"`territory_weight` key {k!r} is no territory of the geography file", where,
+                                  needs=f"a key from `valoria_geography_v30.yaml: provinces` ({sorted(known)})",
+                                  law="U5d_FA_owed_edits §4 -- a key that is no territory of the geography is refused")
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not v > 0:
+                raise Unspecified(f"`territory_weight[{k!r}]` is {v!r}, not a positive number", where,
+                                  needs="a number above 0 (1.0 is the default an absent key reads)",
+                                  law="U5d_FA_owed_edits §4 -- a value that is not a positive number is refused")
+    return {k: float(v) for k, v in raw.items()}
+
+
+_TERRITORY_WEIGHT = _load_territory_weight(_TABLES.get("territory_weight"))
+
+
+def territory_weight_of(territory: "str | None") -> float:
+    """The political weight of one territory (its geography id, `'T1'`), 1.0 where the table does not name it or where there is no territory
+    (`None`). THE ONE READER of `tables.territory_weight` and of its default; `queries/faction_q.py::weight` reads it per member."""
+    return _TERRITORY_WEIGHT.get(territory, 1.0)
+
+
 def table_meta(name: str) -> dict:
     """The table's own declarations -- `default_cell`, `row`, `keys`. Read rather than assumed, so
     a data edit that changes the sparse default cannot leave a stale constant in a body."""
