@@ -8522,7 +8522,7 @@ rows:
     tier:      1
     hole:      "THE CEILING ON ONE CORROBORATED CELL'S WEIGHT -- `evidence_cap`, a number (EVID_B `standing` rule 4: 'capped at `evidence_cap`'): the same cell, same value, same side, from distinct origins is one item of weight `1 - Prod(1 - w_i)` (FI's ruled noisy-OR, `ED-IN-0322`), and that weight is capped here; the same origin twice counts once. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_cap` the one home. READERS: none at B24.17; the `standing` rule (`modules/social_contest/evidence.py`) reads it through `Input.dials` once a later item gives it a corroboration step"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_cap` the one home. READERS: `modules/social_contest/evidence.py::standing` (rule 4), through `Input.dials` (`seam/wrappers/sigma.py::HEARING_SETTINGS`), from B24.19; no caller feeds exhibits to a realm sitting yet, so no run moves by it"
     grade:     "assumption"
     default:   "2.0 -- EVID_B's PROPOSED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (EVID_B gives it no control); the sweep's other points are the alternatives]. Nothing reads it at B24.17, so shipping it moves no run"
     site:      "Fixtures evidence_cap, read by nothing at B24.17; the `standing` rule's corroboration step reads it through `Input.dials`"

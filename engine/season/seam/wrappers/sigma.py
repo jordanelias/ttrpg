@@ -1274,10 +1274,11 @@ PROCEEDING_SETTINGS = (
     # the host
     "start_step", "presume_step", "power_scale", "strain_fade", "recuse_at",
 )
-#: THE FOUR SETTINGS THE HEARING'S BOARD READS (B24.06, HEAR_B edit 10; `H-216`, `H-662` to `H-664`), beside the fifty-four: the closing draw's `proof_level`
-#: (one per whole unit of net standing weight) and `fault_step` (one per level owed), and an `answer`'s `answer_ob` (its difficulty) and `answer_step`
-#: (the weight term). Not V2's settings, so not in `PROCEEDING_SETTINGS`; `proceeding_dials` names both tuples.
-HEARING_SETTINGS = ("proof_level", "fault_step", "answer_ob", "answer_step")
+#: THE FIVE SETTINGS THE HEARING'S BOARD READS (B24.06, HEAR_B edit 10; `H-216`, `H-662` to `H-664`; B24.19, `H-666`), beside the fifty-four: the closing draw's
+#: `proof_level` (one per whole unit of net standing weight) and `fault_step` (one per level owed), an `answer`'s `answer_ob` (its difficulty) and `answer_step`
+#: (the weight term), and `evidence_cap` (what corroboration may gain, read by `evidence.standing`). Not V2's settings, so not in `PROCEEDING_SETTINGS`;
+#: `proceeding_dials` names both tuples.
+HEARING_SETTINGS = ("proof_level", "fault_step", "answer_ob", "answer_step", "evidence_cap")
 
 
 def proceeding_dials(fx: Any) -> Any:

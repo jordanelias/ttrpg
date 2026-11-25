@@ -168,7 +168,12 @@ class Item:
       * `side`   -- `"for"` | `"against"` the party it is shown for, `None` before it is entered;
       * `rung`   -- the `rosters.yaml: issue_rungs` member it bears on;
       * `cell`   -- `(subject, predicate, value)` as filed;  `origin` -- the root of its chain, the thing `impugn` halves by;
-      * `forged_found` -- a filed finding names the Record it comes from forged."""
+      * `forged_found` -- a filed finding names the Record it comes from forged.
+
+    B24.19 (EVID_B edit 3; the same two cells HEAR_B's `Exhibit` names), each defaulted:
+      * `pairs` -- `((another filed exhibit's id, "contradicts" | "agrees"), ...)`: the relation the host builder computed with `decision/options.py::contradicts`
+        and hands over as data, so `modules/social_contest/evidence.py::standing` reads it and restates no pairing rule;
+      * `answered_band` -- the band label (`dice_engine.DEGREE_LABEL`) of the best answering act drawn against it, `None` while none has been."""
     id: str
     kind: str
     weight: float
@@ -180,6 +185,8 @@ class Item:
     cell: tuple = ()
     origin: Optional[str] = None
     forged_found: bool = False
+    pairs: tuple = ()
+    answered_band: Optional[str] = None
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -306,8 +313,8 @@ class Sitting:
       * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`.
 
     B24.06 adds the board (each defaulted, and each in `UNWRITTEN`: no sitting writes them yet, B24.14): `board` -- `((Item, status), ...)` in the order
-    entered, an `Item` carrying the side it stands for and its weight now, `status` `stands` | `answered` (stands, an answer tried and failed or
-    halved it) | `struck`; `faults` -- `((a `proceeding_faults` member, the side at fault), ...)` in order; `levels` -- `((side, how many), ...)`, each a
+    entered, an `Item` carrying the side it stands for and the weight it entered at (what it counts for now is `evidence.standing`'s, B24.19), `status` `stands` |
+    `answered` (stands, an answer tried and failed or halved it) | `struck` (by `standing`) | `withdrawn` (refused at entry, the lighter of two of one side's); `faults` -- `((a `proceeding_faults` member, the side at fault), ...)` in order; `levels` -- `((side, how many), ...)`, each a
     level against that side on the closing draw (a fault's, or a failed `impugn`'s)."""
     n: int = 0
     issue: int = 0
