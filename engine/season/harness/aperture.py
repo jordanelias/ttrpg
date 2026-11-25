@@ -770,6 +770,13 @@ def engine_lines(m: dict) -> list:
     return out
 
 
+def settlement_motion_lines(m: dict) -> list:
+    """The SETTLEMENT MOTION block of one world's `report` (IS-B3-SE-03), printed after ENGINES: `populated.settlement_motion`'s
+    five counts as the measured arm's world ended. A reading, never a threshold."""
+    return ["\n  SETTLEMENT MOTION (`populated.settlement_motion`, over the log since the build)"] + [
+        f"    {k:<36}{v:>6}" for k, v in m["settlement_motion"].items()]
+
+
 def pooled_engine_lines(ms: list) -> list:
     """Per row, the number of seeds whose run entered it (`m["engines"]` of each world in `ms`); a seed
     measured without the counts is named and left out of the denominator."""
@@ -895,7 +902,7 @@ def measure_world(build, seed: int = 0, seasons: int = 1) -> dict:
     run, engines = engines_entered(lambda: instrumented_season(w, seasons))
     return {"seed": seed, "seasons": seasons, "persons": persons, "survivors": len(w.persons),
             "seats": held, "depth": depth, "posts": posts, "granted": granted,
-            "eligible": elig, **run, "engines": engines,
+            "eligible": elig, **run, "engines": engines, "settlement_motion": populated.settlement_motion(w),
             "engines_why": None if engines is not None else monitoring_blocked() or "the tool id was taken",
             "control": {"acts": control["acts"], "claim_sources": control["claim_sources"],
                         "hash": wc.content_hash()}}
@@ -1328,6 +1335,7 @@ def report(res: dict) -> list:
         out.append(_verb_total_line(vc))
         out.extend(pools_lines(m))
         out.extend(engine_lines(m))
+        out.extend(settlement_motion_lines(m))
         out.extend(built_out_lines(m))
         out.extend(null_scene_lines(m))
         # -- why each refusal refused (REM-11) ----------------------------------------------

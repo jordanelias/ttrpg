@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Batch B12a-world-motion-and-ground — IN FLIGHT | `workplans/valoria_master_workplan_v12_part19.md` and `_part20.md`; open 8142371d09003f65c368d67d4ccdfd6ea05174d1 | built · close none · every position remains |
+| Batch B12a-world-motion-and-ground — IN FLIGHT | `workplans/valoria_master_workplan_v12_part19.md` and `_part20.md`; open 8142371d09003f65c368d67d4ccdfd6ea05174d1 | built B12a.01 · close none · the rest remains |
 | Matter/works proposal (`nearest_store`, body gate, `works`/`found`) — RATIFIED AS INTENT (`ED-SE-0053`); IN-28's cost and holder and SE-03's MW-5 landed at B-K (`c8d1db3a`); the closer (`raze`) landed at B-R (`68eaaa41`); the residue is the works' producer | `ED-SE-0053`; `engine/season/hole_register.yaml` H-166 (limit 3), H-228 (`raze`'s limits), H-165; `registers/editorial_ledger_in.jsonl` ED-IN-0297 (needs_jordan, where a works comes from) | the producer waits on ED-IN-0297; nothing else in the proposal exists until built with its test |
 | Built-world ontology proposal (Site/Rung fabric-address, fortification bands) — superseded in part by `ED-SE-0053` and absorbed (fortification is `Site.condition`) | `ED-SE-0052`; `ED-SE-0053` | nothing to rule; H-166 limit 3 and H-211 carry the residue |
 | MW-11 RED (crossing predicate downward-only; nothing raises a body); MW-5 is a test over H-125's arms | `ED-SE-0053`; `engine/season/hole_register.yaml` H-211 (MW-11), H-125; `engine/season/tests/test_se03_body_bands.py` (MW-5) | MW-11 is measured, not in the tree (a red test may not be skipped); r2 section A.4's signed body step and an upward check in `_crossings` are its fix, a position of their own |
