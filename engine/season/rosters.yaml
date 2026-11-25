@@ -2228,6 +2228,18 @@ rosters:
       floors (`world_q.HUNGER_FLOOR_BANDS`). A roster of fewer than two members cannot name `starving`
       and `fed` and raises at import (`world_q`'s unpack).
     values: [starving, hungry, lean, fed]
+  seasons_of_year:
+    source: "ED-IN-0332 (RULED, D-U1-10): the year is a roster; `data/fixtures.py` already speaks of \"two years at four seasons\""
+    open: false
+    ordered: true
+    note: >-
+      THE YEAR, IN ORDER; ITS LENGTH IS THE YEAR (`data/rosters.py::SEASONS_OF_YEAR`, the one owner). The
+      season of the year a tick falls in is `tick % len(SEASONS_OF_YEAR)` (`world_q.season_of_year`), read
+      off the clock and stored nowhere; every age in seasons, every yearly term and the weather read the
+      length and no file states a literal. `season_factor_draw`, when non-empty, holds one entry per
+      member here, in this order, and is refused at `season_factor_of` otherwise. The four names are
+      `[ASSUMPTION; medium; Jordan to correct]`; the length is the ruling.
+    values: [spring, summer, autumn, winter]
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99

@@ -921,6 +921,7 @@ LOGGED_KINDS = check_logged_kinds(roster_map("logged_kinds", "values"))
 STANDING_CROSSED = LOGGED_KINDS["standing_crossed"]
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 HUNGER_BANDS = roster("hunger_bands", ordered=True)
+SEASONS_OF_YEAR = roster("seasons_of_year", ordered=True)   # ED-IN-0332: its length IS the year
 
 
 def _check_scale_of_rung(mapping: dict, kinds) -> None:
