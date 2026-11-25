@@ -732,10 +732,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-526 -- `site: Fixtures endowment_mode`, graded `assumption`; CP-T08-02 gives the arm and no territory's row, so the arm is injected and swept uniform (control) / ground (SHIPPED)]
     endowment_mode="ground",           # `H-526`, swept uniform (control) / ground (SHIPPED, B12a.54's flip)
     # B12a.51 (`07_SE_ground_and_granaries` §4 (b)): SEASONS OF THE EATEN-KIND DEFICIT A GRANARY RUNG STARTS WITH under `ground`
-    # (`07_SE_treasury_granary_B`'s seed, B12a.52). `0` is THE CONTROL, SHIPPED: no territory stock. Read by nothing until B12a.52.
+    # (`07_SE_treasury_granary_B`'s seed, B12a.52). `0` is THE CONTROL: no territory stock. B12a.55 FLIPPED IT to `4` (a declared HASH MOVER):
+    # every settlement's first rung above it is stocked at world-gen with four seasons of the grain and salt its settlements lack, so no cohort
+    # is short at season 0 and the treasury is the clock. `0` under `ground` reproduces B12a.54's realm byte for byte. Revert: `0`.
     # [ASSUMPTION; medium; Jordan to correct; revert: `granary_seasons: 0`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-527 -- `site: Fixtures granary_seasons`, graded `assumption`; the source gives the seed's shape and no count of seasons, so the count is injected at the control and swept 0 / 4 / 8]
-    granary_seasons=0,                 # `H-527`, swept 0 (control, SHIPPED) / 4 / 8 (B12a.55 flips to 4)
+    granary_seasons=4,                 # `H-527`, swept 0 (control) / 4 (SHIPPED, B12a.55's flip) / 8
     # B12a.53 (`07_SE_ground_and_granaries` §4 (d), H-303): HOW FAR THE LARDER WALK GOES. `first` is THE CONTROL, SHIPPED: the draw is the first
     # stocked rung's alone and the remainder is not walked on (today's rule). `through` walks the remainder up the ladder, so a short town with a
     # few units at home reaches the treasury above, and the debit is per rung. Projected by `world_q._larder_parts` into `LarderInput.walk`, read by
