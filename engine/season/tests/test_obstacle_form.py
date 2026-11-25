@@ -588,3 +588,24 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     held = 4 * world_q.remove_weight("firsthand")
     assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=()) == 0.0
     assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=("testimony",)) == held
+
+
+def test_a_subject_above_the_exercised_seat_is_a_rank_gap_term_by_each_branch():
+    """B21.09's `rank_gap` (`sigma._rank_gap_of`), observed nonzero on a rolled `revoke` at `rank_step` 1.0 (set in this test only; shipped 0):
+    a reeve's seat at the settlement `S` (`rung_kinds` rank 3) acting on the duke, who holds `off_duke` at the duchy `D` (rank 6), reads a gap of
+    3; the same act exercised through no seat (the actor's side rank 0) reads 6; a rung subject (`D` itself, the holding branch) reads 3.
+    CONTROL: the duke through `off_duke` on the reeve, who stands below him, lists no `rank_gap` term (the gap is never below 0)."""
+    from ..state.carriers import Office, Tenure
+    w = _world(rank_step=1.0)
+    w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", ["revoke"], faction="Crown")
+    w.add_tenure(Tenure("t_reeve_rank", "p_low", "off_reeve", "hold", 0))
+    checked = 0
+    for actor, via, subject, gap in (("p_low", "off_reeve", "p_high", 3), ("p_low", None, "p_high", 6),
+                                     ("p_low", "off_reeve", "D", 3), ("p_high", "off_duke", "p_low", 0)):
+        out = sigma.resolve(w, [actor], ["c"], V.VERB_TABLE["revoke"].contests, verb="revoke", subject=subject, via=via, seat="off_duke",
+                            rng=draw.seeded(draw.H2("test_obstacle_form_rank_gap", 0)))
+        assert out["status"] == "RESOLVED", out
+        terms = dict(out["terms"])
+        assert terms.get("rank_gap") == (float(gap) if gap else None), (actor, via, subject, terms)
+        checked += 1
+    assert checked == 4, checked

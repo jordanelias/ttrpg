@@ -1763,7 +1763,7 @@ def restrained(w: World, person: Optional[str], kind: str, at: Optional[str] = N
     seat (the edge's object) REACHES that rung (`state/gate.py::purview_reaches`, the one owner), so a
     ban bars only the seats within the banning seat's reach. Without it the answer is as it was: ANY
     live edge of the kind. A ban does not close seats already held (no reader here asks it of a hold).
-    [ASSUMPTION; medium; Jordan to correct; revert: drop the argument at the three call sites]
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the argument at the four call sites]
     A `detain` is never scoped (custody holds a man everywhere: he is not free to travel to a place
     the detaining seat does not govern), so `at` with `DETAIN_KIND` is a caller defect and raises.
     A kind off `RESTRAINT_KINDS` is a caller defect -- every other kind has a reader of its own -- and

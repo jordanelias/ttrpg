@@ -2504,8 +2504,8 @@ rosters:
       also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in
       person), so `dispensation` is carried for `issue` and, from B21.57, `dispatch` (an order is a decree to the man it sends,
       `_eff_dispatch`), and for `covenant` not at all. No record kind is in both rosters (refused at import), and no
-      `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Nothing reads this roster
-      until B21.18 (`loop/witness.py::addressee_reads`). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium;
+      `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Read by
+      `loop/witness.py::proclaimed` (through `addressee_reads`, since B21.18). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium;
       Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]
     values:
       dispensation: [issue, dispatch]

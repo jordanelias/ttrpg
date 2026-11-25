@@ -370,6 +370,14 @@ class VerbRow:
         return self.refusals_by_clause[clause]
 
     @property
+    def party_gap_at_write(self) -> bool:
+        """IS THIS ROW'S PARTY GAP REFUSED AT ITS `write` CLAUSE? True where nobody is opposite on the act's own face -- a `task`
+        row (B07.01: its `draw` key, `draw_kinds`) or a row naming no `counterparty:` (B21.81: `establish`, `revoke`) -- and the row
+        keys `write`: its party gap is an act that did not take, so it emits the `write` key's kinds, never the union. The ONE
+        answer the loader's contested-row rule (`_load_verb_table`) and the fold (`loop/resolve.py::_refuse_party_gap`) read."""
+        return bool(self.draw_kinds or not self.counterparty) and WRITE_CLAUSE in self.refusals_by_clause
+
+    @property
     def draw_kinds(self) -> tuple:
         """B07.01 (18-A item 4): the kinds a `task` row emits when its draw is lost -- its keyed `emits_on_refusal:` clause
         `draw` (`DRAW_CLAUSE`). A lost draw, not a refusal (04 §C.4: a refusal is a precondition failed), so these kinds are
@@ -1211,7 +1219,7 @@ def _load_verb_table() -> dict:
             # on the act's own face, so its party gap is likewise an act that did not take, and emits the `write` key's kinds.
             if ((row.contests or _graded) and len(row.emits_on_refusal) > 1
                     and COUNTERPARTY_CLAUSE not in by_clause
-                    and not ((_form == FORM_TASK or not row.counterparty) and WRITE_CLAUSE in by_clause)):
+                    and not row.party_gap_at_write):
                 _defects.append("declares `contests:` or a `graded_tasks` route, whose "
                                 "party-gap refusal no clause names, keys no `counterparty` "
                                 "refusal for it (nor, as a task, a `write` one), "

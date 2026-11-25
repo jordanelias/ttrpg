@@ -54,7 +54,7 @@ from ..data import verbs as VERBS
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.rosters import PURSUIT_AXES, RESTRAINT_KINDS, table, table_meta
-from ..data.verbs import _OPENERS_FROM_EFFECTS, COUNTERPARTY_CLAUSE, VERB_TABLE, WRITE_CLAUSE
+from ..data.verbs import _OPENERS_FROM_EFFECTS, COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE, WRITE_CLAUSE
 from ..decision.options import seat_of
 from ..harness import probes as P
 from ..loop import resolve as R
@@ -244,6 +244,18 @@ def test_in12_5_the_party_gap_emits_the_counterparty_kind_not_the_union():
     assert _kinds(R._refuse_party_gap(d, w, t)) == list(VERB_TABLE["speak"].emits_on_refusal)
 
 
+def test_a_contested_row_naming_no_counterparty_refuses_its_party_gap_at_write_not_the_union():
+    """B21.81: `establish` and `revoke` contest a seat and name no `counterparty:`, so their party gap is an act that did not take:
+    `_refuse_party_gap` emits the `write` key's one kind (`VerbRow.party_gap_at_write`, the loader's rule and the fold's one owner),
+    never the row's union of several kinds -- which would publish `*.unauthorized`, `*.no_office` and the rest for clauses that held."""
+    w, d = _world()
+    for verb, payload in (("establish", {"subject": "S"}), ("revoke", {"office": WATCH})):
+        row = VERB_TABLE[verb]
+        assert not row.counterparty and row.contests and len(row.emits_on_refusal) > 1, verb
+        got = _kinds(R._refuse_party_gap(d, w, _act(f"pg_{verb}", verb, DUKE, SEAT, **payload)))
+        assert got == [f"{verb}.refused"] == list(row.refusal_for(WRITE_CLAUSE)), (verb, got)
+
+
 # ======================================================================================
 # 4 -- THE OBSERVABLES, THROUGH THE REAL FOLD
 # ======================================================================================
@@ -360,7 +372,19 @@ def test_a_detained_holder_forms_and_is_admitted_no_act_through_his_seat():
     SAME act by the same watchman under a live `detain` is refused and opens no custody; released, it is
     admitted again. The formation arm: his candidate's seat (`seat_of`) is `off_watch` free, `None`
     in custody, `off_watch` again released. The seat's own `hold` is live throughout (custody suspends,
-    it does not vacate). Folded at a PINNED winning band, so a refusal is the gate's, never a lost roll."""
+    it does not vacate). Folded at a PINNED winning band, so a refusal is the gate's, never a lost roll.
+    THE PLAN'S OWN ARM (B21 close): the Duke's `issue` through `off_duke`, an act no remit-act basis reads (eligibility `remit:issue`
+    alone, `loop/resolve.py::_eligible`), admitted free, refused at eligibility under a live `detain` (red before `_eligible` asked
+    `_seat_grants`: the detained arm executed), admitted again released."""
+    issue = lambda w, d, key: _kinds(_fold(w, d, _act(key, "issue", DUKE, SEAT, subject=PRISONER, to=PRISONER)))
+    w, d = _world(**JUDGE)
+    assert issue(w, d, "i1") == ["dispensation.issued"]                          # free: admitted
+    held = Tenure("t_duke_held", DUKE, WATCH, "detain", since=w.tick)
+    w.add_tenure(held)
+    assert issue(w, d, "i2") == list(VERB_TABLE["issue"].refusal_for(ELIGIBILITY_CLAUSE))   # in custody: refused
+    assert "rec:i2" not in w.records, "the detained holder's writ was minted"
+    held.until = w.tick
+    assert issue(w, d, "i3") == ["dispensation.issued"] and "rec:i3" in w.records  # released: admitted again
     arrest = lambda w, d: _kinds(_fold_at(w, d, "Success", _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER)))
     w, d = _world(**JUDGE)
     _warrant_to_watchman(w, d)
@@ -369,7 +393,8 @@ def test_a_detained_holder_forms_and_is_admitted_no_act_through_his_seat():
     _warrant_to_watchman(w, d)
     custody = Tenure("t_custody", WATCHMAN, SEAT, "detain", since=w.tick)
     w.add_tenure(custody)
-    assert arrest(w, d) == ["arrest.refused"] and not _restraints(w)             # in custody: refused
+    # in custody: refused -- at eligibility since the B21 close (`_eligible` asks `_seat_grants`; was `arrest.refused` at the gate)
+    assert arrest(w, d) == list(VERB_TABLE["arrest"].refusal_for(ELIGIBILITY_CLAUSE)) and not _restraints(w)
     seat, = [t for t in w.tenures if t.kind == "hold" and t.object == WATCH]
     assert seat.live, "custody suspends the seat; it does not vacate it"
     custody.until = w.tick

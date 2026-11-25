@@ -747,8 +747,9 @@ def seat_of(p: Person, c: Candidate) -> Optional[str]:
     minted from it cannot name two seats.
 
     NONE FOR A HOLDER IN CUSTODY (B21.11, A-23): a live `detain` he owns suspends every seat he holds
-    (`state/gate.py::_seat_grants` refuses the act through it), so no seat-gated candidate forms --
-    formation follows admission. The seat's `hold` is untouched: custody suspends, it does not vacate.
+    (`state/gate.py::_seat_grants`, asked by every remit-act basis and by `loop/resolve.py::_eligible`'s `remit:` branch, refuses
+    the act through it), so his candidate names no seat: `opening_set` still forms it, the act mints with `via=None`, and the fold
+    admits it only on an eligibility alternative that needs no seat. The seat's `hold` is untouched: custody suspends, it does not vacate.
     The scan is `world_q.restrained(w, p, DETAIN_KIND)`'s, spelt over the person's own Tenures because
     a `decision/` reader holds no `World`."""
     if any(t.kind == DETAIN_KIND and t.live for t in p.tenures):

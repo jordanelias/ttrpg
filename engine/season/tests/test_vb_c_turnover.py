@@ -173,6 +173,8 @@ def test_c3_confer_revoke_succeed_band_on_a_hand_built_world():
     four = {"Overwhelming", "Success", "Partial", "Failure"}
     assert set(bands["confer"]) == four and set(bands["succeed"]) == four, bands
     assert bands["revoke"].get("Failure", 0) > 0, bands
+    # B21 close: the two unseating arms above (the Partial skips the disposal, a Success charges it) each observed something
+    assert bands["revoke"].get("Partial", 0) > 0 and bands["revoke"].get("Success", 0) > 0, bands
 
 
 def test_c3_scenario_vacancy_and_succession_bands_and_the_provisional_term():

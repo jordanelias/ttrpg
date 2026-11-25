@@ -128,8 +128,8 @@ def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
 
 def _provisional_term(w: "World", a: "Act") -> Optional["Term"]:
     """The `Term` a PARTIAL's hold OPENS with -- the one constructor of it (`H-611`, `14_VERBS_BINDING_C` commit C1), in
-    `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5). `None` is the CONTROL and
-    SHIPS: an untermed hold, exactly what a Success opens, so a Partial reads as a Success until the fixture is set. Anything else
+    `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5). `None` is the CONTROL: an
+    untermed hold, exactly what a Success opens, so a Partial reads as a Success there; the fixture SHIPS at 2 (B21.73). Anything else
     must be a whole number of seasons, at least one, refused here as `_oblige_term` refuses it (a `0` would lapse at the very next
     barrier). Callers (B21.14): `_eff_confer` and `_eff_succeed` at a Partial band; a Partial `revoke` opens no hold."""
     n = w.fixtures.get("provisional_term")

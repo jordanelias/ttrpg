@@ -2000,6 +2000,11 @@ def ledger_names(claims) -> frozenset:
     return frozenset(out)
 
 
+#: THE OATH'S KIND, as `oblige`'s row emits it (`(sworn man, duty.taken, True)` is the claim a witness of an oath holds). The one
+#: spelling `commanded_read` reads and `boot/realm.py::seed_command_knowledge` writes, read off the row so a renamed emit moves both.
+DUTY_TAKEN, = _verbs.VERB_TABLE["oblige"].emits
+
+
 def commanded_read(p: Person) -> frozenset:
     """WHOM `p` CAN READ AS COMMANDED -- the persons a seat of his may order, as his OWN state names them (B21.55, A-22; the
     formation half of `queries/world_q.py::commands`, which decides at the fold). Person-side, `p.tenures` and `p.ledger` only (AX-2).
@@ -2024,7 +2029,7 @@ def commanded_read(p: Person) -> frozenset:
     for c in p.ledger:
         if c.chain:
             continue
-        if c.predicate == "duty.taken" and c.value is True:
+        if c.predicate == DUTY_TAKEN and c.value is True:
             out.add(c.subject)
         elif c.predicate == "hold" and c.subject not in seats and isinstance(c.value, str):
             out.add(c.value)

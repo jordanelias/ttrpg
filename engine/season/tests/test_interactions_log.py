@@ -6,7 +6,7 @@ Three controls (the module docstring says what each row holds):
   2. PLANTED FAILURE: `interactions.same_faction` inverted makes `_assert_finding` fail, so the finding below
      is one the log can be seen to get wrong.
   3. THE FINDING: on the shipped season (`build_realm(FINDING_SEED)`, season 1), the first audited row whose candidate was chosen
-     and whose verb declares `contests:` carries six fields equal to the world's for that pair: same faction, stance,
+     and whose verb declares `contests:` carries six fields equal to the world's for that pair AT THE ACT: same faction, stance,
      the question's source, its claim in the actor's ledger, the claim's origin, and the candidate being the act.
   Plus the re-read table IS the chooser's: every act the chooser returned matches a re-read candidate.
 """
@@ -20,15 +20,35 @@ from ..queries import person_q, world_q
 
 
 #: The seed the finding is read on. Seed 0 was the reading until B21.54 moved the shipped season: at B21.99's closing tree, seeds 0 to 15, one season,
-#: audit one row at seed 1 (no chosen contested verb), two at seed 5 and two at seed 12, nothing at the other thirteen. Seed 5's chosen row is a
-#: `capture` after which the target holds no faction at the season's end, so the world's end-of-season reading of the pair is no longer the one the log
-#: took at the act and `_assert_finding` rightly fails there; seed 12's chosen row is the same `capture` of the same pair, after which the target still holds his faction, and holds.
+#: audit one row at seed 1 (no chosen contested verb), two at seed 5 and two at seed 12, nothing at the other thirteen. Read at the act (B21 close),
+#: seed 5 holds too (it failed against the end-of-season world, its `capture` having taken the target's faction).
 FINDING_SEED = 12
 
 
 @pytest.fixture(scope="module")
 def season_one():
-    return I.run(FINDING_SEED, 1)
+    """`I.run(FINDING_SEED, 1)` plus THE WORLD AT EACH ACT: a transparent spy on `interactions.relation` (called at the deliberation
+    that chose the act, the moment the log reads the pair) records, keyed by the very dict the log stores, the world's own readings of
+    the pair there -- `world_q.faction_holding` of both (not `interactions.same_faction`, so a planted wrong reading still shows), the
+    actor's stance and ledger ids, the acquaintance set. B21 close: compared against the end-of-season world before, the finding held
+    only where the season's later acts left the pair unmoved (seed 5's `capture` took the target's faction, and the test failed)."""
+    real = I.relation
+    at_act: dict = {}
+
+    def spy(w, a, t, authored, heads):
+        out = real(w, a, t, authored, heads)
+        p = w.persons[a]
+        at_act[id(out)] = {"factions": (world_q.faction_holding(w, a), world_q.faction_holding(w, t)),
+                           "stance": person_q.stance_toward(p, t), "ledger": {c.id for c in p.ledger},
+                           "acquaintances": set(getattr(w, "_acquaintances", ()) or ())}
+        return out
+    mp = pytest.MonkeyPatch()
+    mp.setattr(I, "relation", spy)
+    try:
+        w, d, rows = I.run(FINDING_SEED, 1)
+    finally:
+        mp.undo()
+    return w, d, rows, at_act
 
 
 def _selected(rows):
@@ -37,18 +57,20 @@ def _selected(rows):
                  if r["candidate"] and r["candidate"]["chosen"] and VERB_TABLE[r["verb"]].contests), None)
 
 
-def _assert_finding(w, rows) -> None:
+def _assert_finding(rows, at_act) -> None:
+    """The selected row's six fields against the world AT ITS ACT (`season_one`'s `at_act`, keyed by the row's own relation dict)."""
     r = _selected(rows)
     assert r is not None, "no audited row of the season is a chosen act of a verb that declares `contests:`"
-    actor, target = r["actor"], r["target"]
-    assert r["relation"]["same_faction"] == (world_q.faction_holding(w, actor) is not None
-                                             and world_q.faction_holding(w, actor) == world_q.faction_holding(w, target)), \
-        "same_faction: the logged reading is not the world's for this pair"
-    assert r["relation"]["stance"] == person_q.stance_toward(w.persons[actor], target)
+    world = at_act.get(id(r["relation"]))
+    assert world is not None, "the selected row's relation was not read at its act: the comparison observed nothing"
+    fa, ft = world["factions"]
+    assert r["relation"]["same_faction"] == (fa is not None and fa == ft), \
+        "same_faction: the logged reading is not the world's for this pair at the act"
+    assert r["relation"]["stance"] == world["stance"]
     assert r["question"]["source"] == "claim_landed"
     claim = r["question"]["claim"]
-    assert claim["id"] in {c.id for c in w.persons[actor].ledger}, "the question's claim is not in the actor's ledger"
-    assert claim["origin"].startswith("acquaintance") == (claim["id"] in w._acquaintances)
+    assert claim["id"] in world["ledger"], "the question's claim is not in the actor's ledger at the act"
+    assert claim["origin"].startswith("acquaintance") == (claim["id"] in world["acquaintances"])
     assert r["candidate"]["chosen"] and r["candidate"]["verb"] == r["verb"]
 
 
@@ -56,14 +78,14 @@ def test_the_log_names_a_contested_act_between_friends_on_the_shipped_season(sea
     """The finding is read off the shipped season, no reverted fixture: the first audited row (a hostile act between
     same-faction persons, stance >= 0) whose candidate was chosen and whose verb declares `contests:` carries the six
     fields the world holds for that pair."""
-    w, _, rows = season_one
+    _, _, rows, at_act = season_one
     checked = len(I.audit(rows))
     assert checked >= 1, "the shipped season has no audited row"
-    _assert_finding(w, rows)
+    _assert_finding(rows, at_act)
 
 
 def test_the_re_read_table_is_the_choosers(season_one):
-    _, _, rows = season_one
+    _, _, rows, _ = season_one
     delib = [r for r in rows if r["kind"] == "deliberation" and r["table_check"]]
     assert sum(r["table_check"]["returned_acts"] for r in delib) > 0
     assert sum(r["table_check"]["unmatched"] for r in delib) == 0

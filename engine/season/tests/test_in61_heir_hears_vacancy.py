@@ -145,9 +145,10 @@ def test_g3_queens_seat_confer_opens():
     """B21.15 (HAPPENINGS-B edit 1, G3): the Queen's and the Princess's seats, vacant, are refilled by a `confer` through a King's
     seat. Each row's `conferral` is read off the SHIPPED registry (`build_realm(0).offices`) onto a hand-built `_gov_world` (a realm
     costs about 0.6 s a seed, and the world is the one B21.14's band test draws on); then 40 world seeds are each drawn through
-    the real `resolve`: never `confer.refused` (eligibility admits the conferral), and the seat opens at Overwhelming, Success or
-    Partial, `appointment.resisted` at Failure with the seat still empty. FALSIFIER (run once, not kept): `conferral: null` on
-    either row returns `confer.refused` at every seed."""
+    the real `resolve`: never `confer.refused` (eligibility, the counterparty and the write admit the conferral; the band arms'
+    strict `kinds ==` read every other refusal), and the seat opens at Overwhelming, Success or Partial, `appointment.resisted` at
+    Failure with the seat still empty. FALSIFIER (run once, not kept): `conferral: null` on either row is refused at every seed --
+    since B21.80 with `confer.no_basis`, the `basis` clause's kind, which the strict `kinds ==` arms read."""
     from collections import Counter
 
     from .test_g3_not_yours import _gov_world, _hold
@@ -238,7 +239,7 @@ def _claim_seasons(w, d, seasons, seed):
     return _holder(w, THRONE)
 
 
-def test_g1_heir_holds_in_most_seeds_not_all():
+def test_g1_the_throne_is_held_by_the_heir_or_another_listed_title_not_always_the_heir():
     """B21.16 G1: THE KING DEAD, THE HEIR ALIVE, 40 world seeds, two seasons (the source reads four, A-114): the throne is held in
     most seeds, the heir holds it in some and not in all, and in at least one seed the holder of another listed title does.
     ⚠ DEPARTURE FROM THE SOURCE: it reads "the heir holds ... in MOST seeds". Nothing yet favours the heir over the other four

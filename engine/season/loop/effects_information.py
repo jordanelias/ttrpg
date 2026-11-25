@@ -547,7 +547,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         which opens a `hold` whose subject is the conferee"*. ⚠ THE PRICE C-1 STATED (*"the subject
         may `release` what the finding opened (T-m) ... a convict can discharge his own penance"*, `oblige`
         being in `release`'s domain) IS OVERWRITTEN BY A-37 (Jordan; VRES §4 edit 2): an imposed service ends
-        by the bench's `pardon` or its term maturing at MATTER, as detention and banishment do, and a party
+        by its term maturing at MATTER (`_eff_pardon` closes only a restraint, never an `oblige`), and a party
         does not release it -- `loop/predicates.py::_req_release` refuses an edge this act opened, and
         `opening_set` forms no `release` on one (`rosters.yaml: own_edge_declines`). The gate basis for
         closing a disposal stays `determination`, through the seat that is the edge's object. The kind is a LITERAL

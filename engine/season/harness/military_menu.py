@@ -74,7 +74,8 @@ class MilitaryMenu:
 
 
 #: The army verbs a SEAT licenses (`verb_table.yaml`: eligibility `remit:dispatch`, B21.59): the act names the seat it is exercised through.
-_SEATED_VERBS = ("recruit", "discharge_troops")
+#: Derived from the row's own column, never from a verb name (`recruit` and `discharge_troops` today).
+_SEATED_VERBS = frozenset(v for v in ARMY_VERBS if VERB_TABLE[v].eligibility == ("remit:dispatch",))
 
 
 def _levy_seats(w, person: str, verb: str = "recruit") -> tuple:

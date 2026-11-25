@@ -414,7 +414,7 @@ rows:
               issue        22/7/23 -> 3/0/0   BUILT OUT at seed 0 only (`clean 3 kinds yes wrote yes one yes via 3`)
               requisition  0/0/0   -> 0/0/0   not built out
               (the carries of other batches, for the nine) open_case 6/5/6 -> 0/0/0; determine 1/0/0 -> 0/0/0; convene 6/5/2 -> 2/1/2 BUILT OUT
-            Pooled over the three realm seeds, `via` at least 1 for `issue` and `convene` only: six of the nine read 0.
+            Pooled over the three realm seeds, `via` at least 1 for `issue` and `convene` only: seven of the nine read 0.
           control: "the same instrument on a clean `git archive c21e451` extract read the BEFORE column (aperture_base.log; `dispatch` 29 and `issue` 52 pooled there); the aperture's own CONTROL line reads `content_hash EQUAL` at every seed (the instrument observed the season without moving it); the run measured an extract of a390628, game code identical to this tree, `PYTHONHASHSEED=0`, about 8 minutes"
           does_not_show: >-
             why `dispatch`, `issue` and the rest fell: not attributed here (57 commits moved the realm, the acts at seed 0, one

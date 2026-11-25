@@ -21,7 +21,7 @@ from ..loop.driver import mint_token
 from ..loop.sides import seat_named_by, sides_of
 from .. import manifest
 from ..seam.wrappers import sigma
-from ..state.carriers import Act, Office
+from ..state.carriers import Act, Claim, Office
 from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 
@@ -214,3 +214,24 @@ def test_non_member_commit_refused_without_admission():
     assert _do(w, d, admitter, "commit", {"subject": RESTORATION}, "elig_recommit") == ["commitment.made"]
     assert _do(w, d, king, "commit", {"subject": "prop:elig_weak"}, "elig_plain") == ["commitment.made"], \
         "a commit to a non-faction Proposition was asked an admission"
+
+
+def test_a_heard_standing_admission_carries_the_faction_into_the_named_mans_question():
+    """B21.63's `propositions_heard` admission block: the Movement's admitter utters and commits to an admission naming the King (it
+    stands). The King, once a claim naming that admission is in his ledger (told it by another: `doer` is not his), has the Movement's
+    Proposition among what he has heard of; before he hears it he has not, and a second man told the same admission, which names not him,
+    does not either. Delete the block and the first assertion after the telling reads red (run once at the B21 close, not kept)."""
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    king = next(p for p in w.persons if any(t.kind == "hold" and t.live and t.object == "off_king" for t in w.persons[p].tenures))
+    ours = world_q.members(w, RESTORATION)
+    admitter = next(p for p in ours if gate.may_admit(w, p, RESTORATION))
+    other = next(p for p in world_q.members(w, "fac_valorsmark") if p != king and p not in ours)
+    assert _admission(w, d, admitter, king, "heard") == ["proposition.uttered", "commitment.made"]
+    assert world_q.admission_stands(w, king, RESTORATION), "fixture: the admission does not stand"
+    for who in (king, other):
+        assert RESTORATION not in world_q.propositions_heard(w, w.persons[who]), "fixture: the faction was heard before the telling"
+        w.persons[who].ledger.append(Claim(f"c_told_{who}", who, "prop:elig_heard", "proposition.uttered", True, w.tick, "told", 80, "own"))
+    assert RESTORATION in world_q.propositions_heard(w, w.persons[king]), "the named man heard a standing admission and not its faction"
+    assert "prop:elig_heard" in world_q.propositions_heard(w, w.persons[other])     # he heard the admission itself ...
+    assert RESTORATION not in world_q.propositions_heard(w, w.persons[other]), "an admission naming another carried its faction"

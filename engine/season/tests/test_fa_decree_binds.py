@@ -303,7 +303,8 @@ def test_suspicion_floors_at_zero_and_a_complied_season_delays_the_recall():
     w, d = _recall_scene()
     _season(w, d, 0, DEFY, DEFY)
     assert sus(w) == 1
-    # the floor: obedience banks no credit below zero
+    # the floor is on the WHOLE SUM (`person_q.suspicions`: max(0, withheld seasons - complied seasons)): the reading never goes below
+    # zero, and obedience DOES bank -- seasons complied earlier offset seasons defied later
     w, d = _recall_scene()
     _season(w, d, 0, DEFY)
     for season in (1, 2, 3):
@@ -311,6 +312,12 @@ def test_suspicion_floors_at_zero_and_a_complied_season_delays_the_recall():
     assert sus(w) == 0
     _season(w, d, 4, COMPLY)
     assert sus(w) == 0 and not _recall_named(w)
+    # B21 close: the arm that tells the two floors apart -- four complied seasons then three defied read 0 (3 under a running floor)
+    w, d = _recall_scene()
+    for season, verb in enumerate((COMPLY,) * 4 + (DEFY,) * 3):
+        _season(w, d, season, verb)
+        checked += 1
+    assert sus(w) == 0 and not _recall_named(w), "comply x4 then defy x3: the whole-sum floor reads 0"
     # the sweep arm and the revert, on one season's defiance
     w, d = _recall_scene()
     _season(w, d, 0, DEFY)

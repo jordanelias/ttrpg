@@ -5130,17 +5130,14 @@ def test_a_holder_can_now_choose_the_governance_verbs_their_office_grants():
         "no remit-only governance verb is offerable to a person who holds the office granting it "
         "-- `H-71` has REGRESSED. Check that `add_tenure` still calls `_grant_remit`")
     assert "confer" in offered, "the duke's office grants `confer` and the person cannot form it"
-    # ⚠ THIS ASSERTS THE MECHANISM, NOT A SIDE OF `H-91`. It pins that the grant is read off the
-    # office that granted it rather than admitting blanket -- an over-admission would be `G4`.
-    # It is NOT a ruling that `remit:` should stay NECESSARY: `H-91` holds that keeping
-    # `remit:revoke` necessary may be an over-REFUSAL against Jordan's 2026-09-02 ruling that
-    # purview is SUFFICIENT, and that row says the conflict *"becomes live the moment H-71
-    # closes"* -- which is now. `H-91` is `grade: absent` and reserves the call; closing `H-71`
-    # moved it from unreachable to reachable and this line must not be read as answering it.
+    # ⚠ THIS ASSERTS THE MECHANISM: the grant is read off the office that granted it rather than
+    # admitting blanket -- an over-admission would be `G4`. `H-91` is CLOSED (`ruled`, B21.64): the
+    # grant is what a seat may do and purview is where it reaches, so `remit:revoke` stays necessary,
+    # as every remit verb's grant is -- one rule, not a collision with Jordan's 2026-09-02 *"so long as"*.
     assert "revoke" not in offered, (
         "`revoke` is offerable to a holder whose office does NOT grant it -- the grant is "
         "admitting on something other than its own office, which is an over-admission (G4). "
-        "If this is being changed deliberately under `H-91`, rule that row first")
+        "`H-91` (ruled, B21.64) keeps the grant necessary; reopen that row before changing this")
     # AND THE FOUR ARE STILL IN THE FOLD'S SET. The two halves now agree, which is the whole
     # point of closing the hole rather than the half the slice built.
     assert {"confer", "revoke", "dispatch", "convene"} <= resolvable_verbs(), (

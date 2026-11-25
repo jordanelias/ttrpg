@@ -225,12 +225,20 @@ def test_in31_a_self_revocation_closes_under_t_m_and_bans_nobody():
 
 
 def test_in31_a_man_already_banned_is_not_banned_twice():
+    """B21 close (B21.02's scoping at the revocation's own ban): "already banned" is asked within the revoking seat's reach
+    (`restrained(..., at=<via's rung>)`, as the other three readers ask it). A prior ban from a seat that reaches the crown's rung (the
+    crown's own) suppresses the new one; a prior ban from a seat whose reach misses it (`off_mayor`, no seat of this world, reaches
+    nothing) does not -- the crown's ban still opens (it read the unscoped answer and opened none before)."""
     w, d = _gov("appointed")
-    w.add_tenure(Tenure("t_prior_ban", DUKE, "off_mayor", BAN_KIND, 0))
+    w.add_tenure(Tenure("t_prior_ban", DUKE, VIA, BAN_KIND, 0))
     kinds, opened = _fold(w, d, _revoke("rv_twice"))
     assert kinds == ["tenure.closed"] and opened == set(), (kinds, opened)
     assert _hold(w, TARGET) is None
     assert sum(1 for t in w.tenures if t.kind == BAN_KIND and t.subject == DUKE and t.live) == 1
+    w, d = _gov("appointed")
+    w.add_tenure(Tenure("t_prior_ban", DUKE, "off_mayor", BAN_KIND, 0))
+    kinds, opened = _fold(w, d, _revoke("rv_out_of_reach"))
+    assert kinds == ["tenure.closed"] and opened == {(BAN_KIND, DUKE, VIA)}, (kinds, opened)
 
 
 # 9 -- NOT A REVOCATION, NO COST -------------------------------------------------------------------------

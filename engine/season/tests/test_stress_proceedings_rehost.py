@@ -184,7 +184,7 @@ def test_st26_release_exists_so_a_duty_a_proceeding_imposes_can_be_discharged():
     """RE-HOSTS ST-26 (`04_VERBS.md` §B.5 / `ID-14`). The tracer's finding (F-26): `release` was ABSENT, so
     a duty a finding imposes was closable only by `repudiate` or a seat-holder's revocation. REVERSED:
     `release` is in the verb table and writes `Tenure.until`. B21.07 (A-37, VRES §4: an imposed service ends
-    by the bench's `pardon` or its term, as detention and banishment do) OVERWRITES the convict's price that
+    by its term maturing at MATTER; `pardon` closes only a restraint) OVERWRITES the convict's price that
     ST-26 first observed here: the party's `release` of the `oblige` the bench opened is now REFUSED
     (`_req_release`'s clause on an edge a determination opened), the edge still live, and so is his `release`
     of a `ban` the same bench opened (a restraint is not the holder's to discharge). What `release` closes

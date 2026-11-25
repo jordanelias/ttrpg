@@ -22,7 +22,7 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.person_q import BOND_STEM, SELF_STEM, holds_self_key, known_persons
+from ..queries.person_q import BOND_STEM, DUTY_TAKEN, SELF_STEM, holds_self_key, known_persons
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
                                home_of as home_of_q, landing_floor, members)
 from ..gaps import Forbidden, Unowned, Unspecified
@@ -37,7 +37,6 @@ from ..loop.effects import EFFECTS
 from ..data.requires import KNOWN_PERSON_CLAIM
 from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
 from ..state.gate import NO_CHANGE, may_revoke, sworn_to
-from ..data.verbs import VERB_TABLE
 from ..state.ids import H, ROOT
 from ..state.world import World
 
@@ -812,7 +811,6 @@ def seed_command_knowledge(w: World) -> list:
     oaths would. The ledger rules of `seed_acquaintances` hold (a claim at `when` 0 is the first evicted at `ledger_cap`). Returns
     the claim ids written. [ASSUMPTION; medium; Jordan to correct; revert: delete the build step, and `issue`/`dispatch` again form
     for nobody in the built realm (B21.55's reading)]"""
-    oath_kind, = VERB_TABLE["oblige"].emits
     conf = w.fixtures.get("confidence_default")
     holds = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices and t.subject in w.persons]
     written, missing = [], []
@@ -824,7 +822,7 @@ def seed_command_knowledge(w: World) -> list:
             if t.subject == lord or t.subject not in w.persons:
                 continue
             cid = f"c_oath_{lord}_{t.id}"
-            p.ledger.append(Claim(cid, lord, t.subject, oath_kind, True, t.since, "firsthand", conf, "own"))
+            p.ledger.append(Claim(cid, lord, t.subject, DUTY_TAKEN, True, t.since, "firsthand", conf, "own"))
             written.append(cid)
             if t.subject not in known and (lord, t.subject) not in missing:
                 missing.append((lord, t.subject))

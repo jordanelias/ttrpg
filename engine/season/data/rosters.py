@@ -670,7 +670,7 @@ ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
 # THE TWO ROSTERS OF WHO LEARNS A DOCUMENT'S CONTENT WITHOUT HOLDING IT, one shape: `{record_kinds member: verbs whose mint of
 # that kind the roster covers}`. `read_to_addressee` (B11 lane A) is "put to the addressee's face": the content reaches a witness
 # the document is ADDRESSED TO. `proclaimed` (B21.17, A-21) is "made public": the content reaches EVERYONE who learns of the
-# mint. Read by `loop/witness.py::addressee_reads` (`proclaimed` from B21.18; until then nothing reads it). Both refused at import
+# mint. Read by `loop/witness.py::addressee_reads` (`proclaimed` through `witness.py::proclaimed`, since B21.18). Both refused at import
 # by `check_record_verb_rosters` below (refusals (a), (b), (d)) and `data/verbs.py::_check_record_verb_minting` (refusal (c), which
 # needs the verb table this module loads before).
 def check_record_verb_rosters(named: dict, kinds=None, keys=None, addressee=None) -> dict:

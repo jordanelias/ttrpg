@@ -493,8 +493,8 @@ def _req_release(w: "World", a: "Act") -> bool:
     if not owned:
         return _refuse("a release of a tenure the actor does not own toward the subject "
                        "(live, of a releasable kind)", f"{a.actor} toward {subj!r}")
-    # VRES §4 edit 1 (A-37, B21.07): A PARTY DOES NOT RELEASE AN EDGE A BENCH IMPOSED -- an imposed service ends by the bench's
-    # `pardon` or its term, as detention and banishment do. `_eff_release` closes EVERY live edge the actor owns toward the
+    # VRES §4 edit 1 (A-37, B21.07): A PARTY DOES NOT RELEASE AN EDGE A BENCH IMPOSED -- an imposed service ends by its term maturing
+    # at MATTER (`_eff_pardon` closes only a restraint, never an `oblige`). `_eff_release` closes EVERY live edge the actor owns toward the
     # subject, so one such edge among them refuses the act. The opening Event is the first logged Event naming the edge whose causing
     # Act (`state/attribution.py::causing_act`) is of a verb that opens its kind (`_OPENERS_FROM_EFFECTS`, `_opened_by_acts`' proxy:
     # a later closure naming the edge is not its opening), and the act is a bench's when that verb is a `DISPOSAL_EVENTS` key
@@ -651,16 +651,17 @@ def _req_revoke(w: "World", a: "Act") -> Answer:
     that basis names; and a live `hold` exists to close. v9 IN-31 adds a backstop BEFORE them: the
     seat's conferral basis has a revocation disposal (`has_revocation_disposal`), else refuse.
 
-    ⚠ `remit:revoke` IS STILL NECESSARY, at eligibility. `H-91` registered that Jordan's 2026-09-02
-    *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
-    silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
-    `H-91`'s, still not resolved by editing the transcribed `eligibility:` column.
+    ⚠ `remit:revoke` IS NECESSARY, at eligibility, AND `H-91` IS CLOSED (`ruled`, B21.64): the grant is what
+    the seat may do and purview is where it reaches, both read of the seat exercised, so a seat carrying no
+    `revoke` grant revokes nothing, as one carrying no `issue` grant issues nothing -- the one rule every
+    remit verb follows (`loop/resolve.py::_eligible` asks `state/gate.py::_seat_grants`, and `may_revoke` the
+    basis), not a collision between Part E and Jordan's 2026-09-02 *"so long as"*.
 
     B21.82: THE ANSWER IS `Answer(ok, clause)`, the clause one of the five declared on the decorator, in branch order:
     `office` (the act names no office the world holds), `disposal` (the conferral basis has no revocation disposal),
     `authority` (the seat exercised has no revocation authority over the seat), `keeps` (the `keeps` operand is no list of
-    acts) and `held` (a seat nobody holds). The four short names are one per `_refuse` phrase [ASSUMPTION; medium; Jordan to
-    correct -- basis: B09.18's `confer` names are single words; revert: the phrases themselves]; `keeps` is the fifth branch
+    acts) and `held` (a seat nobody holds). The five short names are one per `_refuse` phrase [ASSUMPTION; medium; Jordan to
+    correct -- basis: B09.18's `confer` names are single words; revert: the phrases themselves]; `keeps` is the branch
     (B21.69) the workplan entry did not list, named for its operand."""
     obj = office_named_by(a)               # `office`, else the computed act's `subject` (B21.13)
     if not obj or not isinstance(obj, str) or obj not in w.offices:   # a list is unhashable: refused, never raised
@@ -669,7 +670,7 @@ def _req_revoke(w: "World", a: "Act") -> Answer:
     # v9 IN-31 (H-100): PROVENANCE UNREADABLE MEANS REFUSE. What the revocation costs is read off the
     # seat's conferral basis (`state/gate.py::REVOCATION_DISPOSAL`, total over the roster and `None`),
     # so a basis with no disposal -- reached only by a hand-mutated office, `Office.__post_init__`
-    # refuses one -- refuses here (`revoke.refused`) rather than default to some cost.
+    # refuses one -- refuses here (`revoke.no_disposal`, the `disposal` clause's kind) rather than default to some cost.
     if not has_revocation_disposal(off):
         return _refuse_at("disposal", f"{a.actor} on {obj!r}",
                           "a revoke of a seat whose conferral basis has no revocation disposal")

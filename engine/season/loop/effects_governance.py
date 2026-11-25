@@ -15,7 +15,7 @@ import math
 from dataclasses import replace
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS, task_share
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import KEEPS_KEY, TERM_KEY, office_founded_by, office_named_by
@@ -26,7 +26,8 @@ from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_s
 from ..state.ids import H
 
 from .effects_information import _mint_document, _seat_rung
-from .effects_shared import _exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _shift, effect_for
+from .effects_shared import (_exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _share, _shift,
+                             effect_for)
 
 
 def _provisional(res: "Resolution | None") -> bool:
@@ -34,7 +35,7 @@ def _provisional(res: "Resolution | None") -> bool:
     its effect -- read through the one band table (`data/rosters.py::task_share`, so no band is named here): the middle band,
     Partial. An undrawn act (no degree) and the two full bands are not; Failure writes nothing (the rows' `writes:` are empty there),
     so the effect never runs at it."""
-    return task_share(res.degree if res is not None else None) < 1
+    return _share(res) < 1
 
 # --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` DOES NOT MOVE A PERSON, IT TELLS ONE, and whether he goes is his own act
 # (`L1` in one row, A-24): B21.57's `_eff_dispatch` below deposits the order as a document the man may answer, and his `comply`
@@ -261,10 +262,13 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     # the share read through the one band table (`data/rosters.py::task_share`, so no band is named here): Partial founds with the
     # first half (`(n + 1) // 2`), Success and Overwhelming with all of it, an undrawn act (no degree) with all of it, as before.
     # Failure writes nothing (`verb_table.yaml`: its `writes:` is empty), so the effect never runs at it. No branch on an entity.
-    share = task_share(res.degree if res is not None else None)
-    if share < 1:
-        off = replace(off, remit_acts=list(off.remit_acts)[: math.ceil(len(off.remit_acts) * share)])
+    # B21 close: ONLY A FOUNDING IS NARROWED. On an office that already exists a narrower copy would cut the sitting holders' grant
+    # through the re-stamp below, a revocation outside `revoke`, B21.69's one verb and one draw for every cut; there the band
+    # decides only whether the re-grant lands (Failure writes nothing), never how much of it.
     cur = w.offices.get(off.id)
+    share = _share(res)
+    if cur is None and share < 1:
+        off = replace(off, remit_acts=list(off.remit_acts)[: math.ceil(len(off.remit_acts) * share)])
     holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
 
     def perform() -> None:
@@ -391,7 +395,7 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # BIND_C's Partial; revert: drop `not _provisional(res)` below]. At Overwhelming and Success (and an undrawn act) it is charged.
     if off is not None and a.via in w.offices and revocation_disposal(off) == BAN_KIND and not _provisional(res):
         for h in dict.fromkeys(t.subject for t in closed):
-            if h != a.actor and h in w.persons and not restrained(w, h, BAN_KIND):
+            if h != a.actor and h in w.persons and not restrained(w, h, BAN_KIND, at=w.offices[a.via].rung):
                 bans.append(Tenure(H(w.world_seed, w.tick, h, f"ban:{a.via}:{a.id}"), h, a.via,
                                    "ban", w.tick))
     if not bans:

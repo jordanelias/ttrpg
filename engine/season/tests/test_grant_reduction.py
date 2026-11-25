@@ -8,7 +8,7 @@ The hand-built world is `test_g3_not_yours._gov_world`: `p_king` on `off_crown` 
 from __future__ import annotations
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
-from engine.season.data.matrix import WriteClass
+from engine.season.data.matrix import Step, WriteClass
 from engine.season.loop import predicates as _preds
 from engine.season.loop.driver import mint_token
 from engine.season.seam import Resolution
@@ -88,6 +88,29 @@ def test_an_establish_that_narrows_a_sitting_grant_is_refused_and_a_revoke_with_
     assert _kinds(d._fold(w, mint_token(w, WriteClass.ACTS), whole, Resolution(DEGREE_LABEL[Degree.SUCCESS], {}))) == ["revoke.refused"]
     assert t.granted_acts == ("issue", "convene")
     assert not _preds._req_revoke(w, Act(id="rv_bad", actor="p_high", verb="revoke", payload={"office": "off_reeve", "keeps": "issue"}, via="off_duke"))
+
+
+def test_a_partial_establish_on_a_seated_office_never_cuts_the_sitting_grant():
+    """B21 close: the Partial band narrows only a FOUNDING. The duke re-establishes the seated reeve's office (`issue`, `dispatch`) at Partial
+    through the real fold: the same remit leaves the grant as it was (`establish.refused`, nothing moved) -- red before, when Partial cut the copy
+    to its first half and the re-stamp wrote `("issue",)`, a revocation outside `revoke`; a WIDENING at Partial lands whole (before, the half
+    copy equalled the grant and nothing moved)."""
+    w, d = _cr25_world()
+    payload = _seated_reeve(w, "rung_above_same_faction")
+    [t] = [t for t in w.tenures if t.id == "t_reeve"]
+    assert t.granted_acts == ("issue", "dispatch"), t.granted_acts
+
+    def partial(aid, remit):
+        act = Act(id=aid, actor="p_high", verb="establish", payload={**payload, "remit": remit}, via="off_duke")
+        w.step = Step.RESOLVE
+        w.acts.append(act)
+        return _kinds(d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(DEGREE_LABEL[Degree.PARTIAL], {})))
+
+    assert partial("e_same", ["issue", "dispatch"]) == ["establish.refused"]
+    assert t.live and t.granted_acts == ("issue", "dispatch"), "a Partial establish cut the sitting grant"
+    assert w.offices["off_reeve"].remit_acts == ["issue", "dispatch"], w.offices["off_reeve"].remit_acts
+    assert partial("e_wide", ["issue", "dispatch", "convene"]) == ["remit.changed", "tenure.payload_set"]
+    assert t.granted_acts == ("issue", "dispatch", "convene"), t.granted_acts
 
 
 def _power_arm(seed: int, host_weight: int, holder_weight: int, same_faction: bool, step: float = 1):
