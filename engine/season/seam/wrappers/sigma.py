@@ -453,24 +453,16 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                              heard_by=heard_by, toward=toward, seat=seat)[0]
 
 
-#: B08.05 (`RIVAL` 2): THE ROLE OF THE ROLLER A PRECEDENCE DRAW REACHES -- the module entry every social act's pool is rolled by (`rosters.yaml:
-#: graded_tasks` and the prize rows name it too), so the host never rolls (`test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`:
-#: a margin is a module's to produce); the role string is `epistemic.NOTICE_ROLL`'s, the one spelling of the composition row `social_contest.roll`
-#: (`references/module_contracts.yaml` §composition_roles). [ASSUMPTION; low; Jordan to correct; revert: name another registered entry's role] A rivalry
-#: for a seat, a Record or a larder is a contest of the rivals' skills, and the social roll is the one roll a skill has; the draw reaches it with no
-#: obstacle's say (below).
-PRECEDENCE_ENTRY = NOTICE_ROLL
-
-
 def precedence_net(w: Any, a: Any, rng: Draw) -> float:
-    """B08.05: THE NET OF ONE PRECEDENCE DRAW for act `a`, rolled by the module entry (`PRECEDENCE_ENTRY`) on the actor's own pool -- the pool the act would
-    roll at, `contest_input`'s, which is `pool.py::faculty`'s (D-U1-08) -- at ZERO leverage: the bare pool roll (`roll_net_continuous`, the one sampler,
+    """B08.05: THE NET OF ONE PRECEDENCE DRAW for act `a`, rolled by the module entry `NOTICE_ROLL` (the social roll every social act's pool is rolled by, so the host never rolls)
+    on the actor's own pool -- the pool the act would roll at, `contest_input`'s, which is `pool.py::faculty`'s (D-U1-08) -- at ZERO leverage: the bare pool roll (`roll_net_continuous`, the one sampler,
     A-5), with no effort, favour or proof added, since none of them is the rival's skill. Returns `Margin.net` and nothing of the obstacle, which the
     module composes and a precedence draw has no use for. `rng` is the caller's keyed `Draw` (A-30). Refused (`Unspecified`) when no driver has
-    registered the entry, as `resolve` is."""
-    entry, refusal = entry_for(None, _PROVIDER, PRECEDENCE_ENTRY)
+    registered the entry, as `resolve` is. [ASSUMPTION; low; Jordan to correct; revert: name another registered entry's role] A rivalry for a seat, a
+    Record or a larder is a contest of the rivals' skills, and the social roll is the one roll a skill has."""
+    entry, refusal = entry_for(None, _PROVIDER, NOTICE_ROLL)
     if entry is None:
-        raise Unspecified(f"a precedence draw reaches {PRECEDENCE_ENTRY!r}, which MODULE_ENTRIES does not hold: {refusal['why']}", "S39.4",
+        raise Unspecified(f"a precedence draw reaches {NOTICE_ROLL!r}, which MODULE_ENTRIES does not hold: {refusal['why']}", "S39.4",
                           needs="a SeasonDriver constructed before the fold (the registrar fills MODULE_ENTRIES)",
                           law="B08.05 -- the host draws through the module's entry and rolls nothing itself (S27.2)")
     return entry.fn(replace(contest_input(w, [a.actor], verb=a.verb, via=a.via), leverage=0.0), rng).net

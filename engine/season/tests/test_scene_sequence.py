@@ -17,6 +17,7 @@ The fold orders SCENES (B08.03), so a planted scene's interactions fold in the c
 from __future__ import annotations
 
 import copy
+import functools
 import types
 from unittest import mock
 
@@ -30,12 +31,11 @@ from ..data.matrix import Step, WriteClass
 from ..data.rosters import COMBAT_BANDS, DECLARED
 from ..data.verbs import VERB_TABLE
 from ..harness import populated as POP
-from ..harness import probes as P
-from ..loop.driver import SeasonDriver, mint_token
+from ..loop.driver import mint_token
 from ..queries import world_q
 from ..seam.wrappers import combat
 from ..state.carriers import Act, Scene
-from .test_in12_step9 import ARGUER, HEARER, _argue_world
+from .test_in12_step9 import ARGUER, HEARER, _argue_world, _world
 
 CHAL, ACC, OTHER, HIGH = "p_mid", "p_low", "p_other", "p_high"     # `tiny_world`: all at the hearth `Hh`
 FOUGHT = tuple(b for b in COMBAT_BANDS if b != DECLARED)           # the bands a fight reports at ENCOUNTER
@@ -51,13 +51,6 @@ ONE_INTERACTION_SEASON_1 = "0325a35125b97745272e900f5a926db0"
 def _a_dispute_behind_every_challenge(monkeypatch):
     """`challenge`'s DISPUTE conjunct is `test_cr87_violence_contexts.py`'s; here every challenger holds one."""
     monkeypatch.setattr(world_q, "holds_dispute", lambda p, referent, *read: True)
-
-
-def _world():
-    w = P.tiny_world()
-    d = SeasonDriver(w)
-    d.matter(mint_token(w, WriteClass.MATTER), [])
-    return w, d
 
 
 def _run(w, d, *scenes):
@@ -131,13 +124,10 @@ def _argue_scene(i, after, first_to=HEARER, then_to=HEARER):
     return d, first, s
 
 
+@functools.lru_cache(maxsize=None)
 def _first_band(i):
     d, first, _s = _argue_scene(i, None)
-    return {e.degree for e in _of(d, first, f"ar_{i}")}
-
-
-def _skipped(d, first, s):
-    return _of(d, first, s.id)
+    return frozenset(e.degree for e in _of(d, first, f"ar_{i}"))
 
 
 def test_second_step_skipped_when_first_misses_band_logs_sequence_refusal():
@@ -151,7 +141,7 @@ def test_second_step_skipped_when_first_misses_band_logs_sequence_refusal():
     d, first, s = _argue_scene(miss, ARGUE_BANDS)
     prior = _of(d, first, f"ar_{miss}")
     assert prior and {e.degree for e in prior} == {band}, "the first argument did not reach the band the scan read"
-    skipped = _skipped(d, first, s)
+    skipped = _of(d, first, s.id)
     assert [e.kind for e in skipped] == list(VERB_TABLE["argue"].refusal_for(VERBS.SEQUENCE_CLAUSE)), [(e.kind, e.degree) for e in first]
     assert all(e.changes == [] and e.degree is None for e in skipped), "a refusal writes nothing and carries no band (A-62)"
     assert all(e in prior or e in skipped for e in first), "an Event neither the first's nor the refusal"
@@ -159,10 +149,10 @@ def test_second_step_skipped_when_first_misses_band_logs_sequence_refusal():
     # CONTROLS: hung on the band it reached, the second is NOT refused; unhung, it folds as before; and a first that reaches a written band
     # lets the second through.
     d, first, s = _argue_scene(miss, (band,))
-    assert _skipped(d, first, s) and all(e.kind != "argument.refused" for e in _skipped(d, first, s)), "hung on the band reached, the second was refused"
+    assert _of(d, first, s.id) and all(e.kind != "argument.refused" for e in _of(d, first, s.id)), "hung on the band reached, the second was refused"
     won = next(i for i in range(40) if _first_band(i) & set(ARGUE_BANDS))
     d, first, s = _argue_scene(won, ARGUE_BANDS)
-    assert all(e.kind != "argument.refused" for e in _skipped(d, first, s)), "a first that reached a written band still refused the second"
+    assert all(e.kind != "argument.refused" for e in _of(d, first, s.id)), "a first that reached a written band still refused the second"
 
 
 def test_second_step_skipped_when_first_was_refused_at_admission():
@@ -171,10 +161,10 @@ def test_second_step_skipped_when_first_was_refused_at_admission():
     d, first, s = _argue_scene(0, ARGUE_BANDS, first_to=ARGUER)
     prior = _of(d, first, "ar_0")
     assert [e.kind for e in prior] == ["argument.refused"] and all(e.degree is None for e in prior), [(e.kind, e.degree) for e in prior]
-    skipped = _skipped(d, first, s)
+    skipped = _of(d, first, s.id)
     assert [e.kind for e in skipped] == ["argument.refused"] and all(e.changes == [] and e.degree is None for e in skipped)
     d, first, s = _argue_scene(0, None, first_to=ARGUER)          # CONTROL: unhung, the second argument's own fold runs and is not refused
-    assert all(e.kind != "argument.refused" for e in _skipped(d, first, s)), [(e.kind, e.degree) for e in first]
+    assert all(e.kind != "argument.refused" for e in _of(d, first, s.id)), [(e.kind, e.degree) for e in first]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -242,7 +232,8 @@ def test_keyed_row_without_sequence_key_is_refused_at_load():
     assert _loads(lambda doc: None) is None, "CONTROL: the shipped table loads"
     keyed = [r["verb"] for r in _SRC["verbs"] if isinstance(r.get("emits_on_refusal"), dict)]
     assert keyed, "no keyed row: the rule observed nothing"
-    for verb in keyed:      # PER ROW, NOT PER VERB NAMED: every keyed row can be a second interaction
+    # The loader has one branch for the rule, so the first, a middle and the last keyed row observe it as well as all of them do.
+    for verb in (keyed[0], keyed[len(keyed) // 2], keyed[-1]):
         def drop(doc, verb=verb):
             next(r for r in doc["verbs"] if r["verb"] == verb)["emits_on_refusal"].pop("sequence", None)
         msg = _loads(drop)

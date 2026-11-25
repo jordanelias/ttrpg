@@ -1844,6 +1844,13 @@ def act_key(verb: str, subject, operands) -> str:
     return key
 
 
+def counterparty_of(verb: str, operands) -> Optional[str]:
+    """THE OPERAND A VERB'S ROW NAMES AS ITS `counterparty:`, or `None` where the verb has no row, the row names none, or `operands` is not a
+    dict. The one read `opportunity_key` (identity of an opportunity) and `decision/choose.py::hangs_on` (a hang only on the same counterparty) share."""
+    row = VERB_TABLE.get(verb)
+    return operands.get(row.counterparty) if row is not None and row.counterparty and isinstance(operands, dict) else None
+
+
 def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     """WHAT MAKES TWO ACTS ONE OPPORTUNITY, FOR THE ONCE-PER-SEASON FILTER: `(verb, subject)`, plus
     the counterparty where the row names one -- `(verb, subject, <the operand its `counterparty:`
@@ -1864,9 +1871,7 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     `act_key`, which reads the same operands for the act's id, and needs no `World` or carrier."""
     if not subject:
         return None
-    row = VERB_TABLE.get(verb)
-    ops = operands if isinstance(operands, dict) else {}
-    other = ops.get(row.counterparty) if row is not None and row.counterparty else None
+    other = counterparty_of(verb, operands)
     # ⚠ `H-134`: THE SEAT IS NOT IN THIS KEY, and that is chosen, not forgotten. `act_key` carries it
     # (ids must stay distinct), but an opportunity is the verb on the subject (and counterparty) for
     # the ACTOR, however many seats could have done it: the key's shape must not depend on how many
@@ -2640,7 +2645,9 @@ def social_roll_verbs() -> frozenset:
 def prize_step(contests: str) -> Optional[str]:
     """THE STEP A PRIZE DECLARES (`rosters.yaml: contest_subsystems.prizes`' `step:`, the cell `manifest.resolve("contest", ..)` reads), or `None`
     for a prize with none or no such prize: it is fought where its verb is admitted. Read by the chooser (`decision/choose.py::_prize_step`), which may
-    not import `manifest` (`04` §C.3: `decision/` imports `person_q` and `data/`), so the declaration is read off the roster both read."""
+    not import `manifest` (`04` §C.3: `decision/` imports `person_q` and `data/`), so the declaration is read off the roster both read.
+    The row's `step:` has a second reader, `loop/resolve.py::_deferred_prize` (through `manifest.resolve`); the two are accepted, not merged,
+    because `decision/` may not import `manifest`."""
     row = _PRIZES.get(contests)
     return row.get("step") if isinstance(row, dict) else None
 

@@ -39,7 +39,7 @@ from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
     BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
-    prize_step,
+    counterparty_of, prize_step,
 )
 from ..gaps import Unspecified
 from ..data.matrix import Step
@@ -217,13 +217,6 @@ def _prize_step(c: Candidate) -> Optional[str]:
     return None if step in (None, Step.RESOLVE.value) else step
 
 
-def _counterparty(c: Candidate) -> Any:
-    """The operand a candidate's row names as its `counterparty:`, or `None` where the row names none or the candidate carries none:
-    the way `data/verbs.py::opportunity_key` reads it."""
-    row = VERB_TABLE.get(c.verb)
-    return c.operands.get(row.counterparty) if row is not None and row.counterparty and isinstance(c.operands, dict) else None
-
-
 def hangs_on(prev: Candidate, c: Candidate) -> Optional[tuple]:
     """B08.04 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 4; ruling A-9: *a step may hang on the band of the one
     before*): `Act.after` OF `c`, the interaction packed straight after `prev` in one scene -- the bands in which `prev`'s row wrote
@@ -242,7 +235,7 @@ def hangs_on(prev: Candidate, c: Candidate) -> Optional[tuple]:
     bands = _writing_bands(prev)
     if bands is None or not prev.subject or prev.subject != c.subject:
         return None
-    other, mine = _counterparty(prev), _counterparty(c)
+    other, mine = counterparty_of(prev.verb, prev.operands), counterparty_of(c.verb, c.operands)
     if other is not None and mine is not None and other != mine:
         return None
     held = _prize_step(prev)

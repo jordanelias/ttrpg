@@ -27,7 +27,7 @@ from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, DECLARED, SCRUPLE_OVE
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
-from ..data.requires import PRECEDENCE_STEM, UNKNOWN, Observation, Verdict, binding_from_act, evaluate
+from ..data.requires import PRECEDENCE_STEM, UNKNOWN, AllOf, Observation, ScalarThreshold, Verdict, binding_from_act, evaluate
 from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK, SEQUENCE_CLAUSE,
                           VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow, _OPENERS_FROM_EFFECTS, social_roll_verbs)
 from ..gaps import Forbidden, Unspecified
@@ -50,7 +50,7 @@ from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..seam.ladder import is_margin_result
 from ..state.carriers import Act, Event, StateChange, effort_of, operand_of, subject_of
-from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, _seat_grants
+from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, _seat_grants, in_holdings
 from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
@@ -124,9 +124,9 @@ def _stores_debit(row: "VerbRow"):
     todo = [row.requires_typed.requirement] if row.requires_typed is not None else []
     while todo:
         c = todo.pop(0)
-        if hasattr(c, "clauses"):
+        if isinstance(c, AllOf):
             todo.extend(c.clauses)
-        elif getattr(c, "scalar", None) == "stores":
+        elif isinstance(c, ScalarThreshold) and c.scalar == "stores":
             return c
     return None
 
@@ -155,19 +155,19 @@ def rival_key(w: "World", a: "Act") -> "tuple | None":
     [ASSUMPTION; medium; Jordan to correct; revert: draw such a rivalry on a difficulty the row would have to declare, or on the pool alone] a rivalry
     over a thing the social roll does not deal is not drawn."""
     row = VERB_TABLE.get(a.verb)
-    if row is None or a.actor not in w.persons or a.verb not in social_roll_verbs():
+    if (row is None or a.actor not in w.persons or not ("Rung.stores" in row.writes or "Tenure.since" in row.writes)
+            or a.verb not in social_roll_verbs()):
         return None
     key = None
     if "Rung.stores" in row.writes:
         clause = _stores_debit(row)
         rung, kind = operand_of(a, clause.of) if clause else "", operand_of(a, clause.key) if clause else ""
-        if (rung in w.rungs and kind
-                and not any(t.object == rung and t.until is None for t in edges_of(w, "hold", a.actor))):
+        if rung in w.rungs and kind and not in_holdings(w, a.actor, rung):
             key = ("stores", rung, kind)
     elif ("Tenure.since" in row.writes and a.verb in _OPENERS_FROM_EFFECTS.get("hold", ())
             and not any(f.endswith(".exists") for f in row.writes)):
         subject = office_named_by(a)         # as the fold reads the seat it claims: the payload's `office` wins, else the act's subject
-        if subject and (subject in w.offices or subject in w.records):
+        if isinstance(subject, str) and subject and (subject in w.offices or subject in w.records):   # a list-valued subject is the fold's to refuse, not a key
             key = ("hold", subject)
     if key is None:
         return None
@@ -185,11 +185,14 @@ def _rival_groups(w: "World", scenes: list) -> list:
     (`_demand`); a group is a rivalry only with two or more DIFFERENT actors among its scenes (one person's two acts compete with nobody).
     The one reader, so a count of the groups formed (gate 1) and the draw read the same ones."""
     by_key: dict = {}
+    asked: dict = {}      # a `stores` key -> the summed demand of its acts, read once per act as it is keyed
     for i, members in enumerate(scenes):
         for a in members:
             k = rival_key(w, a)
             if k is not None:
                 by_key.setdefault(k, {}).setdefault(i, []).append(a)
+                if k[0] == "stores":
+                    asked[k] = asked.get(k, 0) + _demand(a, _stores_debit(VERB_TABLE[a.verb]))
     parent: dict = {}
 
     def find(i: int) -> int:
@@ -201,18 +204,19 @@ def _rival_groups(w: "World", scenes: list) -> list:
     live: list = []
     for k, held in by_key.items():
         if k[0] == "stores":
-            stock = (w.rungs[k[1]].stores or {}).get(k[2], 0)
-            asked = sum(_demand(a, _stores_debit(VERB_TABLE[a.verb])) for acts in held.values() for a in acts)
-            if asked <= stock:
+            if asked[k] <= (w.rungs[k[1]].stores or {}).get(k[2], 0):
                 continue
-        live.append((k, sorted(held)))
+        idx = sorted(held)
+        live.append((k, idx))
+        root = find(idx[0])
         for i in held:
-            parent[find(i)] = find(next(iter(held)))
+            parent[find(i)] = root
     groups: dict = {}
     for k, idx in live:
-        groups.setdefault(find(idx[0]), ([], set()))
-        groups[find(idx[0])][0].append(k)
-        groups[find(idx[0])][1].update(idx)
+        root = find(idx[0])
+        groups.setdefault(root, ([], set()))
+        groups[root][0].append(k)
+        groups[root][1].update(idx)
     return [(keys, sorted(idx)) for keys, idx in groups.values()
             if len({scenes[i][0].actor for i in idx}) >= 2]
 
@@ -230,11 +234,8 @@ def _precedence_order(w: "World", scenes: list) -> tuple:
     moved. A scene is drawn by its FIRST act that carries one of the group's keys (a scene of one interaction: that act); a tied net is exact (the
     sampler's floats), and the tied scenes re-draw under the n-th re-draw key until the tie breaks -- except where the pool is nothing, which
     draws a nothing every time: those stay in the order they hold (the content-hash order), as a tie nobody's skill can break."""
-    groups = _rival_groups(w, scenes)
-    if not groups:
-        return scenes, {}
     out, nets = list(scenes), {}
-    for keys, idx in groups:
+    for keys, idx in _rival_groups(w, scenes):
         held = set(keys)
         draws = {i: next(a for a in scenes[i] if rival_key(w, a) in held) for i in idx}
         drawn = {i: _precedence_draw(w, draws[i]) for i in idx}
