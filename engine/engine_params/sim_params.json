@@ -4618,11 +4618,11 @@
     {
       "key": "engine.season.settings.endowment_mode",
       "name": "endowment_mode",
-      "value": "uniform",
+      "value": "ground",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-526`, swept uniform (control, SHIPPED) / ground (B12a.54 flips)",
+      "note": "`H-526`, swept uniform (control) / ground (SHIPPED, B12a.54's flip)",
       "citation": null,
       "citation_grade": null
     },

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from ..harness import populated as POP
 from ..boot.realm import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import scarce as S
 from ..queries import world_q
 
@@ -25,8 +26,13 @@ def test_h_it_reads_and_writes_nothing_and_the_census_reports_it():
     assert w.content_hash() == h0
 
 
+UNIFORM = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
+
+
 def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_first_yield():
-    realm = build_realm(0)
+    """KEPT AS WRITTEN UNDER `uniform` (B12a.54): one Site of every kind at every settlement, so every larder is empty at build and the whole
+    realm starves at once. The arm is pinned here because the shipped realm is `ground` since the flip; the uniform realm is its control."""
+    realm = build_realm(0, fixtures=UNIFORM)
     draw = world_q.subsistence_draw(realm)
     hist = POP.census(realm)["hunger_by_settlement"]
     settlements = [r for r in sorted(realm.rungs) if realm.rungs[r].kind == world_q.HUNGER_KIND]
@@ -38,3 +44,23 @@ def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_firs
             checked += 1
     assert checked >= 30, "the loop asserted nothing: no settlement carried a cohort"
     assert hist.get("starving", 0) == checked
+
+
+def test_i_under_ground_the_shipped_realm_does_not_starve_all_at_once_before_the_first_yield():
+    """B12a.54, `test_i` re-recorded under `ground` to assert the opposite on the SHIPPED realm: not every populated settlement starves at build.
+    Under `ground` the places differ, so the realm's settlements span more than one band and some cohort is fed. (Not "no cohort short at
+    season 0": `granary_seasons` is still 0 here, so a town whose own Sites yield only after the draw is short until B12a.55 seeds its treasury.)"""
+    realm = build_realm(0)
+    draw = world_q.subsistence_draw(realm)
+    hist = POP.census(realm)["hunger_by_settlement"]
+    settlements = [r for r in sorted(realm.rungs) if realm.rungs[r].kind == world_q.HUNGER_KIND]
+    assert sum(hist.values()) == len(settlements) >= 30, hist
+    assert len(hist) >= 2, hist
+    checked = fed = 0
+    for rid in settlements:
+        if sum(world_q.demanded(realm, rid, draw).values()) > 0:
+            fed += world_q.hunger(realm, rid, draw)[0] != "starving"
+            checked += 1
+    assert checked >= 30, "the loop asserted nothing: no settlement carried a cohort"
+    assert 0 < fed < checked, (fed, checked)
+    assert hist.get("starving", 0) == checked - fed

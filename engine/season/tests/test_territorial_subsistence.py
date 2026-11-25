@@ -66,6 +66,10 @@ from ..state.carriers import Person, Rung, Site, Tenure
 from ..state.ids import ROOT
 
 WEIGHTS = P.DEFAULT_FIXTURES.get("subsistence_weight")
+# B12a.54: the shipped realm is `endowment_mode` `ground`, where the harbour towns hold stock at build and only the others are short at the first draw.
+# A test whose assertion is the `uniform` arm's world-gen artefact (EVERY larder empty at build, so EVERY cohort short at the first draw, none in
+# surplus at the second) builds its realm with this fixture: the arm is named at each of them.
+UNIFORM = P.DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
 # v9 SE-01 (`24g`): THE LIVE ARMS ARE READ OFF `H-125`'s OWN `sweep:` ROW, NOT COPIED. The register is
 # where the sweep is declared and `harness/register.py` is its one reader, so a re-swept row moves
 # these tests with it. The CONTROL arm (`0`) is the sweep's first point; every OTHER arm is a live arm,
@@ -272,8 +276,9 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
 
     THE DEARTH IS THE REALM'S OWN, NOT PLANTED. At build every larder is empty and MATTER draws
     before it takes the first yield (#353 §25's order), so the first draw finds no stock anywhere:
-    every settlement's `demanded` exceeds its `delivered`. Nothing here empties a store."""
-    w = build_realm(0)
+    every settlement's `demanded` exceeds its `delivered`. Nothing here empties a store. PINNED TO `endowment_mode` `uniform` (B12a.54): under `ground`
+    a harbour town holds stock at build and is not in dearth."""
+    w = build_realm(0, fixtures=UNIFORM)
     w.fixtures = w.fixtures.sweep("body_step", arm)
     pairs = _holder_and_cohort_pairs(w)
     assert pairs, "no office-holder lives under a settlement with a cohort; the falsifier is vacuous"
@@ -308,8 +313,8 @@ def test_24f_control_at_the_control_body_step_no_body_moves_in_the_same_dearth()
     """THE PAIRED CONTROL: the same realm, the same first draw, `body_step` swept to `H-125`'s control
     arm. The cohorts are short and no body moves, so the fall above is `body_step`'s. v10 REM-52: the
     control is swept IN-PROCESS (it was the shipped default, read as it stood; the shipped arm is now
-    `10`, and its own reading is `test_rem52_...` below); every assertion is the control's, unchanged."""
-    w = build_realm(0)
+    `10`, and its own reading is `test_rem52_...` below); every assertion is the control's, unchanged. PINNED TO `endowment_mode` `uniform` (B12a.54): the dearth is every cohort's only there."""
+    w = build_realm(0, fixtures=UNIFORM)
     w.fixtures = w.fixtures.sweep("body_step", CONTROL_ARM)
     assert w.fixtures.get("body_step") == 0, "the control arm moved; `H-125` and this test disagree"
     before = {pid: p.body for pid, p in w.persons.items()}
@@ -407,8 +412,9 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     dearth above), the second draws from that stock. The guard asserts it observed at least one
     cohort drawing (`take > 0`), that nobody else drew, and that the realm's matter after the second
     barrier is exactly `before - drawn + produced` -- so the draw moved real units out of real
-    larders, not merely a number in a record."""
-    w = build_realm(0)
+    larders, not merely a number in a record. PINNED TO `endowment_mode` `uniform` (B12a.54): its first draw finds no stock anywhere and its second is in
+    surplus only where every larder began empty."""
+    w = build_realm(0, fixtures=UNIFORM)
     _matter(w)
     w.tick += 1
     seen: list = []
@@ -470,8 +476,8 @@ def test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent():
 
     The bystander is PLANTED, because on the realm as built no named person's `contain` parent is
     a settlement that seats a cohort; a test-built person standing there is the observer the
-    channel needs, and it eats nothing (weight 1)."""
-    w = build_realm(0)
+    channel needs, and it eats nothing (weight 1). PINNED TO `endowment_mode` `uniform` (B12a.54): the first cohort crosses a band only where it is short."""
+    w = build_realm(0, fixtures=UNIFORM)
     cohort = sorted(_cohorts(w))[0]
     at = world_q.parent_of(w, cohort)
     assert at is not None and at != cohort and at in w.rungs

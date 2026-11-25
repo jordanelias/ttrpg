@@ -28,7 +28,8 @@ from ..harness.populated import run
 from ..loop.driver import SeasonDriver
 from ..queries import world_q
 
-GROUND = DEFAULT_FIXTURES.sweep("endowment_mode", "ground")
+GROUND = DEFAULT_FIXTURES.sweep("endowment_mode", "ground")          # the shipped arm since B12a.54
+UNIFORM = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")        # the control: pinned where a test asserts the uniform arm's placement
 PRODUCING = ("harbour", "seam", "field")
 
 # `uniform`'s whole Site id set (every kind, dwellings and garrisons too) as the realm built it BEFORE this item: 322 ids, their md5.
@@ -87,7 +88,7 @@ def test_a_territory_with_a_settlement_and_no_row_refuses_at_load():
 
 
 def test_uniform_mints_todays_site_ids():
-    w = build_realm(0)
+    w = build_realm(0, fixtures=UNIFORM)
     ids = sorted(w.sites)
     assert (len(ids), hashlib.md5("\n".join(ids).encode()).hexdigest()) == (UNIFORM_SITE_COUNT, UNIFORM_SITE_DIGEST)
     checked = 0
@@ -100,11 +101,11 @@ def test_uniform_mints_todays_site_ids():
 def test_a_settlement_override_comes_before_its_territory_row(monkeypatch):
     sid = _settlements("T5")[0]
     assert endowment_for(GROUND, sid, "T5") == ("field", "field")
-    assert endowment_for(DEFAULT_FIXTURES, sid, "T5") == ("harbour", "seam")
+    assert endowment_for(UNIFORM, sid, "T5") == ("harbour", "seam")
     monkeypatch.setattr(FX, "SITE_ENDOWMENT", {**FX.SITE_ENDOWMENT, "settlement": {sid: ("seam",)}})
     assert endowment_for(GROUND, sid, "T5") == ("seam",)
     assert endowment_for(GROUND, _settlements("T5")[1], "T5") == ("field", "field")
-    assert endowment_for(DEFAULT_FIXTURES, sid, "T5") == ("harbour", "seam")          # the control reads no override
+    assert endowment_for(UNIFORM, sid, "T5") == ("harbour", "seam")          # the control reads no override
 
 
 def _bands(w) -> dict:
@@ -114,7 +115,7 @@ def _bands(w) -> dict:
 def test_ground_reaches_produce_the_settlements_do_not_share_one_band():
     """THE SOURCE'S FALSIFIER: under `ground`, after the first yield, the realm's settlements sit in more than one hunger band (a
     territory of fields yields grain and a territory of seams yields none); under `uniform` they still share one."""
-    ground, uniform = build_realm(0, fixtures=GROUND), build_realm(0)
+    ground, uniform = build_realm(0, fixtures=GROUND), build_realm(0, fixtures=UNIFORM)
     run(1, 0, w=ground)
     run(1, 0, w=uniform)
     g, u = _bands(ground), _bands(uniform)
