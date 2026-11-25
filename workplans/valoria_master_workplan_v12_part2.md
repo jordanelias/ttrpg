@@ -66,7 +66,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S12 | B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
+| S12 | B24p (SC), BA1 (IN), B11 (FI), B21 (FA); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
@@ -92,7 +92,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B12a-world-motion-and-ground | SE+WR | W13 | S13 | 0 | 19, 20 | 40 (B36 P2 H1 DF1; H3: B12a.07 "BUILD (with a CONTENT value)" read as BUILD) | MOVER (behaviour 12, conditional 1) | 18.5 | B00, B01, B02, B04, B05, B07, B10, B11 |
 | B12b-weather-arcs-population | SE+WR | W14 | S14 | 0 | 24, 24_cont | 48 (B38 P7 R1 H1 C1) | MOVER (behaviour 12, encoding 1) | 21.7 | B12a |
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
-| B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B01a (B01a.05), B02, B04, B05, B10, B14 |
 | B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B01a (B01a.05), B02, B06, B07, B10, B11 +R, B15 |
 | B18-pc-content | PC | W14 | S15 | 7 | 28_cont2 | 10 (B9 C1) | MOVER (behaviour 4) | 6.5 | B00, B01, B01a (B01a.05), B02, B14, B15, B16, B17 |
 | B19a-mb-contact-instrument | MB | W14 | S14 | 0 | 24_cont | 4 (B4) | EQUAL | 6.1 | B00, B01, B01a (B01a.05), B02, B16M, B14, B15, B16, B17 |
@@ -149,7 +148,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B12a-world-motion-and-ground | 20:543 | yes | 8 | yes | none | — |
 | B12b-weather-arcs-population | 24_cont:437 | yes | 1 | yes | none | — |
 | B12c-material-verbs-and-valley | 28_cont:277 | yes | 3 | yes | none | —, R1: B15, B34 |
-| B15-pc-calibration | 18:374 | yes | 8 | yes | none | B01a (B01a.05) |
 | B16-pc-round | 23:306 | yes | 9 | yes | none | B01a (B01a.05) |
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
 | B18-pc-content | 28_cont2:218 | yes | 8 | yes | none | B01a (B01a.05) |
@@ -200,7 +198,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | S12 | B24p | 19, 24, 20, 22, 23 | — | — | `B24p.99` | 1 of 5 movers |
 | S12 | BA1 | 01, 02, 03, 04, 05, 06, 08, 09, 12 | — | — | `BA1.99` | 2 of 5 movers |
 | S12 | B11 | 04, 08, 12, 13, 14, 15, 16, 22, 51, 52, 53, 54, 55, 85, 58, 59, 60, 61, 83, 84, 63, 64, 67, 69, 71, 72, 73, 75, 78 | 17, 74 | — | `B11.99` | 3 of 5 movers |
-| S12 | B15 | 01, 03, 04, 05, 07, 08, 09, 10, 11, 15 | — | — | `B15.99` | 4 of 5 movers |
 | S12 | B21 | 02, 03, 04, 05, 07, 08, 09, 11, 13, 14, 15, 16, 18, 20, 21, 22, 23, 51, 52, 53, 54, 55, 56, 79, 57, 63, 65, 66, 69, 71, 73, 80, 81, 82, 83 | — | — | `B21.99` | 5 of 5 movers |
 | S13 | B08 | 03, 04, 05 | — | — | `B08.99` | 1 of 5 movers |
 | S13 | B12a | 03, 05, 06, 08, 14, 15, 54, 55, 56, 62, 66, 69 | — | 09 | `B12a.99` | 2 of 5 movers |
