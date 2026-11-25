@@ -34,7 +34,7 @@ from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
     CELL_STEMS, KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
-    ScalarThreshold, TypedRequires, build_typed_requires,
+    ScalarThreshold, TypedRequires, WITH_STEM, build_typed_requires,
 )
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
@@ -301,6 +301,19 @@ class VerbRow:
         read before the module-global exists) both ask."""
         return self.contested_against_subject() or (
             self.verb in opposed_without_prize and self.opponent_operand() == "subject")
+
+    def with_operands(self) -> tuple:
+        """THE `of:` OPERANDS OF THE ROW'S `relation: with` CONJUNCTS (v12 B11.69, `14_VERBS_SOCIAL1_A` edit 3): the operands the cell asks to
+        be WITH the actor -- `to` for `tell`, `lie`, `give`, `argue`, `accept`; `subject` for `tend`, `train`, `challenge`. Read off the typed
+        cell's TOP-LEVEL clauses (an `AllOf`'s, or the lone clause; a `with` nested under another conjunction is not seen, no shipped cell nests
+        one) by the relation's stem, never a verb name; an untyped row has none. The ONE reader of that conjunct at formation: where the
+        person is offered an act (`decision/options.py::opening_set`) and which bags he forms (`::_person_bags`) both ask it."""
+        req = self.requires_typed
+        if req is None:
+            return ()
+        top = req.requirement
+        return tuple(dict.fromkeys(c.of for c in (top.clauses if isinstance(top, AllOf) else (top,))
+                                   if isinstance(c, Relation) and c.relation == WITH_STEM))
 
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per

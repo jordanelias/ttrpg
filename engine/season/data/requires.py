@@ -867,7 +867,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # deposit to its HOLDER (`loop/witness.py`), not by watching somebody else's refusal. The person forms the
 # Candidate (UNKNOWN never contradicts) and the fold refuses a Record that does not name the pair.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
-WITH_STEM = "with"      # where another person is NOW; named once here for its two readers (`decision/options.py::_hears_by_presence`, `loop/witness.py`'s absence deposit, B11.83)
+WITH_STEM = "with"      # where another person is NOW; named once here for its two readers (`data/verbs.py::VerbRow.with_operands`, `loop/witness.py`'s absence deposit, B11.83)
 WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dispute",
                               "declared.votes", "declared.quorum", "stage_open"}) | SENSITIVITY_STEMS
 

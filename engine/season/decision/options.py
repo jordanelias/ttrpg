@@ -25,8 +25,8 @@ import itertools
 from typing import Optional
 from ..data.rosters import STANCE_MAX
 from ..data.requires import (
-    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, Relation, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
-    SHORTFALL_SOURCED_OPERANDS, VIA, WITH_STEM, binding_of, evaluate,
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
+    SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
@@ -62,21 +62,11 @@ from ...substrate.descriptors import about_mid, scale_of
 # `rosters.yaml: referent_classes` declares; read off the type, never spelt.
 _HELD_WRIT_CLASS = Record.__name__
 
-# B11.08: THE `with` STEM (where another person is NOW: only the world answers it) is `data/requires.py::WITH_STEM` (B11.83 gave it a constant for its
-# second reader, `loop/witness.py`; the set literal it sat in is built from it, so a rename moves every reader and no check is needed here).
-_WITH_STEM = WITH_STEM
-
 
 def _hears_by_presence(row: "VerbRow") -> bool:
     """WHETHER `row`'s CELL CARRIES A `with` CONJUNCT ON `to` -- the hearer must be with the actor (`tell`'s, `lie`'s, `give`'s,
-    `argue`'s and `accept`'s cells). Read off the typed cell's clauses, never a verb name; an untyped row has none. ONLY THE TOP-LEVEL CLAUSES ARE
-    SCANNED (an `AllOf`'s, or the lone clause): a `with` on `to` nested under another conjunction is not seen -- no shipped cell nests one."""
-    req = row.requires_typed
-    if req is None:
-        return False
-    top = req.requirement
-    return any(isinstance(c, Relation) and c.of == "to" and c.relation == _WITH_STEM
-               for c in (getattr(top, "clauses", None) or (top,)))
+    `argue`'s and `accept`'s cells). `VerbRow.with_operands` is the one reader of the conjunct (B11.69); this asks it of `to`."""
+    return "to" in row.with_operands()
 
 
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
@@ -128,7 +118,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     # needs one: `ledger_names` for a `referent_named` row, `known_persons` for a fanned row's bags.
     named: Optional[frozenset] = None
     people: Optional[tuple] = None
-    hearers: Optional[tuple] = None     # B11.08: `telling_hearers`, for a row whose cell has a `with` conjunct on `to`
+    hearers: Optional[tuple] = None     # B11.08, B11.69: `telling_hearers`, for a row whose cell has a `with` conjunct (on `to`: the fan; on `subject`: the referent)
     records: Optional[list] = None
     held: Optional[frozenset] = None
     read: Optional[dict] = None         # `documents_known_as`, once per call, only if a sub-kind row is reached
@@ -321,11 +311,24 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # declaring none iterates the plain `referents`, exactly as before (`VerbRow.referents_of`,
         # `Question.referents_for`) -- no World, no id test, no verb name, because this function
         # cannot ask what kind of thing an id is (L2).
+        # v12 B11.69 (`14_VERBS_SOCIAL1_A` edit 3): A ROW WHOSE CELL ASKS ITS `subject` TO BE WITH THE ACTOR (`tend`, `train`, `fight`, `capture`,
+        # `challenge`) forms only on a referent his OWN ledger places with him -- `telling_hearers`' reading, the one reader of believed co-location
+        # (`known`, the control, is every person he knows, so it drops none). Read off the cell (`VerbRow.with_operands`), never a verb name; the
+        # fold's `with` stays world-only, so a man who is wrong is still refused there. TWO KEPT: a person stands with himself, and a referent he
+        # does not know at all -- no belief places him elsewhere, and clause 4's polarity is that only a belief declines (`to` is fanned over known persons alone).
+        with_subject = "subject" in row.with_operands()
         for subject in refs:
             if told is not None and subject not in told:
                 continue
             if warranted is not None and subject not in warranted:
                 continue
+            if with_subject and subject != p.id:
+                if hearers is None:
+                    hearers = telling_hearers(p.ledger, p.id, fx)
+                if people is None:
+                    people = known_persons(p.ledger, p.id)
+                if subject in people and subject not in hearers:
+                    continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
@@ -1425,7 +1428,9 @@ def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixture
             ops = _operands(p, row, q, subject, fx, given, seat)
             return [] if ops is None else [ops]
     if people is None:
-        people = known_persons(p.ledger, p.id)
+        # B11.69 (`14_VERBS_SOCIAL1_A` edit 3): A FAN OPERAND THE CELL ASKS TO BE WITH THE ACTOR ranges over `telling_hearers`, as `opening_set`
+        # hands it (which holds that answer once per call); a caller that hands none gets the same reading, never a wider one.
+        people = telling_hearers(p.ledger, p.id, fx) if any(n in row.with_operands() for n in fan) else known_persons(p.ledger, p.id)
     # IN-53 D2 (H-207): A ROW DECLARING `counterparty_may_be_self` (`confer`) ALSO RANGES OVER THE
     # PERSON THEMSELF -- a person knows himself from his own state, so this adds no source of
     # knowledge and no world read (`known_persons` stays its three sources, AX-2, ED-IN-0282); the

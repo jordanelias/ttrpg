@@ -5746,6 +5746,8 @@
           "brute_note": "`remit:issue`; acceptance is the counterparty's own act",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "THE COUNTERPARTY, who the instrument is FOR -- the `to` operand the typed cell binds (`give`'s and `petition`'s reading of a document handed to its addressee). `subject` is the Proposition, which acts for nobody.",
+          "referent_class": "Proposition",
+          "referent_class_note": "S1-A (`proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_SOCIAL1_A_formation.md`): the terms are an uttered Proposition (the cell's second conjunct), so the row forms only on one -- `argue`'s and `commit`'s class, REM-28's precedent for `convene`. MEASURED before: `aperture 2 0` 10 of 10 refused `exists:Proposition=0`. [ASSUMPTION; medium; Jordan to correct; revert: drop both keys.]",
           "requires": "the counterparty is a person, and the terms are an uttered Proposition",
           "requires_typed": {
             "all": [
