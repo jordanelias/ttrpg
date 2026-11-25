@@ -278,10 +278,10 @@
           "genre": "judicial",
           "live": "charge",
           "bears": {
-            "procedure": "against",
-            "fact": "against",
-            "definition": "against",
-            "justification": "for"
+            "procedure": "for",
+            "fact": "for",
+            "definition": "for",
+            "justification": "against"
           },
           "reply": {
             "for": "must",

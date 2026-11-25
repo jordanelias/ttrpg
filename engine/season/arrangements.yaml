@@ -198,15 +198,16 @@ rites:
   # bench's own moves), `faults` (`rosters.yaml: proceeding_faults`) and `disclosed` (whether the other side's filings stand on a mover's board).
   # The rite's opener is the bearer of its first issue. `issues` is the trial's three (the `procedure` rung heads the ladder and is read by the
   # hearing's reader, B24.10); the structure cells (`genre` to `concede`) are the `trial` rite's, which the three judicial rows already read.
-  # [ASSUMPTION; Jordan to correct; revert: edit this row -- basis: the `bears:` map is `IS-B2-SC-03` step 1's: the accuser (`against`) bears
-  # procedure, fact and definition and the party (`for`) bears justification, the issue ladder HEAR_B carries from the kernel
-  # (`audits/05_SC_audit_addendum_B.md:242`, `:246`); the tree holds no ruled assignment. `moves` are the six the speech and the hearing give
-  # a side, `bench` the two the bench alone has. ⚠ The `against`-side accuser reads `for` as the party, HEAR_B's `Exhibit.side`; a `trial` row in
-  # this file lets `for` open (`bears: for`), so the opener of the six re-pointed rows is now `against`.]
+  # [ASSUMPTION; Jordan to correct; revert: edit this row -- basis: the `bears:` map keeps `IS-B2-SC-03` step 1's assignment (the accuser bears
+  # procedure, fact and definition and the party bears justification, the issue ladder HEAR_B carries from the kernel,
+  # `audits/05_SC_audit_addendum_B.md:242`, `:246`) and writes it in THIS file's side words: `for` is the bearer, the speaker `claimants[0]` the
+  # sitting places there (`sigma.proceeding_input`), every `trial` and `inquisition` row says `bears: for`, and `Item.side` is the mover's side; so the
+  # accuser is `for` and the party `against` (B24.12's ruling; B24.09 had written it inverted). `moves` are the six the speech and the hearing
+  # give a side, `bench` the two the bench alone has.]
   - id:               default
     genre:            judicial
     live:             charge
-    bears:            {procedure: against, fact: against, definition: against, justification: for}
+    bears:            {procedure: for, fact: for, definition: for, justification: against}
     reply:            {for: must, against: must}
     silence:          refusal
     issues:           [fact, definition, justification]

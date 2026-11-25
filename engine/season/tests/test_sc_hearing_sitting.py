@@ -133,7 +133,7 @@ def test_a_rite_naming_an_unrostered_move_is_refused():
     row = next(r for r in load_yaml(A.ARRANGEMENTS_YAML.read_text(encoding="utf-8"))["rites"] if r["id"] == "default")
     rite = A._load_rite(copy.deepcopy(row))
     assert rite["bench"] == ("rule", "adjourn") and rite["faults"] == tuple(A.PROCEEDING_FAULTS) and rite["disclosed"] is True
-    assert dict(rite["bears_by_rung"]) == {"procedure": "against", "fact": "against", "definition": "against", "justification": "for"}
+    assert dict(rite["bears_by_rung"]) == {"procedure": "for", "fact": "for", "definition": "for", "justification": "against"}
     assert A.RITES["default"] == rite
     planted = [
         (lambda r: r["moves"]["for"].append("filibuster"), r"names move\(s\) of the `for` side \['filibuster'\] outside .*proceeding_moves"),
@@ -182,7 +182,7 @@ def test_a_computed_case_is_heard_under_the_default_rite():
     assert (form, row["rite"], rite.id) == ("full", "default", "default")
     assert dict(rite.moves)["bench"] == ("rule", "adjourn") == cells["bench"] and dict(rite.moves)["for"] == cells["moves"]["for"]
     assert rite.faults == tuple(PROCEEDING_FAULTS) and rite.disclosed is True
-    assert dict(rite.bears_by_rung) == dict(cells["bears_by_rung"]) and rite.bears == cells["bears"] == "against"
+    assert dict(rite.bears_by_rung) == dict(cells["bears_by_rung"]) and rite.bears == cells["bears"] == "for"
     assert rite.turns == 0 and row["turns"][0] > 0                                       # the control: the row's own turns are not nil
     w1, _d1 = _world(sitting_exchanges=1)
     _fold(w1, _d1, _open("oc"))
