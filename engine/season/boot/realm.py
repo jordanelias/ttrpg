@@ -1292,8 +1292,13 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
                 guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True,
-                fixtures=None) -> World:
+                fixtures=None, wound: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `wound` (B12a.07) mints the Calamity's source: the one Site `valoria_geography_v30.yaml` T15's `wound:` row names
+    (`kind`, `condition`), on `terr_T15`, its id built as the producing Sites' are (`s_` + the place's key + `_` + kind).
+    `False` (the default) is the CONTROL ARM: no row is read and the realm is byte-identical to the build without it.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the row] The row's kind, `harbour`, is a kind the roster holds.
 
     `fixtures` (None: `DEFAULT_FIXTURES`) is the injection point of a sweep: `fixtures=DEFAULT_FIXTURES.sweep("generated_attribute_range", (2, 2))` builds the world H-856's control reads.
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
@@ -1526,6 +1531,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         s_id = f"s_{_slug(sid)}_garrison"
         w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", "garrison",
                              condition=w.fixtures.get("condition_scale"))
+
+    # -- the wound (B12a.07; `wound=True` only) ---------------------------------------------------
+    # One Site on Askeheim (T15), the row the geography file authors. Off, nothing here runs.
+    if wound:
+        row = geo["provinces"]["T15"]["wound"]
+        s_id = f"s_{_slug('T15')}_{row['kind']}"
+        w.sites[s_id] = Site(s_id, territory_rung_id("T15"), row["kind"], condition=row["condition"])
 
     # -- the cast ---------------------------------------------------------------
     # ⚠ **NPC CASES ARE PEOPLE; ARC CASES ARE NOT.** The NPC lane names persons -- "Carin Vedel",

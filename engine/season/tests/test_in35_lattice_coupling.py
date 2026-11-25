@@ -274,3 +274,18 @@ def test_in35_the_control_reads_no_site_and_the_weight_is_refused_outside_its_sh
 
 def test_in35_the_shipped_weight_is_the_control():
     assert DEFAULT_FIXTURES.get("lattice_coupling") == 0
+
+
+def test_the_wound_switch_mints_one_site_on_t15_and_off_is_byte_identical():
+    """B12a.07: `build_realm(wound=True)` mints the one Site T15's `wound:` row in the geography file names (its kind, at its
+    `condition`) on `terr_T15`; off, the default, the realm is byte-identical to the build without the parameter."""
+    from ..boot.realm import build_realm
+    row = geography()["provinces"]["T15"]["wound"]
+    off, plain, on = build_realm(0, cap=5, wound=False), build_realm(0, cap=5), build_realm(0, cap=5, wound=True)
+    assert row["kind"] in on.fixtures.get("band_floors") and row["condition"] == 0
+    assert off.content_hash() == plain.content_hash()
+    assert not [s for s in off.sites.values() if s.rung == SOURCE]
+    here = [s for s in on.sites.values() if s.rung == SOURCE]
+    assert [(s.kind, s.condition) for s in here] == [(row["kind"], row["condition"])]
+    assert set(on.sites) - set(off.sites) == {here[0].id} and set(off.sites) <= set(on.sites)
+    assert on.content_hash() != off.content_hash()

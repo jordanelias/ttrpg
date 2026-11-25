@@ -3726,6 +3726,18 @@
             "fed"
           ]
         },
+        "seasons_of_year": {
+          "source": "ED-IN-0332 (RULED, D-U1-10): the year is a roster; `data/fixtures.py` already speaks of \"two years at four seasons\"",
+          "open": false,
+          "ordered": true,
+          "note": "THE YEAR, IN ORDER; ITS LENGTH IS THE YEAR (`data/rosters.py::SEASONS_OF_YEAR`, the one owner). The season of the year a tick falls in is `tick % len(SEASONS_OF_YEAR)` (`world_q.season_of_year`), read off the clock and stored nowhere; every age in seasons, every yearly term and the weather read the length and no file states a literal. `season_factor_draw`, when non-empty, holds one entry per member here, in this order, and is refused at `season_factor_of` otherwise. The four names are `[ASSUMPTION; medium; Jordan to correct]`; the length is the ruling.",
+          "values": [
+            "spring",
+            "summer",
+            "autumn",
+            "winter"
+          ]
+        },
         "factions": {
           "source": "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` \u00a73, \u00a74, \u00a75, \u00a78, \u00a710.",
           "row": "H-99",
@@ -15888,6 +15900,10 @@
           "proximity_calamity": 0,
           "starting_pros": 0,
           "settlements": [],
+          "wound": {
+            "kind": "harbour",
+            "condition": 0
+          },
           "description": "Calamity epicenter. Forgetting zone. Two gates: Oastad (T13) and Stillhelm (T6)."
         },
         "T16": {
