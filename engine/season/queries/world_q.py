@@ -26,7 +26,7 @@ from dataclasses import dataclass, fields, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
-from engine.dice_engine.dice_engine import MARGIN_SCALE, Degree, degree_from_net
+from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, degree_from_net
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
@@ -1535,10 +1535,51 @@ def subsist_input(w: World) -> SubsistInput:
     chain, the `body_step` fixture and every eater's `Person.body`. Read-only; it writes nothing and
     traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's, less those rows (the
     `demanded`, `delivered` and `descendants` rows `subsistence_draw`'s A4 note names). MATTER calls the
-    entry with it once a season and makes every write from the outcome."""
+    entry with it once a season and makes every write from the outcome. `severity` is `_hunger_severity`'s (B12a.61): `()` at the shipped
+    `hunger_severity_draw: False`, else one keyed multiple per eater short."""
     larder, chains = _larder_parts(w)
-    return SubsistInput(larder, chains, w.fixtures.get("body_step"),
-                        tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters))
+    bodies = tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters)
+    return SubsistInput(larder, chains, w.fixtures.get("body_step"), bodies, _hunger_severity(w, larder, bodies))
+
+
+def _hunger_rows(w: World) -> tuple:
+    """`(band_steps, body_pool, depth_obstacle)`, the three rows of the hunger draw (B12a.57's conversion, `H-530` to `H-532`), each refused naming
+    the row when it does not stand: a body or depth row left `None`, or a `hunger_band_steps` whose keys are not exactly the ladder's band names
+    (`DEGREE_LABEL`'s four), which would index a missing band or leave one dead (the draw refuses rather than reading a default)."""
+    steps, pool, depth = (w.fixtures.get(name) for name in ("hunger_band_steps", "hunger_body_pool", "hunger_depth_obstacle"))
+    for name, value in (("hunger_body_pool", pool), ("hunger_depth_obstacle", depth)):
+        if value is None:
+            raise Unspecified(f"`hunger_severity_draw` is on and the fixture `{name}` is unset", "B12a.61 / H-531, H-532",
+                              needs=f"a value for `{name}`; the control is `hunger_severity_draw: False`")
+    if set(steps or ()) != set(DEGREE_LABEL.values()):
+        raise Unspecified(f"`hunger_severity_draw` is on and the fixture `hunger_band_steps` has keys {sorted(steps or ())}, not the ladder's "
+                          f"bands {sorted(DEGREE_LABEL.values())}", "B12a.61 / H-530",
+                          needs="one multiple per band name of `dice_engine.DEGREE_LABEL`; the control is `hunger_severity_draw: False`")
+    return steps, pool, depth
+
+
+def _hunger_severity(w: World, larder: LarderInput, bodies: tuple) -> tuple:
+    """`SubsistInput.severity` (B12a.61, `16_PESSIMIST_GAME_the_world_draws` edit 3): `((pid, multiplier), ...)` for each eater short this season, in
+    the record's order, `()` at the control (`hunger_severity_draw: False`: nothing is drawn). WHO IS SHORT is read by running `larder_draw` on the
+    SAME `LarderInput` the projection built, `subsist`'s own first step, so the depth the draw reads and the loss `subsist` writes cannot disagree.
+    Per short eater ONE keyed draw `(world_seed, tick, pid, "hunger_severity")` through `draw_factory` (a Query's draw advances no ordinal:
+    `season_factor_of`'s precedent), rolled on the one sampler with the cohort's own body as the pool (`pool_of`, the shared `pool_add` and
+    `pool_floor`, B12a.57 s1) against an obstacle of `hunger_depth_obstacle` times the share of its want the larder fell short (s2), graded on the one
+    ladder; the band names the multiple, `hunger_band_steps[band]`."""
+    if not w.fixtures.get("hunger_severity_draw"):
+        return ()
+    steps, pool_k, depth_k = _hunger_rows(w)
+    scale, pool_add, pool_floor = (w.fixtures.get(name) for name in ("condition_scale", "pool_add", "pool_floor"))
+    keyed, body, out = draw_factory(w.world_seed, lambda: w.tick), dict(bodies), []
+    for row in _entry(LARDER_DRAW)(larder).rows:
+        want = sum(cell[1] for cell in row.cells)
+        short = sum(cell[1] - cell[2] for cell in row.cells)
+        if short <= 0:
+            continue
+        pool = _sigma_leverage.pool_of(pool_k * body[row.pid] / scale, 0, pool_add, pool_floor)
+        net = _sigma_leverage.roll_net_continuous(pool, rng=keyed(row.pid, "hunger_severity"))
+        out.append((row.pid, steps[DEGREE_LABEL[degree_from_net(net, depth_k * short / want)]]))
+    return tuple(out)
 
 
 def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
