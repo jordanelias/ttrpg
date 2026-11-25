@@ -5,8 +5,9 @@
 other` (`queries/person_q.py::said_of`). The realm tests read the shipped fixtures plus the two arms the item names (`said_slant: unshared_first`,
 `telling_hearers: seen_since_move`) against the control (`newest`, `known`), seeds 0-2, two seasons, each (seed, arm) built and played once.
 
-⚠ `test_two_hop_chains_at_two_of_three_seeds` MAY READ RED until `16_PESSIMIST_FI_A` edits 1-3 land (`U5c_FI_residue.md` §2 row 3 names them with the
-gate): the batch's `EXPECTED RED UNTIL` line for the second half's item that lands them. A red reading is the item's FALSIFIER reported, not tuned.
+⚠ `test_two_hop_chains_at_two_of_three_seeds` READS RED AT THE B11 CLOSE ({0: 0, 1: 0, 2: 0}), and is the item's FALSIFIER reported, not tuned. The edits it
+waited on (`16_PESSIMIST_FI_A` edits 1-3) landed as B11.51 to B11.53 and it still reads 0: B11.85 (the position that was to move it) was not made, its gate not
+reading; B98 takes it with `notice_arm`. No hole row carries it (the reading names no cause: none was measured).
 """
 from __future__ import annotations
 

@@ -5992,10 +5992,11 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     scale = w.fixtures.get("condition_scale")
+    cut = w.fixtures.sweep("carried_wound_model", "endurance_cut")   # B15.11 ships `level`, under which `party_end` cuts no band: the band cut is the control arm's
     ends = {}
     for body in (scale, 700, 400, 50):
         w.persons["p_low"].body = body
-        ends[body] = C.party_end(w.persons["p_low"], w.fixtures)   # `derive_party(...).end` until `31b`
+        ends[body] = C.party_end(w.persons["p_low"], cut)   # `derive_party(...).end` until `31b`
     assert ends[scale] > ends[700] > ends[400] > ends[50] >= 1, (
         f"the derived `end` is not monotone in body condition: {ends}. A dying fighter must not "
         "be as durable as a healthy one, and the floor of 1 is why a dying one still fights")
@@ -6076,19 +6077,21 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
     spec = importlib.import_module("modules.combat.attributes")
     default_end = spec.DEFAULT["end"]
     w = P.tiny_world()
+    fx = w.fixtures.sweep("carried_wound_model", "endurance_cut")   # B15.11 ships `level` (no band cut in `party_end`); this test reads the control arm that cuts
     p, scale = w.persons["p_low"], w.fixtures.get("condition_scale")
     checked = 0
     for body in (scale, 700, 400, 50):
         p.body = body
         p.attributes = {}
-        bands = decision.body_band_penalty(p, w.fixtures)
-        assert C.party_end(p, w.fixtures) == max(1, default_end - bands)
+        bands = decision.body_band_penalty(p, fx)
+        assert C.party_end(p, fx) == max(1, default_end - bands)
         p.attributes = {"attr.body.endurance": 6}
-        assert C.party_end(p, w.fixtures) == max(1, 6 - bands)
+        assert C.party_end(p, fx) == max(1, 6 - bands)
         checked += 2
     assert checked == 8
     p.body = scale; p.attributes = {"attr.body.endurance": 6}
-    assert C.party_end(p, w.fixtures) == 6
+    assert C.party_end(p, fx) == 6
+    assert C.party_end(p, w.fixtures) == 6      # the shipped `level` arm: the authored Endurance arrives whole at every body
 
 
 def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkeypatch):
