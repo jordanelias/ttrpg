@@ -375,6 +375,9 @@ def _margin_ending(resolution: "Resolution | None") -> tuple:
     return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()
 
 
+_BEAT_CELLS = tuple(f.name for f in fields(Beat) if f.name != "terms")   # the beat's cells a written sitting carries, in the record's order
+
+
 def _milli(x: float) -> int:
     """A real as whole milli-units (B05.01's unit, `MARGIN_SCALE`): the encoding a written record holds, so two writes of one value are one byte string."""
     return int(round(x * MARGIN_SCALE))
@@ -419,12 +422,11 @@ def _proceeding_ending(resolution: "Resolution | None") -> tuple:
         if abs(track - run[who]) > 1 / MARGIN_SCALE:      # [canonical: one milli-unit, the ladder's own unit of account (MARGIN_SCALE)]
             raise InstrumentDefect(f"the written sitting's track of {who!r} is {track!r}; his start and the beats' moves on him sum to {run[who]!r} (04 G.1.5)")
     decided = out.ended == "yielded" and not r["read"]
-    named = [f.name for f in fields(Beat) if f.name != "terms"]
     beats, before = [], None
     for i, b in enumerate(out.beats):
         band = STANCE_DECIDED if decided and i == len(out.beats) - 1 else _stance_of(b.mood)
         shown = band if band != before else None          # the stance is named where it turns, never at a beat that leaves it as it was
-        beats.append((ENDING_BEAT, *(shown if name == "mood" else _plain(getattr(b, name)) for name in named)))
+        beats.append((ENDING_BEAT, *(shown if name == "mood" else _plain(getattr(b, name)) for name in _BEAT_CELLS)))
         before = band
     verdicts = tuple((ENDING_VERDICT, who, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob))) for who, m in out.verdicts)
     card = r["card"]       # B24p.22: the card's public cells (who decided, who tilted the forum and how far) and a played judge's departures, which the witnesses read

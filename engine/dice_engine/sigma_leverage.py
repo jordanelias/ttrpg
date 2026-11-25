@@ -308,9 +308,12 @@ def levels_to_net_sigma(
 # Probability helper (closed-form)
 # ---------------------------------------------------------------------------
 
-def _phi(z: float) -> float:
+def phi(z: float) -> float:
     """Standard normal CDF (stdlib erf path — no numpy)."""
     return (1.0 + fmath.erf(z / math.sqrt(2.0))) / 2.0
+
+
+_phi = phi   # the private name the parity tests read
 
 
 def p_success(
@@ -338,7 +341,7 @@ def p_success(
         return 1.0 if 0.0 >= base_ob else 0.0
     shifted_mean = mu * effective_pool + net_boost(net_sigma, effective_pool, tn, capped)
     z = (base_ob - shifted_mean) / (sigma * math.sqrt(effective_pool))   # [canonical: params/core.md §Continuous Engine]
-    return 1.0 - _phi(z)
+    return 1.0 - phi(z)
 
 
 # ---------------------------------------------------------------------------
@@ -355,7 +358,7 @@ def _at_or_above(pool: float, ob: float, boost: float, floor: int) -> float:
         return 1.0 if boost - ob >= edge else 0.0
     mean = dice_engine.MU_PER_DIE * pool + boost
     sd = dice_engine.SIGMA_PER_DIE * math.sqrt(pool)
-    return 1.0 - _phi((ob + edge - mean) / sd)
+    return 1.0 - phi((ob + edge - mean) / sd)
 
 
 def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:

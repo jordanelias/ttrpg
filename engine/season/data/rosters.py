@@ -232,17 +232,22 @@ def _load_offices() -> dict:
     return doc
 
 
+def _absent_roster(name: str, why: str = "") -> Unspecified:
+    """THE REFUSAL FOR A ROSTER THE FILE DOES NOT CARRY, the one spelling (`roster`, `roster_map` and `_roster_rows` raise it); `why` is what
+    returning an empty answer would have done, appended to the law where the caller has one."""
+    return Unspecified(
+        f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
+        needs="add the roster to the data file; do not inline it here",
+        law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES" + (f"; {why}" if why else ""))
+
+
 def roster(name: str, ordered: bool = False):
     """A closed set, from `rosters.yaml`. `ordered=True` returns a tuple because the order is
     semantic (the strata resolve in sequence); otherwise a frozenset, so a caller cannot depend
     on an order the data does not promise."""
     r = _ROSTERS.get(name)
     if r is None:
-        raise Unspecified(
-            f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
-            needs="add the roster to the data file; do not inline it here",
-            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
-                "returning an empty set would make every membership test silently false")
+        raise _absent_roster(name, "returning an empty set would make every membership test silently false")
     # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0230).
     # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
     # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
@@ -356,11 +361,7 @@ def roster_map(name: str, key: str) -> dict:
     One owner, so a third mapping inherits the refusal by existing (§8)."""
     r = _ROSTERS.get(name)
     if r is None:
-        raise Unspecified(
-            f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
-            needs="add the roster to the data file; do not inline it here",
-            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
-                "returning an empty mapping would make every lookup silently answer `None`")
+        raise _absent_roster(name, "returning an empty mapping would make every lookup silently answer `None`")
     m = r.get(key)
     if not isinstance(m, dict):
         raise Unspecified(
@@ -910,9 +911,7 @@ LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 def _roster_rows(name: str):
     """The `rows:` list of a row roster, the one reader (`roster_map`'s refusal for a name the file does not carry)."""
     if name not in _ROSTERS:
-        raise Unspecified(f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
-                          needs="add the roster to the data file; do not inline it here",
-                          law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES")
+        raise _absent_roster(name)
     return _ROSTERS[name].get("rows")
 
 
@@ -946,8 +945,14 @@ def _proceeding_rows(rows, name: str, cells: frozenset, required: frozenset) -> 
     return out
 
 
-def _is_number(x) -> bool:
+def is_number(x) -> bool:
     return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def in_tenths(x, lo: float, hi: float) -> bool:
+    """A number in `[lo, hi]` that is a whole number of tenths (R11's dials are set in tenths)."""
+    # [canonical: the tenth is the unit R11 sets its dials in, a unit and not a tuned value]
+    return is_number(x) and lo <= x <= hi and abs(x * 10 - round(x * 10)) < 1e-9
 
 
 def _load_grounds(rows) -> dict:
@@ -957,7 +962,7 @@ def _load_grounds(rows) -> dict:
     out = _proceeding_rows(rows, "grounds", frozenset({"reason", "reads"}), frozenset({"reason", "reads"}))
     for gid, g in out.items():
         r = g["reason"]
-        if not _is_number(r) or not 0 <= r <= 1 or abs(r * 10 - round(r * 10)) > 1e-9:
+        if not in_tenths(r, 0, 1):
             raise Unspecified(
                 f"ground {gid!r} has `reason: {r!r}`", "rosters.yaml -- grounds", needs="a number in [0, 1], a whole number of tenths",
                 law="R11 -- the dice are a blend of Reason and Presence by content; the share is set in tenths, as every other dial of the blend is")
@@ -999,7 +1004,7 @@ def _load_issue_rungs(rows, grounds) -> dict:
         for g, w in weighs.items():
             require_member(g, grounds, f"issue rung {rid!r} weighs the ground {g!r}", "rosters.yaml -- issue_rungs",
                            "V2 p2 §B -- the stasis table weighs the grounds, and only those")
-            if not _is_number(w) or w <= 0:
+            if not is_number(w) or w <= 0:
                 raise Unspecified(f"issue rung {rid!r} weighs {g!r} at {w!r}", "rosters.yaml -- issue_rungs", needs="a positive number",
                                   law="a weight of 0 or less would silence a ground, which is a rite's `silence`, not a weight")
     return out
@@ -1021,7 +1026,7 @@ def _load_disposal_writes(rows) -> dict:
     leaves in a ledger counts: V2 p2 §J's yield 1 against a hint 0.4)."""
     out = _proceeding_rows(rows, "disposal_writes", frozenset({"weight"}), frozenset())
     for wid, w in out.items():
-        if "weight" in w and (not _is_number(w["weight"]) or w["weight"] <= 0):
+        if "weight" in w and (not is_number(w["weight"]) or w["weight"] <= 0):
             raise Unspecified(f"disposal write {wid!r} has `weight: {w['weight']!r}`", "rosters.yaml -- disposal_writes",
                               needs="a positive number", law="a write of no weight leaves nothing, which is no write")
     return out

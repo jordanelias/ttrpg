@@ -46,10 +46,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from ..queries.inputs import SIDES   # the stdlib-only record leaf: it imports nothing, so `data/` takes no cycle from it
 from . import files
 from .rosters import (
     AUTHORITIES, DEGREE_BANDS, DIFFICULTY_LEVELS, DISPOSAL_WRITES, GENRES, GROUNDS, INTERPOSITION_KINDS, ISSUE_RUNGS, MATTERS,
-    PROCEEDING_MOVES, REMIT_ACTS, RUNG_KINDS, TENURE_KINDS, load_yaml, roster,
+    PROCEEDING_MOVES, REMIT_ACTS, RUNG_KINDS, TENURE_KINDS, in_tenths, is_number, load_yaml, roster,
 )
 
 
@@ -72,7 +73,6 @@ _DISPOSAL_REACH_FORMS = frozenset({"room", "body"})     # or a `RUNG_KINDS` memb
 # or a `TENURE_KINDS` member, checked separately (`yield` is a questioning's: what the questioned man gave up)
 _DISPOSES_LITERALS = frozenset({"Record", "none", "yield"})
 # B24p.03: THE RITE'S OWN GRAMMAR (V2 p2 §B) -- the sides a rite names and the values of its cells; the moves and the issues are rosters.
-_RITE_SIDES = ("for", "against")
 _REPLY_VALUES = frozenset({"must", "may", "raise"})
 _SILENCE_VALUES = frozenset({"admits", "refusal", "free"})
 _CONCEDE_VALUES = frozenset({"descends", "accepts"})
@@ -168,16 +168,6 @@ def _load_speech_kind(row: dict) -> dict:
             "reachable_bands": tuple(bands)}
 
 
-def _is_number(x) -> bool:
-    return isinstance(x, (int, float)) and not isinstance(x, bool)
-
-
-def _in_tenths(x, lo: float, hi: float) -> bool:
-    """A number in `[lo, hi]` that is a whole number of tenths (R11's dials are set in tenths)."""
-    # [canonical: engine/season/data/rosters.py §_load_grounds -- the tenth is the unit R11 sets its dials in, a unit and not a tuned value]
-    return _is_number(x) and lo <= x <= hi and abs(x * 10 - round(x * 10)) < 1e-9
-
-
 def _word(name: str, kind: str, key: str, value) -> str:
     if not isinstance(value, str) or not value:
         raise SystemExit(f"arrangements.yaml: {kind} {name!r} has `{key}: {value!r}`, not a non-empty word.")
@@ -185,7 +175,7 @@ def _word(name: str, kind: str, key: str, value) -> str:
 
 
 def _load_rite(row: dict) -> dict:
-    """One `rites:` row (V2 p2 §B): the type's structure, which no module compares by id. The sides are `_RITE_SIDES`; `moves` and `reply`
+    """One `rites:` row (V2 p2 §B): the type's structure, which no module compares by id. The sides are `queries/inputs.py::SIDES`; `moves` and `reply`
     are per side; a side with no move has no reply (the crowd of a `rally`); `bears` (who opens) is a side that has a move; `issues` is a
     list of `ISSUE_RUNGS` members, empty for the one undivided issue, the matter itself."""
     if not isinstance(row, dict) or not row.get("id"):
@@ -197,23 +187,23 @@ def _load_rite(row: dict) -> dict:
         raise SystemExit(f"arrangements.yaml: rite {name!r} has no {missing}; a rite states every cell (V2 p2 §B).")
     genre, live, bears = (_word(name, "rite", k, row[k]) for k in ("genre", "live", "bears"))
     moves_in, reply_in = row["moves"], row["reply"]
-    if not isinstance(moves_in, dict) or not isinstance(reply_in, dict) or set(moves_in) != set(_RITE_SIDES):
-        raise SystemExit(f"arrangements.yaml: rite {name!r} must give `moves:` for each of {list(_RITE_SIDES)} (an empty list for a side "
+    if not isinstance(moves_in, dict) or not isinstance(reply_in, dict) or set(moves_in) != set(SIDES):
+        raise SystemExit(f"arrangements.yaml: rite {name!r} must give `moves:` for each of {list(SIDES)} (an empty list for a side "
                          f"with none) and `reply:` as a mapping from a side.")
     moves = {}
-    for side in _RITE_SIDES:
+    for side in SIDES:
         ms = list(moves_in[side] or ())
         _refuse_any_not_in(name, "rite", f"move(s) of the `{side}` side", ms, PROCEEDING_MOVES, "`rosters.yaml: proceeding_moves`",
                            repr_fn=list)
         moves[side] = tuple(ms)
-    if bears not in _RITE_SIDES or not moves[bears]:
-        raise SystemExit(f"arrangements.yaml: rite {name!r} has `bears: {bears!r}`, not a side with a move ({list(_RITE_SIDES)}).")
+    if bears not in SIDES or not moves[bears]:
+        raise SystemExit(f"arrangements.yaml: rite {name!r} has `bears: {bears!r}`, not a side with a move ({list(SIDES)}).")
     reply = {}
     for side, r in reply_in.items():
-        _refuse_not_in(name, f"reply.{side}", side, _RITE_SIDES)
+        _refuse_not_in(name, f"reply.{side}", side, SIDES)
         _refuse_not_in(name, f"reply.{side}", r, _REPLY_VALUES)
         reply[side] = r
-    unanswering = [side for side in _RITE_SIDES if moves[side] and side not in reply]
+    unanswering = [side for side in SIDES if moves[side] and side not in reply]
     if unanswering:
         raise SystemExit(f"arrangements.yaml: rite {name!r} gives {unanswering} moves and no `reply:` (must, may or raise).")
     issues = list(row["issues"] or ())
@@ -261,24 +251,24 @@ def _load_context(ctx) -> dict:
             out[table][rid] = dict(row)
     for rid, row in out["eras"].items():
         for g, w in row.items():
-            if not _is_number(w) or w <= 0:
+            if not is_number(w) or w <= 0:
                 raise SystemExit(f"arrangements.yaml: `context` row 'eras.{rid}' weighs {g!r} at {w!r}, not a positive number.")
     for rid, row in out["strife"].items():
         for k, v in row.items():
-            if not _is_number(v) or (k == "turns" and v != int(v)):
+            if not is_number(v) or (k == "turns" and v != int(v)):
                 raise SystemExit(f"arrangements.yaml: `context` row 'strife.{rid}' has `{k}: {v!r}`, not a number"
                                  f"{' (a whole number of turns)' if k == 'turns' else ''}.")
     for rid, row in out["regimes"].items():
         name = f"regimes.{rid}"
         for k in ("gravity", "standard", "reason_lean"):
-            if not _is_number(row[k]):
+            if not is_number(row[k]):
                 raise SystemExit(f"arrangements.yaml: `context` row {name!r} has `{k}: {row[k]!r}`, not a number.")
         for k in ("admits_add", "admits_drop"):
             row[k] = tuple(row[k] or ())
             _refuse_any_not_in(name, "context row", f"`{k}` kind(s)", row[k], MATTERS, "`rosters.yaml: matters`")
         row["unlawful"] = tuple(row["unlawful"] or ())
         power = row["power"]
-        if not isinstance(power, dict) or set(power) != set(AUTHORITIES) or not all(_is_number(w) and w >= 0 for w in power.values()):
+        if not isinstance(power, dict) or set(power) != set(AUTHORITIES) or not all(is_number(w) and w >= 0 for w in power.values()):
             raise SystemExit(f"arrangements.yaml: `context` row {name!r} has `power: {power!r}`, not a weight of 0 or more for each of "
                              f"{sorted(AUTHORITIES)}.")
         if row["silence"] is not None:
@@ -334,7 +324,7 @@ def _load_arrangement(row: dict, rites: dict | None = None, disposal: dict | Non
     authority = need("authority")
     _refuse_not_in(name, "authority", authority, AUTHORITIES, "an `authorities` member", repr_fn=list)
     reason_lean = need("reason_lean")
-    if not _in_tenths(reason_lean, -1, 1):
+    if not in_tenths(reason_lean, -1, 1):
         raise SystemExit(f"arrangements.yaml: {name!r} has `reason_lean: {reason_lean!r}`, not a number in [-1, 1] that is a whole number "
                          f"of tenths (the venue's lean of the dice toward Reason or Presence, R11).")
     admits = list(need("admits") or ())
@@ -455,5 +445,10 @@ def abridged(row: dict) -> dict:
     hearer who decides (B24p.13), so no bench is needed (V2 p4 §K B3). The venue stays: `standard`, `reason_lean`, `admits`, `authority`,
     `floor` and `disposes` are the row's (an abridged speech keeps its room). It is the only place `exchange` is set."""
     rite = RITES[row["rite"]]
-    moves = {side: (("argue",) if side == rite["bears"] else ()) for side in _RITE_SIDES}
+    moves = {side: (("argue",) if side == rite["bears"] else ()) for side in SIDES}
     return {**row, "turns": (1, 1), "moves": moves, "close": "exchange"}
+
+
+def in_form(arrangement: dict, form: str) -> dict:
+    """A `proceeds:` entry's arrangement in its `form`: `abridged(row)` for `form: abridged`, the row itself otherwise."""
+    return abridged(arrangement) if form == "abridged" else arrangement

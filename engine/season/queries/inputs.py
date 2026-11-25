@@ -50,6 +50,18 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Callable, Mapping, NamedTuple, Optional
 
+# THE MATTER'S TWO SIDES, signed toward `for` (the sign every `stake` and `believes` is read in), and the flip to the other: the one owner
+# the proceeding module, its host adapter, the person reads and the rite loader share.
+SIDES = ("for", "against")
+SIDE_SIGN = {"for": 1.0, "against": -1.0}
+
+
+def other_side(side) -> str:
+    return "against" if side == "for" else "for"
+
+
+_NO_POINT = tuple((s, None) for s in SIDES)   # `Sitting`'s `live` and `last_voice` at the outset: no side has a point or a voice yet
+
 
 @dataclass(frozen=True)
 class SocialContestInput:
@@ -274,11 +286,11 @@ class Sitting:
     n: int = 0
     issue: int = 0
     points: tuple = ()
-    live: tuple = (("for", None), ("against", None))
+    live: tuple = _NO_POINT
     tracks: tuple = ()
     cond: tuple = ()
     used: tuple = ()
-    last_voice: tuple = (("for", None), ("against", None))
+    last_voice: tuple = _NO_POINT
     ended: Optional[str] = None
 
 

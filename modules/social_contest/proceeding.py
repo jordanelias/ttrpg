@@ -32,9 +32,9 @@ from typing import Callable, Mapping, Optional
 
 from engine.dice_engine import dice_engine, fmath
 from engine.dice_engine.sigma_leverage import (M_MAX, MU_PER_DIE, SD_PER_DIE, band_odds, even_line, level, net_boost, pool_of,
-                                               roll_net_continuous, weighted_tenth)
-from engine.season.queries.inputs import (Beat, Choice, Cond, Input, JudgeView, Margin, Option, Outcome, Point, Sitting, SocialContestInput,
-                                          View)
+                                               phi, roll_net_continuous, weighted_tenth)
+from engine.season.queries.inputs import (SIDE_SIGN, Beat, Choice, Cond, Input, JudgeView, Margin, Option, Outcome, Point, Sitting,
+                                          SocialContestInput, View, other_side as _other)
 from .roll import obstacle
 
 
@@ -58,11 +58,7 @@ def _put(t, k, v) -> tuple:
 
 
 def _sg(side) -> float:
-    return 1.0 if side == "for" else -1.0
-
-
-def _other(side) -> str:
-    return "against" if side == "for" else "for"
+    return SIDE_SIGN.get(side, -1.0)   # a side that is not `for` reads as `against`, as the flip does
 
 
 def _clip(x, lo=-1.0, hi=1.0) -> float:
@@ -71,10 +67,6 @@ def _clip(x, lo=-1.0, hi=1.0) -> float:
 
 def _wsum(xs) -> float:
     return fmath.ltr_sum(xs)
-
-
-def _phi(z) -> float:
-    return (1.0 + fmath.erf(z / math.sqrt(2.0))) / 2.0
 
 
 def _sd(pool) -> float:
@@ -86,11 +78,11 @@ def _epos(mu, sd) -> float:
     if sd <= 0:
         return max(0.0, mu)
     z = mu / sd
-    return mu * _phi(z) + sd * fmath.exp(-0.5 * z * z) / math.sqrt(2.0 * math.pi)   # [canonical: V2 p2 §E -- the menu's expected gain, a normal's positive part]
+    return mu * phi(z) + sd * fmath.exp(-0.5 * z * z) / math.sqrt(2.0 * math.pi)   # [canonical: V2 p2 §E -- the menu's expected gain, a normal's positive part]
 
 
 def _p_up(mu, sd) -> float:
-    return (1.0 if mu > 0 else 0.0) if sd <= 0 else 1 - _phi(-mu / sd)
+    return (1.0 if mu > 0 else 0.0) if sd <= 0 else 1 - phi(-mu / sd)
 
 
 def _z(rng) -> float:
@@ -275,27 +267,33 @@ def awe(inp, v) -> float:
                                                 - (v.will - mid) / 3.0) for d in ds) / _wsum(d.weight for d in ds)
 
 
-def _heard_abs(inp, v) -> float:
+def _heard_abs(inp, presence) -> float:
     D = inp.dials
     need = 1.0 + (D["attribute_ceiling"] - 1.0) * crowd(inp)
-    return max(D["heard_floor"], 1.0 - D["heard_step"] * max(0.0, need - v.presence))
+    return max(D["heard_floor"], 1.0 - D["heard_step"] * max(0.0, need - presence))
 
 
 def heard(inp, v) -> float:
     """PRESENCE: the share of him the room listens to, against the man opposite: the better heard of the two is heard whole and the other by
     his share; with nobody opposite, against what an ordinary man of the middle Presence would get from this room (C1)."""
-    own = _heard_abs(inp, v)
+    own = _heard_abs(inp, v.presence)
     o = lead(inp, _other(v.side)) if v.side else None    # the man opposite, as esteem reads him (V2 p4 §F 16); `_foe`'s abridged addressee is for the gap only
     if o is None:
-        return min(1.0, own / _heard_abs(inp, replace(v, presence=inp.dials["attribute_mid"])))
-    return own / max(own, _heard_abs(inp, o))
+        return min(1.0, own / _heard_abs(inp, inp.dials["attribute_mid"]))
+    return own / max(own, _heard_abs(inp, o.presence))
+
+
+def reason_tenths(inp, ground) -> int:
+    """Reason's share of the speech's dice on `ground`, in whole tenths (R11): the ground's `reason` weight, by the venue's lean and the crowd's."""
+    D = inp.dials
+    return min(10, max(0, round(10 * (_ground(inp, ground)[0] + inp.rite.reason_lean - D["crowd_lean"] * crowd(inp)))))
 
 
 def case_pool(inp, v, ground) -> float:
     """the speech's dice: Presence's share of them (the ground's `reason` weight is Reason's, by the venue's lean and the crowd's), then
     `heard`. `k` is Reason's share in whole tenths (R11); at control it is 10 and the dice are Reason's."""
     D = inp.dials
-    k = min(10, max(0, round(10 * (_ground(inp, ground)[0] + inp.rite.reason_lean - D["crowd_lean"] * crowd(inp)))))
+    k = reason_tenths(inp, ground)
     return heard(inp, v) * pool_of(weighted_tenth((v.reason, v.presence), (k, 10 - k)) + v.rank, 0, D["pool_add"], D["pool_floor"])
 
 
@@ -556,7 +554,7 @@ def _yield_to(D) -> float:
     return M_MAX / D["track_step"] if D["track_step"] else D["mood_scale"]
 
 
-def _lasting(inp, st, T, ct, hs, mean, turns_left) -> float:
+def _lasting(inp, T, ct, mean, turns_left) -> float:
     """what a rattle goes on doing after it lands (C1): his standing falls only as far as his Grace lacks headroom, he tires only past his
     staying power, his next speech is pulled; in track units through one speech's slope, the later speeches discounted by `invite`."""
     D, r = inp.dials, inp.rite
@@ -641,7 +639,7 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
                 gain = D["rattle_gain"] * (1.0 - D["reactance"] * ct.rattles) * mean(
                     lambda h: (1.0 - max(0.0, _bond(h, T.id))) * discern(inp, h, T) * theatre(inp, h))
                 ins = 1.0 if (it is not None and not it.sincere) else 0.0
-                ev = p * (gain + _lasting(inp, st, T, ct, hs, mean, turns_left)) - (1 - p) * D["rebound"] - D["off_step"] * e_drift \
+                ev = p * (gain + _lasting(inp, T, ct, mean, turns_left)) - (1 - p) * D["rebound"] - D["off_step"] * e_drift \
                     - D["ploy_step"] * ins - sc_a - sc_b
                 out.append((mid, g, it.id if it else None, "presses", ev, p, tag))
         elif effect == "yield":
@@ -969,7 +967,7 @@ def card_odds(inp) -> Optional[float]:
     W = _wsum(d.weight for d in ds)
     mu = MU_PER_DIE * pool - obstacle(x)[0] + _wsum(d.weight * net_boost(D["track_step"] * quiet[d.id], pool) for d in ds) / W
     sd = SD_PER_DIE * math.sqrt(pool) * math.sqrt(_wsum(d.weight ** 2 for d in ds)) / W
-    return 1.0 - _phi(((dice_engine.BAND_FLOORS["success"] - 0.5) / dice_engine.MARGIN_SCALE - mu) / sd)    # the ladder's edge for Success, as `band_odds` reads it
+    return 1.0 - phi(((dice_engine.BAND_FLOORS["success"] - 0.5) / dice_engine.MARGIN_SCALE - mu) / sd)    # the ladder's edge for Success, as `band_odds` reads it
 
 
 def _judge_view(inp, st, d, track) -> JudgeView:
@@ -1031,7 +1029,7 @@ def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Option
     none, so a played and an automatic man meet in one sitting; an abridged act (`close: exchange`) is one speech nobody watches and asks no
     callback. A resumed sitting (`inp.state`) continues the same sitting: the count of beats, the issue reached and the turns each has had.
     It ends `yielded`, `rested` or `budget` (see the head); `Outcome.ended_by` is who yielded."""
-    r, G = inp.rite, len(inp.grounds)
+    r = inp.rite
     st, beats, ended_by, heard_by = start(inp), [], None, ()
     while st.ended is None:
         able = _able(inp, st)

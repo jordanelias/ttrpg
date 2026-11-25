@@ -769,7 +769,7 @@ _PROCEEDS_KEYS = ("when", "row", "form", "move", "item")
 _PROCEEDS_FORMS = ("full", "abridged", "auto")
 _PROCEEDS_ITEMS = ("any", "false")
 _PROCEEDS_WHEN = {"hearer": ("cohort",), "docketed": (True,)}      # a `when` key and the one value it may take
-_PROCEEDS_DOCKET = "docket"                                         # a `row` that is no arrangement id: the row the docket hears the matter under
+PROCEEDS_DOCKET = "docket"                                         # a `row` that is no arrangement id: the row the docket hears the matter under
 
 
 def _proceeds_entries(verb: str, raw) -> tuple:
@@ -811,8 +811,8 @@ def _check_proceeds(rows: dict) -> None:
             if present:
                 bad.append(f"{verb!r} carries `proceeds:` and `{what}:`: a verb that proceeds pools nothing, its dice are the proceeding's own (B24p.19)")
         for when, rid, form, move, item in row.proceeds:
-            if rid != _PROCEEDS_DOCKET and rid not in ARRANGEMENTS:
-                bad.append(f"{verb!r}: `proceeds` row {rid!r} is no arrangement id and not `{_PROCEEDS_DOCKET}`")
+            if rid != PROCEEDS_DOCKET and rid not in ARRANGEMENTS:
+                bad.append(f"{verb!r}: `proceeds` row {rid!r} is no arrangement id and not `{PROCEEDS_DOCKET}`")
             if form not in _PROCEEDS_FORMS:
                 bad.append(f"{verb!r}: `proceeds` form {form!r} is none of {list(_PROCEEDS_FORMS)}")
             if not (PROCEEDING_MOVES.get(move) or {}).get("draw"):

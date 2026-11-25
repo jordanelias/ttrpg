@@ -53,7 +53,7 @@ from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
-from engine.dice_engine.dice_engine import MARGIN_SCALE
+from .resolve import _milli
 
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
@@ -378,12 +378,12 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
         if d in w.persons:
             partial, lean = conflict(w.persons[d], {}, for_party=bearer, against_party=questioned, edges=w.persons[d].tenures)
             if partial >= w.fixtures.get("recuse_at"):
-                facts.append(("partial", d, (int(round(partial * MARGIN_SCALE)), int(round(lean * MARGIN_SCALE))), None, None))
+                facts.append(("partial", d, (_milli(partial), _milli(lean)), None, None))
     if card.arranged_by is not None and card.tilt > 0:
-        facts.append(("rigged", card.arranged_by, (card.tilted_against, int(round(card.tilt * MARGIN_SCALE))), None, None))
+        facts.append(("rigged", card.arranged_by, (card.tilted_against, _milli(card.tilt)), None, None))
     for d, departure in card.ruled:
         if departure > 0:
-            facts.append(("overruled", d, int(round(departure * MARGIN_SCALE)), None, None))
+            facts.append(("overruled", d, _milli(departure), None, None))
     spoke = {x for b in beats for x in (b.mover, b.voice)}
     if bearer is not None and beats:
         for who in present:

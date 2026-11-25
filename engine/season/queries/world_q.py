@@ -29,7 +29,7 @@ from typing import Callable, NamedTuple, Optional
 from engine.dice_engine.dice_engine import MARGIN_SCALE
 from engine.dice_engine.fmath import ltr_sum
 
-from ..data.arrangements import ARRANGEMENTS, abridged      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
+from ..data.arrangements import ARRANGEMENTS, in_form      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
 from ..data.requires import (
     RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
@@ -50,7 +50,7 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
-    HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -496,7 +496,7 @@ def proceeding_row(w: World, act) -> tuple:
     held = {"hearer": lambda v: hearer is not None and hearer.is_cohort, "docketed": lambda v: bool(docketed(w, subject))}
     for when, rid, form, move, item in entries:
         if all(held[key](value) for key, value in when):
-            if rid == "docket":
+            if rid == PROCEEDS_DOCKET:
                 items = docketed(w, subject)
                 if not items:
                     raise Unspecified(f"{act.verb!r} proceeds under the docket's row, and {subject!r} is on no docket", "world_q.proceeding_row",
@@ -505,7 +505,7 @@ def proceeding_row(w: World, act) -> tuple:
                 if rid is None:     # a computed case names no arrangement (`_eff_open_case`: none is derived): the next entry answers
                     continue
             arrangement = ARRANGEMENTS[rid]
-            return (abridged(arrangement) if form == "abridged" else arrangement), form, move, item
+            return in_form(arrangement, form), form, move, item
     raise Unspecified(f"{act.verb!r} has no `proceeds` entry that holds for this act", "world_q.proceeding_row",
                       needs="a verb row carrying `proceeds:`, its last entry holding for any act", law="B24p.16, RD §D.1")
 

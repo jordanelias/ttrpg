@@ -56,7 +56,7 @@ from ..data.rosters import (
     roster, roster_map,
 )
 from ..state.carriers import Person, PersonInterior, Said
-from .inputs import Item
+from .inputs import SIDE_SIGN, Item
 from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 
@@ -2011,8 +2011,6 @@ OBLIGE_TIE = 0.5           # [JUSTIFIED: V2 p2 §A.2 -- a debt he owes is a tie 
 # (no such patch stands in this tree: nothing here reads a floor but `bearing`).
 PARTY_STAKE = 0.2          # [JUSTIFIED: V2 p2 §A.2 -- a party's least stake in his own case, toward his side, 0.2]  # [ASSUMPTION; Jordan to correct]
 BEARING_PARTS = 3          # [JUSTIFIED: V2 p2 §A.2 -- `(want, hold, bond)`: the three sums a stake, a conflict and a lean are the mean of]
-EFFORT_SPAN = 3            # [JUSTIFIED: V2 p2 §A.2 -- `effort = round(3 abs(mean(stake)) + 1)`: the turns he prepares; no document derives the 3]  # [ASSUMPTION; Jordan to correct]
-_SIDE_SIGN = {"for": 1.0, "against": -1.0}    # the matter's two sides, signed toward `for` (the sign every `stake` and `believes` is read in)
 
 if "testimony" not in MATTERS:
     raise ValueError("`false_items` brings a `testimony`, and `rosters.yaml: matters` has none (V2 p2 §G: a false item is his own "
@@ -2052,23 +2050,21 @@ def _duty_of(duty, bears) -> float:
     return float(ltr_sum(d * bears.get(t, 0.0) for t, d in duty))
 
 
-def bearing(p, bears, *, for_party: Optional[str], against_party: Optional[str], edges=(), factions=(), duty=(), shares=(),
+def bearing(p, bears, *, for_party: Optional[str], against_party: Optional[str], edges=(), duty=(), shares=(),
             party: bool = True) -> tuple:
     """`(want, hold, bond)`, each `-1..1` toward `for`: how the matter bears on `p` (V2 p2 §A.2's three sums).
 
       * `want` -- his pursuits the matter bears on: `sum(pursuits[t] x bears[t])`. Needs, ambitions, goals `[HOOK]`;
       * `hold` -- his convictions over the roster's own ceiling (`AFFILIATION_CEILING`), and his office's `duty` (operand);
-      * `bond` -- `tie(for) - tie(against)` plus what the matter does for the factions of his seats: `factions`
-        `((faction, sign), ...)`, the host passing only the factions he sits for. `shares`: the parties' ids who serve a faction he does.
+      * `bond` -- `tie(for) - tie(against)`; `shares`: the parties' ids who serve a faction he does.
 
     `party=True`: where `p` IS a party, his bond is raised as far as it goes until `mean(stake)` is at least `PARTY_STAKE` toward his own
     side -- being a party is a stake (A-139, V2 p4 §K B6, §L 2). This is the floor's one owner. `party=False` reads what the matter
-    touches of his own beyond that (`effort_of` reads it so)."""
+    touches of his own beyond that."""
     want = _clip(float(ltr_sum(p.pursuits.get(t, 0.0) * w for t, w in bears.items())))
     hold = _clip(float(ltr_sum(p.conviction.get(t, 0) / AFFILIATION_CEILING * w for t, w in bears.items())) + _duty_of(duty, bears))
     bond = _clip(tie(p, for_party, edges=edges, shared_faction=for_party in shares)
-                 - tie(p, against_party, edges=edges, shared_faction=against_party in shares)
-                 + ltr_sum(s for _, s in factions))
+                 - tie(p, against_party, edges=edges, shared_faction=against_party in shares))
     sign = 1.0 if p.id == for_party else -1.0 if p.id == against_party else 0.0
     if party and sign and sign * ltr_sum((want, hold, bond)) < BEARING_PARTS * PARTY_STAKE:
         bond = _clip(sign * BEARING_PARTS * PARTY_STAKE - want - hold)
@@ -2090,14 +2086,6 @@ def takes_side(stake: tuple) -> Optional[str]:
     """Which side a man not named by the matter takes: the sign of `mean(stake)`, `None` where nothing bears (V2 p4 §K D4)."""
     m = _mean(stake)
     return None if m == 0 else "for" if m > 0 else "against"
-
-
-def effort_of(stake: tuple) -> int:
-    """How hard he prepares: `round(3 abs(mean(stake)) + 1)` turns, 0 where nothing bears (V2 p4 §K D4). Read the `stake` with
-    `bearing(..., party=False)`: being a party is not preparation. Half rounds up (`weighted_tenth`'s rule), not to the even number."""
-    if not any(stake):
-        return 0
-    return int(math.floor(EFFORT_SPAN * abs(_mean(stake)) + 1 + 0.5))
 
 
 def conflict(p, bears, *, for_party: Optional[str], against_party: Optional[str], edges=(), duty=()) -> tuple:
@@ -2138,7 +2126,7 @@ def false_items(p, matter: str, side: str, fx, tick: int) -> tuple:
     `testimony` he knows false (`sincere: False`), weighing as much as he is sure of what it contradicts; else `()`. Both read his claims at
     `tick`. A forged `Record` is `[HOOK]`: no act writes one."""
     b = believes(p, matter, fx, tick)
-    if _SIDE_SIGN[side] * b >= 0 or lie_said_of(p.ledger, matter, fx, p, tick=tick) is None:
+    if SIDE_SIGN[side] * b >= 0 or lie_said_of(p.ledger, matter, fx, p, tick=tick) is None:
         return ()
     return (Item(f"word:{p.id}:{matter}", "testimony", abs(b), source=p.id, about=matter, sincere=False),)
 
