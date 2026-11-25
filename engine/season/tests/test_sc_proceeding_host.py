@@ -97,7 +97,19 @@ def test_an_abridged_tell_seats_the_one_addressed_as_its_adjudicator():
     assert card.odds is None                          # the verdict is the speech itself
 
 
-def test_a_church_bench_seats_only_church_seats():
+def test_the_seat_a_self_plea_is_put_to_is_no_party_and_starts_on_his_own_ties():
+    """A speech put to no man (a self-plea) is put to the presiding seat as the one addressed: he decides and is NOT the other party, so a
+    party's stake floor (`bearing`'s `party=True`) is not his. His start is `start_step x mean(stake)` over his ties alone (a tie of +1 to the
+    speaker starts him FOR, where the floor would have forced -0.4), and the sitting names no other party."""
+    w = _world()
+    w.persons["p_high"].stance = [("p_low", 5, 5)]
+    inp, card = _build(w, ("p_low",), row=A.abridged(ROWS["conversation"]), subject=None, verb="speak", effort=0)
+    seat = next(p for p in inp.room if p.id == "p_high")
+    own = person_q.bearing(w.persons["p_high"], {}, for_party="p_low", against_party=None, edges=w.persons["p_high"].tenures, party=False)
+    assert (seat.side, seat.decides) == (None, True) and card.decided_by == ("p_high",)
+    assert seat.start == w.fixtures.get("start_step") * (fmath.ltr_sum(own) / person_q.BEARING_PARTS) > 0
+
+
     """An `authority: church` row seats the church seat alone, read through the office's faction; the crown seat that would
     sit under a polity row does not; with no church seat the proceeding is refused."""
     w = _world()
@@ -259,6 +271,8 @@ def test_the_builder_reads_a_claim_at_the_worlds_tick_and_only_a_truth_valued_on
     later = {p.id: p for p in _build(w, row=ROWS["legal_trial"])[0].room}["p_low"]
     assert -1.0 < later.believes < 0.0 and {it.id: it.weight for it in later.items}["word:p_low:m1"] < word
     w.persons["p_low"].ledger.append(Claim("c_sit", "p_low", "m1", "sitting:rattled", 400, 3, SITTING_SOURCE, full, "own"))
+    assert {p.id: p for p in _build(w, row=ROWS["legal_trial"])[0].room}["p_low"].believes == later.believes
+    w.persons["p_low"].ledger.append(Claim("c_bond", "p_low", "m1", person_q.BOND_STEM + "rivalry", True, 3, "firsthand", full, "own"))   # a relationship, newest and bool
     assert {p.id: p for p in _build(w, row=ROWS["legal_trial"])[0].room}["p_low"].believes == later.believes
 
 

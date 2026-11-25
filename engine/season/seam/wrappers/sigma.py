@@ -1478,7 +1478,7 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
         _refuse("absent", f"{gone[0]} is not in the world (a party or arranger who is gone)")
     if not _lawful(regime, row):
         _refuse("unlawful", f"{row['id']} is not lawful under {REGIME}")
-    venue = place_of(w, topic) or place_of(w, fid)
+    venue = place_of(w, topic) or place_of(w, fid)         # [ASSUMPTION; Jordan to correct: the matter's place, not the actor's (the seam's own rule is the act's venue: loop/sides.py); basis: B24p.13's builder reads the matter's venue]
     floor = row["floor"] if regime["floor"] is None else regime["floor"]
     here = [x for x in dict.fromkeys(presence(w, venue)) if x in w.persons] if venue is not None else []
     watchers = [x for x in _watchers(w, here, floor, row["floor_basis"] if regime["floor"] is None else None) if x not in (fid, aid)]
@@ -1489,11 +1489,13 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
     bench = _bench_of(w, venue, topic, row["authority"]) if close in ("bench", "declared") else []
     # a speech put to no man (`speak` at a sitting, a self-plea) is put to the presiding seat of the row's own bench, who is the one addressed
     # [ASSUMPTION; Jordan to correct: B24p.19 -- the abridged row (`abridged()`) keeps its authority but no bench, so the speaker would sit alone (`refused[one_character]`)]
+    # he is the one addressed and decides, but he is NOT a party (no side, never `against_id`): a party's stake floor is the party's, not his (V2 p4 §L 2)
+    addressed = None
     if aid is None and close == "exchange":
         sitting = sorted(_bench_of(w, venue, topic, row["authority"]), key=lambda x: (-_power(w, x, regime)[1], x))
-        aid = next((x for x in sitting if x != fid), None)
+        addressed = next((x for x in sitting if x != fid), None)
     # the other party: where the rite gives the other side moves and the matter names nobody, the most opposed man on the floor (p4 §K D4)
-    if aid is None and moves.get("against"):
+    if aid is None and addressed is None and moves.get("against"):
         stakes = {x: bearing(w.persons[x], {}, for_party=fid, against_party=None, edges=w.persons[x].tenures)
                   for x in here if x != fid and x not in bench}
         opposed = [x for x, stake in stakes.items() if takes_side(stake) == "against"]
@@ -1529,6 +1531,8 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
     add(fid, "for", False)
     if aid is not None:
         add(aid, "against" if moves.get("against") else None, close in ("exchange", "hearers"))
+    if addressed is not None:
+        add(addressed, None, True)
     for x in seated:
         add(x, None, True)
     for x in watchers:

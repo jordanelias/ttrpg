@@ -2112,11 +2112,11 @@ def believes(p, matter: str, fx, tick: int) -> float:
     claim he would say of `matter` (the subject), a held truth value read as `+` (`for` asserts it true) or `-`, by how sure he is NOW
     (`present_confidence / Fixtures.confidence_default`: a claim nobody refreshed fades). Only a TRUTH-VALUED claim says which side he holds (the
     pool is the ledger's `bool` claims, as `lie_said_of`'s is its cells): a witnessed sitting about the man (`sitting:*`, a number or a name) is
-    not what he believes of him. Nothing held is 0 [ASSUMPTION: the matter's `for` side asserts its claim as held; Jordan to correct]."""
-    said = said_of([c for c in p.ledger if isinstance(c.value, bool)], matter, fx, p, tick=tick)
+    not what he believes of him, nor is a bond he holds of him (`bond:<ground>`, `True`: a relationship, `BOND_STEM`). Nothing held is 0 [ASSUMPTION: the matter's `for` side asserts its claim as held; Jordan to correct]."""
+    said = said_of([c for c in p.ledger if isinstance(c.value, bool) and not c.predicate.startswith(BOND_STEM)], matter, fx, p, tick=tick)
     if said is None:
         return 0.0
-    sure = _clip(said.confidence / fx.get("confidence_default"), 0.0, 1.0)
+    sure =_clip(said.confidence / fx.get("confidence_default"), 0.0, 1.0)
     return sure if said.value else -sure
 
 
