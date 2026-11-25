@@ -4640,11 +4640,11 @@
     {
       "key": "engine.season.settings.larder_walk",
       "name": "larder_walk",
-      "value": "first",
+      "value": "through",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-528`, swept first (control, SHIPPED) / through (B12a.56 flips) / through where the home rung holds the whole want (the walk stops at once)",
+      "note": "`H-528`, swept first (control) / through (SHIPPED, B12a.56's flip) / through where the home rung holds the whole want (the walk stops at once)",
       "citation": null,
       "citation_grade": null
     },
