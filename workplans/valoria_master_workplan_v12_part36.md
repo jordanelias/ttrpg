@@ -23,7 +23,7 @@ GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
-GATE: Batch B11-fi-readers
+GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B32-inst-kit
 GATE: Batch B34-go-surface

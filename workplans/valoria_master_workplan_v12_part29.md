@@ -15,7 +15,7 @@
 ## Batch B21d-fa-arc · lane FA · wave W14 · step S15 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B21d-fa-arc
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
-GATE: Batch B11-fi-readers
+GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B21b-fa-war
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none of its own — carried v11 positions (the intake §3's row `B21d-fa-arc`; `V12_STRUCTURE.md` §2.2: "R-04, R-02, R-06 contributors per entry"). CR-89 is an R-04 and R-02 contributor, CR-88 an R-06 contributor, CR-90 an instrument that moves no row. The close re-reads R-02, R-04 and R-06 and states their conjuncts' readings beside the previous close's (`reading @<sha>`); no row moves by this batch's say-so and no `status:` is edited (A-114)

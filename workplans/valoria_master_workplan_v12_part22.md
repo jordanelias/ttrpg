@@ -23,7 +23,7 @@ GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
-GATE: Batch B11-fi-readers
+GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B24p-sc-proceeding
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c3 → `PYTHONHASHSEED=0 python -m engine.season.harness.headless --world hearing --seed 0 --auto`, run twice, prints the same content hash (`IS_A_NINE.md` R-04.c3; `IS_A_NINE_part2.md` §12.2 row B24: "the hearing's hash twice equal"); no `status:` edited (A-114). Also served: the `scales:` row *social contests / debates* gains its measured `in_loop:` sentence at B24.99 if reading R1 (B24.39) is above zero (`IS-B2-SC-01`, B24.42); A-14, A-25, A-26, A-38, A-63, A-64, A-79, A-80, A-81 for the hearing.

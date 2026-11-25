@@ -22,7 +22,7 @@ GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
-GATE: Batch B11-fi-readers
+GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none of its own — the B12 row of IS-A §12.2 (R-04.c6; `BUILT OUT` for `restore`, `work`, `sabotage`, `exchange`, `requisition`, `found`, `build`) is B12c's (`V12_STRUCTURE.md` §3); B12a re-reads only: its close records the nine lines of `register --requirements` and the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines as readings, and no conjunct is claimed. What the batch serves: A-40, A-45, A-46, A-54, A-55, A-81, ED-IN-0332 (D-U1-10, the year), and the SE standalone test's S7 (`IS_B3_FA_SE_WR_GO.md` §4.1)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
