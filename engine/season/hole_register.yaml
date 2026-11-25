@@ -8194,7 +8194,7 @@ rows:
     site:      "Fixtures esteem_step and start_step, read by the proceeding speech (`modules/social_contest/proceeding.py`: `esteem` on the leverage, the listeners' starts)"
     sweep:     [0, 0.1, 0.2]
     unblocks:  "B98.87's re-sweep of the proceeding's settings against A-79's centre, and the instrument's `--diff read` form for the proceeding"
-    cite:      "A-79 (an even argument on a routine matter carries about one time in four; B05.23's difficulty cell holds the centre); workplan v12 B24p.23 step 3 (`workplans/valoria_master_workplan_v12_part22_b24p_cont.md`); readings at B24p.23's commit"
+    cite:      "A-79 (an even argument on a routine matter carries about one time in four; B05.23's difficulty cell holds the centre); workplan v12 B24p.23 step 3 (`FORK:ba108d1:workplans/valoria_master_workplan_v12_part22_b24p_cont.md`); readings at B24p.23's commit"
     source:    "workplan v12 B24p.23 (measured gap; B24p's H block slot 80, the id the block left unused)"
 
 discharges:
