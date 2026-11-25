@@ -31,7 +31,7 @@ def run_traced_fight(A, B, cfg=None, seed=0, max_rounds=12, *, terms=wrapper.LET
     on Combatants, outside B14.11's WHERE), through its `trace=` argument; the hook is not touched."""
     if yield_decl is not None:
         events = []
-        result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2("fight_trace", seed)), max_rounds=max_rounds, yield_decl=yield_decl, terms=terms,
+        result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2("fight_trace", seed)), max_rounds=max_rounds, yield_decl=yield_decl, terms=terms, keyed_rounds=True,
                                decide=decide, trace=events.append)
         return result, events
     rec = FR.record_of(FR.party_of_combatant(A), FR.party_of_combatant(B), terms=terms)

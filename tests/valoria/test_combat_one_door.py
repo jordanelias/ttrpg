@@ -89,7 +89,7 @@ def _raw_events(m, seed):
     wrapper._TRACE = seen.append
     try:
         kw = dict(terms=m["terms"]) if "terms" in m else {}
-        result = wrapper.fight(A, B, m.get("cfg"), draw.seeded(draw.H2("fight_trace", seed)), max_rounds=m.get("max_rounds", 12), **kw)
+        result = wrapper.fight(A, B, m.get("cfg"), draw.seeded(draw.H2("fight_trace", seed)), max_rounds=m.get("max_rounds", 12), keyed_rounds=True, **kw)
     finally:
         wrapper._TRACE = None
     return result, seen

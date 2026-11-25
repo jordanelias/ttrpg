@@ -253,6 +253,7 @@ def test_twelve_round_calls_equal_one_fight():
     fights another fight), a draw the loop takes that the rounds do not, or a recovery applied where the fight ended."""
     from engine.dice_engine import draw
     from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from modules.combat import wrapper
     from engine.substrate import composition
     fight, fight_round = composition.require("combat.fight"), composition.require("combat.round")
     qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
@@ -262,20 +263,63 @@ def test_twelve_round_calls_equal_one_fight():
         inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs, kits=kits)
         key = draw.H2("test_twelve_round_calls", seed)
         whole_rng = draw.seeded(key)
+        fkey = wrapper.fight_draw(draw.seeded(key))
         whole = fight(inp, whole_rng)
-        rng = draw.seeded(key)
-        scene, states, prev_closed, hand, out = rng.n, (DuelState(), DuelState()), False, [], None
+        states, prev_closed, hand, out = (DuelState(), DuelState()), False, [], None
         for r in range(1, 13):
-            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), rng, scene=scene)
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), wrapper.round_draw(fkey, r))
             hand.extend(out.trace)
             states, prev_closed = out.states, out.closed
             if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
                 break
         engine_events = [e for e in whole.trace if e["kind"] not in ("fight_start", "fight_result")]
         assert hand == engine_events, (seed, "the rounds called by hand are not the fight in one call")
-        assert rng.n == whole_rng.n, (seed, "the loop and the rounds took different numbers of draws", rng.n, whole_rng.n)
+        assert whole_rng.n == 1, (seed, "the fight took more than its one uniform of its own stream: a round draws from its own key (B16.03)", whole_rng.n)
         for pid in inp.claimants:
             assert {q: getattr(whole.wounds[pid], q) for q in qs} == out.wounds[pid], (seed, pid)
         assert whole.rounds == sum(1 for e in hand if e["kind"] == "round_start"), seed
         rounds_seen += whole.rounds
     assert rounds_seen >= 6, f"the three fights ran {rounds_seen} rounds between them: the hand loop is not observing a carried state"
+
+
+def test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_the_key():
+    """B16.03 (PB §2, §7 step 2, A-30): round `r` draws from the key `H2(fight_key, "round:<r>")` and nothing else, so it is recomputable from
+    `(fight_key, r)` and the `DuelState`s it is handed. Sixteen fights (three kit sets and three end pairs, as `test_twelve_round_calls_equal_one_fight`'s): the fight in one call
+    is read round by round (each round's input states and trace); then every round is called AGAIN, last round first, on a fresh keyed `Draw` and no
+    other round having been called in that process step, and must return exactly its slice of the fight's trace. FALSIFIER: a round whose draws
+    depend on another round's count (the sequential stream: the reverse-order recompute then differs), or a fight that takes a position of its own
+    `Draw` beyond its one uniform (`rng.n` past 1)."""
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from modules.combat import wrapper
+    from engine.substrate import composition
+    fight, fight_round = composition.require("combat.fight"), composition.require("combat.round")
+    qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+    kit_sets = ((), (("longsword", "heavy"), ("arming", "light")), (("spear", "light"), ("mace", "medium")))
+    cases = [(seed, ((4, 4), (3, 5), (5, 5))[seed % 3], kit_sets[seed % 3]) for seed in range(16)]
+    recomputed = 0
+    for seed, ends, kits in cases:
+        inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs, kits=kits)
+        key = draw.H2("test_a_round_from_its_key", seed)
+        whole_rng = draw.seeded(key)
+        fkey = wrapper.fight_draw(draw.seeded(key))
+        whole = fight(inp, whole_rng)
+        assert whole_rng.n == 1, (seed, "the fight took more than its one uniform of its own Draw", whole_rng.n)
+        rounds, trace = [], [e for e in whole.trace if e["kind"] not in ("fight_start", "fight_result")]
+        for e in trace:   # the fight's own trace cut into its rounds
+            if e["kind"] == "round_start":
+                rounds.append([])
+            rounds[-1].append(e)
+        assert len(rounds) == whole.rounds, seed
+        carried, states, prev_closed = [], (DuelState(), DuelState()), False
+        for r in range(1, len(rounds) + 1):   # the states each round was handed: threaded through the rounds' own outcomes
+            carried.append((states, prev_closed))
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), wrapper.round_draw(fkey, r))
+            states, prev_closed = out.states, out.closed
+        for r in range(len(rounds), 0, -1):   # last round first: no earlier round has been drawn in this pass
+            states, prev_closed = carried[r - 1]
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), wrapper.round_draw(fkey, r))
+            expected = [e for e in rounds[r - 1] if e["kind"] != "fight_result"]
+            assert [e for e in out.trace if e["kind"] != "fight_result"] == expected, (seed, r, "a round called alone is not that round of the fight")
+            recomputed += 1
+    assert recomputed >= 12, f"only {recomputed} rounds were recomputed: the test is not observing a keyed round"

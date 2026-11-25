@@ -248,8 +248,7 @@ def _attempts(trace: tuple, claimants: tuple) -> dict:
     return n
 
 
-def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[dict] = None,
-                scene: Optional[int] = None) -> DuelRoundOutcome:
+def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[dict] = None) -> DuelRoundOutcome:
     """ONE ROUND AS ITS OWN ENTRY (A-101; PB step 1, PCR-2): build the two Combatants, lay each `DuelState` on, draw `first` (the coin, inside the round),
     run `wrapper.engagement` once, and -- where the round felled nobody -- take the yield rolls (`wrapper.settle_round`) and, where the fight goes on,
     the between-round recovery (`wrapper.recover`); then lift the states. It keeps nothing: no `World`, no module attribute, no state between calls.
@@ -258,28 +257,27 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
     felled, `yielded` the party whose yield roll failed; a round neither felled nor yielded in which the two yield rolls tied ends the fight with
     nobody yielded -- the trace then carries the engine's `fight_result` event, the one marker a loop reads.
 
-    `rng` is the one stream, drawn in the order the fight always drew it. `scene` is the stream's ordinal where the fight began, which keys the
-    round's coverage-gap, riposte and yield sub-draws (`engagement`'s own `scene`): `None` is `rng.n` here, a fight's first round; a loop passes its own,
-    so that a fight in one call and the same fight in many are one fight. `cfg` is the workbench's overlay (`fight`'s). `deciders` is the
+    `rng` is THE ROUND'S OWN `Draw` (`wrapper.round_draw(fight_key, inp.round)`, B16.03): every draw of the round is a keyed sub-draw of it -- `first` (the coin)
+    `H2(rng.key, "first")`, and `engagement`'s coverage-gap, riposte and yield draws `gap:`, `upset:`, `yield:` on the round's index and the blow or party -- so
+    nothing takes a position of a stream and no draw depends on another round (A-30). `cfg` is the workbench's overlay (`fight`'s). `deciders` is the
     per-party approach decider, consulted by no round yet; `inp.plans` is read by no round yet (a missing phase is `normal`)."""
     fi = inp.fighters
     cfg = _fight_cfg(fi, cfg) or CFG
     terms = fi.terms
     _check_terms(terms)
-    scene = rng.n if scene is None else scene
     a_id, b_id = fi.claimants
     A, B = _combatants(fi, cfg, inp.states)
     trace: list = []
     with wrapper.traced(trace.append):
-        first = A if rng.random() < 0.5 else B
+        first = A if seeded(H2(rng.key, "first")).random() < 0.5 else B
         trace.append(dict(kind="round_start", round=inp.round, first=first.label))
         wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)
         loser, closed, ended_by = wrapper.engagement(A, B, first, cfg, rng, inp.prev_closed,
-                                                     terms=None if terms == wrapper.LETHAL_TERMS else terms, turn=inp.round, scene=scene)
+                                                     terms=None if terms == wrapper.LETHAL_TERMS else terms, turn=inp.round)
         trace.append(dict(kind="round_end", round=inp.round, felled=(loser.label if loser is not None else None), ended_by=ended_by))
         yielder = None
         if loser is None:
-            over, yielder = wrapper.settle_round(A, B, wounds0, terms, cfg, rng, scene, inp.round, fi.decisiveness or (0.0, 0.0))
+            over, yielder = wrapper.settle_round(A, B, wounds0, terms, cfg, rng, 0, inp.round, fi.decisiveness or (0.0, 0.0))   # `0`: the workbench loop's `scene` ordinal, which a round's own key has no use for
             if not over:
                 wrapper.recover(A, B, cfg)   # a felling, or a yield, is not a pause to recover in
             elif yielder is None:
@@ -304,6 +302,10 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     THE FIGHT IS A LOOP OVER `fight_round` (PB step 1) with the `DuelState`s in this frame: up to `max_rounds` rounds (twelve, `wrapper.DEFAULT_ROUNDS`),
     stopping on a felling, a yield, a withdrawal or the last round. The workbench's own loop stays `wrapper.fight`; this one is the host's.
 
+    EACH ROUND DRAWS FROM ITS OWN KEY (B16.03): `fight_round` is handed `wrapper.round_draw(fkey, r)`, `fkey` being `wrapper.fight_draw(rng)` (one uniform of
+    `rng`, which keeps a caller that reuses one `Draw` for many fights from fighting one fight n times), so no round's draws depend on another's count (a
+    fight that ends at round 3 and one that runs to 12 draw round 3 alike).
+
     The `rng` is a parameter, and the module builds no generator of its own (`04 §C.12` rejection 4 as amended, A-30: a draw is a function of its key):
     the host builds it from its own seed and passes it down; the module forms keyed SUB-draws of it, or of a hex key the record carries
     (`seeded(H2(rng.key, ...))`), which are values, never state kept between calls. A module whose directory is gone is refused earlier, at
@@ -322,10 +324,10 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     A, B = _combatants(inp, cfg_)
     trace: list = [dict(kind="fight_start", A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
                         armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)]
-    scene = rng.n   # the stream's ordinal where this fight begins: `fight_round`'s keyed sub-draws take it, so the rounds of one fight are one fight
     states = (DuelState(), DuelState())
     wound_state = {a_id: _lift(inp, A), b_id: _lift(inp, B)}
     prev_closed, result, tie = False, 0, False
+    fkey = wrapper.fight_draw(rng)
     for rnd in range(1, (wrapper.DEFAULT_ROUNDS if max_rounds is None else max_rounds) + 1):
         if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the round; draws nothing
             choice = decide(CombatRoundView(round=rnd, claimants=inp.claimants,
@@ -336,7 +338,7 @@ def fight(inp: PersonalCombatInput, rng: Draw,
                 trace.append(dict(kind="withdraw", round=rnd))
                 break            # UNRESOLVED, no further round, no riposte draw
         out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed),
-                          rng, cfg=cfg, scene=scene)
+                          wrapper.round_draw(fkey, rnd), cfg=cfg)
         trace.extend(out.trace)
         states, wound_state, prev_closed = out.states, out.wounds, out.closed
         loser = out.felled or out.yielded

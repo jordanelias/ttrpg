@@ -57,7 +57,7 @@ oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
     seen = []
-    r = wrapper.fight(A, B, cfg=None, rng=draw.seeded(draw.H2("test_combat_module", seed)), trace=seen.append)
+    r = wrapper.fight(A, B, cfg=None, rng=draw.seeded(draw.H2("test_combat_module", seed)), trace=seen.append, keyed_rounds=True)
     oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}, seen))
 print(repr((loaded, out, oracle)))
 """
@@ -772,9 +772,11 @@ def _round_inp(seed, ends=(4, 4), kits=(), terms="death"):
 def _fight_by_rounds(inp, rng, fight_round, limit=12):
     """The rounds of one fight called by hand, the `DuelState`s and the measure threaded in this frame: yields each round's outcome."""
     from ..queries.inputs import DuelRoundInput, DuelState
-    scene, states, prev_closed = rng.n, (DuelState(), DuelState()), False
+    from modules.combat import wrapper
+    states, prev_closed = (DuelState(), DuelState()), False
+    fkey = wrapper.fight_draw(draw.seeded(rng.key))
     for r in range(1, limit + 1):
-        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), rng, scene=scene)
+        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), wrapper.round_draw(fkey, r))
         yield out
         states, prev_closed = out.states, out.closed
         if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
