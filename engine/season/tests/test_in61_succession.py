@@ -162,14 +162,19 @@ def test_with_king_and_heir_removed_someone_may_claim_the_throne():
     at least one person may claim `off_king` (`G.may_claim`, over the seats each holds), and none of them is the dead heir. Before
     `successions` listed more than the heir this read zero eligible claimants (F-PES-FA-11)."""
     w, d, king, heir = _realm()
+    throne = w.offices[THRONE]
+
+    def claimants():
+        return sorted(p for p in w.persons if G.may_claim(w, p, throne, {t.object for t in w.seat_holds(p)}))
+    # B21.67's CONTROL: with the King alive the throne is not claimable (no vacancy), so the read below is the vacancy's, not a
+    # predicate that is true of everyone.
+    assert _holder(w, THRONE) == king and claimants() == [], "the throne is claimable with its King alive"
     w.step = Step.MATTER
     w._emitted_by_write = []
     for who in (king, heir):
         _die(w, mint_token(w, WriteClass.MATTER), who)
     assert _holder(w, THRONE) is None and heir not in w.persons
-    throne = w.offices[THRONE]
-    claimants = sorted(p for p in w.persons if G.may_claim(w, p, throne, {t.object for t in w.seat_holds(p)}))
-    assert claimants, "zero eligible claimants: the throne is stranded"
+    assert claimants(), "zero eligible claimants: the throne is stranded"
 
 
 # --- THE ONE-ACT CLAIM: TWO SEATS, ONE TITLE ----------------------------------------------------
