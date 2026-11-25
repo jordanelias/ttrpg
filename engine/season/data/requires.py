@@ -872,7 +872,7 @@ WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dis
                               "declared.votes", "declared.quorum", "stage_open"}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
-# time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
+# time and can be re-asserted, so two claims on it agree or disagree (`queries/person_q.py::record`).
 # Derived, not a second roster: what a requirement may ask, less what only the world answers. NOT a
 # cell: `seen` (each sighting is a distinct `Seen` value, so two witnesses passing on the same
 # sighting would differ) and the event-kind predicates (`news.told` ... -- the value is always

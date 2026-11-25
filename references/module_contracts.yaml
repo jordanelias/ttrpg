@@ -374,7 +374,7 @@ modules:
       godot: python-oracle
       port_rank: 8
       parity: seam-io
-      note: "BUILD `gated` since v9 FI-03 (was `stub`): `find` runs only when an inquiry's `finding.made` carries a band `finding_terms` keys (`engine/season/rosters.yaml`) -- the condition -- and uncovers only a covert trail the finder did not witness; knots built but unplugged (IN-06/IN-32)."
+      note: "BUILD `gated` since v9 FI-03 (was `stub`): `find` runs only when an inquiry's `finding.made` or `conclusion.reached` (the `inquiry_modules` rows, B11.73) carries a band `finding_terms` keys (`engine/season/rosters.yaml`) -- the condition -- and uncovers only a covert trail the finder did not witness; knots built but unplugged (IN-06/IN-32)."
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary

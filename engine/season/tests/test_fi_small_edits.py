@@ -251,4 +251,4 @@ def test_a_declared_row_with_no_emission_still_raises_d22():
 
 
 # B11.21 (`08_FI_04` §6, D-74): the witness step reads a holder's own ledger through `queries/person_q.py`, never through `decision/`.
-# Build-verification, `season_loop` lane -- run once to read red then green; the scan is the item's named test, kept at its instruction.
+# (A statement of the layering this edit kept, not a test: no test in this file scans `loop/witness.py`'s imports.)

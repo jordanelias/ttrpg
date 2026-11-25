@@ -179,7 +179,7 @@ def test_a_look_deposits_what_finding_terms_lists_at_each_band():
 
 # ======================================================================================
 # B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2)): `reconstruct` REASONS AND DEPOSITS ITS CONCLUSION TO ITS MAKER. The conclusion is read off his OWN ledger
-# at CHOOSE (`person_q.conclusions_of`, `deed_doers`' reading) and rides the act as `concluded`; WITNESS deposits it to the maker by band.
+# at CHOOSE (`person_q.conclusion_cites`, over `_concluded`) and rides the act as `concluded`; WITNESS deposits it to the maker by band.
 # ======================================================================================
 CONCLUDER, VICTIM, KILLER, OTHER = "p_low", "p_mid", "p_other", "p_high"
 DEED = "person.died"        # a paired covert kind: the claim's subject is the one it was done to, the doer is read off a sighting

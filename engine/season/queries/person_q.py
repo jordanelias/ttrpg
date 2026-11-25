@@ -716,7 +716,7 @@ def regard(p: Person, referent: str, fx=None) -> float:
     `regard_gain`: the shape row spells `regard_gain · judged`, but `regard_gain` is `teller_weight`'s
     relation gain (`H-179`, shipped 0.5), and zeroing it for G1's control would move every told
     claim's weight -- two decisions on one fixture, `H-121`'s defect. A second name for one sum is
-    deliberate: `decision/options.py::teller_weight` asks for REGARD, so when the gains move, the
+    deliberate: `queries/person_q.py::teller_weight` asks for REGARD, so when the gains move, the
     reader does not.
     THE SUM OF `regard_parts`, left to right (B10.55): the four addends live there once, so the split a player's surface or the chronicle reads
     cannot disagree with the number a choice scores."""
@@ -998,7 +998,7 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
         MEAN, not a sum, so the term stays on `[-1, +1]` however many poles a faction engages.
       * `regard` -- the mean, over the persons in `regarded` (the faction's head and the doers `p`'s
         own ledger names who are live members of it; the caller reads them, and membership is world truth), of `clamp(regard(p, x, fx) / STANCE_MAX,
-        -1, 1)` -- `regard`, the one owner, normalised exactly as `decision/options.py::teller_weight`
+        -1, 1)` -- `regard`, the one owner, normalised exactly as `queries/person_q.py::teller_weight`
         normalises it. `0.0` for nobody.
 
     PERSON-SIDE, NO WORLD (`04` §A.2: `person_q` reads a `PersonInterior` only): WHO the faction's head
@@ -1524,7 +1524,7 @@ class LedgerReader:
 
     ⚠ `weigh` (telling workplan `T3a`, `ED-IN-0282`, `H-157`): HEARSAY IS GRADED WHEN READ, NEVER
     AT DEPOSIT. `weigh(c) -> [0, 1]` is how far this holder credits one claim; the caller builds it
-    (`decision/options.py::teller_weight`) because this module may not import `decision/`. With
+    (`queries/person_q.py::teller_weight`) and passes it in as a closure. With
     a `weigh`, the comparator ranks a claim by `(support, when, confidence)`, where `support` is
     the noisy-OR over the DISTINCT ORIGINS asserting the same value (below). `None` is today's
     comparator, unchanged; B09.07's callers (`belief_contradicts`, `said_of`, `lie_said_of`, `decision/sheet.py::chronicle`) pass
@@ -1701,7 +1701,7 @@ def knows_self(p, key: str, weigh=None, fx=None) -> bool:
     Person-side (AX-2): his ledger and his id, nothing else.
 
     A claim he made of himself (firsthand, no chain) is believed as it stands, so it never fades out of him. A claim he was TOLD is believed only where `weigh` (his
-    reading of the teller, `decision/options.py::ledger_weigh`, built by the caller because this module may not import `decision/`) puts it at or above
+    reading of the teller, `queries/person_q.py::ledger_weigh`, built by the caller and passed in) puts it at or above
     `Fixtures.self_told_floor` (H-483; read only here, only for a told claim, and `0.0` at the control believes every one). Without a `weigh` a told claim is read as it stands."""
     if key not in SELF_BELIEVED:        # a key outside the roster is known by construction, as it always was
         return True
@@ -1878,8 +1878,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     predicate is a kind the `tell` or `lie` row emits (a telling is not passed on as news of itself), and `unshared_first` then narrows it to the first
     non-empty tier of its `prefers:` (`_SLANT_TIERS`) before the same comparator picks. Neither reads a ledger but the teller's or spends a draw.
 
-    ⚠ B09.07 `weigh`: the closure the one comparator ranks by (`decision/options.py::ledger_weigh`, passed in because this
-    module may not import `decision/`), handed to `LedgerReader` as `epistemic.belief_contradicts` hands it, so a person
+    ⚠ B09.07 `weigh`: the closure the one comparator ranks by (`queries/person_q.py::ledger_weigh`, passed in by the caller), handed to `LedgerReader` as `epistemic.belief_contradicts` hands it, so a person
     passes on the belief he acts on. `None` (a hand-built read) is the plain comparator. ⚠ `LedgerReader._support`
     under a `weigh` ranks `latest_about` ACROSS predicates: a person passes on what he is SUREST of about a subject, not
     the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`).
@@ -1984,7 +1983,7 @@ def drifted(before, band: float, sel: int, whole_band: bool = False):
 
 def is_cell(c) -> bool:
     """Is `c` a claim on a CELL -- a slot that holds one value (`data/requires.py: CELL_STEMS`)? The one owner,
-    read by `lie_said_of` and `decision/options.py::record`'s pairing."""
+    read by `lie_said_of` and `queries/person_q.py::record`'s pairing."""
     return str(c.predicate).partition(":")[0] in CELL_STEMS
 
 
@@ -2018,7 +2017,7 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: in
 
     ⚠ A FALSE VALUE IS NEVER THE HELD ONE, so the hearer's exact-triple guard (`loop/witness.py`) does not
     drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
-    is the pair `decision/options.py::record` counts against the liar (`H-183`).
+    is the pair `queries/person_q.py::record` counts against the liar (`H-183`).
 
     `weigh` (B09.07) is `said_of`'s: the one comparator the liar reads the cell he lies about by."""
     cells = [c for c in claims if c.subject == subject and is_cell(c)]
@@ -2425,10 +2424,9 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     contradicts nothing.
 
     ⚠ TELLING WORKPLAN `T3a` (`ED-IN-0282`): `weigh` GRADES HEARSAY AS IT IS READ. `opening_set`
-    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on does
-    not beat the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
-    not built here, because `decision.options` imports this module and a deferred import back
-    would hide that cycle rather than remove it. Omitted (`None`), the reader is unweighted.
+    passes `queries/person_q.py::teller_weight(p, fx)`, so a newer claim a teller passed on does
+    not beat the person's own firsthand claim merely by being newer. The CLOSURE is passed in
+    by the caller rather than built inside the reader, which keeps the reader one comparator. Omitted (`None`), the reader is unweighted.
 
     ⚠ v9 IN-15 / `H-201`: `actor` IS WHO THE CELL'S `actor` OPERAND BINDS TO, AND IT DEFAULTS TO `p`.
     The person choosing an act is its actor, so `opening_set` passes nothing. A WITNESS asking whether an act they saw could have happened is a

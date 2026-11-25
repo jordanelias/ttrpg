@@ -348,7 +348,7 @@ def inquiry_world(seed: int = 0) -> World:
 # ======================================================================================
 INVESTIGATOR_SEAT, INQUIRY_FORGER = "p_investigator", "p_forger"       # the seated person; the one who did the premise's forging
 CASE_OPENS = 2          # the tick `inquiry_world` returns at (asserted there): the premise's forging at 0, its handover at 1
-COLD_SEASONS = 4        # `08_FI_03` §5: "four seasons pass"
+COLD_SEASONS = 4        # [canonical: proposals/2026-11-12-subsystem-audit-suite/proposals/08_FI_03_playable-inquiry.md §5] "four seasons pass"
 #: `08_FI_07` §2.0's Cut A verb set, with `examine` (B11.72) and `reconstruct` (B11.73) added as their items landed. The chooser draws from it for everyone.
 CUT_A_VERBS = frozenset({"research", "surveil", "petition", "carry", "open_case", "tell", "lie", "give", "survey", "create_record", "forge",
                          "conceal", "utter", "commit", "move", "examine", "reconstruct"})

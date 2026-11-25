@@ -85,7 +85,7 @@ _OPERAND_BENEFICIARIES = tuple(
 class Look:
     """ONE THING A ROW'S ACT LOOKS AT (B11.71, `08_FI_03` §2, FRES §8): the operand it looks at (`of`, a `requires_operands` member the row's own
     cell binds) and the `rosters.yaml: look_reads` member it reads there (`read`). It names what is looked at and NEVER A BAND: which reads a
-    band deposits is `rosters.yaml: finding_terms`'s, the one band-keyed table. `queries/world_q.py::looked_at` answers it."""
+    band deposits is `rosters.yaml: finding_terms`'s, the one band-keyed table. `queries/world_q.py::WorldReader.look` answers it (`.looks` for a whole row)."""
     of: str
     read: str
 
@@ -274,8 +274,8 @@ class VerbRow:
     regard_sign: Optional[int] = None
     # B11.65 (`18_DETERMINISM_notice_is_a_draw` edit 1): IS THE ROW'S DEED DONE TO BE SEEN -- one that those present learn without a draw,
     # as a public act in ordinary speech is one done openly. A boolean, REQUIRED ON EVERY ROW and never derived from the verb's name: the
-    # loader refuses a row that omits it or writes a non-boolean (a string, an integer, a null). Nothing reads it yet (B11.66's notice draw
-    # does). ⚠ LAYER 1, NAMED AT THE SITE, as `regard_sign` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
+    # loader refuses a row that omits it or writes a non-boolean (a string, an integer, a null). Read by `epistemic.py::notice` (B11.66): a `public`
+    # row's deed draws no notice for a person its precedence-head channel admits. ⚠ LAYER 1, NAMED AT THE SITE, as `regard_sign` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
     public: bool = False
     # B11.71 (`08_FI_03` §2, FRES §8): WHAT AN ACT OF THIS ROW LOOKS AT BESIDE THE READS ITS OWN CELL MAKES -- a FLAT list of `Look`s (`observes:`), the
     # non-gating reads the fold takes and attaches to the act's Events as `Observation`s; WITNESS deposits the ones the Event's band lists in
@@ -318,7 +318,7 @@ class VerbRow:
 
     def with_operands(self) -> tuple:
         """THE `of:` OPERANDS OF THE ROW'S `relation: with` CONJUNCTS (v12 B11.69, `14_VERBS_SOCIAL1_A` edit 3): the operands the cell asks to
-        be WITH the actor -- `to` for `tell`, `lie`, `give`, `argue`, `accept`; `subject` for `tend`, `train`, `challenge`. Read off the typed
+        be WITH the actor -- `to` for `tell`, `lie`, `give`, `argue`, `accept`; `subject` for `tend`, `train`, `challenge`, `fight`, `capture`. Read off the typed
         cell's TOP-LEVEL clauses (an `AllOf`'s, or the lone clause; a `with` nested under another conjunction is not seen, no shipped cell nests
         one) by the relation's stem, never a verb name; an untyped row has none. The ONE reader of that conjunct at formation: where the
         person is offered an act (`decision/options.py::opening_set`) and which bags he forms (`::_person_bags`) both ask it."""
@@ -1929,7 +1929,7 @@ _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 # B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2)): A CONCLUSION IS WHAT A PERSON DECIDES HAPPENED AND WHO DID IT, FROM WHAT HE HOLDS. The kind a row reports a winning
 # `reconstruct` as (`conclusion.reached`), the payload key his conclusion rides the act under (`concluded`: `(the one the deed was done to, <deed kind>,
-# doer)`, read off his OWN ledger at CHOOSE by `queries/person_q.py::conclusions_of`) and the predicate stem WITNESS deposits it under to the maker
+# doer)`, read off his OWN ledger at CHOOSE by `queries/person_q.py::_concluded`, with `conclusion_cites` for what each rests on) and the predicate stem WITNESS deposits it under to the maker
 # (`concluded:<deed kind>`, `loop/witness.py`). `CONCLUDING_VERBS` is read off the table, no verb listed: the rows that report the kind. Refused at import when
 # no row does, so a deposit nothing forms an act for cannot read as built.
 CONCLUSION_KIND, CONCLUDED_KEY, CONCLUDED_STEM = "conclusion.reached", "concluded", "concluded"
@@ -2101,7 +2101,27 @@ CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.ex
 # v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
 # (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
 # shape). The carrier is the kind the look emits (`finding.made`), as a telling's is its deposit.
-LEDGER_RANGES = {k: tuple(ps) for k, ps in roster_map("choice_sourced", "ledger_ranges").items()}
+def _check_ledger_ranges(ranges: dict, event_kinds, look_reads, classes) -> dict:
+    """`rosters.yaml: choice_sourced`'s `ledger_ranges`, checked and frozen: each KEY is a choice carrier (`CHOICE_CARRIER`) and each PREDICATE is a form a
+    held claim can carry -- an Event kind (`EVENT_KINDS`), a `look_reads` member (the observation a look deposits), or `exists:<class>` over a class the write
+    matrix declares. A key no verb carries, or a predicate no claim is ever held under, would range over an empty ledger forever and read as built; a function,
+    so a test can plant each refusal."""
+    out = {k: tuple(ps or ()) for k, ps in ranges.items()}
+    bad = {k: [x for x in ps if not (x in event_kinds or x in look_reads or (x.startswith("exists:") and x[len("exists:"):] in classes))]
+           for k, ps in out.items()}
+    bad = {k: v for k, v in bad.items() if v or not out[k]}
+    nokey = sorted(k for k in out if k not in CHOICE_CARRIER)
+    if nokey or bad:
+        raise Forbidden(
+            f"`rosters.yaml: choice_sourced` `ledger_ranges` names keys {nokey} outside `CHOICE_CARRIER`, or predicates {bad} that are no Event kind, `look_reads` "
+            f"member or `exists:<class>` (an empty list is refused too)",
+            "rosters.yaml -- choice_sourced.ledger_ranges",
+            needs="a key `CHOICE_CARRIER` carries, over predicates a held claim can carry",
+            law="v12 B11.72 -- a ledger-sourced range is the subjects of the actor's own claims under these predicates; one no claim carries ranges over nothing")
+    return out
+
+
+LEDGER_RANGES = _check_ledger_ranges(roster_map("choice_sourced", "ledger_ranges"), EVENT_KINDS, LOOK_READS, {c for c, _ in MATRIX})
 # v12 B11.10 (`08_FI_02` edits 7-8): `SAID_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the top `Fixtures.said_choices` claims `said_of`'s slant ranks for the
 # subject (`queries/person_q.py::said_set`), so it has no `CHOICE_RANGES` entry; it rides the payload as it always did, and counts as chosen only where the
 # fan held several (`SAID_RANK_KEY`, `choice_values`). A telling writes nothing, so the carrier of its two keys is the kind its deposit is (`loop/witness.py`'s

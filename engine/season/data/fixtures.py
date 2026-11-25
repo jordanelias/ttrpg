@@ -312,8 +312,8 @@ DEFAULT_FIXTURES = Fixtures(
     #
     # WHY `all_five` AND NOT `presence_only`: `presence_only` COSTS QUESTIONS (the narrowest arm
     # thins the claim->question link), while `all_five` removes most of the deposits and leaves that
-    # link where `total` had it. (`all_five` names five channels and is currently a measurement of
-    # THREE -- `chronicle` matches nobody and `post_remit` needs an obligee at the seat an act was
+    # link where `total` had it. (`all_five` names five channels and, when W6 measured it, was a measurement of
+    # THREE -- the then `chronicle` (since replaced by `reach`, B11.04) matched nobody and `post_remit` needs an obligee at the seat an act was
     # exercised through; `test_w6_every_named_channel_has_a_predicate…` asserts exactly which two
     # are inert.)
     #
@@ -836,7 +836,7 @@ DEFAULT_FIXTURES = Fixtures(
     knower_hears_true=True,            # `H-155`, swept False (control) / True (SHIPPED)
     # `H-177`..`H-179` (telling workplan `T3a`, `ED-IN-0282`; `RULINGS.yaml` CAT-3, closed: store
     # the teller, grade the claim WHEN READ by the hearer's relation to them). HOW MUCH A HEARER
-    # CREDITS A CLAIM SOMEONE TOLD THEM, read by `decision/options.py::teller_weight` -- the `weigh`
+    # CREDITS A CLAIM SOMEONE TOLD THEM, read by `queries/person_q.py::teller_weight` -- the `weigh`
     # `LedgerReader` ranks a person's own claims by in `belief_contradicts`. A told claim weighs
     # `clamp01(told_weight ** hops * relation * record)`, `relation = 1 + rank_gain*rank +
     # regard_gain*clamp(regard/STANCE_MAX, -1, 1)`, `record` = `H-183`'s factor below. CONTROL
@@ -858,7 +858,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `H-183` (telling workplan `T6`, `ED-IN-0282`). HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF
     # THEIR HEARSAY: `record = 1 + record_gain * (agree - dis) / (agree + dis)` over the hearer's
     # claims that teller passed on, each paired with the hearer's OWN firsthand claim on the same
-    # `(subject, predicate)` (`decision/options.py::record`); no pair is exactly 1.0, neutral.
+    # `(subject, predicate)` (`queries/person_q.py::record`); no pair is exactly 1.0, neutral.
     # `0` is the CONTROL: `record` is 1.0 whatever the ledger holds, so every weight is its pre-`T6`
     # value. Shipped `0.5` [ASSUMPTION]: a teller who was always right weighs half again as much as
     # a stranger, one who was always wrong half as much.
@@ -1026,7 +1026,7 @@ DEFAULT_FIXTURES = Fixtures(
     telling_privacy=0.0,               # `H-197`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-199` (v9 IN-15, `AX-7`'s divergence formula; `H-36` rules its shape). HOW FAR THE CHANNEL A
     # CLAIM ARRIVED ON AND WHAT ITS RECEIVER ALREADY HELD LOWER THE CONFIDENCE IT LANDS AT:
-    # `decision/options.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *
+    # `queries/person_q.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *
     # (1 - g*dissent)`, applied by `loop/witness.py::_refract` to every deposit a person receives of
     # an act not their own. `0` is the CONTROL: nothing is refracted and every deposit is the
     # pre-IN-15 one. SHIPPED LIVE at the sweep's midpoint 0.5, per Jordan's ruling of 2026-10-09
@@ -1036,7 +1036,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-199 -- the refraction gain; AX-7 rules THAT channel, competence and prior belief govern divergence and H-36 that it is receiver-side, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
     refraction_gain=0.5,               # `H-199`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-200` (v10 CR-19, `AX-7`'s competence; `ED-IN-0327`). HOW FAR THE RECEIVER'S ATTUNEMENT SCALES THE
-    # CONFIDENCE A TOLD CLAIM LANDS AT: `decision/options.py::refracted_confidence`'s `competence` factor =
+    # CONFIDENCE A TOLD CLAIM LANDS AT: `queries/person_q.py::refracted_confidence`'s `competence` factor =
     # `min(1, 1 + g*(attunement - mid)/(mid - floor))`, `mid`/`floor` the attribute scale's (`descriptors.py`),
     # a receiver with no authored Attunement reading 1. `0` is the CONTROL AND IT SHIPS (the knowledge-model
     # fold, `proposals/2026-11-04-knowledge-model-build-plan.md` §11 item 4): the factor is in place and the
@@ -1233,7 +1233,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
     finding_none_deposit="actor",      # `H-111`, swept none (control; revert) / actor (SHIPPED since B11.12)
     # `H-183` (B09.06; `16_PESSIMIST_SC_B_one_reader_of_a_ledger` edit 1). WHETHER THE ONE COMPARATOR WEIGHS HOW SURE THE HOLDER STILL IS:
-    # `decision/options.py::teller_weight` multiplies every claim's weight by `present_confidence(c) / confidence_default`, and
+    # `queries/person_q.py::teller_weight` multiplies every claim's weight by `present_confidence(c) / confidence_default`, and
     # `ledger_weigh` takes the closure for any ledger holding a claim below full confidence. `False` is the CONTROL and the revert (the
     # closure and the condition are today's, exactly); `True` SHIPS (B09.08). A switch on an existing magnitude, `claim_decay_per_season`.
     # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]

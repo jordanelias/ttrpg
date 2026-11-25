@@ -25,6 +25,7 @@ from engine.season.queries import cache
 from engine.season.state.attribution import live_cover
 from engine.season.state.carriers import Act, Event, Proposition, StateChange, Tenure
 from engine.season.tests._flat_fold import flat_fold
+from engine.season.tests._realm_goldens import SHIPPED
 from engine.season.tests.test_u1_capability_surface import _planted_verb_load, _refused, _row, _shipped_rows
 
 ON = DEFAULT_FIXTURES.sweep("notice_arm", "on")
@@ -33,11 +34,10 @@ BANDS = ("Failure", "Partial", "Success", "Overwhelming")
 HEAD = WITNESS_CHANNELS[0]
 SEEDS = range(200)
 
-#: THE ARM-OFF WORLD'S OWN PINS: the realm content hash at seeds 0 to 2, one season, `notice_arm: off` set explicitly (`PYTHONHASHSEED=0`, `reading @0e0383aea` with B11.66's
-#: edit on it, equal to the base's reading at all three seeds). The arm ships `off`, so these are the shipped realm until B11.67 flips it; the test sets the arm, so they hold
-#: whatever it ships. RE-READ AT B11.99 on the batch's closing tree with `notice_arm` set `off` (B11.69, B11.71 to B11.74 moved it after B11.66; B11.67 flipped nothing, so the arm-off world
-#: is the shipped realm and these equal `_realm_goldens.SHIPPED[(s, 1)]`; the B11.66 values are in `git log`).
-ARM_OFF_PINS = {0: "793f29fd22710b5257a00589c34021d9", 1: "fa87fb815a6ecd6dd6639dd82e7437ae", 2: "e3bf99b86b2314a4b5fb90cc8f2fa86e"}
+#: THE ARM-OFF WORLD'S PINS: the realm content hash at seeds 0 to 2, one season, `notice_arm: off` set explicitly. `notice_arm` ships `off` (B11.67 flipped nothing), so the arm-off world
+#: IS the shipped realm and the three values are `_realm_goldens.SHIPPED[(s, 1)]`, read from it rather than copied (one pin, re-pinned once). ⚠ The coupling is deliberate while the arm
+#: ships `off`: the day it ships `on`, the shipped pins stop being the arm-off world's and this test must take its own values again (the B11.66 values are in `git log`).
+ARM_OFF_PINS = {s: SHIPPED[(s, 1)] for s in (0, 1, 2)}
 
 
 def test_public_column_absent_is_refused_at_load():

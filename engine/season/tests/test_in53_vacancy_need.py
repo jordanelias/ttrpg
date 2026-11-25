@@ -442,7 +442,12 @@ def test_in53v_f_a_seat_he_heard_empty_is_already_one_he_was_told_of():
     _ambition(w, "p_king", "prop_k", "R")
     since = (w.tick, 1)
     ids0, cls0, sig0 = _classes_and_formed(w, "p_king", since)
+    held0 = len(w.persons["p_king"].ledger)
     _told(w, "p_king", "off_reeve")
+    # `_told` really wrote: without this, "told again is a no-op" cannot be told from "`_told` wrote nothing".
+    told = [c for c in w.persons["p_king"].ledger if c.id == "c_told_p_king_0"]
+    assert len(w.persons["p_king"].ledger) == held0 + 1 and len(told) == 1 and \
+        (told[0].subject, told[0].predicate) == ("off_reeve", "tenure.opened"), "`_told` landed no claim in the ledger"
     ids1, cls1, sig1 = _classes_and_formed(w, "p_king", since)
     assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
     assert cls1 == cls0 and sig1 == sig0, "being told again moved something"

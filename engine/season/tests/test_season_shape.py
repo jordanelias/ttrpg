@@ -4299,12 +4299,13 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # gives: nobody ever separates from `co_located` here any more.
     # [GROUNDED: measured 2026-09-29 -- `presence_only` and `all_five` resolve the IDENTICAL
     # 19-member `(actor, verb)` set; `total` resolves a different 16-member set]
-    # ⚠⚠ 2 -> AT LEAST 2, B11.12 (`08_FI_04` §1, A-81), RE-MEASURED AS THE MESSAGE ASKS: a failed inquiry now leaves its actor's own claim
-    # (`finding_none_deposit` ships `actor`), a deposit the arms reach by different routes, so the narrow pair resolves different sets again
-    # (three distinct sets, the third-link state of `U2`). The property is that the fan-out matters to ACTS, which `>= 2` still observes.
-    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) >= 2, (
-        f"the resolved-act sets by arm: {got}. Expected at least two distinct sets -- one would mean the "
-        "fan-out stopped mattering to ACTS at all; re-measure rather than re-pin the count")
+    # ⚠⚠ B11.12 (`08_FI_04` §1, A-81) RECORDED THREE DISTINCT SETS here (a failed inquiry leaving its actor's own claim, `finding_none_deposit` `actor`, a deposit
+    # the arms reach by different routes). RE-MEASURED at the B11 close (seed 0, three seasons, as above) it is TWO AGAIN: `presence_only` and `all_five` resolve
+    # the identical 19-member `(actor, verb)` set and `total` a different 25-member one -- the `11a` state above -- so the three-set reading no longer holds.
+    # EXACT, because `>= 2` passes on the three-set state and the two-set one alike and observes neither; the property is that the fan-out matters to ACTS.
+    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) == 2, (
+        f"the resolved-act sets by arm: {got}. Expected exactly two distinct sets (the narrow pair identical, `total` apart) -- one would mean the "
+        "fan-out stopped mattering to ACTS at all, three that the narrow pair separated again; re-measure rather than re-pin the count")
 
 
 # ===========================================================================

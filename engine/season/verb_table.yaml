@@ -55,8 +55,8 @@
 # takes `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`), else `1`; NO ROW AUTHORS ONE YET (cells are BA1's content).
 #
 # `public:` ON EVERY ROW (B11.65; `data/verbs.py::VerbRow.public`): `true` or `false`, REQUIRED, never derived from the verb's name -- a deed done to be
-# seen, which those present learn without a draw, as a public act in ordinary speech is one done openly. Nothing reads it yet (B11.66's notice draw
-# does). `speak`, `utter`, `issue`, `march`, `determine`, `convene` and `petition` are `true` [ASSUMPTION: the acts done to be seen; `convene` and
+# seen, which those present learn without a draw, as a public act in ordinary speech is one done openly. Read by `epistemic.py::notice` (B11.66): a `public`
+# row's deed draws no notice for a person its precedence-head channel admits. `speak`, `utter`, `issue`, `march`, `determine`, `convene` and `petition` are `true` [ASSUMPTION: the acts done to be seen; `convene` and
 # `petition` added as sittings; the verb lanes correct the rest]; every other row is `false`. The loader refuses a row without it or with a non-boolean.
 # =============================================================================================
 
@@ -265,7 +265,7 @@ verbs:
     writes:      ["Record.exists"]
     writes_note: "v9 IN-12 step 10 (#453 §9.3; K-19): `loop/effects_information.py::_eff_conceal` MINTS A `Record` OF KIND `cover` through `_mint_document` -- `terms` THE ACTOR, written by the effect whatever the act's `subject` (#453: *'`terms` = the actor, written by the effect whatever the act's `subject`'*); the Record's own id is the alias; the maker's `hold` opens with it; its stages are the mint's (`_declared_stages`, `H-80`'s default for a computed act), which MATTER matures. `forge`'s declaration, the one pair the mint writes as its declared write (the stages are wound inside it). WHAT THE COVER CHANGES IS ATTRIBUTION AFTERWARDS, NOT WITNESSING (K-19): `state/attribution.py::anchor_of` answers the cover's id at tier 1 for an act by a person holding a cover whose `terms` is himself while a stage is unmatured (`live_cover`), so the deposits about his later acts are about the alias and his knot-partners stop witnessing by key (`epistemic._ch_witness_key` tests `pid == anchor`); `seen.who` still names him for those present (`epistemic._term_who` reads the act). Ended by `destroy_record` or by its stages maturing (#453 §8.1)."
     emits:       ["cover.assumed"]
-    emits_note: "#453 §9.3's kind, emitted by this row alone. ⚠ NO CHANNEL EXCEPTION (K-19): taking a cover is witnessed as any act is, by `witness_channels`' ordinary precedence -- a per-verb exception there would be scripting drift. `social`, so `_ch_chronicle` does not broadcast it."
+    emits_note: "#453 §9.3's kind, emitted by this row alone. ⚠ NO CHANNEL EXCEPTION (K-19): taking a cover is witnessed as any act is, by `witness_channels`' ordinary precedence -- a per-verb exception there would be scripting drift. `social`, so `_ch_reach` gives it no reach (`event_reach` carries `binding_decision` kinds and the unrest kinds only)."
     emits_on_refusal:
       individual:  ["conceal.refused"]
       write:       ["conceal.refused"]
@@ -343,7 +343,7 @@ verbs:
     writes:      ["Record.exists", "Record.stages"]
     writes_note: "v9 IN-12 step 7: `loop/effects_information.py::_eff_covenant` MINTS A `dispensation` through `_mint_document`, the one mint `issue` shares -- `terms` the act's `subject` (the Proposition), `to` the counterparty (`rosters.yaml: record_kinds`' `read_from`), drawn up at the exercised seat's rung (`_seat_rung`), with the maker's `hold`. NO NEW RECORD KIND (#453 K-11, K-54): a covenant is a dispensation distinguished by what its `terms` names. `Record.stages` is the TERM (#453: *'`Record.stages` as the term (matures at MAT)'*), wound by the mint (`_declared_stages`, `H-80`'s default for a computed act); the pair is check-only, as on `open_case`, whose case file is minted the same way. THE COUNTERPARTY LEARNS THE TERMS ONLY BY HOLDING THE RECORD (#453 K-54): the mint holds only the maker and no channel carries a `social` mint, so the instrument is handed on by `give`, and the addressee's acceptance is his own `commit`, formed from the held dispensation (`rosters.yaml: terms_sourced`). ITS READERS ARE DEFERRED (#453 §10.4 step 7): `loop/effects_economy.py::_renewals` reads `oblige` edges only and `queries/world_q.py::mustered` faction members only, so neither tribute nor allied sides read a covenant. No `war` kind (war is a Proposition, K-29); no `truce` (K-32); `proclaim` deferred (K-50); no `debt` kind (deferred with its `seize` reader, K-14)."
     emits:       ["covenant.offered"]
-    emits_note:  "⚠ A NEW KIND, NOT `dispensation.issued`: `issue`'s kind is a `binding_decision` row's, which `epistemic.py::_ch_chronicle` broadcasts by kind, and a covenant must not be read as a public writ -- #453 K-54: no channel carries a `social` mint, so the counterparty learns the terms only by holding the Record. Emitted by this row alone; `_ch_post_remit` hands it to the obligees standing at the exercised seat (the seat read off the causing act, `seize`'s note), and the content of the instrument reaches nobody but its holder."
+    emits_note:  "⚠ A NEW KIND, NOT `dispensation.issued`: `issue`'s kind is a `binding_decision` row's, which `epistemic.py::_ch_reach` carries by kind (`rosters.yaml: witness_channels.event_reach`), and a covenant must not be read as a public writ -- #453 K-54: no channel carries a `social` mint, so the counterparty learns the terms only by holding the Record. Emitted by this row alone; `_ch_post_remit` hands it to the obligees standing at the exercised seat (the seat read off the causing act, `seize`'s note), and the content of the instrument reaches nobody but its holder."
     emits_on_refusal: ["covenant.refused"]
     refusal_note: "v9 IN-12 step 7, #453 §9.2: *'refusal `covenant.refused`'* -- one flat kind, `transfer`'s shape for a `remit:`-eligible row: the counterparty is no person, the subject is no Proposition, the counterparty is the maker (the fold's `counterparty` clause), or the mint moved nothing."
     grade:       "assumption"
@@ -938,7 +938,7 @@ verbs:
     # CP-T02-01 (H-230 limit 1): `Felled` gains `tenure.closed` beside `person.died` -- the death names
     # each seat it empties, one `tenure.closed` earned by the seat `hold`s the cascade closes and
     # receipted under the Office's id (`state/gate.py::death_subjects`), so it reaches every person
-    # through `chronicle` as a claim about the seat. A death emptying no seat earns none.
+    # through `reach` as a claim about the seat. A death emptying no seat earns none.
     # CP-T03-00 (`-08` AM-C-01): `Felled` gains `body.changed` -- the band is the WORST over both
     # parties, so a felled party beside a WOUNDED one is a `Felled` fight in which the wounded party
     # earns `body.changed`; the cell licenses it, and a fight felling one party and leaving the other
@@ -1283,7 +1283,7 @@ verbs:
     writes:      ["Tenure.until", "Tenure.since"]
     writes_note: "ONE PER SIDE, `seize`'s pair: the yielding seat's live `hold` on the place, if the place is held directly, closes (`Tenure.until`) and the receiver's opens (`Tenure.since`), in ONE effect (`loop/effects_information.py::_eff_surrender` through `_take_hold`). Seeded settlements are held through their territory, so usually nothing closes and the territory's holder keeps the territory, while the settlement's own `hold` now shadows it in `holder_faction_of`'s walk. The gate admits both under `cession` (`state/gate.py`). No `write_matrix.yaml` row is added: both pairs exist. NO BODY, STANCE OR LEG IS WRITTEN: that is the whole difference from a `march` that wins the field."
     emits:       ["place.surrendered"]
-    emits_note:  "A KIND OF ITS OWN: a cession under arms, distinct from `rung.seized` (a taking by a warrant and an occupation) and `rung.ceded` (`give`, consensual and unthreatened). It is an act exercised through a seat, so `_ch_post_remit` hands it to the obligees standing at that seat; `chronicle` keys on `binding_decision` rows, so a town yielded is a chronicled event."
+    emits_note:  "A KIND OF ITS OWN: a cession under arms, distinct from `rung.seized` (a taking by a warrant and an occupation) and `rung.ceded` (`give`, consensual and unthreatened). It is an act exercised through a seat, so `_ch_post_remit` hands it to the obligees standing at that seat; `reach` keys on `binding_decision` rows (`event_reach`), so a town yielded is carried at `realm`."
     emits_on_refusal:
       eligibility: ["surrender.unauthorized"]
       authority:   ["surrender.unauthorized"]
@@ -1459,7 +1459,7 @@ verbs:
     writes:      ["Tenure.until"]
     writes_note: "#453 §9.1: *'writes: `Tenure.until`, under the widened `determination` basis (closing `detain` and `ban` only, §8.3)'*. `_eff_pardon` closes EVERY live restraint the subject owns on `Act.via` -- a custody and a ban on one seat both end (*'grant wholly'*) [ASSUMPTION; medium; Jordan to correct; revert: the oldest one only]. Never an `oblige` (D-5: no obligee-side closer of an obligation, §8.3); the gate's `determination` clause closes `RESTRAINT_KINDS` only."
     emits:       ["detention.ended", "ban.ended"]
-    emits_note: "#453 §9.1: *'`detention.ended` / `ban.ended`, per-kind closers on R-3's `commitment.ended` precedent'*. EACH CLOSED EDGE EARNS ITS OWN KIND (`Subject.earns`), so a pardoned custody never publishes an ended ban. ORDER IS READ: `_eff_pardon` unpacks this column `detain` then `ban` (`seize`'s precedent). Two NEW kinds; `binding_decision`, so `chronicle` broadcasts them."
+    emits_note: "#453 §9.1: *'`detention.ended` / `ban.ended`, per-kind closers on R-3's `commitment.ended` precedent'*. EACH CLOSED EDGE EARNS ITS OWN KIND (`Subject.earns`), so a pardoned custody never publishes an ended ban. ORDER IS READ: `_eff_pardon` unpacks this column `detain` then `ban` (`seize`'s precedent). Two NEW kinds; `binding_decision`, so `reach` carries them at `realm`."
     emits_on_refusal: ["pardon.refused"]
     refusal_note: "#453 §9.1: *'refusal `pardon.refused`'* -- FLAT, one kind for every failable clause: ineligible; no person; the exercised seat does not sit as a bench over him (`bench`); or he holds no live `detain`/`ban` on the exercised seat (the effect's decline)."
     grade:       "assumption"
@@ -1773,7 +1773,7 @@ verbs:
     writes:      ["Tenure.until", "Tenure.since"]
     writes_note: "v10 IN-61: ONE ACT, ONE WRITE (`loop/effects_governance.py::_eff_succeed`): it opens the claimant's `hold` on EVERY vacant seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats`) -- `Tenure.since`, the write gate's claim basis -- and closes his `hold` on that title -- `Tenure.until`, `T-m`. The claim basis is licensed by that closure in the same write, so the two cannot be split. The opened `hold` is a literal `Tenure(..., \"hold\")`, so `data/verbs.py::_derive_openers_from_effects` lists `succeed` among `hold`'s openers and `world_q.endings_reached` credits a seat taken by claim. It writes no `succeed` Tenure: that kind (`rosters.yaml: tenure_kinds`) keeps no opener."
     emits:       ["succession.claimed", "tenure.closed"]
-    emits_note:  "v10 IN-61: each earned per edge (`Subject.edge`): `succession.claimed` by each seat taken, `tenure.closed` by the title laid down. A `binding_decision` row's kinds are broadcast by `epistemic.py::_ch_chronicle`, and WITNESS expands each `hold` Tenure id to the seat it is on (keyed on the Tenure's kind, never the event's), so the realm hears who took the throne. ⚠ ITS OWN SUCCESS KIND, NOT `confer`'s `tenure.opened`,: `data/verbs.py::KIND_VERB` maps a kind to a verb only where ONE row emits it, so a second emitter of `tenure.opened` would zero the deed alignment of every `tenure.opened` claim in every ledger (`align_kind`). `tenure.closed` is already shared (seven rows), so the title's closure moves nothing."
+    emits_note:  "v10 IN-61: each earned per edge (`Subject.edge`): `succession.claimed` by each seat taken, `tenure.closed` by the title laid down. A `binding_decision` row's kinds are carried by `epistemic.py::_ch_reach` (`event_reach`), and WITNESS expands each `hold` Tenure id to the seat it is on (keyed on the Tenure's kind, never the event's), so the realm hears who took the throne. ⚠ ITS OWN SUCCESS KIND, NOT `confer`'s `tenure.opened`,: `data/verbs.py::KIND_VERB` maps a kind to a verb only where ONE row emits it, so a second emitter of `tenure.opened` would zero the deed alignment of every `tenure.opened` claim in every ledger (`align_kind`). `tenure.closed` is already shared (seven rows), so the title's closure moves nothing."
     emits_on_refusal: ["succession.refused"]
     refusal_note: "one flat kind for the predicate's conjuncts: a held seat, a seat the claim does not open, a title he does not hold, or a seat with no `successions` row."
     grade:       "assumption"
@@ -1809,7 +1809,7 @@ verbs:
     writes:      ["Record.exists"]
     writes_note: "`issue`'s and `petition`'s column: one `(Record, exists)` write through `_mint_document`, the one mint, with the surveyor's `hold` riding on the Record's receipt (admitted as `T-m`, `create_record`'s). The content is `faction_q.resolve`'s view AT THE MOMENT OF WRITING (`asdict`, fresh lists), keyed as `rosters.yaml: record_kinds.faction_sheet`, which `faction_q.py` checks against `Faction`'s fields at import. No `write_matrix.yaml` row is added; `faction.surveyed` joins `(Record, exists)`'s `emits:` in the same commit."
     emits:       ["faction.surveyed"]
-    emits_note: "A KIND OF ITS OWN, NOT `record.created`: a survey is a private act (`own`, `uncontested_material`), and neither broadcast channel reads it -- `_ch_chronicle` reads the kinds `binding_decision` rows emit and `_ch_post_remit` those of `remit:`-eligible rows (`give`'s `emits_note` gives the reason in full). Witnesses learn THAT a survey was made of the subject, by the channels that admit them; only the holder learns what it says."
+    emits_note: "A KIND OF ITS OWN, NOT `record.created`: a survey is a private act (`own`, `uncontested_material`), and neither broadcast channel reads it -- `_ch_reach` reads the kinds `binding_decision` rows emit (`event_reach`) and `_ch_post_remit` those of `remit:`-eligible rows (`give`'s `emits_note` gives the reason in full). Witnesses learn THAT a survey was made of the subject, by the channels that admit them; only the holder learns what it says."
     emits_on_refusal:
       write:       ["survey.refused"]
       draw:        ["survey.failed"]
@@ -2012,7 +2012,7 @@ verbs:
     observes:
       - {of: site, read: condition}
       - {of: site, read: stores}
-    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT A LOOK AT THE SITE TEACHES -- its `condition` and the `stores` of the rung it stands in (`queries/world_q.py::looked_at`). Non-gating: the cell above is unchanged. It names what is looked at and never a band; `rosters.yaml: finding_terms` says which of these a band deposits (all at Success and Overwhelming, the numbers lossy at Partial, none at Failure)."
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT A LOOK AT THE SITE TEACHES -- its `condition` and the `stores` of the rung it stands in (`queries/world_q.py::WorldReader.look`, through `.looks`). Non-gating: the cell above is unchanged. It names what is looked at and never a band; `rosters.yaml: finding_terms` says which of these a band deposits (all at Success and Overwhelming, the numbers lossy at Partial, none at Failure)."
     source:      "systems/fieldwork/reference/investigation_systems_v30.md:217 names the six; systems/fieldwork/reference/fieldwork_v30.md:293 (§4.2) and :317 (§4.3) carry this row's content"
   - verb:        "interview"
     public:      false
@@ -2112,7 +2112,7 @@ verbs:
     observes:
       - {of: subject, read: held_by}
       - {of: subject, read: content}
-    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::looked_at`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial)."
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::WorldReader.look`, through `.looks`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial)."
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
     public:      false
@@ -2150,7 +2150,7 @@ verbs:
     observes:
       - {of: subject, read: stores}
       - {of: subject, read: held_by}
-    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT WATCHING A PLACE TEACHES -- the rung's `stores` and who holds it (`queries/world_q.py::looked_at`). Who is `with` the place is world-only and stays so (`WORLD_ONLY_STEMS`): it is no `look_reads` member. Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`)."
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT WATCHING A PLACE TEACHES -- the rung's `stores` and who holds it (`queries/world_q.py::WorldReader.look`, through `.looks`). Who is `with` the place is world-only and stays so (`WORLD_ONLY_STEMS`): it is no `look_reads` member. Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`)."
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:296 (§4.2), :320 (§4.3)"
   - verb:        "thread_read"
     public:      false
@@ -2204,7 +2204,7 @@ verbs:
       Success:      ["conclusion.reached"]
       Partial:      ["conclusion.reached"]
       Failure:      ["finding.none"]
-    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2); [ASSUMPTION; medium; Jordan to correct; revert: `finding.made` at the three winning bands]): THE THREE WINNING BANDS REPORT `conclusion.reached`, not a finding -- it assembles what he holds and gathers nothing new (`fieldwork_v30.md:298`). `loop/witness.py` deposits his conclusion to him alone, `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred`, read off `rosters.yaml: finding_terms` by band (the hand is named at the bands that list `who`, withheld at `Partial`); the doer is whoever his OWN ledger names (`queries/person_q.py::conclusions_of`, `deed_doers`' reading, fixed at CHOOSE and carried on the act as `concluded`), so the roll states nothing wrong (K-37): a wrong name is a wrong ledger. `rosters.yaml: inquiry_modules` still claims the kind, so a conclusion also uncovers the trail a finding did (B11.68). `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (B11.12). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07, and no band deposits."
+    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2); [ASSUMPTION; medium; Jordan to correct; revert: `finding.made` at the three winning bands]): THE THREE WINNING BANDS REPORT `conclusion.reached`, not a finding -- it assembles what he holds and gathers nothing new (`fieldwork_v30.md:298`). `loop/witness.py` deposits his conclusion to him alone, `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred`, read off `rosters.yaml: finding_terms` by band (the hand is named at the bands that list `who`, withheld at `Partial`); the doer is whoever his OWN ledger names (`queries/person_q.py::_concluded`, `deed_doers`' reading, fixed at CHOOSE and carried on the act as `concluded`), so the roll states nothing wrong (K-37): a wrong name is a wrong ledger. `rosters.yaml: inquiry_modules` still claims the kind, so a conclusion also uncovers the trail a finding did (B11.68). `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (B11.12). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07, and no band deposits."
     emits_on_refusal: ["inquiry.refused"]
     grade:       "ruled"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:298 (§4.2), :256-280 (§4.1), :323 (§4.3)"

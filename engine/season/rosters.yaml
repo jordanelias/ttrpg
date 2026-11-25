@@ -1394,7 +1394,7 @@ rosters:
       ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
       questioned person answers by their own `tell`, so there is no degree on the asker);
       `reconstruct` waited on a value space nothing supplied (K-37: no invented number) -- B11.73: it is the doer his own ledger names
-      (`queries/person_q.py::conclusions_of`, `deed_doers`' reading), so its winning bands report `conclusion.reached` and deposit his conclusion to him
+      (`queries/person_q.py::_concluded`, `deed_doers`' reading), so its winning bands report `conclusion.reached` and deposit his conclusion to him
       (`loop/witness.py`); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
       flat `emits:` and is not counted as graded. [B07.01: `reconstruct` and `thread_read` are routed now, under `armed_by: task_draw_arm`; arm `off`
@@ -1650,7 +1650,7 @@ rosters:
     social_roll: seam/wrappers/sigma.py::contest_input
     fight: "seam/wrappers/combat.py::combat_input -> PersonalCombatInput (applied by the module: the fight's attribute input is the six attributes on `PersonalCombatInput.attributes`, sigma-assembled in `modules/combat`, so the site carries no host-side `edge` row and `advantage_sigma` adds no second attribute term to a fight)"
     kit: "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it"
-    told_claim_credit: decision/options.py::competence
+    told_claim_credit: queries/person_q.py::competence
     choice_temper: decision/choose.py::temper
     choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
@@ -2707,7 +2707,7 @@ rosters:
       _eff_utter` stores it as `Proposition.support`, and a cite he does not hold (not in his own ledger, no live `hold` of his) refuses the act (`_held_cites`).
       The carrier is `Proposition.exists`, which the row writes. [ASSUMPTION; medium; Jordan to correct; revert: delete the `utter` line, `CITES_KEY` and `_held_cites`.]
       v12 B11.75 (R-19-04): `reconstruct` CARRIES `concluded`, WHICH SUSPECT, AND IT IS A CHOICE ONLY WHERE HIS LEDGER NAMES SEVERAL (`data/verbs.py::CONCLUDED_RANK_KEY`,
-      `said`'s shape): one Candidate per `(deed kind, doer)` `queries/person_q.py::conclusions_of` reads off his own ledger, each carrying the claims that name him (`cites`), and
+      `said`'s shape): one Candidate per `(deed kind, doer)` `queries/person_q.py::_concluded` reads off his own ledger, each carrying the claims that name him (`cites`), and
       `decision/choose.py::settle_conclusions` keeps ONE, drawn in proportion to each doer's support over distinct origins (`LedgerReader._support`) at a nonzero
       `choice_temperature` (the best-supported at 0). One doer is no choice: the Candidate carries no rank and no act is renamed. The carrier is the kind the row
       emits (`conclusion.reached`). [ASSUMPTION; medium; Jordan to correct; revert: delete the `reconstruct` line and `settle_conclusions`, and the first doer his ledger names rides, as B11.73.]
@@ -3256,8 +3256,8 @@ rosters:
     source: >-
       v12 B11.22 (`08_FI_06` edit 6): *"`told_pairing`, `off` (control, today) / `on`; ships `on` when the gate reads"*.
     note: >-
-      THE ARMS OF `Fixtures.told_pairing` (`H-495`), read by `queries/person_q.py::told_pairing_on` (`said_of`'s pool and pairing). `off` is the CONTROL, shipped:
-      a paired deed heard second-hand names nobody. `on` carries the hand: the deed's pairing rides the telling and is deposited as a told `seen` claim.
+      THE ARMS OF `Fixtures.told_pairing` (`H-495`), read by `queries/person_q.py::told_pairing_on` (`said_of`'s pool and pairing). `off` is the CONTROL (the revert):
+      a paired deed heard second-hand names nobody. `on` is SHIPPED and carries the hand: the deed's pairing rides the telling and is deposited as a told `seen` claim.
     values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
 
   notice_arms:
@@ -3710,7 +3710,7 @@ rosters:
       `condition` of a Site (`(site, condition, n)`); `stores` of a Rung (`(rung, stores:<kind>, n)` for each kind it holds; a Site's look
       reads the rung it stands in); `held_by` of a Rung or a Record (`(thing, held_by:<holder>, True)` for each live `hold`); `content` of a
       Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is
-      `queries/world_q.py::looked_at`, which dispatches on exactly these members and answers nothing for a subject of another class; a
+      `queries/world_q.py::WorldReader.look`, which dispatches on exactly these members and answers nothing for a subject of another class; a
       member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load.
     values: [condition, stores, held_by, content]
 
@@ -3730,7 +3730,7 @@ rosters:
       A covert `destroy_record` (H-75), `arrest` and a costed `surveil` (ED-FI-0009) are unbuilt
       and belong to their own positions.
       THE MEMBERSHIP RULE, so the next member is decided by it and not by taste. A deed kind is
-      covert when (i) no `binding_decision` row emits it, so `chronicle` never broadcasts it;
+      covert when (i) no `binding_decision` row emits it, so `reach` (`event_reach`) never carries it;
       (ii) its row has no `remit:` eligibility, so it is not done through a seat and `post_remit`
       never reports it; (iii) it writes a thing some graded inquiry takes as its subject (a Site
       for `examine`, a Record for `research`, a Person for `interview` and `surveil` at the
