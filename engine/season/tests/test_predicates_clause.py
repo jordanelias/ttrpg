@@ -308,6 +308,42 @@ def test_a_refused_revoke_says_which_clause_refused_in_its_kind(monkeypatch):
             clause, [(c.predicate, c.subject) for c in w.persons[actors[clause]].ledger])
 
 
+def test_a_refused_oblige_says_which_clause_refused_in_its_kind(monkeypatch):
+    """B21.83: THE SHIPPED `oblige` ROW. Hand-built acts refused at `own_seat` (the duke obliging himself to his own seat) and at
+    `banned` (a person holding a live `ban` at the seat) emit two kinds where the flat row (the control) emitted `duty.refused` for
+    both, and the actor's ledger holds a claim keyed by each."""
+    from .test_u7_remit import BAN_KIND, DUKE, PARTY, SEAT, Tenure, _fold, _world
+    declared = PR.REQUIRES_PREDICATES["oblige"].clauses
+    assert declared == ("seat", "binds", "own_seat", "one_edge", "banned"), declared
+    shipped = VERB_TABLE["oblige"]
+    assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
+
+    def arms(world, driver):
+        world.add_tenure(Tenure("t_ban", PARTY, SEAT, BAN_KIND, since=world.tick))
+        got = {}
+        for clause, actor in (("own_seat", DUKE), ("banned", PARTY)):
+            got[clause] = _fold(world, driver, Act(id=f"ob_{clause}", actor=actor, verb="oblige", payload={"subject": SEAT}))
+        return got
+
+    w, d = _world()
+    monkeypatch.setitem(VERB_TABLE, "oblige", _flat_row("oblige", "duty.refused"))
+    flat = {c: [e.kind for e in es] for c, es in arms(w, d).items()}
+    assert flat == {"own_seat": ["duty.refused"], "banned": ["duty.refused"]}, flat       # CONTROL: the flat row
+    monkeypatch.undo()
+    w, d = _world()
+    got = arms(w, d)
+    names = {c: [e.kind for e in es] for c, es in got.items()}
+    assert names == {"own_seat": ["duty.own_seat"], "banned": ["duty.banned"]}, names
+    actors = {"own_seat": DUKE, "banned": PARTY}
+    for clause, events in got.items():
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+        assert any(c.predicate == names[clause][0] for c in w.persons[actors[clause]].ledger), (
+            clause, [(c.predicate, c.subject) for c in w.persons[actors[clause]].ledger])
+
+
 def test_a_keyed_predicate_row_with_unknown_keys_is_refused(monkeypatch):
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
     ok = _keyed_confer({c: "confer.refused" for c in declared})

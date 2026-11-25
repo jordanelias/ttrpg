@@ -1418,9 +1418,16 @@ verbs:
     writes:      ["Tenure.since", "Tenure.term"]
     writes_note: "PLAN POSITION `17b`: `Tenure.term` ADDED, on `establish`'s `Tenure.payload` precedent -- the fold gates exactly the pairs a verb declares, and `_eff_oblige` now opens the edge WITH a declared term (`matures_at = tick + oblige_term`, `declared_by` this act; T-n, *'the opening act declares the terms'*), so undeclared, that write would ride under `Tenure.since`'s gate. The second pair is check-only (class, step, partition); the effect runs once, on the first. Under `H-159`'s control arm (`oblige_term: None`) the edge opens with no term, exactly as at `17a`."
     emits:       ["duty.taken"]
-    emits_on_refusal: ["duty.refused"]
+    emits_on_refusal:
+      seat:         ["duty.no_seat"]
+      binds:        ["duty.bad_binds"]
+      own_seat:     ["duty.own_seat"]
+      one_edge:     ["duty.already"]
+      banned:       ["duty.banned"]
+      write:        ["duty.refused"]
+      counterparty: ["duty.refused"]
     grade:       "ruled"
-    refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel (W3's rule; plan position `17a`). Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it."
+    refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel (W3's rule; plan position `17a`). Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it. B21.83 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_oblige` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the five names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `oblige` says WHICH clause refused. The kinds take the row's own `duty` stem (`duty.taken`, `duty.refused`), in branch order: `seat` (the subject is no seat) `duty.no_seat`; `binds` (the seat's `binds` is off the roster) `duty.bad_binds`; `own_seat` (the actor holds the seat) `duty.own_seat`; `one_edge` (a live `oblige` from the actor to it already) `duty.already`; `banned` (the actor holds a live `ban` at the seat's rung) `duty.banned`. The fold's own two clauses keep the kind the flat row emitted: `write` and `counterparty` are `duty.refused` (the row's eligibility is `own`, which cannot decline, so it keys no `eligibility`). [ASSUMPTION: the spelling follows B21.80's `confer` (`<stem>.<word>`), on the row's existing `duty` stem rather than the verb's name -- basis: CLAUDE.md §0 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"duty.refused\"]`.]"
     formation_decline_note: "A typed `existence` of `subject` kind `Office` is not authored: of the referents `questions_for` stamps none was a seat and no ledger held a claim about an office (plan position `14`, U7-own; `populated.build_realm(0)`), so the cell would form on every referent and refuse on every one, growing the always-refused set. `T4`'s bags supply known PERSONS, not seats, and a known-seat source is a second binding mechanism; formation is the `Office` class's (`referent_class` above). The fold's `counterparty` clause covers the hand-built act."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; body, precondition and refusal from r2 item 9 / `03` §A.9 at plan position `17a`"
   - verb:        "open_case"

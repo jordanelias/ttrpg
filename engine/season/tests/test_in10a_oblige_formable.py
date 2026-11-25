@@ -136,7 +136,7 @@ def test_in10a_the_seat_holder_is_offered_his_own_seat_and_the_fold_refuses_it()
     a = Act(id="ob_in10a_self", actor="p_high", verb="oblige", payload=_payload_of(got[0]))
     out = d.resolve(mint_token(w, WriteClass.ACTS), [a],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["duty.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["duty.own_seat"], [e.kind for e in out]      # B21.83: the `own_seat` clause's kind
 
 
 @pytest.mark.parametrize("verb,value,match", [

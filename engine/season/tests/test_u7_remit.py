@@ -932,7 +932,7 @@ def test_sc03a_a_ban_holder_is_refused_service_and_seating():
     assert "tenure.opened" not in out and set(out) <= set(VERB_TABLE["confer"].emits_on_refusal), out
     assert not [t for t in w.tenures if t.object == "off_reeve" and t.live]
     w, d = world(banned=True)
-    assert _kinds(_fold(w, d, oblige)) == ["duty.refused"]
+    assert _kinds(_fold(w, d, oblige)) == ["duty.banned"]      # B21.83: the `banned` clause's kind
 
 
 def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
