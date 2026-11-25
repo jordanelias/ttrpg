@@ -257,6 +257,7 @@ def inquiry_goal():
     not drawn; its lean (`justice`, `virtue`) is `goals.yaml`'s `goal_riskbreakers_prevent_corruption`'s."""
     (g,) = goals_data.parse({"goals": [{
         "id": CASE_GOAL, "org": {"faction": "Valorsmark"}, "text": "an inquirer learns who did the covert deed",
+        # [canonical: engine/season/goals.yaml §goal_riskbreakers_prevent_corruption] the lean 0.6 / 0.4 is that row's, copied
         "object": {"kind": "deed_doers", "kinds": sorted(COVERT_KINDS)}, "pursuits": {"justice": 0.6, "virtue": 0.4},
         "source": "B11.70 -- `harness/scenarios.py::inquiry_goal`"}]})
     return g

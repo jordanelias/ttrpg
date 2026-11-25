@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 429,
-    "uncited": 304,
+    "total": 431,
+    "uncited": 306,
     "of_which_assumption_grade": 8
   },
-  "count": 429,
+  "count": 431,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 30,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 134,
+    "engine.season.settings": 136,
     "engine.season.realm": 8
   },
   "params": [
@@ -5375,6 +5375,28 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-483`, swept 0 (control, SHIPPED) / 0.5 / 0.75",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.notice_arm",
+      "name": "notice_arm",
+      "value": "off",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-496`, swept off (control, SHIPPED) / on",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.notice_ob",
+      "name": "notice_ob",
+      "value": "routine",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-496`, swept plain / routine (SHIPPED) / demanding / hard",
       "citation": null,
       "citation_grade": null
     },

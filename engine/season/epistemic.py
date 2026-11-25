@@ -39,21 +39,27 @@ table names `epistemic.py` at layer 9 and that is what this is.
 from __future__ import annotations
 
 from dataclasses import dataclass, fields as _dc_fields
+from types import SimpleNamespace
 from typing import Optional
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, degree_from_net
+from engine.substrate import composition
+
+from .data.requires import Observation
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, COVERT_KINDS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
+    CLAIM_SUBJECT_RULES, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
     REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, RUNG_KINDS, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
-    WITNESS_CHANNELS, require_member)
+    WITNESS_CHANNELS, require_member, roster)
 from .data.verbs import EVENT_KINDS, VERB_TABLE
 from .gaps import Unspecified
-from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
+from .state.attribution import event_by_id, actor_of, anchor_of, causing_act, live_cover
 from .state.containment import ancestry
 from .state.gate import purview_reaches
 from .state.ledgers import present_confidence
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
-from .queries.person_q import LedgerReader, belief_contradicts   # `belief_contradicts` moved to person_q (B11.21), re-bound for its importers
+from .queries.inputs import SocialContestInput
+from .queries.person_q import LedgerReader, belief_contradicts, is_deed   # `belief_contradicts` moved to person_q (B11.21), re-bound for its importers
 from .state.carriers import Event, Person, subject_of
 from .state.world import World, register_snapshot_type
 
@@ -801,6 +807,74 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
 
 
 # ---------------------------------------------------------------------------
+# B11.66 (`18_DETERMINISM_notice_is_a_draw`, A-24, A-30; closes C-02) -- WHETHER A BYSTANDER NOTICES A DEED IS A DRAW.
+#
+# `observers_for` says who a channel ADMITS to an Event; at `notice_arm: on` an admitted bystander of a DEED then draws once whether he saw it, and what he saw. THE ARM SHIPS `off`
+# (the control): nothing below is read, the fan is the channels' alone. The odds are state: his pool is the `notice` site's `dice` row (his `inquiry` skill through the one pool rule,
+# `queries/cache.py::notice_pools`), his Perception is its `edge` row (`notice_edges`), and the obstacle is the one composer's (`social_contest.roll`'s own `obstacle`). The draw is the
+# one sampler on a stream keyed to the pair, so it moves no other draw and does not depend on deposit order.
+# ---------------------------------------------------------------------------
+NOTICE_ARMS = roster("notice_arms")
+NOTICE_ROLL = "social_contest.roll"      # [canonical: references/module_contracts.yaml §composition_roles social_contest.roll] the composition row whose module composes the obstacle and rolls one draw
+
+
+def notice_on(w: "World") -> bool:
+    """IS `Fixtures.notice_arm` `on` (B11.66, `H-496`), held to `rosters.yaml: notice_arms`: an unknown arm raises, as `told_pairing_on` does, so a misspelt arm cannot read as the control."""
+    arm = w.fixtures.get("notice_arm")
+    require_member(arm, NOTICE_ARMS, f"notice_arm {arm!r} is not in the roster", "H-496",
+                   law="`told_pairing_on`'s precedent: an unrecognised arm silently reading `off` would make a sweep of the arm report the control twice")
+    return arm == "on"
+
+
+def notice(w: "World", pid: str, e: "Event", ch: str, trail: Optional[dict] = None) -> Optional[str]:
+    """THE BAND OF `pid`'s NOTICE OF `e`, admitted by channel `ch` -- a label of the one ladder -- or `None` where the pair is out of scope and deposits as the channel gives it.
+
+    SCOPE. A pair draws iff `e` is a deed (`person_q.is_deed` on the kind the Event deposits) and `pid` is neither the doer of the act that caused `e` (read from the act store through
+    `e.causes`; an Event carries no actor) nor a subject of its changes. A `public` verb row's deed deposits to the co-present, those the PRECEDENCE HEAD channel (`WITNESS_CHANNELS[0]`,
+    presence) admitted, without a draw: the act's publicity is the channel's eligibility. [ASSUMPTION; medium; Jordan to correct: a public deed still draws for a person a later channel
+    admitted -- basis: the source says "to the co-present", and a seat or a document is not presence.]
+
+    ODDS. His pool is `queries/cache.py::notice_pools`' and his net sigma `notice_edges`' (both barrier maps, built beside the presence index: WITNESS computes neither). The obstacle is
+    composed by the one composer (`social_contest.roll`, which composes `modules/social_contest/roll.py::obstacle` and rolls `roll_net_continuous` on it): the difficulty of the
+    level `Fixtures.notice_ob` names, raised ONE LEVEL (to the next member of `difficulty_levels`, the heaviest holding at the heaviest) where `ch` is not the precedence head and one
+    more where the kind is in `rosters.yaml: covert_kinds`, and the doer's live cover's `forgery_quality` (`conceal`'s band, as an examination of the cover reads it) where he holds one.
+    [ASSUMPTION; medium; Jordan to correct: "one level" is the next member of the ladder -- basis: `difficulty_levels` is the one ordered ladder, sized by `difficulty_ob`.]
+    THE DRAW is keyed `H(world_seed, tick, pid, "notice:" + e.id)` (A-30): his own stream for this Event, so it moves no other draw. Nothing is written.
+
+    `trail`, where given, is filled `{(pid, e.id): (Observation, ...)}` with the reason trail (D-U1-06): the band, the level `notice_ob` names, the two level steps, the cover's quality,
+    and every term the composer made the obstacle of -- WITNESS records it on the deposit's `observed`."""
+    if not is_deed(SimpleNamespace(value=True, predicate=e.kind)):
+        return None
+    act = causing_act(w, e)
+    if (act is not None and act.actor == pid) or any(c.subject == pid for c in e.changes):
+        return None
+    head = ch == WITNESS_CHANNELS[0]
+    row = VERB_TABLE.get(act.verb) if act is not None else None
+    if head and row is not None and row.public:
+        return None
+    from .seam.wrappers.pool import pool_pair, untrained       # at the call: `seam/` imports this module
+    fx = w.fixtures
+    levels = DIFFICULTY_LEVELS
+    base = fx.get("notice_ob")
+    steps = (not head) + (e.kind in COVERT_KINDS)
+    raised = levels[min(levels.index(base) + steps, len(levels) - 1)]
+    cover = live_cover(w, act.actor) if act is not None else None
+    quality = float(w.records[cover].forgery_quality) if cover is not None else 0.0
+    pool = cache.notice_pools(w)[pid]
+    inp = SocialContestInput(
+        pool=pool, opposition=None, obstacle_ceiling=fx.get("obstacle_ceiling"), obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
+        leverage=cache.notice_edges(w)[pid], difficulty=fx.get("difficulty_ob")[raised], pool_default=untrained(fx), pool_add=pool_pair(fx, cache.NOTICE_SITE)[0],
+        opposition_rate=fx.get("opposition_rate"), forgery_quality=quality, ceiling_per_pool=fx.get("ceiling_per_pool"), ceiling_form=fx.get("ceiling_form"))
+    margin = composition.require(NOTICE_ROLL)(inp, draw_factory(w.world_seed, lambda: w.tick)(pid, f"notice:{e.id}"))
+    band = DEGREE_LABEL[degree_from_net(margin.net, margin.ob)]
+    if trail is not None:
+        trail[(pid, e.id)] = tuple(Observation(e.id, f"notice:{name}", value) for name, value in
+                                   (("band", band), ("level", base), ("channel_step", int(not head)), ("covert_step", int(e.kind in COVERT_KINDS)),
+                                    ("cover_quality", quality), *margin.terms))
+    return band
+
+
+# ---------------------------------------------------------------------------
 # `R8.1` -- THE `seen` CLAIM: WHAT A WITNESS SAW, EACH TERM INDEPENDENTLY UNKNOWABLE.
 #
 # Jordan: *"a way for someone to say 'I don't know the description of the person who did x' and
@@ -1052,8 +1126,9 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
     return world_q.event_place(w, e)
 
 
-def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
-    """What `pid` SAW of `e`: the union of the terms shown by every live channel admitting them.
+def seen_of(w: "World", e: "Event", act, pid: str, mode: str, unseen: frozenset = frozenset()) -> Seen:
+    """What `pid` SAW of `e`: the union of the terms shown by every live channel admitting them, less `unseen` (B11.66: the terms a Partial notice withholds, the hand -- `()` for every
+    other caller, so what is shown is the channels' alone).
 
     ⚠ EVERY CHANNEL IS ASKED, NOT THE FIRST THAT MATCHES. `observers_for` short-circuits because it
     needs only WHETHER and the one STRONGEST channel (the deposit's source, position `15d`); this
@@ -1078,7 +1153,7 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     else:
         admitted = [c for c in live_channels(mode) if CHANNEL_PREDICATES[c](w, e, pid)]
         shown = {t for c in admitted for t in TERMS_SUPPLIED_BY[c]}
-    return seen_showing(w, e, act, pid, shown)
+    return seen_showing(w, e, act, pid, shown - unseen)
 
 
 def seen_showing(w: "World", e: "Event", act, pid: str, shown) -> Seen:

@@ -1622,6 +1622,7 @@ rosters:
     choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
     crisis: loop/resolve.py::_crisis_net_sigma   # B10.15: the crisis of faith's roll, read only at `Fixtures.crisis_arm: drawn`
+    notice: epistemic.py::notice   # B11.66: whether a bystander sees a deed done in front of him, read only at `Fixtures.notice_arm: on`; the pool and the edge are built at the barrier (`queries/cache.py::notice_pools`, `notice_edges`)
 
   # WHAT A SITE'S READER READS OF A ROW, where it reads the row by ROLE and not by the row's other columns (B04 Phase 3): a row
   # of that `role` at that site must carry exactly this `key` and `side`, and the site carries one row of the role. Any other
@@ -1633,6 +1634,9 @@ rosters:
       opposes: {key: verb, side: subject}
     own_state_gate:
       gate: {side: actor}
+    notice:
+      dice: {key: inquiry, side: actor}
+      edge: {key: attr.mind.perception, side: actor}
 
   # `side`: whose sheet a row reads -- not who benefits (U1 §3 item 3). `per`: once when held, once per rank, or signed steps
   # of the held value from its scale's mid-point (U1 §3 item 2). `key` selectors: the skill the act's verb names (`verb`)
@@ -3195,6 +3199,15 @@ rosters:
       a paired deed heard second-hand names nobody. `on` carries the hand: the deed's pairing rides the telling and is deposited as a told `seen` claim.
     values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
 
+  notice_arms:
+    source: >-
+      v12 B11.66 (`18_DETERMINISM_notice_is_a_draw` edit 6): *"`notice_arm: off | on`"*; ships `off` (the control) until the gate reads (B11.67).
+    note: >-
+      THE ARMS OF `Fixtures.notice_arm` (`H-496`), read by `loop/witness.py::witness` (once per barrier) and refused outside this set. `off` is the CONTROL, shipped: every pair
+      `observers_for` admits deposits, as before the item. `on`: a pair `(person, Event)` where the Event is a deed and the person neither its doer nor a subject of its changes
+      draws (`epistemic.py::notice`) -- a Failure deposits nothing, a Partial the deed with the hand withheld, a Success as at `off`, an Overwhelming at the full confidence.
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
+
   stock_reports:
     source: >-
       v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;
@@ -3895,6 +3908,15 @@ tables:
       # [ASSUMPTION; medium; Jordan to correct: Spirit governs faith, and by one `minor` step a point -- basis: the source's "will governs faith"; the CHAR content pass may
       # substitute; revert: delete this row, and the crisis reads no attribute.]
       - {use: crisis,            role: edge,      key: attr.spirit.will, side: actor, level: minor, per: mid}
+      # B11.66 (`18_DETERMINISM_notice_is_a_draw` edit 5; U1 §3 site `notice`): WHAT A BYSTANDER BRINGS TO SEEING A DEED DONE IN FRONT OF HIM, read at `epistemic.py::notice` (through the two
+      # barrier maps of `queries/cache.py`) and only at `Fixtures.notice_arm: on`. The `dice` row keys his `inquiry` skill, read through the one pool rule (`pool_of`) at the
+      # skill's held rank, `pool_default` where he holds none; it names no `add:` or `floor:`, so the pool is the score. The `edge` row keys his Perception, one `minor` step of
+      # sigma for each point above or below the scale's mid-point (as `crisis`'s Spirit row), read by the one `edge` reader. A reader reads one row of each role, at exactly this
+      # key and side (`capability_site_reads`).
+      # [ASSUMPTION; medium; Jordan to correct: noticing in passing is the fieldwork skill with Perception as its governing attribute, and a `minor` step a point -- basis: U1's site
+      # row, which the FI lane confirms; revert: delete both rows, and the pool is `pool_default` with no edge.]
+      - {use: notice,            role: dice,      key: inquiry, side: actor}
+      - {use: notice,            role: edge,      key: attr.mind.perception, side: actor, level: minor, per: mid}
 
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."

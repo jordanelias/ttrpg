@@ -1362,6 +1362,14 @@ DEFAULT_FIXTURES = Fixtures(
     # CONTROL and SHIPS: every told claim is taken up, as an unweighed read does, and the fixture is read only where a told self-claim is the best he holds. [ASSUMPTION; medium; Jordan to correct; revert: 0.0.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-483 -- site: Fixtures self_told_floor, graded `assumption`; no document gives how far he must credit a teller before he believes a thing of himself, so it is injected at the control and swept 0 / 0.5 / 0.75]
     self_told_floor=0.0,               # `H-483`, swept 0 (control, SHIPPED) / 0.5 / 0.75
+    # `H-496` (B11.66; `18_DETERMINISM_notice_is_a_draw` edit 6). WHETHER A BYSTANDER'S SEEING A DEED IS A DRAW, AND HOW HARD IT IS TO SEE: `notice_arm` `off` is the CONTROL and SHIPS (every pair
+    # `observers_for` admits deposits, today's fan); `on` draws each non-party witness of a deed once (`epistemic.py::notice`, read at `loop/witness.py::witness`), at the obstacle `notice_ob` names --
+    # a member of `rosters.yaml: difficulty_levels`, sized by `difficulty_ob` -- plus one level where the channel is not presence, one where the kind is covert, and the doer's live cover's
+    # quality. An arm outside `rosters.yaml: notice_arms` is refused at read; a level outside the roster is refused at load. B11.67 flips the arm when the gate reads; B98 sets the level.
+    # [ASSUMPTION; medium; Jordan to correct: the starting level `routine` -- basis: OBS's control arm uses `routine`; revert: `notice_arm: off`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-496 -- site: Fixtures notice_ob and notice_arm, graded `assumption`; the source gives the obstacle's member as "set at calibration" and the arm as `off` until its gate reads, so both are injected, the arm at the control and the level swept over B05's four difficulty levels]
+    notice_arm="off",                  # `H-496`, swept off (control, SHIPPED) / on
+    notice_ob="routine",               # `H-496`, swept plain / routine (SHIPPED) / demanding / hard
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
@@ -1394,6 +1402,10 @@ def load() -> None:
             raise Forbidden(f"`DIFFICULTY_OB_ARMS[{arm!r}]` sizes {list(arm_sizes)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
                             needs="one size per difficulty level, in the roster's order, in every arm",
                             law="T13 edit 1 -- the arms are one table at two sizes; an arm that skips a level answers for it with a KeyError mid-season")
+    if DEFAULT_FIXTURES.get("notice_ob") not in DIFFICULTY_LEVELS:
+        raise Forbidden(f"`Fixtures notice_ob` is {DEFAULT_FIXTURES.get('notice_ob')!r}", "data/fixtures.py",
+                        needs=f"a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
+                        law="B11.66 (H-496) -- the notice obstacle is a level the ladder names, sized by `difficulty_ob`, never a number made up here")
     kinds, stakes = set(roster("tenure_kinds")), set(DEFAULT_FIXTURES.get("stakes_ob"))
     if stakes != kinds:
         raise Forbidden(f"`Fixtures stakes_ob` sizes {sorted(stakes)}, and `rosters.yaml: tenure_kinds` names {sorted(kinds)}", "data/fixtures.py",

@@ -64,6 +64,9 @@ from __future__ import annotations
 
 from typing import NamedTuple
 
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
+
+from ..data.rosters import capability_rows, require_use_site, when_holds
 from ..state import containment
 from ..trace_log import TRACE
 from . import world_q
@@ -140,3 +143,43 @@ def home_index(w: "World") -> dict:
     person between two asks must `w.discard_caches()` between them. It is NOT a replacement for `home_of(w)`
     at a mid-step reader, which must keep the live scan."""
     return w.cache_at_barrier("homes", lambda: containment.home_map(w))
+
+
+#: `rosters.yaml: capability_use_sites`' site whose rows name what a bystander brings to seeing a deed (B11.66): its `dice` row the skill his pool is read from, its `edge` row
+#: the attribute whose levels shift his roll. Bound through `require_use_site`, so a renamed site refuses at import rather than reading no capability.
+NOTICE_SITE = require_use_site("notice")
+
+
+def notice_pools(w: "World") -> dict:
+    """The barrier-scoped `{person id: his pool for noticing a deed}` map (B11.66; `18_DETERMINISM_notice_is_a_draw` edit 2, D-74 B), built once per barrier, for every
+    person, from the `notice` site's `dice` row: the one pool rule (`sigma_leverage.pool_of`) on his held rank in the row's skill, `pool_default` where he holds none (an
+    untrained witness reads the untrained score, as `pool.score` does) -- the row's own `add:` and `floor:` fixtures through `pool.pool_pair`, `(0, 0)` where it names none.
+    It exists so `epistemic.notice`, which runs inside WITNESS, reads a map and computes no pool there (04 §A.2); WITNESS builds it at its entry, beside `presence_index`, and
+    only at `notice_arm: on`, so at the control nothing is read.
+
+    VALID FOR THE SAME REASON AND ONLY WHERE `presence_index` IS: the barrier is the invalidation, and nothing WITNESS writes moves a held skill. A direct caller that
+    changes a person's skill between two asks must `w.discard_caches()` between them.
+    ⚠ `seam.wrappers.pool` is imported at the call, not at module level: `seam/` imports `epistemic`, which imports this module."""
+    def build() -> dict:
+        from ..seam.wrappers.pool import pool_pair, untrained
+        fx = w.fixtures
+        row = next(r for r in capability_rows(NOTICE_SITE) if r.role == "dice")
+        add, floor = pool_pair(fx, NOTICE_SITE)
+        default = untrained(fx)
+        return {pid: pool_of(max(default, int(have)) if (have := (p.capability or {}).get(row.key)) is not None else default, 0, add, floor)
+                for pid, p in w.persons.items()}
+    return w.cache_at_barrier("notice_pools", build)
+
+
+def notice_edges(w: "World") -> dict:
+    """The barrier-scoped `{person id: his net sigma for noticing a deed}` map (B11.66), `notice_pools`' sibling and built beside it for the same reason: the `notice` site's
+    `edge` rows (the shipped one keys his Perception, `per: mid`) are selected as the social roll's are (`when_holds`), each read at the value he holds, summed by the ONE `edge`
+    reader (`sigma.ADVANTAGE_SOURCES["capability"]`) into named levels and turned into a sigma by `levels_to_net_sigma` -- the reader `loop/resolve.py::_crisis_net_sigma`
+    uses for its own site. A person who holds no value reads the scale's mid-point: no step. `0.0` where the site has no `edge` row. Same lifetime and lazy import as `notice_pools`."""
+    def build() -> dict:
+        from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
+        rows = tuple(r for r in capability_rows(NOTICE_SITE) if r.role == "edge")
+        return {pid: levels_to_net_sigma(*ADVANTAGE_SOURCES[CAPABILITY](
+                    w.fixtures, {EDGE: tuple((r, r.key, (p.attributes or {}).get(r.key)) for r in rows if when_holds(r, p))}))
+                for pid, p in w.persons.items()}
+    return w.cache_at_barrier("notice_edges", build)

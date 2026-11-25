@@ -15,6 +15,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
+
 from ..data.matrix import MATRIX, Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, REQUIRES_STEMS, UNKNOWN, WITH_STEM, WORLD_ONLY_STEMS, binding_from_act
@@ -39,7 +41,7 @@ from ..data.verbs import EMITTED_KINDS, IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_
 # CONVENTION, no scan reads this step's person reads; AX-7's governors are widened by hunk H-L0-11.
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
                          claim_subjects, deposit_anchor, held_claim_ids, holds_trail, live_channels,
-                         non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
+                         non_anchor_subjects, notice, notice_on, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
 from ..queries.person_q import LedgerReader, addressed_to, drifted, ledger_weigh, refracted_confidence
 from ..queries.world_q import hold_force
@@ -48,6 +50,11 @@ from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
+
+# B11.66: THE KIND OF EVENT WHOSE HEARER'S DEPOSIT IS THE TOLD CHANNEL'S, `claim.held` of what was said -- not a deed SEEN, so no notice draw reaches it (the source's "a telling ... is unchanged").
+TELLING_KIND = "news.told"
+# B11.66: the bands the notice draw's reading of one pair acts on, as labels of the one ladder, and the term a Partial withholds (`HAND_TERM`, defined below beside the found deposit).
+NOTICE_FAILURE, NOTICE_PARTIAL, NOTICE_OVERWHELMING = (DEGREE_LABEL[d] for d in (Degree.FAILURE, Degree.PARTIAL, Degree.OVERWHELMING))
 
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
@@ -428,6 +435,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # Seeds the cache `_ch_co_located` reads; the predicate would otherwise rebuild it per
     # (event, person).
     cache.presence_index(w)
+    # B11.66 (`18_DETERMINISM_notice_is_a_draw`, D-74 B): THE NOTICE DRAW'S BARRIER MAPS, built here beside the presence index and ONLY AT `notice_arm: on` (at `off` nothing below
+    # reads them and the barrier is the one before the item). `notice` (epistemic.py) reads the two maps and computes no pool of its own; WITNESS does not compute them either.
+    notice_arm = notice_on(w)
+    if notice_arm:
+        cache.notice_pools(w)
+        cache.notice_edges(w)
     everyone = list(w.persons)
     # `W6` / `H-33`: the mode says which channels are live. `total` is the specified behaviour
     # and the sweep's control.
@@ -464,6 +477,21 @@ def witness(self, token: Token, events: list[Event]) -> int:
         (pid, e, ch) for e in events
         if not changes_only_held_claims(w, e, held, mode)
         for pid, ch in observers_for(w, e, mode, everyone)]
+    # B11.66: AT `notice_arm: on` EACH ADMITTED BYSTANDER OF A DEED DRAWS ONCE (`epistemic.notice`, one call per pair, before the parallel map: the maps it reads are barrier caches).
+    # `noticed` is `{(pid, event id): band}` for the pairs that drew; a Failure leaves the fan -- he was there and did not see; a later telling can still reach him -- and a Partial
+    # deposits the deed with the hand withheld (below); `notice_trail` is the reason trail, written on each of his deposits' `observed`. A telling is no deed SEEN: its hearer
+    # holds what he was told, and that deposit stays the told channel's (the source's "a telling ... is unchanged"). At `off`, `noticed` is empty and the fan is untouched.
+    noticed: dict = {}
+    notice_trail: dict = {}
+    if notice_arm:
+        drawn = []
+        for pid, e, ch in fan:
+            band = None if e.kind == TELLING_KIND else notice(w, pid, e, ch, notice_trail)
+            if band is not None:
+                noticed[(pid, e.id)] = band
+            if band != NOTICE_FAILURE:
+                drawn.append((pid, e, ch))
+        fan = drawn
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {n_handed} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
@@ -542,7 +570,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     for pid, e, _ch in fan:
         subj = seen_subject(w, e, pid, mode)
         seen_by[(pid, e.id)] = (None if subj is None
-                                else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode)))
+                                else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode, frozenset((HAND_TERM,)) if noticed.get((pid, e.id)) == NOTICE_PARTIAL else frozenset())))
     # THE DEPOSIT RULE'S TRIGGER (plan position `15`, r2 `02` §A.9): *a held document is a held
     # belief.* A person who COMES TO HOLD a Record this season -- the Record is named in an Event's
     # `changes[]` and its live `hold` opened at this tick -- learns what it says. Resolved per EVENT
@@ -655,7 +683,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         nonlocal deposits
         w.write("claim_ledger", token, lambda: p.ledger.append(c),
                 record_kind="Person", fieldname="claim_ledger", driver="Event",
-                emits="claim.deposited", subject=c.id, causes=[e.id, *also])
+                emits="claim.deposited", subject=c.id, causes=[e.id, *also],
+                observed=notice_trail.get((p.id, e.id), ()))
         TRACE.claim(p.id, e.id, c.source)
         deposits += 1
     w._in_parallel_map = True
@@ -687,7 +716,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
         # performer, so every witness of it refracts.
         actor = actor_of(w, e)
-        refracting = bool(gain) and actor != pid
+        # B11.66: AN OVERWHELMING NOTICE IS SEEN IN FULL -- his deposits of this Event are not refracted, so they land at the confidence the deposit starts at (`confidence_default`,
+        # the ceiling `_credit` clamps to), "as today, at confidence 1.0". A Partial or a Success is refracted as today.
+        seen_whole = noticed.get((pid, e.id)) == NOTICE_OVERWHELMING
+        refracting = bool(gain) and actor != pid and not seen_whole
         # v9 IN-57: Claim.doer -- stamped only where the witness is the actor (see carriers.Claim.doer).
         doer = pid if actor == pid else None
         # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
@@ -718,9 +750,13 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # `test_15d_falsifier` neutralises) -- the told channel's exact-triple guard, one deposit over. Keyed on the row's shape, never on a verb name; moot per row once the row has a product.
         ungraded = _ungraded(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)))
         # B11.58 (CP-T06-09): a channel that shows `who` files a covered deed under the actor, not the alias (`deposit_anchor`).
-        for n, subj in enumerate(() if only is not None or e.kind in UNDEPOSITED_KINDS else
-                                 claim_subjects(w, e, claim_rule, act_refs(self.act_of.get(e.id)),
-                                                deposit_anchor(w, e, HAND_TERM in TERMS_SUPPLIED_BY[channel]))):
+        # B11.66: A PARTIAL NOTICE KEEPS THE DEED AND NOT THE HAND (`_found_claims`' Partial shape): the anchor is not filed under the actor and the claim about the anchor is dropped.
+        hand_seen = HAND_TERM in TERMS_SUPPLIED_BY[channel] and noticed.get((pid, e.id)) != NOTICE_PARTIAL
+        subjects = (() if only is not None or e.kind in UNDEPOSITED_KINDS else
+                    claim_subjects(w, e, claim_rule, act_refs(self.act_of.get(e.id)), deposit_anchor(w, e, hand_seen)))
+        if not hand_seen and noticed.get((pid, e.id)) == NOTICE_PARTIAL:
+            subjects = non_anchor_subjects(subjects, anchor_of(w, e))
+        for n, subj in enumerate(subjects):
             if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain for h in p.ledger):
                 continue
             cid = (e.id if via_knot and n == 0
@@ -944,7 +980,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
         # so storing it makes its own content true.
         _act = self.act_of.get(e.id)
-        if e.kind == "news.told" and _act is not None and pid != _act.actor and only is None:
+        if e.kind == TELLING_KIND and _act is not None and pid != _act.actor and only is None:
             _held = _told_content(_act)   # the `Said` the act carries -- fixed at CHOOSE
             _held_stem = str(_held.predicate).partition(":")[0] if _held is not None else None
             if (_held is not None

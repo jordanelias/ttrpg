@@ -2609,7 +2609,8 @@
           "choice_temper": "decision/choose.py::temper",
           "choice_exposure": "decision/choose.py::nerve",
           "own_state_gate": "queries/person_q.py::OwnStateReader",
-          "crisis": "loop/resolve.py::_crisis_net_sigma"
+          "crisis": "loop/resolve.py::_crisis_net_sigma",
+          "notice": "epistemic.py::notice"
         },
         "capability_site_reads": {
           "social_roll": {
@@ -2624,6 +2625,16 @@
           },
           "own_state_gate": {
             "gate": {
+              "side": "actor"
+            }
+          },
+          "notice": {
+            "dice": {
+              "key": "inquiry",
+              "side": "actor"
+            },
+            "edge": {
+              "key": "attr.mind.perception",
               "side": "actor"
             }
           }
@@ -3525,6 +3536,14 @@
             "on"
           ]
         },
+        "notice_arms": {
+          "source": "v12 B11.66 (`18_DETERMINISM_notice_is_a_draw` edit 6): *\"`notice_arm: off | on`\"*; ships `off` (the control) until the gate reads (B11.67).",
+          "note": "THE ARMS OF `Fixtures.notice_arm` (`H-496`), read by `loop/witness.py::witness` (once per barrier) and refused outside this set. `off` is the CONTROL, shipped: every pair `observers_for` admits deposits, as before the item. `on`: a pair `(person, Event)` where the Event is a deed and the person neither its doer nor a subject of its changes draws (`epistemic.py::notice`) -- a Failure deposits nothing, a Partial the deed with the hand withheld, a Success as at `off`, an Overwhelming at the full confidence.",
+          "values": [
+            "off",
+            "on"
+          ]
+        },
         "stock_reports": {
           "source": "v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium; Jordan to correct; revert: stock_report = off]).",
           "note": "THE ARMS OF `Fixtures.stock_report` (`H-243`), read by `loop/matter.py` at MATTER's last actorless `stores` write to a rung in the barrier (the credit write where the rung yields, else the debit write). `crossing` (SHIPPED) attaches `Observation(rung, \"stores:<default_store_kind>\", units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier differs from after; `season` attaches it to every such write; `off` attaches nothing and is the CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `\"off\"` is QUOTED: bare, YAML reads it as the boolean false.",
@@ -4126,6 +4145,20 @@
               "use": "crisis",
               "role": "edge",
               "key": "attr.spirit.will",
+              "side": "actor",
+              "level": "minor",
+              "per": "mid"
+            },
+            {
+              "use": "notice",
+              "role": "dice",
+              "key": "inquiry",
+              "side": "actor"
+            },
+            {
+              "use": "notice",
+              "role": "edge",
+              "key": "attr.mind.perception",
               "side": "actor",
               "level": "minor",
               "per": "mid"
