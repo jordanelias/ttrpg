@@ -26,7 +26,7 @@ explicitly out of this position's five parts). So the check, read as a hard load
 refuse EVERY row this loader could ever carry -- `determine` opens nothing today, for any Tenure kind,
 and neither does any verb yet open an `oblige` on a mutual disposal's behalf. Enforcing it would make
 the loader vacuous, contradicting this position's own stated artifact ("twelve rows load"). Built
-instead as a REPORT (`arrangements_without_a_disposal_opener()`), on the exact precedent
+instead as a REPORT (`arrangements_without_a_disposal_opener()` (now in `data/verbs.py`)), on the exact precedent
 `tenure_kinds_without_an_opener()` already sets one file over for the identical kind of fact: a kind
 with a declared `writes:` cell and no opener is *"a real, disclosed hole, not an absent declaration."*
 A row failing C-1 today is disclosed by that function, not silently admitted and not blocked.
@@ -457,35 +457,3 @@ def abridged(row: dict) -> dict:
     rite = RITES[row["rite"]]
     moves = {side: (("argue",) if side == rite["bears"] else ()) for side in _RITE_SIDES}
     return {**row, "turns": (1, 1), "moves": moves, "close": "exchange"}
-
-
-def arrangements_without_a_disposal_opener() -> list[str]:
-    """C-1, AS A REPORT (see module docstring for why refusing is wrong today). Every arrangement
-    id whose `disposes` kind has no opener naming `determine` -- or, for `close: consent` (was `disposal: mutual`), whose
-    `oblige` has no opener at all -- in `data/verbs.py::_derive_openers_from_effects()`'s map.
-
-    ⚠ A `disposal: mutual` row passes this check, because `oblige` has an opener (`_eff_oblige`, the
-    joiner's own act). It reports only the seeded rows this check actually ASKS: a row disposing
-    `Record` or `none` is excluded below (`continue`, "C-1 is about a TENURE kind's opener; neither
-    is one"), so it is the seeded rows disposing a real Tenure kind or `mutual` that report today,
-    not every seeded row -- `test_arrangements.py` pins this exactly (`["arbitration"]`, the one
-    seeded row disposing a Tenure kind, against two `Record`-disposing rows that are correctly
-    absent). That is the disclosed gap this function exists to make checkable rather than silent --
-    the same shape `tenure_kinds_without_an_opener()` already reports one file over.
-
-    ⚠ AND THE GAP CLOSED AT PLAN POSITION `19`: `_eff_determine` opens the disposal `oblige`, so
-    `arbitration` is no longer reported and the pinned report is `[]` (see the module docstring's
-    `19` paragraph for why it stays a report)."""
-    from .verbs import _OPENERS_FROM_EFFECTS as openers
-    out = []
-    for name, row in ARRANGEMENTS.items():
-        if row["close"] == "consent":
-            if not openers.get("oblige"):
-                out.append(name)
-            continue
-        kind = row["disposes"]
-        if kind in _DISPOSES_LITERALS:
-            continue                      # C-1 is about a TENURE kind's opener; `Record`, `none` and `yield` are none
-        if "determine" not in (openers.get(kind) or ()):
-            out.append(name)
-    return out

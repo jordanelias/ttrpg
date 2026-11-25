@@ -15,6 +15,7 @@ import textwrap
 import pytest
 
 from ..data import arrangements as A
+from ..data import verbs as _verbs
 from ..data.rosters import LADDER_RUNGS, load_yaml
 
 
@@ -272,7 +273,7 @@ def test_c1_is_a_report_not_a_refusal_and_is_honest_about_todays_state():
     are still not asked. Whether C-1 should now become a LOAD REFUSAL -- the module docstring's reason
     for reporting (*"`determine` opens nothing today"*) no longer holds -- is left to this module's
     owner: `19` did not move the check, only made it pass."""
-    reported = A.arrangements_without_a_disposal_opener()
+    reported = _verbs.arrangements_without_a_disposal_opener()
     assert reported == [], reported
     assert "parliamentary_debate" not in reported and "council_of_state" not in reported, (
         "a `Record`-disposing row is not asked of the tenure-kind opener map")
@@ -289,14 +290,14 @@ def test_a_negotiation_reaches_eff_oblige_the_opener_of_the_kind_it_disposes(mon
     from ..harness import probes as P
     row = A.ARRANGEMENTS["negotiation"]
     assert row["close"] == "consent" and row["disposes"] == "oblige"
-    assert "negotiation" not in A.arrangements_without_a_disposal_opener()
+    assert "negotiation" not in _verbs.arrangements_without_a_disposal_opener()
     w = P.tiny_world()
     P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "oblige", payload={"subject": "off_dicastery"})]
                                     if p.id == "p_low" else []))
     edges = [t for t in w.tenures if t.kind == row["disposes"] and t.subject == "p_low" and t.live]
     assert [t.object for t in edges] == ["off_dicastery"] and "duty.taken" in {e.kind for e in w.log}
     monkeypatch.setitem(_OPENERS_FROM_EFFECTS, "oblige", ())
-    assert A.arrangements_without_a_disposal_opener() == ["arbitration", "negotiation", "audience"]
+    assert _verbs.arrangements_without_a_disposal_opener() == ["arbitration", "negotiation", "audience"]
 
 
 def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(monkeypatch):
@@ -338,7 +339,7 @@ def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(
     arrangements, _ = _reload_with(extra)
     row = arrangements["succession"]
     assert row["disposes"] == "hold" and row["close"] == "bench"      # it loads
-    assert A.arrangements_without_a_disposal_opener() == []              # the control
+    assert _verbs.arrangements_without_a_disposal_opener() == []              # the control
     monkeypatch.setitem(A.ARRANGEMENTS, "succession", row)
-    assert A.arrangements_without_a_disposal_opener() == ["succession"]
+    assert _verbs.arrangements_without_a_disposal_opener() == ["succession"]
     assert "determine" not in (_OPENERS_FROM_EFFECTS.get("hold") or ()), _OPENERS_FROM_EFFECTS.get("hold")

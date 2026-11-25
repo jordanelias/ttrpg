@@ -31,7 +31,7 @@ from typing import Optional
 from . import files
 from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
-from .arrangements import ARRANGEMENTS
+from .arrangements import ARRANGEMENTS, _DISPOSES_LITERALS
 from .matrix import MATRIX, Step
 from .requires import (
     KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
@@ -1490,6 +1490,42 @@ def tenure_kinds_without_an_opener() -> list:
     which of them are holes is a judgement `rosters.yaml`'s `tenure_kinds` row comment records
     (computed, not read off the roster)."""
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
+
+
+def arrangements_without_a_disposal_opener() -> list[str]:
+    """C-1, AS A REPORT (see module docstring for why refusing is wrong today). Every arrangement
+    id whose `disposes` kind has no opener naming `determine` -- or, for `close: consent` (was `disposal: mutual`), whose
+    `oblige` has no opener at all -- in `data/verbs.py::_derive_openers_from_effects()`'s map.
+
+    ⚠ A `disposal: mutual` row passes this check, because `oblige` has an opener (`_eff_oblige`, the
+    joiner's own act). It reports only the seeded rows this check actually ASKS: a row disposing
+    `Record` or `none` is excluded below (`continue`, "C-1 is about a TENURE kind's opener; neither
+    is one"), so it is the seeded rows disposing a real Tenure kind or `mutual` that report today,
+    not every seeded row -- `test_arrangements.py` pins this exactly (`["arbitration"]`, the one
+    seeded row disposing a Tenure kind, against two `Record`-disposing rows that are correctly
+    absent). That is the disclosed gap this function exists to make checkable rather than silent --
+    the same shape `tenure_kinds_without_an_opener()` already reports one file over.
+
+    ⚠ AND THE GAP CLOSED AT PLAN POSITION `19`: `_eff_determine` opens the disposal `oblige`, so
+    `arbitration` is no longer reported and the pinned report is `[]` (see the module docstring's
+    `19` paragraph for why it stays a report)."""
+    openers = _OPENERS_FROM_EFFECTS
+    out = []
+    for name, row in ARRANGEMENTS.items():
+        if row["close"] == "consent":
+            if not openers.get("oblige"):
+                out.append(name)
+            continue
+        kind = row["disposes"]
+        if kind in _DISPOSES_LITERALS:
+            continue                      # C-1 is about a TENURE kind's opener; `Record`, `none` and `yield` are none
+        if "determine" not in (openers.get(kind) or ()):
+            out.append(name)
+    return out
+
+# B24p close: this report lived in `data/arrangements.py` and read this module's opener map by a deferred import; once `_check_proceeds` here
+# read `ARRANGEMENTS` the two modules were an import cycle (`tests/valoria/test_import_cycle_game_state_npe.py`). It sits beside
+# `tenure_kinds_without_an_opener`, the same shape, and `arrangements.py` imports nothing from this file.
 
 VERB_TABLE = _load_verb_table()
 

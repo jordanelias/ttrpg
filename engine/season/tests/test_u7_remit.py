@@ -425,7 +425,7 @@ def test_19_the_disposal_opener_closes_c1s_report():
     `disposes` kind must name `determine` in `ID-14`'s opener map"*. `arbitration` disposes `oblige` and
     was the report's one entry; `_eff_determine`'s `Tenure(..., "oblige", ...)` is read by the derived
     opener map, so the report is now empty."""
-    from ..data.arrangements import arrangements_without_a_disposal_opener
+    from ..data.verbs import arrangements_without_a_disposal_opener
     assert "determine" in _verbs._OPENERS_FROM_EFFECTS["oblige"]
     assert arrangements_without_a_disposal_opener() == []
 
@@ -833,7 +833,7 @@ def test_sc03a_the_determination_basis_opens_each_disposed_kind_and_no_other():
     """The OPENING side: every Tenure kind an arrangement row disposes (`DISPOSABLE_KINDS`) is admitted
     as `determination` through the judging seat; a kind no row disposes (`commit`) is not. The C-1
     report stays empty: `_eff_determine` constructs each disposed kind literally."""
-    from ..data.arrangements import arrangements_without_a_disposal_opener
+    from ..data.verbs import arrangements_without_a_disposal_opener
     w, _ = _world()
     assert RESTRAINT_KINDS | {G.UNDECLARED_DISPOSAL} <= G.DISPOSABLE_KINDS
     for kind in sorted(G.DISPOSABLE_KINDS):

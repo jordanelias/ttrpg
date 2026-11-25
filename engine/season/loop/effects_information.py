@@ -541,7 +541,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         `oblige` is in `release`'s domain, so that price is paid as ruled. The kind is a LITERAL
         here because `data/verbs.py::_derive_openers_from_effects` reads a `Tenure(...)` site's kind
         off its string literal (`_eff_commit`'s docstring records what factoring it cost), and
-        that derivation is what `data/arrangements.py::arrangements_without_a_disposal_opener`
+        that derivation is what `data/verbs.py::arrangements_without_a_disposal_opener`
         (C-1's load check, REPORTED) reads: `arbitration` leaves that report with this line.
         REJECTED: a `hold` on a seat -- `04 §B.7`'s *"conferral: ... determine by <judging seats>"*,
         a determination FILLING a seat -- because a computed act carries one referent and that
