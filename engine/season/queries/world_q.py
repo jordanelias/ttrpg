@@ -36,7 +36,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
@@ -542,7 +542,7 @@ def proceeding_row(w: World, act) -> tuple:
 # B24p.20 -- A PROCEEDING'S ENDING, READ BACK (`rosters.yaml: proceeding_endings`; the one writer is `loop/resolve.py::_proceeding_ending`). Pure
 # readers over `Event.ending`: they hold nothing and decide nothing, and an Event no proceeding wrote answers empty.
 # ---------------------------------------------------------------------------------------------------------------------------------------
-#: A written beat: `written(Beat)` in declared order (`terms`, the true values, and the board's cells, which no sitting writes yet, are left out) and `mood` read as `stance` (its band, named
+#: A written beat: `written(Beat)` in declared order (`terms`, the true values, and the board's cells, which are not a beat's cells: `queries/inputs.py::UNWRITTEN`, are left out) and `mood` read as `stance` (its band, named
 #: only where the room turns; `None` at the beats that leave it as it was; the clamped number is not in the record).
 EndedBeat = namedtuple("EndedBeat", [("stance" if name == "mood" else name) for name in written(Beat)])
 
@@ -589,6 +589,12 @@ def ending_card(event) -> Optional[EndedCard]:
         return None
     _, decided_by, arranged_by, tilt, tilted_against, ruled = held[0]
     return EndedCard(tuple(decided_by), arranged_by, tilt / MARGIN_SCALE, tilted_against, tuple((who, d / MARGIN_SCALE) for who, d in ruled))
+
+
+def ending_exchanges(event) -> tuple:
+    """`((kind, item id), ...)`: the items a sitting entered and struck, as its Event listed them (B24.14; `queries/inputs.py::exchanges` is the value
+    `_eff_determine` appends to the case file's `Record.stages`); `()` for an Event that lists none."""
+    return tuple((x[1], x[2]) for x in _tagged(event, ENDING_EXCHANGE))
 
 
 def ending_arrangement(event) -> Optional[str]:

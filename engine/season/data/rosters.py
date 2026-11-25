@@ -1704,7 +1704,7 @@ def require_mortal_cause(cause) -> None:
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
-ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD = roster("proceeding_endings", ordered=True)   # B24p.20, .22: the tags of a proceeding's `Event.ending`
+ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD, ENDING_EXCHANGE = roster("proceeding_endings", ordered=True)   # B24p.20, .22, B24.14: the tags of a proceeding's `Event.ending`
 # B24p.22: the kinds of claim a sitting leaves with those who saw it (`rosters.yaml: sitting_claims`), each kind's predicate `<stem>:<kind>`; and the four
 # effects a move may have (`proceeding_effects`: the four of the speech, then B24.03's five of the hearing), so a witness reads a beat's move by
 # its effect and never by its id.

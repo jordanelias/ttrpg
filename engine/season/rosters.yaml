@@ -968,7 +968,10 @@ rosters:
       forum, how far and against which side) and a played adjudicator's departures (`Outcome.ruled`, `((decider, departure), ...)`), every real in
       milli-units; read by `world_q.ending_card`. It holds no true attribute: what the witnesses read of who decided and what the forum was is what the
       card showed every participant. `loop/witness.py` deposits what the sitting showed into each man's own ledger from the beats and this tuple.
-    values: [proceeding, beat, sitting, verdict, card]
+      B24.14: AFTER THE CARD, one `("exchange", kind, item id)` per item a beat entered or struck (`queries/inputs.py::exchanges`, `kind` an `EXCHANGE_CELLS`
+      name), in the beats' order, and NONE for a sitting that entered or struck nothing (so the ending of every such sitting is what it was); read by
+      `world_q.ending_exchanges`. The same list is appended to the case file's `Record.stages` by `loop/effects_information.py::_eff_determine`.
+    values: [proceeding, beat, sitting, verdict, card, exchange]
 
   stance_bands:
     source: "B24p.20 (V2 p2 §C.1; p4 §L 20): how a proceeding's `Event.ending` names the room's stance"

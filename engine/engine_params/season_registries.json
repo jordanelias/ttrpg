@@ -2794,13 +2794,14 @@
         "proceeding_endings": {
           "source": "B24p.20 (V2 p2 \u00a7C.1, \u00a7J): the tags of a proceeding's `Event.ending`",
           "cite": "V2 p2 \u00a7C.1",
-          "note": "A PROCEEDING'S ENDING IS A TUPLE OF TUPLES, EACH BEGINNING WITH ONE OF THESE TAGS, in THIS order: `(\"proceeding\", row id, form, ended, ended_by)`, one `(\"beat\", ...)` per beat (a `Beat`'s fields in declared order, `terms` left out, `mood` replaced by its stance, `stance_bands`), one `(\"sitting\", n, issue, points, live, tracks, cond, used, last_voice, ended)` and one `(\"verdict\", id, band)` per verdict, every real a whole number of milli-units. Written by `loop/resolve.py::_proceeding_ending` from the outcome and the result `seam/wrappers/sigma.py::_resolve_proceeding` returned; read by `queries/world_q.py::ending_beats`, `ending_sitting`, `ending_verdicts`, `ending_rattles`. It names no `Claim`'s predicate. An ending of a single roll (`margin_endings`) holds none of these tags. B24p.22: the LAST tag is `(\"card\", decided_by, arranged_by, tilt, tilted_against, ruled)`, the public cells of the card (who decides, who tilted the forum, how far and against which side) and a played adjudicator's departures (`Outcome.ruled`, `((decider, departure), ...)`), every real in milli-units; read by `world_q.ending_card`. It holds no true attribute: what the witnesses read of who decided and what the forum was is what the card showed every participant. `loop/witness.py` deposits what the sitting showed into each man's own ledger from the beats and this tuple.",
+          "note": "A PROCEEDING'S ENDING IS A TUPLE OF TUPLES, EACH BEGINNING WITH ONE OF THESE TAGS, in THIS order: `(\"proceeding\", row id, form, ended, ended_by)`, one `(\"beat\", ...)` per beat (a `Beat`'s fields in declared order, `terms` left out, `mood` replaced by its stance, `stance_bands`), one `(\"sitting\", n, issue, points, live, tracks, cond, used, last_voice, ended)` and one `(\"verdict\", id, band)` per verdict, every real a whole number of milli-units. Written by `loop/resolve.py::_proceeding_ending` from the outcome and the result `seam/wrappers/sigma.py::_resolve_proceeding` returned; read by `queries/world_q.py::ending_beats`, `ending_sitting`, `ending_verdicts`, `ending_rattles`. It names no `Claim`'s predicate. An ending of a single roll (`margin_endings`) holds none of these tags. B24p.22: the LAST tag is `(\"card\", decided_by, arranged_by, tilt, tilted_against, ruled)`, the public cells of the card (who decides, who tilted the forum, how far and against which side) and a played adjudicator's departures (`Outcome.ruled`, `((decider, departure), ...)`), every real in milli-units; read by `world_q.ending_card`. It holds no true attribute: what the witnesses read of who decided and what the forum was is what the card showed every participant. `loop/witness.py` deposits what the sitting showed into each man's own ledger from the beats and this tuple. B24.14: AFTER THE CARD, one `(\"exchange\", kind, item id)` per item a beat entered or struck (`queries/inputs.py::exchanges`, `kind` an `EXCHANGE_CELLS` name), in the beats' order, and NONE for a sitting that entered or struck nothing (so the ending of every such sitting is what it was); read by `world_q.ending_exchanges`. The same list is appended to the case file's `Record.stages` by `loop/effects_information.py::_eff_determine`.",
           "values": [
             "proceeding",
             "beat",
             "sitting",
             "verdict",
-            "card"
+            "card",
+            "exchange"
           ]
         },
         "stance_bands": {
@@ -7318,23 +7319,26 @@
               "Tenure.since",
               "DocketItem.matter",
               "Tenure.degree",
+              "Record.stages",
               "Person.pursuits"
             ],
             "Success": [
               "Tenure.since",
               "DocketItem.matter",
               "Tenure.degree",
+              "Record.stages",
               "Person.pursuits"
             ],
             "Partial": [
               "Tenure.since",
               "DocketItem.matter",
-              "Tenure.degree"
+              "Tenure.degree",
+              "Record.stages"
             ],
             "Failure": []
           },
           "pursuits_note": "v9 SC-02 `22b` step 24 (`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` step 24, *conviction moves by consequence*; the plan's `convictions` is `(Person, pursuits)` since `ED-IN-0261` item 1): `Overwhelming` and `Success` ALSO write the DETERMINER'S OWN `Person.pursuits`, check-only beside the edge (the same effect, `_eff_determine`, moves each held pursuit by `pursuit_shift x DEGREE_STEP[band] x pursuit_lean(determine, pursuit)`, `queries/person_q.py::consequence_pursuits`), earning `pursuit.moved` only when a pursuit moved. `Partial` (the held matter) moves nothing and so declares nothing. `Failure` (the plan: *moves the determiner AGAINST their own axis*) is NOT BUILT (`hole_register.yaml` H-221): a write there gives the failed hearing's Event a change, so its witnessed claim leaves the party for the judge, the scar runs on an act that did nothing, and a judge holding no leaning pursuit would refuse instead of failing. [ASSUMPTION; medium; Jordan to correct; revert: drop `Person.pursuits` and `pursuit.moved` from both bands, `pursuit_shift = 0`.]",
-          "writes_note": "v9 SC-03b: DEGREE-KEYED, on `04_VERBS.md` \u00a7B.2's row (design intent; the code decides). `Tenure.degree` is written (H-162): a CONTESTED act carries a degree (`loop/resolve.py::_fold`), an uncontested one does not. `loop/effects_information.py::_eff_determine` opens the kind the docketed arrangement `disposes:` (v9 SC-03a: `oblige`, `detain` or `ban`; an `oblige` when the docket names no row) owned by the party on the seat exercised, admitted at the gate under the `determination` basis (`state/gate.py::may_determine`), and sets the opened edge's `degree` to the band the contest decided (`Resolution.degree`). `Overwhelming`, `Success` and `Partial` declare the SAME three pairs: `Tenure.since` is the first (the opening, `21_RECONCILIATION.md:575`'s observable); `DocketItem.matter` and `Tenure.degree` are check-only (the same effect takes the matter off the docket and grades the edge it opened). `Partial` opens the disposal graded `Partial` (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:2070`, the plan's SOURCE: *Partial convicts under the one `Partial` rule*; `arrest` reads it the same way, `:1588`). `04_VERBS.md` \u00a7B.2 writes `Partial: Tenure.degree` alone, which the gate makes unbuildable: THE GATE ADMITS A `Tenure.degree` WRITE ONLY ON AN EDGE THE WRITE OPENED (`determination` asks `opened` first, `state/gate.py`'s `determination` basis (`opened` asked first): authority to bind is not authority to re-grade, `test_19_determination_opens_only_a_disposed_kind_and_closes_only_a_restraint`), so a Partial that wrote only a degree has no edge to grade. The declared column therefore names what the one effect body does. [ASSUMPTION; medium; Jordan to correct; revert: `Partial: [Tenure.degree]`, which under-names the opening.] `Failure`: `[]` -- the bench did not carry the matter, nothing opens, the matter stays on the docket, `matter.undetermined`.",
+          "writes_note": "v9 SC-03b: DEGREE-KEYED, on `04_VERBS.md` \u00a7B.2's row (design intent; the code decides). `Tenure.degree` is written (H-162): a CONTESTED act carries a degree (`loop/resolve.py::_fold`), an uncontested one does not. `loop/effects_information.py::_eff_determine` opens the kind the docketed arrangement `disposes:` (v9 SC-03a: `oblige`, `detain` or `ban`; an `oblige` when the docket names no row) owned by the party on the seat exercised, admitted at the gate under the `determination` basis (`state/gate.py::may_determine`), and sets the opened edge's `degree` to the band the contest decided (`Resolution.degree`). `Overwhelming`, `Success` and `Partial` declare the SAME three pairs: `Tenure.since` is the first (the opening, `21_RECONCILIATION.md:575`'s observable); `DocketItem.matter` and `Tenure.degree` are check-only (the same effect takes the matter off the docket and grades the edge it opened). `Partial` opens the disposal graded `Partial` (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:2070`, the plan's SOURCE: *Partial convicts under the one `Partial` rule*; `arrest` reads it the same way, `:1588`). `04_VERBS.md` \u00a7B.2 writes `Partial: Tenure.degree` alone, which the gate makes unbuildable: THE GATE ADMITS A `Tenure.degree` WRITE ONLY ON AN EDGE THE WRITE OPENED (`determination` asks `opened` first, `state/gate.py`'s `determination` basis (`opened` asked first): authority to bind is not authority to re-grade, `test_19_determination_opens_only_a_disposed_kind_and_closes_only_a_restraint`), so a Partial that wrote only a degree has no edge to grade. The declared column therefore names what the one effect body does. [ASSUMPTION; medium; Jordan to correct; revert: `Partial: [Tenure.degree]`, which under-names the opening.] B24.14 (HEAR_B edit 7): `Record.stages` is declared on the three bands a sitting can write at -- a determination that entered or struck items appends them to the docket item's case file (`_eff_determine`, check-only beside the edge as `DocketItem.matter` is); it is written only then, and a `Partial` that opened the edge with no item listed leaves the file as it was. `Failure`: `[]` -- the bench did not carry the matter, nothing opens, the matter stays on the docket, `matter.undetermined`.",
           "emits": {
             "Declared": [
               "determine.declared"
@@ -10982,7 +10986,8 @@
           "kind": "Record",
           "field": "stages",
           "steps": [
-            "RES"
+            "RES",
+            "ENC"
           ],
           "class": "ACTS",
           "social": "true",

@@ -277,3 +277,46 @@ def test_the_hearing_decider_picks_a_legal_move_by_a_draw(monkeypatch):
         v = View(0, me.id, side, "procedure", 2, None, None, (), Cond(), 0.0, 0.0, 0.0, False, (), 0.2, 0.5, 0.0, 1.0)
         low, high = (sigma._believed_chance(inp, sigma._Pick((), v), Option("argue", None, None, "raises", ev, None)) for ev in (-2.0, 2.0))
         assert 0.0 <= low < high <= 1.0, (side, low, high)
+
+
+# ---- B24.14: the sitting is written on the case file and on the Event ---------------------------------------------------------------
+
+def test_a_sitting_appends_its_exchanges_to_the_case_file():
+    """A determination whose sitting entered an item and then struck it leaves two stages on the file `open_case` minted, `(kind, item)` in the beats'
+    order, and an `ending` listing the same two; a determination whose sitting entered nothing leaves the file's stages and the ending as they were.
+    FALSIFIER: the Event and the file are one list (`inputs.exchanges`), so an exchange on one and not the other fails the equality; a determination of an
+    item that names no case file writes the Event alone."""
+    from dataclasses import replace as _replace
+
+    from ..data.matrix import WriteClass
+    from ..loop.driver import mint_token
+    from ..queries import world_q
+    from ..seam import Resolution
+    from .test_sc_proceeding_host import _beat, _planted
+    from .test_u7_remit import DUKE, JUDGE, PARTY, _act, _determine, _fold, _open, _world
+
+    def determined(beats, case=True):
+        w, d = _world(**JUDGE)
+        _fold(w, d, _open("oc"))
+        if not case:
+            for item in w.docket:
+                item[world_q.DOCKET_CASE] = None
+        file = w.records["rec:oc"]
+        before = list(file.stages)
+        act = _determine("dt")
+        events = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution("Success", _planted(beats)))
+        return file, before, [e for e in events if e.kind == "matter.determined"]
+
+    first = _replace(_beat(1, "p_low", "for", 0.1), entered=("i1",))
+    second = _replace(_beat(2, "p_mid", "against", -0.1), struck=("i1",))
+    file, before, events = determined([first, second])
+    assert events and before and all(len(s) == 3 for s in before)                                  # the file was opened with its clock stages
+    assert file.stages == before + [("entered", "i1"), ("struck", "i1")]
+    ended = {e.ending for e in events}
+    assert len(ended) == 1 and world_q.ending_exchanges(events[0]) == (("entered", "i1"), ("struck", "i1")) == tuple(file.stages[len(before):])
+    # the control: a sitting that entered and struck nothing writes neither
+    file, before, events = determined([_beat(1, "p_low", "for", 0.1), _beat(2, "p_mid", "against", -0.1)])
+    assert events and file.stages == before and world_q.ending_exchanges(events[0]) == () and all(t[0] != "exchange" for t in events[0].ending)
+    # the falsifier's other arm: an item with no case file lists its exchanges on the Event alone
+    file, before, events = determined([first, second], case=False)
+    assert events and file.stages == before and world_q.ending_exchanges(events[0]) == (("entered", "i1"), ("struck", "i1"))

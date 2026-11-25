@@ -377,7 +377,9 @@ rows:
     emits:   "`term.matured`"
   - kind:    "Record"
     field:   "stages"
-    steps:   [RES]
+    # `ENC` ADDED AT B24.14: `determine` is the bench's own close, sat at ENCOUNTER (as `(DocketItem, matter)`, B24.10), and its effect appends the sitting's exchange list
+    # to the case file's stages (`_eff_determine`). `class:` is unchanged (ENCOUNTER shares RESOLVE's write class).
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
     by:      "D7 — §13.1: terms are act-declared, never MATTER-advanced"

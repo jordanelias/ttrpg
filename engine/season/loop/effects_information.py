@@ -28,12 +28,12 @@ from ..data.rosters import (
 from ..gaps import Forbidden
 from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ArmyCommand, Outcome
+from ..queries.inputs import ArmyCommand, Outcome, exchanges
 from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
+    case_file_of, faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
@@ -632,6 +632,13 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
 
     G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present).
 
+    B24.14 (HEAR_B edit 7) -- THE SITTING IS WRITTEN ON THE CASE FILE, ITS OWN RECEIPT: where the contest was a sitting that entered or struck items, each is
+    appended to `Record.stages` of the file the docket item names (`world_q.case_file_of`) as a two-cell stage `(kind, item id)`, `kind` an `inputs.
+    EXCHANGE_CELLS` name -- the list `inputs.exchanges` returns, which `loop/resolve.py::_proceeding_ending` carries on the Event's `ending` too. A stage of
+    a clock is `(due, label, act)` and MATTER ripens only a stage of three cells (`loop/matter.py`), so an item-stage ripens nothing and is read by its length.
+    Nothing is appended where no item was entered or struck (every sitting at `sitting_exchanges` 0), where the item names no case file (a computed or calendar
+    item: its list is on the Event alone), or at `Failure` (the row writes `[]`, this body is not called).
+
     ⚠ v9 SC-02 `22b` STEP 24 -- AND THE DETERMINER'S OWN PURSUITS, BY CONSEQUENCE (`19_PLAN.md` step 24,
     *"Conviction moves by consequence"*; the plan's `convictions` is `(Person, pursuits)` since
     `ED-IN-0261` item 1 -- `Person.conviction`, IN-08's affiliations, is another field). The same write
@@ -665,7 +672,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         return NO_CHANGE
     items = docketed(w, party)
     judge = w.persons.get(a.actor)
-    moved = None
+    moved, case, listed = None, None, ()
     subjects = (Subject.edge(nt),)        # a hand-built call with no contest: the edge, as before
     if res is not None:
         if judge is not None:
@@ -679,6 +686,14 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         if moved is not None:
             subjects += (Subject.entity("persons", a.actor, earns=PURSUIT_MOVED,
                                         fields=("pursuits",)),)
+        # B24.14 -- THE SITTING IS WRITTEN ON THE CASE FILE: the exchange list (`queries/inputs.py::exchanges`, the value the Event's `ending` carries too) is
+        # appended to the file the docket item names (`case_file_of`) as its own receipt, so the stages and the Event are one list. Nothing is appended -- and no
+        # receipt is named -- where no beat entered or struck an item (every sitting at `sitting_exchanges` 0), or where the item has no case file.
+        out = res.result.get("proceeding") if isinstance(res.result, dict) else None
+        listed = tuple(exchanges(out.beats)) if isinstance(out, Outcome) else ()
+        case = next((c for c in (case_file_of(w, i) for i in items) if c in w.records), None) if listed else None
+        if case is not None:
+            subjects += (Subject.entity("records", case, earns=band_kind, fields=("stages",)),)
 
     def perform() -> None:
         w.add_tenure(nt)
@@ -686,6 +701,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             item["matter"] = None
         if moved is not None:
             judge.pursuits = moved
+        if case is not None:
+            w.records[case].stages = [*w.records[case].stages, *listed]
     return Change(subjects, perform)
 
 

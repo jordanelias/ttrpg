@@ -395,10 +395,24 @@ class Beat:
     fault: Optional[str] = None
 
 
-#: THE CELLS OF A RECORD THE EVENT'S `ending` DOES NOT CARRY, by record name (B24.06; the ONE OWNER, read through `written`): `Beat.terms` (the true values
-#: are never written) and the board's cells, which no sitting writes until B24.14 does (writing them is a cell on every beat of every proceeding, a hash
-#: mover). B24.14 deletes the board cells from this row when it writes them.
+#: THE CELLS OF A RECORD THE EVENT'S `ending` DOES NOT CARRY AS CELLS, by record name (B24.06; the ONE OWNER, read through `written`): `Beat.terms` (the true
+#: values are never written) and the board's cells (a cell on every beat and every sitting of every proceeding is a hash mover, the realm's own `tell` sittings
+#: among them). B24.14 WRITES `Beat.entered` and `Beat.struck` AS THE EXCHANGE LIST (`exchanges`, one `("exchange", kind, item)` tuple beside the beats, only
+#: where a sitting entered or struck an item), so they stay in this row: they are not a cell of a beat. `Beat.fault` and `Sitting.board`, `.faults`, `.levels`
+#: are written by nobody yet.
 UNWRITTEN = {"Beat": ("terms", "entered", "struck", "fault"), "Sitting": ("board", "faults", "levels")}
+
+#: THE BEAT CELLS THAT ARE THE EXCHANGE LIST, in the order an exchange lists them (B24.14): an item an exchange put on the board, then one it struck. Each
+#: cell's name is the kind of the stage written.
+EXCHANGE_CELLS = ("entered", "struck")
+
+
+def exchanges(beats) -> tuple:
+    """B24.14 -- THE EXCHANGE LIST OF A SITTING: `((kind, item id), ...)`, one for each item a beat entered or struck, in the beats' order and within a beat
+    in `EXCHANGE_CELLS` order. The one owner of the list: `loop/resolve.py::_proceeding_ending` carries it on the Event's `ending` and
+    `loop/effects_information.py::_eff_determine` appends it to the case file's `Record.stages`, so the two are one value. `()` where no beat entered
+    or struck an item (every sitting at `sitting_exchanges` 0)."""
+    return tuple((cell, iid) for b in beats for cell in EXCHANGE_CELLS for iid in getattr(b, cell))
 
 
 def written(cls) -> tuple:
