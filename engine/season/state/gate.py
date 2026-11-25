@@ -732,6 +732,8 @@ def across_chains(w: "World", via: Optional[str], seat: Optional[str]) -> bool:
     through none, or naming none). ONE BODY, TWO READERS: `loop/predicates.py::_req_confer` refuses a conferrer seating himself across
     chains, and the roll's `cross_chain` term (`seam/wrappers/sigma.py::_cross_chain_term`, `rosters.yaml: obstacle_terms`) prices any other
     act across them."""
+    if via is None or seat is None:      # an act exercised through no seat, or naming none, crosses no chain (and reads no office table)
+        return False
     a, b = w.offices.get(via), w.offices.get(seat)
     return a is not None and b is not None and a.faction != b.faction
 
