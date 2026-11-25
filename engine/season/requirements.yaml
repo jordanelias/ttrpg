@@ -398,7 +398,29 @@ rows:
           `determine` and `convene` B32
         argv: ["python", "-m", "engine.season.harness.aperture", "2", "0"]
         expects: "for each of the nine, the `BUILT OUT` block's `via` column at least 1"
-        holds: "unread"
+        holds: "no"
+        reading:
+          tree: "a39062867105f1f270c263a2043a744430e32b84"
+          date: "2026-11-25"
+          seed: "0, 1, 2 (`aperture 2 --seeds 0 1 2`, `PYTHONHASHSEED=0`, the realm worlds; the spine worlds read 0 for every verb below)"
+          seasons: 2
+          line: |-
+            BUILT OUT `via` per realm seed 0/1/2, two seasons; before (the batch's opening reading, aperture_base.log, @c21e451) -> after (this tree):
+              establish    0/0/1   -> 0/0/0   not built out
+              confer       1/1/1   -> 0/0/0   not built out (kinds no, wrote no, one no after)
+              revoke       0/0/0   -> 0/0/0   not built out
+              succeed      0/0/0   -> 0/0/0   not built out
+              dispatch     10/10/9 -> 0/0/0   BUILT OUT before, not after
+              issue        22/7/23 -> 3/0/0   BUILT OUT at seed 0 only (`clean 3 kinds yes wrote yes one yes via 3`)
+              requisition  0/0/0   -> 0/0/0   not built out
+              (the carries of other batches, for the nine) open_case 6/5/6 -> 0/0/0; determine 1/0/0 -> 0/0/0; convene 6/5/2 -> 2/1/2 BUILT OUT
+            Pooled over the three realm seeds, `via` at least 1 for `issue` and `convene` only: six of the nine read 0.
+          control: "the same instrument on a clean `git archive c21e451` extract read the BEFORE column (aperture_base.log; `dispatch` 29 and `issue` 52 pooled there); the aperture's own CONTROL line reads `content_hash EQUAL` at every seed (the instrument observed the season without moving it); the run measured an extract of a390628, game code identical to this tree, `PYTHONHASHSEED=0`, about 8 minutes"
+          does_not_show: >-
+            why `dispatch`, `issue` and the rest fell: not attributed here (57 commits moved the realm, the acts at seed 0, one
+            season, read 570 at the BA1.99 pin and 425 at this tree); nothing was tuned and no fixture swept. The conjunct is read as the aperture's
+            `BUILT OUT` block writes it, at two seasons (A-114): a longer span (B99's `argv`) may read otherwise. `open_case`,
+            `determine` and `convene` belong to B25 and B32, listed for the whole conjunct's sake only
       - id: R-04.b
         text: >-
           no second driver; the faction view is tested (`engine/mc_v18.py` absent, read in this
@@ -436,7 +458,21 @@ rows:
           note). Last recorded `no`; carried by B21, land on a won march B23
         argv: ["python", "-m", "engine.season.harness.governance_spine", "play", "0", "8", "--world", "realm"]
         expects: "exit `closed True` at seeds 0-2"
-        holds: "unread"
+        holds: "no"
+        reading:
+          tree: "a39062867105f1f270c263a2043a744430e32b84"
+          date: "2026-11-25"
+          seed: "0, 1, 2 (`PYTHONHASHSEED=0`)"
+          seasons: "2 (the 8 of the argv is B99's, A-114; 8 is a season count: `play`'s second positional is the season cap, read from its `ended after N season(s)` line)"
+          line: |-
+            governance_spine play 0 2 --world realm  ->  loop: ordered 3, answered 0, responded 0, vacated 0, filled 0; persons 1; closed False
+            governance_spine play 1 2 --world realm  ->  loop: ordered 0, answered 0, responded 0, vacated 0, filled 0; persons 0; closed False
+            governance_spine play 2 2 --world realm  ->  loop: ordered 0, answered 0, responded 0, vacated 0, filled 0; persons 0; closed False
+          control: "`--world realm` reproduces `populated.run`'s `content_hash` for the same seed and seasons (B21.74's `test_world_realm_reproduces_populated_run_hash`); the three runs are the shipped chooser with nobody played, read as built"
+          does_not_show: >-
+            the source's eight-season target (read at two, A-114); that the loop closes in the hand-built situations (the
+            spine's `recall` and `vacancy` plays are B21.72's and B21.74's gate (1) and (2)); only `ordered` is above 0, at seed 0
+            alone, and no writ was answered at any seed, so the exit's `persons` of at least 3 is unmet at all three
       - id: R-04.c3
         text: >-
           social contests and debates: `headless --world hearing` prints the same content hash

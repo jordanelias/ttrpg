@@ -2932,7 +2932,8 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
     # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
     # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (570, 568), (
+    # ⚠⚠ B21.99 re-pin: (570, 568) -> (425, 424), THE B21 MOVERS (`_realm_goldens.py`'s B21.99 paragraph; `CENSUS[(0, 1)]` records the 425); the arms still part, by one act.
+    assert (out["acts"], cout["acts"]) == (425, 424), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what

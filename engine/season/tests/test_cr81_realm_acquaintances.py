@@ -144,11 +144,17 @@ def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_ou
         cap = on.fixtures.get("ledger_cap")
         added = set(on._acquaintances)
         for pid, p in on.persons.items():
-            base = [c for c in p.ledger if c.id not in added]
-            assert base == off.persons[pid].ledger, pid
+            # the oath step (B21.55 repair, `seed_command_knowledge`) runs in both arms and registers the same
+            # `c_acq_<knower>_<sworn>` ids in the on arm's `_acquaintances`: a claim the control also holds is not the
+            # step's addition
+            held_off = {c.id for c in off.persons[pid].ledger}
+            base = [c for c in p.ledger if c.id not in added or c.id in held_off]
+            # claim by claim, order aside: the oath step writes the same `exists:Person` claim at a different point of
+            # the build in the arm that did not already hold it from the acquaintance step
+            assert sorted(base, key=lambda c: c.id) == sorted(off.persons[pid].ledger, key=lambda c: c.id), pid
             assert len(p.ledger) <= cap, (pid, len(p.ledger))
             for c in p.ledger:
-                if c.id in added:
+                if c.id in added and c.id not in held_off:
                     assert c.holder == pid and c.predicate == KNOWN_PERSON_CLAIM["predicate"] and c.value
             persons += 1
     assert persons == 3 * 83

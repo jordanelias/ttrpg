@@ -5,7 +5,7 @@ Three controls (the module docstring says what each row holds):
      seasons with the chooser watched equal the same run unwatched (seed 0 here; seeds 1-2 under `slow`).
   2. PLANTED FAILURE: `interactions.same_faction` inverted makes `_assert_finding` fail, so the finding below
      is one the log can be seen to get wrong.
-  3. THE FINDING: on the shipped season (`build_realm(0)`, season 1), the first audited row whose candidate was chosen
+  3. THE FINDING: on the shipped season (`build_realm(FINDING_SEED)`, season 1), the first audited row whose candidate was chosen
      and whose verb declares `contests:` carries six fields equal to the world's for that pair: same faction, stance,
      the question's source, its claim in the actor's ledger, the claim's origin, and the candidate being the act.
   Plus the re-read table IS the chooser's: every act the chooser returned matches a re-read candidate.
@@ -19,9 +19,16 @@ from ..harness import interactions as I
 from ..queries import person_q, world_q
 
 
+#: The seed the finding is read on. Seed 0 was the reading until B21.54 moved the shipped season: at B21.99's closing tree, seeds 0 to 15, one season,
+#: audit one row at seed 1 (no chosen contested verb), two at seed 5 and two at seed 12, nothing at the other thirteen. Seed 5's chosen row is a
+#: `capture` after which the target holds no faction at the season's end, so the world's end-of-season reading of the pair is no longer the one the log
+#: took at the act and `_assert_finding` rightly fails there; seed 12's chosen row is the same `capture` of the same pair, after which the target still holds his faction, and holds.
+FINDING_SEED = 12
+
+
 @pytest.fixture(scope="module")
 def season_one():
-    return I.run(0, 1)
+    return I.run(FINDING_SEED, 1)
 
 
 def _selected(rows):
