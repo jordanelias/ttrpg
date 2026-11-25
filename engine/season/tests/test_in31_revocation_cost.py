@@ -103,7 +103,7 @@ def test_in31_an_unreadable_provenance_refuses_and_the_control_is_revoked():
     assert not _preds._req_revoke(w, act)
     assert EFFECTS["revoke"](w, act) is NO_CHANGE, "the effect's own backstop defaulted to a cost"
     kinds, opened = _fold(w, d, act)
-    assert kinds == ["revoke.refused"] and opened == set(), (kinds, opened)
+    assert kinds == ["revoke.no_disposal"] and opened == set(), (kinds, opened)      # B21.82: the `disposal` clause's kind
     assert _hold(w, TARGET) is not None and not restrained(w, DUKE, BAN_KIND)
     w.offices[TARGET].conferral = "appointed"                      # CONTROL
     kinds, opened = _fold(w, d, _revoke("rv_ok"))
@@ -300,7 +300,7 @@ def test_in31_the_exit_on_the_built_realm(monkeypatch):
     assert len({frozenset(o) for _, o in out.values()}) > 1, "one outcome whatever the provenance"
     # CONTROL 1: without the placement, the dukes are not revocable at all.
     _, bare = _exit_run(place=False)
-    assert bare[_VARFELL][0] == ["revoke.refused"] and bare[_HAFEN][0] == ["revoke.refused"], bare
+    assert bare[_VARFELL][0] == ["revoke.unauthorized"] and bare[_HAFEN][0] == ["revoke.unauthorized"], bare      # B21.82: the `authority` clause's kind
     # CONTROL 2, THE PLAN'S FALSIFIER OBSERVED LIVE: the mapping's one cost removed, in place.
     monkeypatch.setitem(G.REVOCATION_DISPOSAL, "appointed", None)
     w2, flat = _exit_run()

@@ -630,8 +630,8 @@ def _req_interrogate(w: "World", a: "Act") -> bool:
                    f"{a.actor} on {subj!r}")
 
 
-@requires_predicate("revoke")
-def _req_revoke(w: "World", a: "Act") -> bool:
+@requires_predicate("revoke", clauses=("office", "disposal", "authority", "keeps", "held"))
+def _req_revoke(w: "World", a: "Act") -> Answer:
     """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
 
     ⚠ THE OFFICE CLAUSE: without a check that the object IS AN OFFICE, any live `hold` on the
@@ -654,35 +654,42 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     ⚠ `remit:revoke` IS STILL NECESSARY, at eligibility. `H-91` registered that Jordan's 2026-09-02
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
-    `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
+    `H-91`'s, still not resolved by editing the transcribed `eligibility:` column.
+
+    B21.82: THE ANSWER IS `Answer(ok, clause)`, the clause one of the five declared on the decorator, in branch order:
+    `office` (the act names no office the world holds), `disposal` (the conferral basis has no revocation disposal),
+    `authority` (the seat exercised has no revocation authority over the seat), `keeps` (the `keeps` operand is no list of
+    acts) and `held` (a seat nobody holds). The four short names are one per `_refuse` phrase [ASSUMPTION; medium; Jordan to
+    correct -- basis: B09.18's `confer` names are single words; revert: the phrases themselves]; `keeps` is the fifth branch
+    (B21.69) the workplan entry did not list, named for its operand."""
     obj = office_named_by(a)               # `office`, else the computed act's `subject` (B21.13)
     if not obj or not isinstance(obj, str) or obj not in w.offices:   # a list is unhashable: refused, never raised
-        return _refuse("a revoke names no office the world holds", f"{a.actor} on {obj!r}")
+        return _refuse_at("office", f"{a.actor} on {obj!r}", "a revoke names no office the world holds")
     off = w.offices[obj]
     # v9 IN-31 (H-100): PROVENANCE UNREADABLE MEANS REFUSE. What the revocation costs is read off the
     # seat's conferral basis (`state/gate.py::REVOCATION_DISPOSAL`, total over the roster and `None`),
     # so a basis with no disposal -- reached only by a hand-mutated office, `Office.__post_init__`
     # refuses one -- refuses here (`revoke.refused`) rather than default to some cost.
     if not has_revocation_disposal(off):
-        return _refuse("a revoke of a seat whose conferral basis has no revocation disposal",
-                       f"{a.actor} on {obj!r}")
+        return _refuse_at("disposal", f"{a.actor} on {obj!r}",
+                          "a revoke of a seat whose conferral basis has no revocation disposal")
     # ⚠ G3: THE WRITE GATE'S T-o PREDICATE, ASKED EARLY -- `may_revoke` is `seat_hold` (`via`
     # present, the actor seated in it) + the basis on the roster (`None` or off-roster: the seat
     # cannot be stripped) + the rule that basis names, asked of `via`'s seat (`04:332`: the seat
     # exercised, not the actor).
     # The same function refuses the write at the gate, so this cannot admit what the gate refuses.
     if not may_revoke(w, a.actor, a.via, off):
-        return _refuse("a revoke the seat exercised has no revocation authority over the seat",
-                       f"{a.actor} via {a.via!r} on {obj!r}")
+        return _refuse_at("authority", f"{a.actor} via {a.via!r} on {obj!r}",
+                          "a revoke the seat exercised has no revocation authority over the seat")
     # B21.69 (`IS-B3-FA-07`): `keeps`, where declared, is the list of acts the holder keeps -- a partial revocation. Anything else is refused: a
     # string would be read as its letters and a number as nothing.
     d = a.payload if isinstance(a.payload, dict) else {}
     keeps = d.get(KEEPS_KEY)
     if KEEPS_KEY in d and not (isinstance(keeps, (list, tuple)) and all(isinstance(x, str) for x in keeps)):
-        return _refuse("a revoke whose `keeps` is no list of acts", f"{a.actor} on {obj!r}")
+        return _refuse_at("keeps", f"{a.actor} on {obj!r}", "a revoke whose `keeps` is no list of acts")
     if any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
-        return True
-    return _refuse("a revoke of a seat nobody holds", f"{a.actor} on {obj!r}")
+        return ADMITTED
+    return _refuse_at("held", f"{a.actor} on {obj!r}", "a revoke of a seat nobody holds")
 
 
 @requires_predicate("dispatch")

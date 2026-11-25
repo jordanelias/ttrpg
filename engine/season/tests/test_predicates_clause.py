@@ -102,7 +102,7 @@ def test_every_branch_names_a_declared_clause_and_every_declared_clause_has_a_br
         assert set(declared) <= set(used), (verb, sorted(set(declared) - set(used)))
         assert len(set(declared)) == len(declared), verb
         checked += 1
-    assert checked == 5, f"the five naming predicates (confer, establish, oblige, succeed, utter): saw {checked}"
+    assert checked == 6, f"the six naming predicates (confer, establish, oblige, revoke, succeed, utter): saw {checked}"    # B21.82: `revoke` joins
     # the walk observes what it excludes
     def _planted(w, a):
         return PR._refuse_at("undeclared", "x")
@@ -265,6 +265,47 @@ def test_a_refused_establish_says_which_clause_refused_in_its_kind(monkeypatch):
         d.witness(mint_token(w, WriteClass.INTERIOR), events)
         assert any(c.predicate == names[clause][0] for c in w.persons["p_high"].ledger), (
             clause, [(c.predicate, c.subject) for c in w.persons["p_high"].ledger])
+
+
+def test_a_refused_revoke_says_which_clause_refused_in_its_kind(monkeypatch):
+    """B21.82: THE SHIPPED `revoke` ROW. Hand-built acts refused at `authority` (the mayor's seat has none over the duke) and at
+    `held` (a seat nobody holds) emit two kinds where the flat row (the control) emitted `revoke.refused` for both, and the
+    actor's ledger holds a claim keyed by each."""
+    from .test_g3_not_yours import _SUCCESS, _gov_world
+    declared = PR.REQUIRES_PREDICATES["revoke"].clauses
+    assert declared == ("office", "disposal", "authority", "keeps", "held"), declared
+    shipped = VERB_TABLE["revoke"]
+    assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
+
+    def arms(world, driver):
+        world.offices["off_duke"].remit_acts.append("revoke")       # the duke's seat revokes too (`remit:revoke`, eligibility)
+        world._grant_remit(next(t for t in world.tenures if t.kind == "hold" and t.object == "off_duke"), force=True)
+        got = {}
+        for clause, actor, via, office in (("authority", "p_king", "off_mayor", "off_duke"),
+                                           ("held", "p_high", "off_duke", "off_reeve")):
+            act = Act(id=f"rv_{clause}", actor=actor, verb="revoke", payload={"office": office}, via=via)
+            world.acts.append(act)
+            got[clause] = driver._fold(world, mint_token(world, WriteClass.ACTS), act, _SUCCESS)
+        return got
+
+    w, d = _gov_world()
+    monkeypatch.setitem(VERB_TABLE, "revoke", _flat_row("revoke", "revoke.refused"))
+    flat = {c: [e.kind for e in es] for c, es in arms(w, d).items()}
+    assert flat == {"authority": ["revoke.refused"], "held": ["revoke.refused"]}, flat       # CONTROL: the flat row
+    monkeypatch.undo()
+    w, d = _gov_world()
+    got = arms(w, d)
+    names = {c: [e.kind for e in es] for c, es in got.items()}
+    assert names == {"authority": ["revoke.unauthorized"], "held": ["revoke.no_holder"]}, names
+    actors = {"authority": "p_king", "held": "p_high"}
+    for clause, events in got.items():
+        w.log.extend(events)
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+        assert any(c.predicate == names[clause][0] for c in w.persons[actors[clause]].ledger), (
+            clause, [(c.predicate, c.subject) for c in w.persons[actors[clause]].ledger])
 
 
 def test_a_keyed_predicate_row_with_unknown_keys_is_refused(monkeypatch):

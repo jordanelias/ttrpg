@@ -1656,8 +1656,8 @@ def _seat_of(w, actor):
 
 
 def _may_revoke(w, actor, office) -> bool:
-    return _preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",
-                                     payload={"office": office}, via=_seat_of(w, actor)))
+    return bool(_preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",      # B21.82: the answer is `Answer(ok, clause)`; these read only whether it passed
+                                          payload={"office": office}, via=_seat_of(w, actor))))
 
 
 def test_13d_i_lb10c_a_titled_seat_is_revocable_only_by_the_seat_above_in_its_faction():
@@ -1905,7 +1905,7 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
                  via=_seat_of(w, actor))],
             contest_max_depth=w.fixtures.get("contest_max_depth"))]
 
-    assert run("rv_rival", "c_rival_king") == ["revoke.refused"]
+    assert run("rv_rival", "c_rival_king") == ["revoke.unauthorized"]      # B21.82: the `authority` clause's kind
     assert held(), "the other faction's King closed the duke's hold"
     kinds = run("rv_king", "c_king")
     assert "tenure.closed" in kinds and "revoke.refused" not in kinds, kinds
