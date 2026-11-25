@@ -174,7 +174,7 @@ def _ally_value(w: Any, pid: str, fought: tuple, row: Any) -> Any:
     """THE `ally` SIDE OF A `mortal` ROW: the most of `row.key` held by a person at `pid`'s place (`home_of`, the one owner of where a person is)
     who is neither of the two who fought (`fought`) and for whom the row's `when` holds; `None` where nobody there holds any. The place map is
     built only when someone holds the key, so a realm where nobody holds it pays one pass over the persons."""
-    held = [(q, v) for q in sorted(w.persons) if q not in fought
+    held = [(q, v) for q in w.persons if q not in fought
             and (v := _held_at(w.persons[q], row, row.key, "")) is not None and when_holds(row, w.persons[q])]
     if not held:
         return None

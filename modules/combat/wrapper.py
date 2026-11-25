@@ -101,7 +101,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         elsewhere does not move which blows find a bare zone. A defender in no armour takes no draw (`core.bare_zone`)."""
         nonlocal blow
         blow += 1
-        bare = core.bare_zone(KD.seeded(KD.H2(rng.key, f"gap:{scene}:{turn}:{blow}")), defender.armor)
+        bare = None if defender.armor == 'none' else core.bare_zone(KD.seeded(KD.H2(rng.key, f"gap:{scene}:{turn}:{blow}")), defender.armor)
         return core.strike(attacker, defender, deg, cfg, bare=bare, **kw), bare
     drawn = False   # the round's one riposte draw is taken: a second felling in the same round (a counter's own) is final
     def _land(source, by, victim, d, bare=None):

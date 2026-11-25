@@ -991,21 +991,26 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
     g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
     ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
-    span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
+    span=_commit_span(aggressor, cfg)
     commit=2.0+span*float(rng.beta(ba,bb))   # Beta draw (`Draw.beta`)
     return commit, ba, bb, ln
+
+def _commit_span(aggressor, cfg):
+    """The width of the commit window THIS beat draws in: 3.0 at full room, narrowed by `_commit_range_factor` as room closes (`commit_depth`
+    draws in [2, 2 + span]; `deep_commit` and `lunge_commit` state their edges in the same window)."""
+    return 3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
 
 def deep_commit(aggressor, cfg):
     """The depth at/above which a commit is DEEP this beat: the lower edge of the upper third of the window `commit_depth` draws in
     (`2 + DEEP_FRAC * span`, the ONE owner of "deep"). At full room (`range_avail >= RANGE_COMMIT_PEAK`) exactly 4.0; an exchange
     is fought closed, where the window is about [2, 4.03] and the edge about 3.35. Pure."""
-    span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
+    span=_commit_span(aggressor, cfg)
     return 2.0+cfg['DEEP_FRAC']*span
 
 def lunge_commit(aggressor, cfg):
     """The depth at/above which a THRUST is a lunge this beat: `deep_commit`'s form over its own key (`LUNGE_FRAC`; a lunge is a
     different fact from deep, equal today). The reference of `LUNGE_DEPTH_SCALE`. Pure."""
-    span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
+    span=_commit_span(aggressor, cfg)
     return 2.0+cfg['LUNGE_FRAC']*span
 
 def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
