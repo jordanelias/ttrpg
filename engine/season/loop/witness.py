@@ -686,6 +686,13 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 observed=notice_trail.get((p.id, e.id), ()))
         TRACE.claim(p.id, e.id, c.source)
         deposits += 1
+    # B11 close (Phase 3, F-A4): THE CELLS THIS CALL'S ENDINGS WRITE, per person -- a same-call READ of one (an earlier Event's gating `exists:Person` at 1) is not deposited, so
+    # the ending is the ONE same-call claim on the cell. Both at one `when`, `LedgerReader._best` keeps the first appended on a tie and `_believed_gone` the last, so a read
+    # deposited beside the ending made the two readers of one cell disagree (the witness read the victim alive and believed him gone).
+    _ended_by_event: dict = {}
+    ended_cells = {(pid, entity, f"exists:{kind}")
+                   for pid, e, _c in fan if reported.get((pid, e.id)) is None
+                   for entity, kind in _ended_by_event.setdefault(e.id, tuple(_ended_entities(w, e)))}
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -901,6 +908,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                         continue
                     value = _told_value(w, pid, e, o, H(w.world_seed, w.tick, pid, f"look:{e.id}:{o.subject}:{o.predicate}"),
                                         str(o.predicate).partition(":")[0])
+                if (pid, o.subject, o.predicate) in ended_cells:
+                    continue      # the ending (above) is this call's one claim on the cell
                 key = (o.subject, o.predicate)
                 if key in seen_obs:
                     continue

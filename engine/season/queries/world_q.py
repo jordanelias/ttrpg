@@ -2862,7 +2862,7 @@ def current_stage(w: World, p: Person, ambition, weigh=None) -> Optional[dict]:
     is passed only on a cell that evaluates to TRUE, so a ledger with no claim on the cell's predicate
     leaves the stage open (`belief_contradicts` declines a candidate on known-FALSE alone; a stage is
     passed on known-TRUE alone). B09.07 `weigh`: the closure the ONE comparator reads his ledger by
-    (`decision/options.py::ledger_weigh`, a `decision` import this module may not make, so the caller passes it in, as
+    (`queries/person_q.py::ledger_weigh`, a closure the caller builds and passes in, as
     `LedgerReader` takes it), handed to the reader, so the stage he thinks he has passed is the belief he acts on and says.
     `None` is the plain comparator. It comes from `open_stages`, its one caller; `open_stages`' own callers
     (`stage_referents`, `attention_key`) pass none yet -- the shipped state has no `goal_stages` row, so this reader is

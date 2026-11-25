@@ -2,7 +2,7 @@
 
 The hand world is `tiny_world` at `notice_arm: on`: `p_other` walks to the duchy `D`, where a Site stands and nobody else does, and damages it
 (`sabotage`, a covert kind, `rosters.yaml: covert_kinds`); `p_high`, who was never there, hears the Site exists (`harness/scenarios.py::hear`, the
-`own_ledger` cell `reconstruct` asks) and `reconstruct`s it. The deed is folded flat (`task_draw_arm: off`, `_flat_fold.py`: the question is the
+`own_ledger` cell `reconstruct` asks) and `reconstruct`s it. The deed is folded flat (`task_draw_arm: off`, `harness/flat_fold.py`: the question is the
 find, not the saboteur's own draw) and the arm is turned back `on` for the inquiry, which `reconstruct` is graded under (`armed_by: task_draw_arm`).
 A draw is keyed `H(world_seed, tick, actor, "roll:reconstruct:<act id>")`, so the world seed is the sample and the tick must be equal across arms.
 """

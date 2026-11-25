@@ -189,7 +189,7 @@ def _realm_two_seasons(seed):
 
 
 def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts(monkeypatch):
-    """Seed 2 (since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
+    """Seed 10 (re-picked at the B11 close; seed 2 since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
     The same seed now refuses that act on `individual` -- the mover the position declares; the realm's hash is
     `_realm_goldens.py`'s. Read with CR-87 at its revert (CR-87's contexts leave no `fight` formed in these realms, so the
     conjunct would never be read) and (v11) CP-T03-04's formation mover at its revert, so the seed forms the cohort-party

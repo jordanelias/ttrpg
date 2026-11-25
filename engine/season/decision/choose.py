@@ -326,7 +326,7 @@ def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional
 
 def nerve(p: Person, fx: "Fixtures") -> float:
     """HOW FAR A PERSON'S SPIRIT LETS HIM BEAR A DANGER (B10.31; `H-480`): his own factor on `risk`, the `judgement` rows of site `choice_exposure` read by
-    `options._judgement_factor` as `temper` and `competence` read theirs: `about_mid(held, floor, ceiling, nerve_gain)`, exactly 1 at the scale's mid-point and at
+    `person_q._judgement_factor` as `temper` and `competence` read theirs: `about_mid(held, floor, ceiling, nerve_gain)`, exactly 1 at the scale's mid-point and at
     gain 0, and 1.0 where no row is authored (none ships) or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute (U1 §8):
     the key is the row's.
 
@@ -502,7 +502,7 @@ def settle_conclusions(cands: list, scores: dict, p: Person, fx: "Fixtures", dra
     distinct origins, under his own `ledger_weigh`), so a doer named by two independent tellers stands above one named by a single one, and a claim he has half forgotten weighs half.
 
     THE WEIGHTS (the design read the commit body states): a variant's weight is its SUPPORT, and the survivor is drawn in proportion, `P(v) = support(v) / sum(support)`, by the sampler's own
-    arithmetic (`_sample_order`'s Gumbel-max) on `ln(support)` at unit temperature, one stream per variant keyed `conclude:<subject>:<rank>` (so a variant's draw is its own, and the
+    arithmetic (`_sample_order`'s Gumbel-max) on `ln(support)` at unit temperature, one stream per variant keyed `conclude:<subject>:<kind>:<doer>` (so a variant's draw is its own, and the
     same on every lap). So a doer at 0.3 against one at 0.9 is named a quarter of the time: sometimes, never as often as the better supported (NOT `exp(ln s / choice_temperature)`: at the
     shipped 0.05 that is `s ** 20`, which names the weaker about once in ten billion, and R-19-04 asks that a less-supported suspect be named SOMETIMES). The person's temperature enters
     as the gate `_sample_order` has: AT `choice_temperature` 0 THERE IS NO DRAW, and the best-supported variant (the first formed on a tie) is his conclusion. A variant with no support (its
@@ -630,7 +630,7 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
 
 def temper(p: Person, fx: "Fixtures") -> float:
     """THE PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE (B10.28; CR-93 item 2, AR-23: a high-Focus person is less distracted, so
-    his draw strays less from what he most values). The `judgement` rows of site `choice_temper`, read by `options._judgement_factor`
+    his draw strays less from what he most values). The `judgement` rows of site `choice_temper`, read by `person_q._judgement_factor`
     as `competence` reads its own: `about_mid(held, floor, ceiling, gain)`, exactly 1 at the scale's mid-point and at gain 0, and
     1.0 where no row is authored or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute
     (U1 §8): the key is the row's.

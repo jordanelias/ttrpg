@@ -21,6 +21,7 @@ import pytest
 from ..data.matrix import Step, WriteClass
 from ..data.requires import Observation
 from ..loop.driver import SeasonDriver, mint_token
+from ..queries import world_q
 from ..seam.contest import Resolution
 from ..state.carriers import Act
 from ._scar_helpers import party_state
@@ -86,12 +87,17 @@ def test_bystander_holds_exists_person_zero():
 
 
 def test_an_ending_overrides_an_earlier_read_of_the_same_cell_in_one_call():
-    """A read of `(victim, exists:Person)` at 1 earlier in the SAME witness call must not suppress the ending that follows it: the witness holds the
-    victim ended, as when no read came first. CONTROL: an earlier read at 0 is the same belief, stored once."""
-    for first, want in ((1, [1, 0]), (0, [0])):
+    """A read of `(victim, exists:Person)` at 1 earlier in the SAME witness call must not stand beside the ending that follows it: the witness holds the
+    victim ended, as when no read came first, and BOTH readers of the cell say so -- `LedgerReader` (which keeps the first claim of a tie) and `_believed_gone`
+    (the last). A read at 1 deposited beside the ending made them disagree (reader: alive; gone: True). CONTROL: an earlier read at 0 is the same belief, stored once."""
+    from ..queries.person_q import LedgerReader
+    for first in (1, 0):
         w, _ = killing(read_first=first)
-        got = [c.value for c in w.persons[WITNESS].ledger if c.subject == VICTIM and c.predicate == "exists:Person"]
-        assert sorted(got, reverse=True) == want, (first, got)
+        ledger = w.persons[WITNESS].ledger
+        got = [c.value for c in ledger if c.subject == VICTIM and c.predicate == "exists:Person"]
+        assert got == [0], (first, got)
+        assert LedgerReader(ledger).read(VICTIM, "exists:Person") == 0, first
+        assert VICTIM in world_q._believed_gone(ledger), first
 
 
 def test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial():

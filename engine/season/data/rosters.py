@@ -1916,7 +1916,7 @@ def _load_capability_uses(rows, fixtures) -> tuple:
         if role == "judgement" and (key not in _ATTRIBUTES or row.get("side", "actor") != "actor"):
             refuse(i, row, "is a `judgement` row its reader cannot read",
                    f"an attribute key ({sorted(_ATTRIBUTES)}) on `side: actor`",
-                   "decision/options.py::_judgement_factor reads the actor's own `attributes` at the row's key and no "
+                   "queries/person_q.py::_judgement_factor reads the actor's own `attributes` at the row's key and no "
                    "other side; any other key or side would load and read nothing")
         if role == "gate" and (key not in gate_keys or use not in gate_sites):
             refuse(i, row, "is a `gate` row off its one key or its gate sites",

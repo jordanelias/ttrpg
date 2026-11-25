@@ -2292,16 +2292,14 @@ def holders_named(ledger, obj) -> tuple:
     that needs persons only (`world_q`'s call sites) drops the ids the world knows to be something else; it asks nothing of any
     person's state. Each holder once."""
     news = [c for c in ledger if c.predicate in HOLD_OPEN_KINDS or c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED]
-    # A closing claim about a person ends HIS hold of `obj` only when it is a death or shares its `(when, lap)` with a closing claim about `obj` itself
-    # -- the same Event's one pass, the pairing key the opener side uses. A witness of K's release of ANOTHER commitment holds `(K, tenure.closed, True)`
-    # at a newer key, and that says nothing of the seat.
-    obj_close = {(c.when, c.lap) for c in news if c.subject == obj and (c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED)}
+    # A closing claim ends the SEAT's holders at its `(when, lap)` (`seat_end`: the newest closing or death claim about `obj` itself -- the Event's one pass, the pairing key the
+    # opener side uses; a witness of K's release of ANOTHER commitment holds `(K, tenure.closed, True)` at a newer key and says nothing of the seat). A holder's own closing claim
+    # adds nothing the seat's does not (it ends his hold only at a key in `obj_close`, so never later than `seat_end`); only his DEATH ends it alone.
+    seat_end = max({(c.when, c.lap) for c in news if c.subject == obj and (c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED)}, default=None)
     ends: dict = {}
     for c in news:
-        at = (c.when, c.lap)
-        if (c.predicate == PERSON_DIED or (c.predicate in HOLD_CLOSE_KINDS and at in obj_close)) and at > ends.get(c.subject, (-1 << 60, 0)):
-            ends[c.subject] = at
-    seat_end = ends.get(obj)
+        if c.predicate == PERSON_DIED and (c.when, c.lap) > ends.get(c.subject, (-1 << 60, 0)):
+            ends[c.subject] = (c.when, c.lap)
     named: dict = {}
     for c in ledger:
         if c.subject != obj or c.predicate not in HOLD_OPEN_KINDS:

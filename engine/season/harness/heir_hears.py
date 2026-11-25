@@ -51,6 +51,9 @@ def reading(w, heir, qs):
     # v12 B11.08: the realm starts with the seat news, so the heir holds the throne (as HELD) at build and links (i)-(iii) read true before any death. "Stamped" and "answered" mean the
     # heir has HEARD IT VACANT (`vacant_named`: the newest claim he holds about the seat is a ceasing) AND the seat rides his question as a classed referent: the vacancy, not the seat.
     vacant = vacant_named(heir.ledger, THRONE)
+    # ⚠ AFTER B11.08 LINKS (iii) AND (iv) ARE THE VACANCY ONLY THROUGH `vacant`: `seats_named` stamps every seat the heir was told of as a classed `Office` referent, and the
+    # realm tells everyone of every seat (H-493), so `classed` is true held or vacant. (`world_q.vacancies` is the conferrer's own stamp -- IN-53 -- and is empty for an heir
+    # who holds no `confer` seat, so it cannot stand in for it; tried at the B11 close, it reddened both planted tests.)
     return {"in_ledger": THRONE in ledger_names(heir.ledger),
             "seats_named": THRONE in world_q.seats_named(w, heir),
             "stamped": vacant and any(classed(q) for q in qs),
