@@ -157,13 +157,13 @@ def test_sc01_s15_an_entry_returning_a_winner_is_refused_at_the_host_boundary(mo
     w, _d = _world()
     real = MODULE_ENTRIES[ENTRY]
     # THE CONTROL: the shipped entry passes the same boundary, on the same world and act.
-    ok = sigma.resolve(w, [SPEAKER, PARTY], ["c"], "a standing", verb="tell", subject=PARTY,
+    ok = sigma.resolve(w, [SPEAKER, PARTY], ["c"], "a proposition", verb="determine", subject=PARTY,
                        rng=draw.seeded(draw.H2("test_sc01_provider", 3)))
     assert ok["status"] == "RESOLVED" and ok["module"] == PROVIDER, ok
     monkeypatch.setitem(MODULE_ENTRIES, ENTRY,
                         ModuleEntry(real.role, real.entry, real.verb, real.target, lambda inp, rng: winner))
     with pytest.raises(Unspecified, match=r"social_contest\.roll.*not a `Margin`"):
-        sigma.resolve(w, [SPEAKER, PARTY], ["c"], "a standing", verb="tell", subject=PARTY,
+        sigma.resolve(w, [SPEAKER, PARTY], ["c"], "a proposition", verb="determine", subject=PARTY,
                       rng=draw.seeded(draw.H2("test_sc01_provider", 3)))
 
 
@@ -218,7 +218,7 @@ def test_sc01_s15_a_tell_resolves_through_the_provider(monkeypatch):
 from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, record_odds       # noqa: E402
 from engine.substrate import descriptors                                      # noqa: E402
 
-SUBJECT, SKILL = "p_mid", "copying"          # `tell`'s skill (asserted in the first test below)
+SUBJECT, SKILL = "p_mid", "argue"          # `determine`'s skill (asserted in the first test below; B24p.99: `tell` proceeds, `determine` is still on the single roll)
 
 
 def _edge_world():
@@ -228,7 +228,7 @@ def _edge_world():
     SeasonDriver(w)
     for p in w.persons.values():
         p.capability, p.attributes = {}, {}
-    return w, Act(id="edge_tell", actor=SPEAKER, verb="tell", payload={"to": SUBJECT})
+    return w, Act(id="edge_determine", actor=SPEAKER, verb="determine", payload={"subject": SUBJECT})
 
 
 def _plant_edge(monkeypatch, **columns):
@@ -250,7 +250,7 @@ def _true_odds(w, act, leverage):
 def test_the_shipped_table_brings_no_edge_and_the_channel_names_capability():
     from ..data.verbs import VERB_CAPABILITY
     from ..data import rosters
-    assert VERB_CAPABILITY["tell"] == SKILL
+    assert VERB_CAPABILITY["determine"] == SKILL
     # B05.99 re-pin: B05.17 (`proofs`, `favour`), B05.20 (`office`) and B05.60 (`wounds`) joined the roster; was [effort, capability]
     # (read off the roster and compared member by member: a literal copy of the whole roster would be the duplicate
     # `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) refuses)
@@ -329,11 +329,11 @@ def test_per_mid_counts_signed_steps_from_the_scale_midpoint(monkeypatch):
     assert sigma.odds_of(w, act) == plain                                          # unauthored: the mid-point, zero steps
     for held, steps in ((int(mid) + 2, 2), (int(mid) - 3, -3)):
         w.persons[SPEAKER].attributes = {key: held}
-        inp = sigma.contest_input(w, [SPEAKER, SUBJECT], verb="tell", subject=SUBJECT)
+        inp = sigma.contest_input(w, [SPEAKER, SUBJECT], verb="determine", subject=SUBJECT)
         assert inp.leverage == steps * LEVEL_SIGMA["minor"], (held, inp.leverage)
     monkeypatch.undo()
     _plant_edge(monkeypatch, key=key, side="actor", per="mid", level="minor", against=True)
-    inp = sigma.contest_input(w, [SPEAKER, SUBJECT], verb="tell", subject=SUBJECT)
+    inp = sigma.contest_input(w, [SPEAKER, SUBJECT], verb="determine", subject=SUBJECT)
     assert inp.leverage == 3 * LEVEL_SIGMA["minor"]                                # held 3 below the mid, `against` flips it
 
 
@@ -349,7 +349,7 @@ def test_the_believer_reads_the_subjects_row_only_from_a_held_claim(monkeypatch)
                                when=0, source="told", confidence=5, visibility="own"))
     claim(person_q.CAPABILITY_CLAIM + SKILL, 2, 0)                                 # the opposition's claim the verb already needs
     from ..data.verbs import VERB_TABLE
-    claim(person_q.CAPABILITY_CLAIM + VERB_TABLE["tell"].opposed_attribute, 3, 9)  # and, B05.14, the attribute he resists it with
+    claim(person_q.CAPABILITY_CLAIM + VERB_TABLE["determine"].opposed_attribute, 3, 9)  # and, B05.14, the attribute he resists it with
     control = sigma.odds_of(w, act, believer=me)
     assert control is not None                                                     # CONTROL: no row, a believed figure
     _plant_edge(monkeypatch, key=trait, side="subject", per="held", against=True, level="moderate")
@@ -375,14 +375,15 @@ def test_the_believer_reads_the_subjects_row_only_from_a_held_claim(monkeypatch)
 # `Event.ending` is the margin provider's tuple `((key, value), ...)` in `rosters.yaml: margin_endings`' order. Read
 # against the provider's OWN return, recomputed with the act's own generator: the tuple follows the roll, never a recomputation.
 
-def _argue_once(monkeypatch, key):
-    """One `argue` folded on `tiny_world`: `(events, the provider's call, the act, the world)`."""
-    from .test_in12_step9 import _argue, _argue_world
-    from .test_in10_record_operands import _resolve
-    w, d, pid, _keys = _argue_world()
+def _determine_once(monkeypatch, key):
+    """One `determine` folded on a docketed matter: `(events, the provider's call, the act, the world)`. B24p.99: the single roll's own verb
+    (`argue` proceeds now and its Event's ending is the proceeding's, not this tuple)."""
+    from .test_u7_remit import DUKE, SEAT, _open
+    w, d = _world()
+    _fold(w, d, _open("oc"))
     calls = _recording(monkeypatch)
-    act = _argue(pid, key)
-    out = _resolve(w, d, act)
+    act = Act(id=key, actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY})
+    out = _fold(w, d, act)
     assert len(calls) == 1, calls
     return out, calls[0], act, w
 
@@ -400,7 +401,7 @@ def test_a_social_roll_event_carries_its_margin_ending(monkeypatch):
     assert "levels" in MARGIN_ENDING and MARGIN_ENDING[-1] == "leverage", MARGIN_ENDING
     bands, checked = set(), 0
     for i in range(24):
-        out, call, act, w = _argue_once(monkeypatch, f"mg_{i}")
+        out, call, act, w = _determine_once(monkeypatch, f"mg_{i}")
         monkeypatch.undo()
         r = _the_act_own_roll(w, act, call)
         assert r["status"] == "RESOLVED" and r == call["out"], (r, call["out"])            # the recomputation is the roll the fold saw

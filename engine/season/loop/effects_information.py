@@ -22,16 +22,17 @@ from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
-    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
+    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ArmyCommand
+from ..queries.inputs import ArmyCommand, Outcome
+from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
-    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, army_of, docketed, docketed_under,
+    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
@@ -191,13 +192,16 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
-def _docket_item(matter, arrangement, petition, date=None) -> dict:
+def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
     acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
     sitting's Date when the matter fills a slot CALENDAR formed (`_eff_open_case`, v9 SC-01
-    fired-slot step), else `None`: no sitting was convened for it."""
+    fired-slot step), else `None`: no sitting was convened for it. `arranger` and `rig` (B24p.24,
+    V2 p2 §H) are who arranged its sitting and how hard, a `rig_levels` member: the builder reads
+    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`."""
     return {"date": date, "matter": matter,
-            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
+            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition,
+            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig}
 
 
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
@@ -433,6 +437,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     matter = _operand(a, "subject")
     d = a.payload if isinstance(a.payload, dict) else {}
     arrangement, petition = d.get(DOCKET_ARRANGEMENT), d.get(DOCKET_PETITION)
+    rig = d.get(RIG_KEY, 0)
     # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
     # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
     # (`DISPOSABLE_KINDS`) -- else the matter would dock and `determine` decline it forever, and
@@ -445,6 +450,10 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if petition is not None and not (
             isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
         return NO_CHANGE
+    # B24p.24: THE OPENER'S ARRANGEMENT -- he arranges the sitting of the case he opens, `rig` a `rig_levels` member (a level outside it, or one that
+    # is no number, is declined like a bad arrangement: the item would carry a rig no builder can read).
+    if isinstance(rig, bool) or not isinstance(rig, (int, float)) or rig not in RIG_LEVELS:
+        return NO_CHANGE
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
@@ -452,10 +461,15 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     def perform() -> None:
         made.apply()
         slot = slot_for(w, matter)        # read at the write, so two cases never share one slot
+        arranger, level = a.actor, float(rig)
         if slot is not None:              # the sitting's slot, filled where it stands (`date` kept)
-            slot.update(_docket_item(matter, arrangement, petition, slot.get("date")))
+            # an opener who rigged nothing leaves the forum to the one who convened the sitting, where he rigged it (`_eff_convene`)
+            convened = w.dates.get(slot.get("date")) or {}
+            if level == 0 and convened.get(RIG_KEY):
+                arranger, level = convened.get(DOCKET_ARRANGER), float(convened[RIG_KEY])
+            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level))
         else:
-            w.docket.append(_docket_item(matter, arrangement, petition))
+            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level))
     return Change(made.subjects, perform)
 
 
@@ -553,7 +567,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         closing a disposal stays `determination`, through the seat that is the edge's object. The kind is a LITERAL
         here because `data/verbs.py::_derive_openers_from_effects` reads a `Tenure(...)` site's kind
         off its string literal (`_eff_commit`'s docstring records what factoring it cost), and
-        that derivation is what `data/arrangements.py::arrangements_without_a_disposal_opener`
+        that derivation is what `data/verbs.py::arrangements_without_a_disposal_opener`
         (C-1's load check, REPORTED) reads: `arbitration` leaves that report with this line.
         REJECTED: a `hold` on a seat -- `04 §B.7`'s *"conferral: ... determine by <judging seats>"*,
         a determination FILLING a seat -- because a computed act carries one referent and that
@@ -679,17 +693,44 @@ def _eff_argue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `pursuit_shift` 0, the control) is `NO_CHANGE` -> `argument.refused` at its write (F9): a success
     Event over an unmoved mind would be a deed that did not happen.
 
+    B24p.20 -- UNDER A `hearers` CLOSE (an address to a crowd, the rally) THE EFFECT RUNS ONCE PER VERDICT, ON THAT HEARER, AT HIS OWN BAND: each man of the
+    cohort who heard is moved by what his own draw read, and none the sitting did not carry (`argued_pursuits` moves nothing below `Success`). The act's own
+    band (the weight-mean of the verdicts, `act_band`) still chooses the row's `emits` and whether this effect runs at all. Any other close is as it was: one
+    hearer, the act's band; and so is a sitting a yield decided (`result["read"]` is empty: no verdict decided it, the yield's band is the act's).
+
     DECLINES: no resolution (a hand-built call with no contest), no hearer, no arguer, or nothing moves."""
     hearer, arguer = w.persons.get(_operand(a, "to")), w.persons.get(a.actor)
     if res is None or hearer is None or arguer is None:
         return NO_CHANGE
-    moved = argued_pursuits(hearer, arguer, res.degree, w.fixtures.get("pursuit_shift"))
+    held = res.result if isinstance(res.result, dict) else {}
+    out = held.get("proceeding")
+    if isinstance(out, Outcome) and getattr(held.get("card"), "close", None) == "hearers" and held.get("read"):   # a yield that decided is the act's band, not a draw
+        moves = {}
+        for who, m in out.verdicts:
+            heard = w.persons.get(who)
+            new = None if heard is None else _argued(w, heard, arguer, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob)), held.get("topic"))
+            if new is not None:
+                moves[who] = new
+        if not moves:
+            return NO_CHANGE
+
+        def perform_each() -> None:
+            for who, new in moves.items():
+                w.persons[who].pursuits = new
+        return Change(tuple(Subject.entity("persons", who, fields=("pursuits",)) for who in moves), perform_each)
+    moved = _argued(w, hearer, arguer, res.degree, held.get("topic"))
     if moved is None:
         return NO_CHANGE
 
     def perform() -> None:
         hearer.pursuits = moved
     return Change((Subject.entity("persons", hearer.id, fields=("pursuits",)),), perform)
+
+
+def _argued(w: "World", hearer, arguer, degree, topic) -> Optional[dict]:
+    """`argued_pursuits` at the world's `pursuit_shift`, handed the matter the argument was about. `topic` is passed on and read by nobody:
+    `[ASSUMPTION: which pursuits a topic bears on is B27.05's edit; this item delivers the operand it needs]`."""
+    return argued_pursuits(hearer, arguer, degree, w.fixtures.get("pursuit_shift"))
 
 
 def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,

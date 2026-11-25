@@ -76,13 +76,19 @@ def governing_attribute(entity: Any, verb: str):
 def governing_score(w: Any, p: Any, verb: str) -> float:
     """(B05.25; B05.24's rule, Jordan 2026-11-13) HIS GOVERNING SCORE FOR `verb`: the mean (`sigma_leverage.governing_mean`: to
     the nearest tenth, a half up, a FRACTIONAL number) of his scores in the verb's one to three `governing:` attributes, an
-    attribute he does not hold counting at the untrained score (`untrained`). Refused (`Forbidden`) for a brute verb and
-    (`Unspecified`) for a row naming no attribute: neither is pooled here."""
+    attribute he does not hold counting at the untrained score (`untrained`). Refused (`Forbidden`) for a brute verb and for a verb that
+    proceeds (B24p.19: `faculty` reads this, so the pool reader refuses it naming the verb), and (`Unspecified`) for a row naming no
+    attribute: none of the three is pooled here."""
     row = VERB_TABLE.get(verb)
     if row is not None and row.brute:
         raise Forbidden(f"{verb!r} is a brute verb (`brute: {row.brute}`) and never rolls; it has no governing score",
                         "seam/wrappers/pool.py", needs="a verb row with `governing:`",
                         law="B05.24 -- a brute function is authorised, gated or recorded and does not roll at all")
+    if row is not None and row.proceeds:
+        raise Forbidden(f"{verb!r} proceeds (`proceeds:`, B24p.16) and is never pooled here: its dice are the proceeding's own, drawn by "
+                        f"`social_contest.proceeding` from the six attributes of the room",
+                        "seam/wrappers/pool.py", needs="a verb row with `governing:`",
+                        law="B24p.19, RD §D.3 -- a verb that opens a proceeding names no governing attribute; the pool reader is the single roll's")
     if row is None or not row.governing:
         raise Unspecified(f"{verb!r} names no `governing:` attribute; its act is a subsystem's (`person_inputs: own`) or the verb is no row",
                           "seam/wrappers/pool.py", needs="a verb row with `governing:`",

@@ -32,7 +32,7 @@ from ..data.verbs import VERB_TABLE
 from .test_odds_of import _within_3se
 from .test_sc01_obstacle_ceiling import _module
 
-KEY = "copying"
+KEY = "argue"
 
 
 def _world(opposition):
@@ -45,18 +45,18 @@ def _world(opposition):
     SeasonDriver(w)                                   # the registrar fills MODULE_ENTRIES
     # roster-exempt: TEST FIXTURE capabilities -- a speaker at pool 4 and a hearer scoring `opposition`.
     w.persons["p_low"].capability = {KEY: 4}
-    w.persons["p_mid"].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}
+    w.persons["p_mid"].attributes = {VERB_TABLE["determine"].opposed_attribute: 0}
     w.persons["p_mid"].capability = {KEY: opposition}
     return w
 
 
 def _resolve(w, rng):
-    return sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid", rng=rng)
+    return sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine", subject="p_mid", rng=rng)
 
 
 def _reference_state(w, seed):
     """The generator's state after the module's own roll alone."""
-    inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="p_mid")
+    inp = sigma.contest_input(w, ["p_low"], verb="determine", subject="p_mid")
     rng = draw.seeded(draw.H2("test_settle_margin_seam", seed))
     _module().roll(inp, rng)
     return (rng.key, rng.n)
@@ -98,7 +98,7 @@ def test_the_records_margin_is_the_real_margin_not_a_whole():
 def test_the_records_own_fields_are_the_entrys_and_only_one_is_added():
     w = _world(3)
     out = _resolve(w, draw.seeded(draw.H2("test_settle_margin_seam", 5)))
-    inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="p_mid")
+    inp = sigma.contest_input(w, ["p_low"], verb="determine", subject="p_mid")
     margin = _module().roll(inp, draw.seeded(draw.H2("test_settle_margin_seam", 5)))
     assert (out["net"], out["ob"], out["pool"], out["terms"]) == (margin.net, margin.ob, inp.pool, margin.terms)
     # B05.14: AND `terms`, every term of the obstacle named on the record (`Margin.terms`, the entry's own; lane A's `ob_terms` is replaced)
@@ -124,7 +124,7 @@ def test_degree_of_grades_the_margin_when_present_and_the_pair_otherwise():
 
 def test_the_dealt_distribution_is_odds_of_and_a_fractional_ob_deals_its_own_chance():
     w = _world(3)
-    act = Act(id="a:p_low:p_mid", actor="p_low", verb="tell", payload={"to": "p_mid"})
+    act = Act(id="a:p_low:p_mid", actor="p_low", verb="determine", payload={"subject": "p_mid"})
     odds = sigma.odds_of(w, act)
     whole = sigma.odds_of(_world(4), act)                      # Ob 2.0
     assert odds is not None and whole is not None and odds != whole

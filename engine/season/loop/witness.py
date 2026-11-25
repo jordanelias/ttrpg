@@ -18,9 +18,10 @@ from dataclasses import replace
 from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
+from ..data.arrangements import ARRANGEMENTS, DISPOSAL
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, PROCLAIMED, READ_TO_ADDRESSEE, RECORD_CONTENT,
-    UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
+    CHANNEL_CLAIM_SOURCE, DISPOSAL_WRITES, EFFECT_NONE, EFFECT_STRIKE, EFFECT_YIELD, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, PROCEEDING_MOVES,
+    PROCLAIMED, READ_TO_ADDRESSEE, RECORD_CONTENT, SITTING_CLAIMS, SITTING_PREDICATES, SITTING_SOURCE, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
 from ..data.verbs import VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
@@ -45,13 +46,14 @@ from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_on
                          claim_subjects, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
-from ..queries.person_q import addressed_to, drifted
+from ..queries.person_q import addressed_to, conflict, drifted
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
+from .resolve import _milli
 
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
@@ -338,6 +340,80 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
         for c in out:
             yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cfx)
                          if refracting else c)
+
+
+def _sitting_claims(self, w, e: Event, conf: int) -> list:
+    """B24p.22 (V2 p2 §J; p4 §K B2, B4, B21, C1, C4): WHAT A SITTING SHOWED, DEPOSITED WITH THOSE WHO SAW IT -- `[(person, Claim), ...]`, each into the holder's
+    OWN ledger (the caller's `_deposit`), read from the Event's `ending` alone (`world_q.ending_beats`, `ending_sitting`, `ending_card`, `ending_arrangement`):
+    no true attribute, no `terms`, no second roll. `[]` for an Event no proceeding wrote. The kinds, their subjects and values are `rosters.yaml:
+    sitting_claims`'; each is held by every person in the sitting's room (`Sitting.cond`) but where it says otherwise:
+
+      * `rattled`, `shown`, `conceded`, `contumacy` -- of the speaker, from each beat that rattled a man, showed an item, conceded (a move whose effect
+        is `yield`) or rested or pressed in place of an answer it owed (`evaded`: C1);
+      * `hypocrite` -- of the speaker, held ONLY by those in that beat's `caught` (B2: those whose own reading turned the speech he did not hold);
+      * `temper` -- of a man, the FIRST beat he speaks with his temper broken, once a sitting (C4);
+      * `partial` -- of a decider whose conflict reaches `recuse_at`, `(conflict, lean)` in milli-units, read by `person_q.conflict` (the host's own owner)
+        for the two parties; `rigged` of the arranger where the card shows a tilt; `overruled` of a played adjudicator whose ruling departed from his track;
+      * `heard` -- held by each person present who neither speaks nor decides, of the man who bore the matter (B21: he learns, he does not rule);
+      * `yielded` / `hinted` -- the questioned man, held by the questioner under the `yield` disposal at the Event's band, at `confidence_default` times
+        that write's `weight` (`arrangements.yaml: disposal`, `rosters.yaml: disposal_writes`; the `record:confession` stage is B24.14's).
+
+    A man holds no claim of himself. A claim two beats would both make (one rattle of one man by one speaker) is held once. Deposited in the room's own order."""
+    sitting, card = world_q.ending_sitting(e), world_q.ending_card(e)
+    if sitting is None or card is None:
+        return []
+    beats = world_q.ending_beats(e)
+    present = [who for who, _ in sitting.cond if who in w.persons]
+    for_side, against_side = (side for side, _ in sitting.live)
+    first: dict = {}
+    for b in beats:
+        first.setdefault(b.side, b.mover)
+    bearer, questioned = first.get(for_side), first.get(against_side)
+    facts, broke = [], set()          # (kind, subject, value, holders or None for the whole room, confidence or None for the default)
+    for b in beats:
+        effect = PROCEEDING_MOVES[b.move]["effect"]
+        if b.rattled is not None:
+            facts.append(("rattled", b.mover, b.rattled, None, None))
+        if b.item is not None:
+            facts.append(("shown", b.mover, b.item, None, None))
+        if effect == EFFECT_YIELD:
+            facts.append(("conceded", b.mover, b.issue, None, None))
+        if b.evaded and effect in (EFFECT_NONE, EFFECT_STRIKE):
+            facts.append(("contumacy", b.mover, b.issue, None, None))
+        if b.caught:
+            facts.append(("hypocrite", b.mover, b.issue, tuple(b.caught), None))
+        if b.broke and b.mover not in broke:
+            broke.add(b.mover)
+            facts.append(("temper", b.mover, b.issue, None, None))
+    for d in card.decided_by:
+        if d in w.persons:
+            partial, lean = conflict(w.persons[d], {}, for_party=bearer, against_party=questioned, edges=w.persons[d].tenures)
+            if partial >= w.fixtures.get("recuse_at"):
+                facts.append(("partial", d, (_milli(partial), _milli(lean)), None, None))
+    if card.arranged_by is not None and card.tilt > 0:
+        facts.append(("rigged", card.arranged_by, (card.tilted_against, _milli(card.tilt)), None, None))
+    for d, departure in card.ruled:
+        if departure > 0:
+            facts.append(("overruled", d, _milli(departure), None, None))
+    spoke = {x for b in beats for x in (b.mover, b.voice)}
+    if bearer is not None and beats:
+        for who in present:
+            if who not in spoke and who not in card.decided_by:
+                facts.append(("heard", bearer, beats[-1].issue, (who,), None))
+        for write in DISPOSAL[ARRANGEMENTS[world_q.ending_arrangement(e)]["disposes"]].get(e.degree, ()):
+            kind, weight = write.partition(":")[2], DISPOSAL_WRITES[write].get("weight")
+            if kind in SITTING_CLAIMS and weight is not None and questioned is not None:
+                facts.append((kind, questioned, beats[-1].issue, (bearer,), int(round(conf * weight))))
+    out, held = [], set()
+    for who in present:
+        p = w.persons[who]
+        for kind, subject, value, holders, confidence in facts:
+            if subject == who or (holders is not None and who not in holders) or (kind, subject, value, who) in held:
+                continue
+            held.add((kind, subject, value, who))
+            out.append((p, Claim(H(w.world_seed, w.tick, who, f"sitting:{e.id}:{len(held)}"), who, subject, SITTING_PREDICATES[kind], value, w.tick,
+                                 SITTING_SOURCE, conf if confidence is None else confidence, "own", self.lap, doer=None)))
+    return out
 
 
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
@@ -943,6 +1019,16 @@ def witness(self, token: Token, events: list[Event]) -> int:
                         _deposit(p, dc, e)
         if len(p.ledger) > cap:
             _cap(p)
+    # B24p.22: A DEPOSIT BESIDE THE FAN'S AND THE FINDER'S -- WHAT A SITTING SHOWED, INTO THE OWN LEDGER OF EACH PERSON IN ITS ROOM (V2 p2 §J). One sitting is read once, off the first of
+    # the Events its act emitted (each carries the same `ending`); `_sitting_claims` owns what is deposited and to whom, and nothing here reads a true attribute.
+    # After the fan, as the purview append and the found deposit are, so every deposit the fan makes lands in the order it did; the cap applies as to any deposit.
+    sat: set = set()
+    for e in events:
+        if e.ending and e.causes[0] not in sat:
+            sat.add(e.causes[0])
+            for p, c in _sitting_claims(self, w, e, conf):
+                _deposit(p, c, e)
+                _cap(p)
     # v9 FI-03 (`ED-FI-0002`): THE SIXTH DEPOSIT -- WHAT A FINDING UNCOVERED, INTO THE FINDER'S OWN LEDGER.
     # RESOLVE's per-act bookkeeping asked the `inquiry` role what each Event uncovered and kept the answer
     # on the driver (`self.findings`, `seam.find_trail`); here the finder comes to hold what a WITNESS of

@@ -15,11 +15,11 @@ import math
 from dataclasses import replace
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, RIG_KEY, RIG_LEVELS, SEAT_ROW_BY_ID, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import KEEPS_KEY, TERM_KEY, office_founded_by, office_named_by
-from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
+from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_ARRANGER, restrained
 from ..state.carriers import Tenure, Term, subject_of
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
                           passes_a_seat, revocation_disposal)
@@ -498,18 +498,29 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     `remit:`-eligible and always carries one) gives a vacant date that lapses. Set at
     construction beside `venue` (neither is a Part D row; `due_at` and `fired` are), so a second
     identical convening still moves nothing. REVERT: drop the `holder` key -- every convened date
-    fires vacant again and no computed slot forms."""
+    fires vacant again and no computed slot forms.
+
+    B24p.24 (V2 p2 §H, "the convening seat"): THE CONVENER ARRANGES THE SITTING WHERE HE RIGGED IT. A `rig` operand above 0 (a `rig_levels` member) is
+    written on the Date beside `holder`, with the convener as its `arranger`, and `_eff_open_case` gives it to the item it fills this Date's slot with
+    where the opener rigged none. [ASSUMPTION; medium; Jordan to correct -- basis: V2 p2 §H "the convening seat", "the body's presiding seat"; the
+    convener arranges where the opener did not.] A convening that rigs nothing writes neither key, so every Date is what it was. A level outside the
+    roster is declined (`convene.refused`). REVERT: drop the two keys; every sitting is arranged by its opener alone."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     when = int(d.get("when", w.tick + 1))
     venue = d.get("subject")
+    rig = d.get(RIG_KEY, 0)
+    if isinstance(rig, bool) or not isinstance(rig, (int, float)) or rig not in RIG_LEVELS:
+        return NO_CHANGE
     did = H(w.world_seed, w.tick, a.actor, f"convene:{venue or '-'}")
 
     def perform() -> None:
-        # roster-exempt: MECHANISM -- a Date's own field names (`id`, `venue`, `holder`), the shape of the
+        # roster-exempt: MECHANISM -- a Date's own field names (`id`, `venue`, `holder`, `arranger`, `rig`), the shape of the
         # carrier this line constructs, the class `state/carriers.py::Rung._DECLARED` is exempted for.
         date = w.dates.setdefault(did, {"id": did, "venue": venue, "holder": a.via})
         date["due_at"] = when
         date["convening_attached"] = True
+        if rig > 0:
+            date[DOCKET_ARRANGER], date[RIG_KEY] = a.actor, float(rig)
     return Change((Subject.entity("dates", did),), perform)
 
 

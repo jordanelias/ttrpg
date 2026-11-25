@@ -40,7 +40,7 @@ import pytest
 
 from ..data import verbs as V
 from ..data.pursuits import to_axes
-from ..data.rosters import QUESTION_SOURCES
+from ..data.rosters import QUESTION_SOURCES, SITTING_PREDICATES
 from ..harness import populated as POP
 from ..boot.realm import build_realm
 from ..loop import driver as DRV
@@ -409,10 +409,17 @@ def test_witness_stamps_doer_exactly_on_the_holders_own_acts(season_1):
         if e.kind == "claim.deposited":
             for c in e.changes:
                 dep[c.subject] = [x for x in (e.causes or []) if x != ROOT]
-    stamped = unstamped = 0
+    stamped = unstamped = sitting = 0
+    sat = set(SITTING_PREDICATES.values())
     for p in w.persons.values():
         for c in p.ledger:
             if c.id not in dep:
+                continue
+            if c.predicate in sat:
+                # B24p.99: a SITTING claim (B24p.22) is what a man saw ANOTHER do in a room (`_sitting_claims`: "a man holds no claim of
+                # himself"), so it records no act of its holder's whatever caused the Event, even a sitting his own act opened: `doer` None.
+                assert c.doer is None and c.subject != p.id, (p.id, c)
+                sitting += 1
                 continue
             own = any((a := causing_act(w, ev[x])) is not None and a.actor == p.id
                       for x in dep[c.id] if x in ev)
@@ -424,6 +431,7 @@ def test_witness_stamps_doer_exactly_on_the_holders_own_acts(season_1):
             unstamped += c.doer is None
     # MEASURED at IN-57, `build_realm(0)`, one season: 1,652 of 5,238 held claims stamped.
     assert stamped >= 1000 and unstamped >= 1000, (stamped, unstamped)
+    assert sitting >= 1, "no sitting claim was held: the sitting rule above did not run"
 
 
 def test_seed_0_season_1_each_person_answers_a_tier_0_or_1_question_first_where_he_has_one(

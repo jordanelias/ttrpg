@@ -1304,7 +1304,7 @@ rows:
       `test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing`,
       `test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refuses`,
       `test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived`,
-      `test_wc_no_corpus_refusal_arises_from_a_missing_operand`,
+      `test_wc_no_corpus_refusal_arises_from_a_missing_operand` (retired),
       `test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`,
       `test_wc_the_fold_binds_what_the_person_bound`,
       `test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason`, and probe `F10`.
@@ -5973,7 +5973,7 @@ rows:
     source:    "premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S4; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: the end-to-end deposit (n=120 seeds) and the `proofs` readings with the bench proxy. Reproduce by the call described, not by any scratch script."
   - id:        H-312
     tier:      1
-    hole:      "CLOSED (B05.11, on the `interrogate` row of `verb_table.yaml`, which names `capability: inquiry` since B04.03): the subject's resistance is his `inquiry` SKILL SCORE (`seam/wrappers/sigma.py::_opposition_of` returns `pool.score`, no attribute, on every arm), so raising it lowers Partial-or-better, pinned by `engine/season/tests/test_odds_of.py::test_raising_the_subjects_inquiry_score_lowers_partial_or_better_on_interrogate` and, for the unauthored subject, `::test_an_unauthored_hearer_is_not_harder_than_a_held_one`; the questioner's skill and attributes enter his pool (B05.25); the text below is the row's history. `interrogate` HAS NO CONTEST KEY, SO NEITHER THE QUESTIONER'S SKILL NOR THE SUBJECT'S RESISTANCE ENTERS (premise-check, interrogation). `interrogate` is not in `verb_capability` in `engine/season/rosters.yaml`, so the pool is `pool_default` and the obstacle `obstacle_default` for every pair. Read-only through `seam/wrappers/sigma.py::odds_of`, setting the questioner's or the subject's capabilities and attributes to 0 or 20 left the odds at (0.74, 0.19, 0.07, 0.0); the controls `examine` and `argue` moved to (0.03, 0.03, 0.10, 0.84). Pool sweep 1, 2, 5, 10, 20, 30 gave Failure 0.90, 0.74, 0.40, 0.16, 0.03, 0.007, monotone."
+    hole:      "CLOSED (B05.11, on the `interrogate` row of `verb_table.yaml`, which names `capability: inquiry` since B04.03): the subject's resistance is his `inquiry` SKILL SCORE (`seam/wrappers/sigma.py::_opposition_of` returns `pool.score`, no attribute, on every arm), so raising it lowers Partial-or-better, pinned by `engine/season/tests/test_odds_of.py::test_raising_the_subjects_skill_score_lowers_partial_or_better_on_arrest` and, for the unauthored subject, `::test_an_unauthored_hearer_is_not_harder_than_a_held_one`; the questioner's skill and attributes enter his pool (B05.25); the text below is the row's history. `interrogate` HAS NO CONTEST KEY, SO NEITHER THE QUESTIONER'S SKILL NOR THE SUBJECT'S RESISTANCE ENTERS (premise-check, interrogation). `interrogate` is not in `verb_capability` in `engine/season/rosters.yaml`, so the pool is `pool_default` and the obstacle `obstacle_default` for every pair. Read-only through `seam/wrappers/sigma.py::odds_of`, setting the questioner's or the subject's capabilities and attributes to 0 or 20 left the odds at (0.74, 0.19, 0.07, 0.0); the controls `examine` and `argue` moved to (0.03, 0.03, 0.10, 0.84). Pool sweep 1, 2, 5, 10, 20, 30 gave Failure 0.90, 0.74, 0.40, 0.16, 0.03, 0.007, monotone. SUPERSEDED by B24p.19: interrogate proceeds; the subject's resistance is `will + rank` in the proceeding, not his inquiry skill score."
     kind:      "WIRING"
     owner:     "`engine/season/rosters.yaml` (`verb_capability`); `engine/season/seam/wrappers/pool.py` and `sigma.py` (the opposition read)"
     grade:     "measured"
@@ -7234,6 +7234,1045 @@ rows:
     unblocks:  "the plan's standing rule that no matchup is certain, read as play meets it; a ruling on the riposte's damage and on the floor"
     cite:      "B15.09's commit body (32 of 50 weapon win-rates outside their old intervals, ranseur 96.1 to 99.9, dangpa 95.1 to 100.0); `modules/combat/wrapper.py::_land`. UPSET_FLOOR is the designer's number (ED-PC-0036) and is not touched here. The premise-check reader's figures; the orchestrator re-ran none of them."
     source:    "premise-check pass over workplan v12 B15 (PR 632), batch B15-pc-calibration, 2026-11-25"
+  - id:        H-861
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fit_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fit_level` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "\"strong\" -- V2's SHIPPED VALUE, written by B24p.23 (the control was None, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `None`, the control]"
+    site:      "Fixtures fit_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [null, "strong", "major"]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fit_level ships \"strong\", the control `None`; the running model's value is `sc2/host.py::SHIPPED['fit_level']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, the shipped value and the next level above it]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 1)"
+
+  - id:        H-862
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `answer_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_level` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "\"moderate\" -- V2's SHIPPED VALUE, written by B24p.23 (the control was None, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `None`, the control]"
+    site:      "Fixtures answer_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [null, "moderate", "strong"]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): answer_level ships \"moderate\", the control `None`; the running model's value is `sc2/host.py::SHIPPED['answer_level']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, the shipped value and the next level above it]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 2)"
+
+  - id:        H-863
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `repeat_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.repeat_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.35 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures repeat_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.175, 0.35]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): repeat_step ships 0.35, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['repeat_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 3)"
+
+  - id:        H-864
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `sense_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sense_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.15 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures sense_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.075, 0.15, 0.3]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): sense_step ships 0.15, no control named; the running model's value is `sc2/host.py::SHIPPED['sense_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 4)"
+
+  - id:        H-865
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `involve` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.involve` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures involve, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.15, 0.3, 0.6]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): involve ships 0.3, no control named; the running model's value is `sc2/host.py::SHIPPED['involve']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 5)"
+
+  - id:        H-866
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `esteem_step` (a fifth of a level a point of Grace better than the other) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.esteem_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.2 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures esteem_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.1, 0.2]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): esteem_step ships 0.2, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['esteem_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 6)"
+
+  - id:        H-867
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `show` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.show` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures show, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): show ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['show']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 7)"
+
+  - id:        H-868
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `off_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.off_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures off_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): off_step ships 1.0, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['off_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 8)"
+
+  - id:        H-869
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `admit_step` (silence and the burden) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.admit_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures admit_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): admit_step ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['admit_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 9)"
+
+  - id:        H-870
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `contempt_step` (silence and the burden) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.contempt_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures contempt_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): contempt_step ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['contempt_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 10)"
+
+  - id:        H-871
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `ploy_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.ploy_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures ploy_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.75, 1.5]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): ploy_step ships 1.5, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['ploy_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 11)"
+
+  - id:        H-872
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `grain_strain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain_strain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures grain_strain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.25, 0.5]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): grain_strain ships 0.5, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['grain_strain']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 12)"
+
+  - id:        H-873
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `heard_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.05 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures heard_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.025, 0.05]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): heard_step ships 0.05, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['heard_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 13)"
+
+  - id:        H-874
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `heard_floor` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_floor` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures heard_floor, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): heard_floor ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['heard_floor']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 14)"
+
+  - id:        H-875
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `gap_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.gap_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.25 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures gap_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.125, 0.25]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): gap_step ships 0.25, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['gap_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 15)"
+
+  - id:        H-876
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `weary_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.weary_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures weary_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.25, 0.5]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): weary_step ships 0.5, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['weary_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 16)"
+
+  - id:        H-877
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `stay_base` (Will 4 argues three speeches fresh) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stay_base` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures stay_base, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): stay_base ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['stay_base']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 17)"
+
+  - id:        H-878
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `stay_per_will` (Will 4 argues three speeches fresh) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stay_per_will` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures stay_per_will, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): stay_per_will ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['stay_per_will']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 18)"
+
+  - id:        H-879
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `awe_step` (its control 0 is the model's control set (`sc2/host.py::CONTROL_ZERO`), V2 p2 §K's control list does not name it) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.awe_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures awe_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.25, 0.5]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): awe_step ships 0.5, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['awe_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 19)"
+
+  - id:        H-880
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `comfort_step` (now `discern`, B10) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.comfort_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures comfort_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): comfort_step ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['comfort_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 20)"
+
+  - id:        H-881
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `rel_gain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rel_gain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures rel_gain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): rel_gain ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['rel_gain']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 21)"
+
+  - id:        H-882
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `flop` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.flop` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures flop, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): flop ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['flop']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 22)"
+
+  - id:        H-883
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `invite` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.invite` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures invite, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): invite ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['invite']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 23)"
+
+  - id:        H-884
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `press_ob` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.press_ob` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.25 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures press_ob, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.625, 1.25, 2.5]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): press_ob ships 1.25, no control named; the running model's value is `sc2/host.py::SHIPPED['press_ob']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 24)"
+
+  - id:        H-885
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `press_pull` (multiplied by heat) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.press_pull` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures press_pull, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): press_pull ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['press_pull']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 25)"
+
+  - id:        H-886
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `rattle_pull` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rattle_pull` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures rattle_pull, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): rattle_pull ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['rattle_pull']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 26)"
+
+  - id:        H-887
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `wear` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.wear` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures wear, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): wear ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['wear']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 27)"
+
+  - id:        H-888
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `rattle_gain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rattle_gain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures rattle_gain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.75, 1.5, 3.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): rattle_gain ships 1.5, no control named; the running model's value is `sc2/host.py::SHIPPED['rattle_gain']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 28)"
+
+  - id:        H-889
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `rebound` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rebound` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures rebound, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): rebound ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['rebound']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 29)"
+
+  - id:        H-890
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `reactance` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.reactance` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.75 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures reactance, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 0.75, 1.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): reactance ships 0.75, no control named; the running model's value is `sc2/host.py::SHIPPED['reactance']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; the points the row's own shape asks for]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 30)"
+
+  - id:        H-891
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `room_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.room_level` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures room_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.25, 0.5]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): room_level ships 0.5, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['room_level']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 31)"
+
+  - id:        H-892
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `heckle` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heckle` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures heckle, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.5, 1.0]
+    unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): heckle ships 1.0, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['heckle']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 32)"
+
+  - id:        H-893
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `concede_step` (was 2.0: with the cost taken from where he stands and descent buying the next rung's ground, 2.0 made descending best nowhere) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: conceding). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.concede_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures concede_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's conceding reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): concede_step ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['concede_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 33)"
+
+  - id:        H-894
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `consent_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: conceding). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.consent_at` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures consent_at, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.25, 2.5, 5.0]
+    unblocks:  "the proceeding's conceding reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): consent_at ships 2.5, no control named; the running model's value is `sc2/host.py::SHIPPED['consent_at']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 34)"
+
+  - id:        H-895
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `crowd_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_at` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "12.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures crowd_at, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [6.0, 12.0, 24.0]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): crowd_at ships 12.0, no control named; the running model's value is `sc2/host.py::SHIPPED['crowd_at']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 35)"
+
+  - id:        H-896
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `crowd_lean` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_lean` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.2 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures crowd_lean, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 0.1, 0.2]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): crowd_lean ships 0.2, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['crowd_lean']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 36)"
+
+  - id:        H-897
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `mood_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.mood_scale` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "5.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures mood_scale, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [2.5, 5.0, 10.0]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): mood_scale ships 5.0, no control named; the running model's value is `sc2/host.py::SHIPPED['mood_scale']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 37)"
+
+  - id:        H-898
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `read_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_scale` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures read_scale, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): read_scale ships 1.0, no control named; the running model's value is `sc2/host.py::SHIPPED['read_scale']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 38)"
+
+  - id:        H-899
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `read_blur` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_blur` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures read_blur, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): read_blur ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['read_blur']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 39)"
+
+  - id:        H-900
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `read_noise` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_noise` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures read_noise, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.15, 0.3, 0.6]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): read_noise ships 0.3, no control named; the running model's value is `sc2/host.py::SHIPPED['read_noise']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 40)"
+
+  - id:        H-901
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `bias_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.bias_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures bias_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): bias_step ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['bias_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 41)"
+
+  - id:        H-902
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `relevance` (`on`) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.relevance` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "1 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures relevance, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0, 0.5, 1]
+    unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): relevance ships 1, no control named; the running model's value is `sc2/host.py::SHIPPED['relevance']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; the points the row's own shape asks for]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 42)"
+
+  - id:        H-903
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `track_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the close). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.track_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.2 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures track_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.1, 0.2, 0.4]
+    unblocks:  "the proceeding's the close reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): track_step ships 0.2, no control named; the running model's value is `sc2/host.py::SHIPPED['track_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 43)"
+
+  - id:        H-904
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `temper_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures temper_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): temper_step ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['temper_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 44)"
+
+  - id:        H-905
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `temper_break` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_break` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.75 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures temper_break, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.5, 0.75, 1.0]
+    unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): temper_break ships 0.75, no control named; the running model's value is `sc2/host.py::SHIPPED['temper_break']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; the points the row's own shape asks for]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 45)"
+
+  - id:        H-906
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `temper_cool` (an ordinary man breaks at a second rattle that follows the first closely) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_cool` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures temper_cool, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): temper_cool ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['temper_cool']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 46)"
+
+  - id:        H-907
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `grain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures grain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): grain ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['grain']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 47)"
+
+  - id:        H-908
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `grudge` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grudge` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures grudge, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): grudge ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['grudge']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 48)"
+
+  - id:        H-909
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `pride` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.pride` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures pride, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): pride ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['pride']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 49)"
+
+  - id:        H-910
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `start_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.start_step` the one home. READERS: `seam/wrappers/sigma.py::_present` (the man's `start`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
+    site:      "Fixtures start_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.0, 1.0, 2.0]
+    unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): start_step ships 2.0, the control `0.0`; the running model's value is `sc2/host.py::SHIPPED['start_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names a control and the shipped value and no sweep -- basis: none; the control, half the shipped value, the shipped value]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 50)"
+
+  - id:        H-911
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `presume_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.presume_step` the one home. READERS: `seam/wrappers/sigma.py` (the presumption the room's deciders start from)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures presume_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): presume_step ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['presume_step']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 51)"
+
+  - id:        H-912
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `power_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.power_scale` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
+    grade:     "assumption"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures power_scale, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [1.0, 2.0, 4.0]
+    unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): power_scale ships 2.0, no control named; the running model's value is `sc2/host.py::SHIPPED['power_scale']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 52)"
+
+  - id:        H-913
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `strain_fade` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.strain_fade` the one home. READERS: `queries/person_q.py::strain_carried`, called by `seam/wrappers/sigma.py::_present`"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures strain_fade, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): strain_fade ships 0.5, no control named; the running model's value is `sc2/host.py::SHIPPED['strain_fade']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 53)"
+
+  - id:        H-914
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `recuse_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.recuse_at` the one home. READERS: `seam/wrappers/sigma.py` (the seat's recusal) and `loop/witness.py::_sitting_claims` (the `partial` claim)"
+    grade:     "assumption"
+    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures recuse_at, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
+    sweep:     [0.125, 0.25, 0.5]
+    unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): recuse_at ships 0.25, no control named; the running model's value is `sc2/host.py::SHIPPED['recuse_at']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 54)"
+
+  - id:        H-915
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_carried` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_carried` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_carried, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_carried ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['carried']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 55)"
+
+  - id:        H-916
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_accord` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_accord` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.15 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_accord, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.075, 0.15, 0.3]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_accord ships 0.15, no control named; the running model's value is `sc2/host.py::FOLD['accord']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 56)"
+
+  - id:        H-917
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_unmoved` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_unmoved` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.05 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_unmoved, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.025, 0.05, 0.1]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_unmoved ships 0.05, no control named; the running model's value is `sc2/host.py::FOLD['unmoved']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 57)"
+
+  - id:        H-918
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_accuser` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_accuser` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_accuser, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_accuser ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['accuser']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 58)"
+
+  - id:        H-919
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_acquitted` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_acquitted` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.2 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_acquitted, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.1, 0.2, 0.4]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_acquitted ships 0.2, no control named; the running model's value is `sc2/host.py::FOLD['acquitted']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 59)"
+
+  - id:        H-920
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_heard` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_heard` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.03 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_heard, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.015, 0.03, 0.06]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_heard ships 0.03, no control named; the running model's value is `sc2/host.py::FOLD['heard']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 60)"
+
+  - id:        H-921
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_contumacy` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_contumacy` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_contumacy, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_contumacy ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['contumacy']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 61)"
+
+  - id:        H-922
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_pressed` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_pressed` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_pressed, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_pressed ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['pressed']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 62)"
+
+  - id:        H-923
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_witness` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_witness` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_witness, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_witness ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['witness']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 63)"
+
+  - id:        H-924
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_lost` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_lost` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.05 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_lost, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.025, 0.05, 0.1]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_lost ships 0.05, no control named; the running model's value is `sc2/host.py::FOLD['lost']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 64)"
+
+  - id:        H-925
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_grudge_rig` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_grudge_rig` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_grudge_rig, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.15, 0.3, 0.6]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_grudge_rig ships 0.3, no control named; the running model's value is `sc2/host.py::FOLD['grudge_rig']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 65)"
+
+  - id:        H-926
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_reception` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_reception` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_reception, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_reception ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['reception']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 66)"
+
+  - id:        H-927
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_brute` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_brute` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.2 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_brute, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.1, 0.2, 0.4]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_brute ships 0.2, no control named; the running model's value is `sc2/host.py::FOLD['brute']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 67)"
+
+  - id:        H-928
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_wrong` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: regard. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_wrong` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_wrong, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_wrong ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['wrong']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 68)"
+
+  - id:        H-929
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_legit_ruling` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_legit_ruling` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_legit_ruling, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.05, 0.1, 0.2]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_legit_ruling ships 0.1, no control named; the running model's value is `sc2/host.py::FOLD['legit_ruling']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 69)"
+
+  - id:        H-930
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_legit_brute` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_legit_brute` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.4 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_legit_brute, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.2, 0.4, 0.8]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_legit_brute ships 0.4, no control named; the running model's value is `sc2/host.py::FOLD['legit_brute']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 70)"
+
+  - id:        H-931
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_legit_wrong` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_legit_wrong` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.2 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_legit_wrong, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.1, 0.2, 0.4]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_legit_wrong ships 0.2, no control named; the running model's value is `sc2/host.py::FOLD['legit_wrong']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 71)"
+
+  - id:        H-932
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_legit_fall` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_legit_fall` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_legit_fall, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_legit_fall ships 0.5, no control named; the running model's value is `sc2/host.py::FOLD['legit_fall']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 72)"
+
+  - id:        H-933
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_rig_price` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_rig_price` the one home. READERS: `decision/options.py::rig_offer` (the rig's price in the arranger's choice); the fold's other writes (B27.28, B33.51) are unbuilt"
+    grade:     "assumption"
+    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
+    site:      "Fixtures fold_rig_price, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.125, 0.25, 0.5]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_rig_price ships 0.25, no control named; the running model's value is `sc2/host.py::FOLD['rig_price']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 73)"
+
+  - id:        H-934
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_partial_price` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_partial_price` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_partial_price, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_partial_price ships 0.5, no control named; the running model's value is `sc2/host.py::FOLD['partial_price']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 74)"
+
+  - id:        H-935
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_standing` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_standing` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_standing, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.25, 0.5, 1.0]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_standing ships 0.5, no control named; the running model's value is `sc2/host.py::FOLD['standing']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 75)"
+
+  - id:        H-936
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_strife_ease` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: the fold's thresholds. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_strife_ease` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_strife_ease, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.125, 0.25, 0.5]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_strife_ease ships 0.25, no control named; the running model's value is `sc2/host.py::FOLD['strife_ease']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 76)"
+
+  - id:        H-937
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_merits_at` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: the fold's thresholds. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_merits_at` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_merits_at, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.5, 1.0, 2.0]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_merits_at ships 1.0, no control named; the running model's value is `sc2/host.py::FOLD['merits_at']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; the points the row's own shape asks for]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 77)"
+
+  - id:        H-938
+    tier:      1
+    hole:      "THE SIZE OF THE PROCEEDING'S `fold_fade` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: the fold's thresholds. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_fade` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    grade:     "assumption"
+    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    site:      "Fixtures fold_fade, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
+    sweep:     [0.125, 0.25, 0.5]
+    unblocks:  "the fold's writes to regard, legitimacy, standing and strife"
+    cite:      "V2 p2 §K (`proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part2.md`): fold_fade ships 0.25, no control named; the running model's value is `sc2/host.py::FOLD['fade']` (evidence, cited, not copied). THE SWEEP'S POINTS ARE THIS ROW'S: [ASSUMPTION: V2 names the shipped value only and no sweep -- basis: none; a half, the shipped value, a double]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 78)"
+
+  - id:        H-939
+    tier:      1
+    hole:      "HOW A SPEECH'S DICE ARE BLENDED OF REASON AND PRESENCE -- `speech_blend`, a POINTER ROW with no Fixtures field (R11; V2 p2 §C.2). Two columns carry it and are tuned as one table: the grounds' `reason` (`engine/season/rosters.yaml: grounds`, B24p.01, Reason's share on that ground before the venue's lean) and each type row's `reason_lean` (`engine/season/arrangements.yaml`, B24p.03, how far the venue leans toward Reason or Presence). No document derives either column."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/rosters.yaml: grounds` (`reason`) and `engine/season/arrangements.yaml: arrangements` (`reason_lean`) the two homes. READERS: none yet -- the proceeding's speech (B24p.07) reads both"
+    grade:     "assumption"
+    default:   "THE SHIPPED TABLES, written by B24p.23 from the model (`sc2/host.py::GROUNDS`, `::RITES`): `reason` evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2; `reason_lean` 0.2 on the trial rows (arbitration, legal_trial, tribunal) and the inquisition rows (examination, inquisition_hearing), -0.1 on the debate rows (parliamentary_debate, council_of_state, excommunication_deliberation), -0.3 on rally, 0 on negotiation, conversation, interrogation and audience; the regimes' own `reason_lean` (theocracy -0.1) is in `arrangements.yaml: context` [ASSUMPTION; Jordan to correct; revert: the control, `reason` 1.0 on every ground and `reason_lean` 0 on every row, the dice Reason alone]"
+    site:      "`rosters.yaml: grounds[*].reason` and `arrangements.yaml: arrangements[*].reason_lean`, read by nothing at B24p.04; B24p.07's speech reads them"
+    sweep:     [0, 0.5, 1]
+    unblocks:  "B24p.23's flip of the two columns to V2's model column, and the batch gate's R11 reading (Reason's SLOPE over Presence's under `legal_trial`, the reverse under `rally`)"
+    cite:      "V2 p2 §K (the pointer row: the grounds' `reason` column and the rows' `reason_lean` column are tuned as one table); `sc2/host.py::GROUNDS` and `::RITES` hold the model's values (evidence, cited, not copied). THE SWEEP IS THIS ROW'S: [ASSUMPTION: the scale applied to V2's model column across both tables, 0 the control, 1 the column as V2 gives it, 0.5 between -- basis: none; V2 gives no sweep]. CONTROL: nothing reads either column yet. FALSIFIER: the batch gate's R11 reading at B24p.23 (the blend moves the SLOPE's order by type)."
+    source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 79)"
+
+  - id:        H-940
+    tier:      1
+    hole:      "THE EVEN-SHEET CENTRE OF AN ABRIDGED CONVERSATION AT V2'S SHIPPED SIX ROLES -- the middle bin of `pairs proceeding --type conversation --form abridged --diff sheet` carries 16.6 % (seed 0, n 100,000, 25,770 pairs in the bin) against A-79's one time in four (the same reading with every role at control: 24.4 %). A MEASURED GAP, REPORTED NOT TUNED TO (D-18; B24p.23's STOP clause, overridden by Jordan's ruling this run: ship V2's values and record the miss). THE BATCH GATE'S OTHER MISSES, same ruling, read on the closing tree at B24p.99: the full conversation yields 4.4 % of sittings (the plan expects 5 to 30 %); a decider's Reason (validation) reads no SLOPE beyond two standard errors in `legal_trial`, full form (the gate expects one); perception reads 0.0037 in `legal_trial` full against the gate's +/-0.002; `rally`'s full form reads Reason +0.0039 against Presence +0.0047, the gate's order (Presence above Reason by two standard errors of the difference) holds only in the abridged rally (Presence +0.0254, Reason +0.0080)."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B98.87 re-sweeps it. `engine/season/data/fixtures.py::Fixtures.esteem_step` and `::start_step` the two homes that carry it; the difficulty cell is B05.23's (`Fixtures.difficulty_ob`)"
+    grade:     "assumption"
+    default:   "THE SHIPPED VALUES (esteem_step 0.2, start_step 2.0, V2 p2 §K) [ASSUMPTION; Jordan to correct; revert: the controls, esteem_step 0 and start_step 0]. ATTRIBUTION, seed 0, n 100,000, the middle bin's carried share with one setting back at its control: esteem_step 0 -> 20.0 %, start_step 0 -> 20.3 %, relevance 0 -> 16.8 %, sense_step 0 -> 16.9 %, heard_step 0 -> 16.7 %, crowd_lean 0 -> 16.7 %, off_step 0 -> 16.6 %, and fit_level, answer_level, repeat_step, ploy_step, gap_step, weary_step, awe_step, room_level 0 or None -> 16.6 % (no move). The plan's `--diff read` form cannot read the centre at all: under the proceeding `read` is the act's own margin, whose bin at 0 holds no carried sitting by construction (0.0000 at 0, 0.458 at +1, 1.0 at +2)."
+    site:      "Fixtures esteem_step and start_step, read by the proceeding speech (`modules/social_contest/proceeding.py`: `esteem` on the leverage, the listeners' starts)"
+    sweep:     [0, 0.1, 0.2]
+    unblocks:  "B98.87's re-sweep of the proceeding's settings against A-79's centre, and the instrument's `--diff read` form for the proceeding"
+    cite:      "A-79 (an even argument on a routine matter carries about one time in four; B05.23's difficulty cell holds the centre); workplan v12 B24p.23 step 3 (`FORK:ba108d1:workplans/valoria_master_workplan_v12_part22_b24p_cont.md`); readings at B24p.23's commit"
+    source:    "workplan v12 B24p.23 (measured gap; B24p's H block slot 80, the id the block left unused)"
 
   - id:        H-610
     tier:      1

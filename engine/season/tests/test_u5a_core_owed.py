@@ -49,7 +49,7 @@ def test_sigma_provider_with_no_rng_raises_instrument_defect():
     refusal is the missing generator and not the party, the verb or the prize."""
     w, _d = _world()
     args = (w, ["p_low", "p_mid"], ["c"], "a standing")
-    kw = dict(verb="tell", subject="p_mid")
+    kw = dict(verb="arrest", subject="p_mid")
     ok = sigma.resolve(*args, **kw, rng=draw.seeded(draw.H2("test_u5a_core_owed", 3)))
     assert ok["status"] == "RESOLVED", ok
     with pytest.raises(InstrumentDefect, match="sigma"):

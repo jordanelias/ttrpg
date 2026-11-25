@@ -15,13 +15,14 @@ write below presents it. This module constructs none and calls no minter --
 from __future__ import annotations
 
 import random
-from dataclasses import replace
-from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree, degree_from_net
+from dataclasses import fields, is_dataclass, replace
+from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, degree_from_net
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
 from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
-                            MARGIN_ENDING, SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
+                            ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
+                            SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share, when_holds)
 
 from typing import Any, Optional
@@ -39,7 +40,8 @@ from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMEN
 from ..data.affiliations import engagement
 from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import pool_pair
-from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
+from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE, arranged_by, topic_of
+from ..queries.inputs import Beat, Outcome
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -376,6 +378,65 @@ def _margin_ending(resolution: "Resolution | None") -> tuple:
     return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()
 
 
+_BEAT_CELLS = tuple(f.name for f in fields(Beat) if f.name != "terms")   # the beat's cells a written sitting carries, in the record's order
+
+
+def _milli(x: float) -> int:
+    """A real as whole milli-units (B05.01's unit, `MARGIN_SCALE`): the encoding a written record holds, so two writes of one value are one byte string."""
+    return int(round(x * MARGIN_SCALE))
+
+
+def _plain(v: Any) -> Any:
+    """A record's value as plain tuples, strings, whole numbers and `None`: reals in milli-units, a dataclass (a `Point`, a `Cond`) as the tuple of its
+    fields in declared order. A `bool` stays one (`bool` is an `int`: it is tested first)."""
+    if isinstance(v, bool) or v is None or isinstance(v, (int, str)):
+        return v
+    if isinstance(v, float):
+        return _milli(v)
+    if is_dataclass(v) and not isinstance(v, type):
+        return tuple(_plain(getattr(v, f.name)) for f in fields(v))
+    return tuple(_plain(x) for x in v)
+
+
+def _stance_of(mood: float) -> str:
+    """THE ROOM'S STANCE IN ITS FIVE BANDS (V2 p2 §C.1, p4 §L 20): the clamped mood, -1..1, in five equal fifths named by `rosters.yaml: stance_bands`
+    from the lowest. The number itself is never written."""
+    n = len(STANCE_BANDS)
+    return STANCE_BANDS[min(n - 1, int((mood + 1.0) / 2.0 * n))]
+
+
+def _proceeding_ending(resolution: "Resolution | None") -> tuple:
+    """B24p.20: `Event.ending` OF AN ACT RESOLVED THROUGH THE PROCEEDING -- THE SITTING WRITTEN, from the outcome the entry returned and the result
+    `seam/wrappers/sigma.py::_resolve_proceeding` held, nothing recomputed; `()` where the result holds no proceeding (every other act). The shape is
+    `rosters.yaml: proceeding_endings`: the head `("proceeding", arrangement, form, ended, ended_by)`; a `("beat", ...)` per beat, `terms` (the true values)
+    never written and `mood` written as its STANCE, named only at the beat that turns it (the first, and each whose band differs from the one before) and as
+    `decided` on the beat a yield settled the act on (the act's band read no verdict); the whole `Sitting`, so a resume needs no replay; a
+    `("verdict", id, band)` per verdict, graded on the one ladder by `degree_of`. Every real is milli-rounded. `Sitting.tracks` is asserted equal to each
+    track as the sitting began (`result["starts"]`) plus the beats' moves on him (`04` G.1.5: a stored aggregate decides nothing, a reader rebuilds it)."""
+    r = resolution.result if resolution is not None else None
+    out = r.get("proceeding") if isinstance(r, dict) else None
+    if not isinstance(out, Outcome):
+        return ()
+    run = dict(r["starts"])
+    for b in out.beats:
+        for who, d in b.moved:
+            run[who] += d
+    for who, track in out.state.tracks:
+        if abs(track - run[who]) > 1 / MARGIN_SCALE:      # [canonical: one milli-unit, the ladder's own unit of account (MARGIN_SCALE)]
+            raise InstrumentDefect(f"the written sitting's track of {who!r} is {track!r}; his start and the beats' moves on him sum to {run[who]!r} (04 G.1.5)")
+    decided = out.ended == "yielded" and not r["read"]
+    beats, before = [], None
+    for i, b in enumerate(out.beats):
+        band = STANCE_DECIDED if decided and i == len(out.beats) - 1 else _stance_of(b.mood)
+        shown = band if band != before else None          # the stance is named where it turns, never at a beat that leaves it as it was
+        beats.append((ENDING_BEAT, *(shown if name == "mood" else _plain(getattr(b, name)) for name in _BEAT_CELLS)))
+        before = band
+    verdicts = tuple((ENDING_VERDICT, who, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob))) for who, m in out.verdicts)
+    card = r["card"]       # B24p.22: the card's public cells (who decided, who tilted the forum and how far) and a played judge's departures, which the witnesses read
+    held = (ENDING_CARD, tuple(card.decided_by), card.arranged_by, _milli(card.tilt), card.tilted_against, _plain(out.ruled))
+    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *_plain(out.state)), *verdicts, held)
+
+
 def _refusal_degree(row: "VerbRow", degree):
     """B07.10: the band a REFUSAL Event carries. A task row (`draw_kinds` set) is drawn before its write is known, so a
     refusal after the draw is a precondition failed, not an outcome: `None`, as `_admits`'s and `_refuse_party_gap`'s refusals
@@ -445,12 +506,16 @@ def _fold(self, w: "World", token: Token, a: Act,
     _fed = resolution.result.get("fed_by", ()) if resolution is not None and isinstance(resolution.result, dict) else ()
     _shown = skill_shown_observed(w.persons[a.actor], _fed, _degree) if _fed and a.actor in w.persons else ()
 
+    # B24p.20: A SITTING THAT WAS HELD IS WRITTEN ON EVERY EVENT THE ACT EMITS, a refusal after it too (A-81: no end of a proceeding leaves the stage bare);
+    # `()` for every act no proceeding resolved.
+    _sitting = _proceeding_ending(resolution)
+
     def ev(kinds, changes=None):
-        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + _shown)
+        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + _shown, _sitting)
 
     def refuse(kinds):
         # B07.10: a refusal is a precondition failed, never an outcome (04 §C.4), so a task act's refusal carries no band.
-        return _act_events(self, w, a, kinds, None, _refusal_degree(row, _degree), verdict.observed)
+        return _act_events(self, w, a, kinds, None, _refusal_degree(row, _degree), verdict.observed, _sitting)
 
     # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`): `resolve()`'s contest branch never
     # enters this function, so written out here they would be skipped there.
@@ -482,7 +547,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # SC-P1 (B05.18): a margin provider's contest leaves the roll that decided it on EVERY Event the act's loop below stamps,
     # the Failure band's included (`changed` empty there); a scene's own `ending` replaces it in `_apply_write` (never both:
     # a result is a scene's or a margin's). `()` for every act no margin graded.
-    _roll = _margin_ending(resolution)
+    _roll = _margin_ending(resolution) or _sitting
     if _roll:
         carried["ending"] = _roll
     # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12). An UNCONTESTED verb
@@ -1136,9 +1201,16 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # before the call, because PARTY-GAP is the WRAPPER's own vocabulary for every shape of
     # missing party (empty claimants, wrong-typed claimant, no subject, no rung) and a pre-check
     # here would have to re-enumerate all of them to stay in sync.
+    # B24p.19: THE MATTER A PROCEEDING IS ABOUT (INT C.1). Where the row's opponent operand is another than `subject` (`tell`, `lie`, `argue`: their
+    # hearer, `to`), the matter is the act's `subject`; where the opponent IS the subject (`speak`: the docketed matter; `interrogate`: the man
+    # questioned) the matter is that same operand, `_subject`. Read by the seam only for a row carrying `proceeds:` (`seam/contest.py`).
+    _topic = topic_of(a, _subject)
+    # B24p.24: AND WHO ARRANGED THE SITTING, AND HOW HARD (V2 p2 §H): the docketed item's two keys, read for an act that hears the docket.
+    _arranger, _rig = arranged_by(w, a, _topic)
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng, effort=effort_of(a), host=host, via=a.via, seat=seat_named_by(w, a, contests[0]))
+                rng=_rng, effort=effort_of(a), host=host, via=a.via, act=a, topic=_topic, arranger=_arranger, rig=_rig,
+                seat=seat_named_by(w, a, contests[0]))
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
@@ -1472,7 +1544,7 @@ def resolve(self, token: Token, acts: list[Act],
 
 
 def _act_events(self, w: "World", a: Act, kinds, changes=None, degree=None,
-                observed=()) -> list:
+                observed=(), ending=()) -> list:
     """THE ONE SHAPE OF AN ACT'S EMISSION: one Event per kind, its id `H(seed, tick, actor,
     "<kind>:<act id>")`. `_fold`'s `ev` is this with the act's degree and verdict bound; the
     accumulator's after-the-fact refusal (G4) is this with the success Event's, so a `work`
@@ -1504,7 +1576,7 @@ def _act_events(self, w: "World", a: Act, kinds, changes=None, degree=None,
     cited = list(dict.fromkeys([a.id, *self._occasion_ids(w, a)]))
     return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
                   k, list(changes or []), list(cited), w.tick,
-                  degree=degree, observed=observed)
+                  degree=degree, observed=observed, ending=ending)
             for k in kinds]
 
 

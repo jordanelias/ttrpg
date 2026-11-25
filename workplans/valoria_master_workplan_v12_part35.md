@@ -27,7 +27,7 @@ GATE: Batch B08-scene-order
 GATE: Batch B11-fi-readers
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B24p-sc-proceeding
+GATE: Batch B24p-sc-proceeding @ba108d1
 GATE: Batch B25-fi-questioning
 GATE: Batch B27-sc-proceedings
 GATE: Batch B24a-sc-outside-the-room

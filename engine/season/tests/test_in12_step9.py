@@ -330,21 +330,22 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     assert carin.capability == {"copying": 3}, carin.capability
     others = [p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability]
     assert others, "no person without a capability to compare against"
-    before = sigma.faculty(w, carin, "tell")
+    before = sigma.faculty(w, carin, "carry")
     cands = [c for c in _formed(w, CARIN, "train", CARIN) if c.operands.get("kind") == "copying"]
     assert len(cands) == 1, [c.operands for c in cands]
     (act,) = _acts(w, CARIN, cands)
     assert act.payload["kind"] == "copying"
     assert _kinds(_resolve(w, d, act)) == ["capability.raised"]
     assert carin.capability == {"copying": 4}
-    pools = {p.id: sigma.faculty(w, p, "tell") for p in [carin, *others]}
+    pools = {p.id: sigma.faculty(w, p, "carry") for p in [carin, *others]}
     # B05.99 re-pin (B05.25's pool, B05.23's base 6): Carin is governing 1.0 + rank 4 + 6, one die over her pool before the
     # training (was 4, the key alone); the persons without a key read their drawn sheets' means + 6: {p_b: 10.0, p_c: 9.0}
     # (was {3, 2}, the larger of attribute and key)
     assert pools[CARIN] == 11.0 == before + 1, (pools, before)
     # B06.99 re-pin (B06.04: the keyed mix draws the sheets; a stream change, not a balance change): {p_b: 11.5, p_c: 9.5}
-    # (was {9.0, 10.0})
-    assert {pools[p.id] for p in others} == {9.5, 11.5}, pools
+    # (was {9.0, 10.0}). B24p.99: read on `carry` (charisma + grace; `tell`, which was acuity + attunement, proceeds and is no pool), the same
+    # drawn sheets give {p_b: 10.5, p_c: 11.0}: a different verb reads a different mean of the same two persons' scores
+    assert {pools[p.id] for p in others} == {10.5, 11.0}, pools
     assert len(set(pools.values())) > 1, pools
 
 
@@ -355,16 +356,16 @@ def test_a_planted_addend_registered_through_faculty_is_read_by_the_roll_and_the
     w, _d = _npc088()
     carin = w.persons[CARIN]
     other = next(p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
-    base = {p.id: sigma.faculty(w, p, "tell") for p in (carin, other)}
+    base = {p.id: sigma.faculty(w, p, "carry") for p in (carin, other)}
     determine = sigma.faculty(w, carin, "determine")
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
-    sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "tell") else 0)
-    assert sigma.faculty(w, carin, "tell") == base[CARIN] + 2
-    assert sigma.faculty(w, other, "tell") == base[other.id]            # keyed by the person it names
+    sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "carry") else 0)
+    assert sigma.faculty(w, carin, "carry") == base[CARIN] + 2
+    assert sigma.faculty(w, other, "carry") == base[other.id]            # keyed by the person it names
     # the addend names a verb: her `determine` pool is unmoved (B05.99: it reads her drawn sheet since B05.25, no longer
     # `pool_default`, so it is compared with itself before the addend)
     assert sigma.faculty(w, carin, "determine") == determine
-    inp = sigma.contest_input(w, [CARIN], verb="tell", subject=other.id, room=None, examined=None)
+    inp = sigma.contest_input(w, [CARIN], verb="carry", subject=other.id, room=None, examined=None)
     assert inp.pool == base[CARIN] + 2, inp.pool
 
 
@@ -439,17 +440,18 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     assert w.persons[pupil].capability == {"argue": 3, "inquiry": 4}
     p = w.persons[pupil]
     inquiries = [v for v, k in VERB_CAPABILITY.items() if k == "inquiry"]
-    # B11 lane A: `interrogate` draws on `inquiry` (3 -> 4 verbs) and `determine` on `argue` (it rolled `pool_default`)
+    # B11 lane A: `interrogate` drew on `inquiry` (3 -> 4 verbs; it proceeds since B24p.19 and is no pool) and `determine` on `argue` (it rolled `pool_default`)
     # B05.99 re-pin (B05.25, B05.23): the pool is the governing score (the untrained score: no sheet) + the rank + the base 6;
     # was the key alone ({4}; 3)
     add = w.fixtures.get("pool_add")
     # B07.01 (UNDECIDED (11) (iv)): `survey` and `reconstruct` now name `inquiry` too (4 -> 6 verbs); the pinned
     # SET, not a count, so a verb leaving or joining the skill is a named change here
-    assert set(inquiries) == {"examine", "interrogate", "research", "surveil", "survey", "reconstruct"}
+    assert set(inquiries) == {"examine", "interrogate", "research", "surveil", "survey", "reconstruct"}     # the key's verbs, the proceeding's `interrogate` among them
+    inquiries = [v for v in inquiries if not VERB_TABLE[v].proceeds]                                     # B24p.99: the pool is read where the verb rolls the single roll
     assert {sigma.faculty(w, p, v) for v in inquiries} == {default + 4 + add}
-    assert sigma.faculty(w, p, "argue") == default + 3 + add == sigma.faculty(w, p, "determine")
-    # a verb drawing on no vocation still rolls the untrained man's pool (B05.25: `lie`; a brute verb like `transfer` rolls nothing)
-    assert sigma.faculty(w, p, "lie") == default + add, "a verb drawing on no vocation still rolls the default"
+    assert sigma.faculty(w, p, "determine") == default + 3 + add                           # B24p.99: `argue` proceeds; `determine` is the `argue` key's roll
+    # a verb drawing on no vocation still rolls the untrained man's pool (B05.25: `conceal`, was `lie`; a brute verb like `transfer` rolls nothing)
+    assert sigma.faculty(w, p, "conceal") == default + add, "a verb drawing on no vocation still rolls the default"
 
 
 def test_the_three_train_candidates_on_one_subject_get_three_act_ids():

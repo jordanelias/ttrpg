@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import itertools
 from typing import Any, Callable, Optional
-from ..data.rosters import STANCE_MAX
+from ..data.rosters import RIG_KEY, RIG_LEVELS, STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
@@ -36,7 +36,7 @@ from ..data.rosters import (
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
     CHOICE_RANGES, CHOICE_SOURCED, CONTEXT_KEY, CONTEXT_TERMS, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
-    OPPOSED_WITHOUT_PRIZE, OWN_EDGE_DECLINES, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
+    OPPOSED_WITHOUT_PRIZE, OWN_EDGE_DECLINES, OWN_STANCE_DECLINES, RIGGED_VERBS, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
 )
@@ -47,7 +47,7 @@ from ..queries.person_q import (
     commanded_read, decisiveness, held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
-from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of, in_custody
+from ..state.carriers import Act, Candidate, Claim, Person, Question, Record, View, fade_of, in_custody
 # 04 §C.3 says `decision/` does not import `state/`; the AX-2 scan (`test_season_shape.py`) forbids `state.world` only and has admitted `state.carriers` since
 # before B09. `state/ledgers.py` is a leaf that imports nothing and `present_confidence` is a pure function of a Claim: admitted on that precedent (B09.01).
 from ..state.ledgers import present_confidence
@@ -434,10 +434,55 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
                 if len(seats) > 1:
                     ops = {**ops, VIA: st}
+                # B24p.24: AND HOW HARD HE WOULD RIG THE SITTING, where the act carries a rig and he has the power to work one.
+                if verb in RIGGED_VERBS:
+                    ops = rig_offer(p, v, verb, subject, ops, fx)
                 if contexts:                 # B15.08: the context that admitted this subject (set above where the decline reads it)
                     ops = {**ops, CONTEXT_KEY: context_of[subject]}
                 out.append(Candidate(verb, subject, operands=ops))
     return out
+
+
+#: The stake the arranger reckons a rig on (V2 p2 §H's `2 x stake x P(carried) - price`), in the fold's units: one, the unit V2's own grid of rig levels is
+#: read at ("stakes up to 1"); the matter's worth to him is no number the tree holds (`Fixtures.stakes_ob` ships at its control, 0).
+_RIG_STAKE = 1.0       # [canonical: V2 p4 §F 19 / §K C3 -- the rig levels' grid, "the 27-case grid at stakes up to 1"; ASSUMPTION; Jordan to correct]
+
+
+def rig_worth(stake: float, odds: float, tilt: float, price: float) -> float:
+    """WHAT A RIG IS WORTH TO THE MAN WHO WORKS IT (V2 p2 §H, p4 §F 19): `2 x stake x P(carried) - price x tilt^2`, `price` the fold's `rig_price`.
+    The one formula, read by `rig_offer` for each level and by nothing else: the price is `price x tilt^2` whoever is in the room and it rises with the rig,
+    so no level is dearer for being secret, and a rig of no tilt costs nothing and buys nothing."""
+    return 2.0 * stake * odds - price * tilt * tilt
+
+
+def best_rig(stake: float, readings: dict, price: float) -> float:
+    """THE LEVEL THE RECKONING PICKS: of `readings`, `{level: (odds, tilt)}`, the level whose `rig_worth` is greatest, the lowest where two tie (a rig
+    is worked for what it buys, never for itself). Every level of `RIG_LEVELS` is best somewhere: none where the stake is small, the half where a little
+    of the tilt pays, the whole where the stake is large."""
+    return max(readings, key=lambda r: (rig_worth(stake, readings[r][0], readings[r][1], price), -r))
+
+
+def rig_offer(p: Person, v: View, verb: str, subject, ops: dict, fx: "Fixtures") -> dict:
+    """`ops`, WITH THE RIG THE RECKONING PICKS WHERE HE HAS THE POWER TO WORK ONE (B24p.24; V2 p2 §H, p4 §F 19). The host answers what the room
+    would be (`View.odds.arranged(act, rig)`: his believed odds that the matter carries and the tilt his rig gives the forum, from the one room
+    `proceeding_input` builds); a tilt only where he has more power than the other party, so between equals (a tilt of 0 at the full rig) nothing is
+    offered and `ops` is what it was. Where there is a tilt, each level of `RIG_LEVELS` is priced on `rig_worth` and the best is the one Candidate this
+    forms (a level above 0 rides under `RIG_KEY`; the best being 0, the act carries none): the chooser then scores that act as it scores every
+    other, so the rig is ranked with the rest of what he could do and never beside it. [ASSUMPTION; medium; Jordan to correct: the reckoning
+    picks the level rather than forming one Candidate per level, which would share one act id (`data/verbs.py::act_key`) and score alike, the chooser's
+    score having no price term to tell them apart.] A View that cannot ask (`odds` None, or one with no `arranged`) offers none."""
+    ask = getattr(getattr(v, "odds", None), "arranged", None)
+    if ask is None:
+        return ops
+    act = Act(f"rig:{verb}:{subject}", p.id, verb, payload={**ops, "subject": subject})
+    top = ask(act, RIG_LEVELS[-1])
+    if top is None or top[1] <= 0.0:
+        return ops
+    readings = {r: (top if r == RIG_LEVELS[-1] else ask(act, r)) for r in RIG_LEVELS}
+    if any(x is None for x in readings.values()):
+        return ops
+    best = best_rig(_RIG_STAKE, readings, fx.get("fold_rig_price"))
+    return {**ops, RIG_KEY: best} if best > 0 else ops
 
 
 def subject_is_opponent(row: "VerbRow") -> bool:

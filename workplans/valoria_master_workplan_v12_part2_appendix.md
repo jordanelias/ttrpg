@@ -44,7 +44,7 @@ D = '/home/user/ttrpg/proposals/2026-11-12-subsystem-audit-suite/master/workplan
 HB = r'B(?:A1|\d\d(?:[a-z]|F\d|L|M)?)'            # batch number: B00..B99, B03g, B21b, B11F1, BA1, B16L
 HI = HB + r'\.\d\d'                                 # item handle
 def key(f):
-    m = re.match(r'workplan_v12_part(\d+)(_b24p)?(_cont(\d*))?\.md$', os.path.basename(f))   # `_b24p`: Batch B24p-sc-proceeding's files, read just before part 22 (2026-11-14)
+    m = re.match(r'workplan_v12_part(\d+)(_b24p)?(_cont(\d*))?\.md$', os.path.basename(f))   # `_b24p`: Batch B24p-sc-proceeding @ba108d1's files, read just before part 22 (2026-11-14)
     n = int(m.group(1)) - (0.5 if m.group(2) else 0); c = 0 if not m.group(3) else (1 if m.group(4) == '' else int(m.group(4)))
     return (n, c)
 files = sorted([f for f in glob.glob(f'{D}/workplan_v12_part*.md') if re.search(r'part\d+(_b24p)?(_cont\d*)?\.md$', f)], key=key)

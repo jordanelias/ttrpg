@@ -256,6 +256,23 @@ def governing_mean(scores) -> float:
     return (20 * sum(scores) + n) // (2 * n) / 10
 
 
+def weighted_tenth(scores, tenths) -> float:
+    """A WEIGHTED GOVERNING SCORE (B24p.07; R11, *argument dice is Presence and/or Reason depending upon content of argument and venue*): the mean
+    of `scores` weighted by `tenths` (whole tenths, summing to 10), rounded to the nearest tenth, a value halfway between two tenths rounding up.
+    `governing_mean`'s rule with unequal weights, not a second rounding rule: at equal tenths it is `governing_mean`. A score is taken in
+    tenths first (`round(10 s)`), so the sum is an integer and only the last division is a float, as there. Refuses a negative score or tenth,
+    a count that differs, and tenths that do not sum to 10."""
+    scores, tenths = list(scores), list(tenths)
+    if len(scores) != len(tenths):
+        raise ValueError(f"weighted_tenth takes one tenth per score, got {len(scores)} scores and {len(tenths)} tenths")
+    if any(s < 0 for s in scores) or any(t < 0 for t in tenths):
+        raise ValueError(f"weighted_tenth takes no negative score or tenth, got {scores} and {tenths}")
+    if sum(tenths) != 10:
+        raise ValueError(f"weighted_tenth takes tenths that sum to 10, got {tenths}")
+    # [canonical: ED-IN-0379 (Jordan, 2026-11-13; the ledger row is ratified): the tenth, taken as 20 half-tenths a point]
+    return (2 * sum(t * math.floor(10 * s + 0.5) for s, t in zip(scores, tenths)) + 10) // 20 / 10      # a half-tenth rounds UP (`round` goes to the even)
+
+
 # ---------------------------------------------------------------------------
 # Level lookup + aggregation
 # ---------------------------------------------------------------------------
@@ -291,9 +308,12 @@ def levels_to_net_sigma(
 # Probability helper (closed-form)
 # ---------------------------------------------------------------------------
 
-def _phi(z: float) -> float:
+def phi(z: float) -> float:
     """Standard normal CDF (stdlib erf path — no numpy)."""
     return (1.0 + fmath.erf(z / math.sqrt(2.0))) / 2.0
+
+
+_phi = phi   # the private name the parity tests read
 
 
 def p_success(
@@ -321,7 +341,7 @@ def p_success(
         return 1.0 if 0.0 >= base_ob else 0.0
     shifted_mean = mu * effective_pool + net_boost(net_sigma, effective_pool, tn, capped)
     z = (base_ob - shifted_mean) / (sigma * math.sqrt(effective_pool))   # [canonical: params/core.md §Continuous Engine]
-    return 1.0 - _phi(z)
+    return 1.0 - phi(z)
 
 
 # ---------------------------------------------------------------------------
@@ -338,7 +358,7 @@ def _at_or_above(pool: float, ob: float, boost: float, floor: int) -> float:
         return 1.0 if boost - ob >= edge else 0.0
     mean = dice_engine.MU_PER_DIE * pool + boost
     sd = dice_engine.SIGMA_PER_DIE * math.sqrt(pool)
-    return 1.0 - _phi((ob + edge - mean) / sd)
+    return 1.0 - phi((ob + edge - mean) / sd)
 
 
 def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:

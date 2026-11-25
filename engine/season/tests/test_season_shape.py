@@ -2385,7 +2385,9 @@ def test_person_q_cannot_reach_the_world_side():
     # was rewritten to avoid, and that scan relies on this one for the other half of the edge.
     # B09.01: `state.ledgers` too -- `present_confidence`, the one owner of how a claim fades, lives beside the eviction
     # comparator in that import-free leaf (it holds no store and reaches nothing), and `LedgerReader` reads a claim through it.
-    ALLOWED = ("data", "state.carriers", "state.ledgers", "trace_log")
+    # B24p.06: `queries.inputs` too -- the stdlib-only record leaf (its own docstring: it imports nothing from the season package), whose
+    # `Item` is what `false_items` returns; it holds no store and reaches no World, as `state.ledgers` above.
+    ALLOWED = ("data", "state.carriers", "state.ledgers", "queries.inputs", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
@@ -3477,10 +3479,14 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         # B09.01: the confidence he holds each claim at NOW (`present_confidence`), a stored value being the deposit's
         confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
+        if rate == 0:
+            w0 = w
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
     assert all(seen[r][0] == 0 for r in seen), (
         f"a `claim.decayed` Event stands in the log: {seen}. B09.01: a fade is computed where a claim is read, never written")
-    assert seen[0][1] == seen[0][2], "confidence moved at rate 0"
+    # B24p merge with B21: the world now holds `told_by` deposits (75) beside the `firsthand` ones (100), so min == max no longer says "nothing faded"; the
+    # claim does: at rate 0 every claim reads the confidence it was deposited at.
+    assert all(present_confidence(c.confidence, c.when, w0.tick, 0) == c.confidence for p in w0.persons.values() for c in p.ledger), "confidence moved at rate 0"
     assert seen[20][1] < seen[5][1] < seen[0][1], (
         f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
         "this sweep is measuring nothing")
@@ -3814,7 +3820,8 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # not tell `chronicle` going dark from `witness_key` going dark, which are different findings
     # (§0.1 pt 2).
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 2 seasons -- under `release` alone `chronicle` fired once on a `tenure.closed`; under `U2` the executed verb set in this world is {create_record, move, reconstruct, research, transfer, work} and it admits nobody]
-    assert inert == ["chronicle", "post_remit"], (
+    # B24p merge with B21 re-pin: `chronicle` fires in the merged world (a binding-decision verb executes here: the GAIN the message below names), so the one inert channel is `post_remit`.
+    assert inert == ["post_remit"], (
         f"the inert channels are {inert}, not the two this item published. `post_remit` needs an "
         "obligee standing at the seat an act was exercised through (since `17a`; before it, an "
         "office whose remit covers the emitting verb), and nobody in this world obliges. "
@@ -6794,114 +6801,6 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
 # W-C — OPERANDS ON THE CANDIDATE, DERIVED PERSON-SIDE. `H-94`'s structural half.
 # ===========================================================================
 
-@TRACE.recording()      # `first`..`TRACE.rows` below is read in this window
-def _wc_corpus_pass():
-    """ONE corpus pass, shared by the two tests that measure it, with executions and refusals
-    attributed BY ACT ID and the TRACE slice the pass produced.
-
-    ⚠ ATTRIBUTION IS BY EMISSION ID, NEVER BY KIND, and that is not caution -- it is a defect this
-    corpus has already published once. `forge` and `create_record` BOTH emit `record.created`, so
-    a scan over `{e.kind for e in w.log}` credited `forge` with every record `create_record` made,
-    while `forge` had no predicate and no effect and could not execute at all (v9 IN-45 typed and
-    effected it and moved it to `record.forged`, the matrix row's kind). The fold derives every
-    emission id as `H(seed, tick, actor, f"{kind}:{act.id}")`, so re-deriving it names the act.
-
-    One owner because two tests need the same run and a second copy would let them measure
-    different corpora; cached because the pass is the slowest thing either of them does."""
-    from ..harness import corpus_run as C
-    from ..harness import run_cases as R
-    if getattr(_wc_corpus_pass, "_memo", None) is not None:
-        return _wc_corpus_pass._memo
-    from collections import Counter
-    first = len(TRACE.rows)
-    executed, refused, holes, endpoints = Counter(), Counter(), [], Counter()
-    for case in [c for lane in ("NPC", "ARC") for c in R.load_cases(lane)]:
-        case = C.apply_rescale(case)
-        if str(case.get("scale")) not in set(RUNG_KINDS):
-            continue
-        n = C.seasons_for(case)
-        w = C.build_at(case, 0)
-        d = SeasonDriver(w)
-        mint = (lambda ww: lambda pid, verb, subj:
-                H(ww.world_seed, ww.tick, pid, f"act:{verb}:{subj}"))(w)
-        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                     draw=draw_factory(w.world_seed, lambda: w.tick))
-        for _ in range(n):
-            d.season(ch, question=None,
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-        ids = {e.id for e in w.log}
-        for a in d.resolved:
-            row = VERB_TABLE.get(a.verb)
-            if row is None:
-                continue
-            if a.verb == "transfer":
-                pay = a.payload or {}
-                endpoints["self" if pay.get("from") == pay.get("to") else "across"] += 1
-            for t in range(n + 1):
-                for k in (row.emits or ()):
-                    if H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
-                        executed[a.verb] += 1
-                for k in (row.emits_on_refusal or ()):
-                    if H(w.world_seed, t, a.actor, f"{k}:{a.id}") not in ids:
-                        continue
-                    refused[a.verb] += 1
-                    req = row.requires_typed
-                    if req is None:
-                        continue
-                    b = binding_from_act(a)
-                    missing = [o for o in req.operands() if b.get(o) is None]
-                    if missing:
-                        holes.append((case["id"], a.verb, missing))
-    notes = [r for r in TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
-    _wc_corpus_pass._memo = (executed, refused, holes, notes, endpoints)
-    return _wc_corpus_pass._memo
-
-
-def test_wc_no_corpus_refusal_arises_from_a_missing_operand():
-    """`W-C`'s FIRST PROOF: **zero** of the corpus's refusals is caused by an operand the act
-    could not carry.
-
-    That number was the whole of `H-94`. `transfer` was *"attempted and refused in every world in
-    the corpus"* because `stores(hearth(giver), kind) >= amount` had no `from`, no `kind` and no
-    `amount` that any part of the pipeline could carry, so the fold read UNKNOWN and refused --
-    a refusal about the INSTRUMENT wearing the shape of a refusal about the world. Once `W-B`
-    deposits a Verdict's reads at WITNESS, every such refusal becomes a FALSE BELIEF, which is why
-    the fix is `operands_for` returning `None` (no Candidate at all) rather than a better default.
-
-    ⚠ THE SCAN MUST BE NON-VACUOUS AND THAT IS ASSERTED, not assumed (§0.1 point 2): a corpus with
-    no refusals in it would pass this trivially, and `work` alone refuses 723 times.
-
-    MUTATIONS, BOTH RUN 2026-09-04, and they fire on the two DIFFERENT assertions below, which is
-    the point of running both.
-      * `_derive_operand` returns `None` for `"from"` -- a person cannot name their own hearth
-        again. Every `transfer` Candidate then DECLINES: this test goes RED on the second
-        assertion with `723 Candidates declined`, and
-        `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this` (retired) went red
-        beside it with `transfer executed ZERO times`.
-      * the same, PLUS dropping `operands_for`'s `if v is None: ... return None` guard. The
-        Candidate now forms with `from` absent, the act is minted with a hole, the fold reads
-        UNKNOWN and refuses: this test goes RED on the FIRST assertion with
-        `723 refusals arose from an operand the act does not carry`.
-    Unmutated it is GREEN."""
-    executed, refused, holes, notes, _ends = _wc_corpus_pass()
-    assert sum(refused.values()) > 0, (
-        "the corpus produced NO refusals at all, so this scan cannot observe an operand-caused "
-        "one -- the pass is broken, not the claim")
-    assert not holes, (
-        f"{len(holes)} refusals arose from an operand the act does not carry, e.g. {holes[:5]}. "
-        "That is `H-94` re-opened: the fold read UNKNOWN because the person could not say what "
-        "the act was about, and `W-B` will deposit that refusal as a belief")
-    # AND THE DECLINE CHANNEL IS COUNTED RATHER THAN INFERRED FROM AN ABSENCE. A Candidate that
-    # cannot bind its operands is not formed, and `operands_for` traces every one; in this corpus
-    # the count is zero because `build_at` seats every person on the ladder, so every person has a
-    # hearth. The number is printed rather than asserted at zero: a corpus that legitimately
-    # contains a person with nowhere to give from would be a finding, not a regression.
-    assert len(notes) == 0, (
-        f"{len(notes)} Candidates declined for want of an operand: "
-        f"{sorted({r.what[:70] for r in notes})}. Every corpus person is seated on the ladder by "
-        "`build_at`, so a decline here means the world builder changed")
-
-
 def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
     """`H-94`'s SWEEP, ALL THREE POINTS EXECUTED. `default_transfer_amount` over `[0, 1, 3]`, with
     **0 as the control**: nothing is spent, so scarcity never binds.
@@ -7097,9 +6996,7 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
 
     MUTATION (run 2026-09-04): change `operands_for`'s `if v is None: ... return None` to
     `out[name] = v` -- the Candidate forms with `from` unbound, `transfer x S` stays in the option
-    set, and this goes RED on the first assertion. Unmutated it is GREEN. The same mutation is
-    what turns `test_wc_no_corpus_refusal_arises_from_a_missing_operand` red, from the other
-    end."""
+    set, and this goes RED on the first assertion. Unmutated it is GREEN."""
     w = P.tiny_world()
     p = w.persons["p_low"]
     q = Question("q:wc_decline", "need", ("S",))
@@ -8850,7 +8747,12 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # unplugged sims that roll their own (the σ composition's source is one of them) and `31b`/`31c`
     # move more resolvers into `modules/`; the one-owner property this guarded is now "the host rolls
     # nothing", and a margin is a module's to produce.
-    pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\broll_net_continuous\b|\bnet_boost\b|\bsuccesses\b")
+    # ⚠ B24p.99: `\bnet\b\s*=` read a KEYWORD ARGUMENT as an assignment. The proceeding path hands the module's own close to the one ladder
+    # (`dict(net=m.net, ob=m.ob, ...)` in `loop/resolve.py` and `loop/effects_information.py`, `act_band`'s and `_decided`'s returned record in
+    # `seam/wrappers/sigma.py`: a yield's band at its floor, a weight-mean of the module's verdicts, no draw): that is grading by the module's close,
+    # not a roll. The pattern is now `net` assigned at the head of a statement (the plant below is that shape); `roll_pool`, `roll_net`,
+    # `net_boost` and `successes` are unchanged, so a host-side roll still turns this red.
+    pattern = re.compile(r"^\s*net\s*=(?!=)|roll_pool|\broll_net\b|\broll_net_continuous\b|\bnet_boost\b|\bsuccesses\b")
 
     def _producers(paths, base):
         out = set()

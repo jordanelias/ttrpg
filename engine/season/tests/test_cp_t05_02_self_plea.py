@@ -4,8 +4,8 @@ Part (i) (`hearing`, `hearing_step`) is HELD on SC-02's design and is not built 
 
   * (ii) THE GUARD -- `seam/wrappers/sigma.py::contest_input` reads NO opposition when the subject IS the actor
     (nobody opposes himself), so the self-plea's obstacle carries no opposition term at any capability he holds: on the
-    one form (B05.14) it is `speak`'s difficulty plus `opposed_ob(pool_default)`, the stand-in the module opposes a self-plea at.
-    FALSIFIER: a pleader with `speak`'s capability seeded at 3 rolls the self-plea at the same obstacle as with
+    one form (B05.14) it is the row's difficulty plus `opposed_ob(pool_default)`, the stand-in the module opposes a self-plea at (read on `determine`, B24p.99).
+    FALSIFIER: a pleader with the row's capability seeded at 3 rolls the self-plea at the same obstacle as with
     capability 0. CONTROL: the same person as someone ELSE's subject opposes at his capability (the guard does not
     swallow the opposed case). PLANTED FAILURE (run 2026-11-08, reverted): the guard's condition made `False` (the
     score read for a self-subject) -> the capability-3 pleader's `opposition` reads 3.0 and the first test reds.
@@ -37,7 +37,10 @@ from ..seam.wrappers import sigma
 from .test_sc01_speak import PARTY, SPEAKER, _docket, _speak
 from .test_u7_remit import _fold, _kinds, _plant, _world
 
-KEY = VERB_CAPABILITY["speak"]
+#: B24p.99: the guard is the single roll's, and `speak` proceeds (B24p.19: `contest_input` refuses it), so it is read on `determine`, the one row
+#: on the single roll that `subject_may_be_self` could be admitted on (`counterparty: subject`, below), at the skill it draws on.
+GUARD_VERB = "determine"
+KEY = VERB_CAPABILITY[GUARD_VERB]
 
 
 def revert_cp_t05_02(monkeypatch):
@@ -49,7 +52,7 @@ def revert_cp_t05_02(monkeypatch):
 
 def _obstacle(w, claimants, subject):
     roll = importlib.import_module(composition.require("social_contest.roll").__module__)
-    inp = sigma.contest_input(w, claimants, verb="speak", subject=subject)
+    inp = sigma.contest_input(w, claimants, verb=GUARD_VERB, subject=subject)
     return inp, roll.obstacle(inp)
 
 

@@ -596,7 +596,7 @@ VEN_D §5 is the scenario "The Counting-House" on the spine fixture: a case file
 - GATE: `python -m pytest engine/season/tests/test_sc_legitimacy_and_strife.py -q` → pass; `python -m engine.season.harness.register --check` → counts not risen; the seed-0 hash (`HASH READING`) → moved (declared) at the shipped coefficients and equal to B33.50's with them at 0, both quoted.
 - HASH MOVERS: every world in which a ruling, a rigged forum or a carried disposal on a strife's matter resolves. Declared; B33.99.
 - EXPECTED RED UNTIL: B33.99.
-- DEPENDS ON: V12 Batch B24p-sc-proceeding (B24p.03, .04, .14, .22); V12 Batch B27-sc-proceedings (B27.28: `bounded`, the fade); V12 Batch B21s-strife-supply (the strife lane's moves); EXISTS-IN-TREE `person_q.legitimacy`, `decision/options.py::standing_of`, `rosters.yaml: strife_kinds`, `world_q.open_era`.
+- DEPENDS ON: V12 Batch B24p-sc-proceeding @ba108d1 (B24p.03, .04, .14, .22); V12 Batch B27-sc-proceedings (B27.28: `bounded`, the fade); V12 Batch B21s-strife-supply (the strife lane's moves); EXISTS-IN-TREE `person_q.legitimacy`, `decision/options.py::standing_of`, `rosters.yaml: strife_kinds`, `world_q.open_era`.
 - GLOSSARY: row *legitimacy* gains: "a ruling and a rigged forum reach it as deeds its witnesses heard".
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B33's producer; `Item: B33.51`, `[skip ci]`.

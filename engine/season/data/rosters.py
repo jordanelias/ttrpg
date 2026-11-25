@@ -250,17 +250,22 @@ def _load_offices() -> dict:
     return doc
 
 
+def _absent_roster(name: str, why: str = "") -> Unspecified:
+    """THE REFUSAL FOR A ROSTER THE FILE DOES NOT CARRY, the one spelling (`roster`, `roster_map` and `_roster_rows` raise it); `why` is what
+    returning an empty answer would have done, appended to the law where the caller has one."""
+    return Unspecified(
+        f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
+        needs="add the roster to the data file; do not inline it here",
+        law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES" + (f"; {why}" if why else ""))
+
+
 def roster(name: str, ordered: bool = False):
     """A closed set, from `rosters.yaml`. `ordered=True` returns a tuple because the order is
     semantic (the strata resolve in sequence); otherwise a frozenset, so a caller cannot depend
     on an order the data does not promise."""
     r = _ROSTERS.get(name)
     if r is None:
-        raise Unspecified(
-            f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
-            needs="add the roster to the data file; do not inline it here",
-            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
-                "returning an empty set would make every membership test silently false")
+        raise _absent_roster(name, "returning an empty set would make every membership test silently false")
     # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0230).
     # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
     # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
@@ -374,11 +379,7 @@ def roster_map(name: str, key: str) -> dict:
     One owner, so a third mapping inherits the refusal by existing (§8)."""
     r = _ROSTERS.get(name)
     if r is None:
-        raise Unspecified(
-            f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
-            needs="add the roster to the data file; do not inline it here",
-            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
-                "returning an empty mapping would make every lookup silently answer `None`")
+        raise _absent_roster(name, "returning an empty mapping would make every lookup silently answer `None`")
     m = r.get(key)
     if not isinstance(m, dict):
         raise Unspecified(
@@ -387,6 +388,33 @@ def roster_map(name: str, key: str) -> dict:
             law="rosters.yaml -- the mapping is the DEFINITION. An absent one cannot be "
                 "substituted by an empty dict without inverting the answer it gives")
     return dict(m)
+
+
+# roster-exempt: this is the loader's own grammar -- the two values a `bound:` cell may take -- as `_ptrs`'s key names are; the MEMBERS
+# the cells sort are `rosters.yaml: obstacle_terms`, and no game fact lives here.
+_OBSTACLE_BOUND = ("host", "module")
+
+
+def obstacle_bound(side: str) -> tuple:
+    """THE MEMBERS OF `rosters.yaml: obstacle_terms` BOUND TO `side` (`host`: read by `sigma.OBSTACLE_TERMS`; `module`: supplied by the
+    proceeding module's `TERMS`), in the roster's order (B24p.05). The `bound:` column is closed both ways: a member with no cell, a cell for
+    no member, and a value but `host` or `module` are each refused, so a member is bound to exactly one reader and none is read by neither."""
+    members = roster("obstacle_terms", ordered=True)
+    bound = roster_map("obstacle_terms", "bound")
+    if side not in _OBSTACLE_BOUND:
+        raise Unspecified(f"`obstacle_terms` has no binding {side!r}", "rosters.yaml: obstacle_terms",
+                          needs=f"one of {list(_OBSTACLE_BOUND)}",
+                          law="B24p.05 -- a member is read by the host or supplied by the module, and nothing else reads the obstacle")
+    odd = {k: v for k, v in bound.items() if v not in _OBSTACLE_BOUND}
+    if odd:
+        raise Unspecified(f"`obstacle_terms` `bound:` carries {odd}, not one of {list(_OBSTACLE_BOUND)}", "rosters.yaml: obstacle_terms",
+                          needs="`host` or `module` on each member",
+                          law="B24p.05 -- another value would be a member no reader owns")
+    if set(bound) != set(members):
+        raise Unspecified(f"`obstacle_terms` members {list(members)} and their `bound:` cells {sorted(bound)} differ", "rosters.yaml: obstacle_terms",
+                          needs="a `bound:` cell for every member and a member for every cell",
+                          law="B24p.05 -- every member is bound exactly once; a member with no cell would be read by neither reader")
+    return tuple(n for n in members if bound[n] == side)
 
 
 # `_load_offices` is CALLED here, after `roster()` above: its `founding:` check reads three rosters (B04.23).
@@ -981,8 +1009,161 @@ REMIT_ACTS = roster("remit_acts")
 # bare `roster(...)` call at the one call site, on this file's own established convention.
 INTERPOSITION_KINDS = roster("interposition_kinds")
 GENRES = roster("genres")
-PROOFS = roster("proofs")
 LADDER_RUNGS = roster("ladder_rungs", ordered=True)
+
+
+def _roster_rows(name: str):
+    """The `rows:` list of a row roster, the one reader (`roster_map`'s refusal for a name the file does not carry)."""
+    if name not in _ROSTERS:
+        raise _absent_roster(name)
+    return _ROSTERS[name].get("rows")
+
+
+def _proceeding_rows(rows, name: str, cells: frozenset, required: frozenset) -> dict:
+    """The shared grammar of the proceeding's row rosters (`rosters.yaml: grounds`, `proceeding_moves`, `issue_rungs`,
+    `matters`): a non-empty list of mappings, each with a string `id` no other row repeats, only cells in `cells` and every
+    cell in `required` present. Returns `{id: {cell: value}}` in the file's order. A function, not an inline check, so a test
+    can plant a bad row and watch it refuse (`_check_scale_of_rung`'s reason); every refusal names the row."""
+    where = f"rosters.yaml -- {name}"
+    if not isinstance(rows, list) or not rows:
+        raise Unspecified(f"`{name}` carries no list of rows", where, needs=f"a non-empty list of `{{id, {', '.join(sorted(cells))}}}` rows",
+                          law="rosters.yaml's header -- an empty set makes every membership test silently false, so it REFUSES")
+    out: dict = {}
+    for row in rows:
+        rid = row.get("id") if isinstance(row, dict) else None
+        if not isinstance(rid, str) or not rid:
+            raise Unspecified(f"a `{name}` row has no string `id`: {row!r}", where, needs="a row `{id: <name>, ...}`",
+                              law="a closed roster names its members by id")
+        if rid in out:
+            raise Unspecified(f"`{name}` row {rid!r} appears more than once", where, needs="each id once",
+                              law="a repeated id is a second owner of the row, with a read-order tiebreak")
+        extra = sorted(set(row) - cells - {"id"})
+        if extra:
+            raise Unspecified(f"`{name}` row {rid!r} carries the cell(s) {extra}", where, needs=f"only {sorted(cells)}",
+                              law="04 §B.13 invariant 10 -- an unknown cell is rejected at load, never read by no one")
+        missing = sorted(required - set(row))
+        if missing:
+            raise Unspecified(f"`{name}` row {rid!r} has no {missing}", where, needs=f"every one of {sorted(required)}",
+                              law="a cell with no value is a decision nobody made, and is refused rather than defaulted")
+        out[rid] = {k: v for k, v in row.items() if k != "id"}
+    return out
+
+
+def is_number(x) -> bool:
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def in_tenths(x, lo: float, hi: float) -> bool:
+    """A number in `[lo, hi]` that is a whole number of tenths (R11's dials are set in tenths)."""
+    # [canonical: the tenth is the unit R11 sets its dials in, a unit and not a tuned value]
+    return is_number(x) and lo <= x <= hi and abs(x * 10 - round(x * 10)) < 1e-9
+
+
+def _load_grounds(rows) -> dict:
+    """`rosters.yaml: grounds`: each row's `reason` a number in [0, 1] and a whole number of tenths, its `reads` a member of
+    `ground_reads`. R11: `reason` is Reason's share of a speech's dice on that ground (V2 p2 §C.2)."""
+    reads = roster("ground_reads", ordered=True)
+    out = _proceeding_rows(rows, "grounds", frozenset({"reason", "reads"}), frozenset({"reason", "reads"}))
+    for gid, g in out.items():
+        r = g["reason"]
+        if not in_tenths(r, 0, 1):
+            raise Unspecified(
+                f"ground {gid!r} has `reason: {r!r}`", "rosters.yaml -- grounds", needs="a number in [0, 1], a whole number of tenths",
+                law="R11 -- the dice are a blend of Reason and Presence by content; the share is set in tenths, as every other dial of the blend is")
+        require_member(g["reads"], reads, f"ground {gid!r} has `reads: {g['reads']!r}`", "rosters.yaml -- grounds",
+                       "V2 p2 §A.2 -- a ground's fit reads one channel of the bearing reading, or the item's credit")
+    return out
+
+
+def _load_proceeding_moves(rows) -> dict:
+    """`rosters.yaml: proceeding_moves`: each row's `effect` a member of `proceeding_effects`, `draw` a bool, `capability`
+    (the skill whose rank joins the dice) a member of `descriptors.CAPABILITIES` and present only on a drawing move."""
+    effects = roster("proceeding_effects", ordered=True)
+    out = _proceeding_rows(rows, "proceeding_moves", frozenset({"effect", "draw", "capability"}), frozenset({"effect", "draw"}))
+    for mid, m in out.items():
+        require_member(m["effect"], effects, f"move {mid!r} has `effect: {m['effect']!r}`", "rosters.yaml -- proceeding_moves",
+                       "V2 p2 §B -- a move is read by its effect, and no effect names a winner")
+        if not isinstance(m["draw"], bool):
+            raise Unspecified(f"move {mid!r} has `draw: {m['draw']!r}`", "rosters.yaml -- proceeding_moves", needs="true or false",
+                              law="a move either draws or it does not; a missing or odd cell is refused, not read as false")
+        if "capability" in m:
+            if not m["draw"]:
+                raise Unspecified(f"move {mid!r} draws nothing and names the skill {m['capability']!r}", "rosters.yaml -- proceeding_moves",
+                                  needs="delete the skill, or make the move draw",
+                                  law="V2 p2 §A.1 -- a rank joins the dice of a draw; a move with no draw has none to join")
+            require_member(m["capability"], _CAPABILITIES, f"move {mid!r} names the skill {m['capability']!r}",
+                           "rosters.yaml -- proceeding_moves", "B04 -- one skill roster, `descriptors.CAPABILITIES`")
+    return out
+
+
+def _load_issue_rungs(rows, grounds) -> dict:
+    """`rosters.yaml: issue_rungs`: each row's `weighs` (optional) maps a member of `grounds` to a positive number; a ground a
+    rung does not name weighs 1.0 (V2 p2 §B)."""
+    out = _proceeding_rows(rows, "issue_rungs", frozenset({"weighs"}), frozenset())
+    for rid, r in out.items():
+        weighs = r.setdefault("weighs", {})
+        if not isinstance(weighs, dict):
+            raise Unspecified(f"issue rung {rid!r} has `weighs: {weighs!r}`", "rosters.yaml -- issue_rungs",
+                              needs="a mapping from a ground to its weight", law="V2 p2 §B's stasis table")
+        for g, w in weighs.items():
+            require_member(g, grounds, f"issue rung {rid!r} weighs the ground {g!r}", "rosters.yaml -- issue_rungs",
+                           "V2 p2 §B -- the stasis table weighs the grounds, and only those")
+            if not is_number(w) or w <= 0:
+                raise Unspecified(f"issue rung {rid!r} weighs {g!r} at {w!r}", "rosters.yaml -- issue_rungs", needs="a positive number",
+                                  law="a weight of 0 or less would silence a ground, which is a rite's `silence`, not a weight")
+    return out
+
+
+def _load_matters(rows) -> dict:
+    """`rosters.yaml: matters`: each row names its `carrier`, `brings` and `cost`, each a non-empty string."""
+    out = _proceeding_rows(rows, "matters", frozenset({"carrier", "brings", "cost"}), frozenset({"carrier", "brings", "cost"}))
+    for mid, m in out.items():
+        for k, v in m.items():
+            if not isinstance(v, str) or not v:
+                raise Unspecified(f"matter {mid!r} has `{k}: {v!r}`", "rosters.yaml -- matters", needs="a non-empty token",
+                                  law="V2 p2 §G -- an item is a typed reference; its carrier, who brings it and what it costs are each named")
+    return out
+
+
+def _load_disposal_writes(rows) -> dict:
+    """`rosters.yaml: disposal_writes`: each row's one optional cell, `weight`, a positive number (how much a claim a write
+    leaves in a ledger counts: V2 p2 §J's yield 1 against a hint 0.4)."""
+    out = _proceeding_rows(rows, "disposal_writes", frozenset({"weight"}), frozenset())
+    for wid, w in out.items():
+        if "weight" in w and (not is_number(w["weight"]) or w["weight"] <= 0):
+            raise Unspecified(f"disposal write {wid!r} has `weight: {w['weight']!r}`", "rosters.yaml -- disposal_writes",
+                              needs="a positive number", law="a write of no weight leaves nothing, which is no write")
+    return out
+
+
+def _load_authority_by_faction(mapping: dict, authorities, factions, templated) -> dict:
+    """`rosters.yaml: authorities.by_faction`: each key a `factions` member, each value an `authorities` member, and every
+    faction `role_templates.by_faction` keys (`templated`) mapped."""
+    for f, a in mapping.items():
+        require_member(f, factions, f"`authorities.by_faction` names {f!r}, which is not a faction", "rosters.yaml -- authorities",
+                       "V2 p2 §H -- an authority is read off the faction a person serves")
+        require_member(a, authorities, f"`authorities.by_faction` maps {f!r} to {a!r}", "rosters.yaml -- authorities",
+                       "V2 p2 §H -- an authority is one of the closed set")
+    unmapped = sorted(set(templated) - set(mapping))
+    if unmapped:
+        raise Unspecified(f"`authorities.by_faction` leaves {unmapped} unmapped", "rosters.yaml -- authorities",
+                          needs="a member of `authorities` for each faction `role_templates.by_faction` keys",
+                          law="a faction the realm seats has an authority; absence is a refusal, never `polity` by default")
+    return dict(mapping)
+
+
+# B24p.01: THE PROCEEDING'S CLOSED SETS (V2 p2 §B, §C.2, §C.5, §G, §H), bound here beside `LADDER_RUNGS` so an absent or malformed
+# row refuses at import. Nothing reads them until B24p.07; the module reads cells, never an id (`effect`, `draw`, `reason`).
+GROUNDS = _load_grounds(_roster_rows("grounds"))
+PROCEEDING_MOVES = _load_proceeding_moves(_roster_rows("proceeding_moves"))
+PROCEEDING_ENDS = roster("proceeding_ends", ordered=True)
+ISSUE_RUNGS = _load_issue_rungs(_roster_rows("issue_rungs"), GROUNDS)
+AUTHORITIES = roster("authorities", ordered=True)
+AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
+                                                  roster_map("role_templates", "by_faction"))
+MATTERS = _load_matters(_roster_rows("matters"))
+# B24p.03: THE TYPED WRITES OF `arrangements.yaml: disposal:` (V2 p2 §J). `MATTERS` absorbed the `proofs` roster, which was deleted here.
+DISPOSAL_WRITES = _load_disposal_writes(_roster_rows("disposal_writes"))
 # ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.
 # Bound at import: an unbound roster is the one whose absence goes unnoticed.
 # `Office.__post_init__` refuses a declared basis off either; `state/gate.py`'s
@@ -1103,15 +1284,16 @@ def remove_distance(source: str) -> float:
 
 
 # THE KIND OF PROOF A DEED CLAIM IS, BY HOW ITS HOLDER CAME TO HOLD IT (B05.21, T13 edit 3 / T5): `queries/world_q.py::proofs` reads it where the
-# arrangement row's `proofs:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `proofs` (or
-# `None`, a way of holding that is no kind the rows name), refused at import: a claim whose source maps nowhere would weigh by a guess.
+# arrangement row's `admits:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `MATTERS` (the
+# roster that absorbed `proofs` at B24p.03) or `None`, a way of holding that is no kind the rows name, refused at import: a claim whose source maps
+# nowhere would weigh by a guess.
 PROOF_KIND_OF_SOURCE = roster_map("proof_kind_of_source", "proof_kind")
-if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(PROOFS):
+if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(MATTERS):
     raise Unspecified(
         f"`proof_kind_of_source.proof_kind` is {PROOF_KIND_OF_SOURCE!r}; it must key exactly the claim sources {sorted(CLAIM_SOURCES)} "
-        f"and name only `proofs` members {sorted(PROOFS)} (or null)", "rosters.yaml",
-        needs="one `proofs` member (or null) for every `claim_sources` member",
-        law="T13 T5 -- the kind of a deed claim is its source mapped to the `proofs` roster, a roster row and not a code literal")
+        f"and name only `matters` members {sorted(MATTERS)} (or null)", "rosters.yaml",
+        needs="one `matters` member (or null) for every `claim_sources` member",
+        law="T13 T5 -- the kind of a deed claim is its source mapped to the `matters` roster, a roster row and not a code literal")
 # The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
 # no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
 # _check_dominance_kinds`).
@@ -1434,6 +1616,19 @@ def require_mortal_cause(cause) -> None:
 
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
+# B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
+ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD = roster("proceeding_endings", ordered=True)   # B24p.20, .22: the tags of a proceeding's `Event.ending`
+# B24p.22: the kinds of claim a sitting leaves with those who saw it (`rosters.yaml: sitting_claims`), each kind's predicate `<stem>:<kind>`; and the four
+# effects a move may have (`proceeding_effects`), so a witness reads a beat's move by its effect and never by its id.
+SITTING_CLAIMS = roster("sitting_claims", ordered=True)
+_SITTING_CLAIM = roster_map("sitting_claims", "claim")
+SITTING_PREDICATES = {kind: f"{_SITTING_CLAIM['predicate']}:{kind}" for kind in SITTING_CLAIMS}
+SITTING_SOURCE = _SITTING_CLAIM["source"]
+if SITTING_SOURCE not in CLAIM_SOURCES:
+    raise Unspecified(f"`sitting_claims` has `claim.source: {SITTING_SOURCE!r}`", "rosters.yaml -- sitting_claims", needs="a `claim_sources` member",
+                      law="V2 p2 §J -- a claim is held by one of the ways a person comes to hold one")
+EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE = roster("proceeding_effects", ordered=True)
+*STANCE_BANDS, STANCE_DECIDED = roster("stance_bands", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
 DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
 
@@ -1551,6 +1746,14 @@ if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:
         needs=f"a roster holding {STORM!r} (the default) and at most {BESIEGE!r} beside it",
         law="CP-T04-06 -- a posture is a way of meeting the opposing side that code reads; a name no code reads would "
             "be a posture nothing performs")
+# B24p.24 (V2 p2 §H): HOW HARD AN ARRANGER RIGS THE FORUM, a payload key (`RIG_KEY`) `open_case` and `convene` declare; the closed set is the
+# roster's, `0` first (no rig) and the levels above it the ones a chooser may offer. Refused at import for a roster that does not open on `0`.
+RIG_LEVELS = roster("rig_levels", ordered=True)
+RIG_KEY = "rig"
+if RIG_LEVELS[0] != 0 or list(RIG_LEVELS) != sorted(RIG_LEVELS):
+    raise Unspecified(
+        f"`rig_levels` is {list(RIG_LEVELS)!r}", "rosters.yaml -- rig_levels", needs="`0` first, then the levels in ascending order",
+        law="V2 p2 §H -- `rig` is the arranger's choice from none to full; a roster that does not open on none has no act that carries none")
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")

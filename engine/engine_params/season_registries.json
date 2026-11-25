@@ -56,10 +56,476 @@
           "reachable_bands": []
         }
       ],
+      "rites": [
+        {
+          "id": "conversation",
+          "genre": "dyadic",
+          "live": "claim",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "negotiation",
+          "genre": "dyadic",
+          "live": "offer",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "questioning",
+          "genre": "judicial",
+          "live": "question",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "must"
+          },
+          "silence": "refusal",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest"
+            ],
+            "against": [
+              "argue",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "inquisition",
+          "genre": "judicial",
+          "live": "charge",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "must"
+          },
+          "silence": "admits",
+          "issues": [
+            "fact",
+            "justification"
+          ],
+          "concede": "descends",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest"
+            ],
+            "against": [
+              "argue",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "trial",
+          "genre": "judicial",
+          "live": "charge",
+          "bears": "for",
+          "reply": {
+            "for": "must",
+            "against": "must"
+          },
+          "silence": "refusal",
+          "issues": [
+            "fact",
+            "definition",
+            "justification"
+          ],
+          "concede": "descends",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "debate",
+          "genre": "deliberative",
+          "live": "motion",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "rally",
+          "genre": "deliberative",
+          "live": "theme",
+          "bears": "for",
+          "reply": {
+            "for": "raise"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "rest"
+            ],
+            "against": []
+          }
+        },
+        {
+          "id": "audience",
+          "genre": "deliberative",
+          "live": "plea",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "rest"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest"
+            ]
+          }
+        }
+      ],
+      "context": {
+        "eras": {
+          "plain": {
+            "evidence": 1.0,
+            "consequence": 1.0,
+            "authority": 1.0,
+            "solidarity": 1.0
+          },
+          "age_of_faith": {
+            "evidence": 1.0,
+            "consequence": 0.8,
+            "authority": 1.4,
+            "solidarity": 1.0
+          },
+          "mercantile": {
+            "evidence": 1.0,
+            "consequence": 1.4,
+            "authority": 0.8,
+            "solidarity": 1.0
+          }
+        },
+        "regimes": {
+          "crown": {
+            "unlawful": [],
+            "gravity": 0,
+            "standard": 0,
+            "reason_lean": 0,
+            "admits_add": [],
+            "admits_drop": [],
+            "power": {
+              "parties": 0.0,
+              "polity": 1.0,
+              "church": 0.0,
+              "guild": 0.0,
+              "none": 0.0
+            },
+            "silence": null,
+            "floor": null
+          },
+          "theocracy": {
+            "unlawful": [
+              "debate",
+              "parliamentary_debate",
+              "council_of_state"
+            ],
+            "gravity": 0.5,
+            "standard": 1,
+            "reason_lean": -0.1,
+            "admits_add": [
+              "confession",
+              "oath"
+            ],
+            "admits_drop": [
+              "precedent"
+            ],
+            "power": {
+              "parties": 0.0,
+              "polity": 0.0,
+              "church": 2.0,
+              "guild": 0.0,
+              "none": 0.0
+            },
+            "silence": "admits",
+            "floor": null
+          },
+          "commune": {
+            "unlawful": [
+              "inquisition",
+              "inquisition_hearing",
+              "examination"
+            ],
+            "gravity": 0,
+            "standard": -1,
+            "reason_lean": 0,
+            "admits_add": [
+              "rumour"
+            ],
+            "admits_drop": [],
+            "power": {
+              "parties": 0.0,
+              "polity": 0.0,
+              "church": 0.0,
+              "guild": 1.0,
+              "none": 0.0
+            },
+            "silence": null,
+            "floor": "open"
+          }
+        },
+        "strife": {
+          "peace": {
+            "turns": 0,
+            "unrest": 0,
+            "gravity": 0,
+            "care_want": 0
+          },
+          "war": {
+            "turns": -1,
+            "unrest": 0.5,
+            "gravity": 0.5,
+            "care_want": 0
+          },
+          "famine": {
+            "turns": 0,
+            "unrest": 0.75,
+            "gravity": 0.25,
+            "care_want": 0.3
+          },
+          "schism": {
+            "turns": 0,
+            "unrest": 0.25,
+            "gravity": 0.5,
+            "care_want": 0
+          }
+        }
+      },
+      "disposal": {
+        "none": {
+          "Overwhelming": [
+            "pursuits+",
+            "regard+",
+            "claim:converted"
+          ],
+          "Success": [
+            "pursuits+",
+            "regard+"
+          ],
+          "Partial": [
+            "regard+"
+          ],
+          "Failure": [
+            "regard-",
+            "grievance"
+          ],
+          "impasse": [
+            "regard-"
+          ]
+        },
+        "yield": {
+          "Overwhelming": [
+            "claim:yielded",
+            "record:confession",
+            "regard-"
+          ],
+          "Success": [
+            "claim:yielded",
+            "regard-"
+          ],
+          "Partial": [
+            "claim:hinted"
+          ],
+          "Failure": [
+            "regard-"
+          ],
+          "impasse": [
+            "regard-"
+          ]
+        },
+        "oblige": {
+          "Overwhelming": [
+            "tenure:oblige",
+            "regard+",
+            "precedent"
+          ],
+          "Success": [
+            "tenure:oblige",
+            "regard+"
+          ],
+          "Partial": [
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "grievance",
+            "docket:other_forum"
+          ],
+          "impasse": [
+            "docket:other_forum"
+          ]
+        },
+        "detain": {
+          "Overwhelming": [
+            "tenure:detain",
+            "office:contested",
+            "precedent",
+            "legitimacy+"
+          ],
+          "Success": [
+            "tenure:detain",
+            "precedent",
+            "legitimacy+"
+          ],
+          "Partial": [
+            "tenure:oblige",
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "record:acquittal",
+            "precedent",
+            "regard-"
+          ],
+          "impasse": [
+            "docket:adjourned"
+          ]
+        },
+        "ban": {
+          "Overwhelming": [
+            "tenure:ban",
+            "office:contested",
+            "precedent"
+          ],
+          "Success": [
+            "tenure:ban",
+            "legitimacy+"
+          ],
+          "Partial": [
+            "tenure:oblige",
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "record:acquittal",
+            "legitimacy-"
+          ],
+          "impasse": [
+            "docket:adjourned"
+          ]
+        },
+        "Record": {
+          "Overwhelming": [
+            "record:decree",
+            "faction+",
+            "precedent",
+            "legitimacy+"
+          ],
+          "Success": [
+            "record:decree",
+            "faction+"
+          ],
+          "Partial": [
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "record:defeated",
+            "faction-"
+          ],
+          "impasse": [
+            "docket:adjourned"
+          ]
+        }
+      },
       "arrangements": [
         {
           "id": "arbitration",
-          "disposal": "bench",
+          "rite": "trial",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "parties",
+          "reason_lean": 0.2,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -67,8 +533,7 @@
           "term_required": true,
           "appeal_basis": "none",
           "interposed": [],
-          "order": "alternating",
-          "proofs": [
+          "admits": [
             "record",
             "testimony",
             "oath"
@@ -79,7 +544,14 @@
         },
         {
           "id": "parliamentary_debate",
-          "disposal": "bench",
+          "rite": "debate",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "polity",
+          "reason_lean": -0.1,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "open",
           "records_dissent": true,
@@ -89,15 +561,21 @@
           "interposed": [
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [],
+          "admits": [],
           "disposes": "Record",
           "disposal_reach": "realm",
           "standard": "routine"
         },
         {
           "id": "council_of_state",
-          "disposal": "bench",
+          "rite": "debate",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "polity",
+          "reason_lean": -0.1,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -107,15 +585,21 @@
           "interposed": [
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [],
+          "admits": [],
           "disposes": "Record",
           "disposal_reach": "realm",
           "standard": "routine"
         },
         {
           "id": "legal_trial",
-          "disposal": "bench",
+          "rite": "trial",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "polity",
+          "reason_lean": 0.2,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "open",
           "records_dissent": true,
@@ -126,8 +610,7 @@
             "person",
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [
+          "admits": [
             "record",
             "testimony",
             "oath"
@@ -138,7 +621,14 @@
         },
         {
           "id": "tribunal",
-          "disposal": "bench",
+          "rite": "trial",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "polity",
+          "reason_lean": 0.2,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "admitted",
           "records_dissent": true,
@@ -149,8 +639,7 @@
             "office",
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [
+          "admits": [
             "record",
             "testimony",
             "oath"
@@ -160,8 +649,15 @@
           "standard": "demanding"
         },
         {
-          "id": "interrogation",
-          "disposal": "bench",
+          "id": "examination",
+          "rite": "inquisition",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "polity",
+          "reason_lean": 0.2,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -169,8 +665,7 @@
           "term_required": false,
           "appeal_basis": "none",
           "interposed": [],
-          "order": "scripted",
-          "proofs": [
+          "admits": [
             "testimony",
             "confession"
           ],
@@ -180,7 +675,14 @@
         },
         {
           "id": "inquisition_hearing",
-          "disposal": "bench",
+          "rite": "inquisition",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "church",
+          "reason_lean": 0.2,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -192,8 +694,7 @@
             "procedure",
             "document"
           ],
-          "order": "scripted",
-          "proofs": [
+          "admits": [
             "testimony",
             "confession",
             "record"
@@ -204,7 +705,14 @@
         },
         {
           "id": "excommunication_deliberation",
-          "disposal": "declared",
+          "rite": "debate",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "church",
+          "reason_lean": -0.1,
+          "close": "declared",
           "quorum": 2,
           "bench_basis": "determine",
           "floor": "closed",
@@ -216,8 +724,7 @@
             "procedure",
             "ceremony"
           ],
-          "order": "rank",
-          "proofs": [
+          "admits": [
             "record",
             "testimony"
           ],
@@ -227,7 +734,14 @@
         },
         {
           "id": "negotiation",
-          "disposal": "mutual",
+          "rite": "negotiation",
+          "turns": [
+            1,
+            3
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "consent",
           "bench_basis": "none",
           "floor": "closed",
           "records_dissent": false,
@@ -235,10 +749,123 @@
           "term_required": false,
           "appeal_basis": "none",
           "interposed": [],
-          "order": "alternating",
-          "proofs": [
+          "admits": [
             "record",
             "testimony"
+          ],
+          "disposes": "oblige",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "conversation",
+          "rite": "conversation",
+          "turns": [
+            1,
+            3
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "hearers",
+          "bench_basis": "none",
+          "floor": "closed",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "record",
+            "testimony",
+            "deed",
+            "oath",
+            "debt",
+            "rumour",
+            "state_of_realm"
+          ],
+          "disposes": "none",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "interrogation",
+          "rite": "questioning",
+          "turns": [
+            1,
+            4
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "hearers",
+          "bench_basis": "none",
+          "floor": "closed",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "testimony",
+            "record",
+            "deed",
+            "rumour",
+            "confession"
+          ],
+          "disposes": "yield",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "rally",
+          "rite": "rally",
+          "turns": [
+            1,
+            3
+          ],
+          "authority": "none",
+          "reason_lean": -0.3,
+          "close": "hearers",
+          "bench_basis": "none",
+          "floor": "open",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "deed",
+            "rumour",
+            "state_of_realm",
+            "oath"
+          ],
+          "disposes": "none",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "audience",
+          "rite": "audience",
+          "turns": [
+            1,
+            2
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
+          "bench_basis": "determine",
+          "floor": "admitted",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "record",
+            "debt",
+            "title",
+            "oath",
+            "precedent",
+            "law"
           ],
           "disposes": "oblige",
           "disposal_reach": "room",
@@ -2073,6 +2700,54 @@
             "leverage"
           ]
         },
+        "proceeding_endings": {
+          "source": "B24p.20 (V2 p2 \u00a7C.1, \u00a7J): the tags of a proceeding's `Event.ending`",
+          "cite": "V2 p2 \u00a7C.1",
+          "note": "A PROCEEDING'S ENDING IS A TUPLE OF TUPLES, EACH BEGINNING WITH ONE OF THESE TAGS, in THIS order: `(\"proceeding\", row id, form, ended, ended_by)`, one `(\"beat\", ...)` per beat (a `Beat`'s fields in declared order, `terms` left out, `mood` replaced by its stance, `stance_bands`), one `(\"sitting\", n, issue, points, live, tracks, cond, used, last_voice, ended)` and one `(\"verdict\", id, band)` per verdict, every real a whole number of milli-units. Written by `loop/resolve.py::_proceeding_ending` from the outcome and the result `seam/wrappers/sigma.py::_resolve_proceeding` returned; read by `queries/world_q.py::ending_beats`, `ending_sitting`, `ending_verdicts`, `ending_rattles`. It names no `Claim`'s predicate. An ending of a single roll (`margin_endings`) holds none of these tags. B24p.22: the LAST tag is `(\"card\", decided_by, arranged_by, tilt, tilted_against, ruled)`, the public cells of the card (who decides, who tilted the forum, how far and against which side) and a played adjudicator's departures (`Outcome.ruled`, `((decider, departure), ...)`), every real in milli-units; read by `world_q.ending_card`. It holds no true attribute: what the witnesses read of who decided and what the forum was is what the card showed every participant. `loop/witness.py` deposits what the sitting showed into each man's own ledger from the beats and this tuple.",
+          "values": [
+            "proceeding",
+            "beat",
+            "sitting",
+            "verdict",
+            "card"
+          ]
+        },
+        "stance_bands": {
+          "source": "B24p.20 (V2 p2 \u00a7C.1; p4 \u00a7L 20): how a proceeding's `Event.ending` names the room's stance",
+          "cite": "V2 p2 \u00a7C.1",
+          "note": "THE FIVE BANDS OF A BEAT'S MOOD, THEN THE WORD A YIELD THAT DECIDED IS NAMED BY. The mood is the room's lean toward `for`, clamped to -1..1 (`modules/social_contest/proceeding.py::mood`); the record never shows the number. Its five bands are the five equal fifths of that range, in THIS order from the lowest: firmly with `against`, leaning `against`, hanging, leaning `for`, firmly with `for`. The sixth member is the stance of the beat on which a yield settled the matter itself (the act's band was the yield's: `act_band`'s `read` is empty), said to have decided and never a band of the mood. Written by `loop/resolve.py::_proceeding_ending` at the beat that TURNS the stance (the first beat, and each whose band differs from the beat before); read by nobody as a number. [ASSUMPTION; medium; Jordan to correct; basis: V2 p2 \u00a7C.1 says \"five bands of its mood (firmly with one side, leaning, hanging)\", not their edges; equal fifths of the clamped range; revert: edit the edges in `_stance_of`]",
+          "values": [
+            "firm_against",
+            "lean_against",
+            "hanging",
+            "lean_for",
+            "firm_for",
+            "decided"
+          ]
+        },
+        "sitting_claims": {
+          "source": "B24p.22 (V2 p2 \u00a7J: *every sitting also leaves, from the beats, ... a claim*; p4 \u00a7K B2, B4, B21, C1, C4): the claims a sitting deposits in the ledgers of those who saw it",
+          "cite": "V2 p2 \u00a7J",
+          "note": "THE KINDS OF CLAIM A PROCEEDING'S WITNESSES HOLD, one member each; the PREDICATE is `<claim.predicate>:<kind>` (`sitting:rattled`), and the source is `claim.source`, a `claim_sources` member (each person present saw it: `firsthand`). Written by `loop/witness.py::_sitting_claims` from `Event.ending` alone (`world_q.ending_beats`, `ending_sitting`, `ending_card`), into the OWN ledger of each person in the sitting's room and no other. Every claim's SUBJECT is the person it is about; its VALUE is: `rattled` the man rattled; `shown` the item shown; `conceded` and `contumacy` the issue it was said on; `hypocrite` the issue of the speech his reading turned (held by those whose reading turned it, alone); `temper` the beat on which the man first spoke with his temper broken (one a man a sitting); `partial` a decider's `(conflict, lean)` in milli-units; `rigged` `(the side the forum worked against, how far)` with the arranger as subject; `overruled` how far a played adjudicator's ruling departed from his own track; `heard` the issue the sitting reached, held by each bystander who does not decide (he learns, he does not rule), about the man who bore the matter; `yielded` and `hinted` the matter's questioned man as subject and the issue reached as value, held by the questioner under the `yield` disposal at the band `arrangements.yaml: disposal` names, at confidence `confidence_default` times that write's `weight` in `disposal_writes`. NO VALUE IS A TRUE ATTRIBUTE OR A `terms` CELL. Regard, pursuits, standing and legitimacy are the fold's (B27.28, B33.51), and a conviction is never written (A-92, `04:251`). [ASSUMPTION; Jordan to correct: the kinds' predicates, subjects and values, which V2 names in prose and no roster carried; `heard`'s subject is the bearer and not the matter, because `said_of` would otherwise offer the hearer's newest claim on the matter in place of what he believes of it; `partial` is deposited only where a decider's conflict reaches `recuse_at` (the host's own line for a partial seat); a sitting's claims are first-hand and never refracted (they are the typed record of what a man saw in the room, not a reading of an act).]",
+          "claim": {
+            "predicate": "sitting",
+            "source": "firsthand"
+          },
+          "values": [
+            "rattled",
+            "shown",
+            "conceded",
+            "contumacy",
+            "hypocrite",
+            "temper",
+            "partial",
+            "rigged",
+            "overruled",
+            "heard",
+            "yielded",
+            "hinted"
+          ]
+        },
         "duel_terms": {
           "source": "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 \u00a72): the terms a verb's fight is fought under.",
           "cite": "AM-C-03",
@@ -2719,7 +3394,7 @@
         },
         "obstacle_terms": {
           "source": "B05.14, B05.15, B05.17, B05.21 (`proposals/U5c_SC_one_obstacle_form.md` \u00a71, \u00a72; 29_DICE Item 29-4 step 4; PES-A; `proposals/13_SC_tuning_tables.md` T2-T4): the members the obstacle is composed of, in OBS \u00a72's order",
-          "note": "THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the document's lane A step, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add` (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person is opposite (never absent); `standard` -- what the room demands (OBS \u00a72 member 3; B05.21): for an act a bench hears on a docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `rank_gap` -- how far the person acted on or for stands above the actor's exercised seat (member 6; B21.09, landed with its first reader, `establish`): `rank_step x` the `rung_kinds` steps from the rung of the seat `Act.via` names up to the subject's (a rung's own kind; a person's highest held seat's rung), 0 where the subject stands at or below it; `regard` -- the counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS \u00a72 member 8; B05.17): a bench that regards the speaker ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears, 0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships, so it stands at 0); `cross_chain` -- a conferral across chains of seats (OBS \u00a72 member 29; B21.61, `confer`'s): `cross_chain_step x` 1 where the seat the act names and the seat it is exercised through are of different factions (`gate.across_chains`; the seat is read off a prize row saying its act names one, `loop/sides.py::seat_named_by`); `faction_power` -- the power of the holder's faction against the host's (B21.69, `IS-B3-FA-07`, A-105; the act is `revoke`, a reduction of a sitting holder's grant included, or any act whose prize says it names a seat and is opposed by that seat's holder): `faction_power_step x` 1 where the faction the live holder coheres under outweighs the faction of the seat the act is exercised through (the band above 1 of `faction_q.weight` of the one over the other, read as a comparison so a faction with no members divides nothing), and nothing where it is the same faction or the weaker (`sigma.py::_faction_power_of`). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`, `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap`, `regard`, `cross_chain` and `faction_power` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS \u00a72's table).",
+          "note": "THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the document's lane A step, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add` (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person is opposite (never absent); `standard` -- what the room demands (OBS \u00a72 member 3; B05.21): for an act a bench hears on a docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `rank_gap` -- how far the person acted on or for stands above the actor's exercised seat (member 6; B21.09, landed with its first reader, `establish`): `rank_step x` the `rung_kinds` steps from the rung of the seat `Act.via` names up to the subject's (a rung's own kind; a person's highest held seat's rung), 0 where the subject stands at or below it; `regard` -- the counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS \u00a72 member 8; B05.17): a bench that regards the speaker ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears, 0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships, so it stands at 0); `cross_chain` -- a conferral across chains of seats (OBS \u00a72 member 29; B21.61, `confer`'s): `cross_chain_step x` 1 where the seat the act names and the seat it is exercised through are of different factions (`gate.across_chains`; the seat is read off a prize row saying its act names one, `loop/sides.py::seat_named_by`); `faction_power` -- the power of the holder's faction against the host's (B21.69, `IS-B3-FA-07`, A-105; the act is `revoke`, a reduction of a sitting holder's grant included, or any act whose prize says it names a seat and is opposed by that seat's holder): `faction_power_step x` 1 where the faction the live holder coheres under outweighs the faction of the seat the act is exercised through (the band above 1 of `faction_q.weight` of the one over the other, read as a comparison so a faction with no members divides nothing), and nothing where it is the same faction or the weaker (`sigma.py::_faction_power_of`). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`, `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap`, `regard`, `cross_chain` and `faction_power` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS \u00a72's table). B24p.05: EVERY MEMBER IS BOUND (`bound:` below) to ONE reader, never both and never neither. `host` -- read by its function in `sigma.OBSTACLE_TERMS` (the eight above). `module` -- the proceeding's own, supplied by `modules/social_contest/proceeding.py` (its `TERMS`, B24p.07) as a raw operand and a step on the record the one composer (`roll.py::obstacle`) reads, so there is no second composer: `weary` (the Will his staying power has spent, V2 p2 \u00a7C.2's `weary(V)`), `standing` (the other side's circumstances unless his Reason accounts for them, `gap(V)`), `press` (`press_ob`, on a press only) and `gravity` (the close's and the abridged form's). `data/rosters.py::obstacle_bound` reads the column and refuses a value but these two; `sigma.py` refuses at import a `host` member with no function (and a function with no member) and, at the first call of the module, a `module` member the module's `TERMS` lacks. `standard` stays `host`: inside a proceeding the venue's standard is Grace's `esteem` on the leverage, never an obstacle (B24p.19 omits it for an act on the `proceeds=` path). No leverage source is module-bound.",
           "ordered": true,
           "values": [
             "even",
@@ -2732,8 +3407,29 @@
             "reception",
             "capability",
             "cross_chain",
-            "faction_power"
-          ]
+            "faction_power",
+            "weary",
+            "standing",
+            "press",
+            "gravity"
+          ],
+          "bound": {
+            "even": "host",
+            "difficulty": "host",
+            "opposition": "host",
+            "standard": "host",
+            "stakes": "host",
+            "rank_gap": "host",
+            "regard": "host",
+            "reception": "host",
+            "capability": "host",
+            "cross_chain": "host",
+            "faction_power": "host",
+            "weary": "module",
+            "standing": "module",
+            "press": "module",
+            "gravity": "module"
+          }
         },
         "lifepaths": {
           "source": "v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by, refused at import both ways (`data/rosters.py::_load_lifepaths`), and the set a cast row's `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ... `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and are not members. Jordan's \"34 vocations\" counts these; in code \"vocation\" names a capability key (`data/verbs.py::VOCATIONS`), which is why the cast key is `lifepath:` and not `vocation:`.",
@@ -3268,6 +3964,24 @@
           "ordered": true,
           "from_battle_orders": "retreat_at"
         },
+        "rig_levels": {
+          "source": "B24p.24 (V2 p2 \u00a7H): *`rig` is the arranger's one choice (0, 0.5, 1)*; V2 p4 \u00a7F 19: each level is best somewhere on `2 x stake x P(carried) - rig_price x tilt^2`.",
+          "note": "HOW HARD THE ARRANGER RIGS THE FORUM -- the closed set of `rig`, a PAYLOAD KEY on `open_case` and `convene` (`rosters.yaml: choice_sourced`'s shape: no cell binds it, the closed operand vocabulary stays closed). `0` is no rig and the act that carries none. Read by `data/rosters.py::RIG_LEVELS`: `loop/effects_information.py::_eff_open_case` refuses a level outside it, `decision/options.py::rig_offer` reads the levels above 0 as the ones it may offer, and `seam/wrappers/sigma.py::proceeding_input` reads the rig as the number it multiplies the tilt by. [ASSUMPTION; medium; Jordan to correct; revert: a one-member roster `[0]` offers no rig and refuses any.]",
+          "ordered": true,
+          "values": [
+            0,
+            0.5,
+            1
+          ]
+        },
+        "rigged_verbs": {
+          "source": "B24p.24 (V2 p4 \u00a7H item 13): *the arrangement reaches the builder as operands of `open_case` and `convene`*.",
+          "note": "THE VERBS THAT CARRY A `rig` (`rig_levels`): the act that puts a matter before a room (`open_case`) and the one that convenes the sitting (`convene`). Read by `decision/options.py::opening_set`, which offers a rig on these alone and only where the actor's power exceeds the other party's (the host's reading of the room, `View.odds.arranged`), and by the two effects, which write it. Refused at import for a verb the table lacks (`data/verbs.py::RIGGED_VERBS`).",
+          "values": [
+            "open_case",
+            "convene"
+          ]
+        },
         "choice_sourced": {
           "source": "v11 CP-T04-02 (B10-12): `decision/options.py::operand_bags` *\"ranges `role` and `retreat_at` over their closed sets, or no NPC marshals\"*, after `confer`'s `to` (a known person) and `train`'s vocation (`vocation_sourced`).",
           "note": "WHICH VERBS CARRY A CHOICE, AND OVER WHICH PAYLOAD KEYS -- `verb: [key, ...]`. A verb named here forms ONE bag per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at` is `order_retreat_at`), each value riding on the act's payload under its own name. \u26a0 THE KEYS ARE NOT `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s `stakes` is the precedent for a payload key the effect reads). \u26a0 THE CHOOSER IS CONTENT-BLIND UNTIL A CELL IS AUTHORED: Candidates score on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of which role suits the field. CONTENT ENTERS AT ONE PLACE, `tables.alignment`'s optional `choices:` block (B10.56, shipped absent): a cell there on a key this table names scores that value in `score_terms`' `pursuit`, through the person's own axis weights. \u26a0 THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3 `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`, refused at import for a verb the table lacks, a key without a range, or a key whose carrier the verb's row does not write (`role`, `retreat_at`: `Record.exists`; `posture`: `Site.condition`). \u26a0 A KEY WHOSE RANGE HAS ONE MEMBER IS NOT FANNED (`decision/options.py::_fanned_choices`): CP-T04-06's `march` ranges `posture` over `march_postures`, shipped `[storm]`, so no `march` Candidate carries a `posture` and the shipped season does not move. [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]",
@@ -3730,21 +4444,10 @@
             "epideictic"
           ]
         },
-        "proofs": {
-          "source": "`03_PARAMETERS.md` PART D's `proofs:` schema comment -- Fig. 6 -- and \u00a7E.2's worked rows (`record`, `testimony`, `oath`, `confession` are the four names actually used across all twelve games).",
-          "open": true,
-          "note": "\u26a0 A KNOWN-THIN ROSTER, NAMED RATHER THAN PADDED. `03_PARAMETERS.md` \u00a7E.2's own examination row flags a strain: what an examination weighs is a *performance*, and Fig. 6 (which this roster transcribes) enumerates what a FORENSIC proceeding admits -- so `proofs` may need a fifth member (`performance`) once a non-forensic proof-bearing game is authored, registered there as `10_LOOPS_AND_GAPS.md` `P-13` and NOT invented here. Adding a member is a roster edit, never a code change -- the closure claim this roster exists to make survives the gap.",
-          "values": [
-            "record",
-            "testimony",
-            "oath",
-            "confession"
-          ]
-        },
         "proof_kind_of_source": {
           "source": "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it",
           "from_roster": "claim_sources",
-          "note": "THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: proofs:`, the `proofs` roster). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `proofs` member, or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the proofs, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`). [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath; what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four. Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]",
+          "note": "THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`). [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath; what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four. Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]",
           "proof_kind": {
             "firsthand": "testimony",
             "firsthand_via_knot": "oath",
@@ -3763,6 +4466,301 @@
             "concede_fact",
             "concede_harm",
             "hand_error_back"
+          ]
+        },
+        "ground_reads": {
+          "source": "V2 p2 \u00a7A.2 -- what a ground's fit reads: a channel of the bearing reading, or the item's `credit` for `evidence`.",
+          "cite": "B24p.01",
+          "note": "THE CLOSED SET `grounds`' `reads` cell is a member of. `item` -- the proof the speaker shows, through its `credit`; `want` -- what the listener wants; `hold` -- what he holds; `bond` -- whom he stands with. A ground naming any other reading is refused at import.",
+          "values": [
+            "item",
+            "want",
+            "hold",
+            "bond"
+          ]
+        },
+        "proceeding_effects": {
+          "source": "V2 p2 \u00a7B -- a move is read by its `effect`, never by its id.",
+          "cite": "B24p.01",
+          "note": "THE CLOSED SET `proceeding_moves`' `effect` cell is a member of. `track` -- the speech moves each listener's own track; `strike` -- it presses the man who made the point on the table; `yield` -- the speaker concedes the issue; `none` -- he rests. No effect names a winner or a side: the close is each adjudicator's own draw (V2 p2 \u00a7D).",
+          "values": [
+            "track",
+            "strike",
+            "yield",
+            "none"
+          ]
+        },
+        "grounds": {
+          "source": "V2 p2 \u00a7C.2 (`content[g]`, Reason's share of a speech's dice by ground, R11) and \u00a7A.2 (`reads`); V2 p4 \u00a7F 10 (`consequence` is pathos, `evidence` alone logos).",
+          "cite": "B24p.01, R11",
+          "note": "WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order. `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1]; `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone); B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2). [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.]",
+          "rows": [
+            {
+              "id": "evidence",
+              "reason": 0.8,
+              "reads": "item"
+            },
+            {
+              "id": "consequence",
+              "reason": 0.7,
+              "reads": "want"
+            },
+            {
+              "id": "authority",
+              "reason": 0.4,
+              "reads": "hold"
+            },
+            {
+              "id": "solidarity",
+              "reason": 0.2,
+              "reads": "bond"
+            }
+          ]
+        },
+        "proceeding_moves": {
+          "source": "V2 p2 \u00a7B (a move is read by its `effect`), \u00a7A.1 (`rank`, his rank in the proceeding's skill); V2 p4 \u00a7F 1 (the ploy is carried by `insincerity` on `argue` and `press`; `deceive` and `divert` are not built).",
+          "cite": "B24p.01, R4",
+          "note": "THE MOVES A SPEAKER MAY MAKE, ONE ROW EACH, so that no move id is ever compared in code: the module reads `effect` and `draw`. `draw: true` moves roll the speaker's dice; `capability` is the skill whose rank joins them and is refused on a `draw: false` row. Whom a move is resisted by is not a cell: Will is the resisting attribute of every listener (A-137, V2 p4 \u00a7F 26). B24.03 adds the hearing's moves to THIS roster, never a second one. [ASSUMPTION; Jordan to correct: one skill (`argue`) for both drawing moves -- basis: V2 names \"his rank in the proceeding's skill\", one rank.]",
+          "rows": [
+            {
+              "id": "argue",
+              "effect": "track",
+              "draw": true,
+              "capability": "argue"
+            },
+            {
+              "id": "press",
+              "effect": "strike",
+              "draw": true,
+              "capability": "argue"
+            },
+            {
+              "id": "concede",
+              "effect": "yield",
+              "draw": false
+            },
+            {
+              "id": "rest",
+              "effect": "none",
+              "draw": false
+            }
+          ]
+        },
+        "proceeding_ends": {
+          "source": "V2 p2 \u00a7C.5 -- the three ends of a sitting.",
+          "cite": "B24p.01",
+          "note": "HOW A SITTING ENDS. `budget` -- the turns ran out; `rested` -- every speaker rested, so the close is drawn on what was said; `yielded` -- a side conceded the issue. Ordered as V2 lists them.",
+          "values": [
+            "budget",
+            "rested",
+            "yielded"
+          ]
+        },
+        "issue_rungs": {
+          "source": "V2 p2 \u00a7B's stasis table (A-134): what each issue weighs.",
+          "cite": "B24p.01, A-134",
+          "note": "THE ISSUES A MATTER MAY BE DIVIDED INTO, in the order a sitting takes them; `weighs` maps a ground to the weight it carries on that issue, and a ground a rung does not name weighs 1.0 (so a rung with no `weighs` names none). B24.03 adds `procedure`. [ASSUMPTION; Jordan to correct: each weight below -- basis: V2 p2 \u00a7B's stasis table; the running model is evidence only.]",
+          "rows": [
+            {
+              "id": "fact",
+              "weighs": {
+                "evidence": 1.25,
+                "consequence": 0.75,
+                "solidarity": 0.75
+              }
+            },
+            {
+              "id": "definition",
+              "weighs": {
+                "authority": 1.25,
+                "consequence": 0.75
+              }
+            },
+            {
+              "id": "justification",
+              "weighs": {
+                "consequence": 1.25,
+                "solidarity": 1.25,
+                "evidence": 0.75
+              }
+            }
+          ]
+        },
+        "authorities": {
+          "source": "V2 p2 \u00a7H and \u00a7I -- who sits above a proceeding, and the regime's weight for his authority in `power`.",
+          "cite": "B24p.01",
+          "note": "WHOSE AUTHORITY A VENUE RESTS ON. `parties` -- the parties themselves; `polity` -- the crown and its courts; `church`; `guild`; `none`. `by_faction` maps each faction the realm seats to one member: a person's authority is read off the faction he serves. [ASSUMPTION; Jordan to correct: the whole mapping -- basis: `venues.yaml`'s `serves:` tags (Crown, court and Parliament together; Church; Guild). The Crown (Valorsmark), the duchies and the Restoration Movement, and the two foreign factions, are `polity`; the Church of Solmund is `church`; the Guilds are `guild`. `faction x` is a placeholder naming no polity (`names_index.yaml`), and carries none. `guild` is reached through `Guilds`, which `role_templates.by_faction` does not key -- hence the mapping is checked against the `factions` roster and must cover every `role_templates.by_faction` key.]",
+          "values": [
+            "parties",
+            "polity",
+            "church",
+            "guild",
+            "none"
+          ],
+          "by_faction": {
+            "Valorsmark": "polity",
+            "Hafenmark": "polity",
+            "Varfell": "polity",
+            "L\u00f6wenritter": "polity",
+            "Restoration Movement": "polity",
+            "Church of Solmund": "church",
+            "Guilds": "guild",
+            "Altonia": "polity",
+            "Schoenland": "polity"
+          }
+        },
+        "matters": {
+          "source": "V2 p2 \u00a7G -- the twelve kinds of worldly matter; it absorbs the `proofs` roster (retired at B24p.03).",
+          "cite": "B24p.01",
+          "note": "WHAT AN ITEM MAY BE, ONE ROW PER KIND: a typed reference, never text. `carrier` is the tree's type the item references (`Record`, a ledger `Claim`, a `Tenure` kind, an earlier matter's case-file stages, the strife reading); `brings` is who may bring it; `cost` is what bringing it writes (read by B24p.22 and the fold). `title`'s carrier is a `hold` Tenure; an `Office` is what it holds. `brings` and `cost` are the table's own words as tokens, checked only as present, until a reader names a closed set. [ASSUMPTION; Jordan to correct: the spelling of every `brings` and `cost` token and of the `carrier` suffix after the colon -- basis: V2 p2 \u00a7G's table gives them in prose.]",
+          "rows": [
+            {
+              "id": "record",
+              "carrier": "Record",
+              "brings": "holder",
+              "cost": "disclosure"
+            },
+            {
+              "id": "testimony",
+              "carrier": "Claim:testimony",
+              "brings": "witness_or_caller",
+              "cost": "speaks_and_may_be_pressed"
+            },
+            {
+              "id": "deed",
+              "carrier": "Claim:deed",
+              "brings": "holder",
+              "cost": "names_source"
+            },
+            {
+              "id": "oath",
+              "carrier": "Tenure:oblige",
+              "brings": "party",
+              "cost": "binds_again"
+            },
+            {
+              "id": "debt",
+              "carrier": "Tenure:oblige",
+              "brings": "party",
+              "cost": "spent_when_called"
+            },
+            {
+              "id": "title",
+              "carrier": "Tenure:hold",
+              "brings": "holder",
+              "cost": "puts_title_in_question"
+            },
+            {
+              "id": "precedent",
+              "carrier": "case_file_stages",
+              "brings": "witness",
+              "cost": "none"
+            },
+            {
+              "id": "law",
+              "carrier": "Record:decree",
+              "brings": "anyone",
+              "cost": "disclosure"
+            },
+            {
+              "id": "treaty",
+              "carrier": "Record:covenant",
+              "brings": "party",
+              "cost": "disclosure"
+            },
+            {
+              "id": "rumour",
+              "carrier": "Claim:hearsay",
+              "brings": "holder",
+              "cost": "low_weight"
+            },
+            {
+              "id": "state_of_realm",
+              "carrier": "strife_reading",
+              "brings": "anyone_in_realm",
+              "cost": "none"
+            },
+            {
+              "id": "confession",
+              "carrier": "Record:confession",
+              "brings": "bench_or_questioner",
+              "cost": "none"
+            }
+          ]
+        },
+        "disposal_writes": {
+          "source": "V2 p2 \u00a7J -- the typed writes the fold performs on a sitting's outcome; `arrangements.yaml: disposal:` names them by id.",
+          "cite": "B24p.03",
+          "note": "THE CLOSED SET OF A DISPOSAL ROW'S WRITES, one row each. A `disposal:` cell naming an id outside it is refused at load (`data/arrangements.py::_load_disposal`). `weight` is the one cell a write may carry: how much a claim written to a ledger counts (a yield 1, a hint 0.4: V2 p2 \u00a7J); a write with no `weight` carries none. Nothing performs a write until B24p.20 (the sitting) and B24p.22 (the witnesses' ledgers); a bounded write (regard, pursuits, standing, legitimacy, strife) is B27.28's and B33.51's, on B24p.04's fold table. [ASSUMPTION; Jordan to correct: each `weight` below -- basis: V2 p2 \u00a7J states 1 and 0.4 for a yield and a hint; the roster's spelling of each write (`regard-` for the questioned man's, the accuser's and the loser's regard alike, `office:contested` for V2's \"office contested\", `tenure:oblige` for the surety) is this item's reading of the table's prose.]",
+          "rows": [
+            {
+              "id": "pursuits+"
+            },
+            {
+              "id": "regard+"
+            },
+            {
+              "id": "regard-"
+            },
+            {
+              "id": "grievance"
+            },
+            {
+              "id": "claim:converted"
+            },
+            {
+              "id": "claim:yielded",
+              "weight": 1.0
+            },
+            {
+              "id": "claim:hinted",
+              "weight": 0.4
+            },
+            {
+              "id": "record:confession"
+            },
+            {
+              "id": "tenure:oblige"
+            },
+            {
+              "id": "tenure:detain"
+            },
+            {
+              "id": "tenure:ban"
+            },
+            {
+              "id": "office:contested"
+            },
+            {
+              "id": "precedent"
+            },
+            {
+              "id": "legitimacy+"
+            },
+            {
+              "id": "legitimacy-"
+            },
+            {
+              "id": "faction+"
+            },
+            {
+              "id": "faction-"
+            },
+            {
+              "id": "record:acquittal"
+            },
+            {
+              "id": "record:decree"
+            },
+            {
+              "id": "record:defeated"
+            },
+            {
+              "id": "docket:adjourned"
+            },
+            {
+              "id": "docket:other_forum"
+            }
           ]
         },
         "module_kinds": {
@@ -5414,13 +6412,20 @@
             "own"
           ],
           "beneficiary": "actor",
-          "governing": [
-            "attr.social.charisma",
-            "attr.social.attunement",
-            "attr.mind.acuity"
+          "proceeds": [
+            {
+              "when": {
+                "hearer": "cohort"
+              },
+              "row": "rally",
+              "form": "full"
+            },
+            {
+              "row": "conversation",
+              "form": "full"
+            }
           ],
-          "opposed_attribute": "attr.spirit.will",
-          "governing_note": "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`.",
+          "proceeds_note": "B24p.16 (RD \u00a7D.1, R3): an argument is the proceeding itself, in the full form -- a rally where the hearer is a cohort, a conversation where he is one man. Read by the seam (`seam/contest.py::contest`, B24p.19), which deleted B05.25's interim `governing:` and `opposed_attribute:` from this row: the dice are the proceeding's own, from the six attributes the speaker and the room bring (RD \u00a7D.3). `lie`'s entry is this row's, with the item the liar's own false word.",
           "beneficiary_note": "v9 IN-12 step 9 (#453 \u00a79.4: *'beneficiary `actor`'*): THE ARGUER -- he argues for what he holds right; the hearer is the counterparty, not the party served.",
           "referent_class": "Proposition",
           "referent_class_note": "v10 CP-T05-04 (B10-05, AM-D-05; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds a Proposition and never a person, a Site, a Record or a rung, while `to` still fans over the persons he knows. The class removes wrong-kind formations only: this row's cell, its eligibility and who may argue to whom are unchanged, and the `Proposition` stamp is NOT widened beyond REM-21's own-referent term and the term T02 CP-T02-05 defines (`tests/test_referent_class_stamps.py`). REVERT: delete this column.",
@@ -6349,13 +7354,13 @@
             "own"
           ],
           "beneficiary": "subject",
-          "governing": [
-            "attr.social.attunement",
-            "attr.mind.acuity",
-            "attr.social.grace"
-          ],
-          "opposed_attribute": "attr.social.attunement",
-          "governing_note": "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`.",
+          "proceeds": {
+            "row": "conversation",
+            "form": "abridged",
+            "move": "argue",
+            "item": false
+          },
+          "proceeds_note": "B24p.16 (RD \u00a7D.1, R6; V2 p2 \u00a7M): a lie is an `argue` whose item is the liar's own false word or forgery, so the move is `argue` (`deceive` is not built, V2 p4 \u00a7F 1) and the item `false` (`person_q.false_items`); abridged, in the room the lie is told in. Read by the seam (B24p.19), which deleted B05.25's interim `governing:` and `opposed_attribute:` from this row.",
           "requires": "the liar holds a claim on the subject, and the person told is with the liar",
           "requires_typed": {
             "all": [
@@ -8071,13 +9076,17 @@
             "own"
           ],
           "beneficiary": "none",
-          "governing": [
-            "attr.social.charisma",
-            "attr.mind.acuity",
-            "attr.social.grace"
+          "proceeds": [
+            {
+              "row": "docket",
+              "form": "abridged"
+            },
+            {
+              "row": "audience",
+              "form": "abridged"
+            }
           ],
-          "opposed_attribute": "attr.spirit.will",
-          "governing_note": "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`.",
+          "proceeds_note": "B24p.16 (RD \u00a7D.1, R6): a speech at a sitting is abridged, under the row the docket hears the matter under (`world_q.proceeding_row`); where the docket item names none (a computed case: `_eff_open_case` derives no arrangement) the speech is heard by the seat, the `audience` row [ASSUMPTION; Jordan to correct, B24p.19: the plan's literal reading refused the speech, which left `speak` dead on every computed case; revert: delete the second entry]; B24.08 keeps `speak` a single filing act, which the abridged form is. Read by the seam (B24p.19), which deleted B05.25's interim `governing:` and `opposed_attribute:` from this row.",
           "requires": "a live occasion at the actor's venue whose docket names the subject",
           "requires_typed": {
             "form": "existence",
@@ -8302,12 +9311,11 @@
             "own"
           ],
           "beneficiary": "subject",
-          "governing": [
-            "attr.mind.acuity",
-            "attr.social.attunement"
-          ],
-          "opposed_attribute": "attr.spirit.will",
-          "governing_note": "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`.",
+          "proceeds": {
+            "row": "conversation",
+            "form": "abridged"
+          },
+          "proceeds_note": "B24p.16 (RD \u00a7D.1, R6): a telling is a passing word put to one man, abridged. Read by the seam (B24p.19), which deleted B05.25's interim `governing:` and `opposed_attribute:` from this row.",
           "requires": "the teller holds a claim on the subject, and the person told is with the teller",
           "requires_typed": {
             "all": [
@@ -8476,12 +9484,11 @@
           ],
           "eligibility_note": "v10 IN-12 step 5 (#453 \u00a79.1, the `interrogate` row): `remit:determine` via a seat -- the bench that may bind a party is the one that may question him (`interview` is the `own` row beside it; #453's CONFLICTS line: eligibility, the counterparty's state, the prize).",
           "beneficiary": "actor",
-          "governing": [
-            "attr.social.attunement",
-            "attr.social.charisma"
-          ],
-          "opposed_attribute": "attr.spirit.will",
-          "governing_note": "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`.",
+          "proceeds": {
+            "row": "interrogation",
+            "form": "full"
+          },
+          "proceeds_note": "B24p.16 (RD \u00a7D.1, R6): interrogation for information is a full questioning. RD \u00a7D.1 spells the row `questioning`, which is the RITE; the arrangement that opens it is `interrogation` (`arrangements.yaml`, `rite: questioning`) [ASSUMPTION; Jordan to correct: the arrangement id, since `_check_proceeds` takes arrangement ids]. Read by the seam (B24p.19), which deleted B05.25's interim `governing:` and `opposed_attribute:` from this row.",
           "beneficiary_note": "#453 \u00a79.1: `actor` -- what a confession settles is the questioner's matter, and the seat he acts through is carried on `via`, not on an operand.",
           "requires": "the subject is a person, held in a live `detain`, and a docketed petition's `terms` names him",
           "requires_typed": "none",

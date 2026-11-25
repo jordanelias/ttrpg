@@ -46,10 +46,7 @@ from engine.season.state.carriers import Claim
 # `PYTHONHASHSEED=0`, on the B10.99 closing tree (after B10.72's release fix); still no `claim.decayed`.
 # BA1.99 RE-PIN, 12998 -> 13348 (read at 12933 with BA1.02's `manner:` rows in; they are held back): the BA1 movers (BA1.01, BA1.08, BA1.12; `_realm_goldens.py`'s
 # BA1.99 paragraph) move the season's log once more; same reading, seed 0, `PYTHONHASHSEED=0`, on the BA1.99 closing tree; still no `claim.decayed`.
-# B21.99 RE-PIN, 13522 -> 9288: the B21 movers (`_realm_goldens.py`'s B21.99 paragraph: seat grants narrowed to each row's named acts, so no
-# office mints the `dispatch` and `confer` attempts it did; the command basis; the drawn writ) shorten the season's log; same reading, seed 0,
-# `PYTHONHASHSEED=0`, on the closing tree; still no `claim.decayed`.
-BEFORE_SEASON_ONE_ENTRIES = 9288      # B21.99 re-record: 13522 -> 9288
+BEFORE_SEASON_ONE_ENTRIES = 9142       # B24p merge with B21 re-record: 14307 -> 9142 (B21.99: 13522 -> 9288; B24p merge with B15.99: 13522 -> 14307)
 BEFORE_SEASON_ONE_DECAYED = 0
 
 
