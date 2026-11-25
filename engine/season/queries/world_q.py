@@ -2832,13 +2832,18 @@ def endings_reached(w: World) -> list:
 
 
 def _ending_edges(w: World, row) -> tuple:
-    """The live edges an `endings` row's condition reads, or `()` when it does not hold."""
+    """The live edges an `endings` row's condition reads, or `()` when it does not hold. A `rung_kind` row with
+    `settled: true` selects only the rungs with a `settlement` among their descendants (an unsettled territory,
+    `terr_T15`, is not asked for: no verb holds it, `H-186`)."""
     sel, val = row.holds
     if sel == "post":
         holds = [hold_force(w, o) for o in sorted(w.offices) if w.offices[o].post == val]
     elif sel == "rung_kind":
         holds = [governing_hold(w, r) for r in sorted(w.rungs) if w.rungs[r].kind == val
-                 and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))]
+                 and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))
+                 # `settled: true` (B12a.09): a SETTLED rung has a `settlement` rung among its descendants
+                 and (not row.settled or any(d in w.rungs and w.rungs[d].kind == "settlement"
+                                             for d in descendants(w, r)))]
     else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
         raise Forbidden(f"ending selector {sel!r} has no enumerator", "queries/world_q.py::_ending_edges",
                         f"a branch for it, beside `ENDING_SELECTORS`' two")

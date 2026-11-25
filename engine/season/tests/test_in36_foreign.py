@@ -47,7 +47,7 @@ from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.state.carriers import Claim, Question, Sensation, Tenure, View
 from engine.season.state.ids import H, draw_factory
 
-from .test_in27_endings import _all_but_one_under_the_crown, _realm_territories
+from .test_in27_endings import _all_but_one_under_the_crown, _settled_territories
 from .test_march import _fold_one
 
 EMPIRE = "Altonia"
@@ -184,7 +184,7 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
     sel.add_tenure(Tenure("t_in36_last_crown", last, faction_prop_id("Valorsmark"), "commit", 0))
     assert world_q.governing_hold(sel, root) is not None, "the empire's root must be HELD for this to bite"
     selected = {t.object for t in world_q._ending_edges(sel, ENDINGS["peninsular_sovereignty"]) if t.kind == "hold"}
-    assert root not in selected and selected == set(_realm_territories(sel)) and len(selected) >= 15, selected
+    assert root not in selected and selected == set(_settled_territories(sel)) and len(selected) >= 15, selected
 
 
 # ---------------------------------------------------------------------------------------------- (d)
