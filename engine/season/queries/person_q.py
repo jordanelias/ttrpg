@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import functools
 import math
+from fractions import Fraction
 from dataclasses import dataclass
 from typing import Any, Callable, NamedTuple, Optional
 
@@ -55,7 +56,7 @@ from ..data.requires import (
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
     ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
-    roster, roster_map,
+    roster, roster_map, task_share,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
 from .inputs import SIDE_SIGN, Item
@@ -643,18 +644,37 @@ def is_deed(c) -> bool:
 # of one is a confession, not testimony. A family prefix and not a list, so a kind the table adds to it is read as one without an edit here.
 CONFESSION_FAMILY = "confession."
 
+# THE BAND EACH CONFESSION KIND IS EMITTED AT, read off the `interrogate` row's `emits:` (one kind per band), so no kind is spelt twice and a band the table moves is followed.
+_INTERROGATE = _verbs.VERB_TABLE.get("interrogate")
+CONFESSION_BAND = {k: d for d, ks in (_INTERROGATE.emits_by_degree.items() if _INTERROGATE else ()) for k in ks if k.startswith(CONFESSION_FAMILY)}
+
+
+def proof_weight(c) -> Fraction:
+    """HOW MUCH OF A PROOF A HELD CLAIM IS (B24.23, CF-E8-4): `0` for a claim that is no proof (`proof_kind` is `None`), the share of its band
+    (`rosters.yaml: task_fraction` through `task_share`) for a `confession.*` deed -- full and made 1, partial 0.5, withheld 0 -- and `1` for any other proof.
+    [ASSUMPTION: the confession's weight by band is the case-file share table's (`task_fraction`: Overwhelming and Success 1, Partial 0.5), as
+    `14_VERBS_SOCIAL2_C_case_question_confession.md` §5 weights the case-file entry; a `confession.*` kind the table emits at no band reads the full 1]. World-free."""
+    if proof_kind(c) is None:
+        return Fraction(0)
+    return task_share(CONFESSION_BAND.get(c.predicate)) if c.predicate.startswith(CONFESSION_FAMILY) else Fraction(1)
+
 
 def proof_kind(c) -> Optional[str]:
     """WHAT KIND OF PROOF A HELD CLAIM IS -- A `matters` MEMBER, DERIVED FROM THE CLAIM AND NEVER DECLARED (FI_05_B E-1; the one reader, World-free). A DEED CLAIM (`is_deed`, a `Claim`
     or a told `Said`) of the `confession.` family is `confession`; any other deed claim is `testimony`, told or not: how far it has travelled is `decision/options.py::teller_weight`'s
     WEIGHT (`told_weight ** hops`), never a kind. A claim that is no deed (a cell, a refusal kind, a value that is not `True`) is no proof: `None`.
+    A CONFESSION THAT WAS WITHHELD IS NO PROOF EITHER (B24.23, H-311): a `confession.*` kind whose band's share is zero (`proof_weight`; `confession.withheld`, emitted at
+    `Failure`) reads `None`, so a prisoner who gave nothing is not worse off than one never questioned. The kind is derived from the band's share, not from a spelt kind.
     A Record's kind (`record`) and an edge's (`oath`, cited by its Tenure id) are the host's hold check, not a claim's, so this reader never answers them.
-    [ASSUMPTION: E-1's "about its own subject" is not tested -- the claim carries no second subject to compare, so a `confession.*` deed is `confession` wherever held; B24.23 narrows it]
+    [ASSUMPTION: E-1's "about its own subject" is not tested -- the claim carries no second subject to compare, so a `confession.*` deed is `confession` wherever held; `world_q.proofs`
+    already reads only the opponent's own deeds (`attributed_deeds`)]
     ⚠ `rosters.yaml: proof_kind_of_source` also names a kind per claim, by SOURCE (`world_q.proofs`' admission filter, `dossier`'s `proof_kind` column): the two disagree
     (a `told_by` claim is `record` there, `testimony` here), and which one the host's admission reads is B24.25's to decide."""
     if not is_deed(c):
         return None
-    return "confession" if c.predicate.startswith(CONFESSION_FAMILY) else "testimony"
+    if not c.predicate.startswith(CONFESSION_FAMILY):
+        return "testimony"
+    return "confession" if task_share(CONFESSION_BAND.get(c.predicate)) else None
 
 
 def impeaches(c, record_id: str) -> bool:
