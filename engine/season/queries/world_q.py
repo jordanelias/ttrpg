@@ -5199,7 +5199,7 @@ class WorldReader:
                 return UNKNOWN
             return admitted_to(w, arg, subject)
         if stem in ("march.nth", "march.cap"):
-            # v12 B21b.01 (IN-36 (a), A-103): THE MARCH CAP'S TWO READS, `marches_into` the one owner. UNKNOWN for a subject that is
+            # v12 B21b.01 (IN-36 (a), A-103): THE MARCH CAP'S TWO READS: `march.nth` is `marches_into`'s (the one owner), `march.cap` the fixture. UNKNOWN for a subject that is
             # no rung (`ID-5`). The person side never answers either (`WORLD_ONLY_STEMS`): the count is the lap's, not a belief.
             if subject not in w.rungs:
                 return UNKNOWN

@@ -187,7 +187,7 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     `march` named the place (`world_q.march_at_band`; an Event carries no payload, the act's `subject` is the field's rung), and the log takes a lap's
     Events at the lap's END (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now -- which a `seize` of the same lap precedes,
     RESOLVE before ENCOUNTER, so it could not have read it either. The seat's side is `seat_people_at` (the faction's members and the seat's sworn there), the
-    holder's `mustered`; for a settlement held only through a taken territory (no seat people in it) both counts and the won field are read at that territory. Every decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
+    holder's `mustered`; for a settlement held through a taken territory the territory is read too (either place licenses). THE WON FIELD IS READ OFF THE SEASON'S EARLIER LAPS: a field won in a season's LAST lap exempts nothing, and the next season's seizure meets the plurality against defenders the win did not remove. Every decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
     committed to the seat's faction, and `may_seize` over the hold it replaces)."""
     rung = w.rungs.get(rid)
     mine = seat_faction(w, via)
@@ -202,12 +202,14 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     people = seat_people_at(w, via, rid) if town else []
     if not (occupies(w, rid, mine) or people):
         return None
-    # B21b.04, a TOWN: where the plurality is counted. A settlement the seat holds only THROUGH a taken territory (`occupies`' held-through limb: none of its
-    # faction mustered in the town) is counted, with the won field, at that territory, where the army stands. A territory is occupied by standing AT it, a
-    # count the subtree's `mustered` is not, so its licence stays `occupies` alone [ASSUMPTION; medium; Jordan to correct; revert: the plurality at every held place].
+    # B21b.04, a TOWN: the plurality is read at the town and, for a town held only THROUGH a taken territory (`occupies`' held-through limb), also at that
+    # territory, where the army stands; either place licenses, so more presence never revokes a licence. A won field at either place exempts it. The count at
+    # the territory is the subtree's (the holder's people in the territory's other towns count against the army), a harder test than seizing the territory
+    # itself, which `occupies` alone licenses [ASSUMPTION; medium; Jordan to correct; revert: the plurality at every held place, or at the town alone].
     if town:
-        through = not mustered(w, rid, mine) and occupies(w, rid, mine)
-        at = governing_hold(w, rid).object if through else rid
-        if not march_at_band(w, at, WON) and len(seat_people_at(w, via, at) if through else people) <= len(mustered(w, at, holder)):
+        held = governing_hold(w, rid)
+        places = [rid] + ([held.object] if held is not None and held.object != rid and occupies(w, held.object, mine) else [])
+        if not any(march_at_band(w, at, WON) or len(people if at == rid else seat_people_at(w, via, at)) > len(mustered(w, at, holder))
+                   for at in places):
             return None
     return mine

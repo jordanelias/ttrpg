@@ -854,7 +854,7 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # witness's ledger from each refused `commit`. The person forms the Candidate and the fold refuses it (`commitment.refused`). One stem; no form.
 # ⚠ v12 B21b.01 (IN-36 (a), A-103): `march.nth` and `march.cap`, `declared.votes`/`declared.quorum`'s pair: `scalar_threshold` (form 2) of the count of this
 # season's admitted marches into the subject's territory, WITH the one asked (`march.nth`), `<=` a SECOND READ, the cap (`march.cap`, `Fixtures march_cap_per_territory`).
-# Both read 0 where the cap is 0 or None, so `0 <= 0` holds and nothing is counted. `WorldReader.read` answers both through `world_q.marches_into`, the one owner;
+# Both read 0 where the cap is 0 or None, so `0 <= 0` holds and nothing is counted. `WorldReader.read` answers `march.nth` through `world_q.marches_into`, the one owner, and `march.cap` from the fixture;
 # WORLD-ONLY (below), `declared.votes`' reason: the count changes with every march a lap logs, so a witness's ledger must not hold one as a belief. No form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
