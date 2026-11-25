@@ -17,6 +17,7 @@ from __future__ import annotations
 import random
 from dataclasses import fields, is_dataclass, replace
 from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, degree_from_net
+from engine.dice_engine.draw import seeded
 from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
@@ -27,9 +28,9 @@ from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, DECLARED, SCRUPLE_OVE
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
-from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
+from ..data.requires import PRECEDENCE_STEM, UNKNOWN, Observation, Verdict, binding_from_act, evaluate
 from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK, SEQUENCE_CLAUSE,
-                          VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow)
+                          VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow, _OPENERS_FROM_EFFECTS)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
@@ -39,9 +40,9 @@ from ..epistemic import observers_for
 from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMENT`, `_aff.INCOMPATIBLE`): a rebound table is what is read
 from ..data.affiliations import engagement
 from .effects_combat import MARK_ROLE
-from ..seam.wrappers.pool import pool_pair
+from ..seam.wrappers.pool import faculty, pool_pair
 from ..seam.wrappers.edge import site_net_sigma
-from ..seam.wrappers.sigma import arranged_by, topic_of
+from ..seam.wrappers.sigma import arranged_by, precedence_net, topic_of
 from ..queries.inputs import Beat, Outcome
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
@@ -49,7 +50,7 @@ from engine.substrate.descriptors import AFFILIATION_CEILING
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..seam.ladder import is_margin_result
-from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
+from ..state.carriers import Act, Event, StateChange, effort_of, operand_of, subject_of
 from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, _seat_grants
 from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
@@ -69,10 +70,22 @@ def _canonical_order(w: "World", acts: list) -> list:
     (`a.scene is None`, a bare Act: every existing probe) is its own one-act scene, and so is a scene holding ONE act:
     each is keyed `(stratum_of(a), H(seed, tick, actor, "order:<verb>:<act id>"))` as before, so one interaction per
     scene reproduces today's order.
+    B08.05 (`Fixtures rival_precedence: draw`, shipped): AFTER that sort, scenes whose acts want one exclusive thing
+    (`rival_key`: a seat, a Record, the stores of a larder beyond its stock), by two or more persons, are re-ordered among the
+    positions they already hold by a keyed draw per scene, the highest net first (`_precedence_order`); `hash` stops at the sort.
     Extracted from `resolve()`'s own sort (M4, `ED-IN-0279` clause (a)) so `loop/encounter.py` can fold a
     SUBSET of a lap's acts in the SAME canonical order, rather than re-deriving the rule or
     skipping it (§8: it lives once). No `self`: the ordering is a pure function of the world's
     seed/tick and the acts themselves, not of driver state."""
+    return _canonical_order_with_precedence(w, acts)[0]
+
+
+def _canonical_order_with_precedence(w: "World", acts: list) -> tuple:
+    """`(the canonical order, {act id: precedence net})` -- `_canonical_order`'s body, and the draw's reason trail for the one caller that
+    writes Events (`resolve`). B08.05 (`RIVAL`): AFTER the stratum sort, each rivalry group of scenes (`_rival_groups`) is re-ordered among the
+    positions its scenes already hold, by the keyed draw each scene's first rival act makes (`_precedence_draw`), highest net first; every scene
+    outside a group keeps its position. `Fixtures rival_precedence: hash` is today's order (no group is read, nothing is drawn).
+    The map holds, for every act of a re-ordered scene, the net of the draw that placed its scene (a scene of one interaction: its own)."""
     scenes: dict = {}                       # insertion-ordered: a scene's acts in arrival (chooser) order
     for i, a in enumerate(acts):
         scenes.setdefault(("scene", a.scene) if a.scene is not None else ("act", i), []).append(a)
@@ -85,7 +98,149 @@ def _canonical_order(w: "World", acts: list) -> list:
                  else f"order:{first.verb}:{first.id}")
         return (stratum_of(first), H(w.world_seed, w.tick, first.actor, label))
 
-    return [a for members in sorted(scenes.values(), key=key) for a in members]
+    ordered = sorted(scenes.values(), key=key)
+    nets: dict = {}
+    if w.fixtures.get("rival_precedence") == "draw":
+        ordered, nets = _precedence_order(w, ordered)
+    return [a for members in ordered for a in members], nets
+
+
+# -- THE PRECEDENCE DRAW (B08.05, `RIVAL`; rulings A-5, A-9, A-30; D-36: rank never breaks a tie, for these keys) -----------------------------
+
+def _stores_debit(row: "VerbRow"):
+    """The `stores` clause of a row's typed cell that DEBITS a rung -- `ScalarThreshold(of=<operand naming the rung>, scalar='stores',
+    key=<operand naming the kind>, threshold=<operand naming the amount>)` -- the first one, or `None`. Read off the row (`requisition`'s
+    `of: subject`, `transfer`'s `of: from`); names no verb."""
+    todo = [row.requires_typed.requirement] if row.requires_typed is not None else []
+    while todo:
+        c = todo.pop(0)
+        if hasattr(c, "clauses"):
+            todo.extend(c.clauses)
+        elif getattr(c, "scalar", None) == "stores":
+            return c
+    return None
+
+
+def _demand(a: "Act", clause) -> int:
+    """The `amount` an act asks of the rung `clause` names: its payload's, `0` where it carries none or not a whole number."""
+    got = a.payload.get(clause.threshold) if isinstance(a.payload, dict) else None
+    return got if isinstance(got, int) and not isinstance(got, bool) else 0
+
+
+def rival_key(w: "World", a: "Act") -> "tuple | None":
+    """B08.05 (`RIVAL` 1): THE RIVALRY KEY OF AN ACT, DERIVED AND OWNED HERE, or `None` -- the thing two persons' acts would each take that only one
+    can have. Read off the verb row and the act's operands; names no verb.
+
+      * `("hold", subject)` for a row that opens a `hold` (`data/verbs.py::_OPENERS_FROM_EFFECTS`, which writes `Tenure.since`) without bringing
+        its subject into being (no `.exists` write: `create_record`, `found`, `issue` mint a new thing, so two of them contest nothing), where the
+        subject is a seat (`w.offices`) or a Record (`w.records`) that exists: a seat claimed, a Record seized;
+      * `("stores", rung, kind)` for a row whose typed cell reads `stores` of a rung (`_stores_debit`) and writes `Rung.stores`, when the actor does
+        not hold that rung (what he holds is his to spend, and nobody else's act competes for it). Whether the DEMAND exceeds the stock is the
+        group's (`_rival_groups`: a larder two acts can both empty is no scarcity).
+
+    `None` for an act whose verb the pool rule refuses (`faculty` raises `Forbidden` for a brute verb, `Unspecified` for one naming no attribute):
+    a rival with no pool has no odds to draw, so the order stays the content-hash order. Asked last, only of an act the shape already admits."""
+    row = VERB_TABLE.get(a.verb)
+    if row is None or a.actor not in w.persons:
+        return None
+    key = None
+    if "Rung.stores" in row.writes:
+        clause = _stores_debit(row)
+        rung, kind = operand_of(a, clause.of) if clause else "", operand_of(a, clause.key) if clause else ""
+        if (rung in w.rungs and kind
+                and not any(t.object == rung and t.until is None for t in edges_of(w, "hold", a.actor))):
+            key = ("stores", rung, kind)
+    elif ("Tenure.since" in row.writes and a.verb in _OPENERS_FROM_EFFECTS.get("hold", ())
+            and not any(f.endswith(".exists") for f in row.writes)):
+        subject = subject_of(a)
+        if subject and (subject in w.offices or subject in w.records):
+            key = ("hold", subject)
+    if key is None:
+        return None
+    try:
+        faculty(w, w.persons[a.actor], a.verb)
+    except (Forbidden, Unspecified):
+        return None
+    return key
+
+
+def _rival_groups(w: "World", scenes: list) -> list:
+    """The rivalry groups among `scenes` (already in canonical order): `[(keys, [scene index, ...])]`, the indices ascending. A scene joins the
+    groups of the keys its interactions carry (`rival_key`); scenes sharing a key are one group, and groups sharing a scene are one (a scene
+    holding two keys links them). A `stores` key is a group only where the summed demand of its acts exceeds the rung's stock of the kind
+    (`_demand`); a group is a rivalry only with two or more DIFFERENT actors among its scenes (one person's two acts compete with nobody).
+    The one reader, so a count of the groups formed (gate 1) and the draw read the same ones."""
+    by_key: dict = {}
+    for i, members in enumerate(scenes):
+        for a in members:
+            k = rival_key(w, a)
+            if k is not None:
+                by_key.setdefault(k, {}).setdefault(i, []).append(a)
+    parent: dict = {}
+
+    def find(i: int) -> int:
+        while parent.setdefault(i, i) != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    live: list = []
+    for k, held in by_key.items():
+        if k[0] == "stores":
+            stock = (w.rungs[k[1]].stores or {}).get(k[2], 0)
+            asked = sum(_demand(a, _stores_debit(VERB_TABLE[a.verb])) for acts in held.values() for a in acts)
+            if asked <= stock:
+                continue
+        live.append((k, sorted(held)))
+        for i in held:
+            parent[find(i)] = find(next(iter(held)))
+    groups: dict = {}
+    for k, idx in live:
+        groups.setdefault(find(idx[0]), ([], set()))
+        groups[find(idx[0])][0].append(k)
+        groups[find(idx[0])][1].update(idx)
+    return [(keys, sorted(idx)) for keys, idx in groups.values()
+            if len({scenes[i][0].actor for i in idx}) >= 2]
+
+
+def _precedence_draw(w: "World", a: "Act", n: int = 0) -> float:
+    """One precedence draw of act `a`, rolled by the module entry on the actor's own pool (`seam/wrappers/sigma.py::precedence_net`: the one
+    sampler, A-5, the one pool rule, D-U1-08) on the key `H(seed, tick, actor, "precedence:" + a.id)` through the one `Draw` owner (A-30); the
+    n-th RE-draw (n >= 1, after a tie) is keyed `"precedence:" + a.id + ":" + str(n)`."""
+    label = "precedence:" + a.id + (f":{n}" if n else "")
+    return precedence_net(w, a, seeded(H(w.world_seed, w.tick, a.actor, label)))
+
+
+def _precedence_order(w: "World", scenes: list) -> tuple:
+    """`(scenes, {act id: net})`: each rivalry group re-ordered among the positions its scenes hold, the highest net first, no scene outside a group
+    moved. A scene is drawn by its FIRST act that carries one of the group's keys (a scene of one interaction: that act); a tied net is exact (the
+    sampler's floats), and the tied scenes re-draw under the n-th re-draw key until the tie breaks -- except where the pool is nothing, which
+    draws a nothing every time: those stay in the order they hold (the content-hash order), as a tie nobody's skill can break."""
+    groups = _rival_groups(w, scenes)
+    if not groups:
+        return scenes, {}
+    out, nets = list(scenes), {}
+    for keys, idx in groups:
+        held = set(keys)
+        draws = {i: next(a for a in scenes[i] if rival_key(w, a) in held) for i in idx}
+        drawn = {i: _precedence_draw(w, draws[i]) for i in idx}
+        n = 0
+        while True:
+            tied = [i for i in idx if sum(drawn[j] == drawn[i] for j in idx) > 1
+                    and faculty(w, w.persons[draws[i].actor], draws[i].verb) > 0]
+            if not tied:
+                break
+            n += 1
+            drawn.update({i: _precedence_draw(w, draws[i], n) for i in tied})
+        placed = sorted(idx, key=lambda i: -drawn[i])         # stable: an unbroken tie keeps the content-hash order
+        for slot, i in zip(idx, placed):
+            out[slot] = scenes[i]
+        for i in idx:
+            nets.update({a.id: drawn[i] for a in scenes[i]})
+        TRACE.decision("rival precedence", "A-5/A-9",
+                       chose=f"over {sorted(keys)}, a draw per scene, highest net first: {[(draws[i].actor, draws[i].id, drawn[i]) for i in placed]}",
+                       alternatives=["the content-hash order (`rival_precedence: hash`)", "the senior office first (D-36: rank never breaks a tie)"])
+    return out, nets
 
 
 def _survives(self, w: "World", a: Act) -> list:
@@ -1483,7 +1638,7 @@ def resolve(self, token: Token, acts: list[Act],
     # that roster "ORDER IS SEMANTIC HERE... editing the order changes which acts see which
     # world"). An act that names its own stratum still wins, so a caller can test the ordering
     # directly (`A37`). `_canonical_order` is shared with `loop/encounter.py`.
-    ordered = _canonical_order(w, acts)
+    ordered, precedence = _canonical_order_with_precedence(w, acts)
     TRACE.decision(f"ordering {len(acts)} acts", "S27/S32",
                    chose="five strata, then a content-derived hash key over one global array",
                    alternatives=["completion order", "rank", "per-container sort (voids the fold)"])
@@ -1600,6 +1755,15 @@ def resolve(self, token: Token, acts: list[Act],
         # accumulator WHICH acts a site's total came from, which judging that total's write needs.
         # `_eff_work` stages its own delta through the gate instead (`World.stage`).
         out.extend(produced)
+
+    # B08.05 (`RIVAL` 3): THE REASON AN ACT FOLDED WHERE IT DID RIDES ITS EVENTS -- the net of the precedence draw that placed it, as a read
+    # (`Observation(actor, "precedence", net)`; `PRECEDENCE_STEM` is world-only, so WITNESS deposits no claim of it). Set once here, after the fold,
+    # on every Event whose act was in a group, so no emission site below names it (§8: one writer).
+    if precedence:
+        for _i, _e in enumerate(out):
+            _by = self.act_of.get(_e.id)
+            if _by is not None and _by.id in precedence:
+                out[_i] = replace(_e, observed=tuple(_e.observed) + (Observation(_by.actor, PRECEDENCE_STEM, precedence[_by.id]),))
 
     # S27.3 / S32 rest 4: SUM ALL DELTAS, CLAMP ONCE. Clamping may not depend on arrival
     # order. Integer addition is associative and commutative, so this is order-independent

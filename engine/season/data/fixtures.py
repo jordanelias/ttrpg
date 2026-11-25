@@ -504,6 +504,12 @@ DEFAULT_FIXTURES = Fixtures(
     # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
     # [JUSTIFIED: engine/season/hole_register.yaml H-76 -- `site: Fixtures interactions_per_scene`; `player_agency_v30.md` §6.3 gives *1-3 mechanical interactions*, CANONICAL but pre-#337 and REFERENCE under CLAUDE.md §0.05, so the magnitude is fitted]
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
+    # B08.05 (`RIVAL`; A-5, A-30). HOW RIVALS FOR ONE EXCLUSIVE THING ARE ORDERED IN ONE FOLD. `hash`: the canonical content-hash order alone, so who
+    # gets the seat, the Record or the last of a larder is a fixed function of the acts' content (`loop/resolve.py::_canonical_order`, today's
+    # order). `draw`: each group of acts by different persons sharing a rivalry key (`loop/resolve.py::rival_key`) is re-ordered among the positions
+    # it already holds by a keyed draw per act, its odds the rivals' own pools (`seam/wrappers/pool.py::faculty`); no act outside a group moves.
+    # [JUSTIFIED: proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_rival_acts_in_one_fold.md "The resolution, decided" -- the mechanism (a draw, the odds the rivals' skills) is the source's and the arm's SHIPPED value `draw` the plan's (B08 UNDECIDED (3)), the only arm that moves a world with a rivalry group; the CONTROL and the REVERT are `hash` (today's order, which `engine/season/tests/test_rival_precedence.py` pins at seeds 0-2)]
+    rival_precedence="draw",           # swept hash (control; revert) / draw (SHIPPED)
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
     # `U2` / `H-124`. HOW MANY OF THE FIVE A PERSON MAY SPEND IN ONE LAP of the scene tick.
