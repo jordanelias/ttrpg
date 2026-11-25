@@ -198,7 +198,13 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # world's act mix, and honour/7/7 stopped meeting `_proceeding`. THE SWEEP, this file's `_proceeding` (the producer's scratch, not kept): the 15 convictions x seeds 0..199 at 7
 # seasons, `PYTHONHASHSEED=0`, each of four partitions stopped at its first hit: stability/6, stability/129, stability/151 and stability/152. The lowest seed is taken
 # (stability/6/7, hash aad0df64...). The bar is an existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert: restore honour/7/7 with the merge's movers reverted.]
-PROCEEDINGS = (("stability", 6, 7),)
+# B24.10: RE-TRACED AGAIN, stability/6/7 -> scholastics/153/7, the conviction and the seed both moved -- B24.08 and B24.10 (a `determine` is declared at RESOLVE and sat at
+# ENCOUNTER, as the bench's own close; the chooser prices a computed case's determination by its sitting) moved this three-person world's act mix, and stability/6/7 stopped meeting
+# `_proceeding`: its clerk's case is now opened before the sitting fires ("no open_case put the clerk before the sitting after it fired"). THE SWEEP, this file's `_proceeding`
+# (the producer's scratch, not kept): the 15 convictions x seeds 0..119 at 7 seasons, `PYTHONHASHSEED=0`, no run meets every assertion; then seeds 120..259 conviction by conviction (stability,
+# doctrine, family, reputation, scholastics, community; the sweep was stopped there), one hit: scholastics/153/7 (hash 4784ba71...). The bar is an existence claim on SELECTED seeds (above), not a rate.
+# [ASSUMPTION; medium; Jordan to correct; revert: restore stability/6/7 with B24.08's deferral and B24.10's fallback entry reverted.]
+PROCEEDINGS = (("scholastics", 153, 7),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 
 

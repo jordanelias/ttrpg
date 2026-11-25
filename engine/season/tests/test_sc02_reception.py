@@ -51,7 +51,7 @@ from .test_u7_remit import _world
 
 SPEAKER, PARTY, HEARER, NOBODY = "p_low", "p_mid", "p_high", "p_other"
 PRIZE = "a matter"
-VERB = "determine"      # B24p.99: the single roll's own verb the bench-hearing is exercised through (`speak` now proceeds)
+VERB = "arrest"         # B24.10: the single roll's own verb the bench-hearing is exercised through (`speak` and, since B24.08, `determine` proceed; was `determine`)
 SEASON_DIR = Path(__file__).resolve().parents[1]
 
 # The pursuit the hearer is given: the tiny world's persons hold none, so every valence reads 0 and
@@ -263,10 +263,10 @@ def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
         seen[kw.get("verb")] = built[0]
         return built
     monkeypatch.setattr(sigma, "_read_social_roll", spy)
-    for prize, verb in ((PRIZE, "determine"), ("a standing", "arrest")):       # B24p.99: both still on the single roll (`speak`, `tell` proceed)
+    for prize, verb in ((PRIZE, "issue"), ("a standing", "arrest")):       # B24.10: both still on the single roll (`speak`, `tell`, `determine` proceed; was `determine`)
         sigma.resolve(w, [SPEAKER, PARTY], ["root"], prize, verb=verb, subject=PARTY,
                       rng=draw.seeded(draw.H2("test_sc02_reception", 0)), rung="Hh")
-    assert seen["determine"].reception > 0.0
+    assert seen["issue"].reception > 0.0
     assert seen["arrest"].reception == 0.0 and seen["arrest"].reception_gain == 0.0, seen["arrest"]
 
 

@@ -143,6 +143,10 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
             monkeypatch.setitem(row, "quorum", 1)
             w.propositions["prop_vote"] = Proposition("prop_vote", "OUGHT", PARTY, row["disposes"], True, 0)
             w.add_tenure(Tenure("cm_vote", "p_high", "prop_vote", "commit", since=0))
+        if row["authority"] == "church":
+            # B24.10: the sitting seats the row's own authority (`sigma._bench_of`), so the Church's rows are heard by a seat of the Church's: the Duke's seat
+            # is made one for them (what is under test is the kind a determination opens, not whose bench it is)
+            w.offices[SEAT].faction = "Church of Solmund"
         out = _fold(w, d, _determine("dt"))
         assert _kinds(out) == ["matter.determined"] and out[0].degree in OPENS, (name, _kinds(out))
         edge, = _edges(w, row["disposes"])

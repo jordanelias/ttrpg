@@ -183,24 +183,26 @@ def test_sc01_s12_the_loader_control_the_shipped_row_loads():
     assert _verbs._load_verb_table()["speak"].contests == "a matter"
 
 
-def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash(monkeypatch):
-    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `determine` (B24p.99: `speak` proceeds, and its draw is the proceeding's, so
-    the single roll's refusal is read through the verb still on it) by a bench whose pool is under 1D comes back as the verb's refusal kind,
-    where it used to raise an uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves.
-    B05.99 rewrite: B05.09 floors a held rank at the untrained score and B05.25/B05.23 make the pool the governing score + rank +
-    the base 6 (floor 5), so no held rank gives a pool under one die; the pool is PLANTED at the one pool reader the record
-    reads (`sigma.faculty`) for the judge alone (was: `copying` held at 0, 0.5, 1)."""
-    from ..seam.wrappers import sigma
-    real = sigma.faculty
+def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash():
+    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `speak` whose speech's obstacle is over the multiple of the speaker's pool comes back as the
+    verb's refusal kind (`speech.unheard`, the matter still docketed), where it used to raise an uncaught `Unspecified` out of the season (found at B-N's
+    `/code-review`). Control: the shipped multiple resolves the same speech. B24.10 REPOINT: the refusal was read on a judge's pool under 1D through
+    `determine` (B24p.99: `speak` proceeds and its pool is the proceeding's); `determine` proceeds too now and its close, a bench's draw, is never refused, so
+    the S27.4 a proceeding still makes is the abridged speech's (`_resolve_proceeding`, the `exchange` close), read through `speak`, with the multiple swept
+    to 0 (every obstacle is over it) where the shipped one lets it through. B05.99: no held rank gives a pool under one die, so the ratio is swept, not the pool."""
+    from ..data.fixtures import DEFAULT_FIXTURES
     checked = 0
-    for pool, refused in ((0, True), (0.5, True), (1, False)):
-        w, d = _world()
+    for multiple, refused in ((0, True), (DEFAULT_FIXTURES.get("obstacle_refusal_multiple"), False)):
+        w, d = _world(obstacle_refusal_multiple=multiple)
         _docket(w, d)
-        monkeypatch.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == DUKE else real(w_, p, verb))
-        out = _fold(w, d, Act(id=f"zpool{pool}", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY}))
-        assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
+        out = _fold(w, d, _speak(f"zmult{multiple}"))
+        assert bool(out) and (_kinds(out) == ["speech.unheard"]) is refused, (multiple, _kinds(out))
+        if refused:
+            assert out[0].degree is None and len(world_q.docketed(w, PARTY)) == 1
+        else:
+            assert out[0].degree in BANDS
         checked += 1
-    assert checked == 3
+    assert checked == 2
 
 
 @pytest.mark.parametrize("status", ["PARTY-GAP", "REFUSED", "ENGINE-UNAVAILABLE", "NO-SUCH-STATUS"])

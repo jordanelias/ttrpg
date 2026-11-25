@@ -126,7 +126,9 @@ rows:
     emits:   "`date.fired`"
   - kind:    "DocketItem"
     field:   "matter"
-    steps:   [CAL, MAT, RES]
+    # `ENC` ADDED AT B24.10: `determine` is the bench's own close, declared at RESOLVE and sat at ENCOUNTER (`rosters.yaml` `a verdict`, `step: ENCOUNTER`), where its
+    # effect takes the matter off the docket. `class:` is unchanged (ENCOUNTER shares RESOLVE's write class), as `(Tenure, since)`'s `ENC` below.
+    steps:   [CAL, MAT, RES, ENC]
     class:   "CALENDAR/MATTER/ACTS"
     social:  "false"
     by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ V11 CR-55: MAT is the lapse -- MATTER takes an item off the docket (slot and all) once it has been held beyond `Fixtures docket_lapse` seasons, one gate write per item (`loop/matter.py`), `matter.lapsed` its Event; a dead party, a venue that seats no bench and a matter that is no person otherwise hold their item for ever. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects_information.py`). CALENDAR still forms the actorless empty slot (`{date, matter: None}`); since v9 SC-01's fired-slot step `open_case` FILLS such a slot where one holds the matter (`world_q.slot_for`, the slot keeps its `date`) and appends a dateless item only where none is open. ⚠ V11 CR-56: CAL ALSO RE-SLOTS -- after forming slots, CALENDAR moves each undated person-matter into the open slot `world_q.slot_for` finds for it (`loop/calendar.py`, `docket.formed` at the venue), since no act back-fills a matter already waiting. The waiting item TAKES the slot's place dated with its `date` (`_reslot`), moving whole as CR-55's lapse removes one whole. THE SLOT THEREFORE GAINS the `arrangement` and `petition` keys the waiting item carries (RES wrote them on it), through this `matter` cell and not through those RES cells: B10-13's Lens B grades that CONVENTION (a `(DocketItem, date)` CAL row would be the conformant shape, unmeasured against the hash)."
@@ -221,7 +223,8 @@ rows:
     unproduced: "H-47 / H-62: a §54 fold-in with no specified trigger; only an act may write it and the verb table carries none that does"
   - kind:    "Person"
     field:   "pursuits"
-    steps:   [RES]
+    # `ENC` ADDED AT B24.10: the determiner's own pursuits move by consequence (`_eff_determine`), and `determine` is sat at ENCOUNTER (as `(DocketItem, matter)`).
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
     by:      "DR-2; §9.3 — moved by argument and consequence, never by evidence"
@@ -446,7 +449,8 @@ rows:
     emits:   "`site.built`"
   - kind:    "Tenure"
     field:   "degree"
-    steps:   [RES]
+    # `ENC` ADDED AT B24.10: the disposal `determine` opens is graded at the band the bench's close decided, at ENCOUNTER (as `(DocketItem, matter)`).
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
     by:      "DR-2. ⚠ PRODUCED SINCE v9 SC-03b (H-162): the CONTESTED `determine` (`verb_table.yaml`, `loop/effects_information.py::_eff_determine`) opens the disposal edge graded at the band its contest decided; the `unproduced:` cell is deleted in the same commit, as loader invariant 2 requires"

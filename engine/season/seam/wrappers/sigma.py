@@ -1204,7 +1204,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             raise InstrumentDefect(f"{__name__}.resolve was handed no `rng` by {caller.f_globals.get('__name__', '?')}.{caller.f_code.co_name}: "
                                    f"a proceeding is drawn on the act's own generator, passed down by parameter (04 §C.12)")
         return _resolve_proceeding(w, claimants, rng, verb=verb, subject=subject, topic=topic, effort=effort, proceeds=proceeds,
-                                   arranger=arranger, rig=rig)
+                                   arranger=arranger, rig=rig, host=host)
     # The room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
@@ -1378,17 +1378,25 @@ def _lawful(regime: dict, row: dict) -> bool:
 
 
 def _rite_of(fx: Any, verb: str, row: dict, effort: int, regime: dict, strife: dict) -> Rite:
-    """The rite's cells with the row's, then the context's deltas (V2 p2 §B, §I). Every number here is a cell of a table or a setting."""
+    """The rite's cells with the row's, then the context's deltas (V2 p2 §B, §I). Every number here is a cell of a table or a setting.
+
+    B24.10 (HEAR_B edit 6; `IS-B2-SC-03` step 3): THE RITE IS READ OFF THE ARRANGEMENT ROW (`row["rite"]`), with the hearing's cells it carries (the bench's own
+    moves beside the two sides', `faults`, `disclosed`, `bears_by_rung`). THE SWITCH: a BENCH'S OWN SITTING (a row whose `close` is `bench` or `declared`, in the full
+    form: `abridged` is a speech, whose close is `exchange`) spends no exchange at `Fixtures.sitting_exchanges` 0 (the control): its turns are `(0, 0)`, so
+    nobody speaks and the close is the one draw it was before the hearing, through the same `roll` (HEAR_B gate 1)."""
     cells, (lo, hi) = RITES[row["rite"]], row["turns"]
+    if row["close"] in ("bench", "declared") and not fx.get("sitting_exchanges"):
+        lo = hi = 0
     silence = cells["silence"]
     if regime["silence"] is not None and not (silence == "free" and "must" not in cells["reply"].values()):
         silence = regime["silence"]
     if silence == "free" and "must" in cells["reply"].values():
         silence = "refusal"                                   # never free where an answer is owed (A-145; V2 p4 §L 6)
     admits = tuple(dict.fromkeys(k for k in (*row["admits"], *regime["admits_add"]) if k not in regime["admits_drop"]))
-    moves = row.get("moves") or cells["moves"]
+    moves = row.get("moves") or {**cells["moves"], **({"bench": cells["bench"]} if cells["bench"] else {})}
     return Rite(id=cells["id"], live=cells["live"], bears=cells["bears"], reply=tuple(cells["reply"].items()), silence=silence,
                 issues=tuple(cells["issues"]), concede=cells["concede"], moves=tuple((s, tuple(ms)) for s, ms in moves.items()),
+                faults=tuple(cells["faults"]), disclosed=cells["disclosed"], bears_by_rung=tuple(cells["bears_by_rung"].items()),
                 weighs=tuple((i, tuple(ISSUE_RUNGS[i]["weighs"].items())) for i in cells["issues"] if ISSUE_RUNGS[i]["weighs"]),
                 close=row["close"], turns=max(lo, min(hi, effort + 1 + strife["turns"])), quorum=row.get("quorum"),
                 standard=attribute_midpoint() + DIFFICULTY_LEVELS.index(row["standard"]) + regime["standard"],     # [ASSUMPTION; Jordan to correct: mid plus the level's ordinal -- basis: V2's model reads plain 4, formal 5, solemn 6]
@@ -1482,14 +1490,18 @@ def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) 
                    strain=strain_carried(rattled_since(w, p.id) if w.persons.get(p.id) is p else (), fx))
 
 
-def _rank_key() -> Optional[str]:
+def _rank_key(issue: Optional[str] = None) -> Optional[str]:
     """The one skill whose rank joins the dice of a drawing move (`rosters.yaml: proceeding_moves`' `capability`; V2 p2 §A.1: `rank` is one
-    number, his rank in the proceeding's skill), read as `pool._capability` reads a verb's skill: off the person's `capability`."""
-    # a MAP `capability:` (B24.04: a skill by issue rung) is the sitting's by-rung read (B24.10), not this one number's: a sitting with no
-    # issue ladder (the speech) has no rung to key it, so only a single-id row names the skill the rank is read from until then
-    keys = {m.get("capability") for m in PROCEEDING_MOVES.values() if m["draw"] and isinstance(m.get("capability"), str)}
+    number, his rank in the proceeding's skill), read as `pool._capability` reads a verb's skill: off the person's `capability`.
+    B24.10 (HEAR_B edit 6; HCAP edit 6): a `capability:` cell is a skill id or a MAP by issue rung (B24.04), read AT `issue`, the rung the sitting opens on
+    (the first of its rite's issues); a sitting with no issue ladder (a speech) has no rung to key a map, so only a single-id cell names its skill.
+    Every drawing move must name the same skill at that rung, since `Present.rank` is one number a sitting: a rung where two moves name two (`argue` on
+    `law` at a definition, `press` on `argue`) is a sitting the module must read `rank` per rung for, which this reader refuses rather than choose."""
+    keys = {k for m in PROCEEDING_MOVES.values() if m["draw"]
+            for k in ((m["capability"],) if isinstance(m["capability"], str) else (m["capability"].get(issue),)) if k is not None}
     if len(keys) > 1:
-        raise Unspecified(f"the drawing moves name {sorted(keys)} as their skill", "rosters.yaml -- proceeding_moves", needs="one skill",
+        raise Unspecified(f"the drawing moves name {sorted(keys)} as their skill at {issue or 'a sitting with no issue ladder'}",
+                          "rosters.yaml -- proceeding_moves", needs="one skill",
                           law="V2 p2 §A.1 -- `Present.rank` is his rank in the proceeding's skill, one number")
     return next(iter(keys), None)
 
@@ -1526,6 +1538,8 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
         _refuse("unlawful", f"{row['id']} is not lawful under {REGIME}")
     venue = place_of(w, topic) or place_of(w, fid)         # [ASSUMPTION; Jordan to correct: the matter's place, not the actor's (the seam's own rule is the act's venue: loop/sides.py); basis: B24p.13's builder reads the matter's venue]
     floor = row["floor"] if regime["floor"] is None else regime["floor"]
+    # B24.10, the engagement read (HEAR_B edit 6): until Batch B28 (`28_CORE_scene_access_A`) lands it, every attendee at the venue is present and free to
+    # sit ("at its control the sitting assumes attendees free", NEG's Depends line); `presence` is that read, and B28's engagement filter composes here
     here = [x for x in dict.fromkeys(presence(w, venue)) if x in w.persons] if venue is not None else []
     watchers = [x for x in _watchers(w, here, floor, row["floor_basis"] if regime["floor"] is None else None) if x not in (fid, aid)]
     if form == "abridged" or (form == "auto" and effort <= 0 and not watchers):
@@ -1602,7 +1616,7 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
         tilt = 0.0                                            # only a party decides (a conversation, a questioning, a negotiation): nothing to tilt
     ctx = _Sitting(fx=fx, regime=regime, strife=strife, topic=topic, admits=rite.admits, bears=bears, for_id=fid, against_id=aid,
                    room=tuple(cells), factions=factions, presume=fx.get("presume_step") * tilt * SIDE_SIGN[arr_side] if tilt > 0 else 0.0,
-                   rank_key=_rank_key())
+                   rank_key=_rank_key(rite.issues[0] if rite.issues else None))
     room = tuple(_present(w, (seen or {}).get(x, w.persons[x]), side, decides, ctx) for x, (side, decides) in cells.items())
     dials = dict(proceeding_dials(fx))
     dials["moves"] = {m: (r["effect"], r["draw"]) for m, r in PROCEEDING_MOVES.items()}      # the two rosters the module is handed (its head)
@@ -1732,10 +1746,20 @@ def _draw_of(inp: Input, out: Outcome, band: dict, weights: Mapping) -> tuple:
 _DATA_DEFECTS = ("refused[bad_weight]", "refused[no_weight]")
 
 
+def _played_by(host: Any, inp: Input) -> dict:
+    """THE DECIDER PASS (B24.10; `PlayHost.deciders`, B24.05): the keyword the entry takes for the persons of THIS room the host plays, `{"deciders": {person:
+    callback}}`, else `{}` (no host, a host with no decider for `social_contest.proceeding`, or none of his persons in the room: the sitting is automatic, as
+    it was). The host's decider is `decide(view) -> choice`; the entry's callback is `(view, person)`, so each is the host's closed over. Every other person
+    takes the automatic policy until the NPC decider (B24.13) is handed in here beside it."""
+    decide = getattr(host, "deciders", {}).get(PROCEEDING_ROLE)
+    mine = {p.id: (lambda view, me, d=decide: d(view)) for p in inp.room if p.id in host.persons} if decide is not None else {}
+    return {"deciders": mine} if mine else {}
+
+
 def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
-                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> dict:
-    """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (every sitting of this batch is
-    automatic: no callback is handed in), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
+                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0, host: Any = None) -> dict:
+    """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (the persons a `host` plays are handed their
+    decider, B24.10 `_played_by`; every other sitting is automatic), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
     the module boundary), read the act's record (`act_band`) and refuse S27.4 on an `exchange` close's pair only (a close is an adjudicator's
     draw and is never refused). RESOLVED -> `dict(status, module, resolver, pool, net, ob, leverage, terms, settled_margin, proceeding, card, arrangement, form, topic, read, starts)`
     (the last five are what `loop/resolve.py::_proceeding_ending` writes and `loop/effects_information.py::_eff_argue` reads, B24p.20).
@@ -1753,7 +1777,7 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
             raise                                # a weight that is no whole head count is a data defect, not a room the game refuses
         return dict(status="REFUSED", why=str(refused), module=_PROVIDER, resolver=_RESOLVER, pool=None, terms=())
     entry = composition.require(PROCEEDING_ROLE)
-    out = entry(inp, rng)
+    out = entry(inp, rng, **_played_by(host, inp))
     if not isinstance(out, Outcome) or not all(isinstance(v, tuple) and len(v) == 2 and isinstance(v[1], Margin) for v in out.verdicts):
         raise Unspecified(
             f"module entry {PROCEEDING_ROLE!r} ({entry.__module__}.{getattr(entry, '__qualname__', '?')}) returned {type(out).__name__} "
@@ -1888,9 +1912,10 @@ def _hearing(w: Any) -> Optional[tuple]:
 def _docket_hearing() -> Optional[tuple]:
     for verb, row in sorted(VERB_TABLE.items()):
         entries = getattr(row, "proceeds", ())
-        # B24.08: a verb whose LAST entry is itself the docket's row (`determine`) answers no matter that names none (`world_q.proceeding_row` raises
-        # for it), so it is no hearing of a computed case: the verb that is (`speak`, whose last entry is the seat's `audience`) is the one read.
-        if any(entry[1] == PROCEEDS_DOCKET for entry in entries) and entries[-1][1] != PROCEEDS_DOCKET:
+        # B24.08, B24.10: the hearing an OPENER reads is a SPEECH at the sitting he files for (`speak`: the docket's row, abridged, and the seat's `audience`
+        # where the item names none), never the bench's own close (`determine`: the docket's row in the full form, which the bench alone makes): a verb
+        # whose docket entry is the full form is the judge's, so it is not the one an opener prices.
+        if any(entry[1] == PROCEEDS_DOCKET and entry[2] == "abridged" for entry in entries):
             _when, rid, form, move, item = entries[-1]
             arrangement = ARRANGEMENTS[rid]
             return verb, (in_form(arrangement, form), form, move, item)

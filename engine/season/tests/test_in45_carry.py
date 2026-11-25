@@ -31,7 +31,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..queries import world_q
 from ..state.carriers import Act, Claim, Question, Record, Tenure, View
-from .test_u7_remit import JUDGE, OPENS
+from .test_u7_remit import JUDGE, OPENS, _fold          # B24.10: `_fold` is RESOLVE then ENCOUNTER, where a `determine` is sat
 import pytest
 
 pytestmark = pytest.mark.flat_fold
@@ -49,13 +49,6 @@ def _world(fx=DEFAULT_FIXTURES):
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d
-
-
-def _fold(w, d, *acts):
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    return out
 
 
 def _kinds(events):

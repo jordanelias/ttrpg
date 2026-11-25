@@ -7264,11 +7264,17 @@
             "remit:determine"
           ],
           "beneficiary": "none",
-          "proceeds": {
-            "row": "docket",
-            "form": "full"
-          },
-          "proceeds_note": "B24.08 (HEAR_B edit 2; RD \u00a7D.2, \u00a7D.3): a determination is the bench's close of the docketed matter, in the full form, under the row the docket hears the matter under (`world_q.proceeding_row`), as `speak` is heard. It replaces B05.25's interim `governing:` and `opposed_attribute:` (the proceeding's dice are its own). A questioning is not a determination: `interrogation` closes on its hearer's own accept (`close: hearers`), and what is then done with what he gave is this verb's separate step on the docketed matter, where the `record:confession` left on the case file is an item of kind `confession`, never read as a verdict.",
+          "proceeds": [
+            {
+              "row": "docket",
+              "form": "full"
+            },
+            {
+              "row": "arbitration",
+              "form": "full"
+            }
+          ],
+          "proceeds_note": "B24.10 (`IS-B2-SC-03` step 3): WHERE THE DOCKET ITEM NAMES NO ARRANGEMENT (a computed case: `_eff_open_case` derives none) the bench hears it under `arbitration`, the one row whose bench is the whole `judging_set` (`authority: parties`, no faction filters it), that is closed to watchers, `disposes: oblige` (`UNDECLARED_DISPOSAL`, which `_eff_determine` opens for such a case) and `plain`, and whose rite is `default` (`arrangements.yaml: rites`): a computed case is heard under the default rite [ASSUMPTION; Jordan to correct; revert: delete the entry, and a computed case is the verb's refusal]. B24.08 (HEAR_B edit 2; RD \u00a7D.2, \u00a7D.3): a determination is the bench's close of the docketed matter, in the full form, under the row the docket hears the matter under (`world_q.proceeding_row`), as `speak` is heard. It replaces B05.25's interim `governing:` and `opposed_attribute:` (the proceeding's dice are its own). A questioning is not a determination: `interrogation` closes on its hearer's own accept (`close: hearers`), and what is then done with what he gave is this verb's separate step on the docketed matter, where the `record:confession` left on the case file is an item of kind `confession`, never read as a verdict.",
           "beneficiary_note": "who a determination FAVOURS is the `judging_set`, which `requires` itself records as *D11, absent*. The determination binds the party it names (`counterparty:`, below), but a finding is taken AGAINST the party and FOR no carrier the Candidate holds (the bench's seat), `revoke`'s and `dispatch`'s shape, so `none` stands.",
           "requires": "a fired Date with a DocketItem; judging_set \u2014 D11, absent",
           "requires_note": "EVALUATED AS THE TYPED CELL BELOW (plan position `19`, U7-remit), AND THE READING OF EACH HALF IS STATED. *A fired Date with a DocketItem* is read as `existence` of a DocketItem naming the matter -- the proceedings design's own corrected cell (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` \u00a7B.2: `{form: existence, of: subject, kind: DocketItem}`), which drops the date: the cell reads only that the matter is docketed, dated or not (v9 SC-01: `_eff_convene` gives its Date the convener's seat as holder, CALENDAR forms the slot and `open_case` fills it via `world_q.slot_for`), and the bench is ASKED about a sitting's matters by `world_q.questions_for` (`sittings_before`). *judging_set* is two conjuncts: the seat exercised SITS ON THE BENCH for the party (`basis: bench`, the write gate's own `may_determine` -- `judging_set`'s containment test, `H-32`'s default, asked of the party's home), and the bench MEETS QUORUM (`bench.size >= quorum`, the fixture `bench_quorum`, `H-161`). `D11` is `H-32`, so the grade is `assumption`. The subject must be a PERSON (`party`): the disposal is an edge he owns.",
@@ -10691,7 +10697,8 @@
           "steps": [
             "CAL",
             "MAT",
-            "RES"
+            "RES",
+            "ENC"
           ],
           "class": "CALENDAR/MATTER/ACTS",
           "social": "false",
@@ -10814,7 +10821,8 @@
           "kind": "Person",
           "field": "pursuits",
           "steps": [
-            "RES"
+            "RES",
+            "ENC"
           ],
           "class": "ACTS",
           "social": "true",
@@ -11090,7 +11098,8 @@
           "kind": "Tenure",
           "field": "degree",
           "steps": [
-            "RES"
+            "RES",
+            "ENC"
           ],
           "class": "ACTS",
           "social": "true",

@@ -357,14 +357,14 @@ def test_a_planted_addend_registered_through_faculty_is_read_by_the_roll_and_the
     carin = w.persons[CARIN]
     other = next(p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     base = {p.id: sigma.faculty(w, p, "carry") for p in (carin, other)}
-    determine = sigma.faculty(w, carin, "determine")
+    arrest = sigma.faculty(w, carin, "arrest")                           # B24.10: `arrest` for `determine`, which proceeds and is never pooled
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "carry") else 0)
     assert sigma.faculty(w, carin, "carry") == base[CARIN] + 2
     assert sigma.faculty(w, other, "carry") == base[other.id]            # keyed by the person it names
-    # the addend names a verb: her `determine` pool is unmoved (B05.99: it reads her drawn sheet since B05.25, no longer
+    # the addend names a verb: her `arrest` pool is unmoved (B05.99: it reads her drawn sheet since B05.25, no longer
     # `pool_default`, so it is compared with itself before the addend)
-    assert sigma.faculty(w, carin, "determine") == determine
+    assert sigma.faculty(w, carin, "arrest") == arrest
     inp = sigma.contest_input(w, [CARIN], verb="carry", subject=other.id, room=None, examined=None)
     assert inp.pool == base[CARIN] + 2, inp.pool
 
@@ -449,7 +449,10 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     assert set(inquiries) == {"examine", "interrogate", "research", "surveil", "survey", "reconstruct"}     # the key's verbs, the proceeding's `interrogate` among them
     inquiries = [v for v in inquiries if not VERB_TABLE[v].proceeds]                                     # B24p.99: the pool is read where the verb rolls the single roll
     assert {sigma.faculty(w, p, v) for v in inquiries} == {default + 4 + add}
-    assert sigma.faculty(w, p, "determine") == default + 3 + add                           # B24p.99: `argue` proceeds; `determine` is the `argue` key's roll
+    # B24.10 REPOINT: `determine` was the `argue` key's pooled roll (B24p.99: `argue` proceeds); it proceeds now, so no pooled verb names `argue`: the rank
+    # reaches the dice through the proceeding's `Present.rank` (`sigma._rank_key`), and a pooled verb of another key (`arrest`, `arms`) reads the default
+    assert not [v for v, k in VERB_CAPABILITY.items() if k == "argue" and not VERB_TABLE[v].proceeds]
+    assert sigma.faculty(w, p, "arrest") == default + add
     # a verb drawing on no vocation still rolls the untrained man's pool (B05.25: `conceal`, was `lie`; a brute verb like `transfer` rolls nothing)
     assert sigma.faculty(w, p, "conceal") == default + add, "a verb drawing on no vocation still rolls the default"
 

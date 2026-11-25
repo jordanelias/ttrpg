@@ -60,7 +60,7 @@ SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any t
 ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil", "establish",   # B21.09: `establish`
           "confer", "revoke", "succeed",                                                                                          # B21.14
           "issue")                                                                                                                # B21.56
-#: The rolled rows still on the single roll: since B24p.19 the five that open a proceeding (`VerbRow.proceeds`) are pooled by no `governing:` and
+#: The rolled rows still on the single roll: since B24p.19 (and B24.08, `determine`) the six that open a proceeding (`VerbRow.proceeds`) are pooled by no `governing:` and
 #: refuse `contest_input` (`Forbidden`), so the host's obstacle is read through these alone (B24p.99).
 SINGLE = tuple(v for v in ROLLED if not V.VERB_TABLE[v].proceeds)
 #: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control, and
@@ -425,7 +425,7 @@ def _argue_terms(regard_step, stance):
     """`(terms, levels)` of one `determine` (B24p.99: was `argue`, which proceeds): two NPCs, the hearer (`p_other`) holding the one stance row `stance` toward the arguer (`p_low`)."""
     w = _world(regard_step=regard_step)
     w.persons["p_other"].stance = [("p_low", *stance)] if stance else []
-    out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine", subject="p_other", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
+    out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest", subject="p_other", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["status"] in ("RESOLVED", "REFUSED"), out
     return dict(out["terms"]), {n: (f, a) for n, f, a in out["levels"]}
 
@@ -501,7 +501,7 @@ def _docket(w, matter, row):
 def _speak_terms(w, row=None):
     if row is not None:
         _docket(w, R.PARTY, row)
-    inp = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="determine", subject=R.PARTY, room=world_q.place_of(w, R.SPEAKER))
+    inp = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="arrest", subject=R.PARTY, room=world_q.place_of(w, R.SPEAKER))
     return dict(_module().obstacle(inp)[1])
 
 
@@ -525,7 +525,7 @@ def test_a_docketed_matter_before_a_bench_reads_its_rows_standard_and_the_shippe
     assert checked == 3
     other = R._judging_world()[0]                                                               # an act no bench hears reads no standard
     _docket(other, R.PARTY, row)
-    no_room = dict(_module().obstacle(sigma.contest_input(other, [R.SPEAKER], verb="determine", subject=R.PARTY))[1])
+    no_room = dict(_module().obstacle(sigma.contest_input(other, [R.SPEAKER], verb="arrest", subject=R.PARTY))[1])
     assert "standard" not in no_room, no_room
 
 
@@ -552,14 +552,16 @@ def test_stakes_read_the_tenure_kind_the_act_opens_through_the_docketed_row():
     w = _world(stakes_ob=sized)
     arrest = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="arrest", subject="p_other"))[1])
     assert arrest["stakes"] == 0.5, arrest
-    undocketed = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="determine", subject="p_other"))[1])
-    assert undocketed["stakes"] == 0.25, undocketed                                              # `UNDECLARED_DISPOSAL`
+    # B24.10 REPOINT: `determine` proceeds (B24.08) and is never read through `contest_input`, so what is observed of it is the kind `_stakes_term` reads for it
+    # (`sigma._stakes_kind`, the one reader the term calls), on the docketed row's `disposes:`
+    assert sigma._stakes_kind(w.fixtures, "determine", sigma._docketed_row(w, "p_other")) == "oblige"      # `UNDECLARED_DISPOSAL`: nothing docketed
+    assert sigma._stakes_term(w.fixtures, dict(verb="determine", docketed=None)) == dict(obstacle_operands=(("stakes", 0.25, 1.0),))
     for row, kind in (("arbitration", "oblige"), ("legal_trial", "detain"), ("tribunal", "ban")):
         assert ARR.ARRANGEMENTS[row]["disposes"] == kind
         w = _world(stakes_ob=sized)
         _docket(w, "p_other", row)
-        terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="determine", subject="p_other"))[1])
-        assert terms["stakes"] == sized[kind], (row, terms)
+        assert sigma._stakes_kind(w.fixtures, "determine", sigma._docketed_row(w, "p_other")) == kind, row
+        assert sigma._stakes_term(w.fixtures, dict(verb="determine", docketed=sigma._docketed_row(w, "p_other"))) == dict(obstacle_operands=(("stakes", sized[kind], 1.0),)), row
     plain = dict(_module().obstacle(sigma.contest_input(_world(stakes_ob=sized), ["p_low"], verb="examine", subject="p_other"))[1])
     assert "stakes" not in plain, plain                                                          # `examine` opens no kind (B24p.99: was `tell`)
 
@@ -580,7 +582,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
         R._proofs(w, 4)                                                                         # four firsthand deed claims against the party
         assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh")) == 4 * world_q.remove_weight("firsthand")
         _docket(w, R.PARTY, row)
-        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="determine", subject=R.PARTY, rng=draw.seeded(draw.H2("test_obstacle_form", 0)),
+        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="arrest", subject=R.PARTY, rng=draw.seeded(draw.H2("test_obstacle_form", 0)),
                             rung=world_q.place_of(w, R.SPEAKER))
         return next(f for n, f, _a in out["levels"] if n == "proofs")                           # the count of `proof_level`s the roll recorded
     assert proofs_levels("parliamentary_debate", "off") > 0                                      # the control: held, unfiltered

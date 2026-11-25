@@ -158,10 +158,11 @@ def test_a_commit_by_a_non_member_is_not_a_vote():
 
 
 def test_control_2_a_bench_disposal_matter_in_the_same_world_is_admitted_as_before():
-    """`legal_trial` (`close: bench`) in the same world, with NO commits at all: admitted. The `vote` conjunct
-    reads 0 against 0 for it and refuses nothing."""
-    assert A.ARRANGEMENTS["legal_trial"]["close"] == "bench"
-    w, d = _church_world(row="legal_trial")
+    """`inquisition_hearing` (`close: bench`) in the same world, with NO commits at all: admitted. The `vote` conjunct
+    reads 0 against 0 for it and refuses nothing. B24.10 REPOINT: it was `legal_trial`, a `polity` row; the sitting seats the row's own authority
+    (`sigma._bench_of`) and this world's three seat-holders are the Church's, so the control row is the Church's own bench row (`church`, `close: bench`)."""
+    assert A.ARRANGEMENTS["inquisition_hearing"]["close"] == "bench" and A.ARRANGEMENTS["inquisition_hearing"]["authority"] == "church"
+    w, d = _church_world(row="inquisition_hearing")
     out = _determine_now(w, d)
     assert _kinds(out) == ["matter.determined"], _kinds(out)
     reads = _reads(out[0])

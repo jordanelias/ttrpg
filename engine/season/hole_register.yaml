@@ -8457,10 +8457,10 @@ rows:
     tier:      1
     hole:      "WHETHER THE ATTENDEES AT A SITTING SPEND EXCHANGES -- `sitting_exchanges`, a SWITCH read as 0 or 1 (HEAR_B edit 10): at 0 a sitting holds no exchanges beyond what is filed; at 1 each attendee spends his own act's `effort` as the turns he prepares. No document gives a count."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sitting_exchanges` the one home. READERS: none at B24.07; the sitting's reader (B24.37 flips the shipped value) reads it through `Input.dials`"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sitting_exchanges` the one home. READER: `seam/wrappers/sigma.py::_rite_of` (B24.10), which gives a bench's sitting no turns at 0; B24.37 flips the shipped value"
     grade:     "assumption"
     default:   "0 -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: 0]: no sitting spends an exchange, so every roll and every hash is what it was. 'Shipped' at B24.37 means each attendee spends his own act's `effort` (HEAR_B: 'the attendees' effort'; `person_q.effort_of`, B24p.06), so the setting is a switch read as 0 or 1"
-    site:      "Fixtures sitting_exchanges, read by nothing at B24.07; the sitting's exchange loop reads it through `Input.dials`"
+    site:      "Fixtures sitting_exchanges, read by `sigma._rite_of` (B24.10): a bench's sitting (a row whose close is `bench` or `declared`, full form) has turns (0, 0) at 0"
     sweep:     [0, 1, 2]
     unblocks:  "the hearing's sitting running its attendees' exchanges (B24.37's flip), and B98's sweep of the switch"
     cite:      "HEAR_B (`proposals/2026-11-12-subsystem-audit-suite/proposals/05_SC_playable_hearing_B.md`) 'Exact edits' 10: `sitting_exchanges` 0 control / shipped the attendees' effort, each with a NUMBER row and a three-point sweep. [ASSUMPTION: the sweep is 0 / shipped / shipped -- basis: the plan's B24.07 line; the register's R2 refuses a sweep with fewer than 3 DISTINCT points, so the third point is 2, read as the switch's 1 (any value from 1 up is the switch on), and the two shipped points are one arm]. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.03's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."

@@ -243,7 +243,11 @@ class Rite:
       * `turns`   -- each speaker's turns this sitting; `standard` -- the Grace the occasion asks; `reason_lean` -- the
         venue's lean on Reason's share of the dice; `admits` -- the kinds of matter shown here;
       * `difficulty`, `gravity` -- the obstacle the close is drawn against; `gravity` is how grave the times make a change
-        (renamed from `stakes`); `quorum` -- read by a `declared` close; `unrest` -- the pull of the times (Focus holds against it)."""
+        (renamed from `stakes`); `quorum` -- read by a `declared` close; `unrest` -- the pull of the times (Focus holds against it).
+
+    B24.10 (the hearing's cells, from the rite and read by the module's board, B24.06; each defaulted, so a rite built without them is the rite it was):
+    `faults` -- the `proceeding_faults` the sitting records; `disclosed` -- whether the other side's filings stand on a mover's board;
+    `bears_by_rung` -- `((rung, side), ...)`, who bears each rung of the issue ladder (`bears` is the bearer of the first)."""
     id: str
     live: str
     bears: str
@@ -262,6 +266,9 @@ class Rite:
     gravity: float
     quorum: Optional[int] = None
     unrest: float
+    faults: tuple = ()
+    disclosed: bool = False
+    bears_by_rung: tuple = ()
 
 
 @dataclass(frozen=True)

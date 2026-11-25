@@ -296,8 +296,9 @@ def test_a_passing_word_nobody_watches_runs_abridged():
 
 def test_the_card_promises_what_the_sitting_does():
     """Over 200 keyed sittings of a church inquisition with items held, nobody makes a move the card bars, shows an item of a
-    kind it does not admit, speaks more turns than it gives, and the verdicts are its adjudicators' and no others."""
-    w = _world()
+    kind it does not admit, speaks more turns than it gives, and the verdicts are its adjudicators' and no others. B24.10: at the control
+    (`sitting_exchanges` 0, shipped) a bench's sitting has no turns and nobody speaks, so the sitting that speaks is the one at `sitting_exchanges` 1."""
+    w = _world(sitting_exchanges=1)
     _seat(w, "off_dic", "p_other", CHURCH, post="Dicastery")
     w.records["rec_writ"] = Record("rec_writ", "Hh", "text")
     w.add_tenure(Tenure("h_rec", "p_low", "rec_writ", "hold", since=0))

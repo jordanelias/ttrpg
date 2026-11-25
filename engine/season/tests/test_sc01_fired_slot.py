@@ -242,14 +242,16 @@ def test_each_sitting_is_asked_on_its_own_firing_and_not_on_a_later_one():
 def test_a_slot_refilled_in_one_resolve_is_asked_under_a_new_question_id():
     """The question's id names its matters: a determination and a new case in ONE RESOLVE empty the
     slot and refill it, so the judge's question changes id with what is before him. (Strong judge, as
-    above: the determination must open for the slot to empty.)"""
+    above: the determination must open for the slot to empty.) B24.10 REPOINT: a determination is sat at ENCOUNTER, after the whole RESOLVE, so the new
+    case no longer refills a slot the same RESOLVE emptied (it is filed first and takes no slot); the determination and the new case are two folds of
+    one sitting (the determination's lap, then the next case), and what is asserted is the same: the slot is emptied and refilled and the id changes."""
     w, d = _world(**JUDGE)
     duke = w.persons[DUKE]
     did = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     before = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
-    assert _kinds(_fold(w, d, _determine("dt"), _open("oc2", subject="p_low"))) == [
-        "matter.determined", "case.opened"]
+    assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    assert _kinds(_fold(w, d, _open("oc2", subject="p_low"))) == ["case.opened"]
     assert world_q.docketed(w, "p_low")[0]["date"] == did, w.docket
     after = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
     assert len(before) == len(after) == 1 and before != after, (before, after)

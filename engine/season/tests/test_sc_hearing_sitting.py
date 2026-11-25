@@ -150,3 +150,76 @@ def test_a_rite_naming_an_unrostered_move_is_refused():
             A._load_rite(bad)
         refused += 1
     assert refused == len(planted)
+
+
+# ---- B24.10: the host builder's reading of the rite, and the sitting of no exchanges through the host -----------------------------------
+
+def _heard(w, act, claimants, **kw):
+    """`(row, form, Input)` the host builds for `act` (a `determine`) on the docket as the seam would hand it (`world_q.proceeding_row`)."""
+    from ..queries import world_q
+    from ..seam.wrappers import sigma
+    row, form, _move, _item = world_q.proceeding_row(w, act)
+    inp, _card = sigma.proceeding_input(w, claimants, verb=act.verb, subject=act.payload["subject"], topic=act.payload["subject"], effort=0, row=row, form=form, **kw)
+    return row, form, inp
+
+
+def test_a_computed_case_is_heard_under_the_default_rite():
+    """`IS-B2-SC-03` step 3 (falsifier): `proceeding_input` reads the rite of the docket item's arrangement row, and `default` where the item names none (every
+    computed `open_case`, `world_q.proceeding_row`'s second entry for a `determine`): the built `Rite` carries the default's own cells (the bench's moves beside
+    the sides', the faults, `disclosed`, who bears each rung). CONTROL, one change: a case filed under `examination` is heard under ITS rite (`inquisition`:
+    no faults, nothing disclosed), so the reading is the row's and not a constant. And the switch: at `sitting_exchanges` 0 (shipped) a bench's sitting
+    has no turns, at 1 it has the row's own."""
+    from ..data.arrangements import RITES
+    from ..data.rosters import PROCEEDING_FAULTS
+    from ..queries import world_q
+    from .test_u7_remit import DUKE, PARTY, _determine, _fold, _kinds, _open, _petition, _world
+
+    w, d = _world()
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    assert world_q.docketed(w, PARTY)[0][world_q.DOCKET_ARRANGEMENT] is None            # a computed case: the item names no row
+    row, form, inp = _heard(w, _determine("dt"), [DUKE, PARTY])
+    cells, rite = RITES["default"], inp.rite
+    assert (form, row["rite"], rite.id) == ("full", "default", "default")
+    assert dict(rite.moves)["bench"] == ("rule", "adjourn") == cells["bench"] and dict(rite.moves)["for"] == cells["moves"]["for"]
+    assert rite.faults == tuple(PROCEEDING_FAULTS) and rite.disclosed is True
+    assert dict(rite.bears_by_rung) == dict(cells["bears_by_rung"]) and rite.bears == cells["bears"] == "against"
+    assert rite.turns == 0 and row["turns"][0] > 0                                       # the control: the row's own turns are not nil
+    w1, _d1 = _world(sitting_exchanges=1)
+    _fold(w1, _d1, _open("oc"))
+    assert _heard(w1, _determine("dt"), [DUKE, PARTY])[2].rite.turns == row["turns"][0]  # at 1 the row's own, which `effort` 0 and `peace` give the floor of
+    named, nd = _world()
+    assert _kinds(_fold(named, nd, _open("oc", arrangement="examination", petition=_petition(named)))) == ["case.opened"]
+    other = _heard(named, _determine("dt"), [DUKE, PARTY])[2].rite
+    assert (other.id, other.faults, other.disclosed) == ("inquisition", (), False) and other.id != rite.id
+
+
+def test_a_sitting_of_no_exchanges_is_todays_roll_through_the_host():
+    """GATE 1 (unit, through the host): a `determine` heard at `sitting_exchanges` 0 is the record the one `roll` takes -- the bench's draw -- and nothing else: the
+    provider's `net` and `ob` are `roll`'s own on the record the sitting's seat closes by, the generator the same, no beat spoken and nothing on the board.
+    FALSIFIER: an exchange the host let run (a beat), a board effect on the close, or a second draw (the margin would differ from `roll`'s at the same key).
+    CONTROL: the shipped sitting has a seat that decides, so the reference record is the one he closes on."""
+    from engine.dice_engine.sigma_leverage import pool_of
+
+    from ..queries import world_q
+    from ..queries.inputs import SocialContestInput
+    from ..seam.wrappers import sigma
+    from .test_sc_proceeding_module import ROLL, _key
+    from .test_u7_remit import DUKE, PARTY, _determine, _fold, _kinds, _open, _world
+
+    w, d = _world()
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    row, form, inp = _heard(w, _determine("dt"), [DUKE, PARTY])
+    seat, = [p for p in inp.room if p.decides]
+    D, checked, bands = inp.dials, 0, set()
+    assert D["proof_level"] is not None and D["track_step"] > 0 and inp.rite.turns == 0
+    for i in range(30):
+        out = sigma.resolve(w, [DUKE, PARTY], ["dt"], "a verdict", verb="determine", subject=PARTY, rng=_key("host", i), proceeds=(row, form, None, None), topic=PARTY)
+        ref = ROLL.roll(SocialContestInput(pool=pool_of(D["attribute_mid"], 0, D["pool_add"], D["pool_floor"]), opposition=D["attribute_mid"],
+                                           obstacle_ceiling=None, obstacle_refusal_multiple=float("inf"), leverage=D["track_step"] * seat.start,
+                                           difficulty=inp.rite.difficulty, pool_default=D["pool_default"], pool_add=D["pool_add"],
+                                           opposition_rate=D["opposition_rate"], obstacle_operands=(("gravity", inp.rite.gravity, 1.0),)), _key("host", i))
+        assert out["status"] == "RESOLVED" and (out["net"], out["ob"]) == (ref.net, ref.ob), (i, out, ref)
+        assert out["proceeding"].beats == () and out["proceeding"].standing == () and out["proceeding"].faults == (), i
+        bands.add(round(out["settled_margin"], 1) > 0)
+        checked += 1
+    assert checked == 30 and bands == {True, False}                                        # the draw is live: the margin falls on both sides of nothing

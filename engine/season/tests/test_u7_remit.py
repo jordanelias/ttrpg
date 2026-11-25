@@ -40,7 +40,7 @@ from ..data import verbs as _verbs
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
-from ..data.rosters import GRADED_TASKS
+from ..data.rosters import DECLARED, GRADED_TASKS
 from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE,
                           WRITE_CLAUSE)
 from ..epistemic import belief_contradicts
@@ -97,11 +97,15 @@ def _world(**fx):
 
 
 def _fold(w, d, *acts):
-    """One RESOLVE pass over `acts`, its Events logged as `SeasonDriver.season` logs them."""
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    return out
+    """One RESOLVE pass over `acts` and then ENCOUNTER over what it declared, every Event logged as `SeasonDriver.season` logs them. B24.10: `determine` is
+    the bench's own close, DECLARED at RESOLVE and sat at ENCOUNTER (`rosters.yaml: contest_subsystems` `a verdict`, `step: ENCOUNTER`), so a determination is
+    folded by both steps; what is RETURNED is what the acts did (the `Declared` events RESOLVE wrote of a deferred act are logged and not returned: the Event
+    of a determination is the one ENCOUNTER fought), as a flat fold's was before the verb deferred. A verb that declares nothing is RESOLVE's alone."""
+    depth = w.fixtures.get("contest_max_depth")
+    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts), contest_max_depth=depth)
+    fought = d.encounter(mint_token(w, WriteClass.ACTS), out, depth)
+    w.log.extend(out + fought)
+    return [e for e in out if e.degree != DECLARED] + fought
 
 
 def _kinds(events):
@@ -371,11 +375,12 @@ def test_19_two_determinations_of_one_matter_in_one_fold_the_second_refuses():
     out = _fold(w, d, _determine("dt1"), _determine("dt2"))
     assert sorted(_kinds(out)) == ["determine.refused", "matter.determined"], _kinds(out)
     assert len(_obliges(w)) == 1
-    # AND IT IS THE DOCKET THAT REFUSED, NOT THE EFFECT'S ONE-EDGE-PER-PAIR DECLINE (which would also
-    # refuse a second binding): the refusal's last read -- the conjunct that decided it -- is the
-    # docket, now empty.
+    # AND IT IS THE DOCKET THAT REFUSED, NOT THE EFFECT'S ONE-EDGE-PER-PAIR DECLINE (which would also refuse a second binding). B24.10 REPOINT: both acts were
+    # admitted at RESOLVE (the matter was on the docket for each) and DECLARED; the second is refused at ENCOUNTER, where the seam finds the first has emptied the
+    # docket (`world_q.proceeding_row`: *"is on no docket"*) and the fold is the row's refusal, which carries no `requires` read (ENCOUNTER re-checks no
+    # admission), so what is observed of the docket is the docket itself, empty.
     refused, = [e for e in out if e.kind == "determine.refused"]
-    assert (refused.observed[-1].predicate, refused.observed[-1].value) == ("exists:DocketItem", 0)
+    assert refused.observed == () and world_q.docketed(w, PARTY) == []
 
 
 @pytest.mark.parametrize("quorum", [1, 2, 3])
@@ -662,8 +667,10 @@ PETITION = "rec_petition"
 def _row_disposing(kind):
     # v11 CR-34: a `declared` row needs its bench's votes (`test_cr34_declared_disposal.py`); these tests are about
     # the kind a determination opens, so they take the first row disposing it that is NOT declared.
+    # B24.10: and whose bench the Duke (a `polity` seat) can sit on: the sitting seats the row's own authority (`sigma._bench_of`), so a determination by his
+    # seat under a `church` row (`inquisition_hearing`) is refused at ENCOUNTER (`refused[no_seat]`), where the old single roll read no authority.
     return next(name for name, row in sorted(ARRANGEMENTS.items())
-                if row["disposes"] == kind and row["close"] != "declared")
+                if row["disposes"] == kind and row["close"] != "declared" and row["authority"] in ("polity", "parties"))
 
 
 def _petition(w, rid=PETITION, kind="petition"):
@@ -1163,11 +1170,14 @@ from ..manifest import resolve as _manifest_resolve               # noqa: E402
 
 def test_sc03b_determine_is_a_contested_row_keyed_on_the_four_ladder_bands():
     row = VERB_TABLE["determine"]
-    assert row.contests == "a proposition", row.contests
-    prize = _manifest_resolve("contest", "a proposition")
+    # B24.08: the prize is `a verdict`, the bench's own close (the proceeding's entry), deferred to ENCOUNTER, so the row also keys its `Declared` band, which
+    # writes nothing (`march`'s `a field`'s precedent); the four ladder bands below are what they were
+    assert row.contests == "a verdict", row.contests
+    prize = _manifest_resolve("contest", "a verdict")
     assert prize is not None and prize["provider"] == "social_contest", prize
-    assert prize["module_entry"] == "social_contest.roll", prize
-    assert set(row.writes_by_degree) == set(row.emits_by_degree) == BANDS
+    assert prize["module_entry"] == "social_contest.proceeding" and (prize["step"], prize["declares"]) == ("ENCOUNTER", DECLARED), prize
+    assert set(row.writes_by_degree) == set(row.emits_by_degree) == BANDS | {DECLARED}
+    assert row.writes_at(DECLARED) == () and row.emits_at(DECLARED) == ("determine.declared",)
     # THE FALSIFIER'S DECLARED HALVES, literal: Failure writes nothing; Partial declares what the effect does,
     # the opening graded `Partial` -- the same three pairs as Success (`writes_note`; the gate admits a degree
     # only on an edge the write opens, so `Tenure.degree` alone at Partial was unbuildable).
@@ -1271,24 +1281,21 @@ def test_sc03b_runtime_an_undetermined_matter_can_be_heard_again():
     assert reheard == 1, "the matter was never disposed of on a re-hearing"
 
 
-def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
-    """S27.4 (`Ob > 2 x Pool`) reached by a contested `determine`: a judge whose pool is under 1D comes
-    back as the row's one refusal kind with NO degree -- never an aborted season -- exactly as `speak`'s
-    does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band.
-    B05.99 rewrite: no fixture gives a pool under one die since B05.25/B05.23 (`pool_of(governing score + rank, .., 6, 5)`), so the
-    judge's pool is PLANTED at the one pool reader the record reads (`sigma.faculty`), for the judge alone (was `pool_default` 0, 1)."""
-    from ..seam.wrappers import sigma
-    real = sigma.faculty
-    mp = pytest.MonkeyPatch()
-    for pool, refused in ((0, True), (1, False)):
+def test_sc03b_a_bench_close_reads_no_judges_dice_so_a_judge_of_the_least_is_never_refused():
+    """B24.10 REPOINT (the premise is gone). It was S27.4 (`Ob > 2 x Pool`) reached by the single-roll `determine`: a judge whose pool was under 1D came back as
+    the row's one refusal kind, with no degree. A determination is the BENCH'S close now (`social_contest.proceeding`): drawn by an ordinary bench at the middle
+    of the scale (`close_record`; no judge's own dice enter it) and, by the module's own rule, never refused (`_resolve_proceeding`: S27.4 is read on an
+    `exchange` close alone). So a judge holding the least of every attribute, on the same act id, lands the same Event, band and disposal as the shipped judge,
+    and takes the matter off the docket as it did. CONTROL: the shipped judge's own fold, which resolves to a band."""
+    from ..seam.wrappers import sigma  # noqa: F401  (the provider the fold reaches)
+    from engine.substrate import descriptors
+
+    def run(least):
         w, d = _ready("determine")
-        mp.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == DUKE else real(w_, p, verb))
-        try:
-            out = _fold(w, d, _determine(f"zpool{pool}"))
-        finally:
-            mp.undo()
-        assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
-        if refused:
-            assert out[0].degree is None and not _obliges(w) and len(world_q.docketed(w, PARTY)) == 1
-        else:
-            assert out[0].degree in BANDS
+        if least:
+            w.persons[DUKE].attributes = {name: descriptors.ATTRIBUTE_FLOOR for name in descriptors.ATTRIBUTE_NAMES.values()}
+        out = _fold(w, d, _determine("zpool"))
+        assert len(out) == 1 and out[0].kind != "determine.refused", (least, _kinds(out))
+        return out[0].kind, out[0].degree, len(_obliges(w)), len(world_q.docketed(w, PARTY))
+    control = run(False)
+    assert control[1] in BANDS and run(True) == control, control

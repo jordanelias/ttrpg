@@ -2,8 +2,8 @@
 T1, T2, T4; `13_SC_calibration.md` §3 steps 1 and 2).
 
 THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
-  * THE PLANTED GRID MOVES (T13's restated `planted_grid.py`), read through `determine` (B24p.99: `interrogate`, `lie` and `speak` proceed, so
-    the single roll's grid is read on the verb still on it): it moves with the counterparty's skill score, by `opposition_rate` a point; it
+  * THE PLANTED GRID MOVES (T13's restated `planted_grid.py`), read through `arrest` (B24p.99, B24.10: `interrogate`, `lie`, `speak` and `determine` proceed, so
+    the single roll's grid is read on a verb still on it): it moves with the counterparty's skill score, by `opposition_rate` a point; it
     moves with his opposing attribute (A-137), by `opposition_rate` a point; and under a docketed matter it moves with the row's `standard:`
     (T2), the term being the level's size (`difficulty_ob`) and the composed obstacle distinct at each of the four levels the nine rows name.
     NO CELL'S OBSTACLE IS MOVED BY TEMPERAMENT (T13 "What is deliberately not a table": temperament is leverage, CHAR's): the
@@ -60,18 +60,18 @@ def test_planted_grid_moves_the_single_rolls_cells():
     checked = 0
 
     # B24p.99: `interrogate`, `lie` and `speak` proceed now (their dice and their room are the proceeding's, `social_contest.proceeding`), so the
-    # single roll's grid is read through `determine`, a verb still on it: it names a skill (`argue`) and an opposing attribute (will), which the
+    # single roll's grid is read through `arrest` (B24.10: `determine` proceeds too), a verb still on it: it names a skill (`arms`) and an opposing attribute (strength), which the
     # two retired cells (`interrogate`'s skill, `lie`'s attribute) each read one half of. `lie`'s "a held skill moves nothing on a verb that
     # names none" died with it: no verb left on the single roll names an opposing attribute and no skill.
     # determine: the counterparty's skill score, from the untrained score up
     w = TOF._world()
-    key = V.VERB_CAPABILITY["determine"]
+    key = V.VERB_CAPABILITY["arrest"]
     assert key is not None
     floor = pool.untrained(w.fixtures)
     read = []
     for rank in (floor, floor + 1, floor + 3):
         w.persons["p_other"].capability = {key: rank}
-        ob, terms, _opp = _ob(w, ["p_low"], "determine", "p_other")
+        ob, terms, _opp = _ob(w, ["p_low"], "arrest","p_other")
         assert terms["difficulty"] == sizes["routine"], terms
         assert "ceiling" not in terms, (rank, terms)                            # the cap does not swallow the move
         read.append((rank, ob, terms["opposition"]))
@@ -80,13 +80,13 @@ def test_planted_grid_moves_the_single_rolls_cells():
         assert ob1 > ob0 and abs((o1 - o0) - rate * (r1 - r0)) < 1e-9, read
 
     # determine: the counterparty's opposing attribute (his skill score held at the untrained one)
-    assert V.VERB_TABLE["determine"].opposed_attribute
-    attr = V.VERB_TABLE["determine"].opposed_attribute
+    assert V.VERB_TABLE["arrest"].opposed_attribute
+    attr = V.VERB_TABLE["arrest"].opposed_attribute
     w = TOF._world()
     read = []
     for held in (2, 4, 6):
         w.persons["p_other"].attributes = {attr: held}
-        ob, terms, opposition = _ob(w, ["p_low"], "determine", "p_other")
+        ob, terms, opposition = _ob(w, ["p_low"], "arrest","p_other")
         assert opposition == held + floor and "ceiling" not in terms, (held, opposition, terms)
         read.append((held, ob, terms["opposition"]))
         checked += 1
@@ -99,7 +99,7 @@ def test_planted_grid_moves_the_single_rolls_cells():
     for row, level in T2_FIRST_VALUES.items():
         h, _d = R._judging_world()
         TOF._docket(h, R.PARTY, row)
-        ob, terms, _opp = _ob(h, [R.SPEAKER, R.PARTY], "determine", R.PARTY, room=world_q.place_of(h, R.SPEAKER))
+        ob, terms, _opp = _ob(h, [R.SPEAKER, R.PARTY], "arrest",R.PARTY, room=world_q.place_of(h, R.SPEAKER))
         assert terms.get("standard", 0) == sizes[level], (row, level, terms)
         assert (level == "plain") == ("standard" not in terms), (row, terms)
         by_level.setdefault(level, set()).add(ob)
@@ -116,8 +116,8 @@ def test_planted_grid_moves_the_single_rolls_cells():
         h, _d = R._judging_world()
         TOF._docket(h, R.PARTY, "tribunal")
         h.persons[R.PARTY].pursuits = dict(pursuits)
-        return (_ob(w, ["p_low"], "determine", "p_other")[0],
-                _ob(h, [R.SPEAKER, R.PARTY], "determine", R.PARTY, room=world_q.place_of(h, R.SPEAKER))[0])
+        return (_ob(w, ["p_low"], "arrest","p_other")[0],
+                _ob(h, [R.SPEAKER, R.PARTY], "arrest",R.PARTY, room=world_q.place_of(h, R.SPEAKER))[0])
     assert cells(TEMPERAMENTS[0]) == cells(TEMPERAMENTS[1])
     checked += 1
     assert checked == 3 + 3 + 9 + 1, checked
@@ -157,15 +157,15 @@ def test_a_bench_seat_modifier_is_one_level_for_its_own_bench_only():
         party = next(p for p in sorted(w.persons) if p != speaker)
         own = w.offices[seat].scope_rung
         assert sits_over(w, w.offices[seat], own)
-        here = sigma.contest_input(w, [speaker, party], verb="determine", subject=party, room=own, via=seat)
-        bare = sigma.contest_input(w, [speaker, party], verb="determine", subject=party, room=own)
+        here = sigma.contest_input(w, [speaker, party], verb="arrest",subject=party, room=own, via=seat)
+        bare = sigma.contest_input(w, [speaker, party], verb="arrest",subject=party, room=own)
         assert abs((here.leverage - bare.leverage) - LEVEL_SIGMA["minor"]) < 1e-9, (seat, here.leverage, bare.leverage)
         assert (here.pool, here.opposition, here.obstacle_operands) == (bare.pool, bare.opposition, bare.obstacle_operands), seat
         checked += 1
         away = next((r for r in rungs if not sits_over(w, w.offices[seat], r)), None)
         if away is not None:                                                      # the realm's root seats sit over every rung it holds
-            there = sigma.contest_input(w, [speaker, party], verb="determine", subject=party, room=away, via=seat)
-            bare_there = sigma.contest_input(w, [speaker, party], verb="determine", subject=party, room=away)
+            there = sigma.contest_input(w, [speaker, party], verb="arrest",subject=party, room=away, via=seat)
+            bare_there = sigma.contest_input(w, [speaker, party], verb="arrest",subject=party, room=away)
             assert there.leverage == bare_there.leverage, (seat, away, there.leverage, bare_there.leverage)
             foreign += 1
     assert checked == len(authored) == 7 and foreign >= 5, (checked, foreign)
@@ -173,5 +173,5 @@ def test_a_bench_seat_modifier_is_one_level_for_its_own_bench_only():
     speaker = holder[other]
     party = next(p for p in sorted(w.persons) if p != speaker)
     room = w.offices[other].scope_rung or w.offices[other].rung
-    assert (sigma.contest_input(w, [speaker, party], verb="determine", subject=party, room=room, via=other).leverage
-            == sigma.contest_input(w, [speaker, party], verb="determine", subject=party, room=room).leverage)
+    assert (sigma.contest_input(w, [speaker, party], verb="arrest",subject=party, room=room, via=other).leverage
+            == sigma.contest_input(w, [speaker, party], verb="arrest",subject=party, room=room).leverage)

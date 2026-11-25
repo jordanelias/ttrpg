@@ -37,9 +37,9 @@ from ..seam.wrappers import sigma
 from .test_sc01_speak import PARTY, SPEAKER, _docket, _speak
 from .test_u7_remit import _fold, _kinds, _plant, _world
 
-#: B24p.99: the guard is the single roll's, and `speak` proceeds (B24p.19: `contest_input` refuses it), so it is read on `determine`, the one row
-#: on the single roll that `subject_may_be_self` could be admitted on (`counterparty: subject`, below), at the skill it draws on.
-GUARD_VERB = "determine"
+#: B24p.99, B24.10: the guard is the single roll's, and `speak` and `determine` proceed (`contest_input` refuses them), so it is read on `arrest`, a row
+#: on the single roll that is contested against its subject (`counterparty: subject`, below), at the skill it draws on.
+GUARD_VERB = "arrest"
 KEY = VERB_CAPABILITY[GUARD_VERB]
 
 
