@@ -2038,7 +2038,7 @@ rosters:
     # which troop type trains where). They take `garrison`'s treatment in every table below and for its reason: nothing
     # wears them down (`wear_per_season` 0), they have no floor and no band (`capacity_floor` 0, `band_floors` {}), and
     # `works_cost` prices them like any fabric so `found`/`build` can raise one. [ASSUMPTION; medium; Jordan to correct.]
-    values: [harbour, seam, body, dwelling, garrison, barracks, archery_range, stable, siege_workshop]
+    values: [harbour, seam, body, dwelling, garrison, barracks, archery_range, stable, siege_workshop, field]
 
   matter_kinds:
     source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
@@ -2123,6 +2123,7 @@ rosters:
       archery_range:  0
       stable:         0
       siege_workshop: 0
+      field:          10
 
   capacity_floor:
     source: "`RULINGS.yaml` RR-2 (`ED-SE-0051`, ruled 2026-09-17): *\"a `capacity(w, rung)` QUERY over the rung's dwelling Sites, with a FLOOR — never a fixture table\"*; `01_THE_BUILD_ORDER.md` S10: *\"the floor is a table keyed on site kind, beside `band_floors`\"*. Plan position `24d-ii`, landed with its caller at `19c`."
@@ -2156,6 +2157,7 @@ rosters:
       archery_range:  0
       stable:         0
       siege_workshop: 0
+      field:          0     # [ASSUMPTION; JQ-6] B12a.51: a field holds no housing floor, `dwelling`'s is the only one
 
   works_cost:
     source: "v9 IN-28 (`H-166` limit 1, its own design order: the cost first). r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.6 (intent): *\"the cost is paid by `transfer` into the works' rung\"*, and nothing debited that rung when the place rose. `proposals/2026-09-10-settlements-factions-populations/04_EVALUATION.md` §6 (intent): `found` costs *\"the stake\"*, `build` costs *\"timber\"*."
@@ -2199,6 +2201,38 @@ rosters:
       archery_range:  {timber: 10}
       stable:         {timber: 10}
       siege_workshop: {timber: 10}
+      field:     {timber: 10}      # [ASSUMPTION; JQ-6] B12a.51: the one number every fabric row holds
+
+  site_endowment:
+    source: "CP-T08-02 as amended (proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_ground_and_granaries.md)"
+    row: H-07
+    keys: [territories, site_kinds]
+    note: >-
+      WHAT PRODUCING SITES A SETTLEMENT IS GIVEN AT THE WORLD'S MAKING, keyed on the geography's territory code and, past it, on a settlement
+      code (`data/fixtures.py::endowment_for` is the one reader; `boot/realm.py::build_realm`'s site loop the one minter). `uniform` is the
+      control, today's placement at every settlement; `ground` is the arm, read when `Fixtures.endowment_mode` is `ground`. A list names one
+      Site per entry; a kind named twice is two Sites. The loader (`data/fixtures.py::_check_site_endowment`) refuses a territory holding a
+      settlement with no row, a kind outside `site_kinds`, an empty list, and a key no geography row carries. Every row is
+      [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode` `uniform`]. T15 holds no settlement, so it has no row.
+    uniform: [harbour, seam]            # the control: today's placement, every settlement
+    ground:                             # [ASSUMPTION; medium; Jordan to correct; revert: endowment_mode uniform]
+      T1:  [harbour]                    # capital, river-sea nexus
+      T2:  [field]                      # heartland farmland
+      T3:  [seam]                       # border fortress, mountain pass
+      T4:  [seam]                       # highland timber
+      T5:  [field, field]               # breadbasket
+      T6:  [field]                      # southern farmland
+      T7:  [seam]                       # timber valley
+      T8:  [harbour]                    # west sea trade
+      T9:  [seam]                       # mountain ridge
+      T10: [seam]                       # border castle
+      T11: [harbour]                    # central fjords
+      T12: [harbour]                    # western fjords
+      T13: [harbour]                    # southern fjords
+      T14: [field]                      # central plains
+      T16: [harbour]                    # island republic
+      T17: [seam, seam]                 # northern mines
+    settlement: {}                      # optional override, keyed by geography code (S-NNN)
 
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
@@ -4431,6 +4465,8 @@ tables:
         ore:    50
         timber: 10
       body: {}
+      field:
+        grain: 40
 
   band_floors:
     source: "#353 §12.1 / L5 — the band edges a crossing fires on. `H-08`."
@@ -4481,6 +4517,7 @@ tables:
       archery_range:  {}
       stable:         {}
       siege_workshop: {}
+      field: {}          # [ASSUMPTION; JQ-6] B12a.51: `dwelling`'s empty control cell -- no floor, no band edge, no crossing Event
 
   # v10 CR-33 -- THE 34 LIFEPATHS AS CREATION TEMPLATES: WHICH CAPABILITY KEYS A LIFEPATH'S STARTING SKILLS NAME.
   # A cast row's `lifepath:` key is expanded by `data/cast.py::capability_of` into `Person.capability` entries

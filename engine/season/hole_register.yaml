@@ -8492,6 +8492,32 @@ rows:
     cite:      "CONTROL: `build_realm(0)`'s content hash at `arrival_report: off`, 0 / 1 / 2 seasons, equals B12a.15's after-reading (08a3ac15... / 6671e3c6... / a5182a4e...). FALSIFIERS: `engine/season/tests/test_arrival_report.py` (a traveller to `S` holds a claim about its stores he did not hold before and a stayer in `Hh` holds none; `off` carries no Observation and deposits none in any ledger; the holder line carries the `hold`'s holder, and None where nothing is held, deposited nowhere)."
     source:    "workplan v12 B12a.16 (`07_SE_kernel_repairs` D; B12a's H block slot 3)"
 
+  - id:        H-526
+    tier:      1
+    hole:      "WHICH PRODUCING SITES A SETTLEMENT IS ENDOWED WITH, AND WHERE THE ENDOWMENT IS READ. CP-T08-02 as amended (`07_SE_ground_and_granaries` R1): the realm minted one Site of every producing kind at every settlement, so all 37 cohorts held one body value and all 37 settlements sat in one hunger band. `rosters.yaml: site_endowment` now states, per geography territory (and, past it, per settlement), the list of kinds a place is given, and the fixture `endowment_mode` chooses the arm: `uniform` (today's placement, `harbour` and `seam` everywhere, THE CONTROL, shipped) or `ground` (each territory's own row). The `field` kind (a Site that yields grain) joins the roster to make the ground differ. The `ground` rows, and the `field` kind's three cells the source states no value for (`band_floors.field` empty, `capacity_floor.field` 0, `works_cost.field` timber 10), are `[ASSUMPTION; medium; Jordan to correct]` and join JQ-6's sweep. The harbour's reduced grain under `ground` (the source's 10) is NOT built: `site_yield` is one table keyed by kind and read in both arms."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption (the `ground` rows and the three `field` cells); B12a.54 flips the arm. `engine/season/rosters.yaml: site_endowment` the one home of the rows; `engine/season/data/fixtures.py` the fixture and the one reader `endowment_for` (the loader `_check_site_endowment` refuses a territory holding a settlement with no row, a kind outside `site_kinds`, an empty list); READER: `engine/season/boot/realm.py::build_realm`'s site loop"
+    grade:     "assumption"
+    default:   "endowment_mode uniform -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value]: `harbour` and `seam` at every settlement, the Site ids and the realm content hash the tree's before the item. `ground` mints each territory's row (`s_<slug>_<kind>`, `s_<slug>_<kind>_<n>` for a kind named twice)"
+    site:      "Fixtures endowment_mode, read ONLY by `engine/season/data/fixtures.py::endowment_for`, called by `engine/season/boot/realm.py::build_realm`'s site loop"
+    sweep:     ["uniform (the control, SHIPPED: harbour and seam at every settlement)", "ground (each territory's row of site_endowment)", "ground with every territory planted [harbour, seam] (the failure arm: the endowment reaches nothing and every settlement shares one band)"]
+    unblocks:  "B12a.54's flip to `ground`; scarcity with a geography (a highland settlement that eats from its territory rung while it holds stock); the relief path `07_SE_treasury_granary_B` and the larder walk read"
+    cite:      "CONTROL: `build_realm(0)`'s content hash at `endowment_mode: uniform`, 0 / 1 / 2 seasons, equals B12a.17's after-reading (08a3ac15... / 6671e3c6... / a5182a4e...), and its Site id set (322 ids) is the tree's before the item. FALSIFIERS: `engine/season/tests/test_endowment.py` (every settlement of T5 holds two fields and no seam, of T17 two seams and no field, under `ground`; the `uniform` arm's whole Site id set digest is the one read before the item; a territory with a settlement and no row, a kind outside the roster, an empty list refuse at load; under `ground` the settlements span more than one hunger band after the first yield, under `uniform` one)."
+    source:    "workplan v12 B12a.51 (`07_SE_ground_and_granaries` §4 (a)-(c); CP-T08-02; B12a's H block slot 4)"
+
+  - id:        H-527
+    tier:      1
+    hole:      "HOW MANY SEASONS OF THE EATEN-KIND DEFICIT A GRANARY RUNG STARTS WITH. `07_SE_ground_and_granaries` §4 (b), (c): under `ground` the rung a settlement's draw reaches first above it (`world_q.treasury_above`, B12a.52) is stocked at world-gen with `granary_seasons` seasons of the grain and salt its settlements lack, so a highland settlement eats from its territory rung while it holds stock and starves when it empties (the granary is the clock). The source states the shape and gives no count; `granary_seasons` ships `0`, THE CONTROL (no territory stock), and is read by nothing until B12a.52 writes the seed. The sweep is the source's `0 / 4 / 8`; the flip to 4 is B12a.55's."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B12a.55 flips it. `engine/season/data/fixtures.py` the one home of the row; READER: `engine/season/boot/realm.py::build_realm`'s stores seed (B12a.52)"
+    grade:     "assumption"
+    default:   "granary_seasons 0 -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value]: no territory stock, every rung's stores the tree's before the item"
+    site:      "Fixtures granary_seasons, read ONLY by `engine/season/boot/realm.py::build_realm`'s stores seed under `endowment_mode` `ground` (B12a.52)"
+    sweep:     ["0 (the control, SHIPPED: no territory stock)", "4 (the source's reading: the 11 highland cohorts hold full body for three seasons)", "8 (the long runway: the granary outlasts the source's eight-season reading)"]
+    unblocks:  "B12a.55's flip; the `ground` flip's gate (a draw cell whose `source` is a granary rung)"
+    cite:      "CONTROL: at `granary_seasons: 0` no fixture read changes a store and `build_realm(0)`'s content hash equals the item before it (08a3ac15... / 6671e3c6... / a5182a4e...). Read by nothing yet, so there is no falsifier of its own at B12a.51; B12a.52's `test_endowment.py` reading (the granary falls each season and the highland body falls after it reaches 0) is the one that observes it. [ASSUMPTION; medium; Jordan to correct: that the count is seasons of DEFICIT and not of the whole want]"
+    source:    "workplan v12 B12a.51 (`07_SE_ground_and_granaries` §4 (b), (c); B12a's H block slot 5)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

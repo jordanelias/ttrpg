@@ -3601,7 +3601,8 @@
             "barracks",
             "archery_range",
             "stable",
-            "siege_workshop"
+            "siege_workshop",
+            "field"
           ]
         },
         "matter_kinds": {
@@ -3639,7 +3640,8 @@
             "barracks": 0,
             "archery_range": 0,
             "stable": 0,
-            "siege_workshop": 0
+            "siege_workshop": 0,
+            "field": 10
           }
         },
         "capacity_floor": {
@@ -3660,7 +3662,8 @@
             "barracks": 0,
             "archery_range": 0,
             "stable": 0,
-            "siege_workshop": 0
+            "siege_workshop": 0,
+            "field": 0
           }
         },
         "works_cost": {
@@ -3702,8 +3705,77 @@
             },
             "siege_workshop": {
               "timber": 10
+            },
+            "field": {
+              "timber": 10
             }
           }
+        },
+        "site_endowment": {
+          "source": "CP-T08-02 as amended (proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_ground_and_granaries.md)",
+          "row": "H-07",
+          "keys": [
+            "territories",
+            "site_kinds"
+          ],
+          "note": "WHAT PRODUCING SITES A SETTLEMENT IS GIVEN AT THE WORLD'S MAKING, keyed on the geography's territory code and, past it, on a settlement code (`data/fixtures.py::endowment_for` is the one reader; `boot/realm.py::build_realm`'s site loop the one minter). `uniform` is the control, today's placement at every settlement; `ground` is the arm, read when `Fixtures.endowment_mode` is `ground`. A list names one Site per entry; a kind named twice is two Sites. The loader (`data/fixtures.py::_check_site_endowment`) refuses a territory holding a settlement with no row, a kind outside `site_kinds`, an empty list, and a key no geography row carries. Every row is [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode` `uniform`]. T15 holds no settlement, so it has no row.",
+          "uniform": [
+            "harbour",
+            "seam"
+          ],
+          "ground": {
+            "T1": [
+              "harbour"
+            ],
+            "T2": [
+              "field"
+            ],
+            "T3": [
+              "seam"
+            ],
+            "T4": [
+              "seam"
+            ],
+            "T5": [
+              "field",
+              "field"
+            ],
+            "T6": [
+              "field"
+            ],
+            "T7": [
+              "seam"
+            ],
+            "T8": [
+              "harbour"
+            ],
+            "T9": [
+              "seam"
+            ],
+            "T10": [
+              "seam"
+            ],
+            "T11": [
+              "harbour"
+            ],
+            "T12": [
+              "harbour"
+            ],
+            "T13": [
+              "harbour"
+            ],
+            "T14": [
+              "field"
+            ],
+            "T16": [
+              "harbour"
+            ],
+            "T17": [
+              "seam",
+              "seam"
+            ]
+          },
+          "settlement": {}
         },
         "subsistence_weight": {
           "source": "`H-11` \u2014 *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*.",
@@ -5387,7 +5459,10 @@
               "ore": 50,
               "timber": 10
             },
-            "body": {}
+            "body": {},
+            "field": {
+              "grain": 40
+            }
           }
         },
         "band_floors": {
@@ -5422,7 +5497,8 @@
             "barracks": {},
             "archery_range": {},
             "stable": {},
-            "siege_workshop": {}
+            "siege_workshop": {},
+            "field": {}
           }
         },
         "lifepath_templates": {

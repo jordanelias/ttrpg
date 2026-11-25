@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 529,
-    "uncited": 397,
+    "total": 531,
+    "uncited": 399,
     "of_which_assumption_grade": 9
   },
-  "count": 529,
+  "count": 531,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 223,
+    "engine.season.settings": 225,
     "engine.season.realm": 9
   },
   "params": [
@@ -4612,6 +4612,28 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-525`, swept off (control, SHIPPED) / on",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.endowment_mode",
+      "name": "endowment_mode",
+      "value": "uniform",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-526`, swept uniform (control, SHIPPED) / ground (B12a.54 flips)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.granary_seasons",
+      "name": "granary_seasons",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-527`, swept 0 (control, SHIPPED) / 4 / 8 (B12a.55 flips to 4)",
       "citation": null,
       "citation_grade": null
     },
