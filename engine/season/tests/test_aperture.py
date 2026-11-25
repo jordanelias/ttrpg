@@ -779,8 +779,12 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # gains 7.0; the pools are still many in one season, persons apart.
     # BA1.99 re-pin (BA1.01: the cast's authored `stats:` and `capabilities:` give those persons their own attributes and skill scores;
     # read with `PYTHONHASHSEED=0`, seed 0, one season, the delta in `git log`): still many pools in one season, persons apart.
+    # B24p merge re-pin (the five influence verbs on the proceeding, merged with BA1.99's authored scores and B15.99): 22 pools (main read 20, the B24p tree alone 18),
+    # among them a fraction of a head count (`9.165000000000001`: the speech pool scaled by the share of him the room hears); still many pools in one season,
+    # persons apart. Read at `PYTHONHASHSEED=0`, seed 0, one season, twice equal.
+    # [JUSTIFIED: a measured reading of the shipped seed-0 season, not a game value -- a pin on an exactness claim, `PYTHONHASHSEED=0`]
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 9.7, 10.0, 10.3, 10.5, 11.0, 11.3, 11.5, 11.7, 12.0, 12.5, 13.0, 13.5, 15.5, 15.7}
+        7.0, 7.5, 8.0, 8.5, 9.0, 9.165000000000001, 9.5, 10.0, 10.4, 10.5, 11.0, 11.2, 11.5, 11.6, 11.8, 12.0, 12.5, 13.0, 13.5, 14.0, 15.5, 16.3}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")

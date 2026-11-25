@@ -142,35 +142,35 @@ def test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temper
     assert zero == 0, f"seed {seed}: {zero} deliberations chose other than the leading candidate at zero temperature"
 
 
-def _determine(actor: str, to: str) -> Act:
-    """B24p.99: `determine`, a verb still on the single roll (`tell` proceeds and its dice are the proceeding's, not a pool)."""
-    return Act(id=f"a:{actor}:{to}", actor=actor, verb="determine", payload={"subject": to})
+def _carry(actor: str, to: str) -> Act:
+    """B24p.99 merge: `carry`, a verb still on the single roll with no `opposed_attribute` (`tell` proceeds and its dice are the proceeding's; `determine` reads the subject's will as an edge, so two persons equal only on the governing mean read different odds)."""
+    return Act(id=f"a:{actor}:{to}", actor=actor, verb="carry", payload={"subject": to})
 
 
 def test_r09_two_persons_of_different_skill_score_read_different_odds_in_the_realm():
-    """R-09 (mechanism half) on the built realm: two persons alike in what governs `determine`'s pool and in body, holding
-    skill scores 4 and 0 in `determine`'s skill, read different `sigma.odds_of` for `determine` to one third person. The control
+    """R-09 (mechanism half) on the built realm: two persons alike in what governs `carry`'s pool and in body, holding
+    skill scores 4 and 0 in `carry`'s skill, read different `sigma.odds_of` for `carry` to one third person. The control
     sets both to 4 and the tuples are equal. Nothing is patched: the persons' ranks are set on the `World` the reader reads.
     (The shipped-cast arm, no rank set by the test, moves to BA1's gate: the cast holds no skill scores yet.)"""
     w = build_realm(0)
-    key = VERB_TABLE["determine"].capability
-    assert key and key != "none", "`determine` names no skill: the test would set a key nothing reads"
+    key = VERB_TABLE["carry"].capability
+    assert key and key != "none", "`carry` names no skill: the test would set a key nothing reads"
     alive = [i for i, x in w.persons.items() if getattr(x, "alive", True)]
     assert len(alive) >= 3, "the realm holds fewer than three living persons"
     pair = next(((a, b) for n, a in enumerate(alive) for b in alive[n + 1:]
                  if w.persons[a].body == w.persons[a].body_ceiling and w.persons[b].body == w.persons[b].body_ceiling
-                 and pool.governing_score(w, w.persons[a], "determine") == pool.governing_score(w, w.persons[b], "determine")), None)
-    assert pair is not None, "no two living, unwounded persons are equal on `determine`'s governing score"
+                 and pool.governing_score(w, w.persons[a], "carry") == pool.governing_score(w, w.persons[b], "carry")), None)
+    assert pair is not None, "no two living, unwounded persons are equal on `carry`'s governing score"
     p, q = pair
     r = next(i for i in alive if i not in pair)
     w.persons[p].capability = {key: 4}
     w.persons[q].capability = {key: 0}
-    assert pool.score(w, w.persons[p], "determine") != pool.score(w, w.persons[q], "determine"), "the pair's skill scores do not differ"
-    odds_p, odds_q = sigma.odds_of(w, _determine(p, r)), sigma.odds_of(w, _determine(q, r))
-    assert odds_p is not None and odds_q is not None, "`determine` deals no social roll for the pair: nothing to compare"
+    assert pool.score(w, w.persons[p], "carry") != pool.score(w, w.persons[q], "carry"), "the pair's skill scores do not differ"
+    odds_p, odds_q = sigma.odds_of(w, _carry(p, r)), sigma.odds_of(w, _carry(q, r))
+    assert odds_p is not None and odds_q is not None, "`carry` deals no social roll for the pair: nothing to compare"
     assert odds_p != odds_q, f"skill scores 4 and 0 read the same odds {odds_p}: the skill score does not reach the roll"
     w.persons[q].capability = {key: 4}                      # the control: the cause removed
-    assert sigma.odds_of(w, _determine(p, r)) == sigma.odds_of(w, _determine(q, r)), "equal skill scores read different odds"
+    assert sigma.odds_of(w, _carry(p, r)) == sigma.odds_of(w, _carry(q, r)), "equal skill scores read different odds"
 
 
 def _ranked(w: World, pid: str, q) -> list[tuple[str, str | None]]:
