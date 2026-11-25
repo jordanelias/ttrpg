@@ -391,7 +391,7 @@ class VerbRow:
         A FLAT row answers its flat tuple for every clause. A KEYED row answers the clause's own kinds -- and a clause it does not
         key RAISES, because the loader has already required a key for every clause that can fail
         (`ELIGIBILITY_CLAUSE` if an alternative can decline, each named conjunct, `WRITE_CLAUSE` if
-        the row writes, `COUNTERPARTY_CLAUSE` if it names a second party). Reaching this with an
+        the row writes, `COUNTERPARTY_CLAUSE` if it names a second party, `SEQUENCE_CLAUSE` always). Reaching this with an
         unkeyed clause is therefore a FOLD defect -- a new
         refusal point nobody declared -- and emitting the union instead would publish kinds for
         conjuncts that did not fail, which is `ID-9` inside the scarcity channel."""
@@ -523,10 +523,15 @@ COUNTERPARTY_CLAUSE = "counterparty"
 # B07.01 (18-A item 2, item 4): THE FOURTH KEY, AND NOT A REFUSAL -- a `form: task` row's lost draw. A row keys it iff its
 # `graded_tasks` route is `form: task`; its kinds are the row's `draw_kinds`, kept out of the refusal union.
 DRAW_CLAUSE = "draw"
-# B09.19: THE FOUR THE FOLD OWNS. Any other key of a keyed UNTYPED row with a precondition is a clause its PREDICATE declared
+# B08.02 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 3; ruling A-9): THE FIFTH -- an interaction refused
+# because the interaction before it in its scene did not reach a band it names (`Act.after`; `loop/resolve.py::
+# _sequence_refusal`). Declared here, not invented at the fold (`04` §B.13 inv. 4). EVERY keyed row keys it, because every
+# row can be a second interaction: the rule is per row, not per verb named; a FLAT row answers its flat kind for it already.
+SEQUENCE_CLAUSE = "sequence"
+# B09.19: THE CLAUSES THE FOLD OWNS. Any other key of a keyed UNTYPED row with a precondition is a clause its PREDICATE declared
 # (`loop/predicates.py::requires_predicate(clauses=)`), which this loader may not import: `VerbRow.precondition_evaluable` checks
 # those against the predicate table, and the loader below lets them through as keys it cannot judge.
-FOLD_CLAUSES = frozenset({ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE})
+FOLD_CLAUSES = frozenset({ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE, SEQUENCE_CLAUSE})
 # B07.01 (18-A item 2): THE TWO SHAPES OF A `graded_tasks` ROUTE. `inquiry` keys `emits:` by Degree and writes nothing (FI-01, as
 # before); `task` carries a flat `writes:` and `emits:` and keys `emits_on_refusal:` with `DRAW_CLAUSE`. The loader branches on them.
 FORM_INQUIRY = "inquiry"
@@ -1326,7 +1331,8 @@ def _load_verb_table() -> dict:
         #     import, so it lets the keys beyond the fold's own four through and requires at least one; that they are
         #     exactly the predicate's declared clauses is `VerbRow.precondition_evaluable`'s, asked of the predicate table;
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`);
-        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`.
+        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`;
+        #   * `SEQUENCE_CLAUSE`      on EVERY keyed row (B08.02): any row can be a scene's second interaction.
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
@@ -1347,6 +1353,8 @@ def _load_verb_table() -> dict:
                 _expected.add(COUNTERPARTY_CLAUSE)
             if _form == FORM_TASK:
                 _expected.add(DRAW_CLAUSE)      # B07.01: a `task` row's lost draw (18-A item 4)
+            if by_clause:
+                _expected.add(SEQUENCE_CLAUSE)  # B08.02: any keyed row can be a scene's second interaction
             if not by_clause:
                 _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
             # B07.01 (UNDECIDED (11) (ii)): a precondition may stay UNNAMED where the row declares ONE refusal kind -- its

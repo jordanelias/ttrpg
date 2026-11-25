@@ -41,7 +41,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
 from ..data.rosters import GRADED_TASKS
-from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE,
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, SEQUENCE_CLAUSE, VERB_TABLE,
                           WRITE_CLAUSE)
 from ..epistemic import belief_contradicts
 from ..harness import probes as P
@@ -163,7 +163,8 @@ def test_19_the_four_are_resolvable_typed_and_key_every_failable_clause():
         assert any(getattr(c, "_form", "") == "basis"
                    for c in getattr(row.requires_typed.requirement, "clauses",
                                     (row.requires_typed.requirement,))), f"{verb} reads no seat"
-        expected = {ELIGIBILITY_CLAUSE, WRITE_CLAUSE} | set(row.requires_typed.conjuncts())
+        # B08.02: every keyed row keys `sequence` (any row can be a scene's second interaction)
+        expected = {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, SEQUENCE_CLAUSE} | set(row.requires_typed.conjuncts())
         # PLAN POSITION `14`: a row naming a second party keys the fold's `counterparty` clause too
         # (`determine`'s party, `issue`'s executor).
         if row.counterparty:
