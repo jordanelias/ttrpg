@@ -134,7 +134,9 @@ def test_an_exchange_takes_exactly_its_draws():
     G = len(inp.grounds)
     assert P.DRAWS_PER_EXCHANGE(4) == 35 and G == 4
     checked = 0
-    for mid in PROCEEDING_MOVES:
+    speech = [m for m, r in PROCEEDING_MOVES.items() if r["effect"] in ("track", "strike", "yield", "none")]   # B24.03: the hearing's five are the sitting's, not this entry's
+    assert len(speech) == 4
+    for mid in speech:
         for mover in (inp.room[0], inp.room[1]):
             rng = _Counting(_key("count", checked).key)
             ground = "consequence" if PROCEEDING_MOVES[mid]["draw"] else None
@@ -143,7 +145,7 @@ def test_an_exchange_takes_exactly_its_draws():
             P.exchange(inp, _sit(inp), mover, Choice(mid, ground, None, None), rng, mark=mark)
             assert rng.normals == P.DRAWS_PER_EXCHANGE(G) == 35 and rng.n == 2 * 35, (mid, mover.id, rng.normals)
             checked += 1
-    assert checked == 2 * len(PROCEEDING_MOVES)
+    assert checked == 2 * len(speech)
 
 
 def test_no_branch_names_a_move_a_rite_or_a_ground():

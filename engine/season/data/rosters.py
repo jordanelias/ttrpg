@@ -1016,6 +1016,8 @@ REMIT_ACTS = roster("remit_acts")
 INTERPOSITION_KINDS = roster("interposition_kinds")
 GENRES = roster("genres")
 LADDER_RUNGS = roster("ladder_rungs", ordered=True)
+# B24.03: the faults a sitting records (`rosters.yaml: proceeding_faults`), a tuple in the file's order beside the charge ladder.
+PROCEEDING_FAULTS = roster("proceeding_faults", ordered=True)
 
 
 def _roster_rows(name: str):
@@ -1083,10 +1085,15 @@ def _load_grounds(rows) -> dict:
 
 def _load_proceeding_moves(rows) -> dict:
     """`rosters.yaml: proceeding_moves`: each row's `effect` a member of `proceeding_effects`, `draw` a bool, `capability`
-    (the skill whose rank joins the dice) a member of `descriptors.CAPABILITIES` and present only on a drawing move."""
+    (the skill whose rank joins the dice) a member of `descriptors.CAPABILITIES` and present only on a drawing move, `descends`
+    (optional) a bool: a yield that also descends one rung of a type with an issue ladder. A repeated id is refused by the shared
+    row grammar (`_proceeding_rows`)."""
     effects = roster("proceeding_effects", ordered=True)
-    out = _proceeding_rows(rows, "proceeding_moves", frozenset({"effect", "draw", "capability"}), frozenset({"effect", "draw"}))
+    out = _proceeding_rows(rows, "proceeding_moves", frozenset({"effect", "draw", "capability", "descends"}), frozenset({"effect", "draw"}))
     for mid, m in out.items():
+        if "descends" in m and not isinstance(m["descends"], bool):
+            raise Unspecified(f"move {mid!r} has `descends: {m['descends']!r}`", "rosters.yaml -- proceeding_moves", needs="true or false",
+                              law="a move either descends a rung or it does not; an odd cell is refused, not read as false")
         require_member(m["effect"], effects, f"move {mid!r} has `effect: {m['effect']!r}`", "rosters.yaml -- proceeding_moves",
                        "V2 p2 §B -- a move is read by its effect, and no effect names a winner")
         if not isinstance(m["draw"], bool):
@@ -1680,7 +1687,8 @@ MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
 ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD = roster("proceeding_endings", ordered=True)   # B24p.20, .22: the tags of a proceeding's `Event.ending`
 # B24p.22: the kinds of claim a sitting leaves with those who saw it (`rosters.yaml: sitting_claims`), each kind's predicate `<stem>:<kind>`; and the four
-# effects a move may have (`proceeding_effects`), so a witness reads a beat's move by its effect and never by its id.
+# effects a move may have (`proceeding_effects`: the four of the speech, then B24.03's five of the hearing), so a witness reads a beat's move by
+# its effect and never by its id.
 SITTING_CLAIMS = roster("sitting_claims", ordered=True)
 _SITTING_CLAIM = roster_map("sitting_claims", "claim")
 SITTING_PREDICATES = {kind: f"{_SITTING_CLAIM['predicate']}:{kind}" for kind in SITTING_CLAIMS}
@@ -1688,7 +1696,7 @@ SITTING_SOURCE = _SITTING_CLAIM["source"]
 if SITTING_SOURCE not in CLAIM_SOURCES:
     raise Unspecified(f"`sitting_claims` has `claim.source: {SITTING_SOURCE!r}`", "rosters.yaml -- sitting_claims", needs="a `claim_sources` member",
                       law="V2 p2 §J -- a claim is held by one of the ways a person comes to hold one")
-EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE = roster("proceeding_effects", ordered=True)
+EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE, *_HEARING_EFFECTS = roster("proceeding_effects", ordered=True)
 *STANCE_BANDS, STANCE_DECIDED = roster("stance_bands", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
 DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
