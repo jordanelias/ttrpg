@@ -13,7 +13,7 @@ from __future__ import annotations
 from engine.dice_engine import draw
 
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.boot.realm import build_realm
+from engine.season.tests._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from engine.season.data.rosters import WON
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.sides import sides_of

@@ -25,7 +25,7 @@ import pytest
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..boot.realm import build_realm
+from ._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q, world_q
 from ..seam import Resolution, combat_degree, degree_of, party_degree

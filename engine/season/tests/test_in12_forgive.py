@@ -53,7 +53,7 @@ from ..data.verbs import KIND_VERB, VERB_TABLE
 from ..decision import assemble
 from ..decision.options import opening_set
 from ..gaps import Forbidden
-from ..boot.realm import build_realm
+from ._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import person_q as PQ
 from ..queries.world_q import holder_faction_of
