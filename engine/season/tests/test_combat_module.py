@@ -84,7 +84,7 @@ def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_load
         # THE ORACLE COMPARISON, re-pointed at the record's fields: the engine called directly, its trackers and its trace
         assert rec["wounds"] == wt, f"{role}: seed {seed} lifted {rec['wounds']}, the trackers read {wt}"
         assert list(rec["trace"]) == seen, f"{role}: seed {seed} returned a trace that is not the engine's own"
-        assert rec["rounds"] == sum(1 for e in seen if e["kind"] == "turn_start"), (seed, rec["rounds"])
+        assert rec["rounds"] == sum(1 for e in seen if e["kind"] == "round_start"), (seed, rec["rounds"])
         # the integer `wrapper.fight` returns is not lifted: the engine's own `fight_result` event names it
         assert [e["result"] for e in seen if e["kind"] == "fight_result"] == [r], (seed, r)
         assert len(rec["trace"]) > 0, f"{role}: seed {seed} recorded no trace -- `_TRACE` was not captured"

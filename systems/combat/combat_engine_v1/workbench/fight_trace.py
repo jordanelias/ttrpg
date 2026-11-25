@@ -16,14 +16,14 @@ from modules.combat import fight as entry
 import fight_record as FR
 
 
-def trace_record(rec, cfg=None, seed=0, max_bouts=12, decide=None):
-    """Returns (result, events) for the record `rec`, fought through the entry at `seed`. `decide(turn)` takes the turn number."""
+def trace_record(rec, cfg=None, seed=0, max_rounds=12, decide=None):
+    """Returns (result, events) for the record `rec`, fought through the entry at `seed`. `decide(round)` takes the round number."""
     out = entry.fight(rec, draw.seeded(draw.H2("fight_trace", seed)),
-                      decide=None if decide is None else (lambda view: decide(view.turn)), cfg=cfg, max_bouts=max_bouts)
+                      decide=None if decide is None else (lambda view: decide(view.round)), cfg=cfg, max_rounds=max_rounds)
     return FR.result_of(out), list(out.trace)
 
 
-def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, *, terms=wrapper.LETHAL_TERMS, decide=None, yield_decl=None):
+def run_traced_fight(A, B, cfg=None, seed=0, max_rounds=12, *, terms=wrapper.LETHAL_TERMS, decide=None, yield_decl=None):
     """Returns (result, events). result is -1/0/+1 (A's perspective). events is the ordered trace. A and B are Combatants,
     read into a record (`fight_record.party_of_combatant`). `terms=` and `decide=` ride the record and the entry; `yield_decl=`
     is a declared Yield, which names a Combatant by identity (the record has no field for it), so a call that passes one is this
@@ -31,8 +31,8 @@ def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, *, terms=wrapper.LETH
     on Combatants, outside B14.11's WHERE), through its `trace=` argument; the hook is not touched."""
     if yield_decl is not None:
         events = []
-        result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2("fight_trace", seed)), max_bouts=max_bouts, yield_decl=yield_decl, terms=terms,
+        result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2("fight_trace", seed)), max_rounds=max_rounds, yield_decl=yield_decl, terms=terms,
                                decide=decide, trace=events.append)
         return result, events
     rec = FR.record_of(FR.party_of_combatant(A), FR.party_of_combatant(B), terms=terms)
-    return trace_record(rec, cfg=cfg, seed=seed, max_bouts=max_bouts, decide=decide)
+    return trace_record(rec, cfg=cfg, seed=seed, max_rounds=max_rounds, decide=decide)

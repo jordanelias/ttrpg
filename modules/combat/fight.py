@@ -27,7 +27,7 @@ from typing import Callable, Mapping, Optional
 from engine.dice_engine.draw import H2, Draw, seeded
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma
 from engine.season.queries.inputs import (
-    CombatOutcome, CombatTurnView, DecisiveBeat, DuelRoundInput, DuelRoundOutcome, DuelState, MortalResult, PartyWounds,
+    CombatOutcome, CombatRoundView, DecisiveBeat, DuelRoundInput, DuelRoundOutcome, DuelState, MortalResult, PartyWounds,
     PersonalCombatInput, SceneShape, Surrender)
 from . import attributes as spec, combatant, core, wrapper
 from .config import CFG
@@ -87,21 +87,21 @@ def _surrender(trace: list) -> Optional[Surrender]:
     """The scene's first `yield` event the engine did not refuse (a refused declaration is not a surrender), or `None`."""
     for e in trace:
         if e.get("kind") == "yield" and e.get("refused") is None:
-            return Surrender(by=e["by"], round=e["turn"], accepted=e["accepted"])
+            return Surrender(by=e["by"], round=e["round"], accepted=e["accepted"])
     return None
 
 
 def _beat(trace: list) -> Optional[DecisiveBeat]:
     """The trace's last `wound` event that felled its victim, or `None` when nobody was felled. The `wound` event
     names no weapon and no round: the weapon is the striker's as `fight_start` issued it, the round the count of
-    `turn_start` events up to the wound."""
+    `round_start` events up to the wound."""
     weapons: dict = {}
     rnd, found = 0, None
     for e in trace:
         kind = e.get("kind")
         if kind == "fight_start":
             weapons = {e["A"]: e["weapon_A"], e["B"]: e["weapon_B"]}
-        elif kind == "turn_start":
+        elif kind == "round_start":
             rnd += 1
         elif kind == "wound" and e.get("felled"):
             found = DecisiveBeat(by=e["by"], victim=e["victim"], source=e["source"],
@@ -110,7 +110,7 @@ def _beat(trace: list) -> Optional[DecisiveBeat]:
 
 
 def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> SceneShape:
-    """The scene's `SceneShape` (B14.15), a PURE FOLD over the trace's `wound` and `turn_start` events (and nothing else: a
+    """The scene's `SceneShape` (B14.15), a PURE FOLD over the trace's `wound` and `round_start` events (and nothing else: a
     `yield` declares an ending the shape does not count, and no new engine event is emitted for it). `claimants` is the
     record's `(A, B)`; `health_full` is `{id: full Health}` for each party whose Combatant carries a tracker (a `wound` event
     carries the victim's `cumulative` damage, and Health full is the one number the trace does not hold).
@@ -126,7 +126,7 @@ def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> Scen
     rounds, first_blood, changes, ahead = 0, None, 0, None
     for e in trace:
         kind = e.get("kind")
-        if kind == "turn_start":
+        if kind == "round_start":
             rounds += 1
         elif kind == "wound":
             by, victim = e["by"], e["victim"]
@@ -272,11 +272,11 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
     trace: list = []
     with wrapper.traced(trace.append):
         first = A if rng.random() < 0.5 else B
-        trace.append(dict(kind="turn_start", turn=inp.round, first=first.label))
+        trace.append(dict(kind="round_start", round=inp.round, first=first.label))
         wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)
         loser, closed, ended_by = wrapper.engagement(A, B, first, cfg, rng, inp.prev_closed,
                                                      terms=None if terms == wrapper.LETHAL_TERMS else terms, turn=inp.round, scene=scene)
-        trace.append(dict(kind="engagement_end", turn=inp.round, felled=(loser.label if loser is not None else None), ended_by=ended_by))
+        trace.append(dict(kind="round_end", round=inp.round, felled=(loser.label if loser is not None else None), ended_by=ended_by))
         yielder = None
         if loser is None:
             over, yielder = wrapper.settle_round(A, B, wounds0, terms, cfg, rng, scene, inp.round, fi.decisiveness or (0.0, 0.0))
@@ -294,14 +294,14 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
 
 
 def fight(inp: PersonalCombatInput, rng: Draw,
-          decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
-          max_bouts: Optional[int] = None) -> CombatOutcome:
-    """Fight one bout scene between the record's two parties and return a `CombatOutcome`: `wounds[id]` is that
+          decide: Optional[Callable[[CombatRoundView], str]] = None, cfg: Optional[dict] = None,
+          max_rounds: Optional[int] = None) -> CombatOutcome:
+    """Fight one fight between the record's two parties and return a `CombatOutcome`: `wounds[id]` is that
     party's `PartyWounds` (absent when the Combatant carries no tracker, which the host refuses), `surrender` the
-    scene's un-refused `yield`, `beat` the wound that felled a party, `rounds` the `turn_start` count and `trace` the
+    scene's un-refused `yield`, `beat` the wound that felled a party, `rounds` the `round_start` count and `trace` the
     scene's events.
 
-    THE FIGHT IS A LOOP OVER `fight_round` (PB step 1) with the `DuelState`s in this frame: up to `max_bouts` rounds (twelve, `wrapper.DEFAULT_BOUTS`),
+    THE FIGHT IS A LOOP OVER `fight_round` (PB step 1) with the `DuelState`s in this frame: up to `max_rounds` rounds (twelve, `wrapper.DEFAULT_ROUNDS`),
     stopping on a felling, a yield, a withdrawal or the last round. The workbench's own loop stays `wrapper.fight`; this one is the host's.
 
     The `rng` is a parameter, and the module builds no generator of its own (`04 §C.12` rejection 4 as amended, A-30: a draw is a function of its key):
@@ -309,13 +309,13 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     (`seeded(H2(rng.key, ...))`), which are values, never state kept between calls. A module whose directory is gone is refused earlier, at
     driver construction, by the registrar resolving this file.
 
-    `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-turn decider, called at the top of each round, before every draw of it. It crosses the
-    module boundary OUTWARD, so it is handed a typed view, never a `Combatant`: `CombatTurnView` -- the turn index, the
+    `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-round decider, called at the top of each round, before every draw of it. It crosses the
+    module boundary OUTWARD, so it is handed a typed view, never a `Combatant`: `CombatRoundView` -- the round index, the
     claimants and a fresh copy of each party's `inp.wound_quantities` (`_lift`, above). `None` (AUTOMATED,
-    the default) is the engine's own engage-every-turn loop exactly.
+    the default) is the engine's own engage-every-round loop exactly.
 
-    `cfg` (a config overlay) and `max_bouts` (a bout cap) are the WORKBENCH's (B14.11); the host
-    never passes them, and `None` is the engine's own `CFG` and bout count. `max_bouts` is the tree's name until PCR-3."""
+    `cfg` (a config overlay) and `max_rounds` (a round cap) are the WORKBENCH's (B14.11); the host
+    never passes them, and `None` is the engine's own `CFG` and round cap. """
     a_id, b_id = inp.claimants
     _check_terms(inp.terms)
     cfg_ = _fight_cfg(inp, cfg) or CFG
@@ -326,14 +326,14 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     states = (DuelState(), DuelState())
     wound_state = {a_id: _lift(inp, A), b_id: _lift(inp, B)}
     prev_closed, result, tie = False, 0, False
-    for rnd in range(1, (wrapper.DEFAULT_BOUTS if max_bouts is None else max_bouts) + 1):
+    for rnd in range(1, (wrapper.DEFAULT_ROUNDS if max_rounds is None else max_rounds) + 1):
         if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the round; draws nothing
-            choice = decide(CombatTurnView(turn=rnd, claimants=inp.claimants,
+            choice = decide(CombatRoundView(round=rnd, claimants=inp.claimants,
                                            wound_state={pid: None if q is None else dict(q) for pid, q in wound_state.items()}))
-            if choice not in wrapper.TURN_CHOICES:
-                raise ValueError(f"the decider returned {choice!r}, which is not one of {wrapper.TURN_CHOICES}")
+            if choice not in wrapper.ROUND_CHOICES:
+                raise ValueError(f"the decider returned {choice!r}, which is not one of {wrapper.ROUND_CHOICES}")
             if choice == wrapper.WITHDRAW:
-                trace.append(dict(kind="withdraw", turn=rnd))
+                trace.append(dict(kind="withdraw", round=rnd))
                 break            # UNRESOLVED, no further round, no riposte draw
         out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed),
                           rng, cfg=cfg, scene=scene)

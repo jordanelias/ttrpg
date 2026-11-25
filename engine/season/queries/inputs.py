@@ -43,7 +43,7 @@ v9 IN-07 E4..E6 add `HousingInput`/`Housing`, `FabricInput`/`Fabric` and `FortIn
 `float`), for `settlements.housing`, `settlements.fabric` and `settlements.fortification`.
 v9 IN-52 adds `ProvisionInput` in, `Provision` out, for `settlements.provision` (the levy-to-field feed).
 v10 REM-31 (IN-46) adds, beside `PersonalCombatInput`, the PLAYABLE fight's pair: `PlayHost` (the host's one
-optional argument) and `CombatTurnView` (what its per-turn decider reads, handed outward by the module entry).
+optional argument) and `CombatRoundView` (what its per-round decider reads, handed outward by the module entry).
 """
 from __future__ import annotations
 
@@ -684,7 +684,7 @@ class PartyWounds:
 @dataclass(frozen=True)
 class Surrender:
     """The scene's `yield` event, lifted off its trace by the module entry (B14.01). `round` is the round at whose
-    start or end the yield came (A-101; the engine's trace event still names it `turn`)."""
+    start or end the yield came (A-101; the engine's `yield` trace event names it `round`)."""
     by: str
     round: int
     accepted: Optional[bool]   # `None`: the scene ended with the yielder standing under `death` terms, the victor's choice the host's (B15.10)
@@ -697,7 +697,7 @@ class DecisiveBeat:
       * `victim` -- the felled party's id;
       * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze | finalblow_riposte (a counter that fells, B15.09);
       * `weapon` -- the striker's weapon key as the fight opened (the `fight_start` event; the `wound` event carries none);
-      * `round`  -- the round it landed in (A-101; the count of `turn_start` events up to it)."""
+      * `round`  -- the round it landed in (A-101; the count of `round_start` events up to it)."""
     by: str
     victim: str
     source: str
@@ -708,9 +708,9 @@ class DecisiveBeat:
 @dataclass(frozen=True)
 class SceneShape:
     """WHAT THE SCENE'S TRACE SAYS OF ITS COURSE, folded by the module entry from the trace it already holds (B14.15; a pure
-    fold over `wound`, `turn_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
+    fold over `wound`, `round_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
     act's Events (`loop/effects_combat.py::_eff_kill`); nothing is kept between scenes.
-      * `rounds`      -- rounds fought: the `turn_start` count (A-101; `CombatOutcome.rounds`);
+      * `rounds`      -- rounds fought: the `round_start` count (A-101; `CombatOutcome.rounds`);
       * `blows`       -- wounding blows LANDED, by claimant id (a `wound` event is emitted only for a blow that took Health);
       * `first_blood` -- who landed the first wounding blow, `None` where none landed;
       * `lead_changes`-- times the party ahead on Health fraction changed (a tie is no lead and no change);
@@ -739,7 +739,7 @@ class CombatOutcome:
                        refuses it by name);
       * `surrender` -- the scene's `yield` event the engine did not refuse, or `None` (a refused declaration is not a surrender);
       * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
-      * `rounds`    -- rounds fought (A-101; the `turn_start` count);
+      * `rounds`    -- rounds fought (A-101; the `round_start` count);
       * `shape`     -- the scene's course, folded from its trace (B14.15);
       * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it;
       * `mortal`    -- `{party id: MortalResult}` for each party the scene felled, where the record carried the draw's operands
@@ -756,18 +756,18 @@ class CombatOutcome:
 
 
 @dataclass(frozen=True)
-class CombatTurnView:
-    """What a PLAYABLE fight's per-turn decider reads, and nothing else (v10 REM-31, IN-46).
+class CombatRoundView:
+    """What a PLAYABLE fight's per-round decider reads, and nothing else (v10 REM-31, IN-46).
 
-    Built by the `combat` module entry (`modules/combat/fight.py::fight`) at the top of each turn, before
-    any draw of that turn, and handed OUTWARD to the host's decider -- the one record that crosses the
+    Built by the `combat` module entry (`modules/combat/fight.py::fight`) at the top of each round, before
+    any draw of that round, and handed OUTWARD to the host's decider -- the one record that crosses the
     module boundary in that direction. It names the quantities the input record already names and the
-    turn index, never a `Combatant` (the design's `## Re-read at B-L`, [ASSUMPTION]):
-      * `turn`        -- the 1-based turn about to be fought;
+    round index, never a `Combatant` (the design's `## Re-read at B-L`, [ASSUMPTION]):
+      * `round`       -- the 1-based round about to be fought;
       * `claimants`   -- `PersonalCombatInput.claimants`, `(A, B)`;
       * `wound_state` -- `{id: {quantity: value}}` over `PersonalCombatInput.wound_quantities`, a fresh copy
                          per call, so a decider that mutates it moves nothing in the engine."""
-    turn: int
+    round: int
     claimants: tuple
     wound_state: Mapping
 
@@ -780,8 +780,8 @@ class PlayHost:
       * `persons` -- the ids the host plays. The mode is a PARTY TEST at the provider
                      (`seam/wrappers/combat.py::resolve`): a fight either of whose claimants is in this
                      set is PLAYABLE; every other fight, and every fight with no host, is AUTOMATED;
-      * `decide`  -- `(CombatTurnView) -> str`, one member of the engine's closed per-turn set
-                     (`modules/combat/wrapper.py::TURN_CHOICES`). It is written to draw nothing, write nothing and
+      * `decide`  -- `(CombatRoundView) -> str`, one member of the engine's closed per-round set
+                     (`modules/combat/wrapper.py::ROUND_CHOICES`). It is written to draw nothing, write nothing and
                      hold no token (CONVENTION; `test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended` checks the shipped deciders): it is called inside the provider's frame, with the driver below it on
                      the stack (a call-out, not a return), and its return is the only resume.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""

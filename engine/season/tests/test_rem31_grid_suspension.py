@@ -59,7 +59,7 @@ def _scripted(p, v, s, ask_budget, auto):
 
 def _season(played=None, decider=None, callback=_scripted, shuffle=False):
     """One season on `build_realm(SEED)`. `played` None is AUTOMATED (no host, the plain chooser). `decider` is a
-    factory `(w, record) -> (CombatTurnView) -> str`, so a mutation can close over the world. Returns
+    factory `(w, record) -> (CombatRoundView) -> str`, so a mutation can close over the world. Returns
     `(hash, scene set, mint count, record)`; `record` collects what the decider saw."""
     w = build_realm(SEED)
     d = SeasonDriver(w)
@@ -125,15 +125,15 @@ def _round(played=None, decider=None):
 
 def _engage(w, record):
     def decide(view):
-        record["calls"].append((view.claimants, view.turn, w.draw, record["mints"]))
+        record["calls"].append((view.claimants, view.round, w.draw, record["mints"]))
         return "engage"
     return decide
 
 
 def _withdraw_after_first(w, record):
     def decide(view):
-        record["calls"].append((view.claimants, view.turn, w.draw, record["mints"]))
-        return "engage" if view.turn == 1 else "withdraw"
+        record["calls"].append((view.claimants, view.round, w.draw, record["mints"]))
+        return "engage" if view.round == 1 else "withdraw"
     return decide
 
 
@@ -276,6 +276,6 @@ def test_twelve_round_calls_equal_one_fight():
         assert rng.n == whole_rng.n, (seed, "the loop and the rounds took different numbers of draws", rng.n, whole_rng.n)
         for pid in inp.claimants:
             assert {q: getattr(whole.wounds[pid], q) for q in qs} == out.wounds[pid], (seed, pid)
-        assert whole.rounds == sum(1 for e in hand if e["kind"] == "turn_start"), seed
+        assert whole.rounds == sum(1 for e in hand if e["kind"] == "round_start"), seed
         rounds_seen += whole.rounds
     assert rounds_seen >= 6, f"the three fights ran {rounds_seen} rounds between them: the hand loop is not observing a carried state"

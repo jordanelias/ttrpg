@@ -58,8 +58,8 @@ def commentate(events, cfg):
             out.append({'type': 'header',
                         'line': f"{e['A']} ({e['weapon_A']}, {e['tradition_A']}) faces {e['B']} ({e['weapon_B']}, {e['tradition_B']}).",
                         'mech': "Each fights to fell the other; wounds and fatigue carry across the whole bout."})
-        elif k == 'turn_start':
-            out.append({'type': 'turn', 'line': f"Turn {e['turn']}. {e['first']} has the first move."})
+        elif k == 'round_start':
+            out.append({'type': 'turn', 'line': f"Turn {e['round']}. {e['first']} has the first move."})
         elif k == 'engagement_start':
             if e['closed']:
                 out.append({'type': 'measure', 'line': "They start already at close quarters, blades almost touching.",
@@ -98,7 +98,7 @@ def commentate(events, cfg):
                        'beat_exhaustion': "the moment passes and they reset"}
             out.append({'type': 'sep', 'line': reasons.get(e['reason'], "they separate") + ".",
                         'mech': f"engagement ends: {e['reason']} (no decision this turn; wounds/fatigue persist)"})
-        elif k == 'engagement_end':
+        elif k == 'round_end':
             if e['felled']:
                 out.append({'type': 'sep', 'line': f"{e['felled']} goes down — they can't continue.", 'cls': 'felled',
                             'mech': "wounds crossed the felled threshold (Max Wounds + 1)."})

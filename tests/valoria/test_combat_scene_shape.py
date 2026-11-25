@@ -53,14 +53,14 @@ def test_scene_shape_is_a_pure_fold_over_trace():
     full = {a: 40, b: 30}
     trace = [
         dict(kind="fight_start", A=a, B=b, weapon_A="arming", weapon_B="arming"),
-        dict(kind="turn_start", turn=1, first=a),
+        dict(kind="round_start", round=1, first=a),
         _wound(a, b, 5),            # b 25/30 = .83, a 1.0: a ahead (the first lead is not a change)
         dict(kind="outcome", by=a, hit=1),
         _wound(b, a, 12),           # a 28/40 = .70 < .83: b ahead (change 1)
-        dict(kind="turn_start", turn=2, first=b),
+        dict(kind="round_start", round=2, first=b),
         _wound(a, b, 25, felled=False),   # b 5/30 = .17 < .70: a ahead (change 2)
-        dict(kind="yield", turn=2, by=b, accepted=True, refused=None),
-        dict(kind="turn_start", turn=3, first=a),
+        dict(kind="yield", round=2, by=b, accepted=True, refused=None),
+        dict(kind="round_start", round=3, first=a),
     ]
     frozen = copy.deepcopy(trace)
     got = entry.scene_shape(trace, (a, b), full)
@@ -69,7 +69,7 @@ def test_scene_shape_is_a_pure_fold_over_trace():
     assert trace == frozen, "the fold wrote its input"
     assert entry.scene_shape(tuple(trace), (a, b), full) == got
     # a scene with no blow: the rounds and nothing else (`first_blood` None, a zero for each party, the full Health)
-    quiet = [dict(kind="turn_start", turn=1, first=a), dict(kind="turn_start", turn=2, first=b)]
+    quiet = [dict(kind="round_start", round=1, first=a), dict(kind="round_start", round=2, first=b)]
     assert entry.scene_shape(quiet, (a, b), full) == SceneShape(
         rounds=2, blows={a: 0, b: 0}, first_blood=None, lead_changes=0, nearest=dict(full))
     # a tie is no lead and no change: a ahead (36 against 40), level (36 and 36), then b ahead (36 against 30): one change
@@ -83,7 +83,7 @@ def test_scene_shape_is_a_pure_fold_over_trace():
         out = entry.fight(inp, draw.seeded(draw.H2("test_combat_scene_shape", seed)))
         full = {pid: pw.health_full for pid, pw in out.wounds.items()}
         assert out.shape == entry.scene_shape(out.trace, out.claimants, full), seed
-        assert out.shape.rounds == out.rounds == sum(1 for e in out.trace if e["kind"] == "turn_start"), seed
+        assert out.shape.rounds == out.rounds == sum(1 for e in out.trace if e["kind"] == "round_start"), seed
         assert sum(out.shape.blows.values()) == sum(1 for e in out.trace if e["kind"] == "wound"), seed
         assert {pid: out.shape.nearest[pid] for pid in (a, b)} == {pid: out.wounds[pid].health_remaining for pid in (a, b)}, seed
         assert (out.shape.first_blood is None) == (sum(out.shape.blows.values()) == 0), seed
@@ -158,10 +158,10 @@ def test_a_seed_1003_fight_carries_its_shape():
     assert [e.kind for e in declared] == ["fight.declared"]
     assert [e.kind for e in fought] == ["person.died", "body.changed", "capability.raised"], [e.kind for e in fought]
     # the trace, folded by hand (read at `x61`; was `x43`'s 4 rounds, cums 13/26/29/49, before B15.99, and `x24`'s 8 rounds
-    # before B06): 5 turn_starts; wounds p_low->p_mid 16 (cum 16), p_mid->p_low 19 (cum 19), p_low->p_mid 16 (cum 32),
+    # before B06): 5 round_starts; wounds p_low->p_mid 16 (cum 16), p_mid->p_low 19 (cum 19), p_low->p_mid 16 (cum 32),
     # p_low->p_mid 16 (cum 48, felled); Health 40 each: p_low ahead (24/40 against 40/40), then p_mid ahead (21/40 against
     # 24/40), then p_low ahead again (8/40 against 21/40): 2 changes
-    assert sum(1 for e in out.trace if e["kind"] == "turn_start") == 5
+    assert sum(1 for e in out.trace if e["kind"] == "round_start") == 5
     assert [(e["by"], e["cumulative"]) for e in out.trace if e["kind"] == "wound"] == [
         ("p_low", 16), ("p_mid", 19), ("p_low", 32), ("p_low", 48)]
     want = {("p_low", "blows_landed"): 3, ("p_mid", "blows_landed"): 1, ("p_low", "fight_rounds"): 5,
@@ -201,7 +201,7 @@ def test_played_and_automated_scenes_carry_equal_observations():
         calls = []
 
         def decide(view):
-            calls.append(view.turn)
+            calls.append(view.round)
             return "engage"
         host = PlayHost(frozenset(w.persons), decide) if played else None
         acts = [Act(id=f"b1415_{i}", actor=x, verb="fight", payload={"subject": y}) for i, (x, y) in enumerate(pairs)]

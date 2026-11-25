@@ -242,7 +242,7 @@ def built_names() -> dict[str, list[str]]:
                 names = []
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
                     names = [node.name]
-                    # PARAMETERS COUNT. `max_bouts` read as UNRESOLVED in the first run while
+                    # PARAMETERS COUNT. The fight's round cap read as UNRESOLVED in the first run while
                     # being a live function parameter -- module-level-only harvesting understates
                     # "built" and inflates the bucket Jordan has to adjudicate.
                     a = getattr(node, 'args', None)

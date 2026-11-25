@@ -56,8 +56,8 @@ def _fight(seed, terms=None, pair=_PAIRS[0], cfg=_ALWAYS):
 
 
 def _turn_of(trace, i):
-    """The 1-based turn event `i` falls in (0 before the first `turn_start`)."""
-    return sum(1 for e in trace[:i + 1] if e['kind'] == 'turn_start')
+    """The 1-based round event `i` falls in (0 before the first `round_start`)."""
+    return sum(1 for e in trace[:i + 1] if e['kind'] == 'round_start')
 
 
 def _first(trace, pred):
@@ -129,7 +129,7 @@ def _assert_blood_stop(pair, seed):
     assert len(ylds) == 1, [e['kind'] for e in trace[-6:]]
     ev = ylds[0]
     assert ev['by'] == first_wounded and ev['accepted'] is True and ev['refused'] is None and ev['terms'] == 'blood'
-    assert ev['turn'] == _turn_of(ctrl, k), (ev['turn'], _turn_of(ctrl, k))
+    assert ev['round'] == _turn_of(ctrl, k), (ev['round'], _turn_of(ctrl, k))
     # Up to the stop, the fight IS the control, draw for draw; the control then ran on and drew more.
     assert trace[:_diverge(trace)] == ctrl[:_diverge(trace)]
     assert len(rng.trace) == ev['_draws'] and len(rng.trace) < len(ctrl_rng.trace)
@@ -143,7 +143,7 @@ def _assert_blood_stop(pair, seed):
     st = dict(available=True, **{q: getattr(yielder.wt, q) for q in WOUND_QUANTITIES})
     assert combat_degree(dict(wound_state={first_wounded: st}), first_wounded) == COMBAT_BANDS[1]   # 'Wounded'
     assert result == (-1 if first_wounded == 'A' else 1)
-    assert surrender_of(trace) == Surrender(by=first_wounded, round=ev['turn'], accepted=True)
+    assert surrender_of(trace) == Surrender(by=first_wounded, round=ev['round'], accepted=True)
 
 
 def test_a_blood_duel_stops_at_the_first_wound_with_surrender_set_and_no_death():
@@ -191,11 +191,11 @@ _NEVER = dict(CFG, YIELD_OB={'blood': -99, 'yield': -99, 'death': -99})   # no p
 
 def _crossings(ctrl, full, frac):
     """The control's events at which a standing fighter is at or below the threshold having taken a wound gate in the round he is in (the burst-breaker's
-    crossing, `wrapper._terms_crossed`); `_wounds` at each `turn_start` is the round's opening count."""
+    crossing, `wrapper._terms_crossed`); `_wounds` at each `round_start` is the round's opening count."""
     w0 = [0, 0]
     out = []
     for i, e in enumerate(ctrl):
-        if e['kind'] == 'turn_start':
+        if e['kind'] == 'round_start':
             w0[:] = e['_wounds']
         if any(0 < h <= frac * f and w > o for h, f, w, o in zip(e['_health'], full, e['_wounds'], w0)):
             out.append(i)
@@ -245,10 +245,10 @@ def test_a_yield_duel_stops_at_the_first_failed_roll():
             by = 0 if ev['by'] == 'A' else 1
             assert (A, B)[by].wt.wounds >= 1 and ev['terms'] == 'yield' and ev['degree'] == 'fail' and ev['accepted'] is True
             first_gate = _first(ctrl, lambda e: max(e['_wounds']) >= 1)
-            assert ev['turn'] == _turn_of(ctrl, first_gate), (pair, seed, ev['turn'], _turn_of(ctrl, first_gate))
+            assert ev['round'] == _turn_of(ctrl, first_gate), (pair, seed, ev['round'], _turn_of(ctrl, first_gate))
             assert len(rng.trace) == ev['_draws'] < len(ctrl_rng.trace)   # the roll takes no position of the stream
             assert result == (-1 if by == 0 else 1)
-            assert surrender_of(trace) == Surrender(by=ev['by'], round=ev['turn'], accepted=True)
+            assert surrender_of(trace) == Surrender(by=ev['by'], round=ev['round'], accepted=True)
             checked += 1
     assert checked >= 20, checked
 
@@ -286,7 +286,7 @@ def test_death_terms_leave_felled_reachable():
     felled = 0
     for seed in range(20):
         result, trace, _, A, B = _fight(seed, terms='death')
-        ends = [e for e in trace if e['kind'] == 'engagement_end' and e['felled'] is not None]
+        ends = [e for e in trace if e['kind'] == 'round_end' and e['felled'] is not None]
         if not ends:
             continue
         loser = A if ends[0]['felled'] == 'A' else B
@@ -323,7 +323,7 @@ def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
     assert result == 0
     assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None)]
     assert not any(e['kind'] == 'yield' for e in trace)
-    assert sum(e['kind'] == 'turn_start' for e in trace) == 1      # a tie ends the fight; it does not fight on
+    assert sum(e['kind'] == 'round_start' for e in trace) == 1      # a tie ends the fight; it does not fight on
     assert wrapper._terms_yielder(A, B, [A, B]) is None
 
     # control: unequal damage, same stub -> the fighter with the smaller fraction of Health left yields

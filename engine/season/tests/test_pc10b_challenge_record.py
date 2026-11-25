@@ -120,7 +120,7 @@ def _first_wound_not_decisive(trace) -> bool:
     k = next((i for i, e in enumerate(trace) if e.get("kind") == "wound"), None)
     if k is None or trace[k].get("felled"):
         return False
-    return any(e.get("kind") == "turn_start" for e in trace[k + 1:])
+    return any(e.get("kind") == "round_start" for e in trace[k + 1:])
 
 
 # ---------------------------------------------------------------------------------------------------------------
