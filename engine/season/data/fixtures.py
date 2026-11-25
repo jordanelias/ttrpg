@@ -747,13 +747,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `larder_walk: first`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-528 -- `site: Fixtures larder_walk`, graded `assumption`; the source gives the continued walk and names no setting that ships it, so the arm is injected and swept first (control) / through (SHIPPED)]
     larder_walk="through",             # `H-528`, swept first (control) / through (SHIPPED, B12a.56's flip) / through where the home rung holds the whole want (the walk stops at once)
-    # B12a.58 (`16_PESSIMIST_GAME_the_world_draws` edit 1; the conversion rows are B12a.57's design): HUNGER IS DRAWN. `False` is THE CONTROL, SHIPPED: today's
+    # B12a.58 (`16_PESSIMIST_GAME_the_world_draws` edit 1; the conversion rows are B12a.57's design): HUNGER IS DRAWN. `False` is THE CONTROL: today's
     # exact step (`body_step` times the units short), no draw taken, none of the three rows below read. `True` is the arm: per eater short this season one keyed
-    # draw (`draw_factory(...)(pid, "hunger_severity")`), graded on the one ladder, the band choosing the multiple of that step (`hunger_band_steps`). Read by
-    # NOTHING yet (B12a.59 to .61 build the reader; B12a.62 flips the arm), so all four rows ship at the control for the draw. The shape matches `wear_draw`.
+    # draw (`draw_factory(...)(pid, "hunger_severity")`), graded on the one ladder, the band choosing the multiple of that step (`hunger_band_steps`), read by
+    # `world_q._hunger_severity` (B12a.61). B12a.62 FLIPPED IT to `True` (a declared HASH MOVER): a hard year is a draw per hungry eater, not one fall for
+    # every cohort. `False` reproduces B12a.61's realm byte for byte. Revert: `False`. The shape matches `wear_draw`.
     # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-529 -- `site: Fixtures hunger_severity_draw`, graded `assumption`; the source draws the hunger step and names no setting that ships it, so the arm is injected at the control and swept False / True / True with the pool's body term off]
-    hunger_severity_draw=False,        # `H-529`, swept False (control, SHIPPED) / True (pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-529 -- `site: Fixtures hunger_severity_draw`, graded `assumption`; the source draws the hunger step and names no setting that ships it, so the arm is injected and swept False (control) / True (SHIPPED, pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)]
+    hunger_severity_draw=True,         # `H-529`, swept False (control) / True (SHIPPED, B12a.62's flip; pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)
     # The multiples of `body_step x units short` each band charges (`09_WR_B_draws_not_thresholds` edit 2; the wear draw's shape, `_WEAR_BAND_SHARE`'s):
     # Overwhelming spares, Success half, Partial today's step, Failure twice. Keyed by the ladder's band names; read only under `hunger_severity_draw` True.
     # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
