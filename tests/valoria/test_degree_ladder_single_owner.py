@@ -46,7 +46,7 @@ already, so the fractional cells are where the game actually lives.
 that, and this file's own DOMAIN (the `(net, ob)` pairs every ladder is swept over) is agnostic to
 where `ob` came from -- it does not itself compute Ob for anyone. STATUS, corrected 2026-09-29
 (ED-PC-0058) rather than left to re-drift: `combat_engine_v1/core.py::ob_from_defender` now derives
-it (defender.history/2, no per-instance modifier yet) and every `resolve()` call site passes it;
+it (`opposed_ob(defender.score, OPPOSITION_RATE)`, the rate `dice_engine.MU_PER_DIE` since B15.03 / A-71; no per-instance modifier yet) and every `resolve()` call site passes it;
 `modules/social_contest/roll.py::obstacle` derives it for a person subject on the season side, under
 an injected ceiling (H-213; H-127 covers the no-score fallback; the seam's own site was deleted at v9
 SC-01 step 14). Neither of those is this file's ladder-migration
@@ -222,7 +222,7 @@ RULINGS = {
         "the opposite of the obvious one: derive Ob from the DEFENDER first (score/2 plus that "
         "instance's modifiers), THEN the owner's ladder applies. Migrating combat's bands against "
         "the fixed Ob first is wasted work. ⚠ THE FIRST HALF EXECUTED 2026-09-29 (ED-PC-0058): "
-        "core.ob_from_defender(defender) = defender.history/2 (no per-instance modifier surface "
+        "core.ob_from_defender(defender) = opposed_ob(defender.score, OPPOSITION_RATE), the rate dice_engine.MU_PER_DIE (A-71; no per-instance modifier surface "
         "exists yet at this call boundary; wound impairment keeps its own owner, folded into "
         "net_sigma, ED-1041), and every core.resolve() call site in combat_engine_v1/wrapper.py "
         "now passes it instead of the retired DECISIVE_OB constant. THE SECOND HALF — migrating "

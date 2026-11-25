@@ -24,10 +24,11 @@ from __future__ import annotations
 import dataclasses
 from typing import Callable, Mapping, Optional
 
-from engine.dice_engine.draw import Draw
+from engine.dice_engine.draw import H2, Draw, seeded
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma
 from engine.season.queries.inputs import (
-    CombatOutcome, CombatTurnView, DecisiveBeat, PartyWounds, PersonalCombatInput, SceneShape, Surrender)
-from . import attributes as spec, combatant, wrapper
+    CombatOutcome, CombatTurnView, DecisiveBeat, MortalResult, PartyWounds, PersonalCombatInput, SceneShape, Surrender)
+from . import attributes as spec, combatant, core, wrapper
 from .config import CFG
 
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
@@ -39,17 +40,17 @@ def _kit_kw(kit) -> dict:
     return {} if kit is None else dict(weapon=kit[0], armor=kit[1])
 
 
-def _faculty_kw(fac) -> dict:
+def _score_kw(score) -> dict:
     """`Combatant`'s keyword for one party's skill score (CR-85; the record's `scores` entry); `None` (none given) is none, so the
     Combatant keeps its own default."""
-    return {} if fac is None else dict(faculty=fac)
+    return {} if score is None else dict(score=score)
 
 
 def _fight_cfg(inp: PersonalCombatInput, cfg: Optional[dict] = None) -> Optional[dict]:
     """The engine's `cfg` carrying the record's operands: `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them) and
     `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`), laid over `cfg`
     (the workbench's config overlay; `config.CFG` where it passes none); or `cfg` itself (`None`: the engine's own `CFG`, so
-    `core.OPPOSITION_RATE`, the control 0.5) where the record carries none. A copy: neither dict is ever written."""
+    `core.OPPOSITION_RATE`, `MU_PER_DIE` since B15.03) where the record carries none. A copy: neither dict is ever written."""
     carried = {k: v for k, v in (("BASE_POOL", inp.pool_add), ("POOL_FLOOR", inp.pool_floor),
                                  ("OPPOSITION_RATE", inp.opposition_rate)) if v is not None}
     return {**(CFG if cfg is None else cfg), **carried} if carried else cfg
@@ -65,7 +66,7 @@ def _extras_kw(trad, tech, axes, disp) -> dict:
 def _attr_kw(authored) -> dict:
     """`Combatant`'s keywords for one party's authored attributes (PC-06 K-1): each `attributes.SPEC` entry whose
     `registry_key` the party authored, by that key; every other field stays at the class default. `end` is the input's
-    `ends` (the seam composes it with the body bands), and `faculty`/`disp` have no registry key. `None` is none."""
+    `ends` (the seam composes it with the body bands), and `disp` has no registry key. `None` is none."""
     if not authored:
         return {}
     return {s.key: authored[s.registry_key] for s in spec.SPEC
@@ -144,6 +145,36 @@ def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> Scen
     return SceneShape(rounds=rounds, blows=blows, first_blood=first_blood, lead_changes=changes, nearest=nearest)
 
 
+def mortal_wound(outcome: PartyWounds, rng: Draw, terms: tuple) -> MortalResult:
+    """THE MORTAL-WOUND DRAW (B15.07, PHY_A A3; A-5 to A-8, A-81): whether a party the scene FELLED dies, is left for dead, or lives.
+
+    `outcome` is his lifted tracker (`felled` true); `rng` his own `Draw` (`_mortal_draw`: keyed `fight.mortal`, A-30), never the scene's stream;
+    `terms` is `(pool, obstacle, levels_for, levels_against)`, the record's `mortal` entry less its key: the pool the one pool rule on the untrained
+    default and the obstacle `mortal_wound_ob[terms]` (both `world_q.mortal_terms`), the levels named `LEVEL_SIGMA` levels (his governing
+    attribute and a tending ally's `healing` for or against him, his body band against him), summed by `levels_to_net_sigma`. ONE ROLL ON THE
+    ONE SAMPLER: `core.resolve` (`roll_net_continuous` plus `net_boost`, the roll a fight's every exchange and the survivor's mark roll take),
+    banded by `degree_from_net` (`core.degree`'s label of the owner ladder).
+
+    Failure: he dies (`mortal`, the scene's wounds). Partial: he stands up at `max_wounds` (or the scene's, if more), left for dead. Success and Overwhelming: he stands
+    up with the scene's wounds. Every band writes (A-81): none is the untouched band. Pure: one roll, nothing kept."""
+    pool, ob, levels_for, levels_against = terms
+    deg, _net = core.resolve(pool, levels_to_net_sigma(list(levels_for), list(levels_against)), rng, ob)
+    if deg == "fail":
+        return MortalResult(mortal=True, wounds=outcome.wounds, degree=deg)
+    # Partial is AT LEAST `max_wounds`: a felling can leave more wounds than `max_wounds` (the tracker counts every wounding blow), and left for
+    # dead is never lighter than standing up wounded as the scene left him [ASSUMPTION; low; PHY_A says "`wounds = max_wounds`"; revert: that]
+    return MortalResult(mortal=False, wounds=max(outcome.wounds, outcome.max_wounds) if deg == "partial" else outcome.wounds, degree=deg)
+
+
+def _mortal_draw(rng: Draw, pid: str, key) -> Draw:
+    """The `Draw` one felled party's mortal roll takes. `key` (the record's): the host's keyed draw `(world_seed, tick, pid, "fight.mortal:<cause>")`
+    (A-30), seeded through the one constructor -- the dealt fight's, never a position in the scene's stream, and carried as its key so the
+    record stays a value (a `Draw` object in it would be consumed by the first call). `None` (a sampled estimate's record, whose draws must stay
+    private): a sub-key of the scene's own `Draw` at its current ordinal (B15.05's form, `H2(rng.key, purpose)`), so each sample draws afresh
+    and nothing of the dealt key is read."""
+    return seeded(key) if key is not None else seeded(H2(rng.key, f"fight.mortal:{pid}:{rng.n}"))
+
+
 def fight(inp: PersonalCombatInput, rng: Draw,
           decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
           max_bouts: Optional[int] = None) -> CombatOutcome:
@@ -152,8 +183,9 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     scene's un-refused `yield`, `beat` the wound that felled a party, `rounds` the `turn_start` count and `trace` the
     scene's events.
 
-    The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the host builds it
-    from its own seed and passes it down. A module whose directory is gone is refused earlier, at
+    The `rng` is a parameter, and the module builds no generator of its own (`04 §C.12` rejection 4 as amended, A-30: a draw is a function of its key):
+    the host builds it from its own seed and passes it down; the module forms keyed SUB-draws of it, or of a hex key the record carries
+    (`seeded(H2(rng.key, ...))`), which are values, never state kept between calls. A module whose directory is gone is refused earlier, at
     driver construction, by the registrar resolving this file.
 
     `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-turn decider, forwarded to the engine's own
@@ -170,19 +202,19 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     # built without them (`kits == ()`) is two Combatants at the engine's own default kit, as before.
     a_kit, b_kit = inp.kits or (None, None)
     # THE SKILL SCORES (CR-85, ED-IN-0330; B05.57): each party's skill score for the fight's verb, read off the typed input; it
-    # is `Combatant.faculty`, the number the Ob his opponent rolls against is taken from. A record built without them
+    # is `Combatant.score`, the number the Ob his opponent rolls against is taken from. A record built without them
     # (`scores == ()`) fights at the Combatant's own default. His registered pool addends ride beside it as `pool_addends`
     # (read by the pool alone, never the Ob). [ASSUMPTION: carrier -- basis: the smallest edit that keeps the two numbers
-    # apart; IS-PC-05 (B15) replaces it with the `pool` slot]
-    a_fac, b_fac = inp.scores or (None, None)
+    # apart; `Combatant.score` is the score's one home, IS-PC-05]
+    a_score, b_score = inp.scores or (None, None)
     a_add, b_add = inp.addends or (0, 0)
     # THE AUTHORED ATTRIBUTES (PC-06 K-1): each party's `Person.attributes`, mapped by PC-14's `registry_key`.
     a_attr, b_attr = inp.attributes or (None, None)
     # THE WORKBENCH'S FOUR FIELDS (B14.11): each party's tradition, techniques, axes and disposition, passed as the kits are.
     a_ext = _extras_kw(*(p[0] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
     b_ext = _extras_kw(*(p[1] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
-    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac), **a_ext)
-    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac), **b_ext)
+    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_score_kw(a_score), **a_ext)
+    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_score_kw(b_score), **b_ext)
     A.pool_addends, B.pool_addends = a_add, b_add
     # THE CARRIED WOUND (B05.61, `UPR` §3 edit 4; A-8): each party's signed level from before the fight, read by `assemble_net_sigma` alone.
     # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.
@@ -211,9 +243,13 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     # why the scene may be recorded without perturbing it. `wrapper.fight` binds the hook from `trace` and restores it itself.
     bouts = {} if max_bouts is None else dict(max_bouts=max_bouts)
     wrapper.fight(A, B, cfg=_fight_cfg(inp, cfg), rng=rng, terms=terms, decide=turn_choice, trace=trace.append,
-                  **bouts)   # the integer it returns is not lifted
+                  decisiveness=inp.decisiveness or (0.0, 0.0), **bouts)   # the integer it returns is not lifted; B15.10: the yield roll's σ
 
     wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
     shape = scene_shape(trace, (a_id, b_id), {pid: pw.health_full for pid, pw in wounds.items()})
+    # THE MORTAL-WOUND DRAW (B15.07, PHY_A A3): the last step of the scene, before the outcome is returned -- each party the scene felled rolls
+    # once (`inp.mortal`, claimants order). A record without the operands (`()`) draws nothing: the felling stands.
+    mortal = {pid: mortal_wound(wounds[pid], _mortal_draw(rng, pid, ops[4]), ops[:4]) for pid, ops in zip((a_id, b_id), inp.mortal)
+              if pid in wounds and wounds[pid].felled}
     return CombatOutcome(claimants=(a_id, b_id), wounds=wounds, surrender=_surrender(trace), beat=_beat(trace),
-                         rounds=shape.rounds, shape=shape, trace=tuple(trace))
+                         rounds=shape.rounds, shape=shape, trace=tuple(trace), mortal=mortal)

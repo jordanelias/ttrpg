@@ -15,6 +15,11 @@ The falsifiers are the plan position's own (v9 `_part7`, PC-10):
       (`test_the_blood_assertions_observe_a_missing_stop`) is retired.
 The cross-TREE half of (1) -- the lethal fight equal to the pre-PC-10a engine's -- is the existing combat suite and
 the draw-stream pins, which this position does not move.
+
+B15.10 (A-24): whether a fighter who crosses the terms yields is a ROLL (`wrapper._yield_roll`, `CFG['YIELD_OB']`), under every term, `death`
+included. These tests pin the TERMS (where a round is cut, the one `yield` event, no riposte after it, the tie rule) at the roll's two
+extremes -- `_ALWAYS`: no pool beats an obstacle of +99 (he yields at his first roll) and none fails one of -99 (`death` never yields, the
+lethal fight as it was) -- and the roll's own shares are read in `test_combat_yield_draw.py` and in `test_yield_and_blood_are_different_stops`.
 """
 from engine.dice_engine import draw
 
@@ -28,9 +33,10 @@ from modules.combat import wrapper                                   # noqa: E40
 from modules.combat.config import CFG                           # noqa: E402
 
 _PAIRS = (('arming', 'arming'), ('spear', 'arming'), ('longsword', 'dagger'))
+_ALWAYS = dict(CFG, YIELD_OB={'blood': 99, 'yield': 99, 'death': -99})   # the roll at its extremes: yield at the first roll under `blood` and `yield`, never under `death`
 
 
-def _fight(seed, terms=None, pair=_PAIRS[0]):
+def _fight(seed, terms=None, pair=_PAIRS[0], cfg=_ALWAYS):
     """One fight on `seed`. Every trace event carries `_draws` (engine-level draws so far) and `_wounds`/`_health`,
     each fighter's tracker at the moment of the event, so where the first wound landed is read off the control."""
     A, B = C.Combatant('A', weapon=pair[0]), C.Combatant('B', weapon=pair[1])
@@ -43,7 +49,7 @@ def _fight(seed, terms=None, pair=_PAIRS[0]):
             e, _draws=len(rng.trace),
             _wounds=(A.wt.wounds, B.wt.wounds),
             _health=(A.wt.health_remaining, B.wt.health_remaining)))
-        result = wrapper.fight(A, B, CFG, rng, **kw)
+        result = wrapper.fight(A, B, cfg, rng, **kw)
     finally:
         wrapper._TRACE = prev
     return result, trace, rng, A, B
@@ -71,12 +77,15 @@ def test_the_lethal_default_is_byte_identical_to_a_fight_with_no_terms():
     checked = 0
     for pair in _PAIRS:
         for seed in range(40):
-            r0, t0, g0, _, _ = _fight(seed, pair=pair)
-            r1, t1, g1, _, _ = _fight(seed, terms='death', pair=pair)
-            assert (r1, t1, g1.trace) == (r0, t0, g0.trace), (pair, seed)
-            assert not any(e['kind'] == 'yield' or e.get('reason') == 'terms' for e in t1), (pair, seed)
-            checked += 1
-    assert checked == 120
+            for cfg in (_ALWAYS, CFG):    # at the shipped roll `death` yields sometimes, but a fight with no terms is the `death` fight all the same
+                r0, t0, g0, _, _ = _fight(seed, pair=pair, cfg=cfg)
+                r1, t1, g1, _, _ = _fight(seed, terms='death', pair=pair, cfg=cfg)
+                assert (r1, t1, g1.trace) == (r0, t0, g0.trace), (pair, seed)
+                assert not any(e.get('reason') == 'terms' for e in t1), (pair, seed)   # `death` never cuts a round
+                if cfg is _ALWAYS:
+                    assert not any(e['kind'] == 'yield' for e in t1), (pair, seed)
+                checked += 1
+    assert checked == 240
 
 
 def test_a_term_outside_the_closed_set_is_refused_by_name():
@@ -124,7 +133,7 @@ def _assert_blood_stop(pair, seed):
     # Up to the stop, the fight IS the control, draw for draw; the control then ran on and drew more.
     assert trace[:_diverge(trace)] == ctrl[:_diverge(trace)]
     assert len(rng.trace) == ev['_draws'] and len(rng.trace) < len(ctrl_rng.trace)
-    # Nothing follows the yield but the result: no UPSET_FLOOR draw.
+    # Nothing follows the yield but the result: no riposte draw.
     assert [e['kind'] for e in trace[trace.index(ev) + 1:]] == ['fight_result']
     # NO DEATH: nobody felled, the yielder read by the existing bands (never Felled), the opponent's result.
     from engine.season.data.rosters import COMBAT_BANDS, WOUND_QUANTITIES
@@ -160,9 +169,9 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
     qs = ('felled', 'wounds', 'health_remaining', 'health_full')
     seen = 0
     for seed in range(10):
-        bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
-        death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
-        blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
+        bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), draw.seeded(draw.H2("test_combat_duel_terms", seed)), cfg=_ALWAYS)
+        death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), draw.seeded(draw.H2("test_combat_duel_terms", seed)), cfg=_ALWAYS)
+        blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), draw.seeded(draw.H2("test_combat_duel_terms", seed)), cfg=_ALWAYS)
         assert death == bare                              # the record: wounds, yield, beat, rounds and trace
         assert bare.surrender is None
         s = blood.surrender
@@ -174,57 +183,99 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
     assert seen == 10
 
 
-# ── (3) `yield` stops at the threshold ────────────────────────────────────────────────────────────────────────
 
-def test_a_yield_duel_stops_at_the_health_threshold():
-    from engine.season.queries.inputs import Surrender
-    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
+# ── (3) `yield` cuts a round at the threshold ─────────────────────────────────────────────────────────────────
+
+_NEVER = dict(CFG, YIELD_OB={'blood': -99, 'yield': -99, 'death': -99})   # no pool fails these: the fighter always fights on, so the burst-breaker's cut is read alone
+
+
+def _crossings(ctrl, full, frac):
+    """The control's events at which a standing fighter is at or below the threshold having taken a wound gate in the round he is in (the burst-breaker's
+    crossing, `wrapper._terms_crossed`); `_wounds` at each `turn_start` is the round's opening count."""
+    w0 = [0, 0]
+    out = []
+    for i, e in enumerate(ctrl):
+        if e['kind'] == 'turn_start':
+            w0[:] = e['_wounds']
+        if any(0 < h <= frac * f and w > o for h, f, w, o in zip(e['_health'], full, e['_wounds'], w0)):
+            out.append(i)
+    return out
+
+
+def test_a_yield_duel_cuts_the_round_at_the_health_threshold():
+    """The `yield` term's line is the burst-breaker's: with the roll passed every time (`_NEVER`) the round is cut at the beat head after the
+    first crossing of the line, in the turn the control (the same fight with no terms) first crossed it, and the fight is the control's up to it."""
     frac = CFG['YIELD_HEALTH_FRAC']
     checked = 0
     for pair in _PAIRS:
         for seed in range(30):
             A0, B0 = C.Combatant('A', weapon=pair[0]), C.Combatant('B', weapon=pair[1])
             full = (A0.wt.health_full, B0.wt.health_full)
-            _, ctrl, ctrl_rng, _, _ = _fight(seed, pair=pair)
-            # the first event at which the control has a fighter at or below the threshold, still standing
-            k = _first(ctrl, lambda e: any(0 < h <= frac * f for h, f in zip(e['_health'], full)))
-            if k is None:
+            _, ctrl, ctrl_rng, _, _ = _fight(seed, pair=pair, cfg=_NEVER)
+            cross = _crossings(ctrl, full, frac)
+            if not cross:
                 continue
+            result, trace, rng, A, B = _fight(seed, terms='yield', pair=pair, cfg=_NEVER)
+            assert not any(e['kind'] == 'yield' for e in trace), (pair, seed)
+            i = _first(trace, lambda e: e.get('reason') == 'terms')
+            # a cut follows a crossing in its own round (a crossing in a round's last beat ends the round on its own, with no beat head after it)
+            assert i is not None and any(c < i and _turn_of(ctrl, c) == _turn_of(trace, i) for c in cross), (pair, seed)
+            assert trace[:i] == ctrl[:i]
+            checked += 1
+    assert checked >= 20, checked
+
+
+def test_a_yield_duel_stops_at_the_first_failed_roll():
+    """With the roll failed every time (`_ALWAYS`) the scene ends at the end of the first round in which a fighter took a wound gate: the one
+    `yield` event, `degree` `fail`, the opponent's result, no riposte draw, and the fight is the control's up to the round's end."""
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
+    checked = 0
+    for pair in _PAIRS:
+        for seed in range(30):
+            _, ctrl, ctrl_rng, _, _ = _fight(seed, pair=pair)
             result, trace, rng, A, B = _fight(seed, terms='yield', pair=pair)
             if A.felled or B.felled:
                 continue     # the declared residue: a beat that crosses the threshold AND fells is a felling
             ylds = [e for e in trace if e['kind'] == 'yield']
+            if not ylds:
+                continue     # a tie (both failed at the same Health) ends undecided with no yield: the tie test reads it
             assert len(ylds) == 1, (pair, seed)
             ev = ylds[0]
             by = 0 if ev['by'] == 'A' else 1
-            yielder = (A, B)[by]
-            # the yielder is at or below the threshold; it was strictly above it at the scene's start
-            assert yielder.wt.health_remaining <= frac * yielder.wt.health_full < yielder.wt.health_full
-            # it is the turn the control first crossed it, and the fight is the control's up to the stop
-            assert ev['turn'] == _turn_of(ctrl, k), (pair, seed, ev['turn'], _turn_of(ctrl, k))
-            assert trace[:_diverge(trace)] == ctrl[:_diverge(trace)]
-            assert len(rng.trace) == ev['_draws'] < len(ctrl_rng.trace)
-            assert result == (-1 if by == 0 else 1) and ev['terms'] == 'yield'
+            assert (A, B)[by].wt.wounds >= 1 and ev['terms'] == 'yield' and ev['degree'] == 'fail' and ev['accepted'] is True
+            first_gate = _first(ctrl, lambda e: max(e['_wounds']) >= 1)
+            assert ev['turn'] == _turn_of(ctrl, first_gate), (pair, seed, ev['turn'], _turn_of(ctrl, first_gate))
+            assert len(rng.trace) == ev['_draws'] < len(ctrl_rng.trace)   # the roll takes no position of the stream
+            assert result == (-1 if by == 0 else 1)
             assert surrender_of(trace) == Surrender(by=ev['by'], round=ev['turn'], accepted=True)
             checked += 1
     assert checked >= 20, checked
 
 
 def test_yield_and_blood_are_different_stops():
-    """The two terms read different quantities: on some seed the `yield` stop comes in a LATER turn than `blood`'s."""
+    """The two terms read different quantities: with the roll passed every time (`_NEVER`) the `yield` term's first cut comes in a LATER turn than
+    `blood`'s on some seed."""
     later = 0
     checked = {pair: 0 for pair in _PAIRS}
     for pair in _PAIRS:
         for seed in range(30):
-            tb = [e for e in _fight(seed, 'blood', pair=pair)[1] if e['kind'] == 'yield']
-            ty = [e for e in _fight(seed, 'yield', pair=pair)[1] if e['kind'] == 'yield']
-            if tb and ty:
-                assert ty[0]['turn'] >= tb[0]['turn'], (pair, seed)
-                later += ty[0]['turn'] > tb[0]['turn']
+            tb, ty = (_fight(seed, terms, pair=pair, cfg=_NEVER)[1] for terms in ('blood', 'yield'))
+            ib, iy = (_first(t, lambda e: e.get('reason') == 'terms') for t in (tb, ty))
+            if ib is not None and iy is not None:
+                assert _turn_of(ty, iy) >= _turn_of(tb, ib), (pair, seed)
+                later += _turn_of(ty, iy) > _turn_of(tb, ib)
                 checked[pair] += 1
-    # the comparison is conditional on both terms stopping the fight: it must have run at least once per pair
+    # the comparison is conditional on both terms cutting a round: it must have run at least once per pair
     assert all(n >= 1 for n in checked.values()), checked
     assert later >= 1
+    # THE ROLL'S SHARES (B15.10): at the shipped `YIELD_OB` a fighter across the `yield` line fights on to a felling more often than one across
+    # the `blood` line (the `yield` obstacle is lower), and under neither is the stop certain nor the felling
+    felled = {}
+    for terms in ('blood', 'yield'):
+        n = 150
+        felled[terms] = sum(1 for seed in range(n) for _, _, _, A, B in [_fight(seed, terms, cfg=CFG)] if A.felled or B.felled) / n
+    assert 0 < felled['blood'] < felled['yield'] < 1, felled
 
 
 # ── (4) `death` leaves Felled reachable ───────────────────────────────────────────────────────────────────────
@@ -250,16 +301,16 @@ def test_death_terms_leave_felled_reachable():
 
 def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
     """One `fight` whose first engagement is a stub that wounds both fighters at once and ends without a felling, so
-    BOTH cross the terms on the same beat: the one situation `_terms_yielder`'s tie branch exists for."""
+    BOTH cross the terms on the same beat and both fail their yield roll (`_ALWAYS`): the one situation `_terms_yielder`'s tie branch exists for."""
     A, B = C.Combatant('A', weapon='arming'), C.Combatant('B', weapon='arming')
 
-    def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None):
+    def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0):
         A_.apply_wound(damage_A); B_.apply_wound(damage_B)
-        return None, False
+        return None, False, 'terms'
     monkeypatch.setattr(wrapper, 'engagement', _both_cross)
     trace = []
     monkeypatch.setattr(wrapper, '_TRACE', trace.append)
-    return wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=terms), trace, A, B
+    return wrapper.fight(A, B, _ALWAYS, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=terms), trace, A, B
 
 
 def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
@@ -270,10 +321,10 @@ def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
     result, trace, A, B = _fight_with_stub_engagement(monkeypatch, wi, wi, 'blood')
     assert A.wt.wounds >= 1 and B.wt.wounds >= 1 and not (A.felled or B.felled)
     assert result == 0
-    assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None, upset=False)]
+    assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None)]
     assert not any(e['kind'] == 'yield' for e in trace)
     assert sum(e['kind'] == 'turn_start' for e in trace) == 1      # a tie ends the fight; it does not fight on
-    assert wrapper._terms_yielder(A, B, 'blood', CFG) is None
+    assert wrapper._terms_yielder(A, B, [A, B]) is None
 
     # control: unequal damage, same stub -> the fighter with the smaller fraction of Health left yields
     result, trace, A, B = _fight_with_stub_engagement(monkeypatch, 2 * wi, wi, 'blood')

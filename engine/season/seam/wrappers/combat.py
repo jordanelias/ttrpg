@@ -36,7 +36,7 @@ something the actor genuinely has (his authored attributes, PC-06 K-1), leave ev
 other field at the class's own constructor default, and return a typed gap rather than fabricate a party. The
 `Combatant` defaults it names — strength 4, agi 4, end 4, att 3, spirit 3, focus 3, disp 4,
 weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record carries
-each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`).
+each party's kit (CP-T03-03) and skill score (CR-85, `combat_input`).
 
 ⚠ THE ONE FIELD THE SEAM COMPUTES IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A
 `Person` carries `body`, an int on the condition scale, and `attributes` (PC-06 K-1: those ride
@@ -79,16 +79,16 @@ from typing import Any, Callable, Optional
 from engine.dice_engine.draw import Draw
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma
 
-from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES
-from ...data.verbs import DUEL_TERMS_BY_VERB
+from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES, capability_rows, require_use_site, when_holds
+from ...data.verbs import CONTEXT_KEY, CONTEXT_TERMS, DUEL_TERMS_BY_VERB
 from ...decision import body_band_penalty
 from ...gaps import Forbidden, Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
 from ...queries import person_q
-from ...queries.inputs import CombatOutcome, PartyWounds, PersonalCombatInput, PlayHost
-from ...queries.world_q import kit_of, stakes_of
+from ...queries.inputs import CombatOutcome, MortalResult, PartyWounds, PersonalCombatInput, PlayHost
+from ...queries.world_q import home_of, kit_of, mortal_terms, stakes_of
 from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
 from ...state.ids import draw_factory
@@ -96,7 +96,7 @@ from ..ladder import COMBAT_BANDS, party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
 from .pool import FIGHT_DICE_SITE, addends_of, pool_pair, score
-from .sigma import ADVANTAGE_SOURCES, WOUNDS
+from .sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE, WOUNDS, _held_at
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
 assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
@@ -166,7 +166,69 @@ def party_end(person: Any, fx: Any) -> int:
     return max(1, base_end - bands)
 
 
-def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
+_MORTAL_SITE = require_use_site("mortal")     # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
+_MORTAL_PURPOSE = "fight.mortal"              # the mortal draw's purpose in its key (PHY_A A3, A-30): one draw per felled party per tick
+
+
+def _ally_value(w: Any, pid: str, fought: tuple, row: Any) -> Any:
+    """THE `ally` SIDE OF A `mortal` ROW: the most of `row.key` held by a person at `pid`'s place (`home_of`, the one owner of where a person is)
+    who is neither of the two who fought (`fought`) and for whom the row's `when` holds; `None` where nobody there holds any. The place map is
+    built only when someone holds the key, so a realm where nobody holds it pays one pass over the persons."""
+    held = [(q, v) for q in w.persons if q not in fought
+            and (v := _held_at(w.persons[q], row, row.key, "")) is not None and when_holds(row, w.persons[q])]
+    if not held:
+        return None
+    homes = home_of(w)
+    here = homes.get(pid)
+    at = [v for q, v in held if here is not None and homes.get(q) == here]
+    return max(at) if at else None
+
+
+def _mortal_operands(w: Any, pid: str, fought: tuple, terms: str, keyed: bool = True, cause: str = "", picture: Any = None) -> tuple:
+    """ONE PARTY'S `PersonalCombatInput.mortal` ENTRY (B15.07, PHY_A A3): `(pool, obstacle, levels_for, levels_against, key)`, read, never rolled.
+      * `(pool, obstacle)` -- `world_q.mortal_terms(w, pid, terms, party_end(person, fixtures))` (B15.06): the one pool rule on the untrained
+        default and `mortal_wound_ob[terms]`; a term outside `mortal_causes` is refused there;
+      * the levels -- the `mortal` site's `edge` rows (`rosters.yaml: tables.capability_uses`) summed by the ONE `edge` reader
+        (`ADVANTAGE_SOURCES[CAPABILITY]`, as `loop/resolve.py::_crisis_net_sigma` reads the crisis site): an `actor` row at what the felled man
+        holds (his Endurance as the governing attribute, A-7), an `ally` row at what his best tending ally holds (`_ally_value`); then the
+        `wounds` source's levels against him for his body band (A-8, as `_carried_of` and the mark roll read it).
+        ⚠ HIS HELD ENDURANCE, NOT `party_end`: under `carried_wound_model` `endurance_cut` `party_end` has already taken a point a body band, and
+        the band is charged here once, as levels (one ladder for one quantity, CLAUDE.md §0.06 S). `party_end` is passed to `mortal_terms`, whose
+        signature carries it for the spell's caller and which reads it for neither number;
+      * `key` -- the key of `(world_seed, tick, pid, "fight.mortal:<cause>")` through the one draw owner (`state.ids.draw_factory`, A-30): never
+        the scene's stream. `cause` is the causing act's id (`resolve`'s `causes[0]`), as the scene's own key carries it: a man felled in two
+        scenes of one tick draws twice, one draw per key (S33, *unique per DRAW*) [ASSUMPTION; low; PHY_A writes the key without the cause;
+        revert: drop it, and a second felling in a tick repeats the first's draw]. `keyed=False` (a sampled estimate, `fight_estimate`) carries `None`: the module then draws off the estimate's own private
+        stream, so an estimate never reads the dealt draw.
+      * `picture` -- what stands in for him where the draw reads his BODY band (`body`, `body_ceiling`): `None` is the world's person; a believer's
+        estimate passes `believed_picture`'s (`combat_input`), so the band the mortal roll charges is the believer's picture of him, as `ends` and
+        `carried` are, never the world's.
+    Any other `side` on a `mortal` row is refused by name."""
+    p, fx = w.persons[pid], w.fixtures
+    body_of = p if picture is None else picture
+    pool, ob = mortal_terms(w, pid, terms, party_end(p, fx))
+    reads = []
+    for row in capability_rows(_MORTAL_SITE):
+        if row.role != "edge":
+            continue
+        if row.side == "actor":
+            holder, value = p, _held_at(p, row, row.key, "")
+        elif row.side == "ally":
+            holder, value = p, _ally_value(w, pid, fought, row)
+            if value is None:
+                continue
+        else:
+            raise Unspecified(f"a `mortal` row has side {row.side!r}", "rosters.yaml -- tables: capability_uses",
+                              needs="`side: actor` or `side: ally`", law="B15.07 (PHY_A A3) -- the draw reads the felled man and his tending ally")
+        if row.side == "ally" or when_holds(row, holder):
+            reads.append((row, row.key, value))
+    cap_for, cap_against = ADVANTAGE_SOURCES[CAPABILITY](fx, {EDGE: tuple(reads)})
+    _subject, wound_against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": body_of.body, "body_ceiling": body_of.body_ceiling})
+    return (pool, ob, tuple(cap_for), tuple(cap_against) + tuple(wound_against),
+            draw_factory(w.world_seed, lambda: w.tick)(pid, f"{_MORTAL_PURPOSE}:{cause}").key if keyed else None)
+
+
+def duel_terms_of(verb: str, stakes: Optional[str] = None, context: Optional[str] = None) -> Optional[str]:
     """THE TERMS A VERB'S SCENE IS FOUGHT UNDER (CP-T03-09; `rosters.yaml: duel_terms`), or `None` for a verb the
     roster does not name (its fight is lethal: `PersonalCombatInput.terms`' own default is the one place that says so).
 
@@ -174,13 +236,19 @@ def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
     challenge_terms`), when the act fights under one -- THE SAME FIELD AND THE SAME CHECK, no second path. `None`
     (no challenge, or a challenge naming no stakes) falls through to the verb's roster line.
 
+    B15.08 (PHY_A A3): `context`, the context of violence that formed the act (its payload's `CONTEXT_KEY`, set by `opening_set`), is the
+    LAST of the three: a verb the `duel_terms` roster names keeps its line, and a verb it does not name is fought under
+    `rosters.yaml: context_terms`' line for its context. THE ONE PATH, `duel_terms[verb]` else `context_terms[context]` else `None`
+    (the record's lethal default). Checked against the engine's tuple like the others.
+
     ⚠ THE CLOSED SET IS THE ENGINE'S, AND THE CHECK IS AGAINST IT, NEVER A COPY: the term must be a member of
     `modules/combat/wrapper.py::DUEL_TERMS`, read through the composition row `combat.duel_terms`, and a value outside it REFUSES here naming
     the roster (`engine/season/data` cannot import the module, so the seam, which may reach it, is the first place
     the roster meets the tuple). Engine absent: the unchecked term goes on and the call is refused as
     `ENGINE-UNAVAILABLE` by `entry_for`, so a bad term cannot reach a fight."""
-    term = stakes if stakes is not None else DUEL_TERMS_BY_VERB.get(verb)
-    where = "challenge_terms" if stakes is not None else "duel_terms"
+    by_verb = DUEL_TERMS_BY_VERB.get(verb)
+    term = stakes if stakes is not None else by_verb if by_verb is not None else CONTEXT_TERMS.get(context)
+    where = "challenge_terms" if stakes is not None else "duel_terms" if by_verb is not None else "context_terms"
     if term is not None and engine() is not None:
         closed = tuple(composition.require("combat.duel_terms"))
         if term not in closed:
@@ -194,19 +262,23 @@ def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
 
 def record_of(act: Any) -> Optional[str]:
     """THE RECORD AN ACT IS ABOUT: its `subject` operand (`None` for an act with no dict payload). The one reader for
-    `_cause_record` (the fold's act, off the store) and `sigma.odds_of` (the act in hand)."""
+    `resolve` (the fold's act, off the store, `_cause_act`) and `sigma.odds_of` (the act in hand)."""
     payload = getattr(act, "payload", None)
     return payload.get("subject") if isinstance(payload, dict) else None
 
 
-def _cause_record(w: Any, causes: list) -> Optional[str]:
-    """v10 PC-10b -- THE RECORD THE CAUSING ACT IS ABOUT: the `subject` of `causes[0]`, read off the act store
-    (`World.acts`; RESOLVE records the act before it reaches the seam, `loop/resolve.py`), or `None` (no cause,
-    a cause the store does not hold, or a world with no store). Only a `challenge` Record answers `stakes_of`, so
-    for `fight`, whose `subject` is a person, this changes nothing. The act names the Record; nothing re-derives
-    which challenge a pair fights under."""
+def context_of(act: Any) -> Optional[str]:
+    """B15.08 (PHY_A A3): THE CONTEXT OF VIOLENCE THAT FORMED AN ACT -- its payload's `CONTEXT_KEY`, which `opening_set` records on a
+    `fight` Candidate (`None` for an act formed without one: a hand-built fold, a verb the decline does not govern)."""
+    payload = getattr(act, "payload", None)
+    return payload.get(CONTEXT_KEY) if isinstance(payload, dict) else None
+
+
+def _cause_act(w: Any, causes: list) -> Any:
+    """THE CAUSING ACT, read off the act store (`World.acts`; RESOLVE records the act before it reaches the seam,
+    `loop/resolve.py`), or `None` (no cause, a cause the store does not hold, or a world with no store)."""
     store = getattr(w, "acts", None)
-    return record_of(store.get(causes[0]) if store is not None and causes else None)
+    return store.get(causes[0]) if store is not None and causes else None
 
 
 def _fight_score(w: Any, p: Any, verb: str) -> int:
@@ -242,7 +314,9 @@ def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
     return kit, SimpleNamespace(body=body, body_ceiling=ceiling, attributes=other.attributes)
 
 
-def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None, *, believer: Any = None) -> PersonalCombatInput:
+def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None, *, believer: Any = None,
+                 mortal_keyed: bool = True, cause: str = "", context: Optional[str] = None,
+                 terms: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
     Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
@@ -255,10 +329,14 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     non-lethal term reaches the fight by (`duel_terms_of`). A verb the roster does not name leaves `terms` at the
     record's own default, `'death'`, so `fight` builds the record it always built.
 
-    `record` (v10 PC-10b) is the Record the act is about (`_cause_record`); a `challenge` Record's `stakes`
+    `record` (v10 PC-10b) is the Record the act is about (`record_of` the causing act); a `challenge` Record's `stakes`
     (`world_q.stakes_of`) fill the SAME field through the same `duel_terms_of`, so `accept` is fought under the
     challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
     verb the roster does not name is fought under `'death'`.
+
+    `context` (B15.08, PHY_A A3) is the act's context of violence (`context_of`: its payload's `CONTEXT_KEY`); for a verb `duel_terms` does not
+    name it fills the SAME field through the same `duel_terms_of`, from `rosters.yaml: context_terms` (a `crime` or `defence` fight under
+    `yield`, a `war` fight under `death`). The act's payload reaches here as this one argument, from `fight_estimate`'s callers and `resolve`.
 
     `believer` (B14.24), a `Person` who is one of the parties, reads every OTHER party's kit and wounds as `believed_picture` has them (his ledger's,
     the world's where he has seen him, the default kit and an unhurt body where he knows nothing); his own are the world's. `None` (the dealt fight
@@ -268,12 +346,21 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     `addends`, each party's registered pool addends (`pool.addends_of`, the one sum `pool.faculty` takes), read from their owner `pool.py`
     (a leaf both this adapter and `sigma.py` import) and never copied. The pool is the module's: `pool_of(score, addends, pool_add,
     pool_floor)` with the fight row's two operands carried raw (`pool_add`, `pool_floor`), the Ob the opponent's skill score alone.
-    `opposition_rate` is `None` in B05 (the module's own constant). `carried` (B05.61, A-8) is each party's wound as a signed level (`_carried_of`), filled
+    `opposition_rate` stays `None` (B15.03): the module reads its own constant `MU_PER_DIE`, the same owner the social roll's fixture reads (`test_u1_two_inputs.py` pins the `None`). `carried` (B05.61, A-8) is each party's wound as a signed level (`_carried_of`), filled
     only under `Fixtures carried_wound_model` `level` -- where `party_end` also cuts no band; under the control `endurance_cut` it is `(0.0, 0.0)`. `fight`, `accept` and `capture` draw on the `arms` capability key
     (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no such key reads the untrained score `pool_default`.
-    [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is UNRATIFIED (ED-IN-0351)."""
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
+
+    B15.10 (PC_A): `decisiveness` is each party's `person_q.decisiveness`, the yield roll's σ.
+
+    B15.07 (PHY_A A3): `mortal` is each party's mortal-wound operands (`_mortal_operands`) at the fight's terms, always filled; the module draws
+    them for a party the scene fells. `mortal_keyed=False` (`fight_estimate`) carries no dealt key, so a sampled estimate draws its mortal rolls
+    off its own private stream and its shares are the dealt fight's distribution, the draw included.
+
+    `terms` (the random-pairs instrument, `harness/pairs.py`) names the terms outright, in place of the roster's line for `verb`, so `mortal`'s
+    obstacle is read at the terms the pair is fought under; `None` (every other caller) takes `duel_terms_of`'s one path."""
     a_id, b_id = claimants[0], claimants[1]
-    terms = duel_terms_of(verb, stakes_of(w, record))
+    terms = terms if terms is not None else duel_terms_of(verb, stakes_of(w, record), context)
     pa, pb = w.persons[a_id], w.persons[b_id]
     # WHOSE KIT AND WOUNDS THE FIGHT READS: the world's (`kit_of`, the person), or -- `believer` named, B14.24 -- his OWN picture of every party but himself
     (ka, ba), (kb, bb) = ((kit_of(w, pid), p) if believer is None or pid == believer.id else believed_picture(w, believer, pid)
@@ -288,8 +375,18 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
         pool_add=pool_add, pool_floor=pool_floor,
         carried=(_carried_of(ba, w.fixtures), _carried_of(bb, w.fixtures)) if _carried_level_model(w.fixtures) else (0.0, 0.0),   # B05.61: `level` only
-        opposition_rate=None,               # None until 29-3 (B15): the fixture is live for the social roll since B05; the fight flips with its scale (A-71, A-31)
+        opposition_rate=None,               # stays None (B15.03): the module reads its own constant `MU_PER_DIE`, the same owner as the social roll's fixture (A-71)
         **({} if terms is None else dict(terms=terms)),
+        # B15.07: each party's mortal-wound operands at the terms the fight is fought under (the record's own default where the roster names none)
+        # `wound_harm_model: total` is the control in which ANY wound kills: a man the draw spared would be removed by the arm all the same, with
+        # no `person.died` (no party is Felled to license it), so the control runs with no draw -- a felling is the death, as before B15.07.
+        mortal=() if w.fixtures.get("wound_harm_model") == "total" else tuple(
+            _mortal_operands(w, pid, (a_id, b_id), terms or PersonalCombatInput.terms, mortal_keyed, cause, picture)
+            for pid, picture in ((a_id, ba), (b_id, bb))),   # the body band is the picture's (`ba`, `bb`: the person himself, or the believer's picture of him)
+        # B15.10 (PC_A, A-24; B10's reader `person_q.decisiveness` is in the tree): each party's σ for the yield roll, read as the development sheet
+        # reads it (`decision/sheet.py`: at the chooser's scar shift, hold and mass), so one quantity has one reading. The dealt party's own, never the believer's picture.
+        decisiveness=tuple(person_q.decisiveness(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"),
+                                                 mass=w.fixtures.get("scar_primary_mass")) for p in (pa, pb)),
         # PC-06 K-1: the attributes each party HOLDS (authored or drawn), whenever either party holds any -- under the
         # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the
         # record as it was) is reached only where neither holds one.
@@ -303,7 +400,7 @@ def _party_gap(a: str, b: str) -> dict:
 
 
 def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "",
-                   record: Optional[str] = None, *, believed: bool = False) -> dict:
+                   record: Optional[str] = None, *, believed: bool = False, context: Optional[str] = None) -> dict:
     """THE ODDS A FIGHT WOULD DEAL, SAMPLED LIVE (CP-T03-05; `-08` AM-C-02; MODE (a), THE PLAYER'S DISPLAY ONLY).
 
     Builds the real `PersonalCombatInput` (`combat_input`, so the fight is the one `resolve` deals when it is AUTOMATED (a fight the player plays turn by turn can end undecided on his withdrawal, which the shares do not assume): the same
@@ -312,8 +409,9 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     (`status` `ESTIMATED`, beside the `samples` count). A refusal is `resolve`'s own dict (`PARTY-GAP`,
     `ENGINE-UNAVAILABLE`). `via` is accepted for the shape of the call and read by nothing today; `verb` names the
     `terms` (CP-T03-09), so a `capture` is sampled under the terms it is fought under, and `record` (the act's
-    `subject`, as `resolve`'s `_cause_record` reads it) lets a challenge's `stakes` reach the sampler by the same
-    `combat_input` path, so an `accept` is sampled under the terms it is fought under. CP-T04-08's `field_estimate`
+    `subject`, as `resolve` reads it off the causing act) lets a challenge's `stakes` reach the sampler by the same
+    `combat_input` path, so an `accept` is sampled under the terms it is fought under; `context` (B15.08, the act's
+    `CONTEXT_KEY`) does the same for a `fight`'s `context_terms` line. CP-T04-08's `field_estimate`
     shares the fixture and the stream's key (`_estimate.py`).
 
     ⚠ THE RNG IS PRIVATE AND IS NOT A SEASON DRAW. It is built here from `H(world_seed, tick, actor,
@@ -337,7 +435,7 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     entry, refusal = entry_for(_PRIZE, _PROVIDER)
     if entry is None:
         return refusal
-    inp = combat_input(w, claimants, verb, record, believer=pa if believed else None)
+    inp = combat_input(w, claimants, verb, record, believer=pa if believed else None, mortal_keyed=False, context=context)
     rng = rng_of(w, actor, "estimate.fight" if believed else "estimate")
     tally = dict.fromkeys(ESTIMATE_OUTCOMES, 0)
     bands = dict.fromkeys(COMBAT_BANDS, 0)
@@ -346,7 +444,7 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
         got = entry.fn(inp, rng)
         tally[scene_outcome(got, actor, target)[0]] += 1
         if believed:
-            bands[party_degree(_wound_state(got.wounds.get(target)), edge)] += 1
+            bands[party_degree(_wound_state(got.wounds.get(target), got.mortal.get(target)), edge)] += 1
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{k: v / n for k, v in tally.items()},
                 **(dict(subject_bands={b: v / n for b, v in bands.items()}) if believed else {}))
 
@@ -357,12 +455,13 @@ def scene_outcome(got: CombatOutcome, actor: str, target: str) -> tuple:
     `outcome` is one of `ESTIMATE_OUTCOMES`; `yielder` is the id `got.surrender.by` names, `None` where
     nobody yielded. `got` is the entry's `CombatOutcome` (`wounds`, `surrender`).
 
-    ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER (the walk `_eff_kill` writes by and
+    ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER, his mortal-wound draw mapped on as `resolve` maps it (B15.07: a
+    felled man the draw stands up is no felling here, as in the dealt fight) (the walk `_eff_kill` writes by and
     `combat_degree` grades by; it refuses a missing tracker), NEVER the integer `wrapper.fight` returns (not lifted).
-    That integer flips after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so it
-    names a winner the fold never grades by. A yield is read first; neither or both down is `undecided` (a draw has
+    That integer is the engine's own ending (B15.09: the riposte turns a felling on the trackers, so it no longer flips
+    after them), and a felled man the mortal-wound draw stands up leaves it naming a winner the fold never grades by. A yield is read first; neither or both down is `undecided` (a draw has
     no one felled; a mutual felling names no one)."""
-    a_down, b_down = (party_degree(_wound_state(got.wounds.get(pid))) == FELLED for pid in (actor, target))
+    a_down, b_down = (party_degree(_wound_state(got.wounds.get(pid), got.mortal.get(pid))) == FELLED for pid in (actor, target))
     if got.surrender is not None:
         return "yielded", got.surrender.by
     if a_down and not b_down:
@@ -381,7 +480,7 @@ def estimate(w: Any, act: Any, claimants: list, target: Optional[str]) -> Option
     unused here (the fight's second party is `claimants[1]`). Reads, draws and writes what `fight_estimate` does."""
     if len(claimants) < 2:
         return None
-    got = fight_estimate(w, claimants[0], act.via, claimants[1], act.verb, record_of(act))
+    got = fight_estimate(w, claimants[0], act.via, claimants[1], act.verb, record_of(act), context=context_of(act))
     return tuple(got[k] for k in ESTIMATE_OUTCOMES) if got["status"] == "ESTIMATED" else None
 
 
@@ -395,7 +494,7 @@ def believed_estimate(w: Any, believer: Any, act: Any, claimants: list, bands: A
     the combat ladder does not carry (no figure here speaks for it). READ-ONLY: a private stream and no season draw."""
     if len(claimants) < 2 or claimants[0] != believer.id or not bands or any(b not in COMBAT_BANDS for b in bands):
         return None
-    got = fight_estimate(w, claimants[0], act.via, claimants[1], act.verb, record_of(act), believed=True)
+    got = fight_estimate(w, claimants[0], act.via, claimants[1], act.verb, record_of(act), believed=True, context=context_of(act))
     return sum(got["subject_bands"][b] for b in dict.fromkeys(bands)) if got["status"] == "ESTIMATED" else None   # the bands in the order asked, once each: a set sums in hash-seed order
 
 
@@ -406,9 +505,14 @@ def believed_estimate(w: Any, believer: Any, act: Any, claimants: list, bands: A
 _NO_FIELD = object()    # `getattr`'s default for a roster member the lifted record lacks
 
 
-def _wound_state(lifted: Optional[PartyWounds]) -> dict:
+def _wound_state(lifted: Optional[PartyWounds], mortal: Optional[MortalResult] = None) -> dict:
+    """One party's `wound_state` entry: his lifted tracker by `rosters.yaml: wound_quantities`, with his MORTAL-WOUND DRAW (B15.07, PHY_A A3)
+    mapped onto it where the module drew one: `felled` is the draw's `mortal`, `wounds` its `wounds`. The map computes nothing (holonic §44.3: a wrapper that computes an outcome is the second resolver):
+    the draw and its band are the module's (`fight.py::mortal_wound`)."""
     if lifted is None:                  # ID-5 polarity: absence REFUSES, it does not default
         return dict(available=False)
+    if mortal is not None:
+        lifted = dataclasses.replace(lifted, felled=mortal.mortal, wounds=mortal.wounds)
     # ⚠ THE FIELD LIST IS `rosters.yaml: wound_quantities`, NOT A LITERAL HERE (`H-98`, plan
     # position `8`) -- the same list `combat_band_edges` is validated against at load, so an
     # edge cannot name a quantity this does not lift. A member the tracker does not carry
@@ -485,7 +589,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                     module=_PROVIDER)
     if a_id == b_id:   # `fight_estimate`'s own line: one id as both claimants is refused before the engine is called
         return _party_gap(a_id, b_id)
-    inp = combat_input(w, claimants, verb, _cause_record(w, causes))
+    act = _cause_act(w, causes)          # v10 PC-10b: the Record the act is about (a `challenge`'s stakes) and, B15.08, the context that formed it
+    inp = combat_input(w, claimants, verb, record_of(act), cause=causes[0] if causes else "", context=context_of(act))
     rng = draw_factory(w.world_seed, lambda: w.tick)(a_id, f"contest:{prize}:{causes[0] if causes else ''}")
     entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
@@ -496,7 +601,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         got = entry.fn(inp, rng, decide=host.decide)
     else:
         got = entry.fn(inp, rng)
-    _wounds = {a_id: _wound_state(got.wounds.get(a_id)), b_id: _wound_state(got.wounds.get(b_id))}
+    # B15.07: a felled party's `felled` and `wounds` are the module's mortal-wound draw's (`got.mortal`), mapped, never computed here
+    _wounds = {pid: _wound_state(got.wounds.get(pid), got.mortal.get(pid)) for pid in (a_id, b_id)}
 
     return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                 # THE DEGREE SOURCE. A caller reads severity from here; it does not map it from a winner, which

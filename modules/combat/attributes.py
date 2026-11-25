@@ -2,7 +2,7 @@
 
 A leaf: imports only the standard library. Each entry holds COMBAT FACTS ONLY:
 
-  key          : the engine's own attribute key (`c.faculty`, `c.attrs['faculty']`).
+  key          : the engine's own attribute key (`c.agi`, `c.attrs['agi']`).
   default      : the value a fighter built without that attribute carries.
   neutral      : the centring value a formula subtracts (`c.agi - NEUTRAL['agi']`), present only where a direct
                  centring literal exists in the engine; `None` where none does.
@@ -18,22 +18,17 @@ export (`tools/export_engine_params.py`, section `attributes`) read this tuple. 
 its readers. RE-VALUING is `Combatant.set_attr` (or `c.<key> = v`), which re-derives every derived figure.
 
 NOT delivered, and said so: re-centring the derived quantities stays formula constants anchored on the default
-scale (`balance_eff - 3`, `reflex - 3`, `conc/5 - 3`, `Ob = faculty/2`, `pool = faculty + 6`).
+scale (`balance_eff - 3`, `reflex - 3`, `conc/5 - 3`, `Ob = MU_PER_DIE x score` since B15.03 (was `score/2`), `pool = score + 6`).
 
-INTERIM HOMES. `faculty`, `disp` carry `registry_key: None`: this spec is their only home until the registry or the
-season's carrier (`Person.attributes`, CR-20) names a key for one; that commit sets the entry's `registry_key` in
+INTERIM HOMES. `disp` carries `registry_key: None`: this spec is its only home until the registry or the
+season's carrier (`Person.attributes`, CR-20) names a key for it; that commit sets the entry's `registry_key` in
 the same change. `att` is Perception (ED-IN-0347) and is the whole of the read (PC-18 (1)); Reason (`attr.mind.acuity`) has no combat
 role, so an authored acuity does not reach a `Combatant`. (the revert marker is on `combat_systems.reading`).
 
-`faculty` (CR-85, ED-IN-0330/0331; B05.57) is the party's SKILL SCORE for the verb that opened the fight
-(`engine/season/seam/wrappers/pool.py::score`: no attribute, no addend), passed in `PersonalCombatInput.scores` -- and it is read in
-exactly two places, the pool (`core.resolution_pool`, with the party's `pool_addends`) and the Ob the opponent rolls against
-(`core.ob_from_defender`).
-No sigma term reads it, so nothing centres on it: no `neutral`. It is not a registry attribute: `registry_key` None.
-Default 3 is the module's own (the workbench's and the control arm's); the season always passes a value.
-[ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the design
-(`proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` §1) is UNRATIFIED (ED-IN-0349 withdrawn by
-ED-IN-0351); this build proceeds on it as written by the user's ruling.
+NOT AN ATTRIBUTE: the party's SKILL SCORE for the verb that opened the fight (A-98: a skill score is not an attribute; `IS-PC-05`,
+A-112). It is the skill table's number (`engine/season/seam/wrappers/pool.py::score`, passed in `PersonalCombatInput.scores`) and
+lives on the `Combatant` as `c.score` (`combatant.py`), not here. It is read in exactly two places, the pool (`core.resolution_pool`,
+with the party's `pool_addends`) and the Ob the opponent rolls against (`core.ob_from_defender`).
 """
 from collections import namedtuple
 
@@ -46,9 +41,8 @@ SPEC = (
     AttributeSpec('agi', 4, 4, 'attr.body.agility', IN_FLUX),
     AttributeSpec('end', 4, None, 'attr.body.endurance', IN_FLUX),
     AttributeSpec('att', 3, None, 'attr.mind.perception', IN_FLUX),
-    AttributeSpec('spirit', 3, None, 'attr.spirit.will', IN_FLUX),
+    AttributeSpec('spirit', 3, 4, 'attr.spirit.will', IN_FLUX),   # neutral 4: B15.10's yield roll counts Spirit in whole steps from the 1-7 scale's mid-point (`wrapper._spirit_levels`), as Strength and Coordination centre on it
     AttributeSpec('focus', 3, 3, 'attr.mind.focus', IN_FLUX),
-    AttributeSpec('faculty', 3, None, None, IN_FLUX),
     AttributeSpec('disp', 4, 4, None, IN_FLUX),
 )
 

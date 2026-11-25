@@ -19,20 +19,27 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))  # the repository root: `modules.combat` is a package
 
+from modules.combat import vocabulary
+
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {
     'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
     'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
     'yield',   # §11.4 (PC-01): a Phase-1 declaration; an unrefused one ends the fight at FinalResult via Yielded
-    'wound',   # PC-13: every point of damage the tracker takes, from the ONE helper wrapper._wound (pursuit, stophit, displace_graze, exchange, bind)
+    'wound',   # PC-13: every point of damage the tracker takes, from the ONE helper wrapper._wound (pursuit, stophit, displace_graze, exchange, bind, finalblow_riposte)
+    'finalblow_riposte',   # B15.09: a felling blow turned (`UPSET_FLOOR`): it is not applied and he lands the blow back, the fight going on; no state of its own (HitLanded -> AwaitTempo)
+    'turned',   # PC_D (B15.05): a blow struck against a harness that dealt nothing (`wound` carries `bare`: the blow reached a bare zone)
     'disengage',   # the closed-phase withdrawal attempt (ED-PC-0030): ok=True re-opens to measure, ok=False is pursued
     'withdraw',    # REM-31: the decider's early UNRESOLVED exit, taken at the head of a turn
 }
+# B15.10: the yield roll's Partial and Overwhelming bands (`shaken`, `rallied`); no state of their own (they fall between rounds). Read from the owner.
+TRACE_KINDS |= set(vocabulary.YIELD_ROLL_EVENTS)
 
-# Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check
+# Separation reasons the engine can emit (wrapper.engagement `return None` sites): the round endings (`vocabulary.ROUND_ENDS`, the owner) but
+# `felled`, which is the ending of a round that fell a party and emits `engagement_end`, never a `separation`. The dynamic coverage check
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
-SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaustion', 'terms'}   # 'terms' (RS-25): a duel's terms were met at a beat head
+SEPARATION_REASONS = set(vocabulary.ROUND_ENDS) - {'felled'}
 # [ED-PC-0042] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as never-fired. 'collapse' is NOT dead: PC-13
 # widened the sweep (the WIDE builds below) and it fires, because the 4 default matchups use DEFAULT fighters, who reach
 # clean_defence/burst_ceiling long before stamina <= -4, so the flag on it was a false positive of that sweep's build coverage.
@@ -51,7 +58,7 @@ STATES = {
                        'emits': ['commit', 'read', 'mode', 'roll', 'outcome', 'wound'], 'site': 'wrapper.engagement'},
     'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement'},
     'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement'},
-    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement'},
+    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': ['wound', 'finalblow_riposte'], 'site': 'wrapper.engagement'},
     # ---- contact axis (I7b, D8/D9): a real Contact node — BUILT, not activated (M-11). Reachable from Exchange
     # directly (the deep-commit reopen precondition needs neither Bind/Riposte/HitLanded) as well as from all
     # three, since a grab is opportunistic on ANY of the three opening_created precondition sites.
@@ -62,13 +69,12 @@ STATES = {
     'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded', 'Withdrawal'], 'emits': [], 'site': 'wrapper.fight'},
     # ---- decision ----
     # §11.4 (PC-01): an unrefused Yield, declared at Phase 1 of a turn (so from FightInit or InterTurn), ends the fight
-    # straight at FinalResult with no UPSET_FLOOR draw. A REFUSED declaration emits `yield` and falls through unchanged.
+    # straight at FinalResult with no felling, so no riposte. A REFUSED declaration emits `yield` and falls through unchanged.
     'Yielded':        {'to': ['FinalResult'], 'emits': ['yield'], 'site': 'wrapper.fight (Phase-1 yield declaration)'},
     # REM-31: the decider's 'withdraw', taken at the head of a turn (so from FightInit or InterTurn): the early UNRESOLVED exit,
-    # no UPSET_FLOOR draw.
+    # no felling, so no riposte.
     'Withdrawal':     {'to': ['Unresolved'], 'emits': ['withdraw'], 'site': 'wrapper.fight (per-turn decider, WITHDRAW)'},
-    'Decided':        {'to': ['UpsetCheck'], 'emits': [], 'site': 'wrapper.fight'},
-    'UpsetCheck':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
+    'Decided':        {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
     'Unresolved':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
     'FinalResult':    {'terminal': True, 'to': [], 'emits': ['fight_result'], 'site': 'wrapper.fight'},
 }
@@ -182,7 +188,7 @@ def fired_states_from_events(events):
             fired.add('FinalResult')
             if e['winner'] is None: fired.add('Unresolved')
             elif 'Yielded' not in fired:   # a yield ends the fight before the decision nodes
-                fired.add('Decided'); fired.add('UpsetCheck')
+                fired.add('Decided')
     return fired
 
 
@@ -272,7 +278,7 @@ if __name__ == '__main__':
     _B = Combatant('B')
     _ev = _traced(Combatant('A'), _B, 0, yield_decl=_W.Yield(by=_B, turn=1))
     _fy = fired_states_from_events(_ev)
-    g_ok = {'Yielded', 'FinalResult'} <= _fy and not ({'UpsetCheck', 'Decided'} & _fy)
+    g_ok = {'Yielded', 'FinalResult'} <= _fy and 'Decided' not in _fy
     checks.append(g_ok); print(f"(g) yield path (Yielded -> FinalResult, decision nodes skipped): {'OK' if g_ok else 'FAIL — ' + str(sorted(_fy))}")
 
     # (g) every injection point references a defined state (the WS-1 bridge stays synced with the graph)

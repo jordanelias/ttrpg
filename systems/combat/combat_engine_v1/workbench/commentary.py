@@ -81,7 +81,7 @@ def commentate(events, cfg):
                         'mech': f"stop-hit roll {e['degree']} (pool {e['pool']}D, edge {e['net_sigma']:+}sig)",
                         'cls': 'hit' if landed else 'clean'})
         elif k == 'commit':
-            cur = {'a': e['aggressor'], 'd': e['defender'], 'commit': e['commit'], 'beta_a': e['beta_a'], 'beta_b': e['beta_b']}
+            cur = {'a': e['aggressor'], 'd': e['defender'], 'commit': e['commit'], 'deep': e['deep'], 'beta_a': e['beta_a'], 'beta_b': e['beta_b']}
         elif k == 'read':
             cur['read_win'] = e['read_win']; cur['read_p'] = e['p_read_win']; cur['read_d'] = e['read_d']; cur['read_a'] = e['read_a']
         elif k == 'mode':
@@ -105,7 +105,7 @@ def commentate(events, cfg):
         elif k == 'fight_result':
             if e['winner']:
                 out.append({'type': 'result', 'line': f"It's over — {e['winner']} takes it.",
-                            'mech': "decided by a felling (a 5% upset chance is always live, so nothing is certain)."})
+                            'mech': "decided by a felling that stood (each felling blow may be turned, `UPSET_FLOOR`, so nothing is certain)."})
             else:
                 out.append({'type': 'result', 'line': "Time — neither could put the other down. No decision.",
                             'mech': "12 turns elapsed with no felling: a legitimate draw (no wound-count tiebreak)."})
@@ -146,7 +146,7 @@ def _beat(cur, outcome, cfg, wound_str):
     mech = [COMMIT_MECH[band].format(a=a, d=d, c=round(commit, 1))]
     if rw:
         mech.append(f"the read: {d} out-reads the attack ({round(rp*100)}% to read it) — so {d} picks the BEST defence (not a guess)" +
-                    (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= cfg['DEEP_COMMIT'] else ""))
+                    (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= cur['deep'] else ""))
     else:
         mech.append(f"the read: {a} hid the intent ({d} only had {round(rp*100)}% to read it) — {d} must pick a defence blind (random mode)")
     mech.append({'parry': "parry = deflect with the blade (wants hand-guard)",

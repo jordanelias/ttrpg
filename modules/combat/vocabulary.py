@@ -84,6 +84,19 @@ ADEF_MODE_CONCUSSION = 'concussion'
 ADEF_MODE_GAP_THRUST = 'gap-thrust'
 ADEF_MODE_CUT = 'cut'
 
+# ── ROUND ENDINGS — how a round came to an end (A-101) ──────────────────────────────────────────────
+# A round is one `wrapper.engagement` call. This closed set names how the fighters came apart, or that one fell: it is
+# the `reason` of every `separation` event and the `ended_by` of every `engagement_end` event. Reporting vocabulary
+# only: no rule keys on it and it draws nothing.
+ROUND_ENDS = ('clean_defence', 'burst_ceiling', 'collapse', 'disengage', 'reopen', 'terms', 'felled', 'beat_exhaustion')
+
+# ── YIELD-ROLL events — the trace kinds the yield roll's Partial and Overwhelming bands emit (B15.10, A-24) ──────────────
+# Failure is the `yield` event the engine already emits; Success is no event. A party who rolls Partial is `shaken` (Concentration down by
+# `CFG['CONC_DRAIN_LOSS']`) and fights on; Overwhelming, he `rallied` (Concentration full). Reporting vocabulary: no rule keys on it.
+EV_SHAKEN = 'shaken'
+EV_RALLIED = 'rallied'
+YIELD_ROLL_EVENTS = (EV_SHAKEN, EV_RALLIED)
+
 # ── THE GUARDED SET ────────────────────────────────────────────────────────────────────────────────
 # The 18 tokens the ownership guard enforces. This is the set `workbench/structure_scan.py` [D] measures; it is
 # declared HERE so the instrument and the test read the same list.

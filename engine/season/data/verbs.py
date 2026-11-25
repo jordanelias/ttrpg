@@ -37,7 +37,7 @@ from .requires import (
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    CONTEXT_KEY, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -1466,6 +1466,26 @@ def _check_duel_terms(values: dict, table: dict) -> dict:
 
 
 DUEL_TERMS_BY_VERB = _check_duel_terms(dict(roster_map("duel_terms", "values")), VERB_TABLE)
+
+
+# B15.08 (PHY_A A3): `{context: term}` -- the terms a `fight` is fought under by the context of violence that formed it
+# (`rosters.yaml: context_terms`, `duel_terms`' shape), read by `seam/wrappers/combat.py::combat_input` when `duel_terms`
+# names no line for the verb. REFUSED AT IMPORT for a key or a term that is not a non-empty string; THAT A KEY IS A CONTEXT
+# READER is `decision/options.py::_check_context_terms`'s (the readers are `options.py`'s, `violence_contexts`' split), and
+# THAT A TERM IS THE ENGINE'S is `combat.py::duel_terms_of`'s, `duel_terms`' own: checked against the tuple, never re-declared.
+def _load_context_terms(values: dict) -> dict:
+    """`rosters.yaml: context_terms`' `values`, checked and frozen. A function, so a test can plant a bad line."""
+    for context, term in (values or {}).items():
+        if not isinstance(context, str) or not context or not isinstance(term, str) or not term:
+            raise Forbidden(
+                f"`rosters.yaml: context_terms` names {context!r}: {term!r}, and either the context or the term is not a "
+                "non-empty string", "rosters.yaml",
+                needs="a context `decision/options.py` reads and a term the engine names (`modules/combat/wrapper.py::DUEL_TERMS`)",
+                law="PHY_A A3 -- a fight's terms follow the context that formed it, read from one roster")
+    return dict(values or {})
+
+
+CONTEXT_TERMS = _load_context_terms(roster_map("context_terms", "values"))
 
 
 def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds: dict) -> frozenset:
