@@ -27,8 +27,10 @@ THE RULE (items 3a/3b and plan position `19d`):
   * THE DRAINED RUNG'S GAP: per drained kind, `demanded - delivered` over the rung's subtree -- the
     eaters whose home's chain passes through it, summed by `drawn_under` -- kept only where positive.
     It NESTS (a hearth and its settlement can both report one hungry household): the Query's meaning.
-  * THE BODY: `lost = body_step x (units short, summed in kind order)`; nothing falls at `lost <= 0`
-    (the `body_step = 0` control arm); the body falls to `max(0, body - lost)`, and dies at `<= 0`.
+  * THE BODY: `lost = body_step x (units short, summed in kind order) x the eater's severity multiplier
+    (1 when none is given)`, truncated to an int; the multiplier is the host's draw (`SubsistInput.severity`),
+    this module draws nothing. Nothing falls at `lost <= 0` (the `body_step = 0` control arm, or a severity
+    of 0); the body falls to `max(0, body - lost)`, and dies at `<= 0`.
   The ORDER RULE (#353 §25: draw before produce) is the host's: MATTER calls this before the yield.
 """
 from __future__ import annotations
@@ -68,9 +70,10 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
             shortfalls.append((src, tuple(gaps)))
 
     bodies = dict(inp.bodies)
+    sev = dict(inp.severity)
     falls = []
     for pid in sorted(short):
-        lost = inp.body_step * sum(short[pid].values())
+        lost = int(inp.body_step * sum(short[pid].values()) * sev.get(pid, 1))
         if lost <= 0:
             continue
         after = max(0, bodies[pid] - lost)

@@ -13,6 +13,8 @@ from ..boot.realm import build_realm
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import scarce as S
 from ..queries import world_q
+from ..queries.inputs import Eater, LarderInput, SubsistInput
+from engine.substrate import composition
 
 
 def test_h_it_reads_and_writes_nothing_and_the_census_reports_it():
@@ -59,3 +61,17 @@ def test_i_under_ground_no_cohort_is_short_at_season_0():
     assert populated >= 30, "the loop asserted nothing: no settlement carried a cohort"
     assert gone == [], gone
     assert short(build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("granary_seasons", 0)))[0], "the control is not short: the assertion cannot see the failure"
+
+
+def test_a_severity_of_two_doubles_the_fall_and_zero_spares_it():
+    """B12a.60 (`16_PESSIMIST_GAME_the_world_draws` edit 4): `settlements.subsist`, on a hand-built input with one eater short 3 units
+    (wants 5 `grain`, the home holds 2), multiplies the fall by the eater's severity: none given is 1, 2 doubles it, 0 spares it."""
+    def fall(severity):
+        larder = LarderInput((("grain", 5),), (Eater("p1", "h", 1, True),), (("h", ("h",)),), (("h", (("grain", 2),)),))
+        out = composition.require("settlements.subsist")(SubsistInput(larder, (("h", ("h",)),), 4, (("p1", 100),), severity))
+        assert out.short_by_person == (("p1", (("grain", 3),)),), "the eater is not short 3: the arm cannot observe the multiplier"
+        return {f.pid: f.body_after for f in out.falls}
+    assert fall(()) == {"p1": 100 - 4 * 3}
+    assert fall((("p1", 1),)) == {"p1": 100 - 4 * 3}
+    assert fall((("p1", 2),)) == {"p1": 100 - 4 * 3 * 2}
+    assert fall((("p1", 0),)) == {}
