@@ -18,9 +18,11 @@ from ..decision.sheet import take_ranked
 from ..harness import aperture
 from ..harness import probes as P
 from ..harness import scenarios as S
+from ..harness.play_surface import board
 from ..loop.driver import SeasonDriver, mint_token
+from ..queries.person_q import LedgerReader, deed_doers, ledger_weigh
 from ..seam import Resolution
-from ..state.carriers import DETERMINED_BY, Act, Claim, Question, Tenure, View
+from ..state.carriers import DETERMINED_BY, Act, Claim, Question, Tenure, View, fade_of
 from .test_playable_inquiry import SEASONS, inquiry_runs
 
 HEARD, NOT_A_SITE = "site_harbour", "Hh"      # `tiny_world`: a Site in `S`; a hearth. `p_low` stands in `Hh`, not at the harbour.
@@ -118,3 +120,54 @@ def test_the_play_transcript_never_prints_the_true_doer(monkeypatch, capsys):
     src = inspect.getsource(S).splitlines()
     calls = [i for i, t in enumerate(src) if ".answer(" in t]
     assert len(calls) == 1 and "if a.developer" in src[calls[0] - 1], [src[i - 1: i + 1] for i in calls]
+
+
+# ======================================================================================
+# B11.77 (`08_FI_07` §3, `IS-B2-FI-04`): ONE BOARD, ONE OWNER -- `person_q.dossier` read, `play_surface.board` printed.
+# ======================================================================================
+def test_every_claim_appears_in_one_board_group():
+    """`IS-B2-FI-04`: for the scenario's investigator after one season, every claim in his ledger appears in exactly one board group (`dossier`'s rows are one per claim,
+    a group being the rows that share `(subject, predicate, value)`), a group's `support` is what clause 4 weighs for the same claims, and the suspects line equals
+    `deed_doers` of his goal. FALSIFIER: a claim in no row or in two; a group whose support differs from `LedgerReader._support` under `ledger_weigh`. CONTROL: a
+    ledger the run left too thin to tell (told claims of two origins, a contradiction, a covert deed, a held document) is planted on the same investigator, and the
+    same readings are made again, so each could have failed."""
+    r = S.run("inquiry", 0, 1)
+    w, p = r["world"], r["world"].persons[r["seat"]]
+    goal = S.inquiry_goal().object
+
+    def read():
+        rows = [x["row"] for x in board(p, w.fixtures) if x["kind"] == "claim"]
+        assert sorted(id(x.claim) for x in rows) == sorted(id(c) for c in p.ledger), "a claim in no row, or in two"
+        keys = [(x.claim.subject, x.claim.predicate, x.claim.value) for x in rows]
+        runs = sum(1 for i, k in enumerate(keys) if i == 0 or k != keys[i - 1])
+        assert runs == sum(1 for i, k in enumerate(keys) if k not in keys[:i]), "a group's rows are not together"
+        tick, decay = fade_of(p)
+        weigh = ledger_weigh(p, w.fixtures, tick)
+        for x in rows:
+            same = [c for c in p.ledger if (c.subject, c.predicate, c.value) == (x.claim.subject, x.claim.predicate, x.claim.value)]
+            assert x.support == LedgerReader(p.ledger, weigh, tick=tick, decay=decay)._support(same)[0], x.claim
+        suspects = [x for x in board(p, w.fixtures) if x["kind"] == "suspects"]
+        assert [x["doers"] for x in suspects] == [deed_doers(p.ledger, goal, p.id)]
+        return rows, suspects[0]["doers"]
+
+    assert len(p.ledger) == len({c.id for c in p.ledger}) > 0, "the investigator held nothing: the board proves nothing"
+    _, before = read()
+    held_before = [x for x in board(p, w.fixtures) if x["kind"] == "document"]
+    me, a, b = p.id, "p_holder", "p_witness"
+    told = lambda cid, origin, value: Claim(cid, me, "p_forger", "stores:grain", value, w.tick, "told_by", 60, "own", chain=(origin,))
+    p.ledger += [told("c_t1", a, 7), told("c_t2", b, 7), told("c_t3", a, 7), told("c_t4", b, 9),
+                 Claim("c_deed", me, "p_bench_a", "site.damaged", True, w.tick, "firsthand", 90, "own"),
+                 Claim("c_doc", me, "rec_doc", "content:dispensation", (("terms", "t"), ("to", (me,)), ("at", None)), w.tick, "firsthand", 90, "own")]
+    w.add_tenure(Tenure("t_doc", me, "rec_doc", "hold", since=w.tick))
+    rows, doers = read()
+    assert "p_bench_a" in doers and "p_bench_a" not in before, "the planted covert deed names nobody"
+    by_id = {x.claim.id: x for x in rows}
+    weigh = ledger_weigh(p, w.fixtures, fade_of(p)[0])
+    one, two = (weigh(c) for c in (by_id["c_t1"].claim, by_id["c_t2"].claim))
+    assert by_id["c_t1"].support == by_id["c_t2"].support == by_id["c_t3"].support == 1.0 - (1.0 - one) * (1.0 - two) > max(one, two), "two origins do not stand higher than one"
+    assert by_id["c_t4"].support == 1.0 - (1.0 - weigh(by_id["c_t4"].claim)) and set(by_id["c_t1"].against) == {"c_t4"} and set(by_id["c_t4"].against) == {"c_t1", "c_t2", "c_t3"}
+    assert by_id["c_t1"].proof_kind == "record" and by_id["c_deed"].proof_kind == "testimony" and by_id["c_deed"].against == ()
+    docs = [x for x in board(p, w.fixtures) if x["kind"] == "document"]
+    assert [x.claim.id for x in rows if x.record][-1:] == ["c_doc"] and by_id["c_doc"].record == "rec_doc" and len(docs) == len(held_before) + 1
+    assert docs[-1] == {"kind": "document", "id": "rec_doc", "of": "dispensation", "about": {"terms": "t", "to": (me,), "at": None}}
+    assert docs[:-1] == held_before, "a document he held before the plant moved"

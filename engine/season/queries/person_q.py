@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import functools
 import math
+from dataclasses import dataclass
 from typing import Any, Callable, NamedTuple, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
@@ -53,10 +54,10 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map,
 )
-from ..state.carriers import Claim, Person, PersonInterior, Said
+from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
 from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 
@@ -2508,6 +2509,69 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
         mate = belief[k]
         (agree, dis) = (agree + 1, dis) if c.value == mate.value else (agree, dis + 1)
     return agree, dis
+
+
+def _disagrees(a: Claim, b: Claim) -> bool:
+    """DOES THE PAIRING RULE MARK `b` AS DISAGREEING WITH `a`? One local call of `_pair` on the cell key `(subject, predicate)` -- the key `record` and `dissents` pair a cell claim on --
+    so `dossier.against` asks the tree's one pairing step and never restates `==`. (`decision/options.py::contradicts` is EVID_B edit 2's exposure of this same predicate; until it
+    lands, this is the one call that is replaced there.)"""
+    return _pair([a], [b], lambda c: (c.subject, c.predicate), None)[1] == 1
+
+
+@dataclass(frozen=True)
+class DossierRow:
+    """ONE CLAIM ON THE CASE BOARD (`11_GO_player_surface_contract_B.md` §5's fields). The rows that share `(subject, predicate, value)` are one GROUP and carry one `support`.
+    `record` is the id of the document on his live `hold` this claim is the content of (a `content:<kind>` claim of a record he holds), else `None`; `proof_kind` is
+    `rosters.yaml: proof_kind_of_source`'s kind for the claim's source (`""` where its way of holding is no kind of proof); `against` the ids of his other claims on
+    the same cell that disagree with this one."""
+    claim: Optional[Claim]
+    record: Optional[str]
+    proof_kind: str
+    support: float
+    against: tuple
+
+
+def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = None) -> tuple:
+    """WHAT HE HOLDS, GROUPED BY WHAT IT SAYS -- `DossierRow`s, the groups in the order each was first held, a group's claims in ledger order; `subject` keeps one subject's groups,
+    `None` every group (`IS-B2-FI-04`, `08_FI_07` §3). EVERY CLAIM OF THE LEDGER IS IN EXACTLY ONE ROW. Reads his own ledger, `hold` Tenures and fade, never a World; writes nothing.
+
+    `support` is `LedgerReader._support` over the group's claims, read under `ledger_weigh(p, fx, tick)` -- the closure clause 4 reads his ledger by -- so the board shows what his
+    decisions weigh: `1 - PROD over distinct origins (1 - weigh(c))`, a doer named by two tellers standing above one named by a single teller repeating himself. With no `fx` (a
+    hand-built read), or a ledger `ledger_weigh` takes the plain reader for, every claim weighs 1.0. `against` is `_disagrees` over the claim's CELL (`is_cell`): a claim of any other
+    shape (an event kind, a `seen` struct, a `content:` claim) names no cell and nothing it could disagree with."""
+    tick, decay = fade_of(p)
+    weigh = ledger_weigh(p, fx, tick) if fx is not None else None
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    groups: list = []                                   # [(subject, predicate, value), [claims]]; `==`, not hash: a value need not be hashable
+    for c in p.ledger:
+        if subject is not None and c.subject != subject:
+            continue
+        key = (c.subject, c.predicate, c.value)
+        for g in groups:
+            if g[0] == key:
+                g[1].append(c)
+                break
+        else:
+            groups.append((key, [c]))
+    rows: list = []
+    for _key, members in groups:
+        support = 1.0 if weigh is None else LedgerReader(members, weigh, tick=tick, decay=decay)._support(members)[0]
+        for c in members:
+            rows.append(DossierRow(c, c.subject if content_kind(c) is not None and c.subject in held else None,
+                                   PROOF_KIND_OF_SOURCE.get(c.source) or "", support,
+                                   tuple(o.id for o in p.ledger if o is not c and is_cell(c) and _disagrees(c, o))))
+    return tuple(rows)
+
+
+def deed_doer_claims(ledger, spec: dict, holder: str, against=()) -> dict:
+    """`{doer: (the ids of the deed claims that name him, in ledger order)}`: `deed_doers`' answer, in its order, with what each rests on (`_named_deeds`, the one reading;
+    B11.77's suspects line)."""
+    out: dict = {}
+    for c, doer in _named_deeds(ledger, spec, holder, against):
+        ids = out.setdefault(doer, [])
+        if c.id not in ids:
+            ids.append(c.id)
+    return {d: tuple(ids) for d, ids in out.items()}
 
 
 # The ordinal is `data/rosters.py::REMOVE_ORDINAL`'s, built once there so the resolver-side `reception`

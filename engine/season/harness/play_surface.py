@@ -35,7 +35,9 @@ from __future__ import annotations
 
 from typing import Any, Callable, MutableMapping, Mapping, Sequence
 
+from ..data import goals as goals_data
 from ..gaps import Forbidden
+from ..queries.person_q import content_kind, content_said, deed_doer_claims, deed_doers, dossier
 from ..queries.world_q import continuations
 
 # `(p, v, s, ask_budget) -> list[Act | Scene]` — DELIBERATE's call, the delegate's shape.
@@ -93,3 +95,25 @@ def carry_on(w: Any, overrides: MutableMapping[str, Callback], pid: str, last: S
     if callback is not None:
         overrides[chosen.person] = callback
     return chosen.person, continuations(w, w.persons[chosen.person])
+
+
+def board(p: Any, fixtures: Any) -> list:
+    """THE CASE BOARD: what `p` holds, laid out for a player to read (B11.77, `IS-B2-FI-04`, `08_FI_07` §3). A PRINT, NOT A READER: `person_q.dossier` is the one owner of what a row is and
+    how it is weighed (`fixtures` is the `fx` it weighs under, as clause 4 does), and this groups nothing itself. A list of dicts, in order:
+
+      * `{"kind": "claim", "row": DossierRow}` -- one per `dossier` row, a group's rows together;
+      * `{"kind": "suspects", "goal", "doers", "by"}` -- one per goal of his that is a `deed_doers` case (a live `commit` Tenure on a goal row whose `object:` names one form of
+        `rosters.yaml: goal_object_kinds.forms.deed_doers` and no `against`, which names another goal's referents and is a World read): `doers` is `person_q.deed_doers` over his own
+        ledger, `by` the ids of the claims that name each; `()` and `{}` until his ledger names someone;
+      * `{"kind": "document", "id", "of", "about"}` -- one per `dossier` row that is the content of a document on his live `hold`: its kind and what it says (`content_said`).
+
+    Reads `p` alone: no World, no state written, no token."""
+    out: list = [{"kind": "claim", "row": row} for row in dossier(p, None, fixtures)]
+    for t in p.tenures:
+        goal = goals_data.goal(t.object) if t.kind == "commit" and t.live else None
+        if goal is not None and goal.object["kind"] == "deed_doers" and "against" not in goal.object:
+            out.append({"kind": "suspects", "goal": goal.id, "doers": deed_doers(p.ledger, goal.object, p.id),
+                        "by": deed_doer_claims(p.ledger, goal.object, p.id)})
+    out += [{"kind": "document", "id": x["row"].record, "of": content_kind(x["row"].claim), "about": content_said(x["row"].claim)}
+            for x in out if x["kind"] == "claim" and x["row"].record is not None]
+    return out

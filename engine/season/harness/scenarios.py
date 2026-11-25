@@ -61,7 +61,7 @@ from ..state.world import World
 from ..tests._flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .headless import build_world
-from .play_surface import carry_on, dispatching_chooser
+from .play_surface import board, carry_on, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -435,9 +435,23 @@ SCENARIOS["inquiry"] = Scenario(build=inquiry_world, seat=lambda w: INVESTIGATOR
 
 
 def board_lines(w: World, pid: str) -> list:
-    """The board's lines for `pid`, printed before each lap's offered acts. B11.77 FILLS THIS BODY: it returns `play_surface.board(w.persons[pid], w.fixtures)`
-    rendered one line a row (`dossier`'s rows, the suspects line, the held documents). Until it lands the board is empty and the lap prints its offered acts alone."""
-    return []
+    """The board's lines for `pid`, printed before each lap's offered acts: `play_surface.board(w.persons[pid], w.fixtures)` rendered one line a row (a `dossier` row, the suspects
+    line, a held document). A person the world no longer holds has no board. It prints what he holds and nothing of the world's truth (A-49): a claim's own fields, its support
+    and the ids of his claims that disagree with it."""
+    p = w.persons.get(pid)
+    lines: list = []
+    for x in [] if p is None else board(p, w.fixtures):
+        if x["kind"] == "claim":
+            row = x["row"]
+            c = row.claim
+            via = f" via {'>'.join(c.chain)}" if c.chain else ""
+            lines.append(f"held {c.subject} · {c.predicate} = {str(c.value)[:48]} · {c.source}{via} · confidence {c.confidence} · when {c.when} · support {row.support:.2f}"
+                         + (f" · against {', '.join(row.against)}" if row.against else ""))
+        elif x["kind"] == "suspects":
+            lines.append(f"suspects ({x['goal']}): " + ("; ".join(f"{d} on {', '.join(x['by'][d])}" for d in x["doers"]) or "nobody named yet"))
+        else:
+            lines.append(f"document {x['id']} · {x['of']} · {x['about']}")
+    return lines
 
 
 def _parse(argv) -> argparse.Namespace:
