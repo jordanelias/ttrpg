@@ -17,6 +17,8 @@ licensed in DELIBERATE.
 from __future__ import annotations
 
 from typing import NamedTuple, Optional
+from engine.dice_engine.dice_engine import Degree, degree_from_net
+from engine.dice_engine.sigma_leverage import roll_net_continuous
 from .. import manifest
 from ..data.geography import adjacent_territories
 from ..data.matrix import Step
@@ -192,6 +194,38 @@ def _lattice_strain(w: "World", scale: int) -> dict:
                    alternatives=["a stored Mending Stability scalar decaying a year at a time (a fourth clock)",
                                  "read a neighbour's write of this barrier (a sorted pass, not a parallel map)"])
     return out
+
+
+#: B12a.10 (`09_WR_B_draws_not_thresholds` edit 1) `[ASSUMPTION; medium; Jordan to correct; revert: `wear_draw: False`]`: what the drawn band
+#: makes of the Site's wear this season, as `(numerator, denominator)` of its rate -- Overwhelming 0, Success half, Partial the rate,
+#: Failure twice. Keyed on the one ladder's own bands (`degree_from_net`), so a band the ladder gains is refused here, never defaulted.
+_WEAR_BAND_SHARE = {Degree.OVERWHELMING: (0, 1), Degree.SUCCESS: (1, 2), Degree.PARTIAL: (1, 1), Degree.FAILURE: (2, 1)}
+
+
+def _wear_draw_rows(w: "World") -> Optional[tuple]:
+    """`(pool, ob_step)` when the fixture `wear_draw` is on, `None` when it is off (the control: today's exact rate, no draw taken). The two
+    `[CALIBRATE]` rows ship `None` (E-14), and an arm on an unset row REFUSES naming the row rather than drawing on a default (`H-523`)."""
+    if not w.fixtures.get("wear_draw"):
+        return None
+    rows = tuple(w.fixtures.get(name) for name in ("wear_draw_pool", "wear_draw_ob_step"))
+    for name, value in zip(("wear_draw_pool", "wear_draw_ob_step"), rows):
+        if value is None:
+            raise Unspecified(
+                f"`wear_draw` is on and the fixture `{name}` is unset", "B12a.10 / H-523",
+                needs=f"a value for `{name}` (a [CALIBRATE] row, set by B98); the control is `wear_draw: False`")
+    return rows
+
+
+def _drawn_wear(w: "World", site_id: str, rate: int, rows: tuple, keyed) -> int:
+    """The wear a Site takes this season under `wear_draw`: ONE keyed draw `(world_seed, tick, site id, "wear")`, the pool rolled by the one
+    roller (`roll_net_continuous`) against an obstacle of `wear_draw_ob_step` per point of `rate` (the kind's rate plus the lattice pull, so
+    strain makes a bad season likelier, not certain), graded on the one ladder, the band choosing the wear from `rate`
+    (`_WEAR_BAND_SHARE`). `rate` is nonzero here: a Site that wears nothing draws nothing (the eligibility is the caller's)."""
+    pool, ob_step = rows
+    ob = ob_step * rate
+    degree = degree_from_net(roll_net_continuous(pool, rng=keyed(site_id, "wear")), ob)
+    num, den = _WEAR_BAND_SHARE[degree]
+    return rate * num // den
 
 
 class _HeldBefore(NamedTuple):
@@ -761,6 +795,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # v9 IN-35: the lattice coupling, read off every Site's opening condition BEFORE the parallel map
     # writes one (`_lattice_strain`). `{}` at the shipped weight 0, so `wear` below is today's.
     pull = _lattice_strain(w, scale)
+    # B12a.10: `None` at the shipped `wear_draw: False` (the control takes no draw and reads no row); else `(pool, ob_step)`, refused if unset.
+    draw_rows = _wear_draw_rows(w)
+    keyed_wear = draw_factory(w.world_seed, lambda: w.tick) if draw_rows else None
     w._in_parallel_map = True
     floors_all = w.fixtures.get("band_floors")
     for s in w.sites.values():
@@ -768,6 +805,11 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # NO SILENT DEFAULT -- unregistered kind raises. Plus the coupling's pull: ONE wear write, so
         # one `condition.worn` and one crossing check per Site whatever moved it.
         wear = w.fixtures.wear(s.kind) + pull.get(s.id, 0)
+        # B12a.10: `wear` above stays the ELIGIBILITY (the check below) and the control's value; under `wear_draw` it is the RATE the band picks
+        # from, so a drawn 0 (Overwhelming, or half of 1) is the same unwritten Site as a wear of 0 (`H-135`), and the crossing below stays a
+        # comparison on the drawn condition.
+        if draw_rows and wear and s.condition:
+            wear = _drawn_wear(w, s.id, wear, draw_rows, keyed_wear)
         # `H-135`. A SITE WHOSE WEAR THIS SEASON IS 0 IS NOT WRITTEN: the closure branch of `World.write`
         # judges nothing, so a write that moved nothing would still trace as written and emit
         # `condition.worn` -- a fabricated success (`ID-9`). `before == s.condition` here, so no crossing

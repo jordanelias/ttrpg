@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 525,
-    "uncited": 393,
+    "total": 527,
+    "uncited": 395,
     "of_which_assumption_grade": 9
   },
-  "count": 525,
+  "count": 527,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,8 +17,8 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 220,
-    "engine.season.realm": 8
+    "engine.season.settings": 221,
+    "engine.season.realm": 9
   },
   "params": [
     {
@@ -4583,6 +4583,17 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.settings.wear_draw",
+      "name": "wear_draw",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-523`, swept False (control, SHIPPED) / True (pool 4, step 0.12) / True (pool 6, step 0.08)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.settings.wound_harm_model",
       "name": "wound_harm_model",
       "value": "scene_fraction",
@@ -6533,6 +6544,17 @@
       "key": "engine.season.realm.cast_attributes",
       "name": "cast_attributes",
       "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/boot/realm.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.wound",
+      "name": "wound",
+      "value": false,
       "kind": "scalar",
       "module": "engine.season.realm",
       "file": "engine/season/boot/realm.py",

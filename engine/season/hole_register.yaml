@@ -8453,6 +8453,19 @@ rows:
     cite:      "NOT A RULING: each part has one defensible fix that moves nothing it does not name, and none is made here because the batch's gate rows read this very state: changing the spine fixture or the formation fan after the gate read would move the instrument the gate is graded by. MEASURED, not inferred: the counts above are from the close's premise-check runs; (1) reproduces by folding a King `issue` per (to, via) pair on `build_realm(0)` and reading the refusal clause."
     source:    "workplan v12 B21's close (the premise-check over each batch item); `R-04.a`, `R-04.c2` in `engine/season/requirements.yaml`"
 
+  - id:        H-523
+    tier:      1
+    hole:      "WEAR IS DRAWN, AND THE DRAW'S TWO [CALIBRATE] VALUES ARE UNSET. `09_WR_B_draws_not_thresholds` edit 1: per Site per season one keyed draw, the obstacle from the kind's wear row plus the lattice pull, the pool a fixture row, the bands Overwhelming 0 / Success half the rate / Partial the rate / Failure twice (the standing rule: we do not do deterministic). The source names the pool and the obstacle's per-point size as `[CALIBRATE: joint calibration, OWED §B]` and gives neither, so `wear_draw_pool` and `wear_draw_ob_step` ship `None` and the arm (`wear_draw: True`) REFUSES with `Unspecified` naming the row until B98 sets them; the shipped `wear_draw: False` is today's exact rate. The band multipliers are `[ASSUMPTION; medium; Jordan to correct]`."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B98 sets the two rows (the arm's flip). `engine/season/data/fixtures.py` the one home of the three rows; READER: `engine/season/loop/matter.py::_wear_draw_rows` and `_drawn_wear` (the Site loop of the wear barrier)"
+    grade:     "assumption"
+    default:   "wear_draw False -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value]: no draw taken, no row read, today's rate byte for byte. `True` with either row `None` raises `Unspecified`. The eligibility is the control's own: a Site whose wear (kind rate plus pull) is 0, or whose condition is 0, takes no draw"
+    site:      "Fixtures wear_draw, wear_draw_pool, wear_draw_ob_step, read ONLY by `engine/season/loop/matter.py`'s Site loop (`_wear_draw_rows`, `_drawn_wear`)"
+    sweep:     ["False (the control, SHIPPED: no draw taken, today's exact rate)", "True with pool 4.0, ob_step 0.12 (a test arm, not a chosen value)", "True with pool 6.0, ob_step 0.08 (a test arm, not a chosen value)"]
+    unblocks:  "B98's flip of `wear_draw`; `09_WR_B_draws_not_thresholds` gate (2): two harbours of equal condition and kind diverge at some seed and the realm's mean wear lies within the control's rate plus or minus its own spread; the Calamity's uneven front (the wound's strain enters only as obstacle on its neighbours' wear draws)"
+    cite:      "MEASURED at B12a.10 on its working tree, `PYTHONHASHSEED=0`, a hand-built world (one territory, one harbour at the full scale, seeds 0 to 199, one season; a session probe, not a repo artifact): at pool 4.0 / ob_step 0.12 the harbour's wear was 0 at 11 seeds, 5 at 64, 10 at 48, 20 at 77 (mean 11.7 against the control's 10); at pool 6.0 / ob_step 0.08 it was 0 at 54, 5 at 71, 10 at 34, 20 at 41 (mean 7.575). Both arms are test arms and the means sit either side of the control's rate, so the realm's calibration is B98's. CONTROL: `build_realm(0)`'s content hash at `wear_draw: False`, 0 / 1 / 2 seasons, equals B12a.09's after-reading (08a3ac15... / 94dc5293... / ba502b30...). FALSIFIERS: `engine/season/tests/test_wear_draw.py` (two harbours of one condition and kind diverge at some of seeds 0 to 19; a wear-0 kind and a Site at condition 0 take no draw; the arm refuses each unset row and the control reads neither)."
+    source:    "workplan v12 B12a.10 (`09_WR_B_draws_not_thresholds` edit 1; B12a's H block slot 1)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
