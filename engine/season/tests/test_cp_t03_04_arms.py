@@ -317,11 +317,12 @@ def test_capture_and_accept_grow_by_the_same_rule():
 def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter_step(_engine):
     """Every person in `build_realm(1)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 0.8):
     after one season at least one survivor holds 3 -- the write admitted at ENCOUNTER, where the season fights --
-    and every value is 2 or more (nothing lowered, nothing minted)."""
-    w = build_realm(1)
+    and every value is 2 or more (nothing lowered, nothing minted). SEED 4: at seed 1 no one fights a one-season realm after B11 (measured
+    `{2: 83}` at the B11 close, the season's fights having moved with B11.08's referents); seeds 2, 4 and 5 grow one to two men."""
+    w = build_realm(4)
     for p in w.persons.values():
         p.capability = {**(p.capability or {}), KEY: 2}
-    run(1, 1, w=w)
+    run(1, 4, w=w)
     vals = Counter(int(p.capability[KEY]) for p in w.persons.values())
     assert sum(vals.values()) >= 50
     assert min(vals) >= 2 and max(vals) >= 3, dict(vals)

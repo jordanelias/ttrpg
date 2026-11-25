@@ -5882,7 +5882,7 @@ rows:
 
   - id:        H-304
     tier:      1
-    hole:      "A STARVING COHORT RESTORES ITS BODY WHOLE BY RESTING, WITH NO FOOD EATEN (premise-check, larder). After a season in which every home larder is empty, `tend` on the cohort raises its body back to 1000. In build_realm seasons 37 of 37 cohorts were short at season 0 and 37 and 38 `body.tended` events followed in two seeds at 4 seasons; the empty-larder cohort in the scarce fixture tends itself in 6 of 8 seasons and is alive at 8, where the no-act control dies at tick 4. Hunger therefore costs nothing durable. The reading is pinned by a named test (`test_rem52s_fall_is_tended_by_31_of_37_while_the_seat_news_floods_oblige`)."
+    hole:      "A STARVING COHORT RESTORES ITS BODY WHOLE BY RESTING, WITH NO FOOD EATEN (premise-check, larder). After a season in which every home larder is empty, `tend` on the cohort raises its body back to 1000. In build_realm seasons 37 of 37 cohorts were short at season 0 and 37 and 38 `body.tended` events followed in two seeds at 4 seasons; the empty-larder cohort in the scarce fixture tends itself in 6 of 8 seasons and is alive at 8, where the no-act control dies at tick 4. Hunger therefore costs nothing durable. The reading is pinned by a named test (`test_rem52s_fall_is_tended_by_30_of_37_while_the_seat_news_floods_oblige`)."
     kind:      "MECHANISM"
     owner:     "`engine/season/loop/effects_combat.py` (`_eff_tend`); `modules/settlements/subsist.py` (`subsist`); `engine/season/harness/scarce.py`"
     grade:     "measured"

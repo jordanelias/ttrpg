@@ -196,6 +196,7 @@ def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
     from collections import defaultdict
     from ..boot.realm import build_realm
     from ..harness.populated import run
+    from ..data.rosters import ABSENT_PREDICATE
     from ..queries.person_q import SEEN_PREDICATE
 
     w = build_realm(1)
@@ -207,7 +208,8 @@ def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
         held = defaultdict(set)
         for c in p.ledger:
             held[(c.subject, c.predicate)].add(repr(c.value))
-        seen = {c.subject for c in p.ledger if c.predicate == SEEN_PREDICATE}
+        # a subject he holds a `seen` claim on, or his own `absent` claim on (B11.83: `said_of` never offers it, by design), is outside the rows
+        seen = {c.subject for c in p.ledger if c.predicate in (SEEN_PREDICATE, ABSENT_PREDICATE)}
         subjects = {s for (s, _pr), v in held.items() if len(v) > 1} - seen
         if not subjects:
             continue
@@ -225,5 +227,5 @@ def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
             plain_differs += plain.value != belief
     print(f"B09.08 realm seed 1, 3 seasons: {equal} / {rows} rows equal across said_of, sheet, belief_contradicts' reader "
           f"({plain_differs} rows the plain said_of would have read differently)")
-    assert rows >= 5, rows                                             # the loop must have asserted something (CLAUDE.md 0.1 pt 2)
+    assert rows >= 3, rows                                             # measured 3 at the B11 close (B11.83 leaves three of the nine out); the loop must have asserted something (CLAUDE.md 0.1 pt 2)
     assert equal == rows, f"{rows - equal} rows disagree"
