@@ -154,17 +154,21 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
 def _lattice_strain(w: "World", scale: int) -> dict:
     """v9 IN-35 FORCE-HAZARD -- THE CALAMITY RE-EXPRESSED AS A COUPLING RULE (#457 `:123-143`): `{site
     id: the extra wear this season}`, which the wear loop below adds to the Site's kind's rate. ONE
-    RULE, NO SOURCE AND NO SCALAR: a Site loses `lattice_coupling / condition_scale` of its gap down to
-    the WEAKEST Site of its own territory or a bordering one (`world_q.enclosing_territory`,
-    `data/geography.py::adjacent_territories`), so a worn place drags the fabric beside it down, and
-    that fabric the next ring out, one border a season at most. Nothing else moves the lattice.
+    RULE, NO SOURCE AND NO SCALAR: ONLY A BROKEN SITE PULLS (A-40; `16_PESSIMIST_WR_B` edit 1). A Site
+    with a BROKEN Site (condition 0, a hole in the fabric) in its own territory or a bordering one
+    (`world_q.enclosing_territory`, `data/geography.py::adjacent_territories`) loses
+    `lattice_coupling / condition_scale` of its condition, the whole of it being the gap down to 0.
+    Strain flows from what is broken, so it has a source and a direction and stops when the source is
+    mended; ordinary uneven wear propagates nothing, and a realm with nothing broken couples nothing.
+    The front advances to the next ring when the ring pulled is itself worn to 0, one border a season
+    at most. Nothing else moves the lattice.
 
     * READ FROM THE BARRIER'S OPENING CONDITIONS, ALL OF THEM, BEFORE ANY WEAR IS WRITTEN. The wear
       loop is a parallel map (S31.2: `_in_parallel_map`), so a Site may not read a neighbour's write
       of this same barrier; a front therefore advances one ring per season, never across the realm in
       one sorted pass. That is what makes *"reach territories in order of distance"* a property of
       the rule rather than of `w.sites`' order.
-    * A `+` LOOP (`H-235`): the lower the neighbour, the more this Site falls, and so on outward.
+    * A `+` LOOP (`H-235`): a Site pulled to 0 is itself broken and pulls the next ring, and so on outward.
       BOUNDED BY MENDING -- persons' `restore` acts (`loop/effects_economy.py::_eff_restore`,
       ungraded, its `_rise` unchanged) raise a fabric toward its ceiling at RESOLVE, which the driver
       runs AFTER this season's MATTER and before the next one's. So holding a ring stops the front at
@@ -175,9 +179,8 @@ def _lattice_strain(w: "World", scale: int) -> dict:
       §6 items 3 and 5), and `systems/overview/sim/ms_track.py`'s stored 0-100 scalar and yearly
       rate have no place here -- a world track that moved by itself would be a fourth clock
       (`loop/census.py`: NO CLOCK GENERATES ANYTHING). This is matter wearing, the licensed clock.
-    * NEVER BELOW THE WEAKEST NEIGHBOUR: the share is at most the whole gap (`0 <= weight <= scale`,
-      refused otherwise), so the coupling alone cannot overshoot, and `max(0, ...)` below still floors
-      the write.
+    * NEVER BELOW 0: the share is at most the whole condition (`0 <= weight <= scale`, refused
+      otherwise), so the coupling alone cannot overshoot, and `max(0, ...)` below still floors the write.
     * EVERY SITE, WHATEVER ITS KIND -- the lattice is the territories' fabric, not a kind, so nothing
       is special-cased; a Site with no territory above it couples to nothing and nothing to it.
 
@@ -202,14 +205,15 @@ def _lattice_strain(w: "World", scale: int) -> dict:
     for sid, t in where.items():
         if t is None:
             continue
-        near = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ()) if n != sid]
-        if not near:
+        broken = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ())
+                  if n != sid and w.sites[n].condition <= 0]
+        if not broken:
             continue
-        gap = max(0, w.sites[sid].condition) - max(0, min(w.sites[n].condition for n in near))
+        gap = max(0, w.sites[sid].condition)          # the pull is toward a hole in the fabric
         if gap > 0 and (weight * gap) // scale:
             out[sid] = (weight * gap) // scale
-    TRACE.decision(f"the lattice coupling pulls {len(out)} Site(s) toward their weakest neighbour",
-                   "v9 IN-35 / #457 FORCE-HAZARD",
+    TRACE.decision(f"the lattice coupling pulls {len(out)} Site(s) toward a broken Site (condition 0) of their own or a bordering territory",
+                   "v9 IN-35 / #457 FORCE-HAZARD; A-40",
                    chose="add the pull to the Site's kind's wear, read from the barrier's opening conditions",
                    alternatives=["a stored Mending Stability scalar decaying a year at a time (a fourth clock)",
                                  "read a neighbour's write of this barrier (a sorted pass, not a parallel map)"])
