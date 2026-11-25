@@ -55,12 +55,24 @@ print(repr((loaded, out)))
 """
 
 
+_IMPORT_ONLY = """
+import sys, os, importlib
+sys.path.insert(0, {root!r})
+before = set(sys.modules)
+importlib.import_module({target!r}.split(":", 1)[0])
+print(repr((sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
+                   if n not in before and getattr(m, "__file__", None) and os.path.abspath(m.__file__).startswith({root!r} + os.sep)), [])))
+"""
+
+
 def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_the_dice_engine_and_the_record():
     targets = _entry_targets()
     assert targets, "no prize row names a `module_entry:`; the module entry this test is about is gone"
     checked = 0
-    for role, target in targets:
-        loaded, out = probe(_PROBE, target, 300)
+    proceeding = "social_contest.proceeding"      # a verb's entry, not a prize's (B24p.12): the same import rule, no `roll` to call on a record
+    assert proceeding in composition.ROLES, "the proceeding's composition row is gone"
+    for role, target in targets + [(proceeding, composition.ROLES[proceeding]["target"])]:
+        loaded, out = probe(_IMPORT_ONLY if role == proceeding else _PROBE, target, 300)
         module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
         allowed_files = {"engine/__init__.py", "engine/season/__init__.py",
                          "engine/season/queries/__init__.py", "engine/season/queries/inputs.py"}
@@ -100,7 +112,7 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     from engine.season.loop.driver import SeasonDriver
     from engine.season.seam.wrappers import sigma
     SeasonDriver(P.tiny_world(DEFAULT_FIXTURES))      # the registrar fills MODULE_ENTRIES
-    # B05.14: the act's obstacle is the level's size plus `opposed_ob(pool_default)` (1.0 here: nobody is opposite): `tell` is `routine`,
+    # B05.14: the act's obstacle is the level's size plus `opposed_ob(pool_default)` (1.0 here: nobody is opposite): `determine` (B24p.99: `tell` proceeds) is `routine`,
     # sized 3 here, so the obstacle is 4 == 2 x the pool of 2 (`pool_default` 2: no attribute, no rank), and sized 3.5 it is over it.
     # B05.99 rewrite: the fixtures are the shipped ones swept (the host reads keys B05.21, B05.53, B05.60 and B05.62 added: a
     # hand-written dict of the old keys raised before the roll), and the hand-built person carries the body the `wounds` source reads
@@ -113,10 +125,10 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
                              .sweep("pool_add", 0).sweep("pool_floor", 0))   # and (B05.09) `pool_of`'s two operands, at control
     person = SimpleNamespace(id="p", capability={}, attributes={}, traits=(), body=1000, body_ceiling=1000)
     w = SimpleNamespace(persons={"p": person}, fixtures=sized(3.0))
-    at = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=draw.seeded(draw.H2("test_social_contest_module", 0)))
+    at = sigma.resolve(w, ["p"], ["c"], "a proposition", verb="determine", rng=draw.seeded(draw.H2("test_social_contest_module", 0)))
     assert at["status"] == "RESOLVED" and at["ob"] == 4.0, f"ob 4 == 2 x pool 2 was refused: {at}"
     w.fixtures = sized(3.5)
-    refused = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=draw.seeded(draw.H2("test_social_contest_module", 0)))
+    refused = sigma.resolve(w, ["p"], ["c"], "a proposition", verb="determine", rng=draw.seeded(draw.H2("test_social_contest_module", 0)))
     fed_by = refused.pop("fed_by")           # B04.08: the rows that fed the roll ride the record, a refusal's too (D-U1-06)
     assert tuple((f[0], f[1], f[4], f[5]) for f in fed_by) == (("social_roll", "dice", 2, 2), ("social_roll", "opposes", None, 0.0))
     levels = refused.pop("levels")           # B05.17: each advantage source's levels ride the record too, all zero here
@@ -126,7 +138,7 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
         # B05.14: the obstacle's terms ride the record, a refusal's too; B05.15/B05.17 add the two standing members at 0.0
         terms=(("even", 0.0), ("difficulty", 3.5), ("opposition", 1.0), ("reception", 0.0), ("capability", 0.0)))
     w.fixtures = w.fixtures.sweep("obstacle_ceiling", 2)
-    capped = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=draw.seeded(draw.H2("test_social_contest_module", 0)))
+    capped = sigma.resolve(w, ["p"], ["c"], "a proposition", verb="determine", rng=draw.seeded(draw.H2("test_social_contest_module", 0)))
     assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped
 
 

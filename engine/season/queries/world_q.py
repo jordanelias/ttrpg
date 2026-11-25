@@ -21,24 +21,26 @@ and `_model_modules()` derives that set from a recursive glob.
 from __future__ import annotations
 
 import functools
-from dataclasses import dataclass, replace
+from collections import namedtuple
+from dataclasses import dataclass, fields, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
+from engine.dice_engine.dice_engine import MARGIN_SCALE
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
-from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
+from ..data.arrangements import ARRANGEMENTS, in_form      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
 from ..data.requires import (
     KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
-    faction_prop_id,
+    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
+    faction_prop_id, factions_compatible,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
@@ -49,12 +51,15 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
-    HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
+    VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, content_value, intent_named, ledger_names
+from .person_q import (
+    COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD, LedgerReader, OwnStateReader, addressed_to, content_said, content_value, intent_named, ledger_names,
+    suspicions)
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, deed_valence, paired_deed_term, projected_axes)
@@ -85,9 +90,12 @@ from ..state.containment import descendants, edges_of, parent_of  # noqa: F401 -
 # ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE: the write gate's `determination` basis asks the
 # bench's containment test of the party's home. Same function objects.
 from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-exported
+# B21.59: the residence kind and the one-person read live in `state/containment.py` (the gate reads a residence); `RESIDE_KIND` is read as
+# `world_q.RESIDE_KIND` by boot, the loop and the harness, so it is the one name here that is re-exported as well as used.
+from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
 from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
@@ -95,14 +103,16 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
+# B21.58 (A-20): `at_war`'s last line asks the gate's `may_wage` of each live commit's subject.
+from ..state.gate import commands_a_seated, may_admit, may_wage
 from ..state.ids import H, ROOT, draw_factory
 from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
-from .inputs import (DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput,
-                     ProduceInput, SubsistInput, Under)
+from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
+                     ProduceInput, Sitting, SubsistInput, Under)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -224,6 +234,10 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 # carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
 DOCKET_ARRANGEMENT = "arrangement"
 DOCKET_PETITION = "petition"
+# B24p.24 (V2 p2 §H): THE TWO KEYS A DOCKET ITEM GAINED -- who arranged its sitting and how hard (`rig`, a `rosters.yaml: rig_levels` member). Written by
+# `_docket_item` and read by `seam/wrappers/sigma.py::arranged_by`, which hands them to the proceeding's builder.
+DOCKET_ARRANGER = "arranger"
+DOCKET_RIG = "rig"
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
@@ -486,6 +500,118 @@ def docketed_under(w: World, matter: Optional[str]) -> set:
     return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
 
 
+def proceeding_row(w: World, act) -> tuple:
+    """B24p.16: THE PROCEEDING AN ACT OF A VERB THAT PROCEEDS OPENS -- `(row dict, form, move, item)`, the first entry of the verb row's `proceeds` whose
+    `when` holds (RD §D.1). `hearer: cohort` asks `is_cohort` of the person the act addresses (the row's `opponent_operand`, as the fold names its
+    target); `docketed: True` asks `docketed(w, subject)`. A `row` that is an arrangement id is that arrangement; `docket` is the arrangement the docket
+    hears the matter under (`DOCKET_ARRANGEMENT` of the first item `docketed` lists); `form: abridged` is `abridged(row)`, the same row with one turn
+    and the speech's own close. A verb that does not proceed, an act no entry answers, or a matter on no docket is refused naming the verb:
+    there is no row to proceed under. A docketed matter whose item names no arrangement (a computed case) makes `docket` fall through to the next entry. READ-ONLY; the seam reads it at B24p.19."""
+    row = VERB_TABLE.get(act.verb)
+    entries = getattr(row, "proceeds", ())
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    subject, hearer = payload.get("subject"), w.persons.get(payload.get(row.opponent_operand() if row is not None else "subject"))
+    held = {"hearer": lambda v: hearer is not None and hearer.is_cohort, "docketed": lambda v: bool(docketed(w, subject))}
+    for when, rid, form, move, item in entries:
+        if all(held[key](value) for key, value in when):
+            if rid == PROCEEDS_DOCKET:
+                items = docketed(w, subject)
+                if not items:
+                    raise Unspecified(f"{act.verb!r} proceeds under the docket's row, and {subject!r} is on no docket", "world_q.proceeding_row",
+                                      needs="a docketed matter", law="B24p.16, RD §D.1")
+                rid = items[0].get(DOCKET_ARRANGEMENT)
+                if rid is None:     # a computed case names no arrangement (`_eff_open_case`: none is derived): the next entry answers
+                    continue
+            arrangement = ARRANGEMENTS[rid]
+            return in_form(arrangement, form), form, move, item
+    raise Unspecified(f"{act.verb!r} has no `proceeds` entry that holds for this act", "world_q.proceeding_row",
+                      needs="a verb row carrying `proceeds:`, its last entry holding for any act", law="B24p.16, RD §D.1")
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# B24p.20 -- A PROCEEDING'S ENDING, READ BACK (`rosters.yaml: proceeding_endings`; the one writer is `loop/resolve.py::_proceeding_ending`). Pure
+# readers over `Event.ending`: they hold nothing and decide nothing, and an Event no proceeding wrote answers empty.
+# ---------------------------------------------------------------------------------------------------------------------------------------
+#: A written beat: a `Beat`'s fields in declared order, `terms` left out (the true values are never written) and `mood` read as `stance` (its band, named
+#: only where the room turns; `None` at the beats that leave it as it was; the clamped number is not in the record).
+EndedBeat = namedtuple("EndedBeat", [("stance" if f.name == "mood" else f.name) for f in fields(Beat) if f.name != "terms"])
+
+
+def _tagged(event, tag: str) -> list:
+    """The tuples of `event.ending` that begin with `tag` (`()` for an Event with no ending, or a single roll's: its elements are pairs of keys)."""
+    return [x for x in getattr(event, "ending", ()) if x and x[0] == tag]
+
+
+def ending_beats(event) -> tuple:
+    """The beats a proceeding's Event holds, in order, each an `EndedBeat` of milli-unit whole numbers where the beat held reals."""
+    return tuple(EndedBeat(*x[1:]) for x in _tagged(event, ENDING_BEAT))
+
+
+def ending_sitting(event) -> Optional[Sitting]:
+    """THE WRITTEN SITTING, as a `Sitting` (what a resume passes as `Input.state`: it continues the count and the issue reached, with no replay), its
+    reals read back from milli-units; `None` for an Event holding none. A sitting that ended `yielded` is refused at `Input`, not here."""
+    held = _tagged(event, ENDING_SITTING)
+    if not held:
+        return None
+    _, n, issue, points, live, tracks, cond, used, last_voice, ended = held[0]
+    unit = lambda pairs: tuple((who, v / MARGIN_SCALE) for who, v in pairs)
+    return Sitting(n=n, issue=issue,
+                   # [canonical: engine/season/loop/resolve.py §_proceeding_ending -- a written point is its six fields then its `held` pairs: an index, not a tuned value]
+                   points=tuple(Point(*x[:6], held=unit(x[6])) for x in points), live=tuple(live), tracks=unit(tracks),
+                   cond=tuple((who, Cond(c[0], c[1] / MARGIN_SCALE, c[2] / MARGIN_SCALE, c[3], c[4] / MARGIN_SCALE)) for who, c in cond),
+                   used=tuple(used), last_voice=tuple(last_voice), ended=ended)
+
+
+def ending_verdicts(event) -> tuple:
+    """`((person, band), ...)`: each verdict of the sitting, graded on the one ladder when it was written."""
+    return tuple((x[1], x[2]) for x in _tagged(event, ENDING_VERDICT))
+
+
+#: The card's public cells a sitting's Event holds (B24p.22): who decided, who tilted the forum, how far (a real again) and against which side, and a played
+#: adjudicator's departures `((decider, how far his ruling departed from his own track), ...)`.
+EndedCard = namedtuple("EndedCard", ["decided_by", "arranged_by", "tilt", "tilted_against", "ruled"])
+
+
+def ending_card(event) -> Optional[EndedCard]:
+    """The card's public cells as the sitting wrote them (reals read back from milli-units); `None` for an Event no proceeding wrote."""
+    held = _tagged(event, ENDING_CARD)
+    if not held:
+        return None
+    _, decided_by, arranged_by, tilt, tilted_against, ruled = held[0]
+    return EndedCard(tuple(decided_by), arranged_by, tilt / MARGIN_SCALE, tilted_against, tuple((who, d / MARGIN_SCALE) for who, d in ruled))
+
+
+def ending_arrangement(event) -> Optional[str]:
+    """The id of the arrangement row a sitting was held under (its head's second cell); `None` for an Event no proceeding wrote."""
+    held = _tagged(event, ENDING_HEAD)
+    return held[0][1] if held else None
+
+
+def ending_rattles(event, person: str) -> int:
+    """How many rattles landed on `person` in the sitting this Event wrote: the beats that name him `rattled`."""
+    return sum(1 for b in ending_beats(event) if b.rattled == person)
+
+
+def rattled_since(w: World, person: str) -> tuple:
+    """`(scenes since, ...)`, one for each rattle that landed on `person` in a proceeding THIS SEASON, freshest first: what `person_q.strain_carried` reads
+    (V2 p2 §A.4, a derived read of his own acts' endings). A scene is a proceeding act in which he sat (the sitting's `cond` holds him); an act's Events
+    are one scene, counted once. Read off `w.log` newest first, stopping where the season ends; stores nothing."""
+    out, scenes, seen = [], 0, set()
+    for e in reversed(w.log):
+        if e.emitted_at < w.tick:
+            break
+        if not e.ending or e.causes[0] in seen:
+            continue
+        sitting = ending_sitting(e)
+        if sitting is None:
+            continue
+        seen.add(e.causes[0])
+        if any(who == person for who, _c in sitting.cond):
+            out.extend([scenes] * ending_rattles(e, person))
+            scenes += 1
+    return tuple(out)
+
+
 # ===========================================================================
 # THE WORKS -- plan position `24e` (WORKS & FOUNDING), r2 `04_MATTER_AND_WORKS.md` §A.6. RESOLVER-SIDE
 # Queries, World first, owned by nobody and storing nothing (`AX` T-a).
@@ -687,20 +813,22 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
         off = w.offices.get(t.object)
         if off is None or not sits_over(w, off, venue):
             continue
+        if restrained(w, t.subject, DETAIN_KIND):      # B21.11: a detained holder exercises no seat, `may_determine` asks the same (`_seat_grants`)
+            continue
         seats.append(t.subject)
     return seats
 
 
 def declared_sitting(w: World, matter: Optional[str]):
     """v11 CR-34 (C-7, `ED-SC-0034`): THE ARRANGEMENT ROW `matter` IS HEARD UNDER WHEN THAT ROW DECLARES ITS
-    DISPOSAL (`disposal: declared`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
+    DISPOSAL (`close: declared`, B24p.03: was `disposal`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
     `declared.votes` and `declared.quorum` stems of `determine`'s `vote` conjunct. The row comes from the
     docket item (`docketed_under`); a computed `open_case` names none (H-80), so every computed matter is
     `None` here. More than one row on one matter (a hand-planted docket, which `_eff_determine` declines
     rather than choosing between) is `UNKNOWN` when any of them declares: absence refuses, never a guessed row."""
     rows = docketed_under(w, matter)
     declared = [ARRANGEMENTS[r] for r in rows
-                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["disposal"] == "declared"]
+                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["close"] == "declared"]
     if not declared:
         return None
     return declared[0] if len(rows) == 1 else UNKNOWN
@@ -1560,7 +1688,7 @@ def guard_weight(w: World, rung_id: str) -> int:
     return sum(w.persons[p].weight for p in sworn)
 
 
-def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str]:
+def issuing_seat(w: World, rid: str, verb: Optional[frozenset] = None) -> Optional[str]:
     """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
     Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
     creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
@@ -1569,9 +1697,10 @@ def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
     different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
     import `loop/`, so the one owner sits where both readers reach it. `verb` (v10 PC-10b), when given, asks only
-    for a Record that verb's act minted (the writ limb passes `WRIT_MINTING_VERB`); `None` is every creating act."""
+    for a Record one of those verbs' acts minted (a collection; the writ limb passes `WRIT_MINTING_VERBS`); `None` is every
+    creating act."""
     act = _creating_act(w, rid)
-    if verb is not None and getattr(act, "verb", None) != verb:
+    if verb is not None and getattr(act, "verb", None) not in verb:
         return None
     via = getattr(act, "via", None)
     return via if via in w.offices else None
@@ -1581,21 +1710,42 @@ def _creating_act(w: World, rid: str):
     """THE ACT THAT CAUSED THE EVENT FIRST NAMING `rid` (`issuing_seat`'s read; the
     `audience` stem's writ limb asks the act's VERB of the same act), or `None` (a hand-planted Record, or an
     Event no act caused)."""
-    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    made = w.first_event_naming(rid)
     return causing_act(w, made) if made is not None else None
 
 
-# THE VERB WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
-# a held, addressed Record as a licence to enter only when `issue` made it. `writs_held` stamps every
+def order_destination(w: World, rid) -> Optional[str]:
+    """B21.57 (`IS-B3-FA-05`, CP-T09-08): THE PLACE AN ORDER SENDS ITS ADDRESSEE TO -- the Rung the Record `rid`'s `at` key
+    names (`dispensation`'s place of discharge, `rosters.yaml: record_kinds`), or `None` for a Record that is not a
+    dispensation, one naming no place, or one naming a place the world does not hold. Read-only, and the ONE reading of
+    *an order whose content names a destination*: `loop/effects_migration.py::_eff_comply` relocates the man who answers it."""
+    rec = w.records.get(rid) if isinstance(rid, str) else None
+    content = getattr(rec, "subject_matter", None)
+    if rec is None or rec.kind != "dispensation" or not isinstance(content, dict):
+        return None
+    dest = content.get("at")
+    return dest if isinstance(dest, str) and dest in w.rungs else None
+
+
+def minting_verb(w: World, rid: str) -> Optional[str]:
+    """THE VERB OF THE ACT THAT MADE THE RECORD `rid` -- `_creating_act`'s, the read `issuing_seat` filters on -- or `None` (a
+    hand-planted Record, or an Event no act caused). B21.18: `loop/witness.py::addressee_reads` asks it of a document, since
+    `rosters.yaml: read_to_addressee` and `proclaimed` cover a kind as one verb mints it (`covenant` mints `issue`'s
+    `dispensation` through `issue`'s body, and only `issue`'s is proclaimed, A-21)."""
+    return getattr(_creating_act(w, rid), "verb", None)
+
+
+# THE VERBS WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
+# a held, addressed Record as a licence to enter only when `issue` made it. `writs_addressed` stamps every
 # `RECORD_REFERENT_KINDS` member, and PC-10b's `challenge` joins that set (`accept`'s row), so without this
 # narrowing a challenge addressed to a man would be read as a writ admitting him to a court. A VERB, not a kind:
 # H-240 names the creating act's verb, and a `covenant`'s dispensation (`_eff_issue`'s body, another verb) is an
 # instrument, not an invitation [ASSUMPTION; medium; Jordan to correct; revert: any `dispensation`-kind Record].
-WRIT_MINTING_VERB = "issue"
-if WRIT_MINTING_VERB not in VERB_TABLE:           # the sibling constants refuse at import; a renamed verb would close the limb silently
-    raise Forbidden(f"`world_q.WRIT_MINTING_VERB` names {WRIT_MINTING_VERB!r}, which `verb_table.yaml` does not",
-                    "verb_table.yaml", needs="the verb whose mint is an invitation, as a `verb_table.yaml` row",
-                    law="v10 PC-10b -- the writ limb of `admits_audience` reads a verb; a renamed verb must refuse, not close it")
+# B21.18 (`06_FA_decree_binds` edit 2): THE LIST IS DATA -- the verbs `rosters.yaml: proclaimed` lists (a writ made public is
+# the seat's instrument, A-21), so `issue` is named once, there, and refused at import by its loader if no row mints the kind
+# (`data/verbs.py::_check_record_verb_minting`). ⚠ The roster's revert (`proclaimed: {}`) empties this set too, closing the
+# limb that before B21.18 opened on an `issue`-minted writ; the limb is unreached in computed play (`admits_audience`, limb 4).
+WRIT_MINTING_VERBS = frozenset().union(*PROCLAIMED.values())
 
 
 def record_names(w: World, rid, operand: str, value):
@@ -1647,13 +1797,13 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          over his own obliges (`sworn_to` is keyed by seat, the inverse question), and an IMPOSED oblige
          is a sentence, not an oath (`Tenure.imposed`): skipped as `guard_weight` and `purview_reaches`'
          oblige clause skip it.
-      4. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
+      4. A WRIT: he holds a live writ addressed to him (`writs_addressed(..., held=True)`) whose issuing seat
          (`issuing_seat`, K-52) reaches the rung -- an invitation, minted by `issue`. A hand-planted
          writ has no creating Event and therefore no issuer, and opens nothing. ⚠ Any addressed
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
          only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
-         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERB`, read off the creating act): `writs_held`
+         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERBS`, read off the creating act): `writs_addressed`
          stamps a held `challenge` too, and a challenge is not an invitation.
 
     ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
@@ -1675,10 +1825,11 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     p = w.persons.get(actor)
     if p is None:
         return False
-    # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERB`), so `challenge` joining
+    # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERBS`), so `challenge` joining
     # `RECORD_REFERENT_KINDS` does not widen the gate (a challenge is minted by an `own` act, and is no invitation).
-    for rid in writs_held(w, p):
-        seat = issuing_seat(w, rid, WRIT_MINTING_VERB)
+    # B21.22: the HELD writs alone (`held=True`) -- entry on a writ is the paper's, not the terms'.
+    for rid in writs_addressed(w, p, held=True):
+        seat = issuing_seat(w, rid, WRIT_MINTING_VERBS)
         if seat is not None and purview_reaches(w, w.offices[seat], rung):
             return True
     return False
@@ -1693,7 +1844,6 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
 # its one `Tenure(...)` construction, because `data/verbs.py::_derive_openers_from_effects` reads a
 # kind off that call as a string CONSTANT. Refused at import if the roster stops carrying it: every
 # residence Query would otherwise match nothing and read as a world where nobody lives anywhere.
-RESIDE_KIND = "reside"
 if RESIDE_KIND not in TENURE_KINDS:
     raise Unspecified(
         f"tenure kind {RESIDE_KIND!r} is not a `tenure_kinds` member ({sorted(TENURE_KINDS)})",
@@ -1733,44 +1883,32 @@ def residence_of(w: World) -> dict:
     return out
 
 
-def _refuse_two_residences(pid: str, first: str, second: str) -> None:
-    """THE ONE OWNER OF *A PERSON LIVES IN ONE PLACE* (plan position `19c`): raised by `residence_of` (over the
-    aggregate) and `lives_in` (over one person's own edges) alike, so the rule, its kind and its text live once."""
-    raise Forbidden(
-        f"{pid!r} has two live `{RESIDE_KIND}` edges ({first!r}, {second!r})", "S15",
-        law="plan position `19c` -- a person lives in ONE place; `migrate` closes the old "
-            "residence as it opens the new, so this world was built by hand")
-
-
-def lives_in(p: Person) -> Optional[str]:
-    """THE RUNG ONE PERSON LIVES IN -- the object of his one live `reside` edge, read off his OWN edges
-    (`p.tenures`), or `None` for a man of no fixed abode; two raise (`_refuse_two_residences`, `residence_of`'s
-    rule). The per-person read `kit_of` takes; `residence_of` keeps its scan of the aggregate (it maps everyone,
-    and an edge not yet re-homed onto its subject is in `w.tenures` and not in `p.tenures`)."""
-    found = [t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live]
-    if len(found) > 1:
-        _refuse_two_residences(p.id, found[0], found[1])
-    return found[0] if found else None
-
-
-def restrained(w: World, person: Optional[str], kind: str) -> bool:
+def restrained(w: World, person: Optional[str], kind: str, at: Optional[str] = None) -> bool:
     """DOES `person` OWN A LIVE EDGE OF THE RESTRAINT `kind` -- a `detain` (he is in custody) or a
     `ban` (he is excluded)? v9 SC-03a (#453 §10.4 step 3, K-53): the ONE read behind every reader
     the two kinds ship with, so *is this man a prisoner* cannot mean one thing to `move` and another
     to a muster: `_eff_move`/`_eff_migrate` and `loop/sides.py` ask it of `DETAIN_KIND`,
-    `_req_oblige` and `_eff_confer` of `BAN_KIND`.
+    `_req_oblige`, `_req_succeed` and `_eff_confer` of `BAN_KIND`.
 
-    ⚠ ANY SEAT, AND THAT IS AN [ASSUMPTION; medium; revert: also require the edge's object seat's
-    purview to reach where the restraint is read]: a custody holds a man everywhere (he is not free
-    to travel to a place the detaining seat does not govern), and #453 §8.1 states the ban's readers
-    without a scope (*"a banned person cannot serve or be seated"*). A kind off `RESTRAINT_KINDS` is a
-    caller defect -- every other kind has a reader of its own -- and raises rather than answer False."""
+    `at` (B21.02): a RUNG, asked of `BAN_KIND` only -- with it, the answer is whether some live ban's
+    seat (the edge's object) REACHES that rung (`state/gate.py::purview_reaches`, the one owner), so a
+    ban bars only the seats within the banning seat's reach. Without it the answer is as it was: ANY
+    live edge of the kind. A ban does not close seats already held (no reader here asks it of a hold).
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the argument at the four call sites]
+    A `detain` is never scoped (custody holds a man everywhere: he is not free to travel to a place
+    the detaining seat does not govern), so `at` with `DETAIN_KIND` is a caller defect and raises.
+    A kind off `RESTRAINT_KINDS` is a caller defect -- every other kind has a reader of its own -- and
+    raises rather than answer False."""
     if kind not in RESTRAINT_KINDS:
         raise InstrumentDefect(
             f"`restrained` asked of {kind!r}, not a restraint kind ({sorted(RESTRAINT_KINDS)})")
+    if at is not None and kind != BAN_KIND:
+        raise InstrumentDefect(f"`restrained` scoped `at` {at!r} for {kind!r}: only a ban is scoped to a purview")
     if person is None:
         return False
-    return any(t.kind == kind and t.subject == person and t.live for t in w.tenures)
+    return any(t.kind == kind and t.subject == person and t.live
+               and (at is None or (t.object in w.offices and purview_reaches(w, w.offices[t.object], at)))
+               for t in w.tenures)
 
 
 def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
@@ -2022,6 +2160,44 @@ def members(w: World, faction: str) -> list[str]:
                   and t.subject in w.persons)
 
 
+ADMISSION_MOOD = "OUGHT"   # the mood an admission Proposition is uttered in -- `commit`'s own cause-shape (`boot/realm.py`'s creeds)
+
+
+def admission_stands(w: World, person: str, faction: str) -> bool:
+    """DOES AN ADMISSION OF `person` INTO `faction` STAND? (B21.63, `16_PESSIMIST_FA_B` edit 3, R-02.) An admission is a Proposition of mood
+    `OUGHT` whose `subject` is the joiner and whose `value` is the faction Proposition's id, `commit`ted to (live) by a member who may admit
+    (`gate.may_admit`: the faction's head seat or a confer-granting seat of it, or any member where it has none). It is `covenant`'s shape --
+    two commits make it in force -- with no new carrier: `utter` makes the Proposition, `commit` is the admitting member's yes, and releasing
+    the commit withdraws it. `person` and the admitter may be one man only if he may admit himself (a head seat's holder joining his own
+    faction needs no one: he is already a member)."""
+    return any(q.mood == ADMISSION_MOOD and q.subject == person and q.value == faction
+               and any(t.kind == "commit" and t.object == q.id and t.live and may_admit(w, t.subject, faction) for t in w.tenures)
+               for q in w.propositions.values())
+
+
+def admitted_to(w: World, person: str, prop: str) -> bool:
+    """MAY `person`'S `commit` TO `prop` STAND AS A JOINING? (B21.63, `16_PESSIMIST_FA_B` edit 3; `admitted`, the `requires` stem.) A
+    membership is a unilateral sentence nowhere: it is an offer the faction answers. TRUE when
+      * `prop` is no rostered faction Proposition (`FACTION_BY_PROP`) -- a cause, a creed of nobody's, any other `commit` is not a joining; or
+      * `prop` is a rostered faction with no live member -- the first to join founds it (a faction nobody belongs to has nobody to answer); or
+      * `person` is already a live member of it -- a re-commit is no joining; or
+      * an admission stands (`admission_stands`) AND `person` belongs to no rostered faction incompatible with it
+        (`data/rosters.py::factions_compatible`: two different factions are incompatible unless `rosters.yaml: factions.compatible_with`
+        pairs them) -- a man leaves one faction by his own `release` before an admission into another serves.
+    Leaving stays the member's own `release` (AX-1); nothing here ends an edge."""
+    TRACE.query("admitted_to", "resolver")
+    name = FACTION_BY_PROP.get(prop)
+    if name is None:
+        return True
+    live = members(w, prop)
+    if not live or person in live:
+        return True
+    if not admission_stands(w, person, prop):
+        return False
+    return all(factions_compatible(name, FACTION_BY_PROP[other]) for other in FACTION_BY_PROP
+               if other != prop and person in members(w, other))
+
+
 def leaders(w: World, faction: str) -> list[str]:
     """The members who hold an Office belonging to this faction. §17 · §22's `Nobody` row.
 
@@ -2086,6 +2262,12 @@ def _subtree(w: World, rung_id: str) -> set:
     return {rung_id, *descendants(w, rung_id)}
 
 
+def _present_in(w: World, here: set) -> list:
+    """The subjects of every live `contain` whose object is in `here` (a `_subtree`), in `w.tenures` order: who stands in that ground. The one
+    read `mustered` and `seat_people_at` filter."""
+    return [t.subject for t in w.tenures if t.kind == "contain" and t.live and t.object in here]
+
+
 def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     """`(members of this faction present, persons present)` over the containment subtree.
 
@@ -2122,9 +2304,25 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
     TRACE.query("mustered", "resolver")
     here = _subtree(w, rung_id)
     inside = set(members(w, faction))
-    return sorted(t.subject for t in w.tenures
-                  if t.kind == "contain" and t.live
-                  and t.object in here and t.subject in inside)
+    return sorted(p for p in _present_in(w, here) if p in inside)
+
+
+def seat_people_at(w: World, via: str, rid: str) -> list[str]:
+    """B21.79 (CP-T09-07 (b), AM-F-13). A SEAT'S PEOPLE PRESENT AT `rid`: `mustered(rid, seat_faction(via))` -- its faction's
+    members present in `rid`'s subtree -- UNION the seat's OBLIGEES present there (`establishment_of(via)`, each with a live
+    `contain` in the same subtree), the faction's own first in `mustered`'s order and the obligees after, in `w.tenures` order, none
+    twice. Retainers fight; a vassal's oath yields men. An obligee need not belong to the seat's faction: the oath is the tie.
+    A seat with no faction has no members to muster and still has its sworn; a seat with no obligee present reads `mustered`
+    exactly. Read-only: the openers of `oblige` are untouched. Readers: `loop/sides.py::sides_of` (the army a march musters at a
+    settlement) and `loop/effects_shared.py::occupying_faction` (the presence that licenses occupying one)."""
+    TRACE.query("seat_people_at", "resolver")
+    faction = seat_faction(w, via)
+    people = mustered(w, rid, faction) if faction else []
+    sworn = [t.subject for t in sworn_to(w, via) if not t.imposed and t.subject in w.persons]    # an IMPOSED oblige (a sentence) is no oath
+    if sworn:
+        present = set(_present_in(w, _subtree(w, rid)))
+        people += [p for p in dict.fromkeys(sworn) if p in present and p not in people]
+    return people
 
 
 def occupies(w: World, rung_id: str, faction: str) -> bool:
@@ -2599,7 +2797,7 @@ def endings_reached(w: World) -> list:
     its object, so it needs no such rule. An edge's antecedent is the first logged Event naming it whose
     causing act (`causing_act`) is of a verb that opens its kind (`data/verbs.py`'s derived opener
     table) -- so a re-grant or a closure naming the edge is not its opening (a proxy on the causing
-    verb; `_opened_by_acts` says why it holds). The realm AS BUILT
+    verb; `opened_by_acts` says why it holds). The realm AS BUILT
     therefore reaches nothing, even where a row's condition already holds at build: a seeded edge has
     no opening Event, and nor does an edge planted by hand. One such act suffices, and THE CROSSING
     ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) is what
@@ -2620,7 +2818,7 @@ def endings_reached(w: World) -> list:
         edges = _ending_edges(w, row)
         if not edges:
             continue
-        opened = _opened_by_acts(w, edges)
+        opened = opened_by_acts(w, edges)
         if not opened:
             continue
         out.append(EndingReached(name, row.victory,
@@ -2656,7 +2854,7 @@ def _ending_edges(w: World, row) -> tuple:
     return tuple({t.id: t for t in holds + commits}.values())
 
 
-def _opened_by_acts(w: World, edges: tuple) -> dict:
+def opened_by_acts(w: World, edges: tuple) -> dict:
     """`{edge id: (opening Event, its Act)}` for each edge an act opened (`endings_reached` says how).
     ⚠ A PROXY: an Event "opens" an edge it names when the verb that CAUSED it opens that edge's kind,
     not by anything the Event records, which is true only because `establish`, `release` and `revoke`
@@ -2700,6 +2898,34 @@ def establishment_of(w: World, office_id: str) -> list[str]:
     # v9 IN-40: the walk is `sworn_to`'s (`state/gate.py`, re-exported at the import block), shared with
     # `purview_reaches`' oblige clause, so *who is sworn to this seat* has one answer.
     return [t.subject for t in sworn_to(w, office_id) if t.subject in w.persons]
+
+
+def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str) -> bool:
+    """THE COMMAND BASIS: WHOM A SEAT MAY ORDER (A-22). May `actor`, exercising `via`, order `person_id`?
+    Read-only; three classes, one disjunct each, every one composed on the relation that already owns it:
+
+      (i)   THE SWORN -- a live `oblige` to this seat (`establishment_of`), wherever he lives;
+      (ii)  THE HOLDER OF A SEAT THIS SEAT MAY REVOKE -- `may_revoke` over each seat he holds other than `via`
+            itself, so whom a seat may order and whom it may dismiss are one relation;
+      (iii) AN UNSEATED PERSON IN ITS LAND -- he holds no seat and the seat's purview reaches the place he lives
+            (`purview_reaches` of `place_of`).
+
+    A seated resident who is none of the three is NOT commanded by living in the seat's land: where a person
+    lives no longer decides whose man he is, and an order to a superior is a petition, not a writ. This is the
+    word *command basis* -- *whom a seat may order* -- and not *purview* (the rung a seat's ground covers,
+    `purview_reaches`, which `may_fill` and the rung referents keep).
+
+    ⚠ CALLERS: `issue`'s `basis: command` (B21.20, `WorldReader.read`'s `command` stem); `_req_dispatch` (B21.21);
+    `writs_addressed`'s terms clause (B21.22: a decree forms an answer only for an addressee the seat commands). `actor` is
+    asked only by `may_revoke`, which refuses an actor not seated in `via`; the sworn and the land disjuncts read
+    the seat `via` names alone, as `purview_reaches` does (`04:332`: purview is asked of the seat exercised)."""
+    TRACE.query("commands", "resolver")
+    if via not in w.offices:
+        return False
+    seat = w.offices[via]
+    if commands_a_seated(w, actor, via, person_id):         # (i) and (ii): B21.59 moved their one body to the gate (`may_levy` asks it too)
+        return True
+    return not w.seat_holds(person_id) and purview_reaches(w, seat, place_of(w, person_id))
 
 
 def upkeep_of(w: World, office_id: str) -> int:
@@ -3029,8 +3255,9 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
       * what the faction expects of its members: `data/goals.py::expected("faction", name)` (IN-69's
         owner: its role template plus its faction goals' pursuits);
       * the poles its goals engage: `engaged_poles`;
-      * whom `p` regards on its behalf: its head -- the subject of its creed Proposition, the authored
-        leader `boot/realm.py` subjects the creed on, where that is a living person -- then every
+      * whom `p` regards on its behalf: its PRESENT head -- `head(w, faction)`, the holder of its head seat as
+        the world stands (B21.65: a succession moves it) -- or, where it has none, the subject of its creed
+        Proposition (the authored leader `boot/realm.py` subjects the creed on), where that is a living person -- then every
         doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind: a paired deed's doer
         by the `seen.who` pairing, any other by its subject) who is a live member of it (`members`:
         membership is `commit`, a World read of other persons' edges: the `seat_holders` precedent it cited was reversed at v12 B11.08, and
@@ -3049,9 +3276,12 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
                           law="v9 IN-70 -- an opinion is of a faction")
     inside = set(members(w, faction))
     creed = w.propositions.get(faction)
-    head = creed.subject if creed is not None and creed.subject in w.persons else None
+    present = head(w, faction)
+    # the creed's subject leads only a faction with NO head seat; a headed faction whose seat stands vacant has no leader (B21.65)
+    leader = (present if present is not None and present in w.persons
+              else creed.subject if (creed is not None and HEAD_SEAT.get(name) is None and creed.subject in w.persons) else None)
     regarded = tuple(x for x in dict.fromkeys(
-        ((head,) if head is not None else ())
+        ((leader,) if leader is not None else ())
         + tuple(d for d in deed_doers(p.ledger, {"kinds": DEED_KINDS}, p.id) if d in inside))
         if x != p.id)
     return opinion(p, _goals.expected("faction", name), engaged_poles(name), regarded, w.fixtures)
@@ -3170,6 +3400,36 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o in w.offices and vacant_named(p.ledger, o) and any(may_fill(w, p.id, s, w.offices[o]) for s in seats))
 
 
+def recalls(w: World, p: Person) -> tuple:
+    """THE RECALL OCCASION (B21.23, `06_FA_decree_binds` edit 4; rulings A-24, A-47), `vacancies`' shape: for each person `other`
+    whose `person_q.suspicions` in `p`'s own ledger has reached `Fixtures recall_suspicion`, `other` (stamped `Person`) and each seat
+    he holds that `may_revoke` admits through one of `p`'s own seats (stamped `Office`), in that order, each person's seats by id.
+    Suspicion counts only the answers of persons the writ's issuing seat commands (`commands`, the A-22 basis `writs_addressed`
+    asks): `admit` hands it the command basis, so a writ to someone the seat does not command enters no count. `()` at
+    `recall_suspicion: None` (the revert), for a person with no seat of his own, and for nearly everyone else.
+
+    ⚠ IT OPENS THE ISSUER'S QUESTION AND DECIDES NOTHING (A-24, A-47): the recall itself is `revoke`'s resistible draw, the fold's. It
+    asks the gate's own `may_revoke`, so it names no SEAT the gate would refuse to have stripped through that seat. THE PERSON IS
+    NAMED EITHER WAY (the edit's own words: *"the person and each seat he holds that `may_revoke` admits"*): a defier none of whose
+    seats `p` may strip is an occasion with no `revoke` candidate on him. Resolver-side and read-only, as `vacancies`."""
+    threshold = w.fixtures.get("recall_suspicion")
+    if threshold is None:
+        return ()
+    mine = [t.object for t in w.seat_holds(p.id)]
+    if not mine:
+        return ()
+
+    def commanded(other, writ):
+        return commands(w, p.id, issuing_seat(w, writ), other)
+    out = []
+    for other, n in suspicions(p, commanded).items():
+        if n < threshold or other not in w.persons:
+            continue
+        seats = sorted({t.object for t in w.seat_holds(other) if any(may_revoke(w, p.id, s, w.offices[t.object]) for s in mine)})
+        out += [other, *seats]
+    return tuple(out)
+
+
 def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
     among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
@@ -3198,14 +3458,13 @@ class Continuation(NamedTuple):
 
 
 def _heir_title_holders(w: World, p: Person) -> list:
-    """`heir_title`: the live holders of the `successions` title of each seat `p` holds (`SUCCESSIONS`, the
-    registry IN-61's claim reads), seats in `p`'s store order."""
+    """`heir_title`: the live holders of any `successions` title of each seat `p` holds (`SUCCESSIONS`, the
+    registry IN-61's claim reads), seats in `p`'s store order and titles in list order -- an order for the OFFER only (B21.16:
+    the list is eligibility, never a ranking of who succeeds)."""
     out = []
     for s in w.seat_holds(p.id):
-        title = SUCCESSIONS.get(s.object)
-        if title is None:
-            continue
-        out += [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == title]
+        for title in SUCCESSIONS.get(s.object, ()):
+            out += [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == title]
     return out
 
 
@@ -3259,40 +3518,121 @@ def continuations(w: World, p: Person) -> tuple:
     return tuple(out)
 
 
-def writs_held(w: World, p: Person) -> tuple:
-    """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
-    correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
-    `referent_class: Record` answers (`data/verbs.py::RECORD_REFERENT_KINDS`, `dispensation`). #453
-    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*. ONLY A WRIT THAT
-    NAMES HIM: a writ is minted into its maker's hand (the writ-to-addressee mint, IN-10 (c), was
-    refused 2026-10-14: the user, ED-IN-0292 (1), *"just say no for now"*), so a holder who is not
-    in the writ's addressee list is the issuer or a custodian, not the person the writ orders, and
-    is offered nothing. A writ reaches its addressee only by a `give`. `()` for nearly everyone.
+# THE EVENT KINDS THAT ANSWER A WRIT (B21.22, `06_FA_decree_binds` edit 3): a claim of one of them, of the holder's own
+# doing (`Claim.doer`), on a writ means he has answered it, and `writs_addressed` no longer offers it. `construe`'s
+# `terms.distorted` is not here: a construal is the construer's reading of the terms, after which he may still comply or
+# defy. Refused at import unless each is emitted by a row answering a writ kind (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`),
+# so a renamed emission cannot leave the net reading a kind no answer writes.
+WRIT_ANSWERED_KINDS = frozenset({COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD})      # `person_q`'s two, which `suspicions` folds
+_unanswering = WRIT_ANSWERED_KINDS - {k for v, kinds in RECORD_SUBKINDS_BY_VERB.items()
+                                      if kinds & RECORD_REFERENT_KINDS for k in VERB_TABLE[v].emits}
+if _unanswering:
+    raise Unspecified(
+        f"`WRIT_ANSWERED_KINDS` names {sorted(_unanswering)}, which no row answering a writ kind emits",
+        "verb_table.yaml -- emits",
+        needs="the kinds `comply` and `evade / defy` emit, or the net retired with them",
+        law="B21.22 (`06_FA_decree_binds` edit 3) -- an answered writ is one the actor's own ledger holds his answer to")
 
-    A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS,
-    which `questions_for` adds to the question the person answers as CLASSED referents, and whether
-    the act then passes is the fold's (the rows' typed cells: the actor's own ledger holds a claim on
-    the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
-    ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
-    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203).
-    ⚠ v10 PC-10b: THE KINDS ARE `{dispensation, challenge}` -- `accept` declares `referent_class: Record` on a
-    `challenge` (its `existence` conjunct), so `RECORD_REFERENT_KINDS` derives it and a held challenge ADDRESSED TO
-    `p` (its `to`, the person challenged) is stamped here, `accept`'s occasion. Minted into the challenger's hand,
-    it reaches its addressee only by a `give` (H-229, unreached in the realm): `accept`'s named R-05 residue.
-    `admits_audience` reads only the writs `issue` minted, so the stamp does not widen the access gate."""
-    # v10 IN-12 step 5a: the addressee test is `person_q.addressed_to`'s, its one owner (the terms-sourced
-    # reader in `decision/options.py` asks the same rule of the holder's content claim).
-    return tuple(sorted({t.object for t in p.tenures
-                         if t.kind == "hold" and t.live and t.object in w.records
-                         and w.records[t.object].kind in RECORD_REFERENT_KINDS
-                         and addressed_to(w.records[t.object].subject_matter, p.id)}))
+
+def writs_addressed(w: World, p: Person, held: bool = False) -> tuple:
+    """THE WRITS ADDRESSED TO `p` THAT ARE HIS TO ANSWER (B21.22, `06_FA_decree_binds` edit 3, rulings A-21, A-22;
+    was `writs_held`, v9 IN-09, H-203), sorted by id: the Records of a `RECORD_REFERENT_KINDS` kind
+    (`data/verbs.py`, derived off the rows declaring `referent_class: Record`: `dispensation`, `challenge`) whose
+    addressee list names him (`person_q.addressed_to`, the one owner of the addressee test) and that reach him by
+    either of two clauses, minus those he has already answered:
+
+      1. THE PAPER -- he holds it, on his own live `hold` edge. #453 `:502`: *"the executor holds the writ ...
+         `comply` forms on the held writ"*. A writ is minted into its maker's hand (ED-IN-0292 (1), RULED NO), so a
+         holder who is not an addressee is the issuer or a custodian, and is offered nothing.
+      2. THE TERMS -- his own ledger holds a content claim on it (`person_q.content_said`) whose addressee key names
+         him, the writ's kind and minting verb are proclaimed (`rosters.yaml: proclaimed`, A-21: whoever learns of a
+         decree holds its terms), and the issuing seat COMMANDS him (`commands`, A-22): `issuer` and seat read off the
+         creating act (`_creating_act`, `issuing_seat`). A writ whose addressee the seat does not command is a petition
+         to him, not an order, and forms no answer. A challenge is not proclaimed, so `accept`'s kind reaches a
+         person here only by the paper (`challenges_heard` stamps the one he has heard of). A bystander who knows the
+         terms is not an addressee and is offered nothing [ASSUMPTION: A-21's "and may answer it without holding
+         paper" is read as the answer of those the decree binds -- basis: A-21 answers how a decree reaches its
+         addressee, A-22 whom a seat binds; revert: drop the addressee conjunct of this clause].
+      3. LESS THE ANSWERED -- a writ on which his own ledger holds a `WRIT_ANSWERED_KINDS` claim of his own doing
+         (`Claim.doer`, stamped by WITNESS on the actor's own deposits) is not offered again: the standing scene tax
+         `writs_held` recorded ("NO 'ALREADY ANSWERED' DECLINE", H-203) is closed. A witnessed answer of another
+         person on the same writ is not his.
+
+    `held=True` asks clause 1 alone and nets nothing: `admits_audience`'s writ limb, since entry on a writ is the
+    paper's, and holding the invitation still admits him once he has answered it [ASSUMPTION: the net is the
+    formation's, not the gate's -- basis: edit 3, "`admits_audience` keeps asking for a *held* writ"; revert: net
+    there too].
+
+    A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS, which
+    `questions_for` adds to the question the person answers as CLASSED referents, and whether the act then passes is
+    the fold's (the rows' typed cells: the actor's own ledger holds a claim on the writ). It reads `p`'s own edges and
+    ledger, the store for the kinds and content of the Records they name, and the log for a proclaimed writ's creating
+    act. `()` for nearly everyone."""
+    out = {t.object for t in p.tenures
+           if t.kind == "hold" and t.live and t.object in w.records
+           and w.records[t.object].kind in RECORD_REFERENT_KINDS
+           and addressed_to(w.records[t.object].subject_matter, p.id)}
+    if held:
+        return tuple(sorted(out))
+    tried = set()
+    for c in p.ledger:
+        rec = w.records.get(c.subject)
+        if (rec is None or c.subject in out or c.subject in tried or rec.kind not in RECORD_REFERENT_KINDS
+                or rec.kind not in PROCLAIMED or not addressed_to(content_said(c), p.id)):
+            continue
+        tried.add(rec.id)
+        seat = issuing_seat(w, rec.id, frozenset(PROCLAIMED[rec.kind]))
+        if seat is not None and commands(w, getattr(_creating_act(w, rec.id), "actor", None), seat, p.id):
+            out.add(rec.id)
+    answered = {c.subject for c in p.ledger if c.predicate in WRIT_ANSWERED_KINDS and c.doer == p.id}
+    return tuple(sorted(out - answered))
+
+
+def writs_inherited(w: World, p: Person) -> tuple:
+    """THE WRITS HIS PREDECESSOR ISSUED THROUGH A SEAT `p` NOW HOLDS (B21.66, `IS-B3-FA-06`, replacing `U5d_FA_owed_edits` §9; rulings
+    A-21, `04` §C.2 reading (i)), sorted by id: the Records of a `PROCLAIMED` kind whose issuing seat (`issuing_seat`, read off the
+    creating act) is a seat of `p`'s own live `hold`s, whose creating act `p` did not do himself, and whose terms `p`'s OWN ledger
+    holds a content claim of that is not his own doing (`content_said`; A-21: a decree is proclaimed, so whoever heard it knows its
+    terms). The occasion for his CONFIRMATION: `questions_for` stamps the Propositions these writs order, the existing `issue` row forms
+    on them with the predecessor's terms as its content, and the `issue` he then draws is the confirmation. No new verb, no new basis.
+
+    ⚠ NOTHING HERE DECIDES AND NOTHING IS PASSED ON: the writ is not carried over to him (`04` §C.2's enumeration is complete); a writ he
+    does not confirm has no holder, its addressees still hold its terms as claims, and a `comply` or `evade / defy` on it is answered by
+    nobody until he issues. A writ he HAS confirmed is the one his own `issue` minted, issued by his own act, so it is not listed
+    here. Resolver-side and read-only, `writs_addressed`'s shape (his own edges and ledger, the store for the kind, the log for the
+    creating act); `()` for nearly everyone, and for a person with no seat of his own."""
+    mine = {t.object for t in w.seat_holds(p.id)}
+    if not mine:
+        return ()
+    out, tried = set(), set()
+    for c in p.ledger:
+        rec = w.records.get(c.subject)
+        if (rec is None or c.subject in tried or c.doer == p.id or rec.kind not in PROCLAIMED
+                or content_said(c) is None):
+            continue
+        tried.add(rec.id)
+        seat = issuing_seat(w, rec.id, frozenset(PROCLAIMED[rec.kind]))
+        if seat in mine and getattr(_creating_act(w, rec.id), "actor", None) != p.id:
+            out.add(rec.id)
+    return tuple(sorted(out))
+
+
+def inherited_terms(w: World, p: Person) -> tuple:
+    """THE PROPOSITIONS THE WRITS `writs_inherited` NAMES ORDER (B21.66), sorted by id, each once: the writ's `terms`
+    (`person_q.ABOUT_KEYS`, the one owner of what a document is about) where that is a Proposition (`World.class_of`) -- `issue`'s
+    `referent_class` (B21.54), so what `questions_for` stamps is what the confirming `issue` forms on. A writ whose terms name a
+    person (a `dispatch`'s order, the man sent) or anything else is the predecessor's act to make again by his own row, not a
+    Proposition to confirm, and names none."""
+    terms = {w.records[r].subject_matter.get(ABOUT_KEYS.get(w.records[r].kind)) for r in writs_inherited(w, p)
+             if isinstance(w.records[r].subject_matter, dict)}
+    return tuple(sorted(t for t in terms if isinstance(t, str) and w.class_of(t) == "Proposition"))
 
 
 def addressed_records(w: World, p: Person, kind: str, named: Optional[frozenset] = None) -> tuple:
     """THE RECORDS OF `kind` ADDRESSED TO `p` THAT HE HAS HEARD OF (B11 lane A, carrying
     `proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` A0 [ASSUMPTION;
     medium; Jordan to correct; revert: return `()`]), sorted by id: each Record of that kind whose addressee list
-    names him (`person_q.addressed_to`, the one owner `writs_held` asks too) and whose id his own ledger names
+    names him (`person_q.addressed_to`, the one owner `writs_addressed` asks too) and whose id his own ledger names
     (`person_q.ledger_names`: he saw it made, or was told of it). A document addressed to a man who has not heard of it
     is not his business. No mint and no custody: the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO, stands).
     `named` is `ledger_names(p.ledger)` when the caller holds it already. Resolver-side, read-only."""
@@ -3314,19 +3654,18 @@ def records_held_for_holding_rows(w: World, p: Person) -> tuple:
     taken, [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Records on `p`'s own live `hold`
     edges whose kind is one a `referent_class: Record` row whose typed cell asks `held_by` of `subject`
     asks `existence` of (`data/verbs.py::HOLDING_RECORD_KINDS`: `carry`'s `petition`, `found`'s and
-    `build`'s `works`). The second half of the `Record` term, beside `writs_held`: THE ADDRESSEE TEST
+    `build`'s `works`). The second half of the `Record` term, beside `writs_addressed`: THE ADDRESSEE TEST
     IS NOT HERE, because these rows ask only that the actor HOLD the document (a petitioner holds his
     petition from the mint and is not its addressee), while a writ reaches the person it orders (the
-    addressee test is `comply`'s, kept in `writs_held`). `()` for nearly everyone.
+    addressee test is `comply`'s, kept in `writs_addressed`). `()` for nearly everyone.
 
-    A STANDING OCCASION, `writs_held`'s shape: resolver-side and read-only, it supplies Record IDS,
+    A STANDING OCCASION, `writs_addressed`'s shape: resolver-side and read-only, it supplies Record IDS,
     which `questions_for` adds to the question the person answers as CLASSED referents, and whether the
     act then passes is the fold's (the rows' typed cells). It reads `p`'s own edges and the store only
     for the kinds of the Records they name. ⚠ THE CLASS IS SHARED, as `Office` is between `confer` and
     `oblige`: a held petition is a `Record` for `comply` too (which forms on a Record his own ledger
     names and the fold refuses on `exists:dispensation`), and a held writ is a `Record` for `carry`.
-    ⚠ NO 'ALREADY CARRIED' DECLINE, `writs_held`'s
-    scene tax: a holder who carried a petition is offered it again while he holds it (the fold's
+    ⚠ NO 'ALREADY CARRIED' DECLINE, the scene tax `writs_addressed` had until B21.22 netted the answered: a holder who carried a petition is offered it again while he holds it (the fold's
     `docketed` decline refuses a second carry of one matter only while it stays on the docket; a
     `determine` ends the item and the holder may carry again). REVERT: drop the term in
     `questions_for` (and the three rows' `referent_class`)."""
@@ -3424,7 +3763,14 @@ def propositions_heard(w: World, p: Person) -> tuple:
     `argue`) forms on them; whether the act then passes is the fold's (`commit`'s `existence` cell).
     `()` for everyone at build: no ledger names a Proposition before a season is witnessed."""
     heard = ledger_names([c for c in p.ledger if c.doer != p.id])
-    return tuple(sorted(o for o in heard if w.class_of(o) == "Proposition"))
+    out = {o for o in heard if w.class_of(o) == "Proposition"}
+    # B21.63 (`16_PESSIMIST_FA_B` edit 3): AN ADMISSION HE HAS HEARD OF -- an `OUGHT` naming him and a faction, which stands
+    # (`admission_stands`) -- carries the faction's Proposition into his question too, so a joiner so told forms `commit` on the faction
+    # (the admission is the occasion; `commit`'s `admitted` cell is the fold's answer). Nothing is added for a person no admission names.
+    out |= {q.value for q in (w.propositions.get(o) for o in out)
+            if q is not None and q.mood == ADMISSION_MOOD and q.subject == p.id and q.value in FACTION_BY_PROP
+            and admission_stands(w, p.id, q.value)}
+    return tuple(sorted(out))
 
 
 def conclusions_held(w: World, p: Person) -> tuple:
@@ -3584,23 +3930,43 @@ def _top_arms(w: World, rungs) -> dict:
     return {field: key for field, (_rank, key) in best.items()}
 
 
+def founded_office_id(rung: str, post: str) -> str:
+    """The id a computed founding gives the office it founds: deterministic from (rung, post), so the same
+    founding forms the same id and a repeat meets `_req_establish`'s clause 4 on its existing-id arm. The ONE
+    owner of the id rule: `holdings_to_found` (the stamp) and `loop/predicates.py::office_founded_by` (the
+    derivation) both read it here."""
+    return f"off_{post.strip().lower().replace(' ', '_')}_{rung}"
+
+
+def founded_post(w: World, rung: str) -> Optional[str]:
+    """The post a computed founding over `rung` gives its office: the first post in `offices.yaml: titles.domains`'
+    authored order (`TITLE_DOMAINS`, post -> kind) whose kind is the rung's kind, `None` where no post names it or
+    the rung is not in the world. Data read in reverse, never a branch on a kind; the ONE owner of the post rule,
+    asked by `holdings_to_found` and `loop/predicates.py::office_founded_by`."""
+    if rung not in w.rungs:
+        return None
+    kind = w.rungs[rung].kind
+    return next((post for post, k in TITLE_DOMAINS.items() if k == kind), None)
+
+
 def holdings_to_found(w: World, p: Person) -> tuple:
     """THE HOLDINGS `p` MAY FOUND AN OFFICE OVER (v11 CR-25, CR-11's design; [ASSUMPTION; medium; Jordan to
     correct; revert: drop the term in `questions_for` and `establish`'s `referent_class`]), sorted by id: every
     rung a live `hold` edge of his names (his HOLDINGS, `state/gate.py::holdings_of`, read over `w.tenures`, so an
     edge not yet re-homed onto him counts; the SEATS below are his own edges) that
     `founds_over` admits through some seat of his own live `hold`s whose grant carries an act `establish` is
-    eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`). A `Rung` stamper term, `larders_in_purview`'s shape and
+    eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`) and whose office is NOT YET FOUNDED (B21.08, VB-A: its derived id,
+    `founded_office_id(rung, founded_post(w, rung))`, is not in `w.offices`; the id rule has one owner, above). A `Rung`
+    stamper term, `larders_in_purview`'s shape and
     `vacancies`' standing-occasion reading: world-read over his own edges and NOT gated on his ledger (a man knows
-    his own lands), resolver-side and read-only. `questions_for` stamps the ids onto the question he answers as
-    `Rung` (`_stamped`), so `establish` (`referent_class: Rung`) forms on them with the holding as `subject`, and
-    `loop/predicates.py::office_founded_by` derives the office from that subject and `Act.via`.
-    ⚠ THE CLASS IS SHARED (the `Rung` note in `rosters.yaml: referent_classes`): `migrate`, `requisition`,
-    `march` and `convene` form on a stamped holding too, and the fold disposes. ⚠ A HOLDING ALREADY FOUNDED IS
-    STILL OFFERED: the derived office's id is the derivation's (`loop/`), not this module's, and a repeat
-    founding writes nothing, so the fold emits `establish.refused` (G4's `NoOpReceipt`). Not filtered here: that
-    would be a second copy of the id rule. `()` for a person whose seats grant none of the acts, which is nearly
-    everyone, so nothing else is read for him."""
+    his own lands), resolver-side and read-only. `questions_for` stamps the ids onto the question he answers twice: as
+    `Rung` (`_stamped`), so `migrate`, `requisition`, `march` and `convene` are unmoved, and as `Holding`
+    (`data/verbs.py::HOLDING_CLASS`), the class `establish` alone declares, so `establish` forms on them with the holding
+    as `subject` and on nothing else; `loop/predicates.py::office_founded_by` derives the office from that subject and
+    `Act.via`.
+    ⚠ THE `Rung` CLASS IS SHARED (the `Rung` note in `rosters.yaml: referent_classes`): `migrate`, `requisition`,
+    `march` and `convene` form on a stamped holding too, and the fold disposes. `()` for a person whose seats grant
+    none of the acts, which is nearly everyone, so nothing else is read for him."""
     if not FOUNDING_REMIT_ACTS:
         return ()
     live = [t for t in p.tenures if t.kind == "hold" and t.live]
@@ -3608,7 +3974,9 @@ def holdings_to_found(w: World, p: Person) -> tuple:
         t.object for t in live if t.object in w.offices and not FOUNDING_REMIT_ACTS.isdisjoint(t.granted_acts))]
     if not seats:
         return ()
-    return tuple(r for r in holdings_of(w, p.id) if any(founds_over(w, p.id, s, r) for s in seats))
+    return tuple(r for r in holdings_of(w, p.id)
+                 if (post := founded_post(w, r)) is not None and founded_office_id(r, post) not in w.offices
+                 and any(founds_over(w, p.id, s, r) for s in seats))
 
 
 # ⚠ `04` §A.2:133 and §B.10-§B.12:460 name `faction_q.at_war(w, a, b) -> bool`. DEFINED HERE (v11 CR-87) because
@@ -3634,10 +4002,13 @@ def at_war(w: World, a: str, b: str) -> bool:
     Proposition names its leader (`subject`) and faction (`value`, `boot/realm.py`):
     `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
     compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
-    either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
-    `commit` whose subject is the declaring person, so `T-m` gives peace to the declarer"* (peace
-    = writing `until` on that edge, the owner's own discretion, exactly as a faction's own
-    membership commits close).
+    either. `at_war` asks whether that Proposition still has a live `commit` WHOSE SUBJECT WAGES
+    IT (B21.58, A-20: `gate.may_wage` -- the subject holds a seat of `p.subject`'s faction or of
+    `p.value`'s whose grant carries `MUSTER_ACT`): a war lives in the seats that wage it, so a
+    commit by an unseated member, or by the declarer after he releases his seat's `hold`, keeps
+    no war alive. Peace is still the commit's own release -- `until` written on that edge by its
+    owner, exactly as a faction's own membership commits close -- and a second wager's commit
+    keeps the war alive after the first's release.
 
     ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
     BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
@@ -3655,9 +4026,58 @@ def at_war(w: World, a: str, b: str) -> bool:
     for p in w.propositions.values():
         if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
             continue
-        if any(t.kind == "commit" and t.object == p.id and t.live for t in w.tenures):
+        if any(t.kind == "commit" and t.object == p.id and t.live
+               and ((t.subject in members(w, p.subject) and may_wage(w, t.subject, p.subject))     # B21.62: the declarer's own party's seat
+                    or (t.subject in members(w, p.value) and may_wage(w, t.subject, p.value)))
+               for t in w.tenures):
             return True
     return False
+
+
+def head(w: World, prop: str) -> "str | None":
+    """F.4's first reader (plan position `20-ii`): the subject of the live `commit` Tenure to
+    `prop` carrying a non-`None` `Tenure.degree`; among more than one, the one `w.tenures` places
+    LAST (see the no-cross-domain-ladder note below for why "last", never "highest"). Per
+    `04 §F.34`'s *"if `Tenure.degree` gets a reader the head resolves with it"*.
+
+    DEFINED HERE (B21.65), NAMED `faction_q.head` BY RE-EXPORT, the `at_war` precedent just above (v11 CR-87):
+    `opinion_of` regards a faction's PRESENT head and `faction_q` imports this module, so a definition in
+    `faction_q` is an import cycle. The body is the one it was; `faction_q.head` is this function object.
+
+    ⚠ `None` TODAY, FOR A NAMED REASON, NOT BY CONSTRUCTION. `commit`'s own
+    `verb_table.yaml` row declares `contests: ""` (empty -- `VERB_TABLE["commit"].contests` is
+    falsy), and `04 PART D` row 30a types `writes` as Degree-keyed only for a verb that declares
+    `contests:`, so an uncontested `commit` never reaches a fold branch that could write one. The
+    world-builder's `commit` opener (`boot/realm.py`) mints every membership edge
+    with the dataclass default -- so no live `commit` Tenure this tree can build ever carries a
+    non-`None` `degree`. This is a real gap for the MB lane to pick up (`Faction.head`/`resolve_field`'s
+    `morale_start` candidate), not a Jordan escalation -- `commit` staying uncontested is this tree's
+    own design, not an open question.
+
+    ⚠ NO CROSS-DOMAIN DEGREE RANK IS INVENTED HERE. `Tenure.degree` carries whichever band the verb
+    that graded it uses (`FELLED/WOUNDED/UNTOUCHED` for combat, `DECLARED/WON/LOST/UNOPPOSED` for a
+    field contest, ...) and no ratified ladder orders those bands against each other (`seam/ladder`
+    owns ONE ladder, `D-30`, and it is the dice-engine `Degree` enum -- `OVERWHELMING/SUCCESS/
+    PARTIAL/FAILURE` -- a different vocabulary again). Building a "which degree wins" comparator
+    across families would be the speculative, scale-local dialect `CLAUDE.md` §10 forbids. So on
+    the day more than one live `commit` carries a degree, this picks the one `w.tenures` places
+    LAST -- `state/containment.py::home_of`'s own precedent for the identical ambiguity (more than
+    one live edge where the model expects one): *"LAST WRITE WINS ... the incumbent behaviour of
+    every site this replaces, preserved deliberately rather than quietly tightened here."*"""
+    TRACE.query("head", "resolver")
+    # Unreachable until something writes a degree on a `commit` (see the note above).
+    graded = [t for t in w.tenures
+              if t.kind == "commit" and t.object == prop and t.live and t.degree is not None]
+    if graded:
+        return graded[-1].subject
+    # CR-86 (ED-IN-0342): a faction whose `rosters.yaml: factions` row names a `head_seat` is headed by that
+    # seat's live holder -- the King for Valorsmark. A graded `commit` (above) stays the more specific
+    # reading and wins where one exists [CHOICE: none is built today, so the order moves nothing].
+    seat = HEAD_SEAT.get(FACTION_BY_PROP.get(prop))
+    if seat is None:
+        return None
+    held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
+    return held[-1] if held else None
 
 
 def detainees_held(w: World, p: Person) -> tuple:
@@ -3789,10 +4209,10 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
     read at call time, so no class literal lives here; while no row declares a class outside that list
     the set is empty and this returns `()`. A caller may pass another set. Resolver-side and read-only.
     A WRIT IS NOT STAMPED HERE (the B10-05 close, [ASSUMPTION; medium; Jordan to correct]): a Record of a
-    writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_held`,
+    writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_addressed`,
     whose addressee test is `comply`'s whole formation (its cell asks a claim on the writ, which any
     witness of the issue holds). Since REM-2C released `Record` to this term, a bystander whose question
-    names the writ would be offered `comply` and the fold would execute it; the kinds `writs_held` owns are
+    names the writ would be offered `comply` and the fold would execute it; the kinds `writs_addressed` owns are
     skipped, so he is offered none, and no row forms on a writ for a non-addressee. The petition and
     works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
     it on `held_by`, REM-2C's shared-class cost. REVERT: drop the term in `questions_for`
@@ -4175,7 +4595,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus the
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
-    (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09, widened at v10 REM-25 by
+    (`seats_named`, v9 IN-10 (a)), the writs addressed to him (`writs_addressed`, v9 IN-09, B21.22; widened at v10 REM-25 by
     the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
     the same `Record` term, not another occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
@@ -4310,6 +4730,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject);
     # an ambition about nobody forms no question.
     refs_of: dict = {}                     # handed to `attention_key`, which reads the same referents
+    standing: list = []                    # the ambitions that raised a question: B21.54 stamps these as `Proposition`
     for pid in ambs:
         refs = goal_referents(w, p, w.propositions[pid])
         refs_of[pid] = set(refs) - {None}
@@ -4320,6 +4741,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         # And a row opening `mandatory` marks the question of its last stage (`opens_mandatory`; sorted first below).
         if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid):
             out.append(Question(f"q:need:{pid}", "need", refs, pid, mandatory=opens_mandatory(w, p, pid)))
+            standing.append(pid)
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
     # MATTERS BEFORE A SITTING HE SITS ON. One question per fired sitting (`sittings_before`: a docket
@@ -4373,7 +4795,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # whether a seat is held is the fold's question, not the referent's.
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
     # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
-    # no other row's formations move. REVERT: drop the term.
+    # no other row's formations move. REVERT: drop the term. B21.22 (A-21, A-22): renamed `writs_addressed`, and
+    # widened to the proclaimed writs his own ledger holds the terms of, where the issuing seat commands him, less
+    # those he has answered.
     # B11 lane A (14_VERBS_PHYSICAL_A A4, [ASSUMPTION; medium; Jordan to correct]): AND, BESIDE THEM, THE CHALLENGES
     # ADDRESSED TO HIM THAT HE HAS HEARD OF (`challenges_heard`), as `Record` -- `accept` forms on them. REVERT: drop.
     # v10 REM-25 (AM-A-10, [ASSUMPTION; medium; Jordan to correct]): AND THE RECORDS HE HOLDS THAT A
@@ -4408,6 +4832,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
     # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
     # REVERT: drop the term.
+    # B21.54 (14_VERBS_BINDING_D D1, A-21; [ASSUMPTION; medium; Jordan to correct; revert: drop `tuple(standing)` from the splice
+    # and `issue`'s `referent_class`]): AND, BESIDE THEM, THE PROPOSITIONS HE IS COMMITTED TO AS AN OUGHT (`ambitions`, the one
+    # owner, read once above as `ambs`) THAT STILL RAISE A STANDING QUESTION (`standing`: not a met aim, not a want he believes
+    # met -- CP-T02-03's and B10.71's gates, so a met ambition raises no `need` question by this stamp either), as
+    # `Proposition` -- what a writ orders is an ambition's terms, so `issue` forms on them. DECLARED WIDENING: `argue`, the other `Proposition`-classed row, forms on them too; `commit` does not
+    # (`held_edge_declines`: he already holds a live `commit` on each).
     # CL-THRUST B3.2 (R2; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED LAST, THE
     # REFERENTS OF THE STAGES HE HAS NOT PASSED (`stage_referents`), through the same class test as a question's own
     # referent. `()` while `goal_stages` is `[]`, so with no ladder the output is byte-identical.
@@ -4422,13 +4852,21 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
+    # B21.66 (`IS-B3-FA-06`; A-21, `04` §C.2 reading (i); [ASSUMPTION; medium; Jordan to correct; revert: drop `inherited_terms` from the splice]):
+    # AND, BESIDE THE PROPOSITIONS HE HAS HEARD OF, THE ONES THE WRITS HIS PREDECESSOR ISSUED THROUGH HIS SEAT ORDER
+    # (`writs_inherited`; `inherited_terms`), as `Proposition` -- `issue` forms on them, and the `issue` he draws is the confirmation.
+    # Appended after `propositions_heard`, so a Proposition both name keeps that term's pair (`_stamped`'s dedup).
+    # B21.23 (`06_FA_decree_binds` edit 4; A-24, A-47 [ASSUMPTION; medium; Jordan to correct; revert: `recall_suspicion` `None`,
+    # the occasion off]): AND, BESIDE THE VACANCIES, THE PERSONS WHOSE DEFIANCE OF HIS WRITS HAS REACHED THE THRESHOLD AND THE SEATS HE
+    # MAY STRIP FROM THEM (`recalls`), as `Person` and `Office`. The occasion only; the recall is `revoke`'s draw.
     told = ledger_names(p.ledger)
-    added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + challenges_heard(w, p, told)
+    founding = holdings_to_found(w, p)
+    added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
-             + holdings_to_found(w, p)
+             + founding
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
@@ -4436,6 +4874,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
     # the output is byte-identical. REVERT: drop the term.
     held = tuple((d, DETAINEE_CLASS) for d in detainees_held(w, p))
+    # B21.08 (VB-A commit A2 [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s `referent_class: Rung`, drop this
+    # term]): AND THE HOLDINGS HE MAY FOUND AN OFFICE OVER, AGAIN AS `Holding`, the class `establish` alone declares. The
+    # `Rung` stamp above is kept, so `migrate`, `requisition`, `march` and `convene` form as they did.
+    held += tuple((r, HOLDING_CLASS) for r in founding)
     # v11 CR-87 ([ASSUMPTION; medium; Jordan to correct]): AND, AFTER THEM, THE ENEMIES OF A WAR HE KNOWS OF
     # (`enemies_heard`), as `Enemy` -- no row forms on it; the `fight` decline reads it as the war context. It
     # rides a question he already has and never raises one of its own (a war is a context, not a question). Empty
@@ -4714,6 +5156,13 @@ class WorldReader:
             # that is no Record (`ID-5`). The person side never answers this (`WORLD_ONLY_STEMS`).
             rec = w.records.get(subject)
             return UNKNOWN if rec is None else (not rec.stages or a_stage_unmatured(w, rec))
+        if stem == "admitted":
+            # B21.63 (`16_PESSIMIST_FA_B` edit 3): MAY THE ACTOR (`arg`) JOIN THE PROPOSITION `subject` -- `admitted_to`, the one owner.
+            # UNKNOWN for a subject that is no Proposition or an actor who is no person (`ID-5`). The person side never answers this
+            # (`WORLD_ONLY_STEMS`): who may admit, and who belongs where, is the world's to decide NOW.
+            if subject not in w.propositions or arg not in w.persons:
+                return UNKNOWN
+            return admitted_to(w, arg, subject)
         if stem == "names":
             # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
             # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the
@@ -4764,6 +5213,11 @@ class WorldReader:
             # Proposition) is reached by nothing, which `purview_reaches` answers `False`.
             seat = w.offices.get(arg)
             return UNKNOWN if seat is None else purview_reaches(w, seat, place_of(w, subject))
+        if stem == "command":
+            # B21.20 (`16_PESSIMIST_FA_C` edit 2, A-22): MAY THE SEAT (`arg`) ORDER THE PERSON `subject` -- `purview`'s
+            # dispatch over `commands`, the one owner. The actor is asked only by `may_revoke` inside it. UNKNOWN for a
+            # seat that does not exist or a subject that is no person (`ID-5`). WORLD-ONLY (`data/requires.py`).
+            return UNKNOWN if arg not in w.offices or subject not in w.persons else commands(w, self._actor, arg, subject)
         if stem == "bench":
             # `may_determine`, the `determination` basis whole: the seat is a judging seat the ACTOR
             # sits in, and its bench's ground holds the subject's home. Actor-relative through

@@ -4,7 +4,7 @@ Falsifiers named by the source docs this position builds from (`21_RECONCILIATIO
 6, `19_PLAN.md` step 11, `03_PARAMETERS.md` PART D): a fourteenth key fails naming the row; a
 declared-disposal row with no quorum fails the load; a thirteenth (here: another, beyond the
 seeded rows) arrangement loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
-to load. Scoped to the NINE seeded games (three until v9 SC-03a, seven until v9 SC-04, eight until v10 SC-04; `arrangements.yaml`'s own header states why not all
+to load. Scoped to the THIRTEEN rows (the NINE seeded games plus four new at B24p.03; three until v9 SC-03a, seven until v9 SC-04, eight until v10 SC-04; `arrangements.yaml`'s own header states why not all
 twelve) and the SIX seeded speech kinds (same file, why not all ten).
 """
 
@@ -15,28 +15,29 @@ import textwrap
 import pytest
 
 from ..data import arrangements as A
+from ..data import verbs as _verbs
 from ..data.rosters import LADDER_RUNGS, load_yaml
 
 
-def test_the_nine_seeded_arrangements_load():
+def test_the_thirteen_arrangements_load():
     """THREE until v9 SC-03a, which seeded four `<tenure>` rows (`arrangements.yaml`'s header)
     once `detain` and `ban` became `tenure_kinds` members; EIGHT since v9 SC-04 seeded the fifth,
-    `excommunication_deliberation`; NINE since v10 SC-04 seeded `negotiation` (a `mutual` disposal). The four dispose those two kinds and
-    nothing else, each a `bench` disposal -- the loader stays green on them (the position's own
-    falsifier clause)."""
+    `excommunication_deliberation`; NINE since v10 SC-04 seeded `negotiation` (a `consent` close); THIRTEEN since B24p.03 added `conversation`,
+    `interrogation` (a questioning: the tree's old `interrogation` is now `examination`), `rally` and `audience`. The four dispose those two
+    kinds and nothing else, each a `bench` close -- the loader stays green on them (the position's own falsifier clause)."""
     assert set(A.ARRANGEMENTS) == {"arbitration", "parliamentary_debate", "council_of_state",
-                                   "legal_trial", "tribunal", "interrogation",
+                                   "legal_trial", "tribunal", "examination",
                                    "inquisition_hearing", "excommunication_deliberation",
-                                   "negotiation"}
-    assert len(A.ARRANGEMENTS) == 9
-    sc03a = ("legal_trial", "tribunal", "interrogation", "inquisition_hearing")
+                                   "negotiation", "conversation", "interrogation", "rally", "audience"}
+    assert len(A.ARRANGEMENTS) == 13
+    sc03a = ("legal_trial", "tribunal", "examination", "inquisition_hearing")
     assert {A.ARRANGEMENTS[r]["disposes"] for r in sc03a} == {"detain", "ban"}
-    assert all(A.ARRANGEMENTS[r]["disposal"] == "bench" for r in sc03a)
-    # §E.2's own differences, each locatable in the row: an interrogation's subject cannot appeal
-    # and speaks when scripted; the inquisition hearing is the same with a bench, an appeal and
-    # documents interposed; the tribunal is the trial with an admitted floor and no appeal.
-    assert A.ARRANGEMENTS["interrogation"]["order"] == A.ARRANGEMENTS["inquisition_hearing"]["order"]
-    assert A.ARRANGEMENTS["interrogation"]["appeal_basis"] == "none" != \
+    assert all(A.ARRANGEMENTS[r]["close"] == "bench" for r in sc03a)
+    # §E.2's own differences, each locatable in the row: an examination's subject cannot appeal
+    # (B24p.03: `order`, which said "when scripted", is gone; both rows are the one `inquisition` rite); the inquisition hearing is the same
+    # with a bench, an appeal and documents interposed; the tribunal is the trial with an admitted floor and no appeal.
+    assert A.ARRANGEMENTS["examination"]["rite"] == A.ARRANGEMENTS["inquisition_hearing"]["rite"] == "inquisition"
+    assert A.ARRANGEMENTS["examination"]["appeal_basis"] == "none" != \
         A.ARRANGEMENTS["inquisition_hearing"]["appeal_basis"]
     assert (A.ARRANGEMENTS["tribunal"]["floor"], A.ARRANGEMENTS["legal_trial"]["floor"]) == \
         ("admitted", "open")
@@ -47,26 +48,26 @@ def test_the_nine_seeded_arrangements_load():
     exc = A.ARRANGEMENTS["excommunication_deliberation"]
     assert exc["disposes"] == A.ARRANGEMENTS["inquisition_hearing"]["disposes"] == "ban"
     # v11 CR-34: the first `declared` row (C-7), `quorum: 2` -- `test_cr34_declared_disposal.py` reads the vote.
-    assert (exc["disposal"], exc["quorum"], exc["floor"], exc["records_dissent"], exc["order"],
+    assert (exc["close"], exc["quorum"], exc["floor"], exc["records_dissent"], exc["rite"],
             exc["appeal_basis"], exc["disposal_reach"]) == (
-        "declared", 2, "closed", False, "rank", "determine", "realm")
-    assert [r for r, row in A.ARRANGEMENTS.items() if row["disposal"] == "declared"] == [
+        "declared", 2, "closed", False, "debate", "determine", "realm")
+    assert [r for r, row in A.ARRANGEMENTS.items() if row["close"] == "declared"] == [
         "excommunication_deliberation"]
     assert exc["interposed"] == ("procedure", "ceremony") and exc["term_required"] is True
-    # v10 SC-04: `negotiation`, the one `mutual` disposal -- the deciders are the parties, so no bench
+    # v10 SC-04: `negotiation`, the one `consent` close (was `mutual`) -- the deciders are the parties, so no bench
     # (`bench_basis: none`); §E.2's block (03_PARAMETERS.md:553-565) read key by key. `records_dissent: false`
     # is the reading `excommunication_deliberation` makes for an old false+given pair (kept: the key the
     # source writes), cited rather than re-decided; `succession` is CR-35's and is absent.
     neg = A.ARRANGEMENTS["negotiation"]
-    assert (neg["disposal"], neg["bench_basis"], neg["floor"], neg["records_dissent"], neg["venue_min_rank"],
-            neg["term_required"], neg["appeal_basis"], neg["order"], neg["disposes"],
-            neg["disposal_reach"]) == ("mutual", "none", "closed", False, "hearth", False, "none",
-                                       "alternating", "oblige", "room")
-    assert neg["interposed"] == () and neg["proofs"] == ("record", "testimony") and neg["quorum"] is None
+    assert (neg["close"], neg["bench_basis"], neg["floor"], neg["records_dissent"], neg["venue_min_rank"],
+            neg["term_required"], neg["appeal_basis"], neg["rite"], neg["disposes"],
+            neg["disposal_reach"]) == ("consent", "none", "closed", False, "hearth", False, "none",
+                                       "negotiation", "oblige", "room")
+    assert neg["interposed"] == () and neg["admits"] == ("record", "testimony") and neg["quorum"] is None
     assert neg["records_dissent"] == A.ARRANGEMENTS["excommunication_deliberation"]["records_dissent"]
     assert "succession" not in A.ARRANGEMENTS
     arb = A.ARRANGEMENTS["arbitration"]
-    assert arb["disposal"] == "bench" and arb["appeal_basis"] == "none"
+    assert arb["close"] == "bench" and arb["appeal_basis"] == "none"
     parl = A.ARRANGEMENTS["parliamentary_debate"]
     cos = A.ARRANGEMENTS["council_of_state"]
     # `03_PARAMETERS.md` §E.2: "the same shape, and the opposite trade" -- every difference between
@@ -118,8 +119,12 @@ def test_another_arrangement_loads_with_no_code_change():
     seeded when this was written and seven are now -- the row added is one beyond whatever is seeded.)"""
     extra = textwrap.dedent("""
         arrangements:
-          - id:               examination
-            disposal:          bench
+          - id:               summons
+            rite:               trial
+            turns:              [2, 5]
+            authority:          polity
+            reason_lean:        0
+            close:          bench
             bench_basis:        determine
             floor:              closed
             records_dissent:    false
@@ -127,22 +132,25 @@ def test_another_arrangement_loads_with_no_code_change():
             term_required:      false
             appeal_basis:       none
             interposed:         []
-            order:              scripted
-            proofs:             [testimony]
+            admits:             [testimony]
             disposes:           oblige
             disposal_reach:     room
             standard:     plain
     """)
     arrangements, _ = _reload_with(extra)
     # v9 SC-03a: the seeded count is read, not pinned (it was `== 4` at three seeded rows).
-    assert "examination" in arrangements and len(arrangements) == len(A.ARRANGEMENTS) + 1
+    assert "summons" in arrangements and len(arrangements) == len(A.ARRANGEMENTS) + 1
 
 
 def test_a_fifteenth_key_fails_naming_the_row():
     extra = textwrap.dedent("""
         arrangements:
           - id:               bad_row
-            disposal:          bench
+            rite:               trial
+            turns:              [2, 5]
+            authority:          polity
+            reason_lean:        0
+            close:          bench
             bench_basis:        determine
             floor:              closed
             records_dissent:    false
@@ -150,8 +158,7 @@ def test_a_fifteenth_key_fails_naming_the_row():
             term_required:      false
             appeal_basis:       none
             interposed:         []
-            order:              scripted
-            proofs:             []
+            admits:             []
             disposes:           none
             disposal_reach:     room
             standard:     plain
@@ -165,7 +172,11 @@ def test_a_declared_disposal_row_with_no_quorum_fails_the_load():
     extra = textwrap.dedent("""
         arrangements:
           - id:               vote
-            disposal:          declared
+            rite:               trial
+            turns:              [2, 5]
+            authority:          polity
+            reason_lean:        0
+            close:          declared
             bench_basis:        determine
             floor:              closed
             records_dissent:    true
@@ -173,8 +184,7 @@ def test_a_declared_disposal_row_with_no_quorum_fails_the_load():
             term_required:      false
             appeal_basis:       none
             interposed:         []
-            order:              rank
-            proofs:             []
+            admits:             []
             disposes:           none
             disposal_reach:     room
             standard:     plain
@@ -187,7 +197,11 @@ def test_a_declared_disposal_row_with_a_quorum_loads():
     extra = textwrap.dedent("""
         arrangements:
           - id:               vote
-            disposal:          declared
+            rite:               trial
+            turns:              [2, 5]
+            authority:          polity
+            reason_lean:        0
+            close:          declared
             bench_basis:        determine
             floor:              closed
             records_dissent:    true
@@ -195,8 +209,7 @@ def test_a_declared_disposal_row_with_a_quorum_loads():
             term_required:      false
             appeal_basis:       none
             interposed:         []
-            order:              rank
-            proofs:             []
+            admits:             []
             disposes:           none
             disposal_reach:     room
             standard:     plain
@@ -210,7 +223,11 @@ def test_quorum_on_a_non_declared_row_fails_the_load():
     extra = textwrap.dedent("""
         arrangements:
           - id:               stray_quorum
-            disposal:          bench
+            rite:               trial
+            turns:              [2, 5]
+            authority:          polity
+            reason_lean:        0
+            close:          bench
             bench_basis:        determine
             floor:              closed
             records_dissent:    false
@@ -218,8 +235,7 @@ def test_quorum_on_a_non_declared_row_fails_the_load():
             term_required:      false
             appeal_basis:       none
             interposed:         []
-            order:              rank
-            proofs:             []
+            admits:             []
             disposes:           none
             disposal_reach:     room
             standard:     plain
@@ -257,31 +273,31 @@ def test_c1_is_a_report_not_a_refusal_and_is_honest_about_todays_state():
     are still not asked. Whether C-1 should now become a LOAD REFUSAL -- the module docstring's reason
     for reporting (*"`determine` opens nothing today"*) no longer holds -- is left to this module's
     owner: `19` did not move the check, only made it pass."""
-    reported = A.arrangements_without_a_disposal_opener()
+    reported = _verbs.arrangements_without_a_disposal_opener()
     assert reported == [], reported
     assert "parliamentary_debate" not in reported and "council_of_state" not in reported, (
         "a `Record`-disposing row is not asked of the tenure-kind opener map")
 
 
 def test_a_negotiation_reaches_eff_oblige_the_opener_of_the_kind_it_disposes(monkeypatch):
-    """v10 SC-04: the seeded `negotiation` row (`disposal: mutual`, `disposes: oblige`) is only as good as
+    """v10 SC-04: the seeded `negotiation` row (`close: consent`, was `disposal: mutual`; `disposes: oblige`) is only as good as
     its opener. Hand-built, end to end: the kind it disposes is opened by the real `oblige` act through
     the fold (`loop/effects_governance.py::_eff_oblige` -> `duty.taken`, one live `oblige` edge), and
-    C-1 reads that opener. CONTROL: with `oblige`'s opener map emptied C-1 names the row (a `mutual` row
-    asks for `oblige`'s opener alone; `arbitration`, which `determine` opens `oblige` for, is named too),
+    C-1 reads that opener. CONTROL: with `oblige`'s opener map emptied C-1 names the row (a `consent` row
+    asks for `oblige`'s opener alone; `arbitration`, which `determine` opens `oblige` for, is named too, and so is `audience`, which disposes `oblige` too),
     so its absence from the report is the opener's."""
     from ..data.verbs import _OPENERS_FROM_EFFECTS
     from ..harness import probes as P
     row = A.ARRANGEMENTS["negotiation"]
-    assert row["disposal"] == "mutual" and row["disposes"] == "oblige"
-    assert "negotiation" not in A.arrangements_without_a_disposal_opener()
+    assert row["close"] == "consent" and row["disposes"] == "oblige"
+    assert "negotiation" not in _verbs.arrangements_without_a_disposal_opener()
     w = P.tiny_world()
     P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "oblige", payload={"subject": "off_dicastery"})]
                                     if p.id == "p_low" else []))
     edges = [t for t in w.tenures if t.kind == row["disposes"] and t.subject == "p_low" and t.live]
     assert [t.object for t in edges] == ["off_dicastery"] and "duty.taken" in {e.kind for e in w.log}
     monkeypatch.setitem(_OPENERS_FROM_EFFECTS, "oblige", ())
-    assert A.arrangements_without_a_disposal_opener() == ["arbitration", "negotiation"]
+    assert _verbs.arrangements_without_a_disposal_opener() == ["arbitration", "negotiation", "audience"]
 
 
 def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(monkeypatch):
@@ -302,7 +318,11 @@ def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(
     extra = textwrap.dedent("""
         arrangements:
           - id:               succession
-            disposal:          bench
+            rite:               trial
+            turns:              [2, 5]
+            authority:          polity
+            reason_lean:        0
+            close:          bench
             bench_basis:        determine
             floor:              admitted
             records_dissent:    true
@@ -310,16 +330,16 @@ def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(
             term_required:      false
             appeal_basis:       none
             interposed:         [procedure]
-            order:              rank
-            proofs:             [record, testimony]
+            admits:             [record, testimony]
             disposes:           hold
             disposal_reach:     realm
             standard:     plain
     """)
+    monkeypatch.setitem(A.DISPOSAL, "hold", A.DISPOSAL["oblige"])    # B24p.03: a row must name a `disposal:` row; the hold has none shipped (the planted row is the question)
     arrangements, _ = _reload_with(extra)
     row = arrangements["succession"]
-    assert row["disposes"] == "hold" and row["disposal"] == "bench"      # it loads
-    assert A.arrangements_without_a_disposal_opener() == []              # the control
+    assert row["disposes"] == "hold" and row["close"] == "bench"      # it loads
+    assert _verbs.arrangements_without_a_disposal_opener() == []              # the control
     monkeypatch.setitem(A.ARRANGEMENTS, "succession", row)
-    assert A.arrangements_without_a_disposal_opener() == ["succession"]
+    assert _verbs.arrangements_without_a_disposal_opener() == ["succession"]
     assert "determine" not in (_OPENERS_FROM_EFFECTS.get("hold") or ()), _OPENERS_FROM_EFFECTS.get("hold")

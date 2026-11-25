@@ -2,8 +2,10 @@
 difference, read over generated random pairs at a very high iteration count, as a CURVE -- never one even-matchup
 number. A-79's even centres are the curve's middle bin.
 
-    python -m engine.season.harness.pairs {duel,social} [--terms yield blood death] [--verb argue] [--n N]
+    python -m engine.season.harness.pairs {duel,social,proceeding} [--terms yield blood death] [--verb examine] [--n N]
                                           [--seed S ...] [--diff sheet|read|<registry key>|all] [--min-bin 200]
+    python -m engine.season.harness.pairs proceeding [--type conversation] [--form full|abridged] [--side for|against|decider]
+                                          [--room none|gallery|crowd] [--off <setting>]
 
 WHAT IS DRAWN. For each seed `s` and pair `i` in `0 .. N-1` the two sheets are `state/carriers.py::generated_attributes`
 (`s`, `f"pair{i}.a"` / `f"pair{i}.b"`, `Fixtures generated_attribute_range`): the instrument's population is the
@@ -55,6 +57,24 @@ count, the share of each outcome, `y` and its binomial standard error `sqrt(y (1
 
 `slope` and `spread` are meant in their ordinary statistical sense; this is no check and no gate (it is a reading).
 
+`proceeding` (B24p.17; V2 p3 §B's readings, INT E-18) the same world and sheets, the proceeding in place of the single roll. Per pair
+`proceeding_pairs` seats three persons by the sheets `social` draws (`a` = `p_low`, the bearer and the `for` side; `b` = `p_mid`, the party
+addressed; `c` = `p_high`, who holds the Duke's seat and sits where the row's authority seats one) and the room's onlookers, then runs
+the act as the host runs it (`sigma._resolve_proceeding`: `proceeding_input` on the row, or `abridged(row)` for `--form abridged`, the
+entry the composition row `social_contest.proceeding` names -- never `roll` -- `act_band`, and S27.4 on an `exchange` close), the stream
+`draw(f"pair{i}", f"pairs:proceeding:{type_id}:{form}")`. `y` is the share of CARRIED bands as `social`'s; the other classes are the
+ladder's bands, `Refused` and `Impasse` (a `consent` sitting nobody accepted). `read` is the act's own margin, `net - ob`, `0` where there is none.
+  `--type`  an arrangement id (default `conversation`). A row whose authority seats nobody at the instrument's venue (`inquisition_hearing`,
+            `excommunication_deliberation`: a church) refuses in its full form (`refused[no_seat]`); nothing here seats a church.
+  `--form`  `abridged` (default; one speech weighed by the one addressed) or `full`.
+  `--room`  the onlookers seated at the venue: `none` 0, `gallery` 2, `crowd` one cohort of weight 30. The row's own floor decides whether
+            they watch (`closed` seats none, however many stand there).
+  `--side`  whose sheet the difference `d` is taken on: `for` `a - b` (the default), `against` `b - a`, `decider` the first person the card
+            seats to decide, less the scale's mid-point (an adjudicator has no opposite number; the shift does not move a slope).
+  `--off`   one setting of the proceeding's own at its control (`OFF`: `None` for a level, else 0), for an operand's own arm.
+  Three lines follow the curve: `EXCHANGES` (the mean count of beats), `ENDS` (the share of each `proceeding_ends` member) and
+  `RATTLES` (the beats that rattled someone, per sitting).
+
 DEFAULTS AND TIMING. ⚠ A MEASUREMENT ON ONE MACHINE, not a property of the instrument: every figure in this paragraph
 was read once, on the producer's container, 2026-11-14, and another host or a later tree reads others. With the shell's
 `time`, `--n 1000` wall seconds, of which 0.62 s is importing the package: duel `yield` 2.26, `blood` 2.04, `death` 2.88; `social` 1.20. The cost per
@@ -63,6 +83,15 @@ wall; the 200,000 default is about 50 s). So the defaults, `--n` 20,000 per duel
 `social`, each cost under the two minutes a contest the item allows, and none was lowered. (The drafting lane's scratch
 reading, on fighters at 3 on every key, was 1.1 / 0.7 / 1.9 s per 1,000 duels and 0.015 s per 1,000 social rolls: a
 comparison, not a target. The social figure here includes building the record, `contest_input`, which that reading did not.)
+
+PROCEEDING'S DEFAULT `--n` (B24p.17). ⚠ A MEASUREMENT ON ONE MACHINE, 2026-11-23, the producer's container, tree `b8db4f5` plus this item (`--room none`
+and `crowd` read alike): warm seconds per 1,000 pairs (`--n` 22,000 abridged; 1,500 to 6,000 full), nine tenths of it the module's own `proceed`, the
+host's build and card the rest. ABRIDGED 0.60 to 0.83 in every row (`conversation` 0.66). FULL by row: `rally` 0.7 to 0.9; `negotiation`, `conversation`,
+`interrogation` and `audience` 1.1 to 1.4; `council_of_state` and `parliamentary_debate` 2.0 to 2.3; `examination` 2.9 to 3.2; `arbitration`, `legal_trial`
+and `tribunal` 3.4 to 3.7 (the slowest: two to five turns of both sides before a bench). The two church rows refuse in full (`refused[no_seat]`:
+nothing here seats a church). The two minutes a contest the item allows is held for the SLOWEST row: abridged 0.83 x 100,000 = 83 s; full 3.7 x 25,000
+= 93 s (the dialogue rows 28 to 35 s). The plan's 200,000 and 40,000 [ASSUMPTION, from `social`'s 0.25 s per 1,000 and `DRAWS_PER_EXCHANGE`] would read
+120 to 166 s abridged and 136 to 148 s full on the three slowest rows, so the defaults are halved and cut to 100,000 and 25,000. `--n` is the caller's.
 """
 from __future__ import annotations
 
@@ -79,17 +108,22 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
 from engine.substrate import composition
 from engine.substrate.descriptors import ATTRIBUTES
 
+from ..data.arrangements import ARRANGEMENTS
 from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import PROCEEDING_ENDS
 from ..loop.driver import SeasonDriver
 from ..seam.ladder import degree_of
 from ..seam.wrappers import combat, sigma
 from ..seam.wrappers._entry import entry_for
-from ..state.carriers import generated_attributes
+from ..seam.wrappers.pool import attribute_midpoint
+from ..state.carriers import Person, Rung, Tenure, generated_attributes
 from ..state.ids import draw_factory
 from . import probes
 
 FIRST, SECOND = "p_low", "p_mid"            # the world's two fighters / speakers (test-fixture ids, `probes.tiny_world`)
-DEFAULT_N = {"duel": 20000, "social": 200000}   # [JUSTIFIED: instrument default, no game meaning]
+# [canonical: engine/season/harness/pairs.py §DEFAULT_N -- an instrument's iteration counts per seed, sized to its wall time (the module docstring's measurement); no game meaning]
+DEFAULT_N = {"duel": 20000, "social": 200000,
+             "proceeding": {"abridged": 100000, "full": 25000}}   # [JUSTIFIED: instrument default, no game meaning] proceeding: by the form; the docstring's measurement
 DEFAULT_MIN_BIN = 200   # [JUSTIFIED: instrument default, no game meaning]
 REFUSED = "Refused"                          # S27.4: ob > obstacle_refusal_multiple x pool, no dice dealt (not a band)
 # the four bands in the owner's order (`DEGREE_ORDINAL`, the tuple `band_odds` returns), and the two a carried contest reaches
@@ -98,8 +132,11 @@ CARRIED = tuple(DEGREE_LABEL[d] for d in (Degree.SUCCESS, Degree.OVERWHELMING))
 DUEL_OUTCOMES = ("a_wins", "b_wins", "undecided")
 DIFF_WIDTH = {"sheet": 0.5, "read": 1.0}     # [JUSTIFIED: instrument default, no game meaning] a registry key's bin is 1.0
 
+IMPASSE = "Impasse"                          # a `consent` sitting nobody accepted: no margin, no band (`act_band`'s `IMPASSE`)
+
 DuelPair = namedtuple("DuelPair", "i a b read outcome yielder winner")
 SocialPair = namedtuple("SocialPair", "i a b read inp band")
+ProceedingPair = namedtuple("ProceedingPair", "i a b c read band outcome judge")
 Plant = Optional[Callable[[int, dict, dict], tuple]]
 
 
@@ -177,6 +214,81 @@ def social_pairs(seed: int, n: int, verb: str, plant: Plant = None):
             band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": margin.net - margin.ob})
         opposition = inp.pool_default if inp.opposition is None else inp.opposition
         yield SocialPair(i, a, b, inp.pool - opposition, inp, band)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# proceeding (B24p.17)
+# ---------------------------------------------------------------------------------------------------------------
+
+VENUE = "Hh"                                 # the hearth where the two speakers stand (`probes.tiny_world`)
+THIRD = "p_high"                             # the third person: the Duke, who sits where a row's authority seats one (`probes.tiny_world`)
+FORMS = ("abridged", "full")
+SIDES = ("for", "against", "decider")
+#: the weights of the onlookers each `--room` seats at the venue: none, two, one cohort (weight 30). [JUSTIFIED: instrument default, no game meaning -- B24p.17's `--room`: 0, 2, a cohort of weight 30]
+ROOMS = {"none": (), "gallery": (1, 1), "crowd": (30,)}    # [canonical: engine/season/harness/pairs.py §ROOMS -- the onlookers the instrument seats (none, two, one cohort of weight 30); an instrument choice, no game meaning]
+#: THE SETTINGS `--off` ACCEPTS: V2 p2 §K's control set (the settings it names a control for; `fixtures.py` ships each at it) and the three
+#: B24p.18's control arms switch off besides (`relevance`, `sense_step`, `comfort_step`). Off is `None` for a level and 0 for a step or a gain
+#: (`_off_value`); a threshold or a scale at 0 is no control, and is not named here. [ASSUMPTION: a closed set of the instrument's -- basis: V2 p2 §K's control column]
+OFF = ("fit_level", "answer_level", "repeat_step", "esteem_step", "off_step", "ploy_step", "grain_strain", "heard_step", "gap_step",
+       "weary_step", "awe_step", "room_level", "heckle", "crowd_lean", "start_step", "relevance", "sense_step", "comfort_step")
+
+
+def _off_value(fx, name: str):
+    """A setting at its control: `None` where it is a level, else 0."""
+    return None if fx.get(name) is None else 0
+
+
+def _proceeding_world(room: str, off: Optional[str]):
+    """`tiny_world` with the instrument's room at the venue (`Hh`, where `a` and `b` stand): the fixture's stranger leaves (the room is the
+    instrument's), the onlookers `ROOMS[room]` names arrive, and `off` is one setting at its control. The driver registers the entries."""
+    fx = DEFAULT_FIXTURES
+    if off is not None:
+        if off not in OFF:
+            raise SystemExit(f"--off {off!r}: expected one of {', '.join(OFF)}")
+        fx = fx.sweep(off, _off_value(fx, off))
+    w = probes.tiny_world(fx)
+    for t in w.tenures:
+        if t.kind == "contain" and t.object == VENUE and t.subject not in (FIRST, SECOND):      # whoever else stands at the venue leaves
+            t.until = 0
+    for j, weight in enumerate(ROOMS[room]):
+        pid = f"onlook{j}"
+        w.persons[pid] = Person(pid, "an onlooker", weight=weight)
+        w.rungs[pid] = Rung(pid, "person")
+        w.add_tenure(Tenure(f"t_{pid}", pid, VENUE, "contain", since=0))
+    SeasonDriver(w)
+    return w
+
+
+def proceeding_pairs(seed: int, n: int, type_id: str, form: str, room: str, off: Optional[str] = None, plant: Plant = None,
+                     verb: str = "argue"):
+    """Yield one `ProceedingPair(i, a, b, c, read, band, outcome, judge)` per pair `0 .. n-1`. `a`, `b` are drawn as `social_pairs`' (and
+    `plant(i, a, b)` replaces them), `c` is `p_high`'s sheet (`pair{i}.c`), the onlookers' `pair{i}.o{j}`; `read` the act's own margin
+    (`net - ob`, 0 where there is none); `band` a ladder band, `REFUSED` (S27.4 on an `exchange` close) or `IMPASSE`; `outcome` the
+    sitting's `Outcome`; `judge` the sheet of the first person the card seats to decide (`None` where nobody decides: `consent`)."""
+    if type_id not in ARRANGEMENTS:
+        raise SystemExit(f"--type {type_id!r}: expected one of {', '.join(ARRANGEMENTS)}")
+    if form not in FORMS or room not in ROOMS:
+        raise SystemExit(f"--form {form!r} / --room {room!r}: expected {FORMS} / {tuple(ROOMS)}")
+    w = _proceeding_world(room, off)
+    onlookers = [f"onlook{j}" for j in range(len(ROOMS[room]))]
+    proceeds = (ARRANGEMENTS[type_id], form, None, None)
+    draw = draw_factory(seed, lambda: 0)
+    for i in range(n):
+        a, b = _sheets(seed, i, plant)
+        sheets = {FIRST: a, SECOND: b, THIRD: generated_attributes(seed, f"pair{i}.c", _span()),
+                  **{pid: generated_attributes(seed, f"pair{i}.o{j}", _span()) for j, pid in enumerate(onlookers)}}
+        for pid, sheet in sheets.items():
+            w.persons[pid] = dataclasses.replace(w.persons[pid], attributes=sheet)
+        got = sigma._resolve_proceeding(w, [FIRST, SECOND], draw(f"pair{i}", f"pairs:proceeding:{type_id}:{form}"), verb=verb,
+                                        subject=SECOND, effort=0, proceeds=proceeds)
+        if got["status"] == "REFUSED":
+            band, read = REFUSED, 0.0
+        elif got["status"] == "IMPASSE":
+            band, read = IMPASSE, 0.0
+        else:
+            band, read = degree_of({k: got[k] for k in ("net", "ob", "settled_margin")}), got["net"] - got["ob"]
+        deciders = got["card"].decided_by
+        yield ProceedingPair(i, a, b, sheets[THIRD], read, band, got["proceeding"], sheets[deciders[0]] if deciders else None)
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -312,19 +424,54 @@ def social_report(seed: int, n: int, verb: str, diff: str, min_bin: int) -> list
                  lambda c: sum(c[b] for b in CARRIED), _which(diff), min_bin, f"social verb={verb} seed={seed} n={n}")
 
 
+def _sided(pairs, side: str):
+    """The pairs seen from `side`: `a` and `b` become the two sheets the difference `a[k] - b[k]` is taken on (`for` as drawn; `against`
+    swapped; `decider` the judge's, less the scale's mid-point, which no slope sees)."""
+    mid = {k: attribute_midpoint() for k in ATTRIBUTES}
+    for p in pairs:
+        yield p if side == "for" else p._replace(a=p.b, b=p.a) if side == "against" else p._replace(a=p.judge or mid, b=mid)
+
+
+def proceeding_report(seed: int, n: int, type_id: str, form: str, room: str, side: str, off: Optional[str], diff: str, min_bin: int,
+                      verb: str = "argue") -> list:
+    """The curve (`_read`) of the carried share by `diff` on the sheet of `side`, then `EXCHANGES`, `ENDS` and `RATTLES` read off the outcomes."""
+    tally = dict(sittings=0, beats=0, rattles=0, ends=Counter())
+
+    def seen():
+        for p in proceeding_pairs(seed, n, type_id, form, room, off, verb=verb):
+            tally["sittings"] += 1
+            tally["beats"] += len(p.outcome.beats)
+            tally["rattles"] += sum(b.rattled is not None for b in p.outcome.beats)
+            tally["ends"][p.outcome.ended] += 1
+            yield p
+    title = f"proceeding type={type_id} form={form} room={room} side={side}" + (f" off={off}" if off else "") + f" seed={seed} n={n}"
+    lines = _read(_sided(seen(), side), BANDS + (REFUSED, IMPASSE), lambda p: p.band, lambda c: sum(c[b] for b in CARRIED),
+                  _which(diff), min_bin, title)
+    k = max(tally["sittings"], 1)
+    ends = [(e, tally["ends"][e]) for e in PROCEEDING_ENDS] + [(e, c) for e, c in tally["ends"].items() if e not in PROCEEDING_ENDS]
+    return lines + [f"EXCHANGES {tally['beats'] / k:.4f}", "ENDS " + " ".join(f"{e}={c / k:.4f}" for e, c in ends),
+                    f"RATTLES {tally['rattles'] / k:.4f}"]
+
+
 def main(argv: Optional[list] = None) -> int:
     ap = argparse.ArgumentParser(prog="python -m engine.season.harness.pairs", description=(
         "Outcome by attribute difference over generated random pairs: the curve, its SLOPE (least-squares, count-weighted), "
         "its SPREAD, MONOTONE and DOMINANT. A reading, not a gate."))
-    ap.add_argument("contest", choices=("duel", "social"))
+    ap.add_argument("contest", choices=("duel", "social", "proceeding"))
     ap.add_argument("--terms", nargs="+", default=None, help="duel terms (default: every term the combat module deals)")
-    ap.add_argument("--verb", default="argue", help="the social verb (default argue)")
+    ap.add_argument("--verb", default="examine", help="the social verb (default examine; `argue`, `tell`, `lie`, `speak` and `interrogate` proceed: read them with `pairs proceeding`)")
+    ap.add_argument("--type", default="conversation", help="proceeding: the arrangement id (default conversation)")
+    ap.add_argument("--form", choices=FORMS, default="abridged", help="proceeding: abridged (default) or full")
+    ap.add_argument("--side", choices=SIDES, default="for", help="proceeding: whose sheet the difference is taken on (default for)")
+    ap.add_argument("--room", choices=tuple(ROOMS), default="none", help="proceeding: the onlookers seated: none, gallery (2), crowd (a cohort of 30)")
+    ap.add_argument("--off", default=None, help="proceeding: one setting at its control (" + ", ".join(OFF) + ")")
     ap.add_argument("--n", type=int, default=None, help=f"pairs per seed ({DEFAULT_N})")
     ap.add_argument("--seed", type=int, nargs="+", default=[0])
     ap.add_argument("--diff", default=None, help="sheet | read | <registry key> | all (duel: sheet; social: read)")
     ap.add_argument("--min-bin", type=int, default=DEFAULT_MIN_BIN)
     args = ap.parse_args(argv)
-    n = args.n if args.n is not None else DEFAULT_N[args.contest]
+    default_n = DEFAULT_N[args.contest]
+    n = args.n if args.n is not None else default_n[args.form] if isinstance(default_n, dict) else default_n
     diff = args.diff or ("sheet" if args.contest == "duel" else "read")
     if args.contest == "duel":
         known = tuple(composition.require("combat.duel_terms"))
@@ -333,10 +480,18 @@ def main(argv: Optional[list] = None) -> int:
             if t not in known:
                 raise SystemExit(f"--terms {t!r}: the combat module deals {known}")
         jobs = [lambda s=s, t=t: duel_report(s, n, t, diff, args.min_bin) for s in args.seed for t in terms]
-    else:
+    elif args.contest == "social":
         jobs = [lambda s=s: social_report(s, n, args.verb, diff, args.min_bin) for s in args.seed]
+    else:
+        jobs = [lambda s=s: proceeding_report(s, n, args.type, args.form, args.room, args.side, args.off, diff, args.min_bin, args.verb)
+                for s in args.seed]
     for job in jobs:
-        print("\n".join(job()))
+        try:
+            print("\n".join(job()))
+        except ValueError as refused:           # a row the venue cannot seat (`refused[no_seat]`): said, not a traceback
+            if not str(refused).startswith("refused["):
+                raise
+            raise SystemExit(f"--type {args.type} --form {args.form}: {refused}")
         print()
     return 0
 

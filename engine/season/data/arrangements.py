@@ -11,7 +11,10 @@ catch and misattribute to one case.
 
 ⚠ THIRTEEN KEYS, NOT FIFTEEN. See `arrangements.yaml`'s own header for the `19_PLAN.md` step 11
 derivation (15 - `registers`/`verdict_reasons`/`stakes_grade` + `quorum` = 13). B05.21 (T13 edit 2) adds a fourteenth, `standard:`, a
-`difficulty_levels` member required of every row.
+`difficulty_levels` member required of every row. ⚠ B24p.03 (V2 p1 §D, p2 §B, §I, §J) makes it SEVENTEEN: `rite`, `turns`, `authority`,
+`reason_lean` are added, `order` is deleted (the bearer opens, the rest by precedence), `proofs` is renamed `admits` (a `MATTERS` member each) and
+`disposal` is renamed `close` (`bench`, `declared`, `hearers`, `consent`; `exchange` is `abridged(row)`'s alone). The file also carries the
+`rites:`, `context:` and `disposal:` blocks, loaded before the rows and exposed as `RITES`, `CONTEXT`, `DISPOSAL`.
 
 ⚠ C-1 IS REPORTED, NOT REFUSED, AND THE REASON IS STATED RATHER THAN QUIETLY DECIDED.
 `21_RECONCILIATION.md` PHASE 2 step 6 names a load check: *"every row's `disposes` kind must name
@@ -23,7 +26,7 @@ explicitly out of this position's five parts). So the check, read as a hard load
 refuse EVERY row this loader could ever carry -- `determine` opens nothing today, for any Tenure kind,
 and neither does any verb yet open an `oblige` on a mutual disposal's behalf. Enforcing it would make
 the loader vacuous, contradicting this position's own stated artifact ("twelve rows load"). Built
-instead as a REPORT (`arrangements_without_a_disposal_opener()`), on the exact precedent
+instead as a REPORT (`arrangements_without_a_disposal_opener()` (now in `data/verbs.py`)), on the exact precedent
 `tenure_kinds_without_an_opener()` already sets one file over for the identical kind of fact: a kind
 with a declared `writes:` cell and no opener is *"a real, disclosed hole, not an absent declaration."*
 A row failing C-1 today is disclosed by that function, not silently admitted and not blocked.
@@ -43,10 +46,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from ..queries.inputs import SIDES   # the stdlib-only record leaf: it imports nothing, so `data/` takes no cycle from it
 from . import files
 from .rosters import (
-    DEGREE_BANDS, DIFFICULTY_LEVELS, GENRES, INTERPOSITION_KINDS, PROOFS, REMIT_ACTS, RUNG_KINDS,
-    TENURE_KINDS, load_yaml, roster,
+    AUTHORITIES, DEGREE_BANDS, DIFFICULTY_LEVELS, DISPOSAL_WRITES, GENRES, GROUNDS, INTERPOSITION_KINDS, ISSUE_RUNGS, MATTERS,
+    PROCEEDING_MOVES, REMIT_ACTS, RUNG_KINDS, TENURE_KINDS, in_tenths, is_number, load_yaml, roster,
 )
 
 
@@ -58,24 +62,33 @@ ARRANGEMENTS_YAML = files.ARRANGEMENTS_YAML
 
 # ---------------------------------------------------------------------------
 # roster-exempt: MECHANISM. These are THIS LOADER'S OWN GRAMMAR -- which values a key on THE ROW
-# ITSELF may take -- not the game's vocabulary the way `interposition_kinds`/`proofs`/`genres` are.
+# ITSELF may take -- not the game's vocabulary the way `interposition_kinds`/`matters`/`genres` are.
 # `data/requires.py::REQUIRES_STEMS`/`COMPARATORS` are the direct precedent for a closed set that
 # stays a Python frozenset rather than a `rosters.yaml` entry: a grammar's own shape, checked once,
 # never a content roster a designer edits to add a game.
 # ---------------------------------------------------------------------------
-_DISPOSAL_VALUES = frozenset({"bench", "mutual", "none", "declared"})
+_CLOSE_VALUES = frozenset({"bench", "declared", "hearers", "consent"})     # `exchange` is `abridged`'s, never a row's (B24p.03)
 _FLOOR_FORMS = frozenset({"open", "closed", "admitted"})
-_ORDER_VALUES = frozenset({"free", "rank", "alternating", "scripted", "written_only"})
 _DISPOSAL_REACH_FORMS = frozenset({"room", "body"})     # or a `RUNG_KINDS` member, checked separately
-_DISPOSES_LITERALS = frozenset({"Record", "none"})      # or a `TENURE_KINDS` member, checked separately
+# or a `TENURE_KINDS` member, checked separately (`yield` is a questioning's: what the questioned man gave up)
+_DISPOSES_LITERALS = frozenset({"Record", "none", "yield"})
+# B24p.03: THE RITE'S OWN GRAMMAR (V2 p2 §B) -- the sides a rite names and the values of its cells; the moves and the issues are rosters.
+_REPLY_VALUES = frozenset({"must", "may", "raise"})
+_SILENCE_VALUES = frozenset({"admits", "refusal", "free"})
+_CONCEDE_VALUES = frozenset({"descends", "accepts"})
+_IMPASSE = "impasse"          # the disposal table's band for a sitting that reached no verdict (V2 p2 §J)
 
 # roster-exempt: MECHANISM, same reason as the block above -- THE ROW'S OWN FIELD NAMES, the
 # identical shape `state/carriers.py::Rung._DECLARED` is exempted for. Not the game's vocabulary.
 _ARRANGEMENT_KEYS = frozenset({
-    "id", "disposal", "bench_basis", "floor", "records_dissent", "venue_min_rank",
-    "term_required", "appeal_basis", "interposed", "order", "proofs", "disposes",
-    "disposal_reach", "quorum", "standard",
+    "id", "rite", "turns", "authority", "reason_lean", "admits", "close", "bench_basis", "floor", "records_dissent",
+    "venue_min_rank", "term_required", "appeal_basis", "interposed", "disposes", "disposal_reach", "quorum", "standard",
 })
+_RITE_KEYS = frozenset({"id", "genre", "live", "bears", "reply", "silence", "issues", "concede", "moves"})
+# the context tables' own field names (V2 p2 §I); an era's fields are the `GROUNDS`, a regime's `power` the `AUTHORITIES`
+_REGIME_KEYS = frozenset({"unlawful", "gravity", "standard", "reason_lean", "admits_add", "admits_drop", "power", "silence", "floor"})
+_STRIFE_KEYS = frozenset({"turns", "unrest", "gravity", "care_want"})
+_CONTEXT_TABLES = ("eras", "regimes", "strife")
 _SPEECH_KIND_KEYS = frozenset({"id", "genres", "min_rank", "reachable_bands"})
 
 
@@ -155,7 +168,142 @@ def _load_speech_kind(row: dict) -> dict:
             "reachable_bands": tuple(bands)}
 
 
-def _load_arrangement(row: dict) -> dict:
+def _word(name: str, kind: str, key: str, value) -> str:
+    if not isinstance(value, str) or not value:
+        raise SystemExit(f"arrangements.yaml: {kind} {name!r} has `{key}: {value!r}`, not a non-empty word.")
+    return value
+
+
+def _load_rite(row: dict) -> dict:
+    """One `rites:` row (V2 p2 §B): the type's structure, which no module compares by id. The sides are `queries/inputs.py::SIDES`; `moves` and `reply`
+    are per side; a side with no move has no reply (the crowd of a `rally`); `bears` (who opens) is a side that has a move; `issues` is a
+    list of `ISSUE_RUNGS` members, empty for the one undivided issue, the matter itself."""
+    if not isinstance(row, dict) or not row.get("id"):
+        raise SystemExit(f"arrangements.yaml: a `rites:` row has no `id`: {row!r}")
+    name = str(row["id"])
+    _refuse_unknown(row, _RITE_KEYS, name, "rite")
+    missing = sorted(_RITE_KEYS - set(row))
+    if missing:
+        raise SystemExit(f"arrangements.yaml: rite {name!r} has no {missing}; a rite states every cell (V2 p2 §B).")
+    genre, live, bears = (_word(name, "rite", k, row[k]) for k in ("genre", "live", "bears"))
+    moves_in, reply_in = row["moves"], row["reply"]
+    if not isinstance(moves_in, dict) or not isinstance(reply_in, dict) or set(moves_in) != set(SIDES):
+        raise SystemExit(f"arrangements.yaml: rite {name!r} must give `moves:` for each of {list(SIDES)} (an empty list for a side "
+                         f"with none) and `reply:` as a mapping from a side.")
+    moves = {}
+    for side in SIDES:
+        ms = list(moves_in[side] or ())
+        _refuse_any_not_in(name, "rite", f"move(s) of the `{side}` side", ms, PROCEEDING_MOVES, "`rosters.yaml: proceeding_moves`",
+                           repr_fn=list)
+        moves[side] = tuple(ms)
+    if bears not in SIDES or not moves[bears]:
+        raise SystemExit(f"arrangements.yaml: rite {name!r} has `bears: {bears!r}`, not a side with a move ({list(SIDES)}).")
+    reply = {}
+    for side, r in reply_in.items():
+        _refuse_not_in(name, f"reply.{side}", side, SIDES)
+        _refuse_not_in(name, f"reply.{side}", r, _REPLY_VALUES)
+        reply[side] = r
+    unanswering = [side for side in SIDES if moves[side] and side not in reply]
+    if unanswering:
+        raise SystemExit(f"arrangements.yaml: rite {name!r} gives {unanswering} moves and no `reply:` (must, may or raise).")
+    issues = list(row["issues"] or ())
+    _refuse_any_not_in(name, "rite", "issue(s)", issues, ISSUE_RUNGS, "`rosters.yaml: issue_rungs`", repr_fn=list)
+    silence, concede = row["silence"], row["concede"]
+    _refuse_not_in(name, "silence", silence, _SILENCE_VALUES)
+    _refuse_not_in(name, "concede", concede, _CONCEDE_VALUES)
+    # roster-exempt: MECHANISM -- the return shape's own field names, not a second roster.
+    return {"id": name, "genre": genre, "live": live, "bears": bears, "reply": reply, "silence": silence, "issues": tuple(issues),
+            "concede": concede, "moves": moves}
+
+
+def _load_rites(rows) -> dict:
+    out: dict = {}
+    for r in rows or ():
+        rite = _load_rite(r)
+        if rite["id"] in out:
+            raise SystemExit(f"arrangements.yaml: rite id {rite['id']!r} appears more than once")
+        out[rite["id"]] = rite
+    if not out:
+        raise SystemExit("arrangements.yaml: no `rites:` -- every row names one (V2 p1 §D).")
+    return out
+
+
+def _load_context(ctx) -> dict:
+    """The `context:` block (V2 p2 §I): `eras` (a weight for each ground), `regimes` and `strife` (the cell deltas), each row stating every
+    key of its table. A key outside a table's set, a ground, authority or matter that does not exist, is refused naming the row. A rite or row
+    named `unlawful` is checked in `_load`, once the rows are read."""
+    if not isinstance(ctx, dict) or set(ctx) != set(_CONTEXT_TABLES):
+        raise SystemExit(f"arrangements.yaml: `context:` must carry exactly {list(_CONTEXT_TABLES)}, not {sorted(ctx) if isinstance(ctx, dict) else ctx!r}.")
+    out: dict = {}
+    for table, keys in (("eras", GROUNDS), ("regimes", _REGIME_KEYS), ("strife", _STRIFE_KEYS)):
+        rows = ctx[table]
+        if not isinstance(rows, dict) or not rows:
+            raise SystemExit(f"arrangements.yaml: `context.{table}` carries no rows.")
+        out[table] = {}
+        for rid, row in rows.items():
+            name = f"{table}.{rid}"
+            if not isinstance(row, dict):
+                raise SystemExit(f"arrangements.yaml: `context` row {name!r} is not a mapping: {row!r}")
+            _refuse_unknown(row, frozenset(keys), name, "context row")
+            absent = sorted(set(keys) - set(row))
+            if absent:
+                raise SystemExit(f"arrangements.yaml: `context` row {name!r} has no {absent}; a context row states every key of its table.")
+            out[table][rid] = dict(row)
+    for rid, row in out["eras"].items():
+        for g, w in row.items():
+            if not is_number(w) or w <= 0:
+                raise SystemExit(f"arrangements.yaml: `context` row 'eras.{rid}' weighs {g!r} at {w!r}, not a positive number.")
+    for rid, row in out["strife"].items():
+        for k, v in row.items():
+            if not is_number(v) or (k == "turns" and v != int(v)):
+                raise SystemExit(f"arrangements.yaml: `context` row 'strife.{rid}' has `{k}: {v!r}`, not a number"
+                                 f"{' (a whole number of turns)' if k == 'turns' else ''}.")
+    for rid, row in out["regimes"].items():
+        name = f"regimes.{rid}"
+        for k in ("gravity", "standard", "reason_lean"):
+            if not is_number(row[k]):
+                raise SystemExit(f"arrangements.yaml: `context` row {name!r} has `{k}: {row[k]!r}`, not a number.")
+        for k in ("admits_add", "admits_drop"):
+            row[k] = tuple(row[k] or ())
+            _refuse_any_not_in(name, "context row", f"`{k}` kind(s)", row[k], MATTERS, "`rosters.yaml: matters`")
+        row["unlawful"] = tuple(row["unlawful"] or ())
+        power = row["power"]
+        if not isinstance(power, dict) or set(power) != set(AUTHORITIES) or not all(is_number(w) and w >= 0 for w in power.values()):
+            raise SystemExit(f"arrangements.yaml: `context` row {name!r} has `power: {power!r}`, not a weight of 0 or more for each of "
+                             f"{sorted(AUTHORITIES)}.")
+        if row["silence"] is not None:
+            _refuse_not_in(name, "silence", row["silence"], _SILENCE_VALUES)
+        if row["floor"] is not None:
+            _refuse_not_in(name, "floor", row["floor"], _FLOOR_FORMS)
+    return out
+
+
+def _load_disposal(table) -> dict:
+    """The `disposal:` block (V2 p2 §J): `disposes -> band -> typed writes`. A key is a `disposes` value (`_DISPOSES_LITERALS` or a
+    `TENURE_KINDS` member); each states every band of the ladder and `impasse`; each write is a `rosters.yaml: disposal_writes` member."""
+    if not isinstance(table, dict) or not table:
+        raise SystemExit("arrangements.yaml: no `disposal:` -- every row's `disposes` names a row of it (V2 p2 §J).")
+    bands = frozenset(DEGREE_BANDS) | {_IMPASSE}
+    out: dict = {}
+    for kind, by_band in table.items():
+        if kind not in _DISPOSES_LITERALS and kind not in TENURE_KINDS:
+            raise SystemExit(f"arrangements.yaml: `disposal:` row {kind!r} is not a `disposes` value (`Record`, `none`, `yield` or a "
+                             f"`tenure_kinds` member).")
+        if not isinstance(by_band, dict) or set(by_band) != bands:
+            raise SystemExit(f"arrangements.yaml: `disposal:` row {kind!r} must state exactly the bands {sorted(bands)}.")
+        out[kind] = {}
+        for band, writes in by_band.items():
+            writes = list(writes or ())
+            _refuse_any_not_in(f"{kind}/{band}", "disposal row", "write(s)", writes, DISPOSAL_WRITES, "`rosters.yaml: disposal_writes`")
+            out[kind][band] = tuple(writes)
+    return out
+
+
+def _load_arrangement(row: dict, rites: dict | None = None, disposal: dict | None = None) -> dict:
+    """One `arrangements:` row. `rites` and `disposal` default to the loaded `RITES` and `DISPOSAL` (a caller outside `_load`, which passes
+    them, reads the shipped blocks)."""
+    rites = RITES if rites is None else rites
+    disposal_table = DISPOSAL if disposal is None else disposal
     if not isinstance(row, dict) or not row.get("id"):
         raise SystemExit(f"arrangements.yaml: an `arrangements:` row has no `id`: {row!r}")
     name = str(row["id"])
@@ -163,12 +311,29 @@ def _load_arrangement(row: dict) -> dict:
 
     def need(key: str):
         if key not in row:
-            raise SystemExit(f"arrangements.yaml: {name!r} has no `{key}:`. PART D's keys, and `standard:` "
-                             f"(B05.21), are all required (a row states its shape in full, or not at all).")
+            raise SystemExit(f"arrangements.yaml: {name!r} has no `{key}:`. PART D's keys, `standard:` "
+                             f"(B05.21) and the proceeding's (B24p.03) are all required (a row states its shape in full, or not at all).")
         return row[key]
 
-    disposal = need("disposal")
-    _refuse_not_in(name, "disposal", disposal, _DISPOSAL_VALUES)
+    rite = need("rite")
+    _refuse_not_in(name, "rite", rite, rites, "a `rites:` id")
+    turns = need("turns")
+    if (not isinstance(turns, (list, tuple)) or len(turns) != 2
+            or not all(isinstance(t, int) and not isinstance(t, bool) for t in turns) or not 1 <= turns[0] <= turns[1]):
+        raise SystemExit(f"arrangements.yaml: {name!r} has `turns: {turns!r}`, not `(least, most)`, whole numbers with 1 <= least <= most.")
+    authority = need("authority")
+    _refuse_not_in(name, "authority", authority, AUTHORITIES, "an `authorities` member", repr_fn=list)
+    reason_lean = need("reason_lean")
+    if not in_tenths(reason_lean, -1, 1):
+        raise SystemExit(f"arrangements.yaml: {name!r} has `reason_lean: {reason_lean!r}`, not a number in [-1, 1] that is a whole number "
+                         f"of tenths (the venue's lean of the dice toward Reason or Presence, R11).")
+    admits = list(need("admits") or ())
+    _refuse_any_not_in(name, "arrangement", "kind(s) admitted", admits, MATTERS, "`rosters.yaml: matters`")
+    close = need("close")
+    if close == "exchange":
+        raise SystemExit(f"arrangements.yaml: {name!r} has `close: exchange`, which only `abridged(row)` sets (the one speech's own "
+                         f"margin with the one addressed); a row's close is one of {sorted(_CLOSE_VALUES)}.")
+    _refuse_not_in(name, "close", close, _CLOSE_VALUES)
     bench_basis = need("bench_basis")
     if bench_basis != "none":
         _refuse_not_in(name, "bench_basis", bench_basis, REMIT_ACTS, "`none` or a `remit_acts` member")
@@ -190,15 +355,22 @@ def _load_arrangement(row: dict) -> dict:
     interposed = list(need("interposed") or ())
     _refuse_any_not_in(name, "arrangement", "interposed kind(s)", interposed, INTERPOSITION_KINDS,
                        "`rosters.yaml: interposition_kinds`")
-    order = need("order")
-    _refuse_not_in(name, "order", order, _ORDER_VALUES)
-    proofs = list(need("proofs") or ())
-    _refuse_any_not_in(name, "arrangement", "proof(s)", proofs, PROOFS, "`rosters.yaml: proofs`")
     disposes = need("disposes")
     if disposes not in _DISPOSES_LITERALS and disposes not in TENURE_KINDS:
         raise SystemExit(
-            f"arrangements.yaml: {name!r} has `disposes: {disposes!r}`, not `Record`, `none` or a "
+            f"arrangements.yaml: {name!r} has `disposes: {disposes!r}`, not `Record`, `none`, `yield` or a "
             f"`tenure_kinds` member ({sorted(TENURE_KINDS)}).")
+    if disposes not in disposal_table:
+        raise SystemExit(f"arrangements.yaml: {name!r} has `disposes: {disposes!r}` and the `disposal:` block has no row for it "
+                         f"({sorted(disposal_table)}); the fold would have no writes to perform (V2 p2 §J).")
+    # A-139 AS CORRECTED: a party may also adjudicate, so the loader refuses only the row that can seat ONE character in every role -- a rite that
+    # gives moves to one side alone, closed by the parties' consent: the one party would consent with himself. Every other combination loads
+    # (`acclamation`, a consent on the `rally` structure under `authority: none`, among them); the sitting-level invariant is `Input`'s.
+    # [ASSUMPTION; Jordan to correct: the data form of A-139's one refusal.]
+    sides_with_moves = [side for side, ms in rites[rite]["moves"].items() if ms]
+    if close == "consent" and authority == "parties" and len(sides_with_moves) < 2:
+        raise SystemExit(f"arrangements.yaml: {name!r} has `close: consent` under `authority: parties` on the rite {rite!r}, which gives moves "
+                         f"to {sides_with_moves} alone -- the one party would consent with himself (A-139: one character may not fill every role).")
     disposal_reach = need("disposal_reach")
     if disposal_reach not in _DISPOSAL_REACH_FORMS and disposal_reach not in RUNG_KINDS:
         raise SystemExit(
@@ -214,29 +386,30 @@ def _load_arrangement(row: dict) -> dict:
     # one absent for a reason). `19_PLAN.md` step 11's own falsifier: "a declared-disposal row
     # with no quorum fails the load."
     quorum = row.get("quorum")
-    if disposal == "declared" and quorum is None:
+    if close == "declared" and quorum is None:
         raise SystemExit(
-            f"arrangements.yaml: {name!r} has `disposal: declared` and no `quorum:`. A declared "
+            f"arrangements.yaml: {name!r} has `close: declared` and no `quorum:`. A declared "
             "disposal's tally IS the finding (`19_PLAN.md` step 11: \"the dissent key ... under a "
             "declared disposal it is the tally made visible\"), and a tally with no quorum is not "
             "a rule.")
-    if disposal != "declared" and quorum is not None:
+    if close != "declared" and quorum is not None:
         raise SystemExit(
-            f"arrangements.yaml: {name!r} has `quorum: {quorum!r}` and `disposal: {disposal!r}` -- "
-            "`quorum` is `declared`'s own key; a row with a different disposal carrying one is a "
+            f"arrangements.yaml: {name!r} has `quorum: {quorum!r}` and `close: {close!r}` -- "
+            "`quorum` is `declared`'s own key; a row with a different close carrying one is a "
             "stray value nothing reads.")
     # roster-exempt: MECHANISM -- the return shape's own field names, not a second roster.
     return {
-        "id": name, "disposal": disposal, "bench_basis": bench_basis,
+        "id": name, "rite": rite, "turns": tuple(turns), "authority": authority, "reason_lean": reason_lean,
+        "admits": tuple(admits), "close": close, "bench_basis": bench_basis,
         "floor": floor_form, "floor_basis": floor_basis, "records_dissent": records_dissent,
         "venue_min_rank": venue_min_rank, "term_required": term_required,
-        "appeal_basis": appeal_basis, "interposed": tuple(interposed), "order": order,
-        "proofs": tuple(proofs), "disposes": disposes, "disposal_reach": disposal_reach,
+        "appeal_basis": appeal_basis, "interposed": tuple(interposed),
+        "disposes": disposes, "disposal_reach": disposal_reach,
         "quorum": quorum, "standard": standard,
     }
 
 
-def _load() -> tuple[dict, dict]:
+def _load() -> tuple[dict, dict, dict, dict, dict]:
     if not ARRANGEMENTS_YAML.exists():
         raise SystemExit(f"arrangements.yaml not found at {ARRANGEMENTS_YAML}")
     doc = load_yaml(ARRANGEMENTS_YAML.read_text(encoding="utf-8")) or {}
@@ -246,45 +419,36 @@ def _load() -> tuple[dict, dict]:
         if row["id"] in kinds:
             raise SystemExit(f"arrangements.yaml: speech_kinds id {row['id']!r} appears more than once")
         kinds[row["id"]] = row
+    rites = _load_rites(doc.get("rites"))
+    context = _load_context(doc.get("context"))
+    disposal = _load_disposal(doc.get("disposal"))
     arrangements: dict = {}
     for r in doc.get("arrangements") or ():
-        row = _load_arrangement(r)
+        row = _load_arrangement(r, rites, disposal)
         if row["id"] in arrangements:
             raise SystemExit(f"arrangements.yaml: arrangement id {row['id']!r} appears more than once")
         arrangements[row["id"]] = row
-    return arrangements, kinds
+    for rid, regime in context["regimes"].items():
+        outlawed = [u for u in regime["unlawful"] if u not in rites and u not in arrangements]
+        if outlawed:
+            raise SystemExit(f"arrangements.yaml: `context` row 'regimes.{rid}' outlaws {outlawed}, which are neither a rite nor an "
+                             f"arrangement id ({sorted(rites)}; {sorted(arrangements)}).")
+    return rites, context, disposal, arrangements, kinds
 
 
-ARRANGEMENTS, SPEECH_KINDS = _load()
+RITES, CONTEXT, DISPOSAL, ARRANGEMENTS, SPEECH_KINDS = _load()
 
 
-def arrangements_without_a_disposal_opener() -> list[str]:
-    """C-1, AS A REPORT (see module docstring for why refusing is wrong today). Every arrangement
-    id whose `disposes` kind has no opener naming `determine` -- or, for `disposal: mutual`, whose
-    `oblige` has no opener at all -- in `data/verbs.py::_derive_openers_from_effects()`'s map.
+def abridged(row: dict) -> dict:
+    """THE ABRIDGED FORM OF A ROW (V2 p2 §B; pure): a copy with one turn, the one move `argue` for the bearer (the side its rite says opens) and
+    none for the other side, and `close: exchange` -- the one speech's own margin with the one addressed, who is seated by the builder as a
+    hearer who decides (B24p.13), so no bench is needed (V2 p4 §K B3). The venue stays: `standard`, `reason_lean`, `admits`, `authority`,
+    `floor` and `disposes` are the row's (an abridged speech keeps its room). It is the only place `exchange` is set."""
+    rite = RITES[row["rite"]]
+    moves = {side: (("argue",) if side == rite["bears"] else ()) for side in SIDES}
+    return {**row, "turns": (1, 1), "moves": moves, "close": "exchange"}
 
-    ⚠ A `disposal: mutual` row passes this check, because `oblige` has an opener (`_eff_oblige`, the
-    joiner's own act). It reports only the seeded rows this check actually ASKS: a row disposing
-    `Record` or `none` is excluded below (`continue`, "C-1 is about a TENURE kind's opener; neither
-    is one"), so it is the seeded rows disposing a real Tenure kind or `mutual` that report today,
-    not every seeded row -- `test_arrangements.py` pins this exactly (`["arbitration"]`, the one
-    seeded row disposing a Tenure kind, against two `Record`-disposing rows that are correctly
-    absent). That is the disclosed gap this function exists to make checkable rather than silent --
-    the same shape `tenure_kinds_without_an_opener()` already reports one file over.
 
-    ⚠ AND THE GAP CLOSED AT PLAN POSITION `19`: `_eff_determine` opens the disposal `oblige`, so
-    `arbitration` is no longer reported and the pinned report is `[]` (see the module docstring's
-    `19` paragraph for why it stays a report)."""
-    from .verbs import _OPENERS_FROM_EFFECTS as openers
-    out = []
-    for name, row in ARRANGEMENTS.items():
-        if row["disposal"] == "mutual":
-            if not openers.get("oblige"):
-                out.append(name)
-            continue
-        kind = row["disposes"]
-        if kind in ("Record", "none"):
-            continue                      # C-1 is about a TENURE kind's opener; neither is one
-        if "determine" not in (openers.get(kind) or ()):
-            out.append(name)
-    return out
+def in_form(arrangement: dict, form: str) -> dict:
+    """A `proceeds:` entry's arrangement in its `form`: `abridged(row)` for `form: abridged`, the row itself otherwise."""
+    return abridged(arrangement) if form == "abridged" else arrangement

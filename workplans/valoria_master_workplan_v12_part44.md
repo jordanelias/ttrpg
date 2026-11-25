@@ -2,7 +2,7 @@
 
 ## Status: RATIFIED, ED-IN-0362 (the last body part of workplan v12, drafted under `master/workplan_v12/`; adopted 2026-11-15 as the one active plan; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
-## Written against: the working tree at `f4eb906` (branch `ccr-62958c70-0kjhsw`, read 2026-11-13, a shallow clone); author lane A44 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2 (second pass), one round. Input: `valoria_master_workplan_v12_part2.md` §4, "The settings at control" (105 rows, and rows 106 to 108 added 2026-11-14 for Batch B24p-sc-proceeding), each row's `DIALS AT CONTROL` line and the item that ships the setting, opened in its part, and the source the item cites. Every item is written against the tree as B00 to B41 will leave it; a symbol that does not exist at `f4eb906` names the batch and item that make it.
+## Written against: the working tree at `f4eb906` (branch `ccr-62958c70-0kjhsw`, read 2026-11-13, a shallow clone); author lane A44 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2 (second pass), one round. Input: `valoria_master_workplan_v12_part2.md` §4, "The settings at control" (105 rows, and rows 106 to 108 added 2026-11-14 for Batch B24p-sc-proceeding @ba108d1), each row's `DIALS AT CONTROL` line and the item that ships the setting, opened in its part, and the source the item cites. Every item is written against the tree as B00 to B41 will leave it; a symbol that does not exist at `f4eb906` names the batch and item that make it.
 
 **What this part holds.** Two batches of the IN lane, the plan's last two. **`B98-dials`** (W23, S23): one position per setting that an earlier batch shipped at its control value and did not set itself (D-22; `valoria_master_workplan_v12.md` §6), in the order of part 2 §4's table (the order the mechanisms landed), with the few moves the dependencies force (UNDECIDED U2). A TARGETED row is a flip item: the owner's file and symbol, the control value and the new value, the source's reading rule (a sweep run as a probe where the source gives one), the control arm, the revert and a gate read on a command. A BLOCKED row is a short item that flips nothing and records why, who must supply the target and what B99 quotes. An IN-BATCH row is a flip item that runs only if its owner batch's close did not set it. Since the decision pass of lanes D1 to D3 (U10, U11), every design-blocked row the ladder could answer is a flip item: by script over the position table (2026-11-13), 67 of the 86 positions are flips (B98.31, B98.66 and B98.67 each keep a row BLOCKED inside) and 19 are BLOCKED (content 8, carrier 4, A-114 3, CR-103 1, design 3: B98.26 for Jordan's ruling, B98.37, B98.41). Then `## Readings`, `B98.99` (the one re-pin) and the boundary row. **`B99-nine-retake`** (W24, S24): `IS-A-13`, the one longer re-take of all nine on B98's closing tree, the only item of the plan that may edit a row's `status:`; `B99.99` (an EQUAL close) and the boundary row. Files: this file (the head of B98, its position table, `B98.01` to `B98.22`) → `valoria_master_workplan_v12_part44_cont.md` (`B98.23` to `B98.60`) → `valoria_master_workplan_v12_part44_cont2.md` (`B98.61` to `B98.87`, `## Readings`, `B98.99`, the boundary row, SERIAL EDGES and FILE CENSUS) → `valoria_master_workplan_v12_part44_cont3.md` (B99).
 
@@ -48,14 +48,14 @@ GATE: Batch B18-pc-content
 GATE: Batch B19a-mb-contact-instrument
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
-GATE: Batch B21-fa-governance
+GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B21b-fa-war
 GATE: Batch B21c-fa-seats
 GATE: Batch B21d-fa-arc
 GATE: Batch B21s-strife-supply
 GATE: Batch B22-mb-armies
 GATE: Batch B23-land
-GATE: Batch B24p-sc-proceeding
+GATE: Batch B24p-sc-proceeding @ba108d1
 GATE: Batch B24-sc-hearing
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning
@@ -117,7 +117,7 @@ C(B98-dials): this batch's entries; the plan's head parts (`valoria_master_workp
 PARALLEL: S23, alone in the plan (`V12_STRUCTURE.md` §2.3). No sibling; no merge position.
 BACKGROUND RUN: each probe over many fights or seeds (rows 4, 32, 47, 55, 61: 200 to 6,000 fights; rows 30, 96: 200 planted seeds or eight draw seeds; row 66: 50 planted seeds; row 81: B31.11's 200-seed field and gate 3 at n 200 per `ob`; row 102: PG-5 (d) over seeds 0–19 from the cache) is sized on two small runs at the batch's open, launched in the background (`exec python -u … > log 2>&1`, the skill's "Running a slow instrument"), and read at its item's gate; each item's commit body records the wall time and worker count. No run passes two seasons.
 COST: calibration (one value per commit, read against its target); producer `valoria-author` on `sonnet`, `high`; the probe asserts each numeric target and `opus` reads, before the commit, only a target with no numeric bar (U8); BLOCKED positions are reading on `sonnet`, `low`.
-EST: 39.7 h [estimate: `valoria_master_workplan_v12.md` §5's formula over 88 positions (87 and B98.87, Batch B24p-sc-proceeding): 0.4 h × 88 + 2.5 h for the close + 2 h for the probes; the structure's 8 h predates the member list]
+EST: 39.7 h [estimate: `valoria_master_workplan_v12.md` §5's formula over 88 positions (87 and B98.87, Batch B24p-sc-proceeding @ba108d1): 0.4 h × 88 + 2.5 h for the close + 2 h for the probes; the structure's 8 h predates the member list]
 
 The position table, in landing order (the handles follow part 2 §4's rows, UNDECIDED U1; landing order is the table's except B98.76 before B98.75, U2). Every flip also gates on the last committed flip before it (the control arm's chain); that edge is not repeated per row. The SERIAL EDGES and FILE CENSUS lines are at the batch's end, in `valoria_master_workplan_v12_part44_cont2.md` (E-11).
 
@@ -209,7 +209,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.84 | a marriage may bear a child | row 103; B39.24, B39.26; `STORY_B` gate 2 | BUILD (flip) | MOVER(behaviour) | Batch B39; Batch B37 |
 | B98.85 | the age of majority, if B39 did not set it | row 104; B39.27, B39.28; `STORY_B` gate 4; A-15 | BUILD (flip, conditional) | MOVER(behaviour) | Batch B39 |
 | B98.86 | an empty founded place may be abandoned | row 105; B39.30; `STORY_C` gates 2, 3; A-55 | BUILD (flip) | MOVER(behaviour) | Batch B39 |
-| B98.87 | the six roles' fifty-five settings are re-read on the finished realm | row 106; B24p.23; V2 p2 §K | READING | EQUAL | Batch B24p-sc-proceeding |
+| B98.87 | the six roles' fifty-five settings are re-read on the finished realm | row 106; B24p.23; V2 p2 §K | READING | EQUAL | Batch B24p-sc-proceeding @ba108d1 |
 | B98.88 | a man will not do what he holds wrong, and gives way by a draw: `refusal_axis` and `scruple_temperature` leave control | no row of §4; B10.32 (the reading only); B10.22 gate 2; `U5a_CHAR_owed_amendments` §8 item 2; `16_PESSIMIST_CHAR_C` | BUILD (flip, two settings) | MOVER(behaviour) | Batch B10; Batch BA1 |
 | B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.88 |
 
@@ -485,7 +485,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 - LANDS IT: B98's producer; `Item: B98.19`, `[skip ci]`.
 
 ### B98.20 — three governance obstacle steps leave 0; the provisional term stays as B21.73 set it · rows 23 to 26; B21.09, B21.12, B21.73, B21.61, B21.69 · BUILD (flip, three settings; row 24 a POINTER) · HASH MOVER(behaviour)
-- SOURCE: part 2 §4 rows 23 to 26; `valoria_master_workplan_v12_part14.md` and `_part15.md` B21's `DIALS AT CONTROL` lines; rulings A-105 (Jordan: "it should be uncommon for a foreign faction seat holder in a territory, but in the event that it DOES happen … the king's appointee stays in place unless king convinced otherwise", `unified/DECISIONS_ANSWERED.md`). Decided by the ladder (lane D1): all three steps are members of the one obstacle composer (OBS), so they take B98.46's form (one step moved at a time against its control, the smallest passing value, one commit; step 4). Row 23: the sweep is its own (`unified/work/R4_READ.md:315`: "0.25 [A] sweep {0, 0.25, 0.5}"). Rows 25, 26: no sweep is stated ("proposed 2"; B21.69's test arm 1), so the sibling OBS step's `{0.5, 1.0, 2.0}` is taken (U9's precedent for `regard_step`), and A-105 is the reading (step 1: a ruling). Row 24: step 1, superseded: B21.73 sets `provisional_term` to the source's proposed 2 on C3's gate, and SYN_A names it BIND_C's one fixture (`unified/work/R4_READ.md:314`); the later "re-centring" has no stated value or reading and is not a setting at control.
+- SOURCE: part 2 §4 rows 23 to 26; `FORK:8aa171f30:workplans/valoria_master_workplan_v12_part14.md` and `FORK:8aa171f30:workplans/valoria_master_workplan_v12_part15.md` B21's `DIALS AT CONTROL` lines; rulings A-105 (Jordan: "it should be uncommon for a foreign faction seat holder in a territory, but in the event that it DOES happen … the king's appointee stays in place unless king convinced otherwise", `unified/DECISIONS_ANSWERED.md`). Decided by the ladder (lane D1): all three steps are members of the one obstacle composer (OBS), so they take B98.46's form (one step moved at a time against its control, the smallest passing value, one commit; step 4). Row 23: the sweep is its own (`unified/work/R4_READ.md:315`: "0.25 [A] sweep {0, 0.25, 0.5}"). Rows 25, 26: no sweep is stated ("proposed 2"; B21.69's test arm 1), so the sibling OBS step's `{0.5, 1.0, 2.0}` is taken (U9's precedent for `regard_step`), and A-105 is the reading (step 1: a ruling). Row 24: step 1, superseded: B21.73 sets `provisional_term` to the source's proposed 2 on C3's gate, and SYN_A names it BIND_C's one fixture (`unified/work/R4_READ.md:314`); the later "re-centring" has no stated value or reading and is not a setting at control.
 - SETTINGS: `engine/season/data/fixtures.py`: (23) `rank_step` 0 → the smaller of `{0.25, 0.5}` that passes `[ASSUMPTION: R4's 0.25 [A]; Jordan to correct; revert: 0]`; (25) `cross_chain_step` 0 → the smallest of `{0.5, 1.0, 2.0}` that passes `[ASSUMPTION: the sibling sweep — basis: U9; Jordan to correct; revert: 0]`; (26) `faction_power_step` 0 → the same, `[ASSUMPTION: as (25)]`; (24) `provisional_term`: no edit.
 - INSTRUCTION:
   1. Row 24: open B21.73's commit (`git log --grep='Item: B21.73'`) and record `set by B21.73 @<sha>` with `FIX(provisional_term)` (expected 2). No commit for this row.

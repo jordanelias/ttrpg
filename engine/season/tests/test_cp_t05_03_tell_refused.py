@@ -25,12 +25,11 @@ from ..data.verbs import DEED_KINDS, KIND_VERB, REFUSAL_KINDS, VERB_TABLE
 from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
 from ..loop.driver import SeasonDriver
-from ..manifest import MODULE_ENTRIES
 from ..queries import person_q as PQ
-from ..queries.inputs import Margin
 from ..queries.person_q import said_of
 from ..state.carriers import Act, Claim, Scene
 from ..state.ids import H
+from .test_cr27_lie import force_sitting
 
 TELLER, SUBJECT = "p_low", "Hh"
 PRESENT, ABSENT = "p_mid", "p_king"          # `p_mid` stands in `Hh` with the teller; `p_king` in `R`
@@ -38,16 +37,14 @@ PRESENT, ABSENT = "p_mid", "p_king"          # `p_mid` stands in `Hh` with the t
 
 def _season(monkeypatch, hearer, degree_net):
     """One season in which the teller is handed the SAME `tell` of his one claim to `hearer` every time he is
-    asked, and nobody else chooses anything; the contest is forced to `degree_net` against obstacle 2. Returns
+    asked, and nobody else chooses anything; the sitting's verdicts are forced to `degree_net` against obstacle 2. Returns
     the world and the `tell` Events in log order."""
     w = P.tiny_world()
     d = SeasonDriver(w)                  # constructed first: the registrar fills the module table
     w.persons[TELLER].ledger.append(
         Claim("c_held", TELLER, SUBJECT, "stores:grain", 8, 0, "firsthand", 80, "own"))
     said = said_of(w.persons[TELLER].ledger, SUBJECT, w.fixtures)
-    real = MODULE_ENTRIES["social_contest.roll"]
-    monkeypatch.setitem(MODULE_ENTRIES, "social_contest.roll", dataclasses.replace(
-        real, fn=lambda inp, rng: Margin(net=degree_net, ob=2)))
+    force_sitting(monkeypatch, degree_net)          # B24p.99: `tell` proceeds; the margin is planted on the sitting's verdicts
     asked: list = []
 
     def tell(p, v, s, ask_budget, auto):

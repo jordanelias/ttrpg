@@ -28,7 +28,7 @@ def test_contest_error_at_depth_zero_emits_one_refusal():
     rolls. FALSIFIER: the fold returns `[]` (the act has no Event). The declaration beforehand is the control that the
     act was admitted and reached the contest at all, and the kind read is the row's own `emits_on_refusal`."""
     w = build_realm(0)
-    act = Act(id="m1", actor="p_npc_033", verb="march", payload={"subject": "set_s_036"}, via="off_spymaster")
+    act = Act(id="m1", actor="p_npc_036", verb="march", payload={"subject": "set_s_036"}, via="off_royal_marshal")   # a seat granting `dispatch` (the Spymaster's grant is `issue` alone, B21.03)
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False
@@ -49,7 +49,7 @@ def test_sigma_provider_with_no_rng_raises_instrument_defect():
     refusal is the missing generator and not the party, the verb or the prize."""
     w, _d = _world()
     args = (w, ["p_low", "p_mid"], ["c"], "a standing")
-    kw = dict(verb="tell", subject="p_mid")
+    kw = dict(verb="arrest", subject="p_mid")
     ok = sigma.resolve(*args, **kw, rng=draw.seeded(draw.H2("test_u5a_core_owed", 3)))
     assert ok["status"] == "RESOLVED", ok
     with pytest.raises(InstrumentDefect, match="sigma"):

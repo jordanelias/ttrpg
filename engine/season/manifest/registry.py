@@ -169,10 +169,12 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     # `ENCOUNTER` defers to the seventh phase) and the band RESOLVE's fold writes while deferred; `module_entry`
     # (`31a`, A-25) is the composition role the provider calls, held to its row by `check_contest_prizes()`;
     # `heard_by` (v9 SC-02 `22a`) names the room that hears the contest (`HEARD_BY_ROOMS`) or is absent, `toward` (B07.04) whom that
-    # room is asked about (`TOWARD_SIDES`) or is absent, and `_check_heard_by` refuses any other value of either at boot.
+    # room is asked about (`TOWARD_SIDES`) or is absent, and `_check_heard_by` refuses any other value of either at boot;
+    # `opposed_by` (B21.14) who stands opposite where the act names a seat (`OPPOSED_BY_SIDES`) or is absent, `_check_opposed_by`'s.
     cell = row.get if isinstance(row, dict) else (lambda k: None)
     cells = dict(provider=cell("provider"), step=cell("step"), declares=cell("declares"),
-                 module_entry=cell("module_entry"), heard_by=cell("heard_by"), toward=cell("toward"))
+                 module_entry=cell("module_entry"), heard_by=cell("heard_by"), toward=cell("toward"),
+                 opposed_by=cell("opposed_by"))
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found", **cells)
@@ -229,6 +231,7 @@ def check_rows() -> list:
             _check_step_declares(role, key, row)
             _check_heard_by(role, key, row)
             _check_toward(role, key, row)
+            _check_opposed_by(role, key, row)
             checked.append((role, key))
     return checked
 
@@ -278,6 +281,10 @@ HEARD_BY_ROOMS = frozenset({BENCH, SEAT_BODY, RESIDENTS})
 # B07.04 edit 4: whom the room is asked about. Absent = the actor; `to` = the receiver of the act (`sigma.py::_read_social_roll`).
 TOWARD_TO = "to"
 TOWARD_SIDES = frozenset({TOWARD_TO})
+# B21.14 (BIND_C commit C3): who stands opposite in a contest for the prize. Absent = the act's own opponent operand
+# (`VerbRow.opponent_operand`); `holder` = where the act names a seat, that seat's live holder (`loop/sides.py::sides_of`).
+OPPOSED_BY_HOLDER = "holder"
+OPPOSED_BY_SIDES = frozenset({OPPOSED_BY_HOLDER})
 
 
 def _check_heard_by(role: str, key: Any, row: Any) -> None:
@@ -304,6 +311,17 @@ def _check_toward(role: str, key: Any, row: Any) -> None:
         raise Unspecified(
             f"{role}:{key!r} declares `toward: {toward!r}`", "04 PART E step 10",
             needs=f"one of {sorted(TOWARD_SIDES)}, or no `toward:`",
+            law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
+
+
+def _check_opposed_by(role: str, key: Any, row: Any) -> None:
+    """B21.14: a prize row's `opposed_by:`, if present, names a side `loop/sides.py::sides_of` reads (`OPPOSED_BY_SIDES`), refused at
+    boot naming the row -- a side no reader knows would be taken for the act's own opponent operand, silently."""
+    opposed_by = row.get("opposed_by") if isinstance(row, dict) else None
+    if opposed_by is not None and opposed_by not in OPPOSED_BY_SIDES:
+        raise Unspecified(
+            f"{role}:{key!r} declares `opposed_by: {opposed_by!r}`", "04 PART E step 10",
+            needs=f"one of {sorted(OPPOSED_BY_SIDES)}, or no `opposed_by:`",
             law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
 
 

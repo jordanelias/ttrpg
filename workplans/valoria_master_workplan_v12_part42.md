@@ -29,7 +29,7 @@ GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B11F1-flow-se
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
-GATE: Batch B21-fa-governance
+GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B22-mb-armies
 GATE: Batch B24-sc-hearing
 GATE: Batch B25-fi-questioning

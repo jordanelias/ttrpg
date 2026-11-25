@@ -28,7 +28,7 @@ import pytest
 
 from engine.season.data.fixtures import DEFAULT_FIXTURES
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.boot.realm import build_realm
+from engine.season.tests._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q

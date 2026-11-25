@@ -29,7 +29,7 @@ from typing import Any, Mapping, NamedTuple, Optional
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BINDS_BASES, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
+    BINDS_BASES, CONFERRAL_BASES, DETAIN_KIND, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
     REFERENT_CLASSES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member,
     title_domain,
 )
@@ -297,6 +297,9 @@ class Event:
     # MARGIN_ENDING`: pool, ob, net, margin, terms, levels, leverage), the roll that graded the act, built in
     # `loop/resolve.py::_fold` from what `seam/wrappers/sigma.py::resolve` returned, on every Event of the act
     # (the Failure band's too); a refusal carries none (no dice were dealt). No act is both.
+    # B24p.20: AND (3) A PROCEEDING -- a tuple of tagged tuples (`rosters.yaml: proceeding_endings`): the sitting's head, its beats, the
+    # whole `Sitting` and each verdict's band, written by `loop/resolve.py::_proceeding_ending` on every Event of the act (a refusal after
+    # the sitting's too); read through `queries/world_q.py::ending_beats` and its siblings.
     # ⚠ A DEPARTURE FROM `04` §B.9, NAMED HERE: its `Event` record names `degree?` and no `ending`; the field already
     # ships for combat (H-266), and its use for a margin provider's tuple is a departure (`skills/layer-conformance`
     # B4, third disposition; C3-C16). Its readers: `harness/chronicle.py` and the GO surface's account. It carries
@@ -771,6 +774,13 @@ def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
     lo, hi = span
     draw = draw_factory(world_seed, lambda: 0)
     return {key: draw(pid, f"attr.generated:{key}").die(lo, hi) for key in ATTRIBUTES}
+
+
+def in_custody(tenures) -> bool:
+    """Does a person own a live `detain`, given his own Tenures (a `Person`'s or a `PersonInterior`'s)? (B21.11, A-23: custody suspends a holder's
+    every seat.) The one reading, asked by `state/gate.py::_seat_grants` and `may_admit` and by `decision/options.py::seat_of`
+    (a `decision/` reader holds no `World`)."""
+    return any(t.kind == DETAIN_KIND and t.live for t in tenures)
 
 
 @dataclass

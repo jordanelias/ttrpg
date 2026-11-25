@@ -187,7 +187,10 @@ def test_fresh_sighting_holds_against_one_teller():
 
 
 def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
-    """THE FALSIFIER ON A SEEDED REALM (seed 1, three seasons -- the source's hearer): every (holder, subject) where a person
+    """THE FALSIFIER ON A SEEDED REALM (seed 0, three seasons -- the source's hearer; B24p.99 moved it from seed 1: the five influence verbs on
+    the proceeding entry change which claims reach a ledger, and at seed 1 the realm now holds 1 such row where it held 10 (the contested values
+    of one person's `exists:Person`, told to different hearers), against 20 / 10 / 13 at seeds 0 / 2 / 3, so the `rows >= 5` floor is read on a
+    seed that holds them; the rows the realm no longer forms at seed 1 are the realm's draw, not a reader's failure: the equality below is the claim): every (holder, subject) where a person
     holds two different values for one cell, `said_of`, the sheet and `LedgerReader.read` give ONE value. A subject he holds a
     `seen` claim on is outside the rows: `said_of` passes a sighting on only when it is all he holds (R8.1), by design.
     ⚠ THIS REALM CANNOT SEE THE FAILURE ON ITS OWN: the plain `said_of` reads the same value on every row here (the count is
@@ -199,8 +202,8 @@ def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
     from ..data.rosters import ABSENT_PREDICATE
     from ..queries.person_q import SEEN_PREDICATE
 
-    w = build_realm(1)
-    run(3, 1, w=w)
+    w = build_realm(0)
+    run(3, 0, w=w)
     fx, tick = w.fixtures, w.tick
     assert fx.get("weigh_confidence") is True
     rows = equal = plain_differs = 0
@@ -225,7 +228,7 @@ def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
             equal += said.value == shown.value == belief
             plain = said_of(p.ledger, subject, fx, tick=tick)          # the pre-B09.07 plain reader: the failure this test can see
             plain_differs += plain.value != belief
-    print(f"B09.08 realm seed 1, 3 seasons: {equal} / {rows} rows equal across said_of, sheet, belief_contradicts' reader "
+    print(f"B09.08 realm seed 0, 3 seasons: {equal} / {rows} rows equal across said_of, sheet, belief_contradicts' reader "
           f"({plain_differs} rows the plain said_of would have read differently)")
     assert rows >= 3, rows                                             # measured 3 at the B11 close (B11.83 leaves three of the nine out); the loop must have asserted something (CLAUDE.md 0.1 pt 2)
     assert equal == rows, f"{rows - equal} rows disagree"

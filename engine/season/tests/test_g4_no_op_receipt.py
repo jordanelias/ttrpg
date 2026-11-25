@@ -63,8 +63,8 @@ def _plant(monkeypatch, verb, effect):
 # ======================================================================================
 
 def test_g4_an_effect_that_names_a_subject_and_moves_nothing_is_refused(monkeypatch):
-    """`utter` is the host because its row has NO precondition, so nothing but the gate stands
-    between the planted effect and a success; its refusal is the fold's own `act.refused`. The
+    """`utter` is the host because only a WAR utterance meets a precondition (B21.62), so nothing but the gate stands
+    between the planted effect and a success; its refusal is the row's own `utter.refused`. The
     planted effect names the rung `Hh` -- a real, present entity -- and writes nothing."""
     _plant(monkeypatch, "utter",
            lambda w, a, res=None: Change((Subject.entity("rungs", "Hh"),), lambda: None))
@@ -72,7 +72,7 @@ def test_g4_an_effect_that_names_a_subject_and_moves_nothing_is_refused(monkeypa
     evs = _driver(w).resolve(mint_token(w, WriteClass.ACTS),
                              [Act(id="g4_plant", actor="p_low", verb="utter")])
     mine = [e for e in evs if e.causes and e.causes[0] == "g4_plant"]
-    refused = [e for e in mine if e.kind == "act.refused"]
+    refused = [e for e in mine if e.kind == "utter.refused"]
     assert len(refused) >= 1, [e.kind for e in mine]
     assert not [e for e in mine if e.kind == "proposition.uttered"], [e.kind for e in mine]
     assert _set_receipts_on(evs, "Hh") == [], (
@@ -109,7 +109,7 @@ def test_g4_an_unlawful_edge_write_is_not_yours_even_when_nothing_named_moved(mo
     edge `p_low` has no basis to write (no seat in `via`). If F9 were asked first the write would
     be refused as a NO-OP and, F9 not being an authority check, the order of the two raises would
     decide whether the closure is put back. It must be the gate's `NotYours` -- which the fold
-    emits as the row's refusal (`act.refused`: `utter` declares none), H-143 -- and the seat must
+    emits as the row's refusal (`utter.refused`, since B21.62: it was the fold's `act.refused` while the row declared none), H-143 -- and the seat must
     be live."""
     def plant(w, a, res=None):
         seat = next(t for t in w.tenures if t.id == "t9")
@@ -121,9 +121,9 @@ def test_g4_an_unlawful_edge_write_is_not_yours_even_when_nothing_named_moved(mo
         evs = _driver(w).resolve(mint_token(w, WriteClass.ACTS),
                                  [Act(id="g4_ny", actor="p_low", verb="utter")])
         decided = [r.what for r in TRACE.rows[start:] if r.channel == "DECISION"]
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]    # H-143: emitted, not raised
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]    # H-143: emitted, not raised
     assert [t.live for t in w.tenures if t.id == "t9"] == [True], "the unlawful closure stood"
-    # WHICH raise it was: both `NotYours` and `NoOpReceipt` end as `act.refused` with the seat put back,
+    # WHICH raise it was: both `NotYours` and `NoOpReceipt` end as `utter.refused` with the seat put back,
     # so the Event and the seat cannot tell F3-before-F9 from F9-alone; the fold's own decision row can.
     assert decided.count("utter: the gate refused the write") == 1, decided
     assert "utter wrote nothing" not in decided, decided
@@ -140,7 +140,7 @@ def test_g4_an_unlawful_edge_write_is_not_yours_even_when_nothing_named_moved(mo
                 fieldname="exists", driver="Act", actor="p_low",
                 change=_effects.EFFECTS["utter"](w, Act(id="g4_raw", actor="p_low", verb="utter")))
     evs = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="g4_ny2", actor="p_low", verb="utter")])
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]
 
 
 def test_g4_a_no_op_puts_back_a_lawful_edge_its_closure_opened(monkeypatch):
@@ -155,7 +155,7 @@ def test_g4_a_no_op_puts_back_a_lawful_edge_its_closure_opened(monkeypatch):
     w = P.tiny_world()
     evs = _driver(w).resolve(mint_token(w, WriteClass.ACTS),
                              [Act(id="g4_side", actor="p_low", verb="utter")])
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]
     assert not [t for t in w.tenures if t.id == "g4_side_hold"], "the refused write's edge stood"
 
     # CONTROL: name the edge itself, and the same write is a success that keeps it.

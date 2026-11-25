@@ -22,16 +22,17 @@ from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_AS, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
-    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
+    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
 from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ArmyCommand
+from ..queries.inputs import ArmyCommand, Outcome
+from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
-    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, army_of, docketed, docketed_under,
+    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
@@ -39,7 +40,7 @@ from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
-    may_warrant,
+    may_warrant, may_wage,
 )
 from ..state.ids import H
 
@@ -100,13 +101,16 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
 def _army_mintable(w: "World", actor: str, content) -> bool:
     """ED-IN-0306 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
     faction Proposition the world holds, BY A MEMBER OF THAT FACTION (`faction_holding`: anyone else minting it
-    would lock the faction out of its own army), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
+    would lock the faction out of its own army) WHO SITS IN A MUSTER SEAT OF IT (B21.59, `06_FA_levy_through_the_seat_B` edit 4:
+    `gate.may_wage`, B21.58 -- a faction's army is not its first minter's), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
     only): a second would leave two records claiming to be one faction's army, with no rule for which the battle
     reads."""
     if not isinstance(content, dict) or not isinstance(content.get("faction"), str) \
             or content["faction"] not in FACTION_BY_PROP or content["faction"] not in w.propositions:
         return False
     if faction_holding(w, actor) != content["faction"]:        # a faction's army is raised by one of its own
+        return False
+    if not may_wage(w, actor, content["faction"]):             # B21.59 (edit 4): ... through a muster seat of it (`may_wage`, B21.58)
         return False
     if army_of(w, content["faction"]) is not None:
         return False
@@ -188,13 +192,16 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
-def _docket_item(matter, arrangement, petition, date=None) -> dict:
+def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
     acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
     sitting's Date when the matter fills a slot CALENDAR formed (`_eff_open_case`, v9 SC-01
-    fired-slot step), else `None`: no sitting was convened for it."""
+    fired-slot step), else `None`: no sitting was convened for it. `arranger` and `rig` (B24p.24,
+    V2 p2 §H) are who arranged its sitting and how hard, a `rig_levels` member: the builder reads
+    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`."""
     return {"date": date, "matter": matter,
-            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
+            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition,
+            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig}
 
 
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
@@ -257,8 +264,25 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ `terms` IS THE REFERENT AND `to` AN EXECUTOR: since plan position IN-10 `to` fans over the
     persons the issuer knows (the row's `terms` conjunct binds `subject`, #453 §10.1).
-    `petition`'s row keeps the single-referent limit (`H-94`)."""
-    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+    `petition`'s row keeps the single-referent limit (`H-94`).
+
+    B21.56 (`14_VERBS_BINDING_D` commit D3, edit 9; A-81): THE WRIT IS DRAWN (`contests: "a standing"`) AND MINTED AT EVERY
+    BAND; the band its draw reached is written into the content as `force` (`rosters.yaml: record_kinds.dispensation`), so how
+    strongly it binds travels with the document and with every claim of its content. Written HERE and nowhere else: a hand-built
+    act's own `force` operand is overwritten, and an undrawn fold (`res` None) writes `None`."""
+    return _mint_dispensation(w, a, None if res is None else res.degree)
+
+
+#: B21.56: the `dispensation` content key the issuing draw's band is written to (`rosters.yaml: record_kinds.dispensation`).
+FORCE_KEY = "force"
+if FORCE_KEY not in RECORD_KIND_KEYS["dispensation"]:
+    raise Forbidden(f"`rosters.yaml: record_kinds.dispensation` lacks {FORCE_KEY!r}, which `_eff_issue` writes (B21.56)")
+
+
+def _mint_dispensation(w: "World", a: "Act", force) -> Change:
+    """`issue`'s and `covenant`'s one body: a `dispensation` read off the act, its `force` the caller's."""
+    content = {**(_content_of(a, "dispensation") or {}), FORCE_KEY: force}
+    return _mint_document(w, a, "dispensation", content, _seat_rung(w, a))
 
 
 @effect_for("covenant")
@@ -274,8 +298,10 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     acceptance is his own `commit` to the Proposition, formed from the held dispensation
     (`rosters.yaml: terms_sourced`, `decision/options.py::opening_set`). The instrument is in force
     when both holders are committed -- a reading nothing performs yet: its readers (tribute through
-    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
-    return _eff_issue(w, a, res)
+    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7).
+
+    B21.56: an instrument carries no `force` (`None`): the key is the issuing draw's band, which `_eff_issue` alone writes."""
+    return _mint_dispensation(w, a, None)
 
 
 @effect_for("conceal")
@@ -418,6 +444,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     matter = _operand(a, "subject")
     d = a.payload if isinstance(a.payload, dict) else {}
     arrangement, petition = d.get(DOCKET_ARRANGEMENT), d.get(DOCKET_PETITION)
+    rig = d.get(RIG_KEY, 0)
     # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
     # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
     # (`DISPOSABLE_KINDS`) -- else the matter would dock and `determine` decline it forever, and
@@ -430,6 +457,10 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if petition is not None and not (
             isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
         return NO_CHANGE
+    # B24p.24: THE OPENER'S ARRANGEMENT -- he arranges the sitting of the case he opens, `rig` a `rig_levels` member (a level outside it, or one that
+    # is no number, is declined like a bad arrangement: the item would carry a rig no builder can read).
+    if isinstance(rig, bool) or not isinstance(rig, (int, float)) or rig not in RIG_LEVELS:
+        return NO_CHANGE
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
@@ -437,10 +468,15 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     def perform() -> None:
         made.apply()
         slot = slot_for(w, matter)        # read at the write, so two cases never share one slot
+        arranger, level = a.actor, float(rig)
         if slot is not None:              # the sitting's slot, filled where it stands (`date` kept)
-            slot.update(_docket_item(matter, arrangement, petition, slot.get("date")))
+            # an opener who rigged nothing leaves the forum to the one who convened the sitting, where he rigged it (`_eff_convene`)
+            convened = w.dates.get(slot.get("date")) or {}
+            if level == 0 and convened.get(RIG_KEY):
+                arranger, level = convened.get(DOCKET_ARRANGER), float(convened[RIG_KEY])
+            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level))
         else:
-            w.docket.append(_docket_item(matter, arrangement, petition))
+            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level))
     return Change(made.subjects, perform)
 
 
@@ -529,12 +565,16 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         for `arbitration`, `detain` and `ban` for the SC-03a rows); the other two dispose a `Record`.
         This bullet is the `oblige` case: C-1 (`21_RECONCILIATION.md:167`,
         RULED A there): *"who owns the Tenure a determiner opens: its SUBJECT ... exactly `confer`,
-        which opens a `hold` whose subject is the conferee"*, and its price, stated: *"the subject
-        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"* --
-        `oblige` is in `release`'s domain, so that price is paid as ruled. The kind is a LITERAL
+        which opens a `hold` whose subject is the conferee"*. ⚠ THE PRICE C-1 STATED (*"the subject
+        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"*, `oblige`
+        being in `release`'s domain) IS OVERWRITTEN BY A-37 (Jordan; VRES §4 edit 2): an imposed service ends
+        by its term maturing at MATTER (`_eff_pardon` closes only a restraint, never an `oblige`), and a party
+        does not release it -- `loop/predicates.py::_req_release` refuses an edge this act opened, and
+        `opening_set` forms no `release` on one (`rosters.yaml: own_edge_declines`). The gate basis for
+        closing a disposal stays `determination`, through the seat that is the edge's object. The kind is a LITERAL
         here because `data/verbs.py::_derive_openers_from_effects` reads a `Tenure(...)` site's kind
         off its string literal (`_eff_commit`'s docstring records what factoring it cost), and
-        that derivation is what `data/arrangements.py::arrangements_without_a_disposal_opener`
+        that derivation is what `data/verbs.py::arrangements_without_a_disposal_opener`
         (C-1's load check, REPORTED) reads: `arbitration` leaves that report with this line.
         REJECTED: a `hold` on a seat -- `04 §B.7`'s *"conferral: ... determine by <judging seats>"*,
         a determination FILLING a seat -- because a computed act carries one referent and that
@@ -660,17 +700,44 @@ def _eff_argue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `pursuit_shift` 0, the control) is `NO_CHANGE` -> `argument.refused` at its write (F9): a success
     Event over an unmoved mind would be a deed that did not happen.
 
+    B24p.20 -- UNDER A `hearers` CLOSE (an address to a crowd, the rally) THE EFFECT RUNS ONCE PER VERDICT, ON THAT HEARER, AT HIS OWN BAND: each man of the
+    cohort who heard is moved by what his own draw read, and none the sitting did not carry (`argued_pursuits` moves nothing below `Success`). The act's own
+    band (the weight-mean of the verdicts, `act_band`) still chooses the row's `emits` and whether this effect runs at all. Any other close is as it was: one
+    hearer, the act's band; and so is a sitting a yield decided (`result["read"]` is empty: no verdict decided it, the yield's band is the act's).
+
     DECLINES: no resolution (a hand-built call with no contest), no hearer, no arguer, or nothing moves."""
     hearer, arguer = w.persons.get(_operand(a, "to")), w.persons.get(a.actor)
     if res is None or hearer is None or arguer is None:
         return NO_CHANGE
-    moved = argued_pursuits(hearer, arguer, res.degree, w.fixtures.get("pursuit_shift"))
+    held = res.result if isinstance(res.result, dict) else {}
+    out = held.get("proceeding")
+    if isinstance(out, Outcome) and getattr(held.get("card"), "close", None) == "hearers" and held.get("read"):   # a yield that decided is the act's band, not a draw
+        moves = {}
+        for who, m in out.verdicts:
+            heard = w.persons.get(who)
+            new = None if heard is None else _argued(w, heard, arguer, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob)), held.get("topic"))
+            if new is not None:
+                moves[who] = new
+        if not moves:
+            return NO_CHANGE
+
+        def perform_each() -> None:
+            for who, new in moves.items():
+                w.persons[who].pursuits = new
+        return Change(tuple(Subject.entity("persons", who, fields=("pursuits",)) for who in moves), perform_each)
+    moved = _argued(w, hearer, arguer, res.degree, held.get("topic"))
     if moved is None:
         return NO_CHANGE
 
     def perform() -> None:
         hearer.pursuits = moved
     return Change((Subject.entity("persons", hearer.id, fields=("pursuits",)),), perform)
+
+
+def _argued(w: "World", hearer, arguer, degree, topic) -> Optional[dict]:
+    """`argued_pursuits` at the world's `pursuit_shift`, handed the matter the argument was about. `topic` is passed on and read by nobody:
+    `[ASSUMPTION: which pursuits a topic bears on is B27.05's edit; this item delivers the operand it needs]`."""
+    return argued_pursuits(hearer, arguer, degree, w.fixtures.get("pursuit_shift"))
 
 
 def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,

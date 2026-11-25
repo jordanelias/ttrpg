@@ -101,6 +101,15 @@ def resolvable_verbs() -> frozenset:
         #     ROW DECLARING A REGISTERED PREDICATE, because an untyped row with a precondition
         #     reaches here only through `REQUIRES_PREDICATES` (the first gate) and one with none
         #     would contest with no custody or party read at all.
+        #   * B21.09 (VB-A commit A3): an untyped row naming NO counterparty whose prize's row names a room that hears it (`heard_by:`) --
+        #     `establish` (`a seat`) alone -- has no second claimant to miss (the actor alone claims, the room is what stands opposite,
+        #     `seam/wrappers/sigma.py::audience_of`). Its prize also names `opposed_by:`, so the arm below admits it and the clause is
+        #     not written separately: dropped at B21 close, the resolvable set on the shipped table unchanged.
+        #   * B21.14 (VB-C commit C3) [ASSUMPTION; medium; Jordan to correct; revert: the clauses above alone, under which a
+        #     drawn `confer` leaves the chooser's verb set]: **OR the prize's row names who stands opposite (`opposed_by:`).** The
+        #     opponent is then read off the world by the prize (`loop/sides.py::sides_of`: the named seat's live holder), not off an
+        #     operand the act must carry, so `confer` (whose `counterparty: to` is the conferee, not the opponent) has nothing to
+        #     miss. Narrowed to a registered predicate, as above. Today: `a seat`'s rows -- `confer`, `revoke`, `succeed`, `establish`.
         contested = bool(row.contests)
         resolvable_contest = False
         if contested:
@@ -109,10 +118,11 @@ def resolvable_verbs() -> frozenset:
             # exists so `resolve` does not branch on a role's name."* Two readings of one row's
             # `provider:` is how a new role or row shape silently stops reaching the verb set.
             from ..manifest import resolve as _resolve_row
-            _mod = (_resolve_row("contest", row.contests) or {}).get("provider")
+            _prize = _resolve_row("contest", row.contests) or {}
+            _mod = _prize.get("provider")
             resolvable_contest = bool(_mod) and (
                 row.requires_typed is not None
-                or (row.counterparty == "subject" and v in REQUIRES_PREDICATES))
+                or (v in REQUIRES_PREDICATES and (row.counterparty == "subject" or bool(_prize.get("opposed_by")))))
         if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)

@@ -33,6 +33,7 @@ from engine.season.loop import driver as DRV
 from engine.season.decision import make_chooser
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.queries import world_q as Q
+from engine.season.state import gate
 from engine.season.state.carriers import Act, Event, Tenure
 from engine.season.state.ids import H, ROOT, draw_factory
 
@@ -54,6 +55,17 @@ def _fold(w, d, *acts):
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     w.log.extend(out)
     return [e.kind for e in out]
+
+
+def _admit(w, joiner, fac, tag):
+    """B21.63: joining a faction is answered by it. Fold, BEFORE the joiner's own `commit` (a batch is not folded in the order written), the two
+    acts by which a person who may admit (`gate.may_admit`: the head seat's holder or a member whose seat confers) utters an `OUGHT` naming
+    `joiner` and `fac` and commits to it. The tests below were each a unilateral join."""
+    who = next(m for m in sorted(w.persons) if gate.may_admit(w, m, fac))
+    d = SeasonDriver(w)
+    said = _fold(w, d, Act(id=f"in27_say_{tag}", actor=who, verb="utter", payload={"mood": "OUGHT", "subject": joiner, "value": fac}))
+    yes = _fold(w, d, Act(id=f"in27_yes_{tag}", actor=who, verb="commit", payload={"subject": f"prop:in27_say_{tag}"}))
+    assert said == ["proposition.uttered"] and yes == ["commitment.made"], (said, yes)
 
 
 def _king(w):
@@ -83,6 +95,7 @@ def test_in27_the_king_converts_and_the_realm_reaches_theocracy_by_his_act():
     off, king = _king(w)
     assert Q.faction_holding(w, king) == CROWN and CHURCH in w.propositions, "fixture"
     assert Q.endings_reached(w) == [], "the built realm reached an ending with no act"
+    _admit(w, king, CHURCH, "church")
     kinds = _fold(w, d, Act(id="in27_release", actor=king, verb="release", payload={"subject": CROWN}),
                   Act(id="in27_commit", actor=king, verb="commit", payload={"subject": CHURCH}))
     assert "commitment.made" in kinds and not _membership(w, king, CROWN), kinds
@@ -152,9 +165,9 @@ def test_in27_peninsular_sovereignty_is_reached_by_the_last_holders_act_and_not_
     assert w.rungs["terr_T16"].kind == "territory" and "terr_T16" not in _realm_territories(w), "fixture"
     assert Q.governing_hold(w, "terr_T16") is None, "fixture: the foreign root is held by nobody"
     assert not Q._ending_edges(w, row) and Q.endings_reached(w) == [], "fixture: one holder is under none"
-    kinds = _fold(w, SeasonDriver(w), Act(id="in27_swear", actor=last, verb="commit",
-                                          payload={"subject": CROWN}))
-    assert kinds == ["commitment.made"], kinds
+    _admit(w, last, CROWN, "crown")
+    kinds = _fold(w, SeasonDriver(w), Act(id="in27_swear", actor=last, verb="commit", payload={"subject": CROWN}))
+    assert kinds[-1] == "commitment.made", kinds
     (got,) = Q.endings_reached(w)
     assert got.ending == "peninsular_sovereignty" and got.victory is True, got
     assert got.acts == ("in27_swear",) and len(got.holds) > 1, got
@@ -176,9 +189,9 @@ def test_in27_one_faction_is_not_met_by_a_holder_who_commits_elsewhere():
     fails and nothing is reported, though an act opened an edge the mutated condition would read."""
     w = build_realm(0)
     last = _all_but_one_under_the_crown(w)
-    kinds = _fold(w, SeasonDriver(w), Act(id="in27_stray", actor=last, verb="commit",
-                                          payload={"subject": CHURCH}))
-    assert kinds == ["commitment.made"] and Q.faction_holding(w, last) == CHURCH, kinds
+    _admit(w, last, CHURCH, "stray")
+    kinds = _fold(w, SeasonDriver(w), Act(id="in27_stray", actor=last, verb="commit", payload={"subject": CHURCH}))
+    assert kinds[-1] == "commitment.made" and Q.faction_holding(w, last) == CHURCH, kinds
     assert not Q._ending_edges(w, _row("peninsular_sovereignty"))
     assert Q.endings_reached(w) == [], "holders under two factions were read as under one"
 
@@ -190,8 +203,8 @@ def test_in27_a_king_who_commits_to_a_third_faction_is_no_theocracy():
     w = build_realm(0)
     _, king = _king(w)
     third = next(f for f in sorted(R.FACTION_BY_PROP) if f in w.propositions and f not in (CROWN, CHURCH))
-    kinds = _fold(w, SeasonDriver(w),
-                  Act(id="in27_release3", actor=king, verb="release", payload={"subject": CROWN}),
+    _admit(w, king, third, "third")
+    kinds = _fold(w, SeasonDriver(w), Act(id="in27_release3", actor=king, verb="release", payload={"subject": CROWN}),
                   Act(id="in27_commit3", actor=king, verb="commit", payload={"subject": third}))
     assert "commitment.made" in kinds and Q.faction_holding(w, king) == third, kinds
     assert "theocracy" not in [r.ending for r in Q.endings_reached(w)], "a King of a third faction"

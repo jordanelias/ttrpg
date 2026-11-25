@@ -121,7 +121,7 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     disposes a Tenure kind -- the seven, `excommunication_deliberation` (SC-04's row) and `negotiation` (B10-13 SC-04's) among them -- through the
     real fold: the matter is docketed under the row, a strong judge determines it, and ONE live edge of
     exactly the row's kind appears, owned by the party, on the seat exercised, graded at the band the
-    contest decided, and no edge of any other disposal kind. The loop asserts it asserted (seven rows; six before the B10-13 pin commit's `negotiation`).
+    contest decided, and no edge of any other disposal kind. The loop asserts it asserted (eight rows: seven at the B10-13 pin commit, `audience` at B24p.03).
     THE HALF THAT IS STILL OPEN: the two `Record`-disposing rows (`parliamentary_debate`, `council_of_state`)
     have no writer -- `open_case` REFUSES to dock under them (`case.refused`), asserted below, so the gap is
     observed and not skipped."""
@@ -136,7 +136,7 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
             continue
         assert _kinds(_fold(w, d, _open("oc", arrangement=name, petition=_petition(w)))) \
             == ["case.opened"], name
-        if row["disposal"] == "declared":
+        if row["close"] == "declared":
             # v11 CR-34: a declared row needs its `quorum` of the bench's live commits to an OUGHT about the party
             # naming the kind it disposes; `tiny_world`'s bench is the Duke alone, so the row is read at quorum 1
             # and he is the one vote (the clause itself is `test_cr34_declared_disposal.py`'s).
@@ -150,8 +150,9 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
         assert all(not _edges(w, other) for other in disposal_kinds if other != row["disposes"]), (
             name, [(t.kind, t.subject) for t in w.tenures if t.object == SEAT])
         checked += 1
-    assert checked == 7, checked      # B10-13 pin commit (SC-04's `negotiation` row): was 6
-    assert record_rows == ["council_of_state", "parliamentary_debate"], record_rows
+    assert checked == 8, checked      # B24p.03: `audience` (disposes `oblige`) is the eighth; B10-13 pin commit (SC-04's `negotiation` row) made it 7
+    # B24p.03: the rows disposing a non-Tenure kind are `conversation`, `rally` (`none`) and `interrogation` (`yield`) beside the two `Record` rows
+    assert record_rows == ["conversation", "council_of_state", "interrogation", "parliamentary_debate", "rally"], record_rows
 
 
 def test_st15_an_adjudicator_acts_as_a_seat_and_a_private_opinion_is_not_a_determination():
@@ -183,11 +184,12 @@ def test_st15_an_adjudicator_acts_as_a_seat_and_a_private_opinion_is_not_a_deter
 def test_st26_release_exists_so_a_duty_a_proceeding_imposes_can_be_discharged():
     """RE-HOSTS ST-26 (`04_VERBS.md` §B.5 / `ID-14`). The tracer's finding (F-26): `release` was ABSENT, so
     a duty a finding imposes was closable only by `repudiate` or a seat-holder's revocation. REVERSED:
-    `release` is in the verb table, writes `Tenure.until`, and the convict discharges the `oblige` the bench
-    opened (`tenure.closed`, the edge no longer live). BOUNDED, and observed so: the same party's `release`
-    of a `ban` the same bench opened is REFUSED (a restraint is not the holder's to discharge), so the
-    discharge above is the `oblige`'s and not any edge's -- the control that makes the closure observable
-    as a distinction."""
+    `release` is in the verb table and writes `Tenure.until`. B21.07 (A-37, VRES §4: an imposed service ends
+    by its term maturing at MATTER; `pardon` closes only a restraint) OVERWRITES the convict's price that
+    ST-26 first observed here: the party's `release` of the `oblige` the bench opened is now REFUSED
+    (`_req_release`'s clause on an edge a determination opened), the edge still live, and so is his `release`
+    of a `ban` the same bench opened (a restraint is not the holder's to discharge). What `release` closes
+    is an edge the actor opened himself (`test_vb_a_formation.py`'s control)."""
     assert "release" in VERB_TABLE
     closers = sorted(v for v, r in VERB_TABLE.items() if "Tenure.until" in (r.writes or ()))
     assert "release" in closers, closers
@@ -197,7 +199,7 @@ def test_st26_release_exists_so_a_duty_a_proceeding_imposes_can_be_discharged():
     duty, = _edges(w, "oblige")
     assert duty.live
     out = _fold(w, d, _Act(id="rl", actor=PARTY, verb="release", payload={"subject": SEAT}))
-    assert _kinds(out) == ["tenure.closed"] and not duty.live, _kinds(out)
+    assert _kinds(out) == ["release.refused"] and duty.live, _kinds(out)
     w, d = _world(**JUDGE)
     assert _kinds(_fold(w, d, _open("oc", arrangement="tribunal", petition=_petition(w)))) == ["case.opened"]
     assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]

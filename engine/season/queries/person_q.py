@@ -54,10 +54,11 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
+from .inputs import SIDE_SIGN, Item
 from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 
@@ -2154,6 +2155,13 @@ def content_value(subject_matter):
     return subject_matter
 
 
+def addressees_of(said) -> tuple:
+    """THE ADDRESSEE IDS OF A DOCUMENT SAYING `said` -- the list under the addressee key (`rosters.yaml: record_kinds.content.addressee`, `to`) as a
+    tuple; `()` for anything that is not a dict or carries no list there. The one reader of that value's shape: `addressed_to` and `suspicions` ask it."""
+    v = said.get(RECORD_CONTENT.get("addressee")) if isinstance(said, dict) else None
+    return tuple(v) if isinstance(v, (list, tuple)) else ()
+
+
 def addressed_to(said, pid) -> bool:
     """IS `pid` AMONG THE ADDRESSEES OF A DOCUMENT SAYING `said` -- the id list under the addressee key
     (`rosters.yaml: record_kinds.content.addressee`, `to`), which the mint stores as a list
@@ -2161,10 +2169,52 @@ def addressed_to(said, pid) -> bool:
     lifted out of `world_q.writs_held` (which asks it of a Record's `subject_matter`) so
     `decision/options.py::opening_set`'s terms-sourced reader asks the same rule of the holder's own
     content claim (`content_said`), World-free. `False` for anything that is not a dict."""
-    if not isinstance(said, dict):
-        return False
-    v = said.get(RECORD_CONTENT.get("addressee"))
-    return pid in (tuple(v) if isinstance(v, (list, tuple)) else ())
+    return pid in addressees_of(said)
+
+
+#: THE TWO ANSWERS TO A WRIT, as the kinds `comply` and `evade / defy` emit (the claims a witness of the answer holds). The one home:
+#: `world_q.WRIT_ANSWERED_KINDS` is these two.
+COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD = "compliance.given", "compliance.withheld"
+
+
+def suspicions(p: Person, admit=None) -> dict:
+    """SUSPICION AS A FOLD (B21.23, `06_FA_decree_binds` edit 4; D5 ED-IN-0046, D6 ED-IN-0047, E11; ED-IN-0343 to ED-IN-0345 --
+    a quantity that accumulates from events is a fold of them, not a stored value): `{other: suspicion}` for every person whose
+    answer to a writ `p` MADE `p`'s own ledger holds a claim of. Nothing is written, nothing is carried between reads.
+
+    A writ `p` made is one on which his ledger holds a content claim of his own doing (`Claim.doer`, stamped by WITNESS on the
+    maker's own deposits) naming exactly ONE addressee: the answer claim (`compliance.given` / `.withheld`) names the writ and not
+    its answerer, so a writ to several is attributed to no one (the pairing never guesses, `deed_doer`'s rule). Per person, over
+    SEASONS (`Claim.when`): plus one for each season in which he holds a claim that the person withheld compliance (at most one a
+    season, the ruled cap of D5), minus one for each season in which he holds a claim that the person complied and none that he
+    withheld (E11: *"a way to reduce suspicion by over-compliance"*), the sum floored at zero.
+    ONE ANSWER IS ONE EVENT, WHOEVER REPEATS IT (ED-IN-0322, *"one origin repeating itself doesn't carry more weight"*, read at the
+    count): claims of one writ's one answer from several origins (his own sighting, a told copy) are one answer, at the earliest
+    season he holds it [ASSUMPTION; medium; Jordan to correct; revert: count each origin's claim, `chain[0]` or the holder].
+    `admit(other, writ_id) -> bool`, when given, drops an answer it refuses: `world_q.recalls` passes the command basis, so a writ to
+    someone the issuing seat does not command enters no count (A-22; the Reconciled line of `06_FA_decree_binds`). Person-side
+    and World-free (AX-2), so the caller that holds a World supplies it; omitted, every answer counts."""
+    made = {}
+    for c in p.ledger:
+        if c.doer == p.id:
+            to = addressees_of(content_said(c))
+            if len(to) == 1:
+                made[c.subject] = to[0]
+    if not made:
+        return {}
+    answered: dict = {}          # (writ, kind) -> the earliest season he holds the answer from
+    for c in p.ledger:
+        if c.subject in made and c.predicate in (COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD) and c.doer != p.id:
+            key = (c.subject, c.predicate)
+            answered[key] = min(answered.get(key, c.when), c.when)
+    given: dict = {}
+    withheld: dict = {}
+    for (writ, kind), when in answered.items():
+        other = made[writ]
+        if admit is None or admit(other, writ):
+            (withheld if kind == COMPLIANCE_WITHHELD else given).setdefault(other, set()).add(when)
+    return {o: max(0, len(withheld.get(o, ())) - len(given.get(o, set()) - withheld.get(o, set())))
+            for o in sorted(set(given) | set(withheld))}
 
 
 #: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:
@@ -2202,6 +2252,43 @@ def ledger_range(claims, key: str) -> tuple:
     `decision/options.py::opening_set`; never `known_persons`' sources (a claim about a person does not present a Site)."""
     preds = frozenset(_verbs.LEDGER_RANGES[key])
     return tuple(sorted({c.subject for c in claims if c.predicate in preds}))
+
+
+#: THE OATH'S KIND, as `oblige`'s row emits it (`(sworn man, duty.taken, True)` is the claim a witness of an oath holds). The one
+#: spelling `commanded_read` reads and `boot/realm.py::seed_command_knowledge` writes, read off the row so a renamed emit moves both.
+DUTY_TAKEN, = _verbs.VERB_TABLE["oblige"].emits
+
+
+def commanded_read(p: Person) -> frozenset:
+    """WHOM `p` CAN READ AS COMMANDED -- the persons a seat of his may order, as his OWN state names them (B21.55, A-22; the
+    formation half of `queries/world_q.py::commands`, which decides at the fold). Person-side, `p.tenures` and `p.ledger` only (AX-2).
+
+    Empty for a person who holds no live `hold` (no seat, no one to order). Otherwise two readings, each over a claim he holds that
+    was not told him (`chain` empty: a retelling is a rumour, not what he saw):
+
+      * THE MEN SWORN -- a `(x, duty.taken, True)` claim: the oath's Event is anchored on the man who swore, so the claim names him;
+      * THE HOLDERS HE NAMES OF OTHER SEATS -- a `(S, hold, x)` claim (the shape `sworn_to_holder` and the gate's `Subject.seat` write),
+        for a seat `S` that is not one he sits in.
+
+    ⚠ THREE LIMITS, STATED; (1) AND (2) ARE OVER-INCLUSIONS THE FOLD CORRECTS, (3) IS AN UNDER-INCLUSION THE FOLD CANNOT. (3) Only the first two classes of `commands` are read (sworn men, holders of seats he may revoke), so `issue` and `dispatch` are never FORMED on an unseated, unsworn resident, A-22's third class, though the fold would admit one (`test_vb_d_orders.py` pins this). (1) An oath's claim names the man and never the seat he swore to
+    (the Event's one change is the Tenure edge, whose id a person cannot read), so a man seen swearing to ANOTHER seat is read as
+    sworn here. (2) *Beneath his* is the rung's containment, the World's (`may_revoke`'s rule), so every other seat's named holder is
+    read, and an order up the chain is refused at the fold (`commands` is False for it) and not declined here. Neither widens the
+    fold: it narrows who is OFFERED an order. [ASSUMPTION; medium; Jordan to correct; revert: drop this reader and
+    `rosters.yaml: command_declines`, and `operand_bags` fans over every known person again.] A person is never his own man."""
+    seats = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    if not seats:
+        return frozenset()
+    out = set()
+    for c in p.ledger:
+        if c.chain:
+            continue
+        if c.predicate == DUTY_TAKEN and c.value is True:
+            out.add(c.subject)
+        elif c.predicate == "hold" and c.subject not in seats and isinstance(c.value, str):
+            out.add(c.value)
+    out.discard(p.id)
+    return frozenset(out)
 
 
 def known_persons(claims, actor) -> tuple:
@@ -2921,3 +3008,157 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
         return w * sure(c) if on else w
 
     return weigh
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B24p.06 -- THE BEARING READING AND WHAT A PERSON CARRIES IN (V2 p2 §A.2 to §A.4, §G; p4 §K B2, B6, D4, D6; §L R1, 2, 13, 19).
+#
+# What a matter, a person or a thing shown MEANS TO A PERSON: what he wants, what he holds, whom he stands with. ONE derivation, the
+# same whatever his role (party, adjudicator, audience). Every function here reads the person's OWN interior (a `Person` or a
+# `PersonInterior`) and the operands the host passes (his `oblige` edges, the factions of his seats and of the parties he shares,
+# his office's duty, the matter's `bears`); none reads a `World`, another person's ledger or a true attribute of anyone else.
+#
+# `bears` is `{tag: signed weight}`: how the matter bears on a pursuit or an affiliation, toward `for` (+) or `against` (-). The
+# two rosters share no name (`Person.scar`), so one map serves `want` (pursuits) and `hold` (convictions). It has no tree carrier
+# (C(B24p) UNDECIDED (5): B27.05 owns "which pursuits a topic bears on"), so the HOST passes it and `{}` is a matter that bears on
+# nothing -- stake and fit then fall to `bond` alone `[HOOK]`.
+#
+# `[HOOK]` (V2 p2 §A.3's rule: a layer with no carrier is one more term in a sum the day it has one, read as 0 until then): kin and
+# patronage (`tie`), needs, ambitions and a person's own goals (`want`: `data/goals.py` authors goals for an ORGANISATION, and nothing
+# reads one off a person), a forged `Record` (`false_items`). The office's duty enters as the operand `duty`, empty until a host
+# builds it.
+# ---------------------------------------------------------------------------------------------------------------------
+
+SHARED_FACTION_TIE = 0.3   # [JUSTIFIED: V2 p4 §K C-faction -- a shared faction is a tie, 0.3; no document derives the size]  # [ASSUMPTION; Jordan to correct]
+OBLIGE_TIE = 0.5           # [JUSTIFIED: V2 p2 §A.2 -- a debt he owes is a tie as kin and patronage are, 0.5; no document derives the size]  # [ASSUMPTION; Jordan to correct]
+# THE ONE HOME OF THE FLOOR (V2 p4 §L 2; A-139: being a party is a stake): the literal the season driver's `_stake` used to patch
+# (no such patch stands in this tree: nothing here reads a floor but `bearing`).
+PARTY_STAKE = 0.2          # [JUSTIFIED: V2 p2 §A.2 -- a party's least stake in his own case, toward his side, 0.2]  # [ASSUMPTION; Jordan to correct]
+BEARING_PARTS = 3          # [JUSTIFIED: V2 p2 §A.2 -- `(want, hold, bond)`: the three sums a stake, a conflict and a lean are the mean of]
+
+if "testimony" not in MATTERS:
+    raise ValueError("`false_items` brings a `testimony`, and `rosters.yaml: matters` has none (V2 p2 §G: a false item is his own "
+                     "false word, brought as testimony)")
+
+
+def _clip(x: float, lo: float = -1.0, hi: float = 1.0) -> float:
+    return max(lo, min(hi, x))
+
+
+def _mean(xs) -> float:
+    xs = tuple(xs)
+    return ltr_sum(xs) / len(xs)
+
+
+def _debt(p, q: str, edges) -> float:
+    """What he OWES `q`, from the `oblige` edges the host passes: each live, un-`imposed` oath he swore to `q` (his `subject`, `q` the
+    `object`) is one `OBLIGE_TIE`. An oath sworn TO him is `q`'s debt (a patron's side of it is `[HOOK]`), and a sentence a determination
+    imposed (`Tenure.imposed`) is no oath he swore."""
+    return float(ltr_sum(OBLIGE_TIE for t in edges
+                         if t.kind == "oblige" and t.live and not t.imposed and t.subject == p.id and t.object == q))
+
+
+def tie(p, q: Optional[str], *, edges=(), shared_faction: bool = False) -> float:
+    """HOW ANOTHER PERSON BEARS ON HIM, `-1..1`: `clip(stance toward q + debt[q] + 0.3 [a shared faction])` (V2 p2 §A.2). The stance
+    is `stance_toward` over the row type's own bound (`STANCE_MAX`, as `regard_step` reads it), so a relationship is on `-1..1` as the
+    sum is. Kin and patron or client are `[HOOK]` (no carrier), read as 0. `shared_faction` is the host's: whether `q` serves a
+    faction he serves (a man cannot read another's faction, V2 p4 §K C-faction). Himself, and nobody, are 0."""
+    if q is None or q == p.id:
+        return 0.0
+    x = stance_toward(p, q) / STANCE_MAX + _debt(p, q, edges) + (SHARED_FACTION_TIE if shared_faction else 0.0)
+    return _clip(x)
+
+
+def _duty_of(duty, bears) -> float:
+    """His office's duty where it names what the matter bears on: `sum(duty[t] x bears[t])`, `duty` `((tag, weight), ...)`."""
+    return float(ltr_sum(d * bears.get(t, 0.0) for t, d in duty))
+
+
+def bearing(p, bears, *, for_party: Optional[str], against_party: Optional[str], edges=(), duty=(), shares=(),
+            party: bool = True) -> tuple:
+    """`(want, hold, bond)`, each `-1..1` toward `for`: how the matter bears on `p` (V2 p2 §A.2's three sums).
+
+      * `want` -- his pursuits the matter bears on: `sum(pursuits[t] x bears[t])`. Needs, ambitions, goals `[HOOK]`;
+      * `hold` -- his convictions over the roster's own ceiling (`AFFILIATION_CEILING`), and his office's `duty` (operand);
+      * `bond` -- `tie(for) - tie(against)`; `shares`: the parties' ids who serve a faction he does.
+
+    `party=True`: where `p` IS a party, his bond is raised as far as it goes until `mean(stake)` is at least `PARTY_STAKE` toward his own
+    side -- being a party is a stake (A-139, V2 p4 §K B6, §L 2). This is the floor's one owner. `party=False` reads what the matter
+    touches of his own beyond that."""
+    want = _clip(float(ltr_sum(p.pursuits.get(t, 0.0) * w for t, w in bears.items())))
+    hold = _clip(float(ltr_sum(p.conviction.get(t, 0) / AFFILIATION_CEILING * w for t, w in bears.items())) + _duty_of(duty, bears))
+    bond = _clip(tie(p, for_party, edges=edges, shared_faction=for_party in shares)
+                 - tie(p, against_party, edges=edges, shared_faction=against_party in shares))
+    sign = 1.0 if p.id == for_party else -1.0 if p.id == against_party else 0.0
+    if party and sign and sign * ltr_sum((want, hold, bond)) < BEARING_PARTS * PARTY_STAKE:
+        bond = _clip(sign * BEARING_PARTS * PARTY_STAKE - want - hold)
+    return (want, hold, bond)
+
+
+def care(p) -> tuple:
+    """`(want, hold, bond)` in `0..1`: how much each kind of thing moves him -- his strongest pursuit, his strongest held conviction over
+    the ceiling, his strongest tie in either direction over the stance bound; each 0.5 where he holds none (V2 p2 §A.2)."""
+    pursuits = [float(w) for w in p.pursuits.values() if w > 0]
+    held = [c for c in p.conviction.values() if c > 0]
+    ties = [abs(stance_toward(p, ref)) / STANCE_MAX for ref in {row[0] for row in p.stance if len(row) >= 3}]
+    return (_clip(max(pursuits), 0.0, 1.0) if pursuits else 0.5,
+            _clip(max(held) / AFFILIATION_CEILING, 0.0, 1.0) if held else 0.5,
+            _clip(max(ties), 0.0, 1.0) if ties else 0.5)
+
+
+def takes_side(stake: tuple) -> Optional[str]:
+    """Which side a man not named by the matter takes: the sign of `mean(stake)`, `None` where nothing bears (V2 p4 §K D4)."""
+    m = _mean(stake)
+    return None if m == 0 else "for" if m > 0 else "against"
+
+
+def conflict(p, bears, *, for_party: Optional[str], against_party: Optional[str], edges=(), duty=()) -> tuple:
+    """`(conflict, lean)`: his PARTIALITY, how far the matter is his own business and which way that leans (V2 p2 §A.2; p4 §K B6).
+
+        conflict = (|want| + |duty| + max(|bond|, min(1, |tie to for| + |tie to against|))) / 3        lean = (want + duty + bond) / 3
+
+    It reads his PERSONS (stance, debts, and being a party: the party's own `bearing` bond, his floor) and his WANT, and his office's duty
+    where it names what the matter bears on. Never a conviction (p4 §L 19: it moves how he hears) and never a shared faction (§L R1: it
+    moves how he hears, `tie`'s 0.3, not whether he is partial), so `bearing` is read here with no faction and no `shares`. Interests and
+    ties on both sides are a conflict, never a cancellation: `bond` nets opposed ties, so the sum of their magnitudes is the other reading
+    (p4 §K B6, §L 13)."""
+    want, _, bond = bearing(p, bears, for_party=for_party, against_party=against_party, edges=edges, duty=duty)
+    tf, ta = tie(p, for_party, edges=edges), tie(p, against_party, edges=edges)
+    if p.id not in (for_party, against_party):
+        bond = _clip(tf - ta)
+    d = _clip(_duty_of(duty, bears))
+    return ((abs(want) + abs(d) + max(abs(bond), min(1.0, abs(tf) + abs(ta)))) / BEARING_PARTS,
+            ltr_sum((want, d, bond)) / BEARING_PARTS)
+
+
+def believes(p, matter: str, fx, tick: int) -> float:
+    """What he KNOWS of the matter, `-1..1` toward `for`, read from his OWN ledger through `said_of` at `tick` (V2 p2 §A.3; p4 §F 37): the
+    claim he would say of `matter` (the subject), a held truth value read as `+` (`for` asserts it true) or `-`, by how sure he is NOW
+    (`present_confidence / Fixtures.confidence_default`: a claim nobody refreshed fades). Only a TRUTH-VALUED claim says which side he holds (the
+    pool is the ledger's `bool` claims, as `lie_said_of`'s is its cells): a witnessed sitting about the man (`sitting:*`, a number or a name) is
+    not what he believes of him, nor is a bond he holds of him (`bond:<ground>`, `True`: a relationship, `BOND_STEM`). Nothing held is 0 [ASSUMPTION: the matter's `for` side asserts its claim as held; Jordan to correct]."""
+    said = said_of([c for c in p.ledger if isinstance(c.value, bool) and not c.predicate.startswith(BOND_STEM)], matter, fx, p, tick=tick)
+    if said is None:
+        return 0.0
+    sure =_clip(said.confidence / fx.get("confidence_default"), 0.0, 1.0)
+    return sure if said.value else -sure
+
+
+def false_items(p, matter: str, side: str, fx, tick: int) -> tuple:
+    """Where a false item comes from (V2 p2 §G; p4 §F 37, §K B2, D6): only HIS OWN FALSE WORD. Where `believes` runs against the `side` he
+    speaks for and `lie_said_of` has a false value to say of what he holds, he can offer his own assertion of the contrary as one
+    `testimony` he knows false (`sincere: False`), weighing as much as he is sure of what it contradicts; else `()`. Both read his claims at
+    `tick`. A forged `Record` is `[HOOK]`: no act writes one."""
+    b = believes(p, matter, fx, tick)
+    if SIDE_SIGN[side] * b >= 0 or lie_said_of(p.ledger, matter, fx, p, tick=tick) is None:
+        return ()
+    return (Item(f"word:{p.id}:{matter}", "testimony", abs(b), source=p.id, about=matter, sincere=False),)
+
+
+def strain_carried(rattles, fx) -> float:
+    """What he carries in from earlier rattles (V2 p2 §A.4): `0.5 x` the sum, freshest first, of `max(0, 1 - strain_fade x scenes since)
+    / 2^k` for the k-th freshest -- each rattle fades on its own clock and counts half the one before, so any number stays under 1.0 and
+    nothing ratchets. `rattles` is the `(scenes since, ...)` the host counts from his acts' endings (B24p.20's reader)."""
+    fades = sorted((max(0.0, 1.0 - fx.get("strain_fade") * s) for s in rattles), reverse=True)
+    # The sum is under 1.0 for any count, but a float sum of more than 53 halvings rounds up to 2 x 0.5: clamp to the largest float below it.
+    return min(0.5 * float(ltr_sum(f / 2 ** k for k, f in enumerate(fades))), math.nextafter(1.0, 0.0))

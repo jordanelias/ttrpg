@@ -28,6 +28,7 @@ from engine.season.state.gate import NotYours
 from engine.season.state.world import World
 from engine.season.trace_log import TRACE
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 
 
@@ -38,14 +39,17 @@ def _confer(w, d, aid, actor, via, to="p_mid"):
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the gate's refusal is read here at Success; the draw is C3's test
 def test_a_precondition_and_gate_mismatch_emits_the_refusal(monkeypatch):
     # CONTROL: the shipped precondition refuses `p_other` through `off_duke2` (no purview over the
-    # reeve's rung) before the gate is asked.
+    # reeve's rung) before the gate is asked: at the `purview` clause (B21.80), where the gate's refusal is the `write` clause's.
     w, d = _gov_world()
-    assert [e.kind for e in _confer(w, d, "c_ctl", "p_other", "off_duke2")] == ["confer.refused"]
+    assert [e.kind for e in _confer(w, d, "c_ctl", "p_other", "off_duke2")] == ["confer.unauthorized"]
 
     # THE MISMATCH: the precondition admits what the gate refuses.
-    monkeypatch.setitem(PR.REQUIRES_PREDICATES, "confer", lambda w, a: True)
+    admits = lambda w, a: True
+    admits.clauses = PR.REQUIRES_PREDICATES["confer"].clauses      # B21.80: the keyed row is admitted only while the predicate declares its keys
+    monkeypatch.setitem(PR.REQUIRES_PREDICATES, "confer", admits)
     w, d = _gov_world()
     with TRACE.recording():
         first = len(TRACE.rows)

@@ -22,7 +22,7 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.person_q import BOND_STEM, SELF_STEM, holds_self_key
+from ..queries.person_q import BOND_STEM, DUTY_TAKEN, SELF_STEM, holds_self_key, known_persons
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
                                home_of as home_of_q, landing_floor, members)
 from ..gaps import Forbidden, Unowned, Unspecified
@@ -38,7 +38,7 @@ from ..data.requires import KNOWN_PERSON_CLAIM
 from ..epistemic import CHANNEL_PREDICATES, claim_subjects
 from ..state.carriers import (Act, Claim, Event, Office, Person, Proposition, Rung, Site, StateChange, Tenure,
                               generated_attributes)
-from ..state.gate import NO_CHANGE
+from ..state.gate import NO_CHANGE, may_revoke, sworn_to
 from ..state.ids import H, ROOT
 from ..state.world import World
 
@@ -838,6 +838,51 @@ def seed_seat_news(w: World) -> list:
                 w.persons[pid].ledger.append(Claim(cid, pid, subject, e.kind, 1, when, source, conf, "own", lap))
                 written.append(cid)
     return written
+
+
+def seed_command_knowledge(w: World) -> list:
+    """WHAT A SEAT'S HOLDER KNOWS AT THE START OF WHOM HIS SEAT COMMANDS (B21.55 repair; A-22): a lord knows who is sworn to him
+    and who sits in the seats he may revoke. `queries/person_q.py::commanded_read` forms `issue` and `dispatch` from his own ledger
+    alone (AX-2), and a realm seeded with oaths as Tenures on the sworn men gave that ledger nothing to read. For every live `hold`
+    on a seat, its holder takes, at the seated edge's `since` (season 0 for every seeded edge):
+
+      * per live `oblige` to that seat (`state/gate.py::sworn_to`, the walk `world_q.establishment_of` composes on), the firsthand
+        claim `(sworn man, duty.taken, True)` -- the event-kind claim `loop/witness.py` deposits for a witnessed oath (its
+        `Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", ...)`, the kind `oblige`'s own row emits, the subject the man
+        who swore), so a built oath and a played one read the same;
+      * per live `hold` on ANOTHER seat that he, exercising this one, may revoke (`state/gate.py::may_revoke`, A-22 class (ii)'s
+        rule), the claim `(that seat, hold, its holder)` -- the shape `state/gate.py::Subject.seat` observes (predicate the edge's
+        own kind);
+      * and, for a sworn man he does not yet know (`person_q.known_persons`), the `exists:Person` reading `seed_acquaintances`
+        writes: to know a man is sworn to you is to know he exists. Only the missing pairs, so no acquaintance is written twice.
+
+    Source `firsthand`, at `confidence_default`; no draw. A man sworn to two of his seats gives two oath claims, as two witnessed
+    oaths would. The ledger rules of `seed_acquaintances` hold (a claim at `when` 0 is the first evicted at `ledger_cap`). Returns
+    the claim ids written. [ASSUMPTION; medium; Jordan to correct; revert: delete the build step, and `issue`/`dispatch` again form
+    for nobody in the built realm (B21.55's reading)]"""
+    conf = w.fixtures.get("confidence_default")
+    holds = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices and t.subject in w.persons]
+    written, missing = [], []
+    for h in holds:
+        lord, via = h.subject, h.object
+        p = w.persons[lord]
+        known = set(known_persons(p.ledger, lord))
+        for t in sworn_to(w, via):
+            if t.subject == lord or t.subject not in w.persons:
+                continue
+            cid = f"c_oath_{lord}_{t.id}"
+            p.ledger.append(Claim(cid, lord, t.subject, DUTY_TAKEN, True, t.since, "firsthand", conf, "own"))
+            written.append(cid)
+            if t.subject not in known and (lord, t.subject) not in missing:
+                missing.append((lord, t.subject))
+        for o in holds:
+            cid = f"c_holder_{lord}_{o.id}"
+            if (o.object == via or o.subject == lord or cid in written
+                    or not may_revoke(w, lord, via, w.offices[o.object])):
+                continue
+            p.ledger.append(Claim(cid, lord, o.object, o.kind, o.subject, o.since, "firsthand", conf, "own"))
+            written.append(cid)
+    return written + seed_acquaintances(w, missing)
 
 
 def seed_relations(w: World, relations) -> list:
@@ -1877,9 +1922,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         oid = _seat_id(_off_row, cid)
         if _off_row is not None:
             rung = seat_anchor(w, anchors, _off_row)
-            # `held` is what this seat would have had without the overlay: the acts `offices.yaml:
-            # meta: remit_unruled` names survive it (`authored_remit`), the rest is the row's.
-            remit = authored_remit(_off_row, remit_or_default(over.get("remit")))
+            # A seat holds a remit act iff its row names it: nothing the loop seated it with survives.
+            remit = authored_remit(_off_row)
             authored[_off_row["id"]] = oid
         elif governs is not None:
             # A TITLED holder with no authored row would be seated rungless, silently.
@@ -1889,8 +1933,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 needs="a row naming this holder, so the seat has an anchor",
                 law="a titled seat sits at the rung its title governs (r2 03 §A.8); no row, no rung")
         else:
-            # THE DECLARED EXCEPTION: a seat the registry derives and no row authors (NPC-084's
-            # `guild leader`). It has no anchor to resolve and invents none.
+            # A seat the registry derives and no row authors (none in the shipped cast since B21.03
+            # gave NPC-084's `guild leader` a row). It has no anchor to resolve and invents none.
             rung, remit = None, remit_or_default(over.get("remit"))
             unauthored.append(oid)
         w.offices[oid] = Office(
@@ -2127,6 +2171,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w._acquaintances = seed_acquaintances(w, acquaintance_pairs(w, seat_rows, w._office_census["authored"]))
     # v12 B11.08 (`08_FI_01` edit 6; A-32): WHO HOLDS WHICH SEAT AS THE REALM HEARD IT, beside the acquaintances and after the last seat is seated.
     w._seat_news = seed_seat_news(w)
+    # B21.55 repair (A-22): WHAT EACH SEAT'S HOLDER KNOWS OF WHOM IT COMMANDS -- after every seat, oath (the guards' too) and
+    # acquaintance exists, so only the sworn men he does not already know are made known.
+    seed_command_knowledge(w)
     # B10.65 (`U5a` edit 3): WHAT EACH PERSON BELIEVES OF HIMSELF, once everybody and every acquaintance is seated; a cast row's `unaware:` marks are the claims left out.
     seed_self_knowledge(w, marks)
     # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the last-but-one write. The

@@ -22,8 +22,8 @@ string. Enforced BY PATH over this directory (`04 §E.1`).
 from __future__ import annotations
 
 import itertools
-from typing import Optional
-from ..data.rosters import STANCE_MAX
+from typing import Any, Callable, Optional
+from ..data.rosters import RIG_KEY, RIG_LEVELS, STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
@@ -35,8 +35,8 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, CITES_KEY, CONTEXT_KEY, CONTEXT_TERMS, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
-    OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
+    CHOICE_RANGES, CHOICE_SOURCED, CITES_KEY, CONTEXT_KEY, CONTEXT_TERMS, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
+    OPPOSED_WITHOUT_PRIZE, OWN_EDGE_DECLINES, OWN_STANCE_DECLINES, RIGGED_VERBS, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
 )
@@ -44,19 +44,22 @@ from ..gaps import Forbidden
 # B11.21: `agreement` .. `teller_weight` and `belief_contradicts` are `queries/person_q.py`'s now (`loop/witness.py` reads two of them and may not
 # import `decision/`); re-bound here by name, as `opening_set` and `standing_of` call them and the tests reach them as `options.<name>`.
 from ..queries.person_q import (
-    PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
-    competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
-    ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
+    BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
+    commanded_read, competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
+    is_cell as _is_cell, ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
 )
-from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
+from ..state.carriers import Act, Candidate, Claim, Person, Question, Record, View, fade_of, in_custody
 from ..trace_log import TRACE
 
 # v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
 # `rosters.yaml: referent_classes` declares; read off the type, never spelt.
 _HELD_WRIT_CLASS = Record.__name__
+
+# The Event kinds a bench's disposal emits (`rosters.yaml: own_edge_declines`' `DISPOSAL_EVENTS` values), as a set for the per-claim membership test.
+_DISPOSAL_KINDS = frozenset(DISPOSAL_EVENTS.values())
 
 
 def _hears_by_presence(row: "VerbRow") -> bool:
@@ -244,7 +247,26 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if verb in OWN_TITLE_DECLINES:
             if held is None:
                 held = _held_objects(p)
-            refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
+            refs = tuple(r for r in refs if any(t in held for t in SUCCESSIONS.get(r, ())))   # B21.16: any listed title
+        # VB-A commit A1 (B21.07, `rosters.yaml: own_edge_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE IS TIED TO BY A
+        # LIVE EDGE OF A KIND THE ROW'S OWN `domain:` NAMES -- `release`, which the fold refuses on any referent he owns no
+        # releasable edge toward (a person releasing the King, a cohort the settlement it lives in): no scene is spent on a refusal
+        # of the row's conjunct he could have known. His own live Tenures, no World. It NARROWS and widens nothing; the
+        # predicate is unchanged and stays the fold's check. (After every widening above, `held_edge_sourced`'s too.)
+        kinds = OWN_EDGE_DECLINES.get(verb)
+        if kinds is not None and refs:
+            live = [t for t in p.tenures if t.kind in kinds and t.live]
+            tied = {t.object for t in live}
+            refs = tuple(r for r in refs if r in tied)
+            # VRES §4 edit 1 (A-37; the formation half, the fold's being `loop/predicates.py::_req_release`): A PARTY DOES NOT RELEASE
+            # AN EDGE A BENCH IMPOSED, so a referent he holds a claim of a determination on, naming his own edge to it, is dropped.
+            # The claim is the generic Event claim (`loop/witness.py`): `subject` the disposal edge's id, `predicate` the Event kind
+            # (`DISPOSAL_EVENTS`), `value` True -- it names the judge and the edge and never the party, whose own `tenures` say the
+            # edge is his. `decision/` never reads the log (`04` §B.9: `state/acts` is resolver-side): his own ledger and Tenures only.
+            if refs:
+                found = {c.subject for c in p.ledger if c.predicate in _DISPOSAL_KINDS}
+                imposed = {t.object for t in live if t.id in found}
+                refs = tuple(r for r in refs if r not in imposed)
         # B11 lane A (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`): A `Record` ROW WHOSE CELL ASKS A SUB-KIND forms only
         # on a Record his own content claims say is of that kind (`documents_known_as`) -- `accept` on a challenge,
         # `comply` on a dispensation. The kind is read off the row's own cell, never a verb name; a document is known
@@ -475,6 +497,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
                     if len(seats) > 1:
                         cand_ops = {**cand_ops, VIA: st}
+                    # B24p.24: AND HOW HARD HE WOULD RIG THE SITTING, where the act carries a rig and he has the power to work one.
+                    if verb in RIGGED_VERBS:
+                        cand_ops = rig_offer(p, v, verb, subject, cand_ops, fx)
                     if contexts:                 # B15.08: the context that admitted this subject (set above where the decline reads it)
                         cand_ops = {**cand_ops, CONTEXT_KEY: context_of[subject]}
                     for place, concl in enumerate(conclusions):
@@ -485,6 +510,48 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                                 c_ops[CONCLUDED_RANK_KEY] = place
                         out.append(Candidate(verb, subject, operands=c_ops))
     return out
+
+
+#: The stake the arranger reckons a rig on (V2 p2 §H's `2 x stake x P(carried) - price`), in the fold's units: one, the unit V2's own grid of rig levels is
+#: read at ("stakes up to 1"); the matter's worth to him is no number the tree holds (`Fixtures.stakes_ob` ships at its control, 0).
+_RIG_STAKE = 1.0       # [canonical: V2 p4 §F 19 / §K C3 -- the rig levels' grid, "the 27-case grid at stakes up to 1"; ASSUMPTION; Jordan to correct]
+
+
+def rig_worth(stake: float, odds: float, tilt: float, price: float) -> float:
+    """WHAT A RIG IS WORTH TO THE MAN WHO WORKS IT (V2 p2 §H, p4 §F 19): `2 x stake x P(carried) - price x tilt^2`, `price` the fold's `rig_price`.
+    The one formula, read by `rig_offer` for each level and by nothing else: the price is `price x tilt^2` whoever is in the room and it rises with the rig,
+    so no level is dearer for being secret, and a rig of no tilt costs nothing and buys nothing."""
+    return 2.0 * stake * odds - price * tilt * tilt
+
+
+def best_rig(stake: float, readings: dict, price: float) -> float:
+    """THE LEVEL THE RECKONING PICKS: of `readings`, `{level: (odds, tilt)}`, the level whose `rig_worth` is greatest, the lowest where two tie (a rig
+    is worked for what it buys, never for itself). Every level of `RIG_LEVELS` is best somewhere: none where the stake is small, the half where a little
+    of the tilt pays, the whole where the stake is large."""
+    return max(readings, key=lambda r: (rig_worth(stake, readings[r][0], readings[r][1], price), -r))
+
+
+def rig_offer(p: Person, v: View, verb: str, subject, ops: dict, fx: "Fixtures") -> dict:
+    """`ops`, WITH THE RIG THE RECKONING PICKS WHERE HE HAS THE POWER TO WORK ONE (B24p.24; V2 p2 §H, p4 §F 19). The host answers what the room
+    would be (`View.odds.arranged(act, rig)`: his believed odds that the matter carries and the tilt his rig gives the forum, from the one room
+    `proceeding_input` builds); a tilt only where he has more power than the other party, so between equals (a tilt of 0 at the full rig) nothing is
+    offered and `ops` is what it was. Where there is a tilt, each level of `RIG_LEVELS` is priced on `rig_worth` and the best is the one Candidate this
+    forms (a level above 0 rides under `RIG_KEY`; the best being 0, the act carries none): the chooser then scores that act as it scores every
+    other, so the rig is ranked with the rest of what he could do and never beside it. [ASSUMPTION; medium; Jordan to correct: the reckoning
+    picks the level rather than forming one Candidate per level, which would share one act id (`data/verbs.py::act_key`) and score alike, the chooser's
+    score having no price term to tell them apart.] A View that cannot ask (`odds` None, or one with no `arranged`) offers none."""
+    ask = getattr(getattr(v, "odds", None), "arranged", None)
+    if ask is None:
+        return ops
+    act = Act(f"rig:{verb}:{subject}", p.id, verb, payload={**ops, "subject": subject})
+    top = ask(act, RIG_LEVELS[-1])
+    if top is None or top[1] <= 0.0:
+        return ops
+    readings = {r: (top if r == RIG_LEVELS[-1] else ask(act, r)) for r in RIG_LEVELS}
+    if any(x is None for x in readings.values()):
+        return ops
+    best = best_rig(_RIG_STAKE, readings, fx.get("fold_rig_price"))
+    return {**ops, RIG_KEY: best} if best > 0 else ops
 
 
 def subject_is_opponent(row: "VerbRow") -> bool:
@@ -795,7 +862,15 @@ def seat_of(p: Person, c: Candidate) -> Optional[str]:
     """THE SEAT A CANDIDATE'S ACT IS EXERCISED THROUGH -- the one `pack_scenes` puts on `Act.via`.
     The seat `opening_set` formed it for where it chose among several (`VIA` in its operands); else
     `exercised_seat`'s, which is the only seat there is. One reader, so a Candidate and the act
-    minted from it cannot name two seats."""
+    minted from it cannot name two seats.
+
+    NONE FOR A HOLDER IN CUSTODY (B21.11, A-23): a live `detain` he owns suspends every seat he holds
+    (`state/gate.py::_seat_grants`, asked by every remit-act basis and by `loop/resolve.py::_eligible`'s `remit:` branch, refuses
+    the act through it), so his candidate names no seat: `opening_set` still forms it, the act mints with `via=None`, and the fold
+    admits it only on an eligibility alternative that needs no seat. The seat's `hold` is untouched: custody suspends, it does not vacate.
+    The reading is `state/carriers.py::in_custody`'s, over the person's own Tenures because a `decision/` reader holds no `World`."""
+    if in_custody(p.tenures):
+        return None
     seat = (c.operands or {}).get(VIA)
     return seat if seat is not None else exercised_seat(p, VERB_TABLE.get(c.verb))
 
@@ -1430,7 +1505,15 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     and a Record about anything else forms nothing here. A Record whose kind maps none of the fan's
     operands, or whose addressee is a known person's bag already, adds nothing (same act id,
     `data/verbs.py::act_key`). A row with no fan is untouched: its operands are what it is about."""
-    return _fanned_choices(row, _person_bags(p, row, q, subject, fx, seat, people, records, tick))
+    bags = _person_bags(p, row, q, subject, fx, seat, people, records, tick)
+    # B21.55 (`14_VERBS_BINDING_D` commit D2, A-22): A ROW THAT ORDERS A PERSON (`VerbRow.commanded_operand`: `issue`'s `to`, `dispatch`'s
+    # `subject`) FORMS ONLY ON THE ONES `p` CAN READ AS COMMANDED (`person_q.commanded_read`), so a seat's writ or order is not offered to a
+    # stranger the fold would refuse (`world_q.commands`, which still decides) and nobody orders himself. NARROWS and widens nothing.
+    ordered = row.commanded_operand()
+    if ordered is not None and bags:
+        commanded = commanded_read(p)
+        bags = [b for b in bags if b.get(ordered, subject if ordered == "subject" else None) in commanded]
+    return _fanned_choices(row, bags)
 
 
 def _fanned_choices(row: "VerbRow", bags: list) -> list:

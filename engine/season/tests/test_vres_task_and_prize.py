@@ -72,7 +72,9 @@ def test_a_heard_by_outside_the_rooms_and_an_unclaimed_prize_are_refused(monkeyp
     """Gate (1). CONTROL first: the shipped roster, with `a seat` and `a holding` claimed by no verb, boots and passes the prize check
     (`check_contest_prizes` binds a prize row to no verb, only a verb to a prize row); then each plant is refused naming itself."""
     assert {"a seat", "a holding"} <= set(PRIZES)
-    assert not [v for v, r in VERB_TABLE.items() if set(registry._as_list(r.contests or [])) & {"a seat", "a holding"}], "a verb names the new prizes"
+    # B21.09/B21.14 re-read: `establish`, `confer`, `revoke` and `succeed` now draw on `a seat` (the prize is claimed); `a holding` is still claimed by none
+    assert {v for v, r in VERB_TABLE.items() if "a seat" in set(registry._as_list(r.contests or []))} == {"confer", "establish", "revoke", "succeed"}
+    assert not [v for v, r in VERB_TABLE.items() if "a holding" in set(registry._as_list(r.contests or []))], "a verb names the new prize"
     assert registry.check_rows()
     assert registry.check_contest_prizes(VERB_TABLE)
     monkeypatch.setitem(PRIZES["a seat"], "heard_by", "nobody")
@@ -95,7 +97,7 @@ def test_the_audience_follows_the_prize_row(monkeypatch):
     monkeypatch.setattr(sigma, "audience_of", lambda w_, act, room: read.append((room, real(w_, act, room))) or read[-1][1])
     for room in ("bench", "seat_body"):
         monkeypatch.setitem(PRIZES["a matter"], "heard_by", room)
-        out = sigma.resolve(w, [SPEAKER, PARTY], ["root"], "a matter", verb="speak", subject=PARTY, via=SEAT,
+        out = sigma.resolve(w, [SPEAKER, PARTY], ["root"], "a matter", verb="determine", subject=PARTY, via=SEAT,
                             rng=draw.seeded(draw.H2("test_vres_task_and_prize", 0)), rung="Hh")
         assert out["status"] == "RESOLVED", out
     assert [room for room, _ in read] == ["bench", "seat_body"]
@@ -110,7 +112,7 @@ def test_toward_to_asks_the_room_about_the_receiver_and_an_unknown_side_is_refus
     monkeypatch.setattr(sigma, "reception", lambda w_, who, audience: asked.append((who, audience)) or 0.0)
     w = _council_world()
     for toward in (None, "to"):
-        sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room="Hh", heard_by="residents", toward=toward)
+        sigma.contest_input(w, [SPEAKER, PARTY], verb="determine", subject=PARTY, room="Hh", heard_by="residents", toward=toward)
     assert [who for who, _ in asked] == [SPEAKER, PARTY], asked
     assert all(sorted(a) == sorted((SPEAKER, PARTY, REEVE)) for _, a in asked), asked
     monkeypatch.setitem(PRIZES["a holding"], "toward", "from")

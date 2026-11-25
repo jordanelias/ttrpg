@@ -40,7 +40,7 @@ def test_an_effect_that_eagerly_mutates_an_unrelated_entity_field_is_refused(mon
     w = P.tiny_world()
     assert w.persons["p_high"].body == 1000, "the fixture's field is not what the test reads"
     evs = _run(w, "h137_eager")         # B03.76: the gate's `NotYours` is the fold's refusal, not a raise
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]
     assert w.persons["p_high"].body == 1000, "the eager field write stood"
     assert w.rungs["Hh"].stores == {"grain": 8}, "the refused effect's write still ran"
 
@@ -63,7 +63,7 @@ def test_an_effect_that_adds_or_removes_an_entity_in_its_body_is_refused_and_put
     _plant(monkeypatch, "utter", adds)
     w = P.tiny_world()
     evs = _run(w, "h137_add")
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]
     assert "h137_side_site" not in w.sites, "the eagerly added entity stood"
 
     def removes(w, a, res=None):
@@ -73,7 +73,7 @@ def test_an_effect_that_adds_or_removes_an_entity_in_its_body_is_refused_and_put
     w = P.tiny_world()
     seam = w.sites["site_seam"]
     evs = _run(w, "h137_remove")
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]
     assert w.sites.get("site_seam") is seam, "the eagerly removed entity stayed gone"
 
 
@@ -87,7 +87,7 @@ def test_an_equal_valued_replacement_is_put_back_as_the_original_object(monkeypa
     w = P.tiny_world()
     seam = w.sites["site_seam"]
     evs = _run(w, "h137_equal_copy")
-    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert [e.kind for e in evs] == ["utter.refused"], [e.kind for e in evs]
     assert w.sites["site_seam"] is seam, "the equal-valued copy stood in place of the original"
 
 

@@ -26,7 +26,8 @@ pytestmark = pytest.mark.flat_fold
 
 CROWN = "fac_valorsmark"
 TOWN = "set_s_016"            # Hafenmark-held; no Crown member stands there at build
-ACTOR, SEAT = "p_npc_033", "off_spymaster"   # a Crown seat granted `dispatch`; his army stands at `set_s_014`
+ACTOR, SEAT = "p_npc_036", "off_royal_marshal"   # a Crown seat granted `dispatch` (the Spymaster's grant is `issue` alone, B21.03); his army stands at `set_s_001`
+ORIGIN = "set_s_001"          # the Crown town the army marches from (the Marshal's home)
 
 
 def _fold(w, act, encounter=False):
@@ -113,9 +114,9 @@ def test_in12_11_each_decline_of_the_occupation_read_is_refused():
     Crown's OWN town its army marched from (`set_s_014`: mustered, but nothing foreign to raze). Each
     is `raze.refused` and the place stands."""
     w = build_realm(0)
-    assert world_q.holder_faction_of(w, "set_s_014") == CROWN and world_q.mustered(w, "set_s_014", CROWN)
-    assert _raze(w, "set_s_014", act_id="rz_own") == ["raze.refused"]
-    assert "set_s_014" in w.rungs
+    assert world_q.holder_faction_of(w, ORIGIN) == CROWN and world_q.mustered(w, ORIGIN, CROWN)
+    assert _raze(w, ORIGIN, act_id="rz_own") == ["raze.refused"]
+    assert ORIGIN in w.rungs
     _occupy(w)
     assert w.rungs["terr_T7"].kind == "territory" and world_q.mustered(w, "terr_T7", CROWN)
     assert world_q.holder_faction_of(w, "terr_T7") == "fac_hafenmark"

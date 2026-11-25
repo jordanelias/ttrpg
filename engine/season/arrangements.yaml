@@ -12,6 +12,15 @@
 # write is closable) and ADDS ONE (`quorum`, required exactly when `disposal: declared`). Net:
 # 15 - 3 + 1 = 13. `21_RECONCILIATION.md` PHASE 2 step 6's own falsifier table is written against
 # this count: "a fourteenth key fails naming the row."
+# ⚠ SEVENTEEN KEYS SINCE B24p.03, THIRTEEN ROWS (the count sentence above is the history, kept for the derivation): B05.21 added `standard`
+# (14); B24p.03 (V2 p1 §D, p2 §B, §I, §J) ADDED `rite`, `turns`, `authority`, `reason_lean`, DELETED `order` (the bearer opens, the rest by
+# precedence), RENAMED `proofs` to `admits` (a `rosters.yaml: matters` member each) and `disposal` to `close` (`bench`, `declared`,
+# `hearers`, `consent`; `mutual` is now `consent`; `exchange` is `abridged(row)`'s alone, never a row's): 14 + 4 - 1 = 17. The comments
+# below this header speak in the old key names where they tell a row's history. The three blocks before `arrangements:` -- `rites:`
+# (V2 p1 §D), `context:` (p2 §I) and `disposal:` (p2 §J) -- are read by `data/arrangements.py` as `RITES`, `CONTEXT`, `DISPOSAL`; nothing
+# in the game reads them until B24p.13 (the host builder) and B24p.20 (the sitting). THIRTEEN ROWS: the nine seeded (the tree's
+# `interrogation`, the polity's inquisition, is renamed `examination`: V2 p4 §F 31, one word one thing) and four new (`conversation`,
+# `interrogation` -- Jordan's "interrogation for information", a questioning -- `rally`, `audience`).
 #
 # ⚠ SEEDED WITH THREE OF THE TWELVE GAMES `03_PARAMETERS.md` §E.2 WORKS IN FULL, NOT ALL TWELVE --
 # NAMED SCOPE-DOWN (`CLAUDE.md`'s size-warning permission, this position's brief). All three are
@@ -96,6 +105,165 @@ speech_kinds:
     min_rank:           hearth
     reachable_bands:    []
 
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════════
+# B24p.03: THE RITES (V2 p1 §D, p2 §B) -- a type's STRUCTURE: what the live thing is called, who bears it (he opens), who must answer whom
+# (`reply`: `must`, `may`, `raise`), what silence means (`silence`: `admits`, `refusal`, `free`), the issues it runs through (`issues`: an
+# `issue_rungs` member each; EMPTY IS ONE UNDIVIDED ISSUE, the matter itself), what conceding does (`concede`: `descends` the issue ladder or
+# `accepts` the other side's point), and who may do what (`moves`: a `proceeding_moves` member each, per side, `[]` for a side with none).
+# The rows of `arrangements:` below are these structures ARRANGED by an authority: `rite:` names one. Cells copy the running model's
+# (`sc2/host.py::RITES`, evidence only); `genre`, `live` and `bears` are labels no code compares (the module reads cells, never an id).
+# `negotiation`'s `reply` is `may` on both sides (V2 p4 §F 30: an unanswered offer simply earns no deal, so `must` was inert and is cut).
+# [ASSUMPTION; Jordan to correct: every cell below -- basis: the model's, which V2 p1 §D's table states in prose.]
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════════
+rites:
+  - id:               conversation
+    genre:            dyadic
+    live:             claim
+    bears:            for
+    reply:            {for: may, against: may}
+    silence:          free
+    issues:           []
+    concede:          accepts
+    moves:            {for: [argue, press, rest, concede], against: [argue, press, rest, concede]}
+  - id:               negotiation
+    genre:            dyadic
+    live:             offer
+    bears:            for
+    reply:            {for: may, against: may}
+    silence:          free
+    issues:           []
+    concede:          accepts
+    moves:            {for: [argue, press, rest, concede], against: [argue, press, rest, concede]}
+  - id:               questioning
+    genre:            judicial
+    live:             question
+    bears:            for
+    reply:            {for: may, against: must}
+    silence:          refusal
+    issues:           []
+    concede:          accepts
+    moves:            {for: [argue, press, rest], against: [argue, rest, concede]}
+  - id:               inquisition
+    genre:            judicial
+    live:             charge
+    bears:            for
+    reply:            {for: may, against: must}
+    silence:          admits
+    issues:           [fact, justification]
+    concede:          descends
+    moves:            {for: [argue, press, rest], against: [argue, rest, concede]}
+  - id:               trial
+    genre:            judicial
+    live:             charge
+    bears:            for
+    reply:            {for: must, against: must}
+    silence:          refusal
+    issues:           [fact, definition, justification]
+    concede:          descends
+    moves:            {for: [argue, press, rest, concede], against: [argue, press, rest, concede]}
+  - id:               debate
+    genre:            deliberative
+    live:             motion
+    bears:            for
+    reply:            {for: may, against: may}
+    silence:          free
+    issues:           []
+    concede:          accepts
+    moves:            {for: [argue, press, rest, concede], against: [argue, press, rest, concede]}
+  - id:               rally
+    genre:            deliberative
+    live:             theme
+    bears:            for
+    reply:            {for: raise}
+    silence:          free
+    issues:           []
+    concede:          accepts
+    moves:            {for: [argue, rest], against: []}
+  - id:               audience
+    genre:            deliberative
+    live:             plea
+    bears:            for
+    reply:            {for: may, against: may}
+    silence:          free
+    issues:           []
+    concede:          accepts
+    moves:            {for: [argue, rest], against: [argue, press, rest]}
+
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════════
+# B24p.03: CONTEXT (V2 p2 §I) -- era, regime and strife as CELL DELTAS the builder reads (B24p.13); no code per kind. B24p.03 wrote it AT CONTROL (every
+# era weight 1.0, every delta 0, nothing unlawful, nothing added to or dropped from `admits`, every authority's `power` 1.0, no `silence` or
+# `floor` override); B24p.23 wrote V2's (`sc2/host.py::ERAS`, `::REGIMES`, `::STRIFE`), each cell `[ASSUMPTION; Jordan to correct; revert: the control above]`.
+# The regime's `gravity` delta is V2 p2 §I's (theocracy +0.5, crown and commune 0). A regime's `power` is the model's `power` dict: the weight of
+# each authority it names, and 0 for each it does not (the model reads `.get(auth, 0.0)`, as `_power` does), so a crown weighs the polity and
+# no other seat, a theocracy the church at 2.0, a commune the guild; the loader takes a weight of 0 or more. `eras`: a weight for each ground
+# (`rosters.yaml: grounds`). `regimes`: `unlawful` names rites or arrangement ids; `standard` and `reason_lean` are deltas on the row's;
+# `admits_add`/`admits_drop` are `matters` members; `power` weighs each `authorities` member; `silence`/`floor` override the rite's and the
+# row's. `strife`: `turns` (whole, added to the row's), `unrest`, `gravity`, `care_want`. [ASSUMPTION; Jordan to correct: the table's key
+# set and every control value.]
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════════
+context:
+  # [ASSUMPTION; Jordan to correct; revert: the control (every weight 1.0, every delta 0, nothing unlawful) -- basis: V2 p2 §I; the cells are the running model's
+  # `sc2/host.py::ERAS`, `::REGIMES`, `::STRIFE`, each a ground or key the model leaves unnamed read at its neutral value.]
+  eras:
+    plain:        {evidence: 1.0, consequence: 1.0, authority: 1.0, solidarity: 1.0}
+    age_of_faith: {evidence: 1.0, consequence: 0.8, authority: 1.4, solidarity: 1.0}
+    mercantile:   {evidence: 1.0, consequence: 1.4, authority: 0.8, solidarity: 1.0}
+  regimes:
+    crown:     {unlawful: [], gravity: 0, standard: 0, reason_lean: 0, admits_add: [], admits_drop: [], power: {parties: 0.0, polity: 1.0, church: 0.0, guild: 0.0, none: 0.0}, silence: null, floor: null}
+    theocracy: {unlawful: [debate, parliamentary_debate, council_of_state], gravity: 0.5, standard: 1, reason_lean: -0.1, admits_add: [confession, oath], admits_drop: [precedent], power: {parties: 0.0, polity: 0.0, church: 2.0, guild: 0.0, none: 0.0}, silence: admits, floor: null}
+    commune:   {unlawful: [inquisition, inquisition_hearing, examination], gravity: 0, standard: -1, reason_lean: 0, admits_add: [rumour], admits_drop: [], power: {parties: 0.0, polity: 0.0, church: 0.0, guild: 1.0, none: 0.0}, silence: null, floor: open}
+  strife:
+    peace:  {turns: 0, unrest: 0, gravity: 0, care_want: 0}
+    war:    {turns: -1, unrest: 0.5, gravity: 0.5, care_want: 0}
+    famine: {turns: 0, unrest: 0.75, gravity: 0.25, care_want: 0.3}
+    schism: {turns: 0, unrest: 0.25, gravity: 0.5, care_want: 0}
+
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════════
+# B24p.03: DISPOSAL (V2 p2 §J) -- `(what a row disposes, band) -> typed writes`; the fold performs every one (B24p.20, B24p.22, B27.28,
+# B33.51). Keys are the `disposes` values (`none`, `yield`, `oblige`, `detain`, `ban`, and `Record`, which V2's `decree` row is keyed
+# by: the tree's `parliamentary_debate` and `council_of_state` dispose `Record`, and their `disposes:` lines stay as they were). Each key
+# states the four degree bands and `impasse` (no verdict); each write is a `rosters.yaml: disposal_writes` member. A claim's weight (a
+# yield 1, a hint 0.4) is a cell of its write there. [ASSUMPTION; Jordan to correct: one key for the decree's writes, and the roster
+# spelling of each write -- see `disposal_writes`' note.]
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════════
+disposal:
+  none:
+    Overwhelming: ["pursuits+", "regard+", "claim:converted"]
+    Success:      ["pursuits+", "regard+"]
+    Partial:      ["regard+"]
+    Failure:      ["regard-", "grievance"]
+    impasse:      ["regard-"]
+  yield:
+    Overwhelming: ["claim:yielded", "record:confession", "regard-"]
+    Success:      ["claim:yielded", "regard-"]
+    Partial:      ["claim:hinted"]
+    Failure:      ["regard-"]
+    impasse:      ["regard-"]
+  oblige:
+    Overwhelming: ["tenure:oblige", "regard+", "precedent"]
+    Success:      ["tenure:oblige", "regard+"]
+    Partial:      ["docket:adjourned"]
+    Failure:      ["grievance", "docket:other_forum"]
+    impasse:      ["docket:other_forum"]
+  detain:
+    Overwhelming: ["tenure:detain", "office:contested", "precedent", "legitimacy+"]
+    Success:      ["tenure:detain", "precedent", "legitimacy+"]
+    Partial:      ["tenure:oblige", "docket:adjourned"]
+    Failure:      ["record:acquittal", "precedent", "regard-"]
+    impasse:      ["docket:adjourned"]
+  ban:
+    Overwhelming: ["tenure:ban", "office:contested", "precedent"]
+    Success:      ["tenure:ban", "legitimacy+"]
+    Partial:      ["tenure:oblige", "docket:adjourned"]
+    Failure:      ["record:acquittal", "legitimacy-"]
+    impasse:      ["docket:adjourned"]
+  Record:
+    Overwhelming: ["record:decree", "faction+", "precedent", "legitimacy+"]
+    Success:      ["record:decree", "faction+"]
+    Partial:      ["docket:adjourned"]
+    Failure:      ["record:defeated", "faction-"]
+    impasse:      ["docket:adjourned"]
+
 arrangements:
   # `standard:` (B05.21, T13 edit 2) IS THE FOURTEENTH KEY, a `rosters.yaml: difficulty_levels` member: what the room demands of an act
   # a bench hears on a matter docketed under the row, sized by `Fixtures.difficulty_ob` and read by `sigma.py::OBSTACLE_TERMS["standard"]`.
@@ -111,7 +279,11 @@ arrangements:
   # and `given` (the arbiter's reasons ARE known to the parties) are not in tension the way they
   # would be for a multi-member bench; recorded here rather than left silent.
   - id:               arbitration
-    disposal:          bench
+    rite:               trial
+    turns:              [2, 5]
+    authority:          parties
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              closed
     records_dissent:    false
@@ -119,8 +291,7 @@ arrangements:
     term_required:      true
     appeal_basis:       none
     interposed:         []
-    order:              alternating
-    proofs:             [record, testimony, oath]
+    admits:             [record, testimony, oath]
     disposes:           oblige
     disposal_reach:      room
     standard:           plain
@@ -129,7 +300,11 @@ arrangements:
   # `03_PARAMETERS.md` §E.2, transcribed in full. `records_dissent: true` and the old
   # `verdict_reasons: given` AGREE outright -- no collapse judgment needed.
   - id:               parliamentary_debate
-    disposal:          bench
+    rite:               debate
+    turns:              [2, 4]
+    authority:          polity
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              open
     records_dissent:    true
@@ -137,8 +312,7 @@ arrangements:
     term_required:      true
     appeal_basis:       none
     interposed:         [procedure]
-    order:              rank
-    proofs:             []
+    admits:             []
     disposes:           Record
     disposal_reach:      realm
     standard:           routine
@@ -152,7 +326,11 @@ arrangements:
   # inventing one for two rows would be apparatus this position does not need.
   # `records_dissent: false` and the old `verdict_reasons: withheld` AGREE outright.
   - id:               council_of_state
-    disposal:          bench
+    rite:               debate
+    turns:              [2, 4]
+    authority:          polity
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              closed
     records_dissent:    false
@@ -160,8 +338,7 @@ arrangements:
     term_required:      true
     appeal_basis:       none
     interposed:         [procedure]
-    order:              rank
-    proofs:             []
+    admits:             []
     disposes:           Record
     disposal_reach:      realm
     standard:           routine
@@ -185,7 +362,11 @@ arrangements:
   # ── legal trial — the issue ladder, in public, with advocates ─────────────────────────────────
   # §E.2, transcribed in full but `disposes:`. `records_dissent: true` + old `given` AGREE.
   - id:               legal_trial
-    disposal:          bench
+    rite:               trial
+    turns:              [2, 5]
+    authority:          polity
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              open
     records_dissent:    true
@@ -193,8 +374,7 @@ arrangements:
     term_required:      true
     appeal_basis:       determine
     interposed:         [person, procedure]
-    order:              rank
-    proofs:             [record, testimony, oath]
+    admits:             [record, testimony, oath]
     disposes:           detain
     disposal_reach:      settlement
     standard:           routine
@@ -209,7 +389,11 @@ arrangements:
   # built at v9 IN-12: `loop/effects_governance.py::_eff_pardon`); the gate's `determination` closure arm
   # admits a bench's closure of it (`state/gate.py`).
   - id:               tribunal
-    disposal:          bench
+    rite:               trial
+    turns:              [2, 5]
+    authority:          polity
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              admitted
     records_dissent:    true
@@ -217,16 +401,21 @@ arrangements:
     term_required:      true
     appeal_basis:       none
     interposed:         [office, procedure]
-    order:              rank
-    proofs:             [record, testimony, oath]
+    admits:             [record, testimony, oath]
     disposes:           ban
     disposal_reach:      body
     standard:           demanding
 
-  # ── interrogation — the questioner decides, and the subject cannot win ────────────────────────
-  # §E.2, transcribed in full but `disposes:`. `records_dissent: false` + old `withheld` AGREE.
-  - id:               interrogation
-    disposal:          bench
+  # ── examination (B24p.03: was `interrogation`) — the questioner decides, and the subject cannot win ──
+  # §E.2, transcribed in full but `disposes:`. `records_dissent: false` + old `withheld` AGREE. RENAMED at B24p.03 (V2 p4 §F 31): this row is
+  # the POLITY'S inquisition (rite `inquisition`, `authority: polity`); `interrogation` is now Jordan's "interrogation for information",
+  # a questioning (the last block of this file). Its `disposes: detain` is unchanged.
+  - id:               examination
+    rite:               inquisition
+    turns:              [2, 5]
+    authority:          polity
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `inquisition` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              closed
     records_dissent:    false
@@ -234,8 +423,7 @@ arrangements:
     term_required:      false
     appeal_basis:       none
     interposed:         []
-    order:              scripted
-    proofs:             [testimony, confession]
+    admits:             [testimony, confession]
     disposes:           detain
     disposal_reach:      room
     standard:           plain
@@ -245,7 +433,11 @@ arrangements:
   # interrogation WITH A BENCH"* -- says the same. Every other key transcribed. `records_dissent:
   # false` + old `withheld` AGREE.
   - id:               inquisition_hearing
-    disposal:          bench
+    rite:               inquisition
+    turns:              [2, 5]
+    authority:          church
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `inquisition` rite (`sc2/host.py::RITES`)
+    close:              bench
     bench_basis:        determine
     floor:              closed
     records_dissent:    false
@@ -253,8 +445,7 @@ arrangements:
     term_required:      false
     appeal_basis:       determine
     interposed:         [office, procedure, document]
-    order:              scripted
-    proofs:             [testimony, confession, record]
+    admits:             [testimony, confession, record]
     disposes:           ban
     disposal_reach:      body
     standard:           hard
@@ -283,7 +474,11 @@ arrangements:
   # one without the other]. `parliamentary_debate` is NOT flipped: it disposes a `Record`, which `_eff_determine`
   # declines, so a declared flip there has no opener until a Record disposal site exists.
   - id:               excommunication_deliberation
-    disposal:          declared
+    rite:               debate
+    turns:              [2, 4]
+    authority:          church
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
+    close:              declared
     quorum:             2
     bench_basis:        determine
     floor:              closed
@@ -292,8 +487,7 @@ arrangements:
     term_required:      true
     appeal_basis:       determine
     interposed:         [procedure, ceremony]
-    order:              rank
-    proofs:             [record, testimony]
+    admits:             [record, testimony]
     disposes:           ban
     disposal_reach:      realm
     standard:           demanding
@@ -307,7 +501,11 @@ arrangements:
   # WRITES, `false`, the reading `excommunication_deliberation` above already makes and this row cites
   # rather than re-decides.
   - id:               negotiation
-    disposal:          mutual
+    rite:               negotiation
+    turns:              [1, 3]
+    authority:          parties
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `negotiation` rite (`sc2/host.py::RITES`)
+    close:              consent
     bench_basis:        none
     floor:              closed
     records_dissent:    false
@@ -315,8 +513,96 @@ arrangements:
     term_required:      false
     appeal_basis:       none
     interposed:         []
-    order:              alternating
-    proofs:             [record, testimony]
+    admits:             [record, testimony]
     disposes:           oblige
     disposal_reach:      room
+    standard:           plain
+
+  # ════════════════════════════════════════════════════════════════════════════════════════════════════
+  # B24p.03: FOUR NEW ROWS (V2 p1 §D), each a rite arranged. Every cell is [ASSUMPTION; Jordan to correct]: `turns`, `floor`, `authority`,
+  # `admits` and `disposes` are the running model's (`sc2/host.py::RITES`); `reason_lean` was 0, the control (the venue leaned nothing),
+  # until B24p.23 wrote V2's (`sc2/host.py::RITES`; the model's value for the rite, on the row's own line); `standard: plain`, `venue_min_rank: hearth`, `records_dissent: false`, `term_required: false`,
+  # `appeal_basis: none`, `interposed: []` and `disposal_reach: room` are the loosest values, authored nowhere. `bench_basis: none` on the
+  # three rows the hearers close (no bench sits), `determine` on `audience` (a seat decides).
+  # ════════════════════════════════════════════════════════════════════════════════════════════════════
+
+  # ── conversation — a claim put to one man, who is a side AND decides ──────────────────────────────
+  # `close: hearers`: the man addressed is a side and decides (V2 p2 §D; A-139 as corrected). Disposes nothing it writes in the realm.
+  - id:               conversation
+    rite:               conversation
+    turns:              [1, 3]
+    authority:          parties
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `conversation` rite (`sc2/host.py::RITES`)
+    close:              hearers
+    bench_basis:        none
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      false
+    appeal_basis:       none
+    interposed:         []
+    admits:             [record, testimony, deed, oath, debt, rumour, state_of_realm]
+    disposes:           none
+    disposal_reach:     room
+    standard:           plain
+
+  # ── interrogation — Jordan's "interrogation for information": a questioning ───────────────────────
+  # The questioner asks, the questioned man answers or does not and decides what he yields (`disposes: yield`: a claim in the questioner's
+  # ledger, a `confession` on the case file when overwhelming). The tree's old `interrogation` row, the polity's inquisition, is `examination`.
+  - id:               interrogation
+    rite:               questioning
+    turns:              [1, 4]
+    authority:          parties
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `questioning` rite (`sc2/host.py::RITES`)
+    close:              hearers
+    bench_basis:        none
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      false
+    appeal_basis:       none
+    interposed:         []
+    admits:             [testimony, record, deed, rumour, confession]
+    disposes:           yield
+    disposal_reach:     room
+    standard:           plain
+
+  # ── rally — a theme raised to a crowd, nothing to answer ──────────────────────────────────────────
+  # Each body of the crowd draws for itself; no authority sits (`authority: none`), so a consent on this structure is acclamation (B32.15).
+  - id:               rally
+    rite:               rally
+    turns:              [1, 3]
+    authority:          none
+    reason_lean:        -0.3    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `rally` rite (`sc2/host.py::RITES`)
+    close:              hearers
+    bench_basis:        none
+    floor:              open
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      false
+    appeal_basis:       none
+    interposed:         []
+    admits:             [deed, rumour, state_of_realm, oath]
+    disposes:           none
+    disposal_reach:     room
+    standard:           plain
+
+  # ── audience — a plea put to one seat, who may be the other party ─────────────────────────────────
+  # `close: bench`: the seat decides (`bench_basis: determine`); admitted floor; what it grants is an `oblige`.
+  - id:               audience
+    rite:               audience
+    turns:              [1, 2]
+    authority:          polity
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `audience` rite (`sc2/host.py::RITES`)
+    close:              bench
+    bench_basis:        determine
+    floor:              admitted
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      false
+    appeal_basis:       none
+    interposed:         []
+    admits:             [record, debt, title, oath, precedent, law]
+    disposes:           oblige
+    disposal_reach:     room
     standard:           plain

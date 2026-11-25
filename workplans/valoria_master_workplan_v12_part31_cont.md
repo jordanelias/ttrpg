@@ -170,7 +170,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - GATE: `python -m pytest engine/season/tests/test_sc_after_the_sitting.py -q` → pass; `python -m engine.season.harness.register --check` → counts not risen; the seed-0 hash (`HASH READING`) → moved (declared) at the shipped `fold_*` and equal to the seed-0 hash at B27.28's parent commit (`reading @<parent sha>`) with every `fold_*` at 0, both quoted.
 - HASH MOVERS: every world in which a proceeding resolves (the writes, the fade, the docket). Declared; B27.99.
 - EXPECTED RED UNTIL: B27.99.
-- DEPENDS ON: V12 Batch B24p-sc-proceeding (B24p.03, .04, .14, .20, .22); V12 B27.05 (`argued_pursuits` steps), B27.13 (`reverse`, `appeal_basis`), B27.18 (the docket crossing); EXISTS-IN-TREE `person_q.regard`, `::argued_pursuits`, `_docket_item`, `loop/calendar.py::calendar`, `loop/matter.py`.
+- DEPENDS ON: V12 Batch B24p-sc-proceeding @ba108d1 (B24p.03, .04, .14, .20, .22); V12 B27.05 (`argued_pursuits` steps), B27.13 (`reverse`, `appeal_basis`), B27.18 (the docket crossing); EXISTS-IN-TREE `person_q.regard`, `::argued_pursuits`, `_docket_item`, `loop/calendar.py::calendar`, `loop/matter.py`.
 - GLOSSARY: rows *appeal* (gains: "re-heard before another authority, the grounds a presumption toward the appellant"), *grievance* ("a loser's grudge, aired once as a conversation between the two").
 - COST and TIER: small build; `sonnet`, `high`; `opus` reads the twelve-season run.
 - LANDS IT: B27's producer; `Item: B27.28`, `[skip ci]`.

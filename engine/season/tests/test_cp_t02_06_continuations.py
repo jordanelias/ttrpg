@@ -26,6 +26,7 @@ from ..harness.heir_hears import HEIR_SEAT, THRONE
 from ..harness.heir_hears import holder as _holder
 from ..harness.play_surface import carry_on, dispatching_chooser
 from ..boot.realm import build_realm
+from ..data.rosters import SUCCESSIONS
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..queries import world_q
@@ -41,6 +42,9 @@ def _realm(retainers=2):
     assert king and heir and king != heir, "fixture: no distinct throne-holder and heir"
     for t in w.tenures:                  # the realm ships three sworn retainers: end them, so each arm sets its own
         if t.kind == "oblige" and t.live and any(t.object == h.object for h in w.seat_holds(king)):
+            t.until = w.tick
+    for t in w.tenures:                  # B21.16: the throne lists five titles; every one but the heir's is ended, so the arms below keep one heir
+        if t.kind == "hold" and t.live and t.object in SUCCESSIONS[THRONE] and t.object != HEIR_SEAT:
             t.until = w.tick
     others = [pid for pid in sorted(w.persons) if pid not in (king, heir)][:retainers]
     assert len(others) == retainers
@@ -89,7 +93,10 @@ def test_the_shipped_realm_reads_the_heir_then_its_sworn():
     w = build_realm(0)
     king = _holder(w, THRONE)
     reading = world_q.continuations(w, w.persons[king])
-    assert _ties(reading)[0] == "heir_title" and set(_ties(reading)[1:]) == {"sworn"} and len(reading) >= 2, reading
+    ties = _ties(reading)
+    heirs = len(SUCCESSIONS[THRONE])      # B21.16: the holders of every title the throne lists, each read once at `heir_title`
+    assert ties[0] == "heir_title" and ties == _in_roster_order(heir_title=heirs, sworn=len(ties) - heirs), reading
+    assert reading[0].person == _holder(w, HEIR_SEAT) and len(ties) > heirs, reading
 
 
 def test_the_roster_not_the_reader_table_fixes_the_order(monkeypatch):

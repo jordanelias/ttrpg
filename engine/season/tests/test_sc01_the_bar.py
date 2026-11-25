@@ -187,12 +187,14 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # kept): `BAR_FIXTURES` with `refusal_memory` swept back to 0.0, the parent tree's value, meets every assertion at stability/95/7 again, and the
 # test passes at B09.04's head. NOT RE-TRACED (a search over thousands of runs, as above): the bar is run at the control for the factor.
 # [ASSUMPTION; medium; Jordan to correct; revert: drop the `refusal_memory` sweep and re-trace at 0.5.]
-# B11 CLOSE: RE-TRACED AGAIN, stability/95/7 -> doctrine/16/7, the season count unchanged -- the B11 items and the close's fixes moved this three-person
-# world's act mix: stability/95/7 now fires THREE dates and determines nobody ("0 determined, 3 fired"). THE SWEEP, this file's `_proceeding` (the
-# producer's scratch, not kept): the 15 convictions x seeds 0..199 at 7 seasons, `PYTHONHASHSEED=0`, each of four partitions stopped at its first hit:
-# doctrine/16, stability/29 and stability/139 (one partition none). The lowest seed is taken (doctrine/16/7, hash c658767d...). The bar is an
-# existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert: restore stability/95/7 with the B11 batch reverted.]
-PROCEEDINGS = (("doctrine", 16, 7),)
+# B21.07 (A-37; `release` forms only on a held tie): RE-TRACED AGAIN, stability/95/7 -> honour/7/7, the conviction and the seed both moved --
+# the formation narrowing moved the act mix of this three-person world: stability/95/7 now fires ONE date and its one determination's causes
+# reach no `date.fired` (`_proceeding`: "no determination's causes reach a date.fired (1 determined, 1 fired)"). ATTRIBUTION: the test passes
+# at B21.07's parent (077f26e) and fails at B21.07 (b16009f) and every later commit. THE SWEEP, this file's `_proceeding` (a scratch, not kept):
+# the 15 convictions x seeds 0..11 at 7 seasons (180 runs, stopped at the first hit): exactly one run meets every assertion, honour/7
+# (hash df2e5647...), and it is taken. The bar is an existence claim on SELECTED seeds (above), not a rate.
+# [ASSUMPTION; medium; Jordan to correct; revert: restore stability/95/7 with B21.07's formation decline.]
+PROCEEDINGS = (("honour", 7, 7),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 
 
@@ -332,7 +334,10 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 def _branches_on_an_arrangement_id(tree: ast.AST) -> list:
     """`(line, id)` for every comparison or `match` case whose operand is an arrangement id."""
-    return branches_on_ids(tree, ARRANGEMENTS)
+    # B24p.03: the row `audience` shares its id with the `requires` stem `audience` (`world_q`'s `stem == "audience"`: may an actor enter a rung),
+    # a grammar word and no arrangement; a comparison against it is read as the stem. Every other row id is scanned as before.
+    from ..data.requires import REQUIRES_STEMS
+    return branches_on_ids(tree, set(ARRANGEMENTS) - set(REQUIRES_STEMS))
 
 
 def test_no_game_code_branches_on_an_arrangement_id():

@@ -42,14 +42,14 @@ GATE: Batch B18-pc-content
 GATE: Batch B19a-mb-contact-instrument
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
-GATE: Batch B21-fa-governance
+GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B21b-fa-war
 GATE: Batch B21c-fa-seats
 GATE: Batch B21d-fa-arc
 GATE: Batch B21s-strife-supply
 GATE: Batch B22-mb-armies
 GATE: Batch B23-land
-GATE: Batch B24p-sc-proceeding
+GATE: Batch B24p-sc-proceeding @ba108d1
 GATE: Batch B24-sc-hearing
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning
@@ -129,7 +129,7 @@ THE NINE, AS `IS_A_NINE.md` §2 TO §10 STATE THEIR CONJUNCTS (reference for B99
      | R-08.a | `python -m engine.season.harness.corpus_run --seasons 2` (and `decision_spread --decisions`, unchanged) | `python -m engine.season.harness.corpus_run` |
      | R-09.b | `python -m engine.season.harness.aperture 2 0` | `python -m engine.season.harness.aperture 4 0` |
      | R-09.c | `python -m engine.season.harness.corpus_run --seasons 2` | `python -m engine.season.harness.corpus_run` |
-     | R-04.c2 | written `governance_spine play 0 8` by B02.38 (B21 reads it at `play <s> 2`) | `play 0 8`, as written: re-pointed only if a later item wrote it at two `[ASSUMPTION: 8 is a season count — basis: B21's REQUIREMENT line, `valoria_master_workplan_v12_part14.md`]` |
+     | R-04.c2 | written `governance_spine play 0 8` by B02.38 (B21 reads it at `play <s> 2`) | `play 0 8`, as written: re-pointed only if a later item wrote it at two `[ASSUMPTION: 8 is a season count — basis: B21's REQUIREMENT line, `FORK:8aa171f30:workplans/valoria_master_workplan_v12_part14.md`]` |
 
      Done by a scratch script (not committed) over `engine/season/requirements.yaml`: for each conjunct of the table whose `argv` equals the capped form, write the source form; a conjunct whose `argv` equals neither (a later item re-pointed it) is left and named in the commit body; `assert replaced + left == 11` (CLAUDE.md §0.1 pt 2). R-05's `measure:` string (`corpus_run --seasons 2`, B02.34) is not a conjunct and is left (step 5: `measure:` untouched). Every other `argv` already reads at its source's horizon (`aperture 1 s` of R-04.c4 and R-07.c, `aperture 2 s` of R-04.c5 (i), the pytest `argv`s) and is not edited.
   1. **The base.** B98's closing SHA, `git rev-parse HEAD`, recorded. The before-readings: `register --requirements` and `m1_acceptance --summary` as B98.99's body quotes them (`reading @<B98 sha>`), not re-taken.

@@ -270,6 +270,11 @@ class Requirement:
         verb name (`decision/options.py::opening_set` is the reader)."""
         return ()
 
+    def command_operands(self) -> tuple:
+        """The operands a clause of form `basis` asks under the `command` rule (whom the seat may order), and `()` for every
+        other clause. Walks the TYPED FORM, so `VerbRow.commanded_operand` (B21.55, `operand_bags`' reader) never keys on a verb name."""
+        return ()
+
     def entity_operands(self) -> tuple:
         """The operand naming THE THING THE REQUIREMENT IS ABOUT -- what a Candidate's `subject`
         can bind, and nothing else. A Candidate is `(verb, subject, why)` and carries exactly one
@@ -508,7 +513,9 @@ class Basis(Requirement):
     `basis:` NAMES WHICH SEAT RULE IS ASKED, and the rule is the WRITE GATE'S OWN, never a copy
     (`state/gate.py` -- `_req_confer`/`may_fill`'s one-owner shape): `purview` is ruling (4),
     `purview_reaches` over the subject's place (`04:330`'s *"purview is asked of the seat exercised,
-    never the actor"*); `bench` is `may_determine`, the `determination` basis's own predicate. Each is
+    never the actor"*); `bench` is `may_determine`, the `determination` basis's own predicate.
+    `command` (B21.20, A-22) is `world_q.commands`: whom the seat may order (the sworn, the holder of a seat it may
+    revoke, an unseated person in its land), which is not the purview of the person's place. Each is
     a `REQUIRES_STEMS` member, so a misspelt rule refuses at load rather than reading UNKNOWN forever.
 
     ⚠ OCCUPANCY IS ELIGIBILITY'S, NOT THIS FORM'S -- except where the gate's own predicate asks it.
@@ -528,6 +535,9 @@ class Basis(Requirement):
 
     def operands(self) -> tuple:
         return (self.of,)
+
+    def command_operands(self) -> tuple:
+        return (self.of,) if self.basis == "command" else ()
 
     def entity_operands(self) -> tuple:
         return (self.of,)
@@ -562,6 +572,9 @@ class AllOf(Requirement):
 
     def own_ledger_operands(self) -> tuple:
         return tuple(dict.fromkeys(o for c in self.clauses for o in c.own_ledger_operands()))
+
+    def command_operands(self) -> tuple:
+        return tuple(dict.fromkeys(o for c in self.clauses for o in c.command_operands()))
 
     def needs(self) -> frozenset:
         return frozenset().union(*(c.needs() for c in self.clauses)) if self.clauses else frozenset()
@@ -658,6 +671,9 @@ class TypedRequires:
 
     def own_ledger_operands(self) -> tuple:
         return self.requirement.own_ledger_operands()
+
+    def command_operands(self) -> tuple:
+        return self.requirement.command_operands()
 
     def needs(self) -> frozenset:
         return self.requirement.needs()
@@ -830,11 +846,17 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # lapsed writ is answered by no `comply`. `WorldReader.read` answers it; WORLD-ONLY (below), for `with`'s reason: which
 # stages have ripened changes with MATTER, so a witness's ledger must not hold a `stage_open:<actor>` reading.
 # The relation's second argument (the actor) is not read. One stem; no form, no operand.
+# ⚠ B21.63 (`16_PESSIMIST_FA_B` edit 3): `admitted`: `relation` (form 5) asked of a PROPOSITION and the actor -- *may the actor's `commit` to
+# it stand as a joining* (`queries/world_q.py::admitted_to`, the one owner): true for any Proposition that is no rostered faction's, for a
+# faction nobody belongs to yet, for one the actor already belongs to, or where an admission stands (a member who may admit has `commit`ted to
+# an `OUGHT` naming the actor and the faction) and no incompatible faction holds him. `commit`'s second conjunct. WORLD-ONLY (below), `names`'
+# reason: who may admit and who belongs where is the world's to decide NOW, and a CELL stem would deposit an `admitted:<actor>` reading into every
+# witness's ledger from each refused `commit`. The person forms the Candidate and the fold refuses it (`commitment.refused`). One stem; no form.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience", "room",
-    "individual", "names", "dispute", "declared.votes", "declared.quorum", "stage_open",
+    "claim.held", "rank", "purview", "command", "bench", "bench.size", "quorum", "with", "audience", "room",
+    "individual", "names", "dispute", "declared.votes", "declared.quorum", "stage_open", "admitted",
 }) | OWN_STATE_STEMS
 
 # THE STEMS A `relation` CELL SPELLS `<stem>:<operand>` (v10 PC-10b): asked of `of` and the named operand,
@@ -866,10 +888,15 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # `record` would then pair those readings as cells. What a document says reaches a person by the content
 # deposit to its HOLDER (`loop/witness.py`), not by watching somebody else's refusal. The person forms the
 # Candidate (UNKNOWN never contradicts) and the fold refuses a Record that does not name the pair.
+# ⚠ B21.20 (`16_PESSIMIST_FA_C` edit 2, A-22): `command` is `Basis`'s third seat rule, `purview`'s dispatch -- the
+# argument is the seat (`command:<via>`), answered by `world_q.commands`. WORLD-ONLY for `audience`'s reason: who is
+# sworn to whom, and who holds what seat, NOW is the world's to decide, so a refused `issue` deposits no stale
+# `command:<via>` reading that would stop a later oath from being formed on. The person forms the Candidate and the
+# fold refuses it (`issue.refused` on `authority`; `issue.unauthorized` until B21.56). One stem; no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
 WITH_STEM = "with"      # where another person is NOW; named once here for its two readers (`data/verbs.py::VerbRow.with_operands`, `loop/witness.py`'s absence deposit, B11.83)
 WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dispute",
-                              "declared.votes", "declared.quorum", "stage_open"}) | SENSITIVITY_STEMS
+                              "declared.votes", "declared.quorum", "stage_open", "command", "admitted"}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`queries/person_q.py::record`).

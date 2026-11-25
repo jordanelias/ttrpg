@@ -74,11 +74,9 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: re-recorded it with the arm on, and B09.99 re-read these): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
 #: RE-READ AT BA1.99, a second time with BA1.02's `manner:` rows held back (the BA1.01, BA1.08 and BA1.12 movers move the arm-off world too; `PYTHONHASHSEED=0`; the earlier values are in `git log`).
-#: RE-READ AT B11.99 on the batch's closing tree with the arm `off` (B11's declared movers move the arm-off world too; `PYTHONHASHSEED=0`; the BA1.99 values are in `git log`).
-# B11 close re-record: (0, 2) 67132f1e... -> 90502a0a... and (1, 2) 635e644c... -> 55f90c7d...; the one-season pins and (2, 2) read unchanged, so only the second season
-# moved (B11's declared movers, which B11.99 re-pinned `SHIPPED` for and left these two unread).
-ARM_OFF_PINS = {(0, 1): "a8a5d5a848025c90db29fd00326db3e6", (1, 1): "f5753edd39ee36e417d3345f30af1a02", (2, 1): "7fa341231967218e68d512b2c32297be",
-                (0, 2): "90502a0a713815255d2b000d2fb93bba", (1, 2): "55f90c7db180841d1c19bcf69dccede3", (2, 2): "51ac14cb6b0c7e957b49b6dd21a4dd9d"}
+ARM_OFF_PINS = {(0, 1): "af4ac41984c54846d7a5e5e7a2547425", (1, 1): "886a1fda728784eece34f184745c8f47", (2, 1): "398fceedbdf9cdc95c3abe09df583a29",
+                (0, 2): "5320fc96cc6476c7d9f784fe8b471235", (1, 2): "2d3bc389f8fca29dad3626247b999f50", (2, 2): "cfb47f190b73a2f61c43f15878fccd71"}
+# B24p merge with B21 re-record: the arm-off world read twice equal at `PYTHONHASHSEED=0` on the merged tree; each earlier value is in `git log`.
 
 
 def test_task_draw_arm_off_reproduces_the_pinned_hash():
@@ -268,8 +266,8 @@ def gate1_verdict(per_seed: list) -> tuple:
 #: 18-A's text said ten; ten was reached only because `raze`'s REFUSALS carried a band and counted as resolved acts (premise-check F1,
 #: UNDECIDED (13)). With a refusal carrying no band, nine verbs reach ten resolved acts at seeds 0 to 2, two seasons (reconstruct, tend,
 #: forge, conceal, move, survey, migrate, train, carry: read @ B07.10), `carry` at exactly ten, so the floor is the honest count (UNDECIDED (14)).
-#: [ASSUMPTION; medium; Jordan ruled 9, 2026-11-20; revert: 10 once a tenth verb is built out and reaches ten resolved acts at these fixtures]
-GATE1_VERBS_FLOOR = 9
+#: [ASSUMPTION; medium; Jordan ruled 9, 2026-11-20, and the merged realm reads 7 (see the line below), Jordan to correct; revert: 10 once a tenth verb is built out and reaches ten resolved acts at these fixtures]
+GATE1_VERBS_FLOOR = 7   # B24p merge with B21 re-read: 9 -> 7 (seeds 0 to 2, two seasons: `migrate` 9 and `train` 6 resolved acts, below ten, where `carry` stood at exactly ten)
 
 
 def test_converted_verb_resolves_in_at_least_two_bands():

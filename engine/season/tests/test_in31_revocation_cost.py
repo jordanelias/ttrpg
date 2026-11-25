@@ -35,10 +35,12 @@ from engine.season.state.carriers import Act, Tenure
 from engine.season.state.gate import (
     DETERMINATION, NO_CHANGE, T_O, NotYours, may_determine, may_revoke)
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in10b_termed_seat import _seasons
 
 KING, VIA, DUKE, TARGET = "p_king", "off_crown", "p_high", "off_duke"
+pytestmark = pytest.mark.usefixtures("seat_at_success")   # B21.14: the ruled disposal at O/S is the fold's; the draw is C3's test
 
 
 def _edges(w) -> set:
@@ -101,7 +103,7 @@ def test_in31_an_unreadable_provenance_refuses_and_the_control_is_revoked():
     assert not _preds._req_revoke(w, act)
     assert EFFECTS["revoke"](w, act) is NO_CHANGE, "the effect's own backstop defaulted to a cost"
     kinds, opened = _fold(w, d, act)
-    assert kinds == ["revoke.refused"] and opened == set(), (kinds, opened)
+    assert kinds == ["revoke.no_disposal"] and opened == set(), (kinds, opened)      # B21.82: the `disposal` clause's kind
     assert _hold(w, TARGET) is not None and not restrained(w, DUKE, BAN_KIND)
     w.offices[TARGET].conferral = "appointed"                      # CONTROL
     kinds, opened = _fold(w, d, _revoke("rv_ok"))
@@ -223,12 +225,20 @@ def test_in31_a_self_revocation_closes_under_t_m_and_bans_nobody():
 
 
 def test_in31_a_man_already_banned_is_not_banned_twice():
+    """B21 close (B21.02's scoping at the revocation's own ban): "already banned" is asked within the revoking seat's reach
+    (`restrained(..., at=<via's rung>)`, as the other three readers ask it). A prior ban from a seat that reaches the crown's rung (the
+    crown's own) suppresses the new one; a prior ban from a seat whose reach misses it (`off_mayor`, no seat of this world, reaches
+    nothing) does not -- the crown's ban still opens (it read the unscoped answer and opened none before)."""
     w, d = _gov("appointed")
-    w.add_tenure(Tenure("t_prior_ban", DUKE, "off_mayor", BAN_KIND, 0))
+    w.add_tenure(Tenure("t_prior_ban", DUKE, VIA, BAN_KIND, 0))
     kinds, opened = _fold(w, d, _revoke("rv_twice"))
     assert kinds == ["tenure.closed"] and opened == set(), (kinds, opened)
     assert _hold(w, TARGET) is None
     assert sum(1 for t in w.tenures if t.kind == BAN_KIND and t.subject == DUKE and t.live) == 1
+    w, d = _gov("appointed")
+    w.add_tenure(Tenure("t_prior_ban", DUKE, "off_mayor", BAN_KIND, 0))
+    kinds, opened = _fold(w, d, _revoke("rv_out_of_reach"))
+    assert kinds == ["tenure.closed"] and opened == {(BAN_KIND, DUKE, VIA)}, (kinds, opened)
 
 
 # 9 -- NOT A REVOCATION, NO COST -------------------------------------------------------------------------
@@ -252,8 +262,9 @@ def test_in31_a_release_a_displacing_confer_and_a_matured_term_cost_nothing():
 def test_in31_ban_is_opened_by_determine_and_revoke_and_kind_verb_is_unmoved():
     assert set(V._derive_openers_from_effects()[BAN_KIND]) == {"determine", "revoke"}
     assert V.KIND_VERB.get("tenure.opened") == "confer", "a second `tenure.opened` emitter unpriced confer"
-    assert V.VERB_TABLE["revoke"].emits == ("tenure.closed",)
-    assert V.VERB_TABLE["revoke"].writes == ("Tenure.until", "Tenure.since")
+    # B21.14: `revoke` is drawn -- its emits and writes are degree-keyed; at the ruled O/S bands they are what they were
+    assert all(V.VERB_TABLE["revoke"].emits_at(b) == ("tenure.closed",) for b in ("Overwhelming", "Success"))
+    assert all(V.VERB_TABLE["revoke"].writes_at(b) == ("Tenure.until", "Tenure.since", "Tenure.payload") for b in ("Overwhelming", "Success"))   # B21.69: + the `keeps` re-stamp
 
 
 # 11 -- THE EXIT, ON THE BUILT REALM ---------------------------------------------------------------------
@@ -297,7 +308,7 @@ def test_in31_the_exit_on_the_built_realm(monkeypatch):
     assert len({frozenset(o) for _, o in out.values()}) > 1, "one outcome whatever the provenance"
     # CONTROL 1: without the placement, the dukes are not revocable at all.
     _, bare = _exit_run(place=False)
-    assert bare[_VARFELL][0] == ["revoke.refused"] and bare[_HAFEN][0] == ["revoke.refused"], bare
+    assert bare[_VARFELL][0] == ["revoke.unauthorized"] and bare[_HAFEN][0] == ["revoke.unauthorized"], bare      # B21.82: the `authority` clause's kind
     # CONTROL 2, THE PLAN'S FALSIFIER OBSERVED LIVE: the mapping's one cost removed, in place.
     monkeypatch.setitem(G.REVOCATION_DISPOSAL, "appointed", None)
     w2, flat = _exit_run()

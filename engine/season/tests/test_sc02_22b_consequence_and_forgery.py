@@ -317,7 +317,7 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
 
 def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_subject(monkeypatch):
     """The adapter's gate, `examined = subject if prize is None else None`: an inquiry (no prize) hands the
-    Record to the input builder, a contest a prize names hands it nothing, so a `speak` on the same
+    Record to the input builder, a contest a prize names hands it nothing, so a `determine` (B24p.99: `speak` proceeds) on the same
     Record reads no forgery quality. Observed through a spy on `_read_social_roll`'s `examined` (the
     gate is a branch in `resolve`, and the builder's own default is not it)."""
     w, _d, rid = trail_world(fixtures=_fx(obstacle_ceiling=None))
@@ -328,7 +328,7 @@ def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_sub
         seen.append(kw.get("examined"))
         return real(*args, **kw)
     monkeypatch.setattr(sigma, "_read_social_roll", spy)
-    sigma.resolve(w, [INVESTIGATOR], ["root"], "a matter", verb="speak", subject=rid,
+    sigma.resolve(w, [INVESTIGATOR], ["root"], "a proposition", verb="determine", subject=rid,
                   rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)), rung=None)
     sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
                   rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)))

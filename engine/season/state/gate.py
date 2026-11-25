@@ -29,16 +29,16 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.requires import Observation
 from ..data.rosters import (
-    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES, SEAT_ROW_BY_ID,
-    PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
+    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
+    SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
-from .carriers import Office, Receipt, Tenure
+from .carriers import Office, Receipt, Tenure, in_custody
 # ⚠ NO `World` IMPORT, NOT EVEN UNDER `TYPE_CHECKING`: `world` imports this module, and the tree's
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
 # its type as a string only.
-from .containment import ancestry, descendants, edges_of, home_of, parent_of
+from .containment import ancestry, descendants, edges_of, home_of, lives_in, parent_of
 
 
 @dataclass(frozen=True)
@@ -228,9 +228,8 @@ DISPOSABLE_KINDS = frozenset(
 WARRANT = "warrant"
 # [ASSUMPTION; medium; Jordan to correct; revert: name another remit act here, or drop the grant
 # conjunct from `may_warrant`]: `dispatch` is the act whose grant licenses a warrant. K-52 names it,
-# but `dispatch` is a remit act whose per-post status is J-8's, UNRULED (`engine/season/offices.yaml`
-# `meta: remit_unruled`) -- so which posts carry the grant, and whether it is a remit act at all, is
-# Jordan's to rule, and this basis moves with the ruling.
+# and a seat holds a remit act iff its row names it (`engine/season/offices.yaml`), so the posts that
+# carry the grant are the rows that name `dispatch`, and this basis moves with those rows.
 WARRANT_ACT = "dispatch"
 # `seizure` (v9 IN-12 step 6, #453 §10.4 step 6, `seize`'s Record half; v9 IN-13 the Rung
 # half) -- the PURE CLOSURE of another person's live `hold` on a RECORD or a RUNG, by a seated
@@ -261,9 +260,9 @@ SEIZURE_ACT = "issue"
 # own legs are `T-m`.
 MUSTER = "muster"
 # The remit act whose grant licenses a muster: `march`'s own eligibility, `remit:dispatch`, and the
-# act `may_warrant` reads (`WARRANT_ACT`). ⚠ J-8 (whether `dispatch` is a remit act at all,
-# `engine/season/offices.yaml` `meta: remit_unruled`) gates this basis as it gates `warrant`; it moves
-# with the ruling. One owner of the string: it IS `WARRANT_ACT`'s value, re-named for its second reader.
+# act `may_warrant` reads (`WARRANT_ACT`). A seat holds a remit act iff its row names it
+# (`engine/season/offices.yaml`), so the rows that name `dispatch` gate this basis as they gate
+# `warrant`. One owner of the string: it IS `WARRANT_ACT`'s value, re-named for its second reader.
 # ⚠ THE VALUE IT MUST EQUAL IS `verb_table.yaml`'s `march` eligibility (`remit:dispatch`), which the
 # fold admits the act on. Re-pointing `WARRANT_ACT` without re-pointing this line leaves `_fold`
 # admitting the march while `_not_yet_under`'s `may_muster` filter drops every non-actor claimant:
@@ -315,9 +314,18 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
 def _seat_grants(w: "World", actor: Optional[str], via: Optional[str], act: str) -> bool:
     """`actor` SITS in `via` (`seat_hold`) AND the hold's GRANT snapshot (`Tenure.granted_acts`, `13e` --
     never the office's live field) carries `act`: the first two conjuncts every remit-act basis
-    (`may_determine`, `may_warrant`, `may_seize`, `may_muster`) opens with."""
+    (`may_determine`, `may_warrant`, `may_seize`, `may_muster`, `may_cede`) opens with -- AND `actor` is
+    not in custody (B21.11, A-23: a holder detained acts through no seat; *custody suspends, it does
+    not vacate*, so `seat_hold` is untouched and the `hold` stays live for the day he is pardoned).
+    The custody read is `carriers.in_custody`, the live `detain` the actor owns (`world_q.restrained(w, actor,
+    DETAIN_KIND)` answers for a Query, over every Tenure including an unowned one; `state/` may not import a Query,
+    `04` §A.2). Its mirror on the person side is `decision/options.py::seat_of`, so a candidate is not formed on a
+    seat this refuses."""
     t = seat_hold(w, actor, via)
-    return t is not None and act in t.granted_acts
+    if t is None or act not in t.granted_acts:
+        return False
+    holder = w.persons.get(actor)
+    return holder is None or not in_custody(holder.tenures)
 
 
 def seat_faction(w: "World", via: Optional[str]) -> Optional[str]:
@@ -421,6 +429,12 @@ def sworn_to(w: "World", seat_id: Optional[str]) -> list:
     if seat_id is None:
         return []
     return [t for t in w.tenures if t.kind == "oblige" and t.object == seat_id and t.live]
+
+
+def is_sworn_to(w: "World", person: Optional[str], seat_id: Optional[str]) -> bool:
+    """Does `person` own a live `oblige` to the seat -- one of `sworn_to`'s edges? The one spelling of that membership test, asked by
+    `may_muster` and `commands_a_seated`."""
+    return any(t.subject == person and not t.imposed for t in sworn_to(w, seat_id))     # an IMPOSED oblige (a sentence) is no oath
 
 
 def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:
@@ -657,11 +671,12 @@ def has_filler(off: Office) -> bool:
 
 def check_successions() -> None:
     """REFUSED AT IMPORT: `rosters.yaml: successions` against `offices.yaml` and `FILLED_BY`. A key or a
-    value that is no `offices.yaml` row names a seat that cannot exist; a key whose row's basis the claim
+    title (every member of a value's tuple) that is no `offices.yaml` row names a seat that cannot exist, and an
+    empty tuple names no claimant (B21.16); a key whose row's basis the claim
     does not open (`FILLED_BY`) is a title that passes nothing; and a row whose basis ONLY the claim opens,
     with no key, is a seat nobody can ever fill. Callable again so a test can observe it refuse."""
     rows = SEAT_ROW_BY_ID
-    bad = sorted(f"{k}: {v}" for k, v in SUCCESSIONS.items() if k not in rows or v not in rows)
+    bad = sorted(f"{k}: {v}" for k, v in SUCCESSIONS.items() if k not in rows or not v or any(t not in rows for t in v))
     bad += sorted(f"{k} (conferral {rows[k].get('conferral')!r}): the claim does not open it"
                   for k in SUCCESSIONS if k in rows
                   and CLAIM not in FILLED_BY.get(rows[k].get("conferral"), ()))
@@ -681,30 +696,64 @@ check_successions()
 
 def may_claim(w: "World", actor: Optional[str], off: Office, titles,
               besides: Optional[Tenure] = None) -> bool:
-    """THE CLAIM, AS ONE PREDICATE (v10 IN-61, RS-27): may `actor` take `off` by the claim of its title?
+    """THE CLAIM, AS ONE PREDICATE (v10 IN-61, RS-27): may `actor` take `off` by the claim of a title?
 
-    Three conjuncts: `off`'s conferral basis is opened by the claim (`FILLED_BY`); `off`'s `successions`
-    title is among `titles` -- the seats the CALLER says the actor holds the title by; and `off` has no
+    Three conjuncts: `off`'s conferral basis is opened by the claim (`FILLED_BY`); one of `off`'s `successions`
+    titles (B21.16: a list is eligibility) is among `titles` -- the seats the CALLER says the actor holds the title by; and `off` has no
     live `hold` but `besides`. Two readers, `may_fill`'s shape: `_req_succeed` asks it BEFORE the write
     with the actor's live seat-holds and `besides=None`; the gate asks it AFTER the write -- which closed
     the title in the same act -- with `released` (the objects of the `hold`s this actor ended under `T-m`
     in this write) and `besides` the opened edge itself. So the vacancy and the title are asked once, here,
     and the precondition and the gate cannot disagree. ⚠ "First valid claim wins" is this conjunct: the
     first claim opens the seat, and every later one meets a live `hold`."""
-    title = SUCCESSIONS.get(off.id)
-    if actor is None or title is None or title not in titles or CLAIM not in filled_by(off):
+    listed = SUCCESSIONS.get(off.id)
+    if actor is None or not listed or not any(t in titles for t in listed) or CLAIM not in filled_by(off):
         return False
     return not any(t is not besides and t.kind == "hold" and t.object == off.id and t.live
                    for t in w.tenures)
 
 
-def claimable_seats(w: "World", actor: Optional[str], title: str) -> tuple:
-    """Every seat `actor` may take by the claim of `title` (`may_claim`, so vacancy and basis are asked
+def may_sit(w: "World", person_id: Optional[str]) -> bool:
+    """MAY `person_id` HOLD A SEAT AT ALL? (B21.60, `16_PESSIMIST_FA_B` edit 1, A-19, A-58.) A seat is held by an individual: the
+    person exists and `not Person.is_cohort` (S9, a population is a person at `weight > 1`, and a population is no officeholder).
+    ONE BODY, FOUR READERS: `tenure_write_basis`'s `conferral` and `claim` clauses ask it of the subject of the opened seat-`hold`,
+    and `loop/predicates.py::_req_confer` (of `to`) and `_req_succeed` (of the actor) ask it through the same name, so the fold
+    refuses (`confer.refused`, `succession.refused`) where the gate would raise. The person-side counterparty fan
+    (`decision/options.py`) cannot ask it: AX-2 gives `decision/` no `World`, and a cohort's weight is the world's to say, so
+    a Candidate on a cohort forms and the fold refuses it. A seat-eligibility rule of a later item composes on this: it is its
+    first conjunct, never a second predicate."""
+    p = w.persons.get(person_id) if person_id else None
+    return p is not None and not p.is_cohort
+
+
+def across_chains(w: "World", via: Optional[str], seat: Optional[str]) -> bool:
+    """ARE THE SEAT EXERCISED AND THE SEAT NAMED OF DIFFERENT CHAINS OF SEATS? (B21.61, `16_PESSIMIST_FA_B` edit 2, A-105.) Both are
+    seats the world holds and their `Office.faction` (the resolved faction) differ; False where either is no seat (an act exercised
+    through none, or naming none). ONE BODY, TWO READERS: `loop/predicates.py::_req_confer` refuses a conferrer seating himself across
+    chains, and the roll's `cross_chain` term (`seam/wrappers/sigma.py::_cross_chain_term`, `rosters.yaml: obstacle_terms`) prices any other
+    act across them."""
+    if via is None or seat is None:      # an act exercised through no seat, or naming none, crosses no chain (and reads no office table)
+        return False
+    a, b = w.offices.get(via), w.offices.get(seat)
+    return a is not None and b is not None and a.faction != b.faction
+
+
+def passes_a_seat(off: Office) -> bool:
+    """IS `off` A TITLE THAT EXISTS ONLY TO PASS A SEAT? (B21.16, HAPPENINGS-B edit 3.) `conferral: appointed` and an empty remit:
+    `off_heir`, the Princess, the consort once her standing grant is gone. A claim lays down such a title it claims by -- it was
+    the claimant's licence and has no use beside the seat -- and keeps any other: a duke who takes the throne keeps his duchy,
+    a consort whose seat still carries a grant keeps hers. `_eff_succeed` closes by it and `tenure_write_basis` counts a title
+    the claim did not close as licence by it, so the two cannot disagree."""
+    return off.conferral == "appointed" and not off.remit_acts
+
+
+def claimable_seats(w: "World", actor: Optional[str], titles) -> tuple:
+    """Every seat `actor` may take by the claim of a title in `titles` (`may_claim`, so vacancy and basis are asked
     once), sorted -- what ONE claim opens (v10 IN-61's one-act write, *"opens every vacant seat whose
-    `successions` value is the claimant's title, then closes that title"*). The seat the act names is in
-    the set whenever `_req_succeed` admitted it. The caller says the actor holds `title`."""
-    return tuple(sorted(s for s, ti in SUCCESSIONS.items()
-                        if ti == title and s in w.offices and may_claim(w, actor, w.offices[s], {title})))
+    `successions` titles include the claimant's, then closes that title"*). The seat the act names is in
+    the set whenever `_req_succeed` admitted it. The caller says the actor holds `titles`."""
+    held = set(titles)
+    return tuple(sorted(s for s in SUCCESSIONS if s in w.offices and may_claim(w, actor, w.offices[s], held)))
 
 
 def has_revocation_disposal(off: Office) -> bool:
@@ -950,7 +999,10 @@ def may_muster(w: "World", actor: Optional[str], via: Optional[str],
       3. `subject` holds a LIVE `commit` to the seat's FACTION Proposition -- K-52's faction conjunct,
          a Tenure the gate observes. The seat's display faction is turned into its Proposition id by
          `data/rosters.py::faction_prop_id`, the one owner of that relation (`loop/sides.py` musters
-         the army through the same id).
+         the army through the same id) -- OR (B21.57, CP-T09-07 (b)) a LIVE `oblige` to `via` itself
+         (`sworn_to`, the walk `purview_reaches` and `establishment_of` read): a vassal's oath is the tie, so an
+         obligee who belongs to no faction of the seat's is as mustered as a member is. A seat with no faction
+         still has its sworn.
     PLUS ONE THE ROW DOES NOT LIST: `subject` is a PERSON other than the actor (the marcher's own legs
     are `T-m`'s). ⚠ WHAT IT DOES NOT DECIDE: where the army goes and whether the field allowed it to
     arrive -- the effect's (`_eff_march`); and whether a mustered person may refuse -- `sides_of`'s,
@@ -960,9 +1012,83 @@ def may_muster(w: "World", actor: Optional[str], via: Optional[str],
     if subject is None or subject == actor or subject not in w.persons:
         return False
     fac = seat_faction(w, via)
-    if fac is None:
+    if fac is not None and _committed_to(w, subject, fac):
+        return True
+    return is_sworn_to(w, subject, via)
+
+
+def may_wage(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
+    """DOES `person` HOLD A SEAT OF `faction` WHOSE GRANT CARRIES `MUSTER_ACT`? (B21.58, `06_FA_war_lives_in_seats_B`
+    edit 1; A-20.) `faction` is the Proposition id; `seat_faction` is the one owner of seat -> faction id. A war lives in
+    the seats that wage it: `world_q.at_war` asks this of the subject of each live `commit` to a WAR Proposition, so a
+    commit by a man who sits in no such seat (an unseated member, a treasurer, a holder detained by `_seat_grants`'s
+    custody clause) keeps no war alive. It adds no rule: both conjuncts are `may_muster`'s first two, and the faction
+    read is `seat_faction`'s. `False` for a missing person or faction, or a person with no live `hold`."""
+    if not person or not faction or person not in w.persons:
         return False
-    return _committed_to(w, subject, fac)
+    return any(_seat_grants(w, person, t.object, MUSTER_ACT) and seat_faction(w, t.object) == faction
+               for t in w.persons[person].tenures if t.kind == "hold" and t.live)
+
+
+# The remit act whose grant makes a seat one that ADMITS a joiner into its faction (B21.63, `16_PESSIMIST_FA_B` edit 3): `confer`, the act
+# that names a person to a seat -- admitting a man is the faction's own naming of him. One owner of the string, read by `may_admit` alone.
+ADMIT_ACT = "confer"
+
+
+def may_admit(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
+    """MAY `person` ADMIT A JOINER INTO `faction`? (B21.63, `16_PESSIMIST_FA_B` edit 3, G3.) `faction` is the Proposition id. Joining is an
+    offer the faction's side answers, so the answer is a member's whose seat answers for it: he holds a live `hold` (not in custody) on
+    EITHER the faction's `head_seat` (HEAD_SEAT: its holder need be no member, the Confessor's vacant-and-refilled Church is still the Church's
+    to admit into) OR a seat of the faction (`seat_faction`) whose grant carries `ADMIT_ACT` while he is a LIVE MEMBER of it (`_committed_to`).
+    WHERE THE FACTION HAS NO SUCH SEAT AT ALL -- no authored head seat and no seat of it whose row grants `ADMIT_ACT` (the Guilds, Schoenland,
+    Altonia, an unrostered party) -- ANY live member admits. A faction that has such a seat and nobody sitting in it admits nobody. `False`
+    for a missing person or a faction the roster does not name. Reads Tenures and offices only (`state/` may not import a Query)."""
+    name = FACTION_BY_PROP.get(faction) if faction else None
+    if name is None or person not in w.persons or in_custody(w.persons[person].tenures):
+        return False
+    head = HEAD_SEAT.get(name)
+    if head is not None and seat_hold(w, person, head) is not None:
+        return True
+    # Which seats of the faction ADMIT is the AUTHORED row's (`offices.yaml`'s `remit_acts`), never the `Office` attribute (position `13e`:
+    # a grant is read off the holder's own `Tenure.granted_acts`, below, and nothing else reads the live field).
+    admitting = [oid for oid in w.offices if seat_faction(w, oid) == faction and ADMIT_ACT in (SEAT_ROW_BY_ID.get(oid) or {}).get("remit_acts", ())]
+    if not _committed_to(w, person, faction):
+        return False
+    if head is None and not admitting:
+        return True
+    return any(_seat_grants(w, person, oid, ADMIT_ACT) for oid in admitting)
+
+
+def commands_a_seated(w: "World", actor: Optional[str], via: Optional[str], person: Optional[str]) -> bool:
+    """DOES `via` COMMAND `person` BY THE FIRST TWO OF A-22's CLASSES (B21.59)? (i) he is SWORN to the seat (a live `oblige`,
+    `sworn_to`), wherever he lives; (ii) he holds a seat OTHER than `via` that `actor`, exercising `via`, may revoke
+    (`may_revoke`), so whom a seat may order and whom it may dismiss are one relation. The third class, an unseated person in
+    its land, is `world_q.commands`' own (it reads where he stands). ONE BODY, TWO READERS: `world_q.commands` composes on it
+    and `may_levy` asks it of a SEATED cohort (the A-22 arm), so neither keeps a second copy of the two disjuncts."""
+    if person is None or via not in w.offices or person not in w.persons:
+        return False
+    if is_sworn_to(w, person, via):
+        return True
+    return any(may_revoke(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
+
+
+def may_levy(w: "World", actor: Optional[str], via: Optional[str], cohort: Optional[str], faction: Optional[str]) -> bool:
+    """MAY `actor`, EXERCISING `via`, PUT `cohort`'s PEOPLE UNDER ARMS FOR `faction`'S ARMY? (B21.59, `06_FA_levy_through_the_seat_B`
+    edit 1; A-22.) `faction` is the Proposition id. `may_muster`'s shape: `_seat_grants` (he sits in `via`, the grant carries
+    `MUSTER_ACT`, he is not in custody); `seat_faction(via) == faction`; `purview_reaches(via's seat, the rung the cohort LIVES
+    in)` (`lives_in`, his own `reside` edge). A-22: the basis is command over the unseated on the seat's ground, so a cohort that
+    holds a seat is levied through `via` only if the seat commands him (`commands_a_seated`: sworn to it, or a holder of a seat it
+    may revoke) -- living on its ground is not enough.
+
+    ⚠ NOT HERE: the entry's fifth conjunct, `world_q.raisable_by` (the faction governs where the cohort lives, or the cohort is
+    committed to it) -- a Query, which `state/` may not import (`04` §A.2). `_eff_recruit` and `harness/military_menu.py::
+    cohorts_raisable` ask it beside this, the one owner of that rule. `False` for a cohort that is no person."""
+    if not faction or seat_faction(w, via) != faction or not _seat_grants(w, actor, via, MUSTER_ACT):
+        return False
+    p = w.persons.get(cohort) if cohort else None
+    if p is None or not purview_reaches(w, w.offices[via], lives_in(p)):
+        return False
+    return not w.seat_holds(cohort) or commands_a_seated(w, actor, via, cohort)
 
 
 def _committed_to(w: "World", person: Optional[str], fac: str) -> bool:
@@ -1092,7 +1218,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   The one basis an ACTORLESS write can meet (S15.3's causation rule), which is how
                   MATTER's death reaches it.
       `T-o`       a CLOSURE of a `hold` on a SEAT, by `may_revoke` -- `via` present, the actor
-                  seated in it, and the seat's revocation basis admitting it. AND (v9 IN-31,
+                  seated in it, and the seat's revocation basis admitting it -- or (B21.69) a re-stamp of
+                  its grant that drops an act (a partial revocation), by the same predicate. AND (v9 IN-31,
                   H-100) the revocation's COST: an OPENING of a `ban` whose OBJECT is `via` and
                   whose owner is in `revoked` -- the same write closed his `hold` under `T-o` on a
                   seat whose `REVOCATION_DISPOSAL` is `ban`. One ban per such closure, spent by
@@ -1105,9 +1232,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   seat could write the same ban by a `determine`, and a conjunct keyed on the
                   act's verb would widen this function's interface for one caller.
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
-                  alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
-                  seat confers on its holder, written by the authority that may fill the seat.
-                  Never on a seat whose `FILLED_BY` lacks it (v10 IN-61: an `inheritance` seat).
+                  alone that leaves out no act the grant carried, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
+                  seat confers on its holder, written by the authority that may fill the seat. A change that DROPS an act is a
+                  partial revocation (B21.69): `T-o`'s, by `may_revoke`, and `revoke`'s `keeps` writes it.
+                  Never on a seat whose `FILLED_BY` lacks it (v10 IN-61: an `inheritance` seat), and never for a
+                  subject that may not sit (`may_sit`, B21.60: a cohort).
       `claim`     an OPENING of the ACTOR'S OWN `hold` on a seat whose `FILLED_BY` names it, which
                   has no other live `hold`, and whose `successions` title is in `released` -- the
                   actor ended his own `hold` on that title under `T-m` in this same write (v10 IN-61,
@@ -1357,9 +1486,22 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # under `T-m` in this same write (`released`, `refuse_unauthored`'s first pass) -- so it is reached on
     # the second pass only, `handover`'s licence read for a seat. Not spent: one title opens every vacant
     # seat that names it (`claimable_seats`), and the seat's own vacancy (`besides=t`) bars a second.
-    if opened and owner == actor and may_claim(w, actor, seat, released, besides=t):
+    # B21.16: A TITLE THE CLAIM DOES NOT LAY DOWN (`passes_a_seat` false: a duke's duchy) licenses by being STILL HELD, so it is
+    # counted with the ones `released`; a title that exists to pass a seat licenses only by its closure in this write.
+    # B21.60: A SEAT IS HELD BY AN INDIVIDUAL -- `may_sit` of the subject of the opened seat-`hold`, on both openings (`claim`'s subject
+    # is the actor, `conferral`'s the conferee). An existing edge's payload re-grant (`establish`'s re-stamp) opens no seat-hold: unchanged.
+    if opened and owner == actor and may_sit(w, t.subject) and may_claim(
+            w, actor, seat, set(released) | {s.object for s in w.seat_holds(actor) if not passes_a_seat(w.offices[s.object])},
+            besides=t):
         return CLAIM
-    if (opened or moved == {"payload"}) and may_fill(w, actor, via, seat):
+    # B21.69 (`IS-B3-FA-07`, A-105): A REDUCTION OF A SITTING HOLDER'S GRANT IS A PARTIAL REVOCATION. A re-stamp of a live seat-`hold` that is
+    # nothing but its payload and leaves out an act the grant carried is the holder's seat cut short, so it is `T-o`'s -- `may_revoke`, the one
+    # predicate a whole strip asks -- and never `conferral`'s: the authority that may FILL a seat may widen a grant, and may not narrow one it
+    # could not revoke. The verdict is final here (`None` where `may_revoke` refuses), so the `conferral` return below is never reached for a cut.
+    if (not opened and t.live and moved == {"payload"}
+            and set(was.granted_acts) - set(t.granted_acts)):
+        return T_O if may_revoke(w, actor, via, seat) else None
+    if ((opened and may_sit(w, t.subject)) or moved == {"payload"}) and may_fill(w, actor, via, seat):
         return CONFERRAL
     return None
 

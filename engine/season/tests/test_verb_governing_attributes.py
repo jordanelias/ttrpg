@@ -53,7 +53,8 @@ def _exempt(row, prizes=PRIZES) -> bool:
 
 
 def _kinds_of(row, prizes=PRIZES) -> list:
-    return [k for k, held in (("a", bool(row.brute)), ("b", bool(row.governing)), ("c", _exempt(row, prizes))) if held]
+    """(a) brute, (b) governing, (c) an exempt prize, (d) proceeds (B24p.16: a verb that opens a proceeding)."""
+    return [k for k, held in (("a", bool(row.brute)), ("b", bool(row.governing)), ("c", _exempt(row, prizes)), ("d", bool(row.proceeds))) if held]
 
 
 def _check(rows=None, prizes=None):
@@ -65,10 +66,13 @@ def _check(rows=None, prizes=None):
 def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem():
     checked = 0
     for verb, row in VERB_TABLE.items():
-        assert len(_kinds_of(row)) == 1, (verb, _kinds_of(row))                # exactly one of (a), (b), (c)
-        if row.contests and PRIZES[row.contests].get("person_inputs") == "pool":
-            assert row.governing and not row.brute, verb                       # a pool-prize row takes (b)
+        kinds = _kinds_of(row)
+        assert len(kinds) == 1, (verb, kinds)                                  # exactly one of (a), (b), (c), (d) (B24p.19: the five rows' `governing` is gone)
+        if row.contests and PRIZES[row.contests].get("person_inputs") == "pool" and not row.proceeds:
+            assert row.governing and not row.brute, verb                       # a pool-prize row takes (b), or (d) where it proceeds
             assert row.opposed_attribute in descriptors.ATTRIBUTES, verb       # and names who resists it
+        if row.proceeds:
+            assert not row.governing and row.opposed_attribute is None, verb   # a verb that proceeds pools nothing and names no resisting trait
         if row.brute:
             assert row.brute in BRUTE_KINDS and row.brute_note.strip(), verb
         if row.governing:
@@ -76,8 +80,8 @@ def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem()
             assert set(row.governing) <= set(descriptors.ATTRIBUTES), verb
         checked += 1
     assert checked == len(VERB_TABLE) == 67, checked
-    kinds = [_kinds_of(r)[0] for r in VERB_TABLE.values()]
-    assert (kinds.count("a"), kinds.count("b"), kinds.count("c")) == (32, 31, 4), kinds   # B05.24's count of the interim cells
+    kinds = [k for r in VERB_TABLE.values() for k in _kinds_of(r)]
+    assert (kinds.count("a"), kinds.count("b"), kinds.count("c"), kinds.count("d")) == (27, 31, 4, 5), kinds   # the five that proceed pool nothing; B21.09 moved `establish` from (a) to (b) (it is drawn), B21.14 `confer`, `revoke`, `succeed`, B21.56 `issue`
     assert _check() is None                                                    # the shipped table passes the loader's own check
 
 
@@ -94,12 +98,12 @@ def test_a_brute_row_carrying_governing_or_a_difficulty_is_refused():
         _check({**VERB_TABLE, "give": dataclasses.replace(give, contests="a standing")})
     graded = {**GRADED_TASKS}
     assert "give" not in graded
-    with pytest.raises(Unspecified, match="issue"):                            # a `brute:` row carrying `opposed_attribute`
-        _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], opposed_attribute=ACUITY)})
+    with pytest.raises(Unspecified, match="covenant"):                         # a `brute:` row carrying `opposed_attribute` (B21.56: was `issue`, now drawn)
+        _check({**VERB_TABLE, "covenant": dataclasses.replace(VERB_TABLE["covenant"], opposed_attribute=ACUITY)})
 
 
 def test_a_brute_verb_twice_on_one_state_is_one_outcome_and_no_draw(monkeypatch):
-    """`confer`, `utter`, `transfer` and `dispatch`, hand-built, each resolved on two deep copies of one built world: the
+    """`convene` (B21.14: `confer` until it was drawn), `utter`, `transfer` and `dispatch`, hand-built, each resolved on two deep copies of one built world: the
     Event lists and `content_hash()` are equal, and no `roll:` stream is minted (the counter wraps `draw_factory`'s returned `draw`,
     the one stream every roll at `loop/resolve.py`'s two `"roll:..."` sites comes from) with `faculty` and `score` patched to raise.
     `engine/season/state/draw.py` does not exist; B06's keyed draw owner (`engine/dice_engine/draw.py`) re-points this counter."""
@@ -132,7 +136,8 @@ def test_a_brute_verb_twice_on_one_state_is_one_outcome_and_no_draw(monkeypatch)
     low_w = P.tiny_world()
     low = (low_w, SeasonDriver(low_w))
     cases = (
-        (gov, Act(id="b_confer", actor="p_high", verb="confer", payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke")),
+        # B21.14: `confer` is drawn (`contests: a seat`), so the seat-authorised brute case is `convene`
+        (gov, Act(id="b_convene", actor="p_high", verb="convene", payload={"subject": "S"}, via="off_duke")),
         (low, Act(id="b_utter", actor="p_low", verb="utter")),
         (low, Act(id="b_transfer", actor="p_low", verb="transfer", payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})),
         (gov, Act(id="b_dispatch", actor="p_high", verb="dispatch", via="off_duke", payload={"subject": "p_mid"})),
@@ -173,20 +178,20 @@ def test_a_rolled_act_does_mint_a_roll_stream_under_the_same_counter(monkeypatch
 
 
 def test_a_row_naming_none_is_refused_at_load():
-    for verb in ("give", "examine", "tell"):                                   # one row of each kind (a), (b), (b with an opposition)
+    for verb in ("give", "examine", "determine", "tell"):                      # one row of each kind (a), (b), (b with an opposition), (d)
         row = VERB_TABLE[verb]
-        bare = dataclasses.replace(row, brute=None, brute_note="", governing=(), opposed_attribute=None)
+        bare = dataclasses.replace(row, brute=None, brute_note="", governing=(), opposed_attribute=None, proceeds=())
         with pytest.raises(Unspecified, match=verb):
             _check({**VERB_TABLE, verb: bare})
     with pytest.raises(Unspecified, match="examine"):                           # more than one of (a), (b), (c)
         _check({**VERB_TABLE, "examine": dataclasses.replace(VERB_TABLE["examine"], brute="own", brute_note="x")})
     for bad in ((ACUITY, FOCUS, PERCEPTION, "attr.body.strength"), (ACUITY, ACUITY), ("attr.mind.nonesuch",)):
-        with pytest.raises(Unspecified, match="tell"):                          # four attributes, a repeat, a key outside the ten
-            _check({**VERB_TABLE, "tell": dataclasses.replace(VERB_TABLE["tell"], governing=bad)})
-    with pytest.raises(Unspecified, match="tell"):                              # contested against a person with no opposed attribute
-        _check({**VERB_TABLE, "tell": dataclasses.replace(VERB_TABLE["tell"], opposed_attribute=None)})
-    with pytest.raises(Unspecified, match="issue"):                             # `seat` where there is no `remit:` and no Office
-        _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], eligibility=("own",), referent_class="")})
+        with pytest.raises(Unspecified, match="determine"):                     # four attributes, a repeat, a key outside the ten
+            _check({**VERB_TABLE, "determine": dataclasses.replace(VERB_TABLE["determine"], governing=bad)})
+    with pytest.raises(Unspecified, match="determine"):                         # contested against a person with no opposed attribute
+        _check({**VERB_TABLE, "determine": dataclasses.replace(VERB_TABLE["determine"], opposed_attribute=None)})
+    with pytest.raises(Unspecified, match="covenant"):                          # `seat` where there is no `remit:` and no Office (B21.56: was `issue`)
+        _check({**VERB_TABLE, "covenant": dataclasses.replace(VERB_TABLE["covenant"], eligibility=("own",), referent_class="")})
     with pytest.raises(Unspecified, match="a standing"):                        # a prize row with no `person_inputs`, or another value
         _check(prizes={**PRIZES, "a standing": {k: v for k, v in PRIZES["a standing"].items() if k != "person_inputs"}})
     with pytest.raises(Unspecified, match="a standing"):
@@ -201,7 +206,7 @@ def test_a_verb_is_exempt_only_by_its_prize():
     assert _kinds_of(fight, planted) == []                                      # names nothing, and no longer exempt
     with pytest.raises(Unspecified, match="fight"):
         _check(prizes=planted)
-    with pytest.raises(Unspecified, match="tell"):                              # a pool-prize row cannot be exempt either
+    with pytest.raises(Unspecified, match="arrest"):                            # a pool-prize row cannot be exempt either
         _check(prizes={**PRIZES, "a standing": {**PRIZES["a standing"], "person_inputs": "own"}})
 
 
