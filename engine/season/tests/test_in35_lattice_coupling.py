@@ -91,11 +91,11 @@ def _band_order(territories) -> list:
     return sorted(territories, key=lambda t: (bands.get(t, 9), t))
 
 
-def _world(weight: int, menders_at: tuple = ()) -> World:
+def _world(weight: int, menders_at: tuple = (), seed: int = 1) -> World:
     # B07.99: the coupling is asked of the managed holder's `restore` EXECUTING every season; under `task_draw_arm` on a drawn restore fails
     # about two seasons in three (a failed draw mends nothing), so the world runs the flat fold, as the arm-off control does.
     fixtures = DEFAULT_FIXTURES.sweep("lattice_coupling", weight)
-    w = World(world_seed=1, fixtures=fixtures)
+    w = World(world_seed=seed, fixtures=fixtures)
     scale = fixtures.get("condition_scale")
     w.rungs["R"] = Rung("R", "realm")
     n = [0]
@@ -336,3 +336,143 @@ def test_the_wound_switch_mints_one_site_on_t15_and_off_is_byte_identical():
     assert [(s.kind, s.condition) for s in here] == [(row["kind"], row["condition"])]
     assert set(on.sites) - set(off.sites) == {here[0].id} and set(off.sites) <= set(on.sites)
     assert on.content_hash() != off.content_hash()
+
+
+# ======================================================================================
+# B12a.64: A STRAINED SITE BREAKS, HOLDS OR KNITS BY A DRAW (`16_PESSIMIST_WR_B` edit 2)
+# ======================================================================================
+# Every test plants its strain at season 0 (UNDECIDED 5: the sources read fourteen seasons, A-114 reads two), so the draw is taken in the
+# FIRST MATTER: a Site below the rupture floor beside a broken Site. The pool is the count of broken Sites near it (capped at
+# `rupture_pool_cap`), and one die cannot break a Site (Success needs the net to clear an obstacle of 2 by one), so the arms that must SEE a
+# break plant several broken Sites beside the ring, the way the wound's own territory would hold them once the front had gone through.
+STRAINED = 50                                  # below every kind's lowest floor (harbour 100; an empty cell's `rupture_band`, 100)
+WOUND_PLANT = 5                                # broken harbours planted at the source beside the wound, so the ring's pool reaches the cap
+
+
+def _strained_world(weight: int, seed: int, broken: int = WOUND_PLANT) -> World:
+    """`_world`, then at season 0: the wound's two bordering harbours below the floor, and `broken` more harbours at 0 in the source's territory."""
+    w = _world(weight, seed=seed)
+    for t in RING_1:
+        w.sites[_sid(t)].condition = STRAINED
+    for i in range(broken):
+        sid = f"site_b0_planted_{i}"
+        w.sites[sid] = Site(sid, SOURCE, "harbour", condition=0)
+    return w
+
+
+def _first_matter(w: World) -> list:
+    """The first MATTER barrier's emissions, at the driver's own call."""
+    d = SeasonDriver(w)
+    w.tick += 1
+    return d.matter(mint_token(w, WriteClass.MATTER), [])
+
+
+def test_a_rupture_is_emitted_and_its_season_differs():
+    """Weight 250, the wound planted and the ring below its floor at season 0, seeds 0 to 9: a `site.ruptured` is emitted at some seed and
+    the SET of ruptured Sites differs between at least two seeds (the front moves by a draw, not by the same hand every time)."""
+    ruptured, checked = {}, 0
+    for seed in range(10):
+        w = _strained_world(250, seed)
+        out = _first_matter(w)
+        ruptured[seed] = frozenset(e.changes[0].subject for e in out if e.kind == "site.ruptured")
+        checked += 1
+        assert all(w.sites[sid].condition == 0 for sid in ruptured[seed]), (seed, ruptured[seed])
+    assert checked >= 10, checked
+    assert any(ruptured.values()), ruptured
+    assert len(set(ruptured.values())) >= 2, ruptured
+
+
+def _realm_yield(w: World) -> int:
+    return sum(sum((r.__dict__.get("yield") or {}).values()) for r in w.rungs.values())
+
+
+def _strained_realm(seed: int, weight: int) -> World:
+    """`build_realm` with the wound planted (B12a.07) and, at season 0, every Site of the wound's bordering territories below its kind's lowest
+    floor (an empty cell's, `rupture_band`), the first four of each territory broken."""
+    from ..boot.realm import build_realm
+    w = build_realm(seed, cap=5, wound=True, fixtures=DEFAULT_FIXTURES.sweep("lattice_coupling", weight))
+    floors = w.fixtures.get("band_floors")
+    for t in sorted(adjacent_territories()[SOURCE]):
+        mine = sorted((s for s in w.sites.values() if world_q.enclosing_territory(w, s.rung) == t), key=lambda s: s.id)
+        for k, s in enumerate(mine):
+            low = min(floors[s.kind].values()) if floors[s.kind] else w.fixtures.get("rupture_band")
+            s.condition = 0 if k < 4 else low // 2
+    return w
+
+
+def test_yield_differs_between_seeds_after_two_seasons():
+    """The source's falsifier, at two seasons and planted (UNDECIDED 5): the realm's summed yield after season 1 differs between seeds 0 and 1
+    at weight 250 (the front advances by drawn breaks)."""
+    from ..harness.populated import run
+    got = {}
+    for seed in (0, 1):
+        w = _strained_realm(seed, 250)
+        run(2, seed, w=w)
+        got[seed] = _realm_yield(w)
+    assert got[0] != got[1], got
+
+
+def test_weight_zero_is_the_base_hash():
+    """At weight 0 the season is the base hash (the control): the same strained world with the three rupture rows swept to other values reads
+    the same content hash and emits no `site.ruptured`, while at weight 250 it emits one."""
+    base = _strained_world(0, 3)
+    swept = _strained_world(0, 3)
+    for name, value in (("rupture_band", 400), ("rupture_base", 0), ("rupture_pool_cap", 1)):
+        swept.fixtures = swept.fixtures.sweep(name, value)
+    out_base, out_swept = _first_matter(base), _first_matter(swept)
+    assert not [e for e in out_base + out_swept if e.kind == "site.ruptured"]
+    assert base.content_hash() == swept.content_hash()
+    assert any(e.kind == "site.ruptured" for s in range(10) for e in _first_matter(_strained_world(250, s)))
+
+
+def test_front_stops_where_the_source_is_mended():
+    """The source's gate at two seasons: the wound planted at 0 at season 0 and raised to `condition_scale` before season 1; after season 1
+    no Site is pulled and no `site.ruptured` is emitted (the ring was pulled once, to a standing condition, and nothing near it is broken)."""
+    w = _world(250)
+    scale = w.fixtures.get("condition_scale")
+    d = SeasonDriver(w)
+    log = []
+    for season in range(2):
+        if season == 1:
+            w.sites[_sid(SOURCE)].condition = scale
+        w.tick += 1
+        log += d.matter(mint_token(w, WriteClass.MATTER), [])
+    assert _lattice_strain(w, scale) == {}
+    assert not [e for e in log if e.kind == "site.ruptured"]
+    assert all(w.sites[_sid(t)].condition > 0 for t in RING_1)
+
+
+def test_a_strained_site_takes_no_draw_above_its_floor_or_beside_nothing_broken():
+    """The draw's two gates, each against the arm that would take it: a Site below its floor with NOTHING broken near it (uneven wear alone) and
+    a Site beside a broken Site but STANDING above its floor take no draw, so neither breaks and neither knits (its wear is its kind's alone
+    plus the pull, written once)."""
+    for seed in range(10):
+        w = _strained_world(250, seed)
+        w.sites[_sid(RING_1[0])].condition = 600                       # beside the broken Sites, above the floor
+        far = _sid(_far_from_the_source())
+        w.sites[far].condition = STRAINED                              # below the floor, nothing broken near it
+        wear = w.fixtures.wear("harbour")
+        pull = _lattice_strain(w, w.fixtures.get("condition_scale"))
+        out = _first_matter(w)
+        assert not [e for e in out if e.kind == "site.ruptured" and e.changes[0].subject in (_sid(RING_1[0]), far)], seed
+        assert w.sites[far].condition == STRAINED - wear, seed
+        assert w.sites[_sid(RING_1[0])].condition == 600 - wear - pull[_sid(RING_1[0])], seed
+
+
+def test_a_site_the_strain_fails_to_break_knits_by_the_pull_it_took():
+    """One broken Site is a pool of one, which the obstacle of 2 beats (Failure: the fabric held): the ring harbour recovers the pull it took
+    this season and ends at its kind's wear alone, with a second `condition.worn` written. Over seeds 0 to 9 at least one knits."""
+    knit, checked = 0, 0
+    for seed in range(10):
+        w = _strained_world(250, seed, broken=0)
+        site = w.sites[_sid(RING_1[0])]
+        wear, pull = w.fixtures.wear("harbour"), 250 * STRAINED // 1000
+        out = _first_matter(w)
+        worn = [e for e in out if e.kind == "condition.worn" and e.changes[0].subject == site.id]
+        checked += 1
+        assert site.condition in (STRAINED - wear, STRAINED - wear - pull), (seed, site.condition)
+        if site.condition == STRAINED - wear:
+            knit += 1
+            assert len(worn) == 2, (seed, len(worn))
+        assert not [e for e in out if e.kind == "site.ruptured" and e.changes[0].subject == site.id]
+    assert checked >= 10 and knit >= 1, (checked, knit)

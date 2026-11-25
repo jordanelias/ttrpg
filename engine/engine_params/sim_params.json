@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 536,
-    "uncited": 404,
+    "total": 539,
+    "uncited": 407,
     "of_which_assumption_grade": 9
   },
-  "count": 536,
+  "count": 539,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 230,
+    "engine.season.settings": 233,
     "engine.season.realm": 9
   },
   "params": [
@@ -4694,6 +4694,39 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-532`, swept 3 / 4.5 (SHIPPED) / 6",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rupture_band",
+      "name": "rupture_band",
+      "value": 100,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-533`, swept 50 / 100 (SHIPPED) / 200",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rupture_base",
+      "name": "rupture_base",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-534`, swept 1 / 2 (SHIPPED) / 4",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rupture_pool_cap",
+      "name": "rupture_pool_cap",
+      "value": 6,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-535`, swept 3 / 6 (SHIPPED) / 12",
       "citation": null,
       "citation_grade": null
     },
