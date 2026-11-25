@@ -187,7 +187,12 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # kept): `BAR_FIXTURES` with `refusal_memory` swept back to 0.0, the parent tree's value, meets every assertion at stability/95/7 again, and the
 # test passes at B09.04's head. NOT RE-TRACED (a search over thousands of runs, as above): the bar is run at the control for the factor.
 # [ASSUMPTION; medium; Jordan to correct; revert: drop the `refusal_memory` sweep and re-trace at 0.5.]
-PROCEEDINGS = (("stability", 95, 7),)
+# B11 CLOSE: RE-TRACED AGAIN, stability/95/7 -> doctrine/16/7, the season count unchanged -- the B11 items and the close's fixes moved this three-person
+# world's act mix: stability/95/7 now fires THREE dates and determines nobody ("0 determined, 3 fired"). THE SWEEP, this file's `_proceeding` (the
+# producer's scratch, not kept): the 15 convictions x seeds 0..199 at 7 seasons, `PYTHONHASHSEED=0`, each of four partitions stopped at its first hit:
+# doctrine/16, stability/29 and stability/139 (one partition none). The lowest seed is taken (doctrine/16/7, hash c658767d...). The bar is an
+# existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert: restore stability/95/7 with the B11 batch reverted.]
+PROCEEDINGS = (("doctrine", 16, 7),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 
 
