@@ -2195,11 +2195,11 @@ verbs:
     writes:      []
     writes_note: "— (as `examine`. ⚠ AND CANON WANTS MORE THAN A CLAIM HERE: `:278` makes a FAILED Reconstruct produce a plausible but WRONG conclusion the player acts on. A Claim carries `value` and `confidence` (`state/carriers.py:121-131`), so the carrier exists -- what is missing is the degree that would decide which to mint, which is the same ruling)"
     emits:
-      Overwhelming: ["finding.made"]
-      Success:      ["finding.made"]
-      Partial:      ["finding.made"]
+      Overwhelming: ["conclusion.reached"]
+      Success:      ["conclusion.reached"]
+      Partial:      ["conclusion.reached"]
       Failure:      ["finding.none"]
-    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (B11.12); the WRONG conclusion of `:278` is still not minted (see `writes_note`). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07."
+    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2); [ASSUMPTION; medium; Jordan to correct; revert: `finding.made` at the three winning bands]): THE THREE WINNING BANDS REPORT `conclusion.reached`, not a finding -- it assembles what he holds and gathers nothing new (`fieldwork_v30.md:298`). `loop/witness.py` deposits his conclusion to him alone, `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred`, read off `rosters.yaml: finding_terms` by band (the hand is named at the bands that list `who`, withheld at `Partial`); the doer is whoever his OWN ledger names (`queries/person_q.py::conclusions_of`, `deed_doers`' reading, fixed at CHOOSE and carried on the act as `concluded`), so the roll states nothing wrong (K-37): a wrong name is a wrong ledger. `rosters.yaml: inquiry_modules` still claims the kind, so a conclusion also uncovers the trail a finding did (B11.68). `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (B11.12). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07, and no band deposits."
     emits_on_refusal: ["inquiry.refused"]
     grade:       "ruled"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:298 (§4.2), :256-280 (§4.1), :323 (§4.3)"

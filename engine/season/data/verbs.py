@@ -1907,6 +1907,19 @@ _check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
 _check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
+# B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2)): A CONCLUSION IS WHAT A PERSON DECIDES HAPPENED AND WHO DID IT, FROM WHAT HE HOLDS. The kind a row reports a winning
+# `reconstruct` as (`conclusion.reached`), the payload key his conclusion rides the act under (`concluded`: `(the one the deed was done to, <deed kind>,
+# doer)`, read off his OWN ledger at CHOOSE by `queries/person_q.py::conclusions_of`) and the predicate stem WITNESS deposits it under to the maker
+# (`concluded:<deed kind>`, `loop/witness.py`). `CONCLUDING_VERBS` is read off the table, no verb listed: the rows that report the kind. Refused at import when
+# no row does, so a deposit nothing forms an act for cannot read as built.
+CONCLUSION_KIND, CONCLUDED_KEY, CONCLUDED_STEM = "conclusion.reached", "concluded", "concluded"
+CONCLUDING_VERBS = frozenset(v for v, r in VERB_TABLE.items() if CONCLUSION_KIND in r.emits)
+if not CONCLUDING_VERBS:
+    raise Unspecified(
+        f"no verb row emits {CONCLUSION_KIND!r}", "verb_table.yaml -- B11.73",
+        needs=f"a row whose `emits:` reports {CONCLUSION_KIND!r}, or the conclusion's constants removed",
+        law="FRES §7 -- a conclusion is deposited to the maker of the act that reaches it; a kind no row emits deposits to no one")
+
 
 def _asks_subject_held(row: "VerbRow") -> bool:
     """WHETHER THE ROW'S TYPED CELL ASKS THE ACTOR TO HOLD ITS `subject` -- a `relation` conjunct of

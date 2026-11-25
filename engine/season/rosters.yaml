@@ -1361,8 +1361,9 @@ rosters:
       `pool_default` (`seam/wrappers/sigma.py::faculty`).
       ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
       questioned person answers by their own `tell`, so there is no degree on the asker);
-      `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
-      waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
+      `reconstruct` waited on a value space nothing supplied (K-37: no invented number) -- B11.73: it is the doer his own ledger names
+      (`queries/person_q.py::conclusions_of`, `deed_doers`' reading), so its winning bands report `conclusion.reached` and deposit his conclusion to him
+      (`loop/witness.py`); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
       flat `emits:` and is not counted as graded. [B07.01: `reconstruct` and `thread_read` are routed now, under `armed_by: task_draw_arm`; arm `off`
       they fold flat as above.]
@@ -3613,6 +3614,10 @@ rosters:
       `check_rows()` naming the row.
     findings:
       "finding.made": {module: "fieldwork", provider: "fieldwork", module_entry: "fieldwork.find"}
+      # B11.73: `reconstruct`'s winning bands report `conclusion.reached` (not `finding.made`) and it uncovered a trail as a finding before, so the kind joins
+      # the row: the roll is the same graded one and the trail is the same trail (B11.68's `test_finding_what_is_hidden.py` reconstructs).
+      # [ASSUMPTION; medium; Jordan to correct; revert: drop this line and a conclusion uncovers no trail]
+      "conclusion.reached": {module: "fieldwork", provider: "fieldwork", module_entry: "fieldwork.find"}
 
   finding_terms:
     source: >-

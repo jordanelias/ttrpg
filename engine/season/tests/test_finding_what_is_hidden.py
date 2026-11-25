@@ -46,11 +46,12 @@ def _deed(fixtures, seed: int = 1, cover=None, bystander: bool = False):
 
 
 def _reconstruct(w, d, act_id: str):
-    """The finder hears the Site exists and reconstructs it, the task draw on: the finding Event."""
+    """The finder hears the Site exists and reconstructs it, the task draw on: the Event it reports (B11.73: a winning band is `conclusion.reached`, which `rosters.yaml:
+    inquiry_modules` still claims, so it uncovers the trail as the finding did)."""
     hear(w, FINDER, SITE)
     w.fixtures = w.fixtures.sweep("task_draw_arm", "on")
     (e,) = step(w, d, Act(id=act_id, actor=FINDER, verb="reconstruct", payload={"subject": SITE}))
-    assert e.kind in ("finding.made", "finding.none"), e.kind
+    assert e.kind in ("conclusion.reached", "finding.none"), e.kind
     return e
 
 
@@ -82,11 +83,11 @@ def test_an_unnoticed_deed_is_found_only_by_inquiry_on_its_trace():
 
 
 def _share(cover, quality_fixtures=ON) -> list:
-    """The finder's find (a `finding.made`) at each world seed, the doer holding a cover at `cover` quality or none."""
+    """The finder's find (a `conclusion.reached`) at each world seed, the doer holding a cover at `cover` quality or none."""
     out = []
     for s in SEEDS:
         w, d = _deed(quality_fixtures, seed=s, cover=cover)
-        out.append(_reconstruct(w, d, "rc").kind == "finding.made")
+        out.append(_reconstruct(w, d, "rc").kind == "conclusion.reached")
     return out
 
 

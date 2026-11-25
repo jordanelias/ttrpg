@@ -29,13 +29,13 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
+    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
     capability_rows, FACTION_BY_PROP, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, CONCLUDED_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -45,7 +45,7 @@ from ..gaps import Forbidden
 # import `decision/`); re-bound here by name, as `opening_set` and `standing_of` call them and the tests reach them as `options.<name>`.
 from ..queries.person_q import (
     PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
-    competence, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
+    competence, conclusions_of, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
     ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
@@ -306,6 +306,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
+        concluded = None                    # B11.73: `conclusions_of` of his own ledger, read once per call for a row that reports a conclusion
         # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
         # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
         # `terms`) -- `oblige` on a seat he was told of, never on a vacancy a world read stamped.
@@ -448,6 +449,16 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     saids = said_of_entity[entity]
                     if not saids:
                         continue
+                # B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)): A ROW THAT REPORTS A CONCLUSION (`CONCLUDING_VERBS`: `reconstruct`, read off its `emits:`) CARRIES WHAT HIS OWN
+                # LEDGER LETS HIM CONCLUDE of this subject -- `(the one the deed was done to, deed kind, doer)`, `person_q.conclusions_of`, fixed here as `said` is so WITNESS
+                # reads the act and never his live ledger -- under `CONCLUDED_KEY`, and nothing where his ledger names no doer (the key is absent, the act folds as any
+                # reconstruct). One conclusion: where several are named the first in ledger order rides (the choice among them is B11.75's variants).
+                # It is no operand (`binding_of` drops it) and no part of the act's id (`act_key`). Own ledger only, no World.
+                if verb in CONCLUDING_VERBS:
+                    if concluded is None:
+                        concluded = conclusions_of(p.ledger, p.id, COVERT_KINDS)
+                    if concluded.get(subject):
+                        ops = {**ops, CONCLUDED_KEY: (subject, *concluded[subject][0])}
                 for rank, said in enumerate(saids):
                     cand_ops = ops
                     if said is not None:

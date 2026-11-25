@@ -15,13 +15,15 @@ import pytest
 from ..data import goals as goals_data
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
+from ..decision.options import opening_set
+from ..epistemic import Seen
 from ..harness import probes as P
 from ..harness import scenarios as S
 from ..loop.driver import SeasonDriver, mint_token
-from ..queries import world_q
+from ..queries import person_q, world_q
 from ..queries.person_q import record
 from ..seam import Resolution
-from ..state.carriers import Act, Claim, Record, Tenure
+from ..state.carriers import Act, Claim, Question, Record, Tenure, View
 
 
 def test_inquiry_world_builds_its_six_parts_and_seeds_one_case_goal():
@@ -171,3 +173,73 @@ def test_a_look_deposits_what_finding_terms_lists_at_each_band():
         assert ((REC, f"held_by:{LOOKER}") in mine) == (band != "Partial"), (band, sorted(mine))
         grain = mine[("Hh", "stores:grain")]
         assert (grain == 8) == (band != "Partial") and grain > 0, (band, grain)
+
+
+# ======================================================================================
+# B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2)): `reconstruct` REASONS AND DEPOSITS ITS CONCLUSION TO ITS MAKER. The conclusion is read off his OWN ledger
+# at CHOOSE (`person_q.conclusions_of`, `deed_doers`' reading) and rides the act as `concluded`; WITNESS deposits it to the maker by band.
+# ======================================================================================
+CONCLUDER, VICTIM, KILLER, OTHER = "p_low", "p_mid", "p_other", "p_high"
+DEED = "person.died"        # a paired covert kind: the claim's subject is the one it was done to, the doer is read off a sighting
+BANDS = ("Overwhelming", "Success", "Partial", "Failure")
+
+
+def _concluder(sighted=KILLER):
+    """`tiny_world` where `p_low` holds a death of `p_mid` and, unless `sighted` is `None`, a sighting of the same deed naming `sighted` as the hand."""
+    w, d = _world()
+    p = w.persons[CONCLUDER]
+    p.ledger.append(Claim("c_death", p.id, VICTIM, DEED, True, 0, "firsthand", 100, "own"))
+    if sighted is not None:
+        stratum = next(iter(person_q._KIND_STRATA[DEED]))
+        p.ledger.append(Claim("c_seen", p.id, VICTIM, "seen", Seen(stratum=stratum, who=sighted), 0, "firsthand", 100, "own"))
+    return w, d
+
+
+def _reconstruct(w):
+    """The Candidate his ledger forms on `p_mid` and the act it becomes: `(candidate, act)`."""
+    p = w.persons[CONCLUDER]
+    q = Question("q_b1173", "claim_landed", (VICTIM,), "")
+    (c,) = [c for c in opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures) if c.verb == "reconstruct" and c.subject == VICTIM]
+    return c, Act(id="a_rc", actor=p.id, verb="reconstruct", payload={"subject": VICTIM, **c.operands})
+
+
+def _concluded(w):
+    """`{(subject, predicate): value}` of the `concluded:` claims the maker holds."""
+    return {(c.subject, c.predicate): c.value for c in w.persons[CONCLUDER].ledger if str(c.predicate).startswith("concluded:")}
+
+
+def test_reconstruct_writes_nothing():
+    """FRES §7 (1): the row is an inquiry and writes nothing, at every band -- no typed write, no `changes[]`. A conclusion is a claim minted at WITNESS.
+    CONTROL: the same act at `Success` leaves a `concluded:` claim, so the empty write is not an empty act."""
+    row = VERB_TABLE["reconstruct"]
+    assert not row.writes and not row.writes_by_degree
+    for band in BANDS:
+        w, d = _concluder()
+        out = _look(w, d, _reconstruct(w)[1], band)
+        assert len(out) == 1 and not out[0].changes, (band, out[0].changes)
+    w, d = _concluder()
+    _look(w, d, _reconstruct(w)[1], "Success")
+    assert _concluded(w), "control: a winning reconstruct deposits"
+
+
+def test_a_winning_reconstruct_deposits_a_concluded_claim_by_band():
+    """FRES §7 (2) and R-19-04's table: at WITNESS the maker holds `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred`, the
+    doer the one his OWN ledger names. `Partial` withholds the hand (the claim is the deed alone: value `True`), `Success` and `Overwhelming` name it,
+    `Failure` emits `finding.none` and leaves no `concluded:` claim. FALSIFIER: a conclusion whose doer his ledger did not name -- the same
+    world with no sighting (his ledger names nobody) deposits none at a winning band, and with a sighting of ANOTHER hand he concludes that hand."""
+    cell = (VICTIM, f"concluded:{DEED}")
+    for band, want in (("Overwhelming", KILLER), ("Success", KILLER), ("Partial", True), ("Failure", None)):
+        w, d = _concluder()
+        c, act = _reconstruct(w)
+        assert c.operands["concluded"] == (VICTIM, DEED, KILLER), c.operands
+        out = _look(w, d, act, band)
+        assert [e.kind for e in out] == (["finding.none"] if band == "Failure" else ["conclusion.reached"]), (band, [e.kind for e in out])
+        assert _concluded(w) == ({} if want is None else {cell: want}), (band, _concluded(w))
+        if want is not None:
+            (claim,) = [x for x in w.persons[CONCLUDER].ledger if (x.subject, x.predicate) == cell]
+            assert claim.source == "inferred" and not claim.firsthand, claim
+    for sighted, want in ((None, {}), (OTHER, {cell: OTHER})):
+        w, d = _concluder(sighted)
+        _, act = _reconstruct(w)
+        _look(w, d, act, "Success")
+        assert _concluded(w) == want, (sighted, _concluded(w))

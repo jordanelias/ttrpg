@@ -475,13 +475,22 @@ def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
 
     Reads the holder's OWN ledger only: a deed he was not told of and did not see names nobody, however
     plain it is in the world (AX-2; a `World` is never asked). Person-side."""
+    out: list = []
+    for _c, doer in _named_deeds(ledger, spec, holder, against):
+        if doer not in out:
+            out.append(doer)
+    return tuple(out)
+
+
+def _named_deeds(ledger, spec: dict, holder: str, against=()):
+    """`(claim, doer)` FOR EACH DEED CLAIM `spec` SELECTS THAT NAMES A DOER OTHER THAN THE HOLDER, in ledger order -- `deed_doers`' one reading (its docstring is the
+    rule), kept as a generator so a second reader asks the same question of the same claims and never re-derives it (B11.73's `conclusions_of`)."""
     form = next((f for f in roster_map("goal_object_kinds", "forms")["deed_doers"] if f in spec), None)
     if form is None or (form == "against" and not against):
-        return ()
+        return
     kinds = frozenset(spec["kinds"]) if form == "kinds" else frozenset()
     seen = None
     engages: dict = {}                     # kind -> bool, per call: the tables are rebound by tests
-    out: list = []
     for c in ledger:
         if not is_deed(c) or c.doer == holder:
             continue
@@ -501,9 +510,31 @@ def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
             doer = deed_doer(c, seen)
         else:
             doer = c.subject
-        if doer is not None and doer != holder and doer not in out:
-            out.append(doer)
-    return tuple(out)
+        if doer is not None and doer != holder:
+            yield c, doer
+
+
+def conclusions_of(ledger, holder: str, kinds) -> dict:
+    """WHAT THE HOLDER'S OWN LEDGER LETS HIM CONCLUDE OF A DEED -- `{one the deed was done to: ((deed kind, doer), ...)}`, in ledger order, each pair once (B11.73,
+    FRES §7 (1); `08_FI_03` §3 act 1). The value space of `reconstruct`'s conclusion (U-7): `deed_doers`' reading of `kinds` (`_named_deeds`: the doer his ledger names,
+    never himself, never a guess), each doer filed under the one the deed was done to. A `PAIRED_KINDS` claim is about that one (its subject, the patient) and its
+    doer is the sighting's; an unpaired deed of a Person-subject kind is filed under the counterparty `deed_counterparty` reads off his sightings. Any other unpaired
+    kind names no one it was done to (its claim's subject is its doer, H-192) and concludes nothing here -- the pairing never guesses. Nothing wrong is deposited
+    by a roll (K-37): a wrong name is a wrong ledger. Holder-side and World-free (AX-2)."""
+    seen = None
+    out: dict = {}
+    for c, doer in _named_deeds(ledger, {"kinds": kinds}, holder):
+        if c.predicate in PAIRED_KINDS:
+            to = c.subject
+        elif c.predicate in PERSON_SUBJECT_KINDS:
+            seen = _seen_index(ledger) if seen is None else seen
+            to = deed_counterparty(c, seen)
+        else:
+            continue
+        pair = (c.predicate, doer)
+        if to is not None and pair not in out.setdefault(to, []):
+            out[to].append(pair)
+    return {to: tuple(pairs) for to, pairs in out.items() if pairs}
 
 
 def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:

@@ -24,7 +24,7 @@ from ..data.rosters import (
     ABSENT_PREDICATE, CHANNEL_CLAIM_SOURCE, FINDING_TERMS, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
     TERMS_SUPPLIED_BY, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
-from ..data.verbs import EMITTED_KINDS, IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
+from ..data.verbs import CONCLUDED_KEY, CONCLUDED_STEM, CONCLUSION_KIND, EMITTED_KINDS, IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
 # store. Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
 # in `queries/person_q.py` (B11.21, D-74: `ledger_weigh` and `refracted_confidence` moved there; this step imports nothing from `decision/`);
@@ -897,6 +897,23 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 if refracting:
                     oc = _refract(oc, p, channel, gain, fx=cfx)
                 _deposit(p, oc, e)
+        # B11.73 (`08_FI_03` §3 act 1; FRES §7 (2); `19_LACUNA_conclusion_is_a_committed_assertion` R-19-04): THE CONCLUSION A WINNING `reconstruct` REACHED IS DEPOSITED
+        # TO ITS MAKER ALONE -- one claim, `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred` (`FOUND_CHANNEL`'s: known from the business, not
+        # seen), at the confidence the deposit starts at (the maker is no witness of himself, so nothing refracts it). The act carries it (`payload[CONCLUDED_KEY]`, fixed
+        # at CHOOSE from his OWN ledger: `person_q.conclusions_of`), so this reads the act and never his live ledger, and the roll states nothing wrong (K-37): the doer is
+        # whoever his ledger named at the act. WHAT IT SHOWS IS `rosters.yaml: finding_terms`' BY BAND, the one table: a band that lists the hand (`HAND_TERM`) names the doer,
+        # `Partial` lists none and the claim is the deed alone (value `True`, the trail's own `Partial` shape), and a band with no row -- `Failure` emits `finding.none`, an
+        # arm-`off` fold carries no degree -- deposits nothing. The exact-triple guard is the found deposit's: a conclusion he already holds is not stored twice.
+        if e.kind == CONCLUSION_KIND and only is None and pid == actor and e.degree in FINDING_TERMS:
+            _pay = getattr(self.act_of.get(e.id), "payload", None)
+            _concl = _pay.get(CONCLUDED_KEY) if isinstance(_pay, dict) else None
+            if _concl is not None:
+                _to, _kind, _hand = _concl
+                _said = _hand if HAND_TERM in FINDING_TERMS[e.degree] else True
+                _pred = f"{CONCLUDED_STEM}:{_kind}"
+                if not any(h.subject == _to and h.predicate == _pred and h.value == _said and not h.chain for h in p.ledger):
+                    _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"concluded:{e.id}"), pid, _to, _pred, _said, w.tick,
+                                      CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL], conf, "own", self.lap, doer=None), e)
         # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.
         # Its value is `epistemic.Seen` -- `{stratum, marks, who, why}`, each `None` where the
         # admitting channels withhold it -- and its subject is the changed thing, else the RUNG,
