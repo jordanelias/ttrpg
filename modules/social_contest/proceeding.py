@@ -399,40 +399,46 @@ def esteem(inp, st, v) -> float:
     return (_short(inp, o, cd[o.id]) if o else 0.0) - _short(inp, v, cd[v.id])
 
 
-def _weary_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> tuple:
+def _weary_term(inp, v, c, foe, pressed=False, abridged=False, over=None, first=False) -> tuple:
     D = inp.dials
     return max(0.0, c.spent - (D["stay_base"] + D["stay_per_will"] * v.will - awe(inp, v))), D["weary_step"]
 
 
-def _standing_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> tuple:
+def _standing_term(inp, v, c, foe, pressed=False, abridged=False, over=None, first=False) -> tuple:
     D = inp.dials
     account = (v.reason - D["attribute_floor"]) / (D["attribute_ceiling"] - D["attribute_floor"])
     return (max(0.0, foe.power - v.power) * (1.0 - account) if foe else 0.0), D["gap_step"]
 
 
-def _press_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> Optional[tuple]:
+def _press_term(inp, v, c, foe, pressed=False, abridged=False, over=None, first=False) -> Optional[tuple]:
     return (1.0, inp.dials["press_ob"]) if pressed else None
 
 
-def _gravity_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> Optional[tuple]:
+def _gravity_term(inp, v, c, foe, pressed=False, abridged=False, over=None, first=False) -> Optional[tuple]:
     return (inp.rite.gravity, 1.0) if abridged and not pressed else None
 
 
-def _answer_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> Optional[tuple]:
+def _answer_term(inp, v, c, foe, pressed=False, abridged=False, over=None, first=False) -> Optional[tuple]:
     """B24.06 (HEAR_B's `answer`): an answer to an exhibit meets `answer_step` a unit of the weight the answered exhibit holds over its answer (`over`),
     a hostile term and never a subtraction (A-25: a heavier answer is the closing draw's `proof_level`)."""
     return (over, inp.dials["answer_step"]) if over else None
 
 
+def _first_heard_term(inp, v, c, foe, pressed=False, abridged=False, over=None, first=False) -> Optional[tuple]:
+    """B24.26 (ADM edit 4; OBS §2 member 11): an answer to an item the room heard FIRST (`first`: the answered `Item.first` inside a sitting, `Input.first_heard` for the answering
+    `speak`) meets `first_heard_ob` more. A hostile term only, listed where it weighs (at `first_heard_ob` 0, the control, no roll names it)."""
+    return (1.0, inp.dials["first_heard_ob"]) if first and inp.dials["first_heard_ob"] > 0 else None
+
+
 #: The proceeding's own obstacle terms, the `rosters.yaml: obstacle_terms` members `bound: module`, in the roster's order:
 #: `fn(inp, voice, cond, foe, pressed, abridged) -> (raw, step)`, or `None` where the term does not weigh on this speech. `roll.obstacle` composes
 #: each as `raw x step` and names it in `Margin.terms`. Will: `weary`; Reason: `standing`; `press` is a press's and `gravity` the abridged form's;
-#: `answer` is an exhibit answer's (`over`, B24.06).
-TERMS = {"weary": _weary_term, "standing": _standing_term, "press": _press_term, "gravity": _gravity_term, "answer": _answer_term}
+#: `answer` is an exhibit answer's (`over`, B24.06); `first_heard` is an answer's to an item first heard (`first`, B24.26).
+TERMS = {"weary": _weary_term, "standing": _standing_term, "press": _press_term, "gravity": _gravity_term, "answer": _answer_term, "first_heard": _first_heard_term}
 
 
-def _operands(inp, voice, c, foe, pressed=False, abridged=False, over=None) -> tuple:
-    got = ((name, fn(inp, voice, c, foe, pressed, abridged, over)) for name, fn in TERMS.items())
+def _operands(inp, voice, c, foe, pressed=False, abridged=False, over=None, first=False) -> tuple:
+    got = ((name, fn(inp, voice, c, foe, pressed, abridged, over, first)) for name, fn in TERMS.items())
     return tuple((name,) + row for name, row in got if row is not None)
 
 
@@ -591,11 +597,12 @@ def _record(inp, pool, opposition, leverage, difficulty, operands) -> SocialCont
                               opposition_rate=D["opposition_rate"], obstacle_operands=operands)
 
 
-def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abridged=False, tag=None, over=None) -> tuple:
+def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abridged=False, tag=None, over=None, first=False) -> tuple:
     """one speech heard by `h` (who may be the speaker himself, where he decides: his own Reason validates it, his own Will resists it, C2).
     Returns `(pool, leverage, record)`; the record's obstacle is composed by `roll.obstacle`, so `Margin.terms` names each term. `over` (B24.06) is
     given for a board move's roll (`answer`, `impugn`): its difficulty is `answer_ob`, and `over` the weight the answered item holds over its answer
-    (`TERMS["answer"]`); `None` for every other speech."""
+    (`TERMS["answer"]`); `None` for every other speech. `first` (B24.26) is given for an `answer` to an item first heard (`TERMS["first_heard"]`); an abridged speech
+    meets it too where the host built the input for an act that answers one (`Input.first_heard`), and no other speech does."""
     D, r = inp.dials, inp.rite
     c, foe = _d(st.cond)[voice.id], _foe(inp, mover)
     pool = case_pool(inp, voice, ground)
@@ -614,7 +621,7 @@ def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abr
     sig = _lv(D["fit_level"]) * _weight(inp, st, ground) * f + D["esteem_step"] * esteem(inp, st, voice) * 2.0 * (1.0 - v) \
         + (rl * _lv(D["answer_level"]) if relation == "answers" else 0.0)
     return pool, sig, _record(inp, pool, h.will + h.rank, sig, D["answer_ob"] if over is not None else r.difficulty if abridged else 0.0,
-                              _operands(inp, voice, c, foe, abridged=abridged, over=over))
+                              _operands(inp, voice, c, foe, abridged=abridged, over=over, first=first or (abridged and inp.first_heard)))
 
 
 def _lv(name) -> float:
@@ -698,8 +705,8 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
     if objects is None and T is not None:
         objects = {g: press_object(inp, T, g) for g in G}
 
-    def mu_of(stx, h, g, it, rel, pool, ins, abridged=False, drift=0.0, over=None):
-        x = speech(inp, stx, mover, mover, h, g, it, rel, abridged=abridged, tag=frames.get(g), over=over)[2]
+    def mu_of(stx, h, g, it, rel, pool, ins, abridged=False, drift=0.0, over=None, first=False):
+        x = speech(inp, stx, mover, mover, h, g, it, rel, abridged=abridged, tag=frames.get(g), over=over, first=first)[2]
         return MU_PER_DIE * pool + net_boost(x.leverage, pool) - obstacle(x)[0] - D["off_step"] * _wF(h, D) * drift \
             - D["ploy_step"] * _wA(h, D) * ins
 
@@ -766,7 +773,7 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
                     a, rel = (ans if _reads(inp, g) == "item" else None), ("answers" if effect == "answer" else "impugns")
                     pool = case_pool(inp, mover, g)
                     sd = _sd(pool)
-                    mu = mean(lambda h: mu_of(st, h, g, a, rel, pool, 0.0, False, e_drift, over))
+                    mu = mean(lambda h: mu_of(st, h, g, a, rel, pool, 0.0, False, e_drift, over, effect == "answer" and tg.first))
                     if effect == "answer":           # bounded both ways by how far the answered item stands (C1)
                         ev = min(tg.weight, _epos(mu, sd)) - D["flop"] * min(tg.weight, _epos(-mu, sd))
                     else:                            # a win halves the origin's items, a failure costs a level (HEAR_B's table)
@@ -975,7 +982,7 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
             raise ValueError(f"refused[{effect}]: {ch.item!r} is not a standing item of the other side that {mover.id} may {effect}")
         tot, W = 0.0, 0.0
         for h in hearers + own:
-            pool, sig, x = speech(inp, st, mover, voice, h, ch.ground, ans, relation, abridged=abridged, tag=tag, over=over)
+            pool, sig, x = speech(inp, st, mover, voice, h, ch.ground, ans, relation, abridged=abridged, tag=tag, over=over, first=effect == "answer" and tg.first)
             net, ob, terms, m = _margin(inp, pool, z, x, drift, h, 0.0)
             if h in judges:
                 tot += h.weight * m
