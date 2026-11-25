@@ -222,13 +222,14 @@ def test_resolution_pool_is_unrounded_and_floored():
 
 def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_engines():
     """The fight's pool is `pool_of(score, addends, pool_add, pool_floor)` and its Ob is the defender's skill score alone
-    (`faculty / 2`): a party with three addends rolls three dice more and is attacked at the same Ob (A-79: practice raises a pool,
+    (`MU_PER_DIE x score`, A-71): a party with three addends rolls three dice more and is attacked at the same Ob (A-79: practice raises a pool,
     never an opposition). The record's `pool_add` and `pool_floor` are the pair every roll reads (here 3 and 0, not the module's 6
     and 5); a record naming neither rolls at the module's own."""
     import importlib
     import random
     from collections import Counter
     from ..queries.inputs import PersonalCombatInput
+    from engine.dice_engine.dice_engine import MU_PER_DIE
     core = importlib.import_module("modules.combat.core")
     mod, attr = entry_target(_PRIZE)[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
@@ -242,15 +243,20 @@ def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_
     core.resolve = spy
     try:
         checked = 0
-        for kw, want in ((dict(pool_add=6, pool_floor=5), {(11, 1.0), (8, 1.0)}),
-                         (dict(pool_add=3, pool_floor=0), {(8, 1.0), (5, 1.0)}),
-                         (dict(), {(11, 1.0), (8, 1.0)})):
+        ob = MU_PER_DIE * 2                    # score 2, opposed at the rate the module opposes at (B15.03; was the half-score, 1.0)
+        for kw, want in ((dict(pool_add=6, pool_floor=5), {(11, ob), (8, ob)}),
+                         (dict(pool_add=3, pool_floor=0), {(8, ob), (5, ob)}),
+                         (dict(), {(11, ob), (8, ob)})):
             seen.clear()
             for seed in range(5):
                 entry(PersonalCombatInput(claimants=("a", "b"), ends=(4, 4), wound_quantities=qs, scores=(2, 2),
                                           addends=(3, 0), **kw), draw.seeded(draw.H2("test_combat_module", seed)))
                 checked += 1
-            assert set(seen) == want, (kw, dict(seen))
+            # B15.10: a wounded party's yield roll is the fight's other roll through `core.resolve`; it is at the `death` obstacle and takes the
+            # pool WITHOUT the party's addends (the verb's, not the roll's), so it is told apart by its obstacle and read separately
+            yob = importlib.import_module("modules.combat.config").CFG["YIELD_OB"]["death"]   # by name: a function-local `from modules` import raises the ratchet
+            assert {k for k in seen if k[1] != yob} == want, (kw, dict(seen))
+            assert {p for p, o in seen if o == yob} <= {min(p for p, _ in want)}, (kw, dict(seen))
     finally:
         core.resolve = real
     assert checked == 15
@@ -590,18 +596,27 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
 
     blind, w = read()
     unhurt = _believing_world(3)
-    true_end = C.party_end(w.persons[_B], w.fixtures)
-    assert true_end < C.party_end(unhurt.persons[_B], unhurt.fixtures), "the world's wound cuts nothing: the control cannot see the leak"
+    def wound_of(inp):
+        """How the wound reaches the fight under the shipped arm: his `end` (the cut, `endurance_cut`), his carried level (`level`), and the levels
+        against him the mortal roll charges (`mortal[1][3]`, B15.07: his body band, read off the same picture as the other two)."""
+        return inp.ends[1], inp.carried[1], inp.mortal[1][3]
+    def mortal_levels(world):
+        """The mortal roll's levels against `_B` as the WORLD'S body gives them (the dealt fight's, no believer)."""
+        return C._mortal_operands(world, _B, (_A, _B), blind.terms, False)[3]
+    true_wound = (C.party_end(w.persons[_B], w.fixtures), C._carried_of(w.persons[_B], w.fixtures), mortal_levels(w))
+    unhurt_wound = (C.party_end(unhurt.persons[_B], unhurt.fixtures), C._carried_of(unhurt.persons[_B], unhurt.fixtures), mortal_levels(unhurt))
+    assert true_wound != unhurt_wound, "the world's wound reaches the fight by neither arm: the control cannot see the leak"
+    assert true_wound[2] != unhurt_wound[2], "the world's wound reaches the mortal roll's levels by no band: the control cannot see that leak"
     assert blind.kits == (own, default), blind.kits                            # his own kit is his own; the stranger's is the DEFAULT, not the true one
-    assert blind.ends[1] == C.party_end(unhurt.persons[_B], unhurt.fixtures), (blind.ends, "the opponent's wound leaked into the believer's picture")
+    assert wound_of(blind) == unhurt_wound, (wound_of(blind), "the opponent's wound leaked into the believer's picture")
     sighting = Claim("c_seen", _A, "R", SEEN_PREDICATE, _Sighting(_B), 0, "firsthand", 5, "own")
     seen_it = read(sighting)[0]
-    assert seen_it.kits == (own, true_kit) and seen_it.ends[1] == true_end, (seen_it.kits, seen_it.ends, true_end)   # where he has seen him: the world's
+    assert seen_it.kits == (own, true_kit) and wound_of(seen_it) == true_wound, (seen_it.kits, wound_of(seen_it), true_wound)   # where he has seen him: the world's
     said = read(Claim("c_w", _A, _B, person_q.KIT_CLAIM + "weapon", claimed[0], 0, "told", 5, "own"),
                 Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[1], 0, "told", 5, "own"))[0]
     assert said.kits == (own, claimed), said.kits                              # a claim of his: the claim's, over the default
     wounded = read(Claim("c_b", _A, _B, person_q.BODY_CLAIM, 400, 0, "told", 5, "own"))[0]
-    assert wounded.ends[1] == true_end and wounded.kits == (own, default), (wounded.ends, wounded.kits)   # a claim of his wound: the wound, the kit still the default
+    assert wound_of(wounded) == true_wound and wounded.kits == (own, default), (wound_of(wounded), wounded.kits)   # a claim of his wound: the wound, the kit still the default
 
 
 def test_the_believed_estimate_is_private_and_moves_no_hash():
@@ -663,3 +678,85 @@ def test_drawn_marks_yield_all_three_outcomes_over_200_seeds():
     assert ceilings[1000] < checked, "a mark on every survivor is the certainty the draw replaces"
     for seed in range(8):                                                # keyed by victim and purpose, not by the act or a stream position
         assert one(seed, "drawn", aid="x")[0] == one(seed, "drawn", aid="y")[0]
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B15.07 (PHY_A A3; A-5 to A-8, A-30, A-81): A FELLING IS FOLLOWED BY THE MORTAL-WOUND DRAW, IN THE MODULE.
+# ---------------------------------------------------------------------------------------------------------------------
+def _module_of_entry():
+    """The combat module the host's entry resolves to (reached by the composition row, never imported by name here)."""
+    import sys
+    from ..loop.driver import SeasonDriver
+    from ..harness import probes as P
+    from ..seam.wrappers import combat
+    SeasonDriver(P.tiny_world())
+    entry, refusal = combat.entry_for(combat._PRIZE, combat._PROVIDER)
+    assert entry is not None, refusal
+    return sys.modules[entry.fn.__module__], entry
+
+
+def test_mortal_wound_every_band_writes():
+    """A-81: every band of the mortal draw writes. Over 400 keyed draws for one felled party (pool 8, the season's untrained default; obstacle 3):
+    Failure keeps him felled at the scene's wounds (he dies: the host's band `Felled`); Partial stands him up at `max_wounds` or the scene's wounds,
+    the more (left for dead; on an engine-produced tracker, `max_wounds + 1`, the same as Success: H-576); Success and Overwhelming stand him up at
+    the scene's wounds. Through the host's map (`_wound_state`) and the one grader (`party_degree`)
+    no band is `Untouched`, the band that writes nothing. FALSIFIER: a band missing over 400 draws, a Partial below `max_wounds`, a survivor
+    still felled, or a band the host grades `Untouched`. The draw is keyed: the same key gives the same result."""
+    import dataclasses
+    from ..data.rosters import FELLED
+    from ..queries.inputs import PartyWounds
+    from ..seam.ladder import party_degree
+    from ..seam.wrappers import combat
+    mod, _entry = _module_of_entry()
+    # THE STATES THE ENGINE PRODUCES: a felled tracker carries `wounds == max_wounds + 1` (`combatant.py`: `wounds` is capped at `max_wounds + 1`
+    # and a felling is `cumulative_damage >= health_full`), for each fighter's own `max_wounds`; none holds fewer. ⚠ So Partial's
+    # `max(wounds, max_wounds)` equals Success's `wounds` on every state the engine produces: the two survivor bands write the SAME `wounds` (hole row
+    # H-576, held for a ruling). `want` asserts what each band writes today, `partial` included; it is not a claim that the two should agree.
+    seen, checked = {}, 0
+    for max_wounds in (5, 4):
+        pw = PartyWounds(felled=True, wounds=max_wounds + 1, max_wounds=max_wounds, health_remaining=0, health_full=12)
+        scene_wounds = pw.wounds
+        for seed in range(400):
+            m = mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", seed)), (8.0, 3.0, (), ()))
+            assert m == mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", seed)), (8.0, 3.0, (), ())), seed
+            want = {"fail": (True, scene_wounds), "partial": (False, max(max_wounds, scene_wounds))}.get(m.degree, (False, scene_wounds))
+            assert (m.mortal, m.wounds) == want, (seed, m)
+            band = party_degree(combat._wound_state(pw, m))
+            assert (band == FELLED) == m.mortal and band in ("Felled", "Wounded"), (seed, m, band)
+            seen[m.degree] = seen.get(m.degree, 0) + 1
+            checked += 1
+    assert checked >= 800
+    pw = dataclasses.replace(pw, wounds=5 + 1, max_wounds=5)
+    assert set(seen) == {"fail", "partial", "success", "overwhelming"}, f"each band occurs over {checked} draws: {seen}"
+    # levels move it: a level for raises the survivors, a level against lowers them, on the same keys
+    def survivors(f, a):
+        return sum(not mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", s)), (8.0, 3.0, f, a)).mortal for s in range(400))
+    assert survivors(("major",), ()) > survivors((), ()) > survivors((), ("major",)), "a level is not applied to the mortal roll"
+
+
+def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
+    """THE CONTROL (PHY_A's falsifier): at the unreachable `mortal_wound_ob` (99.0 for every cause) the season's fight, under `death` terms, deals
+    exactly the deaths it dealt with no draw: over 300 seeds, the host's `wound_state` with the draw equals the one built on the same record with
+    `mortal=()` (no draw), party by party, and the scene (rounds, beat, trace) is the same scene -- the draw is keyed apart from the scene's
+    stream (`fight.mortal`) and moves nothing at control. Every felled party is drawn for and dies. FALSIFIER: a survivor at the control, a scene
+    that differs with the draw, or a felled party not drawn for."""
+    import dataclasses
+    from ..seam.wrappers import combat
+    from ..harness import probes as P
+    _mod, entry = _module_of_entry()
+    w = P.tiny_world()
+    w.fixtures = w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
+    deaths = checked = 0
+    for seed in range(300):     # was 200: a failed yield roll (B15.10) ends about a third of lethal scenes with both alive, so fewer parties are felled
+        w.world_seed = seed
+        inp = combat.combat_input(w, ["p_low", "p_mid"], "fight")
+        assert inp.terms == "death" and len(inp.mortal) == 2, (inp.terms, inp.mortal)
+        key = draw.H2("test_unreachable_mortal_ob", seed)
+        drawn, bare = entry.fn(inp, draw.seeded(key)), entry.fn(dataclasses.replace(inp, mortal=()), draw.seeded(key))
+        assert (drawn.rounds, drawn.beat, drawn.trace, drawn.wounds) == (bare.rounds, bare.beat, bare.trace, bare.wounds), seed
+        assert set(drawn.mortal) == {p for p, pw in drawn.wounds.items() if pw.felled} and not bare.mortal, (seed, drawn.mortal)
+        for pid in drawn.wounds:
+            assert combat._wound_state(drawn.wounds[pid], drawn.mortal.get(pid)) == combat._wound_state(bare.wounds[pid]), (seed, pid)
+        deaths += sum(m.mortal for m in drawn.mortal.values())
+        checked += 1
+    assert checked == 300 and deaths >= 150, (checked, deaths)

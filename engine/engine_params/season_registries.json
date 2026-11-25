@@ -2082,6 +2082,16 @@
             "accept": "blood"
           }
         },
+        "context_terms": {
+          "source": "B15.08 (PHY_A A3, ED-IN-0337): the terms a `fight` is fought under, by the context of violence that formed it.",
+          "cite": "ED-IN-0337",
+          "note": "WHICH TERMS A `fight` IS FOUGHT UNDER BY ITS CONTEXT -- `context: term`, `duel_terms`' shape. A CONTEXT IS A NAME OF ONE READER IN `decision/options.py::VIOLENCE_CONTEXT_READERS` (`violence_contexts`' closed set): `opening_set` records the context that admitted the subject on the Candidate's payload (`data/rosters.py::CONTEXT_KEY`), and `seam/wrappers/combat.py::combat_input` fills `PersonalCombatInput.terms` by ONE path: a challenge's `stakes`, else `duel_terms[verb]`, else THIS roster's line for the act's `context`, else the engine's lethal default (`death`). `war` is lethal; a `crime` or a `defence` fight ends when a party yields (a warrant is served, a blow is answered; neither is a licence to kill). `duel` has no line: it is no context of `fight`, a duel is `accept`'s. An own-motive context joins this roster with its reader (A-16, B37). REFUSED AT IMPORT: a key that is no context reader (`options.py`), a term that is not a non-empty string (`data/verbs.py`). REFUSED AT CALL TIME, AND ONLY WHERE THE ENGINE IS PRESENT: a term outside the engine's closed set (`seam/wrappers/combat.py::duel_terms_of`). [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and every `fight` is lethal, as before B15.08.]",
+          "values": {
+            "war": "death",
+            "crime": "yield",
+            "defence": "yield"
+          }
+        },
         "challenge_terms": {
           "source": "v10 PC-10b (RS-25, Jordan 2026-10-14: *a duel doesn't have to be lethal*; H-240 route (1)): the terms a challenge may name.",
           "cite": "H-240",
@@ -2090,6 +2100,17 @@
             "yield",
             "blood",
             "death"
+          ]
+        },
+        "mortal_causes": {
+          "source": "HAP_A edit 3; PHY_A A3's three terms and the spell of illness",
+          "cite": "HAP_A edit 3",
+          "note": "THE CLOSED SET OF CAUSES `queries/world_q.py::mortal_terms` ANSWERS FOR -- the pool and obstacle of the draw that decides whether a felled or stricken body dies, one owner. `death`, `yield` and `blood` are the three terms a fight is fought under (`challenge_terms`' members, PHY_A A3) and each has its obstacle in `Fixtures.mortal_wound_ob`; `spell` is the illness a spell lays, a member now and with NO obstacle until B37 (HAP_A edits 4 and 5) writes its branch, so `mortal_terms` refuses it by name rather than answering. A cause outside this set is refused at `data/rosters.py::require_mortal_cause`. [ASSUMPTION; medium; Jordan to correct; revert: drop the roster and `mortal_terms`]",
+          "values": [
+            "death",
+            "yield",
+            "blood",
+            "spell"
           ]
         },
         "combat_band_edges": {
@@ -2614,7 +2635,8 @@
           "choice_temper": "decision/choose.py::temper",
           "choice_exposure": "decision/choose.py::nerve",
           "own_state_gate": "queries/person_q.py::OwnStateReader",
-          "crisis": "loop/resolve.py::_crisis_net_sigma"
+          "crisis": "loop/resolve.py::_crisis_net_sigma",
+          "mortal": "seam/wrappers/combat.py::_mortal_operands"
         },
         "capability_site_reads": {
           "social_roll": {
@@ -2637,7 +2659,8 @@
           "values": [
             "actor",
             "subject",
-            "each"
+            "each",
+            "ally"
           ]
         },
         "capability_per": {
@@ -4146,6 +4169,22 @@
               "side": "actor",
               "level": "minor",
               "per": "mid"
+            },
+            {
+              "use": "mortal",
+              "role": "edge",
+              "key": "attr.body.endurance",
+              "side": "actor",
+              "level": "minor",
+              "per": "mid"
+            },
+            {
+              "use": "mortal",
+              "role": "edge",
+              "key": "healing",
+              "side": "ally",
+              "level": "minor",
+              "per": "rank"
             }
           ]
         },
@@ -6744,7 +6783,7 @@
             "Untouched": []
           },
           "writes_grade_note": "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. All three branches run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight` and their consequences differ -- Felled deletes the party and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`; each band is read PER PARTY and the act's band is the worst over both. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`.",
-          "writes_source_note": "combat_seam.resolve -> wound_state[EACH PARTY]: felled | wounds. EACH PARTY -- the actor and the subject -- is written by HIS OWN band (`seam/ladder.py::party_degree`, read per party in `_eff_kill`), and the act's band, the token these cells key on, is the WORST over both (`combat_degree`): a felled attacker makes the fight `Felled` though his target stands (CP-T03-00, `-08` AM-C-01). Each party's band lands on that party only: reading the loser's band onto the subject would delete a standing TARGET when the ACTOR is felled. `health_remaining`/`health_full` are read for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band.",
+          "writes_source_note": "combat_seam.resolve -> wound_state[EACH PARTY]: felled | wounds. EACH PARTY -- the actor and the subject -- is written by HIS OWN band (`seam/ladder.py::party_degree`, read per party in `_eff_kill`), and the act's band, the token these cells key on, is the WORST over both (`combat_degree`): a felled attacker makes the fight `Felled` though his target stands (CP-T03-00, `-08` AM-C-01). Each party's band lands on that party only: reading the loser's band onto the subject would delete a standing TARGET when the ACTOR is felled. `health_remaining`/`health_full` are read for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band. The per-party `felled` is the combat module's AFTER the mortal-wound draw (14_VERBS_PHYSICAL_A A3; B15.07, `modules/combat/fight.py::mortal_wound`, mapped by `seam/wrappers/combat.py::_wound_state`): a felling is not a death with certainty (standing rule, 2026-11-12).",
           "emits": {
             "Declared": [
               "fight.declared"
@@ -6757,6 +6796,7 @@
             ],
             "Wounded": [
               "body.changed",
+              "duel.yielded",
               "capability.raised"
             ],
             "Untouched": [

@@ -1,12 +1,12 @@
 """PC-03 (ED-PC-0058 critique): the three readers of the per-defender Ob that ED-PC-0058 left behind.
 
-`core.resolve` bands a roll at `core.ob_from_defender(defender, cfg)` (`opposed_ob(faculty, rate)`, control 0.5; History / 2 until CR-85) on the owner ladder
+`core.resolve` bands a roll at `core.ob_from_defender(defender, cfg)` (`opposed_ob(score, rate)`, rate `MU_PER_DIE` since B15.03, control 0.5; History / 2 until CR-85) on the owner ladder
 (`engine.dice_engine.dice_engine.degree_from_net`, migrated at PC-02). Three things downstream of that
 change kept reading the retired fixed `core.DECISIVE_OB = 3`:
 
  1. `workbench/probabilities.py` banded every displayed distribution at `DECISIVE_OB` on the pre-ruling
     ladder. Its two trace inputs (the wrapper's 'roll' / 'stophit' events) carried no `ob`, so it could
-    not do otherwise. Falsifier: the workbench's band probabilities for a defender whose faculty (History before CR-85) is NOT
+    not do otherwise. Falsifier: the workbench's band probabilities for a defender whose skill score (History before CR-85) is NOT
     the default, against `core.resolve`'s observed band frequencies over N seeds. On the pre-PC-03 tree
     they differ far beyond sampling noise; after it they agree.
  2. `core.strike`'s overwhelming-hit quality measured its severity tail `z` from `net - 2*DECISIVE_OB`,
@@ -36,7 +36,7 @@ from engine.dice_engine import dice_engine as DE          # noqa: E402
 from engine.dice_engine import sigma_leverage as SL       # noqa: E402
 
 BANDS = ('fail', 'partial', 'success', 'overwhelming')
-DEFAULT_FACULTY = C.Combatant('probe').faculty
+DEFAULT_SCORE = C.Combatant('probe').score
 
 
 # ── finding 1: the workbench's distributions against the resolver's frequencies ──────────────────
@@ -49,8 +49,8 @@ def test_trace_events_carry_the_ob_their_roll_was_banded_at():
     for weapon_a, weapon_b in (('spear', 'dagger'), ('longsword', 'arming')):
         for seed in range(20):
             events = []
-            A = C.Combatant('A', weapon=weapon_a, faculty=5)
-            B = C.Combatant('B', weapon=weapon_b, faculty=2)
+            A = C.Combatant('A', weapon=weapon_a, score=5)
+            B = C.Combatant('B', weapon=weapon_b, score=2)
             wrapper._TRACE = events.append
             try:
                 wrapper.fight(A, B, cfg=None, rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
@@ -107,14 +107,14 @@ def _quality_at(net, pool, defender, monkeypatch):
     return seen['q']
 
 
-@pytest.mark.parametrize('faculty', [2, 3, 5, 6, 8])
-def test_overwhelming_quality_tail_is_measured_from_the_owner_bar(faculty, monkeypatch):
+@pytest.mark.parametrize('score', [2, 3, 5, 6, 8])
+def test_overwhelming_quality_tail_is_measured_from_the_owner_bar(score, monkeypatch):
     """At the bar, q is the tail floor (`QUAL['overwhelming']`); past it, z is exactly the distance past the
     bar in sigma_n units. On the pre-PC-03 tree the tail started at net 6 for every defender, so at every
     faculty but 6 the first assertion past the bar fails (or, for faculty 8, the floor is not at the bar)."""
-    defender = C.Combatant('D', faculty=faculty)
+    defender = C.Combatant('D', score=score)
     ob = core.ob_from_defender(defender, CFG)
-    pool = core.resolution_pool(DEFAULT_FACULTY)
+    pool = core.resolution_pool(DEFAULT_SCORE)
     bar = _owner_overwhelming_bar(ob)
     assert DE.degree_from_net(bar, ob) is DE.Degree.OVERWHELMING
     assert DE.degree_from_net(math.nextafter(bar, -math.inf), ob) is DE.Degree.SUCCESS
@@ -122,7 +122,7 @@ def test_overwhelming_quality_tail_is_measured_from_the_owner_bar(faculty, monke
     for delta in (0.25, 1.0, 2.5):
         z = ((bar + delta) - bar) / SL.sigma_n(pool)
         want = 1.5 + (core.OW_MAX - 1.5) * math.tanh(z / core.OW_Z)
-        assert _quality_at(bar + delta, pool, defender, monkeypatch) == want, (faculty, delta)
+        assert _quality_at(bar + delta, pool, defender, monkeypatch) == want, (score, delta)
 
 
 def test_band_floor_reads_the_owner_edges():
@@ -158,7 +158,7 @@ def test_faculty_enters_the_roll_through_exactly_one_channel():
     `reading()`'s READ_HISTORY_K for all three modes, `init_emphasis_sigma`'s INIT_HISTORY_K); this assertion was red
     on that tree. The other rolls that read History -- the bind and the counter -- read none of it now either."""
     aggressor = C.Combatant('A')
-    lo, hi = C.Combatant('D3', faculty=3), C.Combatant('D5', faculty=5)
+    lo, hi = C.Combatant('D3', score=3), C.Combatant('D5', score=5)
     for c in (aggressor, lo, hi):
         wrapper._init_live(c, CFG)
     channels = {'ob': core.ob_from_defender(hi, CFG) - core.ob_from_defender(lo, CFG)}
@@ -166,44 +166,76 @@ def test_faculty_enters_the_roll_through_exactly_one_channel():
         channels[f'net_sigma[{mode}]'] = (_defender_side_sigma(aggressor, hi, mode)
                                           - _defender_side_sigma(aggressor, lo, mode))
     assert len(channels) == 4
-    assert channels['ob'] == 1.0
+    assert channels['ob'] == DE.MU_PER_DIE * 5 - DE.MU_PER_DIE * 3   # two points of skill score at the rate the fight opposes at (A-71)
     # each mode is a separate exchange; the claim is per exchange: Ob plus that mode's sigma
     for mode in ('parry', 'dodge', 'wind'):
         live = [k for k in ('ob', f'net_sigma[{mode}]') if abs(channels[k]) > 1e-12]
-        assert live == ['ob'], f'faculty +2 moves {live}: {channels}'
+        assert live == ['ob'], f'score +2 moves {live}: {channels}'
     assert S.bind_sigma(aggressor, hi, CFG, TR) == S.bind_sigma(aggressor, lo, CFG, TR)
     assert S.counter_success_prob(hi, CFG, TR) == S.counter_success_prob(lo, CFG, TR)
 
 
-def test_set_attr_faculty_7_reads_pool_13_ob_3_5_and_no_sigma_moves():
-    """PC-14's exit, re-based by CR-85: `set_attr('faculty', 7)` reads pool 13 and Ob 3.5, and no sigma term moves."""
+def test_set_attr_score_7_reads_pool_13_ob_mu_per_die_x_7_and_no_sigma_moves():
+    """PC-14's exit, re-based by CR-85 and re-pinned at B15.03 (A-71): a skill score of 7 reads pool 13 and Ob `MU_PER_DIE x 7`
+    (the rate the fight opposes at; not typed as 2.8, the product is 2.8000000000000003), and no sigma term moves."""
     aggressor, d = C.Combatant('A'), C.Combatant('D')
     for c in (aggressor, d):
         wrapper._init_live(c, CFG)
     before = {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')}
-    d.set_attr('faculty', 7)
-    assert (core.resolution_pool(d.faculty), core.ob_from_defender(d, CFG)) == (13, 3.5)
+    d.score = 7
+    assert (core.resolution_pool(d.score), core.ob_from_defender(d, CFG)) == (13, DE.MU_PER_DIE * 7)
     assert {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')} == before
 
 
 # ── B05.58 (29-2): the fight's Ob is the owner's `opposed_ob` at the cfg's rate ────────────────────
 
 def test_the_fight_obstacle_is_opposed_ob_at_the_cfg_rate():
-    """A fight run with `cfg=dict(CFG, OPPOSITION_RATE=0.4)` and skill scores 2 and 3: every `roll` event's `ob` is
-    `0.4 x` the struck party's skill score (`sigma_leverage.opposed_ob`, A-71), not the control's half-score."""
+    """A fight run with `cfg=dict(CFG, OPPOSITION_RATE=0.3)` and skill scores 2 and 3: every `roll` event's `ob` is
+    `0.3 x` the struck party's skill score (`sigma_leverage.opposed_ob`, A-71), not the module's own rate (`MU_PER_DIE`, 0.4 since B15.03:
+    a planted rate equal to it could not show the override read)."""
     checked = 0
     for seed in range(8):
         events = []
-        A, B = C.Combatant('A', faculty=2), C.Combatant('B', faculty=3)
+        A, B = C.Combatant('A', score=2), C.Combatant('B', score=3)
         wrapper._TRACE = events.append
         try:
-            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.4), rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
+            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.3), rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
         finally:
             wrapper._TRACE = None
         for ev in events:
             if ev['kind'] != 'roll':
                 continue
             struck = B if ev['aggressor'] == 'A' else A
-            assert ev['ob'] == SL.opposed_ob(struck.faculty, 0.4) == 0.4 * struck.faculty, ev
+            assert ev['ob'] == SL.opposed_ob(struck.score, 0.3) == 0.3 * struck.score != SL.opposed_ob(struck.score, DE.MU_PER_DIE), ev
             checked += 1
     assert checked >= 1, checked
+
+
+# ── B15.02 (IS-PC-05): the combatant's skill score is the skill table's, never an attribute ────────
+
+def test_the_combat_pool_reads_the_skill_table():
+    """A planted change to one person's skill score (`PersonalCombatInput.scores`, the skill table's number) moves his fight pool, and the
+    Ob his opponent is struck at; a planted change to an attribute alone does not move the pool's base (A-7)."""
+    from engine.season.queries.inputs import PersonalCombatInput
+    from modules.combat import fight as entry
+
+    def read(scores, attributes=()):
+        """A's `roll` pools and the Ob of B's `roll`s over six seeds of one fixed record."""
+        a_pools, b_obs = set(), set()
+        for seed in range(6):
+            inp = PersonalCombatInput(claimants=('A', 'B'), ends=(4, 4), wound_quantities=('wounds',), scores=scores, attributes=attributes)
+            out = entry.fight(inp, draw.seeded(draw.H2("test_combat_ob_from_defender_consumers.skill_table", seed)))
+            for ev in out.trace:
+                if ev['kind'] == 'roll' and ev['aggressor'] == 'A':    # A strikes B: A's pool, B's Ob
+                    a_pools.add(ev['pool'])
+                    b_obs.add(ev['ob'])
+        return a_pools, b_obs
+
+    base_pools, base_obs = read((5, 3))
+    moved_pools, _ = read((7, 3))
+    attr_pools, _ = read((5, 3), attributes=({'attr.body.strength': 7, 'attr.body.agility': 7}, {}))
+    assert base_pools == {core.resolution_pool(5)} and moved_pools == {core.resolution_pool(7)}, (base_pools, moved_pools)
+    assert attr_pools == base_pools, (attr_pools, base_pools)
+    assert base_obs == {SL.opposed_ob(3, core.OPPOSITION_RATE)}, base_obs
+    _, moved_obs = read((5, 6))
+    assert moved_obs == {SL.opposed_ob(6, core.OPPOSITION_RATE)}, moved_obs

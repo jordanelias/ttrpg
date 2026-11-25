@@ -27,7 +27,7 @@ from commentary import commentate
 from fight_trace import trace_record
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')
-_FIGHTER_FIELDS = attributes.KEYS   # PC-14: the attribute spec owns the roster and the defaults
+_FIGHTER_FIELDS = attributes.KEYS + ("score",)   # PC-14: the attribute spec owns the roster and the defaults; `score` is the skill score (IS-PC-05), not an attribute
 
 
 def _make_fighter(spec, default_label):

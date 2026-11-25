@@ -20,10 +20,8 @@ Two batches open in one step and edit one file: the coordinator checks each pair
 
 | step | earlier → later (merge order: §2.1 order) | files both edit (permanent surface and the pin file left out) | hot files among them |
 |---|---|---|---|
-| S12 | B24p → BA1 | `rosters.yaml`, `verb_table.yaml` | rosters.yaml, verb_table.yaml |
 | S12 | B24p → B11 | `data/fixtures.py`, `data/rosters.py`, `data/verbs.py`, `loop/effects_information.py`, `loop/witness.py`, `queries/person_q.py`, `queries/world_q.py`, `references/module_contracts.yaml` | fixtures.py, rosters.py, verbs.py, effects_information.py, witness.py, person_q.py, world_q.py, module_contracts.yaml |
 | S12 | B24p → B15 | `queries/inputs.py`, `seam/wrappers/pool.py`, `seam/wrappers/sigma.py` | inputs.py, sigma.py |
-| S12 | BA1 → B11 | `rosters.yaml`, `verb_table.yaml` | rosters.yaml, verb_table.yaml |
 | S12 | B11 → B15 | `data/fixtures.py`, `data/rosters.py`, `data/verbs.py`, `decision/options.py`, `queries/world_q.py`, `rosters.yaml`, `verb_table.yaml` | fixtures.py, rosters.py, verbs.py, options.py, world_q.py, rosters.yaml, verb_table.yaml |
 | S12 | B11 → B21 | `boot/realm.py`, `data/requires.py`, `harness/scenarios.py`, `loop/effects_information.py`, `loop/witness.py`, `queries/person_q.py`, `tests/test_season_shape.py` | realm.py, requires.py, scenarios.py, effects_information.py, witness.py, person_q.py |
 | S12 | B15 → B21 | `data/fixtures.py`, `data/rosters.py`, `data/verbs.py`, `decision/options.py`, `queries/world_q.py`, `rosters.yaml`, `verb_table.yaml` | fixtures.py, rosters.py, verbs.py, options.py, world_q.py, rosters.yaml, verb_table.yaml |
@@ -174,7 +172,6 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `harness/probes.py` | B09.09, B11.17, B12b.18, B27.16 | B09 → B11 → B12b → B27 |  | **not listed** |
 | `loop/deliberate.py` | B09.01, B09.16, B34.10, B28.17, B38.74 | B09 → B34 → B28 → B38 |  | listed |
 | `harness/aperture.py` | B05.18, B11.76, B12a.01, B37.05, B36.17 | B11 → B12a → B37 → B36 |  | listed |
-| `harness/decision_spread.py` | B09.02, B09.13, B10.29, B10.30, B10.31, BA1.05 | B09 → B10 → BA1 |  | listed |
 | `queries/faction_q.py` | B10.67, B21.68, B21b.13, B11F1.01, B11F2.02, B28.08 | B10 → B21 → B21b → B11F1 → B11F2 → B28 |  | **not listed** |
 | `seam/wrappers/pool.py` | B01.02, B05.09, B05.10, B05.11, B05.16, B24p.19, B15.02, B12c.26 | B01 → B24p → B15 → B12c |  | listed |
 | `modules/mass_battle/core/contact.py` | B19.05, B19.06, B19.59, B20.06, B20.08, B20.09, B20.15, B20.20 | B19 → B20 |  | listed |
@@ -222,7 +219,6 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `engine/` | B10.51, B10.53, B31.01, B38.51 | B10 → B31 → B38 |  | **not listed** |
 | `cohorts.yaml` | B12b.18, B11F1.03, B11F1.04, B38.56 | B12b → B11F1 → B38 |  | **not listed** |
 | `data/instruments.py` | B32.01, B40.18, B40.22, B40.25 | B32 → B40 |  | listed |
-| `data/pursuits.py` | B10.17, B10.19, BA1.07 | B10 → BA1 |  | **not listed** |
 | `harness/arc.py` | B36.04, B36.16, B39.11, B39.12 | B36 → B39 |  | listed |
 | `harness/loops.py` | B11F2.05, B38.23, B38.70, B38.73 | B11F2 → B38 |  | **not listed** |
 | `harness/scene.py` | B34.15, B34.17, B20.21, B30.06 | B34 → B20 → B30 |  | **not listed** |
@@ -259,7 +255,6 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/test_aperture.py` | B12a.01 | B12a |  | **not listed** |
 | `tests/test_cr87_violence_contexts.py` | B15.08, B37.14, B37.99 | B15 → B37 |  | **not listed** |
 | `tests/test_notice_draw.py` | B11.65, B11.66, B12c.09 | B11 → B12c |  | **not listed** |
-| `tests/test_pursuit_signatures.py` | B10.17, B10.19, BA1.07 | B10 → BA1 |  | **not listed** |
 | `tests/test_sc02_reception.py` | B05.17, B05.23, B24.02 | B24 |  | **not listed** |
 | `tests/test_season_weather.py` | B12a.02, B21b.99, B24a.05 | B12a → B21b → B24a |  | **not listed** |
 | `tests/test_valley.py` | B12c.28, B12c.29, B38.89 | B12c → B38 |  | **not listed** |

@@ -27,7 +27,7 @@ GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B08-scene-order
 GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
-GATE: Batch BA1-cast-content
+GATE: Batch BA1-cast-content @ce61cbf3055cd6326cb2f9ea6330af4ce5d4fc45
 GATE: Batch B11-fi-readers
 GATE: Batch B11F1-flow-se
 GATE: Batch B11F2-flow-in
@@ -35,7 +35,7 @@ GATE: Batch B12a-world-motion-and-ground
 GATE: Batch B12b-weather-arcs-population
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
-GATE: Batch B15-pc-calibration
+GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B16-pc-round
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B18-pc-content

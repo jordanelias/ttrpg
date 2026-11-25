@@ -411,3 +411,19 @@ def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_a
     assert got == {HURT: [wound.id], HIT: [ROOT]}, (
         f"the starvation writes cite {got}: the wounded-then-starved person's must be the wound {wound.id} "
         f"that wrote his body, and the wounder's (never wounded) must be [ROOT], not the wound he dealt")
+
+
+# B15.06 (`HAP_A` edit 3): `world_q.mortal_terms`, the one owner of how hard a body is to kill.
+def test_mortal_terms_refuses_an_unknown_cause():
+    """A cause outside `mortal_causes` is refused, naming the roster; `spell` is a member whose obstacle is B37's, so it
+    raises the closed refusal and not the roster's."""
+    from ..gaps import Unspecified
+    w = build_realm(0)
+    pid = _individuals(w)[0]
+    with pytest.raises(Unspecified) as unknown:
+        world_q.mortal_terms(w, pid, "plague", 3)
+    assert "mortal_causes" in str(unknown.value)
+    with pytest.raises(Unspecified) as spell:
+        world_q.mortal_terms(w, pid, "spell", 3)
+    assert "until HAP_A edit 5 lands" in str(spell.value)
+    assert "mortal_causes" not in str(spell.value)

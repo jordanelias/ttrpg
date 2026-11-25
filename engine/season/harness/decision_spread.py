@@ -74,7 +74,7 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                dot still varies by verb identically for everyone.
 
   --signatures BUILT REALM, NO SEASON (BA1.05).  For each pursuit with a row in `rosters.yaml: pursuit_signatures`, every
-               person is given that one pursuit at weight 1.0 (a fresh build per pursuit; conviction as built), the
+               person is given that one pursuit at weight 1.0 (one build, every person's `pursuits` and `manner_offset` overwritten per pursuit; conviction as built), the
                common referents are scored as `--decisions` scores them, and the SAMPLED tops are tallied: `SIGNATURE <k>`
                per pursuit (modal top verb, the tops, any top its row opposes), `SHARED TOP <verb>` for a verb modal for
                more than two pursuits, and the footer `signature_violations` / `shared_tops_over_two`. A reading: it
@@ -958,7 +958,8 @@ def main(argv=None) -> int:
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(argv)
     if a.signatures:
-        if a.arms or a.control or a.null or a.retries or a.persons or a.decisions or a.season or a.retest:
+        if (a.arms or a.control or a.null or a.retries or a.persons or a.decisions or a.season or a.retest
+                or a.seasons != 2 or a.ticks != RETEST_TICKS):
             ap.error("--signatures is its own mode: it takes no other reading or arm flag (--seed only)")
         print_signatures(read_signatures(a.seed))
         return 0

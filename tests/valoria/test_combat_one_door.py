@@ -61,7 +61,7 @@ def _matchups():
                       attributes=({"attr.body.strength": 6}, {}))),
         dict(name="the four new fields and a score",
              A=dict(label="A", weapon="katana", tradition="japanese", equipped={"shinogi": 2.0},
-                    skills={"grab": 0.5}, disp=6, faculty=5),
+                    skills={"grab": 0.5}, disp=6, score=5),
              B=dict(label="B", weapon="arming"),
              rec=dict(claimants=("A", "B"), ends=(4, 4),
                       kits=(("katana", "light"), ("arming", "light")), scores=(5, None),

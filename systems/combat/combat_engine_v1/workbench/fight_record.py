@@ -4,9 +4,9 @@ Part B). `fight_trace.py`, `balance.py` and `server.py` read it; none of them to
 calls `wrapper.fight` on a Combatant, for a declared Yield the record cannot carry.
 
 A PARTY is a plain dict, one fighter's share of the record:
-  label, end, attributes ({registry key: value}), kit ((weapon, armor)), score (`Combatant.faculty`), disp,
+  label, end, attributes ({registry key: value}), kit ((weapon, armor)), score (`Combatant.score`), disp,
   tradition, techniques ({name: level}, or a list), axes ({axis: bonus}).
-It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus weapon, armor, tradition, equipped, skills, label)
+It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus score, weapon, armor, tradition, equipped, skills, label)
 or from a built Combatant (`party_of_combatant`). `record_of` zips two parties into the record, `claimants` order.
 
 NOT CARRIED, and said so: state a Combatant holds that the record has no field for (`known_traditions`, a hand-set
@@ -29,7 +29,7 @@ def party_of_spec(spec, default_label):
                 attributes={s.registry_key: given[s.key] for s in attributes.SPEC
                             if s.key in given and s.key != 'end' and s.registry_key is not None},
                 kit=(spec.get('weapon', 'arming'), spec.get('armor', 'light')),
-                score=given.get('faculty'), disp=given.get('disp'),
+                score=spec.get('score'), disp=given.get('disp'),
                 tradition=spec.get('tradition', 'none'), techniques=spec.get('equipped'), axes=spec.get('skills'))
 
 
@@ -37,7 +37,7 @@ def party_of_combatant(c):
     return dict(label=c.label, end=c.attrs['end'],
                 attributes={s.registry_key: c.attrs[s.key] for s in attributes.SPEC
                             if s.key != 'end' and s.registry_key is not None},
-                kit=(c.weapon, c.armor), score=c.attrs['faculty'], disp=c.attrs['disp'],
+                kit=(c.weapon, c.armor), score=c.score, disp=c.attrs['disp'],
                 tradition=c.tradition, techniques=c.equipped, axes=c.skills)
 
 
@@ -53,7 +53,7 @@ def record_of(pa, pb, terms='death'):
 
 def result_of(outcome):
     """+1 / -1 / 0 (A won / B won / unresolved): the engine's own `fight_result` event, the last event of every scene. The
-    record lifts no integer (B14.01), and the trackers cannot give it: the upset flip turns a felling's winner over."""
+    record lifts no integer (B14.01), and the trackers cannot give it (an undecided fight has none, and the mortal-wound draw may stand a felled man up)."""
     return [e for e in outcome.trace if e['kind'] == 'fight_result'][-1]['result']
 
 

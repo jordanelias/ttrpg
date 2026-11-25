@@ -4,15 +4,15 @@
 (ii) a held `arms` key reaches combat's pool and Ob through `seam/wrappers/sigma.py::faculty` -- CR-85's one path,
 `combat_input` -> `PersonalCombatInput.scores` -- and NO second skill input exists; (i) `arms` is a vocation
 (`data/verbs.py::VOCATIONS`), so `train` forms on it and `_eff_train` raises it; (iii) the `cast:` overlay
-(`harness/corpus_run.py::cast_overlay`, checked by `_check_capability` against the roster's values) is the authored
-writer and names NO `arms` value (Jordan's content); (iv) `loop/effects_combat.py::_grown`: a fight that drew blood
+(`harness/corpus_run.py::cast_overlay`, checked by `_check_capability` against the roster's values) names NO `arms`
+value; the registry rows' `capabilities:` write it since BA1.01 (Jordan's content); (iv) `loop/effects_combat.py::_grown`: a fight that drew blood
 raises `arms` by one on each SURVIVING party -- and, since B05.09 (CORE Edit 9, `raised_capability`), MINTS a first rank
 for a survivor who held none (the never-minted rule and its mutation test are retired with it; B05.99 rewrote this file).
 [ASSUMPTION; low; Jordan to correct; revert: rename the roster key] -- `arms` here is the trained skill, not
 CP-T03-03's `arms_kinds` (equipment).
 
   FALSIFIER: a person holding `arms` 5 (the shipped roster, no test-local row) against a default party rolls pool 11
-  against Ob 1.0, his opponent pool 8 against Ob 2.5 -- CR-85's planted faculty-5 reading, reproduced through the
+  against Ob 0.8, his opponent pool 8 against Ob 2.0 (`MU_PER_DIE x score`, B15.03) -- CR-85's planted faculty-5 reading, reproduced through the
   roster. A surviving holder of a bloodied fight gains one; a surviving non-holder is minted one.
   CONTROL: a FORMATION MOVER EVEN AT CONTROL -- `arms` in the vocation range adds one `train` Candidate per `train`
   formation, so with nobody holding the key every 1-season hash still moves. The realm hashes are
@@ -24,6 +24,7 @@ from __future__ import annotations
 import importlib
 import random
 from engine.dice_engine import draw
+from engine.dice_engine.dice_engine import MU_PER_DIE
 from collections import Counter
 
 import pytest
@@ -111,18 +112,34 @@ def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_
 
 def _spy(monkeypatch) -> Counter:
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
-    core = importlib.import_module("modules.combat.core")
-    seen, real = Counter(), core.resolve
+    core, fight, wrapper = (importlib.import_module(f"modules.combat.{n}") for n in ("core", "fight", "wrapper"))
+    seen, real, real_mortal, real_yield, inside = Counter(), core.resolve, fight.mortal_wound, wrapper._yield_roll, [False]
 
     def spy(pool, net_sigma, rng, ob):
-        seen[(pool, ob)] += 1
+        if not inside[0]:            # the fight's own rolls: B15.07's mortal-wound draw and B15.10's yield roll are drawn on the same owner and are not one
+            seen[(pool, ob)] += 1
         return real(pool, net_sigma, rng, ob)
+
+    def mortal(*a):
+        inside[0] = True
+        try:
+            return real_mortal(*a)
+        finally:
+            inside[0] = False
     monkeypatch.setattr(core, "resolve", spy)
+    def yielded(*a, **k):
+        was, inside[0] = inside[0], True
+        try:
+            return real_yield(*a, **k)
+        finally:
+            inside[0] = was
+    monkeypatch.setattr(fight, "mortal_wound", mortal)
+    monkeypatch.setattr(wrapper, "_yield_roll", yielded)
     return seen
 
 
 @pytest.mark.parametrize("verb", ["fight", "accept"])
-def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_seam(verb, monkeypatch, _engine):
+def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_mu_x_5_through_the_seam(verb, monkeypatch, _engine):
     w = build_realm(1)
     a, b = sorted(w.persons)[:2]
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
@@ -140,7 +157,8 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     # B05.99 re-pin (B05.09: the skill score has no attribute; B05.57/B05.58: the fight's pool is `pool_of(score, addends, 6, 5)`
     # and its Ob `opposed_ob(defender's score, 0.5)`): b scores the untrained 2, so a meets Ob 1.0 and b rolls pool 8 -- the
     # docstring's CR-85 reading again (B01a.99 had read b's drawn attribute: {(11, 0.5), (7, 2.5)}).
-    assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
+    # B15.03 re-pin (A-71): the fight opposes at `MU_PER_DIE`, so a meets Ob `MU_PER_DIE x 2` (0.8) and b is attacked at `MU_PER_DIE x 5` (2.0); was 1.0 and 2.5
+    assert set(seen) == {(11, MU_PER_DIE * 2), (8, MU_PER_DIE * 5)}, dict(seen)
     assert checked == 6
 
 
@@ -175,8 +193,8 @@ def test_control_a_minted_arms_rank_adds_nothing_to_a_roll_only_an_authored_hold
     assert all(held[pid] >= v for pid, v in authored.items()), (authored, held)       # a fight never lowers an authored rank
     pool_add, pool_floor = pool_pair(w.fixtures, FIGHT_DICE_SITE)
     scores = {untrained(w.fixtures)} | {s for pid, v in authored.items() for s in range(v, held[pid] + 1)}
-    allowed = {(pool_of(a, 0, pool_add, pool_floor), opposed_ob(b, 0.5)) for a in scores for b in scores}    # 0.5: the module's own constant
-    assert seen and set(seen) <= allowed and (8, 1.0) in seen, (dict(seen), sorted(allowed))
+    allowed = {(pool_of(a, 0, pool_add, pool_floor), opposed_ob(b, MU_PER_DIE)) for a in scores for b in scores}    # the module's own rate (A-71, B15.03)
+    assert seen and set(seen) <= allowed and (8, MU_PER_DIE * 2) in seen, (dict(seen), sorted(allowed))
     assert any(pool > 8 for pool, _ob in seen), dict(seen)       # an authored holder's roll reads above the untrained pool
 
 
@@ -301,7 +319,7 @@ def test_capture_and_accept_grow_by_the_same_rule():
 
 
 def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter_step(_engine):
-    """Every person in `build_realm(5)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 1.0):
+    """Every person in `build_realm(1)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 0.8):
     after one season at least one survivor holds 3 -- the write admitted at ENCOUNTER, where the season fights --
     and every value is 2 or more (nothing lowered, nothing minted)."""
     # B21.03 RE-TRACED, seed 1 -> 5 (`off_spymaster` and `off_cardinal_prudence` no longer march: a season at most seeds fights nobody, and at seed 1 no one grows).

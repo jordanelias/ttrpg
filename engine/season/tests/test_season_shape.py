@@ -5976,8 +5976,8 @@ def _k1_holds(w, monkeypatch) -> int:
         for key, v in want.items():
             assert getattr(c, key) == v, f"{c.label}: {key} is {getattr(c, key)}, authored {v}"
             checked += 1
-    for key in ("spirit", "focus", "disp", "faculty"):   # unauthored (or keyless): the class default / the input's
-        want = inp.scores[0] if key == "faculty" else spec.DEFAULT[key]
+    for key in ("spirit", "focus", "disp", "score"):   # unauthored (or keyless): the class default / the input's
+        want = inp.scores[0] if key == "score" else spec.DEFAULT[key]
         assert getattr(low, key) == want, f"{key} moved without an authored value"
         checked += 1
     assert mid.strength == spec.DEFAULT["strength"] and mid.end == inp.ends[1]
@@ -8984,7 +8984,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
-    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we3"])   # seed re-picked at B06.99: the stream changed (was we0)
+    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])   # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we3, B06.99; we0)
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
@@ -8998,7 +8998,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     d = SeasonDriver(w2)
     # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER (`_we_bands`' note); the fight's Events are ENCOUNTER's.
     evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
-                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we3", actor="p_low", verb="fight",   # seed re-picked at B06.99: the stream changed (was we0)
+                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",   # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we3, B06.99; we0)
                                 payload={"subject": "p_mid"})], 2), 2)
     assert {e.kind for e in evs} >= {"person.died", "body.changed"}, [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
