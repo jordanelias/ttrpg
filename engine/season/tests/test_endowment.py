@@ -23,7 +23,10 @@ from ..data.geography import geography
 from ..data.rosters import roster
 from ..gaps import Forbidden, Ungraded, expect_refusal
 from ..harness import populated as POP
+from ..harness import probes as P
 from ..harness.populated import run
+from ..loop.driver import SeasonDriver
+from ..queries import world_q
 
 GROUND = DEFAULT_FIXTURES.sweep("endowment_mode", "ground")
 PRODUCING = ("harbour", "seam", "field")
@@ -118,3 +121,66 @@ def test_ground_reaches_produce_the_settlements_do_not_share_one_band():
     assert sum(g.values()) == sum(u.values()) >= 30
     assert len(g) >= 2, g
     assert len(u) == 1, u
+
+
+# --- B12a.52: THE TREASURY IS THE GRANARY (`07_SE_treasury_granary_B` §4 (a), (b)) ------------------------------------------------------
+def _ground_with(granary_seasons: int):
+    return GROUND.sweep("granary_seasons", granary_seasons)
+
+
+def _cohorts_by_settlement(w) -> dict:
+    """`{set_<slug>: [cohort pid, ...]}` -- every cohort housed at or beneath each settlement rung, by the one reader of homes."""
+    homes, out = world_q.home_of(w), {}
+    for sid in geography()["settlements"]:
+        srid = f"set_{_slug(sid)}"
+        out[srid] = sorted(pid for pid, h in homes.items() if w.persons[pid].is_cohort and srid in world_q.ancestry(w, h))
+    return out
+
+
+def _season(w, d=None):
+    d = d or SeasonDriver(w)
+    d.season(P.NOCHOOSE, question=None)
+    return d
+
+
+def test_every_draw_source_above_a_settlement_is_a_seat_rung():
+    """THE SOURCE'S NAMED TEST (`07_SE_treasury_granary_B` §5, §8), at two seasons: under `ground`, `granary_seasons` 4, seed 0, no acts, every
+    draw cell whose `source` lies ABOVE its settlement names a rung at which an Office sits, and at least one such cell exists."""
+    w = build_realm(0, fixtures=_ground_with(4))
+    d, seats, checked = None, {o.rung for o in w.offices.values() if o.rung is not None}, 0
+    for _ in range(2):
+        for home, cells in world_q.subsistence_draw(w).values():      # the draw the stores as they stand give = MATTER's next one (no act writes between)
+            chain = world_q.ancestry(w, home)
+            above = chain[next(i for i, r in enumerate(chain) if w.rungs[r].kind == world_q.HUNGER_KIND) + 1:]
+            for _kind, (_want, _take, src) in cells.items():
+                if src in above:
+                    assert src in seats, (home, src, sorted(seats))
+                    checked += 1
+        d = _season(w, d)
+    assert checked >= 10, "the loop asserted nothing: no draw reached above its settlement"
+
+
+def test_ground_granaries_feed_the_highlands_then_run_down():
+    """`07_SE_ground_and_granaries` §5's named test at two seasons (A-114): `granary_seasons` 1 seeds exactly one season of the deficit, so the
+    granary empties inside the cap. Seed 0, no acts, weather draw off. Season 0: no cohort under a seam territory is short while its treasury holds
+    grain, and the treasury's grain falls; season 1: those cohorts' bodies fall. Control `granary_seasons` 0: they fall from season 0."""
+    seam_towns = {f"set_{_slug(sid)}" for sid, row in geography()["settlements"].items()
+                  if set(endowment_for(GROUND, sid, row["territory"])) == {"seam"}}
+    assert len(seam_towns) >= 10
+    w, control = build_realm(0, fixtures=_ground_with(1)), build_realm(0, fixtures=_ground_with(0))
+    cohorts, full = _cohorts_by_settlement(w), {pid: p.body for pid, p in w.persons.items() if p.is_cohort}
+    seam = {pid for srid in seam_towns for pid in cohorts[srid]}
+    treasuries = {world_q.treasury_above(w, srid) for srid in seam_towns}
+    grain0 = {t: (w.rungs[t].stores or {}).get("grain", 0) for t in treasuries}
+    assert None not in treasuries and all(g > 0 for g in grain0.values()), grain0
+    harbour = {pid for sid, row in geography()["settlements"].items() if "harbour" in endowment_for(GROUND, sid, row["territory"])
+               for pid in cohorts[f"set_{_slug(sid)}"]}
+    d = _season(w)
+    assert all(w.persons[pid].body == full[pid] for pid in full) and len(seam) >= 10      # season 0: nobody in the realm is short
+    assert all((w.rungs[t].stores or {}).get("grain", 0) < g for t, g in grain0.items()), "no treasury was drawn in season 0"
+    _season(w, d)
+    assert all(w.persons[pid].body < full[pid] for pid in seam), "the granary is empty and the highlands are still at full body"
+    assert len(harbour) >= 15 and all(w.persons[pid].body == full[pid] for pid in harbour), "a harbour cohort fell: its own Sites cover both kinds"
+    ccohorts = _cohorts_by_settlement(control)
+    _season(control)
+    assert all(control.persons[pid].body < full[pid] for srid in seam_towns for pid in ccohorts[srid])

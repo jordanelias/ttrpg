@@ -2708,6 +2708,15 @@ def governing_hold(w: World, rung_id: str) -> Optional[Tenure]:
     return None
 
 
+def treasury_above(w: World, rung_id: str) -> Optional[str]:
+    """B12a.52 (`07_SE_treasury_granary_B` R-SE-28): The nearest rung strictly above `rung_id` at which some Office sits, or None. The one
+    owner of *whose treasury relieves this place*; read-only; traces as a resolver. `ancestry` includes `rung_id` itself, so `[1:]` is
+    "strictly above". A stock held at a rung no Office names has no keeper (`loop/effects_governance.py`: the treasury is the seat's rung)."""
+    TRACE.query("treasury_above", "resolver")
+    seated = {o.rung for o in w.offices.values() if o.rung is not None}
+    return next((r for r in ancestry(w, rung_id)[1:] if r in seated), None)
+
+
 def faction_of(w: World, subject: str) -> Optional[str]:
     """WHICH FACTION `subject` COHERES UNDER, whatever it is -- the faction Proposition id, or `None`.
     The one dispatch over the two owners below it, by `World.class_of` (which tries `Person` BEFORE
