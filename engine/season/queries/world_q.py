@@ -3382,6 +3382,46 @@ def writs_addressed(w: World, p: Person, held: bool = False) -> tuple:
     return tuple(sorted(out - answered))
 
 
+def writs_inherited(w: World, p: Person) -> tuple:
+    """THE WRITS HIS PREDECESSOR ISSUED THROUGH A SEAT `p` NOW HOLDS (B21.66, `IS-B3-FA-06`, replacing `U5d_FA_owed_edits` §9; rulings
+    A-21, `04` §C.2 reading (i)), sorted by id: the Records of a `PROCLAIMED` kind whose issuing seat (`issuing_seat`, read off the
+    creating act) is a seat of `p`'s own live `hold`s, whose creating act `p` did not do himself, and whose terms `p`'s OWN ledger
+    holds a content claim of that is not his own doing (`content_said`; A-21: a decree is proclaimed, so whoever heard it knows its
+    terms). The occasion for his CONFIRMATION: `questions_for` stamps the Propositions these writs order, the existing `issue` row forms
+    on them with the predecessor's terms as its content, and the `issue` he then draws is the confirmation. No new verb, no new basis.
+
+    ⚠ NOTHING HERE DECIDES AND NOTHING IS PASSED ON: the writ is not carried over to him (`04` §C.2's enumeration is complete); a writ he
+    does not confirm has no holder, its addressees still hold its terms as claims, and a `comply` or `evade / defy` on it is answered by
+    nobody until he issues. A writ he HAS confirmed is the one his own `issue` minted, issued by his own act, so it is not listed
+    here. Resolver-side and read-only, `writs_addressed`'s shape (his own edges and ledger, the store for the kind, the log for the
+    creating act); `()` for nearly everyone, and for a person with no seat of his own."""
+    mine = {t.object for t in w.seat_holds(p.id)}
+    if not mine:
+        return ()
+    out, tried = set(), set()
+    for c in p.ledger:
+        rec = w.records.get(c.subject)
+        if (rec is None or c.subject in tried or c.doer == p.id or rec.kind not in PROCLAIMED
+                or content_said(c) is None):
+            continue
+        tried.add(rec.id)
+        seat = issuing_seat(w, rec.id, frozenset(PROCLAIMED[rec.kind]))
+        if seat in mine and getattr(_creating_act(w, rec.id), "actor", None) != p.id:
+            out.add(rec.id)
+    return tuple(sorted(out))
+
+
+def inherited_terms(w: World, p: Person) -> tuple:
+    """THE PROPOSITIONS THE WRITS `writs_inherited` NAMES ORDER (B21.66), sorted by id, each once: the writ's `terms`
+    (`person_q.ABOUT_KEYS`, the one owner of what a document is about) where that is a Proposition (`World.class_of`) -- `issue`'s
+    `referent_class` (B21.54), so what `questions_for` stamps is what the confirming `issue` forms on. A writ whose terms name a
+    person (a `dispatch`'s order, the man sent) or anything else is the predecessor's act to make again by his own row, not a
+    Proposition to confirm, and names none."""
+    terms = {w.records[r].subject_matter.get(ABOUT_KEYS.get(w.records[r].kind)) for r in writs_inherited(w, p)
+             if isinstance(w.records[r].subject_matter, dict)}
+    return tuple(sorted(t for t in terms if isinstance(t, str) and w.class_of(t) == "Proposition"))
+
+
 def addressed_records(w: World, p: Person, kind: str, named: Optional[frozenset] = None) -> tuple:
     """THE RECORDS OF `kind` ADDRESSED TO `p` THAT HE HAS HEARD OF (B11 lane A, carrying
     `proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` A0 [ASSUMPTION;
@@ -4525,6 +4565,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
+    # B21.66 (`IS-B3-FA-06`; A-21, `04` §C.2 reading (i); [ASSUMPTION; medium; Jordan to correct; revert: drop `inherited_terms` from the splice]):
+    # AND, BESIDE THE PROPOSITIONS HE HAS HEARD OF, THE ONES THE WRITS HIS PREDECESSOR ISSUED THROUGH HIS SEAT ORDER
+    # (`writs_inherited`; `inherited_terms`), as `Proposition` -- `issue` forms on them, and the `issue` he draws is the confirmation.
+    # Appended after `propositions_heard`, so a Proposition both name keeps that term's pair (`_stamped`'s dedup).
     # B21.23 (`06_FA_decree_binds` edit 4; A-24, A-47 [ASSUMPTION; medium; Jordan to correct; revert: `recall_suspicion` `None`,
     # the occasion off]): AND, BESIDE THE VACANCIES, THE PERSONS WHOSE DEFIANCE OF HIS WRITS HAS REACHED THE THRESHOLD AND THE SEATS HE
     # MAY STRIP FROM THEM (`recalls`), as `Person` and `Office`. The occasion only; the recall is `revoke`'s draw.
@@ -4535,7 +4579,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p) + tuple(standing) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
