@@ -193,6 +193,8 @@ def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # of the opened seats (`tenure_write_basis`'s claim arm counts a title not laid down as still held).
     by = [t for t in w.seat_holds(a.actor) if t.object in listed]
     seats = claimable_seats(w, a.actor, {t.object for t in by}) if by else ()
+    # B21.02: the ban is asked per seat opened, as `_eff_confer` asks it (`_req_succeed` asks only the named seat's rung)
+    seats = tuple(s for s in seats if not restrained(w, a.actor, BAN_KIND, at=w.offices[s].rung))
     if seat not in seats:
         return NO_CHANGE
     held = [t for t in by if passes_a_seat(w.offices[t.object])]

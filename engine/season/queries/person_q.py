@@ -2012,7 +2012,7 @@ def commanded_read(p: Person) -> frozenset:
       * THE HOLDERS HE NAMES OF OTHER SEATS -- a `(S, hold, x)` claim (the shape `sworn_to_holder` and the gate's `Subject.seat` write),
         for a seat `S` that is not one he sits in.
 
-    ⚠ TWO LIMITS, STATED, BOTH OVER-INCLUSIONS THE FOLD CORRECTS. (1) An oath's claim names the man and never the seat he swore to
+    ⚠ THREE LIMITS, STATED; (1) AND (2) ARE OVER-INCLUSIONS THE FOLD CORRECTS, (3) IS AN UNDER-INCLUSION THE FOLD CANNOT. (3) Only the first two classes of `commands` are read (sworn men, holders of seats he may revoke), so `issue` and `dispatch` are never FORMED on an unseated, unsworn resident, A-22's third class, though the fold would admit one (`test_vb_d_orders.py` pins this). (1) An oath's claim names the man and never the seat he swore to
     (the Event's one change is the Tenure edge, whose id a person cannot read), so a man seen swearing to ANOTHER seat is read as
     sworn here. (2) *Beneath his* is the rung's containment, the World's (`may_revoke`'s rule), so every other seat's named holder is
     read, and an order up the chain is refused at the fold (`commands` is False for it) and not declined here. Neither widens the

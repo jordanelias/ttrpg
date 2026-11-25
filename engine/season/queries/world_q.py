@@ -686,6 +686,8 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
         off = w.offices.get(t.object)
         if off is None or not sits_over(w, off, venue):
             continue
+        if restrained(w, t.subject, DETAIN_KIND):      # B21.11: a detained holder exercises no seat, `may_determine` asks the same (`_seat_grants`)
+            continue
         seats.append(t.subject)
     return seats
 
@@ -2189,7 +2191,7 @@ def seat_people_at(w: World, via: str, rid: str) -> list[str]:
     TRACE.query("seat_people_at", "resolver")
     faction = seat_faction(w, via)
     people = mustered(w, rid, faction) if faction else []
-    sworn = establishment_of(w, via)
+    sworn = [t.subject for t in sworn_to(w, via) if not t.imposed and t.subject in w.persons]    # an IMPOSED oblige (a sentence) is no oath
     if sworn:
         present = set(_present_in(w, _subtree(w, rid)))
         people += [p for p in dict.fromkeys(sworn) if p in present and p not in people]
@@ -3836,7 +3838,8 @@ def at_war(w: World, a: str, b: str) -> bool:
         if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
             continue
         if any(t.kind == "commit" and t.object == p.id and t.live
-               and (may_wage(w, t.subject, p.subject) or may_wage(w, t.subject, p.value))
+               and ((t.subject in members(w, p.subject) and may_wage(w, t.subject, p.subject))     # B21.62: the declarer's own party's seat
+                    or (t.subject in members(w, p.value) and may_wage(w, t.subject, p.value)))
                for t in w.tenures):
             return True
     return False

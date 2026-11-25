@@ -2772,8 +2772,7 @@ rosters:
       `basis` conjunct under the `command` rule: `issue`'s `to`, which `VerbRow.commanded_operand` reads off the cell), so this roster
       names only a row no cell can carry: `dispatch`, whose predicate (`loop/predicates.py::_req_dispatch`) asks the same
       `world_q.commands` in the fold. Read in `decision/options.py::operand_bags`, person-side and World-free (AX-2), against
-      `queries/person_q.py::commanded_read` -- what his own ledger names. WHAT HE CANNOT READ STAYS THE FOLD'S REFUSAL: the roster
-      narrows formation and widens nothing, and `commands` still decides at the fold. ONE LOADER, `data/verbs.py::COMMAND_DECLINES`,
+      `queries/person_q.py::commanded_read` -- what his own ledger names. THE ROSTER NARROWS FORMATION AND WIDENS NOTHING, and `commands` still decides at the fold: what he cannot read is refused there when formed, and an unseated, unsworn resident the fold would admit is never formed (`person_q.py::commanded_read`, limit 3). ONE LOADER, `data/verbs.py::COMMAND_DECLINES`,
       refused at import when a member names a verb the table lacks, a typed row, or a row whose `referent_class` is not `Person`.
       [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and `operand_bags` fans `dispatch` over every referent again.]
     values: [dispatch]

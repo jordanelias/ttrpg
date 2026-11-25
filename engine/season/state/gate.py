@@ -434,7 +434,7 @@ def sworn_to(w: "World", seat_id: Optional[str]) -> list:
 def is_sworn_to(w: "World", person: Optional[str], seat_id: Optional[str]) -> bool:
     """Does `person` own a live `oblige` to the seat -- one of `sworn_to`'s edges? The one spelling of that membership test, asked by
     `may_muster` and `commands_a_seated`."""
-    return any(t.subject == person for t in sworn_to(w, seat_id))
+    return any(t.subject == person and not t.imposed for t in sworn_to(w, seat_id))     # an IMPOSED oblige (a sentence) is no oath
 
 
 def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:

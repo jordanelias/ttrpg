@@ -143,7 +143,7 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     if not has_conferral_basis(off):
         return _refuse_at("basis", f"{a.actor} on {obj!r}", "a confer of an office with no conferral basis")
     # B21.01: A DECLARED TERM IS A POSITIVE WHOLE NUMBER, asked before `may_fill` so a malformed one refuses (and EMITS
-    # `confer.refused`) where `_declared_term`'s raise would end the season; that raise stays as the backstop for an act that skipped this.
+    # `confer.bad_term`) where `_declared_term`'s raise would end the season; that raise stays as the backstop for an act that skipped this.
     declared = a.payload.get(TERM_KEY) if isinstance(a.payload, dict) else None
     if declared is not None and not is_season_count(declared):
         return _refuse_at("term", f"{a.actor} on {obj!r} term {declared!r}", "a confer declares a malformed term")
