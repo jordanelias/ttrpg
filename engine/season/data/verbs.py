@@ -2065,8 +2065,14 @@ SAID_KEY, SAID_RANK_KEY, IN_CONFIDENCE_KEY = "said", "said_rank", "in_confidence
 CHOICE_RANGES = {ORDER_ROLE_KEY: tuple(ORDER_ROLES), ORDER_RETREAT_KEY: tuple(ORDER_RETREAT_AT),
                  MARCH_POSTURE_KEY: tuple(MARCH_POSTURES), IN_CONFIDENCE_KEY: (False, True)}
 SITE_KEY = "site"
+# v12 B11.74 (R-19-03, FRES §7 (3)): `CITES_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the claim ids and Record ids the utterer HOLDS and cites for what he
+# asserts, a pick of held ids (`11_GO_player_surface_contract_B.md` §5), carried on the act's payload under its own name and stored by `_eff_utter` as
+# `Proposition.support`. It has no `CHOICE_RANGES` entry (`SAID_KEY`'s shape) and is NOT in `LEDGER_RANGES`: that roster adds referents for a verb to form on
+# (`opening_set`), and the held ids are what a CONCLUSION cites, not what `utter` forms on, so no Candidate carries `cites` until typed `utter` (B25,
+# `14_VERBS_SOCIAL2_B` §1) forms one from a held claim; `_fanned_choices` never fans it (no closed range), so the shipped season forms what it formed.
+CITES_KEY = "cites"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
-                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made"}
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists"}
 # v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
 # (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
 # shape). The carrier is the kind the look emits (`finding.made`), as a telling's is its deposit.
@@ -2082,7 +2088,7 @@ def _load_choice_sourced(values: dict) -> dict:
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k != SAID_KEY and k not in LEDGER_RANGES)
+        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k not in (SAID_KEY, CITES_KEY) and k not in LEDGER_RANGES)
                                         or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "

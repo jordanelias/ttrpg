@@ -26,7 +26,7 @@ from ..data.rosters import (
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
-from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
+from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.inputs import ArmyCommand
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
@@ -1205,6 +1205,29 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     return Change((Subject.entity("records", rid),), perform)
 
 
+def _held_cites(w: "World", actor: str, cites) -> "tuple | None":
+    """THE IDS AN `utter` CITES, AS A PROPOSITION'S `support` -- the act's `cites` in the order given, `()` for an act that cites none, and `None` (the
+    act is refused) when any one is not HELD by the utterer at the act: a claim id is held when it is in his OWN ledger (`Claim.id`, §20: nobody else's), a
+    Record id (or any object) when he owns a live `hold` Tenure on it. HELD, NEVER TRUE (`OwnLedger`'s reading, `T3`): a mistaken or lying ledger cites
+    what it holds. A `cites` that is no list or tuple of ids is refused, not split into characters. [ASSUMPTION; medium; Jordan to correct; revert: `tuple(cites)`
+    unchecked, and a Proposition may cite what its utterer never held (FRES §7's falsifier).]
+
+    ⚠ WHY HERE AND NOT IN A CELL (`R-19-03`: *"each refused at the cell before the draw"*): the grammar's forms are closed and a cell binds a SCALAR operand
+    (`requires_operands`), where `cites` is a list; a registered predicate would put a new refusal kind on a row that declares none. `utter` rolls no draw and writes
+    nothing until this effect returns, so the refusal is `act.refused` (the fold's own kind, the row declaring none) with the world untouched, and the held
+    reading is the OWN-state one a cell would make."""
+    if cites is None:
+        return ()
+    if not isinstance(cites, (list, tuple)):
+        return None
+    p = w.persons.get(actor)
+    if p is None:
+        return None
+    claims = {c.id for c in p.ledger}
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    return tuple(cites) if all(isinstance(c, str) and (c in claims or c in held) for c in cites) else None
+
+
 @effect_for("utter")
 def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Proposition, exists)`. §14: a Proposition is IDENTITY-BEARING AND IMMUTABLE,
@@ -1228,13 +1251,19 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     Proposition's (`Proposition.exists`, the row's first pair), and naming the edge would mint a
     `(tenure, Proposition.exists)` receipt for a write that pair never made (`_eff_confer`'s
     ID-9 note); G3's tenure observation still judges it. What a hold costs is `H-92`'s (it buys
-    budget, `decision/budget.py`) -- registered, not decided here."""
+    budget, `decision/budget.py`) -- registered, not decided here.
+
+    v12 B11.74 (R-19-03) -- THE PROPOSITION CARRIES ITS SUPPORT: the act's `cites` (`data/verbs.py::CITES_KEY`), stored as `Proposition.support` and fixed
+    with it, each held by the utterer at the act (`_held_cites`), else the act is declined whole (`NO_CHANGE`, nothing written, no hold opened)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     pid = d.get("proposition") or f"prop:{a.id}"
     if pid in w.propositions:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
+    support = _held_cites(w, a.actor, d.get(CITES_KEY))
+    if support is None:
+        return NO_CHANGE                  # a cite he does not hold: refused whole, before any write
     prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
-                       d.get("predicate") or "", d.get("value"), w.tick)
+                       d.get("predicate") or "", d.get("value"), w.tick, support=support)
     held = _makers_hold(w, a.actor, pid)
 
     def perform() -> None:

@@ -2666,12 +2666,19 @@ rosters:
       rule. PERSON-SIDE AND WORLD-FREE: whether the id IS a Site, and whether he stands at it, are the fold's conjuncts (`existence`, `present_at`), and a
       man who is wrong is refused there and taught why (B11.61). ⚠ NOT FANNED in `_fanned_choices` (it has no closed range). [ASSUMPTION; medium;
       Jordan to correct; revert: delete the `examine` line and `ledger_ranges`, and `examine` forms on the question's own Site referents alone, which is nowhere.]
+      v12 B11.74 (R-19-03, FRES §7 (3)): `utter` CARRIES `cites`, THE CLAIM IDS AND RECORD IDS THE UTTERER HOLDS AND CITES FOR WHAT HE ASSERTS, AND IT HAS NO RANGE HERE
+      (`data/verbs.py::CITES_KEY`, `SAID_KEY`'s shape): a pick of held ids is no closed set (`_fanned_choices` never fans it) and it is NOT in `ledger_ranges`
+      below (that adds referents a verb forms on; the held ids are what a conclusion cites, not what `utter` forms on). So no computed act carries `cites` until
+      typed `utter` (B25) forms one from a held claim, and the shipped season is what it was; a planted act carries it on its payload, `loop/effects_information.py::
+      _eff_utter` stores it as `Proposition.support`, and a cite he does not hold (not in his own ledger, no live `hold` of his) refuses the act (`_held_cites`).
+      The carrier is `Proposition.exists`, which the row writes. [ASSUMPTION; medium; Jordan to correct; revert: delete the `utter` line, `CITES_KEY` and `_held_cites`.]
     values:
       marshal: [role, retreat_at]
       march: [posture]
       tell: [said, in_confidence]
       lie: [said, in_confidence]
       examine: [site]
+      utter: [cites]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
     # and `condition.band_crossed` the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).

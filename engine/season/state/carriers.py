@@ -1084,7 +1084,16 @@ def operand_of(a: "Act", name: str) -> str:
 @dataclass(frozen=True)
 class Proposition:
     """S14. IDENTITY-BEARING AND IMMUTABLE. Fixed at utterance, never destroyed.
-    `frozen=True` makes the immutability structural rather than asserted."""
+    `frozen=True` makes the immutability structural rather than asserted.
+
+    `support` (v12 B11.74; `19_LACUNA_conclusion_is_a_committed_assertion.md` R-19-03, FRES §7 (3)): THE CLAIM IDS AND RECORD IDS THE UTTERER
+    CITED FOR WHAT HE ASSERTS -- a conclusion says why its utterer believes it. A tuple of ids, fixed at utterance with the rest (`_eff_utter` stores the
+    act's `cites`, each refused unless he held it at the act), `()` for every Proposition that cites nothing, which is every one the realm builds
+    or mints today. ⚠ LAYER 1, NAMED AT THE SITE: `04` §B.6/§B.9 list no `support` on a Proposition. The member is a DEPARTURE from them (the record
+    and the board are its two readers, neither built), taken under `layer-conformance` B4's third disposition: the code carries it and `04` is
+    not edited to match (CLAUDE.md §0.05; C3-C16). A hashed carrier gains a member, so the realm content hash moves by encoding for every world
+    holding a Proposition (D-04); a trailing defaulted member moves no construction (every site is positional up to `when`, or `scope`).
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the member and `_eff_utter`'s `support=`.]"""
     id: str
     mood: str
     subject: str
@@ -1092,6 +1101,7 @@ class Proposition:
     value: Any
     when: int
     scope: Any = None
+    support: tuple = ()
 
 
 def refuse_a_title_in_a_body(office_id: str, post: Optional[str], body: Optional[str]) -> None:
