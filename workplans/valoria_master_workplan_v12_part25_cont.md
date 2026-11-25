@@ -14,7 +14,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
-GATE: Batch B21-fa-governance
+GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B24-sc-hearing
 GATE: Batch B16-pc-round                                                  (added by this part, not in `V12_STRUCTURE.md` §2.1: UNDECIDED U1)
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -283,7 +283,7 @@ Order notes. U3 §1 item 34 orders GO-B → SURF → fidelity → `16_PESSIMIST_
 - FALSIFIER and CONTROL: "`grep -n "def offered" engine/season/harness/governance_spine.py` prints nothing; the transcript of `spine.order` at seed 0 shows the writ's question as an `AskedRow` and at least one `OfferRow` whose `occasion` is that question. Control: the run's content hash is unchanged by the swap (a print moved)."
 - GATE: `python -m engine.season.harness.play_surface --scenario spine.order --seed 0 --seasons 2` → prints an occasioned row for `comply`; `python -m pytest engine/season/tests/test_governance_spine_play.py -q` → pass.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 Batch B21 (`06_FA_playable_scenario`'s `offered`, `IS-B3-FA-01`'s spine rows); V12 B34.04.
+- DEPENDS ON: V12 Batch B21 (`06_FA_playable_scenario`'s `offered`); V12 B23.19 (was B21.76: `IS-B3-FA-01`'s spine rows); V12 B34.04.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16) (GO review).
 - LANDS IT: B34's producer; `Item: B34.09`, `[skip ci]`.
