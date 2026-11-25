@@ -121,6 +121,7 @@ from ..state.ids import draw_factory
 from . import probes
 
 FIRST, SECOND = "p_low", "p_mid"            # the world's two fighters / speakers (test-fixture ids, `probes.tiny_world`)
+# [canonical: engine/season/harness/pairs.py §DEFAULT_N -- an instrument's iteration counts per seed, sized to its wall time (the module docstring's measurement); no game meaning]
 DEFAULT_N = {"duel": 20000, "social": 200000,
              "proceeding": {"abridged": 100000, "full": 25000}}   # [JUSTIFIED: instrument default, no game meaning] proceeding: by the form; the docstring's measurement
 DEFAULT_MIN_BIN = 200   # [JUSTIFIED: instrument default, no game meaning]
@@ -224,7 +225,7 @@ THIRD = "p_high"                             # the third person: the Duke, who s
 FORMS = ("abridged", "full")
 SIDES = ("for", "against", "decider")
 #: the weights of the onlookers each `--room` seats at the venue: none, two, one cohort (weight 30). [JUSTIFIED: instrument default, no game meaning -- B24p.17's `--room`: 0, 2, a cohort of weight 30]
-ROOMS = {"none": (), "gallery": (1, 1), "crowd": (30,)}
+ROOMS = {"none": (), "gallery": (1, 1), "crowd": (30,)}    # [canonical: engine/season/harness/pairs.py §ROOMS -- the onlookers the instrument seats (none, two, one cohort of weight 30); an instrument choice, no game meaning]
 #: THE SETTINGS `--off` ACCEPTS: V2 p2 §K's control set (the settings it names a control for; `fixtures.py` ships each at it) and the three
 #: B24p.18's control arms switch off besides (`relevance`, `sense_step`, `comfort_step`). Off is `None` for a level and 0 for a step or a gain
 #: (`_off_value`); a threshold or a scale at 0 is no control, and is not named here. [ASSUMPTION: a closed set of the instrument's -- basis: V2 p2 §K's control column]
