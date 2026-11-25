@@ -53,10 +53,16 @@
 # `regard_sign:` ON A ROW (B10.11; `rosters.yaml: regard_signs`, `data/verbs.py::VerbRow.regard_sign`): `1`, `-1` or `0` -- whether a person's
 # liking for the act's subject pulls him toward the act, away from it or not at all, read by `decision/choose.py::_stance_arm`. A row naming none
 # takes `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`), else `1`; NO ROW AUTHORS ONE YET (cells are BA1's content).
+#
+# `public:` ON EVERY ROW (B11.65; `data/verbs.py::VerbRow.public`): `true` or `false`, REQUIRED, never derived from the verb's name -- a deed done to be
+# seen, which those present learn without a draw, as a public act in ordinary speech is one done openly. Nothing reads it yet (B11.66's notice draw
+# does). `speak`, `utter`, `issue`, `march`, `determine`, `convene` and `petition` are `true` [ASSUMPTION: the acts done to be seen; `convene` and
+# `petition` added as sittings; the verb lanes correct the rest]; every other row is `false`. The loader refuses a row without it or with a non-boolean.
 # =============================================================================================
 
 verbs:
   - verb:        "carry"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "copying"
@@ -94,6 +100,7 @@ verbs:
     writes_note: "v9 IN-45 (`loop/effects_information.py::_eff_carry`), built on `open_case`'s body (#453: *build on `open_case`'s body, writing the petition's `Record.stages`*): `Record.stages` is the FIRST pair -- the act re-winds the petition's clock (`_declared_stages`, `H-80`'s default for a computed act), so the petition RECORD moves, the gate's `entity` shape observes it, and its receipt names the petition, which the appended docket item names under `DOCKET_PETITION` (v9 SC-03a). The append rides on that receipt, as `open_case`'s rides on its case file, and every decline comes before the write because the gate does not restore a docket. The MATTER (`H-63`'s value for this row) is the petition's `terms`, `open_case`'s precedent. [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id; the stages appended rather than replaced.] The later pairs, `(DocketItem, matter)` and the item's `arrangement` (`None`) and `petition` keys, are check-only (each admits RES in the ACTS class), as on `open_case`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "argue"
+    public:      false
     difficulty:  "routine"
     stratum:     "social"
     capability:  "argue"
@@ -138,6 +145,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 9): the row, the pursuit direction and the Partial reading are v9 IN-12's, on #453 §9.4 `:1896-1923`, K-21 `:2737-2742`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1896-1923`"
   - verb:        "arrest"
+    public:      false
     difficulty:  "routine"
     stratum:     "contested_physical"
     capability:  "arms"
@@ -182,6 +190,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 5): the matrix row `(Tenure, since)` is the tree's; the row, the issuing-seat reading and the warrant formation are v9 IN-12's, on #453 §9.1 `:1570-1611`, K-17, K-52, K-53."
     source:      "v9 IN-12 step 5 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1570-1611`"
   - verb:        "commit"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -203,6 +212,7 @@ verbs:
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: the Proposition does not exist (§14 -- it is immutable and must be uttered first)"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "comply"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
@@ -233,6 +243,7 @@ verbs:
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger, or the writ's last stage has matured"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "conceal"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -265,6 +276,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 10): the matrix row `(Record, exists)` is the tree's; the row, the `cover` kind and the `anchor_of` cover read are v9 IN-12's, on #453 §8.2 `:1486-1495`, §9.3 `:1826-1863`, K-19 `:2722-2727`."
     source:      "v9 IN-12 step 10 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.3 `:1826-1863`"
   - verb:        "confer"
+    public:      false
     scale:   "settlement"
     scale_note: "conferral seats an office, and an office sits at a rung"
     stratum:     "binding_decision"
@@ -288,6 +300,7 @@ verbs:
     eligibility_note: "§E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:confer + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "convene"
+    public:      true
     stratum:     "binding_decision"
     eligibility: ["remit:convene"]
     beneficiary: "none"
@@ -304,6 +317,7 @@ verbs:
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "covenant"
+    public:      false
     stratum:     "social"
     eligibility: ["remit:issue"]
     eligibility_note: "v9 IN-12 step 7 (#453 §9.2, the `covenant` row): `remit:issue` THROUGH A SEAT ONLY -- an `own` alternative would let anyone mint a treaty (#453 K-14). `issue`'s act, because the instrument IS a dispensation (K-54): a covenant is the seat's writ addressed ACROSS purview rather than down it, so the issuing grant licenses it and no new remit act is coined (`rosters.yaml: remit_acts` is closed). [ASSUMPTION; medium; Jordan to correct; revert: a `remit:` act of its own, which the closed roster would have to admit.]"
@@ -334,6 +348,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 7): the matrix rows `(Record, exists)` and `(Record, stages)` and the `dispensation` kind are the tree's; the row, its `remit:issue` eligibility and the dropped purview conjunct are v9 IN-12's, on #453 `:1418-1420` and `:1755-1791`."
     source:      "v9 IN-12 step 7 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.2 `:1755-1791`, K-54 `:3104-3119`"
   - verb:        "create_record"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -353,6 +368,7 @@ verbs:
     grade_note:  "`ruled`: W2 landed Part D's five `Record` rows, which are the verb's table (V2 §E3 had a Part B defect id, `D7`, in the grade column)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "destroy_record"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own", "hold:<record>", "presence"]
     eligibility_note: "v9 IN-26 (BOUND-PAPER; `A-13`'s held shape, H-75's re-scoped half): `own` FIRST (`give`'s order; `transfer` lists `remit:issue` before it). §E3's two alternatives stay and still decline (both placeholders, `H-75`); what they meant -- the actor holds the Record -- is the typed cell's `held_by` conjunct below, which binds the act's `subject`, so the placeholder is answered by the cell and not by guessing which object a `hold:<record>` named."
@@ -378,6 +394,7 @@ verbs:
     formation_decline_note: "v9 IN-26 (BOUND-PAPER): THE HOLD IS AN ARM, NOT THE ROW. The row is typed and `own`-eligible (above), so a hand-built `destroy_record` executes through the fold; FORMATION is decided in `decision/options.py::opening_set` by two reads: `OwnStateReader`'s `held_by` (it forms only on a referent the person himself holds -- his own live `hold` edge, never every referent) and `Fixtures withheld_verbs` (H-156 option (a) as a switch: SHIPPED naming this verb, so nobody forms it; `()` is the sink arm, H-156 option (b) for this row). [ASSUMPTION; medium; Jordan to correct; revert: drop the row's `own` and cell, and the fixture's member with them.]"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "determine"
+    public:      true
     difficulty:  "routine"
     scale:   "settlement"
     scale_note: "a sitting decides at the venue's rung"
@@ -448,6 +465,7 @@ verbs:
     grade_note:  "`assumption`, not `ruled`: `judging_set` is built (`H-32`, graded `assumption`) and the quorum is a swept fixture (`H-161`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; precondition, disposal, keyed refusals and writes at plan position `19` (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` `19 — INSTRUCTION`; `21_RECONCILIATION.md:575`)"
   - verb:        "dispatch"
+    public:      false
     scale:   "territory"
     scale_note: "a dispatch sends a person across rungs; its reach is the territory, not the sender"
     stratum:     "binding_decision"
@@ -468,6 +486,7 @@ verbs:
     writes_note: "— (§11.1: it names a person; their own choose decides)"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "establish"
+    public:      false
     scale:   "settlement"
     scale_note: "founding an office is an act on the rung that will hold it"
     stratum:     "binding_decision"
@@ -487,6 +506,7 @@ verbs:
     grade:       "assumption"
     source:      "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
   - verb:        "evade / defy"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -513,6 +533,7 @@ verbs:
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: as `comply`"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "exchange"
+    public:      false
     scale:   "settlement"
     scale_note: "as `requisition` -- it writes `Rung.stores`"
     stratum:     "uncontested_material"
@@ -544,6 +565,7 @@ verbs:
     writes_note: "`(Rung, stores)` x2, one per side -- as `transfer`. v9 IN-33, restored at v10 REM-2B: `loop/effects_economy.py::_eff_exchange`, `_shift` twice (the actor's `kind` out to `to`, `to`'s `return_kind` back), both rungs named; declines a side that is no rung and a kind traded for itself."
     source:      "W3 -- #353 `:1899` names it and Part E omits it. Modelled on `transfer`, whose scarcity property (§27.1) it must share: the second party on an emptied larder gets a DIFFERENT Event, not a raise."
   - verb:        "forge"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "copying"
@@ -582,6 +604,7 @@ verbs:
   # The false value is `queries/person_q.py::lie_said_of`'s, copied onto the Act at CHOOSE exactly as `said_of`'s
   # is; `rosters.yaml: lie_verbs` names this row so `decision/options.py::opening_set` reads that one instead.
   - verb:        "lie"
+    public:      false
     difficulty:  "routine"
     stratum:     "social"
     capability:  "none"
@@ -627,6 +650,7 @@ verbs:
     refusal_note: "`tell`'s: `holds` -- nothing held about the subject; `hearer` -- the person told is not with the liar; `counterparty` -- a lie to nobody, or to oneself. One kind for all three, `tell.refused`."
     source:      "v11 CR-27 (B10-13), `workplans/valoria_master_workplan_v11_part4.md` CR-27; M9 taken (a) (`-05`, step 5)"
   - verb:        "forgive"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "subject"
@@ -661,6 +685,7 @@ verbs:
   # would deadlock it. The refusal is `19c`'s `migrate`'s.
   # ===========================================================================================
   - verb:        "found"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -699,6 +724,7 @@ verbs:
     refusal_note: "FLAT: one kind for every failable clause, which a flat row declares (`data/verbs.py`, invariant 4). Refusal conditions: the subject is no works, or the actor does not hold it (the cell); the works plans no `rung_kinds` member, names no rung, has already founded, or its plan does not strictly ascend into its `at`; and since v9 IN-28, the plan has no `works_cost` row or the works' rung cannot pay it (the effect's decline, the `write` clause)."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 24e (as corrected 2026-09-25); r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.2 moment 3, §A.7.1; `write_matrix.yaml` `(Rung, exists)` (W2/H-41)"
   - verb:        "build"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -737,6 +763,7 @@ verbs:
     refusal_note: "FLAT, as `found`'s. Refusal conditions: the subject is no works, or the actor does not hold it (the cell); the works plans no `site_kinds` member, names no rung, or has already built; and since v9 IN-28, the plan has no `works_cost` row (`body` among them) or the works' rung cannot pay it (the effect's decline)."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 24e (*'Then a `build` row and `_eff_build` minting a Site of a `site_kinds` member'*); r2 `04_MATTER_AND_WORKS.md` §A.7.1 (the Site half of its one-verb `found`); `write_matrix.yaml` `(Site, exists)` (W2/H-41)"
   - verb:        "give"
+    public:      false
     stratum:     "social"
     eligibility: ["own", "hold:<record>"]
     beneficiary: "to"
@@ -765,6 +792,7 @@ verbs:
     grade_note:  "RATIFIED PROGRAM POSITION 16 -- *one two-party verb ... `own` + `hold:<record>` eligibility, writing the holder's `hold` closed and the receiver's open* -- named against `architecture/VOCABULARY.md` (no row for give, grant, hand, convey or deliver; checked again at the build), and the gate's basis for the receiver's edge settled at G3's pre-flight (`ED-IN-0277`). `hold:<record>` is a PLACEHOLDER and declines on both sides (`H-75`); `own` admits first, as `transfer`'s `own | hold:<store>` does."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` position 16 (≡ `15a`); r2 `proposals/2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` §A.7 (the row, the predicate, the name); `hole_register.yaml` H-84"
   - verb:        "issue"
+    public:      true
     scale:   "province"
     scale_note: "a Dispensation's `scope` enumerates executors -- §37.1 -- so its reach is the domain the issuer governs"
     stratum:     "binding_decision"
@@ -812,6 +840,7 @@ verbs:
     # content-hash move, per `governance_spine.yaml:7`'s convention). The event kinds below (`kill.refused`,
     # `person.died`) are NOT verb-table keys -- they are `write_matrix.yaml`/`emits:` vocabulary, a different namespace.
   - verb:        "fight"
+    public:      false
     stratum:     "contested_physical"
     capability:  "arms"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11: the three rows contesting `the body` draw on `arms`)."
@@ -930,6 +959,7 @@ verbs:
   # `detain` it opens on a yield (`_eff_capture`), the only effect `data/verbs.py::_derive_openers_from_effects` credits
   # `capture` with.
   - verb:        "capture"
+    public:      false
     stratum:     "contested_physical"
     capability:  "arms"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11; added beside `fight` and `accept` because it opens the same fight through the same `combat_input`, CR-85 design §5)."
@@ -991,6 +1021,7 @@ verbs:
   # is not a verb either: it is the name of what resolves, through the same seam as `fight`.
   # Each row is celled on the seven axes in `rosters.yaml: tables.alignment`.
   - verb:        "challenge"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -1030,6 +1061,7 @@ verbs:
     grade_note: "the VERB is ruled (ED-IN-0261: *fight, challenge, accept are* verbs); its row -- the cell, writing nothing, the kinds -- is IN-08's reading, graded as `found` and `survey` are."
     source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); the verb pair is ruled there, and the pursuit-basis worksheet that first listed it is forked (`FORK:f672c8414`), its values owned by `references/descriptor_registry.yaml` (`pursuit_roster`, `axis_roster`) and `engine/season/rosters.yaml`"
   - verb:        "accept"
+    public:      false
     stratum:     "contested_physical"
     capability:  "arms"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11)."
@@ -1091,6 +1123,7 @@ verbs:
     grade_note: "the VERB and its `contests:` are ruled (ED-IN-0261); the composition as challenge-then-accept rests on a short reply, [medium]; the Record binding, the stem and the yield are v10 PC-10b's [ASSUMPTION; medium]; the rest is `fight`'s row, carried."
     source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell; v10 PC-10b (commit `d2847e7b`; `engine/season/hole_register.yaml` H-240)"
   - verb:        "requisition"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1136,6 +1169,7 @@ verbs:
     eligibility_substitution_note: "The source cell named `remit:requisition`, and `requisition` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). `remit:issue` is substituted, declared here: an instrument may fill exactly what the register declares (§42.2/G.4.8), so either `requisition` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a requisition exercises (defensible -- a requisition is issued). The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act. The substitution EXECUTES (a holder granted `issue` can requisition), and the open eligibility question (plan position `19`: *'stays an open eligibility question this position inherits (a neighbour of `H-52`)'*) is carried by `H-52`'s row."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "march"
+    public:      true
     scale:   "settlement"
     scale_note: "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor."
     stratum:     "contested_physical"
@@ -1178,6 +1212,7 @@ verbs:
   # eligibility) writes the order its faction's line takes the field under, BEFORE the field, for attack and for defence.
   # ===========================================================================================
   - verb:        "marshal"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1219,6 +1254,7 @@ verbs:
   # field is fought. Ships WITHHELD (`Fixtures withheld_verbs`, `marshal`'s precedent): formable, it moves every seeded season.
   # ===========================================================================================
   - verb:        "surrender"
+    public:      false
     scale:       "settlement"
     scale_note:  "a place is yielded where it stands: the settlement IS the subject, as `march`'s and `marshal`'s are, and the exercised seat's purview must reach it."
     stratum:     "binding_decision"
@@ -1257,6 +1293,7 @@ verbs:
   # and the rejected carriers are `loop/effects.py::_eff_migrate`'s docstring.
   # ===========================================================================================
   - verb:        "migrate"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1300,6 +1337,7 @@ verbs:
     grade_note:  "the VERB is RR-2's (ruled: *a verb persons take*); its row -- the cell, the writes, the kinds, the throttle's place -- is plan position `19c`'s, argued at `_eff_migrate`, graded as `found`'s and `build`'s are. Its `alignment` cells arrived with IN-08's cells commit, graded `reasoned` (`rosters.yaml: tables.alignment`)."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 19c (MIGRATE, carrying 24d-ii); `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` RR-2; `01_THE_BUILD_ORDER.md` S9"
   - verb:        "move"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1332,6 +1370,7 @@ verbs:
     grade:       "assumption"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "oblige"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -1357,6 +1396,7 @@ verbs:
     formation_decline_note: "A typed `existence` of `subject` kind `Office` is not authored: of the referents `questions_for` stamps none was a seat and no ledger held a claim about an office (plan position `14`, U7-own; `populated.build_realm(0)`), so the cell would form on every referent and refuse on every one, growing the always-refused set. `T4`'s bags supply known PERSONS, not seats, and a known-seat source is a second binding mechanism; formation is the `Office` class's (`referent_class` above). The fold's `counterparty` clause covers the hand-built act."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; body, precondition and refusal from r2 item 9 / `03` §A.9 at plan position `17a`"
   - verb:        "open_case"
+    public:      false
     stratum:     "social"
     eligibility: ["remit:determine"]
     beneficiary: "none"
@@ -1387,6 +1427,7 @@ verbs:
     eligibility_sweep_note: ["remit:determine (V2's value)", "own", "hold:<the matter's record>"]
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "pardon"
+    public:      false
     scale:       "settlement"
     scale_note:  "#453 §9.1: *'settlement'* -- a pardon is the bench's act at the seat that owns the restraint, `determine`'s scale"
     stratum:     "binding_decision"
@@ -1418,6 +1459,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 5): the matrix row `(Tenure, until)` is the tree's; the row, the typed-route reading and the closure basis are v9 IN-12's, on #453 §9.1 `:1710-1740`, §8.2-§8.3."
     source:      "v9 IN-12 step 5 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1710-1740`"
   - verb:        "petition"
+    public:      true
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -1447,6 +1489,7 @@ verbs:
     writes_note: "— (a Petition is created, not written)  ||  ⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate.  ||  ⚠ PLAN POSITION `15`: `Petition.exists` -> `Record.exists`. A petition is a `Record` of kind `petition` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the petitioner's `hold` by `loop/effects.py::_eff_petition`, so `forge`, `destroy_record`, `hold` and `carry` reach it with no new row. `(Petition, exists)` is deleted from the matrix in the same commit."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "construe"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -1475,6 +1518,7 @@ verbs:
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: as `comply`"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "release"
+    public:      false
     stratum:     "binding_decision"
     eligibility: ["own"]
     beneficiary: "subject"
@@ -1495,6 +1539,7 @@ verbs:
     source:      "`04_CODE_ARCHITECTURE.md` §A.3 row 14, QUOTED WHOLE: *four closing verbs missing | one `release` verb, eligibility `own`, generic over kind; `Tenure.term?` for declared ends | T-m, T-n, ID-14*. ⚠ THE CLAUSE AFTER THE SEMICOLON IS NOT DELIVERED HERE AND EARLIER RENDERINGS OF THIS CELL STOPPED BEFORE IT WITH NO ELLIPSIS, WHICH IS CONCEALMENT RATHER THAN SCOPE. `Tenure` carries no `term` field (`state/carriers.py`), so `T-n`'s declared-ends half — a tenure that ENDS BY ITS OWN TERMS rather than by somebody releasing it — is unbuilt and is recorded here as unbuilt. ⚠ AMENDED 2026-09-29 (plan position `17b`): THAT HALF IS NOW BUILT for the one kind given a term, `oblige` — `Tenure.term` exists (`state/carriers.py::Term`), `_eff_oblige` declares it, MATTER matures it (`loop/matter.py`, gate basis `T-n`), and a `transfer` paying the seat's `upkeep` renews it. `release` itself is unchanged: it is still the owner's early way out, and T-m still admits it. The scope taken is `architecture/meta/HANDOFF_NEXT.md` §2a's, which asks for the verb: *the design says a person may resign; the verb table does not let them. Fix the table, and do not re-open the design.* The same shape one level up: `04:464-465` states loader invariant 6 as TWO conjuncts, the domain and *every kind's OPENER set is declared too*, and `data/verbs.py` implements the first — the second is HANDOFF_NEXT item 1e and is open. Also PART D row 15."
     disposal_release_note: "PLAN POSITION `22` (PROC-B): `oblige` IS IN THIS ROW'S DOMAIN, AND THAT ALREADY COVERS A DISPOSAL -- `determine`'s finding (plan position `19`) opens an `oblige` owned by the party it binds (`21_RECONCILIATION.md` C-1, RULED A), so the same `own`/T-m route this row gives every obligee lets that party end it: *'A convict can discharge his own penance.'* `19_PLAN.md` PART H, D-5 (RULED 2026-09-06 by Jordan, *'second-person lever stays refused'*) is why this is the ONLY route: no creditor verb, no `call_in`, no obligee-side closer on an obligation exists or will (`ED-SC-0035`) -- the bench that bound him cannot force the term to run, and cannot force it to end either. C-1's own price for the same ruling: *'That is not a hole — it is public, witnessed, priced by reception, and accepted by ruling.'* `RELEASABLE_KINDS`/`domain:` carry `oblige`, so a disposal releases exactly as any other `oblige` does."
   - verb:        "restore"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1533,6 +1578,7 @@ verbs:
     effect_note: "An effect formula is not a precondition: a precondition is a question the fold asks of the world, an effect is what the write does, and conflating them is how a resolver grows a second body."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "revoke"
+    public:      false
     scale:   "settlement"
     scale_note: "as `confer` -- it unseats the same office"
     stratum:     "binding_decision"
@@ -1553,6 +1599,7 @@ verbs:
     eligibility_note: "§E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:revoke + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "sabotage"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1597,6 +1644,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 9): the row and the mirror are v9 IN-12's, on #453 §9.3 `:1865-1890`, K-04 `:2600-2605`, K-09 `:2640-2646`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.3 `:1865-1890`"
   - verb:        "raze"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1632,6 +1680,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 11): the row is v9 IN-12's, on #453 §9.2 `:1800-1822`, K-06 `:2617-2619`; the occupation licence is IN-13's read (`_seize_rung`), copied."
     source:      "v9 IN-12 step 11 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.2 `:1800-1822`"
   - verb:        "seize"
+    public:      false
     scale:       "settlement"
     scale_note:  "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives"
     stratum:     "uncontested_material"
@@ -1661,6 +1710,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 6): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the row, its `remit:issue` eligibility, the `seizure` basis and the warrant reading are v9 IN-12's, on #453 `:1412` and `:1662`."
     source:      "v9 IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1662-1698`"
   - verb:        "speak"
+    public:      true
     difficulty:  "routine"
     stratum:     "social"
     capability:  "copying"
@@ -1697,6 +1747,7 @@ verbs:
     grade:       "assumption"
     source:      "ARCHITECTURE_V2.md §E3, transcribed; typed cell, prize, bands and refusal at v9 SC-01 step 12 (`workplans/valoria_master_workplan_v9_part6.md` §SC-01), on `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1 (design intent) and `21_RECONCILIATION.md:576`"
   - verb:        "succeed"
+    public:      false
     scale:   "person"
     scale_note: "succession is one person taking another's tenure; the office's rung does not change"
     stratum:     "binding_decision"
@@ -1733,6 +1784,7 @@ verbs:
   # which a reader of this repository meets first as the build step.
   # ===========================================================================================
   - verb:        "survey"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "inquiry"
@@ -1760,6 +1812,7 @@ verbs:
     grade_note:  "an argued addition, graded as `found`, `build` and `forge` are: the matrix row `(Record, exists)` is the tree's; the verb, its cell and its reading of WHICH faction are plan position `20-iii`'s, on proposal 14's reconciliation. The operand reading is `faction_holding`'s, not a new rule."
     source:      "plan `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` position `20-iii` (*'narrative #14 §F (D1-a) and the chain half of #7 (intelligence before action)'*); `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` D1-a; `proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md` §F, proposal 14 (Jordan's) and 14.1 (Jordan's extension, NOT built -- `H-169`)"
   - verb:        "tend"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -1798,6 +1851,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 9): the row and its magnitude are v9 IN-12's, on #453 §9.4 `:1925-1941`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1925-1941`"
   - verb:        "tell"
+    public:      false
     difficulty:  "routine"
     stratum:     "social"
     capability:  "copying"
@@ -1915,6 +1969,7 @@ verbs:
   # makes a verb refuse is the harder-to-flatter option, not the easier one.
   # ===========================================================================================
   - verb:        "examine"
+    public:      false
     difficulty:  "routine"
     stratum:     "contested_physical"
     capability:  "inquiry"
@@ -1949,6 +2004,7 @@ verbs:
     grade:       "assumption"
     source:      "systems/fieldwork/reference/investigation_systems_v30.md:217 names the six; systems/fieldwork/reference/fieldwork_v30.md:293 (§4.2) and :317 (§4.3) carry this row's content"
   - verb:        "interview"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -1972,6 +2028,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
   - verb:        "interrogate"
+    public:      false
     difficulty:  "demanding"   # B05.23, T13 edit 7 (T1 row values at commit 2): the one rolled row above `routine`; the inquiries stay `routine`. [ASSUMPTION; medium; Jordan to correct; revert: `routine`.]
     stratum:     "social"
     capability:  "inquiry"
@@ -2010,6 +2067,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 5): the row, its bands and the predicate route are v10 IN-12's, on #453 §9.1 `:1613-1660`, K-18, K-35, K-55, K-56, H-226 route (a)."
     source:      "v10 IN-12 step 5 (`workplans/valoria_master_workplan_v10_part4.md` IN-12), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1613-1660`"
   - verb:        "research"
+    public:      false
     difficulty:  "routine"
     stratum:     "uncontested_material"
     capability:  "inquiry"
@@ -2042,6 +2100,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
+    public:      false
     difficulty:  "routine"
     stratum:     "contested_physical"
     capability:  "inquiry"
@@ -2075,6 +2134,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:296 (§4.2), :320 (§4.3)"
   - verb:        "thread_read"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -2104,6 +2164,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:297 (§4.2), :321 (§4.3), §4.5 :341-347. ⚠ P-01 CO-MOVEMENT AND THE COHERENCE COST (§4.5 :344-346) ARE NOT EXPRESSED HERE and are not silently dropped: they are threadwork effects with no carrier in this loop, carried on ED-FI-0009 with the Exposure gap"
   - verb:        "reconstruct"
+    public:      false
     difficulty:  "routine"
     difficulty_note: "B07.11 (premise-check F3, UNDECIDED (13) (ii)): `routine`, the inquiries' level (B05.23, T13 edit 7: the inquiries stay `routine`); 18-A's `plain` applies only where no verb lane has stated a level. Read by the draw only (`task_draw_arm` `on`). [ASSUMPTION; medium; Jordan to correct; revert: `plain`]"
     capability:  "inquiry"
@@ -2129,6 +2190,7 @@ verbs:
     grade:       "ruled"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:298 (§4.2), :256-280 (§4.1), :323 (§4.3)"
   - verb:        "tie / knot"
+    public:      false
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
@@ -2143,6 +2205,7 @@ verbs:
     effect_decline_note: "PLAN POSITION `14` (U7-own) STOPPED ON IT (`H-182`). `tie` has NO production reader (`ID-13`, a carrier nobody reads): the only code naming the kind is `release`'s domain and `harness/probes.py`, so an executed `tie` would write an edge nothing reads; the reader that would make it live is `decision/options.py::teller_weight`'s `relation` term (the hearer's relation to the teller), which today reads `rank` and `regard` and no tie. `knot` HAS a reader, `epistemic.py::_ch_witness_key`, which reads the edge UNDIRECTED (either endpoint, either role), against 04 `:388` (*`tie`/`knot` are directed*) -- an observation for the `29f` lane, which owns the `firsthand_via_knot` channel, and not decided here. BOTH kinds also lack the operand: the row's cells bind the actor and no partner, so a computed act names nobody to bond with. Ownership is not the ground: `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 9 (`:191`) overrides `holonic §15.1`'s tie stored once on the lower id -- `tie`/`knot` are TWO DIRECTED EDGES, one owned by each party, `state/gate.py`'s `T-m` (`:707-710`) admits the owner opening it, and `release`'s `domain:` includes `tie` and `knot`, so the owner can end it. The row still names two kinds for one opener. The decline stands."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "train"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -2185,6 +2248,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 9): the row, its magnitude and the J-13 (iii) interim are v9 IN-12's, on #453 §9.4 `:1943-1968`, K-20 `:2729-2735`, K-21 `:2737-2742`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1943-1968`"
   - verb:        "recruit"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
@@ -2221,6 +2285,7 @@ verbs:
     refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
     source:      "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "form_unit"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -2247,6 +2312,7 @@ verbs:
     refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names an unknown troop type, a duplicate name, a role outside the type's menu, or a twelfth unit (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
     source:      "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "assign_troops"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -2273,6 +2339,7 @@ verbs:
     refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names a unit the army lacks, or moves more troops than the cohort has trained and unassigned (or, released, than the unit holds) (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
     source:      "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "disband_unit"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -2299,6 +2366,7 @@ verbs:
     refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not command it (the cell, and the effect's own faction check); the payload names a unit the army lacks (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
     source:      "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "discharge_troops"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -2325,6 +2393,7 @@ verbs:
     refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not command it (the cell, and the effect's own faction check); the payload discharges more troops than the cohort has trained and unassigned (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
     source:      "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "order_unit"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -2351,6 +2420,7 @@ verbs:
     refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names a unit the army lacks, or a role, posture, targeting, fall-back point or strategy outside its roster (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
     source:      "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "transfer"
+    public:      false
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "own", "hold:<store>"]
     eligibility_note: "`H-160` LIMIT 1, THROUGH `H-158`'s FIRST REMEDY -- *'an eligibility alternative that names a seat'* -- [ASSUMPTION; medium; Jordan to correct; revert: the other remedy, a ruling that an `own` verb may be exercised through a seat]. `remit:issue` is the existing grammar's way to name one (`decision/options.py::exercised_seat` returns the hold that grants it, `pack_scenes` puts it on `Act.via`, `loop/resolve.py::_eligible` admits through `seat_hold`), so no fifth eligibility kind and no new form. FIRST, because the first alternative that admits decides which one `via` reflects: a holder of a seat granting `issue` gives THROUGH it, and his `from` is the seat's rung, its treasury (`treasury_of`, off the grant's `seat_rung` snapshot); anyone else falls through to `own` exactly as before. The fold admits the same acts either way (`own` still follows), so WHO PAYS FROM WHERE moves, and with it what `Act.via` reaches: the seat's obligees at its rung witness the transfer (`epistemic._ch_post_remit`; `off_restoration_leader` grants `issue` and has one), `_renewals` clauses 1-2 become meetable, and the fold admits the withdrawal through `own` without re-asking the seat (a queued withdrawal survives a same-round revoke or re-stamp; `test_term_upkeep`'s `_ONE_CLAUSE_BROKEN` asserts such a transfer still executes, so no `_eff_transfer` guard); a rungless seat is passed over (`need_treasury`). ⚠ `issue` IS `requisition`'s SUBSTITUTION CARRIED ONE VERB OVER, not a ruling -- `transfer` is not a remit act (`rosters.yaml: remit_acts` is closed), and a payment out of a treasury is read as issued, the converse of a requisition into it (`H-52`'s neighbour; its `eligibility_substitution_note`). ⚠ AND A HOLDER OF SUCH A SEAT NO LONGER FORMS A TRANSFER AS HIMSELF: one alternative per row decides, so his gifts from his own home are not formed. A candidate per admitting alternative is where that choice would go if it ever matters."
@@ -2374,6 +2444,7 @@ verbs:
     writes_note: "×2, ONE PER SIDE (§E3 `:418`). Both sides are declared: a ×1 declaration decremented only the giver, so grain left the world and arrived nowhere, in an economy where `yield` is the only source (#353 `:856`).  ||  ⚠ PLAN POSITION `17b`: `Tenure.term` ADDED, and `term.renewed` beside `transfer.made`. A transfer is a PAYMENT OF UPKEEP when it is exercised through a seat (`Act.via`) the actor sits in, out of that seat's own rung, to another rung that is the home of persons obliged to the seat: it then renews as many of their `oblige` terms as the amount covers at `upkeep_of(seat)` apiece (`loop/effects.py::_renewals` states the four clauses and why each is there; the gate admits each renewed edge under the `renewal` basis). This is `04 F.18`'s repair -- *'A MATTER payment would be a fourth clock, so the repair is a verb'* -- and the retirement plan's G2, *'payment = the existing `transfer` verb'*: no new verb, no new operand. The third pair is check-only, like the second. `term.renewed` is earned only by an edge whose term actually moved, and each rung earns `transfer.made` by name, so an ordinary transfer emits exactly what it did before `17b`. Since `H-160` limit 1 (`eligibility_note` above), a holder of a seat granting `issue` now gives through it, out of its rung, so a computed transfer CAN meet `_renewals`' clauses 1 and 2; whether one reaches an obligee's home is the chooser's and the world's."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "utter"
+    public:      true
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
@@ -2388,6 +2459,7 @@ verbs:
     grade:       "assumption"
     source:      "W3 -- #353 names it and Part E omits it. WITHOUT IT NO PROPOSITION EXISTS, and `commit`, `petition` and `issue` all `require` one, so the season cannot start. Register row H-42. §14 makes a Proposition IMMUTABLE, so this row admits its CREATION and nothing else -- there is no verb that alters one."
   - verb:        "work"
+    public:      false
     difficulty:  "plain"
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"

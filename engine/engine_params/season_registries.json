@@ -5283,6 +5283,7 @@
       "verbs": [
         {
           "verb": "carry",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "copying",
@@ -5349,6 +5350,7 @@
         },
         {
           "verb": "argue",
+          "public": false,
           "difficulty": "routine",
           "stratum": "social",
           "capability": "argue",
@@ -5425,6 +5427,7 @@
         },
         {
           "verb": "arrest",
+          "public": false,
           "difficulty": "routine",
           "stratum": "contested_physical",
           "capability": "arms",
@@ -5502,6 +5505,7 @@
         },
         {
           "verb": "commit",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -5534,6 +5538,7 @@
         },
         {
           "verb": "comply",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -5580,6 +5585,7 @@
         },
         {
           "verb": "conceal",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -5631,6 +5637,7 @@
         },
         {
           "verb": "confer",
+          "public": false,
           "scale": "settlement",
           "scale_note": "conferral seats an office, and an office sits at a rung",
           "stratum": "binding_decision",
@@ -5667,6 +5674,7 @@
         },
         {
           "verb": "convene",
+          "public": true,
           "stratum": "binding_decision",
           "eligibility": [
             "remit:convene"
@@ -5694,6 +5702,7 @@
         },
         {
           "verb": "covenant",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "remit:issue"
@@ -5741,6 +5750,7 @@
         },
         {
           "verb": "create_record",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -5772,6 +5782,7 @@
         },
         {
           "verb": "destroy_record",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own",
@@ -5815,6 +5826,7 @@
         },
         {
           "verb": "determine",
+          "public": true,
           "difficulty": "routine",
           "scale": "settlement",
           "scale_note": "a sitting decides at the venue's rung",
@@ -5947,6 +5959,7 @@
         },
         {
           "verb": "dispatch",
+          "public": false,
           "scale": "territory",
           "scale_note": "a dispatch sends a person across rungs; its reach is the territory, not the sender",
           "stratum": "binding_decision",
@@ -5976,6 +5989,7 @@
         },
         {
           "verb": "establish",
+          "public": false,
           "scale": "settlement",
           "scale_note": "founding an office is an act on the rung that will hold it",
           "stratum": "binding_decision",
@@ -6009,6 +6023,7 @@
         },
         {
           "verb": "evade / defy",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -6050,6 +6065,7 @@
         },
         {
           "verb": "exchange",
+          "public": false,
           "scale": "settlement",
           "scale_note": "as `requisition` -- it writes `Rung.stores`",
           "stratum": "uncontested_material",
@@ -6098,6 +6114,7 @@
         },
         {
           "verb": "forge",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "copying",
@@ -6153,6 +6170,7 @@
         },
         {
           "verb": "lie",
+          "public": false,
           "difficulty": "routine",
           "stratum": "social",
           "capability": "none",
@@ -6236,6 +6254,7 @@
         },
         {
           "verb": "forgive",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -6265,6 +6284,7 @@
         },
         {
           "verb": "found",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -6331,6 +6351,7 @@
         },
         {
           "verb": "build",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -6396,6 +6417,7 @@
         },
         {
           "verb": "give",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own",
@@ -6443,6 +6465,7 @@
         },
         {
           "verb": "issue",
+          "public": true,
           "scale": "province",
           "scale_note": "a Dispensation's `scope` enumerates executors -- \u00a737.1 -- so its reach is the domain the issuer governs",
           "stratum": "binding_decision",
@@ -6512,6 +6535,7 @@
         },
         {
           "verb": "fight",
+          "public": false,
           "stratum": "contested_physical",
           "capability": "arms",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11: the three rows contesting `the body` draw on `arms`).",
@@ -6592,6 +6616,7 @@
         },
         {
           "verb": "capture",
+          "public": false,
           "stratum": "contested_physical",
           "capability": "arms",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11; added beside `fight` and `accept` because it opens the same fight through the same `combat_input`, CR-85 design \u00a75).",
@@ -6683,6 +6708,7 @@
         },
         {
           "verb": "challenge",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -6744,6 +6770,7 @@
         },
         {
           "verb": "accept",
+          "public": false,
           "stratum": "contested_physical",
           "capability": "arms",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11).",
@@ -6839,6 +6866,7 @@
         },
         {
           "verb": "requisition",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -6913,6 +6941,7 @@
         },
         {
           "verb": "march",
+          "public": true,
           "scale": "settlement",
           "scale_note": "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor.",
           "stratum": "contested_physical",
@@ -7003,6 +7032,7 @@
         },
         {
           "verb": "marshal",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7060,6 +7090,7 @@
         },
         {
           "verb": "surrender",
+          "public": false,
           "scale": "settlement",
           "scale_note": "a place is yielded where it stands: the settlement IS the subject, as `march`'s and `marshal`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
@@ -7108,6 +7139,7 @@
         },
         {
           "verb": "migrate",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7182,6 +7214,7 @@
         },
         {
           "verb": "move",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7241,6 +7274,7 @@
         },
         {
           "verb": "oblige",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -7277,6 +7311,7 @@
         },
         {
           "verb": "open_case",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "remit:determine"
@@ -7331,6 +7366,7 @@
         },
         {
           "verb": "pardon",
+          "public": false,
           "scale": "settlement",
           "scale_note": "#453 \u00a79.1: *'settlement'* -- a pardon is the bench's act at the seat that owns the restraint, `determine`'s scale",
           "stratum": "binding_decision",
@@ -7382,6 +7418,7 @@
         },
         {
           "verb": "petition",
+          "public": true,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -7427,6 +7464,7 @@
         },
         {
           "verb": "construe",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -7470,6 +7508,7 @@
         },
         {
           "verb": "release",
+          "public": false,
           "stratum": "binding_decision",
           "eligibility": [
             "own"
@@ -7508,6 +7547,7 @@
         },
         {
           "verb": "restore",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7575,6 +7615,7 @@
         },
         {
           "verb": "revoke",
+          "public": false,
           "scale": "settlement",
           "scale_note": "as `confer` -- it unseats the same office",
           "stratum": "binding_decision",
@@ -7606,6 +7647,7 @@
         },
         {
           "verb": "sabotage",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7683,6 +7725,7 @@
         },
         {
           "verb": "raze",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7738,6 +7781,7 @@
         },
         {
           "verb": "seize",
+          "public": false,
           "scale": "settlement",
           "scale_note": "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives",
           "stratum": "uncontested_material",
@@ -7787,6 +7831,7 @@
         },
         {
           "verb": "speak",
+          "public": true,
           "difficulty": "routine",
           "stratum": "social",
           "capability": "copying",
@@ -7844,6 +7889,7 @@
         },
         {
           "verb": "succeed",
+          "public": false,
           "scale": "person",
           "scale_note": "succession is one person taking another's tenure; the office's rung does not change",
           "stratum": "binding_decision",
@@ -7880,6 +7926,7 @@
         },
         {
           "verb": "survey",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "inquiry",
@@ -7924,6 +7971,7 @@
         },
         {
           "verb": "tend",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -7988,6 +8036,7 @@
         },
         {
           "verb": "tell",
+          "public": false,
           "difficulty": "routine",
           "stratum": "social",
           "capability": "copying",
@@ -8065,6 +8114,7 @@
         },
         {
           "verb": "examine",
+          "public": false,
           "difficulty": "routine",
           "stratum": "contested_physical",
           "capability": "inquiry",
@@ -8124,6 +8174,7 @@
         },
         {
           "verb": "interview",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -8161,6 +8212,7 @@
         },
         {
           "verb": "interrogate",
+          "public": false,
           "difficulty": "demanding",
           "stratum": "social",
           "capability": "inquiry",
@@ -8218,6 +8270,7 @@
         },
         {
           "verb": "research",
+          "public": false,
           "difficulty": "routine",
           "stratum": "uncontested_material",
           "capability": "inquiry",
@@ -8275,6 +8328,7 @@
         },
         {
           "verb": "surveil",
+          "public": false,
           "difficulty": "routine",
           "stratum": "contested_physical",
           "capability": "inquiry",
@@ -8335,6 +8389,7 @@
         },
         {
           "verb": "thread_read",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -8381,6 +8436,7 @@
         },
         {
           "verb": "reconstruct",
+          "public": false,
           "difficulty": "routine",
           "difficulty_note": "B07.11 (premise-check F3, UNDECIDED (13) (ii)): `routine`, the inquiries' level (B05.23, T13 edit 7: the inquiries stay `routine`); 18-A's `plain` applies only where no verb lane has stated a level. Read by the draw only (`task_draw_arm` `on`). [ASSUMPTION; medium; Jordan to correct; revert: `plain`]",
           "capability": "inquiry",
@@ -8425,6 +8481,7 @@
         },
         {
           "verb": "tie / knot",
+          "public": false,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -8449,6 +8506,7 @@
         },
         {
           "verb": "train",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -8520,6 +8578,7 @@
         },
         {
           "verb": "recruit",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
@@ -8582,6 +8641,7 @@
         },
         {
           "verb": "form_unit",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -8624,6 +8684,7 @@
         },
         {
           "verb": "assign_troops",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -8666,6 +8727,7 @@
         },
         {
           "verb": "disband_unit",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -8708,6 +8770,7 @@
         },
         {
           "verb": "discharge_troops",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -8750,6 +8813,7 @@
         },
         {
           "verb": "order_unit",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -8792,6 +8856,7 @@
         },
         {
           "verb": "transfer",
+          "public": false,
           "stratum": "uncontested_material",
           "eligibility": [
             "remit:issue",
@@ -8831,6 +8896,7 @@
         },
         {
           "verb": "utter",
+          "public": true,
           "stratum": "social",
           "eligibility": [
             "own"
@@ -8853,6 +8919,7 @@
         },
         {
           "verb": "work",
+          "public": false,
           "difficulty": "plain",
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",

@@ -263,6 +263,11 @@ class VerbRow:
     # verb needing more columns is one the design has not finished thinking about*). The column is picked, as U1 §1 picks `capability:`,
     # because a loader default makes a missing value explicit and refusable (B4's third disposition); `04` is not edited.
     regard_sign: Optional[int] = None
+    # B11.65 (`18_DETERMINISM_notice_is_a_draw` edit 1): IS THE ROW'S DEED DONE TO BE SEEN -- one that those present learn without a draw,
+    # as a public act in ordinary speech is one done openly. A boolean, REQUIRED ON EVERY ROW and never derived from the verb's name: the
+    # loader refuses a row that omits it or writes a non-boolean (a string, an integer, a null). Nothing reads it yet (B11.66's notice draw
+    # does). ⚠ LAYER 1, NAMED AT THE SITE, as `regard_sign` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
+    public: bool = False
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -777,6 +782,15 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} carries unknown key(s) {unknown}. 04 §B.13 #10 -- a "
                 f"row's keys are the ones this loader reads ({sorted(_VERB_ROW_KEYS)}) or an "
                 "annotation spelled `*_note`; any other column is read by nothing.")
+        # B11.65: THE `public:` COLUMN, REQUIRED ON EVERY ROW AND A BOOLEAN (`18_DETERMINISM_notice_is_a_draw` edit 1; as `capability:` below, no
+        # default by omission). `isinstance(..., bool)` and nothing looser: `1`, `"yes"` and a null are not booleans.
+        if "public" not in r:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares no `public:`. Every row says whether its deed is done to be seen "
+                "(`public: true` or `public: false`); a row that omits it would leave the notice draw to guess from the verb's name.")
+        if not isinstance(r["public"], bool):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `public: {r['public']!r}`, which is not a boolean. Write `true` or `false`.")
         # ⚠ `writes:` NOW TAKES TWO SHAPES (#358 rev.2 invariant 12). A mapping is degree-keyed;
         # a sequence is the flat form. The union feeds the Part D check below either way, so a
         # pair named in ANY branch is still validated against the matrix at load.
@@ -828,7 +842,8 @@ def _load_verb_table() -> dict:
                       brute=str(r["brute"]).strip() if r.get("brute") else None,
                       brute_note=str(r.get("brute_note") or "").strip(),
                       difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
-                      regard_sign=r.get("regard_sign"))
+                      regard_sign=r.get("regard_sign"),
+                      public=r["public"])
         # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
         # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
         if row.regard_sign is None:
