@@ -256,7 +256,8 @@ CFG = dict(
   # instead; (3) the INITIATIVE LEVER — aggressive drifts the Vor UP (pressing builds Vor), cautious DOWN (cedes it), so
   # BOTH poles cost: aggression risks overcommit (its deep commits raise existing exposure), caution bleeds the Vor. At
   # lean=0 every hook is a no-op (default fighters unchanged). Anchored to the German Vor/Nach doctrine (S2).
-  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10, WARINESS_K=1.5,   # WARINESS_K (WS-5): commit-caution vs an UNREAD tradition (familiarity<1 -> shallow bias), spread-floored; 0 = off
+  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.0, WARINESS_K=1.5,   # WARINESS_K (WS-5): commit-caution vs an UNREAD tradition (familiarity<1 -> shallow bias), spread-floored; 0 = off
+  # DISP_INIT_K (B16.07, PB 03 3, ED-PC-0037 the precedent): a standing initiative bonus for aggression with no cost; with the approach lean (APPROACH_*) the disposition keeps no free advantage. 0 = off; revert: 0.10.
   # APPROACH LEAN (B16.05, PB 03 §3): the `exchange` phase's lean (-1 defensive, 0 normal, +1 aggressive; `c.lean['exchange']`, taken from the round's plans) is a prior on two gates the
   # engine already rolls, at the strengths a disposition of 7 and 1 give: commit depth (`g += COMMIT_BETA_K*APPROACH_COMMIT_K*lean`) and counter selection (`x (1 - APPROACH_COUNTER_K*lean)`).
   # `normal` is lean 0 and adds nothing. Neither rides `disp_lean`: a temperament and a plan are two inputs.
