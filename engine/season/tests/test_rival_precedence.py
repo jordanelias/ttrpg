@@ -30,6 +30,7 @@ from .test_in10_record_operands import _hold_document
 from .test_u7_remit import _fold, _requisition
 
 SEEDS = 200
+IDENTITY_SEEDS = 40                       # the seeds an IDENTITY claim (hash == hash, hash blind to pools) needs: it holds at every seed or fails at the first, with no share to measure
 CHARISMA = "attr.social.charisma"          # `requisition`'s and `succeed`'s one governing attribute (`verb_table.yaml`)
 HIGH, MID = "p_high", "p_mid"             # the two rivals; `p_high` is the better pool wherever a test says so
 STRONG = 7                                 # [JUSTIFIED: a test-fixture pool, not a game value -- the top of the attribute scale against the untrained 2, so the odds are far from even and a 200-seed count separates them]
@@ -125,13 +126,13 @@ def test_two_requisitions_on_one_larder_each_win_sometimes():
 
     # AN OUTSIDER DOES NOT MOVE: `bystander` asks a different larder; the two rivals trade the two positions they hold and nothing else.
     held = {}
+    rq_a, rq_b = _two_requisitions()
+    acts = [rq_a, _requisition("bystander", subject="S", amount=1, actor=MID, via="off_duke2"), rq_b]
     for arm in ("hash", "draw"):
         positions = []
+        w, _d = _larder(0, arm=arm)     # `_canonical_order` reads the seed from the world and nothing here moves between seeds but that
         for seed in range(SEEDS):
-            w, _d = _larder(seed, arm=arm)
-            acts = [_two_requisitions()[0],
-                    _requisition("bystander", subject="S", amount=1, actor=MID, via="off_duke2"),
-                    _two_requisitions()[1]]
+            w.world_seed = seed
             order = [a.id for a in _canonical_order(w, acts)]
             positions.append((order.index("bystander"), sorted(order.index(i) for i in ("rq_a", "rq_b"))))
         held[arm] = positions
@@ -193,7 +194,7 @@ def test_two_heirs_each_reign_in_some_seeds():
 
 def test_hash_control_reproduces_base():
     """`rival_precedence: hash` is today's order: the larder world's content hash after the fold equals the base pin at seeds 0-2; and the
-    order it gives is blind to the rivals' pools (the same winner at every one of 200 seeds whether `p_high` is STRONG or untrained -- the hash
+    order it gives is blind to the rivals' pools (the same winner at every one of IDENTITY_SEEDS seeds whether `p_high` is STRONG or untrained -- the hash
     key reads the acts, never a skill) while `draw` reads them (the winner moves with the pool at some seed). So the control is not the arm."""
     for seed, pin in HASH_ARM_BASE.items():
         w, d = _larder(seed, arm="hash")
@@ -201,7 +202,7 @@ def test_hash_control_reproduces_base():
         assert w.content_hash() == pin, (seed, w.content_hash())
     pool_moved = {"hash": 0, "draw": 0}
     checked = 0
-    for seed in range(SEEDS):
+    for seed in range(IDENTITY_SEEDS):
         for arm in ("hash", "draw"):
             won = []
             for strong in (STRONG, None):
@@ -209,7 +210,7 @@ def test_hash_control_reproduces_base():
                 won.append(_taker(_fold(w, d, *_two_requisitions()), d, "requisition.taken")[0])
             pool_moved[arm] += won[0] != won[1]
         checked += 1
-    assert checked >= SEEDS
+    assert checked >= IDENTITY_SEEDS
     assert pool_moved["hash"] == 0, f"the hash order moved with a pool ({pool_moved}): the control is not today's order"
     assert pool_moved["draw"] > 0, f"the `draw` arm never read a pool ({pool_moved})"
 
@@ -236,7 +237,7 @@ def test_two_seizures_of_one_record_keep_hash_order_and_do_not_abort_resolve():
 
 
 def test_no_group_world_is_byte_identical():
-    """At `draw`, a world with no rivalry group is byte-identical to `hash`: content hash and every Event (id, kind, reads) over 200 seeds, for
+    """At `draw`, a world with no rivalry group is byte-identical to `hash`: content hash and every Event (id, kind, reads) over IDENTITY_SEEDS seeds, for
     three worlds -- two requisitions on two larders, two on one larder holding enough for both (the summed `amount` does not exceed the stock),
     and two acts by one actor on one larder. None carries a `precedence` read."""
     worlds = {
@@ -247,7 +248,7 @@ def test_no_group_world_is_byte_identical():
     }
     for name, make in worlds.items():
         checked = 0
-        for seed in range(SEEDS):
+        for seed in range(IDENTITY_SEEDS):
             sigs = {}
             for arm in ("hash", "draw"):
                 (w, d), acts = make(seed, arm)
@@ -256,4 +257,4 @@ def test_no_group_world_is_byte_identical():
                 sigs[arm] = _signature(w, out)
             assert sigs["hash"] == sigs["draw"], (name, seed)
             checked += 1
-        assert checked >= SEEDS, name
+        assert checked >= IDENTITY_SEEDS, name

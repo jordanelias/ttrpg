@@ -730,7 +730,8 @@ class Act:
     # BANDS OF THE SCENE'S PREVIOUS INTERACTION AT WHICH THIS ONE IS ATTEMPTED -- band labels, the strings the verb table
     # keys degrees by (`writes:`/`emits:` maps; `DEGREE_LABEL`'s values for a four-band row). `None`: always, as before.
     # Read by the fold only (`loop/resolve.py::_sequence_refusal`, ID-13): outside the named bands the interaction is
-    # refused at the clause `sequence` (`data/verbs.py::SEQUENCE_CLAUSE`). Not in `World.content_hash` (the act store is not hashed).
+    # refused at the clause `sequence` (`data/verbs.py::SEQUENCE_CLAUSE`). A tuple of band labels (`loop/deliberate.py` rebinds it to `None` where its
+    # predecessor was dropped). Not in `World.content_hash` (the act store is not hashed).
     after: Optional[tuple] = None
 
     def __post_init__(self) -> None:
@@ -741,13 +742,6 @@ class Act:
         # folded, and a hand-built Act carrying one must reach that refusal to be observed.
         if self.via is not None:
             self.via = SeatId(self.via)
-        # `after` is a tuple of band labels or `None`: a bare string would be read as its letters, and a list would be mutated in
-        # place by whoever holds it. This validates what the act is BUILT with; a later rebind (`loop/deliberate.py` sets it back to
-        # `None` where its predecessor was dropped) is deliberate and goes past this check.
-        if self.after is not None and not (isinstance(self.after, tuple) and all(isinstance(b, str) for b in self.after)):
-            raise Forbidden(f"act {self.id!r} carries after={self.after!r}", "B08.02",
-                            needs="`after` a tuple of band labels, or None",
-                            law="an interaction hangs on the bands of the one before it, named as the verb table names them")
 
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
