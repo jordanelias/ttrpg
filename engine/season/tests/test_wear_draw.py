@@ -102,6 +102,33 @@ def test_a_wear_zero_kind_draws_nothing():
     assert len([1 for s, p in drawn if (s, p) == ("h", "wear")]) == 2 * checked, "one draw per Site per season"
 
 
+@pytest.mark.parametrize("draw", [False, True])
+def test_a_wear_of_zero_is_not_a_write_on_either_arm(draw):
+    """B12a.14 (`07_SE_kernel_repairs` B): a Site whose wear this season is 0 -- its kind's, or a drawn Overwhelming -- writes nothing and emits
+    no `condition.worn`, so no `condition.worn` reports a condition that did not move. A world of one dwelling and one harbour: the control
+    arm emits exactly one per season (the harbour's); the drawn arm emits one exactly in the seasons the harbour's condition moved, and at
+    some seed a season draws 0 (observed, so the zero clause is not an unobserved vacuity)."""
+    scale = DEFAULT_FIXTURES.get("condition_scale")
+    seasons, checked, drawn_zero = 3, 0, 0
+    for seed in SEEDS:
+        w = _world(seed, _fixtures(draw), {"d": ("dwelling", scale), "h": ("harbour", scale)})
+        d = SeasonDriver(w)
+        for _ in range(seasons):
+            before, logged = w.sites["h"].condition, len(w.log)
+            w.tick += 1
+            d.matter(mint_token(w, WriteClass.MATTER), [])
+            worn = [e for e in w.log[logged:] if e.kind == "condition.worn"]
+            moved = w.sites["h"].condition != before
+            assert [e.changes[0].subject for e in worn] == (["h"] if moved else []), (draw, seed, worn)   # no worn event without a move
+            assert w.sites["d"].condition == scale, "a dwelling at wear 0 moved"
+            if not draw:
+                assert len(worn) == 1, (seed, worn)                  # the control: one a season, the harbour's, never the dwelling's
+            drawn_zero += not moved
+            checked += 1
+    assert checked >= 20 * seasons, checked
+    assert (drawn_zero >= 1) == draw, f"a drawn zero must be reached on the drawn arm only: {drawn_zero}"
+
+
 @pytest.mark.parametrize("pool, ob_step, row", [(None, OB_STEP, "wear_draw_pool"), (POOL, None, "wear_draw_ob_step"),
                                                 (None, None, "wear_draw_pool")])
 def test_the_arm_refuses_an_unset_calibrate_row(pool, ob_step, row):
