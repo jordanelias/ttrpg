@@ -3,15 +3,25 @@
 `examine` is classed on a Site (`verb_table.yaml`) and no question the realm delivers carries a Site among its referents, so it formed
 nowhere. Its `site` is now choice-sourced (`rosters.yaml: choice_sourced`, `ledger_ranges`): the range is the ids his OWN ledger presents as a
 Site, read person-side with no World. Whether he stands there is the fold's (`present_at`), and a man who does not is refused.
+
+B11.76 (`08_FI_07` Cut A): THE INQUIRY ROW'S ENDING AND ITS TRANSCRIPT. The twenty runs are `test_playable_inquiry.py::inquiry_runs`'s (one set, two seasons).
 """
 from __future__ import annotations
 
+import inspect
+import io
+from collections import Counter
+
 from ..data.matrix import Step, WriteClass
 from ..decision.options import opening_set
+from ..decision.sheet import take_ranked
+from ..harness import aperture
 from ..harness import probes as P
+from ..harness import scenarios as S
 from ..loop.driver import SeasonDriver, mint_token
 from ..seam import Resolution
-from ..state.carriers import Act, Claim, Question, View
+from ..state.carriers import DETERMINED_BY, Act, Claim, Question, Tenure, View
+from .test_playable_inquiry import SEASONS, inquiry_runs
 
 HEARD, NOT_A_SITE = "site_harbour", "Hh"      # `tiny_world`: a Site in `S`; a hearth. `p_low` stands in `Hh`, not at the harbour.
 
@@ -40,3 +50,71 @@ def test_examine_forms_on_a_site_he_has_heard_of():
     w.acts.append(act)
     out = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution("Success", {}))
     assert [e.kind for e in out] == ["inquiry.refused"], [e.kind for e in out]
+
+
+# ======================================================================================
+# B11.76 (`08_FI_07` Cut A, §4): THE INQUIRY ROW'S ENDING, ITS CONTROL AND ITS TRANSCRIPT.
+# ======================================================================================
+def test_cut_a_runs_end_by_a_predicate_at_seeds_0_to_19():
+    """Gate: `inquiry_world(s)` at seeds 0 to 19, two seasons, the shipped chooser in the investigator's seat: every run ends by one of the row's predicates or at
+    the cap (`inquiry_ending` read off the finished world agrees with what the runner named), two runs of one seed give one content hash, and at least two
+    ending kinds occur among the twenty. FALSIFIER (`08_FI_07` falsifier 3): all twenty end by the same predicate, so the scenario offers no real choice."""
+    runs = inquiry_runs()
+    for r in runs:
+        assert (r["ending"] is None and r["seasons"] == SEASONS) or r["ending"] in S.INQUIRY_KINDS, (r["ending"], r["seasons"])
+        assert S.inquiry_ending(r["world"], r["seat"]) == r["ending"]
+    assert S.run("inquiry", 0, SEASONS)["hash"] == runs[0]["hash"], "two runs of one seed gave two hashes"
+    endings = Counter(r["ending"] for r in runs if r["ending"] is not None)
+    assert len(endings) >= 2, f"FALSIFIER: ending kinds among twenty runs {dict(endings)} ({len(runs) - sum(endings.values())} reached the cap)"
+
+
+def test_a_never_inquiring_script_ends_cold_or_rests():
+    """`IS-B2-FI-03`'s control (`08_FI_07`'s `test_a_never_inquiring_callback_ends_by_the_budget_predicate`, one test): a seat that never picks an inquiry verb
+    forms no inquiry, holds no conclusion, and so cannot end `rests`; the run ends `cold` once four seasons have passed and at the cap before. CONTROL: the same
+    seed with the shipped ranking inquires (an inquiry act of his, the aperture's `formed`) and moves the content hash, so the choice is load-bearing."""
+    inquiry = set(aperture.inquiry_verbs())
+    never = lambda sheet: [i for i in take_ranked(sheet) if sheet.candidates[i].verb not in inquiry]
+    seed = 0
+    quiet, ranked = S.run("inquiry", seed, SEASONS, pick=never), inquiry_runs()[seed]
+    formed = lambda r: sum(c["formed"] for c in aperture.inquiry_counts(r["world"], S.INVESTIGATOR_SEAT).values())
+    assert quiet["seat_deliberations"] >= 1, "the seat was never asked; the control proves nothing"
+    assert formed(quiet) == 0 and not S.concluded(quiet["world"], S.INVESTIGATOR_SEAT)
+    assert quiet["ending"] == ("cold" if SEASONS >= S.COLD_SEASONS else None), quiet["ending"]
+    assert formed(ranked) > 0 and ranked["hash"] != quiet["hash"], "the ranking never inquired, or the pick moved nothing"
+
+
+def _planted_row(monkeypatch):
+    """The `inquiry` row with a bench's disposal edge on the forger planted after the first season: the one run in which `answer` has something to print."""
+    row = S.SCENARIOS["inquiry"]
+
+    def ending(w, pid, left):
+        if w.tick > S.CASE_OPENS and not any(t.id == "t_planted" for t in w.tenures):
+            w.add_tenure(Tenure("t_planted", S.INQUIRY_FORGER, "off_bench_a", "oblige", since=w.tick, payload={DETERMINED_BY: "planted"}))
+        return row.ending(w, pid, left)
+    monkeypatch.setitem(S.SCENARIOS, "inquiry", S.Scenario(build=row.build, seat=row.seat, ending=ending, verbs=row.verbs, kinds=row.kinds,
+                                                           reading=row.reading, answer=row.answer))
+
+
+def _transcript(monkeypatch, capsys, *flags):
+    monkeypatch.setattr("sys.stdin", io.StringIO("\n" * 200))          # blank: take the ranking, every lap
+    assert S.main(["inquiry", "--seed", "0", "--seasons", "2", "--play", *flags]) == 0
+    return capsys.readouterr().out.splitlines()
+
+
+def test_the_play_transcript_never_prints_the_true_doer(monkeypatch, capsys):
+    """`IS-B2-FI-03` (4), A-49: whether the person named is the Event's actor is printed only under `--developer`, and not while the run lives. A planted run
+    (a bench's disposal edge on the forger after season one) ends `determined` and names him: the `--play` transcript carries no such line; with `--developer` it
+    carries one, after the last lap. SOURCE: the row's `answer` is called from one line of the module and that line is guarded by `--developer`. CONTROL: the
+    developer run prints it, so the absence above could have failed."""
+    _planted_row(monkeypatch)
+    plain = _transcript(monkeypatch, capsys)
+    dev = _transcript(monkeypatch, capsys, "--developer")
+    assert any(t.startswith("-- lap") for t in plain), "the run held no lap: nothing was played"
+    assert any(" · ending determined" in t for t in plain), "the planted run did not end determined"
+    assert not [t for t in plain if "DEVELOPER" in t or "actor" in t], "the play transcript printed the doer's reading"
+    marked = [i for i, t in enumerate(dev) if t.startswith("DEVELOPER · named p_forger")]
+    assert len(marked) == 1 and "named is the actor: yes" in dev[marked[0]], dev[-6:]
+    assert marked[0] > max(i for i, t in enumerate(dev) if t.startswith("-- lap")), "printed while the run lived"
+    src = inspect.getsource(S).splitlines()
+    calls = [i for i, t in enumerate(src) if ".answer(" in t]
+    assert len(calls) == 1 and "if a.developer" in src[calls[0] - 1], [src[i - 1: i + 1] for i in calls]

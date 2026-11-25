@@ -2,13 +2,15 @@
 
 The world is a premise folded through the season loop's own steps (a forging, a move, a handover) with no claim planted in
 the investigator's ledger: his case is a goal whose `deed_doers` referents are his suspects, empty until his OWN ledger names
-someone. `test_every_inquiry_world_run_ends_by_a_predicate` is B11.76's (it needs the ending).
+someone. `test_every_inquiry_world_run_ends_by_a_predicate` is B11.76's (it needs the ending; below, with the module fixture it shares with `test_shortest_case.py`).
 
 B11.71 (`08_FI_03` §2, FRES §8): WHAT A LOOK TEACHES -- the three `observes:` rows and the one band table `finding_terms` (the tests after the world's).
 """
 from __future__ import annotations
 
 import dataclasses
+import functools
+from collections import Counter
 
 import pytest
 
@@ -243,3 +245,46 @@ def test_a_winning_reconstruct_deposits_a_concluded_claim_by_band():
         _, act = _reconstruct(w)
         _look(w, d, act, "Success")
         assert _concluded(w) == want, (sighted, _concluded(w))
+
+
+# ======================================================================================
+# B11.76 (`08_FI_03` §1, §3, §5): THE INQUIRY ROW'S RUNS. Twenty runs of `inquiry` at two seasons (A-114, D-17: at two seasons `cold` cannot fire),
+# the shipped ranking in the investigator's seat, read once and shared with `test_shortest_case.py` (the same claim at the same seeds).
+# ======================================================================================
+SEEDS = range(20)
+SEASONS = 2
+
+
+@functools.lru_cache(maxsize=None)
+def inquiry_runs() -> tuple:
+    """The twenty `inquiry` runs, seeds 0 to 19 at two seasons, the seat taking the ranking whole -- the module fixture the two files' tests read. Cached,
+    so one process plays them once (single-threaded: `-n` gives each worker its own set)."""
+    return tuple(S.run("inquiry", seed, SEASONS) for seed in SEEDS)
+
+
+def test_every_inquiry_world_run_ends_by_a_predicate():
+    """`08_FI_03` §1 (gate): each of twenty runs ends by one of the row's predicates or reaches the two-season cap, never by anything else, and the ending the
+    runner names is the one `inquiry_ending` reads off the finished world. FALSIFIER (`08_FI_07`): all twenty end the same way, so the scenario offers no real
+    choice -- at least two ending kinds occur. At two seasons `cold` cannot fire (it needs four), so a run that ended `cold` here read the clock wrong."""
+    runs = inquiry_runs()
+    assert len(runs) == len(SEEDS)
+    for r in runs:
+        assert r["ending"] != "cold", "cold needs four seasons"
+        if r["ending"] is None:
+            assert r["seasons"] == SEASONS, "a run with no ending stopped before the cap"
+        else:
+            assert r["ending"] in S.INQUIRY_KINDS and r["kind"] == S.INQUIRY_KINDS[r["ending"]], r["ending"]
+        assert S.inquiry_ending(r["world"], r["seat"]) == r["ending"], "the ending is a read of the finished world"
+    endings = Counter(r["ending"] for r in runs if r["ending"] is not None)
+    assert len(endings) >= 2, f"FALSIFIER (`08_FI_07` falsifier 3): endings among twenty runs {dict(endings)}; the rest reached the cap"
+
+
+def test_some_conclusion_names_a_non_actor():
+    """`08_FI_03` §3 and `19_LACUNA_conclusion...`: over the twenty runs at least one ends with a conclusion naming someone who is not the Event's actor, and at
+    least one with the actor named (`scenarios.named_and_actor`: a `concluded:` claim's hand against the actors of the Events it concludes about, else the
+    person a bench disposed against the premise's forger). FALSIFIER: every conclusion names the true actor, so nothing can mislead and the wrong conclusion is
+    still unrepresented -- and with no run naming anyone, neither can be shown."""
+    named = [got for r in inquiry_runs() if (got := S.named_and_actor(r["world"], r["seat"])) is not None]
+    assert named, "no run named anyone: neither a conclusion nor an accusation formed in twenty runs"
+    assert any(not is_actor for _n, _a, is_actor in named), "every conclusion names the true actor"
+    assert any(is_actor for _n, _a, is_actor in named), "no conclusion names the actor"

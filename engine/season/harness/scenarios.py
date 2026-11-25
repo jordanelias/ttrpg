@@ -24,6 +24,10 @@ THE ROW (`Scenario`, frozen):
   * `role`                    -- the composition role the scenario exists to enter, for the integrated check.
   * `unreached`               -- composition roles (members of `engine.substrate.composition.ROLES`) whose entry count must
                                  read 0 on this world; `run` returns the counts, no reader is added.
+  * `reading(w, pid) -> str`  -- the row's own figure for the summary line (B11.76): a computed read of the world at the run's end, stored
+                                 nowhere. `None` prints none.
+  * `answer(w, pid) -> str`   -- what the world holds that the seated person does not, printed only under `--developer` and only after the
+                                 run has ended, never per lap (B11.76, A-49: nothing is revealed in play). `None` prints none.
 
 THE LOOP (`run`) is `populated.run`'s: the chooser comes from `boot/chooser.py::chooser`, the seat is bound through
 `play_surface.dispatching_chooser`, `SeasonDriver.season` is called with the fixtures' `contest_max_depth`, a dead seat is
@@ -41,15 +45,17 @@ from ...substrate import composition
 from ..data import goals as goals_data
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
-from ..data.rosters import COVERT_KINDS, faction_prop_id
+from ..data.rosters import COVERT_KINDS, SEEN_PREDICATE, faction_prop_id
+from ..data.verbs import CONCLUDED_STEM
 from ..decision.sheet import DevelopmentSheet, creation_sheet, development_space, seat as bind_seat, take_ranked
 from ..boot.chooser import chooser
 from ..boot.realm import place_person, seed_goals
 from ..gaps import Forbidden
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import world_q
-from ..state.attribution import live_cover
-from ..state.carriers import Act, Claim, Office, Proposition, Rung, Tenure, generated_attributes
+from ..state.attribution import actor_of, anchor_of, causing_act, event_by_id, live_cover
+from ..state.carriers import Act, Claim, Office, Proposition, Question, Rung, Tenure, generated_attributes
+from ..state.gate import DISPOSABLE_KINDS, UNDECLARED_DISPOSAL
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from ..tests._flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
@@ -70,6 +76,8 @@ class Scenario:
     role: Optional[str] = None
     kinds: Mapping[str, str] = field(default_factory=dict)
     unreached: frozenset = frozenset()
+    reading: Optional[Callable[[World, Optional[str]], str]] = None
+    answer: Optional[Callable[[World, Optional[str]], str]] = None
 
     def __post_init__(self):
         object.__setattr__(self, "kinds", dict(self.kinds))
@@ -106,19 +114,24 @@ SCENARIOS: dict[str, Scenario] = {
 
 
 def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None,
-        host=None, person: Optional[str] = None) -> dict:
+        host=None, person: Optional[str] = None, on_build: Optional[Callable[[World], None]] = None) -> dict:
     """Play `SCENARIOS[name]` at `seed` for at most `seasons` seasons and stop at the first season whose end `ending`
     names one. `pick(sheet) -> indices` decides for the seated person (`person`, else the row's `seat`); `None` takes the
-    shipped ranking whole. `host` is `SeasonDriver.season`'s own (`queries/inputs.py::PlayHost`).
+    shipped ranking whole. `host` is `SeasonDriver.season`'s own (`queries/inputs.py::PlayHost`). `on_build(w)` is called once with
+    the built world before any season: a client that prints beside `pick` (the command line's board) keeps it; it is handed the
+    world itself and is a reader by agreement, as `pick` is.
 
-    Returns `{ending, kind, tick, hash, entries, seasons, seat_deliberations, world}`: `ending` is the ending's name and
+    Returns `{ending, kind, tick, hash, entries, seasons, seat_deliberations, premise, seat, world}`: `ending` is the ending's name and
     `kind` its member of `ENDING_KINDS` (both `None` while the run goes on), `entries` CI-11's per-role entry counts
-    (`harness/aperture.py::engines_entered`; `None` where it cannot count), `seasons` the number played and
-    `seat_deliberations` how many times the seated space was asked. An ending whose name the row's `kinds` does not hold
-    is REFUSED, not labelled."""
+    (`harness/aperture.py::engines_entered`; `None` where it cannot count), `seasons` the number played, `seat_deliberations` how many
+    times the seated space was asked, `premise` the ids of the acts the build folded (the run's own are the others) and `seat` the person
+    bound at the end (`None` once his line is extinct). An ending whose name the row's `kinds` does not hold is REFUSED, not labelled."""
     from . import aperture                                     # lazy: aperture imports harness modules a row may import in turn
     row = SCENARIOS[name]
     w = row.build(seed)
+    if on_build is not None:
+        on_build(w)
+    premise = frozenset(a.id for a in w.acts)
     verbs = resolvable_verbs() if row.verbs is None else row.verbs
     pid = row.seat(w) if person is None else person
     mint = lambda who, verb, subj: H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")      # `boot/chooser.py::chooser`'s own mint and draw
@@ -132,7 +145,7 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     overrides = bind_seat(creation_sheet(w.persons.values()), pid, space)
     choose = dispatching_chooser(chooser(w, verbs=verbs), overrides)
     d = SeasonDriver(w)
-    played = {"n": 0}
+    played = {"n": 0, "seat": pid}
 
     def loop() -> Optional[str]:
         bound, last = carry_on(w, overrides, pid, (), lambda offer: offer[0])
@@ -143,6 +156,7 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
             if bound is not None:
                 bound, last = carry_on(w, overrides, bound, last, lambda offer: offer[0])
             ended = row.ending(w, bound, seasons - played["n"])
+        played["seat"] = bound
         return ended
 
     ended, entries = aperture.engines_entered(loop)
@@ -152,12 +166,12 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
                         law="IS-B2-CORE-01 (1) -- every row states its `kinds` beside its endings")
     return {"ending": ended, "kind": None if ended is None else row.kinds[ended], "tick": w.tick,
             "hash": w.content_hash(), "entries": entries, "seasons": played["n"],
-            "seat_deliberations": asked["n"], "world": w}
+            "seat_deliberations": asked["n"], "premise": premise, "seat": played["seat"], "world": w}
 
 
 # ======================================================================================
 # THE INQUIRY WORLDS (B11.70, `08_FI_03` §1): `trail_world`, moved here from `tests/test_fi03_trail.py` unchanged, and
-# `inquiry_world`, the scenario built beside it. Neither is registered in `SCENARIOS` here (B11.76 registers `inquiry`).
+# `inquiry_world`, the scenario built beside it; `trail_world` is no row, `inquiry_world` is the `inquiry` row's builder (B11.76, below).
 # ======================================================================================
 FAC = faction_prop_id("Valorsmark")
 FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
@@ -311,7 +325,119 @@ def inquiry_world(seed: int = 0) -> World:
     finally:
         w.fixtures = played
     w.tick += 1
+    assert w.tick == CASE_OPENS, (w.tick, CASE_OPENS)
     return w
+
+
+# ======================================================================================
+# THE INQUIRY ROW (B11.76, `08_FI_03` §5, `08_FI_07` §4): `inquiry` is registered in `SCENARIOS` -- builder `inquiry_world`, the Cut A verb
+# set, the investigator seated, four endings read off the world by `inquiry_ending`, and a summary line that is computed and stored nowhere.
+# ======================================================================================
+INVESTIGATOR_SEAT, INQUIRY_FORGER = "p_investigator", "p_forger"       # the seated person; the one who did the premise's forging
+CASE_OPENS = 2          # the tick `inquiry_world` returns at (asserted there): the premise's forging at 0, its handover at 1
+COLD_SEASONS = 4        # `08_FI_03` §5: "four seasons pass"
+#: `08_FI_07` §2.0's Cut A verb set, with `examine` (B11.72) and `reconstruct` (B11.73) added as their items landed. The chooser draws from it for everyone.
+CUT_A_VERBS = frozenset({"research", "surveil", "petition", "carry", "open_case", "tell", "lie", "give", "survey", "create_record", "forge",
+                         "conceal", "utter", "commit", "move", "examine", "reconstruct"})
+INQUIRY_KINDS = {"determined": "won", "fled": "lost", "rests": "drawn", "cold": "drawn"}
+
+
+def disposed(w: World) -> list:
+    """The persons under a live disposal edge (`state/gate.py::DISPOSABLE_KINDS`: `oblige` imposed by a determination, `detain`, `ban`) on a seat a member
+    of the bench at `TOWN` holds (`world_q.judging_set`): a bench has ruled on each, `_eff_determine` opens the edge on the seat exercised."""
+    bench = set(world_q.judging_set(w, TOWN))
+    seats = {t.object for t in w.tenures if t.kind == "hold" and t.live and t.subject in bench}
+    return [t.subject for t in w.tenures if t.live and t.object in seats and t.kind in DISPOSABLE_KINDS and t.subject in w.persons
+            and (t.kind != UNDECLARED_DISPOSAL or t.imposed)]
+
+
+def concluded(w: World, investigator: Optional[str]) -> list:
+    """`[(the one it was done to, deed kind, what he concluded)]`: the `concluded:` claims in `investigator`'s own ledger (`loop/witness.py` deposits them at
+    WITNESS, B11.73); the third term is the doer's id, or `True` where a Partial left the deed alone."""
+    p = w.persons.get(investigator)
+    return [] if p is None else [(c.subject, c.predicate.partition(":")[2], c.value) for c in p.ledger
+                                 if str(c.predicate).startswith(f"{CONCLUDED_STEM}:")]
+
+
+def inquiry_ending(w: World, investigator: Optional[str]) -> Optional[str]:
+    """THE INQUIRY'S ENDING, the first true of (`08_FI_03` §5; computed, stored nowhere), or `None`:
+      * `determined` -- a live disposal edge on the bench's seat names a person (`disposed`);
+      * `fled`       -- the forger's place is outside `world_q.reach` of the investigator (the forger has no place at all once he leaves the world);
+      * `rests`      -- the investigator holds a `concluded:` claim. The source's second clause, *"and his season budget is spent"*, is true at every reading
+                        the runner takes (it reads an ending between seasons, once the season's budget is gone), so no budget is read here; its
+                        alternative, *"a petition of his on the docket"* stands only *before FI_03 §3 lands*, and B11.73 has landed it;
+      * `cold`       -- `COLD_SEASONS` seasons have passed since the case opened (`CASE_OPENS`).
+    A dead investigator with no continuation (`investigator` is `None`, or no longer in the world) leaves `fled` and `rests` unread, and `cold`
+    still reads, so the run ends rather than running to the cap seatless."""
+    if disposed(w):
+        return "determined"
+    p = w.persons.get(investigator)
+    if p is not None:
+        if world_q.home_of(w).get(INQUIRY_FORGER) not in world_q.reach(w, p):
+            return "fled"
+        if concluded(w, investigator):
+            return "rests"
+    return "cold" if w.tick - CASE_OPENS >= COLD_SEASONS else None
+
+
+def seen_at_inquiries(w: World, investigator: Optional[str]) -> int:
+    """How many distinct persons hold a `seen` claim naming `investigator` at one of his inquiries (`08_FI_07` §4, R-46: in place of the archived Exposure
+    meter): a `seen` claim whose `who` is he, whose originating Event (`world_q.occasioned_by`, the claim's deposit and the Event it is about) his act of an
+    inquiry verb (`aperture.inquiry_verbs`) caused. A read over ledgers at the run's end; no chooser reads it and no field holds it."""
+    from . import aperture
+    verbs = frozenset(aperture.inquiry_verbs())
+    seers = set()
+    for pid, p in w.persons.items():
+        if pid == investigator:
+            continue
+        for c in p.ledger:
+            if c.predicate != SEEN_PREDICATE or getattr(c.value, "who", None) != investigator or pid in seers:
+                continue
+            for eid in world_q.occasioned_by(w, Question(f"q:seen:{c.id}", "claim_landed", (), c.id)):
+                a = causing_act(w, event_by_id(w, eid))
+                if a is not None and a.actor == investigator and a.verb in verbs:
+                    seers.add(pid)
+                    break
+    return len(seers)
+
+
+def named_and_actor(w: World, investigator: Optional[str]) -> Optional[tuple]:
+    """`(named, actors, named_is_actor)`: who the run's conclusion or accusation names and who did the Event it is about, or `None` where nobody is named. A
+    `concluded:` claim naming a hand is the investigator's conclusion about `(the one it was done to, the deed kind)`: the actors are those of the
+    Events of that kind that name the one it was done to (`anchor_of`, or a change of the Event's); where he concluded a deed alone (a Partial) nobody is named. With no
+    conclusion, a person under `disposed` is the accused, and the Event is the premise's forging (`FORGE_ID`)."""
+    for to, kind, hand in concluded(w, investigator):
+        if isinstance(hand, str):
+            actors = sorted({actor_of(w, e) for e in w.log if e.kind == kind and to in ({anchor_of(w, e)} | {c.subject for c in e.changes})} - {None})
+            return hand, actors, hand in actors
+    accused = disposed(w)
+    if accused:
+        forging = w.acts.get(FORGE_ID)
+        actors = [] if forging is None else [forging.actor]
+        return accused[0], actors, accused[0] in actors
+    return None
+
+
+def inquiry_reading(w: World, investigator: Optional[str]) -> str:
+    """The `inquiry` row's figure on the summary line: `seen_at_inquiries`."""
+    return f"seen by {seen_at_inquiries(w, investigator)}"
+
+
+def inquiry_answer(w: World, investigator: Optional[str]) -> str:
+    """What `--developer` prints at the run's end and nowhere else: whether the person the run named is the Event's actor (`named_and_actor`)."""
+    got = named_and_actor(w, investigator)
+    return "DEVELOPER · nobody was named" if got is None else (
+        f"DEVELOPER · named {got[0]} · the Event's actor {', '.join(got[1]) or 'unknown'} · named is the actor: {'yes' if got[2] else 'no'}")
+
+
+SCENARIOS["inquiry"] = Scenario(build=inquiry_world, seat=lambda w: INVESTIGATOR_SEAT, ending=lambda w, pid, left: inquiry_ending(w, pid),
+                                verbs=CUT_A_VERBS, kinds=INQUIRY_KINDS, reading=inquiry_reading, answer=inquiry_answer)
+
+
+def board_lines(w: World, pid: str) -> list:
+    """The board's lines for `pid`, printed before each lap's offered acts. B11.77 FILLS THIS BODY: it returns `play_surface.board(w.persons[pid], w.fixtures)`
+    rendered one line a row (`dossier`'s rows, the suspects line, the held documents). Until it lands the board is empty and the lap prints its offered acts alone."""
+    return []
 
 
 def _parse(argv) -> argparse.Namespace:
@@ -327,7 +453,9 @@ def _parse(argv) -> argparse.Namespace:
     return ap.parse_args(argv)
 
 
-def _picker(a: argparse.Namespace) -> Callable[[DevelopmentSheet], list]:
+def _picker(a: argparse.Namespace, world: Optional[Callable[[], World]] = None) -> Callable[[DevelopmentSheet], list]:
+    """The command line's `pick`. `world()` returns the built world (`run`'s `on_build`): with it each lap prints `board_lines` for the seated person between its
+    header and the offered acts; without it the lap prints no board (a caller that has no world)."""
     lines = open(a.script).read().splitlines() if a.script else []
     state = {"lap": 0}
 
@@ -336,6 +464,9 @@ def _picker(a: argparse.Namespace) -> Callable[[DevelopmentSheet], list]:
         print(f"-- lap {state['lap']} · {sheet.person_id} · budget {sheet.budget}")
         if a.developer:
             print(f"   decisiveness {sheet.decisiveness:.3f} · pursuits {dict(sheet.pursuits)} · tenures {list(sheet.tenures)}")
+        if world is not None:
+            for line in board_lines(world(), sheet.person_id):
+                print(f"   {line}")
         for i, c in enumerate(sheet.candidates):
             print(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip())
         if a.play:
@@ -352,8 +483,19 @@ def main(argv=None) -> int:
     a = _parse(sys.argv[1:] if argv is None else argv)
     if a.name not in SCENARIOS:
         raise SystemExit(f"no scenario {a.name!r}; registered: {sorted(SCENARIOS) or 'none'}")
-    r = run(a.name, a.seed, a.seasons, pick=_picker(a), person=a.person)
-    print(f"{a.name} · seed {a.seed} · {r['seasons']} season(s) · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}")
+    from . import aperture                                     # lazy, as `run`'s is
+    built: list = []
+    r = run(a.name, a.seed, a.seasons, pick=_picker(a, lambda: built[0]), person=a.person, on_build=built.append)
+    row, w, seat = SCENARIOS[a.name], r["world"], r["seat"]
+    null, total = aperture.null_reading(w, scope=lambda attempt: attempt[0].id not in r["premise"])
+    line = f"{a.name} · seed {a.seed} · {r['seasons']} season(s) · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}"
+    if row.reading is not None:
+        line += f" · {row.reading(w, seat)}"
+    print(f"{line} · null scenes {null}/{total}")                  # THE SUMMARY LINE (`IS-B2-CORE-03` (2), `08_FI_07` §4): one line, computed from the world
+    for text in aperture.inquiry_lines(w, seat):
+        print(text)
+    if a.developer and row.answer is not None:                     # the run has ended: no lap prints this (A-49)
+        print(row.answer(w, seat))
     print(f"CONTENT HASH: {r['hash']}")
     return 0
 
