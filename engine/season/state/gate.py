@@ -1218,7 +1218,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   The one basis an ACTORLESS write can meet (S15.3's causation rule), which is how
                   MATTER's death reaches it.
       `T-o`       a CLOSURE of a `hold` on a SEAT, by `may_revoke` -- `via` present, the actor
-                  seated in it, and the seat's revocation basis admitting it. AND (v9 IN-31,
+                  seated in it, and the seat's revocation basis admitting it -- or (B21.69) a re-stamp of
+                  its grant that drops an act (a partial revocation), by the same predicate. AND (v9 IN-31,
                   H-100) the revocation's COST: an OPENING of a `ban` whose OBJECT is `via` and
                   whose owner is in `revoked` -- the same write closed his `hold` under `T-o` on a
                   seat whose `REVOCATION_DISPOSAL` is `ban`. One ban per such closure, spent by
@@ -1231,8 +1232,9 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   seat could write the same ban by a `determine`, and a conjunct keyed on the
                   act's verb would widen this function's interface for one caller.
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
-                  alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
-                  seat confers on its holder, written by the authority that may fill the seat.
+                  alone that leaves out no act the grant carried, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
+                  seat confers on its holder, written by the authority that may fill the seat. A change that DROPS an act is a
+                  partial revocation (B21.69): `T-o`'s, by `may_revoke`, and `revoke`'s `keeps` writes it.
                   Never on a seat whose `FILLED_BY` lacks it (v10 IN-61: an `inheritance` seat), and never for a
                   subject that may not sit (`may_sit`, B21.60: a cohort).
       `claim`     an OPENING of the ACTOR'S OWN `hold` on a seat whose `FILLED_BY` names it, which
@@ -1492,6 +1494,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
             w, actor, seat, set(released) | {s.object for s in w.seat_holds(actor) if not passes_a_seat(w.offices[s.object])},
             besides=t):
         return CLAIM
+    # B21.69 (`IS-B3-FA-07`, A-105): A REDUCTION OF A SITTING HOLDER'S GRANT IS A PARTIAL REVOCATION. A re-stamp of a live seat-`hold` that is
+    # nothing but its payload and leaves out an act the grant carried is the holder's seat cut short, so it is `T-o`'s -- `may_revoke`, the one
+    # predicate a whole strip asks -- and never `conferral`'s: the authority that may FILL a seat may widen a grant, and may not narrow one it
+    # could not revoke. The verdict is final here (`None` where `may_revoke` refuses), so the `conferral` return below is never reached for a cut.
+    if (not opened and t.live and moved == {"payload"}
+            and set(was.granted_acts) - set(t.granted_acts)):
+        return T_O if may_revoke(w, actor, via, seat) else None
     if ((opened and may_sit(w, t.subject)) or moved == {"payload"}) and may_fill(w, actor, via, seat):
         return CONFERRAL
     return None

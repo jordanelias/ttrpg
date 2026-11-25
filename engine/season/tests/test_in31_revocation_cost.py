@@ -256,7 +256,7 @@ def test_in31_ban_is_opened_by_determine_and_revoke_and_kind_verb_is_unmoved():
     assert V.KIND_VERB.get("tenure.opened") == "confer", "a second `tenure.opened` emitter unpriced confer"
     # B21.14: `revoke` is drawn -- its emits and writes are degree-keyed; at the ruled O/S bands they are what they were
     assert all(V.VERB_TABLE["revoke"].emits_at(b) == ("tenure.closed",) for b in ("Overwhelming", "Success"))
-    assert all(V.VERB_TABLE["revoke"].writes_at(b) == ("Tenure.until", "Tenure.since") for b in ("Overwhelming", "Success"))
+    assert all(V.VERB_TABLE["revoke"].writes_at(b) == ("Tenure.until", "Tenure.since", "Tenure.payload") for b in ("Overwhelming", "Success"))   # B21.69: + the `keeps` re-stamp
 
 
 # 11 -- THE EXIT, ON THE BUILT REALM ---------------------------------------------------------------------

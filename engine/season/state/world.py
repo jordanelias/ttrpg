@@ -1115,7 +1115,7 @@ class World:
         self._staged = {}
         return out
 
-    def _grant_remit(self, t: Tenure, force: bool = False) -> bool:
+    def _grant_remit(self, t: Tenure, force: bool = False, acts: Optional[tuple] = None) -> bool:
         """`H-71` arm 2, THE WRITE HALF: seating a holder writes the office's remit acts into the
         `hold` Tenure's `payload`, so the grant rides on the thing the holder owns.
 
@@ -1169,7 +1169,9 @@ class World:
                 TRACE.note(f"`hold` {t.id!r} opened on {t.object!r}, which the world does not "
                            f"hold yet -- no remit granted until an `establish` founds it")
             return False
-        grant = tuple(off.remit_acts)
+        # B21.69: `acts` is the grant a PARTIAL REVOCATION leaves the holder (`revoke`'s `keeps`), written through the one writer of the key; it
+        # is read as given, never widened by the office's own remit, and is meaningful with `force` only (an existing grant is left alone without it).
+        grant = tuple(off.remit_acts) if acts is None else tuple(acts)
         # `H-160` limit 1 / `H-158`: THE GRANT ALSO SAYS WHERE THE SEAT'S TREASURY IS -- the seat's
         # rung, read person-side by `Tenure.seat_rung` (its one reader of the key), so a holder paying
         # through his seat can name the rung he pays out of without a `World`. Written with the acts,

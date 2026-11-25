@@ -13,7 +13,7 @@ the same world where one is needed so neither half can pass for the other's reas
   4. a re-remit of a VACANT office outside purview refuses -- since H-291 (B03.81) at the overlay arm's
      `founds_over`, no longer at H-144 (b); control: the seat with purview executes;
   5. a reduction of a `revocation: None` seat's grant refuses (H-132 (b)); controls: the same seat's grant
-     WIDENED executes, and a reduction of a seat whose basis admits the exercised seat executes;
+     WIDENED executes, and (B21.69) a reduction of a seat whose basis admits the exercised seat refuses too: it is `revoke`'s;
   6. the founder revokes the founded Lord through the seat that holds `revoke`, and it executes.
 
 Plus the stamper (`holdings_to_found`) on the realm, and the derivation the effect reads being the
@@ -146,13 +146,15 @@ def test_cr25_5_a_reduction_of_a_revocation_none_seats_grant_refuses():
     assert _kinds(out) == ["remit.changed", "tenure.payload_set"], _kinds(out)
 
 
-def test_cr25_5_control_a_reduction_the_seats_basis_admits_executes():
-    """CONTROL 2: the reduction is refused for the BASIS, not for being a reduction -- the reeve's seat declaring
-    `rung_above_same_faction`, which the duke's seat on `S`'s parent `D`, same faction, satisfies."""
+def test_cr25_5_control_a_reduction_the_seats_basis_admits_is_still_refused_at_establish():
+    """B21.69 (`IS-B3-FA-07`): A REDUCTION IS A REVOCATION AND `revoke` CARRIES IT. The reeve's seat declaring `rung_above_same_faction`, which the
+    duke's seat on `S`'s parent `D`, same faction, satisfies, once admitted this cut at `establish` (CONTROL 2: the refusal was the basis's); the
+    clause now refuses every re-stamp that narrows a sitting grant, the basis admitting it or not, and the draw is `revoke`'s with `keeps`
+    (`test_grant_reduction.py`)."""
     w, d = _world()
     payload = _seated_reeve(w, "rung_above_same_faction")
     out = _act(w, d, "e_cut", "p_high", "off_duke", {**payload, "remit": ["issue"]})
-    assert _kinds(out) == ["remit.changed", "tenure.payload_set"], _kinds(out)
+    assert _kinds(out) == ["establish.refused"], _kinds(out)
 
 
 @pytest.mark.usefixtures("seat_at_success")       # B21.14: the founder's conferral and revocation are drawn; read here at Success

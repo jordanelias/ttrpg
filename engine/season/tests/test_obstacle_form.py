@@ -52,7 +52,7 @@ def _fold(terms):
 
 
 ROSTER = roster("obstacle_terms", ordered=True)
-CONDITIONAL = ("standard", "stakes", "rank_gap", "regard", "cross_chain")      # B05.21 (B21.09: `rank_gap`; B21.61: `cross_chain`): members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
+CONDITIONAL = ("standard", "stakes", "rank_gap", "regard", "cross_chain", "faction_power")      # B05.21 (B21.09: `rank_gap`; B21.61: `cross_chain`; B21.69: `faction_power`): members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
 STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
 LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
 BOUNDS = ("ceiling", "floor")

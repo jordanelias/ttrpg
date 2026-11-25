@@ -88,10 +88,11 @@ from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS,
                                   resolve as _prize_row)
 from ...queries.inputs import Margin, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import docketed_under, hold_force, judging_set, proofs, reception, residence_of
+from ...queries.faction_q import weight as faction_weight
+from ...queries.world_q import docketed_under, faction_of, hold_force, judging_set, proofs, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
 from ...state.containment import edges_of
-from ...state.gate import UNDECLARED_DISPOSAL, across_chains, sits_over
+from ...state.gate import UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
@@ -556,7 +557,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
                  docketed=docketed, heard=room is not None, regard=regard, bodies=bodies,
                  rank_gap=_rank_gap_of(w, via, subject),                         # the subject's rank above the exercised seat (B21.09)
-                 cross_chain=int(via is not None and seat is not None and across_chains(w, via, seat)))     # the named seat is of another chain than the exercised one (B21.61)
+                 cross_chain=int(via is not None and seat is not None and across_chains(w, via, seat)),     # the named seat is of another chain than the exercised one (B21.61)
+                 faction_power=_faction_power_of(w, via, subject) if seat is not None else 0)     # the holder's faction against the host's, where the act names a seat (B21.69)
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
@@ -739,11 +741,36 @@ def _cross_chain_term(fx: Any, facts: dict) -> dict:
     return _weighing("cross_chain", float(facts.get("cross_chain") or 0), fx.get("cross_chain_step"))
 
 
+def _faction_power_of(w: Any, via: Optional[str], holder: Optional[str]) -> int:
+    """THE BAND OF THE HOLDER'S FACTION'S WEIGHT AGAINST THE HOST'S (B21.69, `IS-B3-FA-07`, A-105): `+1` where the faction the
+    holder (the roll's subject, the live holder `sides_of` stood opposite) coheres under outweighs the faction of the seat the act is exercised
+    through (`gate.seat_faction`), `0` where they weigh the same or are the SAME faction, `-1` where it weighs less. The weights are
+    `faction_q.weight`, the one owner (political weight, not armed strength: A-105, `U5d_FA` §4). THE RATIO'S BAND IS READ AS THE COMPARISON OF THE TWO
+    WEIGHTS, never their quotient, so a host faction with no members (weight 0.0, B21.68) reads as outweighed by any faction with some, and two
+    empty ones as equal, and nothing divides by zero. `0` for no holder, a holder committed to no faction, or a seat carrying none."""
+    host = seat_faction(w, via)
+    theirs = faction_of(w, holder) if holder is not None and holder in w.persons else None
+    if host is None or theirs is None or theirs == host:
+        return 0
+    mine, yours = faction_weight(w, host), faction_weight(w, theirs)
+    return (yours > mine) - (yours < mine)
+
+
+def _faction_power_term(fx: Any, facts: dict) -> dict:
+    """`faction_power`: how far the power of the holder's faction stands over the host's against the act (B21.69, A-105: *"the
+    amount of power over the foreign officer is determined by the power dynamics between the foreign faction and the host faction"*):
+    `faction_power_step x` the signed band `_faction_power_of` read (`facts["faction_power"]`; 0 where the record's builder read none). Nothing
+    lowers an obstacle (`roll.py::obstacle`), so only the stronger holder's side is listed, as harder: where the holder's faction is the weaker
+    the member reads nothing, as where it is the same, and the host's own faction is never priced. Not listed at `faction_power_step` 0 (the
+    control: "equal at control", OBS §4 step 6+)."""
+    return _weighing("faction_power", float(max(0, facts.get("faction_power") or 0)), fx.get("faction_power_step"))
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
     _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _rank_gap_term, _regard_term, _reception_term,
-    _capability_term, _cross_chain_term)},
+    _capability_term, _cross_chain_term, _faction_power_term)},
                            "obstacle_terms")
 
 
@@ -765,7 +792,8 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
-           regard: Optional[float] = None, bodies: tuple = (None, None), rank_gap: int = 0, cross_chain: int = 0) -> SocialContestInput:
+           regard: Optional[float] = None, bodies: tuple = (None, None), rank_gap: int = 0, cross_chain: int = 0,
+           faction_power: int = 0) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -782,7 +810,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         forgery_quality=forgery_quality,
         **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
                                      reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard,
-                                     rank_gap=rank_gap, cross_chain=cross_chain)),
+                                     rank_gap=rank_gap, cross_chain=cross_chain, faction_power=faction_power)),
         **room_terms)
 
 

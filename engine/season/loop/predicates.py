@@ -231,6 +231,11 @@ def _req_succeed(w: "World", a: "Act") -> Answer:
 #: (which imports this module) reads it; the seat row's `term:` (`offices.yaml`) is the same word.
 TERM_KEY = "term"
 
+#: B21.69 (`IS-B3-FA-07`, A-105): THE PAYLOAD KEY A `revoke` DECLARES THE ACTS THE HOLDER KEEPS UNDER -- a partial revocation, a reduction of his
+#: grant, rolled as the whole strip is. Absent: the full revocation of today. Like `TERM_KEY` it is no `requires_operands` member (the roster is
+#: closed at eight); a computed `revoke` carries none. Read by `_req_revoke` (its shape) and `_eff_revoke` (the re-stamp), which it sits beside.
+KEEPS_KEY = "keeps"
+
 
 def office_named_by(a: "Act") -> "Optional[str]":
     """THE OFFICE A `confer` ACT NAMES -- the one reader `_req_confer` and `_eff_confer` share
@@ -336,7 +341,7 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
 
 
 @requires_predicate("establish", clauses=("office resolves", "rung held", "conferral basis", "filler", "re-founding",
-                                          "may fill", "reduction needs revocation"))
+                                          "may fill", "reduction is revocation"))
 def _req_establish(w: "World", a: "Act") -> Answer:
     """W3's row: *"the establishing office's conferral basis, and a rung to establish it at"*.
 
@@ -382,16 +387,15 @@ def _req_establish(w: "World", a: "Act") -> Answer:
     predicate, whenever ANY live hold exists on the office, self included: 5. the seat the act
     exercises may fill the office (`may_fill`: purview over its rung, `via` not the office itself).
     A founding is unaffected, since there is no hold yet for `may_fill` to be asked about; ⚠ since
-    v11 CR-25 (H-144 (b)) a VACANT EXISTING office is no longer: any existing office asks it, and a
-    reduction of a sitting holder's grant also asks `may_revoke` (H-132 (b)), both at the clause. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
-    re-stamp that changes no grant writes nothing the gate would see, and this still asks for the
-    authority -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it
-    (§8).
+    v11 CR-25 (H-144 (b)) a VACANT EXISTING office is no longer: any existing office asks it, and since
+    B21.69 a re-stamp that reduces a sitting holder's grant is refused at the clause (`reduction is revocation`),
+    for it is a revocation and `revoke` carries it. A re-stamp that changes no grant writes nothing the gate would see,
+    and this still asks `may_fill` -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it (§8).
 
     B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the seven declared on the decorator, in branch order:
     `office resolves` (clause 1: the constructor's refusals, an overlay act `founds_over` refuses, an operand missing),
     `rung held` (2), `conferral basis` (3), `filler`, `re-founding` (4: a different belonging, and an id some other class
-    holds, which clause 4's *the id is new* also refuses), `may fill` (5) and `reduction needs revocation`."""
+    holds, which clause 4's *the id is new* also refuses), `may fill` (5) and `reduction is revocation`."""
     try:
         off = office_founded_by(w, a)      # v11 CR-25: the overlay keys, else the derivation from subject and via
     except (Unowned, Unspecified, Forbidden):
@@ -446,21 +450,18 @@ def _req_establish(w: "World", a: "Act") -> Answer:
     if (held_as == "Office" or holds) and not may_fill(w, a.actor, a.via, off):
         return _refuse_at("may fill", f"{a.actor} via {a.via!r} on {off.id!r}",
                           "an establish on an existing office the seat exercised does not reach")
-    # v11 CR-25, M8 taken, H-132 (b) [ASSUMPTION; medium; Jordan to correct; revert: drop this clause]: A
-    # REDUCTION IS A PARTIAL REVOCATION. A re-stamp that drops from a sitting holder's grant
-    # (`Tenure.granted_acts`, the snapshot the re-stamp overwrites) an act the new remit does not carry must
-    # pass `may_revoke` on the office as it stands -- the one owner that wraps `REVOCATION_RULES` with
-    # `seat_hold` and the basis-roster test, never `REVOCATION_RULES` read here (§8). Asked only where a live
-    # hold exists, because H-132 concerns a sitting holder's grant [ASSUMPTION; medium; Jordan to correct;
-    # revert: ask it on every existing office]. M8 (a) follows: a seat with `revocation: None` is in no basis,
-    # so its grant cannot be reduced.
-    # (A hold opened on the id before the office existed carries no grant to reduce, so the clause needs the
-    # office: `held_as == "Office"`.)
+    # v11 CR-25, M8 taken, H-132 (b) [ASSUMPTION; medium; Jordan to correct; revert: drop this clause]; B21.69
+    # (`IS-B3-FA-07`, A-105): A REDUCTION IS A REVOCATION, AND `establish` IS NOT ITS VERB. A re-stamp that drops from a
+    # sitting holder's grant (`Tenure.granted_acts`, the snapshot the re-stamp overwrites) an act the new remit does not
+    # carry is refused: one verb, one draw and one gate basis carry every revocation (`revoke`, with its `keeps`
+    # operand, `_eff_revoke`; the gate's `T-o` reads a re-stamp that drops an act as the partial revocation it is,
+    # `state/gate.py::tenure_write_basis`). Asked only where a live hold exists, because H-132 concerns a sitting holder's
+    # grant [ASSUMPTION; medium; Jordan to correct; revert: ask it on every existing office]. (A hold opened on the id
+    # before the office existed carries no grant to reduce, so the clause needs the office: `held_as == "Office"`.)
     keeps = set(off.remit_acts)
-    if (held_as == "Office" and any(set(t.granted_acts) - keeps for t in holds)
-            and not may_revoke(w, a.actor, a.via, w.offices[off.id])):
-        return _refuse_at("reduction needs revocation", f"{a.actor} via {a.via!r} on {off.id!r}",
-                          "an establish reducing a sitting holder's grant without revocation authority")
+    if held_as == "Office" and any(set(t.granted_acts) - keeps for t in holds):
+        return _refuse_at("reduction is revocation", f"{a.actor} via {a.via!r} on {off.id!r}",
+                          "an establish reducing a sitting holder's grant, which is a revocation and is `revoke`'s")
     return ADMITTED
 
 
@@ -673,6 +674,12 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     if not may_revoke(w, a.actor, a.via, off):
         return _refuse("a revoke the seat exercised has no revocation authority over the seat",
                        f"{a.actor} via {a.via!r} on {obj!r}")
+    # B21.69 (`IS-B3-FA-07`): `keeps`, where declared, is the list of acts the holder keeps -- a partial revocation. Anything else is refused: a
+    # string would be read as its letters and a number as nothing.
+    d = a.payload if isinstance(a.payload, dict) else {}
+    keeps = d.get(KEEPS_KEY)
+    if KEEPS_KEY in d and not (isinstance(keeps, (list, tuple)) and all(isinstance(x, str) for x in keeps)):
+        return _refuse("a revoke whose `keeps` is no list of acts", f"{a.actor} on {obj!r}")
     if any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
         return True
     return _refuse("a revoke of a seat nobody holds", f"{a.actor} on {obj!r}")

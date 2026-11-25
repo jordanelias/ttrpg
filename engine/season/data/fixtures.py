@@ -1171,6 +1171,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-613 -- site: Fixtures cross_chain_step, graded `assumption`; the source proposes 2 and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
     cross_chain_step=0.0,              # `H-613`, swept 0 (control, SHIPPED) / 1 / 2 (proposed)
+    # `H-614` (B21.69; `IS-B3-FA-07`, A-105). HOW MUCH THE POWER OF A HOLDER'S FACTION OVER THE HOST'S WEIGHS AGAINST AN ACT ON HIS SEAT, in obstacle: the
+    # term `faction_power` is `faction_power_step x` 1 where the faction the seat's live holder coheres under outweighs the faction of the seat the act is
+    # exercised through (`faction_q.weight`, compared; `sigma.py::_faction_power_of`, `_faction_power_term`), so a foreign officer of a stronger faction is
+    # the harder to unseat or to cut down: "the king's appointee stays in place unless the king is convinced otherwise" (A-105). `0` is the CONTROL ("equal
+    # at control"): the term reads nothing and is not listed, so every roll composes the obstacle it had before.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-614 -- site: Fixtures faction_power_step, graded `assumption`; `IS-B3-FA-07` leaves the value to "Jordan or the B21 calibration" and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
+    faction_power_step=0.0,            # `H-614`, swept 0 (control, SHIPPED) / 1 / 2
     # `H-611` (B21.12; `14_VERBS_BINDING_C` commit C1, edit 1). THE LENGTH, IN SEASONS, OF THE TERM A PARTIAL `succeed`/`revoke` OPENS A HOLD FOR (the one
     # `provisional_term`; the BYZANTINE files cite it and ship no second value). Read at ONE place, `loop/effects_shared.py::_provisional_term`.
     # `None` is the CONTROL and SHIPS: a Partial opens an untermed hold, exactly as a Success does, so the two differ by nothing until a value is set.

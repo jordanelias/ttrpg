@@ -18,7 +18,7 @@ from typing import Optional
 from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS, task_share
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
-from ..loop.predicates import TERM_KEY, office_founded_by, office_named_by
+from ..loop.predicates import KEEPS_KEY, TERM_KEY, office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term, subject_of
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
@@ -359,12 +359,32 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     death (the cascade). Both edges earn `None` -- the row's one kind, `tenure.closed` -- so an
     appointed and an elected revocation emit the same Event, and the ban is no event of its own
     (`determine`'s precedent: its disposal edge earns only `matter.determined`). The write gate admits
-    the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`)."""
+    the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`).
+
+    B21.69: WITH A `keeps` OPERAND IT IS A PARTIAL REVOCATION (below): the holder keeps his seat and the acts of his grant `keeps` names."""
     obj = office_named_by(a)               # B21.13: `office`, else the computed act's `subject`
     off = w.offices.get(obj) if isinstance(obj, str) else None
     if off is not None and not has_revocation_disposal(off):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
+    # B21.69 (`IS-B3-FA-07`, A-105): A REDUCTION IS A REVOCATION, DRAWN AS ONE. Where the act declares `keeps` (the acts the holder keeps), the bands that
+    # unseat re-stamp each holder's grant to the acts of it he already carried that `keeps` names, in his own order -- never an act he did not have --
+    # through `World._grant_remit`, the one writer of the grant, and close nothing: he stays seated, with less. A holder whose grant loses nothing is
+    # not touched, so a `keeps` that names the whole grant writes nothing (`NoOpReceipt`, `revoke.refused`). The re-stamp is a `T-o` write of
+    # the gate (`tenure_write_basis`: a payload change that drops an act), asked of the same `may_revoke`; no disposal is charged, for no one is unseated.
+    # A Failure never reaches this effect (the row writes nothing): `revocation.resisted`, as for a whole strip. Each narrowed hold earns the row's
+    # one kind, `tenure.closed` [ASSUMPTION; medium; Jordan to correct -- basis: `tenure.payload_set` is `establish`'s alone (`KIND_VERB`), and a second
+    # emitter would unprice every `establish` deed, as `tenure.opened` would for `confer`; revert: add `tenure.payload_set` to this row's `emits:`].
+    d = a.payload if isinstance(a.payload, dict) else {}
+    if KEEPS_KEY in d and off is not None:
+        keep = set(d[KEEPS_KEY])
+        cut = [(t, tuple(x for x in t.granted_acts if x in keep)) for t in closed]
+        cut = [(t, grant) for t, grant in cut if len(grant) < len(t.granted_acts)]
+
+        def narrow() -> None:
+            for t, grant in cut:
+                w._grant_remit(t, force=True, acts=grant)
+        return Change(tuple(Subject.edge(t) for t, _ in cut), narrow)
     bans: list = []
     # B21.14 (BIND_C edit 6): A PARTIAL REVOCATION UNSEATS HIM WITHOUT THE DISPOSAL (`bans = []`) -- an unseating short of a completed
     # revocation, so the ruled cost is not charged [ASSUMPTION; medium; Jordan to correct -- basis: R4 §2 (BYZ_E conflict) takes
