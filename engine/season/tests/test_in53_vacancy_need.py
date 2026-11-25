@@ -326,20 +326,20 @@ def test_in53v_g_conferring_a_seat_on_its_own_holder_is_refused(to):
     first = _hold(w, "off_reeve")
     assert first.subject == to
     again = _fold_confer(w, d, {"subject": "off_reeve", "to": to}, "off_crown", aid="cf2")
-    assert again == ["confer.refused"], again
+    assert again == ["confer.held"], again          # B21.80: the clause's own kind
     assert _hold(w, "off_reeve") is first and first.live        # untouched: no close, no reopen
 
 
 def test_in53v_g_a_list_valued_subject_is_refused_never_raised():
     """Sibling of the unhashable `to`: a hand-built `confer` whose subject is a list refuses."""
     w, d = _gov_world()
-    assert _fold_confer(w, d, {"subject": ["off_reeve"], "to": "p_mid"}, "off_crown") == ["confer.refused"]
+    assert _fold_confer(w, d, {"subject": ["off_reeve"], "to": "p_mid"}, "off_crown") == ["confer.no_office"]
 
 
 def test_in53v_d_a_confer_naming_nobody_is_refused():
     w, d = _gov_world()
     kinds = _fold_confer(w, d, {"subject": "off_reeve"}, "off_crown")
-    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    assert kinds == ["confer.bad_conferee"] and _hold(w, "off_reeve") is None, kinds
 
 
 @pytest.mark.usefixtures("seat_at_success")       # B21.14: the causes the fold cites, not the draw
@@ -381,7 +381,7 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
     is refused at the precondition (`_req_confer`), never filed as a seat held by nobody."""
     w, d = _gov_world()
     kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_ghost"}, "off_crown")
-    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    assert kinds == ["confer.bad_conferee"] and _hold(w, "off_reeve") is None, kinds
     w, d = _gov_world()
     w.step = Step.MATTER                    # a death, in `loop/matter.py`'s own write shape
     w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_mid"),
@@ -390,7 +390,7 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
     w.step = Step.RESOLVE
     assert "p_mid" not in w.persons
     kinds = _fold_confer(w, d, {"subject": "off_reeve", "to": "p_mid"}, "off_crown")
-    assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
+    assert kinds == ["confer.bad_conferee"] and _hold(w, "off_reeve") is None, kinds
 
 
 # ======================================================================================

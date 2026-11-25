@@ -43,7 +43,7 @@ def test_cohort_cannot_be_named_heir():
     P.plant_cohort(w, COHORT, "S", weight=3)
     assert w.persons[COHORT].is_cohort and not w.persons[INDIVIDUAL].is_cohort, "fixture: no cohort beside an individual"
     kinds = _confer(w, d, COHORT, "elig_cohort")
-    assert "confer.refused" in kinds and "tenure.opened" not in kinds, kinds
+    assert "confer.bad_conferee" in kinds and "tenure.opened" not in kinds, kinds      # B21.80: the `conferee` clause's kind
     assert _hold(w, SEAT) is None, "a cohort was seated"
     kinds = _confer(w, d, INDIVIDUAL, "elig_person")
     assert "tenure.opened" in kinds and "confer.refused" not in kinds, kinds
@@ -100,7 +100,7 @@ def test_self_conferral_across_chains_refused():
     admitted as today -- and the same Church seat on another person is admitted too (the rule is about the conferrer's own chain)."""
     w, d = _church_world()
     kinds = _confer_on(w, d, CHURCH_SEAT, CONFERRER, "elig_self_across")
-    assert "confer.refused" in kinds and "tenure.opened" not in kinds, kinds
+    assert "confer.across_chains" in kinds and "tenure.opened" not in kinds, kinds      # B21.80: the `self_across_chains` clause's kind
     assert _hold(w, CHURCH_SEAT) is None, "he seated himself across chains"
     kinds = _confer_on(w, d, CHURCH_SEAT, INDIVIDUAL, "elig_other_across")
     assert "tenure.opened" in kinds and _hold(w, CHURCH_SEAT).subject == INDIVIDUAL, kinds

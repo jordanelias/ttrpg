@@ -90,7 +90,7 @@ def test_a_row_with_no_term_opens_an_untermed_hold_the_control(monkeypatch):
 def test_malformed_terms_0_minus1_str_true_float_each_refuse(bad):
     w, d = _gov_world()
     out = _resolve(w, d, _confer_act("cf_bad", term=bad))
-    assert [e.kind for e in out] == ["confer.refused"], (bad, [e.kind for e in out])
+    assert [e.kind for e in out] == ["confer.bad_term"], (bad, [e.kind for e in out])      # B21.80: the `term` clause's kind
     assert _hold(w, SEAT) is None, "a refused conferral left a hold"
     # control: a lawful declared term is admitted by the same precondition
     w, d = _gov_world()

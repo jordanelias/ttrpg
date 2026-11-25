@@ -5677,7 +5677,7 @@
           "opposed_attribute": "attr.spirit.will",
           "governing_note": "B21.14 (VB-C commit C3): the conferral is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls, `data/verbs.py::_check_governing_attributes`) for the efficacy kind, whole, in one commit. [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `confer`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `establish`'s cells (B21.09), copied from `seize`'s, the sibling seat-authorised acts on the same prize: Presence leads a choice the seat's room must accept, and `opposed_attribute` is read only where a person stands opposite -- here the seat's displaced holder. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`.]",
           "contests": "a seat",
-          "contests_note": "B21.14 (`14_VERBS_BINDING_C_turnover.md` commit C3, edit 5; audit \u00a70.2: an appointment can be resisted): the prize `a seat` (`rosters.yaml: contest_subsystems.prizes`, `heard_by: seat_body`, `opposed_by: holder`), rolled by the social contest module. `counterparty: to` STAYS -- the conferee is the second side the fold admits -- and the opposition is the seat's present live holder, read host-side by `loop/sides.py::sides_of` through `opposed_by: holder` only when a live hold would be displaced, else absent (the untrained score, `roll.py::obstacle`). The obstacle is `difficulty` `routine` + the `reception` of the conferring seat's body (`sigma.py::audience_of`) + `rank_gap` (`rank_step`, control 0) + `stakes` + `cross_chain` (`cross_chain_step`, control 0, B21.61: a step harder where the seat conferred and the seat exercised are of different factions). `emits_on_refusal` stays flat. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.14.]",
+          "contests_note": "B21.14 (`14_VERBS_BINDING_C_turnover.md` commit C3, edit 5; audit \u00a70.2: an appointment can be resisted): the prize `a seat` (`rosters.yaml: contest_subsystems.prizes`, `heard_by: seat_body`, `opposed_by: holder`), rolled by the social contest module. `counterparty: to` STAYS -- the conferee is the second side the fold admits -- and the opposition is the seat's present live holder, read host-side by `loop/sides.py::sides_of` through `opposed_by: holder` only when a live hold would be displaced, else absent (the untrained score, `roll.py::obstacle`). The obstacle is `difficulty` `routine` + the `reception` of the conferring seat's body (`sigma.py::audience_of`) + `rank_gap` (`rank_step`, control 0) + `stakes` + `cross_chain` (`cross_chain_step`, control 0, B21.61: a step harder where the seat conferred and the seat exercised are of different factions). `emits_on_refusal` was flat here and is keyed per clause since B21.80 (`refusal_note`; the row keys `counterparty`, so more than one kind is lawful on a contested row). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.14.]",
           "difficulty": "routine",
           "capability": "none",
           "capability_note": "B21.14 [ASSUMPTION; medium; Jordan to correct -- basis: `establish`'s cell (B21.09): no skill of `descriptor_registry.yaml: capabilities` is named for a conferral by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`) until one is; revert: the row with no `capability:`].",
@@ -5719,9 +5719,42 @@
             ]
           },
           "emits_note": "B21.14 (edit 5, edit 8a; A-81, C3-C11, the durable write of every band): `appointment.resisted` is the Failure band's kind, emitted by this row alone (`data/verbs.py::KIND_VERB` is derived from the rows' emits) -- the conferral was attempted and the seat's room did not accept it, which a witness reads differently from a refusal (`confer.refused`: the act never reached the draw). It writes nothing; WITNESS deposits it as any Event (a `binding_decision` row's kinds reach every living ledger through `epistemic.py::_ch_chronicle`, the seat's body and the conferee among them, beside `co_located`), so the resisted appointment is a remembered deed.",
-          "emits_on_refusal": [
-            "confer.refused"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "confer.refused"
+            ],
+            "office": [
+              "confer.no_office"
+            ],
+            "basis": [
+              "confer.no_basis"
+            ],
+            "term": [
+              "confer.bad_term"
+            ],
+            "conferee": [
+              "confer.bad_conferee"
+            ],
+            "purview": [
+              "confer.unauthorized"
+            ],
+            "self_across_chains": [
+              "confer.across_chains"
+            ],
+            "held": [
+              "confer.held"
+            ],
+            "displacement": [
+              "confer.displacement_unauthorized"
+            ],
+            "write": [
+              "confer.refused"
+            ],
+            "counterparty": [
+              "confer.refused"
+            ]
+          },
+          "refusal_note": "B21.80 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_confer` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the eight names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `confer` says WHICH clause refused and a person who holds a seat can read it. The predicate's kinds, in branch order: `office` (the act names no office the world holds) `confer.no_office`; `basis` (the office has no conferral basis) `confer.no_basis`; `term` (the declared term is no positive whole number) `confer.bad_term`; `conferee` (no living person, or a cohort) `confer.bad_conferee`; `purview` (the seat exercised does not reach the office conferred) `confer.unauthorized`, the SEAT's kind as `seize.unauthorized` is; `self_across_chains` (the conferrer seats himself on a seat of another chain) `confer.across_chains`; `held` (1-per-object: the seat is held, and the conferral is to its holder or displaces one who carries a live `commit`) `confer.held`; `displacement` (the seat exercised has no revocation authority over the incumbent) `confer.displacement_unauthorized`. The fold's own three clauses keep the kind the flat row emitted: `eligibility`, `write` and `counterparty` (which is also the seam's party gap, `loop/resolve.py::_refuse_party_gap`, so a contested row keying two or more kinds is lawful) are `confer.refused`. [ASSUMPTION: the spelling follows an existing keyed typed row, `seize`'s and `arrest`'s `<verb>.<word>` kinds, `<verb>.unauthorized` for the seat's refusal -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"confer.refused\"]`.]",
           "grade": "ruled",
           "eligibility_note": "\u00a7E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:confer + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster.",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"

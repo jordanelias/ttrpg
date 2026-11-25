@@ -220,8 +220,8 @@ def test_inv7_the_fold_reads_each_literal_from_the_roster_not_from_its_body(monk
 def test_inv4_a_flat_row_with_two_clauses_and_two_refusal_kinds_refuses_the_load(monkeypatch):
     """`confer` is FLAT with an eligibility, a counterparty and a write: a flat list is emitted whole at
     every refusal, so a second kind is published for a clause that did not fail (`ID-9`)."""
-    assert not VERB_TABLE["confer"].refusals_by_clause, "fixture: confer must be a flat row"
-    _plant(monkeypatch, "confer", lambda r: r["emits_on_refusal"].append("confer.also"))
+    assert VERB_TABLE["confer"].refusals_by_clause, "fixture: confer is keyed since B21.80; the plant flattens it"
+    _plant(monkeypatch, "confer", lambda r: r.update(emits_on_refusal=["confer.refused", "confer.also"]))
     # B21.14: `confer` is contested (`a seat`), so the loader names its party gap too
     with pytest.raises(SystemExit, match=r"'confer' is a FLAT row with \d failable clause\(s\) and a contest/graded party gap and "
                                          r"declares 2 refusal kinds \['confer\.refused', 'confer\.also'\]"):

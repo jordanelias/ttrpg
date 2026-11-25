@@ -118,7 +118,7 @@ def test_a_predicate_refusing_at_a_name_it_did_not_declare_is_an_instrument_defe
 
     def drifted(w, a):
         return PR.Answer(False, "bogus")
-    drifted.clauses = ("declared",)
+    drifted.clauses = PR.REQUIRES_PREDICATES["confer"].clauses    # the shipped row is keyed (B21.80): its keys must still equal them
     monkeypatch.setitem(PR.REQUIRES_PREDICATES, "confer", drifted)
     w, d = _gov_world()
     with pytest.raises(InstrumentDefect):
@@ -142,8 +142,8 @@ def test_the_shared_read_returns_a_string_or_empty():
 # B09.19 -- STEP TWO'S CHANNEL: THE REFUSED CLAUSE REACHES THE EVENT'S KIND
 # ======================================================================================
 # `requires_predicate(verb, clauses=...)` declares the clause names; a predicate answers `(ok, clause)`; `_admits` hands the
-# clause to `row.refusal_for`. NO shipped row is keyed (the four authored rows are B21's), so each test PLANTS a keyed `confer`
-# row in its own table, over kinds the roster already holds.
+# clause to `row.refusal_for`. The four rows that take it are B21's, one commit each; B21.80's `confer` is the first shipped keyed
+# row, so the first test reads it and the key-checking test PLANTS variants of it in its own table.
 
 import dataclasses  # noqa: E402
 
@@ -153,29 +153,36 @@ from ..gaps import Unspecified  # noqa: E402
 from ..loop.driver import mint_token  # noqa: E402
 from ..manifest import check_preconditions  # noqa: E402
 
-# B21.56: `_DISPLACE_KIND` was `issue.unauthorized`, retired into `issue.refused`; any declared kind distinct from the other two serves.
-_PURVIEW_KIND, _HELD_KIND, _DISPLACE_KIND = "case.unauthorized", "confer.refused", "seize.unauthorized"
+_FLAT = ("confer.refused",)
 
 
 def _keyed_confer(clause_kinds: dict):
-    """`confer`'s shipped row, keyed: the three fold clauses it fails at (eligibility, write, counterparty), plus the predicate
-    clauses `clause_kinds` names. The fold clauses keep the kind the flat row emitted, so only the predicate's clauses move."""
+    """`confer`'s row with its predicate clauses re-keyed to `clause_kinds` (planted: the shipped row has been keyed since B21.80,
+    so a test that needs other keys or kinds builds its own). The fold clauses keep the one flat kind."""
     row = VERB_TABLE["confer"]
-    flat = row.emits_on_refusal
-    by_clause = {ELIGIBILITY_CLAUSE: flat, WRITE_CLAUSE: flat, COUNTERPARTY_CLAUSE: flat,
+    by_clause = {ELIGIBILITY_CLAUSE: _FLAT, WRITE_CLAUSE: _FLAT, COUNTERPARTY_CLAUSE: _FLAT,
                  **{c: (k,) for c, k in clause_kinds.items()}}
     union = tuple(dict.fromkeys(k for ks in by_clause.values() for k in ks))
     return dataclasses.replace(row, emits_on_refusal=union, refusals_by_clause=by_clause)
 
 
+def _flat_confer():
+    """The row before B21.80: one kind for every refusal, as the control for what keying changes."""
+    return dataclasses.replace(VERB_TABLE["confer"], emits_on_refusal=_FLAT, refusals_by_clause={})
+
+
 def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
+    """B21.80: THE SHIPPED `confer` ROW. A refusal at the purview clause, the held clause and the displacement clause emits
+    three kinds, where the flat row (the control) emitted `confer.refused` for all three."""
     from .test_g3_not_yours import _gov_world
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
     assert declared == ("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"), declared
-    kinds = {c: _HELD_KIND for c in declared}
-    kinds.update(purview=_PURVIEW_KIND, displacement=_DISPLACE_KIND)
-    keyed = _keyed_confer(kinds)
-    assert keyed.precondition_evaluable(PR.REQUIRES_PREDICATES), "the planted row is not admitted: the fixture is wrong"
+    shipped = VERB_TABLE["confer"]
+    assert shipped.refusals_by_clause, "the shipped confer row is flat: B21.80 keys it"
+    assert shipped.precondition_evaluable(PR.REQUIRES_PREDICATES), "the shipped row's keys are not the predicate's clauses"
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
 
     def run(world, driver, aid, actor, via, to):
         out = driver.resolve(mint_token(world, WriteClass.ACTS),
@@ -195,19 +202,21 @@ def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
         return got
 
     w, d = _gov_world()
+    monkeypatch.setitem(VERB_TABLE, "confer", _flat_confer())
     flat = arms(w, d)
-    assert flat == {c: ["confer.refused"] for c in ("purview", "held", "displacement")}, flat    # CONTROL: the shipped flat row
+    assert flat == {c: ["confer.refused"] for c in ("purview", "held", "displacement")}, flat    # CONTROL: the flat row
 
+    monkeypatch.undo()
     w, d = _gov_world()
-    monkeypatch.setitem(VERB_TABLE, "confer", keyed)
     got = arms(w, d)
-    assert got == {"purview": [_PURVIEW_KIND], "held": [_HELD_KIND], "displacement": [_DISPLACE_KIND]}, got
+    assert got == {"purview": ["confer.unauthorized"], "held": ["confer.held"],
+                   "displacement": ["confer.displacement_unauthorized"]}, got
     assert len({k for ks in got.values() for k in ks}) == 3, "two clauses emitted one kind on a keyed row"
     # the actor's ledger holds a claim keyed by the purview kind, so §F1 clause 4 can decline the same act next round
-    refused = [e for e in w.log if e.kind == _PURVIEW_KIND]
+    refused = [e for e in w.log if e.kind == "confer.unauthorized"]
     assert len(refused) == 1, refused
     d.witness(mint_token(w, WriteClass.INTERIOR), refused)
-    assert any(c.predicate == _PURVIEW_KIND and c.subject == "p_other" for c in w.persons["p_other"].ledger), (
+    assert any(c.predicate == "confer.unauthorized" and c.subject == "p_other" for c in w.persons["p_other"].ledger), (
         [(c.predicate, c.subject) for c in w.persons["p_other"].ledger])
 
 

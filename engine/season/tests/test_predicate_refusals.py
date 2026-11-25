@@ -49,6 +49,7 @@ def test_every_confer_and_establish_refusal_names_a_clause(monkeypatch):
                     unnamed.append((_verb, a.actor))
             return answer
 
+        wrapped.clauses = inner.clauses      # B21.80: `confer`'s row is keyed, admitted only while the predicate declares its keys
         monkeypatch.setitem(REQUIRES_PREDICATES, verb, wrapped)
 
     w = build_realm(0)

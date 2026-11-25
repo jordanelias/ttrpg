@@ -284,7 +284,7 @@ def test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse():
         mint_token(w, WriteClass.ACTS),
         [Act(id=aid, actor=actor, verb="confer", payload={"office": "off_reeve", "to": to},
              via=via)], contest_max_depth=w.fixtures.get("contest_max_depth"))]
-    assert run("c0", "p_other", "off_duke2") == ["confer.refused"], "no purview, and admitted"
+    assert run("c0", "p_other", "off_duke2") == ["confer.unauthorized"], "no purview, and admitted"    # B21.80: the purview clause's kind
     assert _hold(w, "off_reeve") is None
     assert "tenure.opened" in run("c1", "p_high", "off_duke")
     # DISPLACEMENT: the reeve's seat is now held (by `p_mid`, no live commit). The King has
@@ -293,7 +293,7 @@ def test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse():
     # admitted, and the incumbent's edge closes as the conferee's opens.
     assert may_fill(w, "p_king", "off_crown", w.offices["off_reeve"])
     assert not may_revoke(w, "p_king", "off_crown", w.offices["off_reeve"])
-    assert run("c2", "p_king", "off_crown", to="p_low") == ["confer.refused"], (
+    assert run("c2", "p_king", "off_crown", to="p_low") == ["confer.displacement_unauthorized"], (
         "the King displaced a sitting reeve he has no revocation authority over")
     assert _hold(w, "off_reeve").subject == "p_mid"
     kinds = run("c3", "p_high", "off_duke", to="p_low")
