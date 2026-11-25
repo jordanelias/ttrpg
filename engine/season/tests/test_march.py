@@ -528,6 +528,12 @@ def _occupy(w, town, actor, via, **kw):
     assert "army.arrived" in kinds, kinds
 
 
+def _lap_end(w, events):
+    """What the driver does at a lap's END (`loop/driver.py`): the lap's Events join `w.log`. `_fold_one` stops short of it, so a test whose
+    seizure must read a WON FIELD of an earlier lap (B21b.04: a won field keeps the licence as it was, `occupying_faction`) logs the fold itself."""
+    w.log.extend(events)
+
+
 def _no_resident_crown(w):
     """FIXTURE EDIT, NAMED: `build_realm(0)` houses ONE Crown member, `p_npc_037`, in the Church's
     cathedral at `set_s_036`, so the Crown is ALREADY `mustered` there before any march -- and by the
@@ -1032,7 +1038,9 @@ def test_in13_a_retaking_closes_the_seizers_hold_under_the_seizure_basis(monkeyp
     assert _seize_kinds(w, "set_s_016") == ["rung.seized"]
     first = world_q.hold_force(w, "set_s_016")
     _patch_won(monkeypatch)
-    _occupy(w, "set_s_016", "p_npc_050", "off_duchess_hafenmark", act_id="m_back")
+    back = _fold_one(w, _march_act("p_npc_050", "set_s_016", "off_duchess_hafenmark", act_id="m_back"))
+    assert "army.arrived" in [e.kind for e in back] and "field.won" in [e.kind for e in back], [e.kind for e in back]
+    _lap_end(w, back)                        # B21b.04: a won field keeps the licence; the field is a lap behind the seizure
     bases = []
     real = G.tenure_write_basis
 
@@ -1063,26 +1071,66 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
     _patch_won(monkeypatch)
     w = _no_resident_crown(build_realm(0))
     defenders = world_q.mustered(w, "set_s_036", CHURCH)
-    kinds = [(e.kind, e.degree)
-             for e in _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"))]
+    events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"))
+    kinds = [(e.kind, e.degree) for e in events]
     assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
+    _lap_end(w, events)                      # B21b.04: the field is a lap behind the seizure, as the driver's log has it
     assert world_q.mustered(w, "set_s_036", CHURCH) == defenders, "a won field removed a defender"
     assert _seize_kinds(w, "set_s_036") == ["rung.seized"]
     assert world_q.holder_faction_of(w, "set_s_036") == CROWN
 
 
 def test_in13_h212_a_resident_occupies_the_church_seat_at_seed_0_with_no_field_fought():
-    """H-212's cite, EXECUTED rather than inspected: on an UNMODIFIED `build_realm(0)` (no
-    `_no_resident_crown` edit) the Crown is already `mustered` at the Church's `set_s_036` through its
-    resident `p_npc_037`, so the Crown seat granted `issue` whose purview reaches the town (`off_king`,
-    the realm) seizes it with no march and no field. CONTROL, one change (the resident re-housed away, the
-    fixture edit the exits above use): the same act is refused."""
+    """H-212's cite, EXECUTED rather than inspected, RE-RECORDED at B21b.04 (CP-T09-04 (b): 'one resident suffices' is replaced by the
+    plurality, Pax Pamir's rule): on an UNMODIFIED `build_realm(0)` (no `_no_resident_crown` edit) the Crown is `mustered` at the Church's
+    `set_s_036` through its resident `p_npc_037` alone, against the Church's six, so the Crown seat granted `issue` whose purview
+    reaches the town (`off_king`, the realm) no longer seizes it with no march and no field: it was `rung.seized` before this
+    arm was re-recorded. CONTROL, one change (the resident re-housed away, the fixture edit the exits above use): the same act is refused."""
     w = build_realm(0)
     assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_037"]
     assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
     ctrl = _no_resident_crown(build_realm(0))
     assert _seize_kinds(ctrl, "set_s_036") == ["seize.refused"]
-    assert _seize_kinds(w, "set_s_036") == ["rung.seized"]
+    assert _seize_kinds(w, "set_s_036") == ["seize.refused"]
+    assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
+
+
+def _station(w, pids, town, tid):
+    """FIXTURE EDIT, NAMED: each of `pids` re-housed to stand AT `town` (a live `contain` there, the old one closed), outside any write
+    (this file observes who may seize, never how a man comes to stand somewhere)."""
+    for i, pid in enumerate(pids):
+        for t in w.persons[pid].tenures:
+            if t.kind == "contain" and t.live:
+                t.until = w.tick
+        w.add_tenure(Tenure(f"{tid}_{i}", pid, town, "contain", w.tick))
+
+
+def test_a_town_held_by_the_church_is_not_taken_by_one_crown_resident():
+    """CP-T09-04 (b), the licence at its one owner: at `set_s_036` the Church holds the town with six persons mustered and the Crown has one
+    (the resident `p_npc_037`), no field fought, so `occupying_faction` -- the reading `seize` and `raze` share -- licenses nobody, and
+    the Crown's `seize` is `seize.refused` with the holder unmoved. It read `CROWN` (one resident sufficed) before B21b.04."""
+    from engine.season.loop.effects_shared import occupying_faction
+    w = build_realm(0)
+    assert (len(world_q.mustered(w, "set_s_036", CROWN)), len(world_q.mustered(w, "set_s_036", CHURCH))) == (1, 6)
+    assert occupying_faction(w, "off_king", "set_s_036") is None
+    assert _seize_kinds(w, "set_s_036") == ["seize.refused"]
+    assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
+
+
+def test_a_town_is_taken_when_the_seat_faction_outnumbers_the_holder():
+    """CP-T09-04 (b)'s other half, no field fought, FALSIFIER (2): the Crown's resident plus five more is six against the Church's six
+    -- a tie, which is not 'strictly more' -- and the seizure is refused; one Crown member more (seven against six) is `rung.seized`
+    and the Crown holds the town. The Church's six are untouched throughout, so the one change is the Crown's count."""
+    w = build_realm(0)
+    church = world_q.mustered(w, "set_s_036", CHURCH)
+    crown_elsewhere = [p for p in world_q.members(w, CROWN) if p not in world_q.mustered(w, "set_s_036", CROWN)]
+    assert len(crown_elsewhere) >= 6, "fixture moved: the Crown has fewer than six more members"
+    _station(w, crown_elsewhere[:5], "set_s_036", "t_b21b04_tie")
+    assert len(world_q.mustered(w, "set_s_036", CROWN)) == len(church) == 6
+    assert _seize_kinds(w, "set_s_036") == ["seize.refused"]
+    _station(w, crown_elsewhere[5:6], "set_s_036", "t_b21b04_more")
+    assert len(world_q.mustered(w, "set_s_036", CROWN)) == 7 and world_q.mustered(w, "set_s_036", CHURCH) == church
+    assert _seize_kinds(w, "set_s_036", act_id="z2") == ["rung.seized"]
     assert world_q.holder_faction_of(w, "set_s_036") == CROWN
 
 
@@ -1201,15 +1249,22 @@ def test_a_seats_obligee_at_home_marches_in_its_army():
 
 
 def test_a_seats_obligee_standing_in_a_town_is_its_occupation():
-    """`occupying_faction` reads the same people: the Crown has nobody mustered at the Church's cathedral `set_s_036` (the resident
-    Crown member is re-housed), so the licence fails; the Spymaster's obligee `p_npc_006`, standing at that settlement, is the
-    presence that makes it the Crown's to take. CONTROL: the same man, unsworn, licenses nothing."""
+    """`occupying_faction` reads the same people (RE-RECORDED at B21b.04, CP-T09-04 (b)'s plurality, AM-F-13's obligee-only arm): the
+    Crown has nobody mustered at the Church's cathedral `set_s_036` (the resident Crown member is re-housed) and the Church's six
+    are re-housed away but one, so the licence fails for want of presence; the Spymaster's obligee `p_npc_006`, standing at that
+    settlement, is the presence that makes it the Crown's to take -- one man against none, the obligee counting toward the plurality.
+    CONTROLS: the same man unsworn licenses nothing, and one Church member left against the one obligee is a tie, which is not 'strictly
+    more'."""
     from engine.season.loop.effects_shared import occupying_faction
     w = _no_resident_crown(build_realm(0))
-    for t in w.persons["p_npc_006"].tenures:
-        if t.kind == "contain" and t.live:
-            t.until = w.tick
-    w.add_tenure(Tenure("t_b2179_006_at", "p_npc_006", "set_s_036", "contain", w.tick))
+    church = world_q.mustered(w, "set_s_036", CHURCH)
+    assert len(church) == 6
+    _station(w, church[1:], "b_s_014_barracks", "t_b21b04_church_away")
+    _station(w, ["p_npc_006"], "set_s_036", "t_b2179_006_at")
+    assert world_q.mustered(w, "set_s_036", CHURCH) == church[:1]
     assert occupying_faction(w, "off_spymaster", "set_s_036") is None
     _swear(w, "p_npc_006", "off_spymaster", "t_b2179_oath")
+    assert world_q.seat_people_at(w, "off_spymaster", "set_s_036") == ["p_npc_006"]
+    assert occupying_faction(w, "off_spymaster", "set_s_036") is None            # one against one: a tie
+    _station(w, church[:1], "b_s_014_barracks", "t_b21b04_last_away")
     assert occupying_faction(w, "off_spymaster", "set_s_036") == CROWN
