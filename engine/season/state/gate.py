@@ -29,8 +29,8 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.requires import Observation
 from ..data.rosters import (
-    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES, SEAT_ROW_BY_ID,
-    PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
+    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
+    SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
@@ -325,8 +325,14 @@ def _seat_grants(w: "World", actor: Optional[str], via: Optional[str], act: str)
     t = seat_hold(w, actor, via)
     if t is None or act not in t.granted_acts:
         return False
+    return not _in_custody(w, actor)
+
+
+def _in_custody(w: "World", actor: Optional[str]) -> bool:
+    """Does `actor` own a live `detain`? (B21.11, A-23: custody suspends a holder's every seat.) The one reading, asked by `_seat_grants`
+    and `may_admit`."""
     person = w.persons.get(actor)
-    return person is None or not any(d.kind == DETAIN_KIND and d.live for d in person.tenures)
+    return person is not None and any(d.kind == DETAIN_KIND and d.live for d in person.tenures)
 
 
 def seat_faction(w: "World", via: Optional[str]) -> Optional[str]:
@@ -1022,6 +1028,35 @@ def may_wage(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
         return False
     return any(_seat_grants(w, person, t.object, MUSTER_ACT) and seat_faction(w, t.object) == faction
                for t in w.persons[person].tenures if t.kind == "hold" and t.live)
+
+
+# The remit act whose grant makes a seat one that ADMITS a joiner into its faction (B21.63, `16_PESSIMIST_FA_B` edit 3): `confer`, the act
+# that names a person to a seat -- admitting a man is the faction's own naming of him. One owner of the string, read by `may_admit` alone.
+ADMIT_ACT = "confer"
+
+
+def may_admit(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
+    """MAY `person` ADMIT A JOINER INTO `faction`? (B21.63, `16_PESSIMIST_FA_B` edit 3, G3.) `faction` is the Proposition id. Joining is an
+    offer the faction's side answers, so the answer is a member's whose seat answers for it: he holds a live `hold` (not in custody) on
+    EITHER the faction's `head_seat` (HEAD_SEAT: its holder need be no member, the Confessor's vacant-and-refilled Church is still the Church's
+    to admit into) OR a seat of the faction (`seat_faction`) whose grant carries `ADMIT_ACT` while he is a LIVE MEMBER of it (`_committed_to`).
+    WHERE THE FACTION HAS NO SUCH SEAT AT ALL -- no authored head seat and no seat of it whose row grants `ADMIT_ACT` (the Guilds, Schoenland,
+    Altonia, an unrostered party) -- ANY live member admits. A faction that has such a seat and nobody sitting in it admits nobody. `False`
+    for a missing person or a faction the roster does not name. Reads Tenures and offices only (`state/` may not import a Query)."""
+    name = FACTION_BY_PROP.get(faction) if faction else None
+    if name is None or person not in w.persons or _in_custody(w, person):
+        return False
+    head = HEAD_SEAT.get(name)
+    if head is not None and seat_hold(w, person, head) is not None:
+        return True
+    # Which seats of the faction ADMIT is the AUTHORED row's (`offices.yaml`'s `remit_acts`), never the `Office` attribute (position `13e`:
+    # a grant is read off the holder's own `Tenure.granted_acts`, below, and nothing else reads the live field).
+    admitting = [oid for oid in w.offices if seat_faction(w, oid) == faction and ADMIT_ACT in (SEAT_ROW_BY_ID.get(oid) or {}).get("remit_acts", ())]
+    if not _committed_to(w, person, faction):
+        return False
+    if head is None and not admitting:
+        return True
+    return any(_seat_grants(w, person, oid, ADMIT_ACT) for oid in admitting)
 
 
 def commands_a_seated(w: "World", actor: Optional[str], via: Optional[str], person: Optional[str]) -> bool:

@@ -37,7 +37,7 @@ from ..data.rosters import (
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
-    faction_prop_id,
+    faction_prop_id, factions_compatible,
     remove_distance, require_member,
     roster_map,
 )
@@ -93,7 +93,7 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 # (below) composes on it.
 from ..state.gate import sworn_to
 # B21.58 (A-20): `at_war`'s last line asks the gate's `may_wage` of each live commit's subject.
-from ..state.gate import commands_a_seated, may_wage
+from ..state.gate import commands_a_seated, may_admit, may_wage
 from ..state.ids import H, ROOT, draw_factory
 from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
@@ -2002,6 +2002,44 @@ def members(w: World, faction: str) -> list[str]:
                   and t.subject in w.persons)
 
 
+ADMISSION_MOOD = "OUGHT"   # the mood an admission Proposition is uttered in -- `commit`'s own cause-shape (`boot/realm.py`'s creeds)
+
+
+def admission_stands(w: World, person: str, faction: str) -> bool:
+    """DOES AN ADMISSION OF `person` INTO `faction` STAND? (B21.63, `16_PESSIMIST_FA_B` edit 3, R-02.) An admission is a Proposition of mood
+    `OUGHT` whose `subject` is the joiner and whose `value` is the faction Proposition's id, `commit`ted to (live) by a member who may admit
+    (`gate.may_admit`: the faction's head seat or a confer-granting seat of it, or any member where it has none). It is `covenant`'s shape --
+    two commits make it in force -- with no new carrier: `utter` makes the Proposition, `commit` is the admitting member's yes, and releasing
+    the commit withdraws it. `person` and the admitter may be one man only if he may admit himself (a head seat's holder joining his own
+    faction needs no one: he is already a member)."""
+    return any(q.mood == ADMISSION_MOOD and q.subject == person and q.value == faction
+               and any(t.kind == "commit" and t.object == q.id and t.live and may_admit(w, t.subject, faction) for t in w.tenures)
+               for q in w.propositions.values())
+
+
+def admitted_to(w: World, person: str, prop: str) -> bool:
+    """MAY `person`'S `commit` TO `prop` STAND AS A JOINING? (B21.63, `16_PESSIMIST_FA_B` edit 3; `admitted`, the `requires` stem.) A
+    membership is a unilateral sentence nowhere: it is an offer the faction answers. TRUE when
+      * `prop` is no rostered faction Proposition (`FACTION_BY_PROP`) -- a cause, a creed of nobody's, any other `commit` is not a joining; or
+      * `prop` is a rostered faction with no live member -- the first to join founds it (a faction nobody belongs to has nobody to answer); or
+      * `person` is already a live member of it -- a re-commit is no joining; or
+      * an admission stands (`admission_stands`) AND `person` belongs to no rostered faction incompatible with it
+        (`data/rosters.py::factions_compatible`: two different factions are incompatible unless `rosters.yaml: factions.compatible_with`
+        pairs them) -- a man leaves one faction by his own `release` before an admission into another serves.
+    Leaving stays the member's own `release` (AX-1); nothing here ends an edge."""
+    TRACE.query("admitted_to", "resolver")
+    name = FACTION_BY_PROP.get(prop)
+    if name is None:
+        return True
+    live = members(w, prop)
+    if not live or person in live:
+        return True
+    if not admission_stands(w, person, prop):
+        return False
+    return all(factions_compatible(name, FACTION_BY_PROP[other]) for other in FACTION_BY_PROP
+               if other != prop and person in members(w, other))
+
+
 def leaders(w: World, faction: str) -> list[str]:
     """The members who hold an Office belonging to this faction. §17 · §22's `Nobody` row.
 
@@ -3476,7 +3514,14 @@ def propositions_heard(w: World, p: Person) -> tuple:
     `argue`) forms on them; whether the act then passes is the fold's (`commit`'s `existence` cell).
     `()` for everyone at build: no ledger names a Proposition before a season is witnessed."""
     heard = ledger_names([c for c in p.ledger if c.doer != p.id])
-    return tuple(sorted(o for o in heard if w.class_of(o) == "Proposition"))
+    out = {o for o in heard if w.class_of(o) == "Proposition"}
+    # B21.63 (`16_PESSIMIST_FA_B` edit 3): AN ADMISSION HE HAS HEARD OF -- an `OUGHT` naming him and a faction, which stands
+    # (`admission_stands`) -- carries the faction's Proposition into his question too, so a joiner so told forms `commit` on the faction
+    # (the admission is the occasion; `commit`'s `admitted` cell is the fold's answer). Nothing is added for a person no admission names.
+    out |= {q.value for q in (w.propositions.get(o) for o in out)
+            if q is not None and q.mood == ADMISSION_MOOD and q.subject == p.id and q.value in FACTION_BY_PROP
+            and admission_stands(w, p.id, q.value)}
+    return tuple(sorted(out))
 
 
 def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
@@ -4685,6 +4730,13 @@ class WorldReader:
             # answers this (`WORLD_ONLY_STEMS`).
             p = w.persons.get(subject)
             return UNKNOWN if p is None else not p.is_cohort
+        if stem == "admitted":
+            # B21.63 (`16_PESSIMIST_FA_B` edit 3): MAY THE ACTOR (`arg`) JOIN THE PROPOSITION `subject` -- `admitted_to`, the one owner.
+            # UNKNOWN for a subject that is no Proposition or an actor who is no person (`ID-5`). The person side never answers this
+            # (`WORLD_ONLY_STEMS`): who may admit, and who belongs where, is the world's to decide NOW.
+            if subject not in w.propositions or arg not in w.persons:
+                return UNKNOWN
+            return admitted_to(w, arg, subject)
         if stem == "names":
             # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
             # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the

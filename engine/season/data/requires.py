@@ -840,11 +840,17 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # heard under no declared row, so the conjunct is vacuous there. `WorldReader.read` answers both through
 # `world_q.declared_sitting`/`declared_votes`; WORLD-ONLY (below): a tally changes whenever a commit opens or ends, so a
 # witness's ledger must not hold one as a belief. No form, no operand.
+# ⚠ B21.63 (`16_PESSIMIST_FA_B` edit 3): `admitted`: `relation` (form 5) asked of a PROPOSITION and the actor -- *may the actor's `commit` to
+# it stand as a joining* (`queries/world_q.py::admitted_to`, the one owner): true for any Proposition that is no rostered faction's, for a
+# faction nobody belongs to yet, for one the actor already belongs to, or where an admission stands (a member who may admit has `commit`ted to
+# an `OUGHT` naming the actor and the faction) and no incompatible faction holds him. `commit`'s second conjunct. WORLD-ONLY (below), `names`'
+# reason: who may admit and who belongs where is the world's to decide NOW, and a CELL stem would deposit an `admitted:<actor>` reading into every
+# witness's ledger from each refused `commit`. The person forms the Candidate and the fold refuses it (`commitment.refused`). One stem; no form.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "command", "bench", "bench.size", "quorum", "with", "audience", "room",
-    "individual", "names", "dispute", "declared.votes", "declared.quorum",
+    "individual", "names", "dispute", "declared.votes", "declared.quorum", "admitted",
 }) | OWN_STATE_STEMS
 
 # THE STEMS A `relation` CELL SPELLS `<stem>:<operand>` (v10 PC-10b): asked of `of` and the named operand,
@@ -883,7 +889,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # fold refuses it (`issue.refused` on `authority`; `issue.unauthorized` until B21.56). One stem; no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
 WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute",
-                              "declared.votes", "declared.quorum", "command"}) | SENSITIVITY_STEMS
+                              "declared.votes", "declared.quorum", "command", "admitted"}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).

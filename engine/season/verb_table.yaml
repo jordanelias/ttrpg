@@ -190,17 +190,21 @@ verbs:
     governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     referent_class: Proposition
     referent_class_note: "v10 REM-23 (B10-05, AM-A-08; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds a Proposition and never a person, a Site, a Record or a rung. The class removes wrong-kind formations only: this row's cell, its eligibility and who may commit are unchanged, and it does NOT answer IN-57's own-act screen (ED-IN-0296 (3)); B10-09's CR-10 does that. No `commit` is formed on a goal Proposition (`data/goals.py::goal`): a person's own goals are not among the referents a question carries. v11 CR-28: `queries/world_q.py::propositions_heard` stamps the Propositions a person's own ledger names through a claim not of his own act, so `commit` forms on a cause another uttered; `rosters.yaml: held_edge_declines` declines it on one he already holds (`tests/test_cr28_propositions_heard.py`, through the real fold). REVERT: delete this column."
-    requires:    "the Proposition exists (immutable, §14)"
+    requires:    "the Proposition exists (immutable, §14), and a commit to a rostered faction's Proposition is a joining the faction answers: the actor is already a member, or the faction has none, or an admission stands (B21.63)"
     requires_typed:
-      form:      existence
-      of:        subject
-      kind:      Proposition
-    requires_typed_note: "§E3 `:426` — *the Proposition exists (immutable, §14)*. Definite article: the one the act commits to, which is the act's `subject`. §14 makes a Proposition immutable and `utter` is the only verb that creates one, so this is the clause that makes `utter` a precondition of the social layer rather than a formality."
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Proposition
+        - form:      relation
+          of:        subject
+          relation:  admitted
+    requires_typed_note: "§E3 `:426` — *the Proposition exists (immutable, §14)*. Definite article: the one the act commits to, which is the act's `subject`. §14 makes a Proposition immutable and `utter` is the only verb that creates one, so this is the clause that makes `utter` a precondition of the social layer rather than a formality. B21.63 (`16_PESSIMIST_FA_B` edit 3, G3; R-04 membership, R-02 an admission sought, granted, refused; [ASSUMPTION; medium; Jordan to correct; revert: drop the second conjunct, which restores the single `existence` cell) ADDED THE SECOND, `relation` of `subject`, `admitted` (`data/requires.py`; `queries/world_q.py::admitted_to`): joining is an offer the faction's side answers, not a sentence the joiner speaks. It is true of every Proposition that is no rostered faction's (a cause, a covenant: `commit` is unchanged there), of a faction nobody belongs to, of a member's re-commit, and of a joiner an admission stands for -- an `OUGHT` naming him and the faction, `commit`ted to by a member who may admit (`state/gate.py::may_admit`: the faction's `head_seat` holder, or a member whose seat's grant carries `confer`; any member where the faction has no such seat) -- unless he belongs to a rostered faction incompatible with it (`rosters.yaml: factions.compatible_with` names the exceptions; the default is incompatible, `data/rosters.py::factions_compatible`). WORLD-ONLY, so a person forms the Candidate on anyone he knows of and the fold refuses a joining no one answered (`commitment.refused`); `world_q.propositions_heard` carries a faction's Proposition into the question of a man an admission names, so he forms the joining the admission offers."
     writes:      ["Tenure.since"]
     emits:       ["commitment.made"]
     emits_on_refusal: ["commitment.refused"]
     grade:       "ruled"
-    refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: the Proposition does not exist (§14 -- it is immutable and must be uttered first)"
+    refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal conditions: the Proposition does not exist (§14 -- it is immutable and must be uttered first); or it is a rostered faction's, the actor belongs to none of it, and no admission of him stands (B21.63)"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "comply"
     stratum:     "social"

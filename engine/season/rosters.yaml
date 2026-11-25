@@ -2098,6 +2098,12 @@ rosters:
       "Church of Solmund": off_confessor
       "Löwenritter": off_grand_master
       "Restoration Movement": off_restoration_leader
+    # B21.63 (`16_PESSIMIST_FA_B` edit 3): THE EXCEPTIONS to the default "two different factions are incompatible" -- `faction name:
+    # [faction names]`, a pair listed in either direction may be held by one person. The RULE is `data/rosters.py::factions_compatible`
+    # (stated once, in code); this key carries no rule and ships EMPTY: no pair is authored compatible. Read by `queries/world_q.py::admitted_to`,
+    # which will not admit into a faction a person who belongs to an incompatible one (he leaves it first: his own `release`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: delete this key and `COMPATIBLE_WITH`, and any admitted person may belong to any number]
+    compatible_with: {}
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."

@@ -1536,6 +1536,23 @@ for _hf, _hs in HEAD_SEAT.items():
     require_member(_hs, SEAT_ROW_BY_ID, f"`factions.head_seat` names the seat {_hs!r}, which no row of offices.yaml authors",
                    "rosters.yaml -- factions", law="CR-86 -- a head seat is an `offices.yaml` seat",
                    needs="a seat id from `offices.yaml: seats`")
+#: `{faction name: [faction names]}` -- B21.63 (`16_PESSIMIST_FA_B` edit 3): the EXCEPTIONS to the default below, and the only data the
+#: rule carries (`04` PART D 27a: a proper noun in the content layer is a declaration, never a rule). Shipped empty.
+COMPATIBLE_WITH = roster_map("factions", "compatible_with")
+for _name in {n for _cf, _others in COMPATIBLE_WITH.items() for n in (_cf, *(_others or ()))}:
+    require_member(_name, FACTIONS, f"`factions.compatible_with` names {_name!r}, which is not a faction",
+                   "rosters.yaml -- factions", law="B21.63 -- a compatibility exception pairs two factions the roster names",
+                   needs="a `token_class: faction` name, as key and in each list")
+
+
+def factions_compatible(a: str, b: str) -> bool:
+    """MAY ONE PERSON BELONG TO BOTH `a` AND `b`? (B21.63, `16_PESSIMIST_FA_B` edit 3.) The two are FACTION NAMES, the roster's own
+    (`FACTION_BY_PROP` turns a Proposition id into one). THE DEFAULT IS INCOMPATIBLE for two different rostered factions, and a
+    pair is compatible only where one row lists the other (`COMPATIBLE_WITH`, either direction): the rule is stated here once and the
+    data carries only the exceptions. A faction is compatible with itself (a re-commit is no second membership)."""
+    return a == b or b in (COMPATIBLE_WITH.get(a) or ()) or a in (COMPATIBLE_WITH.get(b) or ())
+
+
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")

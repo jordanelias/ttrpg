@@ -1,5 +1,6 @@
 """B21.60 -- a seat is held by an individual (`16_PESSIMIST_FA_B` edit 1, G1; R-04 who may sit).
-B21.62 -- a war has two parties and a declarer who can wage it (edit 4, G4; the last test, on the realm).
+B21.62 -- a war has two parties and a declarer who can wage it (edit 4, G4; the test before the last, on the realm).
+B21.63 -- joining a faction is answered by the faction (edit 3, G3; the last test, on the realm).
 
 `state/gate.py::may_sit` is the one predicate: the person exists and is not a cohort. `confer`'s and `succeed`'s preconditions and
 the write gate's `conferral` and `claim` clauses all ask it, so a cohort is refused at the fold (`confer.refused`) where the gate
@@ -161,3 +162,55 @@ def test_war_utterance_without_a_waging_seat_is_not_a_declaration():
     assert [e.kind for e in d.resolve(mint_token(w, WriteClass.ACTS), [ordinary])] == ["proposition.uttered"], "another mood was refused"
     assert _utter_war(w, d, duchess, HAFENMARK, VARFELL, "elig_war_duchess") == ["proposition.uttered"], "the control: the Duchess's war"
     assert len(_wars(w)) == 1 and _wars(w)[0].subject == HAFENMARK
+
+
+RESTORATION = "fac_restoration_movement"
+
+
+def _do(w, d, actor, verb, payload, aid):
+    act = Act(id=aid, actor=actor, verb=verb, payload=payload)
+    return [e.kind for e in d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))]
+
+
+def _admission(w, d, who, joiner, tag):
+    """`who` utters an `OUGHT` naming `joiner` and the Restoration Movement, then commits to it -- the admission, as a member makes it."""
+    said = _do(w, d, who, "utter", {"mood": "OUGHT", "subject": joiner, "value": RESTORATION}, f"elig_{tag}")
+    return said + _do(w, d, who, "commit", {"subject": f"prop:elig_{tag}"}, f"elig_{tag}_c")
+
+
+def test_non_member_commit_refused_without_admission():
+    """G3: the King's `commit` to the Restoration Movement with no admission is refused (`commitment.refused`); a rank-and-file member's
+    admission does not stand (an admission is an `OUGHT` naming him and the faction, `commit`ted to by a member WHO MAY ADMIT: the head seat's
+    holder or a seat that confers), the leader's does: `commitment.made`. The default is incompatible: a man who still belongs to Valorsmark
+    is refused whatever stands, and is admitted once he leaves (his own `release`). CONTROL: a member's re-commit and a `commit` to a
+    Proposition that is no faction's are unchanged."""
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    king = next(p for p in w.persons if any(t.kind == "hold" and t.live and t.object == "off_king" for t in w.persons[p].tenures))
+    ours = world_q.members(w, RESTORATION)
+    admitter = next(p for p in ours if gate.may_admit(w, p, RESTORATION))
+    rank_and_file = next(p for p in ours if not gate.may_admit(w, p, RESTORATION))
+    liege = next(p for p in world_q.members(w, "fac_valorsmark") if p != king and p not in ours)   # a Valorsmark man who joins no faction else
+    assert king not in ours and {king, liege} <= set(world_q.members(w, "fac_valorsmark")), "fixture"
+
+    def joins(who):
+        return who in world_q.members(w, RESTORATION)
+
+    # the King leaves Valorsmark by his own release, so the default pair no longer stands between him and the Movement
+    assert "commitment.ended" in _do(w, d, king, "release", {"subject": "fac_valorsmark"}, "elig_leave")
+    assert _do(w, d, king, "commit", {"subject": RESTORATION}, "elig_join_bare") == ["commitment.refused"] and not joins(king)
+    assert _admission(w, d, rank_and_file, king, "weak") == ["proposition.uttered", "commitment.made"]
+    assert not world_q.admission_stands(w, king, RESTORATION), "a rank-and-file member's admission stood"
+    assert _do(w, d, king, "commit", {"subject": RESTORATION}, "elig_join_weak") == ["commitment.refused"] and not joins(king)
+    assert _admission(w, d, admitter, king, "strong") == ["proposition.uttered", "commitment.made"]
+    assert _do(w, d, king, "commit", {"subject": RESTORATION}, "elig_join") == ["commitment.made"] and joins(king), "the admitted man was refused"
+    # a standing admission serves nobody who still belongs to an incompatible faction
+    assert _admission(w, d, admitter, liege, "liege") == ["proposition.uttered", "commitment.made"]
+    assert world_q.admission_stands(w, liege, RESTORATION), "the admission did not stand"
+    assert _do(w, d, liege, "commit", {"subject": RESTORATION}, "elig_join_incompat") == ["commitment.refused"] and not joins(liege)
+    assert "commitment.ended" in _do(w, d, liege, "release", {"subject": "fac_valorsmark"}, "elig_leave_liege")
+    assert _do(w, d, liege, "commit", {"subject": RESTORATION}, "elig_join_liege") == ["commitment.made"] and joins(liege)
+    # CONTROL: a member's re-commit is no joining, and a `commit` to a Proposition no faction owns is asked of nobody
+    assert _do(w, d, admitter, "commit", {"subject": RESTORATION}, "elig_recommit") == ["commitment.made"]
+    assert _do(w, d, king, "commit", {"subject": "prop:elig_weak"}, "elig_plain") == ["commitment.made"], \
+        "a commit to a non-faction Proposition was asked an admission"
