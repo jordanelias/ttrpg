@@ -11,6 +11,7 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 from __future__ import annotations
 
 from ..data.rosters import ARRIVAL_ONLY_KINDS
+from ..queries.person_q import addressed_to
 from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, order_destination, place_of, residence_of, restrained
 from ..state.carriers import Tenure, subject_of
 from ..state.containment import parent_of
@@ -84,7 +85,11 @@ def _eff_comply(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     an arriving army is placed at, one the §10 ladder will not seat him in, or the place he is already at. Declining there
     leaves him complying and staying, which is what a man who cannot go does; the refusal of a place outside the seat's
     purview is `_req_dispatch`'s, at the sender's act. G4: NAMES THE TRAVELLER, WHOLE, `_eff_move`'s one subject."""
-    dest = order_destination(w, subject_of(a))
+    writ = subject_of(a)
+    rec = w.records.get(writ) if isinstance(writ, str) else None
+    # Only an ADDRESSEE is sent by the order: the fold's `comply` cell asks a claim of the terms in the actor's own ledger, which every
+    # witness of a proclaimed `dispatch` holds (B21.18), so the addressee test is asked here, `person_q.addressed_to`'s, the one owner.
+    dest = order_destination(w, writ) if rec is not None and addressed_to(rec.subject_matter, a.actor) else None
     if (dest is None or restrained(w, a.actor, DETAIN_KIND) or _arrival_only(w, dest) or dest == place_of(w, a.actor)
             or not w.contain_ascends(a.actor, dest)):
         return NO_CHANGE
