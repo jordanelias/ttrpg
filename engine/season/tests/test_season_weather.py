@@ -93,7 +93,7 @@ def _seasons(w, n: int):
 #: The one-season event count and digest of the season with `thread_read` added to `withheld_verbs`. A change detector:
 #: since B08.03 (scenes fold in their own order) it EQUALS the shipped season (`_realm_goldens.SHIPPED`, seed 0, one season),
 #: which is what the test below reads. Its re-record history is in `git log`.
-THREAD_READ_WITHHELD_EVENTS_1 = (7804, "1b04b800ce6803fcbfd1292fbc51b3699818de9e25f883c61a3e684861d50e16")   # B08 re-pin: (9320, 39763260..) -> (7804, 1b04b800..), equal to the shipped season
+THREAD_READ_WITHHELD_EVENTS_1 = (9319, "e5b3ab7c81b4491db42a165f26f77e1693178acf3aff53b9166ac3007fd00ae6")   # B08 re-pin: (9320, 39763260..) -> (9319, e5b3ab7c..), equal to the shipped season (the close's counterparty ruling moved it from (7804, 1b04b800..))
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():
