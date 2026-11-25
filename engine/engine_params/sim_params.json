@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 525,
-    "uncited": 393,
+    "total": 528,
+    "uncited": 396,
     "of_which_assumption_grade": 9
   },
-  "count": 525,
+  "count": 528,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 220,
+    "engine.season.settings": 223,
     "engine.season.realm": 8
   },
   "params": [
@@ -6449,6 +6449,39 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-938`, swept 0.125 / 0.25 / 0.5 (V2's value, SHIPPED here)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.sitting_exchanges",
+      "name": "sitting_exchanges",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-661`, swept 0 (control, SHIPPED) / 1 (shipped: the attendees' effort) / 2 (read as 1: a switch)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.answer_step",
+      "name": "answer_step",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-663`, swept 0 (control, SHIPPED) / 0.25 (first value) / 0.5",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.answer_ob",
+      "name": "answer_ob",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-664`, swept 1 / 2 (proposed, SHIPPED) / 4",
       "citation": null,
       "citation_grade": null
     },

@@ -1676,6 +1676,24 @@ DEFAULT_FIXTURES = Fixtures(
     # `speech_blend` (a POINTER, no field): Reason's share of a speech's dice is two columns tuned as one table -- `rosters.yaml: grounds[*].reason` (B24p.01, 1.0 on every ground at the control) and
     # `arrangements.yaml` rows' `reason_lean` (B24p.03, 0 on every row at the control); B24p.23 writes V2's model column of each (`sc2/host.py::GROUNDS`, `::RITES`).
     # [JUSTIFIED: engine/season/hole_register.yaml H-939 -- site: Fixtures speech_blend (a pointer row, no field), graded `assumption`; the two columns are one blend and are swept together as a scale on V2's column, 0 (control) / 0.5 / 1]
+    # ---- the hearing's settings (B24.07; HEAR_B edit 10, EVID_B `answer_ob`). Nothing reads them until B24.06 (`answer`, through `Input.dials`) and the items after it; every one stands at its control
+    # (`argument_step` is struck: standing arguments are the track, whose setting is `track_step`, `H-903`, so no second ladder is made).
+    # `sitting_exchanges`: whether the attendees at a sitting spend their own act's `effort` as exchanges, a SWITCH read as 0 or 1. `0` is the control: a sitting has no exchanges beyond the filed items.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. Shipped means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 -- basis: HEAR_B "shipped: the attendees' effort" and `person_q.effort_of`, "the turns he prepares", B24p.06.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-661 -- `site: Fixtures sitting_exchanges`, graded `assumption`; HEAR_B gives the control and no number, so it is injected at the control and swept 0 / 1 / 2 (the register wants three distinct points; the switch reads 2 as 1)]
+    sitting_exchanges=0,              # `H-661`, swept 0 (control, SHIPPED) / 1 (shipped: the attendees' effort) / 2 (read as 1: a switch)
+    # `fault_step`: the `LEVEL_SIGMA` name of one fault, a level against the side at fault (never an obstacle term). `None` is the control: a fault brings no level.
+    # [ASSUMPTION; Jordan to correct; revert: `None`. The sweep's two non-control points are `LEVEL_SIGMA`'s two smallest names -- no source states them.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-662 -- `site: Fixtures fault_step`, graded `assumption`; HEAR_B gives no first value, so it is injected at the control and swept None / minor / moderate]
+    fault_step=None,                  # `H-662`, swept None (control, SHIPPED) / minor / moderate
+    # `answer_step`: the obstacle one unit of weight an answered exhibit holds over its answer adds to `answer`'s roll (`answer_ob + answer_step x max(0, w_target - w_answer)`, a hostile term). `0` is the control.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. A new fixture rather than reviving `proof_step`, which OBS §3 deletes; basis R2 §7b-9 #4. The first value is the former `proof_step`'s 0.25.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-663 -- `site: Fixtures answer_step`, graded `assumption`; no document derives the weight unit, so it is injected at the control and swept 0 / 0.25 / 0.5]
+    answer_step=0.0,                  # `H-663`, swept 0 (control, SHIPPED) / 0.25 (first value) / 0.5
+    # `answer_ob`: the base obstacle of an `answer` (EVID_B `standing` rules: a fixture, proposed 2), before `answer_step`'s weight term and the room's hostile terms.
+    # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points in its H row are the alternatives).]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-664 -- `site: Fixtures answer_ob`, graded `assumption`; EVID_B proposes 2 and no document derives it, so it is injected at 2 and swept 1 / 2 / 4]
+    answer_ob=2,                      # `H-664`, swept 1 / 2 (proposed, SHIPPED) / 4
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

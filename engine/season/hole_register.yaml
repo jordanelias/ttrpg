@@ -8453,6 +8453,58 @@ rows:
     cite:      "NOT A RULING: each part has one defensible fix that moves nothing it does not name, and none is made here because the batch's gate rows read this very state: changing the spine fixture or the formation fan after the gate read would move the instrument the gate is graded by. MEASURED, not inferred: the counts above are from the close's premise-check runs; (1) reproduces by folding a King `issue` per (to, via) pair on `build_realm(0)` and reading the refusal clause."
     source:    "workplan v12 B21's close (the premise-check over each batch item); `R-04.a`, `R-04.c2` in `engine/season/requirements.yaml`"
 
+  - id:        H-661
+    tier:      1
+    hole:      "WHETHER THE ATTENDEES AT A SITTING SPEND EXCHANGES -- `sitting_exchanges`, a SWITCH read as 0 or 1 (HEAR_B edit 10): at 0 a sitting holds no exchanges beyond what is filed; at 1 each attendee spends his own act's `effort` as the turns he prepares. No document gives a count."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sitting_exchanges` the one home. READERS: none at B24.07; the sitting's reader (B24.37 flips the shipped value) reads it through `Input.dials`"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: 0]: no sitting spends an exchange, so every roll and every hash is what it was. 'Shipped' at B24.37 means each attendee spends his own act's `effort` (HEAR_B: 'the attendees' effort'; `person_q.effort_of`, B24p.06), so the setting is a switch read as 0 or 1"
+    site:      "Fixtures sitting_exchanges, read by nothing at B24.07; the sitting's exchange loop reads it through `Input.dials`"
+    sweep:     [0, 1, 2]
+    unblocks:  "the hearing's sitting running its attendees' exchanges (B24.37's flip), and B98's sweep of the switch"
+    cite:      "HEAR_B (`proposals/2026-11-12-subsystem-audit-suite/proposals/05_SC_playable_hearing_B.md`) 'Exact edits' 10: `sitting_exchanges` 0 control / shipped the attendees' effort, each with a NUMBER row and a three-point sweep. [ASSUMPTION: the sweep is 0 / shipped / shipped -- basis: the plan's B24.07 line; the register's R2 refuses a sweep with fewer than 3 DISTINCT points, so the third point is 2, read as the switch's 1 (any value from 1 up is the switch on), and the two shipped points are one arm]. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.03's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24.07 (HEAR_B edit 10; B24's H block slot 1)"
+
+  - id:        H-662
+    tier:      1
+    hole:      "THE LEVEL ONE FAULT BRINGS AGAINST THE SIDE AT FAULT -- `fault_step`, a `sigma_leverage.LEVEL_SIGMA` name (HEAR_B edit 10): the closing draw takes the board through the leverage channel, standing exhibits as `proofs` levels for a side and faults as levels against it, never an obstacle term (A-25). No document sizes the level."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fault_step` the one home. READERS: none at B24.07; the hearing's closing draw reads it through `Input.dials`"
+    grade:     "assumption"
+    default:   "None -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: None]: a fault brings no level, so the closing draw is what it was. HEAR_B gives no first value; B98 writes it BLOCKED (design: no target reading)"
+    site:      "Fixtures fault_step, read by nothing at B24.07; the hearing's closing draw reads it through `Input.dials`"
+    sweep:     [null, "minor", "moderate"]
+    unblocks:  "a fault counting against the side at fault in the closing draw, and B98's sweep of the level"
+    cite:      "HEAR_B 'Exact edits' 10: `fault_step` a `LEVEL_SIGMA` name, control `None`. [ASSUMPTION: the sweep's two non-control points are `minor` and `moderate` -- basis: `LEVEL_SIGMA`'s two smallest names; no source states them]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24.07 (HEAR_B edit 10; B24's H block slot 2)"
+
+  - id:        H-663
+    tier:      1
+    hole:      "THE OBSTACLE ONE UNIT OF WEIGHT ADDS TO AN ANSWER -- `answer_step`, the unit of `answer`'s weight difference (R2 §7b-9 #4): the obstacle of an `answer` is `answer_ob + answer_step x max(0, w_target - w_answer)`, a hostile term only; a heavier answer reaches the roll as `proofs` levels for the mover, never a subtraction (A-25). A new fixture rather than reviving `proof_step`, which OBS §3 deletes. No document gives the unit."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_step` the one home. READERS: none at B24.07; B24.06's `answer` reads it through `Input.dials`"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: 0]: a heavier exhibit does not harden its answer. The first value is 0.25, the former `proof_step`'s, set in this batch at B24.37 [ASSUMPTION: R2 §7b-9 #4 -- a new fixture rather than reviving `proof_step`, which OBS §3 deletes]"
+    site:      "Fixtures answer_step, read by nothing at B24.07; B24.06's `answer` reads it through `Input.dials`"
+    sweep:     [0, 0.25, 0.5]
+    unblocks:  "a weightier exhibit being harder to answer, and B98's sweep of the unit"
+    cite:      "HEAR_B 'Exact edits' 10 and EVID_B (`proposals/2026-11-12-subsystem-audit-suite/proposals/05_SC_evidence_and_rebuttal_B.md`) `standing` rules: `answer_step` control 0, first value 0.25. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24.07 (HEAR_B edit 10; B24's H block slot 3)"
+
+  - id:        H-664
+    tier:      1
+    hole:      "THE BASE OBSTACLE OF AN ANSWER -- `answer_ob`, a hostile term of `answer`'s obstacle (EVID_B `standing` rules: 'a fixture, proposed 2, NUMBER row'), before `answer_step`'s weight term and the room's hostile terms. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_ob` the one home. READERS: none at B24.07; B24.06's `answer` reads it through `Input.dials` (B24.05)"
+    grade:     "assumption"
+    default:   "2 -- EVID_B's PROPOSED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (EVID_B gives it no control); the sweep's other points are the alternatives]. Nothing reads it before B24.06, so shipping it moves no run"
+    site:      "Fixtures answer_ob, read by nothing at B24.07; B24.06's `answer` reads it through `Input.dials`"
+    sweep:     [1, 2, 4]
+    unblocks:  "B24.06's `answer` having an obstacle, and B98's sweep of it"
+    cite:      "EVID_B `standing` rules: `answer_ob` a fixture, proposed 2, NUMBER row. [ASSUMPTION: the sweep is a half, the proposed value, a double -- basis: none; EVID_B names the proposed value only]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24.07 (EVID_B `answer_ob`; B24's H block slot 4)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
