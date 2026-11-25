@@ -156,7 +156,7 @@ def test_a_conceal_mints_a_cover_naming_the_actor_whatever_its_subject_held_by_h
     _conceal(w, d, subject="S")                         # the referent is a rung; the cover is about him
     rec = w.records[COVER]
     assert rec.kind == "cover"
-    assert rec.subject_matter == {"terms": DUKE}, rec.subject_matter
+    assert rec.subject_matter == {"terms": DUKE, "as": None}, rec.subject_matter       # B11.64: `as`, the borrowed name, absent for a plain cover
     assert rec.stages, "the mint winds the stages (H-80's default for an act declaring none)"
     assert hold_force(w, COVER).subject == DUKE
     assert live_cover(w, DUKE) == COVER

@@ -21,7 +21,7 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
-    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
+    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_AS, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
     ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
@@ -280,7 +280,7 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
 
 @effect_for("conceal")
 def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """v9 IN-12 step 10 (#453 §9.3; K-19): A COVER IS A `Record` OF KIND `cover` WHOSE ONE KEY NAMES THE
+    """v9 IN-12 step 10 (#453 §9.3; K-19): A COVER IS A `Record` OF KIND `cover` WHOSE `terms` KEY NAMES THE
     ACTOR -- written HERE, whatever the act's `subject` (a computed act's `subject` is its question's
     referent, which a cover is not about), so `_content_of`'s `read_from` (`terms` <- `subject`) is not
     asked. The Record's own id is the alias. Minted through `_mint_document`, the one mint: the maker's
@@ -288,14 +288,21 @@ def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     matures. Drawn up where `create_record` draws a document an act names no seat for (the act's
     declared `rung`, else the actor's id); `place_of` reads a held Record at its holder's place either way.
 
+    B11.64 (CP-T06-07): THE COVER'S SECOND KEY, `COVER_AS`, IS THE NAME IT BORROWS: the act's payload source `content.read_from`
+    declares for it (a non-operand, read as declared; `None` for a plain cover), written whole like `terms`. Where it names a
+    person, `cover_at_logging` anchors his covered acts on THAT PERSON. Its `forgery_quality` is the one `forge_quality_at` gives the
+    act's band, the field `sigma.py::contest_input` reads as the obstacle of an examination of the cover (no second quality field).
+
     What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    # B07.02 (18-A edit 5): a DRAWN cover carries its band's `forge_quality` (the examining draw reads it as obstacle); an act with
-    # no band writes the `0` it always did, and a band with no row (Failure) makes no cover.
-    quality = 0 if res is None else forge_quality_at(res.degree)
+    # B07.02 (18-A edit 5): a DRAWN cover carries its band's `forge_quality` (the examining draw reads it as obstacle), and a band
+    # with no row (Failure) makes no cover. B11.64 (U-9): the value is `_mint_sheet`'s for a forgery, so an act with no band
+    # reads the `Success` row as a forged sheet does (it wrote `0` before): one quality for one field, whichever document carries it.
+    quality = forge_quality_at(None if res is None else res.degree)
     if quality is None:
         return NO_CHANGE
-    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor, forgery_quality=quality)
+    content = {COVER_KEY: a.actor, COVER_AS: d.get(RECORD_CONTENT["read_from"][COVER_AS])}
+    return _mint_document(w, a, COVER_KIND, content, d.get("rung") or a.actor, forgery_quality=quality)
 
 
 @effect_for("challenge")

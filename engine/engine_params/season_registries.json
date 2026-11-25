@@ -1689,7 +1689,8 @@
               "head"
             ],
             "cover": [
-              "terms"
+              "terms",
+              "as"
             ],
             "army": [
               "faction",
@@ -1711,7 +1712,8 @@
           },
           "content": {
             "read_from": {
-              "terms": "subject"
+              "terms": "subject",
+              "as": "as"
             },
             "addressee": "to",
             "predicate": "content"

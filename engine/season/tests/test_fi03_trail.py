@@ -1076,3 +1076,92 @@ def test_a_cover_is_found_by_research_on_its_id():
     assert FORGER in held_by(w, INVESTIGATOR, "record.forged")
     w, _ = band_world(cover_research, frozenset({"Partial"}))
     assert seen_who(w) == [None], seen_who(w)
+
+
+# ======================================================================================
+# B11.64 (CP-T06-07, R-07) -- A COVER CAN BORROW ANOTHER MAN'S NAME, AND A COVER'S QUALITY IS WRITTEN
+# ======================================================================================
+
+DUKE, SEAT, BYSTANDER, NAMED, LEARNER = "p_high", "off_duke", "p_other", "p_mid", "p_king"
+
+
+def framing_world(borrowed=True):
+    """The Duke (at `S`, seated: `convene` is his) takes a cover through the fold with the stranger `p_other` standing beside him -- `as`
+    naming `p_mid` (at `Hh`) when `borrowed`, a plain cover otherwise -- the first act id in `SWEEP` whose `conceal` draws a cover.
+    `p_king` stands at `R`, nowhere near. Returns `(w, d, the lap's Events)`."""
+    for n in range(SWEEP):
+        w = tiny()
+        for t in w.persons[BYSTANDER].tenures:
+            if t.live and t.kind in ("contain", "reside"):
+                t.object = "S"
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        payload = {"subject": DUKE, **({"as": NAMED} if borrowed else {})}
+        out = step(w, d, Act(id=f"fr_cv_{n}", actor=DUKE, verb="conceal", payload=payload))
+        if [e.kind for e in out] == ["cover.assumed"]:
+            return w, d, out
+    raise AssertionError(f"{SWEEP} act ids drew no cover")
+
+
+def covered_convening(borrowed=True):
+    """`framing_world`, a tick on, then the Duke `convene`s `S` (`date.scheduled`, a `binding_decision` kind: the realm hears it).
+    Returns `(w, taking, convening)`: the `cover.assumed` Event and the `date.scheduled` one."""
+    w, d, (taking,) = framing_world(borrowed)
+    w.tick += 1
+    (e,) = [e for e in step(w, d, Act(id="fr_convene", actor=DUKE, verb="convene", via=SEAT, payload={"subject": "S"}))
+            if e.kind == "date.scheduled"]
+    return w, taking, e
+
+
+def test_a_borrowed_name_cover_frames_the_named_man_for_a_distant_learner():
+    """B11.64, F06's falsifier with AM-D-13's limit (1). The Duke takes a cover whose `as` is `p_mid`, then convenes: the convening
+    anchors on `p_mid`, not on a Record id. The learner at `R` (`reach`, `told_by`) holds `(p_mid, date.scheduled, True)` and nothing
+    naming the Duke; the stranger beside the Duke holds `seen{who: Duke}` and `(Duke, date.scheduled, True)`; `p_mid` holds
+    `(Duke, date.scheduled, True)` through `witness_key`, and holds `(Duke, cover.assumed, True)` from the lap the cover was taken (its
+    anchor too). CONTROL: the same world with a plain cover -- the learner holds `(cover, date.scheduled, True)` and nothing of the
+    Duke or of `p_mid`."""
+    w, taking, e = covered_convening()
+    cover = live_cover(w, DUKE)
+    assert cover and w.records[cover].subject_matter == {"terms": DUKE, "as": NAMED}, w.records[cover].subject_matter
+    assert anchor_of(w, taking) == anchor_of(w, e) == NAMED, "the fixture: both the taking and the convening are anchored on the named man"
+    assert actor_of(w, e) == DUKE
+    via = dict(epistemic.observers_for(w, e, w.fixtures.get("fan_out_mode"), list(w.persons)))
+    assert via[BYSTANDER] == "co_located" and via[NAMED] == "witness_key" and via[LEARNER] == "reach", via
+    held = lambda pid, kind: {c.subject for c in w.persons[pid].ledger if c.predicate == kind and c.value is True}
+    written = {c.subject for c in e.changes}
+    assert held(LEARNER, e.kind) == {NAMED} | written, held(LEARNER, e.kind)
+    assert not [c for c in w.persons[LEARNER].ledger if c.subject == DUKE or getattr(c.value, "who", None) == DUKE], "the learner holds the Duke's name"
+    assert held(BYSTANDER, e.kind) == {DUKE} | written, held(BYSTANDER, e.kind)
+    assert [c.value.who for c in w.persons[BYSTANDER].ledger if c.predicate == SEEN_PREDICATE and c.source == "firsthand"
+            and c.subject != cover] == [DUKE]
+    assert DUKE in held(NAMED, e.kind), held(NAMED, e.kind)
+    assert held(NAMED, taking.kind) == {DUKE, cover}, "the named man's ledger at the lap the cover is taken: " + repr(held(NAMED, taking.kind))
+    w, _taking, e = covered_convening(borrowed=False)
+    plain = live_cover(w, DUKE)
+    assert w.records[plain].subject_matter == {"terms": DUKE, "as": None}
+    assert held(LEARNER, e.kind) == {plain} | {c.subject for c in e.changes}, held(LEARNER, e.kind)
+    assert held(NAMED, e.kind) == held(LEARNER, e.kind), "the man whose name was not borrowed hears it as any distant man does"
+    assert not [c for c in w.persons[LEARNER].ledger if c.subject in (DUKE, NAMED)]
+
+
+def test_a_better_cover_is_harder_to_surveil():
+    """B11.64 (`08_FI_03` §6, U-9). A cover is a Record and `_eff_conceal` writes its `forgery_quality` through the one mint, the field
+    an examination's obstacle reads (`sigma.py::resolve`, `examined`): the investigator handed the cover Record and `research`ing it
+    rolls against `base + quality` on the uncapped arm, so a cover minted at a better band is a harder find. The quality is the one
+    the drawn band gives (`forge_quality_at`), patched here to a point at EVERY band so the one `conceal` draw is not the variable.
+    CONTROL: quality 0 reads the bare `base` obstacle, and a Record the cover is not (no `examined`) reads none."""
+    from unittest import mock
+    from engine.dice_engine import draw
+    from ..data.rosters import DEGREE_BANDS, FORGE_QUALITY
+    from ..seam.wrappers import sigma
+    ob = {}
+    for q in (0, 1, 3):
+        with mock.patch.dict(FORGE_QUALITY, {b: q for b in DEGREE_BANDS}):
+            w, d, _ = trail_world(covered=True, fixtures=DEFAULT_FIXTURES.sweep("obstacle_ceiling", None).sweep("ceiling_per_pool", False))
+        assert w.records[COVER].forgery_quality == q, (q, w.records[COVER].forgery_quality)
+        out = sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=COVER,
+                            rng=draw.seeded(draw.H2("test_fi03_trail", 64)), module_entry="social_contest.roll")
+        assert out["status"] == "RESOLVED", out
+        ob[q] = out["ob"]
+        assert sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=COVER).forgery_quality == 0.0
+    assert ob[1] == ob[0] + 1 and ob[3] == ob[0] + 3, ob

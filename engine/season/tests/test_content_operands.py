@@ -359,7 +359,7 @@ def test_a_kind_carrying_a_read_from_key_must_map_its_operand():
     `_check_record_sourced` and the first assertion goes red."""
     ops = frozenset(REQUIRES_OPERANDS)
     shipped = RECORD_CONTENT["read_from"]
-    assert shipped == {"terms": "subject"} and "terms" in RECORD_KIND_KEYS["petition"]
+    assert shipped["terms"] == "subject" and "terms" in RECORD_KIND_KEYS["petition"]   # B11.64 adds `as`, a non-operand source
     with pytest.raises(Unspecified, match="maps no 'subject'"):
         _check_record_sourced({"petition": {"to": "to"}}, ops, RECORD_KIND_KEYS, shipped)
     _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS, shipped)

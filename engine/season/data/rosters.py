@@ -573,19 +573,25 @@ RECORD_KINDS = roster("record_kinds")
 RECORD_KIND_KEYS = {k: tuple(v or ()) for k, v in roster_map("record_kinds", "values").items()}
 RECORD_CONTENT = roster_map("record_kinds", "content")
 # v9 IN-12 step 10 (#453 §8.2, §9.3; K-19): THE `record_kinds` MEMBER A CONCEALED IDENTITY IS, and its
-# ONE content key, which names the person the cover hides (`terms`, read off the roster, never spelt).
-# Named once here, `WORKS_KIND`'s shape, for its three readers: `conceal`'s effect (the mint),
-# `state/attribution.py::live_cover` (the `anchor_of` cover read) and `decision/options.py` (the
+# TWO content keys, read off the roster and never spelt: the first names the person the cover hides (`terms`), the second
+# (B11.64, CP-T06-07) the person whose NAME the cover borrows (`as`, `None` for a plain cover; its payload source is
+# `content.read_from`'s). Named once here, `WORKS_KIND`'s shape, for its readers: `conceal`'s effect (the mint),
+# `state/attribution.py::live_cover` (the `anchor_of` cover read, `COVER_KEY`) and `cover_at_logging` (`COVER_AS`), and `decision/options.py` (the
 # person-side decline, through `held_document_declines`). Refused at import if the roster stops carrying
-# the kind or gives it other than one key: the cover read would otherwise match nothing forever.
+# the kind or gives it other than two keys, or `as` has no payload source: the cover read would otherwise match nothing forever.
 COVER_KIND = "cover"
-if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 1:
+if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 2:
     raise Unspecified(
-        f"record kind {COVER_KIND!r} is not a one-key `record_kinds` member "
+        f"record kind {COVER_KIND!r} is not a two-key `record_kinds` member "
         f"({RECORD_KIND_KEYS.get(COVER_KIND)!r})", "rosters.yaml -- record_kinds",
-        needs=f"a `{COVER_KIND}: [terms]` row, or every cover reader retired with it",
-        law="#453 §8.2 -- a cover is a Record whose one key names the actor it conceals")
-(COVER_KEY,) = RECORD_KIND_KEYS[COVER_KIND]
+        needs=f"a `{COVER_KIND}: [terms, as]` row, or every cover reader retired with it",
+        law="#453 §8.2 -- a cover is a Record whose first key names the actor it conceals; CP-T06-07 -- its second, the name it borrows")
+(COVER_KEY, COVER_AS) = RECORD_KIND_KEYS[COVER_KIND]
+if COVER_AS not in (RECORD_CONTENT.get("read_from") or {}):
+    raise Unspecified(
+        f"record kind {COVER_KIND!r} carries {COVER_AS!r}, which `record_kinds.content.read_from` does not source",
+        "rosters.yaml -- record_kinds.content.read_from", needs=f"a `{COVER_AS}: <payload key>` row",
+        law="CP-T06-07 -- the borrowed name is a non-operand source, read as declared; no row means no act can set it")
 # v10 PC-10b (RS-25; H-240 route (1)): THE `record_kinds` MEMBER A STANDING CHALLENGE IS, its two keys that
 # no act operand fills -- `stakes`, the duel's term, and `challenger`, the actor the effect writes -- and the
 # closed set of terms `stakes` may name (`challenge_terms`, held equal to `modules/combat/wrapper.py::

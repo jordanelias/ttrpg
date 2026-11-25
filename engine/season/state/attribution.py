@@ -38,7 +38,7 @@ live runs that every logged Event anchors, with a population floor so an empty l
 """
 from typing import TYPE_CHECKING, Optional
 
-from ..data.rosters import COVER_KEY, COVER_KIND
+from ..data.rosters import COVER_AS, COVER_KEY, COVER_KIND
 
 if TYPE_CHECKING:                       # pragma: no cover
     from .carriers import Event
@@ -118,7 +118,8 @@ def anchor_of(w, e: "Event") -> Optional[str]:
 
 
 def _cover_for(w, e: "Event", who: str) -> Optional[str]:
-    """THE COVER `anchor_of` ANSWERS FOR AN ACT-CAUSED EVENT, or `None`. For a LOGGED Event, the cover
+    """THE COVER `anchor_of` ANSWERS FOR AN ACT-CAUSED EVENT, or `None` -- the cover's id, or (B11.64) the PERSON whose name it
+    borrows (`_cover_names`; `COVER_AS`), either one what the Event is ABOUT. For a LOGGED Event, the cover
     its actor held WHEN IT WAS LOGGED (`World._covers_logged`, written by `World._on_logged` through
     `cover_at_logging`) -- never re-read, so a logged Event's anchor does not move when the cover later
     lapses, leaves his hand, or a second one is taken (`_on_logged`'s invariant, which
@@ -135,13 +136,26 @@ def _cover_for(w, e: "Event", who: str) -> Optional[str]:
     if has_id is not None and has_id(e.id):
         covers = getattr(w, "_covers_logged", None)
         return covers.get(e.id) if covers else None
-    return live_cover(w, who)
+    return _cover_names(w, live_cover(w, who))
 
 
 def cover_at_logging(w, e: "Event") -> Optional[str]:
-    """The live cover of the act's actor as the Event is logged -- `World._on_logged`'s one question
-    of this module before it indexes the anchor; `None` for an Event no act caused."""
-    return live_cover(w, actor_of(w, e))
+    """WHAT THE ACT'S ACTOR'S LIVE COVER MAKES OF HIM AS THE EVENT IS LOGGED -- `World._on_logged`'s one question
+    of this module before it indexes the anchor; `None` for an Event no act caused or an actor with no cover.
+
+    The answer is the anchor the cover gives (`_cover_names`): the NAME THE COVER BORROWS (`COVER_AS`, B11.64) when it names
+    one, else the cover's own id. It is resolved HERE, once, and kept (`World._covers_logged`), so a logged Event's anchor never
+    moves with the Record a cover is (`_cover_for`'s invariant): `actor_of`, `causing_act` and `seen.who` name the real hand
+    whichever it is."""
+    return _cover_names(w, live_cover(w, actor_of(w, e)))
+
+
+def _cover_names(w, cover: Optional[str]) -> Optional[str]:
+    """THE ANCHOR A COVER GIVES ITS HOLDER'S ACTS: the person it borrows the name of (`COVER_AS`), else its own id (the alias).
+    `None` for no cover. The one owner of that choice, asked by `cover_at_logging` and by `_cover_for`'s live read."""
+    rec = w.records.get(cover) if cover is not None else None
+    sm = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+    return sm.get(COVER_AS) or cover
 
 
 def live_cover(w, actor: Optional[str]) -> Optional[str]:

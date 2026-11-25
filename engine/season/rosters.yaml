@@ -201,7 +201,10 @@ rosters:
       # an act by a person holding a cover whose `terms` is himself, while a stage is unmatured,
       # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
       # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
-      cover:        [terms]
+      # B11.64 (CP-T06-07): `as` is the BORROWED NAME -- a person id, read off the act's payload (`content.read_from`, below: a source
+      # that is no operand, read as declared and absent for a plain cover, so `None`). Where it is set, an act by the cover's holder
+      # anchors on THAT PERSON and not on the cover's id (`state/attribution.py::cover_at_logging`); who acted is still the actor's.
+      cover:        [terms, as]
       # (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
       # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
       # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
@@ -241,6 +244,7 @@ rosters:
       # place of discharge -- is read as declared and may be absent.
       read_from:
         terms: subject
+        as: as
       # THE KEY THAT NAMES WHOM A DOCUMENT ADDRESSES, stored as an id LIST whatever the act carried
       # (r2 §A.9.1 -- *"the id set under the addressee key its kind declares"*). One shape for one
       # key across every kind that has it.
