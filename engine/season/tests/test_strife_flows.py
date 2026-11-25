@@ -293,11 +293,10 @@ def test_two_petitions_on_one_matter_open_a_strand_and_on_two_matters_none():
 
 
 def test_a_content_opened_strand_is_open_at_birth_and_closes_on_a_later_terminal():
-    """Both content-opener kinds are also `concludes` kinds; the move that content-opens is an opening move and
-    is never terminal, so the movement two petitions make is open, a third keeps it open, and a later
+    """The move that content-opens is an opening move and is never terminal, so the movement two petitions make is open, a third keeps it open, and a later
     `matter.determined` on the matter (a `concludes` kind) with nothing open concludes it (the control)."""
     w = _world()
-    assert set(W.CONTENT_OPENING_KINDS) <= W.CONCLUDING_KINDS            # the overlap the rule answers
+    assert not set(W.CONTENT_OPENING_KINDS) & W.CONCLUDING_KINDS         # B12a.05: a content opener concludes nothing
     _petition(w, "rec_1", "p_low", "S", 1)
     _petition(w, "rec_2", "p_mid", "S", 2)
     (s,) = W.flows_in(w).strands
@@ -385,6 +384,56 @@ def test_a_planted_requisition_to_matter_determined_strand_with_no_open_referent
     ev(w, "e_det", "matter.determined", ["S"], tick=2)
     (s,) = W.flows_in(w, H.terminal_for(w)).strands
     assert s.moves[-1].kind == "matter.determined" and s.moves[-1].terminal and W.concluded(w, s)
+
+
+def _release_event(w, eid, tid, actor, tick, kind):
+    """An Event as `_eff_release` earns it: its act, and a receipt on the closed edge's `until`."""
+    w.acts.append(Act(id=f"a_{eid}", actor=actor, verb="release", payload={}))
+    e = Event(eid, kind, [P.apparatus_receipt(w, tid, "set", "Tenure", "until")], [f"a_{eid}"], tick)
+    w.log.append(e)
+    return e
+
+
+def test_a_release_of_a_creed_commit_is_a_move_and_a_routine_release_is_not():
+    """B12a.05 (A-46, read as UNDECIDED (2) takes it): a `commitment.ended` whose closed edge is a `commit` to a
+    faction's creed Proposition joins the strand it links to; any other `commitment.ended` is no move, and the
+    kind-level `tenure.closed` is untouched. The keying reads the closed edge's kind and object: the releaser is
+    `p_low` in every row."""
+    from engine.season.data.rosters import FACTION_BY_PROP
+    creed = sorted(FACTION_BY_PROP)[0]
+    assert creed not in {"prop_a_cause", "off_duke"}
+
+    def strand_moves(edge_kind, obj, event_kind):
+        w = _world()
+        w.add_tenure(Tenure("t_rel", "p_low", obj, edge_kind, 0))
+        ev(w, "e1", "rung.seized", ["S"], actor="p_low", verb="seize")        # a strand `p_low`'s next deed links to
+        _release_event(w, "e2", "t_rel", "p_low", 2, event_kind)
+        (s,) = W.flows_in(w).strands
+        return [m.event for m in s.moves]
+
+    assert strand_moves("commit", creed, "commitment.ended") == ["e1", "e2"]      # a creed's release is a move
+    assert strand_moves("commit", "prop_a_cause", "commitment.ended") == ["e1"]   # a routine release is not
+    assert strand_moves("hold", creed, "commitment.ended") == ["e1"]              # keyed on the edge's kind too
+    assert strand_moves("hold", "off_duke", "tenure.closed") == ["e1", "e2"]      # `tenure.closed`: untouched
+    assert "commitment.ended" not in W.MOVE_KINDS                                 # and the kind stays in `never`
+
+
+def test_arrest_then_petition_on_one_referent_does_not_read_concluded_at_the_person_reading():
+    """B12a.05 (A-45, the source's edit-2 falsifier): a person holding `arrest.made` then `petition.filed` on one
+    referent reads the strand open -- a petition is the movement's content, not its end. Control: the same
+    strand ended by `rung.ceded` (a concession) reads concluded."""
+    checked = 0
+    for latest, want in (("petition.filed", False), ("succession.claimed", False), ("rung.ceded", True)):
+        w = _world()
+        hold(w, "p_low", "S", "arrest.made", when=1)
+        hold(w, "p_low", "S", latest, when=2)
+        p = w.persons["p_low"]
+        (s,) = W.flows_known(w, p)
+        assert [m.kind for m in s.moves] == ["arrest.made", latest]
+        assert W.concluded_known(w, p, s) is want, latest
+        assert ("S" in W.flow_stakes(w, p)) is (not want), latest                  # held open: stamped
+        checked += 1
+    assert checked == 3
 
 
 @pytest.mark.parametrize("a, b, want", [

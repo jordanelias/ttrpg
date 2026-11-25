@@ -4144,7 +4144,10 @@ rosters:
                   world reading, which knows their code (WA) through the verb and side; the rest end no case
                   in either reading. A hand-maintained list over the opens and joins kinds, checked
                   by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule
-                  disagree). Top-down the world sees a war end; bottom-up a
+                  disagree). B12a.05 (A-45): a content-opening kind (`queries/world_q.py::CONTENT_OPENING_KINDS`:
+                  `succession.claimed`, `petition.filed`) is never in it, whatever its codes -- a claim of the
+                  movement's own beginning is no end of it; `check_strife_openers` refuses the overlap at import.
+                  Top-down the world sees a war end; bottom-up a
                   person who holds only a field's outcome may still doubt it.
       The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
       opens, joins and never; a `concludes` kind outside opens and joins.
@@ -4166,9 +4169,8 @@ rosters:
               tenure.opened, office.established, rung.founded, army.recruited, army.formed, army.assigned]
       never: [argument.lost, argument.won, commitment.ended, commitment.made, date.scheduled, duty.refused,
               duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved, travel.ordered]
-      concludes: [army.arrived, succession.claimed, petition.filed, petition.carried, covenant.offered,
-                  matter.determined, dispensation.issued, rung.ceded, record.given, transfer.made,
-                  record.destroyed, tenure.opened]
+      concludes: [army.arrived, petition.carried, covenant.offered, matter.determined, dispensation.issued,
+                  rung.ceded, record.given, transfer.made, record.destroyed, tenure.opened]
 
   foreign_factions:
     source: >-

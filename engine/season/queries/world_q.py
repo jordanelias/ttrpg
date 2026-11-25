@@ -5352,6 +5352,10 @@ OPENING_MARCH_VERB = "march"   # the verb whose act `march_side` reads
 OPENING_DEATH_KIND = PERSON_DIED   # `state/gate.py`'s one spelling of the death kind
 OPENING_DEATH_VERBS = frozenset({"fight", "accept"})
 PETITION_RECORD_KIND = "petition"
+# A-46 (B12a.05): the one `never` kind `flows_in` admits as a move, keyed (`_creed_released`): the vow-break a
+# `release` of a creed `commit` earns (`verb_table.yaml: release` emits `commitment.ended` when an edge it closes is
+# a `commit`). A head seat's release is already a move through `joins` (`tenure.closed`).
+CREED_RELEASE_KIND = "commitment.ended"
 # What a petition is about: `person_q.ABOUT_KEYS`, the one owner of what a document is about (`_eff_petition`
 # mints it from the act's `subject`). `.get`, so a lost row reaches `check_strife_openers`'s refusal, not a KeyError.
 PETITION_MATTER_KEY = ABOUT_KEYS.get(PETITION_RECORD_KIND)
@@ -5389,14 +5393,21 @@ OPENING_KINDS = (*sorted(OPENS_KINDS), OPENING_MARCH_KIND, OPENING_DEATH_KIND, *
 
 
 def check_strife_openers(joins, verb_table, record_keys) -> None:
-    """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): every opener beyond `opens` is a `joins` kind, every
-    opener verb (`OPENING_MARCH_VERB`, `OPENING_DEATH_VERBS`) is a row of `verb_table`, and the `petition` record
-    kind still keys `PETITION_MATTER_KEY`. Callable so a test can plant each refusal."""
+    """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): every opener beyond `opens` is a `joins` kind, no
+    content-opening kind (`CONTENT_OPENING_KINDS`) is also a concluding kind (`CONCLUDING_KINDS`: the claim that
+    begins a movement ends nothing, B12a.05, A-45), every opener verb (`OPENING_MARCH_VERB`,
+    `OPENING_DEATH_VERBS`) is a row of `verb_table`, and the `petition` record kind still keys
+    `PETITION_MATTER_KEY`. Callable so a test can plant each refusal."""
     for k in OPENING_KINDS[len(OPENS_KINDS):]:
         if k not in joins:
             raise Unspecified(
                 f"world reading opener {k!r} is not a `strife_kinds.joins` kind", "rosters.yaml -- strife_kinds",
                 needs=f"{k!r} in `joins`, or the opener dropped", law="CR-75 -- the world reading opens on joins kinds only")
+    for k in CONTENT_OPENING_KINDS:
+        if k in CONCLUDING_KINDS:
+            raise Unspecified(
+                f"content-opening kind {k!r} is also a `strife_kinds.concludes` kind", "rosters.yaml -- strife_kinds",
+                needs=f"{k!r} out of `concludes`", law="A-45 -- a content opener concludes nothing at the person reading")
     for v in (OPENING_MARCH_VERB, *sorted(OPENING_DEATH_VERBS)):
         if v not in verb_table:
             raise Unspecified(
@@ -5608,6 +5619,20 @@ def _content_matter(rd: _StrifeReading, e, a=None) -> Optional[tuple]:
     return read(rd, e, a) if read is not None else None
 
 
+def _creed_released(rd: _StrifeReading, e) -> bool:
+    """A-46: is `e` a `commitment.ended` whose closed edge is a `commit` to a faction's creed Proposition
+    (`FACTION_BY_PROP`)? The closed edge is the Tenure a change of `e` names on `until` (what `_eff_release`
+    writes); the key is that edge's kind and object, never the releaser's id. A `commit` to any other Proposition
+    (a cause, a war) is a routine release and no move."""
+    if e.kind != CREED_RELEASE_KIND:
+        return False
+    for c in e.changes:
+        t = rd.tenures.get(c.subject)
+        if c.field == "until" and t is not None and t.kind == "commit" and t.object in FACTION_BY_PROP:
+            return True
+    return False
+
+
 def _parents(rd: _StrifeReading, refs) -> set:
     """The rungs one step above `refs` (`_StrifeReading.parent`), the realm never among them."""
     return {p for p in (rd.parent(r) for r in refs) if p is not None}
@@ -5744,7 +5769,8 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     """THE WORLD READING (`strife-00` §4, §5): the strands in the log, and the eras over them. `terminal(e, a)`
     says whether an Event (with its causing act, or `None`) is a terminal move; default `default_terminal`.
 
-    STRANDS. Moves are read in log order. A move linking to one or more strands joins them (merged, the oldest id
+    STRANDS. Moves are read in log order; a move is an Event of a `MOVE_KINDS` kind, or a creed's release
+    (`_creed_released`, A-46: a `commitment.ended` closing a `commit` to a faction's creed). A move linking to one or more strands joins them (merged, the oldest id
     kept: new events fold into existing flows, R3); a move linking to none starts a strand only if it opens one.
     A content opener's earlier same-matter moves that no strand holds are taken into the strand it opens (the
     first petition belongs to the movement the second makes), whether the opener started a strand or linked to
@@ -5771,7 +5797,7 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     held: set = set()
     earlier: dict = {}
     for i, e in enumerate(w.log):
-        if e.kind not in MOVE_KINDS:
+        if e.kind not in MOVE_KINDS and not _creed_released(rd, e):
             continue
         a = causing_act(w, e)
         refs = _move_referents(rd, e, a)

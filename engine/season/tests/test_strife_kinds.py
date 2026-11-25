@@ -46,7 +46,10 @@ def derive_concludes(rows, lists) -> frozenset:
         for k in r["kinds"]:
             codes_of[k].append(r)
     moves = lists["opens"] | lists["joins"]
-    return frozenset(k for k in moves if codes_of.get(k) and all(_terminal(r) for r in codes_of[k]))
+    # B12a.05 (A-45): a content-opening kind (`world_q.CONTENT_OPENING_KINDS`) concludes nothing at the person
+    # reading, whatever its codes: a claim of the movement's own beginning is no end of it
+    return frozenset(k for k in moves if codes_of.get(k) and all(_terminal(r) for r in codes_of[k])
+                     and k not in W.CONTENT_OPENING_KINDS)
 
 
 # The control for the three plants below is the import itself: it ran `_check_strife_kinds` on the shipped lists.
@@ -123,6 +126,17 @@ def test_an_opener_verb_outside_the_verb_table_is_refused(verb):
     table = {k: v for k, v in VERB_TABLE.items() if k != verb}
     with pytest.raises(Unspecified, match=f"'{verb}'"):
         W.check_strife_openers(R.STRIFE_KINDS["joins"], table, R.RECORD_KIND_KEYS)
+
+
+@pytest.mark.parametrize("kind", W.CONTENT_OPENING_KINDS)
+def test_a_content_opening_kind_listed_in_concludes_is_refused_at_import(kind, monkeypatch):
+    """B12a.05: the roster and the opener list cannot drift. Planted on the check import runs, by putting the kind
+    in the roster's `concludes` as `world_q` holds it (`CONCLUDING_KINDS`); the shipped call is the control."""
+    assert not set(W.CONTENT_OPENING_KINDS) & W.CONCLUDING_KINDS
+    W.check_strife_openers(R.STRIFE_KINDS["joins"], VERB_TABLE, R.RECORD_KIND_KEYS)           # shipped
+    monkeypatch.setattr(W, "CONCLUDING_KINDS", frozenset(W.CONCLUDING_KINDS) | {kind})
+    with pytest.raises(Unspecified, match=kind):
+        W.check_strife_openers(R.STRIFE_KINDS["joins"], VERB_TABLE, R.RECORD_KIND_KEYS)
 
 
 def test_a_petition_record_without_its_matter_key_is_refused():
