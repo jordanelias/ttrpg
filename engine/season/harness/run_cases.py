@@ -12,6 +12,8 @@ records what went wrong without them, and re-tightened here:
      expensive correction was a bare substring `ambient` catching ambient-MATERIAL rows (8 -> 3)
      and a bare `counter` matching inside "counter-productive" (10 -> 8). Both are guarded here.
   5. **A probe runs ONCE.** Its verdict is cached, so a case cannot change a probe's result.
+
+A READING RULE for the corpus the loader (`load_cases`, `boot/realm.py`) hands this file: where a case file cites an archived fieldwork term, the parent `fieldwork_v30.md` is the reading of that term, and nothing is built from it without a new design (`08_FI_audit_addendum_B.md` F-FI-13, R-47).
 """
 
 from __future__ import annotations

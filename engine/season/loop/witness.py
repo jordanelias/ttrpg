@@ -15,22 +15,22 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from ..data.matrix import Step
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
+
+from ..data.matrix import MATRIX, Step
 from ..state.gate import Token
-from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
+from ..data.requires import LEDGER_DERIVED_STEMS, REQUIRES_STEMS, UNKNOWN, WITH_STEM, WORLD_ONLY_STEMS, binding_from_act
 from ..data.arrangements import ARRANGEMENTS, DISPOSAL
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, DISPOSAL_WRITES, EFFECT_NONE, EFFECT_STRIKE, EFFECT_YIELD, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, PROCEEDING_MOVES,
-    PROCLAIMED, READ_TO_ADDRESSEE, RECORD_CONTENT, SITTING_CLAIMS, SITTING_PREDICATES, SITTING_SOURCE, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
+    ABSENT_PREDICATE, CHANNEL_CLAIM_SOURCE, DISPOSAL_WRITES, EFFECT_NONE, EFFECT_STRIKE, EFFECT_YIELD, FINDING_TERMS, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS,
+    PROCEEDING_MOVES, PROCLAIMED, READ_TO_ADDRESSEE, RECORD_CONTENT, SITTING_CLAIMS, SITTING_PREDICATES, SITTING_SOURCE, TERMS_SUPPLIED_BY, UNDEPOSITED_KINDS,
+    WITNESS_CHANNELS, require_member, roster,
 )
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import CONCLUDED_KEY, CONCLUDED_STEM, CONCLUSION_KIND, EMITTED_KINDS, IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
-# store, and `04:142` keeps `decision/` an island; this is the first non-DELIBERATE step to import it.
-# Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
-# beside `teller_weight`/`record`, which `queries/person_q.py` cannot host (it may not reach
-# `epistemic`, test_season_shape's allow-list); it reads the verb table (`_happened`, `dissents`) and the
-# holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
-# CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
+# store. Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
+# in `queries/person_q.py` (B11.21, D-74: `ledger_weigh` and `refracted_confidence` moved there; this step imports nothing from `decision/`);
+# it reads the verb table (`_happened`, `dissents`) and the holder's own stance (`regard`). `04:178` is exceeded on those two reads.
 # IN-55's `held_claim_ids(w)` exceeds `04:178` a second time, beside the refraction reads: it reads every
 # holder's ledger id set (to decide whether an Event changes only held claims, and so skip its fan),
 # writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
@@ -41,12 +41,11 @@ from ..data.verbs import VERB_TABLE
 # only when `regime_gain` is not 0, so the control reads nothing new. Kept on the WITNESS side, not in
 # `decision/` (`refracted_confidence` takes no world-derived number: `decision/` stays an island, AX-2).
 # CONVENTION, no scan reads this step's person reads; AX-7's governors are widened by hunk H-L0-11.
-from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
-                         claim_subjects, held_claim_ids, holds_trail, live_channels,
-                         non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
+                         claim_subjects, deposit_anchor, held_claim_ids, holds_trail, live_channels,
+                         non_anchor_subjects, notice, notice_on, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
-from ..queries.person_q import addressed_to, conflict, drifted
+from ..queries.person_q import LedgerReader, addressed_to, conflict, content_value, drifted, ledger_weigh, refracted_confidence   # `content_value`: moved to person_q at B11.71, still importable from here
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
@@ -55,8 +54,18 @@ from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
 from .resolve import _milli
 
+# B11.66: THE KIND OF EVENT WHOSE HEARER'S DEPOSIT IS THE TOLD CHANNEL'S, `claim.held` of what was said -- not a deed SEEN, so no notice draw reaches it (the source's "a telling ... is unchanged").
+TELLING_KIND = "news.told"
+# B11.66: the bands the notice draw's reading of one pair acts on, as labels of the one ladder, and the term a Partial withholds (`HAND_TERM`, defined below beside the found deposit).
+NOTICE_FAILURE, NOTICE_PARTIAL, NOTICE_OVERWHELMING = (DEGREE_LABEL[d] for d in (Degree.FAILURE, Degree.PARTIAL, Degree.OVERWHELMING))
+
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
+
+# B11.83: THE `absent` PREDICATE (`rosters.yaml: absence_claim`) is one predicate with one meaning: it is no `requires` grammar stem (a world fact `record`
+# would pair), no `seen` or `content:` predicate and no emitted event kind (`person_q._check_intent_claim`'s refusal, for the same reason).
+if ABSENT_PREDICATE in REQUIRES_STEMS or ABSENT_PREDICATE in EMITTED_KINDS or ABSENT_PREDICATE in (SEEN_PREDICATE, RECORD_CONTENT.get("predicate")):
+    raise SystemExit(f"rosters.yaml: absence_claim.claim.predicate {ABSENT_PREDICATE!r} is already a predicate another reader answers")
 
 # v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
 # `inferred` source and its live/off switch; this route's recipients are seat holders
@@ -70,23 +79,6 @@ require_member(SEAT_CHANNEL, WITNESS_CHANNELS,
                "rosters.yaml -- witness_channels",
                law="v9 IN-22 -- the purview deposit takes the seat channel's source and switch; a "
                    "name the roster does not carry would leave it dead or unsourced")
-
-
-def content_value(subject_matter):
-    """A `content:<kind>` CLAIM'S VALUE: the document's `subject_matter`, FROZEN -- a tuple of
-    `(key, value)` pairs in the kind's own key order, every list a tuple, recursively. `dict(v)`
-    gives the mapping back.
-
-    ⚠ FROZEN AND HASHABLE ON `epistemic.Seen`'s PRECEDENT, AND FOR ITS REASON: claim values sit in
-    the sets the corpus harness builds over `(subject, predicate, value)`
-    (`harness/corpus_run.py`), and a `dict` there is a `TypeError`. Freezing is
-    also what the deep copy was for: a belief that cannot be mutated cannot alias the Record it
-    was read from, so nothing done to the document later reaches back into a ledger."""
-    if isinstance(subject_matter, dict):
-        return tuple((k, content_value(v)) for k, v in subject_matter.items())
-    if isinstance(subject_matter, (list, tuple)):
-        return tuple(content_value(v) for v in subject_matter)
-    return subject_matter
 
 
 def addressee_reads(rec, pid: str, verb) -> bool:
@@ -144,13 +136,21 @@ def _circle_of(w, act, rate: float):
     as before `G6`. A telling that names no addressee (a hand-built act; a row with no counterparty)
     has no circle of two and is never private. `rate` is `telling_privacy`, read and range-checked
     ONCE PER BARRIER by `witness`, beside `gain` (a value outside [0, 1] raises there, `H-190`'s
-    rule, whether or not any telling is deposited)."""
-    if rate == 0:
-        return None
+    rule, whether or not any telling is deposited).
+
+    ⚠ v12 B11.10 (`08_FI_02` edit 8): CONFIDING IS AN OPERAND, NOT A DRAW. A telling that carries `in_confidence` on its payload (`rosters.yaml: choice_sourced`,
+    chosen at CHOOSE among `{false, true}`) is private exactly where it says so, and takes no draw; `telling_privacy` is the share for a telling that
+    carries none (a hand-built act), at control 0."""
     row = VERB_TABLE.get(getattr(act, "verb", None))
+    pay = getattr(act, "payload", None)
+    own = pay.get(IN_CONFIDENCE_KEY) if isinstance(pay, dict) else None
+    if own is None and rate == 0:
+        return None
     hearer = binding_from_act(act).get(row.counterparty) if row is not None else None
     if not isinstance(hearer, str) or hearer == act.actor:
         return None
+    if own is not None:
+        return (act.actor, hearer) if own else None
     if draw_factory(w.world_seed, lambda: w.tick)(act.actor, f"confide:{act.id}").random() < rate:
         return (act.actor, hearer)
     return None
@@ -189,6 +189,12 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     three clauses, applied to the value directly since there is no `content:` wrapper to reach
     through.
 
+    ⚠ B11.55 (`16_PESSIMIST_SC_E` edit 1): THIS BRANCH READS THE HEARER'S OWN LEDGER, which `04` §A.2's list of WITNESS's reads ("this tick's log, presence
+    cache, channel predicates, the act store") omits -- the departure is named here, not hidden. WITNESS already reads that ledger at this deposit (the
+    exact-triple guard that follows the call), so no new read class is opened. A hearer holding the cell FIRSTHAND (`Claim.firsthand`) is handed the
+    figure he holds (`LedgerReader.belief_among` over those claims), not a drifted one, while `Fixtures knower_hears_true` is `True`; his own claim is
+    not written, and the teller's `record` with him is not moved by a copy he could check and that was only garbled in transit.
+
     ⚠ ANYTHING ELSE -- a bare `True`/`False` from an event-kind claim, an `epistemic.Seen` struct,
     any value with neither an addressee key nor a plain number -- carries nothing either branch
     can act on and is deposited VERBATIM.
@@ -226,16 +232,32 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
                 new_to = tuple(tid for i, tid in enumerate(to_ids) if i != drop)
                 return tuple((k, new_to if k == addressee else v) for k, v in held.value)
         return held.value  # one addressee, or none at all -- §A.10.1's floor; nothing droppable
-    if isinstance(held.value, (int, float)) and not isinstance(held.value, bool):
+    if isinstance(held.value, (int, float)) and not isinstance(held.value, bool) and stem in QUANTITY_STEMS:
         # §A.10.2's three clauses live once, in `queries/person_q.py::drifted` (v11 CR-27: the liar's false
-        # number is the same rule), and this branch is its caller.
+        # number is the same rule), and this branch is its caller. ONLY AN AMOUNT IS GARBLED (v12 B11.51, `16_PESSIMIST_FI_A`
+        # edit 2; D-44, D-45: a rumour may lose the doer, not replace him): `data/verbs.py: QUANTITY_STEMS`.
+        # B11.55 (`16_PESSIMIST_SC_E` edit 1): A HEARER WHO HOLDS THE FIGURE FIRSTHAND HEARS IT AS HE HOLDS IT (`knower_hears_true`;
+        # `False` is the control, the drifted copy below). The copy is then his own claim and the exact-triple guard at the deposit drops it.
+        own = [c for c in w.persons[pid].ledger
+               if c.firsthand and c.subject == held.subject and c.predicate == held.predicate]
+        if own and w.fixtures.get("knower_hears_true"):
+            return LedgerReader(own).belief_among().value
         return drifted(held.value, w.fixtures.get("told_drift_band"), sel)
+    # any other numeric value (an existence reading stored as 0/1) falls through and is deposited as held
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
+
+
+def _told_pairing(e: Event, pairing):
+    """THE PAIRING A HEARER RECEIVES (B11.22, `08_FI_06` edit 3; B11.53, `16_PESSIMIST_FI_A` edit 4): the teller's `Said.pairing` at a band whose `rosters.yaml: finding_terms`
+    row shows `HAND_TERM`, and the same sighting WITHOUT `who` at a band whose row does not (shipped: `Partial`) -- the copy says that it happened and not who. One table,
+    read by the finder's deposit (`_found_claims`) and this one: a hearer of a deed at a band holds what a finder at that band holds. A band no row names (the failing
+    one, which no telling emits `news.told` at) shows nothing, so no hand. Reads `pairing`, never writes it."""
+    return pairing if HAND_TERM in FINDING_TERMS.get(e.degree, ()) else replace(pairing, who=None)
 
 
 def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
              fx=None) -> Claim:
-    """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
+    """`c` AS THIS WITNESS RECEIVES IT: `c` with `queries/person_q.py::refracted_confidence`'s
     confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
     passes through, so the six `Claim` constructions share one rule rather than six. The caller
     decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
@@ -270,6 +292,41 @@ def _credit(w, c: Claim, hearer: str, teller: str, regime_gain: float, ceiling: 
     return replace(c, confidence=int(x + 0.5))
 
 
+def _ended_entities(w, e: Event) -> list:
+    """B11.60 (`16_PESSIMIST_FI_C` edit 3, R-02): THE ENTITIES THE EVENT ENDED, as `(entity id, Kind)` -- what a witness of an
+    ending holds as `(entity, exists:<Kind>, 0)`, the cell the fold's `kind` conjunct asks (`data/requires.py::Existence`).
+
+    KEYED ON THE CELL WRITTEN AND THE WORLD'S ANSWER, NEVER ON AN EVENT KIND OR A VERB. A change names an entity cell when its
+    receipt's field is a write-matrix field, and it ENDED the entity when the gate read it so -- the receipt's `mode` is `delete`
+    (a whole-entity write that left the subject absent, `world._mode`), or its `delta`, `(before, after)` over the named
+    attributes (`world._delta`), reads the subject absent after the write -- or when the cell is `exists` itself (the cell MATTER's
+    death writes, whose Event carries a bare `set` receipt on it: `create` is `exists`'s other direction, `person.individuated`,
+    `record.created`) -- AND the subject is gone from its kind's store now. The second half is what tells `exists` set false from
+    `exists` set true. `fight` writes `Person.body` and `World.remove_person` pops him in the same `apply()`, so a killing names
+    `body`, not `exists`: a test of `field == "exists"` alone would see hunger's death and miss every blow. A write that leaves
+    its subject standing (a `body.changed`) ends nothing.
+
+    THE KIND comes from the write matrix by the field written: the kinds that have a row for it. `body` is Person's alone; `exists`
+    is six kinds' cell, and there the rows that DECLARE the Event's kind (`emits`) say which -- the matrix naming its own cell,
+    not a branch per kind. Not exactly one kind: nothing is deposited (an unknown is not a reading, the observation block's rule
+    below; the receipt carries no record kind to ask). `w._entity_stores` is the one list of what can cease to exist, which
+    `class_of` and the F3 gate share; `class_of` itself would answer `Rung` for a dead person, who has a same-id rung."""
+    stores = dict(w._entity_stores())
+    out = []
+    for c in e.changes:
+        after = c.delta[1] if isinstance(c.delta, tuple) and len(c.delta) == 2 else None
+        if not c.subject or not (c.mode == "delete" or after == (False,) or c.field == "exists"):
+            continue
+        kinds = {k for (k, f) in MATRIX if f == c.field}
+        if len(kinds) > 1:
+            kinds = {k for k in kinds if e.kind in MATRIX[(k, c.field)].emits}
+        if len(kinds) == 1:
+            (kind,) = kinds
+            if c.subject not in stores[kind]:
+                out.append((c.subject, kind))
+    return out
+
+
 def _happened(act, e: Event):
     """THE ACT `e` REPORTS HAPPENING, or `None` -- what `dissents`' act-level prior (`H-201`) is asked
     of. `e` must be one of the act's verb row's `emits:` and none of its `emits_on_refusal:` (this ROW's
@@ -301,13 +358,33 @@ require_member(HAND_TERM, OBSERVATION_TERMS,
                    "does not carry would mask nothing and show every finder the hand")
 
 
+def _ungraded(row) -> bool:
+    """B11.14: A VERB ROW THAT DECLARES NO WRITE AT ANY BAND AND NO BANDS -- the shape of an ungraded inquiry (`interview`), read off the
+    row's columns (`writes`, `writes_by_degree`, `emits_by_degree`), never off its name. `None` (an Event no act caused, a verb with no
+    row) is not one."""
+    return row is not None and not row.writes and not row.writes_by_degree and not row.emits_by_degree
+
+
+def _live(w, h) -> bool:
+    """A HELD CLAIM THAT IS STILL LIVE: read at a confidence above 0 at `w.tick` (`present_confidence`, the one owner of the fade -- the
+    reading `epistemic.holds_trail` takes). The exact-triple dedup guard (`_holds_live`) asks it of the held copy it would skip on: a claim he
+    has FORGOTTEN does not block a re-deposit (a trail re-offered by `trail_of` must land, and a witness who saw a deed again holds it again)."""
+    return ledgers.present_confidence(h.confidence, h.when, w.tick, w.fixtures.claim_decay()) > 0
+
+
+def _holds_live(w, p, subject, predicate, value) -> bool:
+    """THE EXACT-TRIPLE DEDUP GUARD, once: `p` holds a LIVE copy, firsthand-or-told with no chain, of `(subject, predicate, value)` (`_live`). The three
+    deposits that skip on it (a finding's claim, an ungraded deed's repeat, a `concluded:` claim) ask it here."""
+    return any(h.subject == subject and h.predicate == predicate and h.value == value and not h.chain and _live(w, h) for h in p.ledger)
+
+
 def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx):
     """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
     yielded per uncovered trail Event so each re-check sees the deposits already written.
 
     `self.findings` is POPPED here (`((trail id, terms shown), ...)`, put there at RESOLVE). The
     `holds_trail` re-check exists because two finds of one Event can reach one WITNESS -- a second
-    `research` of the same Record deposits nothing. The claims are the fan's own shapes
+    `research` of the same Record deposits nothing once the finder holds the hand, and only the triples he lacks before. The claims are the fan's own shapes
     (`claim_subjects`, `seen_subject`), masked to the terms the band shows (`seen_showing`)."""
     found = self.findings.pop(e.id, ())
     pid = actor_of(w, e) if found else None
@@ -326,7 +403,8 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
         refracting = bool(gain) and actor_of(w, f) != pid
         prior_act = _happened(act_f, f) if refracting else None
         prior_weigh = ledger_weigh(p, w.fixtures, w.tick) if prior_act is not None else None
-        subjects = claim_subjects(w, f, claim_rule, act_refs(act_f))
+        # B11.58: a band showing the hand files the deed under the actor, not under a cover's alias (`deposit_anchor`).
+        subjects = claim_subjects(w, f, claim_rule, act_refs(act_f), deposit_anchor(w, f, HAND_TERM in terms))
         if HAND_TERM not in terms:
             subjects = non_anchor_subjects(subjects, anchor_of(w, f))
         out = [Claim(H(w.world_seed, w.tick, pid, f"found:{e.id}:{fid}:{n}"), pid, subj, f.kind,
@@ -338,6 +416,12 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
                              SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.lap, doer=None))
         for c in out:
+            # B11.61 (CP-T06-03): `holds_trail` is true only of a finder who holds the HAND, so a partial finder's later, better find reaches here
+            # holding some of what it deposits. Only the triples he lacks are deposited -- the told channel's exact-triple guard (a held copy of
+            # the same subject, predicate and value, with no chain, skips), one deposit over; a deposit made earlier in this barrier is
+            # already in `p.ledger` (`World.write` applies synchronously), so no second dedup set is kept.
+            if _holds_live(w, p, c.subject, c.predicate, c.value):
+                continue
             yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cfx)
                          if refracting else c)
 
@@ -435,6 +519,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # Seeds the cache `_ch_co_located` reads; the predicate would otherwise rebuild it per
     # (event, person).
     cache.presence_index(w)
+    # B11.66 (`18_DETERMINISM_notice_is_a_draw`, D-74 B): THE NOTICE DRAW'S BARRIER MAPS, built here beside the presence index and ONLY AT `notice_arm: on` (at `off` nothing below
+    # reads them and the barrier is the one before the item). `notice` (epistemic.py) reads the two maps and computes no pool of its own; WITNESS does not compute them either.
+    notice_arm = notice_on(w)
+    if notice_arm:
+        cache.notice_pools(w)
+        cache.notice_edges(w)
     everyone = list(w.persons)
     # `W6` / `H-33`: the mode says which channels are live. `total` is the specified behaviour
     # and the sweep's control.
@@ -444,14 +534,15 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # IN-55: an Event that changes only held claims, with no act, fans to nobody
     # (epistemic.changes_only_held_claims); the ledgers are read here once, before any deposit.
     held = held_claim_ids(w) if mode != "total" else frozenset()
-    # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]): an Event whose KIND is in
-    # `rosters.yaml: undeposited_kinds` (`finding.none`) fans to nobody -- no event-kind claim, no read,
-    # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
-    # or an empty `changes[]`: `news.untold`, `tell.refused` and `matter.undetermined` keep depositing. Rebinding `events`
-    # covers every pass below that reads it; the trace still counts every Event handed in.
-    # B09.04 (`H-111`): THE ACTOR ARM. `finding_none_deposit` is `none` (the CONTROL, shipped: the skip above stands) or `actor`: such an
-    # Event is still skipped by every pass below that reads `events`, and enters the FAN for its own doer alone (`actor_of`, the person
-    # `witness_key` anchors on) -- so a search he failed is a claim he holds, and no non-actor ever receives it at either arm.
+    # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]), NARROWED BY B11.61 (CP-T06-04): an Event whose KIND is in
+    # `rosters.yaml: undeposited_kinds` (`finding.none`, `inquiry.refused`) makes NO EVENT-KIND CLAIM -- and every other deposit goes as for any
+    # Event: its actor's own observation reads (at `observation_deposit_mode: actor`, the refusing `present_at` read among them) and the `seen` claim
+    # of each witness present. So a refused or failed inquiry teaches its actor what it read, and a bystander holds that he tried. Keyed on the
+    # KIND, not on a band or an empty `changes[]`: those would also swallow `matter.undetermined`, `news.untold` and `tell.refused`, which keep
+    # depositing their event-kind claim.
+    # B09.04 (`H-111`): THE ARM. `finding_none_deposit` is `none` (the CONTROL: the whole Event fans to nobody, as before B11.61) or `actor` (shipped
+    # by B11.12; the arm's name is the one B09.04 gave it, and under B11.61 it reads: deposit as any Event, less the event-kind claim). `total`
+    # (S61, the sweep's control) keeps the whole skip: its ledgers are identical by construction, and one doer's reads would differ them.
     # Read once per barrier, and refused outside `rosters.yaml: finding_none_deposit_arms`, as `obs_mode` below is.
     none_arm = w.fixtures.get("finding_none_deposit")
     require_member(
@@ -462,13 +553,29 @@ def witness(self, token: Token, events: list[Event]) -> int:
         law="`observers_for`'s precedent: an unrecognised arm silently falling back to the skip would make every measurement "
             "of the actor arm read the control")
     n_handed = len(events)
-    handed, events = events, [e for e in events if e.kind not in UNDEPOSITED_KINDS]
-    actor_only = {e.id for e in handed if e.kind in UNDEPOSITED_KINDS} if none_arm == "actor" else frozenset()
+    # The whole-Event skip stays the control: it drops the Event from the fan and from every pass below that reads `events`; the trace still
+    # counts every Event handed in.
+    if none_arm == "none" or mode == "total":
+        events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, ch) for e in handed
-        if (e.kind not in UNDEPOSITED_KINDS or e.id in actor_only) and not changes_only_held_claims(w, e, held, mode)
-        for pid, ch in observers_for(w, e, mode, everyone)
-        if e.id not in actor_only or pid == actor_of(w, e)]
+        (pid, e, ch) for e in events
+        if not changes_only_held_claims(w, e, held, mode)
+        for pid, ch in observers_for(w, e, mode, everyone)]
+    # B11.66: AT `notice_arm: on` EACH ADMITTED BYSTANDER OF A DEED DRAWS ONCE (`epistemic.notice`, one call per pair, before the parallel map: the maps it reads are barrier caches).
+    # `noticed` is `{(pid, event id): band}` for the pairs that drew; a Failure leaves the fan -- he was there and did not see; a later telling can still reach him -- and a Partial
+    # deposits the deed with the hand withheld (below); `notice_trail` is the reason trail, written on each of his deposits' `observed`. A telling is no deed SEEN: its hearer
+    # holds what he was told, and that deposit stays the told channel's (the source's "a telling ... is unchanged"). At `off`, `noticed` is empty and the fan is untouched.
+    noticed: dict = {}
+    notice_trail: dict = {}
+    if notice_arm:
+        drawn = []
+        for pid, e, ch in fan:
+            band = None if e.kind == TELLING_KIND else notice(w, pid, e, ch, notice_trail)
+            if band is not None:
+                noticed[(pid, e.id)] = band
+            if band != NOTICE_FAILURE:
+                drawn.append((pid, e, ch))
+        fan = drawn
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {n_handed} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
@@ -533,6 +640,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # them and something must: the first read the fan reaches -- i.e. the earliest Event in
     # RESOLVE order -- is kept, which is the answer `LedgerReader`'s strict `>` gives.
     seen_obs_by_pid: dict = {}
+    # `(pid, entity, predicate)` this call has deposited at ZERO -- an ENDING (`_ended_entities`) or a read of 0. The ending deposit is skipped only when the
+    # held value is already 0, so a read of the same cell at 1 earlier in the call never suppresses the ending that follows it.
+    zero_held: set = set()
     # WHAT A TELLING CONTAINED is `Act.payload["said"]`, fixed at CHOOSE (`_told_content`): the
     # teller's ledger is not read at this barrier, so no order-dependence on whether the teller
     # sorted before the first hearer arises (plan position `15d`).
@@ -547,7 +657,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     for pid, e, _ch in fan:
         subj = seen_subject(w, e, pid, mode)
         seen_by[(pid, e.id)] = (None if subj is None
-                                else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode)))
+                                else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode, frozenset((HAND_TERM,)) if noticed.get((pid, e.id)) == NOTICE_PARTIAL else frozenset())))
     # THE DEPOSIT RULE'S TRIGGER (plan position `15`, r2 `02` §A.9): *a held document is a held
     # belief.* A person who COMES TO HOLD a Record this season -- the Record is named in an Event's
     # `changes[]` and its live `hold` opened at this tick -- learns what it says. Resolved per EVENT
@@ -664,9 +774,17 @@ def witness(self, token: Token, events: list[Event]) -> int:
         nonlocal deposits
         w.write("claim_ledger", token, lambda: p.ledger.append(c),
                 record_kind="Person", fieldname="claim_ledger", driver="Event",
-                emits="claim.deposited", subject=c.id, causes=[e.id, *also])
+                emits="claim.deposited", subject=c.id, causes=[e.id, *also],
+                observed=notice_trail.get((p.id, e.id), ()))
         TRACE.claim(p.id, e.id, c.source)
         deposits += 1
+    # B11 close (Phase 3, F-A4): THE CELLS THIS CALL'S ENDINGS WRITE, per person -- a same-call READ of one (an earlier Event's gating `exists:Person` at 1) is not deposited, so
+    # the ending is the ONE same-call claim on the cell. Both at one `when`, `LedgerReader._best` keeps the first appended on a tie and `_believed_gone` the last, so a read
+    # deposited beside the ending made the two readers of one cell disagree (the witness read the victim alive and believed him gone).
+    _ended_by_event: dict = {}
+    ended_cells = {(pid, entity, f"exists:{kind}")
+                   for pid, e, _c in fan if reported.get((pid, e.id)) is None
+                   for entity, kind in _ended_by_event.setdefault(e.id, tuple(_ended_entities(w, e)))}
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -696,7 +814,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
         # performer, so every witness of it refracts.
         actor = actor_of(w, e)
-        refracting = bool(gain) and actor != pid
+        # B11.66: AN OVERWHELMING NOTICE IS SEEN IN FULL -- his deposits of this Event are not refracted, so they land at the confidence the deposit starts at (`confidence_default`,
+        # the ceiling `_credit` clamps to), "as today, at confidence 1.0". A Partial or a Success is refracted as today.
+        seen_whole = noticed.get((pid, e.id)) == NOTICE_OVERWHELMING
+        refracting = bool(gain) and actor != pid and not seen_whole
         # v9 IN-57: Claim.doer -- stamped only where the witness is the actor (see carriers.Claim.doer).
         doer = pid if actor == pid else None
         # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
@@ -720,9 +841,22 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # "a claim whose subject is SOMETHING THEY HOLD" unreachable. `changes[]` already names
         # what an act touched, so this reads the Event the design has rather than adding a field
         # to it (§8.1).
-        for n, subj in enumerate(() if only is not None else
-                                 claim_subjects(w, e, claim_rule,
-                                                act_refs(self.act_of.get(e.id)))):
+        # B11.14 (`08_FI_04` §2, H-320): A REPEATED UNGRADED FINDING LEAVES ONE CLAIM. An Event whose verb row declares no `writes:` at any
+        # band and no bands (`_ungraded`) reports a thing no cell changed, so its claim is `(subject, kind, True)` and a second one is the
+        # same belief stored again; it is skipped below when the holder already holds that exact triple FIRSTHAND -- not told, an EMPTY
+        # chain, the told channel's own reading of the word (reading `source` instead would make the count depend on the channel map, which
+        # `test_15d_falsifier` neutralises) -- the told channel's exact-triple guard, one deposit over. Keyed on the row's shape, never on a verb name; moot per row once the row has a product.
+        ungraded = _ungraded(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)))
+        # B11.58 (CP-T06-09): a channel that shows `who` files a covered deed under the actor, not the alias (`deposit_anchor`).
+        # B11.66: A PARTIAL NOTICE KEEPS THE DEED AND NOT THE HAND (`_found_claims`' Partial shape): the anchor is not filed under the actor and the claim about the anchor is dropped.
+        hand_seen = HAND_TERM in TERMS_SUPPLIED_BY[channel] and noticed.get((pid, e.id)) != NOTICE_PARTIAL
+        subjects = (() if only is not None or e.kind in UNDEPOSITED_KINDS else
+                    claim_subjects(w, e, claim_rule, act_refs(self.act_of.get(e.id)), deposit_anchor(w, e, hand_seen)))
+        if not hand_seen and noticed.get((pid, e.id)) == NOTICE_PARTIAL:
+            subjects = non_anchor_subjects(subjects, anchor_of(w, e))
+        for n, subj in enumerate(subjects):
+            if ungraded and _holds_live(w, p, subj, e.kind, True):
+                continue
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
             # ⚠ `self.lap` IS THE LAST ARGUMENT AND `U2` IS WHY. §F1 Q2 is *a claim LANDING in
@@ -740,6 +874,26 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # witnessed`, which is what #353 §19.4 means by the substrate of the emergent-narrative
             # claim.
             _deposit(p, c, e)
+        # B11.60 (`16_PESSIMIST_FI_C` edit 3, R-02): A WITNESS OF AN ENDING HOLDS IT IN THE WORDS A REQUIREMENT READS. For each entity
+        # this Event ended (`_ended_entities`, keyed on the receipt the gate minted, never on an event kind or a verb) the witness
+        # holds `(entity, exists:<Kind>, 0)` beside the event-kind claim -- one fact, so a belief that a man is dead declines the
+        # candidates the fold would refuse (`questions_for` clause 4, `belief_contradicts`) as the cell itself does. Same
+        # witness, source, confidence and refraction as the event-kind claim above; the person-side `(subject, predicate)` key
+        # `seen_obs_by_pid` keeps is the observation block's too, so a read of that cell in this barrier is not stored twice.
+        # An Event that ended nothing adds nothing; a governor reached by purview (`only`) gets the reads alone.
+        if only is None:
+            seen_obs = seen_obs_by_pid.setdefault(pid, set())
+            for entity, kind in _ended_entities(w, e):
+                pred = f"exists:{kind}"
+                if (pid, entity, pred) in zero_held:
+                    continue      # an ending OVERRIDES an earlier read at 1; only a held 0 makes it a second copy
+                zero_held.add((pid, entity, pred))
+                seen_obs.add((entity, pred))
+                xc = Claim(H(w.world_seed, w.tick, pid, f"ended:{e.id}:{entity}"), pid, entity, pred, 0, w.tick, src, conf, "own",
+                           self.lap, doer=doer)   # `U2`: see the event-kind deposit
+                if refracting:
+                    xc = _refract(xc, p, channel, gain, prior_act, prior_weigh, cfx)
+                _deposit(p, xc, e)
         # `W-B`. THE SECOND DEPOSIT: ONE CLAIM PER READ THE FOLD MADE, IN THE `requires`
         # VOCABULARY. `Observation` is `(subject, predicate, value)` and so is `Claim`; its
         # own docstring says an Observation *"is what a Claim would be if the reader wrote
@@ -791,6 +945,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if (obs_mode != "none" and e.observed
                 and (obs_mode == "total" or actor is None or pid == actor)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
+            # B11.71: the reads this Event's row LOOKS AT (`observes:`), by stem -- `()` for every row that declares none.
+            looks = frozenset(lk.read for lk in getattr(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)), "observes", ()))
             # `e.observed`, NOT `getattr(e, "observed", ())`: a default here would swallow the one
             # case worth failing on, an object that is not an Event reaching this barrier.
             for o in e.observed:
@@ -821,20 +977,63 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # Only the LEDGER APPEND is skipped: `Event.observed` still carries the read (the
                 # hash-bearing Event is unchanged) and the T4 refusal is the WorldReader's.
                 if str(o.predicate).partition(":")[0] in WORLD_ONLY_STEMS:
+                    # B11.83 (`U5c_VERBS_residue` §3 steps 1 and 3): THE ONE CLAIM A REFUSED `with` LEAVES. The read that DECIDED a refusal is the
+                    # last one the fold made (`AllOf` stops at the first False), so a last read of the `with` stem that the world answered False
+                    # is a refusal on the `with` conjunct: the actor sought a person who was not where he stood. He alone is taught it, at `actor`
+                    # and `total` (the block's own gate: `none` deposits nothing, as the control; it is his reading, never an Event's public payload), as `(person, absent, <the rung he stood at>)`.
+                    # A read the world could not answer (UNKNOWN) never reaches here, and a read of himself teaches nothing.
+                    if (o is e.observed[-1] and actor is not None and pid == actor and o.value is False and o.subject != pid
+                            and str(o.predicate).partition(":")[0] == WITH_STEM
+                            and (here := world_q.event_place_at(w, e)) is not None
+                            and (o.subject, ABSENT_PREDICATE) not in seen_obs):
+                        seen_obs.add((o.subject, ABSENT_PREDICATE))
+                        _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"absent:{e.id}:{o.subject}"), pid, o.subject, ABSENT_PREDICATE, here,
+                                          w.tick, src, conf, "own", self.lap, doer=doer), e)
                     continue
+                # B11.71 (`08_FI_03` §2, FRES §8): A READ THE ROW'S `observes:` TOOK is deposited only where the Event's band lists its stem in
+                # `rosters.yaml: finding_terms` -- the one band-keyed table (no row, `Failure`, lists none) -- and at `Partial` a number goes through the
+                # lossy-copy rule (`_told_value`, the same hash-keyed selection a told copy takes, spending no draw). A GATING read (the row's own cell's) is
+                # no look: its stem is none of `observes:`'s (`data/verbs.py::_build_looks` refuses the overlap), so it is deposited at every band as before.
+                value = o.value
+                if str(o.predicate).partition(":")[0] in looks:
+                    if str(o.predicate).partition(":")[0] not in FINDING_TERMS.get(e.degree, ()):
+                        continue
+                    value = _told_value(w, pid, e, o, H(w.world_seed, w.tick, pid, f"look:{e.id}:{o.subject}:{o.predicate}"),
+                                        str(o.predicate).partition(":")[0])
+                if (pid, o.subject, o.predicate) in ended_cells:
+                    continue      # the ending (above) is this call's one claim on the cell
                 key = (o.subject, o.predicate)
                 if key in seen_obs:
                     continue
                 seen_obs.add(key)
+                if value == 0 and not isinstance(value, bool):
+                    zero_held.add((pid, o.subject, o.predicate))
                 # `e.id` is in the digest, so the per-person counter need only separate
                 # two reads OF ONE EVENT; it spans the pass now and is still strictly
                 # increasing, so no two ids collide.
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
-                           pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
+                           pid, o.subject, o.predicate, value, w.tick, src, conf, "own",
                            self.lap, doer=doer)   # `U2`: see the deposit above
                 if refracting:
                     oc = _refract(oc, p, channel, gain, fx=cfx)
                 _deposit(p, oc, e)
+        # B11.73 (`08_FI_03` §3 act 1; FRES §7 (2); `19_LACUNA_conclusion_is_a_committed_assertion` R-19-04): THE CONCLUSION A WINNING `reconstruct` REACHED IS DEPOSITED
+        # TO ITS MAKER ALONE -- one claim, `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred` (`FOUND_CHANNEL`'s: known from the business, not
+        # seen), at the confidence the deposit starts at (the maker is no witness of himself, so nothing refracts it). The act carries it (`payload[CONCLUDED_KEY]`, fixed
+        # at CHOOSE from his OWN ledger: `person_q.conclusion_cites`), so this reads the act and never his live ledger, and the roll states nothing wrong (K-37): the doer is
+        # whoever his ledger named at the act. WHAT IT SHOWS IS `rosters.yaml: finding_terms`' BY BAND, the one table: a band that lists the hand (`HAND_TERM`) names the doer,
+        # `Partial` lists none and the claim is the deed alone (value `True`, the trail's own `Partial` shape), and a band with no row -- `Failure` emits `finding.none`, an
+        # arm-`off` fold carries no degree -- deposits nothing. The exact-triple guard is the found deposit's: a conclusion he already holds is not stored twice.
+        if e.kind == CONCLUSION_KIND and only is None and pid == actor and e.degree in FINDING_TERMS:
+            _pay = getattr(self.act_of.get(e.id), "payload", None)
+            _concl = _pay.get(CONCLUDED_KEY) if isinstance(_pay, dict) else None
+            if _concl is not None:
+                _to, _kind, _hand = _concl
+                _said = _hand if HAND_TERM in FINDING_TERMS[e.degree] else True
+                _pred = f"{CONCLUDED_STEM}:{_kind}"
+                if not _holds_live(w, p, _to, _pred, _said):
+                    _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"concluded:{e.id}"), pid, _to, _pred, _said, w.tick,
+                                      CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL], conf, "own", self.lap, doer=None), e)
         # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.
         # Its value is `epistemic.Seen` -- `{stratum, marks, who, why}`, each `None` where the
         # admitting channels withhold it -- and its subject is the changed thing, else the RUNG,
@@ -916,7 +1115,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
         # so storing it makes its own content true.
         _act = self.act_of.get(e.id)
-        if e.kind == "news.told" and _act is not None and pid != _act.actor and only is None:
+        if e.kind == TELLING_KIND and _act is not None and pid != _act.actor and only is None:
             _held = _told_content(_act)   # the `Said` the act carries -- fixed at CHOOSE
             _held_stem = str(_held.predicate).partition(":")[0] if _held is not None else None
             if (_held is not None
@@ -998,6 +1197,24 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     if regime:
                         tc = _credit(w, tc, pid, _act.actor, regime, conf)
                     _deposit(p, tc, e)
+                    # B11.22 (`08_FI_06` edit 3): A DEED TOLD WITH ITS HAND DEPOSITS THE HAND -- one told `seen` claim on the same subject, `when`, `lap`,
+                    # source and CHAIN as the deed claim just deposited, which is the key `person_q.deed_doer` pairs a told deed on (`_seen_index`'s fifth
+                    # index); through the same guard, refraction and credit. At `Partial` the copy withholds `who` (`_told_pairing`), so a garbled report
+                    # says that it happened and not who. `_held.pairing` is carried only by a `Said` `said_of` made at `told_pairing` `on`.
+                    _pairing = getattr(_held, "pairing", None)
+                    if _pairing is not None:
+                        _pv = _told_pairing(e, _pairing)
+                        if not any(c.subject == _held.subject and c.predicate == SEEN_PREDICATE and c.value == _pv
+                                   and (not c.chain or c.chain[0] == _origin) for c in p.ledger):
+                            pc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}:seen"),
+                                       pid, _held.subject, SEEN_PREDICATE, _pv, w.tick,
+                                       "told_by", _held.confidence, _circle or "own", self.lap,
+                                       chain=_held.chain + (_act.actor,))
+                            if refracting:
+                                pc = _refract(pc, p, channel, gain, fx=cfx)
+                            if regime:
+                                pc = _credit(w, pc, pid, _act.actor, regime, conf)
+                            _deposit(p, pc, e)
                 # B21.18 (A-21; the entry's ASSUMPTION, read here: this branch passes the one `Said` and no content beside
                 # it): A TELLING ABOUT A PROCLAIMED DOCUMENT CARRIES ITS TERMS -- a second told claim on the same telling,
                 # `(record, "content:<kind>", <subject_matter, frozen>)` read off the Record as the fourth deposit reads it,

@@ -17,13 +17,13 @@ from __future__ import annotations
 import random
 from dataclasses import fields, is_dataclass, replace
 from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, degree_from_net
-from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, pool_of
+from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
+from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
                             ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
                             SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
-                            require_member, require_use_site, task_share, when_holds)
+                            require_member, require_use_site, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -40,7 +40,8 @@ from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMEN
 from ..data.affiliations import engagement
 from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import pool_pair
-from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE, arranged_by, topic_of
+from ..seam.wrappers.edge import site_net_sigma
+from ..seam.wrappers.sigma import arranged_by, topic_of
 from ..queries.inputs import Beat, Outcome
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
@@ -506,12 +507,17 @@ def _fold(self, w: "World", token: Token, a: Act,
     _fed = resolution.result.get("fed_by", ()) if resolution is not None and isinstance(resolution.result, dict) else ()
     _shown = skill_shown_observed(w.persons[a.actor], _fed, _degree) if _fed and a.actor in w.persons else ()
 
+    # B11.71 (`08_FI_03` §2): WHAT THE ACT LOOKED AT BESIDE ITS PRECONDITION -- the row's `observes:`, read by the fold's `WorldReader` once the act is admitted
+    # (a refusal looked at nothing: `refuse` carries the gating reads alone) and rebound below like `verdict`. It rides every Event `ev` builds, after the gating
+    # reads, at EVERY band: which of these a band deposits is `finding_terms`'s, decided at WITNESS, and a failed look still carries them (they are the world's
+    # facts, not a deposit). `()` for every row that declares none, so those Events are byte-identical.
+    looked: tuple = ()
     # B24p.20: A SITTING THAT WAS HELD IS WRITTEN ON EVERY EVENT THE ACT EMITS, a refusal after it too (A-81: no end of a proceeding leaves the stage bare);
     # `()` for every act no proceeding resolved.
     _sitting = _proceeding_ending(resolution)
 
     def ev(kinds, changes=None):
-        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + _shown, _sitting)
+        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + looked + _shown, _sitting)
 
     def refuse(kinds):
         # B07.10: a refusal is a precondition failed, never an outcome (04 §C.4), so a task act's refusal carries no band.
@@ -525,6 +531,8 @@ def _fold(self, w: "World", token: Token, a: Act,
     _ok, _refusal_kinds, verdict = self._admits(w, a, row)
     if not _ok:
         return refuse(_refusal_kinds)
+    if row.observes:
+        looked = WorldReader(w, a.actor).looks(row, binding_from_act(a))
     # B07.05 (18-A "The resolution, decided" 4, A-81): A LOST DRAW WRITES NOTHING AND EMITS THE ROW'S `draw` CLAUSE. A drawn
     # `task` row at a band whose share is zero (`task_share`, `rosters.yaml: task_fraction`; no band named here) folds to its
     # keyed `emits_on_refusal` clause `draw` (`<verb>.failed`), stamped with the band, before any effect runs: the act was
@@ -1004,12 +1012,9 @@ _CRISIS_SITE = require_use_site("crisis")  # the `capability_use_sites` site who
 
 
 def _crisis_net_sigma(w: "World", p: Any) -> float:
-    """THE READER OF `capability_use_sites: crisis` (B10.15, A-7): the net sigma the person in crisis rolls with. The site's `edge` rows (the shipped one keys
-    his Spirit, `per: mid`) are selected as the social roll's are (`when_holds`) and each read at the value he holds, then summed by the ONE `edge` reader
-    (`sigma.ADVANTAGE_SOURCES["capability"]`) into named levels for or against him and by `levels_to_net_sigma` into a sigma. A person who holds no value reads the
-    scale's mid-point: no step. `0.0` where the site has no row."""
-    reads = tuple((r, r.key, (p.attributes or {}).get(r.key)) for r in capability_rows(_CRISIS_SITE) if r.role == "edge" and when_holds(r, p))
-    return levels_to_net_sigma(*ADVANTAGE_SOURCES[CAPABILITY](w.fixtures, {EDGE: reads}))
+    """THE READER OF `capability_use_sites: crisis` (B10.15, A-7): the net sigma the person in crisis rolls with -- `seam/wrappers/edge.py::site_net_sigma` at the crisis site
+    (his Spirit, `per: mid`; the one reader the notice site's map uses for its own)."""
+    return site_net_sigma(w, p, _CRISIS_SITE)
 
 
 def _crisis_obstacle(w: "World", p: Any, x: str) -> float:

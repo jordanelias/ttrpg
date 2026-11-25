@@ -691,7 +691,7 @@ def test_a_move_reads_each_record_s_about_key_and_no_other():
     w = _world()
     w.records["rec_sheet"] = Record("rec_sheet", "S", "faction_sheet", subject_matter={
         "proposition": "prop_x", "members": [], "holdings": [], "seats": [], "head": None})
-    w.records["rec_cover"] = Record("rec_cover", "S", "cover", subject_matter={"terms": "S3"})
+    w.records["rec_cover"] = Record("rec_cover", "S", "cover", subject_matter={"terms": "S3", "as": None})
     w.records["rec_disp"] = Record("rec_disp", "S", "dispensation", subject_matter={"terms": "S2", "to": "p_low",
                                                                                      "at": "S", "force": None})
     assert ABOUT_KEYS["faction_sheet"] != "terms" and "cover" not in ABOUT_KEYS

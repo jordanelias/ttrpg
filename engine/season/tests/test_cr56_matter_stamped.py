@@ -26,7 +26,7 @@ from ..data.verbs import CONVENING_REMIT_ACTS
 from ..decision import opening_set
 from ..loop.driver import mint_token
 from ..queries import world_q
-from ..state.carriers import Office, Tenure, View
+from ..state.carriers import Claim, Office, Tenure, View
 from .test_u7_remit import DUKE, OUTSIDER, PARTY, SEAT, _act, _fold, _kinds, _open, _world
 
 
@@ -49,9 +49,22 @@ def _convene_subjects(w, pid):
     return q, {c.subject for c in opening_set(p, view, q, w.fixtures) if c.verb == "convene"}
 
 
-def _plant(w, matter):
+def _plant(w, matter, monkeypatch=None, hearer=DUKE):
+    """A person-matter waiting on the docket with no Event behind it. v12 B11.08 (`08_FI_01` edit 5): the convener is offered a venue for it
+    only where his own ledger holds a claim of its docketing, so `monkeypatch` (given) plants that claim and the docketing it names:
+    the tier logic these tests read is then the only thing between the matter and the stamp."""
     w.docket.append({"date": None, "matter": matter, world_q.DOCKET_ARRANGEMENT: None,
                      world_q.DOCKET_PETITION: None})
+    if monkeypatch is not None:
+        cid, real = f"c_docketed_{matter}", world_q.docketed_by
+        w.persons[hearer].ledger.append(Claim(cid, hearer, hearer, sorted(world_q.DOCKETING_KINDS)[0], True, 0, "firsthand", 100, "own"))
+        monkeypatch.setattr(world_q, "docketed_by", lambda w_, c: (matter,) if c.id == cid else real(w_, c))
+
+
+def _witnessed(w, d, out):
+    """The Events `out` WITNESSed: the docketing claim lands in the ledger of whoever the channels reach (the actor, firsthand)."""
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    return out
 
 
 # ======================================================================================
@@ -68,8 +81,11 @@ def test_a_waiting_matter_stamps_its_tier_and_convene_forms_there_and_not_before
     assert world_q.matters_awaiting(w, w.persons[DUKE]) == ()
     q, subjects = _convene_subjects(w, DUKE)
     assert ("D", "Rung") not in q.classes and "D" not in subjects, (q.classes, subjects)
-    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]          # no slot open: a dateless item
+    out = _fold(w, d, _open("oc"))
+    assert _kinds(out) == ["case.opened"]                               # no slot open: a dateless item
     assert world_q.undated_matters(w) == [w.docket[0]] and w.docket[0]["matter"] == PARTY
+    assert world_q.matters_awaiting(w, w.persons[DUKE]) == ()           # CONTROL (v12 B11.08): docketed, and he has not yet heard it
+    _witnessed(w, d, out)
     assert world_q.matters_awaiting(w, w.persons[DUKE]) == ("D",)
     q, subjects = _convene_subjects(w, DUKE)
     assert ("D", "Rung") in q.classes and "D" in subjects, (q.classes, subjects)
@@ -77,13 +93,13 @@ def test_a_waiting_matter_stamps_its_tier_and_convene_forms_there_and_not_before
     assert world_q.matters_awaiting(w, w.persons[PARTY]) == ()
 
 
-def test_of_two_convening_seats_the_lowest_that_contains_the_matter_is_stamped():
+def test_of_two_convening_seats_the_lowest_that_contains_the_matter_is_stamped(monkeypatch):
     w, d = _world()
     w.offices["off_crown"] = Office("off_crown", "Crown", "R", ["convene"], faction="Valorsmark")
     w.add_tenure(Tenure("t_crown", DUKE, "off_crown", "hold", since=0))
-    _plant(w, PARTY)                          # in Hh < S < D < R: both seats contain it, D is lower
+    _plant(w, PARTY, monkeypatch)             # in Hh < S < D < R: both seats contain it, D is lower
     assert world_q.matters_awaiting(w, w.persons[DUKE]) == ("D",)
-    _plant(w, OUTSIDER)                       # in R alone: only the Crown's seat contains it
+    _plant(w, OUTSIDER, monkeypatch)          # in R alone: only the Crown's seat contains it
     assert world_q.matters_awaiting(w, w.persons[DUKE]) == ("D", "R")
 
 
@@ -100,7 +116,7 @@ def test_a_matter_outside_every_conveners_seat_is_not_stamped_and_stays_undated(
 def test_the_stamp_displaces_no_question(monkeypatch):
     """The entry's stop condition: the stamp rides the question he answers and reorders nothing."""
     w, d = _world()
-    _plant(w, PARTY)
+    _plant(w, PARTY, monkeypatch)
     duke = w.persons[DUKE]
     with_stamp = world_q.questions_for(w, duke)
     monkeypatch.setattr(world_q, "matters_awaiting", lambda w_, p_: ())

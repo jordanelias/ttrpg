@@ -409,9 +409,10 @@ def test_an_undecided_fight_is_witnessed_by_those_present():
         held = {p.id: [c for c in p.ledger if c.predicate == kind] for p in w.persons.values()}
         for pid in (ACTOR, SUBJECT):                                              # each party holds his own claim
             assert held[pid], (kind, pid, "a party holds no claim of his own fight")
-        present = [pid for pid in w.persons if pid not in (ACTOR, SUBJECT) and held[pid]]
+        # v12 B11.04: the `reach` channel TELLS the Event onward, so a non-party may also hold it `told_by`; those PRESENT hold it firsthand.
+        present = [pid for pid in w.persons if pid not in (ACTOR, SUBJECT) and any(c.source == "firsthand" for c in held[pid])]
         assert present, (kind, "nobody present witnessed the undecided fight")
-        assert all(c.source == "firsthand" for pid in present for c in held[pid]), (kind, held)
+        assert all(c.source in ("firsthand", "told_by") for pid in w.persons for c in held[pid]), (kind, held)
         assert [pid for pid in w.persons if not held[pid]], (kind, "everyone witnessed: the non-witness clause is vacuous")
         checked += 1
     assert checked == 2

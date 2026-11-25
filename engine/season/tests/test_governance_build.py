@@ -2932,7 +2932,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
     # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
     # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (432, 431), (      # B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
+    assert (out["acts"], cout["acts"]) == (392, 391), (      # B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what

@@ -57,14 +57,14 @@ def _world(lie_offered=True, record_gain=None):
     return w
 
 
-def _cands(w, pid=T):
+def _cands(w, pid=T, subject="Hh"):
     p = w.persons[pid]
-    q = Question("q_cr27", "claim_landed", ("Hh",), "")
+    q = Question("q_cr27", "claim_landed", (subject,), "")
     return opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
 
 
-def _candidate(w, verb, to):
-    got = [c for c in _cands(w) if c.verb == verb and c.subject == "Hh" and c.operands.get("to") == to]
+def _candidate(w, verb, to, subject="Hh"):
+    got = [c for c in _cands(w, subject=subject) if c.verb == verb and c.subject == subject and c.operands.get("to") == to]
     return got[0] if got else None
 
 
@@ -86,10 +86,10 @@ def force_sitting(m, net, ob=2):
     m.setattr(composition, "require", forced)
 
 
-def _season(monkeypatch, w, verb, to, net=3):
+def _season(monkeypatch, w, verb, to, net=3, subject="Hh"):
     """One season in which T is handed the ONE act the offered candidate makes (payload as `pack_scenes` builds
     it) and nobody else chooses; the sitting's verdicts are forced to `net` against obstacle 2. Returns the events."""
-    cand = _candidate(w, verb, to)
+    cand = _candidate(w, verb, to, subject)
     assert cand is not None, f"`{verb}` to {to} was not offered"
     d = SeasonDriver(w)                  # constructed first: the registrar fills the module table
     asked = []
@@ -197,32 +197,55 @@ def _claim(pred, value, pid="x", chain=()):
 def test_a_number_moves_one_whole_step_sign_preserving_and_never_across_zero():
     fx = DEFAULT_FIXTURES                                    # band 0.5
     got = {v: lie_said_of([_claim("stores:grain", v)], "S", fx) for v in (8, 1, -8, -1, 3, -3)}
-    assert {v: s.value for v, s in got.items()} == {8: 12, 1: 2, -8: -4, -1: -2, 3: 5, -3: -1}
-    for v, s in got.items():
-        assert s.value != v and (s.value > 0) == (v > 0), (v, s.value)
-        assert s.chain == () and s.confidence == 70 and (s.subject, s.predicate) == ("S", "stores:grain")
+    assert {v: [s.value for s in said] for v, said in got.items()} == {
+        8: [12, 4], 1: [2], -8: [-4, -12], -1: [-2], 3: [5, 1], -3: [-1, -5]}       # one `Said` per direction; a step that would reach zero is dropped, not flipped
+    for v, said in got.items():
+        assert said, v
+        for s in said:
+            assert s.value != v and (s.value > 0) == (v > 0), (v, s.value)
+            assert s.chain == () and s.confidence == 70 and (s.subject, s.predicate) == ("S", "stores:grain")
+
+
+def test_numeric_lie_forms_both_directions_on_a_quantity():
+    """B11.54: a liar of a held amount may say it moved either way -- `lie_said_of` gives one `Said` per direction (the upward whole step, then the downward), `opening_set`
+    forms one `lie` Candidate per `Said`; the control, a `tell` (a row not in `lie_verbs`), forms the one Candidate saying the held value as it holds it. A step that
+    would reach zero comes back as the upward one, so a held 1 has one false number (2), not two."""
+    fx = DEFAULT_FIXTURES                                    # band 0.5
+    assert [s.value for s in lie_said_of([_claim("stores:grain", 8)], "S", fx)] == [12, 4]
+    assert [s.value for s in lie_said_of([_claim("stores:grain", 1)], "S", fx)] == [2]
+    assert [s.value for s in lie_said_of([_claim("stores:grain", -3)], "S", fx)] == [-1, -5]
+    assert lie_said_of([_claim("stores:grain", 0)], "S", fx) == ()
+    for said in lie_said_of([_claim("stores:grain", 8)], "S", fx):
+        assert said.chain == () and said.confidence == 70 and (said.subject, said.predicate) == ("S", "stores:grain")
+    w = _world()
+    lies = [c.operands["said"].value for c in _cands(w) if c.verb == "lie" and c.operands.get("to") == KNOWNOT]
+    assert set(lies) == {4, 12} and lies.count(4) == lies.count(12), lies    # the falsifier: one direction only fails here (`in_confidence` fans each said twice)
+    tells = [c.operands["said"].value for c in _cands(w) if c.verb == "tell" and c.operands.get("to") == KNOWNOT]
+    assert tells and set(tells) == {TRUE_VALUE}, tells         # the control: a row not in `lie_verbs` is unchanged
+    ranks = [c.operands.get("said_rank") for c in _cands(w) if c.verb == "lie" and c.operands.get("to") == KNOWNOT]
+    assert set(ranks) == {0, 1}, ranks                     # distinct act ids: the rank is what `choice_values` reads
 
 
 def test_a_held_zero_a_band_of_zero_a_non_roster_value_and_a_non_cell_have_nothing_false_to_say():
     fx = DEFAULT_FIXTURES
-    assert lie_said_of([_claim("stores:grain", 0)], "S", fx) is None
-    assert lie_said_of([_claim("stores:grain", 8)], "S", fx.sweep("told_drift_band", 0)) is None
-    assert lie_said_of([_claim("held_by:p", "a string")], "S", fx) is None
-    assert lie_said_of([_claim("person.died", True)], "S", fx) is None            # a deed kind: no deed lie
-    assert lie_said_of([_claim("seen", object())], "S", fx) is None
-    assert lie_said_of([], "S", fx) is None
+    assert lie_said_of([_claim("stores:grain", 0)], "S", fx) == ()
+    assert lie_said_of([_claim("stores:grain", 8)], "S", fx.sweep("told_drift_band", 0)) == ()
+    assert lie_said_of([_claim("held_by:p", "a string")], "S", fx) == ()
+    assert lie_said_of([_claim("person.died", True)], "S", fx) == ()            # a deed kind: no deed lie
+    assert lie_said_of([_claim("seen", object())], "S", fx) == ()
+    assert lie_said_of([], "S", fx) == ()
 
 
 def test_a_truth_value_becomes_the_other_member_of_its_roster():
     fx = DEFAULT_FIXTURES
-    assert lie_said_of([_claim("held_by:p", True)], "S", fx).value is False
-    assert lie_said_of([_claim("held_by:p", False)], "S", fx).value is True
+    assert [s.value for s in lie_said_of([_claim("held_by:p", True)], "S", fx)] == [False]
+    assert [s.value for s in lie_said_of([_claim("held_by:p", False)], "S", fx)] == [True]
 
 
 def test_a_cell_is_lied_about_even_when_a_deed_is_the_teller_s_newest_claim():
     deed = Claim("c_deed", "x", "S", "news.told", True, 9, "firsthand", 99, "own")
     got = lie_said_of([_claim("stores:grain", 8), deed], "S", DEFAULT_FIXTURES)
-    assert got is not None and got.predicate == "stores:grain" and got.value == 12
+    assert got and {s.predicate for s in got} == {"stores:grain"} and [s.value for s in got] == [12, 4]
 
 
 def test_the_liars_number_and_the_channels_lossy_copy_are_one_rule(monkeypatch):
@@ -235,7 +258,7 @@ def test_the_liars_number_and_the_channels_lossy_copy_are_one_rule(monkeypatch):
     monkeypatch.setattr(W, "drifted", lambda *a, **k: "owner")
     monkeypatch.setattr(PQ, "drifted", lambda *a, **k: "owner")
     assert W._told_value(w, "p_mid", ev, held) == "owner"
-    assert lie_said_of([held], "S", DEFAULT_FIXTURES).value == "owner"
+    assert [s.value for s in lie_said_of([held], "S", DEFAULT_FIXTURES)] == ["owner"]
 
 
 # ---- the knowledge-model fold's second falsifier (ED-IN-0327) -----------------------------------
@@ -251,7 +274,7 @@ def _two_hear_a_lie(competence_gain):
     for pid, a in ((HOLDER, 2), (KNOWNOT, 6)):
         w.persons[pid].attributes = {next(r.key for r in capability_uses() if r.use == "told_claim_credit"): a}
     act = Act(id="a_lie_cr27", actor=T, verb="lie",
-              payload={"subject": "Hh", "said": lie_said_of(w.persons[T].ledger, "Hh", w.fixtures)})
+              payload={"subject": "Hh", "said": lie_said_of(w.persons[T].ledger, "Hh", w.fixtures)[0]})
     w.acts.append(act)
     ev = Event(H(w.world_seed, w.tick, T, f"ev:news.told:{act.id}"), "news.told", [], [act.id], w.tick, "Success", ())
     w.log.append(ev)
@@ -282,3 +305,141 @@ def test_a_lie_told_to_attunement_2_and_6_at_a_live_gain_is_held_higher_by_the_o
     as it is)."""
     got = _two_hear_a_lie(0.5)
     assert got[KNOWNOT] > got[HOLDER], got
+
+
+# ---- a rumour garbles only an amount (v12 B11.51, `16_PESSIMIST_FI_A` edits 1-3) ----------------------------------
+
+def _partial_telling(w, hearer, held, n):
+    """What `hearer` receives when the `n`th `Partial` telling of `held` reaches him (a distinct event id per hop, so a distinct draw)."""
+    return W._told_value(w, hearer, Event(f"ev_hop{n}", "news.told", [], [f"a_hop{n}"], 0, "Partial", ()), held)
+
+
+def test_the_quantity_stems_are_what_the_table_compares_against_a_threshold():
+    """`QUANTITY_STEMS` is derived: the cell stems a `scalar_threshold` clause carries; an existence reading, a deed and a `seen` are in no row's threshold."""
+    from ..data.verbs import QUANTITY_STEMS
+    assert {"stores", "condition"} <= QUANTITY_STEMS
+    assert not QUANTITY_STEMS & {"exists", "person.died", "seen", "held_by"}, sorted(QUANTITY_STEMS)
+
+
+def test_unshared_first_prefers_a_deed_to_a_quantity_to_an_existence_reading():
+    """B11.52: at `unshared_first` a teller holding a deed claim (OLDEST), a `stores` amount and a NEWER `exists:Person` reading says the deed; with the deed removed,
+    the amount, not the newer existence reading (an existence reading is in `QUANTITY_STEMS`' complement, so it falls in `other`); at `newest` (the control) the newest."""
+    from ..data.verbs import DEED_KINDS, QUANTITY_STEMS
+    transport = {k for v in ("tell", "lie") for k in (*VERB_TABLE[v].emits, *VERB_TABLE[v].emits_on_refusal)}
+    deed = sorted(DEED_KINDS - transport)[0]
+    assert "exists" not in QUANTITY_STEMS and "stores" in QUANTITY_STEMS
+
+    def claim(n, predicate, value, when):
+        return Claim(f"c{n}", "T", "S", predicate, value, when, "firsthand", 100, "own")
+    d, q, e = claim(1, deed, True, 1), claim(2, "stores:grain", 8, 3), claim(3, "exists:Person", 1, 5)
+    fx = DEFAULT_FIXTURES.sweep("said_slant", "unshared_first")
+    assert said_of([d, q, e], "S", fx).predicate == deed
+    assert said_of([q, e], "S", fx).predicate == "stores:grain"
+    assert said_of([e], "S", fx).predicate == "exists:Person"                       # an existence reading is still said when it is all he holds (`other`)
+    assert said_of([d, q, e], "S", DEFAULT_FIXTURES).predicate == "exists:Person"     # the control: `newest`
+
+
+def test_partial_told_deed_withholds_the_hand(monkeypatch):
+    """B11.53: a hearer of a deed at a band holds what a FINDER at that band holds -- the sighting names the hand where `rosters.yaml: finding_terms`' row shows
+    `HAND_TERM`, and names nobody where it does not (`loop/witness.py::_told_pairing` reads that one table). Through the WITNESS barrier: W saw K kill V and tells J at
+    each band the telling emits at; J names K as the doer, or nobody. Then the table PLANTED (`Success` loses the hand) and the same telling names nobody."""
+    from ..data.rosters import FINDING_TERMS
+    from .test_told_pairing import J, K, _doers, _world
+    bands = sorted(set(VERB_TABLE["tell"].emits_by_degree) & set(FINDING_TERMS))
+    assert W.HAND_TERM in FINDING_TERMS["Success"] and W.HAND_TERM not in FINDING_TERMS["Partial"], FINDING_TERMS      # the shipped table the bands read
+    assert len(bands) >= 2, bands
+    for band in bands:
+        w, tell, _claims = _world("on")
+        tell("p_low", K, band)
+        assert _doers(w, J) == ((K,) if W.HAND_TERM in FINDING_TERMS[band] else ()), (band, _doers(w, J))
+    with monkeypatch.context() as m:                                   # the falsifier: one table, so moving a row moves the hearer
+        m.setitem(FINDING_TERMS, "Success", tuple(t for t in FINDING_TERMS["Success"] if t != W.HAND_TERM))
+        w, tell, _claims = _world("on")
+        tell("p_low", K, "Success")
+        assert _doers(w, J) == (), _doers(w, J)
+
+
+def test_existence_lie_is_a_negation():
+    """A lie about an existence reading says the other truth value (`0` for `1`, `1` for `0`), never a whole-band drift of it (`2`)."""
+    fx = DEFAULT_FIXTURES
+    assert [s.value for s in lie_said_of([_claim("exists:Person", 1)], "S", fx)] == [0]
+    assert [s.value for s in lie_said_of([_claim("exists:Person", 0)], "S", fx)] == [1]       # a held 0 has a false thing to say here, unlike an amount
+    for v in (0, 1):
+        (got,) = lie_said_of([_claim("exists:Record", v)], "S", fx)
+        assert got.value in (0, 1) and got.value != v and (got.subject, got.predicate) == ("S", "exists:Record")
+    assert [s.value for s in lie_said_of([_claim("stores:grain", 8)], "S", fx)] == [12, 4]      # the control: an amount moves one whole step each way
+
+
+def test_partial_telling_passes_an_existence_reading_whole():
+    """`(King, exists:Person, 1)` told at `Partial` down a six-hop chain reads `1` at every hop, at every hearer; no existence reading leaves {0, 1}."""
+    w = P.tiny_world()
+    held = Claim("c_king", "p_low", "p_king", "exists:Person", 1, 0, "firsthand", 80, "own")
+    seen = []
+    for hearer in ("p_mid", "p_high", "p_other"):
+        for hop in range(6):
+            held = dataclasses.replace(held, value=_partial_telling(w, hearer, held, hop))
+            seen.append(held.value)
+        held = dataclasses.replace(held, value=1)
+    assert len(seen) == 18 and set(seen) == {1}, seen
+    assert _partial_telling(w, "p_mid", Claim("c_k0", "p_low", "p_king", "exists:Person", 0, 0, "firsthand", 80, "own"), 0) == 0
+
+
+def test_quantity_still_drifts_on_a_partial_telling():
+    """The control, green before and after: an amount on a quantity stem is moved at `Partial` by `drifted`'s own rule, the grain rows as they were."""
+    w = P.tiny_world()
+    band = w.fixtures.get("told_drift_band")
+    for stem, v in (("stores:grain", 8), ("condition", 3), ("stores:grain", -8)):
+        held = Claim("c_q", "p_low", "S", stem, v, 0, "firsthand", 80, "own")
+        got = [_partial_telling(w, "p_mid", held, n) for n in range(12)]
+        assert any(g != v for g in got), (stem, got)
+        ev = Event("ev_hop0", "news.told", [], ["a_hop0"], 0, "Partial", ())
+        sel = int(H(w.world_seed, w.tick, "p_mid", f"told:{ev.id}"), 16)
+        assert got[0] == drifted(v, band, sel), (stem, got[0])
+
+
+def test_a_hand_built_lie_on_a_man_s_existence_declines_the_hearers_challenge_only_as_the_negation_it_is(monkeypatch):
+    """`p1c_exists.py` (i), the lie produced by a hand-built `lie` and not a plant: T tells HOLDER `(p_other, exists:Person, v)`. After the lie HOLDER holds the
+    negation `0` and his own ledger contradicts a `challenge` on `p_other` (§F1 clause 4: no such Candidate forms); after a `tell` (the control) he holds `1`
+    and it does not. Before B11.51 the lie said `2`, which `exists` reads as `>= 1` -- a lie that declined nothing."""
+    def hearer_declines_the_challenge(verb):
+        w = _world()
+        w.persons[T].ledger[:] = [c for c in w.persons[T].ledger if (c.subject, c.predicate) != ("p_other", "exists:Person")]
+        w.persons[T].ledger.append(Claim("c_exists", T, "p_other", "exists:Person", 1, 0, "firsthand", 80, "own"))   # the reading a refused act's observation deposits: 0/1
+        _season(monkeypatch, w, verb, HOLDER, subject="p_other")
+        told = [c for c in w.persons[HOLDER].ledger if c.source == "told_by" and (c.subject, c.predicate) == ("p_other", "exists:Person")]
+        assert len(told) == 1, told
+        return told[0].value, PQ.belief_contradicts(w.persons[HOLDER], VERB_TABLE["challenge"], "p_other", {"subject": "p_other"})
+    assert hearer_declines_the_challenge("lie") == (0, True)
+    assert hearer_declines_the_challenge("tell") == (1, False)
+
+
+# ---- a hearer who knows the figure hears it as he holds it (v12 B11.55, `16_PESSIMIST_SC_E` edit 1) ----------------
+
+def test_knower_hears_true_on_a_partial_telling(monkeypatch):
+    """B11.55: a `Partial` telling of an amount (net 2 against obstacle 2) to a hearer who holds that cell FIRSTHAND is heard as he holds it: no copy lands (the told deposit
+    would be his own claim, and the exact-triple guard drops it), and his `record` of the teller does not fall, whether the teller was honest (`tell`: 8) or a liar (`lie`: 12). A hearer
+    who holds nothing on the cell still receives the drifted copy, so the arm touches the knower and nobody else."""
+    for verb in ("tell", "lie"):
+        w = _world(record_gain=0.5)
+        evs = _season(monkeypatch, w, verb, HOLDER, net=2)
+        assert [e.degree for e in evs if e.kind == "news.told"] == ["Partial"], [(e.kind, e.degree) for e in evs]
+        assert _told(w, HOLDER) == [], (verb, [(c.value, c.chain) for c in _told(w, HOLDER)])
+        assert record(w.persons[HOLDER], T, w.fixtures) >= 1.0, verb
+    for verb in ("tell", "lie"):
+        got = []
+        for arm in (True, False):
+            w = _world(record_gain=0.5)
+            w.fixtures = w.fixtures.sweep("knower_hears_true", arm)
+            _season(monkeypatch, w, verb, KNOWNOT, net=2)
+            got.append([c.value for c in _told(w, KNOWNOT)])
+        assert got[0] == got[1] and len(got[0]) == 1 and got[0][0] != (TRUE_VALUE if verb == "tell" else 12), (verb, got)   # the drifted copy, either arm
+
+
+def test_knower_hears_true_false_reproduces_todays_branch(monkeypatch):
+    """The control: `knower_hears_true` False hands a knower the drifted copy, as before the arm -- an honest `tell` of 8 reaches him as 5 and his `record` of the teller falls below 1.0
+    (the falsifier: a landed truthful telling after which the hearer's `record` of the teller is below 1.0)."""
+    w = _world(record_gain=0.5)
+    w.fixtures = w.fixtures.sweep("knower_hears_true", False)
+    _season(monkeypatch, w, "tell", HOLDER, net=2)
+    assert [c.value for c in _told(w, HOLDER)] == [5], [(c.value, c.chain) for c in _told(w, HOLDER)]
+    assert record(w.persons[HOLDER], T, w.fixtures) < 1.0

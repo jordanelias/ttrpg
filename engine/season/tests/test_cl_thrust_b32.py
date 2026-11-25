@@ -44,6 +44,7 @@ from ..queries import world_q
 from ..state.carriers import Claim, Person, Proposition, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
+from .test_fi_referents import hears_of
 
 SEAT = "off_king"
 OWN = "thing_own"             # an object of his own live `hold`: a claim about it is a tier-1 question
@@ -101,6 +102,8 @@ def _world(ledger, holders=("p_a",), pursuits=None):
     o.tenures.append(Tenure("t_commit_p_o", "p_o", THRONE, "commit", 0))
     o.tenures.append(Tenure("t_hold_own", "p_o", OWN, "hold", 0))
     o.ledger = list(ledger) + [_claim("c_own_seat", "p_o", OWN, "office.changed")]
+    for h in holders:
+        hears_of(o, SEAT, h, when=-2)       # v12 B11.08: who holds the seat is the claims he holds of it, long known
     if pursuits:
         o.pursuits = dict(pursuits)
     return w
@@ -148,7 +151,10 @@ def test_a_person_whose_own_ledger_passes_every_stage_has_no_open_stage_and_no_s
     w = _world(_passing())
     assert world_q.current_stage(w, w.persons["p_o"], THRONE) is None
     assert world_q.stage_referents(w, w.persons["p_o"]) == ()
-    assert ("p_a", "Person") not in _classed(_answered(w)[0])
+    # v12 B11.08: the stage claims about `p_a` are now questions of their own (a claim about a person is admitted on what he holds of him), whose own
+    # plain referent `p_a` is stamped as its class; so the absence of a STAGE stamp is read on the questions that do not name him.
+    others = [q for q in _answered(w) if "p_a" not in q.referents]
+    assert others and all(("p_a", "Person") not in _classed(q) for q in others)
 
 
 def test_a_person_who_has_passed_the_first_stage_only_is_still_stamped_on_the_second(staged):

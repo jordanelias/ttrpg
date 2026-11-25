@@ -101,11 +101,12 @@ def test_a_cohort_forms_none_of_the_individual_rows():
     assert admitted_cast == set(_INDIVIDUAL_ROWS), set(_INDIVIDUAL_ROWS) - admitted_cast
     assert admitted_cohort == set(), admitted_cohort
     # and at formation (B10.59's reader): handed one question about a person, the two differ by exactly the rows
-    # carrying the conjunct -- `challenge` is formed only on a `Disputant` referent, so it is not on this question
+    # carrying the conjunct -- `challenge` is formed only on a `Disputant` referent and (B11.59) `sabotage` only on a `Site`
+    # one, so neither is on this question; their `individual` conjunct is read by the admission half above
     q = Question("q:offer", "claim_landed", (B,), None, ((B, "Person"),))
     formed = {pid: {c.verb for c in opening_set(w.persons[pid], assemble(w.persons[pid], q, 12), q, w.fixtures)}
               for pid in (A, "p_folk")}
-    rows = set(_INDIVIDUAL_ROWS) - {"challenge"}
+    rows = set(_INDIVIDUAL_ROWS) - {"challenge", "sabotage"}
     assert rows <= formed[A], rows - formed[A]
     assert not rows & formed["p_folk"], rows & formed["p_folk"]
     assert formed[A] - formed["p_folk"] == rows, (formed[A] - formed["p_folk"]) ^ rows

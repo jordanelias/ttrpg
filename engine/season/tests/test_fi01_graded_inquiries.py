@@ -93,11 +93,11 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
     # B07.05 ships the arm on, so every armed route is live at the shipped fixtures; the three CARRIED inquiries are the routes live with it off.
     live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES.sweep("task_draw_arm", "off")) is not None}
     assert live == set(GRADED), sorted(live)
-    assert UNDEPOSITED_KINDS == frozenset({"finding.none"}), UNDEPOSITED_KINDS
+    assert UNDEPOSITED_KINDS == frozenset({"finding.none", "inquiry.refused"}), UNDEPOSITED_KINDS   # B11.12: the refusal is its own kind
     for verb in GRADED:
         row = VERB_TABLE[verb]
         assert set(row.emits_by_degree) == {"Overwhelming", "Success", "Partial", "Failure"}, verb
-        assert row.emits_at("Failure") == ("finding.none",) and "finding.none" in row.emits_on_refusal
+        assert row.emits_at("Failure") == ("finding.none",) and "inquiry.refused" in row.emits_on_refusal
     off = DEFAULT_FIXTURES.sweep("task_draw_arm", "off")
     for verb in (PROMPT, *WAITING):
         assert graded_route(verb, off) is None and not VERB_TABLE[verb].emits_by_degree, (
@@ -106,18 +106,18 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
         assert graded_route(verb, off) is None and graded_route(verb, DEFAULT_FIXTURES) is not None, verb
 
 
-def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
-    """THE SKIP ARM, ON A SEEDED CASE. `research` at the shipped fixtures (`pool_default` 2 against the
+def test_a_failed_inquiry_deposits_no_finding_none_claim_and_news_untold_still_does():
+    """THE SKIP ARM, ON A SEEDED CASE (B11.61, CP-T06-04: `undeposited_kinds` now means *no event-kind claim*; the Event's other deposits go
+    as for any Event). `research` at the shipped fixtures (`pool_default` 2 against the
     module's stand-in `opposed_ob(pool_default, opposition_rate)`): the act ids are swept until one draws `Failure` and one draws a finding
     band; each is resolved through the real driver and witnessed. The `Failure` act emits `finding.none`
-    with the degree on it and NOTHING lands in any ledger -- no `claim.deposited` names it; the finding
-    act's `finding.made` does deposit (the arm reads the kind, not the act). A REFUSED research (no such
-    Record) likewise deposits nothing. THE CONTROL: a refused `tell` (`tell.refused`, a keyed kind `tell`
-    declares; `news.untold` before CP-T05-03) deposits as before.
+    with the degree on it and NO LEDGER HOLDS A `finding.none` CLAIM -- the event-kind claim is the one a rolled Failure never makes; the finding
+    act's `finding.made` does deposit it (the arm reads the kind, not the act). A REFUSED research (no such
+    Record) likewise holds no `inquiry.refused` claim, and its actor holds what the refusal read. THE CONTROL: a refused `tell`
+    (`tell.refused`, a keyed kind `tell` declares; `news.untold` before CP-T05-03) deposits its event-kind claim as before.
 
-    MUTATION (run 2026-10-17, reverted): `undeposited_kinds` emptied in `loop/witness.py`'s filter (the
-    `events = [...]` line made a no-op) -- the failed research deposits, and the first ledger assertion
-    goes RED."""
+    MUTATION (run 2026-10-17, reverted; re-run at B11.61): `undeposited_kinds` emptied in `loop/witness.py` (the event-kind skip made a no-op) --
+    the failed research deposits its `finding.none` claim, and the first ledger assertion goes RED."""
     found: dict = {}
     for n in range(60):
         w, d = _world()
@@ -134,8 +134,9 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     (ev,) = out
     assert (ev.kind, ev.degree) == ("finding.none", "Failure"), (ev.kind, ev.degree)
     before, after = _witness(w, d, out)
-    assert before == after, "a Failure inquiry deposited a claim"
-    assert not _deposits_caused_by(w, ev.id), "a `claim.deposited` names the `finding.none`"
+    # B11.61: no `finding.none` claim anywhere -- the event-kind claim is skipped for the actor and every bystander alike.
+    assert not [c for p in w.persons.values() for c in p.ledger if c.predicate == "finding.none"], "a Failure inquiry deposited its event-kind claim"
+    assert before[ACTOR] != after[ACTOR] and _deposits_caused_by(w, ev.id), "the Failure inquiry taught its actor nothing"
 
     w, d, out = found["finding"]
     (ev,) = out
@@ -149,9 +150,10 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     w, d = _world()
     gone = Act(id="a_fi01_research_gone", actor=ACTOR, verb="research", payload={"subject": "rec_none"})
     out = _resolve(w, d, gone)
-    assert [(e.kind, e.degree) for e in out] == [("finding.none", None)], [(e.kind, e.degree) for e in out]
+    assert [(e.kind, e.degree) for e in out] == [("inquiry.refused", None)], [(e.kind, e.degree) for e in out]
     before, after = _witness(w, d, out)
-    assert before == after and not _deposits_caused_by(w, out[0].id), "a refused inquiry deposited"
+    assert not [c for p in w.persons.values() for c in p.ledger if c.predicate == "inquiry.refused"], "a refused inquiry deposited its event-kind claim"
+    assert before[ACTOR] != after[ACTOR], "the refused inquiry taught its actor nothing"
 
     # THE CONTROL: a telling to an absent hearer is refused `tell.refused` (T4) and still deposits.
     w = P.tiny_world()
@@ -166,6 +168,39 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     _witness(w, d, out)
     assert _deposits_caused_by(w, out[0].id), "`tell.refused` stopped depositing -- the skip widened"
     assert any(c.predicate == "tell.refused" for p in w.persons.values() for c in p.ledger)
+
+
+def test_a_refused_examine_teaches_the_refusing_read_and_does_not_re_form():
+    """B11.61 (CP-T06-04's falsifier): a hand-built `examine` by a person NOT PRESENT at the Site is refused (`inquiry.refused`). WITNESS
+    deposits no event-kind claim for it, but its other deposits go as for any Event: the examiner's ledger holds the refusing `present_at` read
+    -- and no `finding.none` or `inquiry.refused` claim -- and his next deliberation declines `examine` on that Site while he is absent
+    (`belief_contradicts`, §F1 clause 4: the candidate the chooser forms, read against his own ledger); a person at his place holds
+    `seen{who: examiner}` and none of his reads. CONTROL: before the act the same ledger contradicts nothing, so the candidate was forming.
+    MUTATION (run at B11.61, reverted): the whole-Event skip (`events` filtered of `undeposited_kinds` at every arm) -- the refusal leaves
+    nothing, the first assertion goes RED, and the act re-forms."""
+    from ..queries.person_q import belief_contradicts
+
+    site, row, examiner, bystander = "site_fi61", VERB_TABLE["examine"], ACTOR, "p_mid"
+    w = P.tiny_world()
+    w.sites[site] = Site(site, "S", "ruin", condition=500)          # the Site is at `S`; the examiner lives at `Hh`
+    d = SeasonDriver(w)
+    ops = {"site": site, "subject": site}
+    assert not belief_contradicts(w.persons[examiner], row, site, ops), "the control: before the refusal nothing contradicts the act"
+    out = _resolve(w, d, Act(id="a_fi61_examine", actor=examiner, verb="examine", payload=dict(ops)))
+    assert [(e.kind, e.degree) for e in out] == [("inquiry.refused", None)], [(e.kind, e.degree) for e in out]
+    _witness(w, d, out)
+
+    mine = w.persons[examiner].ledger
+    assert any(c.subject == site and c.predicate == f"present_at:{examiner}" and c.value is False and c.firsthand for c in mine), \
+        [(c.subject, c.predicate, c.value) for c in mine]
+    assert not [c for p in w.persons.values() for c in p.ledger if c.predicate in ("finding.none", "inquiry.refused")]
+    assert belief_contradicts(w.persons[examiner], row, site, ops), "the refusal taught him nothing: the act re-forms"
+
+    # the bystander at the examiner's place saw WHO tried, and read nothing the examiner read
+    seen = [c for c in w.persons[bystander].ledger if c.predicate == "seen" and getattr(c.value, "who", None) == examiner]
+    assert seen, [(c.subject, c.predicate) for c in w.persons[bystander].ledger]
+    assert not [c for c in w.persons[bystander].ledger if c.subject == site], "a bystander holds the examiner's reads"
+    assert not belief_contradicts(w.persons[bystander], row, site, ops)
 
 
 def test_the_route_is_not_readable_as_a_prize():
@@ -291,7 +326,7 @@ def test_an_inquiry_admits_before_it_rolls():
     with mock.patch.dict(MODULE_ENTRIES, {"social_contest.roll": dataclasses.replace(
             real, fn=lambda inp, rng: called.append(inp) or Margin(net=0, ob=2))}):
         out = _resolve(w, d, a)
-    assert not called and [e.kind for e in out] == ["finding.none"], (called, [e.kind for e in out])
+    assert not called and [e.kind for e in out] == ["inquiry.refused"], (called, [e.kind for e in out])
 
 
 def test_the_realm_grades_inquiries_in_one_season():

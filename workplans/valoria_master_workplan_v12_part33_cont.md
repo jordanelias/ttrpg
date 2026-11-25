@@ -346,7 +346,7 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
-GATE: Batch B11-fi-readers
+GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B24-sc-hearing
 GATE: Batch B25-fi-questioning

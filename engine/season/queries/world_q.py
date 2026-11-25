@@ -32,10 +32,10 @@ from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS, in_form      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
 from ..data.requires import (
-    RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
+    KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CONTINUATION_TIES, SUCCESSIONS,
+    ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
@@ -50,7 +50,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
+    CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
@@ -58,7 +58,7 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import (
-    COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD, LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names,
+    COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD, LedgerReader, OwnStateReader, addressed_to, content_said, content_value, intent_named, ledger_names,
     suspicions)
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
@@ -66,6 +66,10 @@ from .person_q import (
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
+# v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
+from .person_q import holders_named, vacant_named
+# v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`_disagrees`) and reads the teller's `record`.
+from .person_q import _disagrees, is_cell, record as record_of
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -76,7 +80,8 @@ from .person_q import deed_doers
 # expectations here; the doer of a paired deed is the pairing rule's (IN-58).
 from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
-from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
+from ..state.attribution import (  # noqa: F401 -- re-exported
+    a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
@@ -402,6 +407,13 @@ def docketed_by(w: World, claim) -> tuple:
     return tuple(out)
 
 
+def _docketed_in_ledger(w: World, p: Person) -> list:
+    """`[(claim, matters), ...]`: THE CLAIMS IN `p`'S OWN LEDGER OF A DOCKETING EVENT (`DOCKETING_KINDS`) and the docketed matters each puts
+    before a room (`docketed_by`), in ledger order -- `docket_question`'s gate and (v12 B11.08, `08_FI_01` edit 5) `matters_awaiting`'s:
+    a matter is known docketed to the persons whose ledger holds a claim of its docketing."""
+    return [(c, ms) for c in p.ledger if c.predicate in DOCKETING_KINDS and (ms := docketed_by(w, c))]
+
+
 def docket_question(w: World, p: Person) -> Optional[Question]:
     """THE QUESTION A DOCKETING EVENT'S WITNESS IS ASKED (v10 CP-T05-04, B10-05, home T05 §2 CP-T05-04
     (b); [ASSUMPTION; medium; Jordan to correct]): ONE standing question per person, whose PLAIN
@@ -424,10 +436,7 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     question forms `open_case` on a matter that is already docketed and the fold refuses it
     (`case.refused`, `_eff_open_case`'s `docketed` decline), pinned in `test_referent_class_stamps.py`.
     REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
-    held = [c for c in p.ledger if c.predicate in DOCKETING_KINDS]
-    if not held:
-        return None
-    reached = [(c, ms) for c in held if (ms := docketed_by(w, c))]
+    reached = _docketed_in_ledger(w, p)
     if not reached:
         return None
     found = {m for _, ms in reached for m in ms}
@@ -2468,7 +2477,7 @@ def standing_order(w: World, faction: Optional[str], place: Optional[str]):
     """CP-T04-02 (AM-C-09): THE STANDING ORDER `faction`'s line fights `place` under, or `None` -- the live
     `standing_order` Record about `place` (its `at` key) held by a seat of `faction`, the one whose HOLDER EDGE has the
     greatest `since`; a tie goes to the later in `w.tenures` (the read-only owner-first view: the last-write rule of
-    `containment.home_of`). `Record` has no creation tick (`ttl` has no reader), so the edge's `since` -- opened at
+    `containment.home_of`). `Record` has no creation tick, so the edge's `since` -- opened at
     `w.tick` by `_makers_hold` -- is the order's age. OLDER ORDERS ARE IGNORED, NOT DELETED. A holder is `a seat of
     that faction` when he holds a live `hold` on an Office `seat_faction` reads as `faction`; a Record held by anyone else, or about
     another place, or already closed, is not the faction's order here. `None` for no faction or no place: the field as it was."""
@@ -3001,19 +3010,19 @@ def goal_referents(w: World, p: Person, prop) -> tuple:
     `(prop.subject,)`. A goal reads by the kind of its `object:` (`_goal_referents`):
 
       * `person`, `rung` -> `(prop.subject,)`: seeding (IN-68) minted the Proposition about them;
-      * `seat_holders` -> the persons now holding any listed seat (a live `hold`, `w.tenures` order),
-        so the referent FOLLOWS A SUCCESSION and a vacant throne names nobody;
+      * `seat_holders` -> the persons `p`'s OWN ledger names as holding any listed seat (`person_q.holders_named`,
+        in seat order), so the referent FOLLOWS A SUCCESSION once he has heard of it, and a seat he has heard
+        nothing of names nobody;
       * `deed_doers` -> `person_q.deed_doers` over `p`'s OWN ledger (its three forms; `against: <goal>`
         takes that goal's referents, resolved by this same read);
       * `orientation` -> `()`: a pure condition has no referent, and mints no Proposition.
 
-    ⚠ `seat_holders` IS A WORLD READ WITH NO CLAIM BEHIND IT, `vacancies`' shape: it hands `p` the
-    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT WAS TAKEN
-    (ED-IN-0292 (2), closed at v10 ladder step 5, A1-02; `editorial_ledger_in.jsonl:79`), and this read
-    follows that answer -- if it is reopened as a claim reaching persons through the channels, `seat_holders`
-    becomes a read of the holders `p`'s own ledger names. [ASSUMPTION; medium; Jordan to correct --
-    revert: the holders the person's own ledger names, `seats_named`-style, which reads nobody at
-    world-gen (H-203).] `deed_doers` is NOT that read: it takes nothing from the world.
+    ⚠ `seat_holders` READS THE ASKER'S OWN CLAIMS, NOT THE WORLD (v12 B11.08, `08_FI_01` R-02). It was a world read -- whoever
+    sat on a throne `p` may never have been told of -- on the ground that ED-IN-0292 (2) took that precedent for `vacancies`;
+    that row (ED-IN-0292's last, A1-02) was answered the other way: a vacancy, like a holder, reaches a person as a claim deposited
+    through the channels, not as a world stamp. What the ledger holds at build is `boot/realm.py::seed_seat_news`'s, so the
+    realm does not start blind. It may name a man who no longer holds the seat; the fold refuses him. `deed_doers` reads
+    nothing of the world either.
 
     No TRACE row is written (`ambitions`' reason): Q4 calls this once per ambition per person."""
     goal = _goals.goal(prop.id)
@@ -3040,10 +3049,11 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
         # The Office ids seeding recorded (`Proposition.scope`; since v10 CP-T02-02 a seat a row stands for
         # is built under that row's id, so the scope is the listed ids; a seat with no row keeps its slug);
         # a world that minted no scope reads the listed ids as Office ids.
-        seats = set(prop.scope) if prop is not None and prop.scope else set(obj["seats"])
-        return tuple(dict.fromkeys(t.subject for t in w.tenures
-                                   if t.kind == "hold" and t.live and t.object in seats
-                                   and t.subject in w.persons))
+        seats = tuple(prop.scope) if prop is not None and prop.scope else tuple(obj["seats"])
+        # v12 B11.08 (`08_FI_01` edit 2, R-02): THE PERSONS HIS OWN CLAIMS NAME AS HOLDING A LISTED SEAT, in seat order, each once --
+        # `person_q.holders_named`, never the live `hold`s. A man who has not heard a seat changed hands is still aimed at its old holder
+        # (the fold refuses what no longer holds); one who has is aimed at the new.
+        return _persons_named(w, dict.fromkeys(h for s in seats for h in holders_named(p.ledger, s)))
     if kind != "deed_doers":
         return ()
     against = ()
@@ -3078,7 +3088,7 @@ def current_stage(w: World, p: Person, ambition, weigh=None) -> Optional[dict]:
     is passed only on a cell that evaluates to TRUE, so a ledger with no claim on the cell's predicate
     leaves the stage open (`belief_contradicts` declines a candidate on known-FALSE alone; a stage is
     passed on known-TRUE alone). B09.07 `weigh`: the closure the ONE comparator reads his ledger by
-    (`decision/options.py::ledger_weigh`, a `decision` import this module may not make, so the caller passes it in, as
+    (`queries/person_q.py::ledger_weigh`, a closure the caller builds and passes in, as
     `LedgerReader` takes it), handed to the reader, so the stage he thinks he has passed is the belief he acts on and says.
     `None` is the plain comparator. It comes from `open_stages`, its one caller; `open_stages`' own callers
     (`stage_referents`, `attention_key`) pass none yet -- the shipped state has no `goal_stages` row, so this reader is
@@ -3126,7 +3136,8 @@ def commitment_kept(w: World, tenure) -> bool:
     ledger as it stood then: a claim that reached him after he let the want go does not count, and neither does the world's
     own state or another person's ledger. A want with no stage row has no content a ledger can read and reads `False`,
     `believed_met`'s refusal; a live edge reads at the world's tick. Read at the world's tick for confidence (the one reader
-    `current_stage` builds), and `goal_referents`' world read of a seat's holder is as it stands, not as it stood.
+    `current_stage` builds), and `goal_referents`' read of a seat's holder is his ledger's (`holders_named`, v12 B11.08), here the ledger truncated
+    to what he held at the closing tick, so as it stood.
     Stored nowhere; the person closed his own edge (T-m), and nothing here closes it."""
     p = w.persons.get(tenure.subject)
     if p is None or tenure.kind != "commit":
@@ -3191,16 +3202,24 @@ def aim_state(w: World, p: Person, prop) -> str:
     OTHER KIND, and every Proposition no goal names (a creed, a tie, a want), is `"open"`. There is no `"breached"`:
     a vacated seat reaches a person as `tenure.closed` (CP-T02-01), not as a state of the aim.
 
-    `p` is the asker; the shipped rule reads the world alone. No state is stored and no TRACE row is written
+    `p` is the asker; the shipped rule reads the world, AND (v12 B11.08, `08_FI_01` edit 4) `"met"` ALSO NEEDS THE ASKER TO HAVE HEARD: the
+    rung's governing holder is among `person_q.holders_named(p.ledger, rung)`. He keeps working until he hears. No state is stored and
+    no TRACE row is written
     (Q4 asks once per ambition per person, `goal_referents`' reason). AX-6 clause 3: the rule reads live edges and
     is undone by an act (a rung lost), so it is not monotone in the ended-edge set. An unknown rule name REFUSES."""
     goal = _goals.goal(prop.id)
     if goal is None:
         return "open"
     rule = roster_map("goal_object_kinds", "aim").get(goal.object["kind"])
-    if rule is None:
+    if rule is None or not _aim_rule(rule)(w, goal):
         return "open"
-    return "met" if _aim_rule(rule)(w, goal) else "open"
+    governing = governing_hold(w, goal.object["rung"])
+    if governing is None:
+        return "open"
+    # HEARD: his own live `hold` on the very rung that governs (a man knows his own lands, R-03: an own-edge read), else his own claims name its
+    # holder (`holders_named` over the GOVERNING hold's object -- `governing_hold` walks `ancestry`, so that is the goal's rung or one above it).
+    own = governing.subject == p.id
+    return "met" if own or governing.subject in holders_named(p.ledger, governing.object) else "open"
 
 
 # A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --
@@ -3241,7 +3260,8 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
         Proposition (the authored leader `boot/realm.py` subjects the creed on), where that is a living person -- then every
         doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind: a paired deed's doer
         by the `seen.who` pairing, any other by its subject) who is a live member of it (`members`:
-        membership is `commit`, a World read, IN-67's `seat_holders` precedent). `p` himself never.
+        membership is `commit`, a World read of other persons' edges: the `seat_holders` precedent it cited was reversed at v12 B11.08, and
+        this read is `opinion_referents`' own and untouched, an open residual of `08_FI_01`'s R-03). `p` himself never.
 
     `Unspecified` for an id that is no rostered faction's Proposition: a non-faction has no opinion,
     and none is guessed.
@@ -3291,7 +3311,8 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     [ASSUMPTION; medium; Jordan to correct; revert: only the members `p`'s own ledger names, `opinion_of`'s
     `regarded` set] The referents are every live member of the doer's faction, the RS-23 text
     ("the members of the faction whose member killed my lord"); membership is world truth read by this
-    function, not a belief `p` holds (the `seat_holders` precedent, ED-IN-0292 (2)).
+    function, not a belief `p` holds (the `seat_holders` precedent this cited, ED-IN-0292 (2), was reversed at v12 B11.08: that read is now his
+    ledger's; this one is untouched and stays a World read of other persons' faction edges).
 
     `memo` is the caller's per-`p`, per-call cache: `questions_for` asks this once per claim in `p`'s
     ledger, and the pursuit axes, the `seen.who` index (each O(ledger)), `opinion_of` and `members` (each a
@@ -3323,17 +3344,49 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     return (doer,) + tuple(m for m in memo[("members", faction)] if m not in (doer, p.id))
 
 
+def _persons_named(w: World, ids) -> tuple:
+    """THE IDS OF `ids` THAT ARE NOT KNOWN TO BE SOMETHING ELSE, in order (v12 B11.08): `person_q.holders_named` cannot tell a person from
+    the seat it was deposited beside, and a World can say what an id is NOT -- an Office, a Rung, a Site, a Record, a Proposition -- without
+    saying anything of a person's state. A person the world no longer holds (`class_of` is `None`) stays: that he is gone is a fact
+    the asker has not been told, and the fold refuses a referent that no longer exists."""
+    return tuple(x for x in ids if w.class_of(x) in (None, Person.__name__))
+
+
+def _is_person_subject(w: World, subject, known: frozenset) -> bool:
+    """WHETHER A CLAIM'S `subject` IS A PERSON FOR `questions_for`'s CLAIM LOOP: an id the world holds as a Person, or one it holds as nothing
+    that the ASKER'S OWN ledger holds as a person (`known` is his `person_q.known_persons`: a truthy `exists:Person` claim, a sighting, a
+    teller) -- a death with no Event leaves the id held by nobody, and he has not been told. An id the world holds as a Rung, Office,
+    Site, Record or Proposition, or as nothing and he knows no person by it (a date, a Tenure's own id, a document destroyed), is a thing,
+    and `reach` and `place_of` admit it as before. ⚠ BOUND: a person deleted with no Event whom the asker holds claims of but no
+    acquaintance, sighting or teller for reads as a thing, so what the old clauses admitted of him is all he is admitted by."""
+    cls = w.class_of(subject)
+    return cls == Person.__name__ if cls is not None else subject in known
+
+
+def _believed_gone(ledger) -> frozenset:
+    """THE PERSONS WHOSE NEWEST `exists:Person` CLAIM (`rosters.yaml: known_person_operands.claim`) IN `ledger` READS FALSE -- he was told, saw, or
+    was refused to learn that somebody is no more. `known_persons` reads the same claim's truthy half. A person he holds no such claim of is not gone."""
+    predicate = KNOWN_PERSON_CLAIM.get("predicate")
+    newest: dict = {}
+    for c in ledger:
+        if c.predicate == predicate and (c.subject not in newest or (c.when, c.lap) >= newest[c.subject][0]):
+            newest[c.subject] = ((c.when, c.lap), c.value)
+    return frozenset(s for s, (_, v) in newest.items() if not v)
+
+
 def vacancies(w: World, p: Person) -> tuple:
-    """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office
-    with no live `hold` -- the test `_req_confer` runs before its `or` disjunct -- for which
-    `may_fill` holds through some seat of `p`'s own live `hold`s whose grant carries `confer`
-    (`Tenure.granted_acts`, the one owner of the grant's shape). `()` for a person granted no
-    `confer`, which is nearly everyone, so the store is read only for a conferrer.
+    """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office his OWN ledger holds
+    empty (`person_q.vacant_named` over `ledger_names`: the newest claim about it that says somebody came to hold it or
+    ceased to is a ceasing -- v12 B11.08, `08_FI_01` edit 3) for which `may_fill` holds through some seat of `p`'s own live `hold`s
+    whose grant carries `confer` (`Tenure.granted_acts`, the one owner of the grant's shape). `()` for a person granted no
+    `confer`, which is nearly everyone, so the store is read only for a conferrer. THE WORLD'S 'NO LIVE `hold`' TEST IS REMOVED: a man
+    who wrongly believes a seat empty forms the `confer`, and `_req_confer` refuses him (§F1's asymmetry, `belief_contradicts`'
+    rule); one who has not heard it empty forms none.
 
     Resolver-side and read-only: it supplies seat IDS, which `questions_for` adds to the question
     the person answers, as classed referents (D1); whether the conferral then passes is the fold's (`_req_confer`). It asks the
-    write gate's own `may_fill`, so it names no seat the gate would refuse to have filled through
-    that seat. `confer` is named here because it is the remit act the predicate it mirrors serves.
+    write gate's own `may_fill` (his own seat's authority, an own-edge read), so it names no seat the gate would refuse to have filled
+    through that seat. `confer` is named here because it is the remit act the predicate it mirrors serves.
     ⚠ THAT PROMISE IS THIS FUNCTION'S, NOT THE CLASS'S: the seats a person was told of
     (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
     it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
@@ -3343,9 +3396,8 @@ def vacancies(w: World, p: Person) -> tuple:
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:
         return ()
-    held = {t.object for t in w.tenures if t.kind == "hold" and t.live}
-    return tuple(o.id for o in sorted(w.offices.values(), key=lambda o: o.id)
-                 if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
+    return tuple(o for o in sorted(ledger_names(p.ledger))
+                 if o in w.offices and vacant_named(p.ledger, o) and any(may_fill(w, p.id, s, w.offices[o]) for s in seats))
 
 
 def recalls(w: World, p: Person) -> tuple:
@@ -3382,8 +3434,9 @@ def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple
     """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
     among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
     claim a witness of a conferral holds, `epistemic.claim_subjects`' Tenure expansion) or a held
-    document whose `terms` names it. `()` for nearly everyone: before any seat changes hands no
-    ledger holds a claim about one (H-203).
+    document whose `terms` names it. `()` for nearly everyone WAS TRUE UNTIL v12 B11.08 and IS NOT NOW: `boot/realm.py::seed_seat_news` tells
+    every person of every seat of his realm at build (A-32), so a realm person names ~31 seats from the first season (H-203 recorded the
+    old premise; the `oblige` formation this feeds is H-207's, IN-10 (a), and `hole_register.yaml`'s B11.08 row records its cost).
 
     Reads `p`'s OWN LEDGER, never the store's Records (AX-2: a document's content is what the person
     holding it believes); the World is asked only which ids are seats (`w.offices`), the class
@@ -3718,6 +3771,24 @@ def propositions_heard(w: World, p: Person) -> tuple:
             if q is not None and q.mood == ADMISSION_MOOD and q.subject == p.id and q.value in FACTION_BY_PROP
             and admission_stands(w, p.id, q.value)}
     return tuple(sorted(out))
+
+
+def conclusions_held(w: World, p: Person) -> tuple:
+    """THE DOERS A CONCLUSION `p` HAS COMMITTED TO NAMES (v12 B11.78; `proposals/v12_B11_a_conclusion_acted_on.md` §1, option (c); [ASSUMPTION; medium; Jordan to correct;
+    revert: drop the term in `questions_for`]), sorted: the `value` of each Proposition on `p`'s own live `hold` edges whose mood is `HOLDS` and whose predicate is a
+    `concluded:<deed kind>` stem, where that value is a person the world holds other than `p` -- the one `reconstruct` named and his `utter` asserted. `questions_for` adds
+    them as `Person`-classed referents, `writs_held`'s shape one class over, so a computed `petition` (whose `subject` and `to` both bind its one Person referent, H-94's
+    limit) is addressed to the accused, `carry` dockets him and `determine`'s `party` admits him; every row declaring `Person` forms on him too (`dispatch`, `capture`,
+    `open_case`, `tend`), the price of a class-wide stamp.
+
+    WHAT IT IS KEYED ON IS THE COMMITMENT, NOT THE INFERENCE: the `concluded:` claim alone stamps nothing, so a person who reasons and does not utter keeps his inference
+    private. A `Partial` conclusion withholds the hand (its value is `True`), names no person and stamps nothing. Resolver-side and read-only: it reads `p`'s own edges and,
+    for their objects only, the Proposition store, as `writs_held` reads the Record store. `()` for nearly everyone -- and for everyone in the realm until B25 types `utter`
+    (no computed act makes a `HOLDS` Proposition today)."""
+    return tuple(sorted({prop.value for t in p.tenures
+                         if t.kind == "hold" and t.live and (prop := w.propositions.get(t.object)) is not None
+                         and prop.mood == "HOLDS" and str(prop.predicate).startswith(f"{CONCLUDED_STEM}:")
+                         and isinstance(prop.value, str) and prop.value in w.persons and prop.value != p.id}))
 
 
 def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
@@ -4071,8 +4142,13 @@ def matters_awaiting(w: World, p: Person) -> tuple:
              and not CONVENING_REMIT_ACTS.isdisjoint(t.granted_acts)} - {None}
     if not rungs:
         return ()
+    # v12 B11.08 (`08_FI_01` edit 5): A MATTER IS ADMITTED ONLY WHERE HIS OWN LEDGER HOLDS A CLAIM OF ITS DOCKETING EVENT (`docket_question`'s
+    # gate): a man who has not heard it docketed is not offered a venue for it.
+    known = {m for _, ms in _docketed_in_ledger(w, p) for m in ms}
     out: dict = {}
     for item in items:
+        if item["matter"] not in known:
+            continue
         place = place_of(w, item["matter"])
         if place is None:
             continue
@@ -4482,6 +4558,39 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
     return Question(f"q:claim:{xid}", "claim_landed", tuple(tellers), xid) if tellers else None
 
 
+def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> list:
+    """v12 B11.78 (`08_FI_03` §4; `proposals/v12_B11_a_conclusion_acted_on.md` §3; [ASSUMPTION; medium; Jordan to correct; revert: drop the call in `questions_for`]): A CAUGHT
+    LIAR IS A QUESTION -- `standing_crossed`'s sibling, about the people whose word a look has contradicted.
+
+    For each firsthand CELL claim `c` that landed in `p`'s own ledger since he last deliberated (`landing_floor`, the boundary `questions_for`'s Q2 and `standing_crossed` read), the
+    tellers of a claim of his on the same cell that `c` disagrees with (`person_q._disagrees`, `record`'s own pairing step) and whose `record(p, teller)` is BELOW NEUTRAL (the
+    hearer's reading of the liar, `record`'s owner) are the referents of ONE `claim_landed` question whose `about` is `c`: `tell`, `petition`, `challenge`, `forgive` then form on
+    the liar by the ordinary rows. No new deposit, source or Event kind, and nothing is stored: the price of a lie is the hearer's own grading of the teller (CR-83, design §3).
+    The id is its own (`q:liar:<claim>`), so the claim's own Q2 question beside it is neither replaced nor doubled. `[]` for a person who holds no fresh firsthand cell or no
+    telling on it, and at `record_gain` 0, where a contradicted teller reads neutral. ⚠ IT READS `p`'S OWN LEDGER AND WRITES NOTHING."""
+    floor = landing_floor(w, since)
+    fresh = [c for c in p.ledger if c.firsthand and is_cell(c) and (c.when, c.lap) >= floor]
+    if not fresh:
+        return []
+    cells = {(c.subject, c.predicate) for c in fresh}
+    told = [t for t in p.ledger if t.teller is not None and t.teller != p.id and (t.subject, t.predicate) in cells]
+    if not told:
+        return []
+    tick, below = w.tick, {}                  # `below`: teller -> is his record under neutral (read once per teller)
+    out = []
+    for c in fresh:
+        tellers: list = []
+        for t in told:
+            if (t.subject, t.predicate) == (c.subject, c.predicate) and t.teller not in tellers and _disagrees(t, c):
+                if t.teller not in below:
+                    below[t.teller] = record_of(p, t.teller, w.fixtures, tick) < 1.0
+                if below[t.teller]:
+                    tellers.append(t.teller)
+        if tellers:
+            out.append(Question(f"q:liar:{c.id}", "claim_landed", tuple(tellers), c.id))
+    return out
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus the
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
@@ -4570,15 +4679,33 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # change what the Question is ABOUT: that is `(c.subject,)`, widened only by v9 IN-70's
     # `opinion_referents` (below), when the holder's opinion of the doer's faction is under 0.
     # `requires_operands` is untouched by this clause for exactly that reason.
+    # ⚠ v12 B11.08 (`16_PESSIMIST_FI_C` edit 4, C-20): A PERSON SUBJECT IS ADMITTED ON WHAT THE ASKER HOLDS OF HIM, NEVER ON WHERE THE WORLD
+    # PUTS HIM OR WHETHER IT STILL HOLDS HIM. Clause 1 (`reach`) keeps the Rungs and what he holds -- a man knows his own chain of seats and
+    # lands (`08_FI_01`'s R-03) -- and clause 2 (`place_of`) the Sites, Records and Dates; for a person, clauses 1 and 2 are replaced by
+    # the person-side test: the claim has landed since `floor` (the loop's own test below, so a landed claim about him passes it whether or not he
+    # is among `present_persons`, those he has SEEN since he last moved -- `08_FI_02` edit 5's reader, which this loop therefore never asks) and his
+    # newest `exists:Person` claim on him, if any, is not 0 (`gone`). The fold's `with` and `kind` conjuncts refuse what is no longer possible and the refusal's
+    # `exists` observation teaches him. A person subject is a Person the world holds, or an id it no longer holds that he knows for a person
+    # (a death with no Event is the case): `_is_person_subject`.
     R = reach(w, p)
     floor = landing_floor(w, since)
+    gone = _believed_gone(p.ledger)
+    known = frozenset(known_persons(p.ledger, p.id))
     opinions: dict = {}                    # `opinion_referents`' per-call memo of `opinion_of` by faction
     for c in p.ledger:
         if (c.when, c.lap) < floor:
             continue
-        if (c.subject in R                                       # clause 1 -- the thing itself
-                or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
-                or any(x in R for x in named(c))):                # clause 3 -- whom the CONTENT names
+        # B11.83: WHAT A REFUSED `with` TAUGHT HIM -- THAT A MAN WAS NOT WHERE HE STOOD (`rosters.yaml: absence_claim`) -- IS NOT NEWS TO DELIBERATE ABOUT HIM: a
+        # question on the absent man is one he forms the same refused act on (`test_t4_a_with_read_is_observed_and_never_deposited...`'s own ground for the `with` read).
+        if c.predicate == ABSENT_PREDICATE:
+            continue
+        if _is_person_subject(w, c.subject, known):
+            admitted = c.subject not in gone or any(x in R for x in named(c))
+        else:
+            admitted = (c.subject in R                                       # clause 1 -- the thing itself
+                        or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
+                        or any(x in R for x in named(c)))                # clause 3 -- whom the CONTENT names
+        if admitted:
             # v9 IN-70: a paired deed's question also turns `p` toward the doer's faction where his
             # opinion of it is below indifference (`opinion_referents`); the subject stays first, and
             # admission (the three clauses above) is untouched. REVERT: `(c.subject,)` alone.
@@ -4590,6 +4717,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # landed are what crossed. REVERT: drop these two lines; MATTER's record then raises nothing.
     if (sq := standing_crossed(w, p, since)) is not None:
         out.append(sq)
+    # v12 B11.78 (`08_FI_03` §4): ITS SIBLING -- A TELLER WHOSE WORD A FRESH FIRSTHAND CELL CONTRADICTS, AND WHOSE RECORD WITH HIM IS UNDER NEUTRAL, IS A QUESTION ABOUT HIM
+    # (`contradicted_tellers`). Still `claim_landed`; no source added. REVERT: drop these two lines.
+    out.extend(contradicted_tellers(w, p, since))
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
@@ -4714,6 +4844,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED, THE WOUNDED HE MAY
     # TEND (`wounded_with`: himself below his ceiling, and those beside him he BELIEVES hurt), as `Person` -- `tend`
     # forms on them, reading no other person's true body.
+    # v12 B11.78 (`proposals/v12_B11_a_conclusion_acted_on.md` §1; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED AFTER THEM, THE DOERS A
+    # CONCLUSION HE HAS UTTERED NAMES (`conclusions_held`), as `Person` -- `petition` (the accusation, addressed to the accused), `capture`, `open_case`, `dispatch` and
+    # `tend` form on them. `()` for everyone while no computed act makes a `HOLDS` Proposition (B25's typed `utter`), so the output is byte-identical.
     # v11 CR-78 (`strife-00` §5, the stamp; [ASSUMPTION; medium; Jordan to correct; revert: ship off]): AND, APPENDED
     # LAST, WHAT IS AT STAKE IN THE FLOWS HE HOLDS OPEN (`flow_stakes`: the rungs, persons and offices each open
     # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
@@ -4734,7 +4867,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + founding
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
-             + wounded_with(w, p)
+             + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
@@ -4850,6 +4983,41 @@ class WorldReader:
     def _ancestry(self, start: str) -> list:
         return ancestry(self._w, start)
 
+    def look(self, subject, read: str) -> tuple:
+        """B11.71 (`08_FI_03` §2, FRES §8): THE OBSERVATIONS A LOOK AT `subject` TAKES FOR ONE `rosters.yaml: look_reads` MEMBER, as `(subject, predicate,
+        value)` in the vocabulary the clause-4 reader and `record` read, each the one value its owner answers (`stores` and `held_by` as `read` does, `content`
+        as a holder's deposit mints it, `person_q.content_value`). `()` for a subject of the wrong class, or one with nothing to read; never UNKNOWN, since a
+        look gates nothing and an absent read deposits nothing. `stores` of a Site is the rung it stands in (`Site.rung`) and is reported at that rung; `held_by`
+        is one `(thing, held_by:<holder>, True)` per live `hold`, held WITHOUT taking it. The dispatch is the roster's own members, and a member it does not
+        answer raises: a read the roster names that this reader never takes is a dead column, not an empty look."""
+        w = self._w
+        try:
+            hash(subject)
+        except TypeError:
+            return ()
+        if read == "condition":
+            s = w.sites.get(subject)
+            return () if s is None else (Observation(subject, "condition", s.condition),)
+        if read == "stores":
+            at = w.sites[subject].rung if subject in w.sites else subject
+            r = w.rungs.get(at)
+            return () if r is None else tuple(Observation(at, f"stores:{k}", n) for k, n in sorted((r.stores or {}).items()))
+        if read == "held_by":
+            if subject not in w.rungs and subject not in w.records:
+                return ()
+            return tuple(Observation(subject, f"held_by:{h}", True)
+                         for h in sorted({t.subject for t in w.tenures if t.kind == "hold" and t.object == subject and t.live}))
+        if read == "content":
+            rec = w.records.get(subject)
+            said = None if rec is None else content_value(rec.subject_matter)
+            return () if said is None else (Observation(subject, f"{RECORD_CONTENT.get('predicate')}:{rec.kind}", said),)
+        raise InstrumentDefect(f"`rosters.yaml: look_reads` names {read!r} and `WorldReader.look` answers no such read")
+
+    def looks(self, row, binding: dict) -> tuple:
+        """B11.71: EVERY OBSERVATION THE ROW'S `observes:` TAKES for an act binding `binding` (`binding_from_act`), in the row's order. An operand the act
+        does not carry looks at nothing. The fold attaches them to the act's Events after the gating reads; WITNESS deposits those the Event's band lists."""
+        return tuple(o for lk in row.observes if binding.get(lk.of) is not None for o in self.look(binding[lk.of], lk.read))
+
     def read(self, subject, predicate: str):
         w = self._w
         # ⚠ AN UNHASHABLE SUBJECT IS A QUESTION ABOUT NO ONE THING, AND IT REFUSES RATHER THAN CRASHES
@@ -4946,7 +5114,10 @@ class WorldReader:
                        for t in w.tenures)
         if stem == "present_at":
             s = w.sites.get(subject)
-            place = s.rung if s is not None else (subject if subject in w.rungs else None)
+            # B11.13 (`08_FI_04` §2): a RECORD is where its holder is -- `place_of`'s record limb, the one owner
+            # (`research`'s cell; a Record is no Site and no rung, so the two limbs above answered UNKNOWN for it).
+            place = (s.rung if s is not None else subject if subject in w.rungs
+                     else place_of(w, subject) if subject in w.records else None)
             return UNKNOWN if place is None else (arg in presence(w, place))
         if stem == "with":
             # Telling workplan `T4`: TWO PERSONS IN ONE PLACE -- `subject` (the cell's `of:`, a
@@ -4977,6 +5148,14 @@ class WorldReader:
             # answers this (`WORLD_ONLY_STEMS`).
             p = w.persons.get(subject)
             return UNKNOWN if p is None else not p.is_cohort
+        if stem == "stage_open":
+            # v12 B11.17 (`08_FI_04` §4): HAS A DECLARED STAGE OF THE RECORD `subject` NOT YET MATURED --
+            # `a_stage_unmatured`, the one owner of that reading. A writ ends when its last declared stage
+            # matures, so `comply`'s conjunct refuses a lapsed one. A Record declaring no stage has none to
+            # mature and is open (it can never lapse). `arg` (the actor) is not read. UNKNOWN for a subject
+            # that is no Record (`ID-5`). The person side never answers this (`WORLD_ONLY_STEMS`).
+            rec = w.records.get(subject)
+            return UNKNOWN if rec is None else (not rec.stages or a_stage_unmatured(w, rec))
         if stem == "admitted":
             # B21.63 (`16_PESSIMIST_FA_B` edit 3): MAY THE ACTOR (`arg`) JOIN THE PROPOSITION `subject` -- `admitted_to`, the one owner.
             # UNKNOWN for a subject that is no Proposition or an actor who is no person (`ID-5`). The person side never answers this

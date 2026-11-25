@@ -26,6 +26,7 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..state.carriers import Claim, Proposition, Tenure
 from ..state.ids import H, draw_factory
+from .test_fi_referents import hears_of
 
 SEAT = "off_king"
 THRONE = "g_throne"
@@ -55,6 +56,7 @@ def _world(seed: int):
     w.add_tenure(Tenure("t_king_seat", "p_king", SEAT, "hold", 0))
     w.add_tenure(Tenure("t_commit", "p_high", THRONE, "commit", 0))
     w.persons["p_high"].ledger = [Claim("c_first", "p_high", "p_king", "exists:Person", True, 0, "firsthand", 100, "own")]
+    hears_of(w.persons["p_high"], SEAT, "p_king", when=-2)      # v12 B11.08: who holds the throne is the claims he holds of it, long known
     return w
 
 

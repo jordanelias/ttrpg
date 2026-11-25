@@ -189,7 +189,7 @@ def _realm_two_seasons(seed):
 
 
 def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts(monkeypatch):
-    """Seed 2 (since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
+    """Seed 10 (re-picked at the B11 close; seed 2 since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
     The same seed now refuses that act on `individual` -- the mover the position declares; the realm's hash is
     `_realm_goldens.py`'s. Read with CR-87 at its revert (CR-87's contexts leave no `fight` formed in these realms, so the
     conjunct would never be read) and (v11) CP-T03-04's formation mover at its revert, so the seed forms the cohort-party
@@ -206,5 +206,7 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     # seed re-picked at B06.99: the stream changed (was 2; measured seeds 1..12 refused: 0,0,1,0,2,1,0,0,0,0,0,0 -- 3 is the first)
     # re-picked at the B21 close (the batch moved seed 3 off it; B21.99 left it): seeds 0..12, two seasons, under the reverts above,
     # refused 0,0,0,0,0,0,0,3,0,0,0,1,0 -- 7 is the first
-    reads, refused_on_it = _realm_two_seasons(7)
-    assert refused_on_it > 0, "no act was refused on `individual` at seed 7 (re-picked from 3)"
+    # RE-PICKED AT THE B11 MERGE WITH MAIN (B24p and B21 landed while B11 was open; the same five reverts, `PYTHONHASHSEED=0`, two seasons): seeds 1..12 refused
+    # 0,0,0,0,0,0,0,0,0,1,1,0, so 10 is the first (seed 7 reads 0: 202 `individual` reads, none refused)
+    reads, refused_on_it = _realm_two_seasons(10)
+    assert refused_on_it > 0, "no act was refused on `individual` at seed 10 (re-picked from 7)"

@@ -62,7 +62,6 @@ from __future__ import annotations
 
 import copy
 import functools
-import math
 import sys
 from dataclasses import asdict
 from types import MappingProxyType, SimpleNamespace
@@ -77,11 +76,13 @@ from engine.substrate import composition, descriptors
 
 from ...data.affiliations import AFFILIATION_CEILING
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
-from ...data.rosters import STANCE_MAX
+from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
                              PROOF_KIND_OF_SOURCE, RUNG_KINDS)
 from ...data.rosters import capability_rows, obstacle_bound, require_use_site, roster, when_holds
-from ...data.verbs import PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
+from ...data.verbs import FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
+from ...epistemic import trail_concealment
+from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
 from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, conflict, false_items, stance_toward, strain_carried,
@@ -162,8 +163,8 @@ def _effort_levels(fx: Any, operands: dict) -> tuple:
 # step; `against: true` flips the sign, so a count counts AGAINST the roller. `contest_input` and `believed_input` choose the rows that
 # apply (`when`) and read each one's value, and hand them to the source as the `edge` operand: `((row, key, value), ...)`.
 # ---------------------------------------------------------------------------------------------
-EDGE = "edge"                      # the operand key of the selected `edge` rows, beside `EFFORT`
-CAPABILITY = "capability"          # the roster member (`rosters.yaml: advantage_sources`)
+# `EDGE`, `CAPABILITY`, `_edge_levels` and `_capability_levels` are `edge.py`'s (the leaf `queries/cache.py` and `loop/resolve.py` read a site's net sigma through, which
+# may not import this module: it imports `epistemic`); bound here by name for this module and its importers.
 _UNKNOWN = object()                # a value the believer cannot read: `believed_input` answers `None`, never a guess
 
 
@@ -232,45 +233,6 @@ def _edge_reads(verb: str, actor: Any, subject_read, role: str = EDGE) -> Any:
         if when_holds(row, holder):
             out.append((row, key, value))
     return tuple(out)
-
-
-def _edge_scale(key: str) -> tuple:
-    """`(floor, ceiling)` of the scale `key`'s value lives on: an attribute's or a practitioner stat's (`descriptors.scale_of`), a skill's own."""
-    if key in descriptors.CAPABILITIES:
-        row = descriptors.CAPABILITIES[key]
-        return row.floor, row.ceiling
-    return descriptors.scale_of(key)
-
-
-def _edge_levels(row: Any, key: str, value: Any) -> tuple:
-    """`(levels for the roller, levels against him)` of one selected row. The count is `per: held` 1 if held, `per: rank` the held rank,
-    `per: mid` the signed WHOLE steps of the value from its scale's mid-point (an unauthored value IS the mid-point: zero steps; a
-    half step is no step); `against: true` negates it; a positive count is that many copies of the row's `level` FOR the roller, a
-    negative one that many AGAINST him."""
-    if row.per == "held":
-        n = 1 if value else 0
-    elif row.per == "rank":
-        n = int(value or 0)
-    elif row.per == "mid":
-        floor, ceiling = _edge_scale(key)
-        mid = (floor + ceiling) / 2
-        n = math.trunc((mid if value is None else value) - mid)
-    else:
-        raise Unspecified(f"an `edge` row at the social roll ({row.key!r}) has per {row.per!r}", "rosters.yaml -- tables: capability_uses",
-                          needs="`per: held`, `per: rank` or `per: mid`", law="U1 §3 item 2 -- an edge row counts its held value one of three ways")
-    n = -n if row.against else n
-    return ([row.level] * n, []) if n > 0 else ([], [row.level] * -n)
-
-
-def _capability_levels(fx: Any, operands: dict) -> tuple:
-    """THE `capability` SOURCE: `(levels for the roller, levels against him)` summed over the act's selected `edge` rows
-    (`operands[EDGE]`, chosen and read by the input builders). `([], [])` where the act brings none -- the shipped case."""
-    for_, against = [], []
-    for row, key, value in operands.get(EDGE, ()):
-        f, a = _edge_levels(row, key, value)
-        for_.extend(f)
-        against.extend(a)
-    return for_, against
 
 
 def _circumstance_ob(fx: Any, row: Any, value: Any) -> float:
@@ -533,7 +495,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     the act's subject when there is no prize (an inquiry or a task, `graded_tasks`' route), and nothing
     otherwise. Where it names a Record, the record carries that Record's `forgery_quality` (read from
     `w.records`, the one read this builder adds), which the module adds to the obstacle; a site, a
-    person, or a contest a prize names carries `0`."""
+    person, or a contest a prize names carries `0`. B11.68: an INQUIRY (a `graded_tasks` row of `form: inquiry`) also carries the strongest live cover
+    among the doers of the trail it can uncover (`epistemic.trail_concealment`), the larger of the two, so a covered doer's deed is harder to find."""
     fx = w.fixtures
     docketed = _docketed_row(w, subject)                                        # the arrangement row the act's matter is heard under, if one is docketed (B05.21)
     room_terms = {}
@@ -570,7 +533,10 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     counts = dict(rank_gap=_rank_gap_of(w, via, subject),                       # the subject's rank above the exercised seat (B21.09)
                   cross_chain=int(across_chains(w, via, seat)),                 # the named seat is of another chain than the exercised one (B21.61)
                   faction_power=_faction_power_of(w, via, subject) if seat is not None else 0)     # the holder's faction against the host's, where the act names a seat (B21.69)
-    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
+    # B11.68 (`IS-B2-FI-07` (3)): an INQUIRY about a trail meets its doers' covers -- the strongest, once, beside the examined Record's own quality (the larger of the two).
+    concealed = max(doc.forgery_quality if doc is not None else 0.0,
+                    trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
+    inp = _frame(fx, pool, opposition, concealed, room_terms, effort, verb, edge, circumstance, office,
                  docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts)
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`

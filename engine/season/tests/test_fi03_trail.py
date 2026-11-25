@@ -46,13 +46,13 @@ import pytest
 
 from engine.substrate import composition
 
-from ._flat_fold import flat_fold
+from ..harness.flat_fold import flat_fold
 from .. import epistemic
 from ..data import files, rosters, verbs
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.goals import goals
 from ..data.matrix import Step, WriteClass
-from ..data.rosters import COVERT_KINDS, FINDING_TERMS, faction_prop_id
+from ..data.rosters import COVERT_KINDS, FINDING_TERMS
 from ..decision.choose import _payload_of
 from ..decision.options import opening_set
 from ..epistemic import SEEN_PREDICATE, trail_of
@@ -67,72 +67,19 @@ from ..manifest.providers import PROVIDERS
 from ..queries import world_q
 from ..queries.inputs import Findings
 from ..seam import find_trail
-from ..state.attribution import actor_of
-from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
+from ..state.attribution import actor_of, anchor_of, live_cover
+from ..state.carriers import Act, Claim, Event, Proposition, Site, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
-from .test_information_cluster import _hear
+from ..harness.scenarios import (ABOUT, COVER, FAC, FORGE_ID, FORGER, INVESTIGATOR, conceal_forger, hear as _hear, step,
+                                 trail_world)
 
 pytestmark = pytest.mark.flat_fold
 
-FAC = faction_prop_id("Valorsmark")
-FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
-FORGE_ID = "fi03_forge"
 HAND_BANDS = frozenset(b for b, t in FINDING_TERMS.items() if HAND_TERM in t)
 BLIND_BANDS = frozenset(b for b, t in FINDING_TERMS.items() if t and HAND_TERM not in t)
 # [JUSTIFIED: a test-fixture search bound, not a game value -- the act ids tried for a band; asserted reached]
 SWEEP = 60
-
-
-def step(w, d, *acts):
-    """RESOLVE then WITNESS one lap of `acts` through the driver; the Events reach `w.log` between the
-    two, as `SeasonDriver.season` puts them there. Returns the Events."""
-    w.step = Step.RESOLVE
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    w.step = Step.WITNESS
-    d.witness(mint_token(w, WriteClass.INTERIOR), out)
-    return out
-
-
-def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
-    """THE WORLD, built through the fold to the moment the investigator holds the forged Record (tick 2).
-    Returns `(w, d, rid)`. `verb`/`kind`: the tick-0 act that mints the Record and the one Event it must
-    emit -- `forge` by default; step 3's structural control passes `survey` (`faction.surveyed`), which
-    mints the same Record id (the id is the act's) into the same hand by the same body (`_mint_sheet`).
-    `second`: an act id for a SECOND such act by the same man at tick 0 (its own Record, which stays in
-    his hand; `second_record` reads it back) -- the C1 test's second forging. `fixtures`: the arm the
-    world is built at (v9 SC-02 `22b` step 25's sweeps), else `tiny_world`'s default AT THE FIXED CEILING
-    ARM. ⚠ `ceiling_per_pool` (CP-T01-06, shipped True) is swept OFF here: these tests draw until a band
-    lands, and they test the trail's closure and deposits, which no arm moves. Examining a forged Record
-    composes an obstacle above 2 for a pool-2 investigator, and the per-pool cap lets it stand (2.842 at
-    pool 2, against the fixed 2.0), so the draw odds F / P / S / O read 74 / 19 / 7 / 0 % at the fixed
-    arm and 90 / 8.05 / 1.95 / 0 % at the shipped one: a hand band (Success or better) is 1.95 % per
-    act, and the 60-id sweep, being seeded, does not reach one."""
-    if fixtures is None:
-        fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
-    w = flat_fold(P.tiny_world(fixtures))   # the builder owns the flat fold: test_odds_of and test_sc02_22b build this world too, unmarked or on their own
-    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
-    for pid in (INVESTIGATOR, ABOUT):
-        w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
-    d = SeasonDriver(w)
-    _hear(w, FORGER, ABOUT)
-    out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
-    assert [e.kind for e in out] == [kind], [e.kind for e in out]
-    (rid,) = [c.subject for c in out[0].changes]
-    if second is not None:
-        out = step(w, d, Act(id=second, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
-        assert [e.kind for e in out] == [kind], [e.kind for e in out]
-    w.tick += 1
-    assert [e.kind for e in step(w, d, Act(id="fi03_move", actor=FORGER, verb="move",
-                                           payload={"to": "S"}))] == ["travel.moved"]
-    assert [e.kind for e in step(w, d, Act(id="fi03_give", actor=FORGER, verb="give",
-                                           payload={"subject": rid, "to": INVESTIGATOR}))] == [
-        "record.given"]
-    assert world_q.hold_force(w, rid).subject == INVESTIGATOR
-    w.tick += 1
-    return w, d, rid
 
 
 def forged_event(w):
@@ -320,8 +267,11 @@ def test_a_claim_older_than_the_event_does_not_close_the_trail():
     w, d, rid = trail_world()
     e = forged_event(w)
     assert trail_of(w, rid, INVESTIGATOR) != [], "the world offers the investigator no trail to close"
+    # B11.61: the trail is closed by the thing AND the hand (`holds_trail`), so the hand is held at the forging in both readings and
+    # the thing's `when` is the one that moves.
+    hand = Claim("c_hand", INVESTIGATOR, FORGER, "record.forged", True, e.emitted_at, "inferred", 50, "own")
     held = Claim("c_older", INVESTIGATOR, rid, "record.forged", True, e.emitted_at - 1, "inferred", 50, "own")
-    w.persons[INVESTIGATOR].ledger.append(held)
+    w.persons[INVESTIGATOR].ledger.extend([hand, held])
     assert trail_of(w, rid, INVESTIGATOR) != [], "a claim older than the forging closed its trail"
     w.persons[INVESTIGATOR].ledger[-1] = dataclasses.replace(held, id="c_at", when=e.emitted_at)
     assert trail_of(w, rid, INVESTIGATOR) == [], "a claim made at the forging did not close its trail"
@@ -368,20 +318,29 @@ def test_a_witness_of_the_forgery_finds_nothing_new():
     assert trail_of(w, rid, ABOUT) == []
 
 
-def test_a_partial_find_closes_the_same_trail_to_a_later_better_one():
-    """After a BLIND-band find (the claim on the Record, not the hand), a second `research` of the same
-    Record drawing a HAND band deposits nothing: the Record claim is specific to the forging
-    (`holds_trail`), so one partial find closes it -- the hand is not learned later by re-reading."""
+def test_a_partial_find_leaves_the_hand_to_a_later_better_one():
+    """B11.61 (CP-T06-03; AM-D-09): after a BLIND-band find (the claim on the Record, not the hand), a second `research` of the
+    same Record drawing a HAND band is NOT closed out: `holds_trail` answers True only when the finder holds the HAND (the anchor's
+    event-kind claim, or a `seen` claim whose `who` is set), so the better find deposits what he lacks -- `(forger, record.forged,
+    True)` and a `seen` claim naming the forger -- and does not re-deposit `(Record, record.forged, True)`, which he holds."""
     if not BLIND_BANDS:
         pytest.skip("finding_terms shows the hand at every band -- nothing is withheld to learn later")
     n, cand = find_band(BLIND_BANDS)
     w, d, rid = trail_world()
     step(w, d, research(n, cand))
     assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid}
+    held_before = [c for c in forged_claims(w, INVESTIGATOR) if c.subject == rid]
     w.tick += 1
     out = step_until(w, d, cand, "better", HAND_BANDS.__contains__)
-    assert found_deposits(w, out[0].id) == [], found_deposits(w, out[0].id)
-    assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid}
+    assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid, FORGER}
+    assert [c for c in forged_claims(w, INVESTIGATOR) if c.subject == rid] == held_before, "the Record claim was deposited again"
+    assert sorted(getattr(c.value, HAND_TERM, None) for c in found_seen(w, INVESTIGATOR, rid)
+                  if getattr(c.value, HAND_TERM, None) is not None) == [FORGER]
+    assert len(found_deposits(w, out[0].id)) == 2, found_deposits(w, out[0].id)    # the forger's claim and the hand-showing `seen`
+    # ... and now he holds the hand: a third find of any band deposits nothing.
+    w.tick += 1
+    again = step_until(w, d, cand, "third", lambda degree: degree in FINDING_TERMS)
+    assert found_deposits(w, again[0].id) == [], found_deposits(w, again[0].id)
 
 
 FORGE_B = "fi03_forge_b"
@@ -531,13 +490,13 @@ def test_a_finding_terms_row_off_the_ladder_or_off_the_terms_refuses_naming_it()
     """B2 (a): `data/rosters.py::_load_finding_terms`, called on planted rows. The shipped rows load (the
     control); a band no ladder label names, and a term `observation_terms` does not carry, each refuse
     naming it."""
-    bands, terms = rosters.DEGREE_BANDS, rosters.OBSERVATION_TERMS
+    bands, terms, reads = rosters.DEGREE_BANDS, rosters.OBSERVATION_TERMS, rosters.LOOK_READS   # B11.71: a row lists the trail's terms and the look's reads
     shipped = rosters.roster_map("finding_terms", "bands")
-    assert rosters._load_finding_terms(shipped, bands, terms) == {b: tuple(v) for b, v in shipped.items()}
+    assert rosters._load_finding_terms(shipped, bands, terms, reads) == {b: tuple(v) for b, v in shipped.items()}
     with pytest.raises(Unspecified, match="'Middling'"):
-        rosters._load_finding_terms(dict(shipped, Middling=[HAND_TERM]), bands, terms)
+        rosters._load_finding_terms(dict(shipped, Middling=[HAND_TERM]), bands, terms, reads)
     with pytest.raises(Unspecified, match="'whence'"):
-        rosters._load_finding_terms(dict(shipped, Success=[HAND_TERM, "whence"]), bands, terms)
+        rosters._load_finding_terms(dict(shipped, Success=[HAND_TERM, "whence"]), bands, terms, reads)
 
 
 def test_a_covert_kind_that_is_no_deed_refuses_naming_it():
@@ -856,3 +815,283 @@ def test_the_find_lands_through_the_season_loop_in_a_later_round():
     assert {c.id for c in landed} == {e.changes[0].subject for e in deposits}, (landed, deposits)
     assert all(c.lap == released for c in landed), [(c.id, c.lap, released) for c in landed]
     assert d.findings == {}, "the season left a find on the driver"
+
+
+# ======================================================================================
+# B11.58 (CP-T06-09, R-07) -- THE ROOM FILES A COVERED DEED UNDER THE HAND
+# ======================================================================================
+
+def covered_forging(covered=True, document_holder=None):
+    """The forger (`conceal`ed when `covered`) forges on `p_mid` with `p_mid` and `p_low` in the room; WITNESS runs
+    once. `document_holder` is handed the new Record's `hold` between RESOLVE and WITNESS (the forger's ends), so the
+    channel that admits him is `document_key`, which shows no `who`. Returns `(w, forging Event)`."""
+    w = flat_fold(P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)))
+    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
+    for pid in (INVESTIGATOR, ABOUT):
+        w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
+    d = SeasonDriver(w)
+    _hear(w, FORGER, ABOUT)
+    if covered:
+        conceal_forger(w, d)
+    w.step = Step.RESOLVE
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id=FORGE_ID, actor=FORGER, verb="forge", payload={"subject": ABOUT})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    (e,) = out
+    if document_holder is not None:
+        (rid,) = [c.subject for c in e.changes]
+        for t in w.persons[FORGER].tenures:
+            if t.kind == "hold" and t.object == rid:
+                t.until = w.tick
+        w.add_tenure(Tenure("t_hold_doc", document_holder, rid, "hold", since=w.tick))
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    return w, e
+
+
+def test_a_bystander_files_a_covered_deed_under_the_hand():
+    """T06 §3's cover probe: the forger holds a live cover, so the forging anchors on `COVER`. The two neighbours in the room
+    (`co_located` shows `who`) hold `(forger, record.forged, True)` and the Record's, and NOT `(COVER, record.forged, True)`; a
+    `document_key` holder of the Record (`supplied_by` shows no `who`) still holds the alias claim. CONTROL: the same forging with
+    no cover -- the neighbour's subjects are the same set, so the swap is the identity where the anchor is the actor."""
+    w, e = covered_forging(document_holder="p_king")
+    (rid,) = [c.subject for c in e.changes]
+    assert anchor_of(w, e) == COVER, "the fixture: the forging is covered"
+    via = dict(epistemic.observers_for(w, e, w.fixtures.get("fan_out_mode"), list(w.persons)))
+    assert via["p_mid"] == via["p_low"] == "co_located" and via["p_king"] == "document_key", via
+    held = lambda pid: {c.subject for c in forged_claims(w, pid) if c.value is True}
+    for pid in ("p_mid", "p_low"):
+        assert held(pid) == {FORGER, rid}, (pid, held(pid))
+    assert held("p_king") == {COVER, rid}, held("p_king")
+    ctl, _ = covered_forging(covered=False)
+    assert {c.subject for c in forged_claims(ctl, "p_mid")} == held("p_mid")
+
+
+def test_a_finder_files_a_covered_deed_under_the_hand_where_his_band_shows_it():
+    """The found deposit's site: the investigator `research`es the Record a covered forger forged and gave him, at a band whose
+    `finding_terms` show the hand, and holds `(forger, record.forged, True)` -- not the alias. A band that does not show the
+    hand deposits neither (the blind-band masking is unchanged: `non_anchor_subjects` drops the anchor)."""
+    w, d, rid = trail_world(covered=True)
+    assert anchor_of(w, forged_event(w)) == COVER
+    cand = chooser_research(w, rid)
+    assert cand is not None
+    step_until(w, d, cand, "cov", lambda deg: deg in HAND_BANDS)
+    held = {c.subject for c in forged_claims(w, INVESTIGATOR)}
+    assert held == {FORGER, rid}, held
+
+
+# ======================================================================================
+# B11.59 (CP-T06-01, FI_C edits 1-2) -- A DEED THAT WRITES A PLACE OR AN ALIAS LEAVES A TRAIL
+# ======================================================================================
+# `test_deed_trail_at_place.py` reads these builders for the person and place sides.
+
+def tiny():
+    """`tiny_world` at the flat fold and the fixed ceiling arm, as `trail_world` builds it."""
+    return flat_fold(P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)))
+
+
+def sabotaged_site():
+    """A Site at `D` (the duchy: nobody stands directly at it). `p_other` walks there alone and damages it; a tick passes and
+    `p_high` walks there. Returns `(w, d)`: no channel admitted the finder to the deed, and nobody else was in the room."""
+    w = tiny()
+    w.sites["site_x"] = Site("site_x", "D", "ruin", condition=500)
+    d = SeasonDriver(w)
+    assert [e.kind for e in step(w, d, Act(id="sab_mv", actor=FORGER, verb="move", payload={"to": "D"}))] == ["travel.moved"]
+    assert [e.kind for e in step(w, d, Act(id="sab", actor=FORGER, verb="sabotage", payload={"site": "site_x"}))] == [
+        "site.damaged"]
+    w.tick += 1
+    assert [e.kind for e in step(w, d, Act(id="fnd_mv", actor=INVESTIGATOR, verb="move", payload={"to": "D"}))] == [
+        "travel.moved"]
+    return w, d
+
+
+def examine_at(n):
+    """A fresh `sabotaged_site` and the finder's `examine` of it as act id `n`: `(w, finding Event)`. The payload names the
+    place twice: `site` is the cell's operand, `subject` is what `act_refs` reads to say what the inquiry is about (without it
+    the find reads no trail and deposits nothing)."""
+    w, d = sabotaged_site()
+    (e,) = step(w, d, Act(id=f"ex_{n}", actor=INVESTIGATOR, verb="examine", payload={"site": "site_x", "subject": "site_x"}))
+    return w, e
+
+
+def band_world(build, bands):
+    """`build(n)` for the first act id `n` in `SWEEP` whose finding draws a band in `bands`: `(w, finding)`."""
+    for n in range(SWEEP):
+        w, e = build(n)
+        if e.degree in bands:
+            return w, e
+    raise AssertionError(f"{SWEEP} act ids drew no band in {sorted(bands)}")
+
+
+def held_by(w, pid, predicate):
+    return {c.subject for c in w.persons[pid].ledger if c.predicate == predicate and c.value is True}
+
+
+def test_a_sabotage_at_an_empty_place_is_found_by_examine():
+    """CP-T06-01's Site half, on a hand-built world (no seeded run executes a `sabotage`): `p_other` damages a Site with nobody
+    at its place; `p_high` walks there and `examine`s it. At a band showing the hand he holds `(p_other, site.damaged, True)`
+    and the Site's, and the `seen` claim on the Site names `p_other`; at Partial he holds the Site's claim and the `seen`
+    claim's `who` is None. Both `inferred` -- a finding, not a sight. CONTROL: before the `examine` he holds nothing of it."""
+    w, _ = sabotaged_site()
+    assert held_by(w, INVESTIGATOR, "site.damaged") == set(), "the finder was admitted to the deed before any inquiry"
+    seen_who = lambda w: [c.value.who for c in w.persons[INVESTIGATOR].ledger
+                          if c.predicate == SEEN_PREDICATE and c.subject == "site_x" and c.source == "inferred"]
+    w, _ = band_world(examine_at, HAND_BANDS)
+    assert held_by(w, INVESTIGATOR, "site.damaged") == {FORGER, "site_x"}, held_by(w, INVESTIGATOR, "site.damaged")
+    assert seen_who(w) == [FORGER], seen_who(w)
+    w, _ = band_world(examine_at, frozenset({"Partial"}))
+    assert held_by(w, INVESTIGATOR, "site.damaged") == {"site_x"}, held_by(w, INVESTIGATOR, "site.damaged")
+    assert seen_who(w) == [None], seen_who(w)
+    assert {c.source for c in w.persons[INVESTIGATOR].ledger if c.predicate == "site.damaged"} == {"inferred"}
+
+
+def surveil_forging_place(n, at="Hh"):
+    """B11.63. `trail_world`: `p_other` forged at the hearth `Hh` (with `p_mid`; `p_high` at `S`, away) and has since left it. `p_high`
+    walks to `at` if he is not there and `surveil`s it as act id `n`: `(w, finding Event)`."""
+    w, d, _ = trail_world()
+    if at != "S":
+        assert [e.kind for e in step(w, d, Act(id="sv_mv", actor=INVESTIGATOR, verb="move", payload={"to": at}))] == ["travel.moved"]
+    (e,) = step(w, d, Act(id=f"sv_{n}", actor=INVESTIGATOR, verb="surveil", payload={"subject": at}))
+    return w, e
+
+
+def test_surveil_finds_a_forging_done_at_the_place_while_he_was_away():
+    """B11.63 (CP-T06-02), F06's falsifier. `p_other` forges at `Hh` while `p_high` is at `S`; `p_high` walks to `Hh` and `surveil`s
+    it. At a band showing the hand he holds `(p_other, record.forged, True)` and `seen{who: p_other}` on the Record (inferred); at
+    Partial the deed and not the hand. CONTROL: a forging at another Rung is not found from there (`surveil` of `S`, where he stands:
+    nothing of the forging is deposited), asserted over every id the sweep drew a hand band at, `checked >= 3`."""
+    w, d, rid = trail_world()
+    assert not forged_claims(w, INVESTIGATOR), "the finder was admitted to the forging before any inquiry"
+    assert [e.kind for e in trail_of(w, "Hh", INVESTIGATOR)] == ["record.forged"], "the place side finds no forging at Hh"
+    w, _ = band_world(surveil_forging_place, HAND_BANDS)
+    assert FORGER in held_by(w, INVESTIGATOR, "record.forged"), held_by(w, INVESTIGATOR, "record.forged")
+    assert [c.value.who for c in w.persons[INVESTIGATOR].ledger
+            if c.predicate == SEEN_PREDICATE and c.source == "inferred" and c.value.who is not None] == [FORGER]
+    w, _ = band_world(surveil_forging_place, frozenset({"Partial"}))
+    assert FORGER not in held_by(w, INVESTIGATOR, "record.forged"), "Partial showed the hand"
+    assert held_by(w, INVESTIGATOR, "record.forged"), "Partial found nothing of the deed"
+    checked = 0
+    for n in range(SWEEP):
+        w, e = surveil_forging_place(n, at="S")
+        if e.degree in HAND_BANDS:
+            checked += 1
+            assert not forged_claims(w, INVESTIGATOR), "a forging at Hh was found from S"
+    assert checked >= 3, checked
+
+
+def cover_research(n):
+    """`trail_world(covered=True)`, then the forger gives the cover Record `COVER` to the investigator and he `research`es it
+    as act id `n`: `(w, finding Event)`."""
+    w, d, _ = trail_world(covered=True)
+    assert [e.kind for e in step(w, d, Act(id="cv_give", actor=FORGER, verb="give", payload={"subject": COVER, "to": INVESTIGATOR}))
+            ] == ["record.given"]
+    (e,) = step(w, d, Act(id=f"cv_rs_{n}", actor=INVESTIGATOR, verb="research", payload={"subject": COVER}))
+    return w, e
+
+
+def test_a_cover_is_found_by_research_on_its_id():
+    """CP-T06-01's alias half: `p_other` conceals (the cover Record `rec:cv`) and forges under it; `p_high` is handed `rec:cv`
+    and `research`es it. At a band showing the hand he holds `seen(rec:cv){who: p_other}` and the cover deed under the hand --
+    and, because the forging is anchored on the alias, the forging too (`(p_other, record.forged, True)`, the hand under the
+    alias, B11.58's filing). At Partial the `who` is withheld. CONTROL: before the `research` he holds none of it."""
+    w, d, _ = trail_world(covered=True)
+    assert not [c for c in w.persons[INVESTIGATOR].ledger if c.subject == COVER], "he was told of the cover before any inquiry"
+    seen_who = lambda w: [c.value.who for c in w.persons[INVESTIGATOR].ledger
+                          if c.predicate == SEEN_PREDICATE and c.subject == COVER and c.source == "inferred"]
+    w, _ = band_world(cover_research, HAND_BANDS)
+    # B11.61: the finder was handed the Record by the forger, so he already holds `seen(rec:cv){social, who: p_other}` FIRSTHAND; the find's
+    # `seen` is the same triple and is not deposited again (the exact-triple guard), so the hand is read off any source.
+    assert [c.value.who for c in w.persons[INVESTIGATOR].ledger if c.predicate == SEEN_PREDICATE and c.subject == COVER] == [FORGER]
+    assert held_by(w, INVESTIGATOR, "cover.assumed") == {FORGER, COVER}, held_by(w, INVESTIGATOR, "cover.assumed")
+    assert FORGER in held_by(w, INVESTIGATOR, "record.forged")
+    w, _ = band_world(cover_research, frozenset({"Partial"}))
+    assert seen_who(w) == [None], seen_who(w)
+
+
+# ======================================================================================
+# B11.64 (CP-T06-07, R-07) -- A COVER CAN BORROW ANOTHER MAN'S NAME, AND A COVER'S QUALITY IS WRITTEN
+# ======================================================================================
+
+DUKE, SEAT, BYSTANDER, NAMED, LEARNER = "p_high", "off_duke", "p_other", "p_mid", "p_king"
+
+
+def framing_world(borrowed=True):
+    """The Duke (at `S`, seated: `convene` is his) takes a cover through the fold with the stranger `p_other` standing beside him -- `as`
+    naming `p_mid` (at `Hh`) when `borrowed`, a plain cover otherwise -- the first act id in `SWEEP` whose `conceal` draws a cover.
+    `p_king` stands at `R`, nowhere near. Returns `(w, d, the lap's Events)`."""
+    for n in range(SWEEP):
+        w = tiny()
+        for t in w.persons[BYSTANDER].tenures:
+            if t.live and t.kind in ("contain", "reside"):
+                t.object = "S"
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        payload = {"subject": DUKE, **({"as": NAMED} if borrowed else {})}
+        out = step(w, d, Act(id=f"fr_cv_{n}", actor=DUKE, verb="conceal", payload=payload))
+        if [e.kind for e in out] == ["cover.assumed"]:
+            return w, d, out
+    raise AssertionError(f"{SWEEP} act ids drew no cover")
+
+
+def covered_convening(borrowed=True):
+    """`framing_world`, a tick on, then the Duke `convene`s `S` (`date.scheduled`, a `binding_decision` kind: the realm hears it).
+    Returns `(w, taking, convening)`: the `cover.assumed` Event and the `date.scheduled` one."""
+    w, d, (taking,) = framing_world(borrowed)
+    w.tick += 1
+    (e,) = [e for e in step(w, d, Act(id="fr_convene", actor=DUKE, verb="convene", via=SEAT, payload={"subject": "S"}))
+            if e.kind == "date.scheduled"]
+    return w, taking, e
+
+
+def test_a_borrowed_name_cover_frames_the_named_man_for_a_distant_learner():
+    """B11.64, F06's falsifier with AM-D-13's limit (1). The Duke takes a cover whose `as` is `p_mid`, then convenes: the convening
+    anchors on `p_mid`, not on a Record id. The learner at `R` (`reach`, `told_by`) holds `(p_mid, date.scheduled, True)` and nothing
+    naming the Duke; the stranger beside the Duke holds `seen{who: Duke}` and `(Duke, date.scheduled, True)`; `p_mid` holds
+    `(Duke, date.scheduled, True)` through `witness_key`, and holds `(Duke, cover.assumed, True)` from the lap the cover was taken (its
+    anchor too). CONTROL: the same world with a plain cover -- the learner holds `(cover, date.scheduled, True)` and nothing of the
+    Duke or of `p_mid`."""
+    w, taking, e = covered_convening()
+    cover = live_cover(w, DUKE)
+    assert cover and w.records[cover].subject_matter == {"terms": DUKE, "as": NAMED}, w.records[cover].subject_matter
+    assert anchor_of(w, taking) == anchor_of(w, e) == NAMED, "the fixture: both the taking and the convening are anchored on the named man"
+    assert actor_of(w, e) == DUKE
+    via = dict(epistemic.observers_for(w, e, w.fixtures.get("fan_out_mode"), list(w.persons)))
+    assert via[BYSTANDER] == "co_located" and via[NAMED] == "witness_key" and via[LEARNER] == "reach", via
+    held = lambda pid, kind: {c.subject for c in w.persons[pid].ledger if c.predicate == kind and c.value is True}
+    written = {c.subject for c in e.changes}
+    assert held(LEARNER, e.kind) == {NAMED} | written, held(LEARNER, e.kind)
+    assert not [c for c in w.persons[LEARNER].ledger if c.subject == DUKE or getattr(c.value, "who", None) == DUKE], "the learner holds the Duke's name"
+    assert held(BYSTANDER, e.kind) == {DUKE} | written, held(BYSTANDER, e.kind)
+    assert [c.value.who for c in w.persons[BYSTANDER].ledger if c.predicate == SEEN_PREDICATE and c.source == "firsthand"
+            and c.subject != cover] == [DUKE]
+    assert DUKE in held(NAMED, e.kind), held(NAMED, e.kind)
+    assert held(NAMED, taking.kind) == {DUKE, cover}, "the named man's ledger at the lap the cover is taken: " + repr(held(NAMED, taking.kind))
+    w, _taking, e = covered_convening(borrowed=False)
+    plain = live_cover(w, DUKE)
+    assert w.records[plain].subject_matter == {"terms": DUKE, "as": None}
+    assert held(LEARNER, e.kind) == {plain} | {c.subject for c in e.changes}, held(LEARNER, e.kind)
+    assert held(NAMED, e.kind) == held(LEARNER, e.kind), "the man whose name was not borrowed hears it as any distant man does"
+    assert not [c for c in w.persons[LEARNER].ledger if c.subject in (DUKE, NAMED)]
+
+
+def test_a_better_cover_is_harder_to_surveil():
+    """B11.64 (`08_FI_03` §6, U-9). A cover is a Record and `_eff_conceal` writes its `forgery_quality` through the one mint, the field
+    an examination's obstacle reads (`sigma.py::resolve`, `examined`): the investigator handed the cover Record and `research`ing it
+    rolls against `base + quality` on the uncapped arm, so a cover minted at a better band is a harder find. The quality is the one
+    the drawn band gives (`forge_quality_at`), patched here to a point at EVERY band so the one `conceal` draw is not the variable.
+    CONTROL: quality 0 reads the bare `base` obstacle, and a Record the cover is not (no `examined`) reads none."""
+    from unittest import mock
+    from engine.dice_engine import draw
+    from ..data.rosters import DEGREE_BANDS, FORGE_QUALITY
+    from ..seam.wrappers import sigma
+    ob = {}
+    for q in (0, 1, 3):
+        with mock.patch.dict(FORGE_QUALITY, {b: q for b in DEGREE_BANDS}):
+            w, d, _ = trail_world(covered=True, fixtures=DEFAULT_FIXTURES.sweep("obstacle_ceiling", None).sweep("ceiling_per_pool", False))
+        assert w.records[COVER].forgery_quality == q, (q, w.records[COVER].forgery_quality)
+        out = sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=COVER,
+                            rng=draw.seeded(draw.H2("test_fi03_trail", 64)), module_entry="social_contest.roll")
+        assert out["status"] == "RESOLVED", out
+        ob[q] = out["ob"]
+        assert sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=COVER).forgery_quality == 0.0
+    assert ob[1] == ob[0] + 1 and ob[3] == ob[0] + 3, ob

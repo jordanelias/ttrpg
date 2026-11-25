@@ -16,10 +16,10 @@ from typing import Callable, Optional
 
 from engine.dice_engine.fmath import ltr_sum
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
-from ..data.verbs import VERB_TABLE, align, align_choice, align_kind
+from ..data.verbs import VERB_TABLE, align, align_kind
 from ..queries.person_q import crisis_weights, is_deed, knows_self, regard_parts
 from ..state.carriers import Candidate, Claim, Question
-from .choose import _DAMP, TERM_NAMES, admission_weight, chosen_values, odds_weight, score_terms
+from .choose import _DAMP, TERM_NAMES, admission_weight, choice_lean, chosen_values, odds_weight, score_terms
 
 # The terms of `score_terms`' tuple that name an owner here, in the tuple's order. A term added to `score_terms` leaves this shorter than the
 # tuple and `score_parts` refuses, until the new term names its owner below. `test_voices.py` ties it to `choose.TERM_NAMES`.
@@ -68,7 +68,7 @@ def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], to
         axes = to_axes({e: weights[e]})
         pull = memo[_DAMP] * ltr_sum(axes[ax] * align(c.verb, ax) for ax in _AXES)
         if chosen:
-            pull += memo[_DAMP] * ltr_sum(axes[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
+            pull += memo[_DAMP] * ltr_sum(axes[ax] * ltr_sum(choice_lean(k, v, ax) for k, v in chosen) for ax in _AXES)
         if pull != 0.0:
             parts.append(ScorePart("pursuit", e if knows_self(p, e) else UNRECOGNISED, pull * factor_o * factor_a))
     return parts

@@ -126,7 +126,9 @@ def test_a_a_matter_death_of_a_two_seat_holder_emits_one_tenure_closed_naming_bo
     assert seats == ["off_duke_valorsmark", "off_king"], f"fixture moved: {seats}"
     far = "p_npc_008"
     assert world_q.home_of(w)[far] != world_q.home_of(w)[pid], "fixture: the far person stands with him"
-    assert not set(seats) & set(world_q.seats_named(w, w.persons[far])), "control: already told"
+    # CONTROL (v12 B11.08: the realm starts with seat news, so he has heard of both seats as HELD): he holds no claim that either closed
+    closed = lambda: {c.subject for c in w.persons[far].ledger if c.predicate == "tenure.closed"}
+    assert not set(seats) & closed(), "control: already told"
     w.step = Step.MATTER
     w._emitted_by_write = []
     _die(w, mint_token(w, WriteClass.MATTER), pid)
@@ -139,6 +141,7 @@ def test_a_a_matter_death_of_a_two_seat_holder_emits_one_tenure_closed_naming_bo
     _witness(w, SeasonDriver(w), evs)
     named = world_q.seats_named(w, w.persons[far])
     assert set(seats) <= set(named), f"seats_named for the far person is {named}"
+    assert set(seats) <= closed(), f"the far person holds a closing claim of {sorted(closed())}"
 
 
 def test_b_a_death_emptying_no_seat_earns_no_tenure_closed():

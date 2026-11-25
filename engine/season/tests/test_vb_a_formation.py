@@ -136,9 +136,16 @@ def test_a2_establish_forms_only_on_an_unfounded_holding():
     assert ("T", "Rung") in q.classes and _forms(w, "p_king", "migrate", q) == ["T"]
 
     # the founding executes; the holding is then founded, so it is no longer stamped as one and no `establish` forms on it
-    assert [e.kind for e in _found_act(w, d, "e_vba2", "p_king", "off_king", {"subject": "T"})] == ["office.established"]
+    founding = _found_act(w, d, "e_vba2", "p_king", "off_king", {"subject": "T"})
+    assert [e.kind for e in founding] == ["office.established"]
     assert world_q.founded_office_id("T", world_q.founded_post(w, "T")) in w.offices
     assert world_q.holdings_to_found(w, p) == ()
+    # v12 B11.08 + the merge: what a person is asked comes from his own ledger, so the founder is asked about the empty seat he founded only once WITNESS has told him
+    # (`seat_founding_kinds`); that question is what keeps the loop below from being vacuous.
+    from ..data.matrix import WriteClass
+    from ..loop.driver import mint_token
+    w.log.extend(founding)
+    d.witness(mint_token(w, WriteClass.INTERIOR), list(founding))
     q2 = world_q.questions_for(w, p)
     assert q2 and all(q_.referents_for(holding_cls) == () and _forms(w, "p_king", "establish", q_) == [] for q_ in q2)
 

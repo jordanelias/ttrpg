@@ -332,32 +332,40 @@ modules:
     sim_module: modules/fieldwork/   # v9 FI-03: the module's one entry is `find` (composition row `fieldwork.find`); the knots carriers below are `systems/fieldwork/sim/knots.py`'s, unplugged (IN-06/IN-32), and not reachable from `find`
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
-    state:
-      - {name: "knot strain", bucket: clock, writable: true}   # bucket track->clock [verification A4: advances to capacity-break] — knots_v30 §5
-      - {name: "Bonds", bucket: track, writable: true}   # knots_v30 §3.4 capacity (ED-780)
-      - {name: "Evidence Track", bucket: clock, writable: true}   # fieldwork_v30 §4.1
-      - {name: "Disposition Track", bucket: track, writable: true}   # fieldwork_v30 §5.1
+    # REGISTERED: one entry, `fieldwork.find` (composition row; `modules/fieldwork/find.py`). Typed in (`fieldwork_input`), typed out (`Findings`), NO state and NO gates: the module holds no track, clock or token.
+    entries:
+      - {name: find, composition: "fieldwork.find", in: fieldwork_input, out: Findings, state: none}
+    state: []
     transitions:
       - {via: "scale_transitions §3.9 Fieldwork ↔ All Systems"}
     loops: []
-    gates:
-      - id: g_strain
-        when: "Knot strain > capacity"
-        then: "Knot Break"
-        "on": "knot strain"
-        source: "knots_v30 §6.1"
-      - id: g_decay
-        when: "no new strain that season AND Disposition >= +3"
-        then: "Knot strain -1 at Accounting"
-        "on": "knot strain"
-        source: "knots_v30 §5"
-      - id: g_bond5
-        when: "Bonds >= 5"
-        then: "knot operations eligible (Memory-Query-checked prerequisite)"
-        "on": "Bonds"
-        source: "key_substrate_v30 §8.4"
+    gates: []
+    # UNPLUGGED: the knots oracle's carriers (`systems/fieldwork/sim/knots.py`, IN-06/IN-32). NOT the module's state and NOT reachable from `find`; IN-32 plugs `fieldwork.form_knot` under this row, and only then do these become the module's. Marked, not deleted: the oracle still describes them.
+    unplugged:
+      source: systems/fieldwork/sim/knots.py
+      state:
+        - {name: "knot strain", bucket: clock, writable: true}   # bucket track->clock [verification A4: advances to capacity-break] — knots_v30 §5
+        - {name: "Bonds", bucket: track, writable: true}   # knots_v30 §3.4 capacity (ED-780)
+        - {name: "Disposition Track", bucket: track, writable: true}   # fieldwork_v30 §5.1; knots.py reads and drops Disposition (apply_knot_loss)
+        - {name: "Evidence Track", bucket: clock, writable: true}   # fieldwork_v30 §4.1; NO code holds it, knots.py included: prose-only, not a track `find` keeps
+      gates:
+        - id: g_strain
+          when: "Knot strain > capacity"
+          then: "Knot Break"
+          "on": "knot strain"
+          source: "knots_v30 §6.1"
+        - id: g_decay
+          when: "no new strain that season AND Disposition >= +3"
+          then: "Knot strain -1 at Accounting"
+          "on": "knot strain"
+          source: "knots_v30 §5"
+        - id: g_bond5
+          when: "Bonds >= 5"
+          then: "knot operations eligible (Memory-Query-checked prerequisite)"
+          "on": "Bonds"
+          source: "key_substrate_v30 §8.4"
     gap_notes:
-      - "v9 FI-03 (`ED-FI-0002`): the knots state and gates below describe `systems/fieldwork/sim/knots.py`, UNPLUGGED (IN-06/IN-32); the module's one entry today is `find` (`modules/fieldwork/find.py`, what a graded finding uncovers of a covert trail). IN-32 plugs `fieldwork.form_knot` under this same row."
+      - "v9 FI-03 (`ED-FI-0002`): the knots state and gates under `unplugged:` describe `systems/fieldwork/sim/knots.py`, UNPLUGGED (IN-06/IN-32); the module's one entry today is `find` (`modules/fieldwork/find.py`, what a graded finding uncovers of a covert trail). IN-32 plugs `fieldwork.form_knot` under this same row."
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
       - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
     status: extracted
@@ -371,7 +379,7 @@ modules:
       godot: python-oracle
       port_rank: 8
       parity: seam-io
-      note: "BUILD `gated` since v9 FI-03 (was `stub`): `find` runs only when an inquiry's `finding.made` carries a band `finding_terms` keys (`engine/season/rosters.yaml`) -- the condition -- and uncovers only a covert trail the finder did not witness; knots built but unplugged (IN-06/IN-32)."
+      note: "BUILD `gated` since v9 FI-03 (was `stub`): `find` runs only when an inquiry's `finding.made` or `conclusion.reached` (the `inquiry_modules` rows, B11.73) carries a band `finding_terms` keys (`engine/season/rosters.yaml`) -- the condition -- and uncovers only a covert trail the finder did not witness; knots built but unplugged (IN-06/IN-32)."
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary

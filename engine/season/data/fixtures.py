@@ -312,8 +312,8 @@ DEFAULT_FIXTURES = Fixtures(
     #
     # WHY `all_five` AND NOT `presence_only`: `presence_only` COSTS QUESTIONS (the narrowest arm
     # thins the claim->question link), while `all_five` removes most of the deposits and leaves that
-    # link where `total` had it. (`all_five` names five channels and is currently a measurement of
-    # THREE -- `chronicle` matches nobody and `post_remit` needs an obligee at the seat an act was
+    # link where `total` had it. (`all_five` names five channels and, when W6 measured it, was a measurement of
+    # THREE -- the then `chronicle` (since replaced by `reach`, B11.04) matched nobody and `post_remit` needs an obligee at the seat an act was
     # exercised through; `test_w6_every_named_channel_has_a_predicate…` asserts exactly which two
     # are inert.)
     #
@@ -830,9 +830,13 @@ DEFAULT_FIXTURES = Fixtures(
     # actually lossy at `Partial`, not one parked inert pending a later ruling.
     # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
     told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # v12 B11.55 (`16_PESSIMIST_SC_E` edit 1, C3-K1): A HEARER WHO HOLDS THE FIGURE FIRSTHAND HEARS IT AS HE HOLDS IT at a `Partial` telling of an amount, instead of the drifted copy (`loop/witness.py::_told_value`). A switch, not
+    # a number: `True` SHIPS (an honest teller's partial telling no longer lowers a knower's `record` of him), `False` is the control, today's drifted copy.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the told channel's numeric loss; the telling that reaches a firsthand holder is the one case the copy has a figure to be measured against, swept True (SHIPPED) / False (the control)]
+    knower_hears_true=True,            # `H-155`, swept False (control) / True (SHIPPED)
     # `H-177`..`H-179` (telling workplan `T3a`, `ED-IN-0282`; `RULINGS.yaml` CAT-3, closed: store
     # the teller, grade the claim WHEN READ by the hearer's relation to them). HOW MUCH A HEARER
-    # CREDITS A CLAIM SOMEONE TOLD THEM, read by `decision/options.py::teller_weight` -- the `weigh`
+    # CREDITS A CLAIM SOMEONE TOLD THEM, read by `queries/person_q.py::teller_weight` -- the `weigh`
     # `LedgerReader` ranks a person's own claims by in `belief_contradicts`. A told claim weighs
     # `clamp01(told_weight ** hops * relation * record)`, `relation = 1 + rank_gain*rank +
     # regard_gain*clamp(regard/STANCE_MAX, -1, 1)`, `record` = `H-183`'s factor below. CONTROL
@@ -854,7 +858,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `H-183` (telling workplan `T6`, `ED-IN-0282`). HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF
     # THEIR HEARSAY: `record = 1 + record_gain * (agree - dis) / (agree + dis)` over the hearer's
     # claims that teller passed on, each paired with the hearer's OWN firsthand claim on the same
-    # `(subject, predicate)` (`decision/options.py::record`); no pair is exactly 1.0, neutral.
+    # `(subject, predicate)` (`queries/person_q.py::record`); no pair is exactly 1.0, neutral.
     # `0` is the CONTROL: `record` is 1.0 whatever the ledger holds, so every weight is its pre-`T6`
     # value. Shipped `0.5` [ASSUMPTION]: a teller who was always right weighs half again as much as
     # a stranger, one who was always wrong half as much.
@@ -976,21 +980,53 @@ DEFAULT_FIXTURES = Fixtures(
     # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
     # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`
     # is the CONTROL and is SHIPPED [ASSUMPTION], on `H-190`'s precedent: the plan names the control
-    # and is silent on shipping `valence`, and `valence` moves what tellings carry.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
-    said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
+    # and is silent on shipping `valence`, and `valence` moves what tellings carry. v12 B11.09 (`08_FI_02` edits 2-4) adds `unshared` (drops the transport's
+    # own kinds, `rosters.yaml: said_slants` `arms:`) and `unshared_first` (the same, then the first non-empty tier of `prefers`); `unshared_first` ships when
+    # the batch's flip item sets it, once its gate reads (`16_PESSIMIST_FI_A` edits 1-3), so `newest` stays the shipped arm here.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so the readings are declared and swept newest / valence / unshared / unshared_first]
+    said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence / unshared / unshared_first
+    # v11 CR-29, A-32. WHETHER NEWS OF A SEAT CHANGE TRAVELS BY KIND: `realm` (SHIPPED) leaves the tenure-kind news
+    # (`rosters.yaml: seat_news_kinds`) at the reach `witness_channels.event_reach` gives it; `local` lifts it from the
+    # `reach` channel, so it reaches a person only by presence, jurisdiction and telling (`epistemic._ch_reach`,
+    # `rosters.yaml: seat_news_arms`). A measurement arm, B of A-32, not a design.
+    # [JUSTIFIED: A-32 -- ruled: one reach row for seat changes at `realm` ships, and `local` is kept as the tested alternative, so both are declared and swept realm / local]
+    seat_news="realm",                 # A-32, swept realm (SHIPPED) / local (arm B)
+    # v12 B11.08 (`08_FI_02` edit 5). WHO A TELLER OFFERS A TELLING (or a gift, an argument: a row whose cell carries a `with`
+    # conjunct on `to`) TO: `known` (SHIPPED, the control) is every person he has any claim of (`person_q.known_persons`);
+    # `seen_since_move` only those he holds a firsthand sighting of since his own newest movement (`person_q.present_persons`).
+    # The fold's `hearer` conjunct still refuses an absent one (`rosters.yaml: telling_hearer_arms`). Flipped by the batch's flip item.
+    # [JUSTIFIED: v12 B11.08 (08_FI_02 edit 5) -- no document gives who a teller offers a telling to, so both readings are declared and swept known / seen_since_move; shipped at the control]
+    telling_hearers="known",           # B11.08, swept known (control, SHIPPED) / seen_since_move
+    # v12 B11.22 (`08_FI_06` edit 6). WHETHER A TELLING CARRIES THE HAND THAT DID A DEED: under `on`, `queries/person_q.py::said_of` offers a person's deed claims
+    # about what a subject DID (`attributed_deeds`) beside the claims whose subject he is, and a `PAIRED_KINDS` deed carries the sighting that names its doer
+    # (`Said.pairing`); WITNESS deposits it as a told `seen` claim on the deed's chain, and `deed_doer` answers a told deed from it. `off` is the CONTROL (and the revert): a
+    # paired deed heard second-hand names nobody. SHIPPED `on` by this item's last step, after the gate's `on` readings read (`test_told_pairing.py`). A value but `off` and `on` is refused where read.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-495 -- site: Fixtures told_pairing, the limit it closes; the proposal ships `on` when its gate reads, so it is injected, swept off (the control) / on, and shipped `on` once the hand-built gate read]
+    told_pairing="on",                 # B11.22, swept off (the control) / on (SHIPPED, the gate read)
+    # v12 B11.10 (`08_FI_02` edit 7). HOW MANY CLAIMS ABOUT A SUBJECT A TELLER MAY CHOOSE AMONG TO PASS ON: the top this many the slant ranks
+    # (`queries/person_q.py::said_set`), one Candidate per claim and hearer (`rosters.yaml: choice_sourced`). `1` is the CONTROL and is SHIPPED: the single pick
+    # `said_of` made before the choice, so no act is renamed or rescored. A whole number of 1 or more.
+    # [JUSTIFIED: v12 B11.10 (08_FI_02 edit 7) -- no document gives how many claims a teller weighs, so it is injected and swept 1 (control, shipped) / 3; the shipped value is B98's]
+    said_choices=1,                    # B11.10, swept 1 (control, SHIPPED) / 3
+    # v12 B11.75 (`19_LACUNA` R-19-05). WHETHER `record` GRADES A CONCLUDER: at `1`, what a teller told a holder as a conclusion that names a doer (a told `concluded:<kind>` claim) is
+    # paired by `queries/person_q.py::record` against the holder's own reading of who did that deed, as a told cell is (`_pair`), so a concluder caught naming the wrong hand loses his
+    # record with that holder. `0` is the CONTROL and is SHIPPED: `record`'s `told` set is the cell predicates alone, so no pair is read and no weight moves. Only a TOLD holder is
+    # scored (the design departs from R-19-05's "by WITNESS or by telling": `proposals/v12_B11_a_conclusion_acted_on.md` §2). B98 sets it.
+    # [JUSTIFIED: v12 B11.75 (19_LACUNA R-19-05) -- no document gives whether a concluder is graded, only that one who is not is a free pass; injected and swept 0 (control, shipped) / 1, no target reading yet (B98)]
+    record_concluders=0,               # B11.75, swept 0 (control, SHIPPED) / 1
     # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
     # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
     # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to
     # correct; revert: none needed while it ships at 0 -- shipping it on is this one value], on
     # `H-190`'s precedent: the plan names the shape (a swept chance at control 0) and is silent on
     # shipping it on. At 0 no draw is taken, every deposit is `own`, and no circle exists for a
-    # retelling to break. Must lie in [0, 1].
+    # retelling to break. Must lie in [0, 1]. v12 B11.10: an act that carries its own `in_confidence` (`tell`, `lie`: `rosters.yaml: choice_sourced`) is read by
+    # that, and this is the share only for an act that carries none.
     # [JUSTIFIED: engine/season/hole_register.yaml H-197 -- the privacy chance; no document gives how often a telling is made in confidence, so it is injected and swept 0 / 0.5 / 1.0]
     telling_privacy=0.0,               # `H-197`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-199` (v9 IN-15, `AX-7`'s divergence formula; `H-36` rules its shape). HOW FAR THE CHANNEL A
     # CLAIM ARRIVED ON AND WHAT ITS RECEIVER ALREADY HELD LOWER THE CONFIDENCE IT LANDS AT:
-    # `decision/options.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *
+    # `queries/person_q.py::refracted_confidence` = `confidence * (1 - g*remove(channel)) *
     # (1 - g*dissent)`, applied by `loop/witness.py::_refract` to every deposit a person receives of
     # an act not their own. `0` is the CONTROL: nothing is refracted and every deposit is the
     # pre-IN-15 one. SHIPPED LIVE at the sweep's midpoint 0.5, per Jordan's ruling of 2026-10-09
@@ -1000,7 +1036,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-199 -- the refraction gain; AX-7 rules THAT channel, competence and prior belief govern divergence and H-36 that it is receiver-side, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
     refraction_gain=0.5,               # `H-199`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-200` (v10 CR-19, `AX-7`'s competence; `ED-IN-0327`). HOW FAR THE RECEIVER'S ATTUNEMENT SCALES THE
-    # CONFIDENCE A TOLD CLAIM LANDS AT: `decision/options.py::refracted_confidence`'s `competence` factor =
+    # CONFIDENCE A TOLD CLAIM LANDS AT: `queries/person_q.py::refracted_confidence`'s `competence` factor =
     # `min(1, 1 + g*(attunement - mid)/(mid - floor))`, `mid`/`floor` the attribute scale's (`descriptors.py`),
     # a receiver with no authored Attunement reading 1. `0` is the CONTROL AND IT SHIPS (the knowledge-model
     # fold, `proposals/2026-11-04-knowledge-model-build-plan.md` §11 item 4): the factor is in place and the
@@ -1229,14 +1265,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source proposes 0.5 and gives no derivation, so it ships as an assumption for Jordan and is swept 0.0 / 0.5 / 1.0]
     refusal_memory=0.5,                # `H-456`, swept 0.0 (control; revert) / 0.5 (SHIPPED since B09.05) / 1.0
-    # `H-111` (B09.04; `U5a_DICE_owed_edits` §4). WHO RECEIVES A `finding.none` EVENT AT WITNESS (`rosters.yaml: undeposited_kinds` skips it for everyone):
-    # `none` -- nobody (the CONTROL, and what ships; B98 sets the arm); `actor` -- its own doer alone, so a search he failed is a claim he remembers and
-    # `decision/choose.py::admission_weight` discounts (a no-op only at `refusal_memory` 0.0, the control). The arms are `rosters.yaml: finding_none_deposit_arms`.
+    # `H-111` (B09.04; `U5a_DICE_owed_edits` §4; B11.12, A-81; B11.61, CP-T06-04). HOW WITNESS TREATS AN EVENT OF A KIND `rosters.yaml: undeposited_kinds` NAMES (`finding.none`, `inquiry.refused`):
+    # `none` -- the whole Event fans to nobody (the CONTROL; revert); `actor` -- the Event is deposited as any Event but for its event-kind claim: its doer holds his own reads,
+    # the present hold `seen` (SHIPS since B11.12: no null scene; the arm's name is B09.04's and B11.61 widened what it deposits). The arms are `finding_none_deposit_arms`.
     # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
-    finding_none_deposit="none",       # `H-111`, swept none (control, SHIPPED) / actor
+    finding_none_deposit="actor",      # `H-111`, swept none (control; revert) / actor (SHIPPED since B11.12)
     # `H-183` (B09.06; `16_PESSIMIST_SC_B_one_reader_of_a_ledger` edit 1). WHETHER THE ONE COMPARATOR WEIGHS HOW SURE THE HOLDER STILL IS:
-    # `decision/options.py::teller_weight` multiplies every claim's weight by `present_confidence(c) / confidence_default`, and
+    # `queries/person_q.py::teller_weight` multiplies every claim's weight by `present_confidence(c) / confidence_default`, and
     # `ledger_weigh` takes the closure for any ledger holding a claim below full confidence. `False` is the CONTROL and the revert (the
     # closure and the condition are today's, exactly); `True` SHIPS (B09.08). A switch on an existing magnitude, `claim_decay_per_season`.
     # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]
@@ -1379,6 +1415,14 @@ DEFAULT_FIXTURES = Fixtures(
     # CONTROL and SHIPS: every told claim is taken up, as an unweighed read does, and the fixture is read only where a told self-claim is the best he holds. [ASSUMPTION; medium; Jordan to correct; revert: 0.0.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-483 -- site: Fixtures self_told_floor, graded `assumption`; no document gives how far he must credit a teller before he believes a thing of himself, so it is injected at the control and swept 0 / 0.5 / 0.75]
     self_told_floor=0.0,               # `H-483`, swept 0 (control, SHIPPED) / 0.5 / 0.75
+    # `H-496` (B11.66; `18_DETERMINISM_notice_is_a_draw` edit 6). WHETHER A BYSTANDER'S SEEING A DEED IS A DRAW, AND HOW HARD IT IS TO SEE: `notice_arm` `off` is the CONTROL and SHIPS (every pair
+    # `observers_for` admits deposits, today's fan); `on` draws each non-party witness of a deed once (`epistemic.py::notice`, read at `loop/witness.py::witness`), at the obstacle `notice_ob` names --
+    # a member of `rosters.yaml: difficulty_levels`, sized by `difficulty_ob` -- plus one level where the channel is not presence, one where the kind is covert, and the doer's live cover's
+    # quality. An arm outside `rosters.yaml: notice_arms` is refused at read; a level outside the roster is refused at load. B11.67 flips the arm when the gate reads; B98 sets the level.
+    # [ASSUMPTION; medium; Jordan to correct: the starting level `routine` -- basis: OBS's control arm uses `routine`; revert: `notice_arm: off`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-496 -- site: Fixtures notice_ob and notice_arm, graded `assumption`; the source gives the obstacle's member as "set at calibration" and the arm as `off` until its gate reads, so both are injected, the arm at the control and the level swept over B05's four difficulty levels]
+    notice_arm="off",                  # `H-496`, swept off (control, SHIPPED) / on
+    notice_ob="routine",               # `H-496`, swept plain / routine (SHIPPED) / demanding / hard
     # B24p.04 (V2 p2 §K): THE PROCEEDING'S OWN FIFTY-FOUR SETTINGS, each `[ASSUMPTION; Jordan to correct]`, read through `seam/wrappers/sigma.py::proceeding_dials`.
     # Every setting ships V2's value. B24p.04 left fifteen at the CONTROL (the levels `fit_level` and `answer_level` None; `repeat_step`, `esteem_step`, `off_step`,
     # `ploy_step`, `grain_strain`, `start_step`, `crowd_lean`, `heckle`, `room_level`, `heard_step`, `gap_step`, `weary_step` and `awe_step` at 0, the model's `CONTROL_ZERO`);
@@ -1664,6 +1708,10 @@ def load() -> None:
             raise Forbidden(f"`DIFFICULTY_OB_ARMS[{arm!r}]` sizes {list(arm_sizes)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
                             needs="one size per difficulty level, in the roster's order, in every arm",
                             law="T13 edit 1 -- the arms are one table at two sizes; an arm that skips a level answers for it with a KeyError mid-season")
+    if DEFAULT_FIXTURES.get("notice_ob") not in DIFFICULTY_LEVELS:
+        raise Forbidden(f"`Fixtures notice_ob` is {DEFAULT_FIXTURES.get('notice_ob')!r}", "data/fixtures.py",
+                        needs=f"a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
+                        law="B11.66 (H-496) -- the notice obstacle is a level the ladder names, sized by `difficulty_ob`, never a number made up here")
     kinds, stakes = set(roster("tenure_kinds")), set(DEFAULT_FIXTURES.get("stakes_ob"))
     if stakes != kinds:
         raise Forbidden(f"`Fixtures stakes_ob` sizes {sorted(stakes)}, and `rosters.yaml: tenure_kinds` names {sorted(kinds)}", "data/fixtures.py",

@@ -32,6 +32,7 @@ from ..gaps import Forbidden, Unspecified
 from ..harness import populated as P
 from ..boot.realm import build_realm
 from ..queries.world_q import members
+from .test_fi_referents import hears_of
 
 CROWN = {"faction": "Valorsmark"}
 CIRCLE = {"body": "Inner Circle"}
@@ -330,7 +331,8 @@ def test_in68_a_seat_holders_goal_reads_the_seat_a_loop_built_realm_built_it_as(
     row id `off_king`, so the id the goal lists IS the Office id and the census map is the identity (before it,
     the seat was `off_npc_020` and seeding had to record the built id in the Proposition's `scope`; that
     mutation, seeding without the scope, is no longer observable here -- the scope is now the listed ids).
-    The reader names the holder and FOLLOWS the hold."""
+    The reader names the holder and FOLLOWS the hold -- AS THE ASKER HEARS IT (v12 B11.08, `08_FI_01` edit 2): the realm starts with
+    the seat news (`seed_seat_news`), a hold closed on the World alone moves nobody's referent, and the closing the asker is told of does."""
     from ..queries import world_q
     w = _realm(monkeypatch, tmp_path, _king())
     seat = w._office_census["authored"]["off_king"]
@@ -339,8 +341,11 @@ def test_in68_a_seat_holders_goal_reads_the_seat_a_loop_built_realm_built_it_as(
     assert prop.scope == (seat,)
     onlooker = w.persons[HEIR]
     assert world_q.goal_referents(w, onlooker, prop) == (KING,)
-    # the referent FOLLOWS the hold: close the King's hold and nobody is named
+    # the referent FOLLOWS the hold as he hears it: closed on the World alone (no claim reaches him) the King is still named; told of the
+    # closing (the claims a witness of it deposits, newer than the news he started with), nobody is
     [h] = [t for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
     assert h.subject == KING
     h.until = 1
-    assert not h.live and world_q.goal_referents(w, onlooker, prop) == ()
+    assert not h.live and world_q.goal_referents(w, onlooker, prop) == (KING,)
+    hears_of(onlooker, seat, KING, kind="tenure.closed", when=1)
+    assert world_q.goal_referents(w, onlooker, prop) == ()

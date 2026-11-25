@@ -34,11 +34,11 @@ from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
 from .arrangements import ARRANGEMENTS, _DISPOSES_LITERALS
 from .matrix import MATRIX, Step
 from .requires import (
-    KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
-    TypedRequires, build_typed_requires,
+    CELL_STEMS, KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
+    ScalarThreshold, TypedRequires, WITH_STEM, build_typed_requires,
 )
 from .rosters import (
-    CONTEXT_KEY, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -81,6 +81,15 @@ if _unclassified:
         "column, which that check exists to forbid.")
 _OPERAND_BENEFICIARIES = tuple(
     sorted(k for k, v in _BENEFICIARY_CARRIAGE.items() if str(v).strip() == "operand"))
+
+@dataclass(frozen=True)
+class Look:
+    """ONE THING A ROW'S ACT LOOKS AT (B11.71, `08_FI_03` §2, FRES §8): the operand it looks at (`of`, a `requires_operands` member the row's own
+    cell binds) and the `rosters.yaml: look_reads` member it reads there (`read`). It names what is looked at and NEVER A BAND: which reads a
+    band deposits is `rosters.yaml: finding_terms`'s, the one band-keyed table. `queries/world_q.py::WorldReader.look` answers it (`.looks` for a whole row)."""
+    of: str
+    read: str
+
 
 @dataclass(frozen=True)
 class VerbRow:
@@ -239,6 +248,16 @@ class VerbRow:
     # verb needing more columns is one the design has not finished thinking about*). The column is picked, as U1 §1 picks `capability:`,
     # because a loader default makes a missing value explicit and refusable (B4's third disposition); `04` is not edited.
     regard_sign: Optional[int] = None
+    # B11.65 (`18_DETERMINISM_notice_is_a_draw` edit 1): IS THE ROW'S DEED DONE TO BE SEEN -- one that those present learn without a draw,
+    # as a public act in ordinary speech is one done openly. A boolean, REQUIRED ON EVERY ROW and never derived from the verb's name: the
+    # loader refuses a row that omits it or writes a non-boolean (a string, an integer, a null). Read by `epistemic.py::notice` (B11.66): a `public`
+    # row's deed draws no notice for a person its precedence-head channel admits. ⚠ LAYER 1, NAMED AT THE SITE, as `regard_sign` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
+    public: bool = False
+    # B11.71 (`08_FI_03` §2, FRES §8): WHAT AN ACT OF THIS ROW LOOKS AT BESIDE THE READS ITS OWN CELL MAKES -- a FLAT list of `Look`s (`observes:`), the
+    # non-gating reads the fold takes and attaches to the act's Events as `Observation`s; WITNESS deposits the ones the Event's band lists in
+    # `rosters.yaml: finding_terms` (the actor's own reads, as every observation). `()` is the declared absence (every row but three). ⚠ LAYER 1,
+    # NAMED AT THE SITE, as `public` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
+    observes: tuple = ()
     # B24p.16 (RD §D.1; V2 p2 §M): HOW THE VERB PROCEEDS -- a verb that influences a person by words opens a proceeding, and its row says WHICH and in what
     # form (R3, R6). A tuple of `(when, row, form, move, item)` entries, the first whose `when` holds read (`world_q.proceeding_row`): `when` a tuple of
     # `(key, value)` pairs (`hearer`: `cohort`; `docketed`: `True`), empty for the fallback that closes every list; `row` an arrangement id, or `docket` (the
@@ -284,6 +303,19 @@ class VerbRow:
         read before the module-global exists) both ask."""
         return self.contested_against_subject() or (
             self.verb in opposed_without_prize and self.opponent_operand() == "subject")
+
+    def with_operands(self) -> tuple:
+        """THE `of:` OPERANDS OF THE ROW'S `relation: with` CONJUNCTS (v12 B11.69, `14_VERBS_SOCIAL1_A` edit 3): the operands the cell asks to
+        be WITH the actor -- `to` for `tell`, `lie`, `give`, `argue`, `accept`; `subject` for `tend`, `train`, `challenge`, `fight`, `capture`. Read off the typed
+        cell's TOP-LEVEL clauses (an `AllOf`'s, or the lone clause; a `with` nested under another conjunction is not seen, no shipped cell nests
+        one) by the relation's stem, never a verb name; an untyped row has none. The ONE reader of that conjunct at formation: where the
+        person is offered an act (`decision/options.py::opening_set`) and which bags he forms (`::_person_bags`) both ask it."""
+        req = self.requires_typed
+        if req is None:
+            return ()
+        top = req.requirement
+        return tuple(dict.fromkeys(c.of for c in (top.clauses if isinstance(top, AllOf) else (top,))
+                                   if isinstance(c, Relation) and c.relation == WITH_STEM))
 
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
@@ -772,6 +804,41 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
                 "is the subsystem's")
 
 
+def _build_looks(verb: str, raw, row: "VerbRow") -> tuple:
+    """B11.71: A ROW'S `observes:` COLUMN INTO `Look`s, or the load refuses naming the row. The column is a FLAT LIST of `{of: <operand>, read: <read>}`
+    -- a mapping (a band-keyed one) or an entry that names a band is refused, since which reads a band deposits is `finding_terms`'s and a second
+    band-keyed table beside it is the defect FRES §8 names. Each `of` is a `requires_operands` member the row's own cell BINDS (an operand the act
+    never carries looks at nothing), each `read` a `look_reads` member, and no `read` is a stem the row's own cell asks: WITNESS tells a look from a
+    gating read by the stem, so a stem on both sides would let a failed look pass for a gating read. A row that keys no `emits:` by degree has no band,
+    and WITNESS deposits none of its looks (no `finding_terms` row for `None`). A function so a test can plant each refusal."""
+    if raw is None:
+        return ()
+    if not isinstance(raw, list):
+        raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` is {type(raw).__name__}, not a flat list of `{{of, read}}` entries -- it names what is "
+                         "looked at and never a band (`rosters.yaml: finding_terms` is the one band-keyed table)")
+    cell = row.requires_typed
+    out = []
+    for entry in raw:
+        if not isinstance(entry, dict) or set(entry) != {"of", "read"}:
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` entry {entry!r} is not `{{of: <operand>, read: <read>}}`")
+        of, read = entry["of"], entry["read"]
+        if of in DEGREE_BANDS or read in DEGREE_BANDS:
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` entry {entry!r} names a band; it names what is looked at, and "
+                             "`rosters.yaml: finding_terms` says which reads a band deposits")
+        if of not in REQUIRES_OPERANDS or cell is None or of not in cell.operands():
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` looks at {of!r}, which its `requires_typed` cell does not bind "
+                             f"(binds {sorted(cell.operands()) if cell is not None else 'nothing -- the row is untyped'}); the act would not carry it")
+        if read not in LOOK_READS:
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` reads {read!r}, which is not a `rosters.yaml: look_reads` member ({sorted(LOOK_READS)})")
+        if read in cell.stems():
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` reads {read!r}, a stem its own cell asks: a look is a NON-GATING read, and WITNESS "
+                             "tells it from a gating one by the stem")
+        out.append(Look(of, read))
+    if len(set(out)) != len(out):
+        raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` lists a look twice")
+    return tuple(out)
+
+
 # B24p.16: THE KEYS OF ONE `proceeds:` ENTRY, AND THE SET EACH CELL IS A MEMBER OF. Read by `_proceeds_entries` (the normaliser) and `_check_proceeds`.
 _PROCEEDS_KEYS = ("when", "row", "form", "move", "item")
 _PROCEEDS_FORMS = ("full", "abridged", "auto")
@@ -863,6 +930,15 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} carries unknown key(s) {unknown}. 04 §B.13 #10 -- a "
                 f"row's keys are the ones this loader reads ({sorted(_VERB_ROW_KEYS)}) or an "
                 "annotation spelled `*_note`; any other column is read by nothing.")
+        # B11.65: THE `public:` COLUMN, REQUIRED ON EVERY ROW AND A BOOLEAN (`18_DETERMINISM_notice_is_a_draw` edit 1; as `capability:` below, no
+        # default by omission). `isinstance(..., bool)` and nothing looser: `1`, `"yes"` and a null are not booleans.
+        if "public" not in r:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares no `public:`. Every row says whether its deed is done to be seen "
+                "(`public: true` or `public: false`); a row that omits it would leave the notice draw to guess from the verb's name.")
+        if not isinstance(r["public"], bool):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `public: {r['public']!r}`, which is not a boolean. Write `true` or `false`.")
         # ⚠ `writes:` NOW TAKES TWO SHAPES (#358 rev.2 invariant 12). A mapping is degree-keyed;
         # a sequence is the flat form. The union feeds the Part D check below either way, so a
         # pair named in ANY branch is still validated against the matrix at load.
@@ -914,8 +990,10 @@ def _load_verb_table() -> dict:
                       brute_note=str(r.get("brute_note") or "").strip(),
                       difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
                       regard_sign=r.get("regard_sign"),
+                      public=r["public"],
                       proceeds=_proceeds_entries(name, r.get("proceeds")),
                       domain=tuple(r.get("domain") or ()))
+        row = replace(row, observes=_build_looks(name, r.get("observes"), row))
         # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
         # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
         if row.regard_sign is None:
@@ -1533,6 +1611,28 @@ def arrangements_without_a_disposal_opener() -> list[str]:
 
 VERB_TABLE = _load_verb_table()
 
+
+def _quantity_stems(table: dict) -> frozenset:
+    """THE STEMS OF AN AMOUNT (v12 B11.51, `16_PESSIMIST_FI_A` edit 1): the stems of every `scalar_threshold` clause any row's `requires_typed`
+    carries -- whatever the table compares against a threshold -- kept to the ones a cell holds (`data/requires.py: CELL_STEMS`). Derived,
+    never spelt, on `CELL_STEMS`' own precedent. A rumour may garble an amount (`loop/witness.py::_told_value`; the liar's number,
+    `queries/person_q.py::lie_said_of`); a numeric value on any other stem is an existence reading stored as 0/1 and is passed whole."""
+    out = set()
+
+    def walk(req) -> None:
+        if isinstance(req, AllOf):
+            for c in req.clauses:
+                walk(c)
+        elif isinstance(req, ScalarThreshold):
+            out.update(req.stems())
+    for row in table.values():
+        if row.requires_typed is not None:
+            walk(row.requires_typed.requirement)
+    return frozenset(out) & CELL_STEMS
+
+
+QUANTITY_STEMS = _quantity_stems(VERB_TABLE)
+
 # B04.04 (U1-A steps 2-3): WHICH SKILL A VERB TESTS, DERIVED FROM THE ROW THAT HOLDS IT -- the `capability:` column on this table
 # (`descriptors.CAPABILITIES` defines the skill, `descriptor_registry.yaml: capabilities`). The `rosters.yaml: verb_capability`
 # roster it replaces is deleted; `data/rosters.py` re-exports nothing of it (it loads BEFORE this table and may not import it,
@@ -1729,9 +1829,8 @@ def act_key(verb: str, subject, operands) -> str:
     # CP-T04-02: AND THE CHOICE, FOR A ROW THAT CARRIES ONE (`CHOICE_SOURCED`, `marshal`'s `role` and `retreat_at`). A
     # Candidate is formed once per combination on the same subject, so two chosen in one deliberation would share
     # `(actor, verb, subject)` and `state/acts.py` would refuse the second. Present only on a row the roster names.
-    for n in CHOICE_SOURCED.get(verb, ()):
-        if ops.get(n) is not None:
-            key += f"#{ops[n]}"
+    for _, v in choice_values(verb, ops):
+        key += f"#{v}"
     if ops.get(VIA) is not None:
         key += f"@{ops[VIA]}"
     return key
@@ -1986,6 +2085,23 @@ _check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
 _check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
+# B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)-(2)): A CONCLUSION IS WHAT A PERSON DECIDES HAPPENED AND WHO DID IT, FROM WHAT HE HOLDS. The kind a row reports a winning
+# `reconstruct` as (`conclusion.reached`), the payload key his conclusion rides the act under (`concluded`: `(the one the deed was done to, <deed kind>,
+# doer)`, read off his OWN ledger at CHOOSE by `queries/person_q.py::_concluded`, with `conclusion_cites` for what each rests on) and the predicate stem WITNESS deposits it under to the maker
+# (`concluded:<deed kind>`, `loop/witness.py`). `CONCLUDING_VERBS` is read off the table, no verb listed: the rows that report the kind. Refused at import when
+# no row does, so a deposit nothing forms an act for cannot read as built.
+CONCLUSION_KIND, CONCLUDED_KEY, CONCLUDED_STEM = "conclusion.reached", "concluded", "concluded"
+# B11.75 (`19_LACUNA` R-19-04): WHICH SUSPECT IS A CHOICE. Where his ledger names several doers of a deed on one subject, `opening_set` forms one `reconstruct` Candidate per
+# `(deed kind, doer)`, each carrying its own `concluded` triple, the claims that name him (`CITES_KEY`) and this key -- its place among them -- so the acts' ids differ
+# (`choice_values`: `concluded` is a choice only where fanned, as `said` is); `decision/choose.py::settle_conclusions` keeps one, drawn by support.
+CONCLUDED_RANK_KEY = "concluded_rank"
+CONCLUDING_VERBS = frozenset(v for v, r in VERB_TABLE.items() if CONCLUSION_KIND in r.emits)
+if not CONCLUDING_VERBS:
+    raise Unspecified(
+        f"no verb row emits {CONCLUSION_KIND!r}", "verb_table.yaml -- B11.73",
+        needs=f"a row whose `emits:` reports {CONCLUSION_KIND!r}, or the conclusion's constants removed",
+        law="FRES §7 -- a conclusion is deposited to the maker of the act that reaches it; a kind no row emits deposits to no one")
+
 
 def _asks_subject_held(row: "VerbRow") -> bool:
     """WHETHER THE ROW'S TYPED CELL ASKS THE ACTOR TO HOLD ITS `subject` -- a `relation` conjunct of
@@ -2127,9 +2243,47 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 # lists spelt here. REFUSED AT IMPORT, `VOCATION_SOURCED`'s reason: a verb the table lacks, a key with no range, or a verb whose
 # row writes no `CHOICE_CARRIER` of the key (the order is a minted document, `Record.exists`; a besieged posture's wear is
 # written on `Site.condition`) would each carry a choice nothing reads.
+SAID_KEY, SAID_RANK_KEY, IN_CONFIDENCE_KEY = "said", "said_rank", "in_confidence"
 CHOICE_RANGES = {ORDER_ROLE_KEY: tuple(ORDER_ROLES), ORDER_RETREAT_KEY: tuple(ORDER_RETREAT_AT),
-                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES)}
-CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition"}
+                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES), IN_CONFIDENCE_KEY: (False, True)}
+SITE_KEY = "site"
+# v12 B11.74 (R-19-03, FRES §7 (3)): `CITES_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the claim ids and Record ids the utterer HOLDS and cites for what he
+# asserts, a pick of held ids (`11_GO_player_surface_contract_B.md` §5), carried on the act's payload under its own name and stored by `_eff_utter` as
+# `Proposition.support`. It has no `CHOICE_RANGES` entry (`SAID_KEY`'s shape) and is NOT in `LEDGER_RANGES`: that roster adds referents for a verb to form on
+# (`opening_set`), and the held ids are what a CONCLUSION cites, not what `utter` forms on, so no Candidate carries `cites` until typed `utter` (B25,
+# `14_VERBS_SOCIAL2_B` §1) forms one from a held claim; `_fanned_choices` never fans it (no closed range), so the shipped season forms what it formed.
+CITES_KEY = "cites"
+CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists",
+                  CONCLUDED_KEY: CONCLUSION_KIND}
+# v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
+# (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
+# shape). The carrier is the kind the look emits (`finding.made`), as a telling's is its deposit.
+def _check_ledger_ranges(ranges: dict, event_kinds, look_reads, classes) -> dict:
+    """`rosters.yaml: choice_sourced`'s `ledger_ranges`, checked and frozen: each KEY is a choice carrier (`CHOICE_CARRIER`) and each PREDICATE is a form a
+    held claim can carry -- an Event kind (`EVENT_KINDS`), a `look_reads` member (the observation a look deposits), or `exists:<class>` over a class the write
+    matrix declares. A key no verb carries, or a predicate no claim is ever held under, would range over an empty ledger forever and read as built; a function,
+    so a test can plant each refusal."""
+    out = {k: tuple(ps or ()) for k, ps in ranges.items()}
+    bad = {k: [x for x in ps if not (x in event_kinds or x in look_reads or (x.startswith("exists:") and x[len("exists:"):] in classes))]
+           for k, ps in out.items()}
+    bad = {k: v for k, v in bad.items() if v or not out[k]}
+    nokey = sorted(k for k in out if k not in CHOICE_CARRIER)
+    if nokey or bad:
+        raise Forbidden(
+            f"`rosters.yaml: choice_sourced` `ledger_ranges` names keys {nokey} outside `CHOICE_CARRIER`, or predicates {bad} that are no Event kind, `look_reads` "
+            f"member or `exists:<class>` (an empty list is refused too)",
+            "rosters.yaml -- choice_sourced.ledger_ranges",
+            needs="a key `CHOICE_CARRIER` carries, over predicates a held claim can carry",
+            law="v12 B11.72 -- a ledger-sourced range is the subjects of the actor's own claims under these predicates; one no claim carries ranges over nothing")
+    return out
+
+
+LEDGER_RANGES = _check_ledger_ranges(roster_map("choice_sourced", "ledger_ranges"), EVENT_KINDS, LOOK_READS, {c for c, _ in MATRIX})
+# v12 B11.10 (`08_FI_02` edits 7-8): `SAID_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the top `Fixtures.said_choices` claims `said_of`'s slant ranks for the
+# subject (`queries/person_q.py::said_set`), so it has no `CHOICE_RANGES` entry; it rides the payload as it always did, and counts as chosen only where the
+# fan held several (`SAID_RANK_KEY`, `choice_values`). A telling writes nothing, so the carrier of its two keys is the kind its deposit is (`loop/witness.py`'s
+# `news.told` branch reads `said`, `_circle_of` reads `in_confidence`): the row must emit it.
 
 
 def _load_choice_sourced(values: dict) -> dict:
@@ -2137,17 +2291,33 @@ def _load_choice_sourced(values: dict) -> dict:
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or not ks or any(k not in CHOICE_RANGES or CHOICE_CARRIER[k] not in row.writes for k in ks):
+        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k not in (SAID_KEY, CITES_KEY, CONCLUDED_KEY) and k not in LEDGER_RANGES)
+                                        or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
-                f"its row writes no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_RANGES)}",
+                f"its row writes or emits no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_CARRIER)}",
                 "rosters.yaml",
-                needs="a `verb_table.yaml` verb that writes each key's carrier, and keys `CHOICE_RANGES` carries",
+                needs="a `verb_table.yaml` verb that writes or emits each key's carrier, and keys `CHOICE_CARRIER` carries",
                 law="CP-T04-02 -- a choice rides an act that writes what the choice is read from, over a closed set")
     return out
 
 
 CHOICE_SOURCED = _load_choice_sourced(roster_map("choice_sourced", "values"))
+
+
+def choice_values(verb: str, ops) -> tuple:
+    """`(key, value)` for each CHOICE VALUE the operands `ops` carry for `verb` (`rosters.yaml: choice_sourced`, in its order): the one reader, for `act_key`'s
+    suffix and the chooser's score (`decision/choose.py::chosen_values`). `said` is a choice only where `opening_set` fanned it over several claims, and
+    its value is then the claim's RANK (`SAID_RANK_KEY`, 0 for the claim `said_of` ranks first), never the `Said`: with one claim to say there is nothing
+    to choose among, and riding the lone claim on every act would rename every telling (`_fanned_choices`'s reason for a one-member range).
+    `concluded` (B11.75) is a choice the same way: its value is the variant's place among the doers his ledger names (`CONCLUDED_RANK_KEY`), absent for one doer."""
+    ops = ops if isinstance(ops, dict) else {}
+    out = []
+    for k in CHOICE_SOURCED.get(verb, ()):
+        v = ops.get(SAID_RANK_KEY) if k == SAID_KEY else ops.get(CONCLUDED_RANK_KEY) if k == CONCLUDED_KEY else ops.get(k)
+        if v is not None:
+            out.append((k, v))
+    return tuple(out)
 
 
 # B24p.24: THE VERBS THAT CARRY A `rig` (`rosters.yaml: rigged_verbs`, read in `decision/options.py::opening_set`). REFUSED AT IMPORT for a verb the
@@ -2623,7 +2793,7 @@ def _check_choice_cells(choices: Optional[dict]) -> dict:
     operands), a value outside that key's `CHOICE_RANGES` (no candidate holds it), an axis off the roster (`axis_weight` never reaches it)
     and a cell that is not a number. No value is required to carry a cell: a value the block does not name scores as the table's default.
     A value is spelt as `CHOICE_RANGES` spells it (`retreat_at`'s `0.5` is quoted in the YAML, and compared as the string it is)."""
-    sourced = {k for ks in CHOICE_SOURCED.values() for k in ks}
+    sourced = {k for ks in CHOICE_SOURCED.values() for k in ks if k in CHOICE_RANGES}   # `said` ranges over no roster: it is scored by the claim's own valence
     law = ("B10.56 / `02_CHAR_choice_alignment` -- a choice cell scores a value a candidate's operands can carry, on a rostered axis; "
            "a cell nothing reads is never reported")
     out: dict = {}

@@ -109,7 +109,11 @@ def _world(*observers, holders=("p_a",)):
         w.persons[h].tenures.append(Tenure(f"t_hold_{h}", h, SEAT, "hold", i))
     for pid, ledger in observers:
         w.persons[pid].tenures.append(Tenure(f"t_commit_{pid}", pid, THRONE, "commit", 0))
-        w.persons[pid].ledger = list(ledger)
+        # v12 B11.08: an ambition's referents are the asker's OWN ledger's, so each observer has HEARD each holder come to the seat
+        # (the two claims a witness deposits, about the holder and about the seat, at one `(when, lap)`; `holders_named` reads newest first, so the first holder is the newest).
+        heard = [Claim(f"c_heard_{pid}_{h}_{n}", pid, subj, "tenure.opened", True, len(holders) - i, "told_by", 100, "own", 0)
+                 for i, h in enumerate(holders) for n, subj in enumerate((h, SEAT))]
+        w.persons[pid].ledger = list(ledger) + heard
     return w
 
 

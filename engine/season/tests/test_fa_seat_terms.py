@@ -109,12 +109,17 @@ def test_term_null_reproduces_the_hash(monkeypatch):
 
 
 def test_a_seat_emptied_by_a_death_is_offered_as_a_vacancy():
-    w, _ = _gov_world()
+    w, d = _gov_world()
     w.add_tenure(Tenure("t_reeve_held", CONFEREE, SEAT, "hold", w.tick))
     assert SEAT not in world_q.vacancies(w, w.persons[CONFERRER]), "control: a held seat is no vacancy"
     w.step = Step.MATTER
+    _n = len(w.log)
     _die(w, mint_token(w, WriteClass.MATTER), CONFEREE)
     assert CONFEREE not in w.persons and _hold(w, SEAT) is None
+    # v12 B11.08: a vacancy is the claims HIS OWN ledger holds of the seat, so the conferrer is offered it once WITNESS has told him of the death's closure; before, the control.
+    assert SEAT not in world_q.vacancies(w, w.persons[CONFERRER]), "control: he has not yet heard"
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), list(w.log[_n:]))
     assert SEAT in world_q.vacancies(w, w.persons[CONFERRER])
     assert SEAT in _classed(w)[CONFERRER]
 

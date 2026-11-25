@@ -42,7 +42,7 @@ from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..queries import world_q
-from ..queries.person_q import ledger_names
+from ..queries.person_q import vacant_named
 from ..state.carriers import Act
 from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 
@@ -89,7 +89,10 @@ def _plant(monkeypatch, route, seed=0):
     assert king and heir_id and king != heir_id, "fixture: no distinct throne-holder and heir"
     heir = w.persons[heir_id]
     d = SeasonDriver(w)
-    control = _reading(w, heir, world_q.questions_for(w, heir, None))    # throne held, before anything
+    # throne held, before anything. v12 B11.08: the realm starts with the seat news (`seed_seat_news`), so the heir already holds the throne as HELD: links (i)-(iii) read true
+    # before the death, and `_reading`'s "stamped" and "answered" mean he has HEARD IT VACANT, so they read false here and are the control beside `vacant`.
+    control = {**_reading(w, heir, world_q.questions_for(w, heir, None)), "vacant": vacant_named(heir.ledger, THRONE)}
+    assert not (control["stamped"] or control["answered"] or control["vacant"]), f"control: the throne reads vacant to the heir while held: {control}"
     if route == "death":
         w.step = Step.MATTER
         w._emitted_by_write = []
@@ -110,7 +113,8 @@ def _plant(monkeypatch, route, seed=0):
     w.log.extend(events)
     w.step = Step.WITNESS
     d.witness(mint_token(w, WriteClass.INTERIOR), events)
-    deposited = THRONE in ledger_names(w.persons[heir_id].ledger)
+    deposited = vacant_named(w.persons[heir_id].ledger, THRONE) and any(
+        c.subject == THRONE and c.predicate == "tenure.closed" for c in w.persons[heir_id].ledger)
     spy = _HeirSpy(heir_id)
     spy.install(monkeypatch)
     _one_season(w, d)
@@ -120,7 +124,7 @@ def _plant(monkeypatch, route, seed=0):
 def test_planted_death_of_the_throne_holder_reaches_the_heir_as_a_classed_office_referent(monkeypatch):
     deposited, control, spy, kinds = _plant(monkeypatch, "death")
     assert "tenure.closed" in kinds, f"the death named no seat: {kinds}"
-    assert not any(control.values()), f"control: the heir already heard of the throne: {control}"
+    assert not control["vacant"], f"control: the heir already heard the throne empty: {control}"
     readings = _vacant_readings(spy)
     link = _failing_link(deposited, readings)
     assert link is None, f"IN-61 STAYS STOPPED -- first failing link: {link}; readings {readings}"
@@ -132,7 +136,7 @@ def test_planted_release_of_the_throne_reaches_the_heir_as_a_classed_office_refe
     through the real fold. No death, no `person.died`: the seat reaches the heir by `release`'s own
     `tenure.closed` (the closed edge's id, which WITNESS expands to the seat)."""
     deposited, control, spy, kinds = _plant(monkeypatch, "release")
-    assert not any(control.values()), f"control: the heir already heard of the throne: {control}"
+    assert not control["vacant"], f"control: the heir already heard the throne empty: {control}"
     assert "person.died" not in kinds, kinds
     readings = _vacant_readings(spy)
     link = _failing_link(deposited, readings)

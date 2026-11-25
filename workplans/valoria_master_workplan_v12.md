@@ -252,7 +252,6 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
-| S12 | B11 (FI) |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
@@ -269,7 +268,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | **M0 · ground** | B04 | B00, B01, B02, B03, B03a, B13, B16M, B04 | R-01, R-02 (on the new instruments), R-03 | all three hold; the other six print their held counts for the first time |
 | **M1 · every outcome is drawn** | B08 | B05, B08 | R-03 (with R-03.c); R-09.a, .c, .d, .e | R-09 short of R-09.b only |
 | **M2 · persons** | BA1 | — (BA1 landed at `ce61cbf30`) | R-06, R-08, R-09; R-07 if R-07.c reads with its receipt | R-06, R-08, R-09 hold; R-07 holds or is one conjunct short |
-| **M3 · every verb** | B35 | B11, B12a, B12b, B12c, B21b, B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
+| **M3 · every verb** | B35 | B12a, B12b, B12c, B21b, B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
 | **M4 · every scale** | B36 | B16, B19a, B19, B20, B24, B30, B34, B36 | R-04 | every R-04 conjunct holds |
 | **M5 · the rulings beyond the nine, and the carried positions** | B40 | B18, B31, B33, B37, B38, B39, B40, B41, B11F1, B11F2, B21d, B21s, B37p | none new; R-05 re-read at B38, R-06.e and R-09.b at B39, all nine at B40 | all nine hold |
 | **the settings, then the re-take** | B99 | B98, B99 | all nine, on B98's closing tree (the settings as set) | `m1_acceptance --summary` row 3 reads what the readings say |
@@ -365,7 +364,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
 | B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) |
-| B11-fi-readers | FI | ED-FI-0010..0011 (0+2) | H-492..H-498 (2+5) |
 | B11F1-flow-se | SE | ED-SE-0057..0058 (0+2) | H-499..H-505 (2+5) |
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) |
 | B12a-world-motion-and-ground | SE+WR | ED-SE-0059..0060 (0+2) | H-523..H-540 (13+5) |
@@ -441,7 +439,7 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B11-fi-readers | `valoria_master_workplan_v12_part16.md`, `_part16_cont.md`, `_part17.md`, `_part17_cont.md` |
+
 | B12a-world-motion-and-ground | `valoria_master_workplan_v12_part19.md`, `_part20.md` |
 | B21b-fa-war | `valoria_master_workplan_v12_part21.md`, `_part21_cont.md` |
 | B24-sc-hearing | `valoria_master_workplan_v12_part22.md`, `_part22_cont.md` |

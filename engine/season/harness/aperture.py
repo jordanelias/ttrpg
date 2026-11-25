@@ -122,7 +122,7 @@ from typing import Any, Callable
 from ...substrate import composition
 from ..data.matrix import MATRIX
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
-from ..data.rosters import (CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES, RECORD_KINDS,
+from ..data.rosters import (CLAIM_SOURCES, GRADED_TASKS, QUESTION_AGGREGATION, QUESTION_SOURCES, RECORD_KINDS,
                             TENURE_KINDS)
 from ..data.verbs import COUNTERPARTY_CLAUSE, EMITTED_KINDS, VERB_TABLE, WRITE_CLAUSE
 from ..decision import aggregate_questions, assemble, opening_set, person_side_eligible
@@ -821,6 +821,46 @@ def null_scene_lines(m: dict) -> list:
                                                 for c in NULL_CLASSES))
     out.append("    " + null_line(r))
     return out
+
+
+#: The inquiry row's emission that is not a find (`verb_table.yaml`: every inquiry row lists it beside its success kind).
+NO_FIND = "finding.none"
+
+
+def inquiry_verbs() -> tuple:
+    """The inquiry verbs, sorted: the `graded_tasks` rows of `form: inquiry` (`data/rosters.py::GRADED_TASKS`), the one roster that says which verbs look."""
+    return tuple(sorted(v for v, r in GRADED_TASKS.items() if r["form"] == "inquiry"))
+
+
+def inquiry_counts(w, actor=None) -> dict:
+    """`{verb: {"formed": n, "refused": n, "found": n}}` per inquiry verb over the act store (`corpus_run.attempts`, the one owner of made and
+    refused), for `actor`'s acts or everyone's (B11.76, `08_FI_03` §5). `formed` is an act of the verb that entered RESOLVE (a Candidate the
+    chooser picked and the loop took up: the count of the Candidates themselves is `instrumented_season`'s `formed`, which a played run does not
+    watch); `refused` one that emitted the row's refusal kind; `found` one that emitted a kind of the row's `emits` other than `NO_FIND`. An act
+    both refused and found is counted in both. `attempts` reads ids over ticks `0..n`, so `n` is the world's own tick: a played world's clock is
+    not a season count. A reading, never a threshold."""
+    out = {v: {"formed": 0, "refused": 0, "found": 0} for v in inquiry_verbs()}
+    for a, made, no in attempts(w, w.tick):
+        if a.verb in out and (actor is None or a.actor == actor):
+            c = out[a.verb]
+            c["formed"] += 1
+            c["refused"] += 1 if no else 0
+            c["found"] += 1 if any(k != NO_FIND for k in made) else 0
+    return out
+
+
+def inquiry_lines(w, actor=None) -> list:
+    """THE APERTURE LINE PER INQUIRY VERB (B11.76, `08_FI_03` §5), printed beneath a scenario's summary line: `inquiry <verb> formed <n> refused <n>
+    found <n>` (`inquiry_counts`), for `actor` or everyone."""
+    return [f"inquiry {v:<12} formed {c['formed']} refused {c['refused']} found {c['found']}" for v, c in inquiry_counts(w, actor).items()]
+
+
+def null_reading(w, scope=None) -> tuple:
+    """`(null, total)` of `storybar.null_scenes` over the act store of `w` -- the acts that left no durable write and every act -- for the acts `scope` keeps
+    (an `attempts` predicate: a scenario passes the acts its own premise did not fold). The count a scenario's summary line prints (`IS-B2-CORE-03` (2)),
+    read from the instrument B02 owns and not recounted. `null_scenes` reads ids over ticks `0..n`: `n` is the world's own tick."""
+    r = null_scenes(w, w.tick, scope=scope)
+    return sum(r["null"].values()), r["total"]
 
 
 def pooled_built_out_lines(ms: list) -> list:

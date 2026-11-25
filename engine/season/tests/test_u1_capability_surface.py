@@ -383,9 +383,8 @@ def test_a_reader_spelling_an_unregistered_site_is_refused_at_import():
     """F17: each Python literal that names a site binds it through `rosters.require_use_site`, so a renamed site refuses
     rather than reading no capability. The control is the three shipped literals (each is a registered site)."""
     from engine.season.data import rosters
-    from engine.season.decision.options import TOLD_CLAIM_CREDIT
     from engine.season.gaps import Unspecified
-    from engine.season.queries.person_q import OWN_STATE_GATE
+    from engine.season.queries.person_q import OWN_STATE_GATE, TOLD_CLAIM_CREDIT       # B11.21: `TOLD_CLAIM_CREDIT` moved with `competence`
     from engine.season.seam.wrappers.sigma import SOCIAL_ROLL_SITE
     for literal in (TOLD_CLAIM_CREDIT, OWN_STATE_GATE, SOCIAL_ROLL_SITE):
         assert rosters.require_use_site(literal) == literal and literal in rosters.CAPABILITY_USE_SITES

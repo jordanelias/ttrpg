@@ -20,6 +20,7 @@ import pytest
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..decision import options as OPT
+from ..queries import person_q as PQ     # B11.21: `competence` is defined here; `refracted_confidence` calls its own module's binding
 from ..data.rosters import capability_uses
 from ..decision.options import competence, refracted_confidence
 from ..epistemic import observers_for
@@ -132,6 +133,6 @@ def test_the_realm_at_the_shipped_gain_is_the_realm_with_the_factor_inert(monkey
 
     shipped = run()
     assert len(shipped[1]) > 1000, "a vacuous log would make the equality below say nothing"
-    monkeypatch.setattr(OPT, "competence", lambda p, g: 1.0)
+    monkeypatch.setattr(PQ, "competence", lambda p, g: 1.0)
     inert = run()
     assert shipped == inert

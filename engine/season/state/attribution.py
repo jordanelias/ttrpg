@@ -38,7 +38,7 @@ live runs that every logged Event anchors, with a population floor so an empty l
 """
 from typing import TYPE_CHECKING, Optional
 
-from ..data.rosters import COVER_KEY, COVER_KIND
+from ..data.rosters import COVER_AS, COVER_KEY, COVER_KIND
 
 if TYPE_CHECKING:                       # pragma: no cover
     from .carriers import Event
@@ -118,7 +118,8 @@ def anchor_of(w, e: "Event") -> Optional[str]:
 
 
 def _cover_for(w, e: "Event", who: str) -> Optional[str]:
-    """THE COVER `anchor_of` ANSWERS FOR AN ACT-CAUSED EVENT, or `None`. For a LOGGED Event, the cover
+    """THE COVER `anchor_of` ANSWERS FOR AN ACT-CAUSED EVENT, or `None` -- the cover's id, or (B11.64) the PERSON whose name it
+    borrows (`_cover_names`; `COVER_AS`), either one what the Event is ABOUT. For a LOGGED Event, the cover
     its actor held WHEN IT WAS LOGGED (`World._covers_logged`, written by `World._on_logged` through
     `cover_at_logging`) -- never re-read, so a logged Event's anchor does not move when the cover later
     lapses, leaves his hand, or a second one is taken (`_on_logged`'s invariant, which
@@ -135,13 +136,26 @@ def _cover_for(w, e: "Event", who: str) -> Optional[str]:
     if has_id is not None and has_id(e.id):
         covers = getattr(w, "_covers_logged", None)
         return covers.get(e.id) if covers else None
-    return live_cover(w, who)
+    return _cover_names(w, live_cover(w, who))
 
 
 def cover_at_logging(w, e: "Event") -> Optional[str]:
-    """The live cover of the act's actor as the Event is logged -- `World._on_logged`'s one question
-    of this module before it indexes the anchor; `None` for an Event no act caused."""
-    return live_cover(w, actor_of(w, e))
+    """WHAT THE ACT'S ACTOR'S LIVE COVER MAKES OF HIM AS THE EVENT IS LOGGED -- `World._on_logged`'s one question
+    of this module before it indexes the anchor; `None` for an Event no act caused or an actor with no cover.
+
+    The answer is the anchor the cover gives (`_cover_names`): the NAME THE COVER BORROWS (`COVER_AS`, B11.64) when it names
+    one, else the cover's own id. It is resolved HERE, once, and kept (`World._covers_logged`), so a logged Event's anchor never
+    moves with the Record a cover is (`_cover_for`'s invariant): `actor_of`, `causing_act` and `seen.who` name the real hand
+    whichever it is."""
+    return _cover_names(w, live_cover(w, actor_of(w, e)))
+
+
+def _cover_names(w, cover: Optional[str]) -> Optional[str]:
+    """THE ANCHOR A COVER GIVES ITS HOLDER'S ACTS: the person it borrows the name of (`COVER_AS`), else its own id (the alias).
+    `None` for no cover. The one owner of that choice, asked by `cover_at_logging` and by `_cover_for`'s live read."""
+    rec = w.records.get(cover) if cover is not None else None
+    sm = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+    return sm.get(COVER_AS) or cover
 
 
 def live_cover(w, actor: Optional[str]) -> Optional[str]:
@@ -152,7 +166,7 @@ def live_cover(w, actor: Optional[str]) -> Optional[str]:
     (S15: an edge is owned by its subject, so this reads his `Person.tenures`, never an index over every
     edge); (2) it is a `cover` (`COVER_KIND`) whose one key (`COVER_KEY`, `terms`) names HIM -- #453's
     *"where `terms == actor`"*: a cover handed to another hides nobody but the man it names, and only
-    while that man holds it; (3) A STAGE IS UNMATURED (`_a_stage_unmatured`). Several at once answer the first by
+    while that man holds it; (3) A STAGE IS UNMATURED (`a_stage_unmatured`). Several at once answer the first by
     Record id, so the read is deterministic. A second cover is REACHABLE in computed play: `opening_set`
     declines it only through the holder's `content:cover` LEDGER claim (`held_document_declines`), which the
     ledger cap can evict and which two `conceal`s packed into one scene precede.
@@ -175,12 +189,12 @@ def live_cover(w, actor: Optional[str]) -> Optional[str]:
         if rec is None or rec.kind != COVER_KIND:
             continue
         sm = rec.subject_matter if isinstance(rec.subject_matter, dict) else {}
-        if sm.get(COVER_KEY) == actor and _a_stage_unmatured(w, rec):
+        if sm.get(COVER_KEY) == actor and a_stage_unmatured(w, rec):
             found.append(rec.id)
     return min(found) if found else None
 
 
-def _a_stage_unmatured(w, rec) -> bool:
+def a_stage_unmatured(w, rec) -> bool:
     """IS SOME DECLARED STAGE OF `rec` NOT YET RIPENED? -- `matured_terms`' count against the stage list,
     the log being the ruled carrier of *how many have ripened* (`matured_terms`' docstring). A Record
     with no stage has none unmatured. Two shortcuts, each EXACT rather than approximate, so the log is
@@ -215,7 +229,7 @@ def matured_terms(w, rid: str, stop: Optional[int] = None) -> int:
     ⚠ IT LIVES HERE, NOT IN `queries/world_q.py` (which re-exports it for
     `ceiling`): `live_cover` (above) asks it from `anchor_of`, and `state/` imports nothing from
     `queries/` (`world_q` imports this module), so the one owner moved down rather than gaining a copy."""
-    # `stop`: a caller that asks only whether the count REACHES a number (`_a_stage_unmatured`: every
+    # `stop`: a caller that asks only whether the count REACHES a number (`a_stage_unmatured`: every
     # declared stage) ends the scan there; the answer is `min(count, stop)`, which is all it reads.
     n = 0
     for e in w.log:

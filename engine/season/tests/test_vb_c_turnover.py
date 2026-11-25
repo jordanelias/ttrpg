@@ -203,7 +203,7 @@ def test_c3_scenario_vacancy_and_succession_bands_and_the_provisional_term():
                     act = Act(id=f"c3_scn_succeed_{seed}", actor=player, verb="succeed", payload={"subject": seat})
                     conferrer, holder = opener, player
                 titles = [t.id for t in w.tenures if t.kind == "hold" and t.live and t.subject == holder and t.object in SUCCESSIONS.get(seat, ())]
-                band, kinds, _ = _resolved(w, d, act)
+                band, kinds, evs = _resolved(w, d, act)
                 bands[name][band] = bands[name].get(band, 0) + 1
                 h = _hold(w, seat)
                 if band == "Failure":
@@ -212,6 +212,8 @@ def test_c3_scenario_vacancy_and_succession_bands_and_the_provisional_term():
                     assert all(t.live for t in w.tenures if t.id in titles), "the Failed claim laid the title down"
                 else:
                     assert h is not None and h.subject == holder and _termed_iff_partial(w, band, h), (name, band, h)
+                    # v12 B11.08: a vacancy is the claims HIS OWN ledger holds of the seat, so the conferrer stops offering it once WITNESS has told him it was filled.
+                    d.witness(mint_token(w, WriteClass.INTERIOR), list(evs))
                     assert seat not in world_q.vacancies(w, w.persons[conferrer])
                 if band == "Partial":
                     matures = h.term.matures_at
@@ -219,8 +221,10 @@ def test_c3_scenario_vacancy_and_succession_bands_and_the_provisional_term():
                     d.matter(mint_token(w, WriteClass.MATTER), None)
                     assert _hold(w, seat) is not None, "the provisional seat lapsed before its term"
                     w.tick = matures
+                    _n = len(w.log)
                     d.matter(mint_token(w, WriteClass.MATTER), None)
                     assert _hold(w, seat) is None, "the provisional seat did not fall vacant at its term"
+                    d.witness(mint_token(w, WriteClass.INTERIOR), list(w.log[_n:]))      # B11.08: the lapse reaches his ledger by WITNESS, not by the world
                     if verb == "confer":
                         assert seat in world_q.vacancies(w, w.persons[conferrer]), "the lapsed seat is not offered again"
                     else:       # an inherited seat is no one's to confer: it is offered again to whoever still holds one of its titles

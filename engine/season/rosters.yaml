@@ -203,7 +203,10 @@ rosters:
       # an act by a person holding a cover whose `terms` is himself, while a stage is unmatured,
       # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
       # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
-      cover:        [terms]
+      # B11.64 (CP-T06-07): `as` is the BORROWED NAME -- a person id, read off the act's payload (`content.read_from`, below: a source
+      # that is no operand, read as declared and absent for a plain cover, so `None`). Where it is set, an act by the cover's holder
+      # anchors on THAT PERSON and not on the cover's id (`state/attribution.py::cover_at_logging`); who acted is still the actor's.
+      cover:        [terms, as]
       # (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
       # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
       # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
@@ -243,6 +246,7 @@ rosters:
       # place of discharge -- is read as declared and may be absent.
       read_from:
         terms: subject
+        as: as
       # THE KEY THAT NAMES WHOM A DOCUMENT ADDRESSES, stored as an id LIST whatever the act carried
       # (r2 §A.9.1 -- *"the id set under the addressee key its kind declares"*). One shape for one
       # key across every kind that has it.
@@ -365,10 +369,10 @@ rosters:
       ⚠ `post_remit` IS LAST, AND THAT IS THE SAME ORDINAL TAKEN ONE STEP FURTHER. `19_PLAN.md`'s
       ordinal of remove is *firsthand > knot-sourced > told > inferred* in full (`:517`), and
       `post_remit` mints `inferred`, so it ranks below both `told_by` channels: an obligee who is
-      ALSO admitted by the public record (`chronicle`, every `binding_decision` emission) holds the
+      ALSO admitted by the news of the Event's kind (`reach`, `event_reach` below) holds the
       Event `told_by`, never downgraded to `inferred`. `claim_source:` is keyed on exactly these five
       and names only `claim_sources` members (`data/rosters.py` refuses at import otherwise).
-      `chronicle` is `told_by` on `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is
+      `reach` is `told_by` on `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is
       `post_remit`'s `inferred` (§C.6: *"the change claims, `inferred`"*). `post_remit` is the
       place-bound remit channel (r2 item 9: *"the place-blind remit channel -> obligees co-located,
       minting `inferred`"*); see `epistemic._ch_post_remit`.
@@ -379,13 +383,72 @@ rosters:
       knot, the partner's deposits"*) and one channel cannot. A placed actor is credited first by
       presence (`co_located`).
     ordered: true
-    values: [co_located, witness_key, document_key, chronicle, post_remit]
+    values: [co_located, witness_key, document_key, reach, post_remit]
     claim_source:
       co_located:   firsthand
       witness_key:  firsthand_via_knot
       document_key: told_by
-      chronicle:    told_by
+      reach:        told_by
       post_remit:   inferred
+    # CR-29 (commit 2): the `reach` channel's kind -> reach map (`epistemic.EVENT_REACH`). A key is an event kind (held to
+    # `EVENT_KINDS` at import), or a directive that expands to many: `from_stratum:` names `{stratum: reach}` for every
+    # kind a verb row of that stratum emits, and `from_unrest:` names ONE reach for the coercive kinds `person_q.stability`
+    # reads (`standing_routes.kinds.dominance`) less `person.died` -- both derived, never spelt out here. A value is `room`
+    # (the Event's own place) or a member of `rung_kinds` (`data/rosters.py::check_event_reach` refuses any other).
+    # THE TABLE, KIND BY KIND, AND WHY (`person.died` is NOT a key: A-33 -- a death reaches only those who were there,
+    # on its trail, or told, and the seats it empties earn `tenure.closed`, below, which does travel):
+    #   binding_decision kinds -> realm: what the public record carried before this channel replaced it (a decision
+    #     by an institution is public to the realm that institution is of; `order.given`, `date.scheduled`, `tenure.*`,
+    #     `succession.claimed`, `place.surrendered`, `dispensation.issued` ...). Where the event's place lies in no realm
+    #     (Altonia, a territory) the outermost rung above it is the reach (`_ch_reach`). ⚠ WHAT THIS DOES NOT CARRY, because
+    #     the Event has no place: an act of an unplaced actor exercised through no seat (`release`'s `tenure.closed` and
+    #     `commitment.ended`, whose eligibility is its own) reaches nobody by `reach` (H-214's cite). ⚠ THE LEAK IT
+    #     CARRIES: `pursuit.moved` is a `determine` kind and `argue` emits it too, so an argument's private conviction change
+    #     is realm hearsay -- carried, and open under H-333.
+    #   the unrest kinds -> settlement: the signs of coercion (a wound, a field won, a seizure, a requisition) are deposited
+    #     at the settlement they happened in, to the persons who stand in it. ⚠ NO READER YET: `person_q.stability` counts
+    #     only claims whose SUBJECT is the rung (`person_q.py::stability`), and these claims' subjects are the persons and
+    #     records the signs are about, so nothing reads the deposit until FA-01 (B21b) decides the claim subject (H-234). A
+    #     told copy takes ledger space (the cap evicts), so this row has a cost and no reader. [ASSUMPTION; medium; Jordan
+    #     to correct; revert: an empty `from_unrest`, and the signs travel by presence and telling alone]
+    event_reach:
+      from_stratum: {binding_decision: realm}
+      from_unrest: settlement
+
+  seat_news_kinds:
+    source: "v11 CR-29, A-32 (one reach row for seat changes)"
+    note: >-
+      The kinds tenure edges open or close. `witness_channels.event_reach` carries them (shipped at `realm`, by
+      `from_stratum`); `Fixtures.seat_news: local` lifts exactly these from the `reach` channel, so the news travels by
+      presence, jurisdiction and telling. ⚠ A HAND LIST, AND WIDER THAN ITS NAME: no owner of "the kinds a seat opens or
+      closes" exists (`data/verbs.py`'s derived openers are per tenure KIND and `hold` covers Records and Rungs), and
+      `tenure.closed` is emitted by `release` over six tenure kinds (`hold`, `commit`, `oblige`, `succeed`, `tie`,
+      `knot`), so `local` lifts ALL tenure-kind news, not only seats'. Every member must be an Event kind with a reach in
+      `event_reach` (`epistemic.py` refuses at import).
+    values: [tenure.opened, tenure.closed, succession.claimed]
+
+  seat_founding_kinds:
+    source: "v12 B11 close, the merge with B21 (A-32's `vacant_named` against `establish`: a founded seat is empty from the moment it exists)"
+    note: >-
+      THE KINDS A SEAT'S FOUNDING EMITS. `queries/person_q.py::vacant_named` reads a seat as vacant from the claims a person holds of it,
+      and a seat NO ONE HAS HELD has none that say somebody came to hold it or ceased to, so a founder was never offered `confer` on
+      the office he had just founded (the world-sourced vacancy read it as empty at once; B11.08 moved the read to the ledger). A claim
+      of one of these kinds about a seat says it exists and nobody holds it: it reads as a ceasing, the newest news until a
+      `tenure.opened` follows. `epistemic.py::claim_subjects` already deposits it about the new office to the founder and to those
+      who witness it. Every member must be an Event kind a verb writing `Office.exists` emits (`person_q.py` refuses at import).
+      [ASSUMPTION; medium; Jordan to correct; revert: an empty list, and a founded seat is offered only after someone has held and left it.]
+    values: [office.established]
+
+  seat_news_arms:
+    source: >-
+      v11 CR-29 (A-32: one reach row for seat changes at `realm`, B -- the seat-change kinds left out of the map -- the
+      tested alternative), commit (2).
+    note: >-
+      THE ARMS OF `Fixtures.seat_news` (`H-214`), read by `epistemic._ch_reach`. `realm` (SHIPPED) leaves the seat-change
+      kinds (`seat_news_kinds`) at the reach `event_reach` gives them; `local` is the tested alternative:
+      the `reach` channel admits nobody for those kinds, so a seat change reaches a person only by presence, the seat's
+      jurisdiction (`post_remit`, `document_key`) and telling. `local` is a measurement arm, not a design.
+    values: [realm, local]
 
   claim_sources:
     source: "#353 §20 — how a Claim came to be held"
@@ -1220,7 +1283,7 @@ rosters:
       an injected default and this row stays `assumption`.
       ⚠ **UNDER `all_five` THESE PREDICATES DECIDE EVERY DEPOSIT.** Under `total`, `observers_for`
       returned everyone and they were never consulted. Only THREE of the five can admit anyone in a
-      world the fold can currently drive (`chronicle` matches nobody, `post_remit` needs an obligee
+      world the fold can currently drive (`reach` matches nobody there, no `binding_decision` verb resolving, and `post_remit` needs an obligee
       standing at the seat an act was exercised through;
       `test_w6_every_named_channel_has_a_predicate_and_they_are_data` asserts exactly which two are
       inert).
@@ -1228,12 +1291,16 @@ rosters:
       declared -- §19.3 is explicit that an Event carries NO TARGET, *"observers are computed at
       WITNESS from presence; the emitter declares no recipient"*, so a channel that needed the
       emitter to name someone would be a different design and not a fill of this hole.
-      ⚠ `chronicle` IS DELIBERATELY NOT `everyone`. A public channel that matched every person
+      ⚠ `reach` IS DELIBERATELY NOT `everyone`. A public channel that matched every person
       would make the `all_five` union identical to `total`, and the sweep would have two points
       that are the same arm wearing different names -- an arrangement that cannot measure
-      anything. It is the MATTER-OF-RECORD channel: what a binding decision emits is public,
-      because a binding decision is the design's own category for an act whose effect is
-      institutional rather than private.
+      anything. It admits the persons standing within the reach the Event's kind states
+      (`witness_channels.event_reach`): what a binding decision emits is news to the realm it
+      is the decision of, because a binding decision is the design's own category for an act
+      whose effect is institutional rather than private. A person outside it, or a decision
+      with no place, is not admitted.
+      (It REPLACED `chronicle`, CR-29: a kind filter that read no person and so admitted every
+      person alive, wherever they stood.)
     # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
     # named; this row carries only what each one MEANS. The names are loaded by `data/rosters.py`
     # (`WITNESS_CHANNELS`) and read by `epistemic.py`, which builds `CHANNEL_PREDICATES` from them
@@ -1245,7 +1312,7 @@ rosters:
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
       witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
       post_remit:    "the person is an OBLIGEE of the seat the Event's act was exercised through (`Act.via`) -- a live `oblige` Tenure to it, read through `queries/world_q.py::establishment_of`, the one owner of that set -- AND stands AT that seat: the seat's rung is where they are or above it (`state/gate.py::purview_reaches`). Plan position `17a`, r2 item 9. ⚠ THIS ROW READ *the person holds a live office Tenure whose remit covers the verb that emitted this kind* until `17a` -- a remit-holder learning of every covered act anywhere in the realm, the place-blind broadcast r2 `02` §A.7 and `01` both delete. An Event no act caused, or an act exercised through no seat, admits nobody through this predicate. ONE other admission rides this channel's source (`inferred`) and its live/off switch, in `loop/witness.py` (v9 IN-22): an ACTORLESS Event's observation READS (MATTER's recorded shortfall) go to the holders of a live seat whose purview reaches the read rung (`queries/world_q.py::governors_of`) -- reads only, never an event-kind, `seen` or `content:` claim"
-      chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
+      reach:         "the Event's kind has a reach in `event_reach` and the person stands within it -- in the Event's own place for `room`, else inside the rung of that kind that contains the Event's place (CR-29: news of an event reaches persons by the event's kind, at a stated reach)"
 
   observation_terms:
     source: "`R8.1`, `references/design_rulings_2026-09-06.md` -- Jordan: *\"I saw this person doing y, but I don't know what y is\"*, *\"someone looking like y did x\"*, *\"they saw someone skulking around for no reason they could discern\"*. One `seen` claim per (witness, event), BESIDE the two existing deposits; its value is a frozen struct of these four terms, each `None` where the channel withholds it"
@@ -1271,7 +1338,7 @@ rosters:
       witness saw who acted; a document holder saw only that the document changed"* -- so
       `document_key` shows NOTHING, and its witness holds an all-`None` struct, which IS deposited
       (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and
-      `chronicle` are unruled: they withhold rather than invent, and are an injected default in
+      `reach` are unruled: they withhold rather than invent, and are an injected default in
       `H-33`'s sense, exactly as the channel predicates themselves are.
       `why` IS THE ANTECEDENT A WITNESS HOLDS AND MAY CONNECT, NOT THE ACTOR'S MOTIVE (B09.17, `R8.4` narrowed; the engine
       keeps no motive: `Candidate.why` is dropped at `pack_scenes` and `Act` carries none): the id of a claim in the witness's
@@ -1290,7 +1357,7 @@ rosters:
       witness_key:  [stratum, who, why]
       document_key: []
       post_remit:   [stratum]
-      chronicle:    [stratum]
+      reach:        [stratum]
 
   # ── WHAT THE SEASON LOOP IS ───────────────────────────────────────────────────────────────────
   # RULED BY JORDAN, 2026-09-05:
@@ -1397,8 +1464,9 @@ rosters:
       `pool_default` (`seam/wrappers/sigma.py::faculty`).
       ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
       questioned person answers by their own `tell`, so there is no degree on the asker);
-      `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
-      waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
+      `reconstruct` waited on a value space nothing supplied (K-37: no invented number) -- B11.73: it is the doer his own ledger names
+      (`queries/person_q.py::_concluded`, `deed_doers`' reading), so its winning bands report `conclusion.reached` and deposit his conclusion to him
+      (`loop/witness.py`); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
       flat `emits:` and is not counted as graded. [B07.01: `reconstruct` and `thread_read` are routed now, under `armed_by: task_draw_arm`; arm `off`
       they fold flat as above.]
@@ -1539,38 +1607,37 @@ rosters:
 
   undeposited_kinds:
     source: >-
-      RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a
-      verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two) -- a refused inquiry deposits nothing, and no
-      `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.
+      RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): at WITNESS, except keyed kinds a verb declares (`news.untold` and
+      `tell.refused` stay, T4; CP-T05-03 split the one kind in two), a refused or failed inquiry makes no event-kind claim. Built by v9 FI-01
+      as the deposit half of `ED-FI-0009`. B11.12 (`08_FI_04` §1, A-81): `inquiry.refused` is the kind of a REFUSED inquiry, split from
+      `finding.none` (a failed one). B11.61 (CP-T06-04; H-111's default revised to its own named alternative, Remediation DEC-12 reversed):
+      the meaning narrows from "fans to nobody" to "no event-kind claim".
     row: H-111
     note: >-
-      ⚠ THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these
-      kinds stays in the log and in its act's causes, and no ledger receives any claim from it.
+      ⚠ THE EVENT KINDS WHOSE EVENT-KIND CLAIM WITNESS NEVER MAKES (`loop/witness.py::witness`): an Event of one of these kinds stays in the
+      log and in its act's causes and is witnessed like any other Event -- the actor's own observation reads (at `observation_deposit_mode:
+      actor`; a refused `examine` leaves its actor the refusing `present_at` read, so his next deliberation declines it) and the `seen`
+      claim of each witness present (a bystander holds that someone tried) -- but nobody holds `(subject, <kind>, True)`. The whole-Event skip
+      this roster once named is the arm `finding_none_deposit: none` below, kept as the control (and under `fan_out_mode: total`).
       Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow
-      `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing. [ASSUMPTION; medium; Jordan to
-      correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would
-      move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules
-      deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row
+      `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing their event-kind claim. [ASSUMPTION; medium; Jordan to
+      correct] the six inquiry rows' `finding.none` and `inquiry.refused` only, not every refusal kind -- a widening would
+      move every refusal-bearing row's deposits, which nothing here measured. Revert: set `finding_none_deposit` to `none`. Each member must be a kind some verb row
       declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing).
-      THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words ("a refused
-      inquiry deposits nothing") drop the actor's own observation reads and `seen` claims as well as the
-      event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person
-      re-forms it. The narrower arm is `finding_none_deposit_arms` below (B09.04): at `actor` the
-      Event is deposited to its own doer and to nobody else; `none` (shipped) is the skip as written here.
-    values: ["finding.none"]
+    values: ["finding.none", "inquiry.refused"]
 
   finding_none_deposit_arms:
     source: >-
       B09.04 (`U5a_DICE_owed_edits` §4; H-111, `undeposited_kinds`' own note: "the narrower arm ... is the alternative
-      Jordan would name"): who receives a `finding.none` Event at WITNESS, the one kind `undeposited_kinds` skips.
+      Jordan would name"): how WITNESS treats an Event of a kind `undeposited_kinds` names.
     row: H-111
     note: >-
-      `none` is THE CONTROL and ships: the Event fans to nobody, as `undeposited_kinds` says. `actor` deposits it to
-      its own doer alone -- the `witness_key` channel's rule, *change claims about self* -- so a person who failed a
-      search holds the claim `(subject, finding.none, doer = himself)` that `person_q.refused_before` reads
-      (`finding.none` is in `emits_on_refusal` of the inquiry rows) and `decision/choose.py::admission_weight`
-      discounts, until it fades or news of the subject lands. No non-actor receives it at either arm, and no other
-      reader is added. Read once per barrier by `loop/witness.py::witness`; a value outside the roster refuses.
+      `none` is THE CONTROL: the whole Event fans to nobody -- no event-kind claim, no read, no `seen` (the skip before B11.61). `actor` (SHIPPED
+      by B11.12; B11.61 widened what it deposits and kept its name, the fixture key B09.04 gave it) deposits the Event as any Event but for its
+      event-kind claim: its doer holds his own reads, the present hold `seen`, and nobody holds `(subject, finding.none, True)` or
+      `(subject, inquiry.refused, True)`. `person_q.refused_before` reads a row's `emits_on_refusal` kinds (`inquiry.refused` for the
+      inquiry rows), a claim no deposit makes now, so an inquiry's refusal is remembered through the reads it taught (`belief_contradicts`), not through that
+      reader. Read once per barrier by `loop/witness.py::witness`; a value outside the roster refuses.
     values: [none, actor]
 
   fold_kinds:
@@ -1651,11 +1718,12 @@ rosters:
     social_roll: seam/wrappers/sigma.py::contest_input
     fight: "seam/wrappers/combat.py::combat_input -> PersonalCombatInput (applied by the module: the fight's attribute input is the six attributes on `PersonalCombatInput.attributes`, sigma-assembled in `modules/combat`, so the site carries no host-side `edge` row and `advantage_sigma` adds no second attribute term to a fight)"
     kit: "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it"
-    told_claim_credit: decision/options.py::competence
+    told_claim_credit: queries/person_q.py::competence
     choice_temper: decision/choose.py::temper
     choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
     crisis: loop/resolve.py::_crisis_net_sigma   # B10.15: the crisis of faith's roll, read only at `Fixtures.crisis_arm: drawn`
+    notice: epistemic.py::notice   # B11.66: whether a bystander sees a deed done in front of him, read only at `Fixtures.notice_arm: on`; the pool and the edge are built at the barrier (`queries/cache.py::notice_pools`, `notice_edges`)
     mortal: seam/wrappers/combat.py::_mortal_operands   # B15.07 (PHY_A A3): the mortal-wound draw's levels, carried on `PersonalCombatInput.mortal`
 
   # WHAT A SITE'S READER READS OF A ROW, where it reads the row by ROLE and not by the row's other columns (B04 Phase 3): a row
@@ -1668,6 +1736,9 @@ rosters:
       opposes: {key: verb, side: subject}
     own_state_gate:
       gate: {side: actor}
+    notice:
+      dice: {key: inquiry, side: actor}
+      edge: {key: attr.mind.perception, side: actor}
 
   # `side`: whose sheet a row reads -- not who benefits (U1 §3 item 3). `per`: once when held, once per rank, or signed steps
   # of the held value from its scale's mid-point (U1 §3 item 2). `key` selectors: the skill the act's verb names (`verb`)
@@ -1914,24 +1985,6 @@ rosters:
 
   # titles: DELETED -- its domains live in `engine/season/offices.yaml: titles:`
   # (`data/rosters.py::TITLE_DOMAINS` reads `offices.yaml`); nothing here reads such a key.
-
-  conditional_emission_rows:
-    source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
-    note: >-
-      ⚠ THIS ROSTER EXISTS BECAUSE PART D'S COLUMN IS AMBIGUOUS, AND THE AMBIGUITY IS REGISTERED AS
-      `H-86` RATHER THAN DECIDED HERE. `W4` makes a MATTER write on a row that declares an `emits:`
-      kind name one -- that is `D22`, and `H-12` is RULED that way. But `(Record, ttl)` declares
-      only `record.expired`, and the row is DECREMENTED EVERY SEASON: emitting `record.expired` on
-      every decrement would publish an expiry that has not happened, which is worse than the silent
-      write the gate exists to stop. `(Site, condition)` shows the other shape -- `condition.worn`
-      per write PLUS `condition.band_crossed` on a condition -- so the column carries both kinds of
-      kind with nothing to tell them apart. Listing the rows whose declared emissions are ALL
-      conditional is the smallest thing that is true; deciding the column's schema is a Part D
-      change and belongs to whoever ratifies `H-86`.
-    why:
-      "Record.ttl": "`record.expired` fires at zero; every other decrement of §13's licensed clock is a tick with no declared kind, and emitting the terminal one would assert an expiry that has not happened"
-    cite: "H-86"
-    values: ["Record.ttl"]
 
   knowledge_kinds:
     source: "`H-85`; NPC-087's own `season_requires` supplies the two values"
@@ -2785,9 +2838,46 @@ rosters:
       FANNED (`decision/options.py::_fanned_choices`): CP-T04-06's `march` ranges `posture` over `march_postures`, shipped
       `[storm]`, so no `march` Candidate carries a `posture` and the shipped season does not move.
       [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]
+      v12 B11.10 (`08_FI_02` edits 7-8): `tell` AND `lie` CARRY TWO CHOICES, `said` AND `in_confidence`, on `marshal`'s precedent. `said` is WHAT is
+      told: one Candidate per claim among the top `Fixtures.said_choices` the teller's slant ranks for the subject (`queries/person_q.py::said_set`, `said_of`
+      or `lie_said_of` over the teller's own ledger), and a claim is scored by `deed_valence` under the teller's own projected pursuits inside the
+      `pursuit` term (`decision/choose.py::score_terms`) -- no new term. It has no closed roster, and it is a choice (`data/verbs.py::choice_values`) only
+      where more than one claim was offered, so `said_choices` 1 leaves the act's id and score as they were. `in_confidence` is WHETHER the telling is made in
+      confidence, `{false, true}`: `loop/witness.py::_circle_of` reads the act's own value where it would draw on `Fixtures.telling_privacy`, which
+      stays the swept share for an act that carries none (control 0). Who hears is unchanged (presence). ⚠ A TELLING WRITES NOTHING, so the carrier a key is
+      checked against is the kind its deposit is: the row must emit `news.told` (`data/verbs.py::CHOICE_CARRIER`).
+      [ASSUMPTION; medium; Jordan to correct; revert: delete the two `tell` and `lie` lines, and the telling is the single pick at the single draw.]
+      v12 B11.72 (`08_FI_07` §2 (a)): `examine` CARRIES `site`, AND ITS RANGE IS THE ACTOR'S OWN LEDGER, NOT A CLOSED SET (`ledger_ranges`, below). The row is classed on a
+      Site and no question the realm delivers carries one, so it formed nowhere; now `opening_set` offers it on each id his own claims present as a Site
+      (`queries/person_q.py::ledger_range`: the subject of a claim whose predicate is one a Site's state is read or announced by), as `terms_sourced`
+      and `held_edge_sourced` add referents from his own state. The id is the referent and `site` binds it through `_derive_operand`'s unchanged
+      rule. PERSON-SIDE AND WORLD-FREE: whether the id IS a Site, and whether he stands at it, are the fold's conjuncts (`existence`, `present_at`), and a
+      man who is wrong is refused there and taught why (B11.61). ⚠ NOT FANNED in `_fanned_choices` (it has no closed range). [ASSUMPTION; medium;
+      Jordan to correct; revert: delete the `examine` line and `ledger_ranges`, and `examine` forms on the question's own Site referents alone, which is nowhere.]
+      v12 B11.74 (R-19-03, FRES §7 (3)): `utter` CARRIES `cites`, THE CLAIM IDS AND RECORD IDS THE UTTERER HOLDS AND CITES FOR WHAT HE ASSERTS, AND IT HAS NO RANGE HERE
+      (`data/verbs.py::CITES_KEY`, `SAID_KEY`'s shape): a pick of held ids is no closed set (`_fanned_choices` never fans it) and it is NOT in `ledger_ranges`
+      below (that adds referents a verb forms on; the held ids are what a conclusion cites, not what `utter` forms on). So no computed act carries `cites` until
+      typed `utter` (B25) forms one from a held claim, and the shipped season is what it was; a planted act carries it on its payload, `loop/effects_information.py::
+      _eff_utter` stores it as `Proposition.support`, and a cite he does not hold (not in his own ledger, no live `hold` of his) refuses the act (`_held_cites`).
+      The carrier is `Proposition.exists`, which the row writes. [ASSUMPTION; medium; Jordan to correct; revert: delete the `utter` line, `CITES_KEY` and `_held_cites`.]
+      v12 B11.75 (R-19-04): `reconstruct` CARRIES `concluded`, WHICH SUSPECT, AND IT IS A CHOICE ONLY WHERE HIS LEDGER NAMES SEVERAL (`data/verbs.py::CONCLUDED_RANK_KEY`,
+      `said`'s shape): one Candidate per `(deed kind, doer)` `queries/person_q.py::_concluded` reads off his own ledger, each carrying the claims that name him (`cites`), and
+      `decision/choose.py::settle_conclusions` keeps ONE, drawn in proportion to each doer's support over distinct origins (`LedgerReader._support`) at a nonzero
+      `choice_temperature` (the best-supported at 0). One doer is no choice: the Candidate carries no rank and no act is renamed. The carrier is the kind the row
+      emits (`conclusion.reached`). [ASSUMPTION; medium; Jordan to correct; revert: delete the `reconstruct` line and `settle_conclusions`, and the first doer his ledger names rides, as B11.73.]
     values:
       marshal: [role, retreat_at]
       march: [posture]
+      tell: [said, in_confidence]
+      lie: [said, in_confidence]
+      examine: [site]
+      utter: [cites]
+      reconstruct: [concluded]
+    # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
+    # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
+    # and `condition.band_crossed` the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
+    ledger_ranges:
+      site: ["exists:Site", "condition", "condition.worn", "condition.band_crossed"]
 
   vocation_sourced:
     source: >-
@@ -3164,6 +3254,22 @@ rosters:
       predicate: intent
     values: [subject, to]
 
+  absence_claim:
+    source: >-
+      B11.83 (`U5c_VERBS_residue` §3 steps 1 and 3; SOCIAL1 D2, decision register D-46: a man who seeks someone who is not there is refused,
+      learns nothing and forms the same act again).
+    note: >-
+      THE CLAIM A REFUSAL ON THE `with` CONJUNCT TEACHES ITS ACTOR: `(<the person sought>, absent, <the rung the refused act stood at>)`, firsthand, deposited
+      by `loop/witness.py::witness` to the ACTOR ALONE (whatever `observation_deposit_mode`: the claim is his reading, not an Event's public payload) when the read
+      that decided the refusal is a `with` read the world answered False. A `with` read is observed and never deposited (`WORLD_ONLY_STEMS`: the person
+      side cannot answer it), so this is the one claim the refusal leaves of it; a read the world could not answer (UNKNOWN: no place) teaches nothing. The
+      value is the place, so a reader can ask whether the absence was HERE. A bare stem, held by the checks at the
+      predicate's reader: not a `requires` grammar stem, not the `seen` or `content:` predicate, not an emitted event kind (`loop/witness.py`).
+      No roster of claim predicates existed for it to join: the deposits' predicates are declared one roster each (`observation_terms.deposit`,
+      `record_content`, `intent_claim`), and so is this one. `queries/person_q.py::present_persons` reads it back (B11.84): a person the holder's newest `absent` claim names is left out until a newer firsthand sighting.
+    claim:
+      predicate: absent
+
   stance_polarities:
     source: >-
       v9 IN-18 `G2` (telling workplan §5, `ED-IN-0282`): *"polarity in §F2 term 2"* -- the score's
@@ -3327,7 +3433,51 @@ rosters:
       -- the CONTROL, shipped. `valence` first narrows the teller's claims about the subject to
       those THEY judge most strongly (the largest `|deed_valence|` by their own pursuits) and picks
       among those by the same comparator; with no valenced claim it is `newest` exactly.
-    values: [newest, valence]
+      `unshared` (v12 B11.09, `08_FI_02` edit 2) never passes on the transport's own kinds -- the teller's claims whose
+      predicate a `tell` or a `lie` row emits (on success or on refusal) are dropped from the pool -- and so retells what
+      the room did not see for itself. `unshared_first` is `unshared` that then picks, by the same comparator, within the
+      first non-empty tier of its `prefers:`, and a `seen` claim remains the last resort as at every arm. THE TWO KEYS ARE
+      DATA, PER ARM, under `arms:` (read by `queries/person_q.py::_load_slant_arms`, refused at import): `excludes_kinds_of`
+      names VERBS of `verb_table.yaml` (a name the table lacks refuses, as `lie_verbs` does; the excluded predicates are
+      those rows' `emits` and `emits_on_refusal`, derived, never spelt) and `prefers` is an ordered list of tiers, each
+      one `person_q.py::_SLANT_TIERS` reads (told: a claim with a chain; inferred: `source == "inferred"`; deed: `is_deed`;
+      quantity: a claim on a stem of `data/verbs.py: QUANTITY_STEMS`, so an existence reading is not one; other: anything else).
+    values: [newest, valence, unshared, unshared_first]
+    arms:
+      unshared:
+        excludes_kinds_of: [tell, lie]
+      unshared_first:
+        excludes_kinds_of: [tell, lie]
+        prefers: [told, inferred, deed, quantity, other]
+
+  telling_hearer_arms:
+    source: >-
+      v12 B11.08 (`08_FI_02` edit 5): *"fan over `person_q.present_persons(ledger, actor)` ... Fixture `telling_hearers`:
+      `known` (control) / `seen_since_move`"*.
+    note: >-
+      THE ARMS OF `Fixtures.telling_hearers`, read by `queries/person_q.py::telling_hearers` for a row whose cell carries a `with`
+      conjunct on `to` (`decision/options.py::opening_set`): who a teller offers a telling (or a lie, a gift, an argument, an acceptance) to. `known`
+      is `known_persons` -- everybody he has any claim of -- the CONTROL, shipped. `seen_since_move` is `present_persons`: those
+      he holds a firsthand sighting of since his own newest movement claim. He may still be wrong (the man left this lap); the
+      fold's `hearer` conjunct still refuses that.
+    values: [known, seen_since_move]
+
+  told_pairing_arms:
+    source: >-
+      v12 B11.22 (`08_FI_06` edit 6): *"`told_pairing`, `off` (control, today) / `on`; ships `on` when the gate reads"*.
+    note: >-
+      THE ARMS OF `Fixtures.told_pairing` (`H-495`), read by `queries/person_q.py::told_pairing_on` (`said_of`'s pool and pairing). `off` is the CONTROL (the revert):
+      a paired deed heard second-hand names nobody. `on` is SHIPPED and carries the hand: the deed's pairing rides the telling and is deposited as a told `seen` claim.
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
+
+  notice_arms:
+    source: >-
+      v12 B11.66 (`18_DETERMINISM_notice_is_a_draw` edit 6): *"`notice_arm: off | on`"*; ships `off` (the control) until the gate reads (B11.67).
+    note: >-
+      THE ARMS OF `Fixtures.notice_arm` (`H-496`), read by `loop/witness.py::witness` (once per barrier) and refused outside this set. `off` is the CONTROL, shipped: every pair
+      `observers_for` admits deposits, as before the item. `on`: a pair `(person, Event)` where the Event is a deed and the person neither its doer nor a subject of its changes
+      draws (`epistemic.py::notice`) -- a Failure deposits nothing, a Partial the deed with the hand withheld, a Success as at `off`, an Overwhelming at the full confidence.
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
 
   stock_reports:
     source: >-
@@ -3870,6 +4020,10 @@ rosters:
       `check_rows()` naming the row.
     findings:
       "finding.made": {module: "fieldwork", provider: "fieldwork", module_entry: "fieldwork.find"}
+      # B11.73: `reconstruct`'s winning bands report `conclusion.reached` (not `finding.made`) and it uncovered a trail as a finding before, so the kind joins
+      # the row: the roll is the same graded one and the trail is the same trail (B11.68's `test_finding_what_is_hidden.py` reconstructs).
+      # [ASSUMPTION; medium; Jordan to correct; revert: drop this line and a conclusion uncovers no trail]
+      "conclusion.reached": {module: "fieldwork", provider: "fieldwork", module_entry: "fieldwork.find"}
 
   finding_terms:
     source: >-
@@ -3894,10 +4048,30 @@ rosters:
       ⚠ `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not
       own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster
       scan), so the ladder would have read as declared twice.
+      B11.71 (`08_FI_03` §2, FRES §8): THE SAME ROW ALSO LISTS WHICH `look_reads` A BAND DEPOSITS, so one band-keyed table owns what a finding
+      shows -- of a trail (the terms) and of what is looked at (the reads), never two tables. A row lists a read by its `look_reads` name; a
+      verb row's `observes:` says WHAT IS LOOKED AT and never a band, and `loop/witness.py` deposits an observed read only where the Event's
+      band lists its stem. In words: a look at `Overwhelming` or `Success` teaches every read; at `Partial` all but `held_by` (who holds a
+      thing is the sight a good look gives), a number through the lossy-copy rule (`loop/witness.py::_told_value`); at `Failure` -- no row --
+      none, and the reads the row's own cell made (the gating reads) are deposited at every band and on a refusal, as before.
+      [ASSUMPTION; medium; Jordan to correct; revert: every look read at every finding band, `held_by` included.]
     bands:
-      Overwhelming: [stratum, marks, who]
-      Success:      [stratum, marks, who]
-      Partial:      [stratum, marks]
+      Overwhelming: [stratum, marks, who, condition, stores, held_by, content]
+      Success:      [stratum, marks, who, condition, stores, held_by, content]
+      Partial:      [stratum, marks, condition, stores, content]
+
+  look_reads:
+    source: >-
+      B11.71 (`08_FI_03` §2, FRES §8; C-24, R-35, H-218): THE READS A LOOK MAY TAKE -- the closed set a verb row's `observes:` entry names
+      (`data/verbs.py::Look.read`) and a `finding_terms` band row lists. A read is named by the predicate stem it deposits under.
+    cite: "08_FI_03 §2; U5c_FI_residue §8"
+    note: >-
+      `condition` of a Site (`(site, condition, n)`); `stores` of a Rung (`(rung, stores:<kind>, n)` for each kind it holds; a Site's look
+      reads the rung it stands in); `held_by` of a Rung or a Record (`(thing, held_by:<holder>, True)` for each live `hold`); `content` of a
+      Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is
+      `queries/world_q.py::WorldReader.look`, which dispatches on exactly these members and answers nothing for a subject of another class; a
+      member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load.
+    values: [condition, stores, held_by, content]
 
   covert_kinds:
     source: >-
@@ -3908,11 +4082,29 @@ rosters:
       DATA, NOT A WALK OF EVERY DEED KIND: a kind joins the trail by a line here, and each member
       must be a deed kind the verb table emits (`data/verbs.py::DEED_KINDS`; refused at import,
       naming it, `data/verbs.py::_check_covert_kinds`), so a misspelling cannot find nothing and
-      report the trail built. One member today: `forge` is the one covert act that executes
-      (`record.forged`, v9 IN-45). `conceal`, `arrest`, a covert `destroy_record` (H-75) and a
-      costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions.
+      report the trail built. A deed that writes a place, an alias or a person leaves a trail
+      (B11.59, CP-T06-01 with `16_PESSIMIST_FI_C` edits 1-2): `record.forged` (`forge`, v9 IN-45),
+      `site.damaged` (`sabotage`, a place), `cover.assumed` (`conceal`, an alias: the cover
+      Record), and the deeds done to a person -- `person.died`, `body.changed`, `person.captured`.
+      A covert `destroy_record` (H-75), `arrest` and a costed `surveil` (ED-FI-0009) are unbuilt
+      and belong to their own positions.
+      THE MEMBERSHIP RULE, so the next member is decided by it and not by taste. A deed kind is
+      covert when (i) no `binding_decision` row emits it, so `reach` (`event_reach`) never carries it;
+      (ii) its row has no `remit:` eligibility, so it is not done through a seat and `post_remit`
+      never reports it; (iii) it writes a thing some graded inquiry takes as its subject (a Site
+      for `examine`, a Record for `research`, a Person for `interview` and `surveil` at the
+      place -- the card's "or a person").
+      AT THIS TREE, (i) holds for all six; (ii) holds for `record.forged`, `site.damaged`,
+      `cover.assumed` and for `fight`'s and `accept`'s `person.died` and `body.changed`, and not
+      for `capture`'s (a `remit:dispatch` row, which also emits `person.captured`) or `march`'s
+      `person.died`; `body.changed` has a `reach` (`event_reach` `from_unrest`: settlement), which
+      admits the settlement's own persons by news and leaves the trail to everyone else. The six
+      are the card's list (FI_C edit 1), kept whole; a seat-done emission also reaches the
+      obligee, which closes his own trail through `holds_trail`.
+      `trail_of` keeps only Events a person did (a MATTER `body.changed`, from hunger, is no
+      trail) and `holds_trail` excludes a finder who witnessed the deed.
       Why a trail is reachable only through a plant: see `epistemic.trail_of`.
-    values: ["record.forged"]
+    values: ["record.forged", "site.damaged", "cover.assumed", "person.died", "body.changed", "person.captured"]
 
   strife_kinds:
     source: >-
@@ -4160,6 +4352,15 @@ tables:
       # [ASSUMPTION; medium; Jordan to correct: Spirit governs faith, and by one `minor` step a point -- basis: the source's "will governs faith"; the CHAR content pass may
       # substitute; revert: delete this row, and the crisis reads no attribute.]
       - {use: crisis,            role: edge,      key: attr.spirit.will, side: actor, level: minor, per: mid}
+      # B11.66 (`18_DETERMINISM_notice_is_a_draw` edit 5; U1 §3 site `notice`): WHAT A BYSTANDER BRINGS TO SEEING A DEED DONE IN FRONT OF HIM, read at `epistemic.py::notice` (through the two
+      # barrier maps of `queries/cache.py`) and only at `Fixtures.notice_arm: on`. The `dice` row keys his `inquiry` skill, read through the one pool rule (`pool_of`) at the
+      # skill's held rank, `pool_default` where he holds none; it names no `add:` or `floor:`, so the pool is the score. The `edge` row keys his Perception, one `minor` step of
+      # sigma for each point above or below the scale's mid-point (as `crisis`'s Spirit row), read by the one `edge` reader. A reader reads one row of each role, at exactly this
+      # key and side (`capability_site_reads`).
+      # [ASSUMPTION; medium; Jordan to correct: noticing in passing is the fieldwork skill with Perception as its governing attribute, and a `minor` step a point -- basis: U1's site
+      # row, which the FI lane confirms; revert: delete both rows, and the pool is `pool_default` with no edge.]
+      - {use: notice,            role: dice,      key: inquiry, side: actor}
+      - {use: notice,            role: edge,      key: attr.mind.perception, side: actor, level: minor, per: mid}
       # B15.07 (PHY_A A3, "Standing (R4 7b.0 (4))"; A-7): the mortal-wound draw's levels, read by `seam/wrappers/combat.py::_mortal_operands` through the one
       # `edge` reader as the crisis row is. The felled man's own Endurance, one `minor` step a point from the scale's mid-point (his governing attribute
       # as levels, the crisis row's form); a tending ally's `healing`, one `minor` step FOR him a rank he holds. His body band is the `wounds` source's.

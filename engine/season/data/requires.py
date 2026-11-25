@@ -840,6 +840,12 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # heard under no declared row, so the conjunct is vacuous there. `WorldReader.read` answers both through
 # `world_q.declared_sitting`/`declared_votes`; WORLD-ONLY (below): a tally changes whenever a commit opens or ends, so a
 # witness's ledger must not hold one as a belief. No form, no operand.
+# ⚠ v12 B11.17 (`08_FI_04` §4): `stage_open`: `relation` (form 5) asked of a RECORD -- *has a declared stage of `of`
+# not yet matured*, `state/attribution.py::a_stage_unmatured`, the one owner, with a Record that declares no stage
+# open (nothing of it can lapse). `comply`'s conjunct: a writ ends when its last declared stage matures, so a
+# lapsed writ is answered by no `comply`. `WorldReader.read` answers it; WORLD-ONLY (below), for `with`'s reason: which
+# stages have ripened changes with MATTER, so a witness's ledger must not hold a `stage_open:<actor>` reading.
+# The relation's second argument (the actor) is not read. One stem; no form, no operand.
 # ⚠ B21.63 (`16_PESSIMIST_FA_B` edit 3): `admitted`: `relation` (form 5) asked of a PROPOSITION and the actor -- *may the actor's `commit` to
 # it stand as a joining* (`queries/world_q.py::admitted_to`, the one owner): true for any Proposition that is no rostered faction's, for a
 # faction nobody belongs to yet, for one the actor already belongs to, or where an admission stands (a member who may admit has `commit`ted to
@@ -850,7 +856,7 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "command", "bench", "bench.size", "quorum", "with", "audience", "room",
-    "individual", "names", "dispute", "declared.votes", "declared.quorum", "admitted",
+    "individual", "names", "dispute", "declared.votes", "declared.quorum", "stage_open", "admitted",
 }) | OWN_STATE_STEMS
 
 # THE STEMS A `relation` CELL SPELLS `<stem>:<operand>` (v10 PC-10b): asked of `of` and the named operand,
@@ -888,11 +894,12 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # `command:<via>` reading that would stop a later oath from being formed on. The person forms the Candidate and the
 # fold refuses it (`issue.refused` on `authority`; `issue.unauthorized` until B21.56). One stem; no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
-WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute",
-                              "declared.votes", "declared.quorum", "command", "admitted"}) | SENSITIVITY_STEMS
+WITH_STEM = "with"      # where another person is NOW; named once here for its two readers (`data/verbs.py::VerbRow.with_operands`, `loop/witness.py`'s absence deposit, B11.83)
+WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dispute",
+                              "declared.votes", "declared.quorum", "stage_open", "command", "admitted"}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
-# time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
+# time and can be re-asserted, so two claims on it agree or disagree (`queries/person_q.py::record`).
 # Derived, not a second roster: what a requirement may ask, less what only the world answers. NOT a
 # cell: `seen` (each sighting is a distinct `Seen` value, so two witnesses passing on the same
 # sighting would differ) and the event-kind predicates (`news.told` ... -- the value is always

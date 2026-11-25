@@ -210,7 +210,12 @@ scales:
       `step_call`, gated (it runs for a graded finding band whose Event kind a row claims).
       `fieldwork` is a `rosters.yaml` `modules:` entry, so it is not in the computed
       `R04_PENDING_SUBSYSTEMS` (`tests/valoria/test_engine_does_not_import_systems.py`);
-      `R04_PENDING_ROLES` is empty.
+      `R04_PENDING_ROLES` is empty. READING AT B11'S CLOSE (B11.99, `IS-B2-FI-01` (2), `IS-B2-FI-06`'s R-1 (2); `in_loop`
+      stays `false`, and the sentence above stands): `python -m engine.season.harness.aperture 1 s` at seeds 0, 1, 2 (`PYTHONHASHSEED=0`)
+      reads `fieldwork.find` entered 14, 35, 28 times and `examine` executed 3, 1, 5, and FOUND DEPOSITS (a two-cause `claim.deposited` whose
+      first cause is a finding the provider returned items for) 0, 3, 0: above 0 at ONE seed of three, not two. At two seasons
+      the same count reads 0, 3, 3 (two of three). The seed-0 realm test of `test_fi03_trail.py` reads no find at seed 0 at either span.
+      `scenarios inquiry --seed s --seasons 2` ends by no predicate at seeds 0 to 2 (H-497).
 
 rows:
 
@@ -520,6 +525,26 @@ rows:
         argv: ["python", "-m", "pytest", "engine/season/tests/test_shortest_case.py", "engine/season/tests/test_playable_inquiry.py", "-q"]
         expects: "both files green"
         holds: "unread"
+        reading:
+          tree: "0160d6ff1 (B11.79, the batch's last item commit; read with B11.99's pin edits in the working tree)"
+          date: "2026-11-25"
+          seed: "per test (`inquiry_runs()`: seeds 0 to 19)"
+          seasons: 2
+          line: "3 failed, 17 passed in 7.74s"
+          control: >-
+            R-04.c7 DOES NOT HOLD on this tree: the argv's `expects` is "both files green" and three tests are red, on purpose, by the
+            falsifier of B11.76 (`08_FI_07` falsifier 3, H-497): `test_shortest_case.py::test_cut_a_runs_end_by_a_predicate_at_seeds_0_to_19`,
+            `test_playable_inquiry.py::test_every_inquiry_world_run_ends_by_a_predicate` and `::test_some_conclusion_names_a_non_actor`.
+            All twenty `inquiry_world(s)` runs (seeds 0 to 19, two seasons, the shipped chooser in the investigator's seat) reach the
+            two-season cap with no ending (`ending kinds among twenty runs {} (20 reached the cap)`), so no run ends by a predicate
+            and no run names anyone. The same reading at the command line: `scenarios inquiry --seed s --seasons 2` at seeds 0, 1, 2 prints
+            `ending None · kind None`, found 3/0/0 by `reconstruct` and 1/0/0 by `research`, `examine` formed 0 at all three.
+            The other seventeen tests of the two files pass (the shortest case builds, `examine` forms on a site he has heard of, a
+            never-inquiring script ends cold or rests, a run twice gives one hash)
+          does_not_show: >-
+            that the cap is the inquiry's fault and not the chooser's (the falsifier names the scenario offering no real choice; which
+            side fails is H-497's, not read here); `holds` stays `unread` (A-114: the batch writes the reading, not the verdict), and
+            `status:` is not edited; the hearing piece is B24's; run with `-p no:cacheprovider` `-n 2` and `PYTHONHASHSEED=0` added
     blocks: [IN-10, IN-40, FA-01, IN-49, SC-01, IN-46, IN-47]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10 spent (declared routing landed); W13 removed (no conjunct of this row reads the ARC re-authoring lane)
 
@@ -553,6 +578,23 @@ rows:
         argv: ["python", "-m", "engine.season.harness.aperture", "2", "--seeds", "0", "1", "2"]
         expects: "the `BUILT OUT` block reads `built out <n> of <n>`, n = `len(VERB_TABLE)` at measurement time"
         holds: "unread"
+        reading:
+          tree: "0160d6ff1 (B11.79, the batch's last item commit; read with B11.99's pin edits in the working tree)"
+          date: "2026-11-25"
+          seed: "0, 1, 2"
+          seasons: 2
+          line: "    covenant          2 of 3 seeds"
+          control: >-
+            THE `covenant` FORMED READING (B11's requirement, `IS-A-08`; B11.69 moved its formation to what can be done): the pooled
+            `BUILT OUT, POOLED` block of `aperture 2 --seeds 0 1 2` reads `covenant` built out at 2 of 3 seeds (clean executions 1, 0, 3 at
+            seeds 0, 1, 2; `via` equals clean). Its funnel at the realm, per seed: formed 12, 11, 12; attempted 1, 0, 3; executed 1, 0, 3;
+            refused 0, 0, 0 (the open tree `c21e451f1`, one season: formed 18, 18, 18; attempted 3, 3, 10; executed 0, 0, 0; refused 3, 3,
+            10). The realm's `BUILT OUT` reads `built out 27 of 67`, `23 of 67`, `26 of 67` at seeds 0, 1, 2 and `built out in at least one
+            seed 29 of 67`; this conjunct is the whole table, so it stays unread
+          does_not_show: >-
+            that `covenant` is built out at the seed where it was never attempted (seed 1: 0 attempted); that the other verbs of the
+            table are (38 of 67 are not built out in any seed); `holds` stays `unread` (A-114); the pooled `covenant` row reads 4 attempted
+            and 4 executed over three seeds (four acts); run with `PYTHONHASHSEED=0` added
       - id: R-05.c
         text: >-
           no built-out verb has a band that writes nothing (A-81): the same run as R-05.b, two
@@ -681,6 +723,23 @@ rows:
       only have imperfect knowledge
     status: partial
     measure: "python -m pytest engine/season/tests -k 'a_view_raises or a_view_is_capped or r7_two_persons or wa_a_planted_claim or decision_package_never_names_world or another_modules_prize_and_a_foreign_actor or r07_realm_regard_differs'"
+    reading:    # `08_FI_01` edit 7, written by B11.99 (A-114: no `status:` edit): the row-level record of what imperfect knowledge now holds for
+      tree: "0160d6ff1 (B11.79, the batch's last item commit; read with B11.99's pin edits in the working tree)"
+      date: "2026-11-25"
+      seed: "0 (`build_realm(0)`, tick 0), per test"
+      seasons: 0
+      line: "7 passed in 9.89s"
+      control: >-
+        IMPERFECT KNOWLEDGE HOLDS FOR CLAIMS; REFERENTS WERE WORLD-READ UNTIL B11.08. `python -m pytest engine/season/tests/test_fi_referents.py
+        engine/season/tests/test_season_shape.py::test_r7_a_silent_seat_change_moves_no_candidate -q`: `questions_for` hands a person no referent read
+        from another's or a seat's current state. A seat edited on the World with no Event and no WITNESS moves no candidate of `p_npc_088`
+        (a `seat_holders` goal) or of the King (a vacancy), the same seat released through the real fold and WITNESS does move them, and an
+        unrelated seat changing hands silently is the control; a silent death removes no candidate; who is where is read from the asker's ledger
+        (`test_fi_referents.py`, six tests, `seed_seat_news` seeding the realm's seat news)
+      does_not_show: >-
+        a played season (the probes read `build_realm(0)` at tick 0 and hand-built worlds); that the claims themselves are right (a held claim may
+        be false, which is the point); that a told referent is believed by its hearer (R-07.d); which referent classes beyond the seat, the
+        vacancy, the aim and the matter read from a ledger; `status:` stays `partial`; run with `-p no:cacheprovider` and `PYTHONHASHSEED=0` added
     conjuncts:
       - id: R-07.a
         text: >-
@@ -774,6 +833,19 @@ rows:
       optimal decision based upon their epistemic knowledge and personal inclinations
     status: partial
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
+    reading:    # `08_FI_01` edit 7, written by B11.99 (A-114: no `status:` edit); the same probes as R-07's, read for the non-omniscience half
+      tree: "0160d6ff1 (B11.79, the batch's last item commit; read with B11.99's pin edits in the working tree)"
+      date: "2026-11-25"
+      seed: "0 (`build_realm(0)`, tick 0), per test"
+      seasons: 0
+      line: "7 passed in 9.89s"
+      control: >-
+        NON-OMNISCIENCE HOLDS FOR CLAIMS; REFERENTS WERE WORLD-READ UNTIL B11.08. The same two files as R-07's reading
+        (`test_fi_referents.py`, `test_season_shape.py::test_r7_a_silent_seat_change_moves_no_candidate`): what a person is asked about and may
+        act on is read off his own ledger, so a world change he has not witnessed or been told leaves his candidates where they were
+      does_not_show: >-
+        that a chosen act is not the optimal one (R-08.c reads that, and its reading is its own); one build and one tick; `status:` stays
+        `partial`; run with `-p no:cacheprovider` and `PYTHONHASHSEED=0` added
     conjuncts:
       - id: R-08.a
         text: >-

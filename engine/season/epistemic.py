@@ -20,9 +20,11 @@ predicates and it raises at import — loud, which is the good case, and the rea
 moves the table, its loop and its `del` as one block rather than as three statements. It is the
 package's second such lookup; `state/carriers.py` records the first.
 
-⚠ NOTHING HERE READS `belief_contradicts`, AND THAT IS LOAD-BEARING RATHER THAN INCIDENTAL. Its
-only bare-name caller is `opening_set`, which lives in `season.decision` and resolves
-the name in THAT module's globals at call time — so every rebind must name `decision`
+⚠ NOTHING HERE READS `belief_contradicts`, AND THAT IS LOAD-BEARING RATHER THAN INCIDENTAL. It is defined in
+`queries/person_q.py` since B11.21 (a person-side read of one ledger; `LedgerReader` and the typed `requires` are all it
+needs) and bound here only for the importers that spell it `epistemic.belief_contradicts`. Its
+bare-name callers are `opening_set`, which lives in `season.decision` and resolves
+the name in THAT module's globals at call time (`person_q.dissents` reads person_q's own binding, since B11.21) — so every rebind must name `decision`
 (`wd_acceptance.py`'s through `sweep_core.PS`).
 **If a function here ever calls it directly, that reader would bind THIS module's copy and those
 rebinds would become no-ops on it** — the same hazard, one module over.
@@ -39,85 +41,26 @@ from __future__ import annotations
 from dataclasses import dataclass, fields as _dc_fields
 from typing import Optional
 
-from .data.requires import binding_of, evaluate
+from engine.dice_engine.dice_engine import DEGREE_LABEL, degree_from_net
+from engine.substrate import composition
+
+from .data.requires import Observation
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, COVERT_KINDS, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE,
-    TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
-from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
+    CLAIM_SUBJECT_RULES, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
+    REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, RUNG_KINDS, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
+    WITNESS_CHANNELS, require_member, roster)
+from .data.verbs import DEED_KINDS, EVENT_KINDS, VERB_TABLE
 from .gaps import Unspecified
-from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
+from .state.attribution import event_by_id, actor_of, anchor_of, causing_act, live_cover
+from .state.containment import ancestry
 from .state.gate import purview_reaches
+from .state.ledgers import present_confidence
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
-from .queries.person_q import LedgerReader
+from .queries.inputs import SocialContestInput
+from .queries.person_q import LedgerReader, belief_contradicts   # `belief_contradicts` moved to person_q (B11.21), re-bound for its importers
 from .state.carriers import Event, Person, subject_of
 from .state.world import World, register_snapshot_type
-
-
-def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
-                       via: "str | None" = None, weigh=None,
-                       actor: "str | None" = None, tick: int = 0, decay: int = 0) -> bool:
-    """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
-
-    ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
-    True only when the person HOLDS A CLAIM THAT CONTRADICTS the requirement. Having no belief
-    either way is NOT a contradiction, so the Candidate forms, the person acts on a false premise,
-    and the fold refuses them -- which is §F1's "a person who *wrongly* believes the granary full
-    still forms the Candidate ... That is T3 and L2 working."
-
-    Jordan, 2026-09-02: *"we can't control how others perceive and interpret our words or
-    actions"* and *"our understanding of all other words and actions is subjective and singular."*
-    A filter on world truth would be `choose` reading the world; this reads one person's ledger.
-
-    ⚠ `W-A`: IT ASKS THE VERB'S OWN TYPED CELL, NOT A ROSTER. A filter on
-    `predicate in PERSON_PREDICATES and value is False` is a MEMBERSHIP TEST standing in for a
-    requirement (`H-72`: the map from a requirement to a predicate), and the two vocabularies are
-    DISJOINT, so clause 4 could not fire and the candidate set would be invariant with respect to
-    everything that happened in the simulation (`H-116`). The predicate is DERIVED from the form
-    (`stores:grain`, `condition`, `contain.path:D`), so there is one namespace and the write side
-    has a name to aim at. `H-116`'s other half -- WITNESS depositing claims in that namespace -- is not this item.
-
-    ⚠ AN UNTYPED VERB IS NOT CONTRADICTED. `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not
-    False: a person cannot know a requirement fails when nothing states what the requirement is.
-    That polarity is the OPPOSITE of the fold's, deliberately -- §F1 filters on belief and §42.2
-    governs the resolver -- and the same `Verdict` carries both readings.
-
-    ⚠ `W-C`: IT READS THE CANDIDATE'S OWN OPERANDS, WHICH IS WHAT MAKES THIS THE SAME QUESTION
-    THE FOLD ASKS. `binding_from` would rebind `subject` onto whichever operand
-    the cell called its entity -- so for `transfer` the person would ask *does the RECEIVER hold the
-    grain*, and §54 item 7 asks about the GIVER's hearth: a different cell from the fold's and a
-    defensible-looking answer to the wrong question. `operands` is the
-    same bag the Act will carry, passed through the same `binding_of`, so the two sides differ
-    only in WHAT THEY READ (one ledger, one world) and in POLARITY -- which is the difference
-    that is supposed to be there.
-
-    ⚠ PLAN POSITION `19`: AND THE SEAT, FOR THE SAME REASON. `via` is the seat the Candidate's act
-    will be exercised through -- `decision/options.py::seat_of`, the value `pack_scenes` puts
-    on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
-    `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
-    SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which
-    contradicts nothing.
-
-    ⚠ TELLING WORKPLAN `T3a` (`ED-IN-0282`): `weigh` GRADES HEARSAY AS IT IS READ. `opening_set`
-    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on does
-    not beat the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
-    not built here, because `decision.options` imports this module and a deferred import back
-    would hide that cycle rather than remove it. Omitted (`None`), the reader is unweighted.
-
-    ⚠ v9 IN-15 / `H-201`: `actor` IS WHO THE CELL'S `actor` OPERAND BINDS TO, AND IT DEFAULTS TO `p`.
-    The person choosing an act is its actor, so `opening_set` passes nothing. A WITNESS asking whether an act they saw could have happened is a
-    different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
-    `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
-    (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
-    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing.
-
-    ⚠ B09.01: `tick` AND `decay` ARE WHAT HE READS HIS CLAIMS AT (`LedgerReader`'s; `state/ledgers.py::present_confidence`):
-    a stored `confidence` is what a claim was deposited at, and its fade is computed here, where it is read. Omitted, a
-    hand-built ledger reads as deposited."""
-    if (row.requires or "").strip() in NO_PRECONDITION:
-        return False
-    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh, tick=tick, decay=decay),
-                    binding_of(p.id if actor is None else actor, operands, via)).value is False
 
 
 def act_refs(a) -> list:
@@ -164,12 +107,17 @@ def _hold_tenure_ends(w: "World", subject: str) -> tuple:
     return (subject,)
 
 
-def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None) -> list:
+def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None,
+                   anchor: Optional[str] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
     `actor` is the incumbent — one claim, subject = the Event's anchor (`anchor_of`). `per_change` mints
     one per `StateChange`, subject = THE THING CHANGED, which is what makes §F1's Q2 clause
     "something they hold" reachable at all. `both` is the union.
+
+    `anchor` (B11.58) is the anchor to use, the deposit's own call: `None` is `anchor_of` (the alias a
+    cover makes of the actor), and `deposit_anchor` answers the actor itself where the deposit shows `who`.
+    This function stays the one owner of what a deposit is about; the caller only says which anchor.
 
     Order is deterministic and de-duplicated, because a person holding two identical claims about
     one Event would double-count in every eviction comparison."""
@@ -183,7 +131,8 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # `anchor_of` (`state/attribution.py`) separates the two senses an Event's subject could carry: an
     # act-caused Event anchors on its ACTOR, a MATTER write on the THING WRITTEN, and a reader does not
     # have to infer which it received from whether the id happens to name a person.
-    anchor = anchor_of(w, e)
+    if anchor is None:
+        anchor = anchor_of(w, e)
     out = [] if rule == "per_change" else [anchor]
 
     def _add(entity: str) -> None:
@@ -304,36 +253,65 @@ def non_anchor_subjects(subj, anchor) -> list:
     return [s for s in subj if s != anchor]
 
 
+def deposit_anchor(w: "World", e: "Event", shows_who: bool) -> Optional[str]:
+    """B11.58 (CP-T06-09, R-07): THE ANCHOR AN EVENT-KIND DEPOSIT IS ABOUT, `claim_subjects`' `anchor` argument. A cover
+    makes the Event's anchor an alias (`anchor_of`: the cover's id), which is right for a deposit that does not show the doer;
+    where the deposit shows `who` (a channel whose `rosters.yaml: observation_terms.supplied_by` lists it, a finding whose band's
+    `finding_terms` do), the witness knows who did it, so the claim is about the actor -- `(actor, kind, True)`, not
+    `(cover, kind, True)`. The identity where the anchor is the actor (no cover, or an Event no one acted, whose anchor is the
+    thing written). The observation, `seen`, told and content deposits take no event-kind subject from the anchor and do not call
+    this. AM-D-16's limit: a found or seen deed reaches a bench through the bench's own regard and the witness's judgement of the
+    doer, not through `proofs`, because the doer always holds his own claim."""
+    anchor = anchor_of(w, e)
+    actor = actor_of(w, e)
+    return actor if shows_who and actor is not None else anchor
+
+
 def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
-    """Does `p` already hold this deed as a witness would -- an event-kind claim `(s, e.kind, True)`
-    for an `s` SPECIFIC TO `e`, whatever its `when`?
+    """Does `p` already hold this deed as a witness would -- THE THING AND THE HAND?
 
-    THE SPECIFIC SUBJECTS are what the deposit rule makes a claim about `e` (`claim_subjects`) MINUS
-    the Event's anchor (`anchor_of`, the actor for an act-caused Event) -- or, where nothing else is
-    left (the `actor` rule, or an Event that names only its anchor), the anchor alone. The
-    anchor is excluded because it is not specific to ONE Event: `(forger, record.forged, True)` is the
-    same claim for every forging by that forger, so keying on it would close every LATER forging by him
-    to an investigator who had found (or witnessed) ANY one of them.
+    B11.61 (CP-T06-03): TRUE ONLY WHEN HE HOLDS THE HAND. Two tests, both read off his OWN ledger (AX-2), both at a claim no older than the
+    Event and still above 0:
+      (1) THE DEED: an event-kind claim `(s, e.kind, True)` for an `s` SPECIFIC TO `e` -- what the deposit rule makes a claim about `e`
+          (`claim_subjects`) MINUS the Event's anchor (`anchor_of`, the actor for an act-caused Event), or, where nothing else is left (the
+          `actor` rule, or an Event that names only its anchor), the anchor alone.
+      (2) THE HAND, and ONE OF: the event-kind claim on the subject a hand-showing deposit files the deed under (`deposit_anchor`: the
+          actor, else the anchor), or a `seen` claim on a specific subject whose `who` is set AND whose `stratum` is this deed's (`_term_stratum`: a `seen` claim
+          names no Event, and the Record he was handed by the forger shows the forger too -- as the hand of a `give`, whose stratum differs.
+          Every channel that shows `who` shows `stratum`, `rosters.yaml: observation_terms.supplied_by`, so no witness of the deed is excluded).
+    A partial finding lands (1) and withholds (2) (`rosters.yaml: finding_terms`), so it leaves the hand to a LATER, BETTER finding of the same
+    Event, which deposits only the triples the finder lacks (`loop/witness.py::_found_claims`); a second finding of the same Event, once the
+    hand is held, deposits nothing. ⚠ THE EDGE, DECLARED: a claim on the anchor from the same actor's LATER Event of the same kind satisfies (2)
+    for this one too -- the `when` guard cannot separate them -- so a finder who holds the forger from one forging has the hand of another he
+    holds only the Record of.
 
-    ⚠ A SUBJECT IS SPECIFIC TO ONE EVENT ONLY WHEN THE EVENT MINTED IT: each forging mints a fresh Record
-    id, so `(rid, record.forged, True)` is about that forging alone. A repeatable covert deed on one
-    patient (an arrest of the same man twice) would not be, so a held claim also has to be no OLDER
-    than the Event (`c.when >= e.emitted_at`): a claim made before the Event existed cannot be
-    knowledge of it. Nothing changes for `record.forged` (a witness's and a finder's claims are made
-    at or after the forging).
+    The anchor is excluded from (1) because it is not specific to ONE Event: `(forger, record.forged, True)` is the same claim for every
+    forging by that forger, so keying (1) on it would close every LATER forging by him to an investigator who had found (or witnessed) ANY
+    one of them.
 
-    One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and
-    `loop/witness.py`'s found deposit (re-checked there, because a find runs at RESOLVE and two finds of
-    one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ WHAT HOLDS: a held
-    claim on any specific subject closes the Event, so a partial finding -- which lands the claim on
-    the written thing and withholds the hand -- also closes it to a later, better finding of the same
-    Event, and a second finding of the same Event deposits nothing; under the shipped `both` rule a
-    claim on the actor ALONE does not close it. Under the `actor` rule the anchor is the only subject,
-    so there one forging found still closes the forger's others."""
+    ⚠ A SUBJECT IS SPECIFIC TO ONE EVENT ONLY WHEN THE EVENT MINTED IT: each forging mints a fresh Record id, so `(rid, record.forged, True)`
+    is about that forging alone. A repeatable covert deed on one patient (an arrest of the same man twice) would not be, so a held claim also
+    has to be no OLDER than the Event (`c.when >= e.emitted_at`): a claim made before the Event existed cannot be knowledge of it. Nothing
+    changes for `record.forged` (a witness's and a finder's claims are made at or after the forging).
+
+    One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and `loop/witness.py`'s found deposit
+    (re-checked there, because a find runs at RESOLVE and two finds of one Event can reach the same WITNESS). Reads `p`'s OWN ledger only.
+
+    ⚠ A CLAIM HE HAS FORGOTTEN DOES NOT HOLD IT (ED-IN-0320, `08_FI_04` §2): the held claim must still be read at
+    a confidence above 0 -- `present_confidence` at `w.tick`, the one owner of the fade, never the stored value
+    (which nothing rewrites). `deeds_judged` is NOT changed: a stale claim leaves the opinion there, by the same ruling."""
     subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
     specific = set(non_anchor_subjects(subj, anchor_of(w, e))) or set(subj)
-    return any(c.predicate == e.kind and c.value is True and c.subject in specific
-               and c.when >= e.emitted_at for c in p.ledger)
+    hand_subject = deposit_anchor(w, e, True)
+    act = causing_act(w, e)
+    stratum = _term_stratum(w, e, act, p.id)
+    decay = w.fixtures.claim_decay()
+    live = [c for c in p.ledger if c.when >= e.emitted_at and present_confidence(c.confidence, c.when, w.tick, decay) > 0]
+    return (any(c.predicate == e.kind and c.value is True and c.subject in specific for c in live)
+            and any((c.predicate == e.kind and c.value is True and c.subject == hand_subject)
+                    or (c.predicate == SEEN_PREDICATE and c.subject in specific and getattr(c.value, "who", None) is not None
+                        and c.value.stratum == stratum)
+                    for c in live))
 
 
 def trail_of(w: World, subject: Optional[str], pid: str) -> list:
@@ -343,7 +321,12 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
     For each `rosters.yaml: covert_kinds` member -- DATA, never a walk of every deed kind -- the most
     recent Event of that kind that WROTE `subject` (deeds done TO it: `World.last_emission_of(...,
     written=True)`) and the most recent one ANCHORED on it (deeds BY it: the anchor is the actor). The
-    bound is the index's own -- one per kind per side -- and introduces no number. An Event is kept only
+    bound is the index's own -- one per kind per side -- and introduces no number. B11.63 (CP-T06-02): a THIRD side, the most
+    recent one that HAPPENED AT `subject` taken as a place (`last_emission_of(..., at=True)`: where its doer stood when it was
+    logged), so `surveil` of a Rung finds a deed done there while the watcher was away, and an `examine` of a Site reads its Rung's.
+    ⚠ THE LIMIT (AM-D-08): `(kind, place)` keeps ONE Event, the latest, so a watcher is shown at most one deed per covert kind per
+    place per find, and an earlier deed of the same kind at the same place is unreachable while the latest is held or after it is
+    (no fall-back to the next-older). An Event is kept only
     if a PERSON did it (`actor_of`; a MATTER write is no one's hand), the person is not `pid` (a man
     knows his own act), and `pid` does not already hold it (`holds_trail`).
 
@@ -362,9 +345,11 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
     p = w.persons.get(pid)
     rule = w.fixtures.get("claim_subject_rule")
     found: dict = {}
+    place = w.sites[subject].rung if subject in w.sites else subject
     for kind in sorted(COVERT_KINDS):
-        for written in (True, False):
-            eid = w.last_emission_of(kind, subject, written=written)
+        for side in ("written", "anchored", "at"):
+            eid = (w.last_emission_of(kind, place, at=True) if side == "at"
+                   else w.last_emission_of(kind, subject, written=side == "written"))
             if eid is None or eid in found:
                 continue
             e = event_by_id(w, eid)
@@ -373,6 +358,23 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
                 continue
             found[eid] = e
     return sorted(found.values(), key=lambda e: (e.emitted_at, e.id))
+
+
+def trail_concealment(w: World, subject: Optional[str], pid: str) -> float:
+    """B11.68 (`IS-B2-FI-07` (3)): HOW WELL THE DOERS OF THE TRAIL `trail_of(subject, pid)` RETURNS HAVE COVERED IT -- the highest `forgery_quality` among
+    the live covers (`state/attribution.py::live_cover`) of those Events' doers (`actor_of`), `0.0` where there is no trail or no doer holds one.
+
+    The cover's own number, the one the notice draw already reads for the doer of a deed (`notice`): `conceal`'s band written as the cover Record's `forgery_quality`
+    (`loop/effects_information.py::_eff_conceal`). The finder's roll adds it to the obstacle through the input builder's one `forgery_quality` operand
+    (`seam/wrappers/sigma.py::_read_social_roll`, for an inquiry), so the cover stands against the finder's draw as it stands against a bystander's. ONE
+    TERM PER ACT, however many Events the trail holds (the strongest cover counts once); the doer is not read as an opponent, his score in concealing being
+    `pool_default` for everybody (`conceal`'s `capability: none`), which is the `opposed_ob(pool_default)` an inquiry already stands against."""
+    best = 0.0
+    for e in trail_of(w, subject, pid):
+        cover = live_cover(w, actor_of(w, e))
+        if cover is not None:
+            best = max(best, float(w.records[cover].forgery_quality))
+    return best
 
 
 # ---------------------------------------------------------------------------
@@ -571,35 +573,101 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     return purview_reaches(w, seat, world_q.place_of(w, pid))
 
 
-def _ch_chronicle(w: "World", e, pid) -> bool:
-    """The matter-of-record channel: what a binding decision emits is public.
+def _seat_place(w: "World", e) -> "str | None":
+    """WHERE AN EVENT NO ONE PLACED HAPPENED, WHEN IT IS ABOUT A SEAT: the rung of the seat the causing act was exercised
+    through (`Act.via` -> `Office.rung`, as `_ch_post_remit` reads it), else the rung of the first Office the Event's
+    changes name (`None` for an office with no rung, `S6.2`'s cluster case). A MATTER death's `tenure.closed` has no actor
+    and anchors on the Office, which `place_of` does not place (`event_place` is `None`), and the `chronicle` this channel
+    replaced told the realm of the vacancy regardless: without this limb the death of a seat-holder at MATTER would reach
+    nobody by `reach`. Asked only where `event_place` answers `None`. STILL UNPLACED, so reaching nobody: an act of an
+    unplaced actor exercised through no seat (`release`'s `tenure.closed` and `commitment.ended`, eligibility its own)."""
+    act = causing_act(w, e)
+    seat = w.offices.get(act.via) if act is not None and act.via else None
+    if seat is not None and seat.rung is not None:
+        return seat.rung
+    for c in e.changes:
+        office = w.offices.get(c.subject)
+        if office is not None:
+            return office.rung
+    return None
 
-    ⚠ THIS DOES NOT READ `pid`, AND SAYING SO IS THE HONEST DESCRIPTION. It is an EVENT-KIND
-    FILTER, not a per-person predicate: when it fires it fires for everyone alive, so it is
-    `total` conditioned on kind. That is a defensible thing for a PUBLIC channel to be -- a matter
-    of record is public to everyone by definition -- but it does not keep `all_five` distinct from
-    `total`. In Carin's world `chronicle` matches NOBODY: the eight `binding_decision` verbs all
-    have prose `requires:` and none is in `REQUIRES_PREDICATES`, so `resolvable_verbs()` excludes
-    every one of them, and the MATTER/WITNESS kinds appear on no verb's `emits:` at all. The
-    `any(...)` is over an empty generator for every Event the fold can produce there.
-    So the whole of `all_five - presence_only` is `document_key`, and the register carries it as
-    the reason `H-33`'s `all_five` arm is not yet a measurement of five channels.
 
-    ⚠ TRUE OF CARIN'S WORLD, NOT OF THE REALM. In the realm (`boot/realm.py`) this channel is the
-    strongest admitting one for `order.given` (`dispatch`), `date.scheduled` (`convene`),
-    `tenure.closed` and `march.declared` -- every one a person nowhere near the room -- and they
-    hold those deposits `told_by`. This channel is ahead of `post_remit` in the roster (the
-    ordinal: told before inferred).
+def _ch_reach(w: "World", e, pid) -> bool:
+    """The event-kind reach channel (CR-29): news of an event reaches persons by the event's kind, at a stated reach.
 
-    ⚠ KEPT, NOT DELETED. The proceedings design deletes `chronicle` on the ground that it *"matches
-    nobody"* (`21_RECONCILIATION.md` C-6) and pairs the deletion with the channel that replaces its
-    reach (the `<rung kind>` reach channel, the design's step 15); the v9 plan scheduled no
-    replacement. In the realm it is the ONLY channel minting `told_by` -- every hearsay deposit of a
-    binding decision. Deleting it before its replacement exists removes that reach outright; it
-    goes in the change that builds the `<rung kind>` channel (`19_PLAN.md` step 16's pairing), not
-    before."""
-    return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
-               if e.kind in (r.emits or ()))
+    True where `e.kind` has a reach in `EVENT_REACH` and `pid`'s place (`world_q.place_of`) lies within the rung of that
+    kind that contains the event's place (`world_q.event_place`, else `_seat_place`), or is that place for `room`. Where the
+    event's place has NO rung of that kind above it and the reach is wider than the place itself (Altonia, a territory in no
+    `realm`), the outermost rung above it is the reach. An event no one placed, a kind with no reach or an unplaced person
+    admits nobody; so does a seat-change kind (`SEAT_NEWS_KINDS`) at `Fixtures.seat_news == "local"`, the A-32 arm that
+    leaves that news to presence, jurisdiction and telling. Unlike the `chronicle` it replaced, it reads `pid`: a person
+    nowhere within the reach is not admitted.
+
+    ⚠ `person.died` IS NOT IN THE MAP (A-33): a death reaches those who were there, those on its trail and those told.
+    The seats it empties earn `tenure.closed`, which does travel."""
+    reach = EVENT_REACH.get(e.kind)
+    if reach is None or (e.kind in SEAT_NEWS_KINDS and _seat_news(w) == "local"):
+        return False
+    homes = cache.home_index(w)
+    at, here = world_q.event_place(w, e, homes=homes) or _seat_place(w, e), world_q.place_of(w, pid, homes=homes)
+    if at is None or here is None:
+        return False
+    if reach == REACH_ROOM:
+        return here == at
+    chain = ancestry(w, at)
+    rung = next((r for r in chain if getattr(w.rungs.get(r), "kind", None) == reach), None)
+    if rung is None:
+        at_kind = getattr(w.rungs.get(at), "kind", None)
+        if at_kind in RUNG_KINDS and RUNG_KINDS.index(reach) > RUNG_KINDS.index(at_kind):
+            rung = chain[-1]
+    return rung is not None and rung in ancestry(w, here)
+
+
+def _seat_news(w: "World") -> str:
+    """`Fixtures.seat_news`, held to `rosters.yaml: seat_news_arms` (H-214): an unknown arm raises rather than reading as
+    `realm`, the control."""
+    arm = w.fixtures.get("seat_news")
+    require_member(arm, SEAT_NEWS_ARMS, f"seat_news {arm!r} is not one of the declared arms {sorted(SEAT_NEWS_ARMS)}", "H-214",
+                   law="`rosters.yaml: seat_news_arms` -- an arm outside it that read as `realm` would make every reading "
+                       "of the A-32 sweep report the control")
+    return arm
+
+
+def _event_reach(rows: dict) -> dict:
+    """`{event kind: reach}` for the `reach` channel, from `rosters.yaml: witness_channels.event_reach`: an entry
+    `from_stratum: {stratum: reach}` expands to every kind a verb row of that stratum emits and `from_unrest: reach` to
+    the unrest kinds `person_q.stability` reads (`DOMINANCE_KINDS` less `person.died`, A-33) -- both derived, never
+    spelt -- and a kind an entry names must be one the loop declares (`EVENT_KINDS`) or import refuses. The reach values
+    are `data/rosters.py::check_event_reach`'s. A function so a test can plant a row."""
+    out = {}
+    for k, v in rows.items():
+        if k == REACH_FROM_STRATUM:
+            for stratum, reach in v.items():
+                for r in VERB_TABLE.values():
+                    if r.stratum == stratum:
+                        out.update({kind: reach for kind in (r.emits or ())})
+        elif k == REACH_FROM_UNREST:
+            out.update({kind: v for kind in DOMINANCE_KINDS if kind != PERSON_DIED})
+        else:
+            if k not in EVENT_KINDS:
+                raise Unspecified(
+                    f"`witness_channels.event_reach` names {k!r}, which is not an Event kind the loop declares",
+                    "rosters.yaml -- event_reach", needs="name a kind in `data/verbs.py::EVENT_KINDS`",
+                    law="04 section B.13 invariant 7 -- a kind outside the derived roster is one the log accepts from "
+                        "no one, and its reach would read as built")
+            out[k] = v
+    return out
+
+
+#: `{event kind: reach}` for `_ch_reach`, derived from the roster row (CR-29).
+EVENT_REACH = _event_reach(EVENT_REACH_ROWS)
+_no_reach = sorted(k for k in SEAT_NEWS_KINDS if k not in EVENT_REACH)
+if _no_reach:
+    raise Unspecified(
+        f"`seat_news_kinds` names {_no_reach}, which `witness_channels.event_reach` gives no reach", "rosters.yaml -- seat_news_kinds",
+        needs="give each seat-change kind a reach in `event_reach`, or drop it from `seat_news_kinds`",
+        law="A-32 -- the `local` arm lifts the seat-change news from the map; a kind the map never carried is a lift of nothing")
+del _no_reach
 
 
 # ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. A dict literal mapping five channel names to five
@@ -683,7 +751,7 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     claim id, a hash (`state/ids.py::H`) that is no person, site, record, date or rung, so the
     anchor is the claim, `place_of` answers `None` (`co_located` admits nobody), `witness_key`'s
     `pid == anchor` and its knot test have no person to match, and `document_key` needs a `hold`
-    whose object is that claim id; `chronicle` filters on a verb's `emits:` and no verb emits a
+    whose object is that claim id; `reach` is keyed on kinds a verb row emits and no verb emits a
     claim-changing kind.
 
     ⚠ NOT "EVERY CHANGE SUBJECT RESOLVES IN NO WORLD STORE". That also matches a MATTER death:
@@ -700,10 +768,10 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     WHEN IN DOUBT THE FAN RUNS. An Event with no change (`condition.band_crossed`, anchored through
     its cause), a change with no subject, or a claim id no ledger holds any more (its holder died, or
     the cap evicted it, or this very Event removed it) is NOT skipped. Nor is an Event whose kind
-    the `chronicle` channel admits (`_ch_chronicle` reads `e.kind` alone, so it would admit
-    everyone): no row emits a claim-changing kind today, and that is a fact of the table, not of
-    this predicate."""
-    if mode == "total" or not e.changes or causing_act(w, e) is not None or _ch_chronicle(w, e, None):
+    the `reach` channel carries (`EVENT_REACH`: a kind with a reach may admit people the other
+    channels do not): no row emits a claim-changing kind today, and that is a fact of the table,
+    not of this predicate."""
+    if mode == "total" or not e.changes or causing_act(w, e) is not None or e.kind in EVENT_REACH:
         return False
     return all(c.subject and c.subject in held for c in e.changes)
 
@@ -752,6 +820,74 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
         if ch is not None:
             out.append((pid, ch))
     return out
+
+
+# ---------------------------------------------------------------------------
+# B11.66 (`18_DETERMINISM_notice_is_a_draw`, A-24, A-30; closes C-02) -- WHETHER A BYSTANDER NOTICES A DEED IS A DRAW.
+#
+# `observers_for` says who a channel ADMITS to an Event; at `notice_arm: on` an admitted bystander of a DEED then draws once whether he saw it, and what he saw. THE ARM SHIPS `off`
+# (the control): nothing below is read, the fan is the channels' alone. The odds are state: his pool is the `notice` site's `dice` row (his `inquiry` skill through the one pool rule,
+# `queries/cache.py::notice_pools`), his Perception is its `edge` row (`notice_edges`), and the obstacle is the one composer's (`social_contest.roll`'s own `obstacle`). The draw is the
+# one sampler on a stream keyed to the pair, so it moves no other draw and does not depend on deposit order.
+# ---------------------------------------------------------------------------
+NOTICE_ARMS = roster("notice_arms")
+NOTICE_ROLL = "social_contest.roll"      # [canonical: references/module_contracts.yaml §composition_roles social_contest.roll] the composition row whose module composes the obstacle and rolls one draw
+
+
+def notice_on(w: "World") -> bool:
+    """IS `Fixtures.notice_arm` `on` (B11.66, `H-496`), held to `rosters.yaml: notice_arms`: an unknown arm raises, as `told_pairing_on` does, so a misspelt arm cannot read as the control."""
+    arm = w.fixtures.get("notice_arm")
+    require_member(arm, NOTICE_ARMS, f"notice_arm {arm!r} is not in the roster", "H-496",
+                   law="`told_pairing_on`'s precedent: an unrecognised arm silently reading `off` would make a sweep of the arm report the control twice")
+    return arm == "on"
+
+
+def notice(w: "World", pid: str, e: "Event", ch: str, trail: Optional[dict] = None) -> Optional[str]:
+    """THE BAND OF `pid`'s NOTICE OF `e`, admitted by channel `ch` -- a label of the one ladder -- or `None` where the pair is out of scope and deposits as the channel gives it.
+
+    SCOPE. A pair draws iff `e` is a deed (`DEED_KINDS`, the kinds a deed Event deposits) and `pid` is neither the doer of the act that caused `e` (read from the act store through
+    `e.causes`; an Event carries no actor) nor a subject of its changes. A `public` verb row's deed deposits to the co-present, those the PRECEDENCE HEAD channel (`WITNESS_CHANNELS[0]`,
+    presence) admitted, without a draw: the act's publicity is the channel's eligibility. [ASSUMPTION; medium; Jordan to correct: a public deed still draws for a person a later channel
+    admitted -- basis: the source says "to the co-present", and a seat or a document is not presence.]
+
+    ODDS. His pool is `queries/cache.py::notice_pools`' and his net sigma `notice_edges`' (both barrier maps, built beside the presence index: WITNESS computes neither). The obstacle is
+    composed by the one composer (`social_contest.roll`, which composes `modules/social_contest/roll.py::obstacle` and rolls `roll_net_continuous` on it): the difficulty of the
+    level `Fixtures.notice_ob` names, raised ONE LEVEL (to the next member of `difficulty_levels`, the heaviest holding at the heaviest) where `ch` is not the precedence head and one
+    more where the kind is in `rosters.yaml: covert_kinds`, and the doer's live cover's `forgery_quality` (`conceal`'s band, as an examination of the cover reads it) where he holds one.
+    [ASSUMPTION; medium; Jordan to correct: "one level" is the next member of the ladder -- basis: `difficulty_levels` is the one ordered ladder, sized by `difficulty_ob`.]
+    THE DRAW is keyed `H(world_seed, tick, pid, "notice:" + e.id)` (A-30): his own stream for this Event, so it moves no other draw. Nothing is written.
+
+    `trail`, where given, is filled `{(pid, e.id): (Observation, ...)}` with the reason trail (D-U1-06): the band, the level `notice_ob` names, the two level steps, the cover's quality,
+    and every term the composer made the obstacle of -- WITNESS records it on the deposit's `observed`."""
+    if e.kind not in DEED_KINDS:
+        return None
+    act = causing_act(w, e)
+    if (act is not None and act.actor == pid) or any(c.subject == pid for c in e.changes):
+        return None
+    head = ch == WITNESS_CHANNELS[0]
+    row = VERB_TABLE.get(act.verb) if act is not None else None
+    if head and row is not None and row.public:
+        return None
+    from .seam.wrappers.pool import pool_pair, untrained       # at the call: `seam/` imports this module
+    fx = w.fixtures
+    levels = DIFFICULTY_LEVELS
+    base = fx.get("notice_ob")
+    steps = (not head) + (e.kind in COVERT_KINDS)
+    raised = levels[min(levels.index(base) + steps, len(levels) - 1)]
+    cover = live_cover(w, act.actor) if act is not None else None
+    quality = float(w.records[cover].forgery_quality) if cover is not None else 0.0
+    pool = cache.notice_pools(w)[pid]
+    inp = SocialContestInput(
+        pool=pool, opposition=None, obstacle_ceiling=fx.get("obstacle_ceiling"), obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
+        leverage=cache.notice_edges(w)[pid], difficulty=fx.get("difficulty_ob")[raised], pool_default=untrained(fx), pool_add=pool_pair(fx, cache.NOTICE_SITE)[0],
+        opposition_rate=fx.get("opposition_rate"), forgery_quality=quality, ceiling_per_pool=fx.get("ceiling_per_pool"), ceiling_form=fx.get("ceiling_form"))
+    margin = composition.require(NOTICE_ROLL)(inp, draw_factory(w.world_seed, lambda: w.tick)(pid, f"notice:{e.id}"))
+    band = DEGREE_LABEL[degree_from_net(margin.net, margin.ob)]
+    if trail is not None:
+        trail[(pid, e.id)] = tuple(Observation(e.id, f"notice:{name}", value) for name, value in
+                                   (("band", band), ("level", base), ("channel_step", int(not head)), ("covert_step", int(e.kind in COVERT_KINDS)),
+                                    ("cover_quality", quality), *margin.terms))
+    return band
 
 
 # ---------------------------------------------------------------------------
@@ -1006,8 +1142,9 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
     return world_q.event_place(w, e)
 
 
-def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
-    """What `pid` SAW of `e`: the union of the terms shown by every live channel admitting them.
+def seen_of(w: "World", e: "Event", act, pid: str, mode: str, unseen: frozenset = frozenset()) -> Seen:
+    """What `pid` SAW of `e`: the union of the terms shown by every live channel admitting them, less `unseen` (B11.66: the terms a Partial notice withholds, the hand -- `()` for every
+    other caller, so what is shown is the channels' alone).
 
     ⚠ EVERY CHANNEL IS ASKED, NOT THE FIRST THAT MATCHES. `observers_for` short-circuits because it
     needs only WHETHER and the one STRONGEST channel (the deposit's source, position `15d`); this
@@ -1032,7 +1169,7 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     else:
         admitted = [c for c in live_channels(mode) if CHANNEL_PREDICATES[c](w, e, pid)]
         shown = {t for c in admitted for t in TERMS_SUPPLIED_BY[c]}
-    return seen_showing(w, e, act, pid, shown)
+    return seen_showing(w, e, act, pid, shown - unseen)
 
 
 def seen_showing(w: "World", e: "Event", act, pid: str, shown) -> Seen:

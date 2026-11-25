@@ -341,7 +341,7 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     v11 CP-T03-08 (`tend` forms on the wounded) is read at its revert: with it live, every short cohort is stamped for
     itself below its ceiling and tends itself whole in the same season (MEASURED, seed 0: 37 of 37 tended, `fell` 0), so the
     fall this test observes would be erased before the season's end. Its own effect is pinned in
-    `test_cp_t03_08_tend_on_the_wounded.py::test_rem52s_fall_is_tended_whole_the_same_season`."""
+    `test_cp_t03_08_tend_on_the_wounded.py::test_rem52s_fall_is_tended_by_30_of_37_while_the_seat_news_floods_oblige`."""
     from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
     revert_cp_t03_08(monkeypatch)
     from .test_b11a_duel_reach import revert_b11a

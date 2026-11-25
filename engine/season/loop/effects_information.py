@@ -21,12 +21,12 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
-    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
+    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_AS, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
     ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
-from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
+from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.inputs import ArmyCommand, Outcome
 from ..seam.ladder import degree_of
@@ -306,7 +306,7 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
 
 @effect_for("conceal")
 def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """v9 IN-12 step 10 (#453 §9.3; K-19): A COVER IS A `Record` OF KIND `cover` WHOSE ONE KEY NAMES THE
+    """v9 IN-12 step 10 (#453 §9.3; K-19): A COVER IS A `Record` OF KIND `cover` WHOSE `terms` KEY NAMES THE
     ACTOR -- written HERE, whatever the act's `subject` (a computed act's `subject` is its question's
     referent, which a cover is not about), so `_content_of`'s `read_from` (`terms` <- `subject`) is not
     asked. The Record's own id is the alias. Minted through `_mint_document`, the one mint: the maker's
@@ -314,14 +314,21 @@ def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     matures. Drawn up where `create_record` draws a document an act names no seat for (the act's
     declared `rung`, else the actor's id); `place_of` reads a held Record at its holder's place either way.
 
+    B11.64 (CP-T06-07): THE COVER'S SECOND KEY, `COVER_AS`, IS THE NAME IT BORROWS: the act's payload source `content.read_from`
+    declares for it (a non-operand, read as declared; `None` for a plain cover), written whole like `terms`. Where it names a
+    person, `cover_at_logging` anchors his covered acts on THAT PERSON. Its `forgery_quality` is the one `forge_quality_at` gives the
+    act's band, the field `sigma.py::contest_input` reads as the obstacle of an examination of the cover (no second quality field).
+
     What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    # B07.02 (18-A edit 5): a DRAWN cover carries its band's `forge_quality` (the examining draw reads it as obstacle); an act with
-    # no band writes the `0` it always did, and a band with no row (Failure) makes no cover.
-    quality = 0 if res is None else forge_quality_at(res.degree)
+    # B07.02 (18-A edit 5): a DRAWN cover carries its band's `forge_quality` (the examining draw reads it as obstacle), and a band
+    # with no row (Failure) makes no cover. B11.64 (U-9): the value is `_mint_sheet`'s for a forgery, so an act with no band
+    # reads the `Success` row as a forged sheet does (it wrote `0` before): one quality for one field, whichever document carries it.
+    quality = forge_quality_at(None if res is None else res.degree)
     if quality is None:
         return NO_CHANGE
-    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor, forgery_quality=quality)
+    content = {COVER_KEY: a.actor, COVER_AS: d.get(RECORD_CONTENT["read_from"][COVER_AS])}
+    return _mint_document(w, a, COVER_KIND, content, d.get("rung") or a.actor, forgery_quality=quality)
 
 
 @effect_for("challenge")
@@ -1248,8 +1255,7 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     v9 IN-26 (BOUND-PAPER, `A-13`): THE RECORD IS THE BOUND `subject` -- the row's typed cell binds it
     (`existence` kind `Record`, `held_by` the actor) and a computed Candidate carries it; the `record`
     payload key this read before no Candidate carried, so it is gone rather than kept as a second
-    spelling. It is the SINK for paper the verb-coverage survey found none for (`Record.ttl` has no
-    reader): a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
+    spelling. It is the SINK for paper the verb-coverage survey found none for: a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
     (`Fixtures withheld_verbs`, `OwnStateReader`'s `held_by`), never this body's. A Proposition
     is never a subject here: §14 makes it undestroyable, and the cell's `existence` conjunct refuses
     one before this runs."""
@@ -1264,6 +1270,29 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
             if t.object == rid and t.live:
                 t.until = w.tick
     return Change((Subject.entity("records", rid),), perform)
+
+
+def _held_cites(w: "World", actor: str, cites) -> "tuple | None":
+    """THE IDS AN `utter` CITES, AS A PROPOSITION'S `support` -- the act's `cites` in the order given, `()` for an act that cites none, and `None` (the
+    act is refused) when any one is not HELD by the utterer at the act: a claim id is held when it is in his OWN ledger (`Claim.id`, §20: nobody else's), a
+    Record id (or any object) when he owns a live `hold` Tenure on it. HELD, NEVER TRUE (`OwnLedger`'s reading, `T3`): a mistaken or lying ledger cites
+    what it holds. A `cites` that is no list or tuple of ids is refused, not split into characters. [ASSUMPTION; medium; Jordan to correct; revert: `tuple(cites)`
+    unchecked, and a Proposition may cite what its utterer never held (FRES §7's falsifier).]
+
+    ⚠ WHY HERE AND NOT IN A CELL (`R-19-03`: *"each refused at the cell before the draw"*): the grammar's forms are closed and a cell binds a SCALAR operand
+    (`requires_operands`), where `cites` is a list; a registered predicate would put a new refusal kind on a row that declares none. `utter` rolls no draw and writes
+    nothing until this effect returns, so the refusal is `act.refused` (the fold's own kind, the row declaring none) with the world untouched, and the held
+    reading is the OWN-state one a cell would make."""
+    if cites is None:
+        return ()
+    if not isinstance(cites, (list, tuple)):
+        return None
+    p = w.persons.get(actor)
+    if p is None:
+        return None
+    claims = {c.id for c in p.ledger}
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    return tuple(cites) if all(isinstance(c, str) and (c in claims or c in held) for c in cites) else None
 
 
 @effect_for("utter")
@@ -1289,13 +1318,19 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     Proposition's (`Proposition.exists`, the row's first pair), and naming the edge would mint a
     `(tenure, Proposition.exists)` receipt for a write that pair never made (`_eff_confer`'s
     ID-9 note); G3's tenure observation still judges it. What a hold costs is `H-92`'s (it buys
-    budget, `decision/budget.py`) -- registered, not decided here."""
+    budget, `decision/budget.py`) -- registered, not decided here.
+
+    v12 B11.74 (R-19-03) -- THE PROPOSITION CARRIES ITS SUPPORT: the act's `cites` (`data/verbs.py::CITES_KEY`), stored as `Proposition.support` and fixed
+    with it, each held by the utterer at the act (`_held_cites`), else the act is declined whole (`NO_CHANGE`, nothing written, no hold opened)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     pid = d.get("proposition") or f"prop:{a.id}"
     if pid in w.propositions:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
+    support = _held_cites(w, a.actor, d.get(CITES_KEY))
+    if support is None:
+        return NO_CHANGE                  # a cite he does not hold: refused whole, before any write
     prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
-                       d.get("predicate") or "", d.get("value"), w.tick)
+                       d.get("predicate") or "", d.get("value"), w.tick, support=support)
     held = _makers_hold(w, a.actor, pid)
 
     def perform() -> None:

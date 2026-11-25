@@ -28,7 +28,7 @@ from pathlib import Path
 
 import pytest
 
-from ._flat_fold import flat_fold, flat_fold_fixtures
+from ..harness.flat_fold import flat_fold, flat_fold_fixtures
 from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .. import decision
 from .. import seam
@@ -1491,7 +1491,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
         ("Date", "fired"), ("DocketItem", "matter"),
         ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
-        ("Record", "stages"), ("Record", "ttl"), ("Rung", "envelope"),
+        ("Record", "stages"), ("Rung", "envelope"),
         ("Rung", "stores"), ("Rung", "yield"), ("Site", "condition"),
         ("Tenure", "since"), ("Tenure", "until"),
     }
@@ -3394,13 +3394,14 @@ def test_w4_root_belongs_only_to_the_seed_and_a_clocks_genuine_first_emission():
             f"{seasons} season(s): {len(rooted)} roots for {len(w.sites)} site(s)")
 
 
-def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_conditional():
+def test_w4_every_matter_write_on_a_declaring_row_emits():
     """The gate itself, both directions. A MATTER write on a row Part D gives an `emits:` must name
-    one of the declared kinds; a kind the row does not declare is refused.
+    one of the declared kinds; a kind the row does not declare is refused. No row is exempt (`H-12`).
 
     ⚠ THE GATE FOUND SIX SILENT MATTER WRITES THE MOMENT IT WAS TURNED ON — `(Record, matured)`,
     `(Person, exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)`, every one
-    on a row whose `emits:` Part D declares. Five were fixed; the sixth is `H-86`."""
+    on a row whose `emits:` Part D declares. Five were fixed; the sixth, `(Record, ttl)`, was
+    deleted with its field."""
     from ..harness import headless as HL
     w = HL.build_world(0)
     w.step = Step.MATTER
@@ -3420,27 +3421,6 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", subject=site.id, causes=[])
 
-    # AND THE REGISTERED EXEMPTION IS READ FROM DATA, NOT FROM A LITERAL (`H-86`).
-    #
-    # ⚠ THIS CLAUSE USED TO BE VACUOUS AND THE VACUITY WAS INVISIBLE. It read
-    # `rec = next(iter(w.records.values()), None)` then `if rec is not None:` — and
-    # `headless.build_world` creates NO Records, so `rec` was unconditionally `None` and the write
-    # never ran. Deleting the exemption from `write()` left all four `w4` tests green. A Record is
-    # built here rather than hoped for. Found by the `W4` adversarial pass.
-    assert "Record.ttl" in roster("conditional_emission_rows")
-    rec = Record("rec_w4", "S", "text", ttl=2)   # `record_kinds` closes the kind (position `15`)
-    w.records[rec.id] = rec
-    w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
-            record_kind="Record", fieldname="ttl", driver="Event")
-    assert rec.ttl == 1, "the exempt write did not apply"
-    assert not [e for e in w.log if anchor_of(w, e) == rec.id], (
-        "the exempt row emitted anyway — `record.expired` on a non-terminal decrement asserts an "
-        "expiry that has not happened")
-    # AND THE EXEMPTION IS NARROW: an UNDECLARED kind is still refused on the same row.
-    with pytest.raises(Forbidden, match="does not declare"):
-        w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
-                record_kind="Record", fieldname="ttl", driver="Event",
-                emits="record.vanished", subject=rec.id, causes=[ROOT])
     # AND `subject=` IS MANDATORY WHEN EMITTING — the trace-label fallback was the value that
     # made every site's wear emit under the subject `"condition"`.
     with pytest.raises(Forbidden, match="no `subject="):
@@ -3466,7 +3446,7 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
     `H-86`'s exemption argument). A sweep point that fabricates is worse than one nobody runs."""
     from ..harness import headless as HL
     from collections import Counter
-    seen = {}
+    seen, faded = {}, {}
     for rate in (0, 5, 20):
         w = HL.build_world(0, DEFAULT_FIXTURES.sweep("claim_decay_per_season", rate))
         d = SeasonDriver(w)
@@ -3479,14 +3459,14 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         # B09.01: the confidence he holds each claim at NOW (`present_confidence`), a stored value being the deposit's
         confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
-        if rate == 0:
-            w0 = w
+        # B11.12: a told claim deposits below the default (75), so `min == max` is no longer the proof that nothing faded at rate 0;
+        # the fade is the difference between the confidence he holds the claim at now and the one it was deposited at.
+        faded[rate] = sum(1 for p in w.persons.values() for c in p.ledger
+                          if present_confidence(c.confidence, c.when, w.tick, rate) != c.confidence)
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
     assert all(seen[r][0] == 0 for r in seen), (
         f"a `claim.decayed` Event stands in the log: {seen}. B09.01: a fade is computed where a claim is read, never written")
-    # B24p merge with B21: the world now holds `told_by` deposits (75) beside the `firsthand` ones (100), so min == max no longer says "nothing faded"; the
-    # claim does: at rate 0 every claim reads the confidence it was deposited at.
-    assert all(present_confidence(c.confidence, c.when, w0.tick, 0) == c.confidence for p in w0.persons.values() for c in p.ledger), "confidence moved at rate 0"
+    assert faded[0] == 0 and faded[20] > 0, f"claims faded by rate (the control must be 0, rate 20 above it): {faded}"   # was `min == max` at rate 0
     assert seen[20][1] < seen[5][1] < seen[0][1], (
         f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
         "this sweep is measuring nothing")
@@ -3705,7 +3685,7 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     # seasons), but every one of those admissions is a SUBSET of who `presence_only` already
     # admits, on this seed, so the deposit COUNT can no longer tell the two arms apart -- checked
     # directly instead of inferred from a count, which is what the docstring's claim actually is.
-    non_presence = {"document_key", "witness_key", "post_remit", "chronicle"}
+    non_presence = {"document_key", "witness_key", "post_remit", "reach"}
     w5 = worlds["all_five"]
     everyone = list(w5.persons)
     live_extra = {c for e in w5.log for c in non_presence
@@ -3714,7 +3694,7 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
         f"no channel beyond `co_located` admitted anyone over this run: {got} — THIS would be the "
         "four channels genuinely inert, and the sweep would have two points measuring one thing")
     assert got["all_five"][1] < got["total"][1], (
-        f"`all_five` is indistinguishable from `total`: {got} — `chronicle` is matching everyone, "
+        f"`all_five` is indistinguishable from `total`: {got} — `reach` is matching everyone, "
         "which is the degenerate reading `rosters.yaml` warns against")
     # ⚠ `==`, NOT `>=`. The cap fix (`if` -> `while`: one deposit can mint several claims, so a
     # single pop left the ledger at 203 against `L = 200`) had NO FALSIFIER, because `>=` passes
@@ -3820,14 +3800,14 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # not tell `chronicle` going dark from `witness_key` going dark, which are different findings
     # (§0.1 pt 2).
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 2 seasons -- under `release` alone `chronicle` fired once on a `tenure.closed`; under `U2` the executed verb set in this world is {create_record, move, reconstruct, research, transfer, work} and it admits nobody]
-    # B24p merge with B21 re-pin: `chronicle` fires in the merged world (a binding-decision verb executes here: the GAIN the message below names), so the one inert channel is `post_remit`.
+    # B24p merge with B21 re-pin: `reach` (which replaced `chronicle`, B11.04) fires in the merged world (a binding-decision verb executes here: the GAIN the message below names), so the one inert channel is `post_remit`.
     assert inert == ["post_remit"], (
         f"the inert channels are {inert}, not the two this item published. `post_remit` needs an "
         "obligee standing at the seat an act was exercised through (since `17a`; before it, an "
         "office whose remit covers the emitting verb), and nobody in this world obliges. "
-        "`chronicle` fires only on a `binding_decision` verb: it came alive with `release` on "
+        "`reach` fires only on a kind it carries (a `binding_decision` verb's, the unrest kinds): `chronicle`, which it replaced, came alive with `release` on "
         "2026-09-11 and went dark again under `U2`, because the scene tick changed which acts win "
-        "a scene in THIS world. If `chronicle` is out of this list a binding-decision verb is "
+        "a scene in THIS world. If `reach` is out of this list a binding-decision verb is "
         "executing here again, which is a GAIN and should be re-pinned rather than reverted; if a "
         "third channel is in it, the register's reading of `H-33` has to change with it")
     # AND THE INJECTION IS DECLARED AS ONE. `H-33` must not read `ruled` off the back of this.
@@ -3985,6 +3965,62 @@ def test_r7_two_persons_hold_different_things_and_at_total_they_cannot():
         f"every difference is against a person holding nothing: {differ}. That is absence, which "
         "`presence_only` already gives; it is not yet a secret between two people who were both "
         "told something")
+
+
+def test_r7_a_silent_seat_change_moves_no_candidate():
+    """R-07 (`08_FI_01` edit 8; v12 B11.08): `questions_for` hands a person no referent read from ANOTHER's or a seat's current state. Two
+    persons are asked (the `r08_probe.py` P1 and P2, `build_realm(0)`, tick 0): `p_npc_088`, whose goal is about whoever holds
+    `off_cardinal_justice` (a `seat_holders` referent), and `p_npc_020`, the King, who may fill `off_archbishops_rep` (a vacancy). A hold
+    is edited on the World with no Event and no WITNESS -- the subject's ledger and own tenures are byte-identical -- and his candidates
+    (`opening_set` over every question he is given) must not move; the same seat released through the real fold and the real WITNESS must
+    move them; an unrelated seat changing hands silently is the control."""
+    from ..boot.realm import build_realm
+    from ..data.matrix import WriteClass
+    from ..decision import assemble
+    from ..decision.options import opening_set
+    from ..queries import world_q
+    from ..state.carriers import Act
+
+    def cands(w, pid):
+        """What he is asked and what he may do: the referents of his `need` questions (a `seat_holders` goal's are the holders his ledger names)
+        and his candidates over every question -- a released seat's old holder stays a candidate through the claims the release deposits about
+        him, so the goal's referents are what shows the re-aiming."""
+        p = w.persons[pid]
+        qs = world_q.questions_for(w, p)
+        return (frozenset(q.referents for q in qs if q.source == "need"),
+                frozenset((c.verb, c.subject, tuple(sorted((c.operands or {}).items())))
+                          for q in qs for c in opening_set(p, assemble(p, q, 12), q, w.fixtures)))
+
+    def holder(w, seat):
+        return next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat)
+
+    def silently(w, seat):
+        for t in w.tenures:
+            if t.kind == "hold" and t.live and t.object == seat:
+                t.until = w.tick
+
+    def witnessed(w, seat):
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r7_rel", actor=holder(w, seat), verb="release", payload={"subject": seat})],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        w.log.extend(out)
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+        assert {e.kind for e in out} == {"tenure.closed"}
+
+    base = build_realm(0)
+    moved = 0
+    for who, seat, unrelated in (("p_npc_088", "off_cardinal_justice", "off_grand_master"), ("p_npc_020", "off_archbishops_rep", "off_confessor")):
+        c0 = cands(base, who)
+        assert c0[0] and c0[1], who
+        silent, control, told = build_realm(0), build_realm(0), build_realm(0)
+        silently(silent, seat)
+        silently(control, unrelated)
+        witnessed(told, seat)
+        assert cands(silent, who) == c0, f"{who}: a silent change of {seat} moved his candidates"
+        assert cands(control, who) == c0, f"{who}: the control (an unrelated seat, {unrelated}) moved them"
+        moved += cands(told, who) != c0
+    assert moved == 2, "the same seat released through the fold and witnessed must move both persons' candidates"
 
 
 def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
@@ -4265,11 +4301,16 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # gives: nobody ever separates from `co_located` here any more.
     # [GROUNDED: measured 2026-09-29 -- `presence_only` and `all_five` resolve the IDENTICAL
     # 19-member `(actor, verb)` set; `total` resolves a different 16-member set]
-    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) == 2, (
-        f"the resolved-act sets by arm: {got}. Expected exactly two distinct sets (the narrow "
-        "pair coinciding, `total` apart) -- three would mean the narrow-arm collapse this note "
-        "describes has reversed, and one would mean the fan-out stopped mattering to ACTS at all; "
-        "either way, re-measure rather than re-pin the count")
+    # ⚠⚠ B11.12 (`08_FI_04` §1, A-81) RECORDED THREE DISTINCT SETS here (a failed inquiry leaving its actor's own claim, `finding_none_deposit` `actor`, a deposit
+    # the arms reach by different routes). RE-MEASURED at the B11 close (seed 0, three seasons, as above) it is TWO AGAIN: `presence_only` and `all_five` resolve
+    # the identical 19-member `(actor, verb)` set and `total` a different 25-member one -- the `11a` state above -- so the three-set reading no longer holds.
+    # EXACT, because `>= 2` passes on the three-set state and the two-set one alike and observes neither; the property is that the fan-out matters to ACTS.
+    # ⚠⚠ RE-MEASURED AT THE B11 MERGE WITH MAIN (B24p and B21 landed while B11 was open; seed 0, three seasons, as above) it is THREE: `total` 23 acts, `presence_only` 18,
+    # `all_five` 23, no two of the sets equal -- the proceeding's verbs and the command basis give the narrow pair different witnesses again, so the fan-out matters to ACTS between the
+    # narrow arms too. Exactly three, for the reason above: `>= 2` passes on this state and the two-set one alike and observes neither.
+    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) == 3, (
+        f"the resolved-act sets by arm: {got}. Expected exactly three distinct sets (measured at the B11 merge) -- two would mean the narrow pair collapsed again, "
+        "one that the fan-out stopped mattering to ACTS at all; re-measure rather than re-pin the count")
 
 
 # ===========================================================================
@@ -4691,10 +4732,14 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # CP-T04-02: AND THE CHOICE KEYS (`CHOICE_RANGES`, `marshal`'s `role` and `retreat_at`), `said`'s case: a payload key a
     # `choice_sourced` row carries, read by its effect alone, bound by no cell (the row's `requires_typed` binds `subject`)
     # and dropped by `binding_of`, so naming them here coins no operand either.
+    # v12 B11.10: `said_rank` is `said`'s case again -- the claim's rank among those a telling's fan held, read by the deposit, bound by no cell, dropped by `binding_of`.
+    # AND `reconstruct`'s `concluded` / `concluded_rank` / `cites` (B11.72-B11.74): payload keys the deposit reads, bound by no cell, in the same case.
+    from ..data.verbs import CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, SAID_RANK_KEY
+    carry_ok = {"subject", "said", SAID_RANK_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CITES_KEY}
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"} | set(CHOICE_RANGES), (
+    assert carried <= set(REQUIRES_OPERANDS) | carry_ok | set(CHOICE_RANGES), (
         f"a minted act carries "
-        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'} - set(CHOICE_RANGES))}, which "
+        f"{sorted(carried - set(REQUIRES_OPERANDS) - carry_ok - set(CHOICE_RANGES))}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
@@ -5317,11 +5362,11 @@ def test_h71_the_grant_is_a_snapshot_not_a_mirror():
 
 
 def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
-    """`W6`'s adversarial pass found `post_remit` and `chronicle` firing ZERO times, and traced it
+    """`W6`'s adversarial pass found `post_remit` and `chronicle` (now `reach`) firing ZERO times, and traced it
     to the same cause: both need a `binding_decision`, and none was executable. This is the other
     half of that finding — with governance running, the channels are reachable.
 
-    `chronicle` is an event-kind filter (it does not read `pid`) and `post_remit` needs the witness
+    `reach` admits by the event's kind and the person's place and `post_remit` needs the witness
     to be OBLIGED to the seat the act was exercised through and to stand at it, so the two admit
     different people. ⚠ `post_remit` READ THE REMIT until plan position `17a` -- *hold an office whose
     remit covers the emitting verb*, which admitted the duke himself -- and `17a` re-based it onto
@@ -5354,8 +5399,8 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     assert e is not None, (
         f"the fold emitted {[x.kind for x in out]} — no `tenure.closed` to test the channels with")
     everyone = list(w.persons)
-    assert any(CHANNEL_PREDICATES["chronicle"](w, e, pid) for pid in everyone), (
-        "`chronicle` does not fire on a binding decision's emission — then it can never fire at "
+    assert any(CHANNEL_PREDICATES["reach"](w, e, pid) for pid in everyone), (
+        "`reach` does not fire on a binding decision's emission — then it can never fire at "
         "all, and `all_five` is permanently a measurement of fewer channels than it names")
     remit = [pid for pid in everyone if CHANNEL_PREDICATES["post_remit"](w, e, pid)]
     assert remit == ["p_low"], (
@@ -5385,7 +5430,7 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
 
     `fan_out_mode` is the control axis: `presence_only` shows the fact travels through witnessing
     (only a co-located person learns it), `total`/`all_five` show every living person does once
-    `chronicle` admits them (it is a `binding_decision` kind and fires unconditionally)."""
+    `reach` admits them (it is a `binding_decision` kind, carried at `realm`)."""
     def run(mode):
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         w.offices["off_dicastery"].conferral = "appointed"
@@ -5424,8 +5469,8 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
     holder_claim = ("p_mid", "tenure.opened", True)
 
     # `total` and `all_five` (the shipped default) both admit every living person, by different
-    # channels: `total` unconditionally, `all_five` because `chronicle` is an event-kind filter
-    # over every `binding_decision` verb (`_ch_chronicle`, `epistemic.py`) and `confer` is one.
+    # channels: `total` unconditionally, `all_five` because `reach` carries every `binding_decision` verb's kinds at
+    # `realm` (`rosters.yaml: event_reach`, `epistemic._ch_reach`) and `confer` is one, and every person stands in the realm.
     # Same guarantee, same assertion, so one loop over both rather than two copies that could
     # silently drift apart on what each checks.
     for mode in ("total", "all_five"):
@@ -5923,10 +5968,11 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     scale = w.fixtures.get("condition_scale")
+    cut = w.fixtures.sweep("carried_wound_model", "endurance_cut")   # B15.11 ships `level`, under which `party_end` cuts no band: the band cut is the control arm's
     ends = {}
     for body in (scale, 700, 400, 50):
         w.persons["p_low"].body = body
-        ends[body] = C.party_end(w.persons["p_low"], w.fixtures)   # `derive_party(...).end` until `31b`
+        ends[body] = C.party_end(w.persons["p_low"], cut)   # `derive_party(...).end` until `31b`
     assert ends[scale] > ends[700] > ends[400] > ends[50] >= 1, (
         f"the derived `end` is not monotone in body condition: {ends}. A dying fighter must not "
         "be as durable as a healthy one, and the floor of 1 is why a dying one still fights")
@@ -6007,19 +6053,21 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
     spec = importlib.import_module("modules.combat.attributes")
     default_end = spec.DEFAULT["end"]
     w = P.tiny_world()
+    fx = w.fixtures.sweep("carried_wound_model", "endurance_cut")   # B15.11 ships `level` (no band cut in `party_end`); this test reads the control arm that cuts
     p, scale = w.persons["p_low"], w.fixtures.get("condition_scale")
     checked = 0
     for body in (scale, 700, 400, 50):
         p.body = body
         p.attributes = {}
-        bands = decision.body_band_penalty(p, w.fixtures)
-        assert C.party_end(p, w.fixtures) == max(1, default_end - bands)
+        bands = decision.body_band_penalty(p, fx)
+        assert C.party_end(p, fx) == max(1, default_end - bands)
         p.attributes = {"attr.body.endurance": 6}
-        assert C.party_end(p, w.fixtures) == max(1, 6 - bands)
+        assert C.party_end(p, fx) == max(1, 6 - bands)
         checked += 2
     assert checked == 8
     p.body = scale; p.attributes = {"attr.body.endurance": 6}
-    assert C.party_end(p, w.fixtures) == 6
+    assert C.party_end(p, fx) == 6
+    assert C.party_end(p, w.fixtures) == 6      # the shipped `level` arm: the authored Endurance arrives whole at every body
 
 
 def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkeypatch):
@@ -8167,11 +8215,13 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     # after its cause was removed rather than the opposite one.
     # These are INDICES into the sweep the loop above ran, not magnitudes chosen here.
     # [GROUNDED: 0/5/20 are `H-40`'s own declared three-point sweep]
-    assert (out["total"][20][1] == out["actor"][20][1] == out["none"][20][1]
-            and out["total"][5][1] == out["actor"][5][1] == out["none"][5][1]), (
-        f"the three deposit arms no longer agree on minimum confidence: {out}. Under `R7` nothing "
-        "is evicted, so the deposit mode cannot change which claims survive to be decayed — if it "
-        "does, eviction pressure is back and `H-122`'s row must be re-argued a second time")
+    # ⚠⚠ AGREE -> EACH ARM OBSERVABLE, B11.12 (`08_FI_04` §1, A-81). A failed inquiry now deposits to its actor (`finding_none_deposit`
+    # ships `actor`), so the three arms are three different RUNS (a told claim of 75 enters `actor` and `total`, and the minimum is the
+    # trajectory's): measured, seed 0, three seasons, min confidence at rate 0 / 5 / 20 -- `none` 100/85/40, `actor` 75/70/40,
+    # `total` 50/45/30. What the equality protected is that `total` does not go INERT, which is asserted in its place.
+    assert out["total"][20][1] < out["total"][5][1] < out["total"][0][1], (
+        f"`H-40`'s sweep went inert at `total`: {out['total']}. Under `R7` nothing is evicted, so the deposit mode cannot flatten it — "
+        "if it does, eviction pressure is back and `H-122`'s row must be re-argued a second time")
     # AND THE MECHANISM, ASSERTED: NOTHING IS EVICTED, IN ANY ARM. This asserted evictions rise
     # monotonically with the deposit fan-out (48 < 49 < 204 at `total` fan-out) — true then, and
     # the reading `H-122` rests on. It is 0 < 0 < 0 now, which is not a weaker version of that
@@ -10072,8 +10122,11 @@ def test_t4_one_candidate_per_known_hearer():
     no `to` -- the `len == 2` and the `to` set both go red."""
     w, p = _t4_person(knows=("p_mid", "p_high"))
     tells = _t4_offered(w, p, ("Hh",), "tell")
-    assert len(tells) == 2, [(c.subject, c.operands.get("to")) for c in tells]
+    # v12 B11.10: each hearer is offered TWICE, once per `in_confidence` (`CHOICE_RANGES`; `settle_confidences` keeps one at CHOOSE), so the
+    # fan is read one per hearer by the pair it carries.
+    assert len(tells) == 4, [(c.subject, c.operands.get("to")) for c in tells]
     assert {c.operands["to"] for c in tells} == {"p_mid", "p_high"}
+    assert all(sorted(c.operands["in_confidence"] for c in tells if c.operands["to"] == h) == [False, True] for h in ("p_mid", "p_high"))
     assert all(c.subject == "Hh" and c.operands["to"] != p.id for c in tells)
     assert all(c.operands.get("said") is not None for c in tells), "a formed telling carries nothing to say"
     w, p = _t4_person(knows=())
@@ -10084,10 +10137,10 @@ def test_t4_one_candidate_per_known_hearer():
     # so the first formed nothing and the second only `["p_high"]` -- both lines go red against it.
     w, p = _t4_person(knows=("p_mid",), holds=("p_mid",))
     tells = _t4_offered(w, p, ("p_mid",), "tell")
-    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_mid", "p_mid")]
+    assert sorted({(c.subject, c.operands["to"]) for c in tells}) == [("p_mid", "p_mid")] and len(tells) == 2   # two: one per `in_confidence` (B11.10)
     assert tells[0].operands["said"].subject == "p_mid"
     w, p = _t4_person(knows=("p_mid", "p_high"), holds=("p_mid",))
-    assert [c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")] == ["p_high", "p_mid"]
+    assert sorted({c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")}) == ["p_high", "p_mid"]
 
 
 def test_t4_nothing_to_say_forms_no_telling_and_survey_is_untouched():
@@ -10115,7 +10168,7 @@ def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves(mo
     monkeypatch.setattr(_options, "VIOLENCE_CONTEXTS", {})
     w, p = _t4_person(knows=("p_mid",), holds=("p_low",))
     tells = _t4_offered(w, p, ("p_low",), "tell")
-    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_low", "p_mid")], (
+    assert sorted({(c.subject, c.operands["to"]) for c in tells}) == [("p_low", "p_mid")] and len(tells) == 2, (   # two: one per `in_confidence` (B11.10)
         [(c.subject, c.operands.get("to")) for c in tells])
     assert _t4_offered(w, p, ("p_low",), "fight") == [], "a person formed a fight against themselves"
     assert [c.subject for c in _t4_offered(w, p, ("p_mid",), "fight")] == ["p_mid"], (

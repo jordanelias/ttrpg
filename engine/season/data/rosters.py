@@ -654,19 +654,25 @@ RECORD_KINDS = roster("record_kinds")
 RECORD_KIND_KEYS = {k: tuple(v or ()) for k, v in roster_map("record_kinds", "values").items()}
 RECORD_CONTENT = roster_map("record_kinds", "content")
 # v9 IN-12 step 10 (#453 §8.2, §9.3; K-19): THE `record_kinds` MEMBER A CONCEALED IDENTITY IS, and its
-# ONE content key, which names the person the cover hides (`terms`, read off the roster, never spelt).
-# Named once here, `WORKS_KIND`'s shape, for its three readers: `conceal`'s effect (the mint),
-# `state/attribution.py::live_cover` (the `anchor_of` cover read) and `decision/options.py` (the
+# TWO content keys, read off the roster and never spelt: the first names the person the cover hides (`terms`), the second
+# (B11.64, CP-T06-07) the person whose NAME the cover borrows (`as`, `None` for a plain cover; its payload source is
+# `content.read_from`'s). Named once here, `WORKS_KIND`'s shape, for its readers: `conceal`'s effect (the mint),
+# `state/attribution.py::live_cover` (the `anchor_of` cover read, `COVER_KEY`) and `cover_at_logging` (`COVER_AS`), and `decision/options.py` (the
 # person-side decline, through `held_document_declines`). Refused at import if the roster stops carrying
-# the kind or gives it other than one key: the cover read would otherwise match nothing forever.
+# the kind or gives it other than two keys, or `as` has no payload source: the cover read would otherwise match nothing forever.
 COVER_KIND = "cover"
-if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 1:
+if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 2:
     raise Unspecified(
-        f"record kind {COVER_KIND!r} is not a one-key `record_kinds` member "
+        f"record kind {COVER_KIND!r} is not a two-key `record_kinds` member "
         f"({RECORD_KIND_KEYS.get(COVER_KIND)!r})", "rosters.yaml -- record_kinds",
-        needs=f"a `{COVER_KIND}: [terms]` row, or every cover reader retired with it",
-        law="#453 §8.2 -- a cover is a Record whose one key names the actor it conceals")
-(COVER_KEY,) = RECORD_KIND_KEYS[COVER_KIND]
+        needs=f"a `{COVER_KIND}: [terms, as]` row, or every cover reader retired with it",
+        law="#453 §8.2 -- a cover is a Record whose first key names the actor it conceals; CP-T06-07 -- its second, the name it borrows")
+(COVER_KEY, COVER_AS) = RECORD_KIND_KEYS[COVER_KIND]
+if COVER_AS not in (RECORD_CONTENT.get("read_from") or {}):
+    raise Unspecified(
+        f"record kind {COVER_KIND!r} carries {COVER_AS!r}, which `record_kinds.content.read_from` does not source",
+        "rosters.yaml -- record_kinds.content.read_from", needs=f"a `{COVER_AS}: <payload key>` row",
+        law="CP-T06-07 -- the borrowed name is a non-operand source, read as declared; no row means no act can set it")
 # v10 PC-10b (RS-25; H-240 route (1)): THE `record_kinds` MEMBER A STANDING CHALLENGE IS, its two keys that
 # no act operand fills -- `stakes`, the duel's term, and `challenger`, the actor the effect writes -- and the
 # closed set of terms `stakes` may name (`challenge_terms`, held equal to `modules/combat/wrapper.py::
@@ -1299,6 +1305,45 @@ if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND
 # _check_dominance_kinds`).
 DOMINANCE_KINDS = frozenset(roster_map("standing_routes", "kinds")["dominance"])
 STRATA = roster("strata", ordered=True)
+
+#: The one reach that is no rung kind: the Event's own place (`epistemic._ch_reach`). Every other reach is a member of
+#: `RUNG_KINDS`, the rung of that kind that contains the Event's place.
+REACH_ROOM = "room"
+#: The key of an `event_reach` entry that names a verb-table stratum instead of one kind.
+REACH_FROM_STRATUM = "from_stratum"
+#: The key of an `event_reach` entry that names ONE reach for the unrest kinds (`DOMINANCE_KINDS` less `PERSON_DIED`, A-33).
+REACH_FROM_UNREST = "from_unrest"
+
+
+def check_event_reach(mapping: dict, rung_kinds, strata) -> dict:
+    """CR-29 (`rosters.yaml: witness_channels.event_reach`): THE `reach` CHANNEL'S KIND -> REACH MAP, held to its closed
+    sets at import or refused naming the row. A key is an event kind (`is_event_kind`'s spelling; that it is one the loop
+    declares is `epistemic.py`'s check, where `EVENT_KINDS` is bound) or `from_stratum`, whose value is `{stratum: reach}`
+    over `strata`, or `from_unrest` whose value is one reach; a reach is `room` or a member of `rung_kinds`. A function,
+    so a test can plant a bad row. Returns it."""
+    reaches = {REACH_ROOM, *rung_kinds}
+    bad = []
+    for k, v in mapping.items():
+        if k == REACH_FROM_STRATUM:
+            ok = isinstance(v, dict) and all(s in strata and r in reaches for s, r in v.items())
+        elif k == REACH_FROM_UNREST:
+            ok = v in reaches
+        else:
+            ok = is_event_kind(k) and v in reaches
+        if not ok:
+            bad.append((k, v))
+    if bad:
+        raise Unspecified(
+            f"`witness_channels.event_reach` has row(s) {bad}", "rosters.yaml -- event_reach",
+            needs=f"a `<noun>.<verb>` kind (or `{REACH_FROM_STRATUM}: {{stratum: reach}}`) mapped to one of "
+                  f"{sorted(reaches)}",
+            law="CR-29 -- a reach is `room` or a rung kind; a value outside that set names a place no Event has")
+    return dict(mapping)
+
+
+EVENT_REACH_ROWS = check_event_reach(roster_map("witness_channels", "event_reach"), RUNG_KINDS, STRATA)
+SEAT_NEWS_KINDS = roster("seat_news_kinds")
+SEAT_NEWS_ARMS = roster("seat_news_arms")
 # The leaf import: the fifteen pursuits are owned one layer out (`references/descriptor_registry.yaml:
 # pursuit_roster`, exported behind a blocking `--check`). `roster("pursuits")` resolves to the same
 # set through `from_descriptor:` -- two routes, one owner; a third route carrying its own literal is
@@ -1414,27 +1459,43 @@ if not isinstance(SEEN_PREDICATE, str) or not SEEN_PREDICATE:
         needs="name the predicate the `seen` claim is deposited under",
         law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate "
             "would have to spell one in a body")
+# B11.83: THE PREDICATE A REFUSED `with` CONJUNCT TEACHES ITS ACTOR (`rosters.yaml: absence_claim`), spelt once here for the writer
+# (`loop/witness.py`) and, at B11.84, the reader (`queries/person_q.py::present_persons`).
+ABSENT_PREDICATE = roster_map("absence_claim", "claim").get("predicate")
+if not isinstance(ABSENT_PREDICATE, str) or not ABSENT_PREDICATE or ":" in ABSENT_PREDICATE:
+    raise Unspecified(
+        "`absence_claim.claim.predicate` is absent or not a bare name", "B11.83",
+        needs="name the predicate a refused `with` conjunct deposits under",
+        law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate would have to spell one in a body")
 TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 
 
-def _load_finding_terms(mapping: dict, bands, terms) -> dict:
+# B11.71 (`08_FI_03` §2, FRES §8): THE READS A LOOK MAY TAKE (`rosters.yaml: look_reads`), listed beside the trail's terms in a `finding_terms` row.
+LOOK_READS = roster("look_reads")
+
+
+def _load_finding_terms(mapping: dict, bands, terms, reads=()) -> dict:
     """v9 FI-03 (`ED-FI-0002`): `rosters.yaml: finding_terms` -- degree band -> the observation terms
-    a finding at that band shows of a trail -- refused at import naming the row when a key is no band
-    of the one ladder or a value names a term `observation_terms` does not carry. A function, not an
+    a finding at that band shows of a trail, and (B11.71) the `look_reads` it deposits of what is looked at --
+    refused at import naming the row when a key is no band of the one ladder or a value names a member
+    neither `observation_terms` nor `look_reads` carries; and when the two rosters share a name, which
+    one row could not tell apart. A function, not an
     inline check, so a test can plant a bad row and watch it refuse (`_check_scale_of_rung`'s reason).
     Values come back as tuples, in the row's own order."""
+    allowed = [*terms, *reads]
     bad = sorted([f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping
                   if b not in bands]
-                 + [f"band {b!r}: {v!r} is not a list of {list(terms)}" for b, v in mapping.items()
-                    if not isinstance(v, list) or not set(v) <= set(terms)])
+                 + [f"band {b!r}: {v!r} is not a list of {allowed}" for b, v in mapping.items()
+                    if not isinstance(v, list) or not set(v) <= set(allowed)]
+                 + [f"`{n}` is a term of both `observation_terms` and `look_reads`" for n in sorted(set(terms) & set(reads))])
     if bad:
         raise Unspecified(
             f"`finding_terms` rows {bad}", "rosters.yaml -- finding_terms",
             needs="key each row by a band `engine/dice_engine/dice_engine.py::DEGREE_LABEL` names, "
-                  "and list only `observation_terms` members",
+                  "and list only `observation_terms` and `look_reads` members, which share no name",
             law="ED-FI-0002 -- what a finding shows is a mask over the `seen` struct, keyed by the "
                 "degree the one ladder decides; a band off the ladder is never reached and a term "
-                "off the struct is a field nothing has")
+                "off the struct is a field nothing has. B11.71 (FRES §8) -- one band-keyed table, so a look's reads are listed here")
     return {b: tuple(v) for b, v in mapping.items()}
 
 
@@ -1455,7 +1516,7 @@ DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
 # [ASSUMPTION; medium; Jordan to correct; revert: the ordinal unshifted, Failure 0]
 DEGREE_STEP = {_DEGREE_LABEL[d]: _DEGREE_ORDINAL[d] - _DEGREE_ORDINAL[_Degree.PARTIAL]
                for d in _DEGREE_LABEL}
-FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS)
+FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS, LOOK_READS)
 
 
 def _load_band_numbers(name: str, mapping: dict, bands, *, whole: bool, complete: bool) -> dict:
@@ -2158,7 +2219,7 @@ def _load_capability_uses(rows, fixtures) -> tuple:
         if role == "judgement" and (key not in _ATTRIBUTES or row.get("side", "actor") != "actor"):
             refuse(i, row, "is a `judgement` row its reader cannot read",
                    f"an attribute key ({sorted(_ATTRIBUTES)}) on `side: actor`",
-                   "decision/options.py::_judgement_factor reads the actor's own `attributes` at the row's key and no "
+                   "queries/person_q.py::_judgement_factor reads the actor's own `attributes` at the row's key and no "
                    "other side; any other key or side would load and read nothing")
         if role == "gate" and (key not in gate_keys or use not in gate_sites):
             refuse(i, row, "is a `gate` row off its one key or its gate sites",

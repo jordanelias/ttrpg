@@ -22,7 +22,9 @@ from ..queries import person_q, world_q
 #: The seed the finding is read on. Seed 0 was the reading until B21.54 moved the shipped season: at B21.99's closing tree, seeds 0 to 15, one season,
 #: audit one row at seed 1 (no chosen contested verb), two at seed 5 and two at seed 12, nothing at the other thirteen. Read at the act (B21 close),
 #: seed 5 holds too (it failed against the end-of-season world, its `capture` having taken the target's faction).
-FINDING_SEED = 12
+# B11 merge with main: re-read again on the merged tree (seeds 0 to 15, one season, `PYTHONHASHSEED=0`): seeds 0 and 5 audit a row whose chosen verb declares `contests:`
+# (two rows and three), seed 1 and seed 12 one row each with none chosen, nothing at the other twelve. Seed 0, the original reading, holds the finding again.
+FINDING_SEED = 0
 
 
 @pytest.fixture(scope="module")

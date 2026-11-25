@@ -194,48 +194,55 @@ def test_unwired_verb_has_factor_one():
 
 
 def _failed_search(arm: str):
-    """`tiny_world` with the arm swept to `arm`; the actor's `research` of a Record that does not exist is REFUSED at the precondition,
-    which emits `finding.none` with no draw (`test_fi01_graded_inquiries.py` plants the same act), resolved through the real driver and
-    witnessed. Returns the world, the Event, and `(holder, claim)` for every claim of that kind any person holds."""
+    """`tiny_world` with the arm swept to `arm`; the actor's `research` of a documentary Record draws `Failure` (the act id is swept until one
+    does, as `test_fi01_graded_inquiries.py` does), emits `finding.none` at that degree, is resolved through the real driver and witnessed.
+    Returns the world, the Event, and `(holder, claim)` for every claim of that kind any person holds.
+    B11.12 split a REFUSED inquiry's kind (`inquiry.refused`, deposited to nobody) from `finding.none`, a FAILED one's."""
     from ..data.matrix import Step, WriteClass
     from ..harness import probes as P
     from ..loop.driver import SeasonDriver, mint_token
-    from ..state.carriers import Act
+    from ..state.carriers import Act, Record
 
-    w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("finding_none_deposit", arm)
-    d = SeasonDriver(w)
-    act = Act(id="a_b0904_research_gone", actor="p_low", verb="research", payload={"subject": "rec_none"})
-    w.step = Step.RESOLVE
-    (ev,) = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    for n in range(60):
+        w = P.tiny_world()
+        w.records["rec_b0904"] = Record("rec_b0904", "Hh", "text")
+        w.fixtures = w.fixtures.sweep("finding_none_deposit", arm)
+        d = SeasonDriver(w)
+        act = Act(id=f"a_b0904_research_{n}", actor="p_low", verb="research", payload={"subject": "rec_b0904"})
+        w.step = Step.RESOLVE
+        (ev,) = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+        if ev.kind == "finding.none":
+            break
+    assert ev.kind == "finding.none" and ev.degree == "Failure", (ev.kind, ev.degree)
     w.log.extend([ev])
-    assert ev.kind == "finding.none", ev.kind
     w.step = Step.WITNESS
     d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
     return w, ev, [(pid, c) for pid, p in w.persons.items() for c in p.ledger if c.predicate == "finding.none"]
 
 
-def test_finding_none_deposits_to_its_actor_only_at_the_actor_arm():
+def test_finding_none_makes_no_event_kind_claim_but_teaches_its_actor_at_the_actor_arm():
     from ..epistemic import observers_for
 
-    assert DEFAULT_FIXTURES.get("finding_none_deposit") == "none"                  # the shipped arm is the control
+    assert DEFAULT_FIXTURES.get("finding_none_deposit") == "actor"                 # the shipped arm (B11.12); `none` is the control
 
-    # CONTROL ARM: nobody holds the claim -- the skip stands, the actor included.
+    def caused(w, ev):
+        return [e for e in w.log if e.kind == "claim.deposited" and ev.id in e.causes]
+
+    # CONTROL ARM: nothing is deposited from the Event -- the whole-Event skip stands, the actor included.
     w, ev, held = _failed_search("none")
-    assert held == [], held
-    # THE CLAIM COULD HAVE REACHED A NON-ACTOR: the fan that WITNESS would have asked admits somebody besides the actor, so
-    # "no non-actor holds it" below is the arm's doing and not an empty room.
+    assert held == [] and not caused(w, ev), (held, caused(w, ev))
+    # THE EVENT COULD HAVE REACHED A NON-ACTOR: the fan that WITNESS would have asked admits somebody besides the actor, so
+    # the empty ledgers above are the arm's doing and not an empty room.
     reach = {pid for pid, _ in observers_for(w, ev, w.fixtures.get("fan_out_mode"), list(w.persons))}
     assert "p_low" in reach and reach - {"p_low"}, reach
 
-    # ACTOR ARM: the doer, and only the doer, holds one firsthand claim about the subject, stamped as his own act, and the
-    # reader of a refusal one remembers finds it. (An arm wired backwards fails the control's `held == []` and this line.)
+    # ACTOR ARM (B11.61): nobody makes a `finding.none` claim, so the reader of a refusal one remembers finds none either -- and the Event is
+    # deposited otherwise: the actor's ledger moved, from his own act. (An arm wired backwards fails the control's emptiness and this line.)
     w, ev, held = _failed_search("actor")
-    assert [pid for pid, _ in held] == ["p_low"], held
-    claim = held[0][1]
-    assert claim.doer == "p_low" and claim.source == "firsthand", claim
-    assert person_q.refused_before(w.persons["p_low"], ("finding.none",), claim.subject) == claim.confidence > 0
-    assert [e for e in w.log if e.kind == "claim.deposited" and ev.id in e.causes], "the deposit did not emit"
+    assert held == [], held
+    deposited = {e.changes[0].subject for e in caused(w, ev)}
+    assert deposited and any(c.id in deposited and c.doer == "p_low" for c in w.persons["p_low"].ledger), "the actor holds nothing of his own act"
+    assert person_q.refused_before(w.persons["p_low"], ("finding.none",), "rec_b0904") == 0
 
     # AN ARM OUTSIDE THE ROSTER REFUSES, so a misspelt arm cannot read as the control.
     with pytest.raises(Exception, match="finding.none deposit arm"):

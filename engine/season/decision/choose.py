@@ -37,13 +37,15 @@ from ..data import goals as goals_data
 from ..data.rosters import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
-from ..data.verbs import BODILY_PRIZES, CHOICE_SOURCED, VERB_TABLE, act_key, align, align_choice
+from ..data.verbs import (
+    BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
+)
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import (
-    believed_capability, confliction, intent_named, intent_said, refused_before, regard, stance_toward,
+    believed_capability, cited_support, confliction, deed_align, intent_named, intent_said, ledger_weigh, refused_before, regard, stance_toward,
 )
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 from ..trace_log import TRACE
@@ -324,7 +326,7 @@ def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional
 
 def nerve(p: Person, fx: "Fixtures") -> float:
     """HOW FAR A PERSON'S SPIRIT LETS HIM BEAR A DANGER (B10.31; `H-480`): his own factor on `risk`, the `judgement` rows of site `choice_exposure` read by
-    `options._judgement_factor` as `temper` and `competence` read theirs: `about_mid(held, floor, ceiling, nerve_gain)`, exactly 1 at the scale's mid-point and at
+    `person_q._judgement_factor` as `temper` and `competence` read theirs: `about_mid(held, floor, ceiling, nerve_gain)`, exactly 1 at the scale's mid-point and at
     gain 0, and 1.0 where no row is authored (none ships) or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute (U1 §8):
     the key is the row's.
 
@@ -389,8 +391,16 @@ def score_total(terms: tuple) -> float:
 
 
 def chosen_values(c) -> tuple:
-    """`(key, value)` for each CHOICE VALUE the candidate's operands carry (`choice_sourced` keys, B10.56): the one reader, for `score_terms` and `score_parts`."""
-    return tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
+    """`(key, value)` for each CHOICE VALUE the candidate's operands carry (`choice_sourced` keys, B10.56): the one reader, for `score_terms` and `score_parts`.
+    Read through `data/verbs.py::choice_values`, so a telling's `said` is a choice only where it was fanned over several claims, and its value is then the claim."""
+    ops = c.operands or {}
+    return tuple((k, ops[SAID_KEY] if k == SAID_KEY else v) for k, v in choice_values(c.verb, ops))
+
+
+def choice_lean(key: str, value, axis: str) -> float:
+    """THE LEAN OF ONE CHOICE VALUE ON AN AXIS: a claim a telling passes on (`said`) leans as the deed it is (`person_q.deed_align`, so the teller's weights over it are
+    `deed_valence`); every other value is its `choice:<key>=<value>` cell (`data/verbs.py::align_choice`). The one reader, for `score_terms` and `score_parts`."""
+    return deed_align(value, axis) if key == SAID_KEY else align_choice(key, value, axis)
 
 
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
@@ -402,7 +412,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
-      * `pursuit` -- `damp * Σ_axis axis_w[axis] * (align(c.verb, axis) + Σ_(key, value) align_choice(key, value, axis)) * odds_weight(...)` (the
+      * `pursuit` -- `damp * Σ_axis axis_w[axis] * (align(c.verb, axis) + Σ_(key, value) choice_lean(key, value, axis)) * odds_weight(...)` (the
         parenthesised sum over the candidate's `choice_sourced` operands, B10.56; empty where no cell is authored), `axis_w` the
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
@@ -431,7 +441,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     # roster) leaves `pursuit` the very float above, not that float plus a signed zero.
     chosen = chosen_values(c)
     if chosen:
-        by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
+        by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(choice_lean(k, v, ax) for k, v in chosen) for ax in _AXES)
         if by_choice != 0.0:
             pursuit += by_choice
     if pursuit != 0.0:
@@ -451,6 +461,83 @@ def _npc_effort_arm(fx: "Fixtures") -> str:
                    law="CP-T01-05 NPC half -- declare it, default it, sweep it; an unknown arm silently "
                        "reading `off` would make the sweep report the control twice")
     return arm
+
+
+def settle_confidences(cands: list, scores: dict) -> tuple:
+    """ONE ACT PER OPPORTUNITY, FOR A TELLING'S `in_confidence` (v12 B11.10, `08_FI_02` edit 8): of the Candidates that differ only in whether the telling is made in
+    confidence (same verb, subject, hearer, claim and seat -- the same `act_key` once `in_confidence` is left out), only the best-scoring survives, a tie keeping the
+    first formed (`False`, `CHOICE_RANGES` order). `settle_efforts` is the precedent: a base and its variants are one opportunity, so one of them stays, and a teller does
+    not tell one hearer one thing twice in a scene, once in confidence and once not. A Candidate with no `in_confidence` is its own group, so every other row passes through.
+    Returns `(cands, scores)` for the kept set, `scores` keyed on `id(c)` as `score_order` wants."""
+    best: dict = {}
+    for c in cands:
+        ops = c.operands or {}
+        if ops.get(IN_CONFIDENCE_KEY) is None:
+            continue
+        key = (c.verb, act_key(c.verb, c.subject, {**ops, IN_CONFIDENCE_KEY: None}))
+        if key not in best or scores[id(c)] > scores[id(best[key])]:
+            best[key] = c
+    if not best:
+        return cands, scores
+    kept = [c for c in cands if (c.operands or {}).get(IN_CONFIDENCE_KEY) is None
+            or best[(c.verb, act_key(c.verb, c.subject, {**c.operands, IN_CONFIDENCE_KEY: None}))] is c]
+    return kept, {id(c): scores[id(c)] for c in kept}
+
+
+def _gumbel(draw, pid, purpose: str) -> float:
+    """ONE KEYED GUMBEL DRAW, `-log(-log(u))`, the noise `_sample_order` and `settle_conclusions` rank by. `u` is re-read from the SAME stream while it is
+    0.0 (`random()` is [0,1) and log(0) is the one unusable draw): the stream advances, so the loop terminates; re-seeding would return the same value
+    forever (`_sample_order`'s note on the zero guard)."""
+    rng = draw(pid, purpose)
+    u = rng.random()
+    while u <= 0.0:
+        u = rng.random()
+    return -fmath.log(-fmath.log(u))
+
+
+def settle_conclusions(cands: list, scores: dict, p: Person, fx: "Fixtures", draw) -> tuple:
+    """ONE SUSPECT PER CONCLUSION, DRAWN BY HIS SUPPORT (v12 B11.75, `19_LACUNA` R-19-04): of the `reconstruct` Candidates that differ only in WHICH DOER his ledger names (same verb,
+    subject and seat -- the same `act_key` once `CONCLUDED_RANK_KEY` is left out), exactly one survives, `settle_confidences`' shape. The Candidates are the variants `opening_set`
+    formed, one per `(deed kind, doer)`, each carrying the deed claims that name him (`CITES_KEY`); a variant's SUPPORT is `person_q.cited_support` over them (`LedgerReader._support`: over
+    distinct origins, under his own `ledger_weigh`), so a doer named by two independent tellers stands above one named by a single one, and a claim he has half forgotten weighs half.
+
+    THE WEIGHTS (the design read the commit body states): a variant's weight is its SUPPORT, and the survivor is drawn in proportion, `P(v) = support(v) / sum(support)`, by the sampler's own
+    arithmetic (`_sample_order`'s Gumbel-max) on `ln(support)` at unit temperature, one stream per variant keyed `conclude:<subject>:<kind>:<doer>` (so a variant's draw is its own, and the
+    same on every lap). So a doer at 0.3 against one at 0.9 is named a quarter of the time: sometimes, never as often as the better supported (NOT `exp(ln s / choice_temperature)`: at the
+    shipped 0.05 that is `s ** 20`, which names the weaker about once in ten billion, and R-19-04 asks that a less-supported suspect be named SOMETIMES). The person's temperature enters
+    as the gate `_sample_order` has: AT `choice_temperature` 0 THERE IS NO DRAW, and the best-supported variant (the first formed on a tie) is his conclusion. A variant with no support (its
+    cites are not in his ledger) is never drawn; a family where none has any keeps the first formed. A missing `draw` at a nonzero temperature RAISES, as `_sample_order`'s does.
+    A Candidate with no `CONCLUDED_RANK_KEY` is its own group, so every other row passes through. Returns `(cands, scores)` for the kept set, `scores` keyed on `id(c)`."""
+    families: dict = {}
+    for c in cands:
+        ops = c.operands or {}
+        if ops.get(CONCLUDED_RANK_KEY) is not None:
+            families.setdefault((c.verb, act_key(c.verb, c.subject, {**ops, CONCLUDED_RANK_KEY: None})), []).append(c)
+    if not families:
+        return cands, scores
+    tau = own_temperature(p, fx)
+    if tau != 0 and draw is None:
+        raise Unspecified(
+            "the conclusion draw", "B11.75",
+            needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at choice_temperature={tau}",
+            law="R-19-04 -- at a nonzero temperature the suspect is DRAWN by his support, and a chooser built without a draw would silently name the best-supported every time")
+    tick, decay = fade_of(p)
+    weigh = ledger_weigh(p, fx, tick)
+    keep = set()
+    for fam in families.values():
+        support = [cited_support(p.ledger, c.operands.get(CITES_KEY, ()), weigh, tick=tick, decay=decay) for c in fam]
+        best = max(range(len(fam)), key=lambda i: (support[i], -i))     # the best-supported, the first formed on a tie
+        if tau != 0 and sum(1 for sp in support if sp > 0) > 1:
+            keyed = []
+            for i, (c, sp) in enumerate(zip(fam, support)):
+                if sp <= 0:
+                    continue
+                _to, _kind, _doer = c.operands[CONCLUDED_KEY]      # keyed on WHO and WHAT is concluded, never on the variant's place in a list
+                keyed.append((fmath.log(sp) + _gumbel(draw, p.id, f"conclude:{c.subject}:{_kind}:{_doer}"), -i))
+            best = -max(keyed)[1]
+        keep.add(id(fam[best]))
+    kept = [c for c in cands if (c.operands or {}).get(CONCLUDED_RANK_KEY) is None or id(c) in keep]
+    return kept, {id(c): scores[id(c)] for c in kept}
 
 
 def settle_efforts(cands: list, scores: dict, score: Callable, fx: "Fixtures") -> tuple:
@@ -543,7 +630,7 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
 
 def temper(p: Person, fx: "Fixtures") -> float:
     """THE PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE (B10.28; CR-93 item 2, AR-23: a high-Focus person is less distracted, so
-    his draw strays less from what he most values). The `judgement` rows of site `choice_temper`, read by `options._judgement_factor`
+    his draw strays less from what he most values). The `judgement` rows of site `choice_temper`, read by `person_q._judgement_factor`
     as `competence` reads its own: `about_mid(held, floor, ceiling, gain)`, exactly 1 at the scale's mid-point and at gain 0, and
     1.0 where no row is authored or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute
     (U1 §8): the key is the row's.
@@ -684,11 +771,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
         # loop exists to handle. `random()` returns exactly 0.0 about once in 2^53 draws: a guard
         # that cannot do its job is not a weak guard but an absent one (`CLAUDE.md` §0.1 pt 2),
         # and a hang is the worst shape for one.
-        rng = draw(p.id, f"choice:{c.verb}:{c.subject or '-'}")
-        u = rng.random()
-        while u <= 0.0:                   # `random()` is [0,1); log(0) is the one unusable draw
-            u = rng.random()              # SAME stream, so it advances and can terminate
-        g = -fmath.log(-fmath.log(u))
+        g = _gumbel(draw, p.id, f"choice:{c.verb}:{c.subject or '-'}")
         # the trailing two terms are a STABLE TOTAL ORDER for exact float ties, which continuous
         # noise makes measure-zero; they are not the tie-break -- `g` is.
         keyed.append((-(score(c) / tau + g), c.verb, c.subject or "", c))
@@ -917,6 +1000,8 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # the strike leaves standing is kept too, for the fold's `scruple.overridden` (`loop/resolve.py::_scruple_overridden`).
         cands, marked = strike_scruples(p, cands, fx, draw, lambda c: _scores[id(c)])   # (Candidate, margin, score, struck): every candidate with a positive margin
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
+        cands, _scores = settle_confidences(cands, _scores)       # B11.10: a telling in confidence and one not are one opportunity
+        cands, _scores = settle_conclusions(cands, _scores, p, fx, draw)    # B11.75: where his ledger names several doers, one suspect, drawn by support
         cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
         # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive

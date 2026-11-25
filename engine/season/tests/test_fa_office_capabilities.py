@@ -20,6 +20,7 @@ from ..decision import choose as CH
 from ..gaps import Unspecified
 from ..queries import person_q, world_q
 from ..state.carriers import Claim
+from .test_fi_referents import hears_of
 from .test_g3_not_yours import _gov_world
 
 
@@ -86,6 +87,7 @@ def _vacancy_world():
     for i, o in enumerate(("p_mid", "p_low")):
         king.ledger.append(Claim(f"c_k{i}", "p_king", o, "exists:Person", 1, 0, "firsthand", 100, "own"))
     king.stance.append(("p_mid", 4, 2))
+    hears_of(king, _OFFICE, "p_gone", kind="tenure.closed", when=-2)     # v12 B11.08: the vacancy is his ledger's, heard long ago
     return w
 
 

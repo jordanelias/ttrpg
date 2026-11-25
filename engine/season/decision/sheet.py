@@ -233,7 +233,7 @@ def chronicle(p: Person, fx: Any = None) -> Chronicle:
     nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called.
 
     B09.07: given the `fx` the caller already holds, `beliefs` reads through the ONE comparator -- `LedgerReader` with
-    `decision/options.py::ledger_weigh(p, fx, tick)`, the `weigh` `opening_set` and `belief_contradicts` read his ledger by --
+    `queries/person_q.py::ledger_weigh(p, fx, tick)`, the `weigh` `opening_set` and `belief_contradicts` read his ledger by --
     so the sheet shows what he acts on and says. Without `fx` (a hand-built read) it is the plain comparator, as before.
     B09.17: `threads` pairs each `seen` claim he holds with the claim its `why` names, where he still holds both."""
     tick, decay = fade_of(p)                        # B09.01: the claims he would offer are ranked as he holds them now

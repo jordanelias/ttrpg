@@ -229,7 +229,7 @@ print(repr((ROSTER, key, bad["module"], refusal)))
 _PLANTS = """
 from engine.season.manifest import PROVIDERS
 from engine.season.data.rosters import COVERT_KINDS, UNDEPOSITED_KINDS
-KEY = sorted(ROWS)[0]
+KEY = next(iter(ROWS))     # the FIRST row in roster order: the one the loader refuses on (two rows may share a provider, so a sorted first can be another row)
 NAME = ROWS[KEY]["provider"]
 
 def with_rows(rows):

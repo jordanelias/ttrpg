@@ -39,15 +39,16 @@ from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.requires import UNKNOWN, Observation
 from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
-    HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
+    COVERT_KINDS, HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..trace_log import TRACE
-from .attribution import anchor_of, cover_at_logging
+from .attribution import actor_of, anchor_of, cover_at_logging
 from .carriers import (
     Act, Claim, Event, Office, Person, Proposition, Receipt, Record, Rung, Said, Site, StateChange, Tenure, Term,
 )
 from .ids import H
 from .acts import ActStore
+from .containment import home_of
 from .gate import (
     EDGE, ENTITY, STAGED, TENURE_WRITE_CLASSES, Change, Gate, NoToken, Subject, Token, no_op,
     not_yours, refuse_unauthored)
@@ -440,7 +441,8 @@ def encode(w: "World") -> bytes:
     """`w`'s snapshot: see the block above for what it holds."""
     frames = [("world_seed", w.world_seed), ("tick", w.tick), ("acts", list(w.acts)),
               ("fixtures", fixtures_digest(w.fixtures)), ("unowned", list(w._unowned)),
-              ("log", list(w.log)), ("covers_logged", w._covers_logged)]
+              ("log", list(w.log)), ("covers_logged", w._covers_logged),
+              ("places_logged", w._places_logged)]
     frames += [(n, getattr(w, n)) for n in w._STATE_COLLECTIONS]
     frames += [(n, list(getattr(w, n))) for n in w._STATE_SEQUENCES]
     return _canonical((_SNAPSHOT_TAG, tuple(frames)), ordered=True)
@@ -595,8 +597,11 @@ def _world_from(frames: dict, fixtures: Fixtures) -> "World":
     # it stood at each logging, so it is put back and the last-emission maps are indexed again against it.
     w._covers_logged.clear()
     w._covers_logged.update(frames["covers_logged"])
+    w._places_logged.clear()
+    w._places_logged.update(frames["places_logged"])
     w._last_by_anchor.clear()
     w._last_by_subject.clear()
+    w._last_by_place.clear()
     w._first_by_subject.clear()
     for e in frames["log"]:
         w._index_logged(e)
@@ -651,6 +656,13 @@ class World:
         # commits) and by `test_in56`'s oracle against a log scan. Grade: CONVENTION.
         self._last_by_anchor: dict[tuple, str] = {}
         self._last_by_subject: dict[tuple, str] = {}
+        # B11.63 (CP-T06-02): `(covert kind, the place its doer stood at when it was logged) -> id`, the latest -- `_last_by_anchor`'s
+        # shape and its bound, one Event per kind per place -- read by `last_emission_of(..., at=True)`. NOT folded into
+        # `content_hash` (underscore, as its siblings). The place is read ONCE, as the Event is logged, from the live `contain`
+        # edge (`containment.home_of`), and kept by Event id in `_places_logged` as `_covers_logged` keeps the cover: a later move
+        # of the doer cannot change where the deed was done, and a snapshot carries the place a restored world could not re-read.
+        self._last_by_place: dict[tuple, str] = {}
+        self._places_logged: dict[str, str] = {}
         # `{subject: the FIRST logged Event naming it}`, for `queries/world_q.py::_creating_act` (the act that made a Record): the same derived,
         # unhashed index of the log as the two above, written by the same `_index_logged`, so it replaces a forward scan of the whole log per call.
         self._first_by_subject: dict[str, Event] = {}
@@ -1378,7 +1390,7 @@ class World:
         """A kind no Part D row declares is a FABRICATED kind, and the `emits:` column is the only
         thing that may name one.
 
-        ⚠ ONE RULE, ONE MESSAGE, for the must-name-a-kind path and the exempt path alike, so a test
+        ⚠ ONE RULE, ONE MESSAGE, for the must-name-a-kind path and this one alike, so a test
         matching one message matches both (§8)."""
         if emits is None or emits in declared:
             return
@@ -1576,15 +1588,7 @@ class World:
         # true while the mutation happens beside it is worse than no gate.
         # -- W4: THE EMISSION, GATED ON THE SAME ROW AS THE WRITE ------------------------
         declared = tuple(row.emits or ())
-        # `H-86`. A row whose declared emissions are ALL CONDITIONAL is exempt from the
-        # must-name-a-kind rule -- `(Record, ttl)` declares only `record.expired`, and emitting
-        # that on a non-terminal decrement asserts an expiry that has not happened. The exempt
-        # rows are DATA (`rosters.yaml: conditional_emission_rows`), never a literal here, and the
-        # ambiguity in Part D's column that makes the roster necessary is registered rather than
-        # decided. The exemption is narrow: an UNDECLARED kind is still refused below.
-        conditional = roster("conditional_emission_rows")
-        if (wclass is WriteClass.MATTER and declared and emits is None
-                and f"{record_kind}.{fieldname}" not in conditional):
+        if wclass is WriteClass.MATTER and declared and emits is None:
             TRACE.write(thing, wclass.value, sname, False)
             raise Forbidden(
                 f"({record_kind}, {fieldname}) written at MATTER and emitted nothing, while "
@@ -1782,12 +1786,17 @@ class World:
             self._barrier_cache[key] = build()
         return self._barrier_cache[key]
 
-    def last_emission_of(self, kind: str, subject: str, *, written: bool = False) -> Optional[str]:
+    def last_emission_of(self, kind: str, subject: str, *, written: bool = False, at: bool = False) -> Optional[str]:
         """The id of the most recent Event of `kind` about `subject`, or None.
 
         `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`
         (whose fold emission anchors on the killer) and, since v10 REM-52, for the bodies pass's
         `body.changed` read.
+
+        `at=True` (B11.63): the Event of covert `kind` that HAPPENED AT `subject`, a Rung -- the place its doer stood at when it
+        was logged (`_places_logged`), whoever it was anchored on. `None` for a kind outside `rosters.yaml: covert_kinds`, for an
+        Event no person did, and for a doer who held no `contain` edge. ONE Event per `(kind, place)`, the latest; an earlier deed
+        of the same kind at the same place is unreachable (no fall-back to the next-older). `written` and `at` are one or the other.
 
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
@@ -1803,6 +1812,8 @@ class World:
         `loop/calendar.py`), so tier 2 returns `subj` by construction for all of them."""
         # IN-56. A LOOKUP. The two maps are filled by `_on_logged` on every append, so the answer
         # is the last-appended Event of `kind` that matches -- what the reverse scan returned.
+        if at:
+            return self._last_by_place.get((kind, subject))
         return (self._last_by_subject if written else self._last_by_anchor).get((kind, subject))
 
     def first_event_naming(self, subject: str) -> Optional[Event]:
@@ -1825,11 +1836,19 @@ class World:
         cover = cover_at_logging(self, e)
         if cover is not None:
             self._covers_logged[e.id] = cover
+        if e.kind in COVERT_KINDS:
+            who = actor_of(self, e)
+            place = home_of(self).get(who) if who is not None else None
+            if place is not None:
+                self._places_logged[e.id] = place
         self._index_logged(e)
 
     def _index_logged(self, e: Event) -> None:
-        """The two last-emission maps' (and the first-naming map's) one writer: `_on_logged` calls it per append and `decode` per restored Event."""
+        """The last-emission maps' (and the first-naming map's) one writer: `_on_logged` calls it per append and `decode` per restored Event."""
         self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id
+        place = self._places_logged.get(e.id)
+        if place is not None:
+            self._last_by_place[(e.kind, place)] = e.id
         for subj in {c.subject for c in e.changes}:
             self._last_by_subject[(e.kind, subj)] = e.id
             self._first_by_subject.setdefault(subj, e)
