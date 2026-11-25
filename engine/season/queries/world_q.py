@@ -30,7 +30,7 @@ from engine.dice_engine.dice_engine import MARGIN_SCALE
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
-from ..data.arrangements import ARRANGEMENTS, in_form      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
+from ..data.arrangements import ARRANGEMENTS, in_form      # B24p.16: `proceeding_row`
 from ..data.requires import (
     KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
 )
@@ -829,47 +829,39 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     return seats
 
 
-def declared_sitting(w: World, matter: Optional[str]):
-    """v11 CR-34 (C-7, `ED-SC-0034`): THE ARRANGEMENT ROW `matter` IS HEARD UNDER WHEN THAT ROW DECLARES ITS
-    DISPOSAL (`close: declared`, B24p.03: was `disposal`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
-    `declared.votes` and `declared.quorum` stems of `determine`'s `vote` conjunct. The row comes from the
-    docket item (`docketed_under`); a computed `open_case` names none (H-80), so every computed matter is
-    `None` here. More than one row on one matter (a hand-planted docket, which `_eff_determine` declines
-    rather than choosing between) is `UNKNOWN` when any of them declares: absence refuses, never a guessed row."""
-    rows = docketed_under(w, matter)
-    declared = [ARRANGEMENTS[r] for r in rows
-                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["close"] == "declared"]
-    if not declared:
-        return None
-    return declared[0] if len(rows) == 1 else UNKNOWN
+def declared_votes_by_member(w: World, matter: str, row: dict) -> dict:
+    """B24.11 (`U5c_SC_proceedings_residue.md` §6 item 2): THE LIVE COMMITS EACH MEMBER OF THE BENCH AT `matter`'S PLACE HOLDS ON THE MOTION to dispose
+    of the matter as the declared `row` does, SIGNED -- `{member: n}`, `n` the count of his live commits to an OUGHT Proposition whose subject is the
+    matter (the party) and whose predicate names the kind the row `disposes:` (`ban` for `excommunication_deliberation`), less the count of his live
+    commits to the NEGATION of it (the same Proposition with `value` false: *he ought not be banned*). `n` is positive for the motion, negative against
+    it, and a member with no commit on it is absent. The host reads it as where each seat's track STARTS (`sigma._present`: one `lean_level` a commit),
+    never as a gate and never as a leverage source at the close.
+    COMPUTED WHEN READ AND STORED NOWHERE (`commit_count_guard`'s shape): `ambitions` is the one owner of *a live `commit` to an OUGHT* and returns
+    live edges only, each Proposition once, so an ended commit counts for nothing and two edges to one Proposition are one; the bench is `judging_set`'s,
+    counted as distinct persons. THE SUBJECT TEST IS THE RULE, NOT AN ADDENDUM: a commit to a faction creed has the faction's LEADER as its subject
+    (`boot/realm.py`'s creed Propositions), so a member's loyal creed counts for nobody unless the leader is the one on trial -- and then only if the
+    creed's predicate names the disposal, which it does not. `names` is equality with the kind [ASSUMPTION; medium; Jordan to correct; revert: any
+    Proposition about the party]. A commit is public where it is a `commit` edge, which every edge is here [HOOK: no edge carries a privacy]. A matter
+    with no place has no bench: `{}`."""
+    venue = place_of(w, matter)
+    if venue is None:
+        return {}
+    kind, signed = row["disposes"], {}
+    for member in dict.fromkeys(judging_set(w, venue, matter)):
+        p = w.persons.get(member)
+        if p is None:
+            continue
+        n = sum((1 if w.propositions[i].value else -1) for i in ambitions(w, p)
+                if w.propositions[i].subject == matter and w.propositions[i].predicate == kind)
+        if n:
+            signed[member] = n
+    return signed
 
 
 def declared_votes(w: World, matter: str, row: dict) -> int:
-    """v11 CR-34: HOW MANY DISTINCT MEMBERS OF THE BENCH AT `matter`'S PLACE VOTE AGAINST HIM under the declared
-    `row` -- those holding a LIVE `commit` to an OUGHT Proposition whose subject is the matter (the party) and
-    whose predicate names the kind the row `disposes:` (`ban` for `excommunication_deliberation`).
-    COMPUTED WHEN READ AND STORED NOWHERE (`commit_count_guard`'s shape): `ambitions` is the one owner of
-    *a live `commit` to an OUGHT* and returns live edges only, so an ended commit is no vote, and the bench is
-    `judging_set`'s, counted as distinct persons (`bench.size`'s rule).
-
-    THE SUBJECT TEST IS THE RULE, NOT AN ADDENDUM: a commit to a faction creed has the faction's LEADER as its
-    subject (`boot/realm.py`'s creed Propositions), so a member's loyal creed is a vote against nobody
-    unless the leader is the one on trial -- and then only if the creed's predicate names the disposal, which
-    it does not. `names` is equality with the kind: a predicate that merely mentions it is not a vote
-    [ASSUMPTION; medium; Jordan to correct; revert: any Proposition about the party]. A matter with no place has
-    no bench: 0."""
-    venue = place_of(w, matter)
-    if venue is None:
-        return 0
-    kind = row["disposes"]
-    votes = 0
-    for member in set(judging_set(w, venue, matter)):
-        p = w.persons.get(member)
-        if p is not None and any(
-                w.propositions[i].subject == matter and w.propositions[i].predicate == kind
-                for i in ambitions(w, p)):
-            votes += 1
-    return votes
+    """HOW MANY DISTINCT MEMBERS OF THE BENCH VOTE FOR THE MOTION -- those whose signed count (`declared_votes_by_member`) is positive: one body, two
+    readings (v11 CR-34's count, B24.11). It gates nothing now (`determine`'s `vote` conjunct is deleted: the count is the odds, not a gate)."""
+    return sum(1 for n in declared_votes_by_member(w, matter, row).values() if n > 0)
 
 
 # ===========================================================================
@@ -5270,19 +5262,6 @@ class WorldReader:
             # `bench_quorum` (`H-161`), the stand-in for an arrangement's own `quorum:` until a
             # docketed matter maps to its arrangement row. The same for every subject today.
             return w.fixtures.get("bench_quorum")
-        if stem in ("declared.votes", "declared.quorum"):
-            # v11 CR-34 (C-7): `determine`'s `vote` conjunct, `quorum`'s shape -- a computed scalar against a
-            # SECOND READ on the same subject (the matter). Both sides are 0 for a matter heard under no
-            # declared row (every computed matter: no docket item names an arrangement, H-80), so `0 >= 0`
-            # holds and the conjunct is vacuous there. Under a declared row the left is `declared_votes`
-            # (live commits of distinct bench members, computed now, stored nowhere) and the right is the
-            # row's OWN `quorum:` key. UNKNOWN for an ambiguous docket (`declared_sitting`), which refuses.
-            row = declared_sitting(w, subject)
-            if row is None:
-                return 0
-            if row is UNKNOWN:
-                return UNKNOWN
-            return declared_votes(w, subject, row) if stem == "declared.votes" else row["quorum"]
         if stem in SENSITIVITY_STEMS:     # B10.59: `held_by`, `dispute` and `individual` are answered above, from the world
             # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, through
             # `person_q.OwnStateReader` -- the one answerer, which the person's own formation asks

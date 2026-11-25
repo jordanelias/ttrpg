@@ -493,9 +493,9 @@ arrangements:
   # dropped `verdict_reasons: given` is not carried. Reading it the other way would contradict a value the
   # source states outright; the same reading seeds `negotiation` (false + given), the last block below.
   # ⚠ v11 CR-34 (C-7, `ED-SC-0034`) FLIPPED IT TO `disposal: declared`, THE FIRST DECLARED ROW: the deliberation is
-  # a VOTE, and `determine` under it needs at least `quorum` distinct bench members each holding a LIVE `commit`
-  # to an OUGHT whose subject is the accused and whose predicate names `ban` (`determine`'s `vote` conjunct,
-  # `world_q.declared_votes`; computed when read, stored nowhere). `quorum: 2`, swept {1, 2, 3} [ASSUMPTION;
+  # a VOTE, and the sitting carries by its `quorum`-th best seat (`sigma.act_band`). B24.11 DELETED `determine`'s `vote` conjunct (a hard count of the bench's
+  # live commits to an OUGHT about the accused naming `ban`): each seat's signed commits (`world_q.declared_votes_by_member`; computed when read, stored
+  # nowhere) are now where his track starts (`sigma._ballot_start`), so the count is the odds. `quorum: 2`, swept {1, 2, 3} [ASSUMPTION;
   # medium; Jordan to correct; revert: `disposal: bench` and no `quorum:` on this row -- the loader refuses the
   # one without the other]. `parliamentary_debate` is NOT flipped: it disposes a `Record`, which `_eff_determine`
   # declines, so a declared flip there has no opener until a Record disposal site exists.

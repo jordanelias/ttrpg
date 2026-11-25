@@ -1694,6 +1694,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-664 -- `site: Fixtures answer_ob`, graded `assumption`; EVID_B proposes 2 and no document derives it, so it is injected at 2 and swept 1 / 2 / 4]
     answer_ob=2,                      # `H-664`, swept 1 / 2 (proposed, SHIPPED) / 4
+    # `lean_level`: the `LEVEL_SIGMA` name of one live commit a bench member holds on a declared sitting's motion (B24.11; `U5c_SC_proceedings_residue.md` §6): each seat's signed count
+    # (`world_q.declared_votes_by_member`) is where his track STARTS, one `lean_level` a commit, read through `level` and the close's own slope (`track_step`), never a leverage source
+    # at the close. `None` is the control: a commit moves no seat. Read only where a declared row is heard, so the shipped value moves no computed play.
+    # [ASSUMPTION; Jordan to correct; revert: `None`. The shipped first value is the smallest name -- no source sizes it; the sweep's points are `LEVEL_SIGMA`'s two smallest.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-671 -- `site: Fixtures lean_level`, graded `assumption`; no document derives the level of one commit, so it is injected at `minor` and swept None / minor / moderate]
+    lean_level="minor",               # `H-671`, swept None (control) / minor (SHIPPED) / moderate
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

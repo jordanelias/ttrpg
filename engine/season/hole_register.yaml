@@ -8505,6 +8505,19 @@ rows:
     cite:      "EVID_B `standing` rules: `answer_ob` a fixture, proposed 2, NUMBER row. [ASSUMPTION: the sweep is a half, the proposed value, a double -- basis: none; EVID_B names the proposed value only]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
     source:    "workplan v12 B24.07 (EVID_B `answer_ob`; B24's H block slot 4)"
 
+  - id:        H-671
+    tier:      1
+    hole:      "THE LEVEL ONE LIVE COMMIT WEIGHS AT A DECLARED SITTING -- `lean_level`, a `sigma_leverage.LEVEL_SIGMA` name (`U5c_SC_proceedings_residue.md` §6, `U5c_SC_one_obstacle_form.md` §3): each seat's signed live commits on the motion (`world_q.declared_votes_by_member`) are where his track starts, one `lean_level` a commit, read through `level` and the close's slope `track_step`; a seat's commits are never a leverage source at the close. No document sizes the level."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.lean_level` the one home. READER: `seam/wrappers/sigma.py::_ballot_start` (B24.11), through `_present`, for a seat that decides at a `close: declared` sitting"
+    grade:     "assumption"
+    default:   "minor -- SHIPPED at B24.11 [ASSUMPTION; Jordan to correct; revert: None, under which a commit moves no seat and a declared sitting is every seat at the ordinary bench]. No computed docket item names a declared row (H-80), so shipping it moves no computed play"
+    site:      "Fixtures lean_level, read by `sigma._ballot_start` through `sigma._present`: a seat that decides at a sitting whose rite closes `declared` starts at `(signed commits x level(lean_level) + the level of his seat row's modifier:) / track_step`"
+    sweep:     [null, "minor", "moderate"]
+    unblocks:  "a declared bench's commits being the odds of its verdict (R-04.c3), and B98's sweep of the level"
+    cite:      "`U5c_SC_proceedings_residue.md` §6 items 2 and 3: one `lean_level` a commit; `lean` is not added to `advantage_sources` (a seat's commits are where his track starts, V2 p1 §B D8; a lean at the close is cut, V2 p4 §G). [ASSUMPTION: the first value `minor` and the sweep `None` / `minor` / `moderate` -- basis: `LEVEL_SIGMA`'s smallest names; no source states them]. CONTROL: `None` -- a commit moves no seat. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row; `test_sc_hearing_ballots.py` observes the carried share move with the setting."
+    source:    "workplan v12 B24.11 (`U5c_SC_proceedings_residue.md` §6; a slot of B24's H block beyond the ten taken, H-671..H-675 being its five spares)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

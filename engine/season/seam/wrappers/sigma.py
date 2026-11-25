@@ -100,7 +100,7 @@ from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Input, Item, Margin, Outc
                                other_side)
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.faction_q import weight as faction_weight
-from ...queries.world_q import docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
+from ...queries.world_q import declared_votes_by_member, docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ...state.ledgers import present_confidence
@@ -1332,6 +1332,7 @@ class _Sitting(NamedTuple):
     factions: dict
     presume: float
     rank_key: Optional[str]
+    lean: Optional[tuple] = None     # B24.11: `((member, signed live commits on the motion), ...)` of a `declared` sitting (`world_q.declared_votes_by_member`), else `None`
 
 
 def _refuse(key: str, why: str) -> None:
@@ -1357,13 +1358,18 @@ def _rung_ordinal(w: Any, office: Any) -> int:
     return RUNG_KINDS.index(rung.kind) if rung is not None else 0
 
 
+def _top_seat(w: Any, pid: str) -> Optional[Any]:
+    """His highest seat (by rung ordinal, then id), or `None` for a man with none: the one seat `_power` and the declared ballot (`_ballot_start`) read."""
+    seats = _seats_held(w, pid)
+    return max(seats, key=lambda o: (_rung_ordinal(w, o), o.id)) if seats else None
+
+
 def _power(w: Any, pid: str, regime: dict) -> tuple:
     """`(power, precedence)` of a person (V2 p2 §H): his highest seat's rung ordinal, plus twice the level of its `modifier`, plus the
     regime's weight for the authority of its faction. A man with no seat has none (0, 0)."""
-    seats = _seats_held(w, pid)
-    if not seats:
+    top = _top_seat(w, pid)
+    if top is None:
         return 0.0, 0
-    top = max(seats, key=lambda o: (_rung_ordinal(w, o), o.id))
     rank = _rung_ordinal(w, top)
     modifier = 2.0 * sigma_level(top.modifier) if top.modifier else 0.0
     return rank + modifier + regime["power"].get(AUTHORITY_BY_FACTION.get(top.faction), 0.0), rank
@@ -1463,6 +1469,19 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
     return tuple(it for it in out if it.kind in ctx.admits)
 
 
+def _ballot_start(fx: Any, signed: int, modifier: Optional[str]) -> float:
+    """B24.11 (`U5c_SC_proceedings_residue.md` §6 items 2 and 3): WHERE A SEAT'S TRACK STARTS AT A `declared` SITTING, in track units, the close's own slope (`track_step`) turning each
+    level into the start that closes on it: `signed` (his live commits for the motion less those against, `world_q.declared_votes_by_member`) times one `lean_level` a commit, plus
+    the one level his seat row's `modifier:` names (his help on his own ballot, D-U1-01; none where the row names none), each read through `level`. A seat's commits are where his
+    track starts, never a leverage source at the close (V2 p1 §B D8; `lean` is not an `advantage_sources` member). `0.0` for a `track_step` of 0, and no commit moves him at a
+    `lean_level` of `None` (the control) [ASSUMPTION; medium; Jordan to correct; revert: drop the `modifier` term -- the seat's help enters his start in the same units as a
+    commit because the module has no per-seat leverage channel; `_power` already reads the modifier for his station]."""
+    step, lean = fx.get("track_step"), fx.get("lean_level")
+    if not step:
+        return 0.0
+    return ((signed * sigma_level(lean) if signed and lean is not None else 0.0) + (sigma_level(modifier) if modifier else 0.0)) / step
+
+
 def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) -> Present:
     """One person of the room, built from his OWN interior (his attributes, pursuits, convictions, stance, edges and ledger) and the
     operands `ctx` carries: never another person's ledger or true values (F8)."""
@@ -1478,6 +1497,9 @@ def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) 
     bonds = tuple((q, b) for q in ctx.room if q != p.id
                   and (b := tie(p, q, edges=p.tenures, shared_faction=ctx.factions[q] is not None and ctx.factions[q] == ctx.factions[p.id])))
     start = fx.get("start_step") * (ltr_sum(stake) / BEARING_PARTS) + (ctx.presume if decides and side is None else 0.0)
+    if decides and ctx.lean is not None:
+        top = _top_seat(w, p.id)
+        start += _ballot_start(fx, dict(ctx.lean).get(p.id, 0), top.modifier if top is not None else None)      # B24.11: a declared seat's commits and his seat's help
     power, precedence = _power(w, p.id, ctx.regime)
     return Present(id=p.id, weight=int(p.weight), side=side, decides=decides, **attr,
                    rank=float((p.capability or {}).get(ctx.rank_key) or 0) if ctx.rank_key else 0.0,
@@ -1616,7 +1638,8 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
         tilt = 0.0                                            # only a party decides (a conversation, a questioning, a negotiation): nothing to tilt
     ctx = _Sitting(fx=fx, regime=regime, strife=strife, topic=topic, admits=rite.admits, bears=bears, for_id=fid, against_id=aid,
                    room=tuple(cells), factions=factions, presume=fx.get("presume_step") * tilt * SIDE_SIGN[arr_side] if tilt > 0 else 0.0,
-                   rank_key=_rank_key(rite.issues[0] if rite.issues else None))
+                   rank_key=_rank_key(rite.issues[0] if rite.issues else None),
+                   lean=tuple(declared_votes_by_member(w, topic, row).items()) if close == "declared" and topic is not None else None)
     room = tuple(_present(w, (seen or {}).get(x, w.persons[x]), side, decides, ctx) for x, (side, decides) in cells.items())
     dials = dict(proceeding_dials(fx))
     dials["moves"] = {m: (r["effect"], r["draw"]) for m, r in PROCEEDING_MOVES.items()}      # the two rosters the module is handed (its head)
