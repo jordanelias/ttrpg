@@ -416,7 +416,7 @@ rows:
             a counter run once at the close read 3 of 761 `pack_scenes` calls in that run holding an act with `after`, none of which reached the fold with it set (observed, cause unread; the counter is not kept);
             five of the seven read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata; the two argue arms), one reads the verb table and one the realm at one interaction
             per scene (the realm's fold order is read by `test_scene_store.py`'s two-season realm test); the realm figures above are one seed, two seasons and a counter run outside the test; whether a skipped second interaction was the better act is not read;
-            `rival_precedence` is not read (no rivalry group forms at seeds 0, 1, 2 in two seasons: 0, 0, 0, read at c32da4e; not re-read here, the ruling does not reach the draw)
+            `rival_precedence` is read only as a count: no rivalry group forms at seeds 0, 1, 2 in two seasons (0, 0, 0 groups over 11, 10, 11 orderings, re-read on the closing tree with a counter on `_rival_groups`; the run's hashes equal `_realm_goldens.SHIPPED` at (0, 2), (1, 2), (2, 2)); the draw itself is read on hand-built worlds only
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene landed; this row is met)
 
