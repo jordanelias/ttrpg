@@ -772,6 +772,21 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
     # [JUSTIFIED: engine/season/hole_register.yaml H-532 -- `site: Fixtures hunger_depth_obstacle`, graded `assumption`; the design anchors the value to the control's expected loss at one named state and no document sets it, so it is injected and swept 3 / 4.5 / 6]
     hunger_depth_obstacle=4.5,         # `H-532`, swept 3 / 4.5 (SHIPPED) / 6
+    # B12a.64 (`16_PESSIMIST_WR_B` edit 2): A STRAINED SITE BREAKS, HOLDS OR KNITS BY A DRAW. After the wear write, a Site beside a broken Site (the pull's own reading,
+    # `loop/matter.py::_broken_near`) that stands below the lowest floor of its kind takes one keyed draw; a kind whose `band_floors` cell is `{}` has no floor, so its one
+    # edge is THIS ROW. Read only while `lattice_coupling` is non-zero (the control reads no row and takes no draw).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-533 -- `site: Fixtures rupture_band`, graded `assumption`; the source names the row for a kind with no floor and gives its value, no document derives it, so it is injected and swept]
+    rupture_band=100,                  # `H-533`, swept 50 / 100 (SHIPPED) / 200
+    # B12a.64: THE OBSTACLE'S BASE, what holds a strained Site before any sound fabric beside it is counted (each Site of its own territory standing in its top band adds one).
+    # The pool and the base were sized on the whole-dice sampler: re-read at the joint calibration of A-5/A-6 before the weight leaves 0.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-534 -- `site: Fixtures rupture_base`, graded `assumption`; the source gives the value and no document derives it, so it is injected and swept]
+    rupture_base=2,                    # `H-534`, swept 1 / 2 (SHIPPED) / 4
+    # B12a.64: THE CAP ON THE POOL, the strain upon a Site (the count of broken Sites in its own and bordering territories, up to this).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-535 -- `site: Fixtures rupture_pool_cap`, graded `assumption`; the source gives the value and no document derives it, so it is injected and swept]
+    rupture_pool_cap=6,                # `H-535`, swept 3 / 6 (SHIPPED) / 12
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

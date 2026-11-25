@@ -11025,7 +11025,7 @@
           "class": "MATTER/ACTS",
           "social": "false",
           "by": "DR-1",
-          "emits": "`condition.worn` \u00b7 `condition.band_crossed`"
+          "emits": "`condition.worn` \u00b7 `condition.band_crossed` \u00b7 `site.ruptured`"
         },
         {
           "kind": "Site",

@@ -8583,6 +8583,45 @@ rows:
     cite:      "CONTROL: `build_realm(0)`'s content hash with the row added equals B12a.56's after-reading: no code reads the row. COMPUTED in the design (§3, §4): at pool 8 and ob 2.25 the band odds are F 0.337 / P 0.172 / S 0.309 / O 0.183 and the expected multiple 1.0003 at the shipped bands; the sample of 200,000 agrees within 0.003. FALSIFIER (a planted test for the reader, design §5): for each body in {1000, 500, 100}, F(1/6 short) < F(3/6) < F(6/6)."
     source:    "workplan v12 B12a.58 (B12a.57's design, `16_PESSIMIST_GAME_hunger_draw_conversion.md` §2, §4; the second half's H slot 7)"
 
+  - id:        H-533
+    tier:      1
+    hole:      "WHERE A KIND WITH NO FLOOR IS STRAINED. `16_PESSIMIST_WR_B` edit 2 (A-40, A-54): a Site beside a broken Site that stands below the lowest floor of its kind takes one keyed draw to break, hold or knit (`loop/matter.py::_ruptures`). A kind whose `band_floors` cell is `{}` (`dwelling`, `garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop`, `field`) has no floor, so the source gives it one edge, `rupture_band`: strained below it, and standing in its top band at or above it (`_edges`). The value 100 is the source's, matching the lowest floor of `harbour` (100) and `body` (100); it is `[ASSUMPTION; medium; Jordan to correct]` and is read only while `lattice_coupling` is non-zero."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B98 sets it with the `lattice_coupling` flip (`B12a.71`). `engine/season/data/fixtures.py` the one home of the row; READER: `engine/season/loop/matter.py::_edges`, through `_rupture_rows` and `_ruptures`"
+    grade:     "assumption"
+    default:   "rupture_band 100 -- SHIPPED, inert while `lattice_coupling` is 0 [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]: at weight 0 `_rupture_rows` returns `{}` before reading a Site or a row, so no draw is taken and the season is the tree's before the item"
+    site:      "Fixtures rupture_band, read ONLY by `engine/season/loop/matter.py::_edges` (from `_rupture_rows`, `_ruptures`), under a non-zero `lattice_coupling`"
+    sweep:     ["50 (a kind with no floor is strained only far down)", "100 (SHIPPED: the source's value, `harbour`'s lowest floor)", "200 (a kind with no floor is strained from a fifth of the scale)"]
+    unblocks:  "B98's flip of `lattice_coupling` (the Calamity's breaks); `16_PESSIMIST_WR_B`'s gate (a `site.ruptured` is emitted in at least one seed)"
+    cite:      "CONTROL: `build_realm(0)`'s content hash at `lattice_coupling` 0, 0 / 1 / 2 seasons, equals B12a.62's after-reading (ba0ecd0e... / 6a39e62c... / 404a6137...). FALSIFIERS: `engine/season/tests/test_in35_lattice_coupling.py::test_weight_zero_is_the_base_hash` (the three rows swept at weight 0 read the same content hash and emit no `site.ruptured`; at weight 250 one is emitted), `test_a_strained_site_takes_no_draw_above_its_floor_or_beside_nothing_broken` (a Site above its floor, or below it with nothing broken near it, takes no draw)."
+    source:    "workplan v12 B12a.64 (`16_PESSIMIST_WR_B` edit 2; the second half's H slot 8)"
+
+  - id:        H-534
+    tier:      1
+    hole:      "WHAT HOLDS A STRAINED SITE BEFORE ANY SOUND FABRIC IS COUNTED. `16_PESSIMIST_WR_B` edit 2: the draw's obstacle is `rupture_base` plus the number of the Site's own territory's Sites standing in their top band (sound fabric beside it resists). The value 2 is the source's, sized on the whole-dice sampler (one die cannot break a Site: Success needs the net to clear an obstacle of 2 by one; measured here at 0 breaks in 2,000 seeded draws of pool 1, 62 Successes in 2,000 at pool 2, 786 breaks (Success or Overwhelming) at pool 6); the source says to re-read it at the joint calibration of A-5/A-6 before the weight leaves 0. `[ASSUMPTION; medium; Jordan to correct]`."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B98 re-reads it with the `lattice_coupling` flip. `engine/season/data/fixtures.py` the one home of the row; READER: `engine/season/loop/matter.py::_rupture_rows`"
+    grade:     "assumption"
+    default:   "rupture_base 2 -- SHIPPED, inert while `lattice_coupling` is 0 [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]: read only by the draw's obstacle, which is taken only for a Site beside a broken Site below its floor under a non-zero weight"
+    site:      "Fixtures rupture_base, read ONLY by `engine/season/loop/matter.py::_rupture_rows`, under a non-zero `lattice_coupling`"
+    sweep:     ["1 (a strained Site is easier to break)", "2 (SHIPPED: the source's value)", "4 (a strained Site is harder to break)"]
+    unblocks:  "B98's flip of `lattice_coupling`; the joint calibration of A-5 and A-6 (how often a strained Site gives way)"
+    cite:      "CONTROL: as H-533's. MEASURED at B12a.64 on its working tree, `PYTHONHASHSEED=0`, `draw_factory(1, ...)` over ticks 0 to 1,999, the one sampler (`roll_net_continuous`), obstacle 2, no sound fabric: pool 1 gives Failure 1947 / Partial 53, pool 2 Failure 1681 / Partial 257 / Success 62, pool 3 Failure 1415 / Partial 375 / Success 206 / Overwhelming 4, pool 6 Failure 828 / Partial 386 / Success 581 / Overwhelming 205 (a session probe, not a repo artifact). FALSIFIERS: `test_in35_lattice_coupling.py::test_a_rupture_is_emitted_and_its_season_differs` (seeds 0 to 9, a ring of Sites below the floor beside six broken Sites: a `site.ruptured` at some seed and the ruptured set differs between seeds), `test_a_site_the_strain_fails_to_break_knits_by_the_pull_it_took` (a pool of one never breaks)."
+    source:    "workplan v12 B12a.64 (`16_PESSIMIST_WR_B` edit 2; the second half's H slot 9)"
+
+  - id:        H-535
+    tier:      1
+    hole:      "THE CAP ON THE STRAIN UPON A SITE. `16_PESSIMIST_WR_B` edit 2: the draw's pool is the count of broken Sites in the Site's own and bordering territories, capped at `rupture_pool_cap`, so a territory with a dozen holes does not make a certainty of the next break. The value 6 is the source's, sized on the whole-dice sampler, to be re-read at the joint calibration of A-5/A-6 before the weight leaves 0. `[ASSUMPTION; medium; Jordan to correct]`."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B98 re-reads it with the `lattice_coupling` flip. `engine/season/data/fixtures.py` the one home of the row; READER: `engine/season/loop/matter.py::_rupture_rows`"
+    grade:     "assumption"
+    default:   "rupture_pool_cap 6 -- SHIPPED, inert while `lattice_coupling` is 0 [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]: read only by the draw's pool, taken only for a Site beside a broken Site below its floor under a non-zero weight"
+    site:      "Fixtures rupture_pool_cap, read ONLY by `engine/season/loop/matter.py::_rupture_rows`, under a non-zero `lattice_coupling`"
+    sweep:     ["3 (a low ceiling on the strain)", "6 (SHIPPED: the source's value)", "12 (a high ceiling: a territory of holes breaks what it touches more often)"]
+    unblocks:  "B98's flip of `lattice_coupling`; the joint calibration of A-5 and A-6"
+    cite:      "CONTROL: as H-533's. FALSIFIERS: as H-534's (`test_a_rupture_is_emitted_and_its_season_differs` plants six broken Sites beside the ring, the cap's own value, and breaks occur at some seeds; a pool of one, the cap's floor, never breaks). The sweep's two other arms are not exercised by a committed test."
+    source:    "workplan v12 B12a.64 (`16_PESSIMIST_WR_B` edit 2; the second half's H slot 10)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

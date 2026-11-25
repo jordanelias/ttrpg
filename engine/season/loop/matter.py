@@ -151,6 +151,28 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     return out
 
 
+def _broken_near(w: "World") -> tuple:
+    """`({site id: [the broken Sites (condition <= 0) of its own and bordering territories, itself excluded]}, {territory: [its Sites]})`, read from
+    the Sites' CURRENT conditions (the caller reads it before any wear is written, so it is the barrier's opening reading); a Site with none is absent.
+    `A-40`'s one reading of *who is beside a hole in the fabric*: the pull (`_lattice_strain`, B12a.63) and the break's draw (`_rupture_rows`, B12a.64)
+    both read it here, so the two cannot disagree about which Sites are strained. A Site with no territory above it has no neighbour."""
+    borders = adjacent_territories()
+    where = {sid: world_q.enclosing_territory(w, w.sites[sid].rung) for sid in sorted(w.sites)}
+    by_terr: dict = {}
+    for sid, t in where.items():
+        if t is not None:
+            by_terr.setdefault(t, []).append(sid)
+    near: dict = {}
+    for sid, t in where.items():
+        if t is None:
+            continue
+        broken = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ())
+                  if n != sid and w.sites[n].condition <= 0]
+        if broken:
+            near[sid] = broken
+    return near, where, by_terr
+
+
 def _lattice_strain(w: "World", scale: int) -> dict:
     """v9 IN-35 FORCE-HAZARD -- THE CALAMITY RE-EXPRESSED AS A COUPLING RULE (#457 `:123-143`): `{site
     id: the extra wear this season}`, which the wear loop below adds to the Site's kind's rate. ONE
@@ -195,20 +217,8 @@ def _lattice_strain(w: "World", scale: int) -> dict:
         return {}
     if not 0 <= weight <= scale:            # `not ... <=`, so a NaN is refused too
         raise ValueError(f"lattice_coupling {weight} is not a share in [0, {scale}] (H-235)")
-    borders = adjacent_territories()
-    where = {sid: world_q.enclosing_territory(w, w.sites[sid].rung) for sid in sorted(w.sites)}
-    by_terr: dict = {}
-    for sid, t in where.items():
-        if t is not None:
-            by_terr.setdefault(t, []).append(sid)
     out: dict = {}
-    for sid, t in where.items():
-        if t is None:
-            continue
-        broken = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ())
-                  if n != sid and w.sites[n].condition <= 0]
-        if not broken:
-            continue
+    for sid, broken in _broken_near(w)[0].items():
         gap = max(0, w.sites[sid].condition)          # the pull is toward a hole in the fabric
         if gap > 0 and (weight * gap) // scale:
             out[sid] = (weight * gap) // scale
@@ -250,6 +260,56 @@ def _drawn_wear(w: "World", site_id: str, rate: int, rows: tuple, keyed) -> int:
     degree = degree_from_net(roll_net_continuous(pool, rng=keyed(site_id, "wear")), ob)
     num, den = _WEAR_BAND_SHARE[degree]
     return rate * num // den
+
+
+def _edges(w: "World", kind: str, floors_all: dict) -> tuple:
+    """`(lowest, top)`: the lowest and the highest floor of the kind's `band_floors` cell. A kind whose cell is `{}` has no floor, so its one edge is
+    the fixture `rupture_band` (B12a.64: a Site of such a kind is strained below it, and sound at or above it)."""
+    cell = floors_all.get(kind) or {}
+    edges = sorted(cell.values()) or [w.fixtures.get("rupture_band")]
+    return edges[0], edges[-1]
+
+
+def _rupture_rows(w: "World", floors_all: dict) -> dict:
+    """B12a.64 (`16_PESSIMIST_WR_B` edit 2) `[ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`]`: `{site id: (pool, obstacle, opening
+    condition)}` for each Site beside a broken Site (`_broken_near`, the pull's own reading), read from the barrier's OPENING conditions like the pull is, before any
+    wear is written. The POOL is the strain upon it, the count of broken Sites in its own and bordering territories, capped at `rupture_pool_cap`; the
+    OBSTACLE is what holds it, `rupture_base` plus the Sites of its own territory standing in their top band (`_edges`; sound fabric beside it resists).
+    `{}` at the shipped weight 0 before a Site or a row is read: the control takes no draw."""
+    if not w.fixtures.get("lattice_coupling"):
+        return {}
+    cap, base = (w.fixtures.get(name) for name in ("rupture_pool_cap", "rupture_base"))
+    near, where, by_terr = _broken_near(w)
+    sound = {t: sum(1 for n in ids if w.sites[n].condition >= _edges(w, w.sites[n].kind, floors_all)[1]) for t, ids in by_terr.items()}
+    return {sid: (min(len(broken), cap), base + sound[where[sid]], w.sites[sid].condition) for sid, broken in near.items()}
+
+
+def _ruptures(w: "World", token: Token, rows: dict, pull: dict, floors_all: dict) -> None:
+    """THE BREAK IS DRAWN, after the wear write (B12a.64; `A-40`, `A-54`). Each Site of `rows` that now stands above 0 and below the lowest floor of its kind takes
+    ONE keyed draw `(world_seed, tick, site id, "rupture")`, the pool rolled by the one roller against the row's obstacle, graded on the one ladder:
+    Overwhelming and Success BREAK it (condition -> 0, emitting `site.ruptured`); Partial holds it (no write); Failure KNITS it (the fabric held: it recovers
+    the pull it took this season, never above its opening condition, emitting `condition.worn`). Both writes are the `(Site, condition)` cell at MATTER, caused by the
+    Site's wear Event (`W4`'s chain); L5 is kept: matter's licensed clock writing its own cell, no social row written, nobody made to act. A knit that recovers
+    nothing (the Site took no pull) is not written (`H-135`)."""
+    keyed = draw_factory(w.world_seed, lambda: w.tick)
+    for sid in sorted(rows):
+        s = w.sites[sid]
+        pool, ob, opening = rows[sid]
+        if not 0 < s.condition < _edges(w, s.kind, floors_all)[0]:
+            continue
+        degree = degree_from_net(roll_net_continuous(pool, rng=keyed(sid, "rupture")), ob)
+        if degree is Degree.PARTIAL:
+            continue
+        broke = degree in (Degree.OVERWHELMING, Degree.SUCCESS)
+        back = 0 if broke else min(pull.get(sid, 0), opening - s.condition)
+        if not broke and back <= 0:
+            continue
+        prior_wear = w.last_emission_of("condition.worn", sid)
+        w.write("condition", token,
+                (lambda s=s: setattr(s, "condition", 0)) if broke else (lambda s=s, back=back: setattr(s, "condition", s.condition + back)),
+                record_kind="Site", fieldname="condition", driver="Event",
+                emits="site.ruptured" if broke else "condition.worn", subject=sid,
+                causes=[prior_wear] if prior_wear else [ROOT])
 
 
 class _HeldBefore(NamedTuple):
@@ -829,6 +889,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     keyed_wear = draw_factory(w.world_seed, lambda: w.tick) if draw_rows else None
     w._in_parallel_map = True
     floors_all = w.fixtures.get("band_floors")
+    # B12a.64: `{}` at the shipped weight 0 (no Site read, no row read, no draw taken); else the strained Sites and what bears on each, read BEFORE any wear is written.
+    rupture = _rupture_rows(w, floors_all)
     for s in w.sites.values():
         before = s.condition
         # NO SILENT DEFAULT -- unregistered kind raises. Plus the coupling's pull: ONE wear write, so
@@ -866,6 +928,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # A crossing fires only on a REAL band edge, and EMITS.
         emitted.extend(_crossings(w, s.id, floors_all.get(s.kind, {}), before, s.condition,
                                   worn_ev.id if worn_ev else None))
+    # B12a.64: THE BREAK, AFTER THE WEAR WRITE. The draw reads the opening conditions `rupture` took and the Site's own wear-written condition, never a neighbour's write.
+    _ruptures(w, token, rupture, pull, floors_all)
     w._in_parallel_map = False
     # ⚠ THE EMISSIONS `write()` MADE ARE PART OF WHAT MATTER PRODUCED. `emitted` is built by hand
     # from explicit `append`s, and `write()` appends to `w.log` and to this buffer but not to the
