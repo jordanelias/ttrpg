@@ -28,7 +28,7 @@ from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, P
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK,
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FILING_VERBS, FORM_TASK,
                           VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
@@ -46,7 +46,7 @@ from ..queries.inputs import Beat, Outcome, Sitting, exchanges, written
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
-from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
+from ..queries.world_q import CITES_CLAUSE, WorldReader, ceiling, demanded_person, filings, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..seam.ladder import is_margin_result
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
@@ -328,6 +328,13 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
                            alternatives=["admit a self-relation (a fiat)"])
             return (False, _demand_earned(w, a, row.refusal_for(COUNTERPARTY_CLAUSE), False)
                     or (FOLD_REFUSED,), verdict)
+    # B24.25 (EVID_B edit 4, FI_05_B E-1): A CITING SPEECH IS REFUSED BEFORE THE DRAW -- a cite he does not hold, of a kind the matter's row does not admit, one that contradicts what already
+    # stands for his own side, or an answer naming no filed stage of the other side. An ELIGIBILITY refusal in the order of the others: it emits the row's refusal kind and decides no outcome, and
+    # `filings` (`queries/world_q.py`) is its one reader, which `_eff_speak` then writes from, so what is admitted here is what is filed. A verb the roster does not list files nothing and asks nothing.
+    if a.verb in FILING_VERBS and filings(w, a).refused is not None:
+        TRACE.decision(f"{a.verb} by {a.actor}: a cite or an answer is refused", "B24.25",
+                       chose="emit the refusal before the draw", alternatives=["draw, and file nothing", "admit an item the actor does not hold"])
+        return (False, _demand_earned(w, a, row.refusal_for(CITES_CLAUSE), False) or (FOLD_REFUSED,), verdict)
     return (True, (), verdict)
 
 

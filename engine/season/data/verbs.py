@@ -2257,6 +2257,9 @@ CITES_KEY = "cites"
 # citer's ledger (`F8`), so the `Said` of each cited claim is copied out of his own at CHOOSE as `said` is (`person_q.said_of`). A cited Record needs none: its content is
 # read off `w.records`. Read by `loop/witness.py::_told_items`; bound by no cell, dropped by `binding_of`, and not a choice (no `CHOICE_RANGES`/`CHOICE_CARRIER` entry).
 CITED_KEY = "cited"
+# B24.25 (EVID_B rules 1-2): `ANSWERS_KEY` IS THE FILED STAGES AN ACT ANSWERS, a tuple of their places on the case file (`Record.stages` indexes, the number an exhibit's id ends in), carried beside
+# `cites`. The act's own band is the `answered_band` of each (`queries/inputs.py::ANSWERED_STAGE`). Read by `queries/world_q.py::filings`; bound by no cell and not a choice (as `CITED_KEY`).
+ANSWERS_KEY = "answers"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
                   SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists",
                   CONCLUDED_KEY: CONCLUSION_KIND}
@@ -2396,6 +2399,24 @@ def _load_write_optional(values: dict) -> dict:
 
 
 WRITE_OPTIONAL = _load_write_optional(roster_map("write_optional", "values"))
+
+
+# B24.25 (EVID_B edit 4, ADM edit 3): THE VERBS THAT FILE WHAT THEY CITE (`rosters.yaml: filing_verbs`, read in `loop/resolve.py::_admits`; `speak`). REFUSED AT IMPORT when a member
+# names a verb the table lacks or one whose row writes no `Record.stages`: a refusal for cites that no stage the verb writes could carry would guard nothing.
+def _load_filing_verbs(values) -> frozenset:
+    """`rosters.yaml: filing_verbs`' `values`, checked and frozen -- refused per member (above). A function, so a test can plant a bad line and watch it refuse."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or "Record.stages" not in row.writes:
+            raise Forbidden(
+                f"`rosters.yaml: filing_verbs` names {v!r}, and the verb table carries no such verb or its row writes no `Record.stages`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose row writes `Record.stages` (the case file a filing is written on)",
+                law="B24.25 -- an item is filed on the case file by the speech that cites it; a row that writes no stage files nothing")
+    return out
+
+
+FILING_VERBS = _load_filing_verbs(roster("filing_verbs"))
 
 
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own

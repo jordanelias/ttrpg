@@ -14,7 +14,8 @@ from dataclasses import replace
 from ..decision import options as OP
 from ..queries import person_q, world_q
 from ..seam.wrappers import sigma
-from ..state.carriers import Claim
+from ..data import verbs as _verbs
+from ..state.carriers import Act, Claim, Said
 
 CELL = "stores.level"                       # a cell predicate (`requires.CELL_STEMS`)
 
@@ -242,3 +243,136 @@ def test_the_case_file_is_the_proofs_of_a_docketed_matter_and_the_ledger_is_not(
     assert dict(_module().obstacle(ledger_inp)[1]) == dict(_module().obstacle(case_inp)[1]), "the exhibits are leverage, never an obstacle term"
     assert case_out["leverage"] - case_inp.leverage == levels_to_net_sigma(["minor"] * 2, ["minor"]) == 0.25    # what the roll applied is what the record names
     assert ledger_out["leverage"] == ledger_inp.leverage
+
+
+# ---- B24.25: a citing `speak` files its items, and an answering one answers them (EVID_B edit 4; gates 1 to 3) ---------------------------------------------------
+
+def _filing_world(seed, arm="case_file"):
+    from .test_sc_hearing_admission import hearing
+    return hearing(seed, arm)
+
+
+def test_three_filed_items_give_three_proof_levels_and_no_obstacle_change():
+    """EVID_B gate 1, on `build_hearing`: the accuser files two firsthand deed claims and a Record by ONE speech that grades `Success` or better (the seeds whose band does, read off the real fold): three `filed`
+    stages; at close the roll's `proofs` levels are three for him and none against, and the obstacle terms equal those with nothing filed (A-25: items are leverage, never an obstacle term); each
+    present hearer holds the told copies of the two claims with the accuser on the chain. FALSIFIER: an obstacle that moves with the filing, or two levels for three items."""
+    from engine.dice_engine.sigma_leverage import levels_to_net_sigma
+    from .test_sc_hearing_admission import DEED, G, OTHER_DEED, cite, fold_and_witness, hearers, records_of
+    roll, checked = importlib.import_module("modules.social_contest.roll"), 0
+    for seed in range(200):
+        w, d, case = _filing_world(seed)
+        w.persons[G.ACCUSER].ledger.append(Claim("c_deed2", G.ACCUSER, G.ACCUSED, OTHER_DEED, True, 0, "firsthand", 100, "own"))
+        read = lambda: sigma.contest_input(w, [G.ACCUSER, G.ACCUSED], verb="arrest", subject=G.ACCUSED, room=world_q.place_of(w, G.ACCUSER))
+        bare = dict(roll.obstacle(read())[1])
+        out = fold_and_witness(w, d, cite(w, ("c_deed", "c_deed2", records_of(w, G.ACCUSER)[0])))
+        if out[0].degree not in ("Success", "Overwhelming"):
+            continue
+        inp = read()
+        assert len([s for s in w.records[case].stages if s[1] == "filed"]) == 3 and len(inp.exhibits) == 3, seed
+        assert roll.proof_levels(inp) == (3, 0) and roll.leverage(inp) == levels_to_net_sigma(["minor"] * 3, []) and dict(roll.obstacle(inp)[1]) == bare, seed
+        told = [c for p in hearers(w) for c in w.persons[p].ledger if c.source == "told_by" and c.predicate in (DEED, OTHER_DEED)]
+        assert told and all(c.chain[0] == G.ACCUSER for c in told), (seed, told)
+        checked += 1
+    assert checked >= 20, checked
+
+
+def _answered(seed, answer_to, planted, held, key="ans0"):
+    """The accuser answers a stage the ACCUSED planted (an `against` item: the accused's own `speak` is refused today, so the answering side is the accuser's, which the rule treats alike): `planted` are
+    the accused's stages appended before the answer, `held` the claims the accuser holds, `answer_to` the claims cited and the stage places answered. Returns `(world, case, events, items)`."""
+    from .test_sc_hearing_admission import G, fold_and_witness
+    w, d, case = _filing_world(seed)
+    w.records[case].stages.extend(planted)
+    w.persons[G.ACCUSER].ledger.extend(held)
+    cites, places = answer_to
+    ledger = {c.id: c for c in w.persons[G.ACCUSER].ledger}
+    act = Act(id=key, actor=G.ACCUSER, verb="speak", payload={"subject": G.ACCUSED, "cites": cites, "answers": places,
+                                                              "cited": {i: Said(ledger[i].subject, ledger[i].predicate, ledger[i].value, ledger[i].confidence, ledger[i].chain) for i in cites}})
+    out = fold_and_witness(w, d, act)
+    return w, case, out, sigma._exhibits_of(w, case)
+
+
+def test_an_answer_strikes_by_its_band_in_a_share_strictly_between_0_and_1():
+    """EVID_B gate 2 and FI_05_B (b), over 200 seeds of the real fold: the accused's filed claim `deed = True` (planted) is answered by the accuser's held `deed = False` (an `answers` act; the answered
+    item stands at `Failure`, both halve at `Partial`, it is struck at `Success` and `Overwhelming`). All four bands occur; the struck share is strictly between 0 and 1; the answering speech's own item is
+    EXCLUDED at `Failure` by the band that failed it (no exhibit), and the target's `answered_band` is the answering act's own `Event.degree`, read and never regraded. FALSIFIER: an answer that strikes at
+    `Failure`, or at no band, or in every run."""
+    from .test_sc_hearing_admission import DEED, G
+    ev = _ev()
+    planted = [(1, "filed", "against", "fact", Said(G.ACCUSED, DEED, True, 100), 1.0, G.ACCUSED, "a0")]
+    seen, struck, checked = {}, 0, 0
+    for seed in range(200):
+        w, case, out, items = _answered(seed, (("c_deny",), (3,)), planted, [Claim("c_deny", G.ACCUSER, G.ACCUSED, DEED, False, 0, "firsthand", 100, "own")])
+        band = out[0].degree
+        target = items[0]
+        assert target.answered_band == band and target.id == f"{case}#3", (seed, band, items)
+        held, gone, _faults = ev.standing(tuple(items), (), 2.0)
+        weights = {i.id: i.weight for i in held}
+        if band == "Failure":
+            assert len(items) == 1 and weights == {target.id: 1.0}, (seed, items)                  # the answer's item was excluded, the target stands whole
+        elif band == "Partial":
+            assert weights[target.id] == 0.5 and gone == (), (seed, weights)                       # both halved
+        else:
+            assert gone == (target.id,) and target.id not in weights, (seed, band, gone)
+        seen[band] = seen.get(band, 0) + 1
+        struck += bool(gone)
+        checked += 1
+    assert checked == 200 and set(seen) == {"Failure", "Partial", "Success", "Overwhelming"} and 0 < struck < 200, (seen, struck)
+
+
+def test_an_impeachment_strikes_origin_wide_only_at_overwhelming():
+    """EVID_B gate 3 and FI_05_B (c): the accused's filed Record (a forgery) counts like any Record until answered (`standing` holds it whole, weight 1); the examiner, holding the finding
+    `(record, record.forged, True)`, answers it by an `answers` speech that cites the finding: over 200 seeds all four bands occur, and the Record is struck in a share strictly between 0 and 1 --
+    `Failure` it stands and its impeacher bears `failed_impeachment`, `Partial` it is halved, `Success` it alone is struck, `Overwhelming` it and every item of its origin are struck and `forgery_found`
+    is recorded against the side that filed it. FALSIFIER: an origin-wide strike at `Success`."""
+    from .test_sc_hearing_admission import G, records_of
+    ev = _ev()
+    seen, struck, checked = {}, 0, 0
+    for seed in range(200):
+        w0, _d0, _c0 = _filing_world(seed)
+        rec = records_of(w0, G.ACCUSED)[0]
+        planted = [(1, "filed", "against", "fact", rec, 1.0, "o_forger", "a0"), (1, "filed", "against", "fact", Said(G.ACCUSED, CELL, 3, 100), 1.0, "o_forger", "a0")]
+        w, case, out, items = _answered(seed, (("c_found",), (3,)), planted, [Claim("c_found", G.ACCUSER, rec, "record.forged", True, 0, "firsthand", 100, "own")])
+        band, record = out[0].degree, items[0]
+        assert record.forged_found and record.answered_band == band and not items[1].forged_found, (seed, items)
+        before, _g, _f = ev.standing(tuple(replace(i, answered_band=None, forged_found=False) for i in items), (), 2.0)
+        assert {i.id: i.weight for i in before if i.side == "against"} == {record.id: 1.0, items[1].id: 1.0}, seed       # a forgery counts, as a true Record does, until it is answered
+        held, gone, faults = ev.standing(tuple(items), (record.id,), 2.0)
+        if band == "Failure":
+            assert gone == () and ("failed_impeachment", "for") in faults, (seed, gone, faults)
+        elif band == "Partial":
+            assert gone == () and {i.id: i.weight for i in held}[record.id] == 0.5, (seed, gone)
+        elif band == "Success":
+            assert gone == (record.id,), (seed, gone)                                              # the Record alone
+        else:
+            assert set(gone) == {record.id, items[1].id} and ("forgery_found", "against") in faults, (seed, gone, faults)
+        seen[band] = seen.get(band, 0) + 1
+        struck += bool(gone)
+        checked += 1
+    assert checked == 200 and set(seen) == {"Failure", "Partial", "Success", "Overwhelming"} and 0 < struck < 200, (seen, struck)
+
+
+def test_a_same_side_contradicting_cite_is_refused_at_filing():
+    """EVID_B rule 2's filing refusal: a `speak` whose cite contradicts an item already standing for the citer's OWN side is refused BEFORE THE DRAW -- the row's refusal kind, no band, no stage -- and so is
+    one that cites two claims that contradict each other. The same cell with the same value is no contradiction (it is agreement) and files; the other side's contradicting item is an answer, not a refusal.
+    FALSIFIER: the refused speech draws a band or writes a stage."""
+    from .test_sc_hearing_admission import DEED, G, cite, fold_and_witness
+    refusal = _verbs.VERB_TABLE["speak"].emits_on_refusal
+    planted = (1, "filed", "for", "fact", Said(G.ACCUSED, DEED, True, 100), 1.0, G.ACCUSER, "a0")
+    checked = 0
+    for seed in range(20):
+        w, d, case = _filing_world(seed)
+        w.records[case].stages.append(planted)
+        w.persons[G.ACCUSER].ledger.append(Claim("c_no", G.ACCUSER, G.ACCUSED, DEED, False, 0, "firsthand", 100, "own"))
+        n = len(w.records[case].stages)
+        out = fold_and_witness(w, d, cite(w, ("c_no",)))
+        assert tuple(e.kind for e in out) == refusal and out[0].degree is None and len(w.records[case].stages) == n, (seed, out)
+        w2, d2, case2 = _filing_world(seed)                                                          # two cites that contradict one another
+        w2.persons[G.ACCUSER].ledger.append(Claim("c_no", G.ACCUSER, G.ACCUSED, DEED, False, 0, "firsthand", 100, "own"))
+        out2 = fold_and_witness(w2, d2, cite(w2, ("c_deed", "c_no")))
+        assert tuple(e.kind for e in out2) == refusal and out2[0].degree is None, (seed, out2)
+        w3, d3, case3 = _filing_world(seed)                                                          # the same cell and value agrees: not refused
+        w3.records[case3].stages.append(planted)
+        out3 = fold_and_witness(w3, d3, cite(w3, ("c_deed",)))
+        assert out3[0].degree is not None and out3[0].kind not in refusal, (seed, out3)
+        checked += 1
+    assert checked == 20

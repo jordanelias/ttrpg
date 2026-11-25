@@ -39,6 +39,7 @@ live runs that every logged Event anchors, with a population floor so an empty l
 from typing import TYPE_CHECKING, Optional
 
 from ..data.rosters import COVER_AS, COVER_KEY, COVER_KIND
+from .carriers import is_clock_stage
 
 if TYPE_CHECKING:                       # pragma: no cover
     from .carriers import Event
@@ -207,7 +208,7 @@ def a_stage_unmatured(w, rec) -> bool:
         return False
     if not rec.matured:
         return True
-    if any(isinstance(st, tuple) and len(st) >= 3 and st[0] > w.tick for st in stages):
+    if any(is_clock_stage(st) and st[0] > w.tick for st in stages):
         return True
     return matured_terms(w, rec.id, stop=len(stages)) < len(stages)
 

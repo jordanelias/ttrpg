@@ -21,6 +21,7 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
+    DEGREE_STEP, task_share,
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_AS, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
     ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
@@ -28,12 +29,12 @@ from ..data.rosters import (
 from ..gaps import Forbidden
 from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ArmyCommand, Outcome, exchanges
+from ..queries.inputs import ANSWERED_STAGE, EXCLUDED_STAGE, FILED_STAGE, ArmyCommand, Outcome, exchanges
 from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
-    case_file_of, faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
+    case_file_of, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
@@ -704,6 +705,48 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         if case is not None:
             w.records[case].stages = [*w.records[case].stages, *listed]
     return Change(subjects, perform)
+
+
+@effect_for("speak")
+def _eff_speak(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B24.25 (EVID_B "Exact edits" 4 with ADM edit 3) -- THE CITING SPEECH FILES ITS ITEMS BY ITS OWN BAND, on the case file the docket item names (`world_q.case_file_of`). Writes
+    `(Record, stages)` at all four bands, `Failure` too, since `Failure` writes the `excluded` stage. No second roll: the band is the one the speech drew (`seam/ladder.py::degree_of`).
+
+        Failure        every cited item `(tick, "excluded", side, ref, act)` -- the room heard it said and the bench did not take it; no exhibit, so no `proofs` level (the told copy the
+                       told channel deposits is `witness.py`'s and fires at every band)
+        Partial        `(tick, "filed", side, rung, ref, weight x its share, origin, act)`, the share the band's `task_fraction` (one half): entered contested
+        Success        the same at its derived weight
+        Overwhelming   the same at its derived weight, with the ninth cell `True`: first heard (`inputs.is_first`; B24.26 reads it)
+
+    AN `answers` ACT also writes `(tick, "answered", target, band, impeached, act)` for each stage it names, at every band: the band is the target's `answered_band`, which the host reads when it builds
+    the exhibits (`sigma._exhibits_of`) and which `evidence.standing` acts on; the band decides the answer, and the answering speech's OWN items are entered or excluded by the same band (a failed answer
+    does not enter the item it cited). What may be cited, what each weighs and what each answers is `world_q.filings`'s, read before the draw, so no refusal reaches here.
+
+    Declines (`NO_CHANGE`) where the act cites and answers nothing -- every computed `speak` today -- or the matter names no case file: `rosters.yaml: write_optional` lists the verb, so the fold
+    answers it by the band's own kind and not as a refusal, and the speech is the Event it always was. `res` is `None` only for a hand-built call with no contest: the full share, no `answered` stage.
+    G4 -- WHAT IT NAMES: THE CASE FILE, `fields=("stages",)`, earning the band's own kind (the speech's `emits:` at its band), as `determine`'s listed exchange does."""
+    f = filings(w, a)
+    if f.refused is not None or f.case is None:
+        return NO_CHANGE
+    band = res.degree if res is not None else None
+    share = task_share(band)
+    top = max(DEGREE_STEP, key=DEGREE_STEP.get)
+    new = []
+    for it in f.items:
+        if not share:
+            new.append((w.tick, EXCLUDED_STAGE, f.side, it.ref, a.id))
+        else:
+            st = (w.tick, FILED_STAGE, f.side, it.rung, it.ref, it.weight * float(share), it.origin, a.id)
+            new.append(st + (True,) if band == top else st)
+    if band is not None:
+        new.extend((w.tick, ANSWERED_STAGE, idx, band, impeached, a.id) for idx, impeached in f.answers)
+    if not new:
+        return NO_CHANGE
+    earns = VERB_TABLE[a.verb].emits_at(band)[0] if band is not None else None
+
+    def perform() -> None:
+        w.records[f.case].stages = [*w.records[f.case].stages, *new]
+    return Change((Subject.entity("records", f.case, earns=earns, fields=("stages",)),), perform)
 
 
 @effect_for("argue")

@@ -8544,6 +8544,19 @@ rows:
     cite:      "EVID_B 'Exact edits' 5. [ASSUMPTION: a switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line] [ASSUMPTION: the sweep's third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: the register's R2 refuses fewer than 3 DISTINCT points]. CONTROL: at `ledger` the realm hashes at seeds 0 to 2 read equal to B24.22's. FALSIFIER: `engine/season/tests/test_sc_hearing_evidence.py::test_the_case_file_is_the_proofs_of_a_docketed_matter_and_the_ledger_is_not` (a matter whose case file holds one filed item rolls with that item's level and none from its ledger at `case_file`; the same world at `ledger` rolls the ledger's) and `python tools/ci_sim_fabrication_check.py`."
     source:    "workplan v12 B24.21 (EVID_B 'Exact edits' 5; B24's H block slot 7)"
 
+  - id:        H-668
+    tier:      1
+    hole:      "THE OBSTACLE AN ANSWER TO A FIRST-HEARD ITEM ADDS -- `first_heard_ob` (ADM 'The resolution, decided'): a speech that cites and grades `Overwhelming` enters its items at full weight and MARKS THEM first heard (`queries/inputs.py::is_first`, the ninth cell of the `filed` stage), and an answer to a marked item adds `first_heard_ob` to its own obstacle (OBS §2 member 11), a hostile term only. It gives the top band a reason to exist in the room without making any item unanswerable: an answer at its own `Success` still strikes it. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.first_heard_ob` the one home. READER: none at B24.25; B24.26 reads it where an answer's obstacle is built (the sitting's `answer`, and the answering `speak`'s host builder)"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL, SHIPPED at B24.25 [ASSUMPTION; Jordan to correct; revert: 0]: a first-heard item is no harder to answer, so every roll and every hash is what it was. ADM proposes 1, which B24.37 sets"
+    site:      "Fixtures first_heard_ob, read by nothing at B24.25; B24.26's `answer` reads it through `Input.dials` and the answering `speak`'s builder reads it off the filed stage's first mark"
+    sweep:     [0, 1, 2]
+    unblocks:  "the top band of a filing meaning something in the room (R-04.c3), and B98's sweep of the term"
+    cite:      "ADM 'The resolution, decided' (`proposals/2026-11-12-subsystem-audit-suite/proposals/19_LACUNA_admission_rides_the_citing_draw.md`): `first_heard_ob` proposed 1, three-point sweep 0 / 1 / 2, control 0. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.24's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row; `engine/season/tests/test_sc_hearing_admission.py` observes the first-heard mark at the top band only."
+    source:    "workplan v12 B24.25 (ADM edit 3; B24's H block slot 8)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

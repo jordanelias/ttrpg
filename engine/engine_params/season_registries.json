@@ -4155,10 +4155,16 @@
         },
         "write_optional": {
           "source": "B21.57 (`IS-B3-FA-05`, CP-T09-08; ruling A-24 -- *the man's going is his own answer*): `comply` is the act that relocates the man a `dispatch` ordered, and it is also the answer to every other writ, which names nothing to perform.",
-          "note": "WHICH VERBS MAY LAWFULLY WRITE NOTHING, AND WHAT THEY EMIT WHEN THEY DO -- a map `verb: [Event kind, ...]`. A writing row whose effect declines (`NO_CHANGE`) is REFUSED at the fold (`loop/resolve.py::_fold`, F9: a success Event for a write that did not happen is `ID-9`); a verb listed here is the one kind of row whose decline is not a failure, because the act it is also is answered without a write: `comply` on a writ that names no place is the answer given, `compliance.given`, with nothing to go to. Read in `_fold` beside the `NoOpReceipt` it catches, which then emits exactly the kinds listed (never the kinds the write earns, which did not happen). ONE LOADER, `data/verbs.py::WRITE_OPTIONAL`, refused at import when a member names a verb the table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused `compliance.impossible`, and `comply`'s write is `[]` again.]",
+          "note": "WHICH VERBS MAY LAWFULLY WRITE NOTHING, AND WHAT THEY EMIT WHEN THEY DO -- a map `verb: [Event kind, ...]`. A writing row whose effect declines (`NO_CHANGE`) is REFUSED at the fold (`loop/resolve.py::_fold`, F9: a success Event for a write that did not happen is `ID-9`); a verb listed here is the one kind of row whose decline is not a failure, because the act it is also is answered without a write: `comply` on a writ that names no place is the answer given, `compliance.given`, with nothing to go to. Read in `_fold` beside the `NoOpReceipt` it catches, which then emits exactly the kinds listed (never the kinds the write earns, which did not happen). ONE LOADER, `data/verbs.py::WRITE_OPTIONAL`, refused at import when a member names a verb the table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused `compliance.impossible`, and `comply`'s write is `[]` again.] B24.25: `speak` is listed beside it, with the four kinds its bands emit. A speech that cites nothing (every computed `speak` until B24.27) files no stage, so its `(Record, stages)` write declines and the speech is answered as it was, by its band's own kind -- `emits_at` still picks the one the band declares.",
           "values": {
             "comply": [
               "compliance.given"
+            ],
+            "speak": [
+              "matter.carried",
+              "matter.advanced",
+              "matter.held",
+              "matter.turned"
             ]
           }
         },
@@ -4167,6 +4173,13 @@
           "note": "WHICH VERBS SAY A FALSE VALUE OF A CLAIM THE SPEAKER HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): a listed row copies `queries/person_q.py::lie_said_of` onto the Act where an unlisted row copies `said_of`, and is formed only while `Fixtures lie_offered` is True. The roster names the verb and the loader VALIDATES it against the row's typed cell: no verb name is spelt in code. ONE LOADER, `data/verbs.py::LIE_VERBS`, refused at import when a member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the `lie` row, its alignment cells and `lie_offered`.] B10.61 READING, KEPT: it is a setting, not a decline (it picks the false-value reader and gates `lie` on `lie_offered`). Without it `lie` forms on 2405, 2394 and 2606 more (person, question) pairs at seeds 0-2 and carries the claim as held, not a false value, on 1858, 1828 and 1884 others (191 pairs at lap 0 on each seed).",
           "values": [
             "lie"
+          ]
+        },
+        "filing_verbs": {
+          "source": "B24.25 (EVID_B \"Exact edits\" 4, ADM edit 3): the speech that puts held items on a matter's case file.",
+          "note": "WHICH VERBS FILE THE ITEMS THEY CITE -- a list of verbs. A listed verb's act may carry `cites` (held claim ids and Record ids) and `answers` (the filed stages it answers), and `loop/resolve.py::_admits` refuses it BEFORE THE DRAW when a cite is not held, is of a kind the matter's row does not admit, or contradicts an item already standing for the citer's own side, or an answer names no filed stage of the other side (`queries/world_q.py::filings`, the one reader); the verb's effect then writes the case file's stages by the speech's own band (`queries/inputs.py`: `filed`, `excluded`, `answered`). ONE LOADER, `data/verbs.py::FILING_VERBS`, refused at import when a member names a verb the table lacks or one whose row writes no `Record.stages`. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and no act is refused for its cites; the stage writes stay, filing nothing.]",
+          "values": [
+            "speak"
           ]
         },
         "army_verbs": {
@@ -4631,7 +4644,7 @@
         "proof_kind_of_source": {
           "source": "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it",
           "from_roster": "claim_sources",
-          "note": "THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`). [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath; what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four. Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]",
+          "note": "THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`). B24.25: THIS IS THE LEDGER ARM'S MAPPING (`evidence_from: ledger`, the control: `world_q.proofs`' filter, `sigma._items_of`, `dossier`); what a citing speech files is admitted by `queries/person_q.py::proof_kind`, the kind derived from the claim itself, which disagrees here (a `told_by` claim is `record` below, `testimony` there) and is the reader the case file's exhibits follow. The roster stays while the ledger arm does. [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath; what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four. Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]",
           "proof_kind": {
             "firsthand": "testimony",
             "firsthand_via_knot": "oath",
@@ -9455,12 +9468,20 @@
           "subject_may_be_self": true,
           "subject_may_be_self_note": "v10 CP-T05-02 (iii) (AM-D-02) [ASSUMPTION; medium; Jordan to correct; revert: remove the column]. THE ACCUSED ANSWERS: a person docketed, holding the docketing claim, forms `speak {subject: himself}` -- the self-plea. Waives `decision/options.py::opening_set`'s self-subject decline for this row alone (the loader admits the column only on a row contested against its subject, `VerbRow.opponent_operand() == 'subject'`). It is NOT `counterparty_may_be_self` (`confer`), which waives the counterparty operand's self-exclusion. A DECLARED MOVER of every world in which a docketed party is offered his own matter.",
           "writes": {
-            "Overwhelming": [],
-            "Success": [],
-            "Partial": [],
-            "Failure": []
+            "Overwhelming": [
+              "Record.stages"
+            ],
+            "Success": [
+              "Record.stages"
+            ],
+            "Partial": [
+              "Record.stages"
+            ],
+            "Failure": [
+              "Record.stages"
+            ]
           },
-          "writes_note": "\u26a0 EMPTY AT EVERY BAND, AND THE DESIGN'S ROW IS NOT, SO THIS IS A STOP, NOT A READING (v9 SC-01 step 12; the measurement is `hole_register.yaml` `H-63`'s step-12 clause). `04_VERBS.md` \u00a7B.1 writes `Person.stance` on `Overwhelming`/`Success`/`Failure` (the SPEAKER's own, (ix)) and `DocketItem.matter` on `Partial` (*the docket grows*, (vii)). NEITHER IS BUILT: (1) the stance write names no VALUE -- no referent, sign or weight (`H-63`: Part E names the cell, never the value; `march`'s `(faction, -1.0, w)` rows are a different act's); (2) `Partial`'s append has NO CARRIER the gate can receipt -- `World.docket` is a SEQUENCE with no `get()` (`state/gate.py`), and `Partial` writes nothing else to ride on -- and no operand names WHAT is docketed (*the speaker's operand*, `21_RECONCILIATION.md:576`). Building three bands' writes and not the fourth would make `Partial` the empty middle band \u00a7B.1 (vii) rejects, so all four write nothing, `tell`'s precedent (a contest whose product is a deposit at WITNESS), and `_eff_speak` does not exist (the plan builds it only for a non-empty `writes:`). Each band still leaves the room in a different place: what it emits is witnessed, so hearers hold which way the matter went. Revert: the row before SC-01 step 12 (above).",
+          "writes_note": "B24.25 (EVID_B edit 4 with ADM edit 3; `loop/effects_information.py::_eff_speak`): `Record.stages` AT ALL FOUR BANDS, because the band that decides a citing speech's items is its own, and `Failure` writes the `excluded` stage. The speech files what it cites on the matter's case file by its band: `Failure` an `excluded` stage and no exhibit, `Partial` a `filed` stage at the half weight `task_fraction` gives that band, `Success` one at its derived weight, `Overwhelming` one at its derived weight with the first-heard mark; an `answers` act adds an `answered` stage naming the band it drew (`queries/inputs.py` owns the shapes). A speech that cites and answers nothing, or whose matter has no case file, writes nothing: `rosters.yaml: write_optional` lists the verb, so the decline is answered by the band's own kind and not refused. The two stances' writes below are STILL NOT BUILT, as the older note says. OLDER NOTE, KEPT: \u26a0 EMPTY AT EVERY BAND, AND THE DESIGN'S ROW IS NOT, SO THIS WAS A STOP, NOT A READING (v9 SC-01 step 12; the measurement is `hole_register.yaml` `H-63`'s step-12 clause). `04_VERBS.md` \u00a7B.1 writes `Person.stance` on `Overwhelming`/`Success`/`Failure` (the SPEAKER's own, (ix)) and `DocketItem.matter` on `Partial` (*the docket grows*, (vii)). NEITHER IS BUILT: (1) the stance write names no VALUE -- no referent, sign or weight (`H-63`: Part E names the cell, never the value; `march`'s `(faction, -1.0, w)` rows are a different act's); (2) `Partial`'s append has NO CARRIER the gate can receipt -- `World.docket` is a SEQUENCE with no `get()` (`state/gate.py`), and `Partial` writes nothing else to ride on -- and no operand names WHAT is docketed (*the speaker's operand*, `21_RECONCILIATION.md:576`). Building three bands' writes and not the fourth would make `Partial` the empty middle band \u00a7B.1 (vii) rejects, so all four write nothing, `tell`'s precedent (a contest whose product is a deposit at WITNESS), and `_eff_speak` does not exist (the plan builds it only for a non-empty `writes:`). Each band still leaves the room in a different place: what it emits is witnessed, so hearers hold which way the matter went. Revert: the row before SC-01 step 12 (above).",
           "emits": {
             "Overwhelming": [
               "matter.carried"

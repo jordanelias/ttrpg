@@ -1,7 +1,7 @@
 """v9 SC-01 step 12 -- `speak` (`workplans/valoria_master_workplan_v9_part6.md` §SC-01, the CARRIED
-block's *Step 12*): a typed cell, `contests: "a matter"`, four bands. `_eff_speak` only if `writes:` is
-non-empty -- and it is empty at every band (the row's `writes_note` and `H-63`'s step-12 clause say why),
-so no effect exists and none is asserted.
+block's *Step 12*): a typed cell, `contests: "a matter"`, four bands. B24.25: `writes:` is `Record.stages` at every
+band and `_eff_speak` files what a speech cites by its band (`test_sc_hearing_admission.py`); a speech that cites nothing
+writes nothing, as it did when `writes:` was `[]` at every band (H-63's step-12 clause).
 
 WHAT IS BUILT, each asked of the real loader, the real fold and the real seam on a HAND-BUILT world
 (`probes.tiny_world`: `p_high` holds `off_duke`; `p_low`, `p_mid` live in `Hh`):
@@ -74,8 +74,9 @@ def test_sc01_s12_speak_is_a_typed_contested_cell_with_four_ladder_bands():
     # Each band reports its own outcome: four bands, four distinct kinds, no kind shared.
     kinds = [tuple(row.emits_at(b)) for b in sorted(BANDS)]
     assert len(set(kinds)) == 4 and all(len(k) == 1 for k in kinds), kinds
-    # `writes:` is empty at every band, so no effect is registered (the row's `writes_note`).
-    assert row.writes == () and "speak" not in EFFECTS
+    # B24.25: `writes:` is the case file's stages at every band (the citing speech files by its band; `Failure` writes the `excluded` stage) and the effect is registered; a speech that cites nothing
+    # writes nothing, `write_optional` (`test_sc01_s12_a_speak_writes_nothing_and_leaves_the_docket_as_it_was`).
+    assert set(row.writes) == {"Record.stages"} and all(row.writes_by_degree[b] == ["Record.stages"] for b in BANDS) and "speak" in EFFECTS
     # A refusal is the cell's one kind; the party-gap refusal emits the same union.
     assert row.emits_on_refusal == ("speech.unheard",), row.emits_on_refusal
     # The prize routes to a registered provider, so the verb is resolvable. Interim at step 12; steps 13

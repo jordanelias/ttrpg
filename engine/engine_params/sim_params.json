@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 133,
-    "total": 533,
-    "uncited": 400,
+    "total": 535,
+    "uncited": 402,
     "of_which_assumption_grade": 9
   },
-  "count": 533,
+  "count": 535,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 41,
+    "engine.season": 42,
     "mass_battle": 160,
     "social_contest": 32,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 226,
+    "engine.season.settings": 227,
     "engine.season.realm": 8
   },
   "params": [
@@ -659,6 +659,17 @@
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/queries/world_q.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.CLOCK_STAGE_CELLS",
+      "name": "CLOCK_STAGE_CELLS",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/state/carriers.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -6540,6 +6551,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-667`, swept ledger (control, SHIPPED) / case_file / case_file with `evidence_cap` 3.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.first_heard_ob",
+      "name": "first_heard_ob",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-668`, swept 0 (control, SHIPPED) / 1 (ADM's proposed value) / 2",
       "citation": null,
       "citation_grade": null
     },

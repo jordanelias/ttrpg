@@ -427,6 +427,33 @@ UNWRITTEN = {"Beat": ("terms", "entered", "struck", "fault"), "Sitting": ("board
 EXCHANGE_CELLS = ("entered", "struck")
 
 
+# B24.25 -- THE STAGES A CITING SPEECH WRITES ON A CASE FILE, beside the sitting's two-cell exchange stages above (the ONE OWNER of the shapes; `loop/effects_information.py::_eff_speak`
+# writes them, `seam/wrappers/sigma.py::_exhibits_of` reads them; none is a clock stage, `state/carriers.py::is_clock_stage`):
+#   `(tick, "filed", side, rung, ref, weight, origin, act)` -- an item the room took, `ref` the cited claim as the citer said it (a `Said`) or the id of the cited Record, `weight` what it was
+#       entered at (its derived weight times the speech band's share), `origin` the root of its chain; the 9-cell form adds a ninth, `True`, at the top band only (the first-heard mark, B24.26);
+#   `(tick, "excluded", side, ref, act)` -- an item the room did not take (the speech's band entered nothing): the record an appeal cites, and no exhibit;
+#   `(tick, "answered", target, band, impeached, act)` -- an answering speech against the filed stage at index `target`: `band` the speech's own band (the target's `answered_band`) and
+#       `impeached` whether the speech cited a finding that the Record is forged (the target's `forged_found`).
+FILED_STAGE, FILED_CELLS, FIRST_CELLS = "filed", 8, 9
+EXCLUDED_STAGE, EXCLUDED_CELLS = "excluded", 5
+ANSWERED_STAGE, ANSWERED_CELLS = "answered", 6
+
+
+def is_filed(st) -> bool:
+    """IS `st` A FILED STAGE (an exhibit): a tuple of `FILED_CELLS` cells, or `FIRST_CELLS` with the first-heard mark, labelled `FILED_STAGE`."""
+    return isinstance(st, tuple) and len(st) in (FILED_CELLS, FIRST_CELLS) and st[1] == FILED_STAGE
+
+
+def is_first(st) -> bool:
+    """DID THE ROOM HEAR THIS FILED STAGE FIRST -- the mark a top-band speech writes (`FIRST_CELLS`)."""
+    return is_filed(st) and len(st) == FIRST_CELLS and bool(st[-1])
+
+
+def is_answered(st) -> bool:
+    """IS `st` AN ANSWERED STAGE: a tuple of `ANSWERED_CELLS` cells labelled `ANSWERED_STAGE`."""
+    return isinstance(st, tuple) and len(st) == ANSWERED_CELLS and st[1] == ANSWERED_STAGE
+
+
 def exchanges(beats) -> tuple:
     """B24.14 -- THE EXCHANGE LIST OF A SITTING: `((kind, item id), ...)`, one for each item a beat entered or struck, in the beats' order and within a beat
     in `EXCHANGE_CELLS` order. The one owner of the list: `loop/resolve.py::_proceeding_ending` carries it on the Event's `ending` and

@@ -668,8 +668,9 @@ def proof_kind(c) -> Optional[str]:
     A Record's kind (`record`) and an edge's (`oath`, cited by its Tenure id) are the host's hold check, not a claim's, so this reader never answers them.
     [ASSUMPTION: E-1's "about its own subject" is not tested -- the claim carries no second subject to compare, so a `confession.*` deed is `confession` wherever held; `world_q.proofs`
     already reads only the opponent's own deeds (`attributed_deeds`)]
-    ⚠ `rosters.yaml: proof_kind_of_source` also names a kind per claim, by SOURCE (`world_q.proofs`' admission filter, `dossier`'s `proof_kind` column): the two disagree
-    (a `told_by` claim is `record` there, `testimony` here), and which one the host's admission reads is B24.25's to decide."""
+    ⚠ `rosters.yaml: proof_kind_of_source` also names a kind per claim, by SOURCE (`world_q.proofs`' admission filter, `dossier`'s `proof_kind` column, `sigma._items_of`): the two disagree
+    (a `told_by` claim is `record` there, `testimony` here). B24.25 DECIDED: a citing speech's admission (`world_q.filings`, and so the case file's exhibits) reads THIS reader, the one derived from the
+    claim; `proof_kind_of_source` is the ledger arm's mapping (`Fixtures evidence_from: ledger`, the control) and is read by no filing."""
     if not is_deed(c):
         return None
     if not c.predicate.startswith(CONFESSION_FAMILY):

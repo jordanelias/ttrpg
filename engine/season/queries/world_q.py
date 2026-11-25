@@ -38,7 +38,7 @@ from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    MARCH_TARGET_KINDS, MATTERS, RECORD_MATTER, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
     remove_distance, require_member, require_mortal_cause,
@@ -50,7 +50,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
+    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
@@ -70,6 +70,8 @@ from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons,
 from .person_q import holders_named, vacant_named
 # v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
 from .person_q import contradicts, is_cell, record as record_of
+# B24.25: `filings` derives what a cited item is as proof, what it weighs and whether it impeaches a Record, off the one owners.
+from .person_q import impeaches, proof_kind, proof_weight, teller_weight
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -82,7 +84,7 @@ from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import (  # noqa: F401 -- re-exported
     a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
-from ..state.carriers import Person, Question, Site, Tenure
+from ..state.carriers import Person, Question, Said, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
 # which may not import this module. These names are the same function objects as `state/containment`'s.
@@ -112,7 +114,7 @@ from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
-                     ProduceInput, Sitting, SubsistInput, Under, written)
+                     ProduceInput, Sitting, SubsistInput, Under, is_filed, written)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -248,6 +250,110 @@ def case_file_of(w: World, item: dict) -> Optional[str]:
     docketed (`DOCKET_PETITION` -- a carried petition is its own case file), else `None` (a slot CALENDAR formed, a computed item). The one reader:
     nothing reads the `case` key directly. `w` is the world the id is read in; the id is not checked against `w.records` here."""
     return item.get(DOCKET_CASE) or item.get(DOCKET_PETITION)
+
+
+def docketed_row(w: World, subject: Optional[str]) -> Optional[dict]:
+    """The `arrangements.yaml` row the act's matter (its `subject`) is docketed under, or `None`: nothing docketed, an item naming no row (every
+    computed `open_case`, H-80), or more than one row on one matter (a hand-planted docket, which `_eff_determine` declines rather than choosing
+    between: absence refuses, never a guessed row). The one reader: the host's roll (`seam/wrappers/sigma.py`) and the speech that files an item (`filings`) both ask it."""
+    rows = docketed_under(w, subject)
+    (row,) = rows if len(rows) == 1 else (None,)
+    return ARRANGEMENTS.get(row) if isinstance(row, str) else None
+
+
+def admitted_kinds(fx, docketed: Optional[dict]) -> Optional[tuple]:
+    """The proof kinds the docketed row admits -- or `None` for no filter: nothing docketed, or `proof_admission` `off`. The one reader of the admission, for `proofs`' filter and for
+    the speech that files an item (`filings`)."""
+    return tuple(docketed["admits"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+
+
+def side_of(actor: str, subject: Optional[str]) -> str:
+    """The side a speech to a matter is on (`SocialContestInput.side`; the `side` of a stage a speech files): the accused's where he speaks to his own matter (the self-plea), else `for`, the
+    bearer's -- and the docket's `for` for a determiner's draw. [ASSUMPTION; Jordan to correct; revert: always `for`. Basis: `proceeding_input` seats the first claimant as `for` and the
+    matter's other party as `against`.]"""
+    return "against" if subject == actor else "for"
+
+
+#: THE CLAUSE A CITING SPEECH IS REFUSED AT (`filings`): its `cites` or `answers` cell. The row is flat, so the refusal's kind is the row's one (`speech.unheard`) and this names the clause on the Verdict.
+CITES_CLAUSE = "cites"
+
+
+class Filing(NamedTuple):
+    """ONE CITED ITEM A SPEECH FILES: `ref` what the stage carries (the citer's `Said` of a claim, or the id of a Record), `kind` the `matters` member it is as proof, `rung` the issue rung that kind
+    bears on, `weight` its derived weight before the band's share, `origin` the root of its chain."""
+    ref: object
+    kind: str
+    rung: str
+    weight: float
+    origin: str
+
+
+class Filings(NamedTuple):
+    """WHAT A CITING SPEECH PUTS BEFORE A MATTER: `case` the Record the matter's docket item names (`None` where it names none), `side` the speaker's, `items` each `Filing`, `answers` for each
+    stage answered `(index, impeached)`, and `refused` the clause the speech is refused at (`CITES_CLAUSE`) or `None`."""
+    case: Optional[str]
+    side: str
+    items: tuple
+    answers: tuple
+    refused: Optional[str]
+
+
+def filings(w: World, a) -> Filings:
+    """B24.25 (EVID_B "Exact edits" 4; FI_05_B E-1, E-2; ADM) -- WHAT AN ACT THAT CITES OR ANSWERS FILES, AND WHETHER IT MAY BE ATTEMPTED AT ALL. The ONE READER: `loop/resolve.py::_admits` refuses
+    on `refused` BEFORE THE DRAW, and `loop/effects_information.py::_eff_speak` writes the stages from `items` and `answers`, so what was admitted is what is written.
+    `Act.payload["cites"]` is ids only (E-1), each a `Claim` in the actor's OWN ledger or a Record he holds (a live `hold`), refused otherwise, and refused where its kind is not one the matter's row
+    admits (`proof_kind` for a claim, the Record's `matters` carrier for a Record; `admitted_kinds`), and refused where it contradicts an item already standing for the actor's own side or another cite of
+    the same act (rule 2, the filing refusal). A claim's stage carries the `Said` the act carries for it (`CITED_KEY`, copied at CHOOSE) else one read off his own ledger (F8: no other person's is opened);
+    its weight is `proof_weight` times how much the actor's own ledger weighs it (`teller_weight`, the hop discount of a told one), a Record's 1; its origin the root of the claim's chain, else the actor
+    (a firsthand claim is his own), else the Record itself. `answers` are the places of filed stages of the OTHER side, each `impeached` where a cite is a held finding that the answered Record is forged
+    (`person_q.impeaches`).
+    [ASSUMPTION; Jordan to correct; revert: refuse a claim `proof_kind` has no kind for, always -- basis: an ANSWER cites a claim of the same cell and a different value, which is no deed, so its kind is
+    `None`; one that answers is read as `testimony`, one that does not is refused as no proof (a withheld confession, B24.23, among them)]
+    [ASSUMPTION: a Record's origin is the Record itself -- the tree carries no maker for one to name -- and a cited oath edge has no stage shape, so a cite that is no Record or ledger claim is refused]."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    cites, answers = d.get(CITES_KEY), d.get(ANSWERS_KEY)
+    side = side_of(a.actor, d.get("subject"))
+    if cites is None and answers is None:
+        return Filings(None, side, (), (), None)
+    refuse = Filings(None, side, (), (), CITES_CLAUSE)
+    p = w.persons.get(a.actor)
+    if p is None or not isinstance(cites if cites is not None else (), (list, tuple)) or not isinstance(answers if answers is not None else (), (list, tuple)):
+        return refuse
+    case = next((c for c in (case_file_of(w, i) for i in docketed(w, d.get("subject"))) if c in w.records), None)
+    stages = w.records[case].stages if case is not None else []
+    admits = admitted_kinds(w.fixtures, docketed_row(w, d.get("subject")))
+    answering = bool(answers)
+    own = {c.id: c for c in p.ledger}
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    cited, weigh = d.get(CITED_KEY) or {}, teller_weight(p, w.fixtures, w.tick)
+    standing = [st[4] for st in stages if is_filed(st) and st[2] == side and isinstance(st[4], Said)]       # what stands for his own side already
+    items, claims = [], []
+    for cid in dict.fromkeys(cites or ()):
+        if not isinstance(cid, str):
+            return refuse
+        if cid in own:
+            c = own[cid]
+            ref = cited.get(cid) or Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+            kind = proof_kind(ref) or ("testimony" if answering else None)
+            if kind is None or any(contradicts(ref, o) for o in (*standing, *(i.ref for i in items if isinstance(i.ref, Said)))):
+                return refuse
+            weight = (float(proof_weight(ref)) if proof_kind(ref) is not None else 1.0) * weigh(c)
+            item, claims = Filing(ref, kind, MATTERS[kind]["bears_on"], weight, ref.chain[0] if ref.chain else a.actor), [*claims, c]
+        elif cid in held and cid in w.records:
+            kind = RECORD_MATTER.get(w.records[cid].kind, "record")
+            item = Filing(cid, kind, MATTERS[kind]["bears_on"], 1.0, cid)
+        else:
+            return refuse
+        if admits is not None and item.kind not in admits:
+            return refuse
+        items.append(item)
+    marked = []
+    for idx in answers or ():
+        if not isinstance(idx, int) or isinstance(idx, bool) or not 0 <= idx < len(stages) or not is_filed(stages[idx]) or stages[idx][2] == side:
+            return refuse
+        ref = stages[idx][4]
+        marked.append((idx, isinstance(ref, str) and any(impeaches(c, ref) for c in claims)))
+    return Filings(case, side, tuple(items), tuple(marked), None)
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains

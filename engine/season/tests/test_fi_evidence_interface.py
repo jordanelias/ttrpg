@@ -124,3 +124,36 @@ def test_a_cites_payload_is_told_like_said():
     d.act_of[ev.id] = act
     d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
     assert not [c for c in w.persons[hearer].ledger if c.source == "told_by"], "a speak that cites nothing deposited a told claim"
+
+
+def test_a_cited_id_not_held_is_refused_before_the_draw():
+    """B24.25 / FI_05_B E-1 (game-state, season_loop), on `build_hearing`'s real fold: a `speak` is refused BEFORE ANY DRAW -- the row's refusal kind, `Event.degree` None, nothing on the case file -- when it cites
+    an id the speaker does not hold (a claim id nobody holds, another person's claim, a Record the other party holds), when the kind of what it cites is one the matter's row does not admit (`parliamentary_debate`
+    admits no proof; a deed claim reads `testimony`, `person_q.proof_kind`), and when it answers a stage that is no filed stage or is his own side's. The control beside each is the same speech with a held,
+    admitted cite and a stage of the other side: it draws a band and writes a stage. FALSIFIER: a refused speech that has a degree, or writes."""
+    from ..queries import world_q
+    from .test_sc_hearing_admission import DEED, G, cite, hearing, fold_and_witness, records_of
+    refusal = _verbs.VERB_TABLE["speak"].emits_on_refusal
+    checked = 0
+    for seed in range(12):
+        w, d, case = hearing(seed)
+        w.persons[G.ACCUSED].ledger.append(Claim("c_theirs", G.ACCUSED, G.ACCUSER, DEED, True, 0, "firsthand", 100, "own"))
+        n = len(w.records[case].stages)
+        for ids in (("c_nobody",), ("c_theirs",), (records_of(w, G.ACCUSED)[0],), ("c_deed", records_of(w, G.ACCUSED)[1])):
+            out = fold_and_witness(w, d, cite(w, ids, key=f"sp_{ids[-1]}"))
+            assert tuple(e.kind for e in out) == refusal and out[0].degree is None and len(w.records[case].stages) == n, (seed, ids, [(e.kind, e.degree) for e in out])
+        n_own = len(w.records[case].stages)
+        w.records[case].stages.append((1, "filed", "for", "fact", Said(G.ACCUSED, "stores.level", 1, 5), 1.0, G.ACCUSER, "a0"))
+        for places in ((0,), (99,), (n_own,)):                                                       # a clock stage, a place off the file, his own side's stage
+            out = fold_and_witness(w, d, cite(w, (), key=f"sp_ans{places[0]}", answers=places))
+            assert tuple(e.kind for e in out) == refusal and out[0].degree is None, (seed, places, [(e.kind, e.degree) for e in out])
+        # the control: a held, admitted cite files; and a row that admits no proof refuses the same deed claim
+        w2, d2, case2 = hearing(seed)
+        out = fold_and_witness(w2, d2, cite(w2, ("c_deed",)))
+        assert out[0].degree is not None and out[0].kind not in refusal and any(s[1] in ("filed", "excluded") for s in w2.records[case2].stages), (seed, out)
+        w3, d3, case3 = hearing(seed)
+        world_q.docketed(w3, G.ACCUSED)[0][world_q.DOCKET_ARRANGEMENT] = "parliamentary_debate"
+        out3 = fold_and_witness(w3, d3, cite(w3, ("c_deed",)))
+        assert tuple(e.kind for e in out3) == refusal and out3[0].degree is None and not any(s[1] in ("filed", "excluded") for s in w3.records[case3].stages), (seed, out3)
+        checked += 1
+    assert checked == 12

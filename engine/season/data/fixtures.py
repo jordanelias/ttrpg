@@ -1713,6 +1713,11 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `ledger`. A switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-667 -- `site: Fixtures evidence_from`, graded `assumption`; EVID_B gives the two arms and no document says which ships, so it is injected at the control and swept ledger / case_file / case_file at a larger `evidence_cap`]
     evidence_from="ledger",           # `H-667`, swept ledger (control, SHIPPED) / case_file / case_file with `evidence_cap` 3.0
+    # `first_heard_ob`: the obstacle an answer to an item first heard at the top band adds to its roll (B24.25, ADM "The resolution, decided": an `Overwhelming` filing is marked first heard and the answering act's
+    # obstacle reads `answer_ob + first_heard_ob` against it; OBS §2 member 11). Nothing reads it until B24.26 builds the term, so the shipped value moves no run. `0` is the control.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. ADM proposes 1 and no document derives it, so the proposed value is the sweep's middle point and the shipped one is the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-668 -- `site: Fixtures first_heard_ob`, graded `assumption`; ADM proposes 1 and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
+    first_heard_ob=0,                 # `H-668`, swept 0 (control, SHIPPED) / 1 (ADM's proposed value) / 2
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_read_social_roll` reads the setting).

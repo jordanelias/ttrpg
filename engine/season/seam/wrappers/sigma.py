@@ -79,7 +79,7 @@ from ...decision.decider import decides_for, make_decider
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
 from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
-                             PROOF_KIND_OF_SOURCE, RUNG_KINDS)
+                             PROOF_KIND_OF_SOURCE, RECORD_MATTER, RUNG_KINDS)
 from ...data.rosters import capability_rows, obstacle_bound, require_use_site, roster, when_holds
 from ...data.verbs import FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...epistemic import trail_concealment
@@ -98,10 +98,10 @@ from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS,
                                   resolve as _prize_row)
 from ...queries import world_q as _world_q
 from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Choice, Input, Item, Margin, Outcome, Point, Present, Rite, SocialContestInput,
-                               other_side)
+                               is_answered, is_filed, other_side)
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.faction_q import weight as faction_weight
-from ...queries.world_q import case_file_of, declared_votes_by_member, docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
+from ...queries.world_q import admitted_kinds, case_file_of, declared_votes_by_member, docketed_row, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of, side_of
 from ...state.carriers import EFFORT, Said, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ...state.ids import draw_factory
@@ -631,18 +631,8 @@ def _weighing(name: str, raw: float, step: float) -> dict:
     return {"obstacle_operands": ((name, raw, step),)} if raw * step > 0 else {}
 
 
-def _docketed_row(w: Any, subject: Optional[str]) -> Optional[dict]:
-    """The `arrangements.yaml` row the act's matter (its `subject`) is docketed under, or `None`: nothing docketed, an item naming no row (every
-    computed `open_case`, H-80), or more than one row on one matter (a hand-planted docket, which `_eff_determine` declines rather than choosing
-    between: absence refuses, never a guessed row)."""
-    rows = docketed_under(w, subject)
-    (row,) = rows if len(rows) == 1 else (None,)
-    return ARRANGEMENTS.get(row) if isinstance(row, str) else None
-
-
-def _admitted_proofs(fx: Any, docketed: Optional[dict]) -> Optional[tuple]:
-    """The proof kinds the docketed row admits, for `world_q.proofs`' filter -- or `None` for no filter: nothing docketed, or `proof_admission` `off`."""
-    return tuple(docketed["admits"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+# `_docketed_row` and `_admitted_proofs` are `world_q.docketed_row` and `world_q.admitted_kinds` (B24.25: the speech that files an item and this host read the one row and the one admission).
+_docketed_row, _admitted_proofs = docketed_row, admitted_kinds
 
 
 # ---------------------------------------------------------------------------------------------
@@ -650,10 +640,7 @@ def _admitted_proofs(fx: Any, docketed: Optional[dict]) -> Optional[tuple]:
 # case file, not the speaker's ledger: this reader turns the file's `filed` stages into the `Item`s `SocialContestInput.exhibits` carries, each with its relation to the others, and
 # nothing else. The host does NOT call `standing` and imports nothing of the evidence module: the roll counts them (`roll.proof_levels`, reached by its composition row, `_with_exhibits`).
 # ---------------------------------------------------------------------------------------------
-#: THE FILED STAGE, `(tick, "filed", side, rung, ref, weight, origin, act)` on a case file's `Record.stages` (ADM's four-band table): `ref` is the cited claim as the citer said it (a `Said`) or
-#: the id of the cited Record; `weight` is what it was entered at (half at the band that halves it); `origin` the root of its chain. B24.25 writes it; this is the one reader. An `excluded` stage
-#: (a citation that failed) and a sitting's own two-cell `entered`/`struck` stages (`inputs.EXCHANGE_CELLS`, the sitting's receipt) are no exhibit.
-FILED_STAGE, FILED_CELLS = "filed", 8
+# THE STAGES ARE `queries/inputs.py`'s (`is_filed`, `is_answered`: the ONE owner of their shapes; `_eff_speak` writes them, this reads them).
 _CONTRADICTS, _AGREES = "contradicts", "agrees"       # the two relations `Item.pairs` names; the module reads the words, the host does not import it
 
 
@@ -675,27 +662,28 @@ def _exhibits_of(w: Any, case: str) -> tuple:
     `weight` and `origin` the stage's, its `kind` what the claim is as proof (`person_q.proof_kind`; a Record's is the kind its `matters` carrier names, as `_items_of`), its `cell` the claim's own, and
     its `pairs` the relation to every other filed claim (`_relation`). EVERY FILED STAGE IS AN EXHIBIT: the filing admitted it (B24.25 refuses a kind the row does not admit before the draw), so a
     claim `proof_kind` has no kind for (a cell, which the hearing's gates file) is a `testimony`, the kind of a claim a person holds and tells [ASSUMPTION; Jordan to correct; revert: drop such a stage;
-    basis: `kind` is read by the sitting's admission and by neither the roll nor `standing`]. `answered_band` and `forged_found` are not read here: no stage carries either yet
-    (B24.25 files the answering act)."""
+    basis: `kind` is read by the sitting's admission and by neither the roll nor `standing`]. `answered_band` is the BEST band among the `answered` stages that name the exhibit
+    (the sitting keeps the best, B24.19) and `forged_found` whether any of them cited a finding that the Record is forged (`inputs.ANSWERED_STAGE`, written by `_eff_speak`)."""
     refs, items = {}, []
-    for i, st in enumerate(w.records[case].stages):
-        if len(st) != FILED_CELLS or st[1] != FILED_STAGE:
+    stages = w.records[case].stages
+    for i, st in enumerate(stages):
+        if not is_filed(st):
             continue
-        _, _, side, rung, ref, weight, origin, _ = st
+        _, _, side, rung, ref, weight, origin, *_ = st
         rec = None if isinstance(ref, Said) else w.records.get(ref)
-        kind = (proof_kind(ref) or "testimony") if isinstance(ref, Said) else _RECORD_MATTER.get(rec.kind, "record") if rec is not None else "record"
+        kind = (proof_kind(ref) or "testimony") if isinstance(ref, Said) else RECORD_MATTER.get(rec.kind, "record") if rec is not None else "record"
         iid = f"{case}#{i}"
         refs[iid] = ref if isinstance(ref, Said) else None
+        answers = [(_BAND_PLACE[sa[3]], sa[3], sa[4]) for sa in stages if is_answered(sa) and sa[2] == i]      # the answers drawn against this exhibit
+        best = max(answers)[1] if answers else None                                                                                   # the best band, as the sitting keeps it (B24.19)
         items.append(Item(iid, kind, float(weight), about=ref.subject if isinstance(ref, Said) else ref, side=side, rung=rung, origin=origin,
-                          cell=(ref.subject, ref.predicate, ref.value) if isinstance(ref, Said) else ()))
+                          cell=(ref.subject, ref.predicate, ref.value) if isinstance(ref, Said) else (), answered_band=best,
+                          forged_found=any(imp for _, _, imp in answers)))
     return tuple(replace(it, pairs=tuple((o.id, how) for o in items if o.id != it.id and refs[it.id] is not None and refs[o.id] is not None
                                          and (how := _relation(refs[it.id], refs[o.id])) is not None)) for it in items)
 
 
-def _side_of(actor: str, subject: Optional[str]) -> str:
-    """The roller's own side of the case the exhibits are read against (`SocialContestInput.side`): the accused's where he speaks to his own matter (the self-plea), else `for`, the bearer's -- and
-    the docket's `for` for a determiner's draw. [ASSUMPTION; Jordan to correct; revert: always `for`. Basis: `proceeding_input` seats the first claimant as `for` and the matter's other party as `against`.]"""
-    return "against" if subject == actor else "for"
+_side_of = side_of     # `world_q.side_of`: the side a speech to a matter is on, read by the host's roller and by the speech that files his exhibits (B24.25)
 
 
 PROOF_LEVELS_ROLE = "social_contest.proof_levels"   # the composition row whose module counts the filed exhibits' levels (`roll.proof_levels`)
@@ -1384,8 +1372,6 @@ def proceeding_dials(fx: Any) -> Any:
 ERA, REGIME, STRIFE = "plain", "crown", "peace"
 
 _SIX = ("focus", "reason", "attunement", "presence", "grace", "will")      # the six attributes a `Present` carries, by the module's names
-#: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated.
-_RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
 
 
 class Arrangement(NamedTuple):
@@ -1532,7 +1518,7 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
             continue
         if t.kind == "hold" and t.object in w.records:
             rec = w.records[t.object]
-            out.append(Item(rec.id, _RECORD_MATTER.get(rec.kind, "record"), 1.0, source=p.id))
+            out.append(Item(rec.id, RECORD_MATTER.get(rec.kind, "record"), 1.0, source=p.id))
         elif t.kind == "hold" and t.object in w.offices:
             out.append(Item(t.id, "title", 1.0, source=p.id, about=t.object))
         elif t.kind == "oblige" and not t.imposed and t.subject == p.id:

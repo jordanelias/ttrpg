@@ -1199,6 +1199,8 @@ AUTHORITIES = roster("authorities", ordered=True)
 AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
                                                   roster_map("role_templates", "by_faction"))
 MATTERS = _load_matters(_roster_rows("matters"), tuple(ISSUE_RUNGS))
+#: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated (the one owner: `seam/wrappers/sigma.py::_items_of` and `loop/effects_information.py::_eff_speak` read it).
+RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
 # B24p.03: THE TYPED WRITES OF `arrangements.yaml: disposal:` (V2 p2 §J). `MATTERS` absorbed the `proofs` roster, which was deleted here.
 DISPOSAL_WRITES = _load_disposal_writes(_roster_rows("disposal_writes"))
 # ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.
