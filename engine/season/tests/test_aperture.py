@@ -777,8 +777,11 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # differ; a stream change, not a balance change): was {7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}.
     # B07.99 re-pin (B07.05: the task draw is on, so a task act rolls its pool too, and an actor holding no skill rolls `pool_default`):
     # gains 7.0; the pools are still many in one season, persons apart.
+    # B24p.99 re-pin (the five influence verbs on the proceeding entry, B24p.19, and the hearers' weight-mean pool, B24p.20): the realm's season-one rolls read
+    # 19 pools (was 13), among them fractions of a head count (`9.392307692307693`, the mean of a room's pools); still many pools in one season, persons apart.
+    # [JUSTIFIED: a measured reading of the shipped seed-0 season, not a game value -- a pin on an exactness claim, `PYTHONHASHSEED=0`]
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.5, 8.0, 8.5, 9.0, 9.3, 9.5, 10.0, 10.5, 10.7, 11.0, 11.5, 12.0}
+        7.0, 7.5, 8.0, 8.385, 8.5, 8.6, 8.8, 9.0, 9.392307692307693, 9.5, 10.0, 10.4, 10.5, 11.0, 11.2, 11.5, 11.6, 11.8, 12.0}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")

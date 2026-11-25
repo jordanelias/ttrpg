@@ -8861,7 +8861,12 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # unplugged sims that roll their own (the σ composition's source is one of them) and `31b`/`31c`
     # move more resolvers into `modules/`; the one-owner property this guarded is now "the host rolls
     # nothing", and a margin is a module's to produce.
-    pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\broll_net_continuous\b|\bnet_boost\b|\bsuccesses\b")
+    # ⚠ B24p.99: `\bnet\b\s*=` read a KEYWORD ARGUMENT as an assignment. The proceeding path hands the module's own close to the one ladder
+    # (`dict(net=m.net, ob=m.ob, ...)` in `loop/resolve.py` and `loop/effects_information.py`, `act_band`'s and `_decided`'s returned record in
+    # `seam/wrappers/sigma.py`: a yield's band at its floor, a weight-mean of the module's verdicts, no draw): that is grading by the module's close,
+    # not a roll. The pattern is now `net` assigned at the head of a statement (the plant below is that shape); `roll_pool`, `roll_net`,
+    # `net_boost` and `successes` are unchanged, so a host-side roll still turns this red.
+    pattern = re.compile(r"^\s*net\s*=(?!=)|roll_pool|\broll_net\b|\broll_net_continuous\b|\bnet_boost\b|\bsuccesses\b")
 
     def _producers(paths, base):
         out = set()

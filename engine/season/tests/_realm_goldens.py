@@ -43,31 +43,37 @@ measured equal at the shipped data and the first half moved nothing.
 Read once on the closing tree (`PYTHONHASHSEED=0`); seed 0, one season, each mover in order: `6e3a066a..` -> `5f2b9826..` (B10.58) ->
 `576272fd..` (B10.60) -> `39d7c1bc..` (B10.65) -> `3ed14dad..` (B10.72, before the release fix) -> `faf327b7..` (B10.73, before the release
 fix) -> `c8e57653..` (B10.72's release fix, on the closing tree). The B09.99 values these replace are in `git log`.
+
+RE-PINNED AT B24p.99 (every `SHIPPED` and `CENSUS` value; BUILD read `4c6a3a99..` unmoved at seed 0): the batch's movers, each declared at its item: the five influence
+verbs `argue`, `lie`, `speak`, `tell` and `interrogate` rest on the proceeding entry (B24p.19), each hearer is moved for himself (B24p.20), what the beats
+show is deposited with those who saw it (B24p.22), the six roles (B24p.23); the docket item's `arranger` and `rig` (B24p.24) move the item, not the realm's hash. Read once on the
+closing tree (`PYTHONHASHSEED=0`, twice equal, the six readings below); seed 0, one season, each mover in order: `c8e57653..` (batch open) -> `ae2019b6..` (B24p.19) ->
+`4b7d0ca5..` (B24p.24) -> `aae24e2a..` (B24p.20) -> `ce07cfb4..` (B24p.22) -> `a0000b5e..` (B24p.23, the closing tree). The B10.99 values these replace are in `git log`.
 """
 
 BUILD = {0: "4c6a3a994777d975976bd3874ce74c9b"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "c8e57653e2a63fcf8bec25e9c4bb48dd",
-           (1, 1): "07dd712c272598c0a39a3517c17c4da7",
-           (2, 1): "29d35e166ab623e66c29067e5281d44d",
-           (0, 2): "f18fd036890fe21095976493fabc155d",
-           (1, 2): "3602c964373e72702b48337c9d5b2233",
-           (2, 2): "811b41d5a110e6732d3584cd67ba16ef"}    # B10.99 re-pin (the docstring); the B09.99 values are in `git log`
+SHIPPED = {(0, 1): "a0000b5e8d8413dab3caf0eb7e159f85",
+           (1, 1): "4e5b008e87a2c027f2e22fbaabc8e61c",
+           (2, 1): "b9419e53ec015ddf5e34f49b4264582d",
+           (0, 2): "94d2da910bafe6f6bedd57903ce27b9f",
+           (1, 2): "f9bdb84ab1d0d21aada42c33132fb655",
+           (2, 2): "776372bbc29eab456c18ece1362722e3"}    # B24p.99 re-pin (the docstring); the B10.99 values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=563, log=12966,
-                 census="d2b09fad1328a9fd20066ec5be0113ef2401e2dd4ef6783dbe923b680d7cd357"),
-    (1, 1): dict(acts=596, log=11494,
-                 census="2587f7ec1142427f8277d4b7d3812a125b2f8cb3646b2236353c4a641b68b288"),
-    (2, 1): dict(acts=558, log=12756,
-                 census="74e1ca2073a591982e70ecd3d52a466e338ff4653ee219cde8391bd788534290"),
-    (0, 2): dict(acts=1217, log=26585,
-                 census="8b0d0c70c5bcabac09a6dda4b31145b89797f986e98cbe2bdcea6d2787ffe6dd"),
-    (1, 2): dict(acts=1228, log=27171,
-                 census="66ca82cd710832235b17cd8f49cf9d0f64e92caadf3460cd4f907e81b284cc04"),
-    (2, 2): dict(acts=1251, log=34446,
-                 census="527c8cd24c036001271596602265162e9130c613b2315c215c8079eda515239e"),
+    (0, 1): dict(acts=564, log=13798,
+                 census="bae86e964bccaadb6d2aaf084b8622cf7d615c1debd101a971b4f0902762931a"),
+    (1, 1): dict(acts=595, log=11627,
+                 census="0cd7d3b2b0d05f82e1992ea639800d50fb494f6f7cc225c149ef19a52fb24acc"),
+    (2, 1): dict(acts=557, log=12799,
+                 census="b07d19bb127c5d5c5a86495d9a0ae9447a5e87ceca936849f71b5d7ea4d19393"),
+    (0, 2): dict(acts=1227, log=29747,
+                 census="094fd359bc98f37a78ab463a96151dd07e1e8fb1edb0ec4a83f2407acac8b51b"),
+    (1, 2): dict(acts=1225, log=26731,
+                 census="d5ebe63d39fd358d847231793406f6171ddba01c3c3c5bfbe810c9b6663d1270"),
+    (2, 2): dict(acts=1253, log=34365,
+                 census="cfbb0098dec043ff55134560d1d18d24f39b70ac356ca5b3d74a6cf5cae00b19"),
 }

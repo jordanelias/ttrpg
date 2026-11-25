@@ -217,6 +217,7 @@ def social_pairs(seed: int, n: int, verb: str, plant: Plant = None):
 # proceeding (B24p.17)
 # ---------------------------------------------------------------------------------------------------------------
 
+VENUE = "Hh"                                 # the hearth where the two speakers stand (`probes.tiny_world`)
 THIRD = "p_high"                             # the third person: the Duke, who sits where a row's authority seats one (`probes.tiny_world`)
 FORMS = ("abridged", "full")
 SIDES = ("for", "against", "decider")
@@ -244,13 +245,13 @@ def _proceeding_world(room: str, off: Optional[str]):
         fx = fx.sweep(off, _off_value(fx, off))
     w = probes.tiny_world(fx)
     for t in w.tenures:
-        if t.kind == "contain" and t.subject == "p_other":
+        if t.kind == "contain" and t.object == VENUE and t.subject not in (FIRST, SECOND):      # whoever else stands at the venue leaves
             t.until = 0
     for j, weight in enumerate(ROOMS[room]):
         pid = f"onlook{j}"
         w.persons[pid] = Person(pid, "an onlooker", weight=weight)
         w.rungs[pid] = Rung(pid, "person")
-        w.add_tenure(Tenure(f"t_{pid}", pid, "Hh", "contain", since=0))
+        w.add_tenure(Tenure(f"t_{pid}", pid, VENUE, "contain", since=0))
     SeasonDriver(w)
     return w
 
