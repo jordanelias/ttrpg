@@ -17,7 +17,9 @@ and the `TRACE.note` sample.
 THE RULE (items 3a/3b and plan position `19d`):
   * THE DRAW is `larder_draw`'s (`larder.py`) -- the same function, so the draw MATTER writes from and the
     one `demanded`/`delivered` sum cannot disagree: one module computes both (`ED-IN-0246` item 3a).
-  * THE DEBIT: per source rung, `take` summed per kind, kinds in the order the draw first debited them.
+  * THE DEBIT: per rung drawn from, each cell's `parts` summed per kind (under `larder_walk` `first` a
+    cell's one part is `(source, take)`; under `through` a draw splits across rungs and each loses what it
+    gave), kinds in the order the draw first debited them.
     `larder_after` is the source's stores less that debit, kept only where a unit moved. The draw capped
     every take at what was held, so nothing goes below zero and no `max(0, ...)` hides an error.
   * SHORT: an eater is short a kind by `want - take` where `take < want`. A source that gave out with a
@@ -43,10 +45,10 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
     short: dict = {}          # pid -> {kind: units short}, record order
     drained: dict = {}        # source rung -> {kinds it ran out of with a mouth unfed}
     for row in draw.rows:
-        for kind, want, take, src in row.cells:
-            if src is not None:
-                given = debit.setdefault(src, {})
-                given[kind] = given.get(kind, 0) + take
+        for kind, want, take, src, parts in row.cells:
+            for rung, units in parts:
+                given = debit.setdefault(rung, {})
+                given[kind] = given.get(kind, 0) + units
             if take < want:
                 short.setdefault(row.pid, {})[kind] = want - take
                 if src is not None:

@@ -920,16 +920,22 @@ class LarderInput:
                      the first id that is not a rung;
       * `stores`  -- `((rung, ((kind, units), ...)), ...)` for every rung on a cohort ladder, each in its
                      own `Rung.stores` order. An eater whose home has no ladder here draws from nothing,
-                     so the cohort exemption (`larder_draw`'s) and this projection must agree."""
+                     so the cohort exemption (`larder_draw`'s) and this projection must agree;
+      * `walk`    -- `Fixtures.larder_walk` (B12a.53, `H-528`): `"first"` (shipped; the draw is the first
+                     stocked rung's alone) or `"through"` (the remainder goes on up the ladder). Last, with a
+                     default, so the positional empty `LarderInput((), (), (), ())` of `_larder_parts`' head builds."""
     weights: tuple
     eaters: tuple
     ladders: tuple
     stores: tuple
+    walk: str = "first"
 
 
 @dataclass(frozen=True)
 class DrawRow:
-    """One eater's draw: `cells` is `((kind, want, take, source or None), ...)` in kind order."""
+    """One eater's draw: `cells` is `((kind, want, take, source or None, parts), ...)` in kind order. `source` is
+    the first rung the walk drew from; `parts` is `((rung, units), ...)`, every rung it drew from in walk order
+    (`sum(units) == take`): `((source, take),)` under `first` when `source` is not `None`, else `()`. The debit reads `parts`."""
     pid: str
     home: str
     cells: tuple

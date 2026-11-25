@@ -450,3 +450,29 @@ def test_h306_only_a_whole_positive_transfer_amount_moves_stock(value):
         assert "transfer.refused" in kinds and "transfer.made" not in kinds, (value, kinds)
         assert stores == before, value
         assert w.content_hash() == control.content_hash(), value
+
+
+# ======================================================================================
+# 4 -- THE WALK (B12a.53, H-303): the remainder goes on up the ladder under `larder_walk` `through`
+# ======================================================================================
+
+def _h303_world(walk: str):
+    """H-303's pair: a cohort of 6 wanting one grain each, 1 grain at home, 1,000 on the rung above."""
+    w = S.build(fixtures=DEFAULT_FIXTURES.sweep("subsistence_weight", {"grain": 1}).sweep("larder_walk", walk))
+    w.persons[S.POPULACE].weight = 6
+    w.rungs[S.HUNGRY].stores = {"grain": 1}
+    w.rungs["terr_march"].stores = {"grain": 1000}
+    return w
+
+
+def test_h303_first_takes_one_through_takes_six_and_splits_the_debit():
+    for walk, take, home_left, above_left in (("first", 1, 0, 1000), ("through", 6, 0, 995)):
+        w = _h303_world(walk)
+        (_, cells), = world_q.subsistence_draw(w).values()
+        assert cells["grain"] == (6, take, S.HUNGRY), (walk, cells)
+        assert world_q.delivered(w, S.HUNGRY) == {"grain": take}
+        _matter(w)
+        assert w.rungs[S.HUNGRY].stores.get("grain", 0) == home_left, walk
+        assert w.rungs["terr_march"].stores["grain"] == above_left, walk
+        # the two debits sum to the take: no matter made or lost by the split
+        assert 1001 - w.rungs[S.HUNGRY].stores.get("grain", 0) - w.rungs["terr_march"].stores["grain"] == take, walk
