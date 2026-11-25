@@ -154,7 +154,13 @@ def build(seed: int = 0) -> World:
         # like canon Crown structure. `faction x` is unmistakable, which is the point.
         # The member is authored at `references/names_index.yaml` (`world.faction_x`) and reaches
         # this roster through `from_names: faction` — edit the naming index, never the roster.
+        # B21.71: HOW THE SEAT IS FILLED AND WHO MAY STRIP IT, read off the row (a member of
+        # `rosters.yaml: conferral_bases` / `revocation_bases`, which `Office.__post_init__` refuses
+        # a value off). `.get` is an absent key reading `None`, the realm row's own `null`: with
+        # neither basis `may_fill` is false for every pair, so a row that forgot them builds a seat
+        # nobody can fill, which is the state this edit ended.
         w.offices[oid] = Office(oid, str(row["post"]), rid, remit_or_default([]),
+                                conferral=row.get("conferral"), revocation=row.get("revocation"),
                                 faction=SPINE_FACTION)
         w.add_tenure(Tenure(f"lt_hold_{key}", pid, oid, "hold", 0))
         w.add_tenure(Tenure(f"lt_in_{key}", pid, rid, "contain", 0))
