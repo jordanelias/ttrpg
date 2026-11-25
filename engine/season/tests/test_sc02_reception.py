@@ -45,7 +45,7 @@ from ..seam import ladder
 from ..seam.wrappers import sigma
 from ..state.carriers import Claim
 from .test_sc01_obstacle_ceiling import _module
-from .test_u7_remit import _fold, _kinds, _open, _world  # noqa: F401  (`test_odds_of` reads `_fold`, `_kinds`, `_open` from here)
+from .test_u7_remit import _world
 
 SPEAKER, PARTY, HEARER, NOBODY = "p_low", "p_mid", "p_high", "p_other"
 PRIZE = "a matter"

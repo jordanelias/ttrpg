@@ -16,6 +16,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import STANCE_MAX
 from ..queries import person_q as PQ
 from ..queries.inputs import Choice, Cond
+from ..seam.wrappers.sigma import PROCEEDING_SETTINGS
 from ..state.carriers import Claim, Person, interior_of
 from .test_sc_proceeding_module import P, _dials, _inp, _key, _p, _rite, _sit
 
@@ -88,14 +89,14 @@ def test_a_false_item_is_his_own_word_or_nothing():
     def knows(value, pid="p"):
         return _person(pid, ledger=[Claim("c", pid, "m", "held_by:q", value, 0, "firsthand", 80, "own")])
 
-    liar = PQ.false_items(knows(False), "m", "for", FX)
+    liar = PQ.false_items(knows(False), "m", "for", FX, 0)
     assert len(liar) == 1 and liar[0].kind == "testimony" and liar[0].sincere is False
     assert liar[0].source == "p" and liar[0].about == "m" and 0 < liar[0].weight <= 1
-    assert PQ.false_items(knows(False), "m", "against", FX) == ()
-    assert PQ.false_items(knows(True), "m", "for", FX) == ()
-    assert len(PQ.false_items(knows(True), "m", "against", FX)) == 1
-    assert PQ.false_items(_person(), "m", "for", FX) == ()
-    assert PQ.believes(knows(False), "m", FX) < 0 < PQ.believes(knows(True), "m", FX)
+    assert PQ.false_items(knows(False), "m", "against", FX, 0) == ()
+    assert PQ.false_items(knows(True), "m", "for", FX, 0) == ()
+    assert len(PQ.false_items(knows(True), "m", "against", FX, 0)) == 1
+    assert PQ.false_items(_person(), "m", "for", FX, 0) == ()
+    assert PQ.believes(knows(False), "m", FX, 0) < 0 < PQ.believes(knows(True), "m", FX, 0)
 
 
 def test_strain_carried_fades_and_is_bounded():
@@ -144,20 +145,13 @@ def test_a_party_who_decides_hears_his_own_case_by_his_own_reason():
 
 
 # ------------------------------------------------------------------------------------------------------------------ B24p.18: the six roles
-# Each role is one test, on the module with hand-built inputs (no World, no driver). The settings are the SHIPPED column of V2 p2 §K, set in
-# THIS file (the repo's Fixtures hold control values until B24p.23); a role's CONTROL ARM is the same scene with that operand's own setting off.
+# Each role is one test, on the module with hand-built inputs (no World, no driver). The settings are the SHIPPED column of V2 p2 §K, read off
+# `DEFAULT_FIXTURES` (B24p.23 flipped them to V2's values there); a role's CONTROL ARM is the same scene with that operand's own setting off.
 # An arm reads the same `KEYS` keys at attribute 1 and at 7 (common random numbers: a key's draws do not depend on the attribute), so the
 # difference is paired; a POSITIVE arm asserts the ruled sign beyond two standard errors of that paired difference, a CONTROL arm asserts the
 # per-key lists `==`. The outcome of a speech is its margin on the one ladder (carried = Success or better), not the sitting's close: the close's
 # own draw would add noise and no operand. Each test asserts `checked == the arms it ran` (a loop that asserts conditionally must assert it asserted).
-SHIPPED = dict(
-    fit_level="strong", answer_level="moderate", repeat_step=0.35, sense_step=0.15, involve=0.3, esteem_step=0.2, show=1.0, off_step=1.0,
-    admit_step=0.5, contempt_step=1.0, ploy_step=1.5, grain_strain=0.5, heard_step=0.05, heard_floor=0.5, gap_step=0.25, weary_step=0.5,
-    stay_base=1.0, stay_per_will=0.5, awe_step=0.5, comfort_step=0.5, rel_gain=0.5, flop=0.5, invite=0.5, press_ob=1.25, press_pull=1.0,
-    rattle_pull=0.5, wear=0.5, rattle_gain=1.5, rebound=1.0, reactance=0.75, room_level=0.5, heckle=1.0, concede_step=1.0, consent_at=2.5,
-    crowd_at=12.0, crowd_lean=0.2, mood_scale=5.0, read_scale=1.0, read_blur=2.0, read_noise=0.3, bias_step=2.0, relevance=1, track_step=0.2,
-    temper_step=0.5, temper_break=0.75, temper_cool=0.5, grain=2.0, grudge=2.0, pride=2.0, start_step=2.0, presume_step=2.0, power_scale=2.0,
-    strain_fade=0.5, recuse_at=0.25)
+SHIPPED = {name: FX.get(name) for name in PROCEEDING_SETTINGS}
 GROUND_REASON = {"evidence": 0.8, "consequence": 0.7, "authority": 0.4, "solidarity": 0.2}      # each ground's Reason weight, the shipped column
 KEYS = 1000      # the plan's 2,000 ran this file in 21 s (the weakest arm read z = 11.2 there; about 7.9 at 1,000), so 1,000 keys an arm
 LO, HI = 1.0, 7.0

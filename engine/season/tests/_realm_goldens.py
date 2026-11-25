@@ -46,19 +46,26 @@ fix) -> `c8e57653..` (B10.72's release fix, on the closing tree). The B09.99 val
 
 RE-PINNED AT B24p.99 (every `SHIPPED` and `CENSUS` value; BUILD read `4c6a3a99..` unmoved at seed 0): the batch's movers, each declared at its item: the five influence
 verbs `argue`, `lie`, `speak`, `tell` and `interrogate` rest on the proceeding entry (B24p.19), each hearer is moved for himself (B24p.20), what the beats
-show is deposited with those who saw it (B24p.22), the six roles (B24p.23); the docket item's `arranger` and `rig` (B24p.24) move the item, not the realm's hash. Read once on the
+show is deposited with those who saw it (B24p.22), the six roles (B24p.23); the docket item's `arranger` and `rig` (B24p.24) move the realm's hash by their encoding, the item's two keys. Read once on the
 closing tree (`PYTHONHASHSEED=0`, twice equal, the six readings below); seed 0, one season, each mover in order: `c8e57653..` (batch open) -> `ae2019b6..` (B24p.19) ->
 `4b7d0ca5..` (B24p.24) -> `aae24e2a..` (B24p.20) -> `ce07cfb4..` (B24p.22) -> `a0000b5e..` (B24p.23, the closing tree). The B10.99 values these replace are in `git log`.
+
+RE-PINNED AT THE B24p.99 CLOSE (the six `SHIPPED` hashes; `BUILD` and every `CENSUS` value, acts, log and digest, read unmoved): the close's fixes to the proceeding. `heard` is
+read against the man opposite again (`lead(inp, other side)`, as `esteem` is), not against the one addressed in an abridged act: that is the one that moves the realm (seed 0, one
+season, reverted alone it reads `a0000b5e..`; each of the others reverted alone, one at a time, leaves the new hash, so they are inert at that reading). The rest: an abridged
+close reads the addressed man's own `Margin`, not the last hearer's; `believes` and `false_items` read claims at the world's tick and only truth-valued ones; the chooser's
+believed path filters claimants to persons and raises the fold's data defects; `View.odds` signs the mood toward `for`; `odds_of` is `None` for a verb that proceeds. Read
+once on the closing tree (`PYTHONHASHSEED=0`, twice equal); seed 0, one season: `a0000b5e..` -> `acdee97d..`.
 """
 
 BUILD = {0: "4c6a3a994777d975976bd3874ce74c9b"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "a0000b5e8d8413dab3caf0eb7e159f85",
-           (1, 1): "4e5b008e87a2c027f2e22fbaabc8e61c",
-           (2, 1): "b9419e53ec015ddf5e34f49b4264582d",
-           (0, 2): "94d2da910bafe6f6bedd57903ce27b9f",
-           (1, 2): "f9bdb84ab1d0d21aada42c33132fb655",
-           (2, 2): "776372bbc29eab456c18ece1362722e3"}    # B24p.99 re-pin (the docstring); the B10.99 values are in `git log`
+SHIPPED = {(0, 1): "acdee97d7d5b56e720a3d89a3abaa037",
+           (1, 1): "48c76e3f1390c0cc800928d3b7550cd2",
+           (2, 1): "eb92a171699b119cc0985daa8fac6319",
+           (0, 2): "ba059cf72e6e8c5dde76cd5af9469a9f",
+           (1, 2): "e22aedb8e0778e537532442413244191",
+           (2, 2): "0d9413472f3e3f4311cbc239d218eb74"}    # B24p.99 re-pin (the docstring); the B10.99 values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted

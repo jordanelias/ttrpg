@@ -1346,25 +1346,25 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-863 -- site: Fixtures repeat_step, graded `assumption`; V2 p2 §K gives 0.35 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.175 / 0.35]
     repeat_step=0.35,                  # `H-863`, swept 0.0 / 0.175 / 0.35 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-864 -- site: Fixtures sense_step, graded `assumption`; V2 p2 §K gives 0.15 and no document derives it, so it is injected and swept 0.075 / 0.15 / 0.3]
     sense_step=0.15,                  # `H-864`, swept 0.075 / 0.15 / 0.3 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-865 -- site: Fixtures involve, graded `assumption`; V2 p2 §K gives 0.3 and no document derives it, so it is injected and swept 0.15 / 0.3 / 0.6]
     involve=0.3,                      # `H-865`, swept 0.15 / 0.3 / 0.6 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-866 -- site: Fixtures esteem_step, graded `assumption`; V2 p2 §K gives 0.2 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.1 / 0.2]
     esteem_step=0.2,                  # `H-866`, swept 0.0 / 0.1 / 0.2 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-867 -- site: Fixtures show, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     show=1.0,                         # `H-867`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-868 -- site: Fixtures off_step, graded `assumption`; V2 p2 §K gives 1.0 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.5 / 1.0]
     off_step=1.0,                     # `H-868`, swept 0.0 / 0.5 / 1.0 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-869 -- site: Fixtures admit_step, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     admit_step=0.5,                   # `H-869`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-870 -- site: Fixtures contempt_step, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     contempt_step=1.0,                # `H-870`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
@@ -1376,7 +1376,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-873 -- site: Fixtures heard_step, graded `assumption`; V2 p2 §K gives 0.05 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.025 / 0.05]
     heard_step=0.05,                   # `H-873`, swept 0.0 / 0.025 / 0.05 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-874 -- site: Fixtures heard_floor, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     heard_floor=0.5,                  # `H-874`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
@@ -1385,47 +1385,47 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-876 -- site: Fixtures weary_step, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.25 / 0.5]
     weary_step=0.5,                   # `H-876`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-877 -- site: Fixtures stay_base, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     stay_base=1.0,                    # `H-877`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-878 -- site: Fixtures stay_per_will, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     stay_per_will=0.5,                # `H-878`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-879 -- site: Fixtures awe_step, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.25 / 0.5]
     awe_step=0.5,                     # `H-879`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-880 -- site: Fixtures comfort_step, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     comfort_step=0.5,                 # `H-880`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-881 -- site: Fixtures rel_gain, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     rel_gain=0.5,                     # `H-881`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-882 -- site: Fixtures flop, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     flop=0.5,                         # `H-882`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-883 -- site: Fixtures invite, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     invite=0.5,                       # `H-883`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
     # ---- the press
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-884 -- site: Fixtures press_ob, graded `assumption`; V2 p2 §K gives 1.25 and no document derives it, so it is injected and swept 0.625 / 1.25 / 2.5]
     press_ob=1.25,                    # `H-884`, swept 0.625 / 1.25 / 2.5 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-885 -- site: Fixtures press_pull, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     press_pull=1.0,                   # `H-885`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-886 -- site: Fixtures rattle_pull, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     rattle_pull=0.5,                  # `H-886`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-887 -- site: Fixtures wear, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     wear=0.5,                         # `H-887`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-888 -- site: Fixtures rattle_gain, graded `assumption`; V2 p2 §K gives 1.5 and no document derives it, so it is injected and swept 0.75 / 1.5 / 3.0]
     rattle_gain=1.5,                  # `H-888`, swept 0.75 / 1.5 / 3.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-889 -- site: Fixtures rebound, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     rebound=1.0,                      # `H-889`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-890 -- site: Fixtures reactance, graded `assumption`; V2 p2 §K gives 0.75 and no document derives it, so it is injected and swept 0.5 / 0.75 / 1.0]
     reactance=0.75,                   # `H-890`, swept 0.5 / 0.75 / 1.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
@@ -1435,74 +1435,74 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-892 -- site: Fixtures heckle, graded `assumption`; V2 p2 §K gives 1.0 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.5 / 1.0]
     heckle=1.0,                       # `H-892`, swept 0.0 / 0.5 / 1.0 (V2's value, SHIPPED here; the control is 0.0)
     # ---- conceding
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-893 -- site: Fixtures concede_step, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     concede_step=1.0,                 # `H-893`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-894 -- site: Fixtures consent_at, graded `assumption`; V2 p2 §K gives 2.5 and no document derives it, so it is injected and swept 1.25 / 2.5 / 5.0]
     consent_at=2.5,                   # `H-894`, swept 1.25 / 2.5 / 5.0 (V2's value, SHIPPED here)
     # ---- the room and the reading
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-895 -- site: Fixtures crowd_at, graded `assumption`; V2 p2 §K gives 12.0 and no document derives it, so it is injected and swept 6.0 / 12.0 / 24.0]
     crowd_at=12.0,                    # `H-895`, swept 6.0 / 12.0 / 24.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-896 -- site: Fixtures crowd_lean, graded `assumption`; V2 p2 §K gives 0.2 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.1 / 0.2]
     crowd_lean=0.2,                   # `H-896`, swept 0.0 / 0.1 / 0.2 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-897 -- site: Fixtures mood_scale, graded `assumption`; V2 p2 §K gives 5.0 and no document derives it, so it is injected and swept 2.5 / 5.0 / 10.0]
     mood_scale=5.0,                   # `H-897`, swept 2.5 / 5.0 / 10.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-898 -- site: Fixtures read_scale, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     read_scale=1.0,                   # `H-898`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-899 -- site: Fixtures read_blur, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     read_blur=2.0,                    # `H-899`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-900 -- site: Fixtures read_noise, graded `assumption`; V2 p2 §K gives 0.3 and no document derives it, so it is injected and swept 0.15 / 0.3 / 0.6]
     read_noise=0.3,                   # `H-900`, swept 0.15 / 0.3 / 0.6 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-901 -- site: Fixtures bias_step, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     bias_step=2.0,                    # `H-901`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-902 -- site: Fixtures relevance, graded `assumption`; V2 p2 §K gives 1 and no document derives it, so it is injected and swept 0 / 0.5 / 1]
     relevance=1,                      # `H-902`, swept 0 / 0.5 / 1 (V2's value, SHIPPED here)
     # ---- the close
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-903 -- site: Fixtures track_step, graded `assumption`; V2 p2 §K gives 0.2 and no document derives it, so it is injected and swept 0.1 / 0.2 / 0.4]
     track_step=0.2,                   # `H-903`, swept 0.1 / 0.2 / 0.4 (V2's value, SHIPPED here)
     # ---- the NPC's temper
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-904 -- site: Fixtures temper_step, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     temper_step=0.5,                  # `H-904`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-905 -- site: Fixtures temper_break, graded `assumption`; V2 p2 §K gives 0.75 and no document derives it, so it is injected and swept 0.5 / 0.75 / 1.0]
     temper_break=0.75,                # `H-905`, swept 0.5 / 0.75 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-906 -- site: Fixtures temper_cool, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     temper_cool=0.5,                  # `H-906`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-907 -- site: Fixtures grain, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     grain=2.0,                        # `H-907`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-908 -- site: Fixtures grudge, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     grudge=2.0,                       # `H-908`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-909 -- site: Fixtures pride, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     pride=2.0,                        # `H-909`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
     # ---- the host
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-910 -- site: Fixtures start_step, graded `assumption`; V2 p2 §K gives 2.0 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 1.0 / 2.0]
     start_step=2.0,                   # `H-910`, swept 0.0 / 1.0 / 2.0 (V2's value, SHIPPED here; the control is 0.0)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-911 -- site: Fixtures presume_step, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     presume_step=2.0,                 # `H-911`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-912 -- site: Fixtures power_scale, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     power_scale=2.0,                  # `H-912`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-913 -- site: Fixtures strain_fade, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     strain_fade=0.5,                  # `H-913`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-914 -- site: Fixtures recuse_at, graded `assumption`; V2 p2 §K gives 0.25 and no document derives it, so it is injected and swept 0.125 / 0.25 / 0.5]
     recuse_at=0.25,                   # `H-914`, swept 0.125 / 0.25 / 0.5 (V2's value, SHIPPED here)
     # B24p.04: THE FOLD'S TABLE (V2 p2 §K, `sc2/host.py::FOLD`): twenty-four coefficients, each `[ASSUMPTION; Jordan to correct]`. The module never reads one; the fold does,
@@ -1563,7 +1563,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-932 -- site: Fixtures fold_legit_fall, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, and the fold reads it only from B24p.24 (the rig's price), B27.28 and B33.51, so it is injected and swept 0.25 / 0.5 / 1.0]
     fold_legit_fall=0.5,              # `H-932`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
-    # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
+    # [ASSUMPTION; Jordan to correct; revert: none named, V2 gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-933 -- site: Fixtures fold_rig_price, graded `assumption`; V2 p2 §K gives 0.25 and no document derives it, and the fold reads it only from B24p.24 (the rig's price), B27.28 and B33.51, so it is injected and swept 0.125 / 0.25 / 0.5]
     fold_rig_price=0.25,              # `H-933`, swept 0.125 / 0.25 / 0.5 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]

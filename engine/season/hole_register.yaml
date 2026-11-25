@@ -5973,7 +5973,7 @@ rows:
     source:    "premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S4; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: the end-to-end deposit (n=120 seeds) and the `proofs` readings with the bench proxy. Reproduce by the call described, not by any scratch script."
   - id:        H-312
     tier:      1
-    hole:      "CLOSED (B05.11, on the `interrogate` row of `verb_table.yaml`, which names `capability: inquiry` since B04.03): the subject's resistance is his `inquiry` SKILL SCORE (`seam/wrappers/sigma.py::_opposition_of` returns `pool.score`, no attribute, on every arm), so raising it lowers Partial-or-better, pinned by `engine/season/tests/test_odds_of.py::test_raising_the_subjects_skill_score_lowers_partial_or_better_on_arrest` and, for the unauthored subject, `::test_an_unauthored_hearer_is_not_harder_than_a_held_one`; the questioner's skill and attributes enter his pool (B05.25); the text below is the row's history. `interrogate` HAS NO CONTEST KEY, SO NEITHER THE QUESTIONER'S SKILL NOR THE SUBJECT'S RESISTANCE ENTERS (premise-check, interrogation). `interrogate` is not in `verb_capability` in `engine/season/rosters.yaml`, so the pool is `pool_default` and the obstacle `obstacle_default` for every pair. Read-only through `seam/wrappers/sigma.py::odds_of`, setting the questioner's or the subject's capabilities and attributes to 0 or 20 left the odds at (0.74, 0.19, 0.07, 0.0); the controls `examine` and `argue` moved to (0.03, 0.03, 0.10, 0.84). Pool sweep 1, 2, 5, 10, 20, 30 gave Failure 0.90, 0.74, 0.40, 0.16, 0.03, 0.007, monotone."
+    hole:      "CLOSED (B05.11, on the `interrogate` row of `verb_table.yaml`, which names `capability: inquiry` since B04.03): the subject's resistance is his `inquiry` SKILL SCORE (`seam/wrappers/sigma.py::_opposition_of` returns `pool.score`, no attribute, on every arm), so raising it lowers Partial-or-better, pinned by `engine/season/tests/test_odds_of.py::test_raising_the_subjects_skill_score_lowers_partial_or_better_on_arrest` and, for the unauthored subject, `::test_an_unauthored_hearer_is_not_harder_than_a_held_one`; the questioner's skill and attributes enter his pool (B05.25); the text below is the row's history. `interrogate` HAS NO CONTEST KEY, SO NEITHER THE QUESTIONER'S SKILL NOR THE SUBJECT'S RESISTANCE ENTERS (premise-check, interrogation). `interrogate` is not in `verb_capability` in `engine/season/rosters.yaml`, so the pool is `pool_default` and the obstacle `obstacle_default` for every pair. Read-only through `seam/wrappers/sigma.py::odds_of`, setting the questioner's or the subject's capabilities and attributes to 0 or 20 left the odds at (0.74, 0.19, 0.07, 0.0); the controls `examine` and `argue` moved to (0.03, 0.03, 0.10, 0.84). Pool sweep 1, 2, 5, 10, 20, 30 gave Failure 0.90, 0.74, 0.40, 0.16, 0.03, 0.007, monotone. SUPERSEDED by B24p.19: interrogate proceeds; the subject's resistance is `will + rank` in the proceeding, not his inquiry skill score."
     kind:      "WIRING"
     owner:     "`engine/season/rosters.yaml` (`verb_capability`); `engine/season/seam/wrappers/pool.py` and `sigma.py` (the opposition read)"
     grade:     "measured"
@@ -7159,9 +7159,9 @@ rows:
 
   - id:        H-861
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `fit_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `fit_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fit_level` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fit_level` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "\"strong\" -- V2's SHIPPED VALUE, written by B24p.23 (the control was None, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `None`, the control]"
     site:      "Fixtures fit_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7172,9 +7172,9 @@ rows:
 
   - id:        H-862
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `answer_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `answer_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_level` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_level` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "\"moderate\" -- V2's SHIPPED VALUE, written by B24p.23 (the control was None, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `None`, the control]"
     site:      "Fixtures answer_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7185,9 +7185,9 @@ rows:
 
   - id:        H-863
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `repeat_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `repeat_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.repeat_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.repeat_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.35 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures repeat_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7198,11 +7198,11 @@ rows:
 
   - id:        H-864
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `sense_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `sense_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sense_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sense_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.15 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.15 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures sense_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.075, 0.15, 0.3]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7211,11 +7211,11 @@ rows:
 
   - id:        H-865
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `involve` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `involve` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.involve` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.involve` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures involve, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.15, 0.3, 0.6]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7224,9 +7224,9 @@ rows:
 
   - id:        H-866
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `esteem_step` (a fifth of a level a point of Grace better than the other) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `esteem_step` (a fifth of a level a point of Grace better than the other) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.esteem_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.esteem_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.2 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures esteem_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7237,11 +7237,11 @@ rows:
 
   - id:        H-867
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `show` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `show` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.show` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.show` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures show, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7250,9 +7250,9 @@ rows:
 
   - id:        H-868
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `off_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `off_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.off_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.off_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "1.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures off_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7263,11 +7263,11 @@ rows:
 
   - id:        H-869
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `admit_step` (silence and the burden) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `admit_step` (silence and the burden) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.admit_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.admit_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures admit_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7276,11 +7276,11 @@ rows:
 
   - id:        H-870
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `contempt_step` (silence and the burden) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `contempt_step` (silence and the burden) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.contempt_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.contempt_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures contempt_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7289,9 +7289,9 @@ rows:
 
   - id:        H-871
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `ploy_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `ploy_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.ploy_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.ploy_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "1.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures ploy_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7302,9 +7302,9 @@ rows:
 
   - id:        H-872
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `grain_strain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `grain_strain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain_strain` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain_strain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures grain_strain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7315,9 +7315,9 @@ rows:
 
   - id:        H-873
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `heard_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `heard_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.05 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures heard_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7328,11 +7328,11 @@ rows:
 
   - id:        H-874
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `heard_floor` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `heard_floor` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_floor` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_floor` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures heard_floor, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7341,9 +7341,9 @@ rows:
 
   - id:        H-875
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `gap_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `gap_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.gap_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.gap_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.25 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures gap_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7354,9 +7354,9 @@ rows:
 
   - id:        H-876
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `weary_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `weary_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.weary_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.weary_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures weary_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7367,11 +7367,11 @@ rows:
 
   - id:        H-877
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `stay_base` (Will 4 argues three speeches fresh) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `stay_base` (Will 4 argues three speeches fresh) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stay_base` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stay_base` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures stay_base, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7380,11 +7380,11 @@ rows:
 
   - id:        H-878
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `stay_per_will` (Will 4 argues three speeches fresh) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `stay_per_will` (Will 4 argues three speeches fresh) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stay_per_will` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stay_per_will` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures stay_per_will, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7393,9 +7393,9 @@ rows:
 
   - id:        H-879
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `awe_step` (its control 0 is the model's control set (`sc2/host.py::CONTROL_ZERO`), V2 p2 §K's control list does not name it) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `awe_step` (its control 0 is the model's control set (`sc2/host.py::CONTROL_ZERO`), V2 p2 §K's control list does not name it) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.awe_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.awe_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures awe_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7406,11 +7406,11 @@ rows:
 
   - id:        H-880
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `comfort_step` (now `discern`, B10) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `comfort_step` (now `discern`, B10) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.comfort_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.comfort_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures comfort_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7419,11 +7419,11 @@ rows:
 
   - id:        H-881
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `rel_gain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `rel_gain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rel_gain` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rel_gain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures rel_gain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7432,11 +7432,11 @@ rows:
 
   - id:        H-882
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `flop` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `flop` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.flop` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.flop` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures flop, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7445,11 +7445,11 @@ rows:
 
   - id:        H-883
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `invite` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `invite` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the speech). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.invite` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.invite` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures invite, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7458,11 +7458,11 @@ rows:
 
   - id:        H-884
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `press_ob` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `press_ob` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.press_ob` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.press_ob` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.25 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.25 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures press_ob, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.625, 1.25, 2.5]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7471,11 +7471,11 @@ rows:
 
   - id:        H-885
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `press_pull` (multiplied by heat) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `press_pull` (multiplied by heat) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.press_pull` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.press_pull` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures press_pull, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7484,11 +7484,11 @@ rows:
 
   - id:        H-886
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `rattle_pull` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `rattle_pull` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rattle_pull` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rattle_pull` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures rattle_pull, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7497,11 +7497,11 @@ rows:
 
   - id:        H-887
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `wear` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `wear` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.wear` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.wear` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures wear, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7510,11 +7510,11 @@ rows:
 
   - id:        H-888
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `rattle_gain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `rattle_gain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rattle_gain` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rattle_gain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures rattle_gain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.75, 1.5, 3.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7523,11 +7523,11 @@ rows:
 
   - id:        H-889
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `rebound` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `rebound` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rebound` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rebound` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures rebound, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7536,11 +7536,11 @@ rows:
 
   - id:        H-890
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `reactance` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `reactance` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.reactance` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.reactance` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.75 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.75 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures reactance, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 0.75, 1.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7549,9 +7549,9 @@ rows:
 
   - id:        H-891
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `room_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `room_level` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.room_level` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.room_level` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures room_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7562,9 +7562,9 @@ rows:
 
   - id:        H-892
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `heckle` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `heckle` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the press). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heckle` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heckle` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "1.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures heckle, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7575,11 +7575,11 @@ rows:
 
   - id:        H-893
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `concede_step` (was 2.0: with the cost taken from where he stands and descent buying the next rung's ground, 2.0 made descending best nowhere) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: conceding). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `concede_step` (was 2.0: with the cost taken from where he stands and descent buying the next rung's ground, 2.0 made descending best nowhere) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: conceding). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.concede_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.concede_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures concede_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's conceding reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7588,11 +7588,11 @@ rows:
 
   - id:        H-894
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `consent_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: conceding). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `consent_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: conceding). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.consent_at` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.consent_at` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures consent_at, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.25, 2.5, 5.0]
     unblocks:  "the proceeding's conceding reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7601,11 +7601,11 @@ rows:
 
   - id:        H-895
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `crowd_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `crowd_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_at` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_at` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "12.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "12.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures crowd_at, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [6.0, 12.0, 24.0]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7614,9 +7614,9 @@ rows:
 
   - id:        H-896
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `crowd_lean` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `crowd_lean` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_lean` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_lean` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
     default:   "0.2 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures crowd_lean, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7627,11 +7627,11 @@ rows:
 
   - id:        H-897
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `mood_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `mood_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.mood_scale` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.mood_scale` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "5.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "5.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures mood_scale, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [2.5, 5.0, 10.0]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7640,11 +7640,11 @@ rows:
 
   - id:        H-898
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `read_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `read_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_scale` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_scale` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures read_scale, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 1.0, 2.0]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7653,11 +7653,11 @@ rows:
 
   - id:        H-899
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `read_blur` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `read_blur` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_blur` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_blur` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures read_blur, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7666,11 +7666,11 @@ rows:
 
   - id:        H-900
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `read_noise` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `read_noise` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_noise` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.read_noise` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.3 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures read_noise, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.15, 0.3, 0.6]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7679,11 +7679,11 @@ rows:
 
   - id:        H-901
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `bias_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `bias_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.bias_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.bias_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures bias_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7692,11 +7692,11 @@ rows:
 
   - id:        H-902
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `relevance` (`on`) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `relevance` (`on`) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the room and the reading). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.relevance` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.relevance` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "1 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "1 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures relevance, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0, 0.5, 1]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7705,11 +7705,11 @@ rows:
 
   - id:        H-903
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `track_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the close). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `track_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the close). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.track_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.track_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.2 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.2 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures track_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.1, 0.2, 0.4]
     unblocks:  "the proceeding's the close reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7718,11 +7718,11 @@ rows:
 
   - id:        H-904
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `temper_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `temper_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_step` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures temper_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7731,11 +7731,11 @@ rows:
 
   - id:        H-905
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `temper_break` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `temper_break` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_break` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_break` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.75 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.75 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures temper_break, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.5, 0.75, 1.0]
     unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7744,11 +7744,11 @@ rows:
 
   - id:        H-906
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `temper_cool` (an ordinary man breaks at a second rattle that follows the first closely) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `temper_cool` (an ordinary man breaks at a second rattle that follows the first closely) -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_cool` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.temper_cool` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures temper_cool, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7757,11 +7757,11 @@ rows:
 
   - id:        H-907
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `grain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `grain` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures grain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7770,11 +7770,11 @@ rows:
 
   - id:        H-908
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `grudge` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `grudge` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grudge` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grudge` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures grudge, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7783,11 +7783,11 @@ rows:
 
   - id:        H-909
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `pride` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `pride` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the NPC's temper). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.pride` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.pride` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures pride, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the NPC's temper reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7796,9 +7796,9 @@ rows:
 
   - id:        H-910
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `start_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `start_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.start_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.start_step` the one home. READERS: `seam/wrappers/sigma.py::_present` (the man's `start`)"
     grade:     "assumption"
     default:   "2.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures start_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
@@ -7809,11 +7809,11 @@ rows:
 
   - id:        H-911
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `presume_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `presume_step` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.presume_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.presume_step` the one home. READERS: `seam/wrappers/sigma.py` (the presumption the room's deciders start from)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures presume_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7822,11 +7822,11 @@ rows:
 
   - id:        H-912
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `power_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `power_scale` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.power_scale` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.power_scale` the one home. READERS: `modules/social_contest/proceeding.py` (carried by `seam/wrappers/sigma.py::proceeding_dials`)"
     grade:     "assumption"
-    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "2.0 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures power_scale, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [1.0, 2.0, 4.0]
     unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7835,11 +7835,11 @@ rows:
 
   - id:        H-913
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `strain_fade` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `strain_fade` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.strain_fade` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.strain_fade` the one home. READERS: `queries/person_q.py::strain_carried`, called by `seam/wrappers/sigma.py::_present`"
     grade:     "assumption"
-    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.5 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures strain_fade, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.25, 0.5, 1.0]
     unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7848,11 +7848,11 @@ rows:
 
   - id:        H-914
     tier:      1
-    hole:      "THE SIZE OF THE PROCEEDING'S `recuse_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`; nothing reads it yet. No document derives the value."
+    hole:      "THE SIZE OF THE PROCEEDING'S `recuse_at` -- one of V2 p2 §K's fifty-four settings of the proceeding's own (group: the host). The proceeding module reads it through `seam/wrappers/sigma.py::proceeding_dials`. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.recuse_at` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.recuse_at` the one home. READERS: `seam/wrappers/sigma.py` (the seat's recusal) and `loop/witness.py::_sitting_claims` (the `partial` claim)"
     grade:     "assumption"
-    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures recuse_at, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.125, 0.25, 0.5]
     unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -8097,9 +8097,9 @@ rows:
     tier:      1
     hole:      "THE SIZE OF THE PROCEEDING'S `fold_rig_price` -- the fold's table (`host.FOLD`, V2 p2 §K): the fold: legitimacy and standing. Nothing reads it before B24p.24 (`fold_rig_price`, the rig's price in the arranger's choice), B27.28 (regard and pursuits) and B33.51 (standing, legitimacy and strife); the module never reads a `fold_` name. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_rig_price` the one home. READERS: none yet -- the fold (B24p.24, B27.28, B33.51)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fold_rig_price` the one home. READERS: `decision/options.py::rig_offer` (the rig's price in the arranger's choice); the fold's other writes (B27.28, B33.51) are unbuilt"
     grade:     "assumption"
-    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here, read by nothing yet [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it]"
+    default:   "0.25 -- V2 p2 §K's SHIPPED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (V2 gives it no control); the sweep's other points in its H row are the alternatives]"
     site:      "Fixtures fold_rig_price, read by nothing at B24p.04; the fold's writes (B24p.24, B27.28, B33.51) read it"
     sweep:     [0.125, 0.25, 0.5]
     unblocks:  "the fold's writes to regard, legitimacy, standing and strife"

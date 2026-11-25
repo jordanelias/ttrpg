@@ -55,7 +55,7 @@ from ..data.rosters import (
     AFFILIATIONS, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map,
 )
-from ..state.carriers import Person, PersonInterior, Said, fade_of
+from ..state.carriers import Person, PersonInterior, Said
 from .inputs import Item
 from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
@@ -2119,25 +2119,26 @@ def conflict(p, bears, *, for_party: Optional[str], against_party: Optional[str]
             ltr_sum((want, d, bond)) / BEARING_PARTS)
 
 
-def believes(p, matter: str, fx) -> float:
-    """What he KNOWS of the matter, `-1..1` toward `for`, read from his OWN ledger through `said_of` (V2 p2 §A.3; p4 §F 37): the claim he
-    would say of `matter` (the subject), a held truth value read as `+` (`for` asserts it true) or `-`, by how sure he is
-    (`confidence / Fixtures.confidence_default`). A cell that is no truth value (a number) carries no side, and nothing held is 0
-    [ASSUMPTION: the matter's `for` side asserts its claim as held; Jordan to correct]."""
-    said = said_of(p.ledger, matter, fx, p, tick=fade_of(p)[0])
-    if said is None or not isinstance(said.value, bool):
+def believes(p, matter: str, fx, tick: int) -> float:
+    """What he KNOWS of the matter, `-1..1` toward `for`, read from his OWN ledger through `said_of` at `tick` (V2 p2 §A.3; p4 §F 37): the
+    claim he would say of `matter` (the subject), a held truth value read as `+` (`for` asserts it true) or `-`, by how sure he is NOW
+    (`present_confidence / Fixtures.confidence_default`: a claim nobody refreshed fades). Only a TRUTH-VALUED claim says which side he holds (the
+    pool is the ledger's `bool` claims, as `lie_said_of`'s is its cells): a witnessed sitting about the man (`sitting:*`, a number or a name) is
+    not what he believes of him. Nothing held is 0 [ASSUMPTION: the matter's `for` side asserts its claim as held; Jordan to correct]."""
+    said = said_of([c for c in p.ledger if isinstance(c.value, bool)], matter, fx, p, tick=tick)
+    if said is None:
         return 0.0
     sure = _clip(said.confidence / fx.get("confidence_default"), 0.0, 1.0)
     return sure if said.value else -sure
 
 
-def false_items(p, matter: str, side: str, fx) -> tuple:
+def false_items(p, matter: str, side: str, fx, tick: int) -> tuple:
     """Where a false item comes from (V2 p2 §G; p4 §F 37, §K B2, D6): only HIS OWN FALSE WORD. Where `believes` runs against the `side` he
     speaks for and `lie_said_of` has a false value to say of what he holds, he can offer his own assertion of the contrary as one
-    `testimony` he knows false (`sincere: False`), weighing as much as he is sure of what it contradicts; else `()`. A forged `Record`
-    is `[HOOK]`: no act writes one."""
-    b = believes(p, matter, fx)
-    if _SIDE_SIGN[side] * b >= 0 or lie_said_of(p.ledger, matter, fx, p, tick=fade_of(p)[0]) is None:
+    `testimony` he knows false (`sincere: False`), weighing as much as he is sure of what it contradicts; else `()`. Both read his claims at
+    `tick`. A forged `Record` is `[HOOK]`: no act writes one."""
+    b = believes(p, matter, fx, tick)
+    if _SIDE_SIGN[side] * b >= 0 or lie_said_of(p.ledger, matter, fx, p, tick=tick) is None:
         return ()
     return (Item(f"word:{p.id}:{matter}", "testimony", abs(b), source=p.id, about=matter, sincere=False),)
 

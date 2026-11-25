@@ -244,6 +244,24 @@ def test_the_builder_reads_no_ledger_but_each_persons_own(monkeypatch):
         _build(w, row=ROWS["legal_trial"])
 
 
+def test_the_builder_reads_a_claim_at_the_worlds_tick_and_only_a_truth_valued_one():
+    """A claim of full sureness deposited at tick 0 is read at the world's tick: the man's `believes` and the weight of the false word he may offer
+    fall as the seasons pass (the stored `Person` has no tick of his own). A witnessed sitting about the matter's person (a `sitting:*` claim, a
+    number, the newest he holds) does not blank what he believes. CONTROL: the same claim read at tick 0 is at its deposited sureness."""
+    from ..data.rosters import SITTING_SOURCE
+    w = _world()
+    full = w.fixtures.get("confidence_default")
+    w.persons["p_low"].ledger = [Claim("c_low", "p_low", "m1", "held_by:q", False, 0, "firsthand", full, "own")]
+    row = {p.id: p for p in _build(w, row=ROWS["legal_trial"])[0].room}["p_low"]
+    word = {it.id: it.weight for it in row.items}["word:p_low:m1"]
+    assert row.believes == -1.0 and word == 1.0
+    w.tick = 3
+    later = {p.id: p for p in _build(w, row=ROWS["legal_trial"])[0].room}["p_low"]
+    assert -1.0 < later.believes < 0.0 and {it.id: it.weight for it in later.items}["word:p_low:m1"] < word
+    w.persons["p_low"].ledger.append(Claim("c_sit", "p_low", "m1", "sitting:rattled", 400, 3, SITTING_SOURCE, full, "own"))
+    assert {p.id: p for p in _build(w, row=ROWS["legal_trial"])[0].room}["p_low"].believes == later.believes
+
+
 def test_a_passing_word_nobody_watches_runs_abridged():
     """`form="auto"`: a word of effort 0 that nobody watches (a closed floor, or no one present) is the one-speech form; effort, or a
     floor that watches, makes it the full rite; an explicit form is kept."""
@@ -404,11 +422,11 @@ def test_declared_reads_the_quorum_th_best_seat_and_sets_no_veto():
     out = PROCEED(inp, _key("b14-declared"))
     margin = lambda o: S.act_band(o, inp.rite)["settled_margin"]
     ranked = sorted((m.net - m.ob for _, m in out.verdicts), reverse=True)
-    assert len(ranked) == 3 and ranked[0] > ranked[1] > ranked[2] and margin(out) == pytest.approx(ranked[1])
+    assert len(ranked) == 3 and ranked[0] > ranked[1] > ranked[2] and margin(out) == ranked[1]
     bend = lambda who: replace(out, verdicts=tuple((i, _m(-100.0) if i == who else m) for i, m in out.verdicts))
     by_margin = sorted(out.verdicts, key=lambda v: v[1].net - v[1].ob)
-    assert margin(bend(by_margin[0][0])) == pytest.approx(ranked[1])                            # the worst seat, bent, moves nothing
-    assert margin(bend(by_margin[1][0])) == pytest.approx(ranked[2])                            # the quorum-th seat, bent, does: the control
+    assert margin(bend(by_margin[0][0])) == ranked[1]                            # the worst seat, bent, moves nothing
+    assert margin(bend(by_margin[1][0])) == ranked[2]                            # the quorum-th seat, bent, does: the control
 
 
 def test_a_decided_band_is_graded_on_its_settled_margin(monkeypatch):
@@ -593,6 +611,15 @@ def test_an_argue_resolves_as_exchanges_and_the_hearers_draw():
     many = _seamed(w, "argue", "a proposition", topic="m1", effort=2)
     heard = [v[0] for v in many["proceeding"].verdicts]
     assert many["status"] == "RESOLVED" and "p_mid" in heard and len(heard) > 1, heard
+
+
+def test_odds_of_has_no_social_roll_figure_for_a_verb_that_proceeds():
+    """`odds_of` shows the social roll's odds; a verb that proceeds is dealt by the sitting, so there are none, shown or believed, where
+    the single roll would have raised on a skill no such verb names. CONTROL: `arrest` still reads."""
+    w = _world()
+    argue = Act(id="a_argue", actor="p_low", verb="argue", payload={"to": "p_mid", "subject": "m1"})
+    assert S.odds_of(w, argue) is None and S.odds_of(w, argue, believer=w.persons["p_low"]) is None
+    assert S.odds_of(w, Act(id="a_arrest", actor="p_low", verb="arrest", payload={"to": "p_other"})) is not None
 
 
 def test_an_arrest_still_resolves_on_the_single_roll(monkeypatch):

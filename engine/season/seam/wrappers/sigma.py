@@ -100,6 +100,7 @@ from ...queries.inputs import Card, Input, Item, Margin, Outcome, Point, Present
 from ...queries.world_q import docketed_under, faction_holding, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, sits_over
+from ...state.ledgers import present_confidence
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
@@ -1009,8 +1010,8 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
         if answered:
             return odds
     called = _rolled_as(w, act)
-    if called is None:
-        return None
+    if called is None or getattr(VERB_TABLE.get(act.verb), "proceeds", ()):
+        return None                     # a verb that proceeds is dealt by the sitting, not the social roll (`_believed_proceeding_chance` is its odds, `_rolled_as` its room)
     parties, subject, room, examined, prize = called
     effort = effort_of(act)                 # the act's own, as the fold hands it to `resolve`
     if w.persons.get(parties[0]) is None:
@@ -1403,13 +1404,13 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
         elif t.kind == "oblige" and not t.imposed and t.subject == p.id:
             out.append(Item(t.id, "oath", 1.0, source=p.id, about=t.object))
     if ctx.topic is not None:
-        full = ctx.fx.get("confidence_default")
+        full, decay = ctx.fx.get("confidence_default"), ctx.fx.claim_decay()
         for c in p.ledger:
             kind = PROOF_KIND_OF_SOURCE.get(c.source)
             if c.subject == ctx.topic and kind is not None:
-                out.append(Item(c.id, kind, _clip01(c.confidence / full), source=p.id, about=c.subject))
+                out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject))
         if side is not None:
-            out.extend(false_items(p, ctx.topic, side, ctx.fx))
+            out.extend(false_items(p, ctx.topic, side, ctx.fx, w.tick))
     return tuple(it for it in out if it.kind in ctx.admits)
 
 
@@ -1432,7 +1433,7 @@ def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) 
     return Present(id=p.id, weight=int(p.weight), side=side, decides=decides, **attr,
                    rank=float((p.capability or {}).get(ctx.rank_key) or 0) if ctx.rank_key else 0.0,
                    care=care, stake=stake, bonds=bonds, start=start, holds=_holds(p, ctx.bears),
-                   believes=believes(p, ctx.topic, fx) if ctx.topic is not None else 0.0,
+                   believes=believes(p, ctx.topic, fx, w.tick) if ctx.topic is not None else 0.0,
                    bias=0.0,                                  # [HOOK: his stable misjudgement has no carrier]
                    power=power, precedence=precedence, items=_items_of(w, p, ctx, side),
                    # what he carries in is the rattles of this season's sittings (`world_q.rattled_since`, B24p.20), his OWN: a person a chooser pictures
@@ -1569,20 +1570,20 @@ def card(inp: Input, row: dict, arrangement: Arrangement) -> Card:
     no true start; its `odds` is the close itself where nobody speaks (`card_odds`), `None` where nothing is drawn."""
     mod, rite, D = _proceeding_module(), inp.rite, inp.dials
     moves, ds = dict(rite.moves), [p for p in inp.room if p.decides]
-    bearer = mod._lead(inp, rite.bears)
+    bearer = mod.lead(inp, rite.bears)
     owed = dict(rite.reply).get(_OTHER_SIDE[rite.bears]) == "must" and rite.silence != "free"
     unmoved = fmath.ltr_sum(mod.silence_cost(inp, d, None, bearer) for d in ds) / len(ds) if (owed and bearer is not None and ds) else 0.0
     if rite.silence == "free":
         silence = "free: nothing here must be answered, and silence costs nothing"
     else:
         side = "against" if dict(rite.reply).get("against") == "must" else rite.bears
-        owes = mod._lead(inp, side) or (ds[0] if ds else None)
+        owes = mod.lead(inp, side) or (ds[0] if ds else None)
         pt = Point(-1, _OTHER_SIDE[side], "", "", None, "", ())
         cost = fmath.ltr_sum(mod.silence_cost(inp, d, pt, owes) for d in ds) / len(ds) if (ds and owes is not None) else 0.0
         silence = f"{rite.silence}: a point owed an answer and left standing costs {cost:.2f} with each who decides" \
             + (" (he decides himself, and answers to the contempt of those present)" if ds == [owes] else "") \
             + (", and counts with him again as tacitly admitted" if rite.silence == "admits" else "")
-    crowd = mod._crowd(inp)
+    crowd = mod.crowd(inp)
     return Card(kind=row["id"], genre=RITES[row["rite"]]["genre"], arranged_by=arrangement.arranger, tilt=round(arrangement.tilt, 2),
                 tilted_against=arrangement.tilted_against, stake=row["disposes"], outcomes=tuple(DISPOSAL[row["disposes"]].items()),
                 room=tuple((p.id, ("speaks " + p.side + (" and judges" if p.decides else "")) if p.side else ("judges" if p.decides else "attends"),
@@ -1675,9 +1676,9 @@ def _draw_of(inp: Input, out: Outcome, band: dict, weights: Mapping) -> tuple:
         return None, None
     if inp.rite.close == "exchange":
         beat = out.beats[-1]
-        return (None if beat.ground is None else mod.case_pool(inp, mod._who(inp, beat.voice), beat.ground)), None
+        return (None if beat.ground is None else mod.case_pool(inp, mod.who(inp, beat.voice), beat.ground)), None
     tracks = dict(out.state.tracks)
-    drawn = [mod._close_record(inp, tracks[i]) for i in read]
+    drawn = [mod.close_record(inp, tracks[i]) for i in read]
     heads = [weights[i] for i in read]
     return drawn[0][0], ltr_sum(h * rec.leverage for h, (_, rec) in zip(heads, drawn)) / ltr_sum(heads)
 
@@ -1801,16 +1802,16 @@ def believed_proceeding(w: Any, believer: Any, claimants: list, *, verb: str, su
     mod = _proceeding_module()
 
     def read(acc: float) -> tuple:
-        inp, card_ = proceeding_input(w, list(claimants), verb=verb, subject=subject, topic=subject if topic is None else topic, effort=effort,
-                                      row=row, form=form, arranger=arranger, rig=rig, seen=_Believed(w, believer, acc))
-        return inp, card_, mod.view(inp, mod._start(inp), mod._who(inp, believer.id), _NoNoise())
+        inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject, topic=subject if topic is None else topic,
+                                      effort=effort, row=row, form=form, arranger=arranger, rig=rig, seen=_Believed(w, believer, acc))
+        return inp, card_, mod.view(inp, mod.start(inp), mod.who(inp, believer.id), _NoNoise())
     try:
         inp, _, first = read(1.0)
         inp, card_, seen = read(first.acc)
     except ValueError as refused:
-        if str(refused).startswith("refused["):
-            return None
-        raise
+        if not str(refused).startswith("refused[") or str(refused).startswith(_DATA_DEFECTS):
+            raise                                # the fold's own reading (`_resolve_proceeding`): a data defect is raised, a room the game refuses has no odds
+        return None
     return None if inp.rite.close == "consent" else (seen.odds, card_.tilt)
 
 
@@ -1882,6 +1883,6 @@ def _believed_proceeding_chance(w: Any, believer: Any, act: Any, bands: Any) -> 
     arranger, rig = arranged_by(w, act, topic)
     p = believed_proceeding_odds(w, believer, called[0], verb=act.verb, subject=called[1], effort=effort_of(act), proceeds=row, topic=topic,
                                  arranger=arranger, rig=rig)
-    carried = {DEGREE_LABEL[d] for d, n in DEGREE_ORDINAL.items() if n >= mod._CARRIED}
+    carried = {DEGREE_LABEL[d] for d, n in DEGREE_ORDINAL.items() if n >= mod.CARRIED}
     held = set(bands)
     return None if p is None else p if held == carried else 1.0 - p if held == set(DEGREE_LABEL.values()) - carried else None

@@ -94,7 +94,7 @@ def test_planted_grid_moves_the_single_rolls_cells():
         assert ob1 > ob0 and abs((o1 - o0) - rate * (a1 - a0)) < 1e-9, read
 
     # determine, B24p.99 (was `speak`): under each of the nine rows, docketed; T2's standard is the row's level's size, and the four levels compose four obstacles
-    assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items() if row in T2_FIRST_VALUES} == T2_FIRST_VALUES   # B24p.03: the four new rows are `plain` and not T2's
+    assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items()} == {**{row: "plain" for row in ARR.ARRANGEMENTS}, **T2_FIRST_VALUES}   # B24p.03: the four new rows are `plain` and not T2's
     by_level: dict = {}
     for row, level in T2_FIRST_VALUES.items():
         h, _d = R._judging_world()

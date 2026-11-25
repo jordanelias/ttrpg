@@ -352,7 +352,7 @@ def test_a_composed_npc_is_the_view_best_chooser():
 def test_a_sitting_opens_each_man_at_his_start_carrying_his_strain():
     """What a man carries in from earlier rattles and where his track starts are the sitting's opening values; nothing else is."""
     inp = _inp([_p("a", "for", start=0.4, strain=1.5), _p("b", "against", start=-0.2), _p("j", decides=True, start=0.1)])
-    st = P._start(inp)
+    st = P.start(inp)
     assert dict(st.tracks) == {"a": 0.4, "b": -0.2, "j": 0.1} and dict(st.cond)["a"] == Cond(strain=1.5) and dict(st.cond)["b"] == Cond()
     assert (st.n, st.issue, st.points, st.ended) == (0, 0, (), None)
 
@@ -639,10 +639,31 @@ def test_one_speaker_one_turn_no_callback_is_the_speech_plus_the_addressed_mans_
             out = P.proceed(inp, rng)
             (who, v), = out.verdicts
             assert who == "b" and rng.normals == 35 and len(out.beats) == 1
-            assert v.net - v.ob == pytest.approx(out.beats[0].margin + start) and v.terms == out.beats[0].terms
+            assert v.net - v.ob == pytest.approx(out.beats[0].margin + start) and v.terms == out.beats[0].terms    # not `==`: (net + start) - ob and (net - ob) + start differ in the last bit
             assert v.ob == pytest.approx(sum(x for _, x in v.terms))
             checked += 1
     assert checked == 30
+
+
+def test_an_abridged_close_is_the_addressed_mans_own_margin_not_a_watchers():
+    """The one verdict of an abridged act carries the OBSTACLE AND TERMS of the man addressed, however many hear it after him: a watcher (a
+    hearer who does not decide, seated after the addressee, of another Will) is not the man the close reads. Net less obstacle is the speech's
+    margin with him plus his start."""
+    checked = 0
+    for start in (-0.8, 0.4):
+        inp = _inp([_p("a", "for", reason=6.0), _p("b", decides=True, start=start, will=3.0, rank=1.0), _p("w", will=7.0, rank=2.0)],
+                   _rite(close="exchange", turns=1, moves=(("for", ("argue",)),)))
+        for i in range(10):
+            out = P.proceed(inp, _key("watched", i))
+            (who, v), = out.verdicts
+            (beat,) = out.beats
+            a, to, watcher = inp.room
+            own = ROLL.obstacle(P.speech(inp, _sit(inp), a, a, to, beat.ground, None, beat.relation, abridged=True)[2])
+            his = ROLL.obstacle(P.speech(inp, _sit(inp), a, a, watcher, beat.ground, None, beat.relation, abridged=True)[2])
+            assert own != his and (v.ob, v.terms) == own and who == "b"
+            assert v.net - v.ob == pytest.approx(beat.margin + start)     # (net + start) - ob and (net - ob) + start differ in the last bit: not `==`
+            checked += 1
+    assert checked == 20
 
 
 def test_the_view_shows_the_chooser_the_odds_of_an_ordinary_bench_on_his_reading():
@@ -651,4 +672,5 @@ def test_the_view_shows_the_chooser_the_odds_of_an_ordinary_bench_on_his_reading
     v = P.view(inp, _sit(inp), inp.room[0], _key("odds"))
     assert v.odds == P.p_carried(inp, v.mood * inp.dials["mood_scale"]) and 0.0 < v.odds < 1.0
     assert P.view_odds(inp, replace(v, mood=0.9)) > P.view_odds(inp, replace(v, mood=-0.9))
+    assert P.view_odds(inp, replace(v, side="against", mood=0.9)) < P.view_odds(inp, replace(v, side="for", mood=0.9))    # a room that leans HIS way is his loss on `against`
     assert P.view_odds(replace(inp, rite=replace(inp.rite, close="consent")), v) == 0.0
