@@ -67,6 +67,9 @@ ON = 500                                     # a test arm (H-235's sweep), not a
 # has been worn to 0. A share of the whole condition (the weight at its ceiling, `condition_scale`) breaks a
 # pulled ring in one MATTER, so the front advances one ring a season: the arm the front tests run at.
 BREAKS = 1000
+# B12a.65: `restore` is declined at a broken Site while the coupling runs, so a ring can be held only BEFORE it breaks: a managed ring is pulled
+# part-way (this weight, a quarter of the scale: under the first floor, above the second) and mended before the next MATTER opens.
+HOLDS = 250
 FLOOR = "bulk_shipping"                      # the harbour's first floor, `band_floors.harbour`
 
 
@@ -200,19 +203,22 @@ def test_in35_the_front_advances_one_ring_a_season_at_most():
 # ======================================================================================
 
 def test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unmanaged_arm_does_not():
-    """Menders at both ring-1 harbours `restore` at every RESOLVE. Season 1's MATTER pulls ring 1 before
+    """Menders at both ring-1 harbours `restore` at every RESOLVE, at `HOLDS` (a ring pulled part-way, never to 0: `restore` is declined at a
+    broken Site, B12a.65, so a ring is held before it breaks). Season 1's MATTER pulls ring 1 before
     anybody has mended (the driver's order), so ring 1 crosses in every season's MATTER (the source stays
     at 0, so the pull is the same each time), and nothing beyond it ever does:
     each restore puts ring 1 back at the full scale before the next MATTER opens, so ring 2 opens every
     season at exactly its kind's wear (no pull: ring 1 is whole at the open, so nothing there is broken),
-    while the same world unmended crosses ring after ring."""
-    managed = _run(_world(BREAKS, RING_1), RING_1)
+    while the same world unmended (at `BREAKS`) crosses ring after ring."""
+    managed = _run(_world(HOLDS, RING_1), RING_1)
     unmanaged = _run(_world(BREAKS))
     scale, wear = DEFAULT_FIXTURES.get("condition_scale"), DEFAULT_FIXTURES.wear("harbour")
     assert managed["restored"] >= len(RING_1) * SEASONS, managed["restored"]   # EXECUTED, every season
     assert managed["first"] == {t: 1 for t in RING_1}, managed["first"]
-    # the limit cycle: pulled from the full scale to 0, ring 1 crosses every floor of its kind each MATTER
-    floors = len(DEFAULT_FIXTURES.get("band_floors")["harbour"])
+    # the limit cycle: pulled from the full scale to a quarter short of it, ring 1 crosses the floors above that each MATTER
+    pulled = scale - wear - HOLDS
+    floors = len([f for f in DEFAULT_FIXTURES.get("band_floors")["harbour"].values() if pulled < f])
+    assert floors >= 1
     assert managed["crossings"] == {t: SEASONS * floors for t in RING_1}, managed["crossings"]
     ring_2 = [t for t, b in _bands().items() if b == 2]
     checked = 0
@@ -229,13 +235,13 @@ def test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unman
 
 
 def test_in35_a_mended_source_does_not_recall_a_ring_matter_has_already_pulled():
-    """THE OTHER HALF, INVERTED FROM WHAT THE RULE CANNOT DO: a mender at the source restores it at every
-    RESOLVE, but season 1's MATTER has already pulled ring 1 to 0, and a ring at 0 is itself broken and
-    pulls the next. So the front reaches every banded territory in the season the unmanaged arm does: mending
-    the source does not stop it. Holding a ring does (the test above)."""
+    """THE OTHER HALF, INVERTED FROM WHAT THE RULE CANNOT DO: a mender at the source tries to restore it at every
+    RESOLVE, but the source is broken (B12a.65: `restore` is declined there while the coupling runs, so nothing is mended) and season 1's MATTER
+    has already pulled ring 1 to 0, and a ring at 0 is itself broken and pulls the next. So the front reaches every banded territory in
+    the season the unmanaged arm does: the mender at the source changes nothing. Holding a ring does (the test above)."""
     managed = _run(_world(BREAKS, (SOURCE,)), (SOURCE,))
     unmanaged = _run(_world(BREAKS))
-    assert managed["restored"] >= SEASONS, managed["restored"]   # the arm EXECUTED, every season
+    assert managed["restored"] == 0, managed["restored"]   # every attempt DECLINED at the broken source
     banded = {t for t, b in _bands().items() if b >= 1}
     assert all(unmanaged["first"].get(t) for t in banded), unmanaged["first"]   # not vacuous
     assert {t: managed["first"].get(t) for t in banded} == {t: unmanaged["first"].get(t) for t in banded}, (
@@ -457,6 +463,32 @@ def test_a_strained_site_takes_no_draw_above_its_floor_or_beside_nothing_broken(
         assert not [e for e in out if e.kind == "site.ruptured" and e.changes[0].subject in (_sid(RING_1[0]), far)], seed
         assert w.sites[far].condition == STRAINED - wear, seed
         assert w.sites[_sid(RING_1[0])].condition == 600 - wear - pull[_sid(RING_1[0])], seed
+
+
+def test_restore_is_refused_at_a_broken_site_while_the_coupling_runs():
+    """A hand-built `restore` at a Site at 0 through the real RESOLVE fold: refused at weight 250 (`restore.refused`, the Site stays at 0, the
+    decline's TRACE line is written) and admitted at weight 0 (`site.restored`, the Site rises). The same act at a standing Site at weight 250 is
+    admitted, so the refusal is the broken Site's and not the weight's."""
+    got = {}
+    for weight in (250, 0):
+        w = _world(weight, (SOURCE,))
+        site = w.sites[_sid(SOURCE)]
+        assert site.condition == 0
+        seen = len(TRACE.rows)
+        out = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS),
+                                      [Act(id="mend", actor=f"p_mender_{SOURCE}", verb="restore", payload={"site": site.id})],
+                                      contest_max_depth=w.fixtures.get("contest_max_depth"))
+        got[weight] = ([e.kind for e in out], site.condition,
+                       [r for r in TRACE.rows[seen:] if r.channel == "DECISION" and "broken Site" in r.what])
+    assert "restore.refused" in got[250][0] and "site.restored" not in got[250][0] and got[250][1] == 0, got
+    assert len(got[250][2]) == 1 and not got[0][2], got
+    assert "site.restored" in got[0][0] and got[0][1] > 0, got
+    w = _world(250, (RING_1[0],))                       # a standing Site at the same weight: admitted
+    w.sites[_sid(RING_1[0])].condition = 400
+    out = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS),
+                                  [Act(id="mend", actor=f"p_mender_{RING_1[0]}", verb="restore", payload={"site": _sid(RING_1[0])})],
+                                  contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert "site.restored" in [e.kind for e in out] and w.sites[_sid(RING_1[0])].condition > 400
 
 
 def test_a_site_the_strain_fails_to_break_knits_by_the_pull_it_took():

@@ -197,10 +197,17 @@ def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     finish what somebody else began"* (r2 §A.6.7) with no special case anywhere.
 
     DECLINES: a site that does not exist (a hand-built act that skipped the precondition) is
-    `NO_CHANGE` -> `restore.refused`."""
+    `NO_CHANGE` -> `restore.refused`; so is a BROKEN site (`condition <= 0`, `loop/matter.py::_broken_near`'s
+    reading) while `lattice_coupling` is non-zero -- a hole in the fabric is not repaired with mortar
+    (B12a.65; the Mend that will answer it is B35's). At weight 0 the decline is unreached."""
     sid = _operand(a, "site")
     site = w.sites.get(sid)
     if site is None:
+        return NO_CHANGE
+    if site.condition <= 0 and w.fixtures.get("lattice_coupling"):
+        TRACE.decision(f"restore at a broken Site (condition 0) while the lattice coupling runs -> {a.actor} at {sid!r}", "B12a.65",
+                       chose="change nothing, so the fold emits the refusal",
+                       alternatives=["raise the broken Site by `_rise` (the mortar the calamity's hole is not repaired with)"])
         return NO_CHANGE
     delta = _rise(w, site, res)
     cell = Subject.staged("Site", sid, "condition")
