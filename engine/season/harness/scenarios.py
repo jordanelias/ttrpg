@@ -8,8 +8,9 @@ one mapping from a name to its row; `run` is the one season loop that plays a ro
     python -m engine.season.harness.scenarios <name> --seed S --seasons K [--person P] [--play | --script FILE] [--developer]
 
 THE ROW (`Scenario`, frozen):
-  * `build(seed) -> World`    -- the world. A builder imports the realm's from `boot/realm.py` and places a person through
-                                 `boot/realm.py::place_person`, assigning no store directly. A scenario whose opening
+  * `build(seed) -> World`    -- the world. A builder places a person through `boot/realm.py::place_person`; the `season`
+                                 world (`carin.build_world`, moved from `headless`) and `inquiry_world` assign their rungs, offices and
+                                 propositions directly AT BUILD, before any season (the apparatus's precedent: the hand-built worlds of `tests/`). A scenario whose opening
                                  situation is made by acts folds them inside `build`; the row has no field for them.
   * `seat(w) -> str`          -- the default seated person (`--person` overrides it). `None` is a row with NO default seat (`life`): `run` refuses
                                  a call with no `person`, and the command line prints the creation sheet and exits.

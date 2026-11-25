@@ -2,7 +2,8 @@
 
 A LEAF: it imports `data/`, `gaps`, `substrate` and the dice engine, and nothing of `epistemic` or `queries/`, which is why it is a file of its own. `sigma.py` (the
 social roll's provider) imports `epistemic`, and `queries/cache.py` (which `epistemic` imports) builds the notice maps from a site's `edge` rows: the reader both
-`loop/resolve.py::_crisis_net_sigma` and `cache.notice_edges` call lives here, so neither closes a loop through `sigma.py`. `sigma.py` re-binds the names it and its
+`loop/resolve.py::_crisis_net_sigma` and `cache.notice_edges` call lives here, so neither calls into `sigma.py`'s own body. ⚠ IT DOES NOT BREAK THE IMPORT LOOP ALONE: importing this file first runs the package `__init__`, which imports `sigma`, which imports
+`epistemic`; `queries/cache.py` therefore imports it INSIDE `notice_edges`, and that lazy import is what keeps the cycle at its pinned count. `sigma.py` re-binds the names it and its
 importers (`combat.py`, `resolve.py`) read.
 """
 from __future__ import annotations
