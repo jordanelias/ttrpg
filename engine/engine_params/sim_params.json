@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 528,
-    "uncited": 396,
+    "total": 529,
+    "uncited": 397,
     "of_which_assumption_grade": 9
   },
-  "count": 528,
+  "count": 529,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 222,
+    "engine.season.settings": 223,
     "engine.season.realm": 9
   },
   "params": [
@@ -4601,6 +4601,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.arrival_report",
+      "name": "arrival_report",
+      "value": "off",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-525`, swept off (control, SHIPPED) / on",
       "citation": null,
       "citation_grade": null
     },

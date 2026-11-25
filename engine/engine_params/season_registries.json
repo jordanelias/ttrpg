@@ -4402,6 +4402,14 @@
             "off"
           ]
         },
+        "arrival_reports": {
+          "source": "v12 B12a.16 (`07_SE_kernel_repairs` D, `H-327`): *\"`arrival_report` (`off`, shipped; `on`)\"*.",
+          "note": "THE ARMS OF `Fixtures.arrival_report` (`H-525`), read by `loop/matter.py` at MATTER's `travel.ended` write (once per barrier) and refused outside this set. `off` is the CONTROL, shipped: the write carries no Observation, the tree before the item exactly. `on`: it carries `Observation(rung, \"stores:<default_store_kind>\", units)` and `Observation(rung, \"held_by\", holder id or None)` about the rung the traveller now stands in, which WITNESS deposits to the write's witnesses, the traveller among them. `\"off\"` is QUOTED: bare, YAML reads it as the boolean false.",
+          "values": [
+            "off",
+            "on"
+          ]
+        },
         "beneficiary_kinds": {
           "source": "`CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`). The carriers a verb's `beneficiary:` column may name -- *\"a carrier a Candidate ALREADY holds (the actor, `subject`, or a named operand), NOT a fifth field on `Candidate`.\"*",
           "note": "\u26a0 THIS IS A SUBSET OF `requires_operands` PLUS TWO, AND IT IS NOT THAT ROSTER. The operand vocabulary says what a PRECONDITION may bind; this says who an act is taken FOR THE GOOD OF. `from`, `site`, `kind`, `amount` and `floor` are absent because none of them names a person, and a beneficiary that is not a person is not a beneficiary -- it is the `none` member. \u26a0 `actor` IS A MEMBER HERE AND IS NEVER CARRIED IN `operands` (`operands_for` skips it: *\"`actor` is structural on both sides and is never carried\"*). That asymmetry is the point. The actor is the one carrier every Candidate holds unconditionally, so a verb declaring `beneficiary: actor` resolves for every candidate ever formed, where `to` resolves only where the cell binds it. \u26a0 `none` IS A DECLARATION, NOT A BLANK, and the loader requires the column on every row. An act whose good accrues to a Record, an Office, a Site or a Rung has no person-beneficiary the Candidate carries, and saying so in the data is what distinguishes it from a row nobody graded. Absence would read as `false` for every verb -- the UNKNOWN/False collapse `operands_for` refuses one level down. \u26a0 WHAT THIS ROSTER DOES NOT DECIDE: the WEIGHT. `synthesis.md` \u00a71.3 spells the term `orient \u00b7 benefits_me(c)`. The missing piece is the STATE: `Person` has no `orient` field and `references/npc_registry.yaml` authors no such value (its 28 per-row values were deleted at B04.12, unread, `ED-IN-0260`). The term is `6f`'s. This roster and its column deliver `beneficiary_of(p, c)`, which no game code reads (tests only).",

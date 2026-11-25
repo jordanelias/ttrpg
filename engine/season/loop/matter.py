@@ -84,6 +84,26 @@ def _stock_report(w: "World", rid: str, update: dict, mode: str, stocked_before:
     return (Observation(rid, f"stores:{kind}", stores_after.get(kind, 0)),)
 
 
+#: B12a.16 (`H-525`): the arms of `Fixtures.arrival_report`, `rosters.yaml: arrival_reports`.
+ARRIVAL_REPORTS = roster("arrival_reports")
+
+
+def _arrival_report(w: "World", pid: str, mode: str) -> tuple:
+    """WHAT ARRIVING TEACHES THE TRAVELLER ABOUT THE PLACE (B12a.16, `07_SE_kernel_repairs` D, `H-327`; [ASSUMPTION; medium; Jordan to
+    correct; revert: `arrival_report = off`]): `()` at `off`, else at most two `Observation`s about the rung `pid` now stands in -- its stores
+    as `_stock_report` builds them (`stores:<default_store_kind>`, the units the rung holds: that function at `season`, nothing laid over it),
+    and `(rung, "held_by", the id of whoever holds it)` through `world_q.governing_hold` (`None` where nothing at or above it is held, which
+    WITNESS deposits nowhere). `mode` is read and held to the roster by the caller. The report rides MATTER's `travel.ended` write, so WITNESS
+    gives it to that write's witnesses, the traveller among them: no new kind, no new channel."""
+    if mode == "off":
+        return ()
+    rid = world_q.place_of(w, pid)
+    if rid is None or rid not in w.rungs:
+        return ()
+    hold = world_q.governing_hold(w, rid)
+    return _stock_report(w, rid, {}, "season", {}) + (Observation(rid, "held_by", hold.subject if hold is not None else None),)
+
+
 # -- MATTER -- barrier 2 -- THE WORLD FREEZES AT ITS END (S25) -----------
 def _crossings(w: "World", subject_id: str, floors: dict, before, after,
                cause: "str | None") -> list:
@@ -776,6 +796,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # counts only this season's legs (the list would still grow without bound, and `budget` is
     # person-side and reads no clock); a guard over `travel_leg` (`CLAUDE.md` §0.1 pt 5 -- a one-off
     # defect, fixed at its one missing writer; the plan says *"No guard"*).
+    # B12a.16 (`H-525`): THE ARRIVAL'S REPORT rides each `travel.ended` write below, `off` (the control, shipped) carrying nothing.
+    arrival_mode = w.fixtures.get("arrival_report")
+    require_member(arrival_mode, ARRIVAL_REPORTS, f"arrival report {arrival_mode!r} is not in the roster", "H-525",
+                   law="`stock_report`'s precedent: an unknown arm silently reading `off` would make a sweep of the arm report the control twice")
     for pid in sorted(w.persons):
         traveller = w.persons[pid]
         if not traveller.travel_leg:
@@ -788,7 +812,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 lambda traveller=traveller: setattr(traveller, "travel_leg", []),
                 record_kind="Person", fieldname="travel_leg", driver="Event",
                 emits="travel.ended", subject=pid,
-                causes=[prior_leg] if prior_leg else [ROOT])
+                causes=[prior_leg] if prior_leg else [ROOT],
+                observed=_arrival_report(w, pid, arrival_mode))
 
     # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
     scale = w.fixtures.get("condition_scale")
