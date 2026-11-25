@@ -40,7 +40,7 @@ from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
-    RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
+    STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
     table_meta,
@@ -92,31 +92,6 @@ class VerbRow:
     emits: tuple
     emits_on_refusal: tuple
     grade: str
-    # ⚠ THE SCALE THE ACT REACHES — a `rung_kinds` member (Jordan, 2026-09-02: *"we also need
-    # stratum that concern governance and management re different scales of factions/governing
-    # bodies"*). It is a SEPARATE AXIS from `stratum`, crossed with it: the stratum says what KIND
-    # of act this is and orders resolution; the scale says WHOSE BODY it reaches. Five strata x
-    # eight scales covers the governance surface without multiplying strata.
-    #
-    # ⚠ AND THE SCALE LADDER ALREADY EXISTED — `rung_kinds`: person, hearth, community,
-    # settlement, territory, province, duchy, realm. Minting a second roster for it would be §8
-    # broken on the exact axis this column is about.
-    #
-    # ⚠ A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION.
-    # `ARCHITECTURE_V2.md:93` lists *"a **faction acting** as an actor"* in its REFUSAL table, at
-    # `L1`; `H-21` completes it — *"a faction's treasury is matter at the rung or office that
-    # holds it"*. So a faction never acts: a PERSON HOLDING AN OFFICE acts, and the scale is the
-    # rung that office reaches. Governance at faction scale is `binding_decision x <rung>`, not a
-    # faction verb.
-    #
-    # ⚠ SAME NAME AS A RETIRED FIELD. `04_CODE_ARCHITECTURE.md` §A.3 row 4 (`04:173`) and §B.13
-    # invariant 10 (`04:470`) say a `scale:` key is "deleted; the loader rejects the key" — but
-    # that row describes THE CHAIN's `scale:` (a per-module/per-verb-row concept, ID-13). This
-    # field is an unrelated ruling under the same word (`CLAUDE.md` §4's hazard: one spelling, two
-    # meanings). `04` is ratified and this comment does not edit it (`CLAUDE.md` §0.05) — it names
-    # the ambiguity at the site that would otherwise be misread, per the layer-conformance
-    # skill's B4.
-    scale: str = "person"
     # ⚠ PART E'S `contests:` COLUMN. `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> |
     # none` — if set, ROUTES TO THE SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound`
     # (*"`contests: the body` → the seam"*). Jordan, 2026-09-02: *"that…would trigger the personal
@@ -793,9 +768,9 @@ def _load_verb_table() -> dict:
         # LOADER INVARIANT 10, VERB HALF (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED.
         # A column is either one this loader reads or an annotation spelled `*_note`; anything else
         # is a column that silently does nothing.
-        # ⚠ #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS NOT ENFORCED, BECAUSE IT
-        # IS ABOUT A DIFFERENT FIELD: the chain's retired per-module `scale:`, not the ruled
-        # rung-kind column `VerbRow.scale` carries (see the comment on that field above).
+        # #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS ENFORCED BY THIS SAME RULE: `scale` is
+        # no `VerbRow` field (B21.84 cut the stored column; a scale is the scope of the seat exercised,
+        # `Act.via`'s seat), so a `scale:` key is an unknown key and refuses the load naming the row.
         unknown = sorted(k for k in r if k not in _VERB_ROW_KEYS and not str(k).endswith("_note"))
         if unknown:
             raise SystemExit(
@@ -832,7 +807,6 @@ def _load_verb_table() -> dict:
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
                       flat, flat_emits,
                       flat_refusals, r["grade"],
-                      str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip(),
                       by_degree, emits_by_degree,
                       build_typed_requires(name, r.get("requires_typed")),
@@ -1148,12 +1122,6 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} has eligibility kind {k!r}, which is not one of "
                     f"{ELIGIBILITY_KINDS}. §E4 admits exactly four and a fifth would be a new "
                     "way to make a verb unavailable -- which is a design change, not a table edit.")
-        # The scale must be a rung kind, and `rung_kinds` owns which. An unrostered scale RAISES
-        # rather than defaulting to `person`: a governance verb quietly filed at person scale is
-        # the silent-wrong-answer shape this file refuses everywhere else.
-        if row.scale not in RUNG_KINDS:
-            raise SystemExit(f"verb_table.yaml: {name!r} has scale {row.scale!r}, which is not a "
-                             f"`rung_kinds` member: {sorted(RUNG_KINDS)}")
         # The stratum must be one of the five, and the roster owns which five.
         if row.stratum not in STRATA:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "

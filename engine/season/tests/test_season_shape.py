@@ -4267,47 +4267,8 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
 
 # ===========================================================================
 # THE GOVERNANCE SLICE — Jordan, 2026-09-02: strata that concern governance and management across
-# scales of factions/governing bodies. The `scale:` axis, crossed with the five strata.
+# scales of factions/governing bodies. A scale is the scope of the seat exercised (`Act.via`), stored on no verb row.
 # ===========================================================================
-
-def test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum():
-    """`scale:` is a SEPARATE AXIS from `stratum`, not more strata. The stratum says what KIND of
-    act this is and orders resolution; the scale says WHOSE BODY it reaches.
-
-    ⚠ THE LADDER ALREADY EXISTED — `rung_kinds`, person through realm — so this reads that roster
-    rather than minting a second one, which on this exact axis would be §8 broken.
-
-    ⚠ AND A FACTION IS NOT A SCALE, WHICH IS A RULING AND NOT AN OMISSION.
-    `ARCHITECTURE_V2.md:93` lists *"a faction acting as an actor"* in its REFUSAL table at `L1`,
-    with three corpus cases that wanted it, and `H-21` completes it: *"a faction's treasury is
-    matter at the rung or office that holds it."* Governance above the person is a PERSON HOLDING
-    AN OFFICE acting at a rung."""
-    scales = {r.scale for r in VERB_TABLE.values()}
-    assert scales <= set(RUNG_KINDS), (
-        f"a verb's scale is not a rung kind: {sorted(scales - set(RUNG_KINDS))}")
-    assert "faction" not in RUNG_KINDS, (
-        "`faction` has become a rung kind. `ARCHITECTURE_V2.md:93` REFUSES a faction acting as an "
-        "actor at `L1`; if that has been overturned, this test is the wrong place to find out")
-    # THE AXES ARE GENUINELY CROSSED: one stratum spans several scales, and one scale spans
-    # several strata. Either alone would mean `scale` is just `stratum` under another name.
-    by_stratum, by_scale = {}, {}
-    for v, r in VERB_TABLE.items():
-        by_stratum.setdefault(r.stratum, set()).add(r.scale)
-        by_scale.setdefault(r.scale, set()).add(r.stratum)
-    assert any(len(v) > 1 for v in by_stratum.values()), (
-        f"every stratum sits at exactly one scale — then `scale` adds nothing: {by_stratum}")
-    # ⚠ THE DEFAULT BUCKET IS EXCLUDED, AND WITHOUT THAT THIS CANNOT FAIL. Delete every `scale:`
-    # line from `verb_table.yaml` and all 32 rows fall to the `"person"` default — `by_scale`
-    # becomes `{"person": {all five strata}}` and `any(len(v) > 1)` PASSES, satisfied entirely by
-    # the unauthored bucket. The property is about AUTHORED scales. Found by the governance-slice
-    # adversarial pass.
-    authored = {k: v for k, v in by_scale.items() if k != "person"}
-    assert authored, "no verb carries an authored scale; the column is entirely default"
-    assert any(len(v) > 1 for v in authored.values()), (
-        f"every AUTHORED scale carries exactly one stratum — then the two are the same axis "
-        f"under another name: {authored}")
-    print(f"\n  scales in use: { {k: sorted(v) for k, v in sorted(by_scale.items())} }")
-
 
 def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     """§0.2 — the slice is done when it RUNS. Four `binding_decision` verbs execute here, at
@@ -4372,11 +4333,7 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
                for t in w.tenures), "the conferral emitted but seated no live tenure"
     assert "date.scheduled" in kinds, f"`convene` scheduled no sitting: {sorted(kinds)}"
     assert "order.given" in kinds, f"`dispatch` gave no order: {sorted(kinds)}"
-    # AND THE SCALE IS CARRIED, not merely declared: each of these reaches a rung above the person.
-    # ⚠ `convene` DROPPED OUT OF THIS LOOP (plan position `18`/PROC-A): its `scale:` key is
-    # deleted (`03_PARAMETERS.md` §C.1) and the ordinal check below is the row's own falsifier now.
-    assert VERB_TABLE["confer"].scale == "settlement", VERB_TABLE["confer"].scale
-    assert VERB_TABLE["dispatch"].scale == "territory"
+    # AND THE SCALE IS CARRIED by the seat, not by the verb row: the ordinal check below is `convene`'s own falsifier.
     assert RUNG_KINDS.index(w.rungs["S"].kind) > 0, (
         "`convene`'s ordinal read `S` (settlement) as at or below the person tier")
     print(f"\n  governance slice — emitted {sorted(kinds)}; "

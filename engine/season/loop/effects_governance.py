@@ -556,8 +556,8 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
 @effect_for("requisition")
 def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """PLAN POSITION `19` -- A REQUISITION MOVES A RUNG'S STORES INTO THE REQUISITIONING SEAT'S TREASURY. The row's
-    `scale_note`, *"a requisition moves a Rung's stores -- the rung IS the subject"*; the retirement plan's
+    """PLAN POSITION `19` -- A REQUISITION MOVES A RUNG'S STORES INTO THE REQUISITIONING SEAT'S TREASURY. A requisition
+    moves a Rung's stores, and the rung IS the subject; the retirement plan's
     G2 names where it goes, *"treasury = `Rung.stores` at the office's own rung"* -- the rung of the
     seat the act exercises (`Act.via`), the same treasury `_renewals` pays upkeep OUT of. So a requisition is
     `transfer`'s shape with both sides fixed by the act's seat and subject rather than by the actor's

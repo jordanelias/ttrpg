@@ -5658,8 +5658,6 @@
         },
         {
           "verb": "confer",
-          "scale": "settlement",
-          "scale_note": "conferral seats an office, and an office sits at a rung",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:confer"
@@ -5910,8 +5908,6 @@
         {
           "verb": "determine",
           "difficulty": "routine",
-          "scale": "settlement",
-          "scale_note": "a sitting decides at the venue's rung",
           "stratum": "binding_decision",
           "capability": "argue",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
@@ -6041,8 +6037,6 @@
         },
         {
           "verb": "dispatch",
-          "scale": "territory",
-          "scale_note": "a dispatch sends a person across rungs; its reach is the territory, not the sender",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -6072,8 +6066,6 @@
         },
         {
           "verb": "establish",
-          "scale": "settlement",
-          "scale_note": "founding an office is an act on the rung that will hold it",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:confer"
@@ -6209,8 +6201,6 @@
         },
         {
           "verb": "exchange",
-          "scale": "settlement",
-          "scale_note": "as `requisition` -- it writes `Rung.stores`",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -6602,8 +6592,6 @@
         },
         {
           "verb": "issue",
-          "scale": "province",
-          "scale_note": "a Dispensation's `scope` enumerates executors -- \u00a737.1 -- so its reach is the domain the issuer governs",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:issue"
@@ -7034,8 +7022,6 @@
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `requisition`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
-          "scale": "settlement",
-          "scale_note": "a requisition moves a Rung's stores -- the rung IS the subject",
           "stratum": "uncontested_material",
           "eligibility": [
             "remit:issue",
@@ -7069,7 +7055,7 @@
               }
             ]
           },
-          "requires_typed_note": "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the row's own `scale_note` makes the requisitioned rung THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (\u00a7F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`).",
+          "requires_typed_note": "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the requisitioned rung is THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (\u00a7F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`).",
           "writes": [
             "Rung.stores",
             "Rung.stores"
@@ -7104,8 +7090,6 @@
         },
         {
           "verb": "march",
-          "scale": "settlement",
-          "scale_note": "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor.",
           "stratum": "contested_physical",
           "capability": "none",
           "capability_note": "undeclared at authoring; every person rolls the untrained default. The field's skill enters at the `field` site, on the commander's record (`27_MB_A`).",
@@ -7198,8 +7182,6 @@
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `marshal`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
-          "scale": "settlement",
-          "scale_note": "a standing order is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -7251,8 +7233,6 @@
         },
         {
           "verb": "surrender",
-          "scale": "settlement",
-          "scale_note": "a place is yielded where it stands: the settlement IS the subject, as `march`'s and `marshal`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -7542,8 +7522,6 @@
         },
         {
           "verb": "pardon",
-          "scale": "settlement",
-          "scale_note": "#453 \u00a79.1: *'settlement'* -- a pardon is the bench's act at the seat that owns the restraint, `determine`'s scale",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:determine"
@@ -7786,8 +7764,6 @@
         },
         {
           "verb": "revoke",
-          "scale": "settlement",
-          "scale_note": "as `confer` -- it unseats the same office",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:revoke"
@@ -7951,8 +7927,6 @@
           "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
           "capability": "none",
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `raze`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
-          "scale": "settlement",
-          "scale_note": "#453 \u00a79.2: a razing ends the settlement it names -- the place IS the subject, `march`'s and `seize`'s scale for the same reason.",
           "stratum": "contested_physical",
           "eligibility": [
             "remit:dispatch"
@@ -8002,8 +7976,6 @@
         },
         {
           "verb": "seize",
-          "scale": "settlement",
-          "scale_note": "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives",
           "stratum": "uncontested_material",
           "eligibility": [
             "remit:issue"
@@ -8108,8 +8080,6 @@
         },
         {
           "verb": "succeed",
-          "scale": "person",
-          "scale_note": "succession is one person taking another's tenure; the office's rung does not change",
           "stratum": "binding_decision",
           "eligibility": [
             "own"

@@ -34,13 +34,11 @@
 # NEVER `capability`. #353 §9.2: "`capability` supplies dice and GATES NOTHING." An office makes an
 # ORDINARY verb eligible; no verb exists only for office-holders, and none carries a modifier.
 #
-# `scale:` ON A ROW. #358 §E.3 / Stage 2 §C.3: scale is a POSITION IN THE CONTAINMENT TREE, derived on
-# demand, stored nowhere -- "a label cannot be walked". A row that still carries `scale:` answers a real
-# Jordan question ("is it unnecessary to nest these and instead just explicitly define scale?"; #358 rev.2,
-# 2026-09-03): the answer is THE SCOPE OF THE SEAT BEING EXERCISED -- `Act.via.scope` -- not a column on the
-# verb. The key is retired when `Act.via` carries the scope; until then each such row's `scale_note` is the
-# provenance that would be lost. `convene` has none: its venue test is an ordinal read off the act's own
-# `subject` operand (its `requires_note:`).
+# NO ROW CARRIES `scale:` (B21.84; `04` §A.3 row 4, §B.13 #10). #358 §E.3 / Stage 2 §C.3: scale is a POSITION IN THE CONTAINMENT
+# TREE, derived on demand, stored nowhere -- "a label cannot be walked". Jordan's question ("is it unnecessary to nest these and
+# instead just explicitly define scale?"; #358 rev.2, 2026-09-03) is answered by THE SCOPE OF THE SEAT BEING EXERCISED --
+# `Act.via`'s seat, its `scope_rung` -- not a column on the verb. A `scale:` key is an unknown key and the loader refuses it,
+# naming the row (`data/verbs.py::_load_verb_table`).
 #
 # The flat `emits_on_refusal` rule (invariant 4) covers every failable clause, not only a `requires`.
 # STILL OPEN: eligibility itself can decline -- `destroy_record` declines on BOTH its alternatives (H-75)
@@ -266,8 +264,6 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 10): the matrix row `(Record, exists)` is the tree's; the row, the `cover` kind and the `anchor_of` cover read are v9 IN-12's, on #453 §8.2 `:1486-1495`, §9.3 `:1826-1863`, K-19 `:2722-2727`."
     source:      "v9 IN-12 step 10 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.3 `:1826-1863`"
   - verb:        "confer"
-    scale:   "settlement"
-    scale_note: "conferral seats an office, and an office sits at a rung"
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
     referent_class: Office
@@ -406,8 +402,6 @@ verbs:
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "determine"
     difficulty:  "routine"
-    scale:   "settlement"
-    scale_note: "a sitting decides at the venue's rung"
     stratum:     "binding_decision"
     capability:  "argue"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
@@ -475,8 +469,6 @@ verbs:
     grade_note:  "`assumption`, not `ruled`: `judging_set` is built (`H-32`, graded `assumption`) and the quorum is a swept fixture (`H-161`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; precondition, disposal, keyed refusals and writes at plan position `19` (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` `19 — INSTRUCTION`; `21_RECONCILIATION.md:575`)"
   - verb:        "dispatch"
-    scale:   "territory"
-    scale_note: "a dispatch sends a person across rungs; its reach is the territory, not the sender"
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     beneficiary: "none"
@@ -495,8 +487,6 @@ verbs:
     writes_note: "— (§11.1: it names a person; their own choose decides)"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "establish"
-    scale:   "settlement"
-    scale_note: "founding an office is an act on the rung that will hold it"
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
     beneficiary: "none"
@@ -564,8 +554,6 @@ verbs:
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: as `comply`"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "exchange"
-    scale:   "settlement"
-    scale_note: "as `requisition` -- it writes `Rung.stores`"
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -816,8 +804,6 @@ verbs:
     grade_note:  "RATIFIED PROGRAM POSITION 16 -- *one two-party verb ... `own` + `hold:<record>` eligibility, writing the holder's `hold` closed and the receiver's open* -- named against `architecture/VOCABULARY.md` (no row for give, grant, hand, convey or deliver; checked again at the build), and the gate's basis for the receiver's edge settled at G3's pre-flight (`ED-IN-0277`). `hold:<record>` is a PLACEHOLDER and declines on both sides (`H-75`); `own` admits first, as `transfer`'s `own | hold:<store>` does."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` position 16 (≡ `15a`); r2 `proposals/2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` §A.7 (the row, the predicate, the name); `hole_register.yaml` H-84"
   - verb:        "issue"
-    scale:   "province"
-    scale_note: "a Dispensation's `scope` enumerates executors -- §37.1 -- so its reach is the domain the issuer governs"
     stratum:     "binding_decision"
     eligibility: ["remit:issue"]
     beneficiary: "none"
@@ -1162,8 +1148,6 @@ verbs:
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
     capability_note: "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `requisition`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it."
-    scale:   "settlement"
-    scale_note: "a requisition moves a Rung's stores -- the rung IS the subject"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "presence:<rung>"]
     beneficiary: "actor"
@@ -1186,7 +1170,7 @@ verbs:
           threshold: amount
           comparator: ">="
           conjunct:  stores
-    requires_typed_note: "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the row's own `scale_note` makes the requisitioned rung THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (§F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`)."
+    requires_typed_note: "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the requisitioned rung is THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (§F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`)."
     writes:      ["Rung.stores", "Rung.stores"]
     writes_note: "×2, ONE PER SIDE -- PLAN POSITION `19`, `transfer`'s shape and the W3 audit's reason (*'six grain left the world and arrived nowhere'*): the requisitioned rung goes down and the seat's treasury, the rung of `Act.via`, goes up by the same, in one effect (`loop/effects.py::_eff_requisition`, through `_shift`, the one body of every move between two rungs' stores). The second pair is check-only."
     emits:       ["requisition.taken"]
@@ -1203,8 +1187,6 @@ verbs:
     eligibility_substitution_note: "The source cell named `remit:requisition`, and `requisition` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). `remit:issue` is substituted, declared here: an instrument may fill exactly what the register declares (§42.2/G.4.8), so either `requisition` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a requisition exercises (defensible -- a requisition is issued). The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act. The substitution EXECUTES (a holder granted `issue` can requisition), and the open eligibility question (plan position `19`: *'stays an open eligibility question this position inherits (a neighbour of `H-52`)'*) is carried by `H-52`'s row."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "march"
-    scale:   "settlement"
-    scale_note: "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor."
     stratum:     "contested_physical"
     capability:  "none"
     capability_note: "undeclared at authoring; every person rolls the untrained default. The field's skill enters at the `field` site, on the commander's record (`27_MB_A`)."
@@ -1249,8 +1231,6 @@ verbs:
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
     capability_note: "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `marshal`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it."
-    scale:       "settlement"
-    scale_note:  "a standing order is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it."
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     beneficiary: "actor"
@@ -1286,8 +1266,6 @@ verbs:
   # field is fought. Ships WITHHELD (`Fixtures withheld_verbs`, `marshal`'s precedent): formable, it moves every seeded season.
   # ===========================================================================================
   - verb:        "surrender"
-    scale:       "settlement"
-    scale_note:  "a place is yielded where it stands: the settlement IS the subject, as `march`'s and `marshal`'s are, and the exercised seat's purview must reach it."
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     beneficiary: "none"
@@ -1461,8 +1439,6 @@ verbs:
     eligibility_sweep_note: ["remit:determine (V2's value)", "own", "hold:<the matter's record>"]
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "pardon"
-    scale:       "settlement"
-    scale_note:  "#453 §9.1: *'settlement'* -- a pardon is the bench's act at the seat that owns the restraint, `determine`'s scale"
     stratum:     "binding_decision"
     eligibility: ["remit:determine"]
     beneficiary: "subject"
@@ -1607,8 +1583,6 @@ verbs:
     effect_note: "An effect formula is not a precondition: a precondition is a question the fold asks of the world, an effect is what the write does, and conflating them is how a resolver grows a second body."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "revoke"
-    scale:   "settlement"
-    scale_note: "as `confer` -- it unseats the same office"
     stratum:     "binding_decision"
     eligibility: ["remit:revoke"]
     beneficiary: "none"
@@ -1697,8 +1671,6 @@ verbs:
     difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
     capability:  "none"
     capability_note: "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `raze`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it."
-    scale:       "settlement"
-    scale_note:  "#453 §9.2: a razing ends the settlement it names -- the place IS the subject, `march`'s and `seize`'s scale for the same reason."
     stratum:     "contested_physical"
     eligibility: ["remit:dispatch"]
     eligibility_note: "v9 IN-12 step 11 (#453 §9.2, the `raze` row): `remit:dispatch`, the act that musters the army (`march`'s eligibility, `state/gate.py::MUSTER_ACT`'s grant) -- the seat that can put an army on a town is the seat that can level it. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with the ruling. Built on `remit_default` (§A v9, J-8 partly answered), `arrest`'s precedent."
@@ -1728,8 +1700,6 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 11): the row is v9 IN-12's, on #453 §9.2 `:1800-1822`, K-06 `:2617-2619`; the occupation licence is IN-13's read (`_seize_rung`), copied."
     source:      "v9 IN-12 step 11 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.2 `:1800-1822`"
   - verb:        "seize"
-    scale:       "settlement"
-    scale_note:  "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue"]
     beneficiary: "none"
@@ -1793,8 +1763,6 @@ verbs:
     grade:       "assumption"
     source:      "ARCHITECTURE_V2.md §E3, transcribed; typed cell, prize, bands and refusal at v9 SC-01 step 12 (`workplans/valoria_master_workplan_v9_part6.md` §SC-01), on `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1 (design intent) and `21_RECONCILIATION.md:576`"
   - verb:        "succeed"
-    scale:   "person"
-    scale_note: "succession is one person taking another's tenure; the office's rung does not change"
     stratum:     "binding_decision"
     eligibility: ["own"]
     beneficiary: "actor"
