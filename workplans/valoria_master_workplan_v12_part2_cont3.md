@@ -29,7 +29,7 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | `import core` | `from modules.combat import core` (B05.58); `from modules.combat import …` (B16.01) | B16.01 elides the imported names; not a defect |
 | `Unit.base_combat_pool` | `Army.base_combat_pool` (B17.05); `systems/mass_battle/sim/multi.py::base_combat_pool` (B19.07) | **a check at B19.07's open**: B17 (S9) renames the class `Unit` → `Army` before B19 (S15), so B19.07's NAMES line names a spelling the tree no longer has at its turn; the item's SITE re-grep (part 2 §5.7) finds `Army.base_combat_pool`. Not edited (the brief's scope is the tables) |
 | `harness/populated.py::mint_planned_works` | `boot/realm.py::mint_planned_works` (B12a.03); `boot/realm.py` (B12c.19, B12c.28) | path and symbol spellings of one move; not a defect |
-| `::seat_guards` | `boot/realm.py` (B21b.02); `boot/realm.py::seat_guards` (B37.14) | the same; not a defect |
+| `::seat_guards` | `boot/realm.py` (B21b.02, landed @ae98b73ef); `boot/realm.py::seat_guards` (B37.14) | the same; not a defect |
 | `oughts_named` | `world_q.propositions_heard` (B21b.08); `propositions_heard` (B21b.12) | the same symbol, qualified and bare, inside one batch; not a defect |
 | `Regime` | `CreedBody` (B38.17, B38.21); `creed_bodies` (B38.57, B38.59) | **a spelling to read at B38.57's open**: B38.17 fixes the class `Regime` → `CreedBody` and the collection `regimes` → `creed_bodies`; B38.57 and B38.59 write the class's old name against the collection's new one (B38.71, below, the reverse). Both names exist after B38.17, so each item's SITE step resolves which it edits |
 | `regimes` | `creed_bodies` (B38.17, B38.21, B38.64, B38.73); `CreedBody` (B38.71) | the reverse crossing of the row above |
@@ -77,7 +77,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 50 | `Yield.turn` → `Yield.round` | B16.02 | — |
 | 51 | `bouts` → `rounds` | B16.02 | — |
 | 52 | `turn=` → `round=` | B16.09 | — |
-| 53 | `::seat_guards` → `boot/realm.py` | B21b.02 | — |
 | 54 | `oughts_named` → `world_q.propositions_heard` | B21b.08 | — |
 | 55 | `oughts_named` → `propositions_heard` | B21b.12 | — |
 | 56 | `proof_step` → `proof_level` | B24.02 | — |
@@ -274,7 +273,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 196 | `tests/test_approach_responses.py` | test file | B16.09 | — |
 | 197 | `engine/season/harness/duel_scene.py` | harness module | B16.11 | — |
 | 198 | `engine/season/tests/test_duel_scene.py` | test file | B16.11 | — |
-| 199 | `engine/season/tests/test_in36_march_cap.py` | test file | B21b.01 | — |
 | 200 | `engine/season/tests/test_in30_faction_props.py` | test file | B21b.05 | — |
 | 201 | `engine/season/tests/test_cp_t09_allegiance.py` | test file | B21b.08 | — |
 | 202 | `engine/season/tests/test_cp_t09_declare.py` | test file | B21b.11 | — |
