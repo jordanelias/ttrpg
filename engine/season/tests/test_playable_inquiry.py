@@ -25,7 +25,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q, world_q
 from ..queries.person_q import record
 from ..seam import Resolution
-from ..state.carriers import Act, Claim, Question, Record, Tenure, View
+from ..state.carriers import Act, Claim, Proposition, Question, Record, Tenure, View
 
 
 def test_inquiry_world_builds_its_six_parts_and_seeds_one_case_goal():
@@ -288,3 +288,90 @@ def test_some_conclusion_names_a_non_actor():
     assert named, "no run named anyone: neither a conclusion nor an accusation formed in twenty runs"
     assert any(not is_actor for _n, _a, is_actor in named), "every conclusion names the true actor"
     assert any(is_actor for _n, _a, is_actor in named), "no conclusion names the actor"
+
+
+# ======================================================================================
+# B11.78 (`08_FI_03` §3 "Acting on it", §4; `proposals/v12_B11_a_conclusion_acted_on.md` §1): A HELD CONCLUSION FORMS AN ACCUSATION; A CAUGHT LIAR IS A QUESTION.
+# Hand-built worlds (no computed `utter` makes a `HOLDS` Proposition until B25 types it), the person-side formation read through `questions_for` and `opening_set`.
+# ======================================================================================
+def _holds_conclusion(w, mood="HOLDS", held=True, doer=KILLER):
+    """`p_low` holds a `concluded:` claim naming `doer` and, per the arguments, the Proposition he uttered of it `(VICTIM, concluded:<deed>, doer)` of `mood`, on a live `hold`."""
+    p = w.persons[CONCLUDER]
+    p.ledger.append(Claim("c_concluded", p.id, VICTIM, f"concluded:{DEED}", doer, 0, "inferred", 100, "own"))
+    w.propositions["prop_b1178"] = Proposition("prop_b1178", mood, VICTIM, f"concluded:{DEED}", doer, 0)
+    if held:
+        w.add_tenure(Tenure("t_hold_prop", p.id, "prop_b1178", "hold", since=0))
+    return p
+
+
+def _petitions_to(w, doer):
+    """The `petition` Candidates `p_low` forms on the first question `questions_for` gives him, those that name `doer`."""
+    p = w.persons[CONCLUDER]
+    (q, *_rest) = world_q.questions_for(w, p)
+    return [c for c in opening_set(p, View(p.id, [], w.fixtures.get("view_k")), q, w.fixtures) if c.verb == "petition" and c.operands.get("to") == doer]
+
+
+@pytest.mark.parametrize("variant", ["no_proposition", "mood_ought", "not_held"])
+def test_a_held_conclusion_forms_an_accusation(variant):
+    """B11.78 (design §1): a person who holds a `concluded:` claim AND the `HOLDS` Proposition he made of it forms a `petition` naming the doer, and folding it through the
+    real driver mints a petition Record whose `terms` is the doer. CONTROL (each variant, one at a time): the same claim without the Proposition, with it in mood `OUGHT`, or
+    with it uttered and no longer held forms none -- the conclusion is acted on once it is a committed assertion, not on the inference alone."""
+    w, d = _concluder()
+    _holds_conclusion(w)
+    assert world_q.conclusions_held(w, w.persons[CONCLUDER]) == (KILLER,)
+    (c,) = _petitions_to(w, KILLER)
+    out = _look(w, d, Act(id="a_acc", actor=CONCLUDER, verb="petition", payload={"subject": c.subject, **c.operands}), "Success")
+    assert [e.kind for e in out] == ["petition.filed"], [e.kind for e in out]
+    minted = [r for r in w.records.values() if r.kind == "petition" and r.id != REC]
+    assert [r.subject_matter["terms"] for r in minted] == [KILLER], minted
+    ctl, _ = _concluder()
+    if variant == "no_proposition":
+        ctl.persons[CONCLUDER].ledger.append(Claim("c_concluded", CONCLUDER, VICTIM, f"concluded:{DEED}", KILLER, 0, "inferred", 100, "own"))
+    else:
+        _holds_conclusion(ctl, **{"mood_ought": dict(mood="OUGHT"), "not_held": dict(held=False)}[variant])
+    assert world_q.conclusions_held(ctl, ctl.persons[CONCLUDER]) == ()
+    assert _petitions_to(ctl, KILLER) == []
+
+
+def _caught(w, told=True, own_value=8, own_when=0, told_by=None):
+    """`LOOKER` was told by `LIAR` that `Hh` holds 12 grain (a false cell) and, unless `own_value` is `None`, holds his own firsthand reading of it at `own_when`; returns the
+    contradicting claim."""
+    p = w.persons[LOOKER]
+    if told:
+        _told_false(w, LOOKER, "Hh", "stores:grain", 12)
+    mine = Claim("c_own_grain", p.id, "Hh", "stores:grain", own_value, own_when, "firsthand", 100, "own")
+    if own_value is not None:
+        p.ledger.append(mine)
+    return mine
+
+
+def _liar_questions(w, since=None):
+    """The questions `questions_for` gives `LOOKER` whose referent is the liar."""
+    return [q for q in world_q.questions_for(w, w.persons[LOOKER], since) if LIAR in q.referents]
+
+
+def test_a_contradicted_teller_becomes_a_question():
+    """B11.78 (`08_FI_03` §4, "Gates" §4): when `record(p, teller)` is below neutral and the firsthand claim that contradicts the teller landed since `p` last deliberated, one
+    `claim_landed` question exists whose referent is the teller and whose `about` is that claim -- no new source, deposit or Event kind. CONTROLS, one at a time, each leaving
+    no such question: no contradiction (his own reading AGREES with the telling), no telling (the firsthand claim contradicts nobody), a contradiction that landed before he last
+    deliberated (`since`), and the teller's record at neutral (`record_gain` 0, where a contradicted teller reads 1.0). The question is the ordinary one: the unclassed rows (`speak`, `interview`) form on the liar; the classed ones (`petition`, `challenge`) reach him only as a Person-classed referent of the question he answers first (`own_referents_of_class`)."""
+    w, _ = _world()
+    mine = _caught(w)
+    assert record(w.persons[LOOKER], LIAR, w.fixtures, w.tick) < 1.0
+    (q,) = _liar_questions(w)
+    assert (q.source, q.referents, q.about) == ("claim_landed", (LIAR,), mine.id), q
+    formed = {c.verb for c in opening_set(w.persons[LOOKER], View(LOOKER, [], w.fixtures.get("view_k")), q, w.fixtures) if c.subject == LIAR}
+    assert {"speak", "interview"} <= formed, f"the unclassed rows form on the liar: {sorted(formed)}"
+    for name, build in {"agreeing": lambda x: _caught(x, own_value=12), "untold": lambda x: _caught(x, told=False),
+                        "no_own_claim": lambda x: _caught(x, own_value=None)}.items():
+        ctl, _ = _world()
+        build(ctl)
+        assert _liar_questions(ctl) == [], name
+    stale, _ = _world()
+    _caught(stale)
+    assert _liar_questions(stale, since=(stale.tick + 1, 0)) == [], "landed before he last deliberated"
+    flat, _ = _world()
+    flat.fixtures = flat.fixtures.sweep("record_gain", 0)
+    _caught(flat)
+    assert record(flat.persons[LOOKER], LIAR, flat.fixtures, flat.tick) == 1.0
+    assert _liar_questions(flat) == [], "his record is neutral: no question"

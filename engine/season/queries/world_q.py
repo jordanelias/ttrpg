@@ -47,7 +47,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
+    CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
     HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -62,6 +62,8 @@ from .person_q import (
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
 from .person_q import holders_named, vacant_named
+# v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`_disagrees`) and reads the teller's `record`.
+from .person_q import _disagrees, is_cell, record as record_of
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -74,7 +76,7 @@ from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import (  # noqa: F401 -- re-exported
     a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
-from ..state.carriers import Person, Question, Site, Tenure
+from ..state.carriers import Person, Question, Site, Tenure, fade_of
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
 # which may not import this module. These names are the same function objects as `state/containment`'s.
@@ -3398,6 +3400,24 @@ def propositions_heard(w: World, p: Person) -> tuple:
     return tuple(sorted(o for o in heard if w.class_of(o) == "Proposition"))
 
 
+def conclusions_held(w: World, p: Person) -> tuple:
+    """THE DOERS A CONCLUSION `p` HAS COMMITTED TO NAMES (v12 B11.78; `proposals/v12_B11_a_conclusion_acted_on.md` §1, option (c); [ASSUMPTION; medium; Jordan to correct;
+    revert: drop the term in `questions_for`]), sorted: the `value` of each Proposition on `p`'s own live `hold` edges whose mood is `HOLDS` and whose predicate is a
+    `concluded:<deed kind>` stem, where that value is a person the world holds other than `p` -- the one `reconstruct` named and his `utter` asserted. `questions_for` adds
+    them as `Person`-classed referents, `writs_held`'s shape one class over, so a computed `petition` (whose `subject` and `to` both bind its one Person referent, H-94's
+    limit) is addressed to the accused, `carry` dockets him and `determine`'s `party` admits him; every row declaring `Person` forms on him too (`dispatch`, `capture`,
+    `open_case`, `tend`), the price of a class-wide stamp.
+
+    WHAT IT IS KEYED ON IS THE COMMITMENT, NOT THE INFERENCE: the `concluded:` claim alone stamps nothing, so a person who reasons and does not utter keeps his inference
+    private. A `Partial` conclusion withholds the hand (its value is `True`), names no person and stamps nothing. Resolver-side and read-only: it reads `p`'s own edges and,
+    for their objects only, the Proposition store, as `writs_held` reads the Record store. `()` for nearly everyone -- and for everyone in the realm until B25 types `utter`
+    (no computed act makes a `HOLDS` Proposition today)."""
+    return tuple(sorted({prop.value for t in p.tenures
+                         if t.kind == "hold" and t.live and (prop := w.propositions.get(t.object)) is not None
+                         and prop.mood == "HOLDS" and str(prop.predicate).startswith(f"{CONCLUDED_STEM}:")
+                         and isinstance(prop.value, str) and prop.value in w.persons and prop.value != p.id}))
+
+
 def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
     """IS THIS LARDER WORTH A REQUISITION (v10 CR-23, M17 taken (a), [ASSUMPTION; medium; Jordan to
     correct]): it holds a positive amount of the matter a computed requisition carries, and at least
@@ -4091,6 +4111,39 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
     return Question(f"q:claim:{xid}", "claim_landed", tuple(tellers), xid) if tellers else None
 
 
+def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> list:
+    """v12 B11.78 (`08_FI_03` §4; `proposals/v12_B11_a_conclusion_acted_on.md` §3; [ASSUMPTION; medium; Jordan to correct; revert: drop the call in `questions_for`]): A CAUGHT
+    LIAR IS A QUESTION -- `standing_crossed`'s sibling, about the people whose word a look has contradicted.
+
+    For each firsthand CELL claim `c` that landed in `p`'s own ledger since he last deliberated (`landing_floor`, the boundary `questions_for`'s Q2 and `standing_crossed` read), the
+    tellers of a claim of his on the same cell that `c` disagrees with (`person_q._disagrees`, `record`'s own pairing step) and whose `record(p, teller)` is BELOW NEUTRAL (the
+    hearer's reading of the liar, `record`'s owner) are the referents of ONE `claim_landed` question whose `about` is `c`: `tell`, `petition`, `challenge`, `forgive` then form on
+    the liar by the ordinary rows. No new deposit, source or Event kind, and nothing is stored: the price of a lie is the hearer's own grading of the teller (CR-83, design §3).
+    The id is its own (`q:liar:<claim>`), so the claim's own Q2 question beside it is neither replaced nor doubled. `[]` for a person who holds no fresh firsthand cell or no
+    telling on it, and at `record_gain` 0, where a contradicted teller reads neutral. ⚠ IT READS `p`'S OWN LEDGER AND WRITES NOTHING."""
+    floor = landing_floor(w, since)
+    fresh = [c for c in p.ledger if c.firsthand and is_cell(c) and (c.when, c.lap) >= floor]
+    if not fresh:
+        return []
+    cells = {(c.subject, c.predicate) for c in fresh}
+    told = [t for t in p.ledger if t.teller is not None and t.teller != p.id and (t.subject, t.predicate) in cells]
+    if not told:
+        return []
+    tick, below = fade_of(p)[0], {}                  # `below`: teller -> is his record under neutral (read once per teller)
+    out = []
+    for c in fresh:
+        tellers: list = []
+        for t in told:
+            if (t.subject, t.predicate) == (c.subject, c.predicate) and t.teller not in tellers and _disagrees(t, c):
+                if t.teller not in below:
+                    below[t.teller] = record_of(p, t.teller, w.fixtures, tick) < 1.0
+                if below[t.teller]:
+                    tellers.append(t.teller)
+        if tellers:
+            out.append(Question(f"q:liar:{c.id}", "claim_landed", tuple(tellers), c.id))
+    return out
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus the
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
@@ -4217,6 +4270,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # landed are what crossed. REVERT: drop these two lines; MATTER's record then raises nothing.
     if (sq := standing_crossed(w, p, since)) is not None:
         out.append(sq)
+    # v12 B11.78 (`08_FI_03` §4): ITS SIBLING -- A TELLER WHOSE WORD A FRESH FIRSTHAND CELL CONTRADICTS, AND WHOSE RECORD WITH HIM IS UNDER NEUTRAL, IS A QUESTION ABOUT HIM
+    # (`contradicted_tellers`). Still `claim_landed`; no source added. REVERT: drop these two lines.
+    out.extend(contradicted_tellers(w, p, since))
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
@@ -4331,6 +4387,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED, THE WOUNDED HE MAY
     # TEND (`wounded_with`: himself below his ceiling, and those beside him he BELIEVES hurt), as `Person` -- `tend`
     # forms on them, reading no other person's true body.
+    # v12 B11.78 (`proposals/v12_B11_a_conclusion_acted_on.md` §1; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED AFTER THEM, THE DOERS A
+    # CONCLUSION HE HAS UTTERED NAMES (`conclusions_held`), as `Person` -- `petition` (the accusation, addressed to the accused), `capture`, `open_case`, `dispatch` and
+    # `tend` form on them. `()` for everyone while no computed act makes a `HOLDS` Proposition (B25's typed `utter`), so the output is byte-identical.
     # v11 CR-78 (`strife-00` §5, the stamp; [ASSUMPTION; medium; Jordan to correct; revert: ship off]): AND, APPENDED
     # LAST, WHAT IS AT STAKE IN THE FLOWS HE HOLDS OPEN (`flow_stakes`: the rungs, persons and offices each open
     # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
@@ -4343,7 +4402,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
-             + wounded_with(w, p)
+             + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
