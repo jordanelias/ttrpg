@@ -18,7 +18,7 @@ export (`tools/export_engine_params.py`, section `attributes`) read this tuple. 
 its readers. RE-VALUING is `Combatant.set_attr` (or `c.<key> = v`), which re-derives every derived figure.
 
 NOT delivered, and said so: re-centring the derived quantities stays formula constants anchored on the default
-scale (`balance_eff - 3`, `reflex - 3`, `conc/5 - 3`, `Ob = score/2`, `pool = score + 6`).
+scale (`balance_eff - 3`, `reflex - 3`, `conc/5 - 3`, `Ob = MU_PER_DIE x score` since B15.03 (was `score/2`), `pool = score + 6`).
 
 INTERIM HOMES. `disp` carries `registry_key: None`: this spec is its only home until the registry or the
 season's carrier (`Person.attributes`, CR-20) names a key for it; that commit sets the entry's `registry_key` in

@@ -597,11 +597,16 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
     blind, w = read()
     unhurt = _believing_world(3)
     def wound_of(inp):
-        """How the wound reaches the fight under the shipped arm: his `end` (the cut, `endurance_cut`) and his carried level (`level`)."""
-        return inp.ends[1], inp.carried[1]
-    true_wound = (C.party_end(w.persons[_B], w.fixtures), C._carried_of(w.persons[_B], w.fixtures))
-    unhurt_wound = (C.party_end(unhurt.persons[_B], unhurt.fixtures), C._carried_of(unhurt.persons[_B], unhurt.fixtures))
+        """How the wound reaches the fight under the shipped arm: his `end` (the cut, `endurance_cut`), his carried level (`level`), and the levels
+        against him the mortal roll charges (`mortal[1][3]`, B15.07: his body band, read off the same picture as the other two)."""
+        return inp.ends[1], inp.carried[1], inp.mortal[1][3]
+    def mortal_levels(world):
+        """The mortal roll's levels against `_B` as the WORLD'S body gives them (the dealt fight's, no believer)."""
+        return C._mortal_operands(world, _B, (_A, _B), blind.terms, False)[3]
+    true_wound = (C.party_end(w.persons[_B], w.fixtures), C._carried_of(w.persons[_B], w.fixtures), mortal_levels(w))
+    unhurt_wound = (C.party_end(unhurt.persons[_B], unhurt.fixtures), C._carried_of(unhurt.persons[_B], unhurt.fixtures), mortal_levels(unhurt))
     assert true_wound != unhurt_wound, "the world's wound reaches the fight by neither arm: the control cannot see the leak"
+    assert true_wound[2] != unhurt_wound[2], "the world's wound reaches the mortal roll's levels by no band: the control cannot see that leak"
     assert blind.kits == (own, default), blind.kits                            # his own kit is his own; the stranger's is the DEFAULT, not the true one
     assert wound_of(blind) == unhurt_wound, (wound_of(blind), "the opponent's wound leaked into the believer's picture")
     sighting = Claim("c_seen", _A, "R", SEEN_PREDICATE, _Sighting(_B), 0, "firsthand", 5, "own")
@@ -692,8 +697,9 @@ def _module_of_entry():
 
 def test_mortal_wound_every_band_writes():
     """A-81: every band of the mortal draw writes. Over 400 keyed draws for one felled party (pool 8, the season's untrained default; obstacle 3):
-    Failure keeps him felled at the scene's wounds (he dies: the host's band `Felled`); Partial stands him up at `max_wounds` (left for dead);
-    Success and Overwhelming stand him up at the scene's wounds. Through the host's map (`_wound_state`) and the one grader (`party_degree`)
+    Failure keeps him felled at the scene's wounds (he dies: the host's band `Felled`); Partial stands him up at `max_wounds` or the scene's wounds,
+    the more (left for dead; on an engine-produced tracker, `max_wounds + 1`, the same as Success: H-576); Success and Overwhelming stand him up at
+    the scene's wounds. Through the host's map (`_wound_state`) and the one grader (`party_degree`)
     no band is `Untouched`, the band that writes nothing. FALSIFIER: a band missing over 400 draws, a Partial below `max_wounds`, a survivor
     still felled, or a band the host grades `Untouched`. The draw is keyed: the same key gives the same result."""
     import dataclasses
@@ -702,21 +708,25 @@ def test_mortal_wound_every_band_writes():
     from ..seam.ladder import party_degree
     from ..seam.wrappers import combat
     mod, _entry = _module_of_entry()
-    pw = PartyWounds(felled=True, wounds=3, max_wounds=5, health_remaining=0, health_full=12)
+    # THE STATES THE ENGINE PRODUCES: a felled tracker carries `wounds == max_wounds + 1` (`combatant.py`: `wounds` is capped at `max_wounds + 1`
+    # and a felling is `cumulative_damage >= health_full`), for each fighter's own `max_wounds`; none holds fewer. ⚠ So Partial's
+    # `max(wounds, max_wounds)` equals Success's `wounds` on every state the engine produces: the two survivor bands write the SAME `wounds` (hole row
+    # H-576, held for a ruling). `want` asserts what each band writes today, `partial` included; it is not a claim that the two should agree.
     seen, checked = {}, 0
-    for scene_wounds in (3, 7):                                  # under and over `max_wounds`: left for dead is never lighter than standing up
-        pw = dataclasses.replace(pw, wounds=scene_wounds)
+    for max_wounds in (5, 4):
+        pw = PartyWounds(felled=True, wounds=max_wounds + 1, max_wounds=max_wounds, health_remaining=0, health_full=12)
+        scene_wounds = pw.wounds
         for seed in range(400):
             m = mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", seed)), (8.0, 3.0, (), ()))
             assert m == mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", seed)), (8.0, 3.0, (), ())), seed
-            want = {"fail": (True, scene_wounds), "partial": (False, max(5, scene_wounds))}.get(m.degree, (False, scene_wounds))
+            want = {"fail": (True, scene_wounds), "partial": (False, max(max_wounds, scene_wounds))}.get(m.degree, (False, scene_wounds))
             assert (m.mortal, m.wounds) == want, (seed, m)
             band = party_degree(combat._wound_state(pw, m))
             assert (band == FELLED) == m.mortal and band in ("Felled", "Wounded"), (seed, m, band)
             seen[m.degree] = seen.get(m.degree, 0) + 1
             checked += 1
     assert checked >= 800
-    pw = dataclasses.replace(pw, wounds=3)
+    pw = dataclasses.replace(pw, wounds=5 + 1, max_wounds=5)
     assert set(seen) == {"fail", "partial", "success", "overwhelming"}, f"each band occurs over {checked} draws: {seen}"
     # levels move it: a level for raises the survivors, a level against lowers them, on the same keys
     def survivors(f, a):

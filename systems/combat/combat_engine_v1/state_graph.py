@@ -19,6 +19,8 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))  # the repository root: `modules.combat` is a package
 
+from modules.combat import vocabulary
+
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {
     'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
@@ -29,13 +31,15 @@ TRACE_KINDS = {
     'turned',   # PC_D (B15.05): a blow struck against a harness that dealt nothing (`wound` carries `bare`: the blow reached a bare zone)
     'disengage',   # the closed-phase withdrawal attempt (ED-PC-0030): ok=True re-opens to measure, ok=False is pursued
     'withdraw',    # REM-31: the decider's early UNRESOLVED exit, taken at the head of a turn
-    'shaken', 'rallied',   # B15.10: the yield roll's Partial and Overwhelming bands (`vocabulary.YIELD_ROLL_EVENTS`); no state of their own (they fall between rounds)
 }
+# B15.10: the yield roll's Partial and Overwhelming bands (`shaken`, `rallied`); no state of their own (they fall between rounds). Read from the owner.
+TRACE_KINDS |= set(vocabulary.YIELD_ROLL_EVENTS)
 
-# Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check
+# Separation reasons the engine can emit (wrapper.engagement `return None` sites): the round endings (`vocabulary.ROUND_ENDS`, the owner) but
+# `felled`, which is the ending of a round that fell a party and emits `engagement_end`, never a `separation`. The dynamic coverage check
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
-SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaustion', 'terms'}   # 'terms' (RS-25): a duel's terms were met at a beat head
+SEPARATION_REASONS = set(vocabulary.ROUND_ENDS) - {'felled'}
 # [ED-PC-0042] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as never-fired. 'collapse' is NOT dead: PC-13
 # widened the sweep (the WIDE builds below) and it fires, because the 4 default matchups use DEFAULT fighters, who reach
 # clean_defence/burst_ceiling long before stamina <= -4, so the flag on it was a false positive of that sweep's build coverage.

@@ -1250,7 +1250,7 @@ def mortal_terms(w: World, pid: str, cause: str, endurance: float) -> tuple:
     `party_end` nor `body_band_penalty` (nothing here imports `seam` or `decision`). It stays in the signature so the fight's
     caller (B15.07) and the spell's (B37) pass one shape [ASSUMPTION: the endurance argument is the governing attribute's
     operand -- basis: PHY_A "Standing (R4 7b.0 (4))": "the governing attribute as levels (A-7)"]. `pid` is likewise the
-    caller's: the untrained default reads no one's body. Nothing calls this yet."""
+    caller's: the untrained default reads no one's body. Called by `seam/wrappers/combat.py::_mortal_operands` (B15.07)."""
     require_mortal_cause(cause)
     if cause == "spell":
         raise Unspecified(

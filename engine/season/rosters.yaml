@@ -925,7 +925,8 @@ rosters:
       `war` is lethal; a `crime` or a `defence` fight ends when a party yields (a warrant is served, a blow is answered; neither
       is a licence to kill). `duel` has no line: it is no context of `fight`, a duel is `accept`'s. An own-motive context joins
       this roster with its reader (A-16, B37). REFUSED AT IMPORT: a key that is no context reader (`options.py`), a term that is
-      not a non-empty string (`data/verbs.py`), a term outside the engine's closed set (`combat.py::duel_terms_of`).
+      not a non-empty string (`data/verbs.py`). REFUSED AT CALL TIME, AND ONLY WHERE THE ENGINE IS PRESENT: a term outside the
+      engine's closed set (`seam/wrappers/combat.py::duel_terms_of`).
       [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and every `fight` is lethal, as before B15.08.]
     values:
       war: death

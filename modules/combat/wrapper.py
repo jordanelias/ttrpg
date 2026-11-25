@@ -572,7 +572,6 @@ class Yield:
 # under any term; the cut is read between beats, never inside a strike.
 DUEL_TERMS = ('yield', 'blood', 'death')   # closed set, this module's: the season's `duel_terms` and `challenge_terms` rosters are checked against it through the composition row `combat.duel_terms`, never re-declared
 LETHAL_TERMS = 'death'
-SPIRIT_LEVEL = 'minor'   # [ASSUMPTION; medium; Jordan to correct -- one `LEVEL_SIGMA` step a point of Spirit from the scale's mid-point, as the crisis and mortal `edge` rows (`rosters.yaml: capability_uses`) count their governing attribute; revert: delete the level, and the roll reads wounds and σ alone.]
 _UNHURT = SimpleNamespace(wt=SimpleNamespace(wounds=0))   # the unwounded party `wound_impairment` is read against: his own wounds are the only term
 
 def _gate_crossed(c, wounds0):
@@ -600,12 +599,13 @@ def _terms_yielder(A, B, failed):
     fa, fb = (c.wt.health_remaining / c.wt.health_full for c in (A, B))
     return A if fa < fb else B if fb < fa else None
 
-def _spirit_levels(c):
+def _spirit_levels(c, cfg):
     """`(levels for, levels against)` the yield roll from his Spirit: the signed WHOLE steps of `c.spirit` from the attribute scale's mid-point
-    (`attributes.NEUTRAL['spirit']`, the spec's centring value: this module reads no registry, A-25), each one `SPIRIT_LEVEL` for him above it and
+    (`attributes.NEUTRAL['spirit']`, the spec's centring value: this module reads no registry, A-25), each one `cfg['SPIRIT_LEVEL']` for him above it and
     against him below (a half step is no step)."""
     n = math.trunc(c.spirit - ATTR.NEUTRAL['spirit'])
-    return ([SPIRIT_LEVEL] * n, []) if n > 0 else ([], [SPIRIT_LEVEL] * -n)
+    level = cfg['SPIRIT_LEVEL']
+    return ([level] * n, []) if n > 0 else ([], [level] * -n)
 
 def _yield_roll(c, terms, sigma, cfg, draw):
     """THE YIELD ROLL (B15.10, `PC_A`, A-24): one roll through `core.resolve` (the owner ladder), returning the degree; the caller applies
@@ -614,7 +614,7 @@ def _yield_roll(c, terms, sigma, cfg, draw):
     exchange uses, read against an unhurt man) plus `sigma`, the host's `decisiveness` for him. `draw` is the keyed `Draw` of
     `"yield:<scene>:<round>:<party>"`. Draws only from `draw`; mutates nothing."""
     pool = max(1, _pool_dice(c, cfg, addends=0))
-    net_sigma = core.SL.levels_to_net_sigma(*_spirit_levels(c)) + S.wound_impairment(_UNHURT, c, cfg) + sigma
+    net_sigma = core.SL.levels_to_net_sigma(*_spirit_levels(c, cfg)) + S.wound_impairment(_UNHURT, c, cfg) + sigma
     deg, _net = core.resolve(pool, net_sigma, draw, cfg['YIELD_OB'][terms])
     return deg
 

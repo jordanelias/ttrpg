@@ -184,7 +184,7 @@ def _ally_value(w: Any, pid: str, fought: tuple, row: Any) -> Any:
     return max(at) if at else None
 
 
-def _mortal_operands(w: Any, pid: str, fought: tuple, terms: str, keyed: bool = True, cause: str = "") -> tuple:
+def _mortal_operands(w: Any, pid: str, fought: tuple, terms: str, keyed: bool = True, cause: str = "", picture: Any = None) -> tuple:
     """ONE PARTY'S `PersonalCombatInput.mortal` ENTRY (B15.07, PHY_A A3): `(pool, obstacle, levels_for, levels_against, key)`, read, never rolled.
       * `(pool, obstacle)` -- `world_q.mortal_terms(w, pid, terms, party_end(person, fixtures))` (B15.06): the one pool rule on the untrained
         default and `mortal_wound_ob[terms]`; a term outside `mortal_causes` is refused there;
@@ -200,8 +200,12 @@ def _mortal_operands(w: Any, pid: str, fought: tuple, terms: str, keyed: bool = 
         scenes of one tick draws twice, one draw per key (S33, *unique per DRAW*) [ASSUMPTION; low; PHY_A writes the key without the cause;
         revert: drop it, and a second felling in a tick repeats the first's draw]. `keyed=False` (a sampled estimate, `fight_estimate`) carries `None`: the module then draws off the estimate's own private
         stream, so an estimate never reads the dealt draw.
+      * `picture` -- what stands in for him where the draw reads his BODY band (`body`, `body_ceiling`): `None` is the world's person; a believer's
+        estimate passes `believed_picture`'s (`combat_input`), so the band the mortal roll charges is the believer's picture of him, as `ends` and
+        `carried` are, never the world's.
     Any other `side` on a `mortal` row is refused by name."""
     p, fx = w.persons[pid], w.fixtures
+    body_of = p if picture is None else picture
     pool, ob = mortal_terms(w, pid, terms, party_end(p, fx))
     reads = []
     for row in capability_rows(_MORTAL_SITE):
@@ -219,7 +223,7 @@ def _mortal_operands(w: Any, pid: str, fought: tuple, terms: str, keyed: bool = 
         if row.side == "ally" or when_holds(row, holder):
             reads.append((row, row.key, value))
     cap_for, cap_against = ADVANTAGE_SOURCES[CAPABILITY](fx, {EDGE: tuple(reads)})
-    _subject, wound_against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": p.body, "body_ceiling": p.body_ceiling})
+    _subject, wound_against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": body_of.body, "body_ceiling": body_of.body_ceiling})
     return (pool, ob, tuple(cap_for), tuple(cap_against) + tuple(wound_against),
             draw_factory(w.world_seed, lambda: w.tick)(pid, f"{_MORTAL_PURPOSE}:{cause}").key if keyed else None)
 
@@ -311,7 +315,8 @@ def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
 
 
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None, *, believer: Any = None,
-                 mortal_keyed: bool = True, cause: str = "", context: Optional[str] = None) -> PersonalCombatInput:
+                 mortal_keyed: bool = True, cause: str = "", context: Optional[str] = None,
+                 terms: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
     Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
@@ -341,7 +346,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     `addends`, each party's registered pool addends (`pool.addends_of`, the one sum `pool.faculty` takes), read from their owner `pool.py`
     (a leaf both this adapter and `sigma.py` import) and never copied. The pool is the module's: `pool_of(score, addends, pool_add,
     pool_floor)` with the fight row's two operands carried raw (`pool_add`, `pool_floor`), the Ob the opponent's skill score alone.
-    `opposition_rate` is `None` in B05 (the module's own constant). `carried` (B05.61, A-8) is each party's wound as a signed level (`_carried_of`), filled
+    `opposition_rate` stays `None` (B15.03): the module reads its own constant `MU_PER_DIE`, the same owner the social roll's fixture reads (`test_u1_two_inputs.py` pins the `None`). `carried` (B05.61, A-8) is each party's wound as a signed level (`_carried_of`), filled
     only under `Fixtures carried_wound_model` `level` -- where `party_end` also cuts no band; under the control `endurance_cut` it is `(0.0, 0.0)`. `fight`, `accept` and `capture` draw on the `arms` capability key
     (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no such key reads the untrained score `pool_default`.
     [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
@@ -350,9 +355,12 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
 
     B15.07 (PHY_A A3): `mortal` is each party's mortal-wound operands (`_mortal_operands`) at the fight's terms, always filled; the module draws
     them for a party the scene fells. `mortal_keyed=False` (`fight_estimate`) carries no dealt key, so a sampled estimate draws its mortal rolls
-    off its own private stream and its shares are the dealt fight's distribution, the draw included."""
+    off its own private stream and its shares are the dealt fight's distribution, the draw included.
+
+    `terms` (the random-pairs instrument, `harness/pairs.py`) names the terms outright, in place of the roster's line for `verb`, so `mortal`'s
+    obstacle is read at the terms the pair is fought under; `None` (every other caller) takes `duel_terms_of`'s one path."""
     a_id, b_id = claimants[0], claimants[1]
-    terms = duel_terms_of(verb, stakes_of(w, record), context)
+    terms = terms if terms is not None else duel_terms_of(verb, stakes_of(w, record), context)
     pa, pb = w.persons[a_id], w.persons[b_id]
     # WHOSE KIT AND WOUNDS THE FIGHT READS: the world's (`kit_of`, the person), or -- `believer` named, B14.24 -- his OWN picture of every party but himself
     (ka, ba), (kb, bb) = ((kit_of(w, pid), p) if believer is None or pid == believer.id else believed_picture(w, believer, pid)
@@ -367,13 +375,14 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
         pool_add=pool_add, pool_floor=pool_floor,
         carried=(_carried_of(ba, w.fixtures), _carried_of(bb, w.fixtures)) if _carried_level_model(w.fixtures) else (0.0, 0.0),   # B05.61: `level` only
-        opposition_rate=None,               # None until 29-3 (B15): the fixture is live for the social roll since B05; the fight flips with its scale (A-71, A-31)
+        opposition_rate=None,               # stays None (B15.03): the module reads its own constant `MU_PER_DIE`, the same owner as the social roll's fixture (A-71)
         **({} if terms is None else dict(terms=terms)),
         # B15.07: each party's mortal-wound operands at the terms the fight is fought under (the record's own default where the roster names none)
         # `wound_harm_model: total` is the control in which ANY wound kills: a man the draw spared would be removed by the arm all the same, with
         # no `person.died` (no party is Felled to license it), so the control runs with no draw -- a felling is the death, as before B15.07.
         mortal=() if w.fixtures.get("wound_harm_model") == "total" else tuple(
-            _mortal_operands(w, pid, (a_id, b_id), terms or PersonalCombatInput.terms, mortal_keyed, cause) for pid in (a_id, b_id)),
+            _mortal_operands(w, pid, (a_id, b_id), terms or PersonalCombatInput.terms, mortal_keyed, cause, picture)
+            for pid, picture in ((a_id, ba), (b_id, bb))),   # the body band is the picture's (`ba`, `bb`: the person himself, or the believer's picture of him)
         # B15.10 (PC_A, A-24; B10's reader `person_q.decisiveness` is in the tree): each party's σ for the yield roll, read as the development sheet
         # reads it (`decision/sheet.py`: at the chooser's scar shift, hold and mass), so one quantity has one reading. The dealt party's own, never the believer's picture.
         decisiveness=tuple(person_q.decisiveness(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"),

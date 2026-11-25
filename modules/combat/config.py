@@ -278,9 +278,14 @@ CFG = dict(
   # ends at first blood), the `yield` mirror's felled share is reported beside each member, and the admitted value nearest the prototype's is the one
   # shipped. Sweep table: the commit body.]
   YIELD_OB={'blood': 4, 'yield': 2, 'death': 0},
-  # No matchup is certain: the chance a blow that would fell a fighter is TURNED (`wrapper.engagement`'s `_land`, B15.09).
+  # THE SIZE OF A SPIRIT STEP in that roll (`wrapper._spirit_levels`): one `LEVEL_SIGMA` level a whole point of Spirit from the attribute scale's
+  # mid-point, for him above it and against him below, as the crisis and mortal `edge` rows (`rosters.yaml: capability_uses`) count their governing
+  # attribute. [ASSUMPTION; medium; Jordan to correct; revert: delete the level, and the roll reads wounds and σ alone.] [SIM-CALIBRATE]
+  SPIRIT_LEVEL='minor',
+  # No matchup is certain: the chance a felling blow is TURNED (`wrapper.engagement`'s `_land`, B15.09). It is drawn ONCE PER ROUND: a felling
+  # after a turned one in the same round is final and draws nothing, so the realised rate is a little under this nominal figure.
   UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
-  # One keyed draw at each felling (a sub-key of the fight's own Draw, "upset:<scene>:<round>", so it takes no position of the
+  # One keyed draw at the round's first felling (a sub-key of the fight's own Draw, "upset:<scene>:<round>", so it takes no position of the
   # fight's stream); with this probability the blow is turned (not applied: the tracker stays as it stood before it) and the would-be-felled fighter
   # lands the damage it carried back through the one damage site (`finalblow_riposte`), and the fight goes on from there. It MOVES THE TRACKERS: it is
   # a blow the trackers record, not an edit of the result -- the result is whatever the continued fight ends with, so a felled
