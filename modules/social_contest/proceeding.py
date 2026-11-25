@@ -23,6 +23,11 @@ the deciders' state, and an end is never a verdict. Then the close.
 THE CLOSE (B24p.12; V2 p2 §D): `_close` is each adjudicator's own draw on his own track (a `Margin`, never a band or a side), or under `consent` a
 party's accept (an act, nothing drawn), or under `exchange` the one speech's margin with the one addressed; `p_carried`, `view_odds` and
 `card_odds` are its closed form, the chooser's believed odds and the card's. The host reads the verdicts (B24p.13).
+
+THE BOARD (B24.06; HEAR_B): `Sitting.board` holds the `Item`s entered (`exhibit`), answered or struck (`answer`), halved or turned on (`impugn`), and
+`Sitting.faults`/`.levels` what the sitting owes. A `rule` or an `adjourn` is the bench's. The board reaches the close as LEVERAGE ONLY (`_lever`: one
+`proof_level` per whole unit of net standing weight, `fault_step` levels per level owed): nothing favourable lowers an obstacle (A-25), and a fault is
+a cost on the draw, never a verdict. With no item on the board the close is what it was.
 """
 from __future__ import annotations
 
@@ -208,6 +213,80 @@ def _voice(inp, mover, it):
     return mover
 
 
+# ------------------------------------------------------------------ the board (B24.06; HEAR_B "The six moves", "Faults")
+#: What a fault costs the side at fault on the closing draw, in `fault_step` levels: a contradiction one, silence two; `forgery_found` and `irrelevance` cost
+#: what they strike or turn away, not a level. The faults are read by id, as `rosters.yaml: proceeding_faults` says; none names a winner or a side.
+FAULT_LEVELS = {"self_contradiction": 1, "silence": 2}   # [canonical: HEAR_B "Faults" -- one level against the side at fault, and two for silence]
+STANDS, ANSWERED, STRUCK = "stands", "answered", "struck"      # an `Item`'s status on `Sitting.board`: an answered item stands, its answer failed or halved it
+
+
+def _at(board, iid) -> Optional[int]:
+    return next((k for k, (it, _) in enumerate(board) if it.id == iid), None)
+
+
+def _standing(board, side=None) -> list:
+    """the items not struck, of one side or of both."""
+    return [it for it, s in board if s != STRUCK and (side is None or it.side == side)]
+
+
+def _on_rung(it, issue) -> bool:
+    return it.rung is None or it.rung == issue
+
+
+def _clash(a, b) -> bool:
+    """two items that say different things of one `(subject, predicate)`; the host's `pairs` replace this reading (B24.19)."""
+    return len(a.cell) >= 2 and len(b.cell) >= 2 and a.cell[:2] == b.cell[:2] and a.cell[2:] != b.cell[2:]
+
+
+def _hand(inp, st, mover) -> list:
+    """his own admitted items not yet shown."""
+    return [it for it in _items(inp, mover) if _at(st.board, it.id) is None]
+
+
+def _answer_of(board, side, target):
+    """the heaviest standing item of `side` that says otherwise of what `target` says, or `None`."""
+    mine = [it for it in _standing(board, side) if _clash(it, target)]
+    return max(mine, key=lambda it: (it.weight, it.id)) if mine else None
+
+
+def _answerable(st, mover, effect) -> list:
+    """`[(the item answered or impugned, his answer to it or None, over)]` over the other side's standing items: an `answer` needs an item of his own that
+    clashes with the target, or the target's `forged_found` (a filed finding); an `impugn` needs an origin to impugn. `over` is the weight the target holds
+    over its answer, the roll's added obstacle."""
+    out = []
+    for tg in _standing(st.board, _other(mover.side)):
+        if effect == "answer":
+            ans = _answer_of(st.board, mover.side, tg)
+            if ans is not None or tg.forged_found:
+                out.append((tg, ans, max(0.0, tg.weight - (ans.weight if ans else 0.0))))
+        elif tg.origin is not None:
+            out.append((tg, None, 0.0))
+    return out
+
+
+def _worth(inp, w) -> float:
+    """`w` of standing weight as the closing draw's leverage, read in TRACK units through the close's own slope (`track_step`): what the menu prices an
+    exhibit at. [ASSUMPTION; Jordan to correct: this price is the menu's only -- the NPC decider's cost terms are B24.12's, which replaces it]"""
+    D = inp.dials
+    return w * _lv(D["proof_level"]) / D["track_step"] if D["track_step"] else 0.0
+
+
+def _cost(inp, n) -> float:
+    """`n` levels owed, in track units, the same way (`fault_step`)."""
+    D = inp.dials
+    return n * _lv(D["fault_step"]) / D["track_step"] if D["track_step"] else 0.0
+
+
+def _lever(inp, st) -> float:
+    """THE BOARD ON THE CLOSING DRAW'S LEVERAGE CHANNEL (HEAR_B "How a sitting runs" 4; A-25): one `proof_level` per whole unit of net standing weight toward
+    `for`, less `fault_step` levels per level owed against `for` (toward it, per level owed against `against`). It reaches the leverage and never the
+    obstacle: nothing favourable is subtracted. `0.0` for an empty board, whatever the settings."""
+    D = inp.dials
+    net = _wsum(_sg(it.side) * it.weight for it in _standing(st.board))
+    owed = _wsum(_sg(side) * n for side, n in st.levels)
+    return _lv(D["proof_level"]) * math.trunc(net) - _lv(D["fault_step"]) * owed
+
+
 def mood(inp, st, viewer=None) -> float:
     """the room's lean toward `for`, -1..1: the weighted mean of the tracks that decide."""
     T = _d(st.tracks)
@@ -308,33 +387,40 @@ def esteem(inp, st, v) -> float:
     return (_short(inp, o, cd[o.id]) if o else 0.0) - _short(inp, v, cd[v.id])
 
 
-def _weary_term(inp, v, c, foe, pressed=False, abridged=False) -> tuple:
+def _weary_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> tuple:
     D = inp.dials
     return max(0.0, c.spent - (D["stay_base"] + D["stay_per_will"] * v.will - awe(inp, v))), D["weary_step"]
 
 
-def _standing_term(inp, v, c, foe, pressed=False, abridged=False) -> tuple:
+def _standing_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> tuple:
     D = inp.dials
     account = (v.reason - D["attribute_floor"]) / (D["attribute_ceiling"] - D["attribute_floor"])
     return (max(0.0, foe.power - v.power) * (1.0 - account) if foe else 0.0), D["gap_step"]
 
 
-def _press_term(inp, v, c, foe, pressed=False, abridged=False) -> Optional[tuple]:
+def _press_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> Optional[tuple]:
     return (1.0, inp.dials["press_ob"]) if pressed else None
 
 
-def _gravity_term(inp, v, c, foe, pressed=False, abridged=False) -> Optional[tuple]:
+def _gravity_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> Optional[tuple]:
     return (inp.rite.gravity, 1.0) if abridged and not pressed else None
+
+
+def _answer_term(inp, v, c, foe, pressed=False, abridged=False, over=None) -> Optional[tuple]:
+    """B24.06 (HEAR_B's `answer`): an answer to an exhibit meets `answer_step` a unit of the weight the answered exhibit holds over its answer (`over`),
+    a hostile term and never a subtraction (A-25: a heavier answer is the closing draw's `proof_level`)."""
+    return (over, inp.dials["answer_step"]) if over else None
 
 
 #: The proceeding's own obstacle terms, the `rosters.yaml: obstacle_terms` members `bound: module`, in the roster's order:
 #: `fn(inp, voice, cond, foe, pressed, abridged) -> (raw, step)`, or `None` where the term does not weigh on this speech. `roll.obstacle` composes
-#: each as `raw x step` and names it in `Margin.terms`. Will: `weary`; Reason: `standing`; `press` is a press's and `gravity` the abridged form's.
-TERMS = {"weary": _weary_term, "standing": _standing_term, "press": _press_term, "gravity": _gravity_term}
+#: each as `raw x step` and names it in `Margin.terms`. Will: `weary`; Reason: `standing`; `press` is a press's and `gravity` the abridged form's;
+#: `answer` is an exhibit answer's (`over`, B24.06).
+TERMS = {"weary": _weary_term, "standing": _standing_term, "press": _press_term, "gravity": _gravity_term, "answer": _answer_term}
 
 
-def _operands(inp, voice, c, foe, pressed=False, abridged=False) -> tuple:
-    got = ((name, fn(inp, voice, c, foe, pressed, abridged)) for name, fn in TERMS.items())
+def _operands(inp, voice, c, foe, pressed=False, abridged=False, over=None) -> tuple:
+    got = ((name, fn(inp, voice, c, foe, pressed, abridged, over)) for name, fn in TERMS.items())
     return tuple((name,) + row for name, row in got if row is not None)
 
 
@@ -493,9 +579,11 @@ def _record(inp, pool, opposition, leverage, difficulty, operands) -> SocialCont
                               opposition_rate=D["opposition_rate"], obstacle_operands=operands)
 
 
-def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abridged=False, tag=None) -> tuple:
+def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abridged=False, tag=None, over=None) -> tuple:
     """one speech heard by `h` (who may be the speaker himself, where he decides: his own Reason validates it, his own Will resists it, C2).
-    Returns `(pool, leverage, record)`; the record's obstacle is composed by `roll.obstacle`, so `Margin.terms` names each term."""
+    Returns `(pool, leverage, record)`; the record's obstacle is composed by `roll.obstacle`, so `Margin.terms` names each term. `over` (B24.06) is
+    given for a board move's roll (`answer`, `impugn`): its difficulty is `answer_ob`, and `over` the weight the answered item holds over its answer
+    (`TERMS["answer"]`); `None` for every other speech."""
     D, r = inp.dials, inp.rite
     c, foe = _d(st.cond)[voice.id], _foe(inp, mover)
     pool = case_pool(inp, voice, ground)
@@ -513,8 +601,8 @@ def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abr
         - D["repeat_step"] * _d(st.used).get((mover.side, it.id if it else ground), 0)
     sig = _lv(D["fit_level"]) * _weight(inp, st, ground) * f + D["esteem_step"] * esteem(inp, st, voice) * 2.0 * (1.0 - v) \
         + (rl * _lv(D["answer_level"]) if relation == "answers" else 0.0)
-    return pool, sig, _record(inp, pool, h.will + h.rank, sig, r.difficulty if abridged else 0.0,
-                              _operands(inp, voice, c, foe, abridged=abridged))
+    return pool, sig, _record(inp, pool, h.will + h.rank, sig, D["answer_ob"] if over is not None else r.difficulty if abridged else 0.0,
+                              _operands(inp, voice, c, foe, abridged=abridged, over=over))
 
 
 def _lv(name) -> float:
@@ -598,8 +686,8 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
     if objects is None and T is not None:
         objects = {g: press_object(inp, T, g) for g in G}
 
-    def mu_of(stx, h, g, it, rel, pool, ins, abridged=False, drift=0.0):
-        x = speech(inp, stx, mover, mover, h, g, it, rel, abridged=abridged, tag=frames.get(g))[2]
+    def mu_of(stx, h, g, it, rel, pool, ins, abridged=False, drift=0.0, over=None):
+        x = speech(inp, stx, mover, mover, h, g, it, rel, abridged=abridged, tag=frames.get(g), over=over)[2]
         return MU_PER_DIE * pool + net_boost(x.leverage, pool) - obstacle(x)[0] - D["off_step"] * _wF(h, D) * drift \
             - D["ploy_step"] * _wA(h, D) * ins
 
@@ -655,6 +743,26 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
                 ev = max(0.0, best_raise(st2) - best_raise(st)) * max(0, turns_left - 1) \
                     - D["concede_step"] * (1.0 + max(abs(x) for x in mover.stake))
             out.append((mid, None, None, "concedes", ev, None, None))
+        elif effect == "exhibit":                    # B24.06: each admitted item of his hand not yet shown, at what it would weigh on this rung
+            for x_it in _hand(inp, st, mover):
+                out.append((mid, None, x_it.id, "presents", _worth(inp, x_it.weight if _on_rung(x_it, _issue(inp, st)) else x_it.weight / 2.0), None, None))
+        elif effect in ("answer", "impugn"):         # B24.06: each standing item of the other side he may answer, or whose origin he may impugn, on each ground
+            for tg, ans, over in _answerable(st, mover, effect):
+                for g in G:
+                    if effect == "impugn" and _reads(inp, g) == "item":
+                        continue
+                    a, rel = (ans if _reads(inp, g) == "item" else None), ("answers" if effect == "answer" else "impugns")
+                    pool = case_pool(inp, mover, g)
+                    sd = _sd(pool)
+                    mu = mean(lambda h: mu_of(st, h, g, a, rel, pool, 0.0, False, e_drift, over))
+                    if effect == "answer":           # bounded both ways by how far the answered item stands (C1)
+                        ev = min(tg.weight, _epos(mu, sd)) - D["flop"] * min(tg.weight, _epos(-mu, sd))
+                    else:                            # a win halves the origin's items, a failure costs a level (HEAR_B's table)
+                        p = _p_up(mu, sd)
+                        ev = p * _worth(inp, _wsum(i.weight for i in _standing(st.board) if i.origin == tg.origin) / 2.0) - (1.0 - p) * _cost(inp, 1)
+                    out.append((mid, g, tg.id, rel, ev, _p_up(mu, sd), frames.get(g)))
+        elif effect in ("rule", "adjourn"):
+            continue                                 # the bench's moves: a seat that decides without a side takes no turn in `proceed` (the order is the host's, B24.10)
         else:
             out.append((mid, None, None, "rests", -sc_a - sc_b, None, None))
     return out, T, P, S
@@ -682,7 +790,7 @@ def view(inp, st, mover, rng) -> View:
     opts = []
     for mv, g, it, rel, ev, p, fr in true:
         effect, draws = _move(inp, mv)
-        x = xarg[g] if effect == "track" else xprs[g] if effect == "strike" else xc if effect == "yield" else xr
+        x = xarg[g] if effect in ("track", "answer", "impugn") else xprs[g] if effect == "strike" else xc if effect == "yield" else xr
         pe = perceived(ev, acc, x, mover.bias if draws else 0.0, D)
         pp = None if p is None else _clip(perceived(p, acc, 0.1 * x, 0.1 * mover.bias, D), 0.0, 1.0)   # [canonical: V2 p2 §E -- a chance's tenth of the worth's error]
         opts.append(Option(mv, g, it, rel, round(pe, 2), None if pp is None else round(pp, 2), fr))
@@ -695,7 +803,7 @@ def view(inp, st, mover, rng) -> View:
     out = View(st.n, mover.id, mover.side, _issue(inp, st), turns_left, live_theirs, live_own, tuple(opts), c,
                round(perceived(esteem(inp, st, mover), acc, 0.25 * xe, 0.0, D), 2), round(weary(inp, mover, c), 2),   # [canonical: V2 p2 §E -- a quarter of the blur]
                round(max(0.0, perceived(awe(inp, mover), acc, 0.25 * xw, 0.0, D)), 2), _broken(inp, mover, c), vis, m_seen,
-               0.0, intent, acc, burden(inp, st, mover))
+               0.0, intent, acc, burden(inp, st, mover), board=tuple(st.board), hand=tuple(_hand(inp, st, mover)))     # B24.06: the rite discloses the whole board
     assert rng.n - n0 == 2 * (DRAWS_PER_EXCHANGE(len(G)) - 2), (rng.n - n0)    # normals are two uniforms each (`Draw.normal`)
     return replace(out, odds=view_odds(inp, out))
 
@@ -737,19 +845,34 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
     P_lt = _point(st, lt)
     rep = _reply(inp, side)
     stands = P_lt is not None and _stands(P_lt) > 0
-    relation = ch.relation or {"track": "raises", "strike": "presses", "yield": "concedes", "none": "rests"}[effect]
-    if relation == "answers" and not stands:
-        relation = "raises"                               # an answer is to a point that stands; else it raises
-    unanswered = stands and relation != "answers" and effect != "yield"
+    relation = ch.relation or {"track": "raises", "strike": "presses", "yield": "concedes", "none": "rests", "exhibit": "presents", "answer": "answers",
+                               "impugn": "impugns", "rule": "rules", "adjourn": "adjourns"}[effect]
+    if relation == "answers" and not stands and effect == "track":
+        relation = "raises"                               # an answer is to a point that stands; else it raises (an `answer` move's is to an item)
+    unanswered = stands and relation != "answers" and effect not in ("yield", "exhibit", "impugn", "rule", "adjourn")
     evade_a = rep == "must" and unanswered
     evade_b = burden(inp, st, mover) and effect in ("none", "strike") and not evade_a
     evaded = (evade_a or evade_b) and r.silence != "free"
     moved, margins, margin, rattled, target, closed, pid, insinc, terms, ended, caught = [], [], 0.0, None, None, None, None, 0.0, (), None, []
     issue, obj = _issue(inp, st), tag
+    board, faults, levels, entered, struck, flagged = list(st.board), list(st.faults), list(st.levels), [], [], []
 
     def move(h, d):
         moved.append((h.id, d))
         tracks[h.id] += d
+
+    def fault(name, who):                                 # a condition on the board, and a cost on the closing draw (`FAULT_LEVELS`), never a verdict
+        faults.append((name, who))
+        flagged.append(name)
+        if name in FAULT_LEVELS:
+            levels.append((who, FAULT_LEVELS[name]))
+
+    def put(iid, how, w=None):                            # one item's row on the board: a status, and a weight where it changes
+        k = _at(board, iid)
+        it, s = board[k]
+        board[k] = (replace(it, weight=it.weight if w is None else w), how or s)
+        if how == STRUCK and s != STRUCK:
+            struck.append(iid)
 
     if effect == "track":
         insinc = insincerity(inp, voice, side, ch.ground, it)
@@ -821,6 +944,65 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
                 move(h, -sg * cost)
             live = {"for": None, "against": None}
             used = {k: v for k, v in used.items() if k[0] != side}
+    elif effect == "exhibit":                           # B24.06: an item of his hand enters the board; nothing is drawn but the exchange's own two
+        if it is None or it not in mover.items or it.kind not in r.admits or _at(board, it.id) is not None:
+            raise ValueError(f"refused[exhibit]: {ch.item!r} is not an admitted item of {mover.id}'s hand not yet shown")
+        w = it.weight if _on_rung(it, issue) else it.weight / 2.0       # off the rung tried it enters at half, and the `irrelevance` fault counts it
+        if w != it.weight:
+            fault("irrelevance", side)
+        board.append((replace(it, side=side, weight=w), STANDS))
+        entered.append(it.id)
+        clash = [o for o in _standing(board, side) if o.id != it.id and _clash(o, board[-1][0])]
+        if clash:                                       # two standing items of one side disagree: the lighter is struck (the newcomer on a tie)
+            o = max(clash, key=lambda i: (i.weight, i.id))
+            put(o.id if o.weight < w else it.id, STRUCK)
+            fault("self_contradiction", side)
+    elif effect in ("answer", "impugn"):                # B24.06: a rolled move on the board; each listener's margin is read as a speech's is
+        tg, ans, over = next(((t, a, o) for t, a, o in _answerable(replace(st, board=tuple(board)), mover, effect) if t.id == ch.item), (None, None, None))
+        if tg is None:
+            raise ValueError(f"refused[{effect}]: {ch.item!r} is not a standing item of the other side that {mover.id} may {effect}")
+        tot, W = 0.0, 0.0
+        for h in hearers + own:
+            pool, sig, x = speech(inp, st, mover, voice, h, ch.ground, ans, relation, abridged=abridged, tag=tag, over=over)
+            net, ob, terms, m = _margin(inp, pool, z, x, drift, h, 0.0)
+            if h in judges:
+                tot += h.weight * m
+                W += h.weight
+            margins.append((h.id, Margin(net=net, ob=ob, terms=terms)))
+            if effect == "answer":                      # bounded both ways by how far the answered item stands (C1)
+                move(h, sg * (min(tg.weight, m) if m > 0 else -D["flop"] * min(tg.weight, -m)))
+        margin = tot / W if W else 0.0
+        band = dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(margin, 0.0)]      # graded on the one ladder owner, in the module (HEAR_B)
+        win, over_win = band >= CARRIED, band > CARRIED
+        if effect == "impugn":                          # Success or better halves every item of that origin; Failure is a level against the mover
+            if win:
+                for o in _standing(board):
+                    if o.origin == tg.origin:
+                        put(o.id, None, o.weight / 2.0)
+            elif band == 0:
+                levels.append((side, 1))
+        elif win:                                       # the answered item is struck; on a forgery, Overwhelming strikes its whole origin and records the fault
+            put(tg.id, STRUCK)
+            if over_win and tg.forged_found:
+                for o in _standing(board):
+                    if tg.origin is not None and o.origin == tg.origin:
+                        put(o.id, STRUCK)
+                fault("forgery_found", tg.side)
+        else:                                           # Partial: both halved (a forgery finding: the item alone); Failure: it stands, answered
+            if band == 1:
+                put(tg.id, ANSWERED, tg.weight / 2.0)
+                if ans is not None and not tg.forged_found:
+                    put(ans.id, None, ans.weight / 2.0)
+            else:
+                put(tg.id, ANSWERED)
+    elif effect in ("rule", "adjourn"):                 # the bench's: close on what was said now, or hold the stage to the next sitting (resumable)
+        if not mover.decides:
+            raise ValueError(f"refused[{effect}]: {mover.id} does not decide, and only the bench rules or adjourns")
+        ended = "rested" if effect == "rule" else "budget"
+    if effect == "none" and any(p.items for p in inp.room):       # SILENCE as a fault: the bearer rests with nothing standing on the rung, or the other rests unanswered
+        if (side == r.bears and not [i for i in _standing(board, side) if _on_rung(i, issue)]) or \
+                (side != r.bears and [i for i, s in board if s == STANDS and i.side == other and _on_rung(i, issue)]):
+            fault("silence", side)
     if evaded:                                          # silence, or turning away, where he must speak (A-145)
         for h in hearers + ([mover] if mover.decides else []):
             move(h, -sg * silence_cost(inp, h, P_lt if evade_a else None, mover))
@@ -833,11 +1015,13 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
     if draws:
         lv[side] = voice.id
     new = replace(st, n=st.n + 1, issue=st.issue + (1 if (closed and ended is None) else 0), points=tuple(points), live=tuple(live.items()),
-                  tracks=tuple(tracks.items()), cond=tuple(cond.items()), used=tuple(used.items()), last_voice=tuple(lv.items()), ended=ended)
+                  tracks=tuple(tracks.items()), cond=tuple(cond.items()), used=tuple(used.items()), last_voice=tuple(lv.items()), ended=ended,
+                  board=tuple(board), faults=tuple(faults), levels=tuple(levels))
     beat = Beat(st.n + 1, mover.id, voice.id, side, ch.move, relation, issue, ch.ground, ch.item, pid, target, margin, drift, evaded,
                 lt if unanswered else None, insinc, tuple(caught), rattled,
                 (tag if effect == "track" else obj if effect == "strike" else None), relevance(inp, voice), heard(inp, voice),
-                esteem(inp, st, voice), _broken(inp, mover, _d(st.cond)[mover.id]), tuple(moved), closed, mood(inp, new), terms)
+                esteem(inp, st, voice), _broken(inp, mover, _d(st.cond)[mover.id]), tuple(moved), closed, mood(inp, new), terms,
+                tuple(entered), tuple(struck), flagged[0] if flagged else None)
     assert rng.n - n0 == 2 * 2, (rng.n - n0)    # the hold and the speech, a normal each (two uniforms: `Draw.normal`)
     return new, beat, tuple(margins)
 
@@ -919,18 +1103,20 @@ def _seats(inp) -> list:
     return sorted((p for p in inp.room if p.decides), key=lambda p: (-p.precedence, p.id))
 
 
-def close_record(inp, track) -> tuple:
+def close_record(inp, track, board=0.0) -> tuple:
     """`(pool, record)` of one adjudicator's draw at `track`: the ordinary bench (the middle of the scale for his dice and for what opposes
-    him), his own track as the leverage, the rite's `difficulty` and `gravity` (named in `Margin.terms`) the obstacle. No speaker enters it."""
+    him), his own track as the leverage, the rite's `difficulty` and `gravity` (named in `Margin.terms`) the obstacle. No speaker enters it.
+    `board` (B24.06) is the board's leverage (`_lever`): added to the leverage and to nothing else, so no favourable term lowers the obstacle (A-25)."""
     D, r = inp.dials, inp.rite
     pool = pool_of(D["attribute_mid"], 0, D["pool_add"], D["pool_floor"])
-    return pool, _record(inp, pool, D["attribute_mid"], D["track_step"] * track, r.difficulty, (("gravity", r.gravity, 1.0),))
+    return pool, _record(inp, pool, D["attribute_mid"], D["track_step"] * track + board if board else D["track_step"] * track, r.difficulty,
+                         (("gravity", r.gravity, 1.0),))
 
 
-def p_carried(inp, track) -> float:
+def p_carried(inp, track, board=0.0) -> float:
     """P(carried) of one adjudicator's draw at `track`: the closed form of the close at that track (`band_odds` on the same record the close
-    rolls), Success or better. Pure."""
-    pool, x = close_record(inp, track)
+    rolls), Success or better. `board` is the standing board's leverage (`_lever`) where the close has one. Pure."""
+    pool, x = close_record(inp, track, board)
     return _wsum(band_odds(pool, obstacle(x)[0], net_boost(x.leverage, pool))[CARRIED:])
 
 
@@ -979,7 +1165,7 @@ def _judge_view(inp, st, d, track) -> JudgeView:
     tells = tuple((p.id, round(read * max(0.0, -_sg(p.side) * p.believes), 2),
                    round(read * min(1.0, cond[p.id].strain + 0.5 * cond[p.id].rattles), 2))     # [ASSUMPTION; Jordan to correct: discomfort is strain plus half a rattle, as the running model reads it (sc2/engine.py:502)]
                   for p in inp.room if p.side and p.id != d.id)
-    return JudgeView(d.id, track, p_carried(inp, track), tuple(st.points), tells)
+    return JudgeView(d.id, track, p_carried(inp, track, _lever(inp, st)), tuple(st.points), tells)
 
 
 def _abridged(inp, beats, margins=()) -> tuple:
@@ -1009,9 +1195,9 @@ def _close(inp, st, rng, rulings=None, *, beats=(), margins=()) -> tuple:
         return (), ()
     if r.close == "exchange":
         return _abridged(inp, beats, margins), ()
-    T, seats, n0, out, ruled = _d(st.tracks), _seats(inp), rng.n, [], []
+    T, seats, n0, out, ruled, board = _d(st.tracks), _seats(inp), rng.n, [], [], _lever(inp, st)
     for k, d in enumerate(seats):
-        pool, x = close_record(inp, T[d.id])
+        pool, x = close_record(inp, T[d.id], board)
         ob, terms = obstacle(x)
         net = _roll(pool, _z(rng)) + net_boost(x.leverage, pool)
         if (k == 0 or r.close != "bench") and rulings and d.id in rulings:
@@ -1054,4 +1240,4 @@ def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Option
             st = replace(st, ended="rested")
     st = replace(st, ended=st.ended or "budget")
     verdicts, ruled = _close(inp, st, rng, rulings, beats=tuple(beats), margins=heard_by)
-    return Outcome(tuple(beats), st, st.ended, ended_by, verdicts, ruled)
+    return Outcome(tuple(beats), st, st.ended, ended_by, verdicts, ruled, tuple(_standing(st.board)), tuple(f for f, _ in st.faults))

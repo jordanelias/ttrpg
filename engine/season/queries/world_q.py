@@ -112,7 +112,7 @@ from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
-                     ProduceInput, Sitting, SubsistInput, Under)
+                     ProduceInput, Sitting, SubsistInput, Under, written)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -542,9 +542,9 @@ def proceeding_row(w: World, act) -> tuple:
 # B24p.20 -- A PROCEEDING'S ENDING, READ BACK (`rosters.yaml: proceeding_endings`; the one writer is `loop/resolve.py::_proceeding_ending`). Pure
 # readers over `Event.ending`: they hold nothing and decide nothing, and an Event no proceeding wrote answers empty.
 # ---------------------------------------------------------------------------------------------------------------------------------------
-#: A written beat: a `Beat`'s fields in declared order, `terms` left out (the true values are never written) and `mood` read as `stance` (its band, named
+#: A written beat: `written(Beat)` in declared order (`terms`, the true values, and the board's cells, which no sitting writes yet, are left out) and `mood` read as `stance` (its band, named
 #: only where the room turns; `None` at the beats that leave it as it was; the clamped number is not in the record).
-EndedBeat = namedtuple("EndedBeat", [("stance" if f.name == "mood" else f.name) for f in fields(Beat) if f.name != "terms"])
+EndedBeat = namedtuple("EndedBeat", [("stance" if name == "mood" else name) for name in written(Beat)])
 
 
 def _tagged(event, tag: str) -> list:

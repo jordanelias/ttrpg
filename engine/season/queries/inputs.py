@@ -47,7 +47,7 @@ optional argument) and `CombatTurnView` (what its per-turn decider reads, handed
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import Callable, Mapping, NamedTuple, Optional
 
 # THE MATTER'S TWO SIDES, signed toward `for` (the sign every `stake` and `believes` is read in), and the flip to the other: the one owner
@@ -296,7 +296,12 @@ class Sitting:
       * `live` -- `((side, the side's live point id | None), ...)`: one live point a side;
       * `tracks` -- `((person, value), ...)`, each person's own running `start + the beats' moves` (never a verdict);
       * `cond` -- `((person, Cond), ...)`; `used` -- grounds and items used, for staleness;
-      * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`."""
+      * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`.
+
+    B24.06 adds the board (each defaulted, and each in `UNWRITTEN`: no sitting writes them yet, B24.14): `board` -- `((Item, status), ...)` in the order
+    entered, an `Item` carrying the side it stands for and its weight now, `status` `stands` | `answered` (stands, an answer tried and failed or
+    halved it) | `struck`; `faults` -- `((a `proceeding_faults` member, the side at fault), ...)` in order; `levels` -- `((side, how many), ...)`, each a
+    level against that side on the closing draw (a fault's, or a failed `impugn`'s)."""
     n: int = 0
     issue: int = 0
     points: tuple = ()
@@ -306,6 +311,9 @@ class Sitting:
     used: tuple = ()
     last_voice: tuple = _NO_POINT
     ended: Optional[str] = None
+    board: tuple = ()
+    faults: tuple = ()
+    levels: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -343,9 +351,11 @@ class Beat:
       * `broke` -- he spoke with his temper broken; `moved` -- each listener's move; `closed` -- how it ended the sitting;
       * `mood` -- the room's, named only at the beat that turns it; `terms` -- true values.
 
-    ⚠ EVERY FIELD BUT `terms` IS WRITTEN: `loop/resolve.py::_BEAT_CELLS` and `queries/world_q.py::EndedBeat` both read `fields(Beat)`, so a field
-    added here is a cell of every proceeding's `Event.ending` and moves the content hash. HEAR_B's board cells (`exhibit`, `entered`, `struck`,
-    `fault`) are not here yet for that reason (B24.05)."""
+    B24.06 adds the board's three cells, each defaulted and after `terms`: `entered` -- the ids of the items this exchange put on the board;
+    `struck` -- the ids it struck; `fault` -- the first `proceeding_faults` member it recorded. The item a move uses is `item`, as it always was.
+
+    ⚠ EVERY FIELD BUT THOSE IN `UNWRITTEN["Beat"]` IS WRITTEN: `loop/resolve.py::_BEAT_CELLS` and `queries/world_q.py::EndedBeat` both read `written(Beat)`,
+    so a field added here and left out of `UNWRITTEN` is a cell of every proceeding's `Event.ending` and moves the content hash."""
     n: int
     mover: str
     voice: str
@@ -373,6 +383,21 @@ class Beat:
     closed: Optional[str]
     mood: float
     terms: tuple = ()
+    entered: tuple = ()
+    struck: tuple = ()
+    fault: Optional[str] = None
+
+
+#: THE CELLS OF A RECORD THE EVENT'S `ending` DOES NOT CARRY, by record name (B24.06; the ONE OWNER, read through `written`): `Beat.terms` (the true values
+#: are never written) and the board's cells, which no sitting writes until B24.14 does (writing them is a cell on every beat of every proceeding, a hash
+#: mover). B24.14 deletes the board cells from this row when it writes them.
+UNWRITTEN = {"Beat": ("terms", "entered", "struck", "fault"), "Sitting": ("board", "faults", "levels")}
+
+
+def written(cls) -> tuple:
+    """The names of `cls`'s fields the Event's `ending` carries, in the record's declared order: every field but `UNWRITTEN[cls.__name__]`.
+    `loop/resolve.py::_proceeding_ending` writes them and `queries/world_q.py::EndedBeat` reads them back, both through this."""
+    return tuple(f.name for f in fields(cls) if f.name not in UNWRITTEN.get(cls.__name__, ()))
 
 
 @dataclass(frozen=True)

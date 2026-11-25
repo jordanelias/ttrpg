@@ -20,7 +20,7 @@ from ..data.rosters import GROUNDS, PROCEEDING_MOVES, RUNG_KINDS
 from ..harness import probes as PR
 from ..gaps import Unspecified
 from ..queries import person_q
-from ..queries.inputs import Beat, Card, Cond, Input, Margin, Outcome, Sitting
+from ..queries.inputs import Beat, Card, Cond, Input, Margin, Outcome, Sitting, written
 from ..seam.ladder import degree_of
 from ..seam.wrappers import sigma as S
 from ..data.verbs import VERB_TABLE, _check_proceeds
@@ -850,7 +850,7 @@ def test_a_proceedings_event_carries_its_beats_sitting_and_verdicts():
     assert e.ending[0] == ("proceeding", "conversation", "full", out.ended, out.ended_by)
     beats = world_q.ending_beats(e)
     assert len(out.beats) > 1 and [(b.n, b.mover, b.move, b.margin) for b in beats] == [(b.n, b.mover, b.move, round(b.margin * 1000)) for b in out.beats]
-    assert all(len(t) == len(fields(Beat)) for t in e.ending if t[0] == "beat")                    # one field fewer than the beat (`terms`), one tag more
+    assert all(len(t) == len(written(Beat)) + 1 for t in e.ending if t[0] == "beat")               # the beat's written cells (`queries/inputs.py::UNWRITTEN`), one tag more
     assert out.beats[0].terms and all(out.beats[0].terms not in t for t in e.ending)
     state = world_q.ending_sitting(e)
     assert (state.n, state.issue, state.ended) == (out.state.n, out.state.issue, out.state.ended)

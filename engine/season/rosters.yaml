@@ -1831,8 +1831,10 @@ rosters:
       a `host` member with no function (and a function with no member) and, at the first call of the module, a `module` member the
       module's `TERMS` lacks. `standard` stays `host`: inside a proceeding the venue's standard is Grace's `esteem` on the leverage, never
       an obstacle (B24p.19 omits it for an act on the `proceeds=` path). No leverage source is module-bound.
+      B24.06 adds `answer` (module-bound, last): the hostile weight of an answered exhibit over its answer, `answer_step x max(0, w_target - w_answer)`,
+      on the roll of an `answer` move only (HEAR_B's table; a heavier answer is never a subtraction, A-25, it is the closing draw's `proof_level`).
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity]
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity, answer]
     # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after the host's members, so the proceeding's terms follow the
     # host's in composition order; revert: the four rows and their `bound:` cells.]
     bound:
@@ -1851,6 +1853,7 @@ rosters:
       standing: module
       press: module
       gravity: module
+      answer: module
 
   lifepaths:
     source: >-

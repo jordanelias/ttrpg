@@ -1272,6 +1272,10 @@ PROCEEDING_SETTINGS = (
     # the host
     "start_step", "presume_step", "power_scale", "strain_fade", "recuse_at",
 )
+#: THE FOUR SETTINGS THE HEARING'S BOARD READS (B24.06, HEAR_B edit 10; `H-216`, `H-662` to `H-664`), beside the fifty-four: the closing draw's `proof_level`
+#: (one per whole unit of net standing weight) and `fault_step` (one per level owed), and an `answer`'s `answer_ob` (its difficulty) and `answer_step`
+#: (the weight term). Not V2's settings, so not in `PROCEEDING_SETTINGS`; `proceeding_dials` names both tuples.
+HEARING_SETTINGS = ("proof_level", "fault_step", "answer_ob", "answer_step")
 
 
 def proceeding_dials(fx: Any) -> Any:
@@ -1279,10 +1283,10 @@ def proceeding_dials(fx: Any) -> Any:
     beside the dice settings the proceeding shares with the single roll -- `pool_add` and `pool_floor` (`pool_pair`, the one reader of
     the `social_roll` site's `dice` row), `pool_default` and `opposition_rate` -- and the attribute scale's three numbers
     (`descriptors.ATTRIBUTE_FLOOR` and `ATTRIBUTE_CEILING`, and `pool.attribute_midpoint()`, the one mid-point), sixty-one names in all,
-    as a read-only mapping. The fold's `fold_*` coefficients are not in it. `proceeding_input` (B24p.13) reads it and adds the two rosters
-    the module is handed (`moves`, `reads`), which are not settings."""
+    as a read-only mapping (sixty-five with B24.06's four). The fold's `fold_*` coefficients are not in it. `proceeding_input` (B24p.13) reads it and adds the two rosters
+    the module is handed (`moves`, `reads`), which are not settings. B24.06 adds the four `HEARING_SETTINGS` the board reads (`Input.dials`, B24.05)."""
     pool_add, pool_floor = pool_pair(fx)
-    d = {name: fx.get(name) for name in PROCEEDING_SETTINGS}
+    d = {name: fx.get(name) for name in PROCEEDING_SETTINGS + HEARING_SETTINGS}
     d.update(pool_add=pool_add, pool_floor=pool_floor, pool_default=fx.get("pool_default"), opposition_rate=fx.get("opposition_rate"),
              attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING)
     return MappingProxyType(d)

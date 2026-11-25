@@ -156,7 +156,9 @@ def test_no_branch_names_a_move_a_rite_or_a_ground():
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign) and any(getattr(t, "id", None) == "TERMS" for t in node.targets):
             exempt = {id(k) for k in node.value.keys}
-    ids = set(PROCEEDING_MOVES) | set(RITES) | set(GROUNDS)
+    # B24.06: four hearing moves (`answer`, `impugn`, `rule`, `adjourn`) share their id with their EFFECT, and the module reads effects (`proceeding_effects`)
+    # by name as it reads `track` and `strike`; a string that is an effect name is that read, not a branch on the move
+    ids = (set(PROCEEDING_MOVES) | set(RITES) | set(GROUNDS)) - set(roster("proceeding_effects"))
     strings = [n for n in ast.walk(tree) if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in exempt]
     assert len(ids) >= 16 and len(strings) > 100
     assert sorted(n.value for n in strings if n.value in ids) == []

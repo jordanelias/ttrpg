@@ -42,7 +42,7 @@ from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import pool_pair
 from ..seam.wrappers.edge import site_net_sigma
 from ..seam.wrappers.sigma import arranged_by, topic_of
-from ..queries.inputs import Beat, Outcome
+from ..queries.inputs import Beat, Outcome, Sitting, written
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -379,7 +379,7 @@ def _margin_ending(resolution: "Resolution | None") -> tuple:
     return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()
 
 
-_BEAT_CELLS = tuple(f.name for f in fields(Beat) if f.name != "terms")   # the beat's cells a written sitting carries, in the record's order
+_BEAT_CELLS = written(Beat)   # the beat's cells a written sitting carries, in the record's order (`queries/inputs.py::UNWRITTEN` owns which are not)
 
 
 def _milli(x: float) -> int:
@@ -435,7 +435,7 @@ def _proceeding_ending(resolution: "Resolution | None") -> tuple:
     verdicts = tuple((ENDING_VERDICT, who, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob))) for who, m in out.verdicts)
     card = r["card"]       # B24p.22: the card's public cells (who decided, who tilted the forum and how far) and a played judge's departures, which the witnesses read
     held = (ENDING_CARD, tuple(card.decided_by), card.arranged_by, _milli(card.tilt), card.tilted_against, _plain(out.ruled))
-    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *_plain(out.state)), *verdicts, held)
+    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *(_plain(getattr(out.state, name)) for name in written(Sitting))), *verdicts, held)
 
 
 def _refusal_degree(row: "VerbRow", degree):
