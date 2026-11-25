@@ -1668,7 +1668,7 @@ def resolve(self, token: Token, acts: list[Act],
     # would resolve at 4 and §27's five-strata ordering would be INERT (`rosters.yaml` says of
     # that roster "ORDER IS SEMANTIC HERE... editing the order changes which acts see which
     # world"). An act that names its own stratum still wins, so a caller can test the ordering
-    # directly (`A37`). `_canonical_order` is shared with `loop/encounter.py`.
+    # directly (`A37`) -- as the FIRST interaction of its scene or alone: a scene is keyed by its first interaction's stratum (B08.03). `_canonical_order` is shared with `loop/encounter.py`.
     ordered, precedence = _canonical_order_with_precedence(w, acts)
     TRACE.decision(f"ordering {len(acts)} acts", "S27/S32",
                    chose="five strata, then a content-derived hash key over one global array",

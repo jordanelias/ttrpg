@@ -392,7 +392,7 @@ rows:
           `[ASSUMPTION: the row needs the new conjunct to stay met after B08 — basis: R-03.a and .b read laps, not the scene A-9 defines.
           Revert: drop R-03.c; the row is then unmoved by B08.]`
         argv: ["python", "-m", "pytest", "engine/season/tests/test_scene_sequence.py", "-q"]
-        expects: "all pass (the plan wrote five; the file holds eight at the close, B08.02 to B08.04 and the close's ruling having added three); control `interactions_per_scene = 1` reproduces the pre-edit hash"
+        expects: "all pass (the plan wrote five; the file holds seven at the close, B08.02 to B08.04 and the close's ruling having added two); control `interactions_per_scene = 1` reproduces the pre-edit hash"
         holds: "yes"
         reading:
           tree: "000d1779612c29f594e8c2649a17997c8a5b852e"
@@ -414,8 +414,8 @@ rows:
             the realm does not exercise `after`: no act in two seasons at seed 0 carries one when it reaches the fold, so "acts with `after` set are skipped when the prior misses its band"
             is read only on planted scenes (a hand-built `_argue_world`, one arguer, one hearer, a keyed act id), and the realm arm reads the scene ORDER alone;
             a counter run once at the close read 3 of 761 `pack_scenes` calls in that run holding an act with `after`, none of which reached the fold with it set (observed, cause unread; the counter is not kept);
-            five of the seven read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata; the two argue arms), one reads the verb table, one the realm at one interaction
-            per scene and one the realm's fold order; the realm figures above are one seed, two seasons and a counter run outside the test; whether a skipped second interaction was the better act is not read;
+            five of the seven read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata; the two argue arms), one reads the verb table and one the realm at one interaction
+            per scene (the realm's fold order is read by `test_scene_store.py`'s two-season realm test); the realm figures above are one seed, two seasons and a counter run outside the test; whether a skipped second interaction was the better act is not read;
             `rival_precedence` is not read (no rivalry group forms at seeds 0, 1, 2 in two seasons: 0, 0, 0, read at c32da4e; not re-read here, the ruling does not reach the draw)
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene landed; this row is met)
