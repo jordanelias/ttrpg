@@ -4,6 +4,7 @@ Inputs: two `combatant.Combatant` objects, `config.CFG` (or a `cfg` passed in) a
 reaches it through `fight.py`. Here `engagement`
 assigns aggressor/defender ONCE per beat and passes Combatant objects to every subsystem (`combat_systems`, `core`,
 `contact`, `tradition`), the structural cure for the role-inversion bug class: nothing ever indexes raw 'A'/'B'."""
+import contextlib
 import math
 from types import SimpleNamespace
 from engine.dice_engine import draw as KD   # the one keyed draw (`H2`, `seeded`): the per-blow coverage-gap draw below forms its key from the fight's own
@@ -22,6 +23,18 @@ _TRACE = None
 def _emit(kind, **data):
     if _TRACE is not None:
         _TRACE(dict(kind=kind, **data))
+
+@contextlib.contextmanager
+def traced(trace):
+    """Bind `_TRACE` to the callable `trace` for the `with` block and restore it after, on every exit: `fight`'s own binding, offered to the
+    caller that runs `engagement` itself (`fight.py::fight_round`), so no caller assigns the module attribute (B14.11)."""
+    global _TRACE
+    prev = _TRACE
+    _TRACE = trace
+    try:
+        yield
+    finally:
+        _TRACE = prev
 
 def _wound(source, by, victim, damage, bare=None):
     """The ONE damage site (PC-13): `victim.apply_wound(damage)` plus the `wound` trace event, nothing else. The event
@@ -632,7 +645,41 @@ def _yield_roll(c, terms, sigma, cfg, draw):
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
 
-def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None, decisiveness=(0.0, 0.0)):
+def settle_round(A, B, wounds0, terms, cfg, rng, scene, turn, decisiveness):
+    """THE END OF A ROUND THAT DID NOT FELL (A-101; the one site `_fight` and `fight.py::fight_round` both call): the yield roll of each party who took a
+    wound gate since `wounds0` (B15.10, A-24), once, on the party's own keyed sub-draw (a function of the fight's key, the round and the party, never of
+    how many uniforms the stream has taken: B15.05's form). A Partial shakes him (`conc` down), an Overwhelming rallies him (`conc` full). A FAILED ROLL ENDS
+    THE SCENE with the yielder standing: the `yield` event `fight._surrender` lifts, the opponent's result (no felling, so no riposte), read at the END of the
+    round where a declared `Yield` is read at the start of its turn. Two failures in one round: the smaller fraction of Health yields; an exact tie yields
+    nobody and the fight ends UNRESOLVED. Returns `(over, yielder)`: `over` is whether the scene ends here, `yielder` the Combatant who yielded (`None`
+    on the tie, or where `over` is false). The caller emits `fight_result`."""
+    failed = []
+    for side, c in (('A', A), ('B', B)):
+        if not _gate_crossed(c, wounds0):
+            continue
+        deg = _yield_roll(c, terms, decisiveness[0 if c is A else 1], cfg, KD.seeded(KD.H2(rng.key, f"yield:{scene}:{turn}:{side}")))
+        if deg == 'fail':
+            failed.append(c)
+        elif deg == 'partial':
+            c.conc = max(0, c.conc - cfg['CONC_DRAIN_LOSS']); _emit(V.EV_SHAKEN, turn=turn, by=c.label)
+        elif deg == 'overwhelming':
+            c.conc = c.conc_max; _emit(V.EV_RALLIED, turn=turn, by=c.label)
+    if not failed:
+        return False, None
+    yielder = _terms_yielder(A, B, failed)
+    if yielder is not None:
+        _emit('yield', turn=turn, by=yielder.label, accepted=(None if terms == LETHAL_TERMS else True), refused=None, terms=terms, degree='fail')
+    return True, yielder
+
+def recover(A, B, cfg):
+    """THE BETWEEN-ROUND RECOVERY: each party's Stamina and Concentration regather, once, at the end of a round the fight goes on from."""
+    for c in (A,B):
+        c.stamina=min(c.stamina_max, c.stamina+cfg['RECOVERY_FRAC']*(c.stamina_max-c.stamina)*(c.stamina_max/cfg['STAMINA_REF']))
+        c.conc=max(0,min(c.conc_max, c.conc-cfg['CONC_DRAIN_BOUT']+cfg['CONC_RECOVER_FRAC']*(c.conc_max-c.conc)))
+
+DEFAULT_BOUTS = 12   # the rounds a fight runs to without a felling or a yield (`fight`'s `max_bouts` default; `fight.py::fight` reads it too)
+
+def fight(A, B, cfg, rng, max_bouts=DEFAULT_BOUTS, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None, decisiveness=(0.0, 0.0)):
     """One scene (`_fight`, below). `cfg` and `rng` take no default: a missing stream is a signature error at the call site,
     not a branch (B14.20); `cfg=None` is passed on purpose and means the engine's own `CFG`; pass a keyed
     `Draw` (`draw.seeded(...)`) for `rng`. `trace` is a callable(event: dict) the engine binds to `_TRACE` for the call and
@@ -693,34 +740,15 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide, decisiveness=(0
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break
-        failed = []
-        for side, c in (('A', A), ('B', B)):
-            if not _gate_crossed(c, wounds0):
-                continue
-            # THE YIELD ROLL (B15.10, A-24): at the end of the round in which he took a wound gate, once, the party's own keyed sub-draw (a function of the
-            # fight's key, the round and the party, never of how many uniforms the stream has taken: B15.05's form).
-            deg = _yield_roll(c, terms, decisiveness[0 if c is A else 1], cfg, KD.seeded(KD.H2(rng.key, f"yield:{scene}:{turn+1}:{side}")))
-            if deg == 'fail':
-                failed.append(c)
-            elif deg == 'partial':
-                c.conc = max(0, c.conc - cfg['CONC_DRAIN_LOSS']); _emit(V.EV_SHAKEN, turn=turn+1, by=c.label)
-            elif deg == 'overwhelming':
-                c.conc = c.conc_max; _emit(V.EV_RALLIED, turn=turn+1, by=c.label)
-        if failed:
-            # A FAILED ROLL ENDS THE SCENE with the yielder standing: the `yield` event `fight._surrender` lifts, the opponent's result (no felling, so no
-            # riposte), read at the END of the round where a declared `Yield` is read at the start of its turn. Two failures in one round: the smaller fraction of
-            # Health yields; an exact tie yields nobody and the fight ends UNRESOLVED.
-            yielder = _terms_yielder(A, B, failed)
+        over, yielder = settle_round(A, B, wounds0, terms, cfg, rng, scene, turn+1, decisiveness)
+        if over:
             if yielder is None:
                 _emit('fight_result', result=0, winner=None)
                 return 0
-            _emit('yield', turn=turn+1, by=yielder.label, accepted=(None if terms == LETHAL_TERMS else True), refused=None, terms=terms, degree='fail')
             result, winner = (-1, B) if yielder is A else (1, A)
             _emit('fight_result', result=result, winner=winner.label)
             return result
-        for c in (A,B):
-            c.stamina=min(c.stamina_max, c.stamina+cfg['RECOVERY_FRAC']*(c.stamina_max-c.stamina)*(c.stamina_max/cfg['STAMINA_REF']))
-            c.conc=max(0,min(c.conc_max, c.conc-cfg['CONC_DRAIN_BOUT']+cfg['CONC_RECOVER_FRAC']*(c.conc_max-c.conc)))
+        recover(A, B, cfg)
     # NO automatic tiebreak (Jordan 2026-06-02): if neither fighter is felled, the round ends UNRESOLVED (result 0).
     # We do not foreclose by awarding the round on wound-count — an undecided fight is a legitimate outcome.
     # No matchup is ever certain (`UPSET_FLOOR`) -- and that is a blow, not an edit of the result: at a felling the riposte

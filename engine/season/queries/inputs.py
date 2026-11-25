@@ -600,6 +600,63 @@ class PersonalCombatInput:
 
 
 @dataclass(frozen=True)
+class DuelState:
+    """WHAT ONE PARTY CARRIES FROM ROUND TO ROUND, in the FRAME of the loop that calls `modules/combat/fight.py::fight_round`
+    (the duel's `fight`, a skirmish's or a field's own loop), for one provider call: no adapter, module attribute or `World` field
+    holds it, and it is outside `World.content_hash()`. The carried set is what a round does not reset or re-derive: damage,
+    stamina, concentration, poise and the weapon in hand (initiative, grip, lunge, facing and the selected mode are re-taken at
+    the round's open measure).
+      * `cumulative_damage` -- the party's damage so far this fight;
+      * `stamina`, `conc`   -- live Stamina and Concentration; `None` is the start of a fight (the module derives the maximum);
+      * `poise`             -- balance, `1.0` whole;
+      * `form`              -- the weapon record in hand when the last round ended; `None` is the kit's own."""
+    cumulative_damage: int = 0
+    stamina: Optional[float] = None
+    conc: Optional[float] = None
+    poise: float = 1.0
+    form: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class DuelRoundInput:
+    """WHAT ONE ROUND READS (`fight_round`). Every number the roll takes is carried once, on `fighters`.
+      * `fighters`    -- who they are: a `PersonalCombatInput` (ends, attributes, kits, terms, and the roll's numbers raw:
+                         `scores`, `addends`, `pool_add`, `pool_floor`, `opposition_rate`);
+      * `states`      -- `(DuelState, DuelState)`, in `fighters.claimants` order;
+      * `plans`       -- per party `{phase: approach}`; a missing phase is `normal`;
+      * `round`       -- 1-based;
+      * `prev_closed` -- the measure the last round ended in."""
+    fighters: PersonalCombatInput
+    states: tuple
+    plans: tuple
+    round: int
+    prev_closed: bool = False
+
+
+@dataclass(frozen=True)
+class DuelRoundOutcome:
+    """WHAT ONE ROUND RETURNS: how it ended, never who won (A-3: an ending, not a winner; the host reads the rest).
+      * `states`   -- each party's `DuelState` as the round left it (the between-round recovery applied where the fight goes on);
+      * `wounds`   -- `{id: {quantity: value}}` over `fighters.wound_quantities`, a fresh copy per party;
+      * `felled`   -- the id of the party the round felled, or `None`;
+      * `yielded`  -- the id of the party whose yield roll failed, or `None`;
+      * `closed`   -- the measure the round ended in (the next round's `prev_closed`);
+      * `trace`    -- this round's events;
+      * `ended_by` -- a member of `modules/combat/vocabulary.py::ROUND_ENDS`: `engagement`'s own third element;
+      * `exchanges`-- the round's `outcome` events;
+      * `attempts` -- `{claimant id: attack attempts}`: the round's `roll`, `stophit` and pursued `disengage` events by striker."""
+    states: tuple
+    wounds: Mapping
+    felled: Optional[str]
+    yielded: Optional[str]
+    closed: bool
+    trace: tuple
+    ended_by: str
+    exchanges: int
+    attempts: Mapping
+
+
+@dataclass(frozen=True)
 class MortalResult:
     """ONE FELLED PARTY'S MORTAL-WOUND DRAW (B15.07, PHY_A A3), returned on `CombatOutcome.mortal` by the module
     (`modules/combat/fight.py::mortal_wound`) and MAPPED by the host onto that party's `felled` and `wounds`

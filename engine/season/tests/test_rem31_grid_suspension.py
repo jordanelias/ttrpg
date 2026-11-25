@@ -243,3 +243,39 @@ def test_the_decider_must_answer_from_the_closed_set():
         return lambda view: "flee"
     with pytest.raises(ValueError, match="not one of"):
         _round(played=_played(), decider=bad)
+
+
+def test_twelve_round_calls_equal_one_fight():
+    """B16.01 (PB step 1, PCR-2): `fight` is the loop over `fight_round`. Three hand-built records (the second a longsword against
+    plate, the case in which a weapon form is in hand at a round's end; the third unequal ends): the rounds called BY HAND, each handed the
+    `DuelState`s and the measure the last one returned, on the one stream, are the fight in one call -- the same events round for round, the same
+    wounds at the end, and the same number of draws taken from the stream. FALSIFIER: a state the round does not carry (the hand loop then
+    fights another fight), a draw the loop takes that the rounds do not, or a recovery applied where the fight ended."""
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from engine.substrate import composition
+    fight, fight_round = composition.require("combat.fight"), composition.require("combat.round")
+    qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+    cases = ((7, (4, 4), ()), (11, (4, 4), (("longsword", "heavy"), ("arming", "light"))), (3, (3, 5), (("spear", "light"), ("mace", "medium"))))
+    rounds_seen = 0
+    for seed, ends, kits in cases:
+        inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs, kits=kits)
+        key = draw.H2("test_twelve_round_calls", seed)
+        whole_rng = draw.seeded(key)
+        whole = fight(inp, whole_rng)
+        rng = draw.seeded(key)
+        scene, states, prev_closed, hand, out = rng.n, (DuelState(), DuelState()), False, [], None
+        for r in range(1, 13):
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), rng, scene=scene)
+            hand.extend(out.trace)
+            states, prev_closed = out.states, out.closed
+            if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
+                break
+        engine_events = [e for e in whole.trace if e["kind"] not in ("fight_start", "fight_result")]
+        assert hand == engine_events, (seed, "the rounds called by hand are not the fight in one call")
+        assert rng.n == whole_rng.n, (seed, "the loop and the rounds took different numbers of draws", rng.n, whole_rng.n)
+        for pid in inp.claimants:
+            assert {q: getattr(whole.wounds[pid], q) for q in qs} == out.wounds[pid], (seed, pid)
+        assert whole.rounds == sum(1 for e in hand if e["kind"] == "turn_start"), seed
+        rounds_seen += whole.rounds
+    assert rounds_seen >= 6, f"the three fights ran {rounds_seen} rounds between them: the hand loop is not observing a carried state"
