@@ -1378,8 +1378,14 @@ def _sequence_refusal(self, w: "World", a: Act, *in_hand: list) -> list:
         raise InstrumentDefect(
             f"act {a.id!r} ({a.verb}) hangs on {prev.id!r} ({prev.verb}), which has not folded at {w.step.value}: a "
             "scene folds in the chooser's order (A-9; B08.03's scene key), so its band cannot be read yet")
-    band = next((e.degree for events in reversed(in_hand) for e in reversed(events)
-                 if getattr(self.act_of.get(e.id), "id", None) == prev.id and e.degree is not None), None)
+    # The NEWEST list of Events that holds any of `prev`'s decides, so ENCOUNTER reads the band its own fight just produced -- and a
+    # refusal it emitted this step (no degree: `None`, the step is skipped) -- never RESOLVE's earlier `Declared` for the same act.
+    band = None
+    for events in reversed(in_hand):
+        mine = [e for e in events if getattr(self.act_of.get(e.id), "id", None) == prev.id]
+        if mine:
+            band = next((e.degree for e in reversed(mine) if e.degree is not None), None)
+            break
     if band == DECLARED:
         held = _deferred_prize(w, _contests_of(prev, VERB_TABLE.get(prev.verb)))
         if held is None:
