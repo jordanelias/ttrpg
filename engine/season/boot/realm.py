@@ -1291,7 +1291,7 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True,
+                guards: bool = True, acquaintances: bool = True, cast_attributes: bool = True,
                 fixtures=None) -> World:
     """The whole map, its buildings, and one person per season loop.
 
@@ -1319,12 +1319,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     `factions` member in both arms and a world's member in one).
 
     `guards` (v9 IN-36, carrying IN-60's guard content) seats `cohorts.yaml: guards` -- a cohort of `weight > 1`
-    sworn (`oblige`) to a principal's seat, posted at the exact rung the seat's holder is present at. `False`
-    (the default) is its control arm, for the same reason. The two switches are independent.
-    [ASSUMPTION; medium; Jordan to correct] `guards` ships OFF: the on arm moves the realm hash
-    and switches on an unmeasured side effect (the guards enter the obligee witness channel and the larder draw),
-    so IN-60's EXIT reads on `build_realm(0, guards=True)` until a position flips the default as its own declared
-    mover. Revert: the default is `True` and the realm hashes and 1-/2-season pins are re-recorded.
+    sworn (`oblige`) to a principal's seat, posted at the exact rung the seat's holder is present at. `True` ships
+    (ED-IN-0317: the ladder takes the flip, after CP-T09-07 (b)'s union; IN-36's EXIT read at B21b.02): `guard_weight` reads above 0
+    at the King's rung and IN-59 (b)'s `audience` limb closes `move` and `migrate` into a guarded rung. A declared mover of the build and of
+    every season. `False` is the CONTROL ARM (the pre-flip realm). The two switches are independent.
+    [ASSUMPTION; medium; Jordan to correct; revert: the default is `False` and the realm hashes and 1-/2-season pins are re-recorded.]
 
     `goals` seeds `goals.yaml`'s organization goals (`seed_goals`, v9 IN-68). `False` is the CONTROL
     ARM (`harness/decision_spread.py --control`): the same realm with no goal minted, committed to or

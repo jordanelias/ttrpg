@@ -388,9 +388,12 @@ def _the_witness_seed_reaches_the_seam_in_a_full_season(seed):
 
 # The guard reading is IN-60's Query, `world_q.guard_weight` (`test_in60_guard_weight.py` holds its falsifiers).
 
-def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
-    assert not [p for p in control.persons if p.startswith(COHORT_PREFIX + "guard_")]
-    assert all(world_q.guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
+def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth():
+    # ED-IN-0317: `guards` now defaults to True, so the no-guard control arm is asked for by name (the `control` fixture stays
+    # `foreign=False` alone: its other tests compare it with the `foreign` fixture, which carries the shipped guards).
+    off = build_realm(0, foreign=False, guards=False)
+    assert not [p for p in off.persons if p.startswith(COHORT_PREFIX + "guard_")]
+    assert all(world_q.guard_weight(off, r) == 0 for r in off.rungs if off.rungs[r].kind == "hearth")
 
 
 def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_than_a_duke(guarded):
@@ -412,6 +415,29 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
     # the guard is a cohort (S9) and holds no title and no commitment
     for pid in (p for p in w.persons if p.startswith(COHORT_PREFIX + "guard_")):
         assert w.persons[pid].weight > 1 and not [t for t in w.tenures if t.subject == pid and t.kind in ("hold", "commit")]
+
+
+def test_the_shipped_default_seats_the_guards():
+    """ED-IN-0317: `build_realm(0)` with no argument holds the three guard cohorts, each with a live `oblige` to its seat's
+    seat (`seat_guards`); `guards=False` is the control arm and holds none."""
+    w = build_realm(0)
+    authored = w._office_census["authored"]
+    rows = {r["seat"]: r["weight"] for r in guard_rows()}
+    assert set(rows) == {"off_king", "off_duchess_hafenmark", "off_duke_varfell"}
+    for seat in rows:
+        cohort = f"{COHORT_PREFIX}guard_{seat}"
+        assert cohort in w.persons, seat
+        assert [t for t in w.tenures if t.kind == "oblige" and t.live and t.subject == cohort and t.object == authored[seat]], seat
+    assert not [p for p in build_realm(0, guards=False).persons if p.startswith(COHORT_PREFIX + "guard_")]
+
+
+def test_guard_weight_is_above_zero_at_the_kings_rung():
+    """IN-36's EXIT at the shipped default, seed 0: the King's rung reads the authored weight; the control reads 0 there."""
+    def at_kings_rung(w):
+        holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
+        return world_q.guard_weight(w, world_q.home_of(w)[holder])
+    assert at_kings_rung(build_realm(0)) == {r["seat"]: r["weight"] for r in guard_rows()}["off_king"] > 0
+    assert at_kings_rung(build_realm(0, guards=False)) == 0
 
 
 def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
