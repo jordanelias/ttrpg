@@ -35,7 +35,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, CONTEXT_KEY, CONTEXT_TERMS, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, RIGGED_VERBS, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -216,7 +216,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if records is None:
                 records = held_record_claims(p, tick, decay)
             memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
-            refs = tuple(r for r in refs if violence_context_of(p, q, r, contexts, records, memo) is not None)
+            # B15.08 (PHY_A A3): THE CONTEXT THAT ADMITTED A REFERENT RIDES ITS CANDIDATE (`CONTEXT_KEY`), the first of the line that holds
+            # (`violence_context_of`, the one reader), for `combat_input` to read the fight's terms by (`rosters.yaml: context_terms`).
+            context_of = {r: violence_context_of(p, q, r, contexts, records, memo) for r in refs}
+            refs = tuple(r for r in refs if context_of[r] is not None)
         # v9 IN-26 (`A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS (`destroy_record`, `give`, `carry`,
         # `found`, `build`) is declined BELOW, with the rest of what he reads off himself: its cell's `held_by` conjunct is
         # asked of `OwnStateReader` (B10.59), which reads his own live `hold` Tenures. B10.61 deleted the roster that did
@@ -412,6 +415,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # B24p.24: AND HOW HARD HE WOULD RIG THE SITTING, where the act carries a rig and he has the power to work one.
                 if verb in RIGGED_VERBS:
                     ops = rig_offer(p, v, verb, subject, ops, fx)
+                if contexts:                 # B15.08: the context that admitted this subject (set above where the decline reads it)
+                    ops = {**ops, CONTEXT_KEY: context_of[subject]}
                 out.append(Candidate(verb, subject, operands=ops))
     return out
 
@@ -560,6 +565,21 @@ for _v, _ctx in VIOLENCE_CONTEXTS.items():
             f"({sorted(VIOLENCE_CONTEXT_READERS)}) or the row's subject is not its opponent", "rosters.yaml",
             needs="a verb contested against its subject, and contexts `decision/options.py` reads",
             law="CR-87 -- a violence decline narrows an attack on its subject by a context the actor holds")
+
+
+def _check_context_terms(terms: dict) -> dict:
+    """B15.08 (PHY_A A3): `rosters.yaml: context_terms` held to the readers, or import refuses naming the line -- each key a name in
+    `VIOLENCE_CONTEXT_READERS`, the range `CONTEXT_KEY` carries. A function, so a test can plant a bad line and watch it refuse."""
+    if set(terms) - VIOLENCE_CONTEXT_READERS.keys():
+        raise Forbidden(
+            f"`rosters.yaml: context_terms` names {sorted(set(terms) - VIOLENCE_CONTEXT_READERS.keys())}, which is no context reader "
+            f"({sorted(VIOLENCE_CONTEXT_READERS)})", "rosters.yaml",
+            needs="a context `decision/options.py::VIOLENCE_CONTEXT_READERS` reads",
+            law="PHY_A A3 -- a fight's terms follow a context the decline can record on the Candidate")
+    return terms
+
+
+_check_context_terms(CONTEXT_TERMS)
 
 
 # ⚠ `project` LIVES HERE, NOT IN `choose.py`, BECAUSE OF AN IMPORT CYCLE: `opening_set` calls it

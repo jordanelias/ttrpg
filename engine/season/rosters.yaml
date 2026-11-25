@@ -968,6 +968,26 @@ rosters:
       capture: yield
       accept: blood
 
+  context_terms:
+    source: "B15.08 (PHY_A A3, ED-IN-0337): the terms a `fight` is fought under, by the context of violence that formed it."
+    cite: "ED-IN-0337"
+    note: >-
+      WHICH TERMS A `fight` IS FOUGHT UNDER BY ITS CONTEXT -- `context: term`, `duel_terms`' shape. A CONTEXT IS A NAME OF ONE
+      READER IN `decision/options.py::VIOLENCE_CONTEXT_READERS` (`violence_contexts`' closed set): `opening_set` records the
+      context that admitted the subject on the Candidate's payload (`data/rosters.py::CONTEXT_KEY`), and
+      `seam/wrappers/combat.py::combat_input` fills `PersonalCombatInput.terms` by ONE path: a challenge's `stakes`, else
+      `duel_terms[verb]`, else THIS roster's line for the act's `context`, else the engine's lethal default (`death`).
+      `war` is lethal; a `crime` or a `defence` fight ends when a party yields (a warrant is served, a blow is answered; neither
+      is a licence to kill). `duel` has no line: it is no context of `fight`, a duel is `accept`'s. An own-motive context joins
+      this roster with its reader (A-16, B37). REFUSED AT IMPORT: a key that is no context reader (`options.py`), a term that is
+      not a non-empty string (`data/verbs.py`). REFUSED AT CALL TIME, AND ONLY WHERE THE ENGINE IS PRESENT: a term outside the
+      engine's closed set (`seam/wrappers/combat.py::duel_terms_of`).
+      [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and every `fight` is lethal, as before B15.08.]
+    values:
+      war: death
+      crime: yield
+      defence: yield
+
   challenge_terms:
     source: "v10 PC-10b (RS-25, Jordan 2026-10-14: *a duel doesn't have to be lethal*; H-240 route (1)): the terms a challenge may name."
     cite: "H-240"
@@ -979,6 +999,18 @@ rosters:
       under `duel_terms`' `accept` line, `blood` since v11 CR-87. [ASSUMPTION; medium; Jordan to correct -- the three
       terms; revert: no terms, a duel is lethal, as before.]
     values: [yield, blood, death]
+
+  mortal_causes:
+    source: "HAP_A edit 3; PHY_A A3's three terms and the spell of illness"
+    cite: "HAP_A edit 3"
+    note: >-
+      THE CLOSED SET OF CAUSES `queries/world_q.py::mortal_terms` ANSWERS FOR -- the pool and obstacle of the draw that decides
+      whether a felled or stricken body dies, one owner. `death`, `yield` and `blood` are the three terms a fight is fought under
+      (`challenge_terms`' members, PHY_A A3) and each has its obstacle in `Fixtures.mortal_wound_ob`; `spell` is the illness a
+      spell lays, a member now and with NO obstacle until B37 (HAP_A edits 4 and 5) writes its branch, so `mortal_terms` refuses
+      it by name rather than answering. A cause outside this set is refused at `data/rosters.py::require_mortal_cause`.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop the roster and `mortal_terms`]
+    values: [death, yield, blood, spell]
 
   combat_band_edges:
     source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
@@ -1623,6 +1655,7 @@ rosters:
     choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
     crisis: loop/resolve.py::_crisis_net_sigma   # B10.15: the crisis of faith's roll, read only at `Fixtures.crisis_arm: drawn`
+    mortal: seam/wrappers/combat.py::_mortal_operands   # B15.07 (PHY_A A3): the mortal-wound draw's levels, carried on `PersonalCombatInput.mortal`
 
   # WHAT A SITE'S READER READS OF A ROW, where it reads the row by ROLE and not by the row's other columns (B04 Phase 3): a row
   # of that `role` at that site must carry exactly this `key` and `side`, and the site carries one row of the role. Any other
@@ -1637,9 +1670,10 @@ rosters:
 
   # `side`: whose sheet a row reads -- not who benefits (U1 §3 item 3). `per`: once when held, once per rank, or signed steps
   # of the held value from its scale's mid-point (U1 §3 item 2). `key` selectors: the skill the act's verb names (`verb`)
-  # and that skill's governing attribute (`verb.base`) (U1 §3 item 1).
+  # and that skill's governing attribute (`verb.base`) (U1 §3 item 1). `ally` (B15.07): the person at the roller's place, neither the roller
+  # nor the party he fought, who holds the most of the row's key -- the one who tends a felled man (PHY_A A3); read by the `mortal` site alone.
   capability_sides:
-    values: [actor, subject, each]
+    values: [actor, subject, each, ally]
   capability_per:
     values: [held, rank, mid]
   # the columns whose value names a registered `Fixtures` entry (a `gain`, and a `dice` row's pool rule)
@@ -4020,6 +4054,14 @@ tables:
       # [ASSUMPTION; medium; Jordan to correct: Spirit governs faith, and by one `minor` step a point -- basis: the source's "will governs faith"; the CHAR content pass may
       # substitute; revert: delete this row, and the crisis reads no attribute.]
       - {use: crisis,            role: edge,      key: attr.spirit.will, side: actor, level: minor, per: mid}
+      # B15.07 (PHY_A A3, "Standing (R4 7b.0 (4))"; A-7): the mortal-wound draw's levels, read by `seam/wrappers/combat.py::_mortal_operands` through the one
+      # `edge` reader as the crisis row is. The felled man's own Endurance, one `minor` step a point from the scale's mid-point (his governing attribute
+      # as levels, the crisis row's form); a tending ally's `healing`, one `minor` step FOR him a rank he holds. His body band is the `wounds` source's.
+      # [ASSUMPTION; medium; Jordan to correct: Endurance governs surviving a wound, `minor` a step, the ally's rank as steps -- basis: PHY_A A3 names
+      # "the governing attribute as levels" and "a co-located ally's `healing` score as a level for" and no size; revert: delete both rows, and the
+      # draw reads the body band alone.]
+      - {use: mortal,            role: edge,      key: attr.body.endurance, side: actor, level: minor, per: mid}
+      - {use: mortal,            role: edge,      key: healing,          side: ally,  level: minor, per: rank}
 
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."
@@ -4581,12 +4623,23 @@ tables:
       `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.
     keys: [affiliations, verbs]
     note: >-
-      [ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the
-      CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above
+      [ASSUMPTION; Jordan to correct: every row is content.] The rows are the CHAR content pass's (`IS-A-11` stage 1 table
+      (e); four of the five creeds, landed uncorrected at BA1.06; `altonian_civics` has no basis). `favours`: verbs whose engagement cell on the creed should be above
       zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are
       `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no
       engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.
-    cells: {}
+    # BA1.06 (`IS-A-11` table (e.1), the draft UNCORRECTED, landed under D-19; every row [ASSUMPTION; low; Jordan to correct;
+    # revert: delete the row]). The draft grounds four of the five creeds; `altonian_civics` has no basis in either cell
+    # (`[NO BASIS IN THE TREE]`: its two holders' roles name offices, not acts) and carries no row. `solmund_orthodoxy`'s
+    # `opposes` is the tree's own cell (`affiliation_engagement`: -1 on `thread_read`); the rest is the draft's. `open_case`,
+    # `examine` and `reconstruct` have no engagement cell, so the reader reports them (`conviction_spread --words`): a cell is
+    # repaired in `affiliation_engagement` and nowhere else, and the draft authors none. `inner_tradition` and `thread_truth`
+    # read alike here, so the draft's gate ("each creed's violating set differs from another's") does not hold for the two.
+    cells:
+      solmund_orthodoxy:  {favours: [open_case, examine], opposes: [thread_read]}
+      inner_tradition:    {favours: [thread_read],        opposes: []}
+      thread_truth:       {favours: [thread_read],        opposes: []}
+      einhir_restoration: {favours: [reconstruct],        opposes: []}
 
   alignment:
     source: >-
@@ -4699,6 +4752,19 @@ tables:
     # no `choice_sourced` line carries, a value outside that key's `CHOICE_RANGES` (a value `0.5` is quoted), an axis off the roster and a
     # cell that is not a number; `align_choice` reads the cells through `ALIGNMENT`. The cells are Jordan's (`BA1-cast-content`): each
     # authored cell is a declared mover of the realm hash.
+    # BA1.04 (`IS-A-11` table (c.1), the draft uncorrected): the two cells the source authors, on `retreat_at`: its `never` is the tree's
+    # `none`, its `early` the earliest threshold `0.5` [ASSUMPTION: "never" is `none`; "early" is `0.5`; the source calls both cells
+    # "illustrative; the cells are Jordan's"; medium; Jordan to correct; revert: delete this block]. `0.25`, the fifteen `role` values
+    # and `storm` carry no source cell and none is written. The source's `approach` cells wait on the PC lane's key (no `approach`
+    # on the tree: the loader refuses it).
+    choices:
+      retreat_at:
+        none:
+          rigid_flexible: -0.4
+          grandiose_humble: -0.3
+        "0.5":
+          rigid_flexible: 0.3
+          selfish_selfless: -0.2
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does

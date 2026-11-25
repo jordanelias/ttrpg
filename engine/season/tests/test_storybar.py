@@ -122,9 +122,9 @@ def test_depth_runs_along_cross_person_edges_only():
 DRAWS = (0, 1, 2, 3)
 
 
-def _small_world(**sweeps):
+def _small_world(seed=SEED, **sweeps):
     from ..boot.realm import build_realm
-    w = build_realm(SEED, CAP)
+    w = build_realm(seed, CAP)
     for name, value in sweeps.items():
         w.fixtures = w.fixtures.sweep(name, value)
     return w
@@ -345,12 +345,18 @@ def test_the_remove_cli_prints_a_replay_of_zero_and_refuses_an_unknown_person(ca
 
 # -- B02.19: the removal test states what it expects, and whom it removes ---------------------------
 
+#: BA1.99 re-pin (BA1.01's authored cast): at seed 0 the most-cited person (p_npc_087, cited 3 times) removed at the first lap
+#: changed no other person's act (`{'n': 0, 'm': 0, 'replay': 0}`, read `PYTHONHASHSEED=0`), so the test it carried observed nothing;
+#: seeds 1, 2 and 3 name p_npc_010 and read n = m = 59, 68, 83. The test reads seed 1; the assertions are unchanged.
+REMOVAL_SEED = 1
+
+
 def test_removal_changes_another_persons_later_act():
-    """Seed 0, two seasons, the most-cited person removed at the first lap: others' acts differ (`n`),
+    """Seed `REMOVAL_SEED`, two seasons, the most-cited person removed at the first lap: others' acts differ (`n`),
     some of them at a later (season, lap) (`m`), the replay arm reads 0 (the control: were it above 0
     every figure would be void), and the removed person's own acts are not in `n`. The second control is
     a person removed at a lap in which the unperturbed copy shows him forming no scene: `n` reads 0."""
-    base = _small_world()
+    base = _small_world(REMOVAL_SEED)
     who, cited = SB.most_cited(base)        # the instrument's own default, which names an individual (a cohort's removal reads n = 0 since B10.60)
     assert who is not None and cited >= 1, "no individual is cited by another person; the removal observed nothing"
     assert not base.persons[who].is_cohort
@@ -377,8 +383,9 @@ def test_removal_changes_another_persons_later_act():
     assert quiet is not None, "every person acts at every lap; the quiet control observed nothing"
     p, at = quiet
     reference = SB._others(everyone, p)
-    assert SB._removal_run(base, SEASONS, p, at)[1] == 1, "the quiet person's removal did not fire: the zero below would be a replay's"
-    assert SB.chain_difference(reference, SB.removal_arm(base, SEASONS, p, at)) == 0
+    q, fired, _ = SB._removal_run(base, SEASONS, p, at)
+    assert fired == 1, "the quiet person's removal did not fire: the zero below would be a replay's"
+    assert SB.chain_difference(reference, SB._others(q, p)) == 0
 
 
 def test_the_most_cited_person_is_the_most_cited_with_ties_by_person_id():

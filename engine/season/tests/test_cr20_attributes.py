@@ -261,8 +261,8 @@ def test_the_creation_sheet_carries_the_attributes_as_a_read_only_copy():
 
 def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     """`cast_attributes=False` (the control) leaves every person with no attribute; `True` (SHIPPED since B11 lane A)
-    seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and the one row the
-    registry authors (NPC-001, Edeyja) over it, key by key. The event-list and hash readings of the two arms are in
+    seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and each row the
+    registry authors (NPC-001, Edeyja, and 42 more at BA1.01) over it, key by key. The event-list and hash readings of the two arms are in
     `build_realm`'s docstring and the CR-20 and B11 lane A commit bodies."""
     from engine.season.boot.realm import build_realm
     from engine.season.state.carriers import generated_attributes
@@ -270,15 +270,18 @@ def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     assert not [p.id for p in off.persons.values() if p.attributes]
     on = build_realm(0)
     span = on.fixtures.get("generated_attribute_range")
-    checked = 0
+    # BA1.99 re-point (BA1.01 authors `stats:` on 42 rows, not the one): every person's sheet is the drawn one with the row's authored
+    # keys over it, key by key, and a person with no row or a row with no `stats:` holds the drawn sheet alone.
+    checked, authored = 0, 0
     for pid, p in on.persons.items():
         drawn = generated_attributes(0, pid, span)
-        if pid == "p_npc_001":
-            assert p.attributes == {**drawn, **cast.attributes_of(cast.row("NPC-001"))}
-        else:
-            assert p.attributes == drawn, pid
+        row = cast.row(f"NPC-{pid[len('p_npc_'):]}") if pid.startswith("p_npc_") else None
+        stated = cast.attributes_of(row) if row else {}
+        assert p.attributes == {**drawn, **stated}, pid
+        authored += bool(stated)
         checked += 1
     assert checked == len(on.persons) and checked > 1
+    assert authored == 43, authored           # NPC-001 (before the batch) and the 42 BA1.01 states (NPC-001 not among them)
 
 
 # ======================================================================================

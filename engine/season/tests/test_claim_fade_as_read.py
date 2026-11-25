@@ -44,10 +44,9 @@ from engine.season.state.carriers import Claim
 # tree's season-one log (seed 0, `PYTHONHASHSEED=0`, `reading @072d6f921`), which still holds no `claim.decayed`.
 # B10.99 RE-PIN, 11848 -> 12998: the B10 movers (`_realm_goldens.py`'s B10.99 paragraph) move the season's log again; same reading, seed 0,
 # `PYTHONHASHSEED=0`, on the B10.99 closing tree (after B10.72's release fix); still no `claim.decayed`.
-# B24p.99 RE-PIN, 12998 -> 13830: the B24p movers (`_realm_goldens.py`'s B24p.99 paragraph: the five influence verbs on the proceeding entry,
-# each hearer moved for himself, what the beats show deposited with those who saw it) move the season's log again; same reading, seed 0,
-# `PYTHONHASHSEED=0`, on the B24p.23 tree; still no `claim.decayed` (the test's own first assertion).
-BEFORE_SEASON_ONE_ENTRIES = 13830
+# BA1.99 RE-PIN, 12998 -> 13348 (read at 12933 with BA1.02's `manner:` rows in; they are held back): the BA1 movers (BA1.01, BA1.08, BA1.12; `_realm_goldens.py`'s
+# BA1.99 paragraph) move the season's log once more; same reading, seed 0, `PYTHONHASHSEED=0`, on the BA1.99 closing tree; still no `claim.decayed`.
+BEFORE_SEASON_ONE_ENTRIES = 13522      # B15.99 re-record: 13348 -> 13522
 BEFORE_SEASON_ONE_DECAYED = 0
 
 

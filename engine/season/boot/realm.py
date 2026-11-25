@@ -1208,8 +1208,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     person (the cohorts included) last; `Fixtures generated_attribute_range` None draws nothing. ⚠ `True` SHIPS
     (persons hold scores, so a person is opposed by the score he rolls and his resisting attribute, never by the stand-in `opposed_ob(pool_default)`), a declared mover
     of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM: no person holds an attribute, so
-    `faculty` falls to `pool_default`. The registry authors ONE row's `stats:` (NPC-001), and `True` is a MOVER by
-    that one person (her pool on the `inquiry` vocation is her Reason, not the default; on `argue`, her Attunement).
+    `faculty` falls to `pool_default`. The registry authors `stats:` on the rows `cast.attributes_of` reads, and `True` is a MOVER by
+    those persons (a person's pool on the `inquiry` vocation is his Reason, not the default; on `argue`, his Attunement).
     [ASSUMPTION; medium; Jordan to correct; revert: none needed -- flipping
     the default is its own declared mover, with the cast's values Jordan's content.]
 
@@ -1524,7 +1524,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.persons[pid].traits = cast.traits_of(cast.row(cid) or {})
         # B10.58 (A-108): the row's `manner:` offsets, within `Fixtures.manner_offset_bound`, set here and NEVER written in play; a row with no `manner:` holds none (`{}`).
         w.persons[pid].manner_offset = cast.manner_offset_of(cast.row(cid) or {}, w.fixtures.get("manner_offset_bound"))
-        # B10.64, B10.65 (`U5a` edits 2, 3): the keys the row marks `unaware:`, handed to `seed_self_knowledge` once the cast is seated; none ships. A mark is the claim NOT written.
+        # B10.64, B10.65 (`U5a` edits 2, 3): the keys the row marks `unaware:`, handed to `seed_self_knowledge` once the cast is seated (`unaware:` on the registry rows). A mark is the claim NOT written.
         if unaware := cast.unaware_of(cast.row(cid) or {}):
             marks[pid] = unaware
         # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at

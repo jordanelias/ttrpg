@@ -1519,6 +1519,18 @@ WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
 # CP-T03-02: how each party's fight ended, as `Event.ending` carries it (`loop/effects_combat.py::fight_ending`).
 ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED, ENDING_PREVAILED = roster("fight_endings", ordered=True)
+# B15.06 (`HAP_A` edit 3): the causes `queries/world_q.py::mortal_terms` answers for; a cause outside it is refused here, once.
+MORTAL_CAUSES = roster("mortal_causes", ordered=True)
+
+
+def require_mortal_cause(cause) -> None:
+    """THE REFUSAL OF A CAUSE OUTSIDE `mortal_causes`, for `world_q.mortal_terms` and any later caller of the draw."""
+    require_member(
+        cause, MORTAL_CAUSES, f"mortal cause {cause!r} is not a member of `mortal_causes`", "rosters.yaml -- mortal_causes",
+        law="HAP_A edit 3 -- one owner of how hard a body is to kill, over a CLOSED set of causes; a cause it does not name has "
+            "no obstacle, and answering one would be a number nobody declared")
+
+
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
@@ -1637,6 +1649,12 @@ MARCH_TARGET_KINDS = roster("march_target_kinds")
 # posture is read under.
 MARCH_POSTURES = roster("march_postures", ordered=True)
 MARCH_POSTURE_KEY = "posture"
+# B15.08 (PHY_A A3): THE PAYLOAD KEY A VIOLENCE DECLINE SETS -- the context of violence that admitted a `fight`'s subject
+# (`decision/options.py::opening_set`), read by `seam/wrappers/combat.py::combat_input` for the terms (`rosters.yaml:
+# context_terms`). Its range is the names of `options.py::VIOLENCE_CONTEXT_READERS` (`data/` imports no `decision/`, so
+# the registry stays there). Not `choice_sourced`: the decline sets it, the chooser does not choose it, so it is in
+# neither `CHOICE_RANGES` nor `CHOICE_CARRIER`, and no roster names it.
+CONTEXT_KEY = "context"
 STORM = "storm"
 BESIEGE = "besiege"
 if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:

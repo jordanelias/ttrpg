@@ -3,7 +3,7 @@ read by `decision/choose.py::score_terms`' `pursuit` for each `choice_sourced` k
 
 THE FALSIFIER: two persons of opposite weight on one axis ranking two `retreat_at` values of one `marshal` question the same way with a cell authored
 on that axis (the term does not reach the score), or differently with no cell (the order is not content-blind where no cell is authored). The cell is
-PLANTED here through the loader's own `choices=`; the shipped roster carries none (the cells are content for `BA1-cast-content`).
+PLANTED here through the loader's own `choices=`; the shipped roster carries two `retreat_at` cells (BA1.04: `none` on `rigid_flexible` and `grandiose_humble`, and `"0.5"` on `rigid_flexible` and `selfish_selfless`); the weights here sit on `grandiose_humble` only, so the shipped `"0.5"` cell adds nothing to the bare arm below; the pair read here is `'0.5'` and `'0.25'` (`ORDER_RETREAT_AT`), so the `none` cell, which IS on this axis, is outside it. That holds only while no shipped cell of the pair is on this test's axis.
 """
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ def test_opposite_temperaments_rank_two_retreat_at_values_in_opposite_order(monk
     a, b = Person(id="p_choice_a", name="a"), Person(id="p_choice_b", name="b")
 
     bare = (_rank(a, plus, monkeypatch), _rank(b, minus, monkeypatch))
-    assert bare[0] == bare[1] == [_EARLY, _LATE], bare          # no cell authored: the two persons rank alike (the shipped state)
+    assert bare[0] == bare[1] == [_EARLY, _LATE], bare          # no cell on this axis for the pair: the two persons rank alike (the shipped cells sit on other axes; a shipped `grandiose_humble` cell on `"0.5"` would redden this control)
 
     cell = {"retreat_at": {_EARLY: {_AXIS: 0.3}, _LATE: {_AXIS: -0.4}}}
     monkeypatch.setattr(V, "ALIGNMENT", V._load_alignment(choices=cell))

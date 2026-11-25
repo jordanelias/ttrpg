@@ -157,41 +157,37 @@ def test_the_sampler_does_not_swap_the_parties():
 
 def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
     """The control the tolerance cannot be: NO SAMPLING NOISE. The sampler's own stream is replayed here (same key,
-    same module entry, same input), each scene is classified the two ways, and (1) the display equals the
-    trackers' tally EXACTLY, (2) the result's sign disagrees with the trackers on at least one scene, so the
-    exclusion this asserts is one the stream can show (`wrapper.fight` flips the sign in `UPSET_FLOOR` of the
-    decided fights and leaves the trackers alone)."""
+    same module entry, same input), each scene is classified off the trackers, and the display equals the trackers' tally
+    EXACTLY. (B15.09: the result's sign no longer disagrees with the trackers -- the post-hoc flip that made it do so on a
+    twentieth of the decided scenes is the riposte now, a blow the trackers record -- so the former second clause, that
+    the sign and the trackers disagree on at least one scene, observes nothing and is gone.)"""
     from ..seam.wrappers._entry import entry_for
     from ..state.ids import draw_factory
     w = _world((4, 1))
     got = _estimate(w)
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
-    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight")
+    # B15.07: the estimate's record carries no dealt mortal key (`mortal_keyed=False`) and each tracker is read with its mortal-wound draw mapped on
+    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight", mortal_keyed=False)
     rng = draw_factory(w.world_seed, lambda: w.tick)(ACTOR, "estimate")
     n = w.fixtures.get("estimate_samples")
     by_trackers = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)
-    disagree = scenes = 0
+    scenes = 0
     for _ in range(n):
         r = _ran("entry.fn", entry.fn, inp, rng)
-        a, b = bool(r.wounds[ACTOR].felled), bool(r.wounds[SUBJECT].felled)
-        # the sign `wrapper.fight` returned is not lifted into the record; the engine's own `fight_result` event names it
-        sign = next(e["result"] for e in r.trace if e["kind"] == "fight_result")
+        a, b = (bool(combat._wound_state(r.wounds[p], r.mortal.get(p))["felled"]) for p in (ACTOR, SUBJECT))
         if r.surrender is not None:
             by_trackers["yielded"] += 1
         elif a and not b:
             by_trackers["actor_felled"] += 1
-            disagree += sign != -1
         elif b and not a:
             by_trackers["subject_felled"] += 1
-            disagree += sign != 1
         else:
             by_trackers["undecided"] += 1
         scenes += 1
     assert scenes == n and scenes >= 100, scenes
     for k in combat.ESTIMATE_OUTCOMES:
         assert got[k] == by_trackers[k] / n, (k, got[k], by_trackers[k] / n)
-    assert disagree >= 1, "the stream never showed the sign and the trackers disagreeing: the control cannot fail"
 
 
 def _fight_act():

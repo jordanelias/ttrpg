@@ -59,13 +59,18 @@ def test_the_sheet_is_a_function_of_seed_person_and_key():
     assert differing >= 1, "two seeds drew the same sheet for fifty persons"
 
 
+def _authored(pid: str) -> dict:
+    """The attributes the cast row of person `pid` authors (BA1.01 authors 42 rows beside NPC-001's): `{}` for a person no registry row seats."""
+    return cast.attributes_of(cast.row("NPC-" + pid[len("p_npc_"):])) if pid.startswith("p_npc_") else {}
+
+
 def test_a_realm_holds_every_value_of_the_range_on_every_key():
     w = build_realm(0)
-    authored = cast.attributes_of(cast.row("NPC-001"))
     lo, hi = SHIPPED
+    authored = {p.id: _authored(p.id) for p in w.persons.values()}
     checked = 0
     for key in ATTRIBUTES:
-        held = {p.attributes[key] for p in w.persons.values() if not (p.id == "p_npc_001" and key in authored)}
+        held = {p.attributes[key] for p in w.persons.values() if key not in authored[p.id]}
         for value in range(lo, hi + 1):
             assert value in held, (key, value)
             checked += 1
@@ -96,15 +101,17 @@ def test_the_sheet_does_not_read_pool_default(monkeypatch):
 def test_falsifier_a_realm_built_at_another_range_seats_that_range(monkeypatch):
     _range_at(monkeypatch, (3, 3))
     w = build_realm(0)
-    authored = cast.attributes_of(cast.row("NPC-001"))
-    checked = 0
+    checked = authored_held = 0
     for p in w.persons.values():
+        authored = _authored(p.id)
         for key in ATTRIBUTES:
-            if p.id == "p_npc_001" and key in authored:
+            if key in authored:
+                assert p.attributes[key] == authored[key], (p.id, key)   # an authored value wins over the range, key by key
+                authored_held += 1
                 continue
             assert p.attributes[key] == 3, (p.id, key)
             checked += 1
-    assert checked >= 10 * (len(w.persons) - 1)
+    assert authored_held >= 80 and checked + authored_held == 10 * len(w.persons)
 
 
 @pytest.mark.parametrize("bad", [(0, 6), (5, 4), (1, 8), (1.0, 6)])
@@ -197,16 +204,18 @@ def test_the_old_will_key_resolves_to_the_new_one():
 def test_a_sheet_holds_ten_keys_in_range():
     w = build_realm(0)
     lo, hi = SHIPPED
-    authored = cast.attributes_of(cast.row("NPC-001"))
-    checked = 0
+    checked = skipped = 0
     for p in w.persons.values():
+        authored = _authored(p.id)
         assert list(p.attributes) == list(ATTRIBUTES) and len(p.attributes) == 10, p.id
         for key, value in p.attributes.items():
-            if p.id == "p_npc_001" and key in authored:
+            if key in authored:
+                assert value == authored[key], (p.id, key)
+                skipped += 1
                 continue
             assert lo <= value <= hi, (p.id, key)
             # each key is its own stream: no key draws from another key's
             assert value == draw_factory(w.world_seed, lambda: 0)(p.id, f"attr.generated:{key}").die(lo, hi), (p.id, key)
             checked += 1
-    assert checked >= 10 * (len(w.persons) - 1)
+    assert skipped >= 80 and checked + skipped == 10 * len(w.persons)
     assert "attr.mind.will" not in next(iter(w.persons.values())).attributes

@@ -24,7 +24,8 @@
 # Jordan to correct]. `engine/season/data/cast.py` refuses a row naming fewer than the fifteen, or
 # holding no member of a concern (`descriptor_registry.yaml: affiliation_roster.concerns`).
 #
-# Stats are deferred per npc_roster_v30 (most rows carry `stats: null`).
+# Stats and skill scores are authored (BA1.01, `IS-A-11` table (a), uncorrected) for the rows the draft grounds;
+# a row it does not ground keeps `stats: null`.
 # History and discussion: references/npc_registry_history.md
 
 schema:
@@ -45,16 +46,16 @@ schema:
   # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
   # `manner:` (B10.58, A-108) is `{<axis>: <number>}`, a person's own stored offset on a manner axis, over `engine/season/rosters.yaml: manner_offset_axes`, each within
   # `+-Fixtures.manner_offset_bound`; read by `cast.py::manner_offset_of` into `Person.manner_offset`, which RAISES on any other axis or a value outside the bound. No row
-  # authors one yet (the values are the cast content pass's); silence is no key.
+  # authors one: BA1.02 drafted ten (the IS-A-11 draft's table (a) `manner:` column, `proposals/2026-11-12-subsystem-audit-suite/proposals/IS_A_11_cast_values_draft.md`) and they are HELD BACK for Jordan, because they take R-06.d's strict-top share at seed 0 from 255 to 249 of 498 (one half, not above it); silence is no key. Sign when they land: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
   # `relations:` (B10.62) is a list of `{to: <registry case id>, ground: <a `engine/season/rosters.yaml: relation_grounds` member>, valence: -1 or +1,
   # weight: <whole number 0-5>}`, read by `engine/season/data/cast.py::relations_of`, which RAISES on an unknown id, ground or valence and on a weight outside the
   # stance row's own bound. A relation is authored on the side that HOLDS it: a symmetric one is two rows, one on each person, and they need not agree. At build
-  # `boot/realm.py::seed_relations` gives the holder a stance row `(<to's person id>, valence, weight)` and his own `bond:<ground>` claim about `to`. No row authors one
-  # yet (the cast content pass's, BA1); silence is no key.
+  # `boot/realm.py::seed_relations` gives the holder a stance row `(<to's person id>, valence, weight)` and his own `bond:<ground>` claim about `to`. Six rows on five holders
+  # author one (BA1.08, the draft's table (d), uncorrected); silence is no key.
   # `unaware:` (B10.64, A-34) is a list of keys the person does not know of himself, each a member of `engine/season/data/rosters.py::SELF_BELIEVED` (`engine/season/rosters.yaml:
   # self_believed` and the pursuit roster) that the row itself holds (a pursuit in `convictions:`, the gift in `ts:`), read by `engine/season/data/cast.py::unaware_of`, which RAISES
-  # on any other key. A marked key is read from the person's own `self:<key>` claim and not from the field (`queries/person_q.py::knows_self`). No row authors one yet (the cast
-  # content pass's, BA1); silence is no key.
+  # on any other key. A marked key is read from the person's own `self:<key>` claim and not from the field (`queries/person_q.py::knows_self`). NPC-004 and NPC-012
+  # author one (BA1.12, `status: seed`); silence is no key.
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
   # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
   # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by
@@ -125,7 +126,8 @@ characters:
     territory: null
     ts: ~50
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred per npc_roster_v30 §Stat Blocks]
+    stats: {perception: 5, attunement: 4}
+    capabilities: {inquiry: 5}
     convictions:
       primary:
         - {conviction: justice, weight: 0.50}
@@ -163,7 +165,8 @@ characters:
     territory: null
     ts: 25
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {charisma: 5, will: 4}
+    capabilities: {argue: 5}
     convictions:
       primary:
         - {conviction: justice, weight: 0.40}
@@ -202,7 +205,8 @@ characters:
     territory: null
     ts: 15
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {perception: 5, will: 4}
+    capabilities: {inquiry: 5, argue: 3, law: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.60}
@@ -226,6 +230,7 @@ characters:
       thread_truth: 1
       einhir_restoration: 0
       altonian_civics: 1
+    unaware: [prac.thread_sensitivity]  # BA1.12, U5a self-knowledge edit 2: he attributes his hunches to investigative instinct; status: seed [ASSUMPTION; medium; Jordan to correct; reverts alone]
     source: npc_roster_v30 §4
     notes: "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
 
@@ -241,7 +246,8 @@ characters:
     territory: null
     ts: 35
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {agility: 5, perception: 4}
+    capabilities: {arms: 5, inquiry: 3}
     convictions:
       primary:
         - {conviction: stewardship, weight: 0.40}
@@ -278,7 +284,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred. npc_roster_v30 notes "high personal combat stats (career soldier)"]
+    stats: {strength: 4, charisma: 4}
+    capabilities: {arms: 5}
     convictions:
       primary:
         - {conviction: honour, weight: 0.35}
@@ -315,7 +322,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {charisma: 5, acuity: 4}
+    capabilities: {argue: 5}
     convictions:
       primary:
         - {conviction: wealth, weight: 0.50}
@@ -351,7 +359,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {focus: 5, acuity: 4}
+    capabilities: {law: 5, copying: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -387,7 +396,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {acuity: 5, grace: 4}
+    capabilities: {law: 3, argue: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.30}
@@ -423,7 +433,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {attunement: 5, charisma: 4}
+    capabilities: {argue: 5}
     convictions:
       primary:
         - {conviction: wealth, weight: 0.30}
@@ -461,7 +472,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {grace: 5, charisma: 4}
+    capabilities: {argue: 3, law: 3}
     convictions:
       primary:
         - {conviction: virtue, weight: 0.50}
@@ -498,7 +510,8 @@ characters:
     territory: T16 (Schoenland)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {acuity: 4, attunement: 4}
+    capabilities: {argue: 3}
     convictions:
       primary:
         - {conviction: wealth, weight: 0.30}
@@ -521,6 +534,7 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 1
       altonian_civics: 2
+    unaware: [stability]  # BA1.12, U5a self-knowledge edit 2: the pursuit his case names (homesickness steering policy toward stability; engine/season/cases/chain/NPC1.yaml); status: seed [ASSUMPTION; medium; Jordan to correct; reverts alone]
     source: npc_roster_v30 §12
 
   - id: NPC-013
@@ -534,7 +548,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {acuity: 5, will: 4}
+    capabilities: {law: 3, argue: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.50}
@@ -576,7 +591,8 @@ characters:
     territory: T1 (Valorsplatz)
     ts: 28
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {charisma: 5, will: 4}
+    capabilities: {argue: 3}
     convictions:
       primary:
         - {conviction: virtue, weight: 0.45}
@@ -600,6 +616,7 @@ characters:
       thread_truth: 1
       einhir_restoration: 2
       altonian_civics: 1
+    relations: [{to: NPC-032, ground: kin, valence: 1, weight: 4}, {to: NPC-050, ground: rivalry, valence: -1, weight: 3}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: faction_canon_v30 §Crown
     notes: "TS 28 per character_canon — no threshold crossing. Honor enters via valorian_court cultural template."
 
@@ -615,7 +632,8 @@ characters:
     territory: T9 (Himmelenger)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {will: 5, charisma: 4}
+    capabilities: {argue: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.50}
@@ -734,7 +752,8 @@ characters:
     territory: T1 (Valorsplatz)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 5, focus: 4}
+    capabilities: {inquiry: 5, copying: 3, law: 3}
     convictions:
       primary:
         - {conviction: justice, weight: 0.45}
@@ -757,6 +776,7 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 5
       altonian_civics: 1
+    relations: [{to: NPC-020, ground: kin, valence: 1, weight: 4}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_character_analyses §2, faction_canon_v30 §Crown
     notes: "Queen Lenneth Almqvist. Archivist by training. PP-685 §2.3 ecclesiastical profile was misattribution. Lenneth archive awakened Torsvald's TS (character_analyses_infill §5)."
 
@@ -771,7 +791,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {perception: 5, attunement: 4}
+    capabilities: {inquiry: 5}
     convictions:
       primary:
         - {conviction: liberty, weight: 0.30}
@@ -808,7 +829,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {grace: 4, attunement: 4}
+    capabilities: {argue: 3, inquiry: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.60}
@@ -826,7 +848,7 @@ characters:
         - {conviction: family, weight: 0.02}
         - {conviction: love, weight: 0.02}
         - {conviction: stewardship, weight: 0.03}
-    goals: null  # [GAP]
+    goals: ["Carry the Crown Inner Circle's counsel to Himlensendt", "Hold the Church's place at court"]  # IS-A-11 draft (e.2), BA1.09; [ASSUMPTION; low; Jordan to correct]
     affiliations:  # ED-IN-0293: Himlensendt's agent (Church > Holy See) seated in Crown > Inner Circle, Truth 5: orthodoxy at ceiling; the Church side of his dual loyalty dominates
       solmund_orthodoxy: 5
       einhir_restoration: 1
@@ -844,7 +866,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {agility: 5, strength: 4}
+    capabilities: {arms: 5}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -880,7 +903,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 4, charisma: 4}
+    capabilities: {arms: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -916,7 +940,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 5, focus: 4}
+    capabilities: {inquiry: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -959,7 +984,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {will: 5, acuity: 4}
+    capabilities: {law: 5, inquiry: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.60}
@@ -996,7 +1022,10 @@ characters:
     territory: null
     ts: null  # [GAP — "TS exposure via archive work" per faction_canon suggests latent/emerging TS]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 4}
+    capabilities:
+      inquiry: 3
+      arms: 3  # [ASSUMPTION: IS-A-11 draft, uncorrected]
     convictions:
       primary:
         - {conviction: scholastics, weight: 0.35}
@@ -1034,7 +1063,7 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {will: 4}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.50}
@@ -1074,7 +1103,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {charisma: 5}
+    capabilities: {argue: 5}
     convictions:
       primary:  # ED-IN-0293: was null ([GAP]); all fifteen authored
         - {conviction: virtue, weight: 0.06}
@@ -1112,7 +1142,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {charisma: 5, acuity: 4}
+    capabilities: {law: 5, argue: 3}
     convictions:
       primary:
         - {conviction: justice, weight: 0.30}
@@ -1135,6 +1166,7 @@ characters:
       solmund_orthodoxy: 2
       einhir_restoration: 0
       altonian_civics: 0
+    relations: [{to: NPC-020, ground: rivalry, valence: -1, weight: 3}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_behavior_v30 §2.3, npc_character_analyses §6, faction_canon_v30
 
   - id: NPC-052
@@ -1150,7 +1182,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {charisma: 5, acuity: 5}
+    capabilities: {inquiry: 3}
     convictions:
       primary:
         - {conviction: justice, weight: 0.35}
@@ -1174,6 +1207,7 @@ characters:
       thread_truth: 2
       einhir_restoration: 5
       altonian_civics: 1
+    relations: [{to: NPC-050, ground: rivalry, valence: -1, weight: 4}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_behavior_v30 §2.4, npc_character_analyses_infill §5, faction_canon_v30
     notes: "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
 
@@ -1184,6 +1218,8 @@ characters:
     faction: Löwenritter
     role: Grandmaster
     status: canonical
+    stats: {will: 5, charisma: 4}
+    capabilities: {arms: 5}
     ts: 0
     certainty: 4
     resonant_style: Consequence
@@ -1208,6 +1244,7 @@ characters:
       solmund_orthodoxy: 2
       einhir_restoration: 1
       altonian_civics: 1
+    relations: [{to: NPC-020, ground: service, valence: 1, weight: 3}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: behavior_v30 §2.5
 
   - id: NPC-071
@@ -1216,6 +1253,8 @@ characters:
     faction: Hafenmark (Inner Council)
     role: Legal Advisor to Baralta
     status: canonical
+    stats: {acuity: 5, focus: 4}
+    capabilities: {law: 5, argue: 3}
     certainty: 5
     resonant_style: Evidence
     convictions:
@@ -1239,6 +1278,7 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 1
       altonian_civics: 1
+    goals: ["Ground the Duchess's Sovereign Authority claim in law", "Keep Hafenmark's procedure correct"]  # IS-A-11 draft (e.2), BA1.09; [ASSUMPTION; low; Jordan to correct]
     source: behavior_v30 §2.16
 
   - id: NPC-072
@@ -1247,6 +1287,8 @@ characters:
     faction: Hafenmark (Inner Council)
     role: Military Commander
     status: canonical
+    stats: {endurance: 4, charisma: 4}
+    capabilities: {arms: 5}
     certainty: 4
     resonant_style: Consequence
     convictions:
@@ -1309,6 +1351,10 @@ characters:
     faction: Varfell (Jarl Council)
     role: Skald-Chief
     status: canonical
+    stats: {charisma: 5}
+    capabilities:
+      argue: 3  # [ASSUMPTION: IS-A-11 draft, uncorrected]
+      copying: 3
     certainty: 3
     resonant_style: Solidarity
     convictions:
@@ -1340,6 +1386,7 @@ characters:
     faction: Independent (Southernmost Wardens)
     role: Second Senior Warden
     status: canonical
+    stats: {focus: 5}
     territory: T15 (Southernmost)
     ts: 60
     certainty: 0
@@ -1376,6 +1423,8 @@ characters:
     role: Riskbreaker (doctrine-following — foil to Torsvald)
     lifepath: 3-LO3  # this row's own text: role "Riskbreaker" -> 3-LO3 Riskbreaker (maps to no capability key)
     status: proposed
+    stats: {agility: 5}
+    capabilities: {arms: 5}
     ts: 0
     certainty: 5
     resonant_style: Authority
@@ -1408,6 +1457,8 @@ characters:
     faction: Hafenmark (Inner Council)  # seat #4 (the unquoted `#4)` had eaten the paren)
     role: Commune Representative (Banneret)
     status: proposed
+    stats: {charisma: 4}
+    capabilities: {argue: 3, arms: 3}
     resonant_style: Consequence
     convictions:
       primary:
@@ -1438,6 +1489,8 @@ characters:
     faction: Varfell (Jarl Council)  # seat #5 (the unquoted `#5)` had eaten the paren)
     role: Military Jarl
     status: proposed
+    stats: {strength: 4}
+    capabilities: {arms: 5}
     resonant_style: Solidarity
     convictions:
       primary:
@@ -1468,6 +1521,8 @@ characters:
     faction: Crown
     role: Governor of Ehrenfeld (T14)
     status: proposed
+    stats: {acuity: 4, focus: 4}
+    capabilities: {law: 3}
     territory: T14 (Ehrenfeld)
     resonant_style: Evidence
     convictions:
@@ -1499,6 +1554,8 @@ characters:
     faction: Guilds
     role: Zunftmeisterin (Guildmaster Council)
     status: proposed
+    stats: {charisma: 4}
+    capabilities: {argue: 3}
     resonant_style: Solidarity
     convictions:
       primary:
@@ -1529,6 +1586,8 @@ characters:
     faction: Guilds
     role: Guild Advocate (legal representative at Crown court)
     status: proposed
+    stats: {acuity: 5, charisma: 4}
+    capabilities: {law: 5, argue: 5}
     resonant_style: Evidence
     convictions:
       primary:
@@ -1559,6 +1618,8 @@ characters:
     faction: Guilds
     role: Guild Surveyor (mapping maritime Forgetting boundary)
     status: proposed
+    stats: {perception: 5, focus: 4}
+    capabilities: {inquiry: 5}
     resonant_style: Evidence
     convictions:
       primary:
@@ -1589,6 +1650,8 @@ characters:
     faction: Restoration Movement
     role: Buditel (hedge school teacher)
     status: proposed
+    stats: {acuity: 4, charisma: 4}
+    capabilities: {argue: 3}
     resonant_style: Solidarity
     convictions:
       primary:
@@ -1620,6 +1683,8 @@ characters:
     role: Copyist (hand-copies suppressed Einhir cultural texts)
     lifepath: 3-CF4  # this row's own text: role "Copyist (hand-copies ... texts)" is the trade 3-CF4 Scribe is named for (its Knot: "an author whose work you copied"); maps to inquiry, not copying (the table's 3-CF4 ground)
     status: proposed
+    stats: {focus: 5, agility: 4}
+    capabilities: {copying: 5, inquiry: 3}
     resonant_style: Evidence
     convictions:
       primary:
@@ -1650,6 +1715,10 @@ characters:
     faction: Altonia
     role: Katepano (frontier governor)
     status: proposed
+    stats: {acuity: 4, charisma: 4}
+    capabilities:
+      law: 3
+      arms: 3  # [ASSUMPTION: IS-A-11 draft, uncorrected]
     resonant_style: Consequence
     convictions:
       primary:
@@ -1680,6 +1749,8 @@ characters:
     faction: Altonia
     role: Kommerkiarios (trade prefect at Schoenland interface)
     status: proposed
+    stats: {acuity: 4, focus: 4}
+    capabilities: {law: 3, inquiry: 3}
     resonant_style: Authority
     convictions:
       primary:

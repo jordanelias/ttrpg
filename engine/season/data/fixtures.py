@@ -21,7 +21,7 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, STANCE_MAX, roster, roster_map, table
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -437,11 +437,11 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-433 -- `site: Fixtures wound_levels_max`, graded `assumption`; the most levels a wound can stack is ADV Edit D's two, injected and swept]
     wound_levels_max=2,                # `H-433`, swept 1 / 2 (SHIPPED) / 3 (levels, per side)
     # B05.61 (`UPR` §3 edit 1; A-8): HOW A WOUND CARRIED INTO A FIGHT ENTERS IT, read ONLY by `seam/wrappers/combat.py` (`party_end`, `combat_input`).
-    # `endurance_cut` is the CONTROL and the shipped arm until B15 reads `UPR` §3's gate: Endurance one point lower per body band, the tracker clean
-    # (Health, Wound Interval and Max Wounds all shrink). `level` is the A-8 arm: the authored Endurance whole, and the person's `wounds` level carried
-    # on `PersonalCombatInput.carried` against his own attack and defence.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-434 -- `site: Fixtures carried_wound_model`, graded `ruled` (A-8); the arm is swept endurance_cut (control, SHIPPED) / level]
-    carried_wound_model="endurance_cut",   # `H-434`, swept endurance_cut (control, SHIPPED until B15) / level
+    # `level` is the A-8 arm and the SHIPPED one since B15.11 (`UPR` §3's flip): the authored Endurance whole, and the person's `wounds` level carried
+    # on `PersonalCombatInput.carried` against his own attack and defence. `endurance_cut` is the CONTROL: Endurance one point lower per body band, the
+    # tracker clean (Health, Wound Interval and Max Wounds all shrink).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-434 -- `site: Fixtures carried_wound_model`, graded `ruled` (A-8); the arm is swept level (SHIPPED) / endurance_cut (control)]
+    carried_wound_model="level",           # `H-434`, swept endurance_cut (control) / level (SHIPPED since B15.11)
     # v9 SC-02 `22b` step 24 (proceedings `19_PLAN.md` step 24): HOW FAR A DETERMINATION MOVES ITS MAKER'S
     # OWN PURSUITS, per unit of `queries/person_q.py::pursuit_lean` and per band step (`data/rosters.py::
     # DEGREE_STEP`), read by `person_q.consequence_pursuits` from `loop/effects_information.py::
@@ -656,6 +656,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`, which reads no obstacle]
     # [JUSTIFIED: engine/season/hole_register.yaml H-567 -- `site: Fixtures mark_ob`, graded `assumption`; no document gives how hard it is to mend clean at one's limit, so it is injected and swept 1.2 / 2.4 / 4.8]
     mark_ob=2.4,                       # `H-567`, swept 1.2 / 2.4 (seed value, read only under `drawn`) / 4.8
+    # B15.06 (`H-574`). HOW HARD A FELLED BODY IS TO KILL, per cause: the obstacle `queries/world_q.py::mortal_terms` answers for `death`,
+    # `yield` and `blood` (PHY_A A3's three terms; `spell` has none until B37). Fractional like every obstacle (A-5). Shipped at B15.06 at an
+    # unreachable control, 99.0 a cause (PC_A's "an obstacle no pool can beat"), under which every felled body dies as before the draw. B15.07's
+    # sweep (0..4 a cause, 1,000 felled parties a cell, `H-574`) SETS THE SHIPPED VALUES: a felling under `death` terms is a death about half the
+    # time, one whole obstacle step less lethal a term down the terms' intent (`yield`, then `blood`), on the one sampler and pool the mark roll takes.
+    # [ASSUMPTION; medium; Jordan to correct (D-19, in the PR body); revert: 99.0 a cause, the control]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-574 -- `site: Fixtures mortal_wound_ob`, graded `assumption`; no document gives how hard a felled body is to kill, so it is injected and swept]
+    mortal_wound_ob={_c: _v for _c, _v in (("death", 3.0), ("yield", 2.0), ("blood", 1.0)) if _c in MORTAL_CAUSES},   # `H-574`, swept 99.0 (control) / 0..4 a cause; death 3 / yield 2 / blood 1 SHIPPED (B15.07)
     # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is
@@ -710,7 +718,7 @@ DEFAULT_FIXTURES = Fixtures(
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     # B17.01 SHIPS `3`, A.9's number spelled out: with CP-T04-05's scaling it is the archived table's +3 at a full garrison and
     # proportionally less below, and `None`, the flat row, stays in the sweep as the control.
-    field_walls_dr=3,     # `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control) [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped]
+    field_walls_dr=3,     # [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped] `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control)
     # CP-T04-01 (`H-359`). WHAT A HEADCOUNT SIDE IS MADE OF: `person` IS SHIPPED (B17.01) -- one subunit per commanding
     # person, sized by `under_arms_cap` of his own weight, and `_eff_march` scales each side's person by HIS subunit's ratio
     # and names, on the band Event, the person whose subunit broke first. `side` is the control: one subunit sized by the
@@ -1323,8 +1331,8 @@ DEFAULT_FIXTURES = Fixtures(
     # wrapper passes a decider. The first role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
     npc_decider_roles=(),
     # `H-481` (B10.58; `IS-B2-CHAR-07`, A-108). THE LARGEST STORED MANNER OFFSET A CAST ROW MAY AUTHOR: `data/cast.py::manner_offset_of` refuses a `manner:` value outside
-    # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). It moves nothing
-    # while no row authors an offset, which is every shipped row. [ASSUMPTION; medium; Jordan to correct; revert: none needed, no row authors an offset.]
+    # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). No row authors an
+    # offset today (`references/npc_registry.yaml`'s `manner:` header says why). [ASSUMPTION; medium; Jordan to correct; revert: none needed.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-481 -- site: Fixtures manner_offset_bound, graded `assumption`; CL-PERSON drafts +-0.15 and no live reading fixes it, so it is injected and swept 0.1 / 0.15 / 0.3]
     manner_offset_bound=0.15,          # `H-481`, swept 0.1 / 0.15 (SHIPPED, CL-PERSON's draft) / 0.3
     # `H-483` (B10.65; `U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a)). THE LEAST A TOLD `self:<key>` CLAIM MUST WEIGH FOR HIM TO TAKE IT UP: `queries/person_q.py::knows_self` reads a

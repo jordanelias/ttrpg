@@ -81,6 +81,9 @@ capabilities:
     arms:    {kind: skill, gloss: "Fights with a weapon in hand.", untrained: default, grows_by: [train, practice, use], scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
     # `law` is the one social skill defined (B04.18, ED-IN-0378): `insight` and `deception` are not created, `rhetoric` is not created (D-U1-03).
     law:     {kind: skill, gloss: "Knows and applies the rules of a forum: procedure, definition, precedent.", untrained: default, grows_by: [train, practice], scale: [0, 7], source: "05_SC_hearing_capabilities (SC-B3); D-U1-03; U1 §5 (FA's `judgment` is `law`)"}
+    # `healing` (B15.07, U1-C item 3: the row lands with its first use, a co-located ally's level FOR the mortal-wound draw, `rosters.yaml:
+    # capability_uses` site `mortal`; `tend` reads it later, B12c/B16). No `base:`: a skill names no attribute (B05.25), the verb row does.
+    healing: {kind: skill, gloss: "Tends a wound or a sickness so the body recovers.", untrained: default, grows_by: [train, practice], scale: [0, 7], source: "U1 §2 (PC, tend); B15.07 [ASSUMPTION: the gloss; tend's verb row names its governing attribute]"}
 
 # TRAITS -- what a person IS MOVED BY, DEFINED ONCE (B04.07; U1 §2a, A-98 (4), A-107: a roster separate from `capabilities`).
 # A trait is held or not (scale [0, 1]) and never gives dice. `seated_by` is the ONE `resonant_style` value of
