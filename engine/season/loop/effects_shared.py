@@ -171,13 +171,15 @@ def _exercised_office(w: "World", a: "Act") -> Optional["Office"]:
     return w.offices.get(a.via) if a.via else None
 
 
-def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
+def occupying_faction(w: "World", via: str, rid: str, unheld: bool = False) -> Optional[str]:
     """THE LICENCE OF OCCUPATION (#453 §10.4 steps 8 and 11), the one reading `seize` (a Rung) and `raze` share:
     the faction of the exercised seat `via`, when it OCCUPIES the place `rid` (`world_q.occupies`, the one
     reading of that: mustered under a settlement, arrived at a territory, and a taken territory's settlements
     with it) and the place is held by ANOTHER faction (`holder_faction_of`).
+    `unheld=True` (`seize`'s Rung half; `09_WR_world_motion` edit 2) also passes a place NOBODY holds, on the same
+    occupation: the rule for held land is the rule for unheld land. `raze` leaves it `False` and keeps its decline.
     `None` -- the licence fails -- for a subject that is no Rung or no `march_target_kinds` kind, a seat with
-    no faction, a place nobody holds (H-166: who holds an unheld place is unruled) or the seat's own
+    no faction, a place nobody holds (H-166: who holds an unheld place is unruled; passed when `unheld`) or the seat's own
     faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's AGAINST A
     MARCH: one that lost never arrived, so nothing occupies and nothing is seized. Occupation is PRESENCE (R-6, ruled
     for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
@@ -189,7 +191,7 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
         return None
     holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine:
+    if holder == mine or (holder is None and not unheld):
         return None
     # B21.79 (CP-T09-07 (b)): the seat's sworn men present at a settlement are presence as its faction's members are
     # (`world_q.seat_people_at`); a territory is occupied by standing AT it, which the union does not widen.

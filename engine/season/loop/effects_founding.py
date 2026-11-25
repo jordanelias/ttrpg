@@ -258,8 +258,8 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         and seized and never razed; occupation is defined only at the places a march arrives at) [ASSUMPTION; medium; Jordan to
         correct; revert: any Rung kind, the licence still occupation];
       * the exercised seat has no faction;
-      * nobody holds the settlement (H-166: who holds an unheld place is unruled, `_seize_rung`'s
-        reading) or the seat's own faction does -- a faction does not raze its own town;
+      * nobody holds the settlement (H-166: who holds an unheld place is unruled; `occupying_faction`'s default,
+        which `_seize_rung` lifts with `unheld=True`) or the seat's own faction does -- a faction does not raze its own town;
       * the seat's faction is not mustered there (NO ARMY: the entry's falsifier).
     ⚠ NOT COPIED FROM `_seize_rung`: its decline on an actor not committed to the seat's faction. Its
     stated reason is that `seize` writes the ACTOR'S OWN `hold`; `raze` writes no title, so the reason
