@@ -2658,11 +2658,24 @@ rosters:
       stays the swept share for an act that carries none (control 0). Who hears is unchanged (presence). ⚠ A TELLING WRITES NOTHING, so the carrier a key is
       checked against is the kind its deposit is: the row must emit `news.told` (`data/verbs.py::CHOICE_CARRIER`).
       [ASSUMPTION; medium; Jordan to correct; revert: delete the two `tell` and `lie` lines, and the telling is the single pick at the single draw.]
+      v12 B11.72 (`08_FI_07` §2 (a)): `examine` CARRIES `site`, AND ITS RANGE IS THE ACTOR'S OWN LEDGER, NOT A CLOSED SET (`ledger_ranges`, below). The row is classed on a
+      Site and no question the realm delivers carries one, so it formed nowhere; now `opening_set` offers it on each id his own claims present as a Site
+      (`queries/person_q.py::ledger_range`: the subject of a claim whose predicate is one a Site's state is read or announced by), as `terms_sourced`
+      and `held_edge_sourced` add referents from his own state. The id is the referent and `site` binds it through `_derive_operand`'s unchanged
+      rule. PERSON-SIDE AND WORLD-FREE: whether the id IS a Site, and whether he stands at it, are the fold's conjuncts (`existence`, `present_at`), and a
+      man who is wrong is refused there and taught why (B11.61). ⚠ NOT FANNED in `_fanned_choices` (it has no closed range). [ASSUMPTION; medium;
+      Jordan to correct; revert: delete the `examine` line and `ledger_ranges`, and `examine` forms on the question's own Site referents alone, which is nowhere.]
     values:
       marshal: [role, retreat_at]
       march: [posture]
       tell: [said, in_confidence]
       lie: [said, in_confidence]
+      examine: [site]
+    # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
+    # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
+    # and `condition.band_crossed` the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
+    ledger_ranges:
+      site: ["exists:Site", "condition", "condition.worn", "condition.band_crossed"]
 
   vocation_sourced:
     source: >-

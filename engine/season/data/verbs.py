@@ -2051,8 +2051,13 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 SAID_KEY, SAID_RANK_KEY, IN_CONFIDENCE_KEY = "said", "said_rank", "in_confidence"
 CHOICE_RANGES = {ORDER_ROLE_KEY: tuple(ORDER_ROLES), ORDER_RETREAT_KEY: tuple(ORDER_RETREAT_AT),
                  MARCH_POSTURE_KEY: tuple(MARCH_POSTURES), IN_CONFIDENCE_KEY: (False, True)}
+SITE_KEY = "site"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
-                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told"}
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made"}
+# v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
+# (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
+# shape). The carrier is the kind the look emits (`finding.made`), as a telling's is its deposit.
+LEDGER_RANGES = {k: tuple(ps) for k, ps in roster_map("choice_sourced", "ledger_ranges").items()}
 # v12 B11.10 (`08_FI_02` edits 7-8): `SAID_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the top `Fixtures.said_choices` claims `said_of`'s slant ranks for the
 # subject (`queries/person_q.py::said_set`), so it has no `CHOICE_RANGES` entry; it rides the payload as it always did, and counts as chosen only where the
 # fan held several (`SAID_RANK_KEY`, `choice_values`). A telling writes nothing, so the carrier of its two keys is the kind its deposit is (`loop/witness.py`'s
@@ -2064,7 +2069,7 @@ def _load_choice_sourced(values: dict) -> dict:
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k != SAID_KEY)
+        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k != SAID_KEY and k not in LEDGER_RANGES)
                                         or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "

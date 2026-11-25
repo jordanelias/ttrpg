@@ -35,7 +35,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -45,7 +45,7 @@ from ..gaps import Forbidden
 # import `decision/`); re-bound here by name, as `opening_set` and `standing_of` call them and the tests reach them as `options.<name>`.
 from ..queries.person_q import (
     PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
-    competence, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names,
+    competence, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
     ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
@@ -204,6 +204,13 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live
                                        and t.object not in FACTION_BY_PROP))
             refs = tuple(refs) + tuple(o for o in mine if o not in refs)
+        # v12 B11.72 (`08_FI_07` §2 (a); `rosters.yaml: choice_sourced`'s `ledger_ranges`): A VERB WHOSE `site` IS CHOICE-SOURCED (`examine`) ALSO FORMS ON EACH ID HIS
+        # OWN LEDGER PRESENTS AS A SITE (`person_q.ledger_range`) -- the place he has heard of, which is not what any question is about. His own claims and no
+        # World; it ADDS referents and nothing else, `site` binds the referent as ever (`_derive_operand`), and whether the id is a Site and whether he
+        # stands at it are the fold's `existence` and `present_at`. [ASSUMPTION; medium; Jordan to correct; revert: the question's subject.]
+        for key in CHOICE_SOURCED.get(verb, ()):
+            if key in LEDGER_RANGES:
+                refs = tuple(refs) + tuple(r for r in ledger_range(p.ledger, key) if r not in refs)
         # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
         # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to
         # (`_eff_commit` always opens a fresh Tenure). After every widening above, so it covers each route

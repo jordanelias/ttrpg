@@ -2133,6 +2133,15 @@ def ledger_names(claims) -> frozenset:
     return frozenset(out)
 
 
+def ledger_range(claims, key: str) -> tuple:
+    """THE IDS THIS HOLDER'S OWN CLAIMS PRESENT UNDER A CHOICE KEY, sorted (v12 B11.72, `rosters.yaml: choice_sourced`'s `ledger_ranges`: `site` for
+    `examine`) -- the subjects of the claims whose predicate the key lists. A holder's own ledger and nothing else: no World, so an id is a Site
+    here only as his claims say, and the fold's `existence` conjunct disposes of one that is not. The ONE reader of a ledger-sourced range, asked by
+    `decision/options.py::opening_set`; never `known_persons`' sources (a claim about a person does not present a Site)."""
+    preds = frozenset(_verbs.LEDGER_RANGES[key])
+    return tuple(sorted({c.subject for c in claims if c.predicate in preds}))
+
+
 def known_persons(claims, actor) -> tuple:
     """THE PERSONS THIS HOLDER KNOWS OF, from their OWN claims only -- sorted ids, never `actor`
     (telling workplan `T4`, `ED-IN-0282`). Three sources, and no other:
