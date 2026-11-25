@@ -38,13 +38,22 @@ from dataclasses import dataclass, field
 from typing import Callable, Mapping, Optional
 
 from ...substrate import composition
+from ..data import goals as goals_data
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.matrix import Step, WriteClass
+from ..data.rosters import COVERT_KINDS, faction_prop_id
 from ..decision.sheet import DevelopmentSheet, creation_sheet, development_space, seat as bind_seat, take_ranked
 from ..boot.chooser import chooser
+from ..boot.realm import place_person, seed_goals
 from ..gaps import Forbidden
-from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import world_q
+from ..state.attribution import live_cover
+from ..state.carriers import Act, Claim, Office, Proposition, Rung, Tenure, generated_attributes
 from ..state.ids import H, draw_factory
 from ..state.world import World
+from ..tests._flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
+from . import probes as P
 from .headless import build_world
 from .play_surface import carry_on, dispatching_chooser
 
@@ -144,6 +153,164 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     return {"ending": ended, "kind": None if ended is None else row.kinds[ended], "tick": w.tick,
             "hash": w.content_hash(), "entries": entries, "seasons": played["n"],
             "seat_deliberations": asked["n"], "world": w}
+
+
+# ======================================================================================
+# THE INQUIRY WORLDS (B11.70, `08_FI_03` §1): `trail_world`, moved here from `tests/test_fi03_trail.py` unchanged, and
+# `inquiry_world`, the scenario built beside it. Neither is registered in `SCENARIOS` here (B11.76 registers `inquiry`).
+# ======================================================================================
+FAC = faction_prop_id("Valorsmark")
+FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
+FORGE_ID = "fi03_forge"
+
+
+def hear(w, holder, subject):
+    """Put a firsthand claim ON `subject` in `holder`'s own ledger -- what `survey`'s cell asks
+    (`own_ledger`, *the surveyor has heard of it*). An existence observation, a stem the reader
+    already answers, so the planted belief means nothing beyond *I know this exists*."""
+    kind = ("Proposition" if subject in w.propositions else "Person" if subject in w.persons
+            else "Rung")
+    p = w.persons[holder]
+    p.ledger.append(Claim(f"c_{holder}_{subject}_{len(p.ledger)}", holder, subject,
+                          f"exists:{kind}", 1, w.tick, "firsthand", 1, "own"))
+
+
+def step(w, d, *acts):
+    """RESOLVE then WITNESS one lap of `acts` through the driver; the Events reach `w.log` between the
+    two, as `SeasonDriver.season` puts them there. Returns the Events."""
+    w.step = Step.RESOLVE
+    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    return out
+
+
+COVER = "rec:cv"
+
+
+def conceal_forger(w, d):
+    """The forger takes a cover (`conceal`, through the fold) and a tick passes: `anchor_of` now answers `COVER` for his
+    acts. Asserted, so no test below reads an uncovered world as a covered one."""
+    assert [e.kind for e in step(w, d, Act(id="cv", actor=FORGER, verb="conceal", payload={"subject": FORGER}))] == [
+        "cover.assumed"]
+    assert live_cover(w, FORGER) == COVER
+    w.tick += 1
+
+
+def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None, covered=False):
+    """THE WORLD, built through the fold to the moment the investigator holds the forged Record (tick 2).
+    Returns `(w, d, rid)`. `verb`/`kind`: the tick-0 act that mints the Record and the one Event it must
+    emit -- `forge` by default; step 3's structural control passes `survey` (`faction.surveyed`), which
+    mints the same Record id (the id is the act's) into the same hand by the same body (`_mint_sheet`).
+    `second`: an act id for a SECOND such act by the same man at tick 0 (its own Record, which stays in
+    his hand; `second_record` reads it back) -- the C1 test's second forging. `fixtures`: the arm the
+    world is built at (v9 SC-02 `22b` step 25's sweeps), else `tiny_world`'s default AT THE FIXED CEILING
+    ARM. ⚠ `ceiling_per_pool` (CP-T01-06, shipped True) is swept OFF here: these tests draw until a band
+    lands, and they test the trail's closure and deposits, which no arm moves. Examining a forged Record
+    composes an obstacle above 2 for a pool-2 investigator, and the per-pool cap lets it stand (2.842 at
+    pool 2, against the fixed 2.0), so the draw odds F / P / S / O read 74 / 19 / 7 / 0 % at the fixed
+    arm and 90 / 8.05 / 1.95 / 0 % at the shipped one: a hand band (Success or better) is 1.95 % per
+    act, and the 60-id sweep, being seeded, does not reach one.
+
+    `covered` (B11.58): the forger `conceal`s first (a live `cover`, `COVER`) and forges a tick later, so the forging
+    anchors on the alias (`anchor_of`)."""
+    if fixtures is None:
+        fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
+    w = flat_fold(P.tiny_world(fixtures))   # the builder owns the flat fold: test_odds_of and test_sc02_22b build this world too, unmarked or on their own
+    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
+    for pid in (INVESTIGATOR, ABOUT):
+        w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
+    d = SeasonDriver(w)
+    hear(w, FORGER, ABOUT)
+    if covered:
+        conceal_forger(w, d)
+    out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
+    assert [e.kind for e in out] == [kind], [e.kind for e in out]
+    (rid,) = [c.subject for c in out[0].changes]
+    if second is not None:
+        out = step(w, d, Act(id=second, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
+        assert [e.kind for e in out] == [kind], [e.kind for e in out]
+    w.tick += 1
+    assert [e.kind for e in step(w, d, Act(id="fi03_move", actor=FORGER, verb="move",
+                                           payload={"to": "S"}))] == ["travel.moved"]
+    assert [e.kind for e in step(w, d, Act(id="fi03_give", actor=FORGER, verb="give",
+                                           payload={"subject": rid, "to": INVESTIGATOR}))] == [
+        "record.given"]
+    assert world_q.hold_force(w, rid).subject == INVESTIGATOR
+    w.tick += 1
+    return w, d, rid
+
+
+# THE INQUIRY SCENARIO'S CAST AND PLACES. Ids of this builder's own world (as `trail_world`'s are), never game vocabulary.
+FORGE_PLACE, HAND_PLACE, TOWN = "Hf", "Hw", "Sq"       # the hearths the sheet is forged at and handed over at, and the settlement they are in
+CASE_GOAL = "goal_scenario_inquiry"  # the investigator's one goal: the Proposition id and the `data/goals.py` row's id
+INQUIRY_CAST = ("p_forger", "p_holder", "p_witness", "p_investigator", "p_bench_a", "p_bench_b")
+
+
+def inquiry_goal():
+    """THE INVESTIGATOR'S ONE GOAL (`08_FI_07` §1, R-44: *the case is a goal*), a `data/goals.py` row parsed through the
+    loader's own `parse`: its `object:` is `deed_doers` over `rosters.yaml: covert_kinds` -- the doers his OWN ledger names of
+    any covert deed, `person_q.deed_doers` -- so its referents are his suspects, empty until his ledger names someone.
+    [ASSUMPTION; medium; Jordan to correct] a scenario goal is authored in the builder as `build_realm`'s ambitions are,
+    not drawn; its lean (`justice`, `virtue`) is `goals.yaml`'s `goal_riskbreakers_prevent_corruption`'s."""
+    (g,) = goals_data.parse({"goals": [{
+        "id": CASE_GOAL, "org": {"faction": "Valorsmark"}, "text": "an inquirer learns who did the covert deed",
+        "object": {"kind": "deed_doers", "kinds": sorted(COVERT_KINDS)}, "pursuits": {"justice": 0.6, "virtue": 0.4},
+        "source": "B11.70 -- `harness/scenarios.py::inquiry_goal`"}]})
+    return g
+
+
+def inquiry_world(seed: int = 0) -> World:
+    """THE INQUIRY WORLD (`08_FI_03` §1, B11.70): one settlement (`TOWN`, under a duchy and the realm, with two hearths:
+    `FORGE_PLACE`, `HAND_PLACE`), six persons placed through `boot/realm.py::place_person` -- `p_forger` (at the forging hearth),
+    `p_holder` and `p_witness` (at the handover hearth), and the investigator and the bench's two members (in the settlement) --
+    the investigator and the two bench members each holding a seat that may `open_case` (`remit:determine`, scoped to the
+    settlement, so the three are the bench `world_q.judging_set` finds there).
+
+    The opening situation is made by the acts, folded as `trail_world`'s are and none planted but the forger's hearing of his
+    subject (`hear`, the faction's own sheet): he `forge`s a sheet where nobody else stands, `move`s to the handover hearth and
+    `give`s it to the holder with the witness standing by -- so the witness was at the handover and not at the forging, and the
+    investigator, who stands at neither, holds nothing of either. The premise is folded with the task draw off (a failed forging
+    leaves no sheet); the world is returned at the arm it was built with. The holder's act on the sheet is his own, in the season
+    (none is folded here). The investigator holds one goal (`inquiry_goal`), seeded by `boot/realm.py::seed_goals`; the row is
+    planted for the reader (`data/goals.py::plant`). No claim of the investigator's names the forger or the sheet."""
+    w = World(world_seed=seed)
+    for rid, kind, under in (("Rl", "realm", None), ("Dc", "duchy", "Rl"), (TOWN, "settlement", "Dc"), (FORGE_PLACE, "hearth", TOWN),
+                           (HAND_PLACE, "hearth", TOWN)):
+        w.rungs[rid] = Rung(rid, kind)
+        if under is not None:
+            w.add_tenure(Tenure(f"t_{rid}_in", rid, under, "contain", 0))
+    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
+    here = {"p_forger": FORGE_PLACE, "p_holder": HAND_PLACE, "p_witness": HAND_PLACE}
+    for pid in INQUIRY_CAST:
+        place_person(w, pid, pid[2:].replace("_", " "), here.get(pid, TOWN),
+                     attributes=generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")))
+    for pid, post in (("p_investigator", "Inquirer"), ("p_bench_a", "Magistrate"), ("p_bench_b", "Magistrate")):
+        oid = f"off_{pid[2:]}"
+        w.offices[oid] = Office(oid, post, TOWN, ["determine"], scope_rung=TOWN, faction="Valorsmark")
+        w.add_tenure(Tenure(f"t_hold_{pid}", pid, oid, "hold", 0))
+    w.add_tenure(Tenure("t_commit_p_investigator", "p_investigator", FAC, "commit", 0))
+    hear(w, "p_forger", FAC)
+    goal = inquiry_goal()
+    goals_data.plant((goal,))
+    seed_goals(w, (goal,), {}, {}, complete=False)
+    played, w.fixtures = w.fixtures, flat_fold_fixtures(w.fixtures)   # the PREMISE is folded with the task draw off (a forging that failed leaves no sheet); the world plays at its own arm
+    try:
+        d = SeasonDriver(w)
+        (sheet,) = [e for e in step(w, d, Act(id=FORGE_ID, actor="p_forger", verb="forge", payload={"subject": FAC}))
+                    if e.kind == "record.forged"]
+        (rid,) = [c.subject for c in sheet.changes]
+        w.tick += 1
+        for n, to in enumerate((TOWN, HAND_PLACE)):
+            assert [e.kind for e in step(w, d, Act(id=f"inq_move_{n}", actor="p_forger", verb="move", payload={"to": to}))] == ["travel.moved"]
+        assert [e.kind for e in step(w, d, Act(id="inq_give", actor="p_forger", verb="give",
+                                               payload={"subject": rid, "to": "p_holder"}))] == ["record.given"]
+    finally:
+        w.fixtures = played
+    w.tick += 1
+    return w
 
 
 def _parse(argv) -> argparse.Namespace:

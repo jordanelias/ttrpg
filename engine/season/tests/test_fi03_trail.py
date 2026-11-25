@@ -52,7 +52,7 @@ from ..data import files, rosters, verbs
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.goals import goals
 from ..data.matrix import Step, WriteClass
-from ..data.rosters import COVERT_KINDS, FINDING_TERMS, faction_prop_id
+from ..data.rosters import COVERT_KINDS, FINDING_TERMS
 from ..decision.choose import _payload_of
 from ..decision.options import opening_set
 from ..epistemic import SEEN_PREDICATE, trail_of
@@ -71,85 +71,15 @@ from ..state.attribution import actor_of, anchor_of, live_cover
 from ..state.carriers import Act, Claim, Event, Proposition, Site, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
-from .test_information_cluster import _hear
+from ..harness.scenarios import (ABOUT, COVER, FAC, FORGE_ID, FORGER, INVESTIGATOR, conceal_forger, hear as _hear, step,
+                                 trail_world)
 
 pytestmark = pytest.mark.flat_fold
 
-FAC = faction_prop_id("Valorsmark")
-FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
-FORGE_ID = "fi03_forge"
 HAND_BANDS = frozenset(b for b, t in FINDING_TERMS.items() if HAND_TERM in t)
 BLIND_BANDS = frozenset(b for b, t in FINDING_TERMS.items() if t and HAND_TERM not in t)
 # [JUSTIFIED: a test-fixture search bound, not a game value -- the act ids tried for a band; asserted reached]
 SWEEP = 60
-
-
-def step(w, d, *acts):
-    """RESOLVE then WITNESS one lap of `acts` through the driver; the Events reach `w.log` between the
-    two, as `SeasonDriver.season` puts them there. Returns the Events."""
-    w.step = Step.RESOLVE
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    w.step = Step.WITNESS
-    d.witness(mint_token(w, WriteClass.INTERIOR), out)
-    return out
-
-
-COVER = "rec:cv"
-
-
-def conceal_forger(w, d):
-    """The forger takes a cover (`conceal`, through the fold) and a tick passes: `anchor_of` now answers `COVER` for his
-    acts. Asserted, so no test below reads an uncovered world as a covered one."""
-    assert [e.kind for e in step(w, d, Act(id="cv", actor=FORGER, verb="conceal", payload={"subject": FORGER}))] == [
-        "cover.assumed"]
-    assert live_cover(w, FORGER) == COVER
-    w.tick += 1
-
-
-def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None, covered=False):
-    """THE WORLD, built through the fold to the moment the investigator holds the forged Record (tick 2).
-    Returns `(w, d, rid)`. `verb`/`kind`: the tick-0 act that mints the Record and the one Event it must
-    emit -- `forge` by default; step 3's structural control passes `survey` (`faction.surveyed`), which
-    mints the same Record id (the id is the act's) into the same hand by the same body (`_mint_sheet`).
-    `second`: an act id for a SECOND such act by the same man at tick 0 (its own Record, which stays in
-    his hand; `second_record` reads it back) -- the C1 test's second forging. `fixtures`: the arm the
-    world is built at (v9 SC-02 `22b` step 25's sweeps), else `tiny_world`'s default AT THE FIXED CEILING
-    ARM. ⚠ `ceiling_per_pool` (CP-T01-06, shipped True) is swept OFF here: these tests draw until a band
-    lands, and they test the trail's closure and deposits, which no arm moves. Examining a forged Record
-    composes an obstacle above 2 for a pool-2 investigator, and the per-pool cap lets it stand (2.842 at
-    pool 2, against the fixed 2.0), so the draw odds F / P / S / O read 74 / 19 / 7 / 0 % at the fixed
-    arm and 90 / 8.05 / 1.95 / 0 % at the shipped one: a hand band (Success or better) is 1.95 % per
-    act, and the 60-id sweep, being seeded, does not reach one.
-
-    `covered` (B11.58): the forger `conceal`s first (a live `cover`, `COVER`) and forges a tick later, so the forging
-    anchors on the alias (`anchor_of`)."""
-    if fixtures is None:
-        fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
-    w = flat_fold(P.tiny_world(fixtures))   # the builder owns the flat fold: test_odds_of and test_sc02_22b build this world too, unmarked or on their own
-    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
-    for pid in (INVESTIGATOR, ABOUT):
-        w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
-    d = SeasonDriver(w)
-    _hear(w, FORGER, ABOUT)
-    if covered:
-        conceal_forger(w, d)
-    out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
-    assert [e.kind for e in out] == [kind], [e.kind for e in out]
-    (rid,) = [c.subject for c in out[0].changes]
-    if second is not None:
-        out = step(w, d, Act(id=second, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
-        assert [e.kind for e in out] == [kind], [e.kind for e in out]
-    w.tick += 1
-    assert [e.kind for e in step(w, d, Act(id="fi03_move", actor=FORGER, verb="move",
-                                           payload={"to": "S"}))] == ["travel.moved"]
-    assert [e.kind for e in step(w, d, Act(id="fi03_give", actor=FORGER, verb="give",
-                                           payload={"subject": rid, "to": INVESTIGATOR}))] == [
-        "record.given"]
-    assert world_q.hold_force(w, rid).subject == INVESTIGATOR
-    w.tick += 1
-    return w, d, rid
 
 
 def forged_event(w):

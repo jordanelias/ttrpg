@@ -590,6 +590,23 @@ def rows_replaced(rows: tuple = ()):
         _CACHE = saved
 
 
+# B11.70: THE GOALS A SCENARIO WORLD CARRIES (`harness/scenarios.py::inquiry_world`), by id. `goals.yaml` is the realm's: a
+# row there is seeded onto every realm (`boot/realm.py::seed_goals`) and moves its hash, so a scenario's own goal is held here
+# and read by `goal(id)` ALONE, never by `goals()` -- no realm build, no `engaged_poles` walk and no `rows_replaced` control
+# arm sees it. An id the file holds is refused (`plant` replaces nothing the realm reads).
+_SCENARIO_ROWS: dict = {}
+
+
+def plant(rows: tuple) -> None:
+    """Hold `rows` (`Goal`s from `parse`) for `goal(id)` to answer: the goals of a scenario world (`harness/scenarios.py`). Idempotent
+    for one row planted twice; refuses an id `goals.yaml` already carries."""
+    for g in rows:
+        if any(f.id == g.id for f in goals()):
+            raise Forbidden(f"goal {g.id!r}: the id is a `goals.yaml` row's", _where(g.id, "goal"),
+                            needs="an id `goals.yaml` does not carry", law="B11.70 -- a scenario goal never shadows a realm goal")
+        _SCENARIO_ROWS[g.id] = g
+
+
 def goal(goal_id: str) -> Optional[Goal]:
-    """The goal under `goal_id`, or `None` where the file carries none."""
-    return next((g for g in goals() if g.id == goal_id), None)
+    """The goal under `goal_id`: `goals.yaml`'s, else a scenario world's (`plant`), or `None`."""
+    return next((g for g in goals() if g.id == goal_id), _SCENARIO_ROWS.get(goal_id))

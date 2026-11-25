@@ -52,6 +52,7 @@ from ..decision.options import opening_set
 from ..gaps import Unspecified
 from ..boot.realm import build_realm
 from ..harness import probes as P
+from ..harness.scenarios import hear as _hear      # `_hear` moved to the harness with `trail_world` (B11.70)
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..loop.witness import content_value
@@ -79,17 +80,6 @@ def _world():
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
     w.add_tenure(Tenure("t_hold_Hh", "p_mid", "Hh", "hold", since=0))
     return w, SeasonDriver(w)
-
-
-def _hear(w, holder, subject):
-    """Put a firsthand claim ON `subject` in `holder`'s own ledger -- what `survey`'s cell asks
-    (`own_ledger`, *the surveyor has heard of it*). An existence observation, a stem the reader
-    already answers, so the planted belief means nothing beyond *I know this exists*."""
-    kind = ("Proposition" if subject in w.propositions else "Person" if subject in w.persons
-            else "Rung")
-    p = w.persons[holder]
-    p.ledger.append(Claim(f"c_{holder}_{subject}_{len(p.ledger)}", holder, subject,
-                          f"exists:{kind}", 1, w.tick, "firsthand", 1, "own"))
 
 
 def _fold(w, d, *acts):
