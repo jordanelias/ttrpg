@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 532,
-    "uncited": 400,
+    "total": 536,
+    "uncited": 404,
     "of_which_assumption_grade": 9
   },
-  "count": 532,
+  "count": 536,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 226,
+    "engine.season.settings": 230,
     "engine.season.realm": 9
   },
   "params": [
@@ -4645,6 +4645,55 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-528`, swept first (control) / through (SHIPPED, B12a.56's flip) / through where the home rung holds the whole want (the walk stops at once)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_severity_draw",
+      "name": "hunger_severity_draw",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-529`, swept False (control, SHIPPED) / True (pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_band_steps",
+      "name": "hunger_band_steps",
+      "value": {
+        "Overwhelming": 0.0,
+        "Success": 0.5,
+        "Partial": 1.0,
+        "Failure": 2.0
+      },
+      "kind": "table",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-530`, swept shipped (0 / 0.5 / 1 / 2) / flat (1 / 1 / 1 / 1) / harsher tail (0 / 0.25 / 1 / 3)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_body_pool",
+      "name": "hunger_body_pool",
+      "value": 4,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-531`, swept 0 (the body term off) / 4 (SHIPPED) / 8",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_depth_obstacle",
+      "name": "hunger_depth_obstacle",
+      "value": 4.5,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-532`, swept 3 / 4.5 (SHIPPED) / 6",
       "citation": null,
       "citation_grade": null
     },
