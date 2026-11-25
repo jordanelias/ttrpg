@@ -24,6 +24,13 @@ skill score the only thing the two sides differ in. The reading of one fight (`r
                    against 3) are the first felling's, and the fight as it ends reads a little below them (the old flip read about 0.04
                    below at every cell, 0.879 at 7 against 3, measured). The lead change reads the result as the fight ends.
 
+EVERY FIGHT HERE IS READ TO ITS FELLING, WITH THE YIELD ROLL (B15.10, `PC_A`) HELD AT SUCCESS (`no_yield`, on by default; `--with-yield` and
+`HOLD_YIELD = False` read the shipped game's fight instead). The windows of `tests/valoria/test_combat_opposed_rule_shape.py` were set on fights
+read to a felling, and whether a wounded man gives up is the yield roll's measure (`test_combat_yield_draw.py`), so the two are not the same fight
+and neither stands in for the other: with the roll live the death-terms mirror (score 2 both, seeds 0-1,199) reads about 3.4 rounds against the
+4.0-5.0 window of reading (a) (B15.10's reading; reproduce: `python -c "import scale_census as SC; SC.HOLD_YIELD = False; print(SC.Tally(2, 2, 0, 1200).mean_turns())"`
+from this directory).
+
 The two ARMS: `live` is the shipped tree; `control` is the 2026-08-14 scale put back by an override, `cfg=dict(CFG,
 OPPOSITION_RATE=0.5)` and `core.DMG_SCALE` 1.55 (a module global, patched for the arm and restored).
 
@@ -73,13 +80,16 @@ def no_yield():
         wrapper._yield_roll = real
 
 
+HOLD_YIELD = True      # read a fight to its felling (the windows' fight); `--with-yield` clears it
+
+
 def play(score_a, score_b, seed, cfg=None, weapon='arming', armor='light'):
     """One lethal fight, arming sword and light armour, A at `score_a`, B at `score_b`, on `seed`, read to its felling (`no_yield`).
     Returns (result, trace, A, B)."""
     A = combatant.Combatant('A', weapon=weapon, armor=armor, score=score_a)
     B = combatant.Combatant('B', weapon=weapon, armor=armor, score=score_b)
     trace = []
-    with no_yield():
+    with (no_yield() if HOLD_YIELD else contextlib.nullcontext()):
         result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2(KEY, seed)), trace=trace.append)
     return result, trace, A, B
 
@@ -195,5 +205,7 @@ if __name__ == '__main__':
     ap.add_argument('--n', type=int, default=5000)
     ap.add_argument('--first', type=int, default=0)
     ap.add_argument('--control-first', type=int, default=800000)
+    ap.add_argument('--with-yield', action='store_true', help="read the shipped fight, the yield roll live (default: held at Success)")
     a = ap.parse_args()
+    HOLD_YIELD = not a.with_yield
     census(a.arm, a.n, a.first, a.control_first)

@@ -1487,7 +1487,7 @@ def test_reach_class_beats_arming_not_inverted():
 
 
 @pytest.mark.slow
-def test_plate_participation_tracks_armour_defeat_capability(n=40):
+def test_plate_participation_tracks_armour_defeat_capability(n=100):
     """[ED-PC-0040] The roster-wide form of the plate-participation guard: across EVERY weapon in the roster,
     whether it can settle a fight against plate must track its ARMOUR-DEFEAT CAPABILITY, in both directions.
 
@@ -1500,7 +1500,13 @@ def test_plate_participation_tracks_armour_defeat_capability(n=40):
     lucerne_hammer and goedendag at plate simultaneously — three quarters of the percussive defeater class going
     silently mute — and the full 806-test suite passed, because the one guard in the corpus watched the poleaxe.
 
-    The measured partition is cleanly separated, which is why loose bounds still bite (n=200, vs an arming sword):
+    B15 RE-MEASURE (the n raise, 40 -> 100; no bound moved): at the new calibration (DMG_SCALE 1.07, the coverage-gap draw, the riposte, the
+    yield roll) the weakest plate-defeater is the staff, 0.49 at n=200 (0.10 with `COVERAGE_GAP` at 0: the gap draw is what lets a staff settle a
+    plate fight), which at this test's old n=40 sits 1.75 sigma off the 0.35 floor and read 0.30 on its fixed seeds. At n=100 the same floor sits
+    2.8 sigma off it. A bound is a bound ON A MEASUREMENT: the sample is raised so the floor still bites for what it was written for, class death
+    (a defeater gone mute), and the floor is not touched.
+
+    The measured partition is cleanly separated, which is why loose bounds still bite (n=200, vs an arming sword; the first calibration):
         capability >= 0.9 (comfortably clears 0.72):  decided 0.59 .. 0.99   (13 weapons)
         capability in [0.72, 0.9) (marginal):         decided 0.23          (main_gauche)
         capability <  0.45 (well under):              decided 0.00 .. 0.12  (max = ranseur, KNOWN-OPEN below)
