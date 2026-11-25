@@ -2198,6 +2198,36 @@ def admitted_to(w: World, person: str, prop: str) -> bool:
                if other != prop and person in members(w, other))
 
 
+def marches_into(w: World, target: str) -> tuple:
+    """`(nth, cap)` -- THE MARCH CAP'S TWO READINGS FOR A MARCH ON `target` (B21b.01, IN-36 (a), A-103; the `march.nth` and `march.cap` stems, one owner).
+    `nth` is how many marches the current `w.tick` has ADMITTED into `target`'s territory, with the one asked; `cap` is `Fixtures march_cap_per_territory`.
+    A march is ADMITTED when the log holds its `march.declared` (RESOLVE's deferral fold, emitted only past `_admits`), and it lies in a territory by its act's
+    `subject`, the target the act named, which counts against the nearest territory in the target's own ancestry (a settlement for the territory that
+    contains it, a territory for itself; a target with no territory above it is its own count). `0` or unset is NO CAP and reads `(0, 0)`: nothing is counted and
+    `0 <= 0` holds. `None` for a `target` that is no rung (the stems read UNKNOWN, `ID-5`).
+    ⚠ THE LOG TAKES A LAP'S EVENTS AT THE LAP'S END (`loop/driver.py`), so a march folded in the same lap is not yet counted; the marches of the tick's earlier laps are."""
+    TRACE.query("marches_into", "resolver")
+    if target not in w.rungs:
+        return None
+    cap = w.fixtures.get("march_cap_per_territory")
+    if not cap:
+        return (0, 0)
+
+    def territory(rid: str) -> str:
+        return next((r for r in ancestry(w, rid) if w.rungs[r].kind == "territory"), rid)
+    here, n = territory(target), 0
+    for e in reversed(w.log):
+        if e.emitted_at < w.tick:
+            break
+        if e.kind != OPENING_MARCH_KIND or e.emitted_at != w.tick:
+            continue
+        a = causing_act(w, e)
+        subj = (a.payload or {}).get("subject") if a is not None and isinstance(a.payload, dict) else None
+        if subj in w.rungs and territory(subj) == here:
+            n += 1
+    return (n + 1, cap)
+
+
 def leaders(w: World, faction: str) -> list[str]:
     """The members who hold an Office belonging to this faction. §17 · §22's `Nobody` row.
 
@@ -5163,6 +5193,11 @@ class WorldReader:
             if subject not in w.propositions or arg not in w.persons:
                 return UNKNOWN
             return admitted_to(w, arg, subject)
+        if stem in ("march.nth", "march.cap"):
+            # v12 B21b.01 (IN-36 (a), A-103): THE MARCH CAP'S TWO READS, `marches_into` the one owner. UNKNOWN for a subject that is
+            # no rung (`ID-5`). The person side never answers either (`WORLD_ONLY_STEMS`): the count is the lap's, not a belief.
+            got = marches_into(w, subject)
+            return UNKNOWN if got is None else got[0 if stem == "march.nth" else 1]
         if stem == "names":
             # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
             # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the

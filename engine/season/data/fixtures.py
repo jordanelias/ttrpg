@@ -1676,6 +1676,14 @@ DEFAULT_FIXTURES = Fixtures(
     # `speech_blend` (a POINTER, no field): Reason's share of a speech's dice is two columns tuned as one table -- `rosters.yaml: grounds[*].reason` (B24p.01, 1.0 on every ground at the control) and
     # `arrangements.yaml` rows' `reason_lean` (B24p.03, 0 on every row at the control); B24p.23 writes V2's model column of each (`sc2/host.py::GROUNDS`, `::RITES`).
     # [JUSTIFIED: engine/season/hole_register.yaml H-939 -- site: Fixtures speech_blend (a pointer row, no field), graded `assumption`; the two columns are one blend and are swept together as a scale on V2's column, 0 (control) / 0.5 / 1]
+    # `H-620` (B21b.01; IN-36 (a), ED-IN-0317). THE INTERIM TEST CAP ON MARCHES: at most this many `march`es are ADMITTED in one season (one `w.tick`) into each
+    # territory, a march on a settlement counted against the territory that contains it, uniform for every marcher, civil-war marches included. It is the
+    # `march_cap` conjunct of `march`'s cell (`verb_table.yaml`), read by the one admission path (`loop/resolve.py::_admits`) through the stems `march.nth`
+    # and `march.cap` (`queries/world_q.py::marches_into`). `0` or unset is NO CAP: the control, and the revert.
+    # A-103 (2026-11-12): the ruled test limit; a claim to a territory is an occasion, never a gate (`IS-B3-FA-04`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`, no cap.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-620 -- site: Fixtures march_cap_per_territory, graded `assumption`; ED-IN-0317 rules the limit and gives one march a season, so it ships at 1 and is swept 0 (control, no cap) / 1 / 2]
+    march_cap_per_territory=1,         # `H-620`, swept 0 (control, no cap) / 1 (SHIPPED, IN-36 (a)) / 2
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
