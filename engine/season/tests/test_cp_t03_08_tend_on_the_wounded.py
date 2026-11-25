@@ -165,4 +165,5 @@ def test_rem52s_fall_is_tended_by_30_of_37_while_the_seat_news_floods_oblige():
     # v12 B11.08 re-pin, SAID PLAINLY: (37, 37) -> (37, 31); the cause is the docstring's.
     # v12 B11.14 (one more cohort no longer tends, attributed to B11.14 by the B11.99 reading):
     # (37, 31) -> (37, 30). A measured pin moved by a declared mover, re-recorded here; the six lost to the flood stand.
-    assert (len(short), len(tended)) == (37, 30)
+    # B21b.02 (the guards ship on, three guard cohorts join the realm): (37, 30) -> (40, 31), read at PYTHONHASHSEED=0; `tended <= short` above still holds.
+    assert (len(short), len(tended)) == (40, 31)
