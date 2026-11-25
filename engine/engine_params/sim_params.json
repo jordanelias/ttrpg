@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 133,
-    "total": 531,
-    "uncited": 398,
+    "total": 532,
+    "uncited": 399,
     "of_which_assumption_grade": 9
   },
-  "count": 531,
+  "count": 532,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 40,
+    "engine.season": 41,
     "mass_battle": 160,
     "social_contest": 32,
     "characters": 5,
@@ -352,6 +352,17 @@
       "module": "engine.season",
       "file": "engine/season/harness/decision_spread.py",
       "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.EXHIBITS",
+      "name": "EXHIBITS",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/governance_spine.py",
+      "note": "`IS-B2` §1.0: \"two parties each with three filed exhibits\"",
       "citation": null,
       "citation_grade": null
     },
