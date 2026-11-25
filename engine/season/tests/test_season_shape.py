@@ -4769,10 +4769,12 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # CP-T04-02: AND THE CHOICE KEYS (`CHOICE_RANGES`, `marshal`'s `role` and `retreat_at`), `said`'s case: a payload key a
     # `choice_sourced` row carries, read by its effect alone, bound by no cell (the row's `requires_typed` binds `subject`)
     # and dropped by `binding_of`, so naming them here coins no operand either.
+    # v12 B11.10: `said_rank` is `said`'s case again -- the claim's rank among those a telling's fan held, read by the deposit, bound by no cell, dropped by `binding_of`.
+    from ..data.verbs import SAID_RANK_KEY
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"} | set(CHOICE_RANGES), (
+    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said", SAID_RANK_KEY} | set(CHOICE_RANGES), (
         f"a minted act carries "
-        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'} - set(CHOICE_RANGES))}, which "
+        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said', SAID_RANK_KEY} - set(CHOICE_RANGES))}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
@@ -10225,8 +10227,11 @@ def test_t4_one_candidate_per_known_hearer():
     no `to` -- the `len == 2` and the `to` set both go red."""
     w, p = _t4_person(knows=("p_mid", "p_high"))
     tells = _t4_offered(w, p, ("Hh",), "tell")
-    assert len(tells) == 2, [(c.subject, c.operands.get("to")) for c in tells]
+    # v12 B11.10: each hearer is offered TWICE, once per `in_confidence` (`CHOICE_RANGES`; `settle_confidences` keeps one at CHOOSE), so the
+    # fan is read one per hearer by the pair it carries.
+    assert len(tells) == 4, [(c.subject, c.operands.get("to")) for c in tells]
     assert {c.operands["to"] for c in tells} == {"p_mid", "p_high"}
+    assert all(sorted(c.operands["in_confidence"] for c in tells if c.operands["to"] == h) == [False, True] for h in ("p_mid", "p_high"))
     assert all(c.subject == "Hh" and c.operands["to"] != p.id for c in tells)
     assert all(c.operands.get("said") is not None for c in tells), "a formed telling carries nothing to say"
     w, p = _t4_person(knows=())
@@ -10237,10 +10242,10 @@ def test_t4_one_candidate_per_known_hearer():
     # so the first formed nothing and the second only `["p_high"]` -- both lines go red against it.
     w, p = _t4_person(knows=("p_mid",), holds=("p_mid",))
     tells = _t4_offered(w, p, ("p_mid",), "tell")
-    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_mid", "p_mid")]
+    assert sorted({(c.subject, c.operands["to"]) for c in tells}) == [("p_mid", "p_mid")] and len(tells) == 2   # two: one per `in_confidence` (B11.10)
     assert tells[0].operands["said"].subject == "p_mid"
     w, p = _t4_person(knows=("p_mid", "p_high"), holds=("p_mid",))
-    assert [c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")] == ["p_high", "p_mid"]
+    assert sorted({c.operands["to"] for c in _t4_offered(w, p, ("p_mid",), "tell")}) == ["p_high", "p_mid"]
 
 
 def test_t4_nothing_to_say_forms_no_telling_and_survey_is_untouched():
@@ -10268,7 +10273,7 @@ def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves(mo
     monkeypatch.setattr(_options, "VIOLENCE_CONTEXTS", {})
     w, p = _t4_person(knows=("p_mid",), holds=("p_low",))
     tells = _t4_offered(w, p, ("p_low",), "tell")
-    assert [(c.subject, c.operands["to"]) for c in tells] == [("p_low", "p_mid")], (
+    assert sorted({(c.subject, c.operands["to"]) for c in tells}) == [("p_low", "p_mid")] and len(tells) == 2, (   # two: one per `in_confidence` (B11.10)
         [(c.subject, c.operands.get("to")) for c in tells])
     assert _t4_offered(w, p, ("p_low",), "fight") == [], "a person formed a fight against themselves"
     assert [c.subject for c in _t4_offered(w, p, ("p_mid",), "fight")] == ["p_mid"], (
