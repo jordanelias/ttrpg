@@ -971,11 +971,15 @@ class SubsistInput:
                        builder's; `World.add_tenure` checks ascent, not uniqueness, and `parent_of`
                        takes the first live edge), which is what `demanded`/`delivered` sum;
       * `body_step` -- the `body_step` fixture: body lost per unit short (`0` is the control arm);
-      * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid."""
+      * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid;
+      * `severity`  -- `((pid, multiplier), ...)` (B12a.59): the hunger draw's per-eater multiplier on the body
+                       lost per unit short; empty means 1 for every eater. Last, with a default, so the
+                       four-argument build of `world_q.subsist_input` stays valid."""
     larder: LarderInput
     chains: tuple
     body_step: int
     bodies: tuple
+    severity: tuple = ()
 
 
 @dataclass(frozen=True)
