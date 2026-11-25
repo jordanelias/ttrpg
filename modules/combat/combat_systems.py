@@ -873,6 +873,7 @@ def disengage_attempt_p(longer, shorter, base_gap, fat_longer, cfg):
     foot = balance_eff(longer, fat_longer, cfg)/3
     fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W'][V.TIER_HEAVY])
     p = cfg['DISENGAGE_BASE_P'] * bind_deficit * foot * fade * min(1.0, base_gap/cfg['DISENGAGE_GAP_REF'])
+    p *= max(0.0, 1 - cfg['APPROACH_BREAK_K']*longer.lean['bind'])   # the `bind` lean (B16.06, PB 03 §3): the WITHDRAWER's (`longer` is the one who breaks); defensive (-1) raises the attempt, aggressive (+1) lowers it, normal (0) leaves it
     return min(cfg['DISENGAGE_MAX'], p)
 
 def disengage_clean_p(longer, shorter, cfg, TR):

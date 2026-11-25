@@ -112,7 +112,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     `plans` is the round's approach per party, `({phase: approach}, {phase: approach})` in A, B order (`fight_round`: the claimants' order); `None`, a missing
     party's entry or a missing phase is `normal`, lean 0. The wrapper reads it into `c.lean[phase]` at the CONSULT POINTS (B16.05, PB 03 §4): the round's start
     (the measure open: `measure`; opening closed: `exchange`), the measure closing (`exchange`) and a bind entered (`bind`). No decider is asked here; the leans
-    are the plan given in advance. Only the `exchange` lean is read by a gate yet (`S.commit_depth`, `S.counter_select`)."""
+    are the plan given in advance. The `exchange` lean is read by `S.commit_depth` and `S.counter_select`; the `bind` lean by `S.disengage_attempt_p` (the withdrawer's)."""
     plans = plans or ({}, {})
     def _consult(phase):
         """A phase is entered: each party's approach for it, from the round's plans, becomes his `lean[phase]`. A pure write: it draws nothing."""

@@ -262,6 +262,7 @@ CFG = dict(
   # `normal` is lean 0 and adds nothing. Neither rides `disp_lean`: a temperament and a plan are two inputs.
   APPROACH_COMMIT_K=0.8,     # [SIM-CALIBRATE] starts at DISP_COMMIT_K
   APPROACH_COUNTER_K=0.5,    # [SIM-CALIBRATE] starts at DISP_COUNTER_K
+  APPROACH_BREAK_K=0.5,      # [SIM-CALIBRATE] [ASSUMPTION: PB gives no starting value for this coefficient; 0.5 is `DISP_COUNTER_K`'s, the smaller of the two values PB's other two coefficients start from -- basis: PB §3 "start at the values of ..."; the gate reads only its sign; UNDECIDED (5)]. The `bind` lean on the fighting withdrawal: `disengage_attempt_p x (1 - APPROACH_BREAK_K*lean)`, the withdrawer's lean
   # CONTINUOUS commitment (the commitment-recovery axis is a SPECTRUM, not 4 rungs): commit ~ 2 + 3*Beta(a,b),
   # with the disposition+wariness skew _k shaping the Beta (neutral a=b -> centred ~3.5; aggressive -> toward 5;
   # cautious/wary -> toward 2). Param floor 0.25 = the spread-floor. Replaces the old integer {2,3,4,5} draw.
