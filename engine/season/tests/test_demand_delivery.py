@@ -59,7 +59,7 @@ from ..harness import probes as P
 from ..harness import scarce as S
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import world_q
-from ..state.carriers import Claim, Person, Question, Rung, Tenure, View
+from ..state.carriers import Act, Claim, Person, Question, Rung, Tenure, View
 from ..state.ids import H, draw_factory
 
 WEIGHTS = DEFAULT_FIXTURES.get("subsistence_weight")
@@ -416,3 +416,37 @@ def test_19d_the_next_season_delivers_more_where_the_steward_holds_the_town():
     c_after = control["seasons"][2]["delivered"]
     assert sum(t_after.values()) > sum(c_after.values()) == 0, (t_after, c_after)
     assert not [t for s in control["seasons"] for t in s["transfers"] if t["claim_sourced"]]
+
+
+# ======================================================================================
+# AN AMOUNT IS A POSITIVE WHOLE NUMBER (H-306; 07_SE_kernel_repairs A)
+# ======================================================================================
+
+@pytest.mark.parametrize("value", [-5, 0, 1, 2.5, True])
+def test_h306_only_a_whole_positive_transfer_amount_moves_stock(value):
+    """Through the real fold on `scarce.build`: only `1` moves stock; every other value emits
+    `transfer.refused` and leaves every rung's stores and the content hash equal to the no-act arm.
+    Today `-5`, `2.5` and `True` move stock (H-306)."""
+    def at_resolve():
+        w = S.build()
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        w.step = Step.RESOLVE
+        return w, d
+
+    control, _ = at_resolve()
+    w, d = at_resolve()
+    out = d._fold(w, mint_token(w, WriteClass.ACTS), Act(
+        id="tr_whole", actor=S.STEWARD, verb="transfer",
+        payload={"subject": S.GRANARY, "from": S.GRANARY, "to": S.HUNGRY, "kind": "grain",
+                 "amount": value}))
+    kinds = [e.kind for e in out]
+    stores = {r: dict(w.rungs[r].stores) for r in (S.GRANARY, S.HUNGRY)}
+    before = {r: dict(control.rungs[r].stores) for r in stores}
+    if value == 1 and value is not True:
+        assert "transfer.made" in kinds and "transfer.refused" not in kinds, kinds
+        assert stores != before
+    else:
+        assert "transfer.refused" in kinds and "transfer.made" not in kinds, (value, kinds)
+        assert stores == before, value
+        assert w.content_hash() == control.content_hash(), value

@@ -212,3 +212,39 @@ def test_in33_c_a_question_naming_the_return_kind_forms_no_exchange():
     got = opening_set(p, View("p_low", [], w.fixtures.get("view_k")), q, w.fixtures)
     assert not [x for x in got if x.verb == VERB], [x.operands for x in got if x.verb == VERB]
     assert [x for x in got if x.verb == "transfer" and x.operands["kind"] == back], "control"
+
+
+# (e) AN AMOUNT IS A POSITIVE WHOLE NUMBER (H-306; 07_SE_kernel_repairs A) ------------------------------
+
+@pytest.mark.parametrize("side", ["amount", "return_amount"])
+@pytest.mark.parametrize("value", [-5, 0, 1, 2.5, True])
+def test_in33_e_only_a_whole_positive_amount_moves_stock_on_either_side(side, value):
+    """Through the real fold on `scarce.build`: each side's amount swept over the row's own values. Only `1`
+    moves stock; every other value emits `exchange.refused`, and every rung's stores and the content hash equal
+    the no-act arm. Before the edit `-5` and `2.5` move stock and `0` and `True` half-happen (H-306)."""
+    from engine.season.harness import scarce as S
+
+    def at_resolve():
+        w = S.build()
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        w.step = Step.RESOLVE
+        w.rungs[S.HUNGRY].stores = {"grain": 20, "salt": 20}
+        return w, d
+
+    control, _ = at_resolve()
+    w, d = at_resolve()
+    payload = {"subject": S.GRANARY, "from": S.GRANARY, "to": S.HUNGRY, "kind": "grain", "amount": 1,
+               "return_kind": "salt", "return_amount": 1, side: value}
+    out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                  Act(id="ex_whole", actor=S.STEWARD, verb=VERB, payload=payload))
+    kinds = [e.kind for e in out]
+    stores = {r: dict(w.rungs[r].stores) for r in (S.GRANARY, S.HUNGRY)}
+    before = {r: dict(control.rungs[r].stores) for r in stores}
+    if value == 1 and value is not True:
+        assert MADE in kinds and REFUSED not in kinds, kinds
+        assert stores != before
+    else:
+        assert REFUSED in kinds and MADE not in kinds, (side, value, kinds)
+        assert stores == before, (side, value)
+        assert w.content_hash() == control.content_hash(), (side, value)

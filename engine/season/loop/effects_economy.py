@@ -17,7 +17,8 @@ from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
 from ..trace_log import TRACE
 
-from .effects_shared import _exercised_office, _oblige_term, _operand, _share, _shift, effect_for
+from .effects_shared import (_decline_amount, _exercised_office, _oblige_term, _operand, _share, _shift, effect_for,
+                             whole_amount)
 
 
 @effect_for("work")
@@ -238,6 +239,8 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
                        chose="change nothing, so the fold emits the refusal",
                        alternatives=["move the giver's side anyway (matter leaves the world)"])
         return NO_CHANGE
+    if not whole_amount(amount):
+        return _decline_amount("transfer", amount)
 
     renewed = _renewals(w, a, src.id, dst.id, amount)
 
@@ -288,6 +291,9 @@ def _eff_exchange(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
                        "E3/S27.1", chose="change nothing, so the fold emits the refusal",
                        alternatives=["move one side anyway (matter leaves the world)"])
         return NO_CHANGE
+    for what, n in (("amount", amount), ("return_amount", back_amount)):
+        if not whole_amount(n):
+            return _decline_amount(f"exchange's {what}", n)
 
     def perform() -> None:
         _shift(src, dst, kind, amount)

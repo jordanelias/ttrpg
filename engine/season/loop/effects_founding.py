@@ -20,7 +20,7 @@ from ..state.ids import H
 from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
 
-from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for, occupying_faction
+from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for, occupying_faction, whole_amount
 
 
 def _works_named(w: "World", a: "Act") -> tuple:
@@ -63,6 +63,7 @@ def _cost(w: "World", rec, plan: str):
       * the plan has NO PRICE (no `works_cost` row -- `body`, `person`, `settlement` and above:
         the roster's note says why each); a missing row is not a cost of zero;
       * the works' rung is no rung;
+      * a price cell is not a whole number of units, at least one (`whole_amount`, H-306);
       * the rung cannot meet every kind of the price -- r2 §A.6.6's MATTER-STALL, *"a scaffolding
         standing empty"*, refused at the act that would have raised it.
     ⚠ NOT A TYPED CELL: the threshold is `works_cost[plan]` read off the works' CONTENT and the
@@ -75,6 +76,10 @@ def _cost(w: "World", rec, plan: str):
         why = f"no `works_cost` row prices a {plan!r}, so nobody can pay for one"
     elif payer is None:
         why = f"the works' rung {rec.rung!r} is no rung, so nothing can pay its price"
+    elif any(not whole_amount(n) for n in price.values()):
+        # H-306/A-81: a price cell is an amount like any store move's; `_shift` and `_debit` would raise on it.
+        why = (f"the {plan} costs {dict(sorted(price.items()))}: a price cell that is not a whole number of "
+               f"units, at least one, is no price")
     else:
         short = {k: n for k, n in sorted(price.items()) if (payer.stores or {}).get(k, 0) < n}
         if short:
