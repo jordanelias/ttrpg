@@ -731,7 +731,9 @@ class Act:
     # keys degrees by (`writes:`/`emits:` maps; `DEGREE_LABEL`'s values for a four-band row). `None`: always, as before.
     # Read by the fold only (`loop/resolve.py::_sequence_refusal`, ID-13): outside the named bands the interaction is
     # refused at the clause `sequence` (`data/verbs.py::SEQUENCE_CLAUSE`). A tuple of band labels (`loop/deliberate.py` rebinds it to `None` where its
-    # predecessor was dropped). Not in `World.content_hash` (the act store is not hashed).
+    # predecessor was dropped). Not in `World.content_hash` (the act store is not hashed). `04` §B.9's `Act` tuple has no `after` and §C.4's
+    # A-9 clause names the hang without naming its carrier; it rides the Act, not the Scene, because the chooser sets it per interaction from
+    # the row and the fold reads it per act (CONVENTION departure from §B.9, as `changes`, `reads`, `contests` and `stratum` are).
     after: Optional[tuple] = None
 
     def __post_init__(self) -> None:
