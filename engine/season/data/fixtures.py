@@ -21,7 +21,8 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_map, table
+from .geography import geography
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_list, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -198,9 +199,71 @@ def _check_works_cost(costs, plans: set, mk: set) -> dict:
     return {plan: dict(cell) for plan, cell in costs.items()}
 
 
+def _load_site_endowment() -> dict:
+    """B12a.51 (CP-T08-02 as amended): `rosters.yaml: site_endowment`, `{uniform: [kind, ...], ground: {territory: [kind, ...]}, settlement:
+    {geography code: [kind, ...]}}`, the geography file's settlements read once (`data/geography.py`'s cache) for the check below."""
+    settled = {sid: row["territory"] for sid, row in (geography().get("settlements") or {}).items()}
+    return _check_site_endowment(roster_list("site_endowment", "uniform"), roster_map("site_endowment", "ground"),
+                                 roster_map("site_endowment", "settlement"), set(roster("site_kinds")), settled,
+                                 set(geography().get("provinces") or {}))
+
+
+def _check_site_endowment(uniform, ground, override, kinds: set, settled: dict, provinces: set) -> dict:
+    """`_load_site_endowment`'s refusals, with the rosters and the map passed in so a test can plant each one (`_check_works_cost`'s precedent,
+    §0.1 pt 3). `settled` is `{settlement code: its territory}` and `provinces` the geography's territory codes. A territory holding a settlement with no `ground` row is UNGRADED (a place
+    nothing says what to make of: a missing row is not an empty endowment); an empty list is UNGRADED; a kind outside `site_kinds`, or a
+    `ground` key no geography territory carries, or an override key no settlement carries, is FORBIDDEN (a table keyed past its own roster). Returns
+    the validated copy, every list a tuple."""
+    territories = set(settled.values())
+    lists = {"uniform": uniform, **{f"ground[{t}]": v for t, v in ground.items()}, **{f"settlement[{c}]": v for c, v in override.items()}}
+    for name, kinds_listed in lists.items():
+        if not isinstance(kinds_listed, (list, tuple)) or not kinds_listed:
+            raise Ungraded(
+                f"site_endowment.{name} is {kinds_listed!r}: an endowment is a non-empty list of site kinds", "rosters.yaml",
+                needs="one site kind per Site the place is given, at least one",
+                law="CP-T08-02 -- a place endowed with nothing is a settlement that produces nothing; an empty list is refused, not a choice")
+        if set(kinds_listed) - kinds:
+            raise Forbidden(
+                f"site_endowment.{name} names site kind(s) no roster carries: {sorted(set(kinds_listed) - kinds)}", "rosters.yaml",
+                needs="add the kind to `site_kinds`, or drop it from the list",
+                law="S42.2.1 -- a table keyed past its own roster answers for a kind nobody declared")
+    if set(ground) - provinces:
+        raise Forbidden(
+            f"site_endowment.ground names territor(ies) the map does not carry: {sorted(set(ground) - provinces)}", "rosters.yaml",
+            needs="a territory code of `valoria_geography_v30.yaml: provinces`, or drop the row",
+            law="S42.2.1 -- a table keyed past its own roster answers for a place nobody declared")
+    if set(override) - set(settled):
+        raise Forbidden(
+            f"site_endowment.settlement names settlement(s) the map does not carry: {sorted(set(override) - set(settled))}", "rosters.yaml",
+            needs="a settlement code of `valoria_geography_v30.yaml`, or drop the override",
+            law="S42.2.1 -- a table keyed past its own roster answers for a place nobody declared")
+    if territories - set(ground):
+        raise Ungraded(
+            f"site_endowment.ground has no row for territor(ies) holding a settlement: {sorted(territories - set(ground))}", "rosters.yaml",
+            needs="a `ground` row per territory a settlement stands in",
+            law="CP-T08-02 -- a settlement in a territory no row names has no endowment, and the loader will not choose one for it")
+    return {"uniform": tuple(uniform), "ground": {t: tuple(v) for t, v in ground.items()},
+            "settlement": {c: tuple(v) for c, v in override.items()}}
+
+
 WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 CAPACITY_FLOORS = _load_capacity_floor()
 WORKS_COST = _load_works_cost()
+SITE_ENDOWMENT = _load_site_endowment()
+
+
+def endowment_for(fixtures: "Fixtures", sid: str, territory: str) -> tuple:
+    """B12a.51: THE ONE READER of `rosters.yaml: site_endowment` -- the producing Site kinds settlement `sid` (a geography code) in
+    `territory` is given, one Site per entry, in minting order. `endowment_mode` `uniform` (the control) is the `uniform` list at every
+    settlement; `ground` is the settlement's own override where the roster has one, else its territory's row. An arm outside the two raises."""
+    mode = fixtures.get("endowment_mode")
+    if mode == "uniform":
+        return SITE_ENDOWMENT["uniform"]
+    if mode == "ground":
+        return SITE_ENDOWMENT["settlement"].get(sid) or SITE_ENDOWMENT["ground"][territory]
+    raise Forbidden(
+        f"endowment_mode {mode!r} is no arm", "data/fixtures.py", needs="`uniform` (the control) or `ground`",
+        law="CP-T08-02 -- an arm outside the two is refused, never read as the control")
 
 # `H-424`'s CONTROL ARM (B05.21, T13 edit 1; B05.23): `Fixtures.difficulty_ob` below is the shipped arm -- the CALIBRATED one since B05.23,
 # 0 / 0.8 / 1.6 / 2.4 above the even line -- and this is the CONTROL, 0 / 1 / 2 / 3 (with an unopposed act's opposition at
@@ -660,6 +723,18 @@ DEFAULT_FIXTURES = Fixtures(
     # `rosters.yaml: arrival_reports` is refused at the barrier. No source names a setter or a calibration: the flip is B98's. Injection site: this line.
     # [JUSTIFIED: engine/season/hole_register.yaml H-525 -- `site: Fixtures arrival_report`, graded `assumption`; the source ships the arm `off` and names neither a setter nor a reading that flips it, so it is injected at the control and swept off / on]
     arrival_report="off",              # `H-525`, swept off (control, SHIPPED) / on
+    # B12a.51 (`07_SE_ground_and_granaries` §4 (b), CP-T08-02): WHICH PRODUCING SITES A SETTLEMENT IS ENDOWED WITH at the world's making
+    # (`boot/realm.py::build_realm`'s site loop, through `endowment_for`, which reads `rosters.yaml: site_endowment`). `uniform` is THE CONTROL,
+    # SHIPPED: `harbour` and `seam` at every settlement, today's placement byte for byte. `ground` is the arm: each territory's own row. The flip
+    # to `ground` is B12a.54's, its own declared mover.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode: uniform`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-526 -- `site: Fixtures endowment_mode`, graded `assumption`; CP-T08-02 gives the arm and no territory's row, so the arm is injected at the control and swept uniform / ground]
+    endowment_mode="uniform",          # `H-526`, swept uniform (control, SHIPPED) / ground (B12a.54 flips)
+    # B12a.51 (`07_SE_ground_and_granaries` §4 (b)): SEASONS OF THE EATEN-KIND DEFICIT A GRANARY RUNG STARTS WITH under `ground`
+    # (`07_SE_treasury_granary_B`'s seed, B12a.52). `0` is THE CONTROL, SHIPPED: no territory stock. Read by nothing until B12a.52.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `granary_seasons: 0`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-527 -- `site: Fixtures granary_seasons`, graded `assumption`; the source gives the seed's shape and no count of seasons, so the count is injected at the control and swept 0 / 4 / 8]
+    granary_seasons=0,                 # `H-527`, swept 0 (control, SHIPPED) / 4 / 8 (B12a.55 flips to 4)
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

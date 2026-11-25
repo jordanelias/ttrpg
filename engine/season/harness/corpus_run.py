@@ -49,7 +49,7 @@ from collections import Counter, defaultdict
 
 from .. import decision
 from ..data import cast as cast_data
-from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
+from ..data.fixtures import DEFAULT_FIXTURES, SITE_ENDOWMENT
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
@@ -404,10 +404,11 @@ def build_at(case: dict, seed: int = 0) -> World:
         w.rungs[ids[k]] = Rung(ids[k], k)
     for lower, upper in zip(chain, chain[1:]):
         w.add_tenure(Tenure(f"t_{lower}_in_{upper}", ids[lower], ids[upper], "contain", 0))
-    for kind in sorted(SITE_YIELD):
-        if SITE_YIELD[kind]:
-            w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
-                                          condition=w.fixtures.get("condition_scale"))
+    # B12a.51: a case world is the `uniform` endowment (`harbour`, `seam`), the control; looping every producing kind would mint a `field` here
+    # the day `site_yield` holds the row, which is a Site no case ever carried.
+    for kind in SITE_ENDOWMENT["uniform"]:
+        w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
+                                      condition=w.fixtures.get("condition_scale"))
     seated, _waiting = seating(case)
     pids = seat_ids(len(seated))
     by_pid = dict(zip(pids, seated))      # the entry each seated person stands for; the floor has none

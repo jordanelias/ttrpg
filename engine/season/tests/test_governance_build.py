@@ -2553,7 +2553,7 @@ def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
     shape `dwelling` already has: one per unit, `SITE_YIELD` never keys it, `wear_per_season`/
     `band_floors` both ship it a control-arm `0`/`{}}`). A dwelling or garrison id that collided
     with a producing Site's would overwrite it, and the first count would drop."""
-    from ..data.fixtures import SITE_YIELD
+    from ..data.fixtures import SITE_ENDOWMENT, SITE_YIELD
     w = build_realm(0)
     # ED-IN-0310: the Altonian settlement (`foreign_cast`) sits outside every realm rung and the realm mint gives it no Site of any kind (MEASURED
     # at seed 0, asserted below as a control), so it is not counted here. Schoenland's settlement is outside the realm too and IS minted its Sites,
@@ -2563,7 +2563,8 @@ def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
     alt = {f"set_{_slug(p['settlement']['code'])}" for p in FOREIGN_CAST.values()}
     settlements = [r for r in w.rungs.values() if r.kind == "settlement" and r.id not in alt]
     outside = [r for r in w.rungs.values() if r.id in alt]
-    producing = [k for k in sorted(SITE_YIELD) if SITE_YIELD[k]]
+    # B12a.51: the producing Sites a realm mints are its `endowment_mode`'s list (`uniform`, shipped: `harbour`, `seam`), not every `SITE_YIELD` kind (`field` is the `ground` arm's).
+    producing = [k for k in SITE_ENDOWMENT["uniform"] if SITE_YIELD[k]]
     assert settlements and producing, "fixture: no settlement or no producing kind"
     others = Counter(s.kind for s in w.sites.values() if s.kind not in ("dwelling", "garrison"))
     assert others == Counter({k: len(settlements) for k in producing}), others

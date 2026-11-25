@@ -26,7 +26,7 @@ from ..queries.person_q import BOND_STEM, DUTY_TAKEN, SELF_STEM, holds_self_key,
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
                                home_of as home_of_q, landing_floor, members)
 from ..gaps import Forbidden, Unowned, Unspecified
-from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
+from ..data.fixtures import DEFAULT_FIXTURES, endowment_for
 from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
@@ -1488,12 +1488,17 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # -- a site per producing kind, at the settlement ---------------------------
     # Same rule `build_at` uses, one layer up: `work` needs somewhere to be done, and a world whose
     # sites are all in one place is the co-location defect again by another route.
+    # B12a.51 (CP-T08-02): WHAT A PLACE IS ENDOWED WITH is `data/fixtures.py::endowment_for`'s answer -- one Site per entry of the settlement's list
+    # under `endowment_mode`. The id is `s_<slug>_<kind>` for the first Site of a kind and `s_<slug>_<kind>_<n>` (n the 1-based ordinal) for the
+    # rest, so the `uniform` arm (`harbour`, `seam`) mints today's ids byte for byte. (Looping every `SITE_YIELD` kind would mint a `field` at
+    # every settlement once the table has the row.)
     for sid in geo["settlements"]:
-        for k in sorted(SITE_YIELD):
-            if SITE_YIELD[k]:
-                s_id = f"s_{_slug(sid)}_{k}"
-                w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
-                                     condition=w.fixtures.get("condition_scale"))
+        minted: dict = {}
+        for k in endowment_for(w.fixtures, sid, geo["settlements"][sid]["territory"]):
+            minted[k] = minted.get(k, 0) + 1
+            s_id = f"s_{_slug(sid)}_{k}" if minted[k] == 1 else f"s_{_slug(sid)}_{k}_{minted[k]}"
+            w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
+                                 condition=w.fixtures.get("condition_scale"))
 
     # -- a dwelling per hearth, at the hearth (`ED-SE-0055`) -----------------------------------
     # `ED-SE-0051`'s `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and the

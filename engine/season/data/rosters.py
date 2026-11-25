@@ -390,6 +390,22 @@ def roster_map(name: str, key: str) -> dict:
     return dict(m)
 
 
+def roster_list(name: str, key: str) -> list:
+    """An ORDERED LIST that lives inside a roster row -- `site_endowment.uniform`, whose order is the order its Sites are minted in. `roster_map`'s
+    refusal for a name the file does not carry and for a key that is not the shape asked for, so an absent list cannot answer `[]`."""
+    r = _ROSTERS.get(name)
+    if r is None:
+        raise _absent_roster(name, "returning an empty list would make every lookup silently answer nothing")
+    m = r.get(key)
+    if not isinstance(m, list):
+        raise Unspecified(
+            f"roster {name!r} has no list `{key}:`", "rosters.yaml",
+            needs=f"give {name!r} a `{key}:` list, or read it with roster()/roster_map()/table()",
+            law="rosters.yaml -- the list is the DEFINITION. An absent one cannot be substituted by an empty list "
+                "without inverting the answer it gives")
+    return list(m)
+
+
 # roster-exempt: this is the loader's own grammar -- the two values a `bound:` cell may take -- as `_ptrs`'s key names are; the MEMBERS
 # the cells sort are `rosters.yaml: obstacle_terms`, and no game fact lives here.
 _OBSTACLE_BOUND = ("host", "module")
