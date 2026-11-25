@@ -270,21 +270,3 @@ def test_scene_folds_contiguously_in_chooser_order():
     for sc in (sa, sb):
         at = [folded.index(a.id) for a in sc.acts]
         assert at == list(range(at[0], at[0] + len(at))), (sc.id, folded)
-
-
-def test_realm_scenes_fold_contiguously_in_chooser_order_over_two_seasons():
-    """R-03.c on the realm (B08.04's gate): over `build_realm(0)`, two seasons, EVERY scene whose interactions were folded two or more at
-    a time (the act store's order is the fold's) was folded in the chooser's own order (`Scene.acts`) and with nothing of another scene
-    between them. `checked >= 1` so a realm that formed no multi-interaction scene fails rather than passing on nothing."""
-    w = build_realm(0)
-    POP.run(seasons=2, seed=0, w=w)
-    folded_at = {a.id: i for i, a in enumerate(w.acts)}
-    checked = 0
-    for sc in w.acts.scenes():
-        at = [folded_at[a.id] for a in sc.acts if a.id in folded_at]
-        if len(at) < 2:
-            continue
-        checked += 1
-        assert at == sorted(at), (sc.id, "folded out of the chooser's order", at)
-        assert at[-1] - at[0] == len(at) - 1, (sc.id, "another scene's act sits between this scene's interactions", at)
-    assert checked >= 1, "the realm formed no scene of two interactions in two seasons: the order was not observed"

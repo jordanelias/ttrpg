@@ -399,12 +399,12 @@ rows:
           date: "2026-11-25"
           seed: "0 (the control: `build_realm(0)`; the four others are hand-built worlds)"
           seasons: "1 (the control); the four others fold one lap"
-          line: "8 passed in 63.25s"
+          line: "7 passed (test_scene_sequence.py; the realm arm lives in test_scene_store.py's two-season realm test, which also passed)"
           control: >-
-            `test_one_interaction_per_scene_hash_equals_today` is one of the eight and passed: `interactions_per_scene = 1` after one season at seed 0 reads the
+            `test_one_interaction_per_scene_hash_equals_today` is one of the seven and passed: `interactions_per_scene = 1` after one season at seed 0 reads the
             S13 base's own value (`0325a351..`; seeds 1 and 2 `710d4161..`, `e90b1a4f..`, read in a scratch run with `rival_precedence: hash`, equal to the base's), which the file
-            pins as a test-local literal and no B08 item moved. The plan wrote five tests; the file held five at c32da4e and holds eight now (the close's Phase 1
-            split the skip test in two, added the admission-refusal arm and the realm arm `test_realm_scenes_fold_contiguously_in_chooser_order_over_two_seasons`). THE REALM (seed 0, two
+            pins as a test-local literal and no B08 item moved. The plan wrote five tests; the file held five at c32da4e and holds seven now (the close's Phase 1
+            split the skip test in two and added the admission-refusal arm; the realm arm is an assertion in `test_scene_store.py::test_the_realm_two_season_hash_is_the_shipped_pin_and_the_run_stores_scenes`, which already runs that realm). THE REALM (seed 0, two
             seasons, a counter that draws nothing, its hash equal to `_realm_goldens.SHIPPED[(0, 2)]`, `3e017756..`): 371 scenes with two or three folded interactions (314 of three, 57 of two),
             371 folded in the chooser's own order and contiguous (100 %; 97 of 369, 26.3 %, and 2 contiguous, at `8142371`); acts with `after` set 0 (238 at c32da4e, before the close's ruling
             that `hangs_on` also requires the same counterparty), so skipped at clause `sequence` 0 (230 at c32da4e: 28 band misses and 202 no-band skips, 192 of those an `argue` refused at
@@ -413,8 +413,8 @@ rows:
           does_not_show: >-
             the realm does not exercise `after`: no act in two seasons at seed 0 carries one when it reaches the fold, so "acts with `after` set are skipped when the prior misses its band"
             is read only on planted scenes (a hand-built `_argue_world`, one arguer, one hearer, a keyed act id), and the realm arm reads the scene ORDER alone;
-            `test_npc_effort_attribution` reads 3 of 761 `pack_scenes` calls in that run holding an act with `after`, none of which reached the fold with it set (observed, cause unread);
-            five of the eight read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata; the two argue arms), one reads the verb table, one the realm at one interaction
+            a counter run once at the close read 3 of 761 `pack_scenes` calls in that run holding an act with `after`, none of which reached the fold with it set (observed, cause unread; the counter is not kept);
+            five of the seven read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata; the two argue arms), one reads the verb table, one the realm at one interaction
             per scene and one the realm's fold order; the realm figures above are one seed, two seasons and a counter run outside the test; whether a skipped second interaction was the better act is not read;
             `rival_precedence` is not read (no rivalry group forms at seeds 0, 1, 2 in two seasons: 0, 0, 0, read at c32da4e; not re-read here, the ruling does not reach the draw)
     blocks: []
