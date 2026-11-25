@@ -46,7 +46,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _lattice_strain
 from ..queries import world_q
 from ..state.attribution import event_by_id
-from ..state.carriers import Act, Person, Rung, Site, Tenure
+from ..state.carriers import Act, Claim, Person, Rung, Site, Tenure
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -508,3 +508,59 @@ def test_a_site_the_strain_fails_to_break_knits_by_the_pull_it_took():
             assert len(worn) == 2, (seed, len(worn))
         assert not [e for e in out if e.kind == "site.ruptured" and e.changes[0].subject == site.id]
     assert checked >= 10 and knit >= 1, (checked, knit)
+
+
+# ======================================================================================
+# B12a.66: A CROSSING A PERSON STANDS BESIDE RAISES A QUESTION ABOUT THE PLACE (`16_PESSIMIST_WR_B` edit 4)
+# ======================================================================================
+def _crossing_claim(site: str, holder: str, kind: str = "condition.band_crossed") -> Claim:
+    """The claim WITNESS deposits for a crossing: predicate the Event's kind, subject its anchor (the Site), landed at tick 0."""
+    return Claim(f"c_{kind}_{site}", holder, site, kind, True, 0, "firsthand", 5, "own")
+
+
+def _stands_beside(kind: str, far: bool) -> tuple:
+    """One person living at a territory, holding a claim of `kind` on a Site (at his own rung, or `far`: a bordering territory's) AND, ahead of it in
+    the question order, a claim about himself: the crossing's own question is NOT the one he answers first, so the Site reaches him only by the stamp."""
+    w = _world(250, (RING_1[0],))
+    p = w.persons[f"p_mender_{RING_1[0]}"]
+    site = _sid(RING_1[1] if far else RING_1[0])
+    p.ledger.append(Claim("c_0_self", p.id, p.id, "body", 5, 0, "firsthand", 5, "own"))
+    p.ledger.append(_crossing_claim(site, p.id, kind))
+    w.tick = 1                                   # the claims landed last season: new to his next deliberation
+    return w, p, site
+
+
+def test_a_witnessed_crossing_at_his_rung_stamps_the_site():
+    """One person, one claim of a crossing (`condition.band_crossed`, then `site.ruptured`) on a Site at his rung, a claim about himself sorting
+    ahead of it: the question he answers carries the Site as a `Site`-classed referent, so `restore` forms for him. The falsifier arm: the same claim
+    on a Site at a rung he does not stand on stamps nothing."""
+    for kind in ("condition.band_crossed", "site.ruptured"):
+        w, p, site = _stands_beside(kind, far=False)
+        assert world_q.place_of(w, site) == world_q.place_of(w, p.id)
+        got = world_q.questions_for(w, p)
+        assert got and got[0].about == "c_0_self" and got[0].referents_for("Site") == (site,), (kind, got)
+        w, p, site = _stands_beside(kind, far=True)
+        assert world_q.place_of(w, site) != world_q.place_of(w, p.id)
+        got = world_q.questions_for(w, p)
+        assert got and got[0].about == "c_0_self" and not got[0].referents_for("Site"), (kind, got)
+
+
+def test_restore_or_mend_attempted_at_a_crossed_site():
+    """Played, two seasons, the wound planted and the ring strained at season 0 (the B12a.64 plant, weight 250), seeds 0 and 1 POOLED: `restore`
+    is ATTEMPTED at least once by a person standing at a crossed Site (an Event of `condition.band_crossed` or `site.ruptured` anchored on it). ATTEMPTED,
+    not executed: B12a.65 declines `restore` at a broken Site while the coupling runs, and a decline is an attempt the fold refuses. The Mend does not
+    exist yet (B35), so `restore` is the only verb read."""
+    from ..harness.populated import run
+    from ..state.attribution import anchor_of
+    attempts, checked = [], 0
+    for seed in (0, 1):
+        w = _strained_realm(seed, 250)
+        run(2, seed, w=w)
+        crossed = {anchor_of(w, e) for e in w.log if e.kind in ("condition.band_crossed", "site.ruptured")}
+        crossed = {s for s in crossed if s in w.sites}
+        checked += len(crossed)
+        attempts += [(seed, a.id) for a in w.acts
+                     if a.verb == "restore" and isinstance(a.payload, dict) and a.payload.get("site") in crossed
+                     and world_q.place_of(w, a.actor) == w.sites[a.payload["site"]].rung]
+    assert checked >= 2, checked
+    assert attempts, "no `restore` was attempted at a crossed Site by a person standing there"

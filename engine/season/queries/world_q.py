@@ -3825,6 +3825,26 @@ def works_sites(w: World, p: Person) -> tuple:
     return tuple(sorted(s.id for s in w.sites.values() if (s.kind, s.rung) in targets))
 
 
+#: v12 B12a.66 (`16_PESSIMIST_WR_B` edit 4): the Event kinds WITNESS deposits as a claim whose subject is the Site that crossed or broke.
+CROSSING_KINDS = frozenset(("condition.band_crossed", "site.ruptured"))
+
+
+def crossed_sites(w: World, p: Person, since: Optional[tuple] = None) -> tuple:
+    """THE SITES AT HIS OWN RUNG THAT A CROSSING OR A BREAK HAS JUST BEEN WITNESSED OF (v12 B12a.66, `16_PESSIMIST_WR_B` edit 4, [ASSUMPTION; medium;
+    Jordan to correct; revert: drop the term in `questions_for`]), sorted by id: each Site that a claim NEW to `p` (`landing_floor`, the boundary Q2 reads)
+    holds a `CROSSING_KINDS` Event of, where the Site stands at the rung `p` does (`place_of`, `with`'s one owner). A STANDING OCCASION, `works_sites`'
+    shape: `questions_for` adds the ids to the question he answers as CLASSED referents (`_stamped`, `Site`), so `restore` forms for him. Without it the
+    Site reaches a question's classes only as the plain referent of its own `claim_landed` question, and only when that question sorts first.
+    Resolver-side and read-only: `p`'s own ledger, and where the Site and he stand. `()` for a man who has witnessed no crossing beside him."""
+    floor = landing_floor(w, since)
+    seen = sorted({c.subject for c in p.ledger
+                   if c.predicate in CROSSING_KINDS and (c.when, c.lap) >= floor and c.subject in w.sites})
+    if not seen:
+        return ()
+    here = place_of(w, p.id)
+    return tuple(s for s in seen if here is not None and place_of(w, s) == here)
+
+
 def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
     [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
@@ -4950,6 +4970,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
     # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
     # which no question a master answers carried. REVERT: drop the term.
+    # v12 B12a.66 (`16_PESSIMIST_WR_B` edit 4; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, BESIDE THEM, THE SITES AT HIS RUNG A
+    # CROSSING OR A BREAK HAS JUST BEEN WITNESSED OF (`crossed_sites`), as `Site` -- `restore` forms on them. A world with no crossing is byte-identical.
     # v11 CR-28 (G-04 (a); CP-T02-05's re-take; [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE
     # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
     # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
@@ -4988,7 +5010,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + crossed_sites(w, p, since) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
