@@ -3505,6 +3505,16 @@ rosters:
       (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `"off"` is QUOTED: bare, YAML reads it as the boolean false.
     values: [crossing, season, "off"]
 
+  arrival_reports:
+    source: >-
+      v12 B12a.16 (`07_SE_kernel_repairs` D, `H-327`): *"`arrival_report` (`off`, shipped; `on`)"*.
+    note: >-
+      THE ARMS OF `Fixtures.arrival_report` (`H-525`), read by `loop/matter.py` at MATTER's `travel.ended` write (once per barrier) and refused outside this set. `off` is the CONTROL,
+      shipped: the write carries no Observation, the tree before the item exactly. `on`: it carries `Observation(rung, "stores:<default_store_kind>", units)` and
+      `Observation(rung, "held_by", holder id or None)` about the rung the traveller now stands in, which WITNESS deposits to the write's witnesses, the traveller among them.
+      `"off"` is QUOTED: bare, YAML reads it as the boolean false.
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).

@@ -654,6 +654,12 @@ DEFAULT_FIXTURES = Fixtures(
     ending_draw=False,                 # `H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)
     ending_draw_pool_step=None,        # `H-524`, [CALIBRATE: the pool per season stood], read only under `ending_draw` True; `None` refuses
     ending_draw_ob=None,               # `H-524`, [CALIBRATE: the obstacle's base], read only under `ending_draw` True; `None` refuses
+    # B12a.16 (`07_SE_kernel_repairs` D, `H-327`): ARRIVING TEACHES THE TRAVELLER THE PLACE. `off` is THE CONTROL, SHIPPED: MATTER's `travel.ended` write carries nothing,
+    # as before the item. `on`: it carries `loop/matter.py::_arrival_report` -- the stores of the rung he now stands in (`stores:<default_store_kind>`, as `_stock_report`
+    # builds it) and its holder (`held_by`, through `world_q.governing_hold`) -- which WITNESS deposits to the write's witnesses, the traveller among them. An arm outside
+    # `rosters.yaml: arrival_reports` is refused at the barrier. No source names a setter or a calibration: the flip is B98's. Injection site: this line.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-525 -- `site: Fixtures arrival_report`, graded `assumption`; the source ships the arm `off` and names neither a setter nor a reading that flips it, so it is injected at the control and swept off / on]
+    arrival_report="off",              # `H-525`, swept off (control, SHIPPED) / on
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
