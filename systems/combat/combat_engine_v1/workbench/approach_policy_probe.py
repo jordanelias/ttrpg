@@ -14,8 +14,6 @@ each is written here as a kit table, and this table is the one place the words b
 | against a low-Endurance opponent        | arming, light           | arming, light, end 2    |
 | a lightly armoured fighter against plate| arming, light           | arming, heavy           |
 | arming mirror                           | arming, light           | arming, light           |
-| spear vs arming sword                   | spear, light            | arming, light           |
-| arming sword vs dagger (the bind row)   | arming, light           | dagger, light           |
 | mace mirror                             | mace, light             | mace, light             |
 | rapier mirror                           | rapier, light           | rapier, light           |
 
@@ -58,7 +56,8 @@ from modules.combat import fight as entry
 import fight_record
 
 WILSON_Z = 1.96
-from modules.combat.vocabulary import APPROACHES, PHASES   # PB §3's vocabulary, owned once (B16.05)
+APPROACHES = ('defensive', 'normal', 'aggressive')   # PB §3's vocabulary; written here until `modules/combat/vocabulary.py` owns it (B16.05)
+PHASES = ('measure', 'exchange', 'bind')
 
 # THE MATCHUPS -- see the table in the docstring. (name, L's spec, O's spec)
 MATCHUPS = (
@@ -66,8 +65,6 @@ MATCHUPS = (
     ('vs low-Endurance opponent',         dict(weapon='arming', armor='light'),   dict(weapon='arming', armor='light', end=2)),
     ('light armour vs plate',             dict(weapon='arming', armor='light'),   dict(weapon='arming', armor='heavy')),
     ('arming mirror',                     dict(weapon='arming', armor='light'),   dict(weapon='arming', armor='light')),
-    ('spear vs arming sword',             dict(weapon='spear', armor='light'),    dict(weapon='arming', armor='light')),
-    ('arming sword vs dagger',            dict(weapon='arming', armor='light'),   dict(weapon='dagger', armor='light')),   # B16.06's bind row: the arming sword is the reach side that breaks the bind, so its `bind` lean is the one `disengage_attempt_p` reads (the spear row above never binds: it wins on approach)
     ('mace mirror',                       dict(weapon='mace', armor='light'),     dict(weapon='mace', armor='light')),
     ('rapier mirror',                     dict(weapon='rapier', armor='light'),   dict(weapon='rapier', armor='light')),
 )

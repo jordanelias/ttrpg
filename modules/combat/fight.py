@@ -260,8 +260,7 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
     `rng` is THE ROUND'S OWN `Draw` (`wrapper.round_draw(fight_key, inp.round)`, B16.03): every draw of the round is a keyed sub-draw of it -- `first` (the coin)
     `H2(rng.key, "first")`, and `engagement`'s coverage-gap, riposte and yield draws `gap:`, `upset:`, `yield:` on the round's index and the blow or party -- so
     nothing takes a position of a stream and no draw depends on another round (A-30). `cfg` is the workbench's overlay (`fight`'s). `deciders` is the
-    per-party approach decider, consulted by no round yet; `inp.plans` is each party's `{phase: approach}` in `claimants` order (A, B), read into `c.lean` at
-    `engagement`'s consult points (a missing phase is `normal`, lean 0; B16.05)."""
+    per-party approach decider, consulted by no round yet; `inp.plans` is read by no round yet (a missing phase is `normal`)."""
     fi = inp.fighters
     cfg = _fight_cfg(fi, cfg) or CFG
     terms = fi.terms
@@ -274,7 +273,7 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
         trace.append(dict(kind="round_start", round=inp.round, first=first.label))
         wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)
         loser, closed, ended_by = wrapper.engagement(A, B, first, cfg, rng, inp.prev_closed,
-                                                     terms=None if terms == wrapper.LETHAL_TERMS else terms, turn=inp.round, plans=inp.plans)
+                                                     terms=None if terms == wrapper.LETHAL_TERMS else terms, turn=inp.round)
         trace.append(dict(kind="round_end", round=inp.round, felled=(loser.label if loser is not None else None), ended_by=ended_by))
         yielder = None
         if loser is None:

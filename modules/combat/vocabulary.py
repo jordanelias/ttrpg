@@ -70,14 +70,6 @@ DEF_DODGE = 'dodge'
 DEF_WIND = 'wind'
 DEFENCE_MODES = (DEF_PARRY, DEF_DODGE, DEF_WIND)
 
-# ── APPROACHES and PHASES — what a fighter chooses and where (PB 03 §3; B16.05) ─────────────────────
-# Both closed. A lean is a prior on a gate the engine already rolls; it selects no outcome and adds no branch.
-APPROACHES = ('defensive', 'normal', 'aggressive')    # the lean is the position minus one: -1, 0, +1. `defensive` holds back, `normal` is the fighter's own temperament, `aggressive` presses.
-PHASES = ('measure', 'exchange', 'bind')              # the engagement's three phases a fighter can lean in.
-# `measure` is the open-measure phase (the state graph's `Approach` node: the fighters close, the longer weapon stop-hits). `exchange` is the closed,
-# tempo-gated exchange. `bind` is the hold-or-break decision of a closed beat. Each is a state the engine already resolves through and
-# `state_graph.py::INJECTION_POINTS` already names; no state is added.
-
 # ── HILT types (weapon_physics.GUARD / HILT_CATCH_MULT keys) ────────────────────────────────────────
 HILT_COMPOUND = 'compound'
 HILT_SIMPLE = 'simple'
