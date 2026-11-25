@@ -4212,7 +4212,8 @@ rosters:
       that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id,
       and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
       RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
-      outside the realm and not selected).
+      outside the realm and not selected), which may carry `settled: true` beside it and nothing else
+      (only the rungs with a `settlement` rung among their descendants).
       `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
       whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
       second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
@@ -4221,7 +4222,7 @@ rosters:
     members:
       peninsular_sovereignty:
         victory: true
-        holds: {rung_kind: territory}
+        holds: {rung_kind: territory, settled: true}
         under: one_faction
         source: >-
           GD-1 (`canon/04_game_design_constraints.md`): *"Peninsular Sovereignty is the sole victory
@@ -4229,10 +4230,10 @@ rosters:
         assumption_note: >-
           [ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2`
           and `Political Stability <= 6` read stored scalars #457 §5 cuts, `sustained 2 consecutive
-          seasons` is a clock, and `treaties counting` has no carrier. Every territory under a `realm`
-          rung counts, not a fixed 15; the foreign root (`terr_T16`, Schoenland's, kept out of the realm
-          by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY whoever holds what: `terr_T15`
-          is Uncontrolled at build (`H-186`) and no verb opens a `hold` on any territory (`H-176`).
+          seasons` is a clock, and `treaties counting` has no carrier. Every SETTLED territory under a `realm`
+          rung counts (`settled: true`: a `settlement` rung among its descendants), not a fixed 15;
+          `terr_T15`, which has none, and the foreign root (`terr_T16`, Schoenland's, kept out of the
+          realm by `build_realm`) are not asked for. A structural predicate, no territory id named.
           A consumer that treats `victory: true` as the game's end must carry this caveat itself --
           the row is GD-1 minus its sustain, Accord and Stability clauses, and nothing in the loop
           halts on it (`SeasonDriver.season` only reports `endings`).

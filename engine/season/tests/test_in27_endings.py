@@ -174,13 +174,86 @@ def test_in27_peninsular_sovereignty_is_reached_by_the_last_holders_act_and_not_
     # THE REALM'S TERRITORIES ARE SELECTED, AND THE FOREIGN ROOT IS NOT (an unheld selected rung
     # would have made the condition false and the report empty)
     selected = {t.object for t in Q._ending_edges(w, row) if t.kind == "hold"}
-    assert "terr_T16" not in selected and selected == set(_realm_territories(w)), selected
+    assert "terr_T16" not in selected and selected == set(_settled_territories(w)), selected
+    assert set(_realm_territories(w)) - selected == {"terr_T15"}, "only the unsettled territory is not asked for"
 
     control = build_realm(0)
     last = _all_but_one_under_the_crown(control)
     control.add_tenure(Tenure("t_in27_last_crown", last, CROWN, "commit", 0))
     assert Q._ending_edges(control, row), "control: the planted condition does not hold"
     assert Q.endings_reached(control) == [], "GD-1's row fired with no person's act among its antecedents"
+
+
+def _settled_territories(w):
+    """The realm's territories with a `settlement` rung among their descendants -- what the shipped
+    `peninsular_sovereignty` row's `settled: true` selects (B12a.09)."""
+    return [r for r in _realm_territories(w)
+            if any(x in w.rungs and w.rungs[x].kind == "settlement" for x in Q.descendants(w, r))]
+
+
+def _settled_all_but_one_under_the_crown(w):
+    """`_all_but_one_under_the_crown`, then every UNSETTLED realm territory (`terr_T15`, which the helper
+    gave the King) left unheld again, so the planted world holds exactly the settled territories. Returns
+    the last holder."""
+    last = _all_but_one_under_the_crown(w)
+    settled = set(_settled_territories(w))
+    unsettled = [r for r in _realm_territories(w) if r not in settled]
+    assert unsettled, "fixture: the realm has an unsettled territory (terr_T15)"
+    for r in unsettled:
+        for t in w.tenures:
+            if t.live and t.kind == "hold" and t.object == r:
+                t.until = w.tick
+        assert Q.governing_hold(w, r) is None, "fixture"
+    return last
+
+
+def test_peninsular_sovereignty_is_reached_when_every_settled_territory_is_held_under_one_faction_by_an_act():
+    """B12a.09 / `09_WR_world_motion` gate (3): the unsettled `terr_T15` stays unheld (no verb holds it), every
+    SETTLED territory is a Crown man's but one holder's, and that holder's own `commit` reaches the shipped
+    row, naming his act; the selected holds are the settled territories and no other. FALSIFIER: the row
+    reached with a SETTLED territory unheld (the last arm)."""
+    w = build_realm(0)
+    last = _settled_all_but_one_under_the_crown(w)
+    settled = set(_settled_territories(w))
+    assert len(settled) >= 14 and "terr_T15" not in settled, settled
+    assert Q.governing_hold(w, "terr_T15") is None, "fixture: the unsettled territory is unheld"
+    _admit(w, last, CROWN, "crown9")
+    kinds = _fold(w, SeasonDriver(w), Act(id="in27_swear9", actor=last, verb="commit", payload={"subject": CROWN}))
+    assert kinds[-1] == "commitment.made", kinds
+    (got,) = Q.endings_reached(w)
+    assert got.ending == "peninsular_sovereignty" and got.victory is True and got.acts == ("in27_swear9",), got
+    selected = {t.object for t in Q._ending_edges(w, _row("peninsular_sovereignty")) if t.kind == "hold"}
+    assert selected == settled, selected
+    # the leak arm: one settled territory unheld -> not reached, though every other condition stands
+    gone = sorted(settled)[0]
+    for t in w.tenures:
+        if t.live and t.kind == "hold" and t.object == gone:
+            t.until = w.tick
+    assert Q.governing_hold(w, gone) is None, "fixture"
+    assert Q.endings_reached(w) == [], "reached with a settled territory unheld"
+
+
+def test_it_is_not_reached_when_one_settled_territory_is_held_by_another_faction():
+    """The same planted world, but one settled territory's holder coheres under the Church: not reached; with
+    that holder back under the Crown it is (the same act is credited), so the one difference is the holder."""
+    w = build_realm(0)
+    last = _settled_all_but_one_under_the_crown(w)
+    king = _king(w)[1]
+    other = next(Q.governing_hold(w, r).subject for r in sorted(_settled_territories(w))
+                 if Q.governing_hold(w, r).subject not in (last, king))
+    for t in w.persons[other].tenures:
+        if t.kind == "commit" and t.live and t.object in R.FACTION_BY_PROP:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_in27_other_church", other, CHURCH, "commit", 0))
+    assert Q.faction_holding(w, other) == CHURCH, "fixture"
+    _admit(w, last, CROWN, "crown9b")
+    _fold(w, SeasonDriver(w), Act(id="in27_swear9b", actor=last, verb="commit", payload={"subject": CROWN}))
+    assert Q.endings_reached(w) == [], "a Church man's territory was read as one faction's"
+    for t in w.persons[other].tenures:
+        if t.kind == "commit" and t.live and t.object == CHURCH:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_in27_other_crown", other, CROWN, "commit", 0))
+    assert [r.ending for r in Q.endings_reached(w)] == ["peninsular_sovereignty"]
 
 
 def test_in27_one_faction_is_not_met_by_a_holder_who_commits_elsewhere():
@@ -340,6 +413,11 @@ def _load(members):
     (dict(_GOOD, threshold=3), "unknown key"),
     (dict(_GOOD, victory="yes"), "victory"),
     (dict(_GOOD, holds={"post": "King", "rung_kind": "territory"}), "holds"),
+    (dict(_GOOD, holds={"rung_kind": "territory", "settled": False}), "holds"),            # `settled: true` only
+    (dict(_GOOD, holds={"rung_kind": "territory", "settled": "yes"}), "holds"),
+    (dict(_GOOD, holds={"post": "King", "settled": True}), "holds"),                       # beside `rung_kind` only
+    (dict(_GOOD, holds={"rung_kind": "territory", "settled": True, "post": "King"}), "holds"),
+    (dict(_GOOD, holds={"settled": True}), "holds"),
     (dict(_GOOD, holds={"seat": "off_king"}), "holds"),
     (dict(_GOOD, holds={"post": "Emperor"}), "no offices.yaml seat carries"),
     (dict(_GOOD, holds={"rung_kind": "continent"}), "not a rung_kinds member"),
@@ -353,6 +431,13 @@ def test_in27_the_loader_refuses_a_malformed_ending_row_naming_it(row, says):
     with pytest.raises(Unspecified) as e:
         _load({"ok": _GOOD, "bad_row": row})
     assert "'bad_row'" in str(e.value) and says in str(e.value), str(e.value)
+
+
+def test_in27_the_loader_admits_settled_true_beside_rung_kind():
+    """The control of the refusals above: the optional key is admitted where it may stand."""
+    row = _load({"ok": dict(_GOOD, holds={"rung_kind": "territory", "settled": True})})["ok"]
+    assert row.holds == ("rung_kind", "territory") and row.settled is True, row
+    assert _load({"ok": dict(_GOOD, holds={"rung_kind": "territory"})})["ok"].settled is False
 
 
 def test_in27_the_loader_refuses_a_second_victory_row():
