@@ -353,9 +353,15 @@ def _ungraded(row) -> bool:
 
 def _live(w, h) -> bool:
     """A HELD CLAIM THAT IS STILL LIVE: read at a confidence above 0 at `w.tick` (`present_confidence`, the one owner of the fade -- the
-    reading `epistemic.holds_trail` takes). The three exact-triple dedup guards below ask it of the held copy they would skip on: a claim he
+    reading `epistemic.holds_trail` takes). The exact-triple dedup guard (`_holds_live`) asks it of the held copy it would skip on: a claim he
     has FORGOTTEN does not block a re-deposit (a trail re-offered by `trail_of` must land, and a witness who saw a deed again holds it again)."""
     return ledgers.present_confidence(h.confidence, h.when, w.tick, w.fixtures.claim_decay()) > 0
+
+
+def _holds_live(w, p, subject, predicate, value) -> bool:
+    """THE EXACT-TRIPLE DEDUP GUARD, once: `p` holds a LIVE copy, firsthand-or-told with no chain, of `(subject, predicate, value)` (`_live`). The three
+    deposits that skip on it (a finding's claim, an ungraded deed's repeat, a `concluded:` claim) ask it here."""
+    return any(h.subject == subject and h.predicate == predicate and h.value == value and not h.chain and _live(w, h) for h in p.ledger)
 
 
 def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx):
@@ -400,7 +406,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
             # holding some of what it deposits. Only the triples he lacks are deposited -- the told channel's exact-triple guard (a held copy of
             # the same subject, predicate and value, with no chain, skips), one deposit over; a deposit made earlier in this barrier is
             # already in `p.ledger` (`World.write` applies synchronously), so no second dedup set is kept.
-            if any(h.subject == c.subject and h.predicate == c.predicate and h.value == c.value and not h.chain and _live(w, h) for h in p.ledger):
+            if _holds_live(w, p, c.subject, c.predicate, c.value):
                 continue
             yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cfx)
                          if refracting else c)
@@ -750,7 +756,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if not hand_seen and noticed.get((pid, e.id)) == NOTICE_PARTIAL:
             subjects = non_anchor_subjects(subjects, anchor_of(w, e))
         for n, subj in enumerate(subjects):
-            if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain and _live(w, h) for h in p.ledger):
+            if ungraded and _holds_live(w, p, subj, e.kind, True):
                 continue
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
@@ -924,7 +930,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 _to, _kind, _hand = _concl
                 _said = _hand if HAND_TERM in FINDING_TERMS[e.degree] else True
                 _pred = f"{CONCLUDED_STEM}:{_kind}"
-                if not any(h.subject == _to and h.predicate == _pred and h.value == _said and not h.chain and _live(w, h) for h in p.ledger):
+                if not _holds_live(w, p, _to, _pred, _said):
                     _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"concluded:{e.id}"), pid, _to, _pred, _said, w.tick,
                                       CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL], conf, "own", self.lap, doer=None), e)
         # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.

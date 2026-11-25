@@ -24,7 +24,7 @@ from engine.season.loop.driver import SeasonDriver
 from engine.season.queries import cache
 from engine.season.state.attribution import live_cover
 from engine.season.state.carriers import Act, Event, Proposition, StateChange, Tenure
-from engine.season.tests._flat_fold import flat_fold
+from engine.season.harness.flat_fold import flat_fold
 from engine.season.tests._realm_goldens import SHIPPED
 from engine.season.tests.test_u1_capability_surface import _planted_verb_load, _refused, _row, _shipped_rows
 

@@ -39,7 +39,6 @@ table names `epistemic.py` at layer 9 and that is what this is.
 from __future__ import annotations
 
 from dataclasses import dataclass, fields as _dc_fields
-from types import SimpleNamespace
 from typing import Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, degree_from_net
@@ -50,7 +49,7 @@ from .data.rosters import (
     CLAIM_SUBJECT_RULES, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
     REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, RUNG_KINDS, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
     WITNESS_CHANNELS, require_member, roster)
-from .data.verbs import EVENT_KINDS, VERB_TABLE
+from .data.verbs import DEED_KINDS, EVENT_KINDS, VERB_TABLE
 from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act, live_cover
 from .state.containment import ancestry
@@ -59,7 +58,7 @@ from .state.ledgers import present_confidence
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
 from .queries.inputs import SocialContestInput
-from .queries.person_q import LedgerReader, belief_contradicts, is_deed   # `belief_contradicts` moved to person_q (B11.21), re-bound for its importers
+from .queries.person_q import LedgerReader, belief_contradicts   # `belief_contradicts` moved to person_q (B11.21), re-bound for its importers
 from .state.carriers import Event, Person, subject_of
 from .state.world import World, register_snapshot_type
 
@@ -846,7 +845,7 @@ def notice_on(w: "World") -> bool:
 def notice(w: "World", pid: str, e: "Event", ch: str, trail: Optional[dict] = None) -> Optional[str]:
     """THE BAND OF `pid`'s NOTICE OF `e`, admitted by channel `ch` -- a label of the one ladder -- or `None` where the pair is out of scope and deposits as the channel gives it.
 
-    SCOPE. A pair draws iff `e` is a deed (`person_q.is_deed` on the kind the Event deposits) and `pid` is neither the doer of the act that caused `e` (read from the act store through
+    SCOPE. A pair draws iff `e` is a deed (`DEED_KINDS`, the kinds a deed Event deposits) and `pid` is neither the doer of the act that caused `e` (read from the act store through
     `e.causes`; an Event carries no actor) nor a subject of its changes. A `public` verb row's deed deposits to the co-present, those the PRECEDENCE HEAD channel (`WITNESS_CHANNELS[0]`,
     presence) admitted, without a draw: the act's publicity is the channel's eligibility. [ASSUMPTION; medium; Jordan to correct: a public deed still draws for a person a later channel
     admitted -- basis: the source says "to the co-present", and a seat or a document is not presence.]
@@ -860,7 +859,7 @@ def notice(w: "World", pid: str, e: "Event", ch: str, trail: Optional[dict] = No
 
     `trail`, where given, is filled `{(pid, e.id): (Observation, ...)}` with the reason trail (D-U1-06): the band, the level `notice_ob` names, the two level steps, the cover's quality,
     and every term the composer made the obstacle of -- WITNESS records it on the deposit's `observed`."""
-    if not is_deed(SimpleNamespace(value=True, predicate=e.kind)):
+    if e.kind not in DEED_KINDS:
         return None
     act = causing_act(w, e)
     if (act is not None and act.actor == pid) or any(c.subject == pid for c in e.changes):

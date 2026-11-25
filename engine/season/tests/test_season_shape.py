@@ -28,7 +28,7 @@ from pathlib import Path
 
 import pytest
 
-from ._flat_fold import flat_fold, flat_fold_fixtures
+from ..harness.flat_fold import flat_fold, flat_fold_fixtures
 from .. import decision
 from .. import seam
 from ..data.fixtures import DEFAULT_FIXTURES

@@ -59,7 +59,7 @@ from ..state.carriers import Act, Claim, Office, Proposition, Question, Rung, Te
 from ..state.gate import DISPOSABLE_KINDS, UNDECLARED_DISPOSAL
 from ..state.ids import H, draw_factory
 from ..state.world import World
-from ..tests._flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
+from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .carin import build_world
 from .play_surface import board, carry_on, dispatching_chooser

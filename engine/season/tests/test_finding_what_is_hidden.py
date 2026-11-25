@@ -14,7 +14,7 @@ from engine.season.harness.scenarios import hear, step
 from engine.season.loop.driver import SeasonDriver
 from engine.season.state.attribution import live_cover
 from engine.season.state.carriers import Act, Site
-from engine.season.tests._flat_fold import flat_fold
+from engine.season.harness.flat_fold import flat_fold
 
 DOER, FINDER, BYSTANDER = "p_other", "p_high", "p_low"
 DEED, SITE, COVER = "site.damaged", "site_x", "rec:cv"

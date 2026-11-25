@@ -83,9 +83,9 @@ def _flat_fold_arm(request):
     """`@pytest.mark.flat_fold` (file or test): the task draw is off for the test, so a world built from the default fixtures folds flat.
     `DEFAULT_FIXTURES` is one shared object whose `sweep` copies its values at call time, so setting the one value covers every world
     the test builds, `build_realm`'s and `tiny_world`'s alike; `monkeypatch` undoes it. A MODULE- or SESSION-scoped fixture is set up
-    before this one: it builds its own world through `engine/season/tests/_flat_fold.py::flat_fold`. A test with no mark is untouched."""
+    before this one: it builds its own world through `engine/season/harness/flat_fold.py::flat_fold`. A test with no mark is untouched."""
     if request.node.get_closest_marker("flat_fold") is not None:
         from engine.season.data.fixtures import DEFAULT_FIXTURES
-        from engine.season.tests._flat_fold import ARM
+        from engine.season.harness.flat_fold import ARM
         DEFAULT_FIXTURES.get(ARM)      # a renamed arm raises `Ungraded` here instead of setting a dead key and leaving the draw on
         request.getfixturevalue("monkeypatch").setitem(DEFAULT_FIXTURES._v, ARM, "off")

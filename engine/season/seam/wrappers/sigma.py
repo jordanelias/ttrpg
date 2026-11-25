@@ -60,7 +60,6 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
-import math
 import sys
 from dataclasses import asdict
 from types import SimpleNamespace
@@ -77,7 +76,7 @@ from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
 from ...data.verbs import FORM_INQUIRY, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...epistemic import trail_concealment
-from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels, _edge_scale  # noqa: F401  (moved: see edge.py)
+from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
 from ...queries.person_q import believed_capability, stance_toward

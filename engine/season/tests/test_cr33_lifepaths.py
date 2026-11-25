@@ -26,7 +26,7 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.seam.wrappers import pool, sigma
 from engine.season.state.carriers import Act, Person, Question
 from engine.season.state.gate import WriteClass
-from ._flat_fold import flat_fold
+from ..harness.flat_fold import flat_fold
 from .test_in10_record_operands import _resolve
 
 pytestmark = pytest.mark.flat_fold

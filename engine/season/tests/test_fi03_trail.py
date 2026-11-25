@@ -46,7 +46,7 @@ import pytest
 
 from engine.substrate import composition
 
-from ._flat_fold import flat_fold
+from ..harness.flat_fold import flat_fold
 from .. import epistemic
 from ..data import files, rosters, verbs
 from ..data.fixtures import DEFAULT_FIXTURES

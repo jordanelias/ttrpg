@@ -484,6 +484,17 @@ def settle_confidences(cands: list, scores: dict) -> tuple:
     return kept, {id(c): scores[id(c)] for c in kept}
 
 
+def _gumbel(draw, pid, purpose: str) -> float:
+    """ONE KEYED GUMBEL DRAW, `-log(-log(u))`, the noise `_sample_order` and `settle_conclusions` rank by. `u` is re-read from the SAME stream while it is
+    0.0 (`random()` is [0,1) and log(0) is the one unusable draw): the stream advances, so the loop terminates; re-seeding would return the same value
+    forever (`_sample_order`'s note on the zero guard)."""
+    rng = draw(pid, purpose)
+    u = rng.random()
+    while u <= 0.0:
+        u = rng.random()
+    return -fmath.log(-fmath.log(u))
+
+
 def settle_conclusions(cands: list, scores: dict, p: Person, fx: "Fixtures", draw) -> tuple:
     """ONE SUSPECT PER CONCLUSION, DRAWN BY HIS SUPPORT (v12 B11.75, `19_LACUNA` R-19-04): of the `reconstruct` Candidates that differ only in WHICH DOER his ledger names (same verb,
     subject and seat -- the same `act_key` once `CONCLUDED_RANK_KEY` is left out), exactly one survives, `settle_confidences`' shape. The Candidates are the variants `opening_set`
@@ -522,11 +533,7 @@ def settle_conclusions(cands: list, scores: dict, p: Person, fx: "Fixtures", dra
                 if sp <= 0:
                     continue
                 _to, _kind, _doer = c.operands[CONCLUDED_KEY]      # keyed on WHO and WHAT is concluded, never on the variant's place in a list
-                rng = draw(p.id, f"conclude:{c.subject}:{_kind}:{_doer}")
-                u = rng.random()
-                while u <= 0.0:
-                    u = rng.random()
-                keyed.append((fmath.log(sp) - fmath.log(-fmath.log(u)), -i))
+                keyed.append((fmath.log(sp) + _gumbel(draw, p.id, f"conclude:{c.subject}:{_kind}:{_doer}"), -i))
             best = -max(keyed)[1]
         keep.add(id(fam[best]))
     kept = [c for c in cands if (c.operands or {}).get(CONCLUDED_RANK_KEY) is None or id(c) in keep]
@@ -764,11 +771,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
         # loop exists to handle. `random()` returns exactly 0.0 about once in 2^53 draws: a guard
         # that cannot do its job is not a weak guard but an absent one (`CLAUDE.md` §0.1 pt 2),
         # and a hang is the worst shape for one.
-        rng = draw(p.id, f"choice:{c.verb}:{c.subject or '-'}")
-        u = rng.random()
-        while u <= 0.0:                   # `random()` is [0,1); log(0) is the one unusable draw
-            u = rng.random()              # SAME stream, so it advances and can terminate
-        g = -fmath.log(-fmath.log(u))
+        g = _gumbel(draw, p.id, f"choice:{c.verb}:{c.subject or '-'}")
         # the trailing two terms are a STABLE TOTAL ORDER for exact float ties, which continuous
         # noise makes measure-zero; they are not the tie-break -- `g` is.
         keyed.append((-(score(c) / tau + g), c.verb, c.subject or "", c))

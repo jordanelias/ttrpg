@@ -2372,7 +2372,6 @@ def telling_hearers(claims, actor, fx) -> tuple:
     return present_persons(claims, actor) if arm == "seen_since_move" else known_persons(claims, actor)
 
 
-_is_cell = is_cell                      # the name the moved bodies spell it by (`decision/options.py` imported `is_cell as _is_cell`)
 
 
 # --- B11.21: moved byte for byte from `decision/options.py` (`agreement` .. `teller_weight`) and `epistemic.py` (`belief_contradicts`) ---
@@ -2618,7 +2617,7 @@ def dissents(p: Person, c: Claim, act=None, weigh=None, decay: int = 0) -> bool:
          * a claim ABOUT `p` on a `person_predicates` member: `agreement` -- §18.2's comparison of
            what others read off you against what you hold true of yourself, which is `AX-7`'s
            *"(2) IS REVISABLE BY (3)"* seen from the receiving end;
-         * a claim on a CELL (`_is_cell`): `record`'s pairing, `(subject, predicate)`;
+         * a claim on a CELL (`is_cell`): `record`'s pairing, `(subject, predicate)`;
          * anything else -- an event-kind claim (always `True`), a `seen` struct (each sighting a
            new value, so it would "disagree" with the sighting it reports), a `content:` claim --
            nothing, for the reason `record`'s docstring gives for not scoring those.
@@ -2640,8 +2639,8 @@ def dissents(p: Person, c: Claim, act=None, weigh=None, decay: int = 0) -> bool:
     if c.subject == p.id and c.predicate in PERSON_PREDICATES:
         if agreement([c], [x for x in own if x.subject == p.id], tick, decay)[1] > 0:
             return True
-    elif _is_cell(c):
-        if _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate), None, tick, decay)[1] > 0:
+    elif is_cell(c):
+        if _pair([c], [x for x in own if is_cell(x)], lambda x: (x.subject, x.predicate), None, tick, decay)[1] > 0:
             return True
     if act is None:
         return False
@@ -2799,7 +2798,7 @@ def record(p: Person, teller: str, fx: "Fixtures", tick: int = 0) -> float:
     `p.ledger` and nothing else, so another person's claims cannot move it (`p` never reads a
     ledger it does not hold).
 
-    ⚠ ONLY CELL PREDICATES PAIR (`_is_cell`, `data/requires.py: CELL_STEMS`), BOTH SIDES. A `seen`
+    ⚠ ONLY CELL PREDICATES PAIR (`is_cell`, `data/requires.py: CELL_STEMS`), BOTH SIDES. A `seen`
     claim is not a cell -- each sighting is a distinct `Seen` value, so a told sighting would
     "disagree" with the very sighting it reports -- and an event-kind claim (`news.told` ...) is
     always `True`, so any pair of them agrees for free. The firsthand claim paired against is the
@@ -2819,8 +2818,8 @@ def record(p: Person, teller: str, fx: "Fixtures", tick: int = 0) -> float:
     credited on the next cell -- and it is also why `record_gain` 0 (the control) is the only arm on
     which a told claim's weight is independent of the firsthand claims it contradicts."""
     gain = fx.get("record_gain")
-    told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
-    own = [c for c in p.ledger if c.firsthand and _is_cell(c)]
+    told = [c for c in p.ledger if c.teller == teller and is_cell(c)]
+    own = [c for c in p.ledger if c.firsthand and is_cell(c)]
     # B11.75 (R-19-05; `proposals/v12_B11_a_conclusion_acted_on.md` §2): A CONCLUDER IS A TELLER OF HIS OWN CONCLUSION. At `record_concluders` 1 the `told` set also admits what `teller`
     # told `p` as a conclusion that NAMES A DOER (`concluded:<kind>`, value a person -- the `Partial` deposit, value `True`, withholds the hand and says nothing to check), and `own`
     # gains `p`'s own reading of who did each such deed (`concluded_cells`, over his UNTOLD claims), so `_pair` grades it as it grades a told cell: the same agree/disagree rule,
