@@ -14,9 +14,10 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, is_season_count, task_share
+from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, WON, is_season_count, task_share
+from ..data.verbs import VERB_TABLE
 from ..gaps import Forbidden, InstrumentDefect
-from ..queries.world_q import holder_faction_of, occupies, seat_people_at
+from ..queries.world_q import causing_act, holder_faction_of, mustered, occupies, seat_people_at
 from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, seat_faction
 from ..trace_log import TRACE
@@ -181,8 +182,13 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's AGAINST A
     MARCH: one that lost never arrived, so nothing occupies and nothing is seized. Occupation is PRESENCE (R-6, ruled
     for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
-    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. Every
-    decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
+    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. A held place taken
+    without a won field this lap goes to the faction with strictly more persons mustered there (CP-T09-04 (b), Pax Pamir's rule);
+    after a won field the licence is unchanged. B21b.04, the limit: "a won field" is a `field.won` in `w.log` at this `w.tick` whose causing
+    `march` named `rid` (an Event carries no payload; the act's `subject` is the field's rung), and the log takes a lap's Events at the lap's END
+    (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now -- which a `seize` of the same lap precedes, RESOLVE before
+    ENCOUNTER, so it could not have read it either. The seat's side is `seat_people_at` (the faction's members and the seat's sworn there), the
+    holder's `mustered`. Every decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
     committed to the seat's faction, and `may_seize` over the hold it replaces)."""
     rung = w.rungs.get(rid)
     mine = seat_faction(w, via)
@@ -196,4 +202,22 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if not (occupies(w, rid, mine)
             or (rung.kind in SUBTREE_OCCUPATION_KINDS and seat_people_at(w, via, rid))):
         return None
+    if not _field_won_at(w, rid) and len(seat_people_at(w, via, rid)) <= len(mustered(w, rid, holder)):
+        return None
     return mine
+
+
+def _field_won_at(w: "World", rid: str) -> bool:
+    """Did a `march` onto `rid` fold `field.won` this `w.tick`? Read off `w.log` (`world_q.siege_pressed_by`'s shape: the Event's kind off the
+    row, the field's rung off the causing act's `subject`, as an Event carries no payload). THE LOG TAKES A LAP'S EVENTS AT THE LAP'S END, so
+    the tick's earlier laps are read and the lap folding is not."""
+    kind = VERB_TABLE["march"].emits_at(WON)[0]
+    for e in reversed(w.log):
+        if e.emitted_at < w.tick:
+            break
+        if e.kind != kind or e.emitted_at != w.tick:
+            continue
+        a = causing_act(w, e)
+        if a is not None and a.verb == "march" and isinstance(a.payload, dict) and a.payload.get("subject") == rid:
+            return True
+    return False
