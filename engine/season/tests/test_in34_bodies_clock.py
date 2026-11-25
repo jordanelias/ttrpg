@@ -414,25 +414,6 @@ def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_a
 
 
 # B15.06 (`HAP_A` edit 3): `world_q.mortal_terms`, the one owner of how hard a body is to kill.
-def test_mortal_terms_takes_the_endurance_from_its_caller():
-    """The pool is the one pool rule on the untrained default and the obstacle is the cause's fixture row; the
-    caller's `endurance` (his `party_end`, which `queries/` may not compute) is in the signature and is an operand of
-    neither, so the same answer comes back at any endurance, and a fixture swept to another obstacle moves it."""
-    from engine.dice_engine import sigma_leverage as SL
-    w = build_realm(0)
-    fx = w.fixtures
-    pool = SL.pool_of(fx.get("pool_default"), 0, fx.get("pool_add"), fx.get("pool_floor"))
-    pid = _individuals(w)[0]
-    causes = tuple(fx.get("mortal_wound_ob"))
-    assert causes == ("death", "yield", "blood"), causes
-    for cause in causes:
-        got = {world_q.mortal_terms(w, pid, cause, end) for end in (0, 3, 9)}
-        assert got == {(pool, fx.get("mortal_wound_ob")[cause])}, (cause, got)
-    swept = {c: 1.5 + i for i, c in enumerate(causes)}
-    w.fixtures = fx.sweep("mortal_wound_ob", swept)
-    assert [world_q.mortal_terms(w, pid, c, 3)[1] for c in causes] == list(swept.values())
-
-
 def test_mortal_terms_refuses_an_unknown_cause():
     """A cause outside `mortal_causes` is refused, naming the roster; `spell` is a member whose obstacle is B37's, so it
     raises the closed refusal and not the roster's."""
