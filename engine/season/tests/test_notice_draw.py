@@ -35,8 +35,9 @@ SEEDS = range(200)
 
 #: THE ARM-OFF WORLD'S OWN PINS: the realm content hash at seeds 0 to 2, one season, `notice_arm: off` set explicitly (`PYTHONHASHSEED=0`, `reading @0e0383aea` with B11.66's
 #: edit on it, equal to the base's reading at all three seeds). The arm ships `off`, so these are the shipped realm until B11.67 flips it; the test sets the arm, so they hold
-#: whatever it ships. EXPECTED RED UNTIL B11.99 from the first later mover (B11.99 re-reads them on the closing tree).
-ARM_OFF_PINS = {0: "62d9ba9d3922424f337a6736a0e890df", 1: "44aab4b410b7f61eb9bbcf4c18d3d38a", 2: "79340bfbd5095c0667e2e6cad0a49a51"}
+#: whatever it ships. RE-READ AT B11.99 on the batch's closing tree with `notice_arm` set `off` (B11.69, B11.71 to B11.74 moved it after B11.66; B11.67 flipped nothing, so the arm-off world
+#: is the shipped realm and these equal `_realm_goldens.SHIPPED[(s, 1)]`; the B11.66 values are in `git log`).
+ARM_OFF_PINS = {0: "793f29fd22710b5257a00589c34021d9", 1: "fa87fb815a6ecd6dd6639dd82e7437ae", 2: "e3bf99b86b2314a4b5fb90cc8f2fa86e"}
 
 
 def test_public_column_absent_is_refused_at_load():

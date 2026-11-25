@@ -800,8 +800,10 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # gains 7.0; the pools are still many in one season, persons apart.
     # BA1.99 re-pin (BA1.01: the cast's authored `stats:` and `capabilities:` give those persons their own attributes and skill scores;
     # read with `PYTHONHASHSEED=0`, seed 0, one season, the delta in `git log`): still many pools in one season, persons apart.
+    # B11.99 re-pin (B11's declared movers, BA1's too: read once on the closing tree, `PYTHONHASHSEED=0`, seed 0, one season, the realm's rolls now read
+    # fifteen pools; 9.7, 11.3, 11.7, 12.5 and 15.7 are no longer rolled): still many pools in one season, persons apart.
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 9.7, 10.0, 10.3, 10.5, 11.0, 11.3, 11.5, 11.7, 12.0, 12.5, 13.0, 13.5, 15.5, 15.7}
+        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.3, 10.5, 11.0, 11.5, 12.0, 13.0, 13.5, 15.5}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")
