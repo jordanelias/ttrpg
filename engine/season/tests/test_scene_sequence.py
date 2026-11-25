@@ -11,10 +11,8 @@ ENCOUNTER produces.
   RESOLVE on the band nobody fought (`Declared`); a keyed `emits_on_refusal:` row with no `sequence:` key loads; at
   `interactions_per_scene = 1` the realm hash moves (`SEQ` "Falsifier"); a scene's interactions fold out of the chooser's order.
   CONTROLS: `after = None` folds as before; the shipped table loads.
-  EXPECTED RED UNTIL B08.03: `test_scene_folds_contiguously_in_chooser_order` (the scene key is B08.03's).
 
-⚠ UNTIL B08.03 THE FOLD ORDERS ACTS, NOT SCENES, so the planted scenes below declare their strata (`Act.stratum`, which
-`stratum_of` takes at its word) to fold their two interactions in the chooser's order.
+The fold orders SCENES (B08.03), so a planted scene's interactions fold in the chooser's order whatever their strata.
 """
 from __future__ import annotations
 
@@ -105,8 +103,8 @@ class _Spy:
 
 def _challenge_then_fight(after):
     """`[challenge, fight]` (`SEQ`'s own pair): the challenger issues the challenge, then fights the man he challenged."""
-    ch = Act(id="ch0", actor=CHAL, verb="challenge", payload={"subject": ACC}, scene="sc0", stratum=0)
-    f = Act(id="f1", actor=CHAL, verb="fight", payload={"subject": ACC}, scene="sc0", stratum=1, after=after)
+    ch = Act(id="ch0", actor=CHAL, verb="challenge", payload={"subject": ACC}, scene="sc0")
+    f = Act(id="f1", actor=CHAL, verb="fight", payload={"subject": ACC}, scene="sc0", after=after)
     return Scene("sc0", CHAL, acts=[ch, f])
 
 
@@ -138,8 +136,8 @@ def _fight_then_fight(after):
     """`[fight, fight]`: he fights one man and, at the bands `after` names, then a second. `the body` is fought at
     ENCOUNTER (`rosters.yaml`, `step: ENCOUNTER`), so at RESOLVE the first reaches only its declared band."""
     w, d = _world()
-    f0 = Act(id="f0", actor=ACC, verb="fight", payload={"subject": CHAL}, scene="sc0", stratum=1)
-    f1 = Act(id="f1", actor=ACC, verb="fight", payload={"subject": OTHER}, scene="sc0", stratum=2, after=after)
+    f0 = Act(id="f0", actor=ACC, verb="fight", payload={"subject": CHAL}, scene="sc0")
+    f1 = Act(id="f1", actor=ACC, verb="fight", payload={"subject": OTHER}, scene="sc0", after=after)
     spy = _Spy()
     with spy.patch():
         first, second = _run(w, d, Scene("sc0", ACC, acts=[f0, f1]))

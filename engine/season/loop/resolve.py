@@ -61,13 +61,31 @@ from ..trace_log import TRACE
 # -- RESOLVE -- barrier 3 -- the ONLY writing step for acts (S27) -------
 
 def _canonical_order(w: "World", acts: list) -> list:
-    """S27/S32 rest 3: FIVE STRATA, then a CONTENT-DERIVED hash key within each -- extracted
-    from `resolve()`'s own sort (M4, `ED-IN-0279` clause (a)) so `loop/encounter.py` can fold a
+    """B08.03 (`04` §C.4): SCENES are ordered, then flattened. A scene is the acts sharing an `Act.scene`; one
+    holding several is keyed by `(stratum_of(its FIRST interaction), H(seed, tick, that interaction's actor,
+    "order:scene:<scene id>"))` -- FIVE STRATA, then a CONTENT-DERIVED hash key within each, read off the scene as a whole -- and its
+    interactions stay CONTIGUOUS and in the order they arrive (the chooser's: `pack_scenes` composes it, DELIBERATE
+    returns it, RESOLVE's fold keeps it; ENCOUNTER's subset arrives in RESOLVE's fold order). An act with no scene
+    (`a.scene is None`, a bare Act: every existing probe) is its own one-act scene, and so is a scene holding ONE act:
+    each is keyed `(stratum_of(a), H(seed, tick, actor, "order:<verb>:<act id>"))` as before, so one interaction per
+    scene reproduces today's order.
+    Extracted from `resolve()`'s own sort (M4, `ED-IN-0279` clause (a)) so `loop/encounter.py` can fold a
     SUBSET of a lap's acts in the SAME canonical order, rather than re-deriving the rule or
     skipping it (§8: it lives once). No `self`: the ordering is a pure function of the world's
     seed/tick and the acts themselves, not of driver state."""
-    return sorted(acts, key=lambda a: (stratum_of(a),
-                                       H(w.world_seed, w.tick, a.actor, f"order:{a.verb}:{a.id}")))
+    scenes: dict = {}                       # insertion-ordered: a scene's acts in arrival (chooser) order
+    for i, a in enumerate(acts):
+        scenes.setdefault(("scene", a.scene) if a.scene is not None else ("act", i), []).append(a)
+
+    def key(members: list) -> tuple:
+        first = members[0]
+        # A scene of ONE interaction is keyed as that act is (`interactions_per_scene = 1` is today's world, hash-equal:
+        # `test_one_interaction_per_scene_hash_equals_today`); a scene of several is keyed by its id.
+        label = (f"order:scene:{first.scene}" if len(members) > 1 and first.scene is not None
+                 else f"order:{first.verb}:{first.id}")
+        return (stratum_of(first), H(w.world_seed, w.tick, first.actor, label))
+
+    return [a for members in sorted(scenes.values(), key=key) for a in members]
 
 
 def _survives(self, w: "World", a: Act) -> list:
