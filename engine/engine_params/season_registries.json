@@ -276,14 +276,14 @@
           },
           "age_of_faith": {
             "evidence": 1.0,
-            "consequence": 1.0,
-            "authority": 1.0,
+            "consequence": 0.8,
+            "authority": 1.4,
             "solidarity": 1.0
           },
           "mercantile": {
             "evidence": 1.0,
-            "consequence": 1.0,
-            "authority": 1.0,
+            "consequence": 1.4,
+            "authority": 0.8,
             "solidarity": 1.0
           }
         },
@@ -296,48 +296,63 @@
             "admits_add": [],
             "admits_drop": [],
             "power": {
-              "parties": 1.0,
+              "parties": 0.0,
               "polity": 1.0,
-              "church": 1.0,
-              "guild": 1.0,
-              "none": 1.0
+              "church": 0.0,
+              "guild": 0.0,
+              "none": 0.0
             },
             "silence": null,
             "floor": null
           },
           "theocracy": {
-            "unlawful": [],
-            "gravity": 0,
-            "standard": 0,
-            "reason_lean": 0,
-            "admits_add": [],
-            "admits_drop": [],
+            "unlawful": [
+              "debate",
+              "parliamentary_debate",
+              "council_of_state"
+            ],
+            "gravity": 0.5,
+            "standard": 1,
+            "reason_lean": -0.1,
+            "admits_add": [
+              "confession",
+              "oath"
+            ],
+            "admits_drop": [
+              "precedent"
+            ],
             "power": {
-              "parties": 1.0,
-              "polity": 1.0,
-              "church": 1.0,
-              "guild": 1.0,
-              "none": 1.0
+              "parties": 0.0,
+              "polity": 0.0,
+              "church": 2.0,
+              "guild": 0.0,
+              "none": 0.0
             },
-            "silence": null,
+            "silence": "admits",
             "floor": null
           },
           "commune": {
-            "unlawful": [],
+            "unlawful": [
+              "inquisition",
+              "inquisition_hearing",
+              "examination"
+            ],
             "gravity": 0,
-            "standard": 0,
+            "standard": -1,
             "reason_lean": 0,
-            "admits_add": [],
+            "admits_add": [
+              "rumour"
+            ],
             "admits_drop": [],
             "power": {
-              "parties": 1.0,
-              "polity": 1.0,
-              "church": 1.0,
+              "parties": 0.0,
+              "polity": 0.0,
+              "church": 0.0,
               "guild": 1.0,
-              "none": 1.0
+              "none": 0.0
             },
             "silence": null,
-            "floor": null
+            "floor": "open"
           }
         },
         "strife": {
@@ -348,21 +363,21 @@
             "care_want": 0
           },
           "war": {
-            "turns": 0,
-            "unrest": 0,
-            "gravity": 0,
+            "turns": -1,
+            "unrest": 0.5,
+            "gravity": 0.5,
             "care_want": 0
           },
           "famine": {
             "turns": 0,
-            "unrest": 0,
-            "gravity": 0,
-            "care_want": 0
+            "unrest": 0.75,
+            "gravity": 0.25,
+            "care_want": 0.3
           },
           "schism": {
             "turns": 0,
-            "unrest": 0,
-            "gravity": 0,
+            "unrest": 0.25,
+            "gravity": 0.5,
             "care_want": 0
           }
         }
@@ -509,7 +524,7 @@
             5
           ],
           "authority": "parties",
-          "reason_lean": 0,
+          "reason_lean": 0.2,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
@@ -535,7 +550,7 @@
             4
           ],
           "authority": "polity",
-          "reason_lean": 0,
+          "reason_lean": -0.1,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "open",
@@ -559,7 +574,7 @@
             4
           ],
           "authority": "polity",
-          "reason_lean": 0,
+          "reason_lean": -0.1,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
@@ -583,7 +598,7 @@
             5
           ],
           "authority": "polity",
-          "reason_lean": 0,
+          "reason_lean": 0.2,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "open",
@@ -612,7 +627,7 @@
             5
           ],
           "authority": "polity",
-          "reason_lean": 0,
+          "reason_lean": 0.2,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "admitted",
@@ -641,7 +656,7 @@
             5
           ],
           "authority": "polity",
-          "reason_lean": 0,
+          "reason_lean": 0.2,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
@@ -666,7 +681,7 @@
             5
           ],
           "authority": "church",
-          "reason_lean": 0,
+          "reason_lean": 0.2,
           "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
@@ -696,7 +711,7 @@
             4
           ],
           "authority": "church",
-          "reason_lean": 0,
+          "reason_lean": -0.1,
           "close": "declared",
           "quorum": 2,
           "bench_basis": "determine",
@@ -808,7 +823,7 @@
             3
           ],
           "authority": "none",
-          "reason_lean": 0,
+          "reason_lean": -0.3,
           "close": "hearers",
           "bench_basis": "none",
           "floor": "open",
@@ -4363,26 +4378,26 @@
         "grounds": {
           "source": "V2 p2 \u00a7C.2 (`content[g]`, Reason's share of a speech's dice by ground, R11) and \u00a7A.2 (`reads`); V2 p4 \u00a7F 10 (`consequence` is pathos, `evidence` alone logos).",
           "cite": "B24p.01, R11",
-          "note": "WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order. `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1]; `reads` names what the ground's fit reads (`ground_reads`). AT CONTROL every `reason` is 1.0, so the dice are Reason alone; B24p.23 writes the shipped column of V2's model (`sc2/host.py::GROUNDS`), each cell then marked. [ASSUMPTION; Jordan to correct: every `reason` below is the control value, not V2's shipped one -- basis: B24p.01's INSTRUCTION; revert: none, it is the control.]",
+          "note": "WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order. `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1]; `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone); B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2). [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.]",
           "rows": [
             {
               "id": "evidence",
-              "reason": 1.0,
+              "reason": 0.8,
               "reads": "item"
             },
             {
               "id": "consequence",
-              "reason": 1.0,
+              "reason": 0.7,
               "reads": "want"
             },
             {
               "id": "authority",
-              "reason": 1.0,
+              "reason": 0.4,
               "reads": "hold"
             },
             {
               "id": "solidarity",
-              "reason": 1.0,
+              "reason": 0.2,
               "reads": "bond"
             }
           ]

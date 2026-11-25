@@ -1,6 +1,6 @@
 """B24p.07 -- the proceeding's exchange (`modules/social_contest/proceeding.py`): the module's own behaviour, on hand-built records.
 
-No `World`, no driver: a `Present` is built by hand, the dials are `proceeding_dials(DEFAULT_FIXTURES)` (every setting at its control) with the two
+No `World`, no driver: a `Present` is built by hand, the dials are `proceeding_dials(DEFAULT_FIXTURES)` (every setting at V2's shipped value since B24p.23; the control test sets its own, `CONTROL`) with the two
 rosters the host hands in (`dials["moves"]`, `dials["reads"]`, see the module's head). The role tests of the six attributes are `test_sc_roles.py`'s.
 Shared with the sitting's and the close's tests (B24p.11, .12)."""
 from __future__ import annotations
@@ -47,6 +47,11 @@ def _dials(fx=FX, **over) -> dict:
     d["reads"] = {g: r["reads"] for g, r in GROUNDS.items()}
     d.update(over)
     return d
+
+
+#: THE FIFTEEN SETTINGS B24p.04 SHIPPED AT THEIR CONTROL and B24p.23 flipped to V2's value (the model's `CONTROL_ZERO`): a level None, a step 0.
+CONTROL = dict(fit_level=None, answer_level=None, repeat_step=0.0, esteem_step=0.0, off_step=0.0, ploy_step=0.0, grain_strain=0.0, heard_step=0.0,
+               gap_step=0.0, weary_step=0.0, awe_step=0.0, room_level=0.0, heckle=0.0, crowd_lean=0.0, start_step=0.0)
 
 
 def _p(pid, side=None, decides=False, **kw) -> Present:
@@ -100,7 +105,7 @@ def test_at_control_an_abridged_speech_is_the_single_roll():
                 focus=float(g.die(1, 7)), will=float(g.die(1, 7)), rank=float(g.die(0, 3)))
         to = _p("b", decides=True, will=g.die(10, 70) / 10, rank=float(g.die(0, 3)))     # tenths: a pool rounded to a whole die reads differently
         rite = _rite(close="exchange", turns=1, moves=(("for", ("argue",)),), difficulty=(0.5, 1.0, 2.0)[i % 3], gravity=(0.0, 0.5, 1.5)[i % 3])
-        inp = _inp([sp, to], rite)
+        inp = _inp([sp, to], rite, dials=_dials(**CONTROL), grounds=tuple((g, 1.0, 1.0) for g in GROUNDS))
         st = _sit(inp)
         ground = [x for x, r in GROUNDS.items() if r["reads"] != "item"][i % 3]
         rng = _key("speech", i)

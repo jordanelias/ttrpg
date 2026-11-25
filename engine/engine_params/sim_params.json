@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 131,
-    "total": 509,
-    "uncited": 378,
+    "total": 511,
+    "uncited": 380,
     "of_which_assumption_grade": 9
   },
-  "count": 509,
+  "count": 511,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 39,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 205,
+    "engine.season.settings": 207,
     "engine.season.realm": 8
   },
   "params": [
@@ -5442,13 +5442,35 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.settings.fit_level",
+      "name": "fit_level",
+      "value": "strong",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-861`, swept None / strong / major (V2's value, SHIPPED here; the control is None)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.answer_level",
+      "name": "answer_level",
+      "value": "moderate",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-862`, swept None / moderate / strong (V2's value, SHIPPED here; the control is None)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.settings.repeat_step",
       "name": "repeat_step",
-      "value": 0.0,
+      "value": 0.35,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-863`, swept 0.0 / 0.175 / 0.35 (control, SHIPPED here)",
+      "note": "`H-863`, swept 0.0 / 0.175 / 0.35 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5477,11 +5499,11 @@
     {
       "key": "engine.season.settings.esteem_step",
       "name": "esteem_step",
-      "value": 0.0,
+      "value": 0.2,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-866`, swept 0.0 / 0.1 / 0.2 (control, SHIPPED here)",
+      "note": "`H-866`, swept 0.0 / 0.1 / 0.2 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5499,11 +5521,11 @@
     {
       "key": "engine.season.settings.off_step",
       "name": "off_step",
-      "value": 0.0,
+      "value": 1.0,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-868`, swept 0.0 / 0.5 / 1.0 (control, SHIPPED here)",
+      "note": "`H-868`, swept 0.0 / 0.5 / 1.0 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5532,33 +5554,33 @@
     {
       "key": "engine.season.settings.ploy_step",
       "name": "ploy_step",
-      "value": 0.0,
+      "value": 1.5,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-871`, swept 0.0 / 0.75 / 1.5 (control, SHIPPED here)",
+      "note": "`H-871`, swept 0.0 / 0.75 / 1.5 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.grain_strain",
       "name": "grain_strain",
-      "value": 0.0,
+      "value": 0.5,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-872`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)",
+      "note": "`H-872`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.heard_step",
       "name": "heard_step",
-      "value": 0.0,
+      "value": 0.05,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-873`, swept 0.0 / 0.025 / 0.05 (control, SHIPPED here)",
+      "note": "`H-873`, swept 0.0 / 0.025 / 0.05 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5576,22 +5598,22 @@
     {
       "key": "engine.season.settings.gap_step",
       "name": "gap_step",
-      "value": 0.0,
+      "value": 0.25,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-875`, swept 0.0 / 0.125 / 0.25 (control, SHIPPED here)",
+      "note": "`H-875`, swept 0.0 / 0.125 / 0.25 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.weary_step",
       "name": "weary_step",
-      "value": 0.0,
+      "value": 0.5,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-876`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)",
+      "note": "`H-876`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5620,11 +5642,11 @@
     {
       "key": "engine.season.settings.awe_step",
       "name": "awe_step",
-      "value": 0.0,
+      "value": 0.5,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-879`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)",
+      "note": "`H-879`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5752,22 +5774,22 @@
     {
       "key": "engine.season.settings.room_level",
       "name": "room_level",
-      "value": 0.0,
+      "value": 0.5,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-891`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)",
+      "note": "`H-891`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.heckle",
       "name": "heckle",
-      "value": 0.0,
+      "value": 1.0,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-892`, swept 0.0 / 0.5 / 1.0 (control, SHIPPED here)",
+      "note": "`H-892`, swept 0.0 / 0.5 / 1.0 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5807,11 +5829,11 @@
     {
       "key": "engine.season.settings.crowd_lean",
       "name": "crowd_lean",
-      "value": 0.0,
+      "value": 0.2,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-896`, swept 0.0 / 0.1 / 0.2 (control, SHIPPED here)",
+      "note": "`H-896`, swept 0.0 / 0.1 / 0.2 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },
@@ -5961,11 +5983,11 @@
     {
       "key": "engine.season.settings.start_step",
       "name": "start_step",
-      "value": 0.0,
+      "value": 2.0,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-910`, swept 0.0 / 1.0 / 2.0 (control, SHIPPED here)",
+      "note": "`H-910`, swept 0.0 / 1.0 / 2.0 (V2's value, SHIPPED here; the control is 0.0)",
       "citation": null,
       "citation_grade": null
     },

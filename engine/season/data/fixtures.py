@@ -1333,19 +1333,19 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-483 -- site: Fixtures self_told_floor, graded `assumption`; no document gives how far he must credit a teller before he believes a thing of himself, so it is injected at the control and swept 0 / 0.5 / 0.75]
     self_told_floor=0.0,               # `H-483`, swept 0 (control, SHIPPED) / 0.5 / 0.75
     # B24p.04 (V2 p2 §K): THE PROCEEDING'S OWN FIFTY-FOUR SETTINGS, each `[ASSUMPTION; Jordan to correct]`, read through `seam/wrappers/sigma.py::proceeding_dials`.
-    # A setting V2 p2 §K names a control for SHIPS at that control (the levels None; `repeat_step`, `esteem_step`, `off_step`, `ploy_step`, `grain_strain`, `start_step`,
-    # `crowd_lean`, `heckle`, `room_level`, `heard_step`, `gap_step`, `weary_step`, and `awe_step`, the model's control set, at 0), and B24p.23 writes V2's shipped value; every
-    # other ships V2's value. Nothing reads any of them yet. `yield_track` and `sympathy_step` are cut (V2 p4 §L 3, §K C-dead) and are not here.
+    # Every setting ships V2's value. B24p.04 left fifteen at the CONTROL (the levels `fit_level` and `answer_level` None; `repeat_step`, `esteem_step`, `off_step`,
+    # `ploy_step`, `grain_strain`, `start_step`, `crowd_lean`, `heckle`, `room_level`, `heard_step`, `gap_step`, `weary_step` and `awe_step` at 0, the model's `CONTROL_ZERO`);
+    # B24p.23 wrote V2's shipped value on each, and each line's comment names the control it left. Readers: `seam/wrappers/sigma.py::proceeding_dials`. `yield_track` and `sympathy_step` are cut (V2 p4 §L 3, §K C-dead) and are not here.
     # ---- the speech
     # [ASSUMPTION; Jordan to correct; revert: `None`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-861 -- site: Fixtures fit_level, graded `assumption`; V2 p2 §K gives "strong" and names the control `None`, and no document derives either, so it is injected at the control and swept None / strong / major]
-    fit_level=None,                   # `H-861`, swept None / strong / major (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-861 -- site: Fixtures fit_level, graded `assumption`; V2 p2 §K gives "strong" and names the control `None`, and no document derives either, so it is injected at V2's shipped value (the control is `None`) and swept None / strong / major]
+    fit_level="strong",                   # `H-861`, swept None / strong / major (V2's value, SHIPPED here; the control is None)
     # [ASSUMPTION; Jordan to correct; revert: `None`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-862 -- site: Fixtures answer_level, graded `assumption`; V2 p2 §K gives "moderate" and names the control `None`, and no document derives either, so it is injected at the control and swept None / moderate / strong]
-    answer_level=None,                # `H-862`, swept None / moderate / strong (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-862 -- site: Fixtures answer_level, graded `assumption`; V2 p2 §K gives "moderate" and names the control `None`, and no document derives either, so it is injected at V2's shipped value (the control is `None`) and swept None / moderate / strong]
+    answer_level="moderate",                # `H-862`, swept None / moderate / strong (V2's value, SHIPPED here; the control is None)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-863 -- site: Fixtures repeat_step, graded `assumption`; V2 p2 §K gives 0.35 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.175 / 0.35]
-    repeat_step=0.0,                  # `H-863`, swept 0.0 / 0.175 / 0.35 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-863 -- site: Fixtures repeat_step, graded `assumption`; V2 p2 §K gives 0.35 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.175 / 0.35]
+    repeat_step=0.35,                  # `H-863`, swept 0.0 / 0.175 / 0.35 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-864 -- site: Fixtures sense_step, graded `assumption`; V2 p2 §K gives 0.15 and no document derives it, so it is injected and swept 0.075 / 0.15 / 0.3]
     sense_step=0.15,                  # `H-864`, swept 0.075 / 0.15 / 0.3 (V2's value, SHIPPED here)
@@ -1353,14 +1353,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-865 -- site: Fixtures involve, graded `assumption`; V2 p2 §K gives 0.3 and no document derives it, so it is injected and swept 0.15 / 0.3 / 0.6]
     involve=0.3,                      # `H-865`, swept 0.15 / 0.3 / 0.6 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-866 -- site: Fixtures esteem_step, graded `assumption`; V2 p2 §K gives 0.2 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.1 / 0.2]
-    esteem_step=0.0,                  # `H-866`, swept 0.0 / 0.1 / 0.2 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-866 -- site: Fixtures esteem_step, graded `assumption`; V2 p2 §K gives 0.2 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.1 / 0.2]
+    esteem_step=0.2,                  # `H-866`, swept 0.0 / 0.1 / 0.2 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-867 -- site: Fixtures show, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     show=1.0,                         # `H-867`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-868 -- site: Fixtures off_step, graded `assumption`; V2 p2 §K gives 1.0 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
-    off_step=0.0,                     # `H-868`, swept 0.0 / 0.5 / 1.0 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-868 -- site: Fixtures off_step, graded `assumption`; V2 p2 §K gives 1.0 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.5 / 1.0]
+    off_step=1.0,                     # `H-868`, swept 0.0 / 0.5 / 1.0 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-869 -- site: Fixtures admit_step, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     admit_step=0.5,                   # `H-869`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
@@ -1368,23 +1368,23 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-870 -- site: Fixtures contempt_step, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     contempt_step=1.0,                # `H-870`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-871 -- site: Fixtures ploy_step, graded `assumption`; V2 p2 §K gives 1.5 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.75 / 1.5]
-    ploy_step=0.0,                    # `H-871`, swept 0.0 / 0.75 / 1.5 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-871 -- site: Fixtures ploy_step, graded `assumption`; V2 p2 §K gives 1.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.75 / 1.5]
+    ploy_step=1.5,                    # `H-871`, swept 0.0 / 0.75 / 1.5 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-872 -- site: Fixtures grain_strain, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.25 / 0.5]
-    grain_strain=0.0,                 # `H-872`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-872 -- site: Fixtures grain_strain, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.25 / 0.5]
+    grain_strain=0.5,                 # `H-872`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-873 -- site: Fixtures heard_step, graded `assumption`; V2 p2 §K gives 0.05 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.025 / 0.05]
-    heard_step=0.0,                   # `H-873`, swept 0.0 / 0.025 / 0.05 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-873 -- site: Fixtures heard_step, graded `assumption`; V2 p2 §K gives 0.05 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.025 / 0.05]
+    heard_step=0.05,                   # `H-873`, swept 0.0 / 0.025 / 0.05 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-874 -- site: Fixtures heard_floor, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     heard_floor=0.5,                  # `H-874`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-875 -- site: Fixtures gap_step, graded `assumption`; V2 p2 §K gives 0.25 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.125 / 0.25]
-    gap_step=0.0,                     # `H-875`, swept 0.0 / 0.125 / 0.25 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-875 -- site: Fixtures gap_step, graded `assumption`; V2 p2 §K gives 0.25 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.125 / 0.25]
+    gap_step=0.25,                     # `H-875`, swept 0.0 / 0.125 / 0.25 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-876 -- site: Fixtures weary_step, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.25 / 0.5]
-    weary_step=0.0,                   # `H-876`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-876 -- site: Fixtures weary_step, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.25 / 0.5]
+    weary_step=0.5,                   # `H-876`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-877 -- site: Fixtures stay_base, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
     stay_base=1.0,                    # `H-877`, swept 0.5 / 1.0 / 2.0 (V2's value, SHIPPED here)
@@ -1392,8 +1392,8 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-878 -- site: Fixtures stay_per_will, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     stay_per_will=0.5,                # `H-878`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-879 -- site: Fixtures awe_step, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.25 / 0.5]
-    awe_step=0.0,                     # `H-879`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-879 -- site: Fixtures awe_step, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.25 / 0.5]
+    awe_step=0.5,                     # `H-879`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-880 -- site: Fixtures comfort_step, graded `assumption`; V2 p2 §K gives 0.5 and no document derives it, so it is injected and swept 0.25 / 0.5 / 1.0]
     comfort_step=0.5,                 # `H-880`, swept 0.25 / 0.5 / 1.0 (V2's value, SHIPPED here)
@@ -1429,11 +1429,11 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-890 -- site: Fixtures reactance, graded `assumption`; V2 p2 §K gives 0.75 and no document derives it, so it is injected and swept 0.5 / 0.75 / 1.0]
     reactance=0.75,                   # `H-890`, swept 0.5 / 0.75 / 1.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-891 -- site: Fixtures room_level, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.25 / 0.5]
-    room_level=0.0,                   # `H-891`, swept 0.0 / 0.25 / 0.5 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-891 -- site: Fixtures room_level, graded `assumption`; V2 p2 §K gives 0.5 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.25 / 0.5]
+    room_level=0.5,                   # `H-891`, swept 0.0 / 0.25 / 0.5 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-892 -- site: Fixtures heckle, graded `assumption`; V2 p2 §K gives 1.0 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
-    heckle=0.0,                       # `H-892`, swept 0.0 / 0.5 / 1.0 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-892 -- site: Fixtures heckle, graded `assumption`; V2 p2 §K gives 1.0 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.5 / 1.0]
+    heckle=1.0,                       # `H-892`, swept 0.0 / 0.5 / 1.0 (V2's value, SHIPPED here; the control is 0.0)
     # ---- conceding
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-893 -- site: Fixtures concede_step, graded `assumption`; V2 p2 §K gives 1.0 and no document derives it, so it is injected and swept 0.5 / 1.0 / 2.0]
@@ -1446,8 +1446,8 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-895 -- site: Fixtures crowd_at, graded `assumption`; V2 p2 §K gives 12.0 and no document derives it, so it is injected and swept 6.0 / 12.0 / 24.0]
     crowd_at=12.0,                    # `H-895`, swept 6.0 / 12.0 / 24.0 (V2's value, SHIPPED here)
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-896 -- site: Fixtures crowd_lean, graded `assumption`; V2 p2 §K gives 0.2 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 0.1 / 0.2]
-    crowd_lean=0.0,                   # `H-896`, swept 0.0 / 0.1 / 0.2 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-896 -- site: Fixtures crowd_lean, graded `assumption`; V2 p2 §K gives 0.2 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 0.1 / 0.2]
+    crowd_lean=0.2,                   # `H-896`, swept 0.0 / 0.1 / 0.2 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-897 -- site: Fixtures mood_scale, graded `assumption`; V2 p2 §K gives 5.0 and no document derives it, so it is injected and swept 2.5 / 5.0 / 10.0]
     mood_scale=5.0,                   # `H-897`, swept 2.5 / 5.0 / 10.0 (V2's value, SHIPPED here)
@@ -1491,8 +1491,8 @@ DEFAULT_FIXTURES = Fixtures(
     pride=2.0,                        # `H-909`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)
     # ---- the host
     # [ASSUMPTION; Jordan to correct; revert: `0.0`, the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-910 -- site: Fixtures start_step, graded `assumption`; V2 p2 §K gives 2.0 and names the control `0.0`, and no document derives either, so it is injected at the control and swept 0.0 / 1.0 / 2.0]
-    start_step=0.0,                   # `H-910`, swept 0.0 / 1.0 / 2.0 (control, SHIPPED here)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-910 -- site: Fixtures start_step, graded `assumption`; V2 p2 §K gives 2.0 and names the control `0.0`, and no document derives either, so it is injected at V2's shipped value (the control is `0.0`) and swept 0.0 / 1.0 / 2.0]
+    start_step=2.0,                   # `H-910`, swept 0.0 / 1.0 / 2.0 (V2's value, SHIPPED here; the control is 0.0)
     # [ASSUMPTION; Jordan to correct; revert: none needed, nothing reads it.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-911 -- site: Fixtures presume_step, graded `assumption`; V2 p2 §K gives 2.0 and no document derives it, so it is injected and swept 1.0 / 2.0 / 4.0]
     presume_step=2.0,                 # `H-911`, swept 1.0 / 2.0 / 4.0 (V2's value, SHIPPED here)

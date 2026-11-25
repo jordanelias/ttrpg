@@ -190,29 +190,33 @@ rites:
     moves:            {for: [argue, rest], against: [argue, press, rest]}
 
 # ══════════════════════════════════════════════════════════════════════════════════════════════════════════
-# B24p.03: CONTEXT (V2 p2 §I) -- era, regime and strife as CELL DELTAS the builder reads (B24p.13); no code per kind. AT CONTROL until B24p.23
-# writes V2's (`sc2/host.py::ERAS`, `::REGIMES`, `::STRIFE`): every era weight 1.0, every delta 0, nothing unlawful, nothing added to or dropped
-# from `admits`, every authority's `power` 1.0, no `silence` or `floor` override (`null`). So nothing here moves a number until then; the
-# regime's `gravity` delta (V2 p2 §I: theocracy +0.5, crown and commune 0) is written with the rest. `eras`: a weight for each ground
+# B24p.03: CONTEXT (V2 p2 §I) -- era, regime and strife as CELL DELTAS the builder reads (B24p.13); no code per kind. B24p.03 wrote it AT CONTROL (every
+# era weight 1.0, every delta 0, nothing unlawful, nothing added to or dropped from `admits`, every authority's `power` 1.0, no `silence` or
+# `floor` override); B24p.23 wrote V2's (`sc2/host.py::ERAS`, `::REGIMES`, `::STRIFE`), each cell `[ASSUMPTION; Jordan to correct; revert: the control above]`.
+# The regime's `gravity` delta is V2 p2 §I's (theocracy +0.5, crown and commune 0). A regime's `power` is the model's `power` dict: the weight of
+# each authority it names, and 0 for each it does not (the model reads `.get(auth, 0.0)`, as `_power` does), so a crown weighs the polity and
+# no other seat, a theocracy the church at 2.0, a commune the guild; the loader takes a weight of 0 or more. `eras`: a weight for each ground
 # (`rosters.yaml: grounds`). `regimes`: `unlawful` names rites or arrangement ids; `standard` and `reason_lean` are deltas on the row's;
 # `admits_add`/`admits_drop` are `matters` members; `power` weighs each `authorities` member; `silence`/`floor` override the rite's and the
 # row's. `strife`: `turns` (whole, added to the row's), `unrest`, `gravity`, `care_want`. [ASSUMPTION; Jordan to correct: the table's key
 # set and every control value.]
 # ══════════════════════════════════════════════════════════════════════════════════════════════════════════
 context:
+  # [ASSUMPTION; Jordan to correct; revert: the control (every weight 1.0, every delta 0, nothing unlawful) -- basis: V2 p2 §I; the cells are the running model's
+  # `sc2/host.py::ERAS`, `::REGIMES`, `::STRIFE`, each a ground or key the model leaves unnamed read at its neutral value.]
   eras:
     plain:        {evidence: 1.0, consequence: 1.0, authority: 1.0, solidarity: 1.0}
-    age_of_faith: {evidence: 1.0, consequence: 1.0, authority: 1.0, solidarity: 1.0}
-    mercantile:   {evidence: 1.0, consequence: 1.0, authority: 1.0, solidarity: 1.0}
+    age_of_faith: {evidence: 1.0, consequence: 0.8, authority: 1.4, solidarity: 1.0}
+    mercantile:   {evidence: 1.0, consequence: 1.4, authority: 0.8, solidarity: 1.0}
   regimes:
-    crown:     {unlawful: [], gravity: 0, standard: 0, reason_lean: 0, admits_add: [], admits_drop: [], power: {parties: 1.0, polity: 1.0, church: 1.0, guild: 1.0, none: 1.0}, silence: null, floor: null}
-    theocracy: {unlawful: [], gravity: 0, standard: 0, reason_lean: 0, admits_add: [], admits_drop: [], power: {parties: 1.0, polity: 1.0, church: 1.0, guild: 1.0, none: 1.0}, silence: null, floor: null}
-    commune:   {unlawful: [], gravity: 0, standard: 0, reason_lean: 0, admits_add: [], admits_drop: [], power: {parties: 1.0, polity: 1.0, church: 1.0, guild: 1.0, none: 1.0}, silence: null, floor: null}
+    crown:     {unlawful: [], gravity: 0, standard: 0, reason_lean: 0, admits_add: [], admits_drop: [], power: {parties: 0.0, polity: 1.0, church: 0.0, guild: 0.0, none: 0.0}, silence: null, floor: null}
+    theocracy: {unlawful: [debate, parliamentary_debate, council_of_state], gravity: 0.5, standard: 1, reason_lean: -0.1, admits_add: [confession, oath], admits_drop: [precedent], power: {parties: 0.0, polity: 0.0, church: 2.0, guild: 0.0, none: 0.0}, silence: admits, floor: null}
+    commune:   {unlawful: [inquisition, inquisition_hearing, examination], gravity: 0, standard: -1, reason_lean: 0, admits_add: [rumour], admits_drop: [], power: {parties: 0.0, polity: 0.0, church: 0.0, guild: 1.0, none: 0.0}, silence: null, floor: open}
   strife:
     peace:  {turns: 0, unrest: 0, gravity: 0, care_want: 0}
-    war:    {turns: 0, unrest: 0, gravity: 0, care_want: 0}
-    famine: {turns: 0, unrest: 0, gravity: 0, care_want: 0}
-    schism: {turns: 0, unrest: 0, gravity: 0, care_want: 0}
+    war:    {turns: -1, unrest: 0.5, gravity: 0.5, care_want: 0}
+    famine: {turns: 0, unrest: 0.75, gravity: 0.25, care_want: 0.3}
+    schism: {turns: 0, unrest: 0.25, gravity: 0.5, care_want: 0}
 
 # ══════════════════════════════════════════════════════════════════════════════════════════════════════════
 # B24p.03: DISPOSAL (V2 p2 §J) -- `(what a row disposes, band) -> typed writes`; the fold performs every one (B24p.20, B24p.22, B27.28,
@@ -278,7 +282,7 @@ arrangements:
     rite:               trial
     turns:              [2, 5]
     authority:          parties
-    reason_lean:        0
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              closed
@@ -299,7 +303,7 @@ arrangements:
     rite:               debate
     turns:              [2, 4]
     authority:          polity
-    reason_lean:        0
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              open
@@ -325,7 +329,7 @@ arrangements:
     rite:               debate
     turns:              [2, 4]
     authority:          polity
-    reason_lean:        0
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              closed
@@ -361,7 +365,7 @@ arrangements:
     rite:               trial
     turns:              [2, 5]
     authority:          polity
-    reason_lean:        0
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              open
@@ -388,7 +392,7 @@ arrangements:
     rite:               trial
     turns:              [2, 5]
     authority:          polity
-    reason_lean:        0
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              admitted
@@ -410,7 +414,7 @@ arrangements:
     rite:               inquisition
     turns:              [2, 5]
     authority:          polity
-    reason_lean:        0
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `inquisition` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              closed
@@ -432,7 +436,7 @@ arrangements:
     rite:               inquisition
     turns:              [2, 5]
     authority:          church
-    reason_lean:        0
+    reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `inquisition` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              closed
@@ -473,7 +477,7 @@ arrangements:
     rite:               debate
     turns:              [2, 4]
     authority:          church
-    reason_lean:        0
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
     close:              declared
     quorum:             2
     bench_basis:        determine
@@ -500,7 +504,7 @@ arrangements:
     rite:               negotiation
     turns:              [1, 3]
     authority:          parties
-    reason_lean:        0
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `negotiation` rite (`sc2/host.py::RITES`)
     close:              consent
     bench_basis:        none
     floor:              closed
@@ -516,8 +520,8 @@ arrangements:
 
   # ════════════════════════════════════════════════════════════════════════════════════════════════════
   # B24p.03: FOUR NEW ROWS (V2 p1 §D), each a rite arranged. Every cell is [ASSUMPTION; Jordan to correct]: `turns`, `floor`, `authority`,
-  # `admits` and `disposes` are the running model's (`sc2/host.py::RITES`); `reason_lean: 0` is the control (the venue leans nothing until
-  # B24p.23 writes V2's); `standard: plain`, `venue_min_rank: hearth`, `records_dissent: false`, `term_required: false`,
+  # `admits` and `disposes` are the running model's (`sc2/host.py::RITES`); `reason_lean` was 0, the control (the venue leaned nothing),
+  # until B24p.23 wrote V2's (`sc2/host.py::RITES`; the model's value for the rite, on the row's own line); `standard: plain`, `venue_min_rank: hearth`, `records_dissent: false`, `term_required: false`,
   # `appeal_basis: none`, `interposed: []` and `disposal_reach: room` are the loosest values, authored nowhere. `bench_basis: none` on the
   # three rows the hearers close (no bench sits), `determine` on `audience` (a seat decides).
   # ════════════════════════════════════════════════════════════════════════════════════════════════════
@@ -528,7 +532,7 @@ arrangements:
     rite:               conversation
     turns:              [1, 3]
     authority:          parties
-    reason_lean:        0
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `conversation` rite (`sc2/host.py::RITES`)
     close:              hearers
     bench_basis:        none
     floor:              closed
@@ -549,7 +553,7 @@ arrangements:
     rite:               questioning
     turns:              [1, 4]
     authority:          parties
-    reason_lean:        0
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `questioning` rite (`sc2/host.py::RITES`)
     close:              hearers
     bench_basis:        none
     floor:              closed
@@ -569,7 +573,7 @@ arrangements:
     rite:               rally
     turns:              [1, 3]
     authority:          none
-    reason_lean:        0
+    reason_lean:        -0.3    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `rally` rite (`sc2/host.py::RITES`)
     close:              hearers
     bench_basis:        none
     floor:              open
@@ -589,7 +593,7 @@ arrangements:
     rite:               audience
     turns:              [1, 2]
     authority:          polity
-    reason_lean:        0
+    reason_lean:        0    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `audience` rite (`sc2/host.py::RITES`)
     close:              bench
     bench_basis:        determine
     floor:              admitted

@@ -7163,7 +7163,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fit_level` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "None -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is \"strong\", written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `None`]"
+    default:   "\"strong\" -- V2's SHIPPED VALUE, written by B24p.23 (the control was None, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `None`, the control]"
     site:      "Fixtures fit_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [null, "strong", "major"]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7176,7 +7176,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_level` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "None -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is \"moderate\", written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `None`]"
+    default:   "\"moderate\" -- V2's SHIPPED VALUE, written by B24p.23 (the control was None, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `None`, the control]"
     site:      "Fixtures answer_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [null, "moderate", "strong"]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7189,7 +7189,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.repeat_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.35, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.35 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures repeat_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.175, 0.35]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7228,7 +7228,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.esteem_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.2, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.2 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures esteem_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.1, 0.2]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7254,7 +7254,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.off_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 1.0, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "1.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures off_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.5, 1.0]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7293,7 +7293,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.ploy_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 1.5, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "1.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures ploy_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.75, 1.5]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7306,7 +7306,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.grain_strain` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.5, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures grain_strain, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.25, 0.5]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7319,7 +7319,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heard_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.05, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.05 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures heard_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.025, 0.05]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7345,7 +7345,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.gap_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.25, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.25 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures gap_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.125, 0.25]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7358,7 +7358,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.weary_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.5, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures weary_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.25, 0.5]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7397,7 +7397,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.awe_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.5, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures awe_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.25, 0.5]
     unblocks:  "the proceeding's the speech reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7553,7 +7553,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.room_level` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.5, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.5 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures room_level, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.25, 0.5]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7566,7 +7566,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.heckle` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 1.0, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "1.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures heckle, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.5, 1.0]
     unblocks:  "the proceeding's the press reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7618,7 +7618,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.crowd_lean` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 0.2, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "0.2 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures crowd_lean, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 0.1, 0.2]
     unblocks:  "the proceeding's the room and the reading reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -7800,7 +7800,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.start_step` the one home. READERS: none yet -- `seam/wrappers/sigma.py::proceeding_dials` carries it to the module (B24p.05 on)"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, SHIPPED: the setting is inert at it; V2's shipped value is 2.0, written by B24p.23 [ASSUMPTION; Jordan to correct; revert: `0.0`]"
+    default:   "2.0 -- V2's SHIPPED VALUE, written by B24p.23 (the control was 0.0, which B24p.04 shipped) [ASSUMPTION; Jordan to correct; revert: `0.0`, the control]"
     site:      "Fixtures start_step, read by nothing at B24p.04; B24p.05 on reads it through `seam/wrappers/sigma.py::proceeding_dials`"
     sweep:     [0.0, 1.0, 2.0]
     unblocks:  "the proceeding's the host reading, and B24p.23's flip of the controlled settings to V2's shipped values"
@@ -8177,12 +8177,25 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/rosters.yaml: grounds` (`reason`) and `engine/season/arrangements.yaml: arrangements` (`reason_lean`) the two homes. READERS: none yet -- the proceeding's speech (B24p.07) reads both"
     grade:     "assumption"
-    default:   "0 -- THE CONTROL, SHIPPED: `reason` 1.0 on every ground and `reason_lean` 0 on every row, the dice Reason alone; V2's model column is written by B24p.23 (`sc2/host.py::GROUNDS`, `::RITES`) [ASSUMPTION; Jordan to correct; revert: the control]"
+    default:   "THE SHIPPED TABLES, written by B24p.23 from the model (`sc2/host.py::GROUNDS`, `::RITES`): `reason` evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2; `reason_lean` 0.2 on the trial rows (arbitration, legal_trial, tribunal) and the inquisition rows (examination, inquisition_hearing), -0.1 on the debate rows (parliamentary_debate, council_of_state, excommunication_deliberation), -0.3 on rally, 0 on negotiation, conversation, interrogation and audience; the regimes' own `reason_lean` (theocracy -0.1) is in `arrangements.yaml: context` [ASSUMPTION; Jordan to correct; revert: the control, `reason` 1.0 on every ground and `reason_lean` 0 on every row, the dice Reason alone]"
     site:      "`rosters.yaml: grounds[*].reason` and `arrangements.yaml: arrangements[*].reason_lean`, read by nothing at B24p.04; B24p.07's speech reads them"
     sweep:     [0, 0.5, 1]
     unblocks:  "B24p.23's flip of the two columns to V2's model column, and the batch gate's R11 reading (Reason's SLOPE over Presence's under `legal_trial`, the reverse under `rally`)"
     cite:      "V2 p2 §K (the pointer row: the grounds' `reason` column and the rows' `reason_lean` column are tuned as one table); `sc2/host.py::GROUNDS` and `::RITES` hold the model's values (evidence, cited, not copied). THE SWEEP IS THIS ROW'S: [ASSUMPTION: the scale applied to V2's model column across both tables, 0 the control, 1 the column as V2 gives it, 0.5 between -- basis: none; V2 gives no sweep]. CONTROL: nothing reads either column yet. FALSIFIER: the batch gate's R11 reading at B24p.23 (the blend moves the SLOPE's order by type)."
     source:    "workplan v12 B24p.04 (V2 p2 §K; B24p's H block slot 79)"
+
+  - id:        H-940
+    tier:      1
+    hole:      "THE EVEN-SHEET CENTRE OF AN ABRIDGED CONVERSATION AT V2'S SHIPPED SIX ROLES -- the middle bin of `pairs proceeding --type conversation --form abridged --diff sheet` carries 16.6 % (seed 0, n 100,000, 25,770 pairs in the bin) against A-79's one time in four (the same reading with every role at control: 24.4 %). A MEASURED GAP, REPORTED NOT TUNED TO (D-18; B24p.23's STOP clause, overridden by Jordan's ruling this run: ship V2's values and record the miss)."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B98.87 re-sweeps it. `engine/season/data/fixtures.py::Fixtures.esteem_step` and `::start_step` the two homes that carry it; the difficulty cell is B05.23's (`Fixtures.difficulty_ob`)"
+    grade:     "assumption"
+    default:   "THE SHIPPED VALUES (esteem_step 0.2, start_step 2.0, V2 p2 §K) [ASSUMPTION; Jordan to correct; revert: the controls, esteem_step 0 and start_step 0]. ATTRIBUTION, seed 0, n 100,000, the middle bin's carried share with one setting back at its control: esteem_step 0 -> 20.0 %, start_step 0 -> 20.3 %, relevance 0 -> 16.8 %, sense_step 0 -> 16.9 %, heard_step 0 -> 16.7 %, crowd_lean 0 -> 16.7 %, off_step 0 -> 16.6 %, and fit_level, answer_level, repeat_step, ploy_step, gap_step, weary_step, awe_step, room_level 0 or None -> 16.6 % (no move). The plan's `--diff read` form cannot read the centre at all: under the proceeding `read` is the act's own margin, whose bin at 0 holds no carried sitting by construction (0.0000 at 0, 0.458 at +1, 1.0 at +2)."
+    site:      "Fixtures esteem_step and start_step, read by the proceeding speech (`modules/social_contest/proceeding.py`: `esteem` on the leverage, the listeners' starts)"
+    sweep:     [0, 0.1, 0.2]
+    unblocks:  "B98.87's re-sweep of the proceeding's settings against A-79's centre, and the instrument's `--diff read` form for the proceeding"
+    cite:      "A-79 (an even argument on a routine matter carries about one time in four; B05.23's difficulty cell holds the centre); workplan v12 B24p.23 step 3 (`workplans/valoria_master_workplan_v12_part22_b24p_cont.md`); readings at B24p.23's commit"
+    source:    "workplan v12 B24p.23 (measured gap; B24p's H block slot 80, the id the block left unused)"
 
 discharges:
   D1:   "row:H-01"

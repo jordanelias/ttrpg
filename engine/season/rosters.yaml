@@ -3503,14 +3503,14 @@ rosters:
     note: >-
       WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order.
       `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1];
-      `reads` names what the ground's fit reads (`ground_reads`). AT CONTROL every `reason` is 1.0, so the dice are Reason alone;
-      B24p.23 writes the shipped column of V2's model (`sc2/host.py::GROUNDS`), each cell then marked.
-      [ASSUMPTION; Jordan to correct: every `reason` below is the control value, not V2's shipped one -- basis: B24p.01's INSTRUCTION; revert: none, it is the control.]
+      `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone);
+      B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2).
+      [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.]
     rows:
-      - {id: evidence,    reason: 1.0, reads: item}
-      - {id: consequence, reason: 1.0, reads: want}
-      - {id: authority,   reason: 1.0, reads: hold}
-      - {id: solidarity,  reason: 1.0, reads: bond}
+      - {id: evidence,    reason: 0.8, reads: item}
+      - {id: consequence, reason: 0.7, reads: want}
+      - {id: authority,   reason: 0.4, reads: hold}
+      - {id: solidarity,  reason: 0.2, reads: bond}
 
   proceeding_moves:
     source: "V2 p2 §B (a move is read by its `effect`), §A.1 (`rank`, his rank in the proceeding's skill); V2 p4 §F 1 (the ploy is carried by `insincerity` on `argue` and `press`; `deceive` and `divert` are not built)."

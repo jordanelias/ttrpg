@@ -278,8 +278,8 @@ def _load_context(ctx) -> dict:
             _refuse_any_not_in(name, "context row", f"`{k}` kind(s)", row[k], MATTERS, "`rosters.yaml: matters`")
         row["unlawful"] = tuple(row["unlawful"] or ())
         power = row["power"]
-        if not isinstance(power, dict) or set(power) != set(AUTHORITIES) or not all(_is_number(w) and w > 0 for w in power.values()):
-            raise SystemExit(f"arrangements.yaml: `context` row {name!r} has `power: {power!r}`, not a positive weight for each of "
+        if not isinstance(power, dict) or set(power) != set(AUTHORITIES) or not all(_is_number(w) and w >= 0 for w in power.values()):
+            raise SystemExit(f"arrangements.yaml: `context` row {name!r} has `power: {power!r}`, not a weight of 0 or more for each of "
                              f"{sorted(AUTHORITIES)}.")
         if row["silence"] is not None:
             _refuse_not_in(name, "silence", row["silence"], _SILENCE_VALUES)
