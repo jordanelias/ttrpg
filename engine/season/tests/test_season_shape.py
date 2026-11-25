@@ -5675,7 +5675,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # restored in its place: the depth is the act mix's number, not a discriminator (the COUNT is).
 
 
-def _h79_bailiff_subjects() -> dict:
+def _h79_bailiff_subjects(seed: int = 0) -> dict:
     """`H-79`'s sweep: per `claim_subject_rule`, the distinct subjects of the bailiff's non-`seen` claims after two
     seasons of `build_world(0)` (`test_w9_the_sweeps_...`'s reading, factored out at v10 REM-2C so the shipped
     table and the blanked one read it alike)."""
@@ -5684,7 +5684,7 @@ def _h79_bailiff_subjects() -> dict:
     for rule in sorted(CLAIM_SUBJECT_RULES):
         # B07.99: the relation is read with `task_draw_arm` swept off (the REM-2C precedent above: evaluated in process, assertion unchanged);
         # with the arm on the act mix moves again (actor 13 / both 12 / per_change 10) and the shipped-table test below reads the shipped arm.
-        w = HL.build_world(0, flat_fold_fixtures(DEFAULT_FIXTURES.sweep("claim_subject_rule", rule)))
+        w = HL.build_world(seed, flat_fold_fixtures(DEFAULT_FIXTURES.sweep("claim_subject_rule", rule)))
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
@@ -5710,7 +5710,12 @@ def test_w9_h79_per_change_changes_what_the_bailiffs_ledger_holds_at_the_shipped
     `actor` arm's act mix (`test_w9_the_sweeps_...` reads the count relation with that class blanked); the sets
     still differ on both trees, in the direction the rule names."""
     from ..harness import headless as HL
-    s = _h79_bailiff_subjects()
+    # B21.54 (a writ's terms are a Proposition: the act mix moves) RE-TRACED, seed 0 -> 1 -- a selected-seed existence claim, not a rate. At seed 0 the bailiff
+    # is now the SUBJECT of a `per_change` claim as well (actor 10 / per_change 16, `HL.BAILIFF` in both), so he is no longer only under `actor`. THE SWEEP
+    # (`build_world(seed)`, 2 seasons, the shipped table, run once, not kept; this test's own assertions): seeds 0..5 hold at 1, 2, 3 and 5, fail at 0 and 4
+    # (the bailiff under `per_change` too); the first is taken. The default `seed=0` stays for `test_w9_the_sweeps_the_register_declares_are_executed`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: seed 0, with B21.54's `issue` class dropped.]
+    s = _h79_bailiff_subjects(seed=1)
     assert {HL.CARIN, HL.BAILIFF} <= s["actor"] - s["per_change"], s
     assert s["per_change"] - s["actor"], s
 
@@ -6488,6 +6493,10 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # operands knows one. The verdicts below are read off `empty`, a reader over NO claims, so the
     # arm still observes an empty ledger.
     p0.ledger.append(Claim("c_wa_knows", p0.id, "p_mid", "exists:Person", 1, 0, "firsthand", 100, "own"))
+    # B21.55: `issue` forms only on a person he reads as commanded (`commanded_read`: a seat he holds, an untold `duty.taken` claim on the man), so the
+    # derivation of the operands sits him in a seat and reads `p_mid` as sworn (the verdicts are still read off `empty`, so the ledger arm is unchanged).
+    p0.tenures.append(Tenure("t_wa_seat", p0.id, "off_wa", "hold", since=0))
+    p0.ledger.append(Claim("c_wa_sworn", p0.id, "p_mid", "duty.taken", True, 0, "firsthand", 100, "own"))
     forms, checked = set(), 0
     for verb, row in sorted(VERB_TABLE.items()):
         if row.requires_typed is None:
@@ -7305,6 +7314,10 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # remit verb's clause 4 can move.
     duke.ledger.append(Claim("c_wc_seen_duke", duke.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
                              "firsthand", 100, "own"))
+    # B21.55: `issue` forms only on a person he reads as commanded (`commanded_read`), so the seated duke reads `p_mid` as sworn to him.
+    duke.ledger.append(Claim("c_wc_sworn_duke", duke.id, "p_mid", "duty.taken", True, 0, "firsthand", 100, "own"))
+    # B21.54: `issue` forms only on a `Proposition`-classed referent (`prop_wc`, in `q`'s classes) the issuer holds a claim on (its `terms` conjunct).
+    duke.ledger.append(Claim("c_wc_terms_duke", duke.id, "prop_wc", "proposition.uttered", True, 0, "firsthand", 100, "own"))
     # v9 IN-12 step 6: A WARRANT IN THE DUKE'S HAND naming `Hh` (a referent of `q`), so the warrant-sourced
     # verb forms and is walked with the four -- the seat is present on both sides for `seize` too.
     from .test_in10_record_operands import _hold_document
@@ -7336,7 +7349,8 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # `march`, `raze` and `capture` are (excluded from the first walk above for the same reason): `p_low` holds no office, so
     # neither forms for him even at the sink arm. DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
     WALK_HELD_OFFICE: frozenset = frozenset(vb for vb in WALK_HELD if VERB_TABLE[vb].eligibility == ("remit:dispatch",))
-    assert WALK_HELD_OFFICE == {"marshal", "surrender"}, sorted(WALK_HELD_OFFICE)
+    # B21.59 re-read (men are levied through a seat): `recruit` and `discharge_troops` joined them, each `remit:dispatch`-only and withheld.
+    assert WALK_HELD_OFFICE == {"marshal", "surrender", "recruit", "discharge_troops"}, sorted(WALK_HELD_OFFICE)
     assert {c.verb for c in held_walk} == WALK_HELD - WALK_HELD_OFFICE, sorted({c.verb for c in held_walk})
     for c in held_walk:
         act = [a for sc in pack_scenes(p, [c], 5, sink, mint, occasion=qh) for a in sc.acts][0]

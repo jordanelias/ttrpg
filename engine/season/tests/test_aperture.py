@@ -890,7 +890,8 @@ def test_built_out_reads_a_write_less_band_as_not_having_written_and_a_seat_as_v
     `march`, whose `Declared` band writes nothing and whose `Won` band writes, does not read as write-less
     through its empty band. `kinds` takes the LAST keyed band an act's Events name and every kind of it.
     `via` counts the clean executions that exercised a seat."""
-    assert not VERB_TABLE["tell"].writes and not VERB_TABLE["comply"].writes
+    assert not VERB_TABLE["tell"].writes     # B21.57 re-read: `comply` writes now (the order deposited, the addressee moves), so `tell` alone is the write-less witness
+    assert VERB_TABLE["comply"].writes
     assert VERB_TABLE["march"].writes and VERB_TABLE["utter"].writes
     row = VERB_TABLE["tell"]
     ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)

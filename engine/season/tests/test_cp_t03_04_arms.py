@@ -154,7 +154,11 @@ def test_control_a_minted_arms_rank_adds_nothing_to_a_roll_only_an_authored_hold
     seen = _spy(monkeypatch)
     # seed re-picked at B06.99: the stream changed (was 1; seeds 0,2..8 scanned: a survivor of two bloodied fights holds 2 at 0,3,4,5,6,8;
     # seed 2 is the first where every holder is at 1 and every roll is (8, 1.0))
-    w = build_realm(2)
+    # B21.03 RE-TRACED, seed 2 -> 0 (a seat holds a remit act iff its row names it: `off_spymaster` and `off_cardinal_prudence` no longer march, so a season
+    # at most seeds fights nobody -- `seen` is empty at seed 2). THE SWEEP, this test's own body at `build_realm(s)` / `run(1, s)`, seeds 0..7, run once and not
+    # kept: it holds at seed 0 and fails at 1..7 (no roll read, so no minted holder); the first is taken. A selected-seed existence claim, not a rate.
+    # [ASSUMPTION; medium; Jordan to correct; revert: seed 2, with B21.03's `remit_unruled` retirement undone.]
+    w = build_realm(0)
     # BA1.99 re-point (BA1.01 authors `arms` 3 or 5 on 11 persons, so "nobody holds one at the build" is no longer the world): the rolls read
     # the untrained score alone for every person who authors none, and the authored holders read their own score (each raised by `_grown` at
     # most up to the value they hold after the season); a roll reads no other pool or Ob.
@@ -162,7 +166,7 @@ def test_control_a_minted_arms_rank_adds_nothing_to_a_roll_only_an_authored_hold
     from ..seam.wrappers.pool import FIGHT_DICE_SITE, pool_pair, untrained
     authored = {pid: p.capability[KEY] for pid, p in w.persons.items() if KEY in (p.capability or {})}
     assert len(authored) == 11 and set(authored.values()) == {3, 5}, authored
-    run(1, 2, w=w)
+    run(1, 0, w=w)
     held = {pid: p.capability[KEY] for pid, p in w.persons.items() if KEY in (p.capability or {})}
     # B10.99 re-read: B10.72 moved the season's fights, and a survivor of two bloodied fights now holds 2 here (was: every holder at 1);
     # what the claim needs is that no MINTED holder stands above the untrained score (`pool_default`), so a minted rank adds nothing to a roll
@@ -297,13 +301,16 @@ def test_capture_and_accept_grow_by_the_same_rule():
 
 
 def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter_step(_engine):
-    """Every person in `build_realm(1)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 1.0):
+    """Every person in `build_realm(5)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 1.0):
     after one season at least one survivor holds 3 -- the write admitted at ENCOUNTER, where the season fights --
     and every value is 2 or more (nothing lowered, nothing minted)."""
-    w = build_realm(1)
+    # B21.03 RE-TRACED, seed 1 -> 5 (`off_spymaster` and `off_cardinal_prudence` no longer march: a season at most seeds fights nobody, and at seed 1 no one grows).
+    # THE SWEEP, this test's own body at `build_realm(s)` / `run(1, s)`, seeds 0 and 2..8, run once and not kept: it holds at seed 5 alone (seed 0: the one
+    # growth is a `train`, no body verb; the rest every value stays 2); the first is taken. [ASSUMPTION; medium; Jordan to correct; revert: seed 1.]
+    w = build_realm(5)
     for p in w.persons.values():
         p.capability = {**(p.capability or {}), KEY: 2}
-    run(1, 1, w=w)
+    run(1, 5, w=w)
     vals = Counter(int(p.capability[KEY]) for p in w.persons.values())
     assert sum(vals.values()) >= 50
     assert min(vals) >= 2 and max(vals) >= 3, dict(vals)
