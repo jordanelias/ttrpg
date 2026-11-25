@@ -210,6 +210,7 @@ provinces:
     proximity_calamity: 0
     starting_pros: 0
     settlements: []
+    wound: {kind: harbour, condition: 0}   # [ASSUMPTION; medium; Jordan to correct; revert: delete the row]
     description: "Calamity epicenter. Forgetting zone. Two gates: Oastad (T13) and Stillhelm (T6)."
   T16:
     name: Schoenland
