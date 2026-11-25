@@ -74,6 +74,11 @@ UNIFORM = P.DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
 # assertion is the `granary_seasons` 0 arm's world-gen artefact (the highland and other cohorts short at season 0 under `ground`, B12a.54's realm) builds
 # its realm with this fixture: the arm is named at each of them.
 NO_GRANARY = P.DEFAULT_FIXTURES.sweep("granary_seasons", 0)
+# B12a.62: the shipped realm is `hunger_severity_draw` True, where each short cohort's fall is a drawn multiple of `body_step x units short`. A test whose
+# assertion is the `False` arm's arithmetic (every short cohort falls by exactly `body_step x its shortfall`) builds its realm with these two (the control
+# arm of the draw swept onto `UNIFORM` / `NO_GRANARY`): the arm is named at each of them.
+UNIFORM_FLAT_FALL = UNIFORM.sweep("hunger_severity_draw", False)
+NO_GRANARY_FLAT_FALL = NO_GRANARY.sweep("hunger_severity_draw", False)
 # v9 SE-01 (`24g`): THE LIVE ARMS ARE READ OFF `H-125`'s OWN `sweep:` ROW, NOT COPIED. The register is
 # where the sweep is declared and `harness/register.py` is its one reader, so a re-swept row moves
 # these tests with it. The CONTROL arm (`0`) is the sweep's first point; every OTHER arm is a live arm,
@@ -281,8 +286,9 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
     THE DEARTH IS THE REALM'S OWN, NOT PLANTED. At build every larder is empty and MATTER draws
     before it takes the first yield (#353 §25's order), so the first draw finds no stock anywhere:
     every settlement's `demanded` exceeds its `delivered`. Nothing here empties a store. PINNED TO `endowment_mode` `uniform` (B12a.54): under `ground`
-    a harbour town holds stock at build and is not in dearth."""
-    w = build_realm(0, fixtures=UNIFORM)
+    a harbour town holds stock at build and is not in dearth. PINNED TO `hunger_severity_draw` `False` (B12a.62): the fall asserted is `arm x shortfall`, the
+    undrawn arm's arithmetic."""
+    w = build_realm(0, fixtures=UNIFORM_FLAT_FALL)
     w.fixtures = w.fixtures.sweep("body_step", arm)
     pairs = _holder_and_cohort_pairs(w)
     assert pairs, "no office-holder lives under a settlement with a cohort; the falsifier is vacuous"
@@ -346,7 +352,8 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     person (`person = copy.copy(w.persons.get(pid))`) leaves every body at 1000 and this test reds -- the
     read/write asymmetry `CLAUDE.md` §0.1 pt 1 names, observed from the reader's side.
     CONTROL, below: the same realm with `body_step` swept back to the control arm moves no body, so
-    the fall is the shipped arm's. PINNED TO `granary_seasons` 0 (B12a.55): under the shipped 4 no cohort is short at season 0, so there is no fall to read.
+    the fall is the shipped arm's. PINNED TO `granary_seasons` 0 (B12a.55): under the shipped 4 no cohort is short at season 0, so there is no fall to read. PINNED TO
+    `hunger_severity_draw` `False` (B12a.62): the fall asserted is `step x shortfall`, the undrawn arm's arithmetic.
     v11 CP-T03-08 (`tend` forms on the wounded) is read at its revert: with it live, every short cohort is stamped for
     itself below its ceiling and tends itself whole in the same season (MEASURED, seed 0: 37 of 37 tended, `fell` 0), so the
     fall this test observes would be erased before the season's end. Its own effect is pinned in
@@ -357,7 +364,7 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     from .test_b11a_scores_and_obstacle import revert_b11a_scores
     revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    w = build_realm(0, fixtures=NO_GRANARY)
+    w = build_realm(0, fixtures=NO_GRANARY_FLAT_FALL)
     assert w.fixtures.get("body_step") == SHIPPED_ARM and SHIPPED_ARM in LIVE_ARMS, (
         "this test reads the SHIPPED default, unswept")
     scale = w.fixtures.get("condition_scale")

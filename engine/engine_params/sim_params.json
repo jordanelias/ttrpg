@@ -4651,11 +4651,11 @@
     {
       "key": "engine.season.settings.hunger_severity_draw",
       "name": "hunger_severity_draw",
-      "value": false,
+      "value": true,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-529`, swept False (control, SHIPPED) / True (pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)",
+      "note": "`H-529`, swept False (control) / True (SHIPPED, B12a.62's flip; pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)",
       "citation": null,
       "citation_grade": null
     },
