@@ -58,7 +58,7 @@ composition_roles:
   social_contest.proceeding:
     target: "modules.social_contest.proceeding:proceed"
     entry: verb_call
-    verb: argue
+    verb: determine   # B24.08: the verb whose prize (`a verdict`) names this entry (`manifest/registry.py::_bound_verb_contests_it`); the registrar holds one verb per entry, and every other `proceeds:` verb reaches it through the provider path below, not through this cell
     needed_by: "engine/season/seam/wrappers/sigma.py — the provider path for a verb row carrying `proceeds:` (B24p.14): it builds the typed `Input` (B24p.13), calls this entry through `manifest.MODULE_ENTRIES` and reads the `Outcome`'s verdicts on the one ladder. `proceed` draws the whole sitting and its close from the one keyed `Draw` it is handed (V2 p2 §C to §D)."
   social_contest.obstacle:
     target: "modules.social_contest.roll:obstacle"

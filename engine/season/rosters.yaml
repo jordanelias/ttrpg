@@ -1985,15 +1985,12 @@ rosters:
         toward: "to"   # the residents' stance toward whoever would hold the place: the room is asked about the receiver, not the actor (`sigma.py::_read_social_roll`).
         cite:     "U5c_VERBS_residue §2 edits 3 and 4 (B07.04)."
       # B24.03 (`U5c_VERBS_residue` §2's prize table, edit 3: "`a verdict` lands with the hearing, not here"; C-25, U1 ledger S-23): the prize `determine` will contest
-      # (B24.08), the bench's own close. No verb contests it yet, so the row is read by the contest-prize checks alone and no seam call reaches it.
+      # (B24.08), the bench's own close: `determine` contests it since B24.08.
       "a verdict":
         module:   "social_contest"
         person_inputs: "pool"   # as `a matter`'s: a verb that `proceeds:` is exempt from naming attributes, its dice being the proceeding's own
         provider: "social_contest"   # as `a matter`'s
-        # NO `module_entry:` YET, and that is the one cell the entry (B24.03 step 2) names that this row does not carry. `manifest/registry.py::_bound_verb_contests_it`
-        # refuses a prize naming `social_contest.proceeding` while the composition row's `verb: argue` contests nothing (`argue` is
-        # a `proceeds:` verb, not a contest), so the row would stop the driver constructing. B24.08, which makes `determine` contest this prize,
-        # adds `module_entry: "social_contest.proceeding"` here and binds the composition row to `determine`, in one commit.
+        module_entry: "social_contest.proceeding"   # the proceeding's entry (B24p.12), not `roll`: `determine` `proceeds:`. `manifest/registry.py::_bound_verb_contests_it` asks that the composition row's `verb:` contest this prize, and that row is bound to `determine` (`references/module_contracts.yaml`; the registrar holds one `verb_call` entry per verb, so the row names the one verb that contests a prize).
         heard_by: "bench"   # the bench at the act's rung hears this prize (`manifest/registry.py::_check_heard_by`)
         step:     "ENCOUNTER"   # `the body`'s and `a field`'s pair: declared at RESOLVE, sat at ENCOUNTER
         declares: "Declared"

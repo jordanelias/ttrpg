@@ -133,7 +133,7 @@
       "target": "modules.social_contest.proceeding:proceed",
       "kind": "callable",
       "entry": "verb_call",
-      "verb": "argue",
+      "verb": "determine",
       "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 the provider path for a verb row carrying `proceeds:` (B24p.14): it builds the typed `Input` (B24p.13), calls this entry through `manifest.MODULE_ENTRIES` and reads the `Outcome`'s verdicts on the one ladder. `proceed` draws the whole sitting and its close from the one keyed `Draw` it is handed (V2 p2 \u00a7C to \u00a7D)."
     },
     "social_contest.roll": {

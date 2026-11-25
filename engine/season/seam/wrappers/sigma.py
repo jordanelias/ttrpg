@@ -1888,7 +1888,9 @@ def _hearing(w: Any) -> Optional[tuple]:
 def _docket_hearing() -> Optional[tuple]:
     for verb, row in sorted(VERB_TABLE.items()):
         entries = getattr(row, "proceeds", ())
-        if any(entry[1] == PROCEEDS_DOCKET for entry in entries):
+        # B24.08: a verb whose LAST entry is itself the docket's row (`determine`) answers no matter that names none (`world_q.proceeding_row` raises
+        # for it), so it is no hearing of a computed case: the verb that is (`speak`, whose last entry is the seat's `audience`) is the one read.
+        if any(entry[1] == PROCEEDS_DOCKET for entry in entries) and entries[-1][1] != PROCEEDS_DOCKET:
             _when, rid, form, move, item = entries[-1]
             arrangement = ARRANGEMENTS[rid]
             return verb, (in_form(arrangement, form), form, move, item)

@@ -81,7 +81,7 @@ def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem()
         checked += 1
     assert checked == len(VERB_TABLE) == 67, checked
     kinds = [k for r in VERB_TABLE.values() for k in _kinds_of(r)]
-    assert (kinds.count("a"), kinds.count("b"), kinds.count("c"), kinds.count("d")) == (27, 31, 4, 5), kinds   # the five that proceed pool nothing; B21.09 moved `establish` from (a) to (b) (it is drawn), B21.14 `confer`, `revoke`, `succeed`, B21.56 `issue`
+    assert (kinds.count("a"), kinds.count("b"), kinds.count("c"), kinds.count("d")) == (27, 30, 4, 6), kinds   # B24.08: `determine` moved from (b) to (d). The five that proceed pool nothing; B21.09 moved `establish` from (a) to (b) (it is drawn), B21.14 `confer`, `revoke`, `succeed`, B21.56 `issue`
     assert _check() is None                                                    # the shipped table passes the loader's own check
 
 
@@ -178,7 +178,7 @@ def test_a_rolled_act_does_mint_a_roll_stream_under_the_same_counter(monkeypatch
 
 
 def test_a_row_naming_none_is_refused_at_load():
-    for verb in ("give", "examine", "determine", "tell"):                      # one row of each kind (a), (b), (b with an opposition), (d)
+    for verb in ("give", "examine", "issue", "tell"):                      # one row of each kind (a), (b), (b with an opposition), (d)
         row = VERB_TABLE[verb]
         bare = dataclasses.replace(row, brute=None, brute_note="", governing=(), opposed_attribute=None, proceeds=())
         with pytest.raises(Unspecified, match=verb):
@@ -186,10 +186,10 @@ def test_a_row_naming_none_is_refused_at_load():
     with pytest.raises(Unspecified, match="examine"):                           # more than one of (a), (b), (c)
         _check({**VERB_TABLE, "examine": dataclasses.replace(VERB_TABLE["examine"], brute="own", brute_note="x")})
     for bad in ((ACUITY, FOCUS, PERCEPTION, "attr.body.strength"), (ACUITY, ACUITY), ("attr.mind.nonesuch",)):
-        with pytest.raises(Unspecified, match="determine"):                     # four attributes, a repeat, a key outside the ten
-            _check({**VERB_TABLE, "determine": dataclasses.replace(VERB_TABLE["determine"], governing=bad)})
-    with pytest.raises(Unspecified, match="determine"):                         # contested against a person with no opposed attribute
-        _check({**VERB_TABLE, "determine": dataclasses.replace(VERB_TABLE["determine"], opposed_attribute=None)})
+        with pytest.raises(Unspecified, match="issue"):                         # four attributes, a repeat, a key outside the ten
+            _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], governing=bad)})
+    with pytest.raises(Unspecified, match="issue"):                             # contested against a person with no opposed attribute
+        _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], opposed_attribute=None)})
     with pytest.raises(Unspecified, match="covenant"):                          # `seat` where there is no `remit:` and no Office (B21.56: was `issue`)
         _check({**VERB_TABLE, "covenant": dataclasses.replace(VERB_TABLE["covenant"], eligibility=("own",), referent_class="")})
     with pytest.raises(Unspecified, match="a standing"):                        # a prize row with no `person_inputs`, or another value

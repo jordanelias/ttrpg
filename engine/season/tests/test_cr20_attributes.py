@@ -45,7 +45,7 @@ def _roll_module():
     load would put `modules/` in its subprocess."""
     return importlib.import_module(composition.require("social_contest.roll").__module__)
 
-TELL = "determine"                              # B24p.19: `tell` proceeds and pools nothing; `determine` is the nearest row still on the single roll: draws on `argue`, two attributes, resisted by Will
+TELL = "arrest"                                 # B24p.19: `tell` proceeds and pools nothing; B24.08: nor does `determine`; `arrest` is a row still on the single roll: draws on `arms`, two attributes, resisted by Strength (not Will)
 GOV = VERB_TABLE[TELL].governing                # (acuity, focus)
 WILL = VERB_TABLE[TELL].opposed_attribute
 ATTR = GOV[0]
@@ -74,7 +74,7 @@ def _pool(w, g, rank=0):
 # ======================================================================================
 
 def test_pools_follow_the_governing_attributes_and_the_opposition_reads_the_opposing_attribute():
-    assert len(GOV) == 2 and WILL == "attr.spirit.will"
+    assert len(GOV) == 2 and WILL == "attr.body.strength"
     w = _w(**{LOW: _held(2), HIGH: _held(6)})
     assert [pool.governing_score(w, w.persons[p], TELL) for p in (LOW, MID, HIGH)] == [2.0, 2.0, 6.0]   # MID: the untrained 2
     assert w.fixtures.get("pool_add") == 6 and w.fixtures.get("pool_floor") == 5        # the shipped base and floor

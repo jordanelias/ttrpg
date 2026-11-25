@@ -493,7 +493,7 @@ def test_believed_odds_use_his_own_values_and_an_ordinary_man_for_the_rest(monke
 
 # B24p.16 -- THE VERB ROWS SAY HOW THEY PROCEED (RD §D.1 to §D.4; V2 p2 §M): `VerbRow.proceeds`, `data/verbs.py::_check_proceeds`,
 # `world_q.proceeding_row`. Nothing dispatches on the cell until B24p.19; the routing is what these read.
-FIVE = ("argue", "tell", "lie", "speak", "interrogate")
+FIVE = ("argue", "tell", "lie", "speak", "interrogate", "determine")      # B24.08 added `determine`: the six
 
 
 def _act(verb, **payload):
@@ -502,7 +502,7 @@ def _act(verb, **payload):
 
 def test_five_rows_proceed_and_name_a_loadable_row():
     """Each of the five verbs carries a `proceeds` cell whose every entry names an arrangement the tree loads (or the docket's own row), a
-    form, and a drawing move; no other verb is routed (`covenant`, `interview`, `determine` are their own items'). A planted cell that names a
+    form, and a drawing move; no other verb is routed (`covenant`, `interview` are their own items'). A planted cell that names a
     row nothing loads is refused naming the verb: the check observes the failure it excludes."""
     routed = {v: r for v, r in VERB_TABLE.items() if r.proceeds}
     assert set(routed) == set(FIVE), sorted(routed)
