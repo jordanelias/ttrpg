@@ -7163,7 +7163,7 @@ rows:
     kind:      "NUMBER"
     owner:     "`engine/season/queries/world_q.py::mortal_terms`, the one place `mortal_wound_ob` is read"
     grade:     "assumption"
-    default:   "death 3.0, yield 2.0, blood 1.0 -- SHIPPED by B15.07's sweep. THE GRID: each of the three at 0, 1, 2, 3, 4; 1,000 felled parties a cell, the season-default pair (`tiny_world` p_low v p_mid, shipped fixtures), the module entry on the host's record, the same felled parties and keyed draws read at every obstacle. THE READINGS (share of fellings that become deaths; pool 8, no levels on that pair): death terms 0.073 / 0.179 / 0.309 / 0.474 / 0.637 at 0..4 (1,003 fights for 1,000 fellings); yield terms 0.086 / 0.180 / 0.304 / 0.468 / 0.644 (30,322 fights); blood terms: NO FELLING in 200,000 fights (the scene ends at first blood), so its cell is the same draw read in closed form and inert at module scale. Over the realm's 83 persons (seed 0) with their own levels (net -0.75 to +0.5 sigma), 20 keyed draws each: 0.117 / 0.212 / 0.363 / 0.530 / 0.684. THE PICK: under `death` a felling is a death about half the time (0.47 module, 0.53 realm) -- not certain (the standing rule) and not trivially survivable; one whole obstacle step less lethal a term down the terms' intent (`yield` 2: about 0.30; `blood` 1: about 0.18). One ladder: the same sampler and pool (8) as the survivor's mark roll (`mark_ob` 2.4, the even line), every obstacle within 0.4 of the even line plus a `difficulty_ob` level. [ASSUMPTION; medium; Jordan to correct (D-19); revert: 99.0 a cause, the control]"
+    default:   "death 3.0, yield 2.0, blood 1.0 -- SHIPPED by B15.07's sweep. THE GRID: each of the three at 0, 1, 2, 3, 4; 1,000 felled parties a cell, the season-default pair (`tiny_world` p_low v p_mid, shipped fixtures), the module entry on the host's record, the same felled parties and keyed draws read at every obstacle. THE READINGS (share of fellings that become deaths; pool 8, no levels on that pair): death terms 0.073 / 0.179 / 0.309 / 0.474 / 0.637 at 0..4 (1,003 fights for 1,000 fellings); yield terms 0.086 / 0.180 / 0.304 / 0.468 / 0.644 (30,322 fights); blood terms: NO FELLING in 200,000 fights at B15.07 (the scene then ended at first blood), so its cell was read in closed form; since B15.10's yield roll a blood duel can go on past the first wound, and at the closing tree 173 of 6,000 blood duels fell someone and 37 end in a death (B15's premise-check pass), so the blood cell is live at module scale, not inert. Over the realm's 83 persons (seed 0) with their own levels (net -0.75 to +0.5 sigma), 20 keyed draws each: 0.117 / 0.212 / 0.363 / 0.530 / 0.684. THE PICK: under `death` a felling is a death about half the time (0.47 module, 0.53 realm) -- not certain (the standing rule) and not trivially survivable; one whole obstacle step less lethal a term down the terms' intent (`yield` 2: about 0.30; `blood` 1: about 0.18). One ladder: the same sampler and pool (8) as the survivor's mark roll (`mark_ob` 2.4, the even line), every obstacle within 0.4 of the even line plus a `difficulty_ob` level. [ASSUMPTION; medium; Jordan to correct (D-19); revert: 99.0 a cause, the control]"
     site:      "Fixtures mortal_wound_ob, read by `engine/season/queries/world_q.py::mortal_terms` only"
     sweep:     ["99.0 a cause (control: every felled body dies, the realm hash equal to the pre-draw reading)", "0 / 1 / 2 / 3 / 4 a cause (B15.07's grid)", "death 3 / yield 2 / blood 1 (SHIPPED, B15.07)"]
     unblocks:  "B15.07's mortal-wound draw (PHY_A A3), and the spell's obstacle (B37)"
@@ -7182,6 +7182,58 @@ rows:
     unblocks:  "Perception 5 against 3 within four points of score, if that is wanted; the lever table already reports every lever outside the bound and gates none"
     cite:      "`systems/combat/combat_engine_v1/workbench/build_levers.py` (the `ladders` sweep, B15.15) and the commit body of B15.15's `Item:` commit (the grid and the readings, seeds 0 and 1); B14.17's isolation reading is in the commit body of `9f260ef` (its `mode_sigma` read term arm: 87.7% to 69.6%). The producer's figures; the orchestrator re-ran none of them."
     source:    "workplan v12 B15.15 (`U5b_PC_residue` section 1 items 3 and 5; B15's H block spare slot), batch B15-pc-calibration, 2026-11-24"
+
+  - id:        H-576
+    tier:      1
+    hole:      "A SPARED MAN LEFT FOR DEAD IS WRITTEN EXACTLY AS ONE WHO LIVES -- the mortal-wound draw's middle band is inert (B15.07; premise-check P5, module and season scale). `modules/combat/fight.py::mortal_wound` writes `wounds = max(wounds, max_wounds)` for Partial and the scene's wounds for Success and better, but the tracker caps `wounds` at `max_wounds + 1` and a felled party already carries that, so the two bands write the same number: `wounds - max_wounds` was 1 in 8,509 of 8,509 felled parties, and all 4,707 survivors had written wounds equal to the scene's. At season scale 700 war fights leave every survivor at body 1 with ceiling 799 whatever his band (Partial 88, Success 125, Overwhelming 50). The three-way verdict (dies, left for dead, lives) is two ways."
+    kind:      "RULING"
+    owner:     "`modules/combat/fight.py::mortal_wound`, and `seam/wrappers/combat.py::_wound_state` where the survivor's `wounds` is mapped"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a lasting mark that tells a man left for dead from one who lived (CP-T03-07); A-81's every-band-writes reading"
+    cite:      "`engine/season/tests/test_combat_module.py::test_mortal_wound_every_band_writes` (B15.07: every band writes, which it does, the two survivor bands to the same value); `modules/combat/combatant.py` (the tracker's cap). Two defensible readings, hence a ruling: a spared man at the limit (`max_wounds`) against one left for dead at the cap (`max_wounds + 1`), or a mark carried apart from `wounds`. The premise-check reader's figures; the orchestrator re-ran none of them."
+    source:    "premise-check pass over workplan v12 B15 (PR 632), batch B15-pc-calibration, 2026-11-25"
+
+  - id:        H-577
+    tier:      1
+    hole:      "THE RECORD DOES NOT CARRY THE NEW OUTCOMES OF A FIGHT -- a man felled and spared reads `undecided` for both parties, and `shaken` and `rallied` reach no Event (B15.07 and B15.10; premise-check P5 and P8, season scale). In 700 war fights, 263 of 263 scenes in which a felled man was spared (alive after the draw) read `undecided` for both parties: the man who felled him is not `prevailed`, because `loop/effects_combat.py` reads the post-draw state, and the Event names neither the band nor the helper. In 400 war scenes the module trace shows 120 `shaken` and 241 `rallied` and no Event names either; a `fight` act with no context defaults to `death` terms silently, and no Event carries the terms."
+    kind:      "WIRING"
+    owner:     "`engine/season/loop/effects_combat.py` (the ending read off the post-draw state) and the fight row's `emits` in `engine/season/verb_table.yaml`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a player reading from the Event log that a man was left for dead, that a fighter was rattled or rallied, and who prevailed over a man the draw spared"
+    cite:      "B15.07 and B15.10 commit bodies; `modules/combat/fight.py::mortal_wound` and `wrapper.py::_yield_roll` (the events exist in the module trace). The premise-check reader's figures; the orchestrator re-ran none of them."
+    source:    "premise-check pass over workplan v12 B15 (PR 632), batch B15-pc-calibration, 2026-11-25"
+
+  - id:        H-578
+    tier:      1
+    hole:      "THE HELPER OF THE MORTAL DRAW IS CALLED A FRIEND AND IS ANY NON-FIGHTER AT THE PLACE (B15.07; premise-check P5, season scale). `seam/wrappers/combat.py::_ally_value` takes the highest `healing` score among persons at the victim's place who are not fighters, with no friendship test: a healer holding stance -1 toward both fighters gave 0.910 survival, equal to a friendly one's 0.910 (n 986 felled); a healer elsewhere, an opponent healer, rank 0 and no healer all read the baseline 0.534. In the seeded realm 0 of 83 persons hold `healing`, so the healer link is EXECUTES only (the draw ran 12 times at seeds 0 to 2, two seasons: 5 deaths, 7 spared, levels_for 0 each time)."
+    kind:      "NAME"
+    owner:     "`engine/season/seam/wrappers/combat.py::_ally_value` and the `ally` side of `rosters.yaml: tables.capability_uses`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a friendship or stance test on who may tend a felled man, or the plain name for what the code does (a bystander who tends)"
+    cite:      "`engine/season/seam/wrappers/combat.py::_ally_value`; workplan v12 part 18's B15.07 entry says a co-located person (\"at the party's place\"), so the code follows the entry and the word misleads. The premise-check reader's figures; the orchestrator re-ran none of them."
+    source:    "premise-check pass over workplan v12 B15 (PR 632), batch B15-pc-calibration, 2026-11-25"
+
+  - id:        H-579
+    tier:      1
+    hole:      "NO MATCHUP IS CERTAIN HOLDS ONLY AT LARGE N, AND THE RIPOSTE'S COUNTER IS THE FELLING BLOW'S DAMAGE (B15.09; premise-check P7, module scale). At n 1,000 dangpa against arming/light reads 1,000 of 1,000 at `UPSET_FLOOR` 0.05 (guandao 1,000 of 1,000 at floor 0); at n 400 89 of 100 light pairs and 99 of 100 plate-against-unarmoured pairs show no upset; across the seven weapons at or above 99% the weaker side wins 0.53%; at n 10,000 dangpa against arming gives the weaker side 9 wins live, 7 held and 5 at floor 0; the skill axis keeps a floor (rank 7 against 0: the weaker side 1.2% held, 2.2% live). Riposte fires in 4.5 to 5.0% of deciding blows, but the fight runs on and the weaker side usually still loses, so the old 5% flip's clamp at 95% is gone. The counter is the felling blow's own damage (`wrapper.py::_land`): in dagger/none against mace/heavy it averages 1.83 wound intervals on the plated man where that dagger's ordinary wound events on that plate average 0.72, and in the arming/light mirror it fells the striker in 31% of ripostes."
+    kind:      "MECHANISM"
+    owner:     "`modules/combat/wrapper.py::_land` and `config.py::UPSET_FLOOR`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "the plan's standing rule that no matchup is certain, read as play meets it; a ruling on the riposte's damage and on the floor"
+    cite:      "B15.09's commit body (32 of 50 weapon win-rates outside their old intervals, ranseur 96.1 to 99.9, dangpa 95.1 to 100.0); `modules/combat/wrapper.py::_land`. UPSET_FLOOR is the designer's number (ED-PC-0036) and is not touched here. The premise-check reader's figures; the orchestrator re-ran none of them."
+    source:    "premise-check pass over workplan v12 B15 (PR 632), batch B15-pc-calibration, 2026-11-25"
 
 discharges:
   D1:   "row:H-01"
