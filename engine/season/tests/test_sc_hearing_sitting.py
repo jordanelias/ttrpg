@@ -223,3 +223,57 @@ def test_a_sitting_of_no_exchanges_is_todays_roll_through_the_host():
         bands.add(round(out["settled_margin"], 1) > 0)
         checked += 1
     assert checked == 30 and bands == {True, False}                                        # the draw is live: the margin falls on both sides of nothing
+
+
+# ---- B24.13: the hearing's NPC decider ---------------------------------------------------------------------------------------------
+
+def test_the_hearing_decider_picks_a_legal_move_by_a_draw(monkeypatch):
+    """`IS-B2-SC-04` (HEAR_B edit 8), through the live path (`sigma._played_by`, as `_resolve_proceeding` hands it to the entry): 200 keyed draws on a hand-built `View`
+    each return a `Choice` that is an option of the view, and with no cell authored on `hearing_move` and a flat menu every legal move and every ground of `argue` is
+    picked at least once -- the pick is the sampler's draw over equal scores, never a fixed function of the board. Then one change: a cell on `hearing_move=argue` (and
+    his one weighted axis) moves the draw toward `argue` for the person who weighs it, and `p_carried` is asked of the move (the believed chance): a draw whose odds his
+    interior sets."""
+    from ..data import verbs as V
+    from ..decision import choose as CH
+    from ..queries.inputs import Cond, Option, PlayHost, View
+    from ..seam.wrappers import sigma
+    from .test_u7_remit import DUKE, PARTY, _determine, _fold, _kinds, _open, _world
+
+    w, d = _world(sitting_exchanges=1)
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    _row, _form, inp = _heard(w, _determine("dt"), [DUKE, PARTY])
+    me = next(p for p in inp.room if p.side == "for")
+    assert sigma._played_by(w, None, inp) == {}                                                # CONTROL, shipped: no role listed, the sitting is automatic
+    w, _d = _world(sitting_exchanges=1, npc_decider_roles=("social_contest.proceeding",))
+    assert set(sigma._played_by(w, None, inp)["deciders"]) == {p.id for p in inp.room if p.side}
+    assert sigma._played_by(w, PlayHost(frozenset({me.id}), None), inp)["deciders"].keys() == {p.id for p in inp.room if p.side} - {me.id}   # a person the host plays is not the NPC's
+    moves, grounds = dict(inp.rite.moves)["for"], [g for g, _, _ in inp.grounds]
+    assert len(moves) > 2 and len(grounds) > 1
+    options = tuple(Option(m, g, None, "raises", 0.0, 0.5) for m in moves for g in (grounds if m in ("argue", "press") else (None,)))
+    menu = [(o.move, o.ground, o.item, o.relation) for o in options]
+    decide = sigma._played_by(w, None, inp)["deciders"][me.id]
+
+    def picks(count):
+        return [decide(View(n, me.id, "for", "procedure", 2, None, None, options, Cond(), 0.0, 0.0, 0.0, False, (), 0.0, 0.5, 0.0, 1.0), me)
+                for n in range(count)]
+
+    bare = picks(200)
+    assert len(bare) == 200 and all(c in menu for c in bare)
+    assert {c.move for c in bare} == set(moves), {c.move for c in bare}                      # a constant decider fails here
+    assert {c.ground for c in bare if c.move == "argue"} == set(grounds)
+    assert picks(200) == bare                                                                  # keyed: the same stream gives the same picks
+
+    axis = "grandiose_humble"
+    monkeypatch.setattr(CH, "project", lambda person, shift=0.0, **read: {a: (1.0 if a == axis else 0.0) for a in V.ALIGNMENT})
+    asked, module = [], sigma._proceeding_module()
+    real = module.p_carried
+    monkeypatch.setattr(module, "p_carried", lambda i, track, board=0.0: asked.append(track) or real(i, track, board))
+    monkeypatch.setattr(V, "ALIGNMENT", {**V.ALIGNMENT, axis: {**V.ALIGNMENT.get(axis, {}), "choice:hearing_move=argue": 0.3}})
+    celled = picks(200)
+    assert asked and all(c in menu for c in celled)
+    assert [c.move for c in celled].count("argue") > [c.move for c in bare].count("argue")
+    # the believed chance is signed by side: a better perceived worth raises the mover's own chance, whichever side he is on (unsigned, `against` would fall)
+    for side in ("for", "against"):
+        v = View(0, me.id, side, "procedure", 2, None, None, (), Cond(), 0.0, 0.0, 0.0, False, (), 0.2, 0.5, 0.0, 1.0)
+        low, high = (sigma._believed_chance(inp, sigma._Pick((), v), Option("argue", None, None, "raises", ev, None)) for ev in (-2.0, 2.0))
+        assert 0.0 <= low < high <= 1.0, (side, low, high)

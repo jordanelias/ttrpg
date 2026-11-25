@@ -63,7 +63,7 @@ from __future__ import annotations
 import copy
 import functools
 import sys
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from types import MappingProxyType, SimpleNamespace
 from typing import Any, Mapping, NamedTuple, Optional
 
@@ -75,6 +75,7 @@ from engine.dice_engine.sigma_leverage import level as sigma_level, levels_to_ne
 from engine.substrate import composition, descriptors
 
 from ...data.affiliations import AFFILIATION_CEILING
+from ...decision.decider import decides_for, make_decider
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
 from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
@@ -96,13 +97,14 @@ from ...manifest.providers import provider
 from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS, RESIDENTS, SEAT_BODY, TOWARD_TO, call as _provider_for,
                                   resolve as _prize_row)
 from ...queries import world_q as _world_q
-from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Input, Item, Margin, Outcome, Point, Present, Rite, SocialContestInput,
+from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Choice, Input, Item, Margin, Outcome, Point, Present, Rite, SocialContestInput,
                                other_side)
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.faction_q import weight as faction_weight
 from ...queries.world_q import declared_votes_by_member, docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
+from ...state.ids import draw_factory
 from ...state.ledgers import present_confidence
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
@@ -1769,20 +1771,69 @@ def _draw_of(inp: Input, out: Outcome, band: dict, weights: Mapping) -> tuple:
 _DATA_DEFECTS = ("refused[bad_weight]", "refused[no_weight]")
 
 
-def _played_by(host: Any, inp: Input) -> dict:
-    """THE DECIDER PASS (B24.10; `PlayHost.deciders`, B24.05): the keyword the entry takes for the persons of THIS room the host plays, `{"deciders": {person:
-    callback}}`, else `{}` (no host, a host with no decider for `social_contest.proceeding`, or none of his persons in the room: the sitting is automatic, as
-    it was). The host's decider is `decide(view) -> choice`; the entry's callback is `(view, person)`, so each is the host's closed over. Every other person
-    takes the automatic policy until the NPC decider (B24.13) is handed in here beside it."""
+HEARING_MOVE_KEY, ARGUMENT_GROUND_KEY = "hearing_move", "argument_ground"   # the two choice keys of a hearing: values `proceeding_moves` and `rosters.yaml: grounds`
+
+
+@dataclass(frozen=True)
+class _Pick:
+    """What `make_decider` is handed: the `legal` values, which are the `View`'s own `Option`s, and the `View` they are read from, which the pick's `odds` reads."""
+    legal: tuple
+    view: Any
+
+
+def _believed_chance(inp: Input, pick: _Pick, option: Any) -> Optional[float]:
+    """`odds=` OF THE PICK (B24.13): the chance the matter goes the mover's way on the room as HE reads it after `option`. `Option.ev` is the option's PERCEIVED worth to
+    the mover in track units (it carries what the option costs him, which is how the Class S costs of B24.12 reach the believed verdict), so the believed track it
+    leaves, toward `for`, is `t + _sg(side) * ev` with `t = _sg(side) * view.mood * mood_scale` (`view_odds`' reading). `p_carried` is P(carried) toward `for` (the module's
+    pure closed form), so the chance is it for a `for` mover and `1 - it` for an `against` mover. Nothing true enters it. `None` where nothing is drawn (a `consent` close)."""
+    if inp.rite.close == "consent":
+        return None
+    v = pick.view
+    sg = SIDE_SIGN.get(v.side, -1.0)                     # the module's `_sg`: a side that is not `for` reads as `against`
+    carried = _proceeding_module().p_carried(inp, sg * (v.mood * inp.dials["mood_scale"] + option.ev))
+    return carried if sg > 0 else 1.0 - carried
+
+
+def _npc_decider(w: Any, inp: Input) -> Any:
+    """THE NPC'S DECIDER OF A HEARING (B24.13; HEAR_B "Who decides"; `IS-B2-CHAR-02`): `(view, me) -> Choice`, the `decide=` callback the entry takes. ONE
+    `make_decider` pick OVER THE VIEW'S OPTIONS (an item exposed and a person struck are properties of the option, so a move chosen blind first could not avoid a damning
+    item): each `Option` is one value whose choice operands are its `hearing_move` (`proceeding_moves`) and its `argument_ground` (`rosters.yaml: grounds`), their cells summed
+    into its pursuit, priced by the believed chance after it (`_believed_chance`, on the option's PERCEIVED worth). The stream is `draw_factory(seed, tick)(person,
+    f"hearing:{matter}:{n}")`, `n` the exchange's number. The person is his own, `w.persons[me.id]`, read when he is asked; nothing is written. THE COST TERMS (B24.12)
+    ARE NOT HERE. ⚠ FOR A PERSON THIS DECIDES, IT SUPERSEDES `policy`'s `grudge` term (`D["grudge"] * (-_bond(me, foe))`): the automatic policy is not run for him."""
+    fx, base = w.fixtures, draw_factory(w.world_seed, lambda: w.tick)
+
+    def decide(view: Any, me: Any) -> Choice:
+        scoped = lambda pid, purpose: base(pid, f"hearing:{inp.matter}:{view.n}:{purpose}")
+        o = make_decider(w.persons[me.id], fx, scoped, key=(HEARING_MOVE_KEY, ARGUMENT_GROUND_KEY), of=lambda o: (o.move, o.ground),
+                         odds=lambda pick, o: _believed_chance(inp, pick, o))(_Pick(tuple(view.options), view))
+        return Choice(o.move, o.ground, o.item, o.relation)
+    return decide
+
+
+def _played_by(w: Any, host: Any, inp: Input) -> dict:
+    """THE DECIDER PASS (B24.10, B24.13; `PlayHost.deciders`, B24.05): the keyword the entry takes for the persons of THIS room who decide their own moves,
+    `{"deciders": {person: callback}}`, else `{}` (the sitting is automatic, as it was). A person the host plays takes the host's decider for the role
+    (`decide(view) -> choice`; the entry's callback is `(view, person)`, so it is the host's closed over), and none where the host has none for it; any other
+    speaker takes the NPC decider (`_npc_decider`) where `Fixtures npc_decider_roles` names this role (`decider.decides_for`), else the automatic policy."""
     decide = getattr(host, "deciders", {}).get(PROCEEDING_ROLE)
-    mine = {p.id: (lambda view, me, d=decide: d(view)) for p in inp.room if p.id in host.persons} if decide is not None else {}
+    plays = getattr(host, "persons", frozenset())
+    npc = None
+    mine = {}
+    for p in inp.room:
+        if p.id in plays:
+            if decide is not None:
+                mine[p.id] = lambda view, me, d=decide: d(view)
+        elif inp.rite.close != "exchange" and p.side and p.id in w.persons and decides_for(w.fixtures, PROCEEDING_ROLE, False):   # an abridged close asks no callback
+            npc = npc or _npc_decider(w, inp)
+            mine[p.id] = npc
     return {"deciders": mine} if mine else {}
 
 
 def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
                         topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0, host: Any = None) -> dict:
     """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (the persons a `host` plays are handed their
-    decider, B24.10 `_played_by`; every other sitting is automatic), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
+    decider, B24.10 `_played_by`; every other speaker takes `_npc_decider` where `Fixtures npc_decider_roles` names the role, B24.13, else the automatic policy), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
     the module boundary), read the act's record (`act_band`) and refuse S27.4 on an `exchange` close's pair only (a close is an adjudicator's
     draw and is never refused). RESOLVED -> `dict(status, module, resolver, pool, net, ob, leverage, terms, settled_margin, proceeding, card, arrangement, form, topic, read, starts)`
     (the last five are what `loop/resolve.py::_proceeding_ending` writes and `loop/effects_information.py::_eff_argue` reads, B24p.20).
@@ -1800,7 +1851,7 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
             raise                                # a weight that is no whole head count is a data defect, not a room the game refuses
         return dict(status="REFUSED", why=str(refused), module=_PROVIDER, resolver=_RESOLVER, pool=None, terms=())
     entry = composition.require(PROCEEDING_ROLE)
-    out = entry(inp, rng, **_played_by(host, inp))
+    out = entry(inp, rng, **_played_by(w, host, inp))
     if not isinstance(out, Outcome) or not all(isinstance(v, tuple) and len(v) == 2 and isinstance(v[1], Margin) for v in out.verdicts):
         raise Unspecified(
             f"module entry {PROCEEDING_ROLE!r} ({entry.__module__}.{getattr(entry, '__qualname__', '?')}) returned {type(out).__name__} "

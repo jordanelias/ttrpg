@@ -1402,8 +1402,10 @@ DEFAULT_FIXTURES = Fixtures(
     crisis_obstacle=None,              # `H-473`, swept plain / routine / demanding / hard; None (SHIPPED, absent until B98)
     # B10.57 (`IS-B2-CHAR-02` step 5). THE COMPOSITION ROLES WHOSE NPC PARTY DECIDES A CHOICE BY `decision/decider.py::make_decider`: a wrapper passes that decider as its module's
     # `decide=` only for a role named here and a party the host does not play (`decider.decides_for`); for any other role the module runs its interim policy as it does
-    # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL and SHIPS: no role is named, no
-    # wrapper passes a decider. The first role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
+    # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL: no role is named, no
+    # wrapper passes a decider. A role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
+    # B24.13: `social_contest.proceeding` is read here (`seam/wrappers/sigma.py::_played_by`): a speaker the host does not play decides his move by `make_decider`. NOT LISTED AT SHIP:
+    # the realm's own `tell`/`lie` sittings are one-turn `hearers` closes that ask a move even at `sitting_exchanges` 0, so listing it moves what NPCs say (the flip is B98's).
     npc_decider_roles=(),
     # `H-481` (B10.58; `IS-B2-CHAR-07`, A-108). THE LARGEST STORED MANNER OFFSET A CAST ROW MAY AUTHOR: `data/cast.py::manner_offset_of` refuses a `manner:` value outside
     # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). No row authors an
