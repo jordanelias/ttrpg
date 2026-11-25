@@ -68,8 +68,8 @@ from .person_q import (
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
 from .person_q import holders_named, vacant_named
-# v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`_disagrees`) and reads the teller's `record`.
-from .person_q import _disagrees, is_cell, record as record_of
+# v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
+from .person_q import contradicts, is_cell, record as record_of
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -4596,7 +4596,7 @@ def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> 
     LIAR IS A QUESTION -- `standing_crossed`'s sibling, about the people whose word a look has contradicted.
 
     For each firsthand CELL claim `c` that landed in `p`'s own ledger since he last deliberated (`landing_floor`, the boundary `questions_for`'s Q2 and `standing_crossed` read), the
-    tellers of a claim of his on the same cell that `c` disagrees with (`person_q._disagrees`, `record`'s own pairing step) and whose `record(p, teller)` is BELOW NEUTRAL (the
+    tellers of a claim of his on the same cell that `c` disagrees with (`person_q.contradicts`, `record`'s own pairing step) and whose `record(p, teller)` is BELOW NEUTRAL (the
     hearer's reading of the liar, `record`'s owner) are the referents of ONE `claim_landed` question whose `about` is `c`: `tell`, `petition`, `challenge`, `forgive` then form on
     the liar by the ordinary rows. No new deposit, source or Event kind, and nothing is stored: the price of a lie is the hearer's own grading of the teller (CR-83, design §3).
     The id is its own (`q:liar:<claim>`), so the claim's own Q2 question beside it is neither replaced nor doubled. `[]` for a person who holds no fresh firsthand cell or no
@@ -4614,7 +4614,7 @@ def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> 
     for c in fresh:
         tellers: list = []
         for t in told:
-            if (t.subject, t.predicate) == (c.subject, c.predicate) and t.teller not in tellers and _disagrees(t, c):
+            if (t.subject, t.predicate) == (c.subject, c.predicate) and t.teller not in tellers and contradicts(t, c):
                 if t.teller not in below:
                     below[t.teller] = record_of(p, t.teller, w.fixtures, tick) < 1.0
                 if below[t.teller]:

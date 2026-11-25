@@ -2594,10 +2594,10 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
     return agree, dis
 
 
-def _disagrees(a: Claim, b: Claim) -> bool:
-    """DOES THE PAIRING RULE MARK `b` AS DISAGREEING WITH `a`? One local call of `_pair` on the cell key `(subject, predicate)` -- the key `record` and `dissents` pair a cell claim on --
-    so `dossier.against` asks the tree's one pairing step and never restates `==`. (`decision/options.py::contradicts` is EVID_B edit 2's exposure of this same predicate; until it
-    lands, this is the one call that is replaced there.)"""
+def contradicts(a: Claim, b: Claim) -> bool:
+    """DO TWO CLAIMS CONTRADICT? THE PAIRING RULE'S ANSWER, EXPOSED ONCE: the same cell `(subject, predicate)` and a different value (`_pair`'s whole-value `==`, run on the cell key
+    `record` and `dissents` pair a cell claim on). It is the one call of `_pair` the host (`dossier.against`, `world_q.contradicted_tellers`) and the modules ask, so none
+    restates `==`. `decision/options.py` re-binds it by name (`options.contradicts`)."""
     return _pair([a], [b], lambda c: (c.subject, c.predicate), None)[1] == 1
 
 
@@ -2620,7 +2620,7 @@ def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = No
 
     `support` is `LedgerReader._support` over the group's claims, read under `ledger_weigh(p, fx, tick)` -- the closure clause 4 reads his ledger by -- so the board shows what his
     decisions weigh: `1 - PROD over distinct origins (1 - weigh(c))`, a doer named by two tellers standing above one named by a single teller repeating himself. With no `fx` (a
-    hand-built read), or a ledger `ledger_weigh` takes the plain reader for, every claim weighs 1.0. `against` is `_disagrees` over the claim's CELL (`is_cell`): a claim of any other
+    hand-built read), or a ledger `ledger_weigh` takes the plain reader for, every claim weighs 1.0. `against` is `contradicts` over the claim's CELL (`is_cell`): a claim of any other
     shape (an event kind, a `seen` struct, a `content:` claim) names no cell and nothing it could disagree with."""
     tick, decay = fade_of(p)
     weigh = ledger_weigh(p, fx, tick) if fx is not None else None
@@ -2642,7 +2642,7 @@ def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = No
         for c in members:
             rows.append(DossierRow(c, c.subject if content_kind(c) is not None and c.subject in held else None,
                                    PROOF_KIND_OF_SOURCE.get(c.source) or "", support,
-                                   tuple(o.id for o in p.ledger if o is not c and is_cell(c) and _disagrees(c, o))))
+                                   tuple(o.id for o in p.ledger if o is not c and is_cell(c) and contradicts(c, o))))
     return tuple(rows)
 
 

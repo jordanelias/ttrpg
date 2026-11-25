@@ -45,7 +45,7 @@ from ..gaps import Forbidden
 # import `decision/`); re-bound here by name, as `opening_set` and `standing_of` call them and the tests reach them as `options.<name>`.
 from ..queries.person_q import (
     BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
-    commanded_read, competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
+    commanded_read, contradicts, competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
     is_cell as _is_cell, ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
