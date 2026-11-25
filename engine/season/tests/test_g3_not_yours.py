@@ -497,7 +497,7 @@ def test_g3_the_shipped_establish_refuses_the_restamp_before_the_gate():
                         contest_max_depth=w.fixtures.get("contest_max_depth"))
         clauses = [r.what.split(" -> ")[0] for r in TRACE.rows[first:]
                    if r.channel == "DECISION" and r.detail.get("chose") == "refuse"]
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
     assert "an establish over a rung the seat exercised does not found over" in clauses, clauses
     assert t.granted_acts == ("issue",) and w.offices["off_reeve"].remit_acts == ["issue"]
 

@@ -91,7 +91,7 @@ def test_cr25_1_a_king_founds_lord_over_a_held_territory_and_the_office_is_the_d
 def test_cr25_2_a_founding_on_an_unheld_territory_refuses():
     w, d = _world()
     out = _act(w, d, "e_unheld", "p_king", "off_king", {"subject": "T2"})
-    assert _kinds(out) == ["establish.refused"], _kinds(out)
+    assert _kinds(out) == ["establish.no_office"], _kinds(out)      # B21.81: the `office resolves` clause's kind
     assert _preds.founded_office_id("T2", "Lord") not in w.offices
 
 
@@ -119,7 +119,7 @@ def test_cr25_4_a_re_remit_of_a_vacant_office_outside_purview_refuses():
                    conferral="appointed")
     assert not any(t.kind == "hold" and t.object == "off_reeve" and t.live for t in w.tenures), "fixture: held"
     out = _act(w, d, "e_far", "p_other", "off_duke2", payload)       # H-291: refused at the overlay arm's `founds_over`
-    assert _kinds(out) == ["establish.refused"], _kinds(out)
+    assert _kinds(out) == ["establish.no_office"], _kinds(out)      # B21.81: the `office resolves` clause's kind
     assert w.offices["off_reeve"].remit_acts == ["issue"]
     out = _act(w, d, "e_near", "p_high", "off_duke", payload)            # control: the seat whose purview reaches S
     assert _kinds(out) == ["remit.changed"], _kinds(out)
@@ -139,7 +139,7 @@ def test_cr25_5_a_reduction_of_a_revocation_none_seats_grant_refuses():
     [t] = [t for t in w.tenures if t.id == "t_reeve"]
     assert t.granted_acts == ("issue", "dispatch"), t.granted_acts
     out = _act(w, d, "e_cut", "p_high", "off_duke", {**payload, "remit": ["issue"]})
-    assert _kinds(out) == ["establish.refused"], _kinds(out)
+    assert _kinds(out) == ["establish.reduces_grant"], _kinds(out)      # B21.81: the `reduction is revocation` clause's kind
     assert t.granted_acts == ("issue", "dispatch"), "the refused reduction re-stamped the grant"
     # CONTROL 1: the same seat, the same actor, a WIDENING -- the purview is there, so the refusal was the cut's.
     out = _act(w, d, "e_add", "p_high", "off_duke", {**payload, "remit": ["issue", "dispatch", "convene"]})
@@ -154,7 +154,7 @@ def test_cr25_5_control_a_reduction_the_seats_basis_admits_is_still_refused_at_e
     w, d = _world()
     payload = _seated_reeve(w, "rung_above_same_faction")
     out = _act(w, d, "e_cut", "p_high", "off_duke", {**payload, "remit": ["issue"]})
-    assert _kinds(out) == ["establish.refused"], _kinds(out)
+    assert _kinds(out) == ["establish.reduces_grant"], _kinds(out)      # B21.81: the `reduction is revocation` clause's kind
 
 
 @pytest.mark.usefixtures("seat_at_success")       # B21.14: the founder's conferral and revocation are drawn; read here at Success
@@ -213,7 +213,7 @@ def test_overlay_establish_by_a_duke_of_another_body_is_refused():
     assert not _preds._req_establish(w, Act(id="e_comp", actor="p_other", verb="establish",
                                             payload={"subject": "S"}, via="off_duke2")), "control: computed arm admits"
     out = _act(w, d, "e_far", "p_other", "off_duke2", overlay)
-    assert _kinds(out) == ["establish.refused"], _kinds(out)
+    assert _kinds(out) == ["establish.no_office"], _kinds(out)      # B21.81: the `office resolves` clause's kind
     assert "off_reeve2" not in w.offices
     near = dict(office="off_lord_t", post="Lord", rung="T", remit=["issue"], faction="Crown",
                 conferral="appointed")

@@ -70,7 +70,7 @@ def test_an_establish_that_narrows_a_sitting_grant_is_refused_and_a_revoke_with_
     w._grant_remit(next(t for t in w.tenures if t.kind == "hold" and t.object == "off_duke"), force=True)
     [t] = [t for t in w.tenures if t.id == "t_reeve"]
     assert t.granted_acts == ("issue", "dispatch"), t.granted_acts
-    assert _kinds(_act(w, d, "e_cut", "p_high", "off_duke", {**payload, "remit": ["issue"]})) == ["establish.refused"]
+    assert _kinds(_act(w, d, "e_cut", "p_high", "off_duke", {**payload, "remit": ["issue"]})) == ["establish.reduces_grant"]      # B21.81: the `reduction is revocation` clause's kind
     assert t.granted_acts == ("issue", "dispatch"), "the refused cut re-stamped the grant"
     assert _kinds(_act(w, d, "e_add", "p_high", "off_duke", {**payload, "remit": ["issue", "dispatch", "convene"]})) \
         == ["remit.changed", "tenure.payload_set"], "the control widening did not execute"

@@ -1041,9 +1041,10 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
         declared = ()
     elif COUNTERPARTY_CLAUSE in row.refusals_by_clause:
         declared = row.refusal_for(COUNTERPARTY_CLAUSE)
-    elif row.draw_kinds and WRITE_CLAUSE in row.refusals_by_clause:
+    elif (row.draw_kinds or not row.counterparty) and WRITE_CLAUSE in row.refusals_by_clause:
         # B07.01 (UNDECIDED (11) (i)): a `task` row has nobody opposite, so no counterparty clause; its refused roll is an
         # act that did not take, its `write` key's kinds (the loader accepts its two refusal kinds on that ground).
+        # B21.81: a contested row that names no `counterparty:` (`establish`, `revoke`) is the same case: the loader's rule, one owner.
         declared = row.refusal_for(WRITE_CLAUSE)
     else:
         declared = row.emits_on_refusal

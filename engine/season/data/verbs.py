@@ -1239,9 +1239,11 @@ def _load_verb_table() -> dict:
             # B07.01 (UNDECIDED (11) (i)): the count is of REFUSAL kinds (`emits_on_refusal`, which holds no `draw` kind), and a
             # `form: task` row -- nobody opposite, so no counterparty clause -- names the kind its refused roll emits by keying
             # `write`: its party gap emits that key's kinds (`loop/resolve.py::_refuse_party_gap`), as an act that did not take.
+            # B21.81: THE SAME HOLDS FOR A CONTESTED ROW THAT NAMES NO `counterparty:` (`establish`, `revoke`): nobody is opposite
+            # on the act's own face, so its party gap is likewise an act that did not take, and emits the `write` key's kinds.
             if ((row.contests or _graded) and len(row.emits_on_refusal) > 1
                     and COUNTERPARTY_CLAUSE not in by_clause
-                    and not (_form == FORM_TASK and WRITE_CLAUSE in by_clause)):
+                    and not ((_form == FORM_TASK or not row.counterparty) and WRITE_CLAUSE in by_clause)):
                 _defects.append("declares `contests:` or a `graded_tasks` route, whose "
                                 "party-gap refusal no clause names, keys no `counterparty` "
                                 "refusal for it (nor, as a task, a `write` one), "

@@ -1265,7 +1265,7 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     # cannot meet over its own rung; clause 5's own refusal is told from the retired precondition below.)
     out = _establish(w, d, "e_self", _founding(remit=["confer", "dispatch"]),
                      actor="p_mid", via="off_reeve")
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
     assert w.offices["off_reeve"].remit_acts == ["confer"], (
         "the refused act still re-stamped the remit")
 
@@ -1291,6 +1291,7 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
                     for t in w.tenures)
         return not others or PR.may_fill(w, a.actor, a.via, off)
 
+    retired_req_establish.clauses = PR.REQUIRES_PREDICATES["establish"].clauses      # B21.81: the keyed row is admitted only while the predicate declares its keys
     monkeypatch.setitem(PR.REQUIRES_PREDICATES, "establish", retired_req_establish)
     # H-291 (B03.81): the effect reads `office_founded_by`, which now asks `founds_over` of an overlay act as
     # well, and a seat cannot found over its own rung -- so, as the retired precondition predates that
@@ -1350,27 +1351,27 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
         f"{change}: the payload did not describe a constructible Office at all")
 
     out = _establish(w, d, "e_refound", changed_payload)
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.refounding"], [e.kind for e in out]      # B21.81: the `re-founding` clause's kind
     assert w.offices["off_reeve"].remit_acts == ["issue"]
     assert t.granted_acts == ("issue",)
 
 
 # `raises` marks the payloads the CONSTRUCTOR itself rejects, so each refusal below is shown to
 # have intercepted a real raise rather than to have been a no-op nothing would have tripped.
-@pytest.mark.parametrize("payload,raises", [
-    ({}, False),
-    (_founding(faction=None), True),                                   # belongs to nothing
-    (_founding(faction="Nowhere Brotherhood"), True),                  # an unknown faction
-    (_founding(faction=None, body="Office of Nothing"), True),         # an unknown body
-    (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
-    (_founding(remit=["issue", "requisition"]), True),                        # off `REMIT_ACTS`
-    (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
-    (_founding(rung="nowhere"), False),                                # a rung the world lacks: no constructor raise; refused by `founds_over`'s own guard (`rung not in w.rungs`, H-291)
-    (_founding(conferral=None), False),                                # no conferral basis
-    (_founding(office="p_low"), False),                                # an id a person holds
+@pytest.mark.parametrize("payload,raises,kind", [
+    ({}, False, "establish.no_office"),
+    (_founding(faction=None), True, "establish.no_office"),                                   # belongs to nothing
+    (_founding(faction="Nowhere Brotherhood"), True, "establish.no_office"),                  # an unknown faction
+    (_founding(faction=None, body="Office of Nothing"), True, "establish.no_office"),         # an unknown body
+    (_founding(body="Imperial Court", faction="Church of Solmund"), True, "establish.no_office"),   # a mismatch
+    (_founding(remit=["issue", "requisition"]), True, "establish.no_office"),                        # off `REMIT_ACTS`
+    (_founding(post="Duke", faction=None, body="Imperial Court"), True, "establish.no_office"),     # a title in a body
+    (_founding(rung="nowhere"), False, "establish.no_office"),                                # a rung the world lacks: no constructor raise; refused by `founds_over`'s own guard (`rung not in w.rungs`, H-291)
+    (_founding(conferral=None), False, "establish.no_basis"),                                # no conferral basis
+    (_founding(office="p_low"), False, "establish.refounding"),                                # an id a person holds
 ], ids=["empty", "no-belonging", "unknown-faction", "unknown-body", "mismatch", "off-roster-remit",
         "title-in-body", "unknown-rung", "no-basis", "person-id"])
-def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_nothing(payload, raises):
+def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_nothing(payload, raises, kind):
     """The fold's FIRST refusal path: the precondition returns False and the fold emits
     `emits_on_refusal`. Asserted on the Event -- the fold is called bare, so a raise escaping it
     fails this test as an error rather than passing silently."""
@@ -1383,7 +1384,7 @@ def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_noth
         with pytest.raises((Unowned, Unspecified, Forbidden)):
             office_described_by(act)
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == [kind], [e.kind for e in out]      # B21.81: the clause's own kind (`office resolves`, `conferral basis`, `re-founding`)
     assert w.offices == before, f"an office was constructed: {sorted(set(w.offices) - set(before))}"
 
 
@@ -1400,7 +1401,7 @@ def test_13f_a_computed_establish_carries_no_operands_and_refuses():
     assert person_side_eligible(duke, row), "fixture: the duke cannot form `establish` at all"
     assert operands_for(duke, row, None, "p_low", w.fixtures) == {}
     out = _establish(w, d, "e_computed", {"subject": "p_low"})
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
 
 
 def test_13f_confer_and_establish_ask_one_basis_test(monkeypatch):
@@ -1842,7 +1843,7 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
     with pytest.raises(Unspecified):
         office_described_by(act)
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["establish.no_office"], [e.kind for e in out]      # B21.81: the `office resolves` clause's kind
     assert "off_reeve" not in w.offices
     # v10 IN-61 (B10-09 close): a seat only the heir's claim opens is founded only as the seat a title passes
     # (`SUCCESSIONS`, `gate.has_filler`); the same basis on a seat no title passes is refused (CONTROL below).
@@ -1857,7 +1858,7 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
         founded += 1
         if claim_only:
             out = _establish(w, d, f"e_orphan_{i}", _founding(office=f"off_orphan_{i}", conferral=basis))
-            assert [e.kind for e in out] == ["establish.refused"], (basis, [e.kind for e in out])
+            assert [e.kind for e in out] == ["establish.no_filler"], (basis, [e.kind for e in out])      # B21.81: the `filler` clause's kind
             assert f"off_orphan_{i}" not in w.offices
             refused += 1
     assert founded == len(CONFERRAL_BASES) >= 3 and refused >= 1, (founded, refused)

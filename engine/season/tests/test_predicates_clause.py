@@ -220,6 +220,53 @@ def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
         [(c.predicate, c.subject) for c in w.persons["p_other"].ledger])
 
 
+def _flat_row(verb: str, kind: str):
+    """A shipped row as it stood flat: one kind for every refusal (the control for what keying changes)."""
+    return dataclasses.replace(VERB_TABLE[verb], emits_on_refusal=(kind,), refusals_by_clause={})
+
+
+def test_a_refused_establish_says_which_clause_refused_in_its_kind(monkeypatch):
+    """B21.81: THE SHIPPED `establish` ROW. Hand-built acts refused at `conferral basis`, `re-founding` and `reduction is
+    revocation` emit three kinds where the flat row (the control) emitted `establish.refused` for all three, and the actor's
+    ledger holds a claim keyed by each. (`rung held` is not reachable by a hand-built act: clause 1's `founds_over` refuses a
+    rung the world does not hold first, as `office resolves`.)"""
+    from .test_governance_build import _establish, _establish_world, _founding, _seat_reeve
+    declared = PR.REQUIRES_PREDICATES["establish"].clauses
+    assert declared == ("office resolves", "rung held", "conferral basis", "filler", "re-founding", "may fill",
+                        "reduction is revocation"), declared
+    shipped = VERB_TABLE["establish"]
+    assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
+    kinds = [shipped.refusals_by_clause[c] for c in declared]
+    assert all(len(k) == 1 for k in kinds) and len({k[0] for k in kinds}) == len(declared), (
+        "two clauses of the predicate key one kind", kinds)
+
+    def arms(world, driver):
+        got = {}
+        got["conferral basis"] = [e for e in _establish(world, driver, "e0", _founding(conferral=None))]
+        _seat_reeve(world, ["confer", "issue", "dispatch"])      # a sitting holder whose grant is the three
+        got["re-founding"] = [e for e in _establish(world, driver, "e1", _founding(post="Other"))]
+        got["reduction is revocation"] = [e for e in _establish(world, driver, "e2",
+                                                                 _founding(remit=["confer", "issue"]))]
+        return got
+
+    w, d = _establish_world()
+    monkeypatch.setitem(VERB_TABLE, "establish", _flat_row("establish", "establish.refused"))
+    flat = {c: [e.kind for e in es] for c, es in arms(w, d).items()}
+    assert flat == {c: ["establish.refused"] for c in ("conferral basis", "re-founding", "reduction is revocation")}, flat
+    monkeypatch.undo()
+    w, d = _establish_world()
+    got = arms(w, d)
+    names = {c: [e.kind for e in es] for c, es in got.items()}
+    assert names == {"conferral basis": ["establish.no_basis"], "re-founding": ["establish.refounding"],
+                     "reduction is revocation": ["establish.reduces_grant"]}, names
+    # the actor's ledger holds a claim keyed by each kind, so §F1 clause 4 can decline the same act next round
+    for clause, events in got.items():
+        w.log.extend(events)
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+        assert any(c.predicate == names[clause][0] for c in w.persons["p_high"].ledger), (
+            clause, [(c.predicate, c.subject) for c in w.persons["p_high"].ledger])
+
+
 def test_a_keyed_predicate_row_with_unknown_keys_is_refused(monkeypatch):
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
     ok = _keyed_confer({c: "confer.refused" for c in declared})

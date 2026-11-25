@@ -6085,7 +6085,7 @@
           "opposed_attribute": "attr.spirit.will",
           "governing_note": "B21.09 (VB-A commit A3): the founding is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls, `data/verbs.py::_check_governing_attributes`) for the efficacy kind, whole, in one commit. [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `establish`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `seize`'s cells, the other seat-authorised act contested on the social roll, are copied: Presence leads a claim the seat's room must accept, and `opposed_attribute` is read only where a person stands opposite, which for this row is never (no `counterparty:`, a holding `subject`), so it moves no roll. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`.]",
           "contests": "a seat",
-          "contests_note": "B21.09 (`14_VERBS_BINDING_A_formation.md` commit A3, edit 12; audit \u00a70.2, the standing rule: a founding is drawn, graded and recoverable): the prize `a seat` (`rosters.yaml: contest_subsystems.prizes`, B07's row, `heard_by: seat_body`), rolled by the social contest module (`social_contest.roll`). NO COUNTERPARTY: the opposition is the untrained score (`roll.py::obstacle`, never absent; SC-B: absent for a non-person subject); the obstacle is `difficulty` `demanding` + the `reception` of the seat's body or the seated persons at its rung (`sigma.py::audience_of`) + `rank_gap` (`rank_step`, at control 0, B21.09). The flat `emits_on_refusal` stays: a contested row keys one refusal kind. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.09.]",
+          "contests_note": "B21.09 (`14_VERBS_BINDING_A_formation.md` commit A3, edit 12; audit \u00a70.2, the standing rule: a founding is drawn, graded and recoverable): the prize `a seat` (`rosters.yaml: contest_subsystems.prizes`, B07's row, `heard_by: seat_body`), rolled by the social contest module (`social_contest.roll`). NO COUNTERPARTY: the opposition is the untrained score (`roll.py::obstacle`, never absent; SC-B: absent for a non-person subject); the obstacle is `difficulty` `demanding` + the `reception` of the seat's body or the seated persons at its rung (`sigma.py::audience_of`) + `rank_gap` (`rank_step`, at control 0, B21.09). `emits_on_refusal` was flat here and is keyed per clause since B21.81 (`refusal_note`; the row names no counterparty, so its party gap takes the `write` key's kind). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.09.]",
           "difficulty": "demanding",
           "capability": "none",
           "capability_note": "B21.09 [ASSUMPTION; medium; Jordan to correct -- basis: `found`'s cell, the sibling founding: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) is named for a founding by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`) until one is; revert: `law`].",
@@ -6133,9 +6133,36 @@
             ]
           },
           "emits_note": "B21.09 (edit 12; A-81, C3-C11, the durable write of every band): `office.unrecognised` is the Failure band's kind -- the founding was attempted and the seat's room did not accept it, which a witness reads differently from a refusal (`establish.refused`: the act never reached the draw). It writes nothing; WITNESS deposits it as any Event, so the refused founding is a remembered deed of its actor.",
-          "emits_on_refusal": [
-            "establish.refused"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "establish.refused"
+            ],
+            "office resolves": [
+              "establish.no_office"
+            ],
+            "rung held": [
+              "establish.no_rung"
+            ],
+            "conferral basis": [
+              "establish.no_basis"
+            ],
+            "filler": [
+              "establish.no_filler"
+            ],
+            "re-founding": [
+              "establish.refounding"
+            ],
+            "may fill": [
+              "establish.unauthorized"
+            ],
+            "reduction is revocation": [
+              "establish.reduces_grant"
+            ],
+            "write": [
+              "establish.refused"
+            ]
+          },
+          "refusal_note": "B21.81 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_establish` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the seven names, spelled there with their spaces; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `establish` says WHICH clause refused. The predicate's kinds, in branch order: `office resolves` (the constructor refused it, an overlay act the seat does not found over, or an operand missing) `establish.no_office`; `rung held` (no rung the world holds) `establish.no_rung`; `conferral basis` (the office declares none) `establish.no_basis`; `filler` (a seat only the heir's claim opens, no title passing it) `establish.no_filler`; `re-founding` (an id some other class holds, or a different belonging for an existing office) `establish.refounding`; `may fill` (an existing office the seat exercised does not reach) `establish.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `reduction is revocation` (a re-stamp that drops from a sitting holder's grant an act, which is `revoke`'s) `establish.reduces_grant`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `establish.refused`; the row names no `counterparty:`, so the seam's party gap (S27.4's pool under 1D, a contest that reached its depth cap) takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81, on the `task` row's precedent). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal, itself on `seize`'s and `arrest`'s) -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"establish.refused\"]`.]",
           "grade": "assumption",
           "source": "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
         },
