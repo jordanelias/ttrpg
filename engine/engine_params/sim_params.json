@@ -4538,7 +4538,7 @@
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control) [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped]",
+      "note": "[JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped] `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control)",
       "citation": null,
       "citation_grade": null
     },

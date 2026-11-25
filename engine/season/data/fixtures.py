@@ -718,7 +718,7 @@ DEFAULT_FIXTURES = Fixtures(
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     # B17.01 SHIPS `3`, A.9's number spelled out: with CP-T04-05's scaling it is the archived table's +3 at a full garrison and
     # proportionally less below, and `None`, the flat row, stays in the sweep as the control.
-    field_walls_dr=3,     # `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control) [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped]
+    field_walls_dr=3,     # [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped] `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control)
     # CP-T04-01 (`H-359`). WHAT A HEADCOUNT SIDE IS MADE OF: `person` IS SHIPPED (B17.01) -- one subunit per commanding
     # person, sized by `under_arms_cap` of his own weight, and `_eff_march` scales each side's person by HIS subunit's ratio
     # and names, on the band Event, the person whose subunit broke first. `side` is the control: one subunit sized by the
