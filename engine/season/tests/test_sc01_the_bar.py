@@ -1,82 +1,24 @@
-"""v9 SC-01 STEP 16 -- THE BAR, M2's first gate (`workplans/valoria_master_workplan_v9_part6.md` §SC-01,
-the CARRIED *Step 16* bullet and the entry's FALSIFIER): *two seeded proceedings run end to end with
-zero authored acts, twice, byte-identical including the hash, and `causes[]` walks from the
-determination back to the date that raised it* -- and the closure test: *a planted
-`if arrangement.id == "tribunal"` in an effect must redden it*.
+"""v9 SC-01 STEP 16 -- THE BAR, M2's first gate, RE-PINNED ON THE SHIPPED HEARING (B24.16; `U5c_SC_proceedings_residue.md` §2): *proceedings run with zero authored
+acts, twice, byte-identical including the hash*, *a verdict that can be lost*, and the closure test: *a planted `if arrangement.id == "tribunal"` in an effect must
+redden it*.
 
-WHAT A PROCEEDING IS HERE, every act chosen by the real chooser (`decision.make_chooser`, built as
-`harness/populated.py::run` builds it) through the real `SeasonDriver.season`; the test injects no Act,
-calls no `resolve`, and only builds the world and turns the seasons:
-  convene (the Duke, via his seat, at a place) -> `date.scheduled` -> next season CALENDAR fires it
-  (`date.fired`, `docket.formed`: an empty slot, the date being held) -> WITNESS deposits the firing in
-  the Duke's ledger -> `open_case` on the clerk fills the slot -> the sitting question
-  (`world_q.questions_for`'s `q:sitting:<date>:<matters>`) -> `determine` -> `matter.determined`, whose
-  `causes[]` reach the `date.fired` Event of the Date whose slot held the matter.
+THE WORLD IS `governance_spine.build_hearing(seed)` -- the world `harness/scenarios.py::SCENARIOS["hearing"]` plays -- at the fixtures it builds itself (`DEFAULT_FIXTURES`
+with its own two arms, `sitting_exchanges` 1 and the proceeding role as the NPC attendees' decider; the shipped realm keeps its control, so the entry's "`DEFAULT_FIXTURES`"
+is the world's own fixtures and not the bare ones). It replaces the world this file used to find by sweeping 1,815 runs of a three-person `tiny_world` at a judge pool of 60
+(`BAR_FIXTURES`, off the declared sweep and global to every contested verb), whose proceedings the file re-traced a dozen times as the act mix moved. The hearing's sitting is
+opened by the game's own acts at build (a Mayor `convene`s, CALENDAR fires the Date, the Mayor `open_case`s the accused: `premise` below), and every act of the run is the real
+chooser's (`probes.chooser`, `harness/populated.py::run`'s), through the real `SeasonDriver.season`; the test injects no Act, calls no `resolve`.
 
-THE WORLD IS HAND-BUILT STATE ONLY (v9 §0.5): `probes.tiny_world` (`R` > `D` > `S` > `Hh`; the Duke
-`p_high` holds `off_duke`, rung `D`, and stands in `S`; the clerk `p_mid` lives in `Hh`), plus two
-pieces of character data, the kind the realm's builder authors for every person: one conviction
-(`Person.pursuits`), and one ambition -- an OUGHT Proposition about the clerk the Duke `commit`s to
-(`harness/populated.py`'s tie shape), so a standing `need` question about the clerk recurs every season
-(`questions_for` Q4). No Date, docket item, claim or Act is planted.
+WHAT LEAVES THIS FILE: the claim that a determination's `causes[]` walk back to the `date.fired` that raised it. It held on the swept world only (the hearing's Date fires at
+build and no determination's causes reach it, read at 40 seeds); `test_sc01_fired_slot.py` (the walk at its `done`/`fired` pair) owns it.
 
-⚠ THE TWO SEEDS ARE SELECTED, AND THE RATE IS MEASURED -- THE BAR IS AN EXISTENCE CLAIM, NOT A RATE.
-MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
-seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
-(doctrine 12, family 13, reputation 13, scholastics 6); this file first ran scholastics 6 and family 13;
-the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25, at CR-16 which left no family proceeding, and at v11 CR-10/CR-28). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
-`world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
-appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
-him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the
-determination without a sitting. That ordering -- a matter docketed before a sitting is never called
-to one, and a dateless item is determinable -- is the link that keeps the rate low; it is recorded at
-`hole_register.yaml` H-163 with a prototype measurement, and lifting it is a design choice this step
-does not take. Without the ambition (the Duke given only a firsthand claim that the clerk exists,
-`test_u7_remit.py`'s plant; 15 convictions x seeds 0..5, five seasons) nobody is determined at all:
-the Duke is asked about a person almost never, and a sitting's slot is filled by whatever he is asked
-about when he next opens a case (a rung, a Record, the date's own id), on which `determine` refuses
-on `party`.
-
-THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run and reverted):
-  * AN INJECTED ACT REDDENS THE BAR: a chooser wrapper replacing the first act of the Duke's first
-    scene with a hand-written `open_case` Act -- `_zero_authored` fails naming `authored_oc` (kept
-    as `test_an_injected_act_reddens_the_bar`).
-  * A DIFFERENT RNG ON THE SECOND RUN REDDENS THE BAR: the chooser's draw stream seeded one higher
-    on run two of family/13 (world and world seed unchanged) -- hashes f0aa1e93 vs e4cc794a.
-  * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
-    `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
-    determined, 1 fired)*.
-  * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
-    `_eff_determine` (`loop/effects_information.py`) reddened both closure tests (the package scan
-    reports the line; the real effect no longer scans clean); the same plant is kept as a test over
-    the real effect's own source.
+THE FALSIFIERS, each seen red before it was trusted:
+  * AN INJECTED ACT REDDENS THE BAR (kept below): a chooser wrapper replacing the first act of the accuser's first scene with a hand-written Act -- `_zero_authored` names it.
+  * A VERDICT THAT CANNOT BE LOST REDDENS THE BAR (run once, not kept): `sigma._resolve_proceeding`'s returned net pinned a whole success over the obstacle, so every sitting
+    is `Success` -- `test_a_verdict_can_be_lost_on_the_shipped_hearing` fails on the lost arm (no `matter.undetermined` at any of the 40 seeds).
+  * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real `_eff_determine` reddened both closure tests (kept as a test over the real effect's
+    own source).
 No test here asserts execution in the seed-0 realm (v9 §0.5's relaxed exit).
-
-v9 SC-03b (RE-RECORDED): `determine` is a CONTESTED act now, rolled by the Duke's `pool_default` against the
-clerk's obstacle, so at the shipped judge (pool 2, obstacle 2) most determinations are `Failure`
-(`matter.undetermined`, nothing opens). MEASURED 2026-10-17, this world at each of the 15 convictions x
-seeds 0..23, ten seasons, shipped fixtures: 360 runs, ONE proceeding walks (scholastics/6) -- family/13
-drew `Failure` in its fifth season (counts from a one-off sweep, not kept). So the bar runs a STRONG JUDGE
-(`BAR_FIXTURES`: `pool_default` 30), at which the same 15 x seeds 0..15 sweep gives three (family/13,
-reputation/13, scholastics/6), and the two seeds and season counts of this file are unchanged. ⚠ 30 IS OFF
-THE SWEEP: `H-126` declares `[1, 2, 4]` and `Fixtures.sweep` does not check the value, so this is a fixture
-chosen to make the finding open, not a declared arm; at the declared top arm (4) family/13 draws `Failure`
-(read 2026-10-17). It is GLOBAL: every contested verb without a `verb_capability` row falls to
-`pool_default`, so `speak` and `tell` roll at 30 here too, and a saturated roll hides the contest's draw
-stream from the twice-identical-hash check. The bar's claim is an EXISTENCE claim (the chain can close
-from a conviction by choices alone), which the strong judge removes the lottery from; the three falsifiers
-above were seen at SC-01's shipped fixtures and are not re-run at 30.
-The `Failure` band and the shipped judge are observed in `test_u7_remit.py` (section 10), not here.
-
-v9 FI-01 (RE-TRACED 2026-10-17, NOT RE-PINNED): `research`, `examine` and `surveil` are graded through
-`sigma.faculty` too, so at `BAR_FIXTURES` every graded inquiry these runs reach draws `Overwhelming`
-(scholastics/6: 3 `surveil`; family/13: 4 `surveil`, 1 `research`; doctrine/8: 2 `surveil`), and the
-skip arm deposits nothing for `finding.none` (15 / 11 / 19 `finding.none` claims held at the base, 0
-now). Each run's hash moved (213c3aca... -> faf13c18..., 7e3578b5... -> 07ed5a02..., b1a4c665... ->
-74bcb320..., read off a one-off trace, not kept), and both proceedings still walk to their `date.fired`
-in the same season counts while the control still does not, so the two seeds, the season counts and the
-control are unchanged. The saturation hides the inquiries' draw stream from the twice-identical check,
-as it does `speak`'s and `tell`'s.
 """
 
 from __future__ import annotations
@@ -90,143 +32,27 @@ import pytest
 
 from ..data import files
 from ..data.arrangements import ARRANGEMENTS
-from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
+from ..harness.governance_spine import ACCUSED, ACCUSER, ACCUSER_SEAT, build_hearing
+from ..harness.scenarios import HEARING_VERBS
 from ..loop import effects_information
-from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.driver import SeasonDriver
 from ..queries import world_q
-from ..state.carriers import Act, Proposition, Tenure
+from ..state.carriers import Act
 from ._closure_scan import branches_on_ids, game_code
-from .test_sc01_fired_slot import _walks_to
 
-DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
-
-# (conviction, world seed, seasons): the two seeded proceedings, and the control run. The season count
-# is the first season after which the determination stands (traced at build), so each run is no longer
-# than its proceeding.
-# v10 REM-25 (B10-05): RE-TRACED, scholastics/6 -> scholastics/16, the conviction and season count unchanged --
-# `carry`, `found` and `build` declare `referent_class: Record`, so they form only on a Record the person holds
-# (the Duke and the clerk hold none here), and the act mix of this world moved: scholastics/6 now fires TWO dates
-# and determines one matter whose causes reach neither (`_proceeding`: "no determination's causes reach a
-# date.fired (1 determined, 2 fired)"). The bar is an existence claim on SELECTED seeds (above), not a rate. A sweep
-# of scholastics x seeds 0..39 at 6 seasons for a run meeting every assertion of `_proceeding` finds seeds 13, 16 and
-# 21 (scratch, not kept); 16 is taken, the first that is not family's seed. family/13/5 is unmoved (it meets them
-# all). CONTROL, run: this file on the REM-24 tree (`f2381695`) meets them all at scholastics/6, so the move is this
-# unit's.
-# v10 CP-T05-04 (B10-05): RE-TRACED AGAIN, scholastics/16 -> scholastics/21, the conviction and season count unchanged --
-# `open_case` declares `referent_class: Person` (and `argue` declares `Proposition`, and `docket_question` asks the
-# witness of a docketing), so the Duke's `open_case` stops forming on the rungs and the Sites he is asked about, and the
-# act mix of this world moved: scholastics/16/6 now fires ONE date and determines nobody (`_proceeding`: "no
-# determination's causes reach a date.fired (0 determined, 1 fired)"). ATTRIBUTION, in-process on this tree (the same
-# script on each arm): with neither column nor the docket question (the REM-25 behaviour) scholastics/16/6, family/13/5
-# and the control all meet their assertions; the docket question alone moves none of the three (their hashes are the
-# REM-25 tree's); the `open_case` column alone breaks scholastics/16/6 and the control (the `argue` column alone moves
-# every hash and breaks neither); family/13/5 still meets every assertion with a moved hash. The bar is an existence
-# claim on SELECTED seeds (above), not a rate. A sweep of scholastics x seeds 0..39 at 6 seasons for a run meeting every
-# assertion of `_proceeding` finds seeds 13, 21 and 22 (scratch, not kept); 21 is taken, the first that is not family's
-# seed.
-# v10 CR-16 (B10-07b): RE-TRACED AGAIN, scholastics/21/6 and family/13/5 -> scholastics/13/6 and scholastics/33/6, the season
-# count unchanged -- `Fixtures stance_polarity` ships `declared` (H-194), so the Duke's `determine` on the clerk is scored with the
-# grudge's sign and the act mix of this world moved: scholastics/21/6 now fires ONE date and determines nobody and family/13/5
-# determines nobody in three firings (`_proceeding`: "no determination's causes reach a date.fired"). The CONTROL test below
-# (virtue/2) still meets its assertions. The bar is an existence claim on SELECTED seeds (above), not a rate. A sweep of
-# scholastics x seeds 0..39 at 6 seasons for a run meeting every assertion of `_proceeding` finds seeds 13 and 33 (seed 39 raises
-# in a different assertion); a sweep of family x seeds 0..39 at 5 seasons finds none, so both proceedings are scholastics' (scratch,
-# not kept; the two worlds differ by seed, and the file's own distinct-hash assertion holds). ATTRIBUTION, in process on this tree:
-# `stance_polarity` swept back to `legacy` on `BAR_FIXTURES` meets every assertion at scholastics/21/6 and family/13/5 again.
-# v11 CR-10 + CR-28 (B10-09 close two): RE-TRACED AGAIN, scholastics/13/6 and scholastics/33/6 -> virtue/30/6 and
-# scholastics/115/6, the season counts unchanged -- CR-10's own-act screen (CR-10 left both proceedings red: scholastics/13
-# "no determination's causes reach a date.fired (0 determined, 1 fired)") and CR-28's `propositions_heard` term moved the act
-# mix of these worlds. A sweep of the 15 convictions x seeds 0..120 at 6 seasons for a run meeting every assertion of
-# `_proceeding` found two in 1815 runs, virtue/30 and scholastics/115 (the producer's scratch, not kept; the base rate was not
-# measured); both were re-run here twice, byte-identical, hashes db518c5d and 108f5d6d. The bar is an existence claim on
-# SELECTED seeds (above), not a rate. [GAP: the sweep's lowest-seed claim is the producer's, not re-run by the orchestrator]
-# v11 CR-82 (B10-09 close two, ED-IN-0319): RE-TRACED AGAIN, virtue/30/6 and scholastics/115/6 -> doctrine/115/6 and
-# community/466/6, the season counts unchanged -- `ledger_cap` 200 -> 3200, and this three-person world's ledgers reached 200
-# inside six seasons (364 at the new cap, virtue/30), so what the Duke holds stops being evicted and the act mix moves: both old
-# proceedings now fire ONE date and determine nobody ("0 determined, 1 fired"). ATTRIBUTION, in process on this tree:
-# `BAR_FIXTURES` with `ledger_cap` swept back to 200 meets every assertion at virtue/30/6 and scholastics/115/6 again, twice
-# byte-identical (2a8c0103... and 108f5d6d...). THE SWEEP, this file's `_proceeding` over the 15 convictions x seeds 0..480 at 6
-# seasons (7215 runs; the producer's scratch, not kept): exactly two runs meet every assertion, doctrine/115 and community/466;
-# both are taken. The rate fell (two in 1815 at the parent over seeds 0..120; one in 1815 here over the same range), which is
-# recorded and not asserted: the bar is an existence claim on SELECTED seeds (above), not a rate.
-# v11 CR-17 (B10-09 close two): RE-TRACED AGAIN, doctrine/115/6 and community/466/6 -> stability/95/6, AND ONE PROCEEDING WHERE THERE
-# WERE TWO -- `Fixtures choice_temperature` 0.1 -> 0.05 (H-96's re-derivation by the card's rule; `odds_weighting` `believed` alone is
-# not the cause) moved the act mix of this three-person world: both old proceedings now fire ONE date and determine nobody
-# (`_proceeding`: "no determination's causes reach a date.fired (0 determined, 1 fired)"). ATTRIBUTION: `BAR_FIXTURES` with
-# `choice_temperature` swept back to 0.1 is the parent tree's fixture and meets every assertion at doctrine/115/6 and community/466/6
-# (the parent tree passes this test; the in-process sweep was not run for the two seeds). THE SWEEP, this file's `_proceeding` over the
-# 15 convictions x seeds 0..480 at 6 seasons (7215 runs; the producer's scratch, not kept): exactly ONE run meets every assertion,
-# stability/95 (hash 5d7ac834...), and it is taken; the rate fell from two in 7215 (v11 CR-82, tau 0.1) to one in 7215. THE SECOND
-# PROCEEDING WAS NOT FOUND within a bounded further search: seeds 481..1000 at 6 seasons for 11 of the 15 convictions (those of three of
-# the four index classes of the sweep; the fourth was not run) found none, nor did seeds 0..120 at 5 seasons for all 15 (1815 runs). The
-# bar is an existence claim on SELECTED seeds (above), not a rate, and one passing proceeding still carries it; the file's
-# `len(set(hashes)) == len(PROCEEDINGS)` clause is trivial with one, and the falsifiers below read `PROCEEDINGS[0]`. [ASSUMPTION; medium;
-# Jordan to correct; revert: restore the pair doctrine/115 and community/466 if `choice_temperature` returns to 0.1.]
-# v10 REM-30 (the `verb_capability` rows, B10-10): RE-TRACED AGAIN, stability/95/6 -> stability/35/7, the conviction unchanged and
-# THE SEASON COUNT MOVED -- `train` forms one Candidate per vocation and its act id carries the vocation, so the act mix of this
-# three-person world moved: stability/95/6 now fires TWO dates and determines nobody (`_proceeding`: "no determination's causes reach a
-# date.fired (0 determined, 2 fired)"). ATTRIBUTION: the rows commit's four source files reverted meet every assertion at stability/95/6
-# (the parent tree passes this file). THE SWEEP, this file's `_proceeding` (the producer's scratch, not kept): the 15 convictions x
-# seeds 0..720 at 6 seasons (10800 runs) found NO run meeting every assertion; the 15 convictions x seeds 0..60 at 4 and 5 seasons (900
-# runs each) found none; at 7 and 8 seasons (900 runs each) exactly one each, stability/35 (hashes 7214ae32... and 8dac56b0...). 7 is taken,
-# the first. The bar is an existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert:
-# restore stability/95/6 if the rows commit is reverted.]
-# B11 lane A (the duel chain's reach, rebased; re-pinned in B01.02): RE-TRACED AGAIN, stability/35/7 -> stability/95/7, the conviction
-# and season count unchanged -- the reach's formation changes (a `challenge` only on a grievance beside its holder, the Record sub-kind
-# rule, `carry`/`found`/`build` only on a held Record) moved the act mix of this three-person world: stability/35/7 now fires TWO
-# dates and determines nobody ("0 determined, 2 fired"). ATTRIBUTION, in process on this tree (scratch, not kept): with
-# `revert_b11a` and `revert_b11a_scores` applied stability/35/7 meets every assertion again (e5d27cd7...); with
-# `revert_b11a_scores` alone it misses as above, so the move is the reach's, not the obstacle's (this world is `tiny_world`,
-# which seats no drawn sheet (`state/carriers.py::generated_attributes`), and `BAR_FIXTURES` reads the control obstacle). stability/95/7, lane A's own re-trace
-# (its sweep: the 15 convictions at 7 seasons, seed blocks 0-160, stopped at the first hit), meets every assertion on this tree
-# (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
-# [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
-# B09.05 (`refusal_memory` 0.0 -> 0.5): stability/95/7 stopped meeting `_proceeding` ("no slot names the raising date", the docket holds the
-# matter with no date) -- the remembered refusal moves this three-person world's act mix. ATTRIBUTION, in process on the batch tree (scratch, not
-# kept): `BAR_FIXTURES` with `refusal_memory` swept back to 0.0, the parent tree's value, meets every assertion at stability/95/7 again, and the
-# test passes at B09.04's head. NOT RE-TRACED (a search over thousands of runs, as above): the bar is run at the control for the factor.
-# [ASSUMPTION; medium; Jordan to correct; revert: drop the `refusal_memory` sweep and re-trace at 0.5.]
-# B21.07 (A-37; `release` forms only on a held tie): RE-TRACED AGAIN, stability/95/7 -> honour/7/7, the conviction and the seed both moved --
-# the formation narrowing moved the act mix of this three-person world: stability/95/7 now fires ONE date and its one determination's causes
-# reach no `date.fired` (`_proceeding`: "no determination's causes reach a date.fired (1 determined, 1 fired)"). ATTRIBUTION: the test passes
-# at B21.07's parent (077f26e) and fails at B21.07 (b16009f) and every later commit. THE SWEEP, this file's `_proceeding` (a scratch, not kept):
-# the 15 convictions x seeds 0..11 at 7 seasons (180 runs, stopped at the first hit): exactly one run meets every assertion, honour/7
-# (hash df2e5647...), and it is taken. The bar is an existence claim on SELECTED seeds (above), not a rate.
-# [ASSUMPTION; medium; Jordan to correct; revert: restore stability/95/7 with B21.07's formation decline.]
-# B11 MERGE WITH MAIN: RE-TRACED AGAIN, honour/7/7 -> stability/6/7, the conviction and the seed both moved -- B11's items with B21's and B24p's moved this three-person
-# world's act mix, and honour/7/7 stopped meeting `_proceeding`. THE SWEEP, this file's `_proceeding` (the producer's scratch, not kept): the 15 convictions x seeds 0..199 at 7
-# seasons, `PYTHONHASHSEED=0`, each of four partitions stopped at its first hit: stability/6, stability/129, stability/151 and stability/152. The lowest seed is taken
-# (stability/6/7, hash aad0df64...). The bar is an existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert: restore honour/7/7 with the merge's movers reverted.]
-# B24.10: RE-TRACED AGAIN, stability/6/7 -> scholastics/153/7, the conviction and the seed both moved -- B24.08 and B24.10 (a `determine` is declared at RESOLVE and sat at
-# ENCOUNTER, as the bench's own close; the chooser prices a computed case's determination by its sitting) moved this three-person world's act mix, and stability/6/7 stopped meeting
-# `_proceeding`: its clerk's case is now opened before the sitting fires ("no open_case put the clerk before the sitting after it fired"). THE SWEEP, this file's `_proceeding`
-# (the producer's scratch, not kept): the 15 convictions x seeds 0..119 at 7 seasons, `PYTHONHASHSEED=0`, no run meets every assertion; then seeds 120..259 conviction by conviction (stability,
-# doctrine, family, reputation, scholastics, community; the sweep was stopped there), one hit: scholastics/153/7 (hash 4784ba71...). The bar is an existence claim on SELECTED seeds (above), not a rate.
-# [ASSUMPTION; medium; Jordan to correct; revert: restore stability/6/7 with B24.08's deferral and B24.10's fallback entry reverted.]
-PROCEEDINGS = (("scholastics", 153, 7),)
-BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
+# THE KIND THE LOST ARM READS: `verb_table.yaml: determine` emits `matter.undetermined` at the Failure band -- the bench heard the matter and did not dispose of it, nothing opens.
+# [ASSUMPTION: `matter.dismissed` is B27's (`05_SC_acquittal`), not emitted by the tree today -- basis: no `emits` row of `verb_table.yaml` names it; B27 re-points `LOST` here.]
+BOUND, LOST = "matter.determined", "matter.undetermined"
+SEEDS = range(40)
 
 
-def _world(conviction: str, seed: int):
-    """`tiny_world` at `seed`, the Duke given one conviction and one ambition about the clerk."""
-    w = P.tiny_world(BAR_FIXTURES)
-    w.world_seed = seed
-    w.persons[DUKE].pursuits = {conviction: 1.0}
-    w.propositions[WANT] = Proposition(WANT, "OUGHT", PARTY, "the clerk should answer", True, 0)
-    w.add_tenure(Tenure("t_bar_duke_want", DUKE, WANT, "commit", since=0))
-    return w
-
-
-def _run(conviction: str, seed: int, seasons: int, wrap=None):
-    """Turn the seasons through the real chooser. Returns `(world, driver, chosen)`: `chosen` holds every
-    Act OBJECT the chooser returned -- an observation, it decides nothing. Objects, not ids: the driver
-    re-derives a re-deliberated act's id with its round (`loop/deliberate.py`, `:r<n>`), so an id the
-    minter produced is not the id RESOLVE sees. `wrap` is the mutation hook a falsifier uses (a wrapper
-    OUTSIDE the recorder, as an injection would be); THE BAR passes none."""
-    w = _world(conviction, seed)
-    d = SeasonDriver(w)
-    real = P.chooser(w, verbs=resolvable_verbs())
+def _hearing(seed: int, wrap=None):
+    """`build_hearing(seed)` and ONE season (the sitting is due at its tick) through the real chooser. Returns `(world, chosen)`: `chosen` holds every Act OBJECT the
+    chooser returned -- an observation, it decides nothing. Objects, not ids: the driver re-derives a re-deliberated act's id with its round (`loop/deliberate.py`, `:r<n>`).
+    `wrap` is the mutation hook a falsifier uses (a wrapper OUTSIDE the recorder, as an injection would be); THE BAR passes none."""
+    w = build_hearing(seed)
+    real = P.chooser(w, verbs=HEARING_VERBS)
     chosen: list = []
 
     def choose(p, v, s, ask_budget):
@@ -235,98 +61,94 @@ def _run(conviction: str, seed: int, seasons: int, wrap=None):
         return scenes
     if wrap is not None:
         choose = wrap(choose)
-    for _ in range(seasons):
-        d.season(choose, question=None,
-                 contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, d, chosen
+    premise = {a.id for a in w.acts}                      # what the build folded: the sitting's opening, made by the game's own acts
+    SeasonDriver(w).season(choose, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return w, chosen, premise
 
 
-def _zero_authored(w, chosen: list) -> None:
-    """Every act that reached RESOLVE is an object the chooser returned: none was injected. Read off
-    `w.acts`, the store every act entering RESOLVE is recorded in -- not `SeasonDriver.resolved`,
-    which a contested act refused at admission (e.g. `speech.unheard`) never enters."""
-    assert len(w.acts), "the run resolved no act at all"
+def _zero_authored(w, chosen: list, premise: set) -> None:
+    """Every act that reached RESOLVE in the run is an object the chooser returned: none was injected. Read off `w.acts`, the store every act entering RESOLVE is recorded
+    in -- not `SeasonDriver.resolved`, which a contested act refused at admission (e.g. `speech.unheard`) never enters. The build's own acts (`premise`) are the opening."""
     ours = {id(a) for a in chosen}          # `chosen` keeps every object alive, so no id is reused
-    authored = [(a.id, a.actor, a.verb) for a in w.acts if id(a) not in ours]
+    run = [a for a in w.acts if a.id not in premise]
+    assert run, "the run resolved no act at all"
+    authored = [(a.id, a.actor, a.verb) for a in run if id(a) not in ours]
     assert not authored, f"acts the chooser did not return reached RESOLVE (authored): {authored}"
 
 
-def _proceeding(conviction: str, seed: int, seasons: int) -> str:
-    """ONE SEEDED PROCEEDING, end to end, every link read off the log; returns the content hash."""
-    w, d, chosen = _run(conviction, seed, seasons)
-    _zero_authored(w, chosen)
-    acts = {a.id: a for a in d.resolved}
-    # THE DETERMINATION, and the firing its `causes[]` walk back to.
-    done = [e for e in w.log if e.kind == "matter.determined"]
-    fired = [e for e in w.log if e.kind == "date.fired"]
-    raised = [(e, f) for e in done for f in fired if _walks_to(w, e, f.id)]
-    assert raised, (f"{conviction}/{seed}: no determination's causes reach a date.fired "
-                    f"({len(done)} determined, {len(fired)} fired)")
-    e, f = raised[0]
-    det, = [acts[c] for c in e.causes if c in acts]
-    assert (det.verb, det.actor, det.via, det.payload.get("subject")) == ("determine", DUKE, SEAT, PARTY), det
-    # THE DATE THAT RAISED IT: the held Date at the firing's venue, due the tick it fired, whose slot
-    # CALENDAR formed and an `open_case` on the clerk filled.
-    venue = world_q.anchor_of(w, f)
-    did, = [k for k, v in w.dates.items()
-            if v.get("venue") == venue and v.get("due_at") == f.emitted_at and v.get("fired")]
-    assert w.dates[did]["holder"] == SEAT, w.dates[did]
-    assert any(i.get("date") == did for i in w.docket), f"no slot names the raising date {did}: {w.docket}"
-    formed = [x for x in w.log if x.kind == "docket.formed" and f.id in x.causes]
-    assert formed, "the raising firing formed no docket slot"
-    # The clerk's case was opened AFTER the firing (so it filled the slot, not a dateless item), and the
-    # determination was formed from THAT sitting's question, which names only a slot's docketed matters.
-    opened = [x for x in w.log if x.kind == "case.opened" and x.emitted_at >= f.emitted_at
-              and any(c in acts and (acts[c].verb, acts[c].via, acts[c].payload.get("subject"))
-                      == ("open_case", SEAT, PARTY) for c in x.causes)]
-    assert opened, "no open_case put the clerk before the sitting after it fired"
-    occ = w.acts.scene_of(det.id).occasion
-    assert occ.id.startswith(f"q:sitting:{did}:") and PARTY in occ.referents, occ
-    # ... AND THE CONVENE THAT SCHEDULED IT WAS CHOSEN, NOT INJECTED.
-    sched, = [x for x in w.log if x.kind == "date.scheduled" and any(ch.subject == did for ch in x.changes)]
-    conv, = [acts[c] for c in sched.causes if c in acts]
-    assert (conv.verb, conv.actor, conv.via, conv.payload.get("subject")) == ("convene", DUKE, SEAT, venue), conv
-    assert sched.emitted_at < f.emitted_at
-    return w.content_hash()
+def _determinations(w) -> list:
+    """The `determine` Events of the hearing's matter (the accused), whoever sat: `(kind, Event)`, off the log."""
+    out = []
+    for e in w.log:
+        act = w.acts.get(e.causes[0]) if e.causes else None
+        if e.kind in (BOUND, LOST) and act is not None and act.verb == "determine" and act.payload.get("subject") == ACCUSED:
+            out.append(e)
+    return out
+
+
+def _bar(worlds: list) -> None:
+    """THE BAR ON THE SHIPPED HEARING: over the worlds, a determination binds at some seed and is lost at some seed, and every binding one carries its terms."""
+    assert len(worlds) == 40, len(worlds)                 # it checked 40 worlds (`CLAUDE.md` §0.1 pt 2): a run that built fewer asserts nothing
+    kinds, termed, bound = set(), 0, 0
+    for w in worlds:
+        edges = {t.id: t for t in w.tenures}
+        for e in _determinations(w):
+            kinds.add(e.kind)
+            if e.kind != BOUND:
+                continue
+            bound += 1
+            # THE DETERMINING EVENT CARRIES ITS TERMS: the sitting it was graded by (`ending` holds the arrangement and a verdict) and the edge it opened on the accused,
+            # graded the Event's own band, with the term the disposal runs for. (`terms` is no key of a proceeding's `ending`: `queries/inputs.py::UNWRITTEN` keeps the
+            # roll's `terms` out of it, and a margin provider's `((key, value), ...)` ending is another shape.)
+            assert world_q.ending_arrangement(e) is not None and world_q.ending_verdicts(e), e.ending
+            opened = [edges[r.subject] for r in e.changes if r.subject in edges]
+            termed += any(t.subject == ACCUSED and t.degree == e.degree and t.term is not None for t in opened)
+    assert bound > 0 and termed == bound, (bound, termed)
+    assert kinds == {BOUND, LOST}, f"a verdict that cannot be lost: the hearing's determinations, over 40 seeds, were only {sorted(kinds)}"
 
 
 # ======================================================================================
 # THE BAR
 # ======================================================================================
 
-def test_the_bar_seeded_proceedings_with_zero_authored_acts_run_twice_byte_identical():
-    """AT HEAD `PROCEEDINGS` HOLDS ONE PROCEEDING, NOT THE BAR'S TWO (CR-17's tau moved the second out of reach; the
-    bounded search for another is recorded at `PROCEEDINGS`): the bar as the plan words it is UNMET, and this test reads
-    the one run twice. [ASSUMPTION; medium; Jordan to correct; revert: tau 0.1 restores the two]"""
-    assert PROCEEDINGS, "no proceeding to run"
-    for conviction, seed, seasons in PROCEEDINGS:
-        first = _proceeding(conviction, seed, seasons)
-        assert _proceeding(conviction, seed, seasons) == first, (
-            f"{conviction}/{seed}: the same seeded proceeding hashed differently on its second run")
+def test_a_verdict_can_be_lost_on_the_shipped_hearing():
+    """THE BAR's re-pin (B24.16, `U5c_SC_proceedings_residue.md` §2): `build_hearing(seed)`, seeds 0 to 39, one season each. `matter.determined` and the lost arm
+    (`LOST`, read where B27's `matter.dismissed` will be) each occur at some seed, and the determining Event carries its terms. THE INSTRUMENT SEES A VERDICT THAT CANNOT
+    BE LOST: with the roll pinned to Success `_bar` fails on the lost arm (run once at the build, not kept)."""
+    _bar([_hearing(seed)[0] for seed in SEEDS])
+
+
+@pytest.mark.parametrize("seed", [1, 4])
+def test_the_hearing_with_zero_authored_acts_runs_twice_byte_identical(seed):
+    """Two runs of the same seeded hearing, every act the chooser's, hash the same (seeds 1 and 4 are the two whose sitting binds, so the run reaches an edge)."""
+    hashes = []
+    for _ in range(2):
+        w, chosen, premise = _hearing(seed)
+        _zero_authored(w, chosen, premise)
+        assert any(e.kind == BOUND for e in _determinations(w)), "the run did not reach a determination that binds"
+        hashes.append(w.content_hash())
+    assert hashes[0] == hashes[1], f"hearing/{seed}: the same seeded run hashed differently on its second run"
 
 
 @pytest.mark.parametrize("verb", ["open_case", "speak"])
 def test_an_injected_act_reddens_the_bar(verb):
-    """THE BAR's first falsifier, kept: a wrapper OUTSIDE the recorder replaces the first act of the
-    Duke's first scene with a hand-written act, and `_zero_authored` names it. `speak` is the act a
-    `SeasonDriver.resolved` reading missed: refused `speech.unheard` at admission (no docketed
-    matter yet), it never enters `resolved`, but it is in `w.acts`."""
+    """THE BAR's first falsifier, kept: a wrapper OUTSIDE the recorder replaces the first act of the accuser's first scene with a hand-written act, and `_zero_authored`
+    names it. `speak` is the act a `SeasonDriver.resolved` reading missed: refused at admission it never enters `resolved`, but it is in `w.acts`."""
     injected = []
 
     def wrap(choose):
         def inject(p, v, s, ask_budget):
             scenes = choose(p, v, s, ask_budget)
-            if p.id == DUKE and not injected and scenes and scenes[0].acts:
-                a = Act("authored_oc", DUKE, verb, via=SEAT, payload={"subject": PARTY})
+            if p.id == ACCUSER and not injected and scenes and scenes[0].acts:
+                a = Act("authored_oc", ACCUSER, verb, via=ACCUSER_SEAT, payload={"subject": ACCUSED})
                 scenes[0].acts[0] = a
                 injected.append(a)
             return scenes
         return inject
-    conviction, seed, seasons = PROCEEDINGS[0]
-    w, _, chosen = _run(conviction, seed, seasons, wrap=wrap)
+    w, chosen, premise = _hearing(1, wrap=wrap)
     assert injected and injected[0].id in w.acts, "the injection never reached RESOLVE"
     with pytest.raises(AssertionError, match="authored_oc"):
-        _zero_authored(w, chosen)
+        _zero_authored(w, chosen, premise)
 
 
 # ======================================================================================
