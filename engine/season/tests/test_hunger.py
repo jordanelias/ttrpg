@@ -49,8 +49,9 @@ def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_firs
 def test_i_under_ground_the_shipped_realm_does_not_starve_all_at_once_before_the_first_yield():
     """B12a.54, `test_i` re-recorded under `ground` to assert the opposite on the SHIPPED realm: not every populated settlement starves at build.
     Under `ground` the places differ, so the realm's settlements span more than one band and some cohort is fed. (Not "no cohort short at
-    season 0": `granary_seasons` is still 0 here, so a town whose own Sites yield only after the draw is short until B12a.55 seeds its treasury.)"""
-    realm = build_realm(0)
+    season 0", which `granary_seasons` 0 made false; B12a.55's flip to 4 makes it true, below.) PINNED TO `granary_seasons` 0 (B12a.55): its
+    `0 < fed < checked` is that arm's world-gen artefact (some cohort short at build); under the shipped 4 every populated settlement is fed."""
+    realm = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("granary_seasons", 0))
     draw = world_q.subsistence_draw(realm)
     hist = POP.census(realm)["hunger_by_settlement"]
     settlements = [r for r in sorted(realm.rungs) if realm.rungs[r].kind == world_q.HUNGER_KIND]
@@ -64,3 +65,18 @@ def test_i_under_ground_the_shipped_realm_does_not_starve_all_at_once_before_the
     assert checked >= 30, "the loop asserted nothing: no settlement carried a cohort"
     assert 0 < fed < checked, (fed, checked)
     assert hist.get("starving", 0) == checked - fed
+
+
+def test_i_under_ground_no_cohort_is_short_at_season_0():
+    """B12a.55 (`07_SE_ground_and_granaries` §5, "no cohort short at season 0"), on the SHIPPED realm (`ground`, `granary_seasons` 4), seed 0: the
+    draw the build's stores give leaves no populated settlement unmet, so no cohort under any is short. Control `granary_seasons` 0 under
+    `ground`: the same read finds settlements short (22 of the 37 populated at B12a.54's reading)."""
+    def short(realm):
+        draw = world_q.subsistence_draw(realm)
+        rids = [r for r in sorted(realm.rungs) if realm.rungs[r].kind == world_q.HUNGER_KIND
+                and sum(world_q.demanded(realm, r, draw).values()) > 0]
+        return [r for r in rids if world_q.hunger(realm, r, draw)[2] > 0], len(rids)
+    gone, populated = short(build_realm(0))
+    assert populated >= 30, "the loop asserted nothing: no settlement carried a cohort"
+    assert gone == [], gone
+    assert short(build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("granary_seasons", 0)))[0], "the control is not short: the assertion cannot see the failure"

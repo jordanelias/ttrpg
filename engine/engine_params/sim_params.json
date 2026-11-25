@@ -4629,11 +4629,11 @@
     {
       "key": "engine.season.settings.granary_seasons",
       "name": "granary_seasons",
-      "value": 0,
+      "value": 4,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-527`, swept 0 (control, SHIPPED) / 4 / 8 (B12a.55 flips to 4)",
+      "note": "`H-527`, swept 0 (control) / 4 (SHIPPED, B12a.55's flip) / 8",
       "citation": null,
       "citation_grade": null
     },

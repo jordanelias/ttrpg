@@ -145,20 +145,25 @@ def _season(w, d=None):
 
 
 def test_every_draw_source_above_a_settlement_is_a_seat_rung():
-    """THE SOURCE'S NAMED TEST (`07_SE_treasury_granary_B` §5, §8), at two seasons: under `ground`, `granary_seasons` 4, seed 0, no acts, every
-    draw cell whose `source` lies ABOVE its settlement names a rung at which an Office sits, and at least one such cell exists."""
-    w = build_realm(0, fixtures=_ground_with(4))
-    d, seats, checked = None, {o.rung for o in w.offices.values() if o.rung is not None}, 0
-    for _ in range(2):
-        for home, cells in world_q.subsistence_draw(w).values():      # the draw the stores as they stand give = MATTER's next one (no act writes between)
-            chain = world_q.ancestry(w, home)
-            above = chain[next(i for i, r in enumerate(chain) if w.rungs[r].kind == world_q.HUNGER_KIND) + 1:]
-            for _kind, (_want, _take, src) in cells.items():
-                if src in above:
-                    assert src in seats, (home, src, sorted(seats))
-                    checked += 1
-        d = _season(w, d)
-    assert checked >= 10, "the loop asserted nothing: no draw reached above its settlement"
+    """THE FLIP'S GATE (`07_SE_treasury_granary_B` §4 (c), B12a.55), on the SHIPPED realm (`ground`, `granary_seasons` 4; no fixture override), seeds
+    0 to 2, two seasons, no acts: every draw cell whose `source` lies ABOVE its settlement names a rung at which an Office sits, and at each seed
+    at least one such cell exists. (Red at `granary_seasons` 0: no stock above any settlement, so no cell is drawn from above one.)"""
+    checked = 0
+    for seed in range(3):
+        w = build_realm(seed)
+        d, seats, here = None, {o.rung for o in w.offices.values() if o.rung is not None}, 0
+        for _ in range(2):
+            for home, cells in world_q.subsistence_draw(w).values():      # the draw the stores as they stand give = MATTER's next one (no act writes between)
+                chain = world_q.ancestry(w, home)
+                above = chain[next(i for i, r in enumerate(chain) if w.rungs[r].kind == world_q.HUNGER_KIND) + 1:]
+                for _kind, (_want, _take, src) in cells.items():
+                    if src in above:
+                        assert src in seats, (seed, home, src, sorted(seats))
+                        here += 1
+            d = _season(w, d)
+        assert here >= 1, f"seed {seed}: no draw reached above its settlement"
+        checked += here
+    assert checked >= 3, "the loop asserted nothing"
 
 
 def test_ground_granaries_feed_the_highlands_then_run_down():
