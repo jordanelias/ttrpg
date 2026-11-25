@@ -1328,7 +1328,7 @@ def _load_verb_table() -> dict:
         #   * every NAMED top-level conjunct of its typed cell (`conjunct:`, `data/requires.py`) --
         #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, OR be an untyped PREDICATE row
         #     (B09.19): a predicate's clauses (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
-        #     import, so it lets the keys beyond the fold's own four through and requires at least one; that they are
+        #     import, so it lets the keys beyond the fold's own (`FOLD_CLAUSES`) through and requires at least one; that they are
         #     exactly the predicate's declared clauses is `VerbRow.precondition_evaluable`'s, asked of the predicate table;
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`);
         #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`;
@@ -2635,6 +2635,14 @@ def social_roll_verbs() -> frozenset:
     provider resolves, a `graded_tasks` route to it). Read off the rows and the two rosters, no verb named."""
     prizes = _PRIZES
     return frozenset(v for v, r in VERB_TABLE.items() if social_rolled(v, r, prizes))
+
+
+def prize_step(contests: str) -> Optional[str]:
+    """THE STEP A PRIZE DECLARES (`rosters.yaml: contest_subsystems.prizes`' `step:`, the cell `manifest.resolve("contest", ..)` reads), or `None`
+    for a prize with none or no such prize: it is fought where its verb is admitted. Read by the chooser (`decision/choose.py::_prize_step`), which may
+    not import `manifest` (`04` §C.3: `decision/` imports `person_q` and `data/`), so the declaration is read off the roster both read."""
+    row = _PRIZES.get(contests)
+    return row.get("step") if isinstance(row, dict) else None
 
 
 def _derive_rung_remit_acts() -> frozenset:

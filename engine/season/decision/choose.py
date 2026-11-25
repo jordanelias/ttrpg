@@ -39,9 +39,9 @@ from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
     BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
+    prize_step,
 )
 from ..gaps import Unspecified
-from .. import manifest
 from ..data.matrix import Step
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
@@ -209,13 +209,19 @@ def _writing_bands(c: Candidate) -> Optional[tuple]:
 
 
 def _prize_step(c: Candidate) -> Optional[str]:
-    """The step at which a CONTESTED candidate's prize is fought when that is not RESOLVE (`manifest.resolve("contest", ..)["step"]`:
+    """The step at which a CONTESTED candidate's prize is fought when that is not RESOLVE (the prize row's `step:`, `data/verbs.py::prize_step`:
     `the body` and `a field` declare ENCOUNTER), else `None` -- the prize fights where its verb is admitted. The reading the fold's
-    own deferral test makes (`loop/resolve.py::_deferred_prize`), taken at the chooser from the row."""
+    own deferral test makes (`loop/resolve.py::_deferred_prize`, off `manifest.resolve`, the same roster row), taken at the chooser from the row."""
     row = VERB_TABLE.get(c.verb)
-    prize = manifest.resolve("contest", row.contests) if row is not None and row.contests else None
-    step = None if prize is None else prize.get("step")
+    step = prize_step(row.contests) if row is not None and row.contests else None
     return None if step in (None, Step.RESOLVE.value) else step
+
+
+def _counterparty(c: Candidate) -> Any:
+    """The operand a candidate's row names as its `counterparty:`, or `None` where the row names none or the candidate carries none:
+    the way `data/verbs.py::opportunity_key` reads it."""
+    row = VERB_TABLE.get(c.verb)
+    return c.operands.get(row.counterparty) if row is not None and row.counterparty and isinstance(c.operands, dict) else None
 
 
 def hangs_on(prev: Candidate, c: Candidate) -> Optional[tuple]:
@@ -224,7 +230,10 @@ def hangs_on(prev: Candidate, c: Candidate) -> Optional[tuple]:
     anything (`_writing_bands`, off `writes_by_degree`), or `None` (`c` is attempted whatever `prev` does, as before). No verb is
     named; the rule reads the row. Set only for a CONTESTED `prev` (a roll that can land outside the bands it writes in; an
     uncontested one, and a contested one that writes in no band, name no band) that `c` follows on the SAME subject (a second
-    interaction about the same thing is the one a first's outcome conditions; one about another thing is not).
+    interaction about the same thing is the one a first's outcome conditions; one about another thing is not) AND, where both rows name
+    a `counterparty:`, the SAME counterparty (`opportunity_key`'s identity of "the same opportunity": `argue` P->B and `argue` P->C are
+    two independent interactions on one Proposition, and B's refusal at admission conditions nothing about C). A prior that names none
+    still conditions `c`.
 
     ⚠ NEVER A HANG THE FOLD CANNOT DEFER (`loop/resolve.py::_sequence_refusal`): where `prev`'s prize is fought at a later step
     (`_prize_step`), the fold declares `prev` and defers what hangs on it, which `c` can take only if its OWN prize is fought at
@@ -232,6 +241,9 @@ def hangs_on(prev: Candidate, c: Candidate) -> Optional[tuple]:
     later step, and never otherwise."""
     bands = _writing_bands(prev)
     if bands is None or not prev.subject or prev.subject != c.subject:
+        return None
+    other, mine = _counterparty(prev), _counterparty(c)
+    if other is not None and mine is not None and other != mine:
         return None
     held = _prize_step(prev)
     if held is not None and _prize_step(c) != held:

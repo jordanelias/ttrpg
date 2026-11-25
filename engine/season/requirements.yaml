@@ -407,8 +407,9 @@ rows:
             own order and contiguous (100 %; 97 of 369, 26.3 %, and 2 contiguous, at `8142371`), 238 acts with `after` set, 230 skipped with a refusal Event
             at clause `sequence`
           does_not_show: >-
-            four of the five read planted scenes (a `challenge` then a `fight`), not the chooser's own; the realm figures above are one seed, two seasons and a
-            counter run outside the test; whether a skipped second interaction was the better act is not read; `rival_precedence` is not read (no rivalry
+            three of the five read planted scenes ([challenge, fight]; [fight, fight]; two scenes in opposite strata), not the chooser's own, one reads the
+            verb table and one the realm at one interaction per scene; the realm figures above are one seed, two seasons and a counter run outside
+            the test; whether a skipped second interaction was the better act is not read; `rival_precedence` is not read (no rivalry
             group forms at seeds 0, 1, 2 in two seasons: 0, 0, 0)
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene landed; this row is met)

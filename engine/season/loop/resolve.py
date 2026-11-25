@@ -17,11 +17,10 @@ from __future__ import annotations
 import random
 from dataclasses import fields, is_dataclass, replace
 from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, degree_from_net
-from engine.dice_engine.draw import seeded
 from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, DECLARED, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
+from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, DECLARED, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route, roster,
                             ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
                             SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share)
@@ -30,10 +29,10 @@ from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import PRECEDENCE_STEM, UNKNOWN, Observation, Verdict, binding_from_act, evaluate
 from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK, SEQUENCE_CLAUSE,
-                          VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow, _OPENERS_FROM_EFFECTS)
+                          VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow, _OPENERS_FROM_EFFECTS, social_roll_verbs)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
-from ..loop.predicates import REQUIRES_PREDICATES
+from ..loop.predicates import REQUIRES_PREDICATES, office_named_by
 from ..loop.sides import _contests_of, seat_named_by, sides_of    # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
@@ -61,6 +60,12 @@ from ..trace_log import TRACE
 
 # -- RESOLVE -- barrier 3 -- the ONLY writing step for acts (S27) -------
 
+RIVAL_PRECEDENCE_ARMS = roster("rival_precedence_arms")        # `rosters.yaml`: the arms of `Fixtures.rival_precedence` (H-30)
+#: The most re-draws one tie gets (`_precedence_order`): a tie nobody's pool can break (two rival acts sharing one id, so one stream; a roll with no `dice`
+#: row) would otherwise draw forever. [ASSUMPTION; low; Jordan to correct; revert: re-draw without a bound] A fixed bound far past any real tie (each
+#: re-draw of two honest streams ties again with probability near zero); on reaching it the tied scenes keep the content-hash order, as the zero-pool case does.
+PRECEDENCE_REDRAW_CAP = 32
+
 def _canonical_order(w: "World", acts: list) -> list:
     """B08.03 (`04` §C.4): SCENES are ordered, then flattened. A scene is the acts sharing an `Act.scene`; one
     holding several is keyed by `(stratum_of(its FIRST interaction), H(seed, tick, that interaction's actor,
@@ -75,8 +80,8 @@ def _canonical_order(w: "World", acts: list) -> list:
     positions they already hold by a keyed draw per scene, the highest net first (`_precedence_order`); `hash` stops at the sort.
     Extracted from `resolve()`'s own sort (M4, `ED-IN-0279` clause (a)) so `loop/encounter.py` can fold a
     SUBSET of a lap's acts in the SAME canonical order, rather than re-deriving the rule or
-    skipping it (§8: it lives once). No `self`: the ordering is a pure function of the world's
-    seed/tick and the acts themselves, not of driver state."""
+    skipping it (§8: it lives once). No `self`: the ordering reads no driver state, but it is no longer a pure function of the world's seed/tick and the
+    acts: under `draw` it reads the world -- persons, tenures, rungs, pools and fixtures (`rival_key`, `_precedence_draw`)."""
     return _canonical_order_with_precedence(w, acts)[0]
 
 
@@ -93,14 +98,19 @@ def _canonical_order_with_precedence(w: "World", acts: list) -> tuple:
     def key(members: list) -> tuple:
         first = members[0]
         # A scene of ONE interaction is keyed as that act is (`interactions_per_scene = 1` is today's world, hash-equal:
-        # `test_one_interaction_per_scene_hash_equals_today`); a scene of several is keyed by its id.
+        # `test_one_interaction_per_scene_hash_equals_today`); a scene of several is keyed by its id. [ASSUMPTION; medium; Jordan to correct;
+        # revert: key every scene by `order:scene:<id>` (the plan's literal key; it moves the one-interaction-per-scene realm hash, which the control
+        # forces to stay)] the key depends on how many members ARRIVE, and ENCOUNTER's subset may hold fewer than the scene's.
         label = (f"order:scene:{first.scene}" if len(members) > 1 and first.scene is not None
                  else f"order:{first.verb}:{first.id}")
         return (stratum_of(first), H(w.world_seed, w.tick, first.actor, label))
 
     ordered = sorted(scenes.values(), key=key)
     nets: dict = {}
-    if w.fixtures.get("rival_precedence") == "draw":
+    arm = w.fixtures.get("rival_precedence")
+    require_member(arm, RIVAL_PRECEDENCE_ARMS, f"rival_precedence {arm!r} is not in the roster", "H-30",
+                   law="`notice_on`'s precedent: an unrecognised arm silently reading `hash` would make a sweep of the arm report the control twice")
+    if arm == "draw":
         ordered, nets = _precedence_order(w, ordered)
     return [a for members in ordered for a in members], nets
 
@@ -138,10 +148,14 @@ def rival_key(w: "World", a: "Act") -> "tuple | None":
         not hold that rung (what he holds is his to spend, and nobody else's act competes for it). Whether the DEMAND exceeds the stock is the
         group's (`_rival_groups`: a larder two acts can both empty is no scarcity).
 
-    `None` for an act whose verb the pool rule refuses (`faculty` raises `Forbidden` for a brute verb, `Unspecified` for one naming no attribute):
-    a rival with no pool has no odds to draw, so the order stays the content-hash order. Asked last, only of an act the shape already admits."""
+    `None` for an act whose verb the social roll does not deal (`social_roll_verbs`: `seize` opens a hold and names no `difficulty:`, so the
+    precedence roll has nothing to compose and `precedence_net` raises `Unspecified`; the pool rule below is NOT sufficient, `seize` has a governing
+    attribute), and for one the pool rule refuses (`faculty` raises `Forbidden` for a brute verb, `Unspecified` for one naming no attribute):
+    a rival with no roll or no pool has no odds to draw, so the order stays the content-hash order. Asked last, only of an act the shape already admits.
+    [ASSUMPTION; medium; Jordan to correct; revert: draw such a rivalry on a difficulty the row would have to declare, or on the pool alone] a rivalry
+    over a thing the social roll does not deal is not drawn."""
     row = VERB_TABLE.get(a.verb)
-    if row is None or a.actor not in w.persons:
+    if row is None or a.actor not in w.persons or a.verb not in social_roll_verbs():
         return None
     key = None
     if "Rung.stores" in row.writes:
@@ -152,7 +166,7 @@ def rival_key(w: "World", a: "Act") -> "tuple | None":
             key = ("stores", rung, kind)
     elif ("Tenure.since" in row.writes and a.verb in _OPENERS_FROM_EFFECTS.get("hold", ())
             and not any(f.endswith(".exists") for f in row.writes)):
-        subject = subject_of(a)
+        subject = office_named_by(a)         # as the fold reads the seat it claims: the payload's `office` wins, else the act's subject
         if subject and (subject in w.offices or subject in w.records):
             key = ("hold", subject)
     if key is None:
@@ -208,7 +222,7 @@ def _precedence_draw(w: "World", a: "Act", n: int = 0) -> float:
     sampler, A-5, the one pool rule, D-U1-08) on the key `H(seed, tick, actor, "precedence:" + a.id)` through the one `Draw` owner (A-30); the
     n-th RE-draw (n >= 1, after a tie) is keyed `"precedence:" + a.id + ":" + str(n)`."""
     label = "precedence:" + a.id + (f":{n}" if n else "")
-    return precedence_net(w, a, seeded(H(w.world_seed, w.tick, a.actor, label)))
+    return precedence_net(w, a, draw_factory(w.world_seed, lambda: w.tick)(a.actor, label))
 
 
 def _precedence_order(w: "World", scenes: list) -> tuple:
@@ -229,6 +243,11 @@ def _precedence_order(w: "World", scenes: list) -> tuple:
             tied = [i for i in idx if sum(drawn[j] == drawn[i] for j in idx) > 1
                     and faculty(w, w.persons[draws[i].actor], draws[i].verb) > 0]
             if not tied:
+                break
+            if n >= PRECEDENCE_REDRAW_CAP:
+                TRACE.decision("rival precedence: a tie no draw breaks", "A-5/A-9",
+                               chose=f"after {n} re-draws, keep the content-hash order for {[(draws[i].actor, draws[i].id) for i in tied]}",
+                               alternatives=["re-draw until the tie breaks (forever, for rivals sharing one stream)"])
                 break
             n += 1
             drawn.update({i: _precedence_draw(w, draws[i], n) for i in tied})
@@ -1331,8 +1350,12 @@ def _sequence_refusal(self, w: "World", a: Act, *in_hand: list) -> list:
     entries after `_survives` -- `resolve` with the lap's Events so far, `loop/encounter.py` with RESOLVE's and its own.
     `[]`: fold `a` as before. Otherwise the Events of its refusal at `SEQUENCE_CLAUSE`, which the caller emits INSTEAD.
 
-    THE BAND READ is the degree on the last Event in hand that `self.act_of` maps to the scene's previous interaction --
-    `None` where it reached none (an uncontested act, a refusal), which no `after` names, so a step hung on it is skipped.
+    THE BAND READ is the degree of the latest Event in hand that `self.act_of` maps to the scene's previous interaction AND carries
+    one (a `scruple.overridden` Event, appended last, carries none) -- `None` where none does (an uncontested act, a refusal), which
+    no `after` names, so a step hung on it is skipped. [ASSUMPTION; medium; Jordan to correct; revert: fold the hanging act when the
+    previous interaction reached no band] a previous interaction that reached no band does not condition the one hung on it as
+    having succeeded: the step is skipped (`data/rosters.py::UNROUTED_BAND` reads a degree-less executed act as Success for the
+    ROUTING of a refusal, a different question).
     The refusal carries no `changes` (A-62: the budget is a Query) and no band; it is in the log and costs its slot, and the
     scene is not still (A-81): the previous interaction's Event is its write.
 
@@ -1356,7 +1379,7 @@ def _sequence_refusal(self, w: "World", a: Act, *in_hand: list) -> list:
             f"act {a.id!r} ({a.verb}) hangs on {prev.id!r} ({prev.verb}), which has not folded at {w.step.value}: a "
             "scene folds in the chooser's order (A-9; B08.03's scene key), so its band cannot be read yet")
     band = next((e.degree for events in reversed(in_hand) for e in reversed(events)
-                 if getattr(self.act_of.get(e.id), "id", None) == prev.id), None)
+                 if getattr(self.act_of.get(e.id), "id", None) == prev.id and e.degree is not None), None)
     if band == DECLARED:
         held = _deferred_prize(w, _contests_of(prev, VERB_TABLE.get(prev.verb)))
         if held is None:
@@ -1763,7 +1786,9 @@ def resolve(self, token: Token, acts: list[Act],
         for _i, _e in enumerate(out):
             _by = self.act_of.get(_e.id)
             if _by is not None and _by.id in precedence:
-                out[_i] = replace(_e, observed=tuple(_e.observed) + (Observation(_by.actor, PRECEDENCE_STEM, precedence[_by.id]),))
+                # FIRST, not last: the readers of `Event.observed` take the last read as the one that decided the act (`loop/witness.py`,
+                # `harness/decision_spread.py`, `harness/aperture.py`), and the precedence draw decided only the act's place.
+                out[_i] = replace(_e, observed=(Observation(_by.actor, PRECEDENCE_STEM, precedence[_by.id]),) + tuple(_e.observed))
 
     # S27.3 / S32 rest 4: SUM ALL DELTAS, CLAMP ONCE. Clamping may not depend on arrival
     # order. Integer addition is associative and commutative, so this is order-independent

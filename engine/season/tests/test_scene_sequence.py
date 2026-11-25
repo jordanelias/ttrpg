@@ -35,6 +35,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..seam.wrappers import combat
 from ..state.carriers import Act, Scene
+from .test_in12_step9 import ARGUER, HEARER, _argue_world
 
 CHAL, ACC, OTHER, HIGH = "p_mid", "p_low", "p_other", "p_high"     # `tiny_world`: all at the hearth `Hh`
 FOUGHT = tuple(b for b in COMBAT_BANDS if b != DECLARED)           # the bands a fight reports at ENCOUNTER
@@ -108,24 +109,72 @@ def _challenge_then_fight(after):
     return Scene("sc0", CHAL, acts=[ch, f])
 
 
-def test_second_step_skipped_when_first_misses_band_logs_sequence_refusal():
+def test_unconditional_second_step_is_fought_as_before():
     # CONTROL: no `after` -- the fight is declared at RESOLVE and fought at ENCOUNTER, as before B08.02.
     w, d = _world()
     first, second = _run(w, d, _challenge_then_fight(None))
     assert [e.kind for e in _of(d, first, "f1")] == ["fight.declared"], [e.kind for e in first]
     assert _of(d, second, "f1"), "CONTROL: the unconditional fight was not fought at ENCOUNTER"
 
-    # A challenge is uncontested: it reaches no band (`degree` None), so a fight hung on any band is skipped.
-    w, d = _world()
-    first, second = _run(w, d, _challenge_then_fight(tuple(FOUGHT) + ("Success",)))
-    issued = _of(d, first, "ch0")
-    assert [e.kind for e in issued] == ["challenge.issued"] and issued[0].changes, "the first interaction's Event stands"
-    skipped = _of(d, first, "f1")
-    assert [e.kind for e in skipped] == list(VERB_TABLE["fight"].refusal_for(VERBS.SEQUENCE_CLAUSE)), [e.kind for e in skipped]
+
+ARGUE_BANDS = tuple(b for b, written in VERB_TABLE["argue"].writes_by_degree.items() if written)   # `argue` writes at Overwhelming and Success
+
+
+def _argue_scene(i, after, first_to=HEARER, then_to=HEARER):
+    """`[argue, argue]` on one uttered Proposition, in one scene, the arguer's `i`-th: the first argument rolls at RESOLVE (a contested,
+    non-deferred prize; the act id keys its draw, so `i` picks the band it lands in), the second hangs on `after`.
+    Returns `(driver, RESOLVE's events, the second act)`."""
+    w, d, pid, _ = _argue_world()
+    f = Act(id=f"ar_{i}", actor=ARGUER, verb="argue", payload={"subject": pid, "to": first_to}, scene="sc0")
+    s = Act(id=f"ar_{i}b", actor=ARGUER, verb="argue", payload={"subject": pid, "to": then_to}, scene="sc0", after=after)
+    first, _second = _run(w, d, Scene("sc0", ARGUER, acts=[f, s]))
+    return d, first, s
+
+
+def _first_band(i):
+    d, first, _s = _argue_scene(i, None)
+    return {e.degree for e in _of(d, first, f"ar_{i}")}
+
+
+def _skipped(d, first, s):
+    return _of(d, first, s.id)
+
+
+def test_second_step_skipped_when_first_misses_band_logs_sequence_refusal():
+    """A CONTESTED prior reaches a real band at RESOLVE (`argue`, a roll on the actor's pool, an act id keying the draw): the first act id,
+    scanned upward from 0, whose argument lands outside the bands `argue` writes in (Failure or Partial) is the miss; the same act id lands there
+    on every run (the draw is keyed to it and the seed). The second argument hung on the bands `argue` writes in is then refused at `sequence`,
+    with no changes and no band (A-62), while the first's Event stands (A-81)."""
+    miss = next(i for i in range(40) if not (_first_band(i) & set(ARGUE_BANDS)))
+    (band,) = _first_band(miss)
+    assert band in ("Failure", "Partial"), band
+    d, first, s = _argue_scene(miss, ARGUE_BANDS)
+    prior = _of(d, first, f"ar_{miss}")
+    assert prior and {e.degree for e in prior} == {band}, "the first argument did not reach the band the scan read"
+    skipped = _skipped(d, first, s)
+    assert [e.kind for e in skipped] == list(VERB_TABLE["argue"].refusal_for(VERBS.SEQUENCE_CLAUSE)), [(e.kind, e.degree) for e in first]
     assert all(e.changes == [] and e.degree is None for e in skipped), "a refusal writes nothing and carries no band (A-62)"
-    assert "f1" in w.acts, "the skipped interaction is in the act store: it cost its slot"
-    assert not _of(d, second, "f1"), "a skipped fight was fought at ENCOUNTER"
-    assert all(e in w.log for e in issued + skipped)
+    assert all(e in prior or e in skipped for e in first), "an Event neither the first's nor the refusal"
+
+    # CONTROLS: hung on the band it reached, the second is NOT refused; unhung, it folds as before; and a first that reaches a written band
+    # lets the second through.
+    d, first, s = _argue_scene(miss, (band,))
+    assert _skipped(d, first, s) and all(e.kind != "argument.refused" for e in _skipped(d, first, s)), "hung on the band reached, the second was refused"
+    won = next(i for i in range(40) if _first_band(i) & set(ARGUE_BANDS))
+    d, first, s = _argue_scene(won, ARGUE_BANDS)
+    assert all(e.kind != "argument.refused" for e in _skipped(d, first, s)), "a first that reached a written band still refused the second"
+
+
+def test_second_step_skipped_when_first_was_refused_at_admission():
+    """THE NONE-BAND POLICY (`_sequence_refusal`'s tag): a first argument refused at admission (here: the arguer names himself as the hearer,
+    the `counterparty` clause) reaches no band, so the second -- whose own hearer is valid -- hung on any band is skipped; unhung it folds."""
+    d, first, s = _argue_scene(0, ARGUE_BANDS, first_to=ARGUER)
+    prior = _of(d, first, "ar_0")
+    assert [e.kind for e in prior] == ["argument.refused"] and all(e.degree is None for e in prior), [(e.kind, e.degree) for e in prior]
+    skipped = _skipped(d, first, s)
+    assert [e.kind for e in skipped] == ["argument.refused"] and all(e.changes == [] and e.degree is None for e in skipped)
+    d, first, s = _argue_scene(0, None, first_to=ARGUER)          # CONTROL: unhung, the second argument's own fold runs and is not refused
+    assert all(e.kind != "argument.refused" for e in _skipped(d, first, s)), [(e.kind, e.degree) for e in first]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -193,14 +242,11 @@ def test_keyed_row_without_sequence_key_is_refused_at_load():
     assert _loads(lambda doc: None) is None, "CONTROL: the shipped table loads"
     keyed = [r["verb"] for r in _SRC["verbs"] if isinstance(r.get("emits_on_refusal"), dict)]
     assert keyed, "no keyed row: the rule observed nothing"
-    checked = 0
     for verb in keyed:      # PER ROW, NOT PER VERB NAMED: every keyed row can be a second interaction
         def drop(doc, verb=verb):
             next(r for r in doc["verbs"] if r["verb"] == verb)["emits_on_refusal"].pop("sequence", None)
         msg = _loads(drop)
-        assert msg is not None and "'sequence'" in msg and repr(verb) in msg, (verb, msg)
-        checked += 1
-    assert checked == len(keyed)
+        assert msg is not None and f"verb_table.yaml: {verb!r} keys no refusal for the failable clause(s) ['sequence']" in msg, (verb, msg)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -233,3 +279,21 @@ def test_scene_folds_contiguously_in_chooser_order():
     for sc in (sa, sb):
         at = [folded.index(a.id) for a in sc.acts]
         assert at == list(range(at[0], at[0] + len(at))), (sc.id, folded)
+
+
+def test_realm_scenes_fold_contiguously_in_chooser_order_over_two_seasons():
+    """R-03.c on the realm (B08.04's gate): over `build_realm(0)`, two seasons, EVERY scene whose interactions were folded two or more at
+    a time (the act store's order is the fold's) was folded in the chooser's own order (`Scene.acts`) and with nothing of another scene
+    between them. `checked >= 1` so a realm that formed no multi-interaction scene fails rather than passing on nothing."""
+    w = build_realm(0)
+    POP.run(seasons=2, seed=0, w=w)
+    folded_at = {a.id: i for i, a in enumerate(w.acts)}
+    checked = 0
+    for sc in w.acts.scenes():
+        at = [folded_at[a.id] for a in sc.acts if a.id in folded_at]
+        if len(at) < 2:
+            continue
+        checked += 1
+        assert at == sorted(at), (sc.id, "folded out of the chooser's order", at)
+        assert at[-1] - at[0] == len(at) - 1, (sc.id, "another scene's act sits between this scene's interactions", at)
+    assert checked >= 1, "the realm formed no scene of two interactions in two seasons: the order was not observed"

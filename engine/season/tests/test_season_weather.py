@@ -100,9 +100,11 @@ def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():
     """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures withheld_verbs` reads
     `THREAD_READ_WITHHELD_EVENTS_1`, and that EQUALS the shipped season's own event sequence, read in process: withholding
     `thread_read` moves nothing at seed 0, one season (nor at seed 0, two seasons, nor at seed 1, one season: B08 reading).
-    Before B08.03 the arm differed (its formation moved the season through a side effect, while the verb executed 0 times in
-    that season's store); the scene-ordered fold removed that coupling. The test fails the day `thread_read` forms or
-    executes in the season, or its formation moves the season again, so a later batch that changes it sees it here."""
+    OBSERVED; THE CAUSE IS CONJECTURED. Before B08.03 the arm differed and since it equals the shipped season: a bisection to B08.03
+    (scenes fold in their own order), read as that fold removing a coupling by which forming `thread_read` moved the season while the
+    verb executed 0 times in that season's store. Nothing counts how often `thread_read` is formed or chosen in either arm, so this
+    cannot tell "the coupling was removed" from "the candidates are dropped the same way in both arms". The test fails the day the arm
+    differs from the shipped season again, so a later batch that changes it sees it here."""
     w = build_realm(0)
     shipped = tuple(w.fixtures.get("withheld_verbs"))
     assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"

@@ -26,6 +26,7 @@ from ..seam.wrappers.pool import faculty
 from ..state.carriers import Act, Office, Tenure
 from ..trace_log import TRACE
 from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
+from .test_in10_record_operands import _hold_document
 from .test_u7_remit import _fold, _requisition
 
 SEEDS = 200
@@ -211,6 +212,27 @@ def test_hash_control_reproduces_base():
     assert checked >= SEEDS
     assert pool_moved["hash"] == 0, f"the hash order moved with a pool ({pool_moved}): the control is not today's order"
     assert pool_moved["draw"] > 0, f"the `draw` arm never read a pool ({pool_moved})"
+
+
+def test_two_seizures_of_one_record_keep_hash_order_and_do_not_abort_resolve():
+    """C1: two persons each `seize` one Record. `seize` opens a hold and so reads as a rivalry key, but it carries no `difficulty:` (the social
+    roll does not deal it), so the precedence draw has no roll to make: `rival_key` is None for it, RESOLVE does not raise, and the two keep the
+    content-hash order, with no `precedence` read on either Event. (Before the fix: `Unspecified` out of `precedence_net`, RESOLVE aborted.)"""
+    checked = 0
+    for seed in range(20):
+        orders = {}
+        for arm in ("hash", "draw"):
+            w, d = _larder(seed, arm=arm)
+            _hold_document(w, w.persons[HIGH], "petition", {"terms": "p_mid", "to": ["p_mid"], "from": "Hh"}, rec_id="rec_pet")
+            acts = [Act(id="sz_a", actor=HIGH, verb="seize", via="off_duke", payload={"subject": "rec_pet"}),
+                    Act(id="sz_b", actor=MID, verb="seize", via="off_duke2", payload={"subject": "rec_pet"})]
+            out = _fold(w, d, *acts)
+            assert not _precedence_of(out, d), (seed, "a seizure carries a precedence read")
+            orders[arm] = [d.act_of[e.id].id for e in out]
+        assert sorted(set(orders["draw"])) == ["sz_a", "sz_b"], (seed, orders)
+        assert orders["draw"] == orders["hash"], (seed, orders)
+        checked += 1
+    assert checked >= 20
 
 
 def test_no_group_world_is_byte_identical():

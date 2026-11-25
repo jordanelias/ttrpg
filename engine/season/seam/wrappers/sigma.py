@@ -81,7 +81,7 @@ from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, I
                              PROOF_KIND_OF_SOURCE, RUNG_KINDS)
 from ...data.rosters import capability_rows, obstacle_bound, require_use_site, roster, when_holds
 from ...data.verbs import FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
-from ...epistemic import trail_concealment
+from ...epistemic import NOTICE_ROLL, trail_concealment
 from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
@@ -455,9 +455,11 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
 
 #: B08.05 (`RIVAL` 2): THE ROLE OF THE ROLLER A PRECEDENCE DRAW REACHES -- the module entry every social act's pool is rolled by (`rosters.yaml:
 #: graded_tasks` and the prize rows name it too), so the host never rolls (`test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`:
-#: a margin is a module's to produce). [ASSUMPTION; low; Jordan to correct; revert: name another registered entry's role] A rivalry for a seat, a Record or a
-#: larder is a contest of the rivals' skills, and the social roll is the one roll a skill has; the draw reaches it with no obstacle's say (below).
-PRECEDENCE_ENTRY = "social_contest.roll"
+#: a margin is a module's to produce); the role string is `epistemic.NOTICE_ROLL`'s, the one spelling of the composition row `social_contest.roll`
+#: (`references/module_contracts.yaml` §composition_roles). [ASSUMPTION; low; Jordan to correct; revert: name another registered entry's role] A rivalry
+#: for a seat, a Record or a larder is a contest of the rivals' skills, and the social roll is the one roll a skill has; the draw reaches it with no
+#: obstacle's say (below).
+PRECEDENCE_ENTRY = NOTICE_ROLL
 
 
 def precedence_net(w: Any, a: Any, rng: Draw) -> float:

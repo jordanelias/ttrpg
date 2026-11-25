@@ -4381,6 +4381,14 @@
             "on"
           ]
         },
+        "rival_precedence_arms": {
+          "source": "v12 B08.05 (`18_DETERMINISM_rival_acts_in_one_fold` \"The resolution, decided\"): *\"`Fixtures rival_precedence: draw | hash`\"*; ships `draw`.",
+          "note": "THE ARMS OF `Fixtures.rival_precedence` (`H-30`), read by `loop/resolve.py::_canonical_order_with_precedence` and refused outside this set, so a misspelt arm cannot read as the control. `hash` is the CONTROL (the revert): scenes stay in the content-hash order. `draw` is SHIPPED: a rivalry group of scenes is re-ordered among the positions it holds by a keyed draw per scene, the highest net first (`loop/resolve.py::_precedence_order`).",
+          "values": [
+            "hash",
+            "draw"
+          ]
+        },
         "stock_reports": {
           "source": "v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium; Jordan to correct; revert: stock_report = off]).",
           "note": "THE ARMS OF `Fixtures.stock_report` (`H-243`), read by `loop/matter.py` at MATTER's last actorless `stores` write to a rung in the barrier (the credit write where the rung yields, else the debit write). `crossing` (SHIPPED) attaches `Observation(rung, \"stores:<default_store_kind>\", units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier differs from after; `season` attaches it to every such write; `off` attaches nothing and is the CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `\"off\"` is QUOTED: bare, YAML reads it as the boolean false.",

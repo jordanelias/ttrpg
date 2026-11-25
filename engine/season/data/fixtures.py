@@ -508,7 +508,8 @@ DEFAULT_FIXTURES = Fixtures(
     # gets the seat, the Record or the last of a larder is a fixed function of the acts' content (`loop/resolve.py::_canonical_order`, today's
     # order). `draw`: each group of acts by different persons sharing a rivalry key (`loop/resolve.py::rival_key`) is re-ordered among the positions
     # it already holds by a keyed draw per act, its odds the rivals' own pools (`seam/wrappers/pool.py::faculty`); no act outside a group moves.
-    # [JUSTIFIED: proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_rival_acts_in_one_fold.md "The resolution, decided" -- the mechanism (a draw, the odds the rivals' skills) is the source's and the arm's SHIPPED value `draw` the plan's (B08 UNDECIDED (3)), the only arm that moves a world with a rivalry group; the CONTROL and the REVERT are `hash` (today's order, which `engine/season/tests/test_rival_precedence.py` pins at seeds 0-2)]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-30 -- `site: Fixtures rival_precedence`, graded measured; the mechanism (a draw, the odds the rivals' skills) is the source's (`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_rival_acts_in_one_fold.md` "The resolution, decided"), the CONTROL and the REVERT are `hash` (today's order, which `engine/season/tests/test_rival_precedence.py` pins at seeds 0-2)]
+    # [ASSUMPTION; medium; Jordan to correct; revert: rival_precedence hash] the SHIPPED value `draw` is the plan's (B08 UNDECIDED (3)): the only arm that moves a world with a rivalry group
     rival_precedence="draw",           # swept hash (control; revert) / draw (SHIPPED)
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
