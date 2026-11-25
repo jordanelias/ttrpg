@@ -1015,6 +1015,40 @@ def test_a_sabotage_at_an_empty_place_is_found_by_examine():
     assert {c.source for c in w.persons[INVESTIGATOR].ledger if c.predicate == "site.damaged"} == {"inferred"}
 
 
+def surveil_forging_place(n, at="Hh"):
+    """B11.63. `trail_world`: `p_other` forged at the hearth `Hh` (with `p_mid`; `p_high` at `S`, away) and has since left it. `p_high`
+    walks to `at` if he is not there and `surveil`s it as act id `n`: `(w, finding Event)`."""
+    w, d, _ = trail_world()
+    if at != "S":
+        assert [e.kind for e in step(w, d, Act(id="sv_mv", actor=INVESTIGATOR, verb="move", payload={"to": at}))] == ["travel.moved"]
+    (e,) = step(w, d, Act(id=f"sv_{n}", actor=INVESTIGATOR, verb="surveil", payload={"subject": at}))
+    return w, e
+
+
+def test_surveil_finds_a_forging_done_at_the_place_while_he_was_away():
+    """B11.63 (CP-T06-02), F06's falsifier. `p_other` forges at `Hh` while `p_high` is at `S`; `p_high` walks to `Hh` and `surveil`s
+    it. At a band showing the hand he holds `(p_other, record.forged, True)` and `seen{who: p_other}` on the Record (inferred); at
+    Partial the deed and not the hand. CONTROL: a forging at another Rung is not found from there (`surveil` of `S`, where he stands:
+    nothing of the forging is deposited), asserted over every id the sweep drew a hand band at, `checked >= 3`."""
+    w, d, rid = trail_world()
+    assert not forged_claims(w, INVESTIGATOR), "the finder was admitted to the forging before any inquiry"
+    assert [e.kind for e in trail_of(w, "Hh", INVESTIGATOR)] == ["record.forged"], "the place side finds no forging at Hh"
+    w, _ = band_world(surveil_forging_place, HAND_BANDS)
+    assert FORGER in held_by(w, INVESTIGATOR, "record.forged"), held_by(w, INVESTIGATOR, "record.forged")
+    assert [c.value.who for c in w.persons[INVESTIGATOR].ledger
+            if c.predicate == SEEN_PREDICATE and c.source == "inferred" and c.value.who is not None] == [FORGER]
+    w, _ = band_world(surveil_forging_place, frozenset({"Partial"}))
+    assert FORGER not in held_by(w, INVESTIGATOR, "record.forged"), "Partial showed the hand"
+    assert held_by(w, INVESTIGATOR, "record.forged"), "Partial found nothing of the deed"
+    checked = 0
+    for n in range(SWEEP):
+        w, e = surveil_forging_place(n, at="S")
+        if e.degree in HAND_BANDS:
+            checked += 1
+            assert not forged_claims(w, INVESTIGATOR), "a forging at Hh was found from S"
+    assert checked >= 3, checked
+
+
 def cover_research(n):
     """`trail_world(covered=True)`, then the forger gives the cover Record `COVER` to the investigator and he `research`es it
     as act id `n`: `(w, finding Event)`."""

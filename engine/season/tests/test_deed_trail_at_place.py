@@ -8,8 +8,9 @@
     second man `examine`s it and holds the deed. CP-T06-01's two-band reading is `test_fi03_trail.py`'s.
   * `test_bystander_holds_exists_person_zero` -- GREEN since B11.60: a witness of a killing holds the victim ended
     (`exists:Person` 0), not only `person.died`.
-  * `test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial` -- EXPECTED RED UNTIL B11.63: the place side. `trail_of`
-    reads the Events that wrote or were anchored on the inquiry's subject, and a place is neither for a killing.
+  * `test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial` -- GREEN since B11.63: the place side. `trail_of` reads the
+    Events that wrote or were anchored on the inquiry's subject, and a place is neither for a killing; the third side reads the
+    Event done AT it (`World.last_emission_of(..., at=True)`).
 """
 from __future__ import annotations
 
@@ -75,7 +76,7 @@ def test_bystander_holds_exists_person_zero():
 
 
 def test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial():
-    """EXPECTED RED UNTIL B11.63. A man who was not in the room walks to `Hh` and `surveil`s it; at a Partial band he holds the
+    """A man who was not in the room walks to `Hh` and `surveil`s it; at a Partial band he holds the
     victim dead (`finding_terms` Partial: the deed, not the hand), under the victim and not under the killer."""
     for n in range(SWEEP):
         w, d = killing()

@@ -316,7 +316,12 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
     For each `rosters.yaml: covert_kinds` member -- DATA, never a walk of every deed kind -- the most
     recent Event of that kind that WROTE `subject` (deeds done TO it: `World.last_emission_of(...,
     written=True)`) and the most recent one ANCHORED on it (deeds BY it: the anchor is the actor). The
-    bound is the index's own -- one per kind per side -- and introduces no number. An Event is kept only
+    bound is the index's own -- one per kind per side -- and introduces no number. B11.63 (CP-T06-02): a THIRD side, the most
+    recent one that HAPPENED AT `subject` taken as a place (`last_emission_of(..., at=True)`: where its doer stood when it was
+    logged), so `surveil` of a Rung finds a deed done there while the watcher was away, and an `examine` of a Site reads its Rung's.
+    ⚠ THE LIMIT (AM-D-08): `(kind, place)` keeps ONE Event, the latest, so a watcher is shown at most one deed per covert kind per
+    place per find, and an earlier deed of the same kind at the same place is unreachable while the latest is held or after it is
+    (no fall-back to the next-older). An Event is kept only
     if a PERSON did it (`actor_of`; a MATTER write is no one's hand), the person is not `pid` (a man
     knows his own act), and `pid` does not already hold it (`holds_trail`).
 
@@ -335,9 +340,11 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
     p = w.persons.get(pid)
     rule = w.fixtures.get("claim_subject_rule")
     found: dict = {}
+    place = w.sites[subject].rung if subject in w.sites else subject
     for kind in sorted(COVERT_KINDS):
-        for written in (True, False):
-            eid = w.last_emission_of(kind, subject, written=written)
+        for side in ("written", "anchored", "at"):
+            eid = (w.last_emission_of(kind, place, at=True) if side == "at"
+                   else w.last_emission_of(kind, subject, written=side == "written"))
             if eid is None or eid in found:
                 continue
             e = event_by_id(w, eid)
