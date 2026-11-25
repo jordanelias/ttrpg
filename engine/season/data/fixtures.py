@@ -735,6 +735,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `granary_seasons: 0`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-527 -- `site: Fixtures granary_seasons`, graded `assumption`; the source gives the seed's shape and no count of seasons, so the count is injected at the control and swept 0 / 4 / 8]
     granary_seasons=0,                 # `H-527`, swept 0 (control, SHIPPED) / 4 / 8 (B12a.55 flips to 4)
+    # B12a.53 (`07_SE_ground_and_granaries` §4 (d), H-303): HOW FAR THE LARDER WALK GOES. `first` is THE CONTROL, SHIPPED: the draw is the first
+    # stocked rung's alone and the remainder is not walked on (today's rule). `through` walks the remainder up the ladder, so a short town with a
+    # few units at home reaches the treasury above, and the debit is per rung. Projected by `world_q._larder_parts` into `LarderInput.walk`, read by
+    # `modules/settlements/larder.py::larder_draw`. The flip to `through` is B12a.56's, its own declared mover.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `larder_walk: first`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-528 -- `site: Fixtures larder_walk`, graded `assumption`; the source gives the continued walk and names no setting that ships it, so the arm is injected at the control and swept first / through]
+    larder_walk="first",               # `H-528`, swept first (control, SHIPPED) / through (B12a.56 flips) / through where the home rung holds the whole want (the walk stops at once)
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

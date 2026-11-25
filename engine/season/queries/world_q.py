@@ -1525,7 +1525,8 @@ def _larder_parts(w: World) -> tuple:
                 stores.append((rid, tuple((w.rungs[rid].stores or {}).items())))
         ladders.append((home, tuple(ladder)))
         chains.append((home, chain))
-    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores)),
+    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores),
+                        w.fixtures.get("larder_walk")),
             tuple(chains))
 
 
@@ -1559,13 +1560,16 @@ def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
 
 def _draw_dict(record: DrawRecord) -> dict:
     """`DrawRecord` -> `{pid: (home, {kind: (want, take, source)})}`, in the record's order."""
-    return {r.pid: (r.home, {k: (want, take, src) for k, want, take, src in r.cells})
+    return {r.pid: (r.home, {k: (want, take, src) for k, want, take, src, _parts in r.cells})
             for r in record.rows}
 
 
 def _draw_record(draw: dict) -> DrawRecord:
-    """The inverse of `_draw_dict`, for a caller holding the dict (the `draw=` argument; tests)."""
-    return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell) for k, cell in row.items()))
+    """The inverse of `_draw_dict`, for a caller holding the dict (the `draw=` argument; tests). The dict's cell names the first
+    source only, so `parts` is rebuilt as `((source, take),)` (`()` where there is no source): exact under `larder_walk` `first`,
+    and under `through` a cell split across rungs reads as one part -- harmless to the one reader (`drawn_under` sums `want`/`take`)."""
+    return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell, ((cell[2], cell[1]),) if cell[2] is not None else ())
+                                                     for k, cell in row.items()))
                             for pid, (home, row) in draw.items()))
 
 

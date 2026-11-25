@@ -8518,6 +8518,19 @@ rows:
     cite:      "CONTROL: at `granary_seasons: 0` no fixture read changes a store and `build_realm(0)`'s content hash equals the item before it (08a3ac15... / 6671e3c6... / a5182a4e...). Read by nothing yet, so there is no falsifier of its own at B12a.51; B12a.52's `test_endowment.py` reading (the granary falls each season and the highland body falls after it reaches 0) is the one that observes it. [ASSUMPTION; medium; Jordan to correct: that the count is seasons of DEFICIT and not of the whole want]"
     source:    "workplan v12 B12a.51 (`07_SE_ground_and_granaries` §4 (b), (c); B12a's H block slot 5)"
 
+  - id:        H-528
+    tier:      1
+    hole:      "HOW FAR THE LARDER WALK GOES, AND H-303'S REMAINDER. `07_SE_ground_and_granaries` §4 (d) (H-303; ED-IN-0246 item 3a): `settlements.larder_draw` took `min(want, held)` from the FIRST stocked rung on an eater's ladder and did not walk the remainder further up, so a short town with a few units at home was drawn short while a treasury above held thousands. The fixture `larder_walk` chooses the arm, projected into `LarderInput.walk`: `first` (today's rule, THE CONTROL, shipped) or `through` (each stocked rung gives `min(want - taken so far, held)` until `want` is met or the ladder ends). A `DrawRow` cell gains a fifth element `parts` -- `((rung, units), ...)`, every rung drawn from -- and `settlements.subsist`'s debit sums `parts` instead of `(source, take)`, so a split draw takes from each rung exactly what it gave. `source` stays the first rung drawn from, so the drained-rung and shortfall reading is `first`'s under either arm (a rung past the first that runs dry is not named a drained source: the host's question for B12a.56's flip). The arm is not shipped on: the flip is B12a.56's, its own declared mover."
+    kind:      "MECHANISM"
+    owner:     "Jordan, who corrects the assumption; B12a.56 flips the arm. `engine/season/data/fixtures.py` the one home of the row; READER: `modules/settlements/larder.py::larder_draw` (through `engine/season/queries/world_q.py::_larder_parts`, which projects the fixture into `LarderInput.walk`); the debit is `modules/settlements/subsist.py::subsist`"
+    grade:     "assumption"
+    default:   "larder_walk first -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value]: the draw is the first stocked rung's alone, every cell's `parts` is `((source, take),)` and the debit is the tree's before the item. A `walk` outside `first` / `through` raises in `larder_draw`, never read as the control"
+    site:      "Fixtures larder_walk, read ONLY by `engine/season/queries/world_q.py::_larder_parts`, which hands it to `modules/settlements/larder.py::larder_draw`"
+    sweep:     ["first (the control, SHIPPED: the first stocked rung gives, the remainder is not walked on)", "through (the remainder goes on up the ladder; the debit splits per rung)", "through where the home rung holds the whole want (the walk stops at the home rung and the cell is `first`'s)"]
+    unblocks:  "B12a.56's flip to `through`; H-303's resolution (R-SE-03): a short town with a few units at home reaches the treasury above"
+    cite:      "CONTROL: `build_realm(0)`'s content hash at `larder_walk: first`, 0 / 1 / 2 seasons, equals B12a.52's after-reading (08a3ac15... / 6671e3c6... / a5182a4e...). FALSIFIERS: `engine/season/tests/test_demand_delivery.py::test_h303_first_takes_one_through_takes_six_and_splits_the_debit` (home 1, above 1,000, want 6: `first` takes 1 and leaves the rung above whole; `through` takes 6 with the debit 1 at home and 5 above, the two rungs' stores falling by exactly the take)."
+    source:    "workplan v12 B12a.53 (`07_SE_ground_and_granaries` §4 (d), (e); H-303; B12a's H block slot 6, the second half's slot 3)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
