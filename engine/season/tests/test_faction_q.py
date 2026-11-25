@@ -323,3 +323,41 @@ def test_head_is_a_person_for_the_lowenritter_and_the_restoration_movement_and_n
     for prop, who in (("fac_valorsmark", "p_npc_020"), ("fac_hafenmark", "p_npc_050"), ("fac_varfell", "p_npc_052"),
                       ("fac_church_of_solmund", "p_npc_021")):
         assert faction_q.head(w, prop) == who, prop
+
+
+# ---------------------------------------------------------------------------------------------
+# B21.65 -- a person's opinion of a faction regards its PRESENT head (`world_q.opinion_of`).
+# ---------------------------------------------------------------------------------------------
+
+def _with_a_regarding_observer(w, whom):
+    """A person who stands at `+5` toward `whom` and toward nobody else, so the regard term of his opinion of a
+    faction is `whom`'s alone when `whom` is the one regarded."""
+    from engine.season.state.carriers import Person
+    o = Person("o_b21_65", "o_b21_65")
+    o.stance = [(whom, 5, 5)]
+    w.persons[o.id] = o
+    return o
+
+
+def test_after_a_succession_opinion_of_regards_the_successor():
+    """Hand-built: the King's `hold` of the head seat closes and another person's opens. The observer who regards the
+    successor reads a higher opinion of the Crown's faction than before; the creed's authored subject is no longer
+    the one regarded. Control: a faction whose head seat is unchanged (the Hafenmark) reads the same opinion as before
+    the succession."""
+    from engine.season.data.rosters import HEAD_SEAT
+    w = build_realm(0)
+    old, other = "p_npc_020", "p_npc_050"
+    assert faction_q.head(w, "fac_valorsmark") == old
+    successor = next(p for p in sorted(w.persons) if p not in (old, other) and p != "o_b21_65")
+    o = _with_a_regarding_observer(w, successor)
+    before = world_q.opinion_of(w, o, "fac_valorsmark")
+    hafen_before = world_q.opinion_of(w, o, "fac_hafenmark")
+    seat = HEAD_SEAT["Valorsmark"]
+    held = next(t for t in w.tenures if t.kind == "hold" and t.live and t.object == seat and t.subject == old)
+    held.until = w.tick + 1
+    w.add_tenure(Tenure("t_b21_65_succession", successor, seat, "hold", w.tick + 1))
+    assert faction_q.head(w, "fac_valorsmark") == successor
+    assert w.propositions["fac_valorsmark"].subject == old, "the creed's authored subject is the stale reading"
+    after = world_q.opinion_of(w, o, "fac_valorsmark")
+    assert after > before, (before, after)
+    assert world_q.opinion_of(w, o, "fac_hafenmark") == hafen_before

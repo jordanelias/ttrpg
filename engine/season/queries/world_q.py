@@ -33,7 +33,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
@@ -3084,8 +3084,9 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
       * what the faction expects of its members: `data/goals.py::expected("faction", name)` (IN-69's
         owner: its role template plus its faction goals' pursuits);
       * the poles its goals engage: `engaged_poles`;
-      * whom `p` regards on its behalf: its head -- the subject of its creed Proposition, the authored
-        leader `boot/realm.py` subjects the creed on, where that is a living person -- then every
+      * whom `p` regards on its behalf: its PRESENT head -- `head(w, faction)`, the holder of its head seat as
+        the world stands (B21.65: a succession moves it) -- or, where it has none, the subject of its creed
+        Proposition (the authored leader `boot/realm.py` subjects the creed on), where that is a living person -- then every
         doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind: a paired deed's doer
         by the `seen.who` pairing, any other by its subject) who is a live member of it (`members`:
         membership is `commit`, a World read, IN-67's `seat_holders` precedent). `p` himself never.
@@ -3103,9 +3104,11 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
                           law="v9 IN-70 -- an opinion is of a faction")
     inside = set(members(w, faction))
     creed = w.propositions.get(faction)
-    head = creed.subject if creed is not None and creed.subject in w.persons else None
+    present = head(w, faction)
+    leader = (present if present is not None and present in w.persons
+              else creed.subject if creed is not None and creed.subject in w.persons else None)
     regarded = tuple(x for x in dict.fromkeys(
-        ((head,) if head is not None else ())
+        ((leader,) if leader is not None else ())
         + tuple(d for d in deed_doers(p.ledger, {"kinds": DEED_KINDS}, p.id) if d in inside))
         if x != p.id)
     return opinion(p, _goals.expected("faction", name), engaged_poles(name), regarded, w.fixtures)
@@ -3764,6 +3767,52 @@ def at_war(w: World, a: str, b: str) -> bool:
                for t in w.tenures):
             return True
     return False
+
+
+def head(w: World, prop: str) -> "str | None":
+    """F.4's first reader (plan position `20-ii`): the subject of the live `commit` Tenure to
+    `prop` carrying a non-`None` `Tenure.degree`; among more than one, the one `w.tenures` places
+    LAST (see the no-cross-domain-ladder note below for why "last", never "highest"). Per
+    `04 §F.34`'s *"if `Tenure.degree` gets a reader the head resolves with it"*.
+
+    DEFINED HERE (B21.65), NAMED `faction_q.head` BY RE-EXPORT, the `at_war` precedent just above (v11 CR-87):
+    `opinion_of` regards a faction's PRESENT head and `faction_q` imports this module, so a definition in
+    `faction_q` is an import cycle. The body is the one it was; `faction_q.head` is this function object.
+
+    ⚠ `None` TODAY, FOR A NAMED REASON, NOT BY CONSTRUCTION. `commit`'s own
+    `verb_table.yaml` row declares `contests: ""` (empty -- `VERB_TABLE["commit"].contests` is
+    falsy), and `04 PART D` row 30a types `writes` as Degree-keyed only for a verb that declares
+    `contests:`, so an uncontested `commit` never reaches a fold branch that could write one. The
+    world-builder's `commit` opener (`boot/realm.py`) mints every membership edge
+    with the dataclass default -- so no live `commit` Tenure this tree can build ever carries a
+    non-`None` `degree`. This is a real gap for the MB lane to pick up (`Faction.head`/`resolve_field`'s
+    `morale_start` candidate), not a Jordan escalation -- `commit` staying uncontested is this tree's
+    own design, not an open question.
+
+    ⚠ NO CROSS-DOMAIN DEGREE RANK IS INVENTED HERE. `Tenure.degree` carries whichever band the verb
+    that graded it uses (`FELLED/WOUNDED/UNTOUCHED` for combat, `DECLARED/WON/LOST/UNOPPOSED` for a
+    field contest, ...) and no ratified ladder orders those bands against each other (`seam/ladder`
+    owns ONE ladder, `D-30`, and it is the dice-engine `Degree` enum -- `OVERWHELMING/SUCCESS/
+    PARTIAL/FAILURE` -- a different vocabulary again). Building a "which degree wins" comparator
+    across families would be the speculative, scale-local dialect `CLAUDE.md` §10 forbids. So on
+    the day more than one live `commit` carries a degree, this picks the one `w.tenures` places
+    LAST -- `state/containment.py::home_of`'s own precedent for the identical ambiguity (more than
+    one live edge where the model expects one): *"LAST WRITE WINS ... the incumbent behaviour of
+    every site this replaces, preserved deliberately rather than quietly tightened here."*"""
+    TRACE.query("head", "resolver")
+    # Unreachable until something writes a degree on a `commit` (see the note above).
+    graded = [t for t in w.tenures
+              if t.kind == "commit" and t.object == prop and t.live and t.degree is not None]
+    if graded:
+        return graded[-1].subject
+    # CR-86 (ED-IN-0342): a faction whose `rosters.yaml: factions` row names a `head_seat` is headed by that
+    # seat's live holder -- the King for Valorsmark. A graded `commit` (above) stays the more specific
+    # reading and wins where one exists [CHOICE: none is built today, so the order moves nothing].
+    seat = HEAD_SEAT.get(FACTION_BY_PROP.get(prop))
+    if seat is None:
+        return None
+    held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
+    return held[-1] if held else None
 
 
 def detainees_held(w: World, p: Person) -> tuple:

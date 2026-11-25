@@ -56,7 +56,8 @@ from dataclasses import dataclass, fields
 
 from .world_q import WAR_MOOD, at_war, establishment_of, members  # noqa: F401 -- v11 CR-87: the first two MOVED to `world_q` (the war context's `enemies_heard` reads `at_war`, and this module imports `world_q`, so the reverse import would be a cycle); re-exported so every `faction_q.at_war` caller reads the one owner
 from .world_q import density, footprint, provinces_of, sovereign_fraction
-from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RECORD_KIND_KEYS
+from .world_q import head  # noqa: F401 -- B21.65: MOVED to `world_q` (`opinion_of` regards the present head and this module imports `world_q`, so a definition here is a cycle); re-exported, the `at_war` precedent above, so `faction_q.head` is the one owner's function object
+from ..data.rosters import RECORD_KIND_KEYS
 from ..gaps import Unspecified
 from ..state.containment import descendants
 from ..state.world import World
@@ -81,7 +82,7 @@ def resolve(w: World, prop: str) -> Faction:
     """§B.6.1's one constructor. `sides = (faction_q.resolve(proj, A), faction_q.resolve(proj, B))`
     -- §C.5.1, called ONCE per side before a provider runs; never re-derived inside one.
 
-    ⚠ `head` IS `head()` BELOW, F.4's first reader: a real read of `Tenure.degree`, so a future
+    ⚠ `head` IS `world_q.head` (re-exported above), F.4's first reader: a real read of `Tenure.degree`, so a future
     `commit` degree writer needs no second edit here. It is vacuous today, for the reason
     `head()`'s own docstring states."""
     TRACE.query("resolve", "resolver")
@@ -137,48 +138,6 @@ def standing(w: World, prop: str, rung_id: str) -> FactionStanding:
     return FactionStanding(footprint=fp, present=present, persons=persons,
                            sovereign_share=share, undetermined=undetermined,
                            provinces=tuple(provinces_of(w, rung_id).get(prop, ())))
-
-
-def head(w: World, prop: str) -> "str | None":
-    """F.4's first reader (plan position `20-ii`): the subject of the live `commit` Tenure to
-    `prop` carrying a non-`None` `Tenure.degree`; among more than one, the one `w.tenures` places
-    LAST (see the no-cross-domain-ladder note below for why "last", never "highest"). Per
-    `04 §F.34`'s *"if `Tenure.degree` gets a reader the head resolves with it"*.
-
-    ⚠ `None` TODAY, FOR A NAMED REASON, NOT BY CONSTRUCTION. `commit`'s own
-    `verb_table.yaml` row declares `contests: ""` (empty -- `VERB_TABLE["commit"].contests` is
-    falsy), and `04 PART D` row 30a types `writes` as Degree-keyed only for a verb that declares
-    `contests:`, so an uncontested `commit` never reaches a fold branch that could write one. The
-    world-builder's `commit` opener (`boot/realm.py`) mints every membership edge
-    with the dataclass default -- so no live `commit` Tenure this tree can build ever carries a
-    non-`None` `degree`. This is a real gap for the MB lane to pick up (`Faction.head`/`resolve_field`'s
-    `morale_start` candidate), not a Jordan escalation -- `commit` staying uncontested is this tree's
-    own design, not an open question.
-
-    ⚠ NO CROSS-DOMAIN DEGREE RANK IS INVENTED HERE. `Tenure.degree` carries whichever band the verb
-    that graded it uses (`FELLED/WOUNDED/UNTOUCHED` for combat, `DECLARED/WON/LOST/UNOPPOSED` for a
-    field contest, ...) and no ratified ladder orders those bands against each other (`seam/ladder`
-    owns ONE ladder, `D-30`, and it is the dice-engine `Degree` enum -- `OVERWHELMING/SUCCESS/
-    PARTIAL/FAILURE` -- a different vocabulary again). Building a "which degree wins" comparator
-    across families would be the speculative, scale-local dialect `CLAUDE.md` §10 forbids. So on
-    the day more than one live `commit` carries a degree, this picks the one `w.tenures` places
-    LAST -- `state/containment.py::home_of`'s own precedent for the identical ambiguity (more than
-    one live edge where the model expects one): *"LAST WRITE WINS ... the incumbent behaviour of
-    every site this replaces, preserved deliberately rather than quietly tightened here."*"""
-    TRACE.query("head", "resolver")
-    # Unreachable until something writes a degree on a `commit` (see the note above).
-    graded = [t for t in w.tenures
-              if t.kind == "commit" and t.object == prop and t.live and t.degree is not None]
-    if graded:
-        return graded[-1].subject
-    # CR-86 (ED-IN-0342): a faction whose `rosters.yaml: factions` row names a `head_seat` is headed by that
-    # seat's live holder -- the King for Valorsmark. A graded `commit` (above) stays the more specific
-    # reading and wins where one exists [CHOICE: none is built today, so the order moves nothing].
-    seat = HEAD_SEAT.get(FACTION_BY_PROP.get(prop))
-    if seat is None:
-        return None
-    held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
-    return held[-1] if held else None
 
 
 def holdings(w: World, prop: str) -> list:
