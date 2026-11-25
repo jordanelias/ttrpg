@@ -29,7 +29,7 @@ from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
-    KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
+    KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
@@ -53,7 +53,7 @@ from ..data.verbs import (
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names
+from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, content_value, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, deed_valence, paired_deed_term, projected_axes)
@@ -4454,6 +4454,41 @@ class WorldReader:
 
     def _ancestry(self, start: str) -> list:
         return ancestry(self._w, start)
+
+    def look(self, subject, read: str) -> tuple:
+        """B11.71 (`08_FI_03` §2, FRES §8): THE OBSERVATIONS A LOOK AT `subject` TAKES FOR ONE `rosters.yaml: look_reads` MEMBER, as `(subject, predicate,
+        value)` in the vocabulary the clause-4 reader and `record` read, each the one value its owner answers (`stores` and `held_by` as `read` does, `content`
+        as a holder's deposit mints it, `person_q.content_value`). `()` for a subject of the wrong class, or one with nothing to read; never UNKNOWN, since a
+        look gates nothing and an absent read deposits nothing. `stores` of a Site is the rung it stands in (`Site.rung`) and is reported at that rung; `held_by`
+        is one `(thing, held_by:<holder>, True)` per live `hold`, held WITHOUT taking it. The dispatch is the roster's own members, and a member it does not
+        answer raises: a read the roster names that this reader never takes is a dead column, not an empty look."""
+        w = self._w
+        try:
+            hash(subject)
+        except TypeError:
+            return ()
+        if read == "condition":
+            s = w.sites.get(subject)
+            return () if s is None else (Observation(subject, "condition", s.condition),)
+        if read == "stores":
+            at = w.sites[subject].rung if subject in w.sites else subject
+            r = w.rungs.get(at)
+            return () if r is None else tuple(Observation(at, f"stores:{k}", n) for k, n in sorted((r.stores or {}).items()))
+        if read == "held_by":
+            if subject not in w.rungs and subject not in w.records:
+                return ()
+            return tuple(Observation(subject, f"held_by:{h}", True)
+                         for h in sorted({t.subject for t in w.tenures if t.kind == "hold" and t.object == subject and t.live}))
+        if read == "content":
+            rec = w.records.get(subject)
+            said = None if rec is None else content_value(rec.subject_matter)
+            return () if said is None else (Observation(subject, f"{RECORD_CONTENT.get('predicate')}:{rec.kind}", said),)
+        raise InstrumentDefect(f"`rosters.yaml: look_reads` names {read!r} and `WorldReader.look` answers no such read")
+
+    def looks(self, row, binding: dict) -> tuple:
+        """B11.71: EVERY OBSERVATION THE ROW'S `observes:` TAKES for an act binding `binding` (`binding_from_act`), in the row's order. An operand the act
+        does not carry looks at nothing. The fold attaches them to the act's Events after the gating reads; WITNESS deposits those the Event's band lists."""
+        return tuple(o for lk in row.observes if binding.get(lk.of) is not None for o in self.look(binding[lk.of], lk.read))
 
     def read(self, subject, predicate: str):
         w = self._w

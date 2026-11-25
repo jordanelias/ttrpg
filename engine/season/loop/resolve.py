@@ -442,8 +442,14 @@ def _fold(self, w: "World", token: Token, a: Act,
     _fed = resolution.result.get("fed_by", ()) if resolution is not None and isinstance(resolution.result, dict) else ()
     _shown = skill_shown_observed(w.persons[a.actor], _fed, _degree) if _fed and a.actor in w.persons else ()
 
+    # B11.71 (`08_FI_03` §2): WHAT THE ACT LOOKED AT BESIDE ITS PRECONDITION -- the row's `observes:`, read by the fold's `WorldReader` once the act is admitted
+    # (a refusal looked at nothing: `refuse` carries the gating reads alone) and rebound below like `verdict`. It rides every Event `ev` builds, after the gating
+    # reads, at EVERY band: which of these a band deposits is `finding_terms`'s, decided at WITNESS, and a failed look still carries them (they are the world's
+    # facts, not a deposit). `()` for every row that declares none, so those Events are byte-identical.
+    looked: tuple = ()
+
     def ev(kinds, changes=None):
-        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + _shown)
+        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + looked + _shown)
 
     def refuse(kinds):
         # B07.10: a refusal is a precondition failed, never an outcome (04 §C.4), so a task act's refusal carries no band.
@@ -457,6 +463,8 @@ def _fold(self, w: "World", token: Token, a: Act,
     _ok, _refusal_kinds, verdict = self._admits(w, a, row)
     if not _ok:
         return refuse(_refusal_kinds)
+    if row.observes:
+        looked = WorldReader(w, a.actor).looks(row, binding_from_act(a))
     # B07.05 (18-A "The resolution, decided" 4, A-81): A LOST DRAW WRITES NOTHING AND EMITS THE ROW'S `draw` CLAUSE. A drawn
     # `task` row at a band whose share is zero (`task_share`, `rosters.yaml: task_fraction`; no band named here) folds to its
     # keyed `emits_on_refusal` clause `draw` (`<verb>.failed`), stamped with the band, before any effect runs: the act was

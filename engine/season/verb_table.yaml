@@ -2004,6 +2004,10 @@ verbs:
     emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none` and a refusal `inquiry.refused`, kinds in `undeposited_kinds`: WITNESS makes no event-kind claim of either (B11.61) and deposits the rest as for any Event; the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
     emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
+    observes:
+      - {of: site, read: condition}
+      - {of: site, read: stores}
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT A LOOK AT THE SITE TEACHES -- its `condition` and the `stores` of the rung it stands in (`queries/world_q.py::looked_at`). Non-gating: the cell above is unchanged. It names what is looked at and never a band; `rosters.yaml: finding_terms` says which of these a band deposits (all at Success and Overwhelming, the numbers lossy at Partial, none at Failure)."
     source:      "systems/fieldwork/reference/investigation_systems_v30.md:217 names the six; systems/fieldwork/reference/fieldwork_v30.md:293 (§4.2) and :317 (§4.3) carry this row's content"
   - verb:        "interview"
     public:      false
@@ -2100,6 +2104,10 @@ verbs:
     emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none` and a refusal `inquiry.refused`, kinds in `undeposited_kinds`: WITNESS makes no event-kind claim of either (B11.61) and deposits the rest as for any Event; the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
     emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
+    observes:
+      - {of: subject, read: held_by}
+      - {of: subject, read: content}
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::looked_at`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial)."
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
     public:      false
@@ -2134,6 +2142,10 @@ verbs:
     emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none` and a refusal `inquiry.refused`, kinds in `undeposited_kinds`: WITNESS makes no event-kind claim of either (B11.61) and deposits the rest as for any Event; the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
     emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
+    observes:
+      - {of: subject, read: stores}
+      - {of: subject, read: held_by}
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT WATCHING A PLACE TEACHES -- the rung's `stores` and who holds it (`queries/world_q.py::looked_at`). Who is `with` the place is world-only and stays so (`WORLD_ONLY_STEMS`): it is no `look_reads` member. Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`)."
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:296 (§4.2), :320 (§4.3)"
   - verb:        "thread_read"
     public:      false

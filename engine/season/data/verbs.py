@@ -37,7 +37,7 @@ from .requires import (
     ScalarThreshold, TypedRequires, WITH_STEM, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -80,6 +80,15 @@ if _unclassified:
         "column, which that check exists to forbid.")
 _OPERAND_BENEFICIARIES = tuple(
     sorted(k for k, v in _BENEFICIARY_CARRIAGE.items() if str(v).strip() == "operand"))
+
+@dataclass(frozen=True)
+class Look:
+    """ONE THING A ROW'S ACT LOOKS AT (B11.71, `08_FI_03` §2, FRES §8): the operand it looks at (`of`, a `requires_operands` member the row's own
+    cell binds) and the `rosters.yaml: look_reads` member it reads there (`read`). It names what is looked at and NEVER A BAND: which reads a
+    band deposits is `rosters.yaml: finding_terms`'s, the one band-keyed table. `queries/world_q.py::looked_at` answers it."""
+    of: str
+    read: str
+
 
 @dataclass(frozen=True)
 class VerbRow:
@@ -268,6 +277,11 @@ class VerbRow:
     # loader refuses a row that omits it or writes a non-boolean (a string, an integer, a null). Nothing reads it yet (B11.66's notice draw
     # does). ⚠ LAYER 1, NAMED AT THE SITE, as `regard_sign` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
     public: bool = False
+    # B11.71 (`08_FI_03` §2, FRES §8): WHAT AN ACT OF THIS ROW LOOKS AT BESIDE THE READS ITS OWN CELL MAKES -- a FLAT list of `Look`s (`observes:`), the
+    # non-gating reads the fold takes and attaches to the act's Events as `Observation`s; WITNESS deposits the ones the Event's band lists in
+    # `rosters.yaml: finding_terms` (the actor's own reads, as every observation). `()` is the declared absence (every row but three). ⚠ LAYER 1,
+    # NAMED AT THE SITE, as `public` above: `04` §B.13 inv. 10 admits the key once the loader knows it; `04` is not edited.
+    observes: tuple = ()
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -772,6 +786,41 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
                 "is the subsystem's")
 
 
+def _build_looks(verb: str, raw, row: "VerbRow") -> tuple:
+    """B11.71: A ROW'S `observes:` COLUMN INTO `Look`s, or the load refuses naming the row. The column is a FLAT LIST of `{of: <operand>, read: <read>}`
+    -- a mapping (a band-keyed one) or an entry that names a band is refused, since which reads a band deposits is `finding_terms`'s and a second
+    band-keyed table beside it is the defect FRES §8 names. Each `of` is a `requires_operands` member the row's own cell BINDS (an operand the act
+    never carries looks at nothing), each `read` a `look_reads` member, and no `read` is a stem the row's own cell asks: WITNESS tells a look from a
+    gating read by the stem, so a stem on both sides would let a failed look pass for a gating read. A row that keys no `emits:` by degree has no band,
+    and WITNESS deposits none of its looks (no `finding_terms` row for `None`). A function so a test can plant each refusal."""
+    if raw is None:
+        return ()
+    if not isinstance(raw, list):
+        raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` is {type(raw).__name__}, not a flat list of `{{of, read}}` entries -- it names what is "
+                         "looked at and never a band (`rosters.yaml: finding_terms` is the one band-keyed table)")
+    cell = row.requires_typed
+    out = []
+    for entry in raw:
+        if not isinstance(entry, dict) or set(entry) != {"of", "read"}:
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` entry {entry!r} is not `{{of: <operand>, read: <read>}}`")
+        of, read = entry["of"], entry["read"]
+        if of in DEGREE_BANDS or read in DEGREE_BANDS:
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` entry {entry!r} names a band; it names what is looked at, and "
+                             "`rosters.yaml: finding_terms` says which reads a band deposits")
+        if of not in REQUIRES_OPERANDS or cell is None or of not in cell.operands():
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` looks at {of!r}, which its `requires_typed` cell does not bind "
+                             f"(binds {sorted(cell.operands()) if cell is not None else 'nothing -- the row is untyped'}); the act would not carry it")
+        if read not in LOOK_READS:
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` reads {read!r}, which is not a `rosters.yaml: look_reads` member ({sorted(LOOK_READS)})")
+        if read in cell.stems():
+            raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` reads {read!r}, a stem its own cell asks: a look is a NON-GATING read, and WITNESS "
+                             "tells it from a gating one by the stem")
+        out.append(Look(of, read))
+    if len(set(out)) != len(out):
+        raise SystemExit(f"verb_table.yaml: {verb!r} `observes:` lists a look twice")
+    return tuple(out)
+
+
 def _load_verb_table() -> dict:
     if not VERB_TABLE_YAML.exists():
         raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
@@ -857,6 +906,7 @@ def _load_verb_table() -> dict:
                       difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
                       regard_sign=r.get("regard_sign"),
                       public=r["public"])
+        row = replace(row, observes=_build_looks(name, r.get("observes"), row))
         # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
         # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
         if row.regard_sign is None:

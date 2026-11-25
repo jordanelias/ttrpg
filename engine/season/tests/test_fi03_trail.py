@@ -490,13 +490,13 @@ def test_a_finding_terms_row_off_the_ladder_or_off_the_terms_refuses_naming_it()
     """B2 (a): `data/rosters.py::_load_finding_terms`, called on planted rows. The shipped rows load (the
     control); a band no ladder label names, and a term `observation_terms` does not carry, each refuse
     naming it."""
-    bands, terms = rosters.DEGREE_BANDS, rosters.OBSERVATION_TERMS
+    bands, terms, reads = rosters.DEGREE_BANDS, rosters.OBSERVATION_TERMS, rosters.LOOK_READS   # B11.71: a row lists the trail's terms and the look's reads
     shipped = rosters.roster_map("finding_terms", "bands")
-    assert rosters._load_finding_terms(shipped, bands, terms) == {b: tuple(v) for b, v in shipped.items()}
+    assert rosters._load_finding_terms(shipped, bands, terms, reads) == {b: tuple(v) for b, v in shipped.items()}
     with pytest.raises(Unspecified, match="'Middling'"):
-        rosters._load_finding_terms(dict(shipped, Middling=[HAND_TERM]), bands, terms)
+        rosters._load_finding_terms(dict(shipped, Middling=[HAND_TERM]), bands, terms, reads)
     with pytest.raises(Unspecified, match="'whence'"):
-        rosters._load_finding_terms(dict(shipped, Success=[HAND_TERM, "whence"]), bands, terms)
+        rosters._load_finding_terms(dict(shipped, Success=[HAND_TERM, "whence"]), bands, terms, reads)
 
 
 def test_a_covert_kind_that_is_no_deed_refuses_naming_it():

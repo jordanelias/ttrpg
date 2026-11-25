@@ -43,7 +43,7 @@ from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_on
                          claim_subjects, deposit_anchor, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, notice, notice_on, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
-from ..queries.person_q import LedgerReader, addressed_to, drifted, ledger_weigh, refracted_confidence
+from ..queries.person_q import LedgerReader, addressed_to, content_value, drifted, ledger_weigh, refracted_confidence   # `content_value`: moved to person_q at B11.71, still importable from here
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
@@ -76,23 +76,6 @@ require_member(SEAT_CHANNEL, WITNESS_CHANNELS,
                "rosters.yaml -- witness_channels",
                law="v9 IN-22 -- the purview deposit takes the seat channel's source and switch; a "
                    "name the roster does not carry would leave it dead or unsourced")
-
-
-def content_value(subject_matter):
-    """A `content:<kind>` CLAIM'S VALUE: the document's `subject_matter`, FROZEN -- a tuple of
-    `(key, value)` pairs in the kind's own key order, every list a tuple, recursively. `dict(v)`
-    gives the mapping back.
-
-    ⚠ FROZEN AND HASHABLE ON `epistemic.Seen`'s PRECEDENT, AND FOR ITS REASON: claim values sit in
-    the sets the corpus harness builds over `(subject, predicate, value)`
-    (`harness/corpus_run.py`), and a `dict` there is a `TypeError`. Freezing is
-    also what the deep copy was for: a belief that cannot be mutated cannot alias the Record it
-    was read from, so nothing done to the document later reaches back into a ledger."""
-    if isinstance(subject_matter, dict):
-        return tuple((k, content_value(v)) for k, v in subject_matter.items())
-    if isinstance(subject_matter, (list, tuple)):
-        return tuple(content_value(v) for v in subject_matter)
-    return subject_matter
 
 
 def addressee_reads(rec, pid: str) -> bool:
@@ -846,6 +829,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if (obs_mode != "none" and e.observed
                 and (obs_mode == "total" or actor is None or pid == actor)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
+            # B11.71: the reads this Event's row LOOKS AT (`observes:`), by stem -- `()` for every row that declares none.
+            looks = frozenset(lk.read for lk in getattr(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)), "observes", ()))
             # `e.observed`, NOT `getattr(e, "observed", ())`: a default here would swallow the one
             # case worth failing on, an object that is not an Event reaching this barrier.
             for o in e.observed:
@@ -889,6 +874,16 @@ def witness(self, token: Token, events: list[Event]) -> int:
                         _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"absent:{e.id}:{o.subject}"), pid, o.subject, ABSENT_PREDICATE, here,
                                           w.tick, src, conf, "own", self.lap, doer=doer), e)
                     continue
+                # B11.71 (`08_FI_03` §2, FRES §8): A READ THE ROW'S `observes:` TOOK is deposited only where the Event's band lists its stem in
+                # `rosters.yaml: finding_terms` -- the one band-keyed table (no row, `Failure`, lists none) -- and at `Partial` a number goes through the
+                # lossy-copy rule (`_told_value`, the same hash-keyed selection a told copy takes, spending no draw). A GATING read (the row's own cell's) is
+                # no look: its stem is none of `observes:`'s (`data/verbs.py::_build_looks` refuses the overlap), so it is deposited at every band as before.
+                value = o.value
+                if str(o.predicate).partition(":")[0] in looks:
+                    if str(o.predicate).partition(":")[0] not in FINDING_TERMS.get(e.degree, ()):
+                        continue
+                    value = _told_value(w, pid, e, o, H(w.world_seed, w.tick, pid, f"look:{e.id}:{o.subject}:{o.predicate}"),
+                                        str(o.predicate).partition(":")[0])
                 key = (o.subject, o.predicate)
                 if key in seen_obs:
                     continue
@@ -897,7 +892,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # two reads OF ONE EVENT; it spans the pass now and is still strictly
                 # increasing, so no two ids collide.
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
-                           pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
+                           pid, o.subject, o.predicate, value, w.tick, src, conf, "own",
                            self.lap, doer=doer)   # `U2`: see the deposit above
                 if refracting:
                     oc = _refract(oc, p, channel, gain, fx=cfx)

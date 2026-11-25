@@ -2071,6 +2071,27 @@ def content_kind(c) -> "str | None":
     return kind or None
 
 
+def content_value(subject_matter):
+    """A `content:<kind>` CLAIM'S VALUE: the document's `subject_matter`, FROZEN -- a tuple of
+    `(key, value)` pairs in the kind's own key order, every list a tuple, recursively. `dict(v)`
+    gives the mapping back.
+
+    ⚠ FROZEN AND HASHABLE ON `epistemic.Seen`'s PRECEDENT, AND FOR ITS REASON: claim values sit in
+    the sets the corpus harness builds over `(subject, predicate, value)`
+    (`harness/corpus_run.py`), and a `dict` there is a `TypeError`. Freezing is
+    also what the deep copy was for: a belief that cannot be mutated cannot alias the Record it
+    was read from, so nothing done to the document later reaches back into a ledger.
+
+    B11.71: MOVED HERE FROM `loop/witness.py` (which imports it back, so `from ..loop.witness import content_value` still resolves) -- the
+    fold's look at a Record (`world_q.WorldReader.look`, `content`) reads the same value a holder's deposit mints, and `queries/` may not import
+    `loop/`. One owner, `content_said`'s neighbour."""
+    if isinstance(subject_matter, dict):
+        return tuple((k, content_value(v)) for k, v in subject_matter.items())
+    if isinstance(subject_matter, (list, tuple)):
+        return tuple(content_value(v) for v in subject_matter)
+    return subject_matter
+
+
 def addressed_to(said, pid) -> bool:
     """IS `pid` AMONG THE ADDRESSEES OF A DOCUMENT SAYING `said` -- the id list under the addressee key
     (`rosters.yaml: record_kinds.content.addressee`, `to`), which the mint stores as a list

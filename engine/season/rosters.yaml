@@ -3624,10 +3624,30 @@ rosters:
       ⚠ `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not
       own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster
       scan), so the ladder would have read as declared twice.
+      B11.71 (`08_FI_03` §2, FRES §8): THE SAME ROW ALSO LISTS WHICH `look_reads` A BAND DEPOSITS, so one band-keyed table owns what a finding
+      shows -- of a trail (the terms) and of what is looked at (the reads), never two tables. A row lists a read by its `look_reads` name; a
+      verb row's `observes:` says WHAT IS LOOKED AT and never a band, and `loop/witness.py` deposits an observed read only where the Event's
+      band lists its stem. In words: a look at `Overwhelming` or `Success` teaches every read; at `Partial` all but `held_by` (who holds a
+      thing is the sight a good look gives), a number through the lossy-copy rule (`loop/witness.py::_told_value`); at `Failure` -- no row --
+      none, and the reads the row's own cell made (the gating reads) are deposited at every band and on a refusal, as before.
+      [ASSUMPTION; medium; Jordan to correct; revert: every look read at every finding band, `held_by` included.]
     bands:
-      Overwhelming: [stratum, marks, who]
-      Success:      [stratum, marks, who]
-      Partial:      [stratum, marks]
+      Overwhelming: [stratum, marks, who, condition, stores, held_by, content]
+      Success:      [stratum, marks, who, condition, stores, held_by, content]
+      Partial:      [stratum, marks, condition, stores, content]
+
+  look_reads:
+    source: >-
+      B11.71 (`08_FI_03` §2, FRES §8; C-24, R-35, H-218): THE READS A LOOK MAY TAKE -- the closed set a verb row's `observes:` entry names
+      (`data/verbs.py::Look.read`) and a `finding_terms` band row lists. A read is named by the predicate stem it deposits under.
+    cite: "08_FI_03 §2; U5c_FI_residue §8"
+    note: >-
+      `condition` of a Site (`(site, condition, n)`); `stores` of a Rung (`(rung, stores:<kind>, n)` for each kind it holds; a Site's look
+      reads the rung it stands in); `held_by` of a Rung or a Record (`(thing, held_by:<holder>, True)` for each live `hold`); `content` of a
+      Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is
+      `queries/world_q.py::looked_at`, which dispatches on exactly these members and answers nothing for a subject of another class; a
+      member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load.
+    values: [condition, stores, held_by, content]
 
   covert_kinds:
     source: >-

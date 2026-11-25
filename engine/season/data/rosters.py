@@ -1205,24 +1205,32 @@ if not isinstance(ABSENT_PREDICATE, str) or not ABSENT_PREDICATE or ":" in ABSEN
 TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 
 
-def _load_finding_terms(mapping: dict, bands, terms) -> dict:
+# B11.71 (`08_FI_03` §2, FRES §8): THE READS A LOOK MAY TAKE (`rosters.yaml: look_reads`), listed beside the trail's terms in a `finding_terms` row.
+LOOK_READS = roster("look_reads")
+
+
+def _load_finding_terms(mapping: dict, bands, terms, reads=()) -> dict:
     """v9 FI-03 (`ED-FI-0002`): `rosters.yaml: finding_terms` -- degree band -> the observation terms
-    a finding at that band shows of a trail -- refused at import naming the row when a key is no band
-    of the one ladder or a value names a term `observation_terms` does not carry. A function, not an
+    a finding at that band shows of a trail, and (B11.71) the `look_reads` it deposits of what is looked at --
+    refused at import naming the row when a key is no band of the one ladder or a value names a member
+    neither `observation_terms` nor `look_reads` carries; and when the two rosters share a name, which
+    one row could not tell apart. A function, not an
     inline check, so a test can plant a bad row and watch it refuse (`_check_scale_of_rung`'s reason).
     Values come back as tuples, in the row's own order."""
+    allowed = [*terms, *reads]
     bad = sorted([f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping
                   if b not in bands]
-                 + [f"band {b!r}: {v!r} is not a list of {list(terms)}" for b, v in mapping.items()
-                    if not isinstance(v, list) or not set(v) <= set(terms)])
+                 + [f"band {b!r}: {v!r} is not a list of {allowed}" for b, v in mapping.items()
+                    if not isinstance(v, list) or not set(v) <= set(allowed)]
+                 + [f"`{n}` is a term of both `observation_terms` and `look_reads`" for n in sorted(set(terms) & set(reads))])
     if bad:
         raise Unspecified(
             f"`finding_terms` rows {bad}", "rosters.yaml -- finding_terms",
             needs="key each row by a band `engine/dice_engine/dice_engine.py::DEGREE_LABEL` names, "
-                  "and list only `observation_terms` members",
+                  "and list only `observation_terms` and `look_reads` members, which share no name",
             law="ED-FI-0002 -- what a finding shows is a mask over the `seen` struct, keyed by the "
                 "degree the one ladder decides; a band off the ladder is never reached and a term "
-                "off the struct is a field nothing has")
+                "off the struct is a field nothing has. B11.71 (FRES §8) -- one band-keyed table, so a look's reads are listed here")
     return {b: tuple(v) for b, v in mapping.items()}
 
 
@@ -1243,7 +1251,7 @@ DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
 # [ASSUMPTION; medium; Jordan to correct; revert: the ordinal unshifted, Failure 0]
 DEGREE_STEP = {_DEGREE_LABEL[d]: _DEGREE_ORDINAL[d] - _DEGREE_ORDINAL[_Degree.PARTIAL]
                for d in _DEGREE_LABEL}
-FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS)
+FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS, LOOK_READS)
 
 
 def _load_band_numbers(name: str, mapping: dict, bands, *, whole: bool, complete: bool) -> dict:
