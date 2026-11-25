@@ -28,6 +28,11 @@ game's own acts through the fold at tick 0, `play` runs seasons from it with one
 news digest is: one line per occurrence, read off the log and the tenures, written nowhere. It adds no rule and edits no
 file under `loop/`, `state/`, `queries/`, `decision/` or `data/`: with no pick the run is `populated.run`'s on the same world.
 `python -m engine.season.harness.governance_spine play SEED SEASONS {vacancy|order|succession} [--player ID] [--pick I,I,...]`.
+
+B21.74, `recall`, `--world realm`, `loop_closed` (`06_FA_shortest_loop_B`): `recall` is `order`'s opening with a longer ending (the run goes on two seasons
+after the player's seat is gone, so the filling of it is seen); `play(..., world="realm")` is `populated.run` on the built realm with the digest printed;
+`loop_closed` is one pure reader of whether the five links of the loop (an order, an answer to it, a response to a withheld answer, a seat closed, a seat
+filled) each occurred, and who acted in them. `play SEED SEASONS --world realm`.
 """
 
 from __future__ import annotations
@@ -38,9 +43,11 @@ import sys
 from collections import Counter
 from typing import Callable, Iterator, Optional, Sequence
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.substrate import names as _names
 
 from ..boot.chooser import chooser
+from ..boot.realm import build_realm
 from ..data import files
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import RESTRAINT_KINDS, RUNG_KINDS, SUCCESSIONS, load_yaml, remit_or_default
@@ -50,6 +57,7 @@ from ..decision.options import seat_of
 from ..decision.sheet import development_space
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import faction_q, world_q
+from ..queries.person_q import COMPLIANCE_WITHHELD, addressed_to
 from ..state.attribution import causing_act
 from ..state.carriers import Act, Office, Person, Rung, Site, Tenure, generated_attributes
 from ..state.containment import parent_of
@@ -289,7 +297,12 @@ def census(w: World) -> dict:
 # builds every seat (the fixture is this module's), and the act that matters, the `release`, goes through the fold.
 THRONE_SUFFIX = "throne"
 
-SITUATIONS = ("vacancy", "order", "succession")
+WORLDS = ("spine", "realm")
+SITUATIONS = ("vacancy", "order", "succession", "recall")
+
+# B21.74: THE SEASONS A SCENARIO GOES ON AFTER THE PLAYER'S SEAT IS GONE, by situation (none named: it ends at once). `recall` is `order`'s opening; what it
+# adds is that the run does not stop on the revocation, so the filling of the seat is seen (`06_FA_shortest_loop_B`, "The resolution": two seasons later).
+LINGER_AFTER_UNSEATED = {"recall": 2}
 
 
 def _seat_of(w: World, player: str) -> Office:
@@ -370,7 +383,7 @@ def _opening(w: World, name: str, player: str) -> Iterator[Act]:
         if not below:
             raise _refused(f"no held seat stands one rung below {seat.id!r}", "a held seat beneath the player's")
         yield Act(id=f"scn:vacancy:{below[0]}", actor=_holder_of(w, below[0]), verb="release", payload={"subject": below[0]}, via=below[0])
-    elif name == "order":
+    elif name in ("order", "recall"):
         sov = _sovereign(w, seat)
         sovereign = _holder_of(w, sov.id)
         # a writ's terms are something its issuer holds a claim on: he utters one first, as the engine's own acts do
@@ -390,7 +403,7 @@ def _opening(w: World, name: str, player: str) -> Iterator[Act]:
 
 
 def situation(w: World, name: str, player: str) -> list:
-    """`vacancy`, `order` or `succession`, MADE BY THE GAME'S OWN ACTS through `SeasonDriver`'s fold at tick 0 (never by a branch on an id and never by
+    """`vacancy`, `order`, `succession` or `recall` (`order`'s opening; the name selects `play`'s ending rule), MADE BY THE GAME'S OWN ACTS through `SeasonDriver`'s fold at tick 0 (never by a branch on an id and never by
     writing a carrier of the situation directly), and the acts returned so the digest can cite them. A situation whose opening act the fold refuses raises,
     naming the Event, so a scenario cannot start from a state the engine did not produce. D-08: a set-up act is a draw where its row contests a prize,
     so it can come out otherwise; the scenario does not force it, and a set-up that failed is itself the opening situation (the digest reports its band).
@@ -512,7 +525,7 @@ def _successions_set(mapping: dict) -> Iterator[None]:
 
 
 def standing_lines(w: World) -> list:
-    """Each rostered faction's `faction_q.standing` record at the realm rung (B03.65's caller; no second footprint, density or provinces reading here)."""
+    """Each rostered faction's `faction_q.standing` record at the realm rung (B03.65's caller; no second footprint, density or provinces reading here); B21.74 adds `faction_q.weight` (B21.68)."""
     from ..data.rosters import FACTION_BY_PROP
     top = next((r.id for r in w.rungs.values() if r.kind == RUNG_KINDS[-1]), None)
     if top is None:
@@ -521,13 +534,14 @@ def standing_lines(w: World) -> list:
     for prop, name in FACTION_BY_PROP.items():
         s = faction_q.standing(w, prop, top)
         out.append(f"  faction {name}: footprint {len(s.footprint)} rungs, {s.present} of {s.persons} present, "
-                   f"largest holder's share {s.sovereign_share:.2f}, {len(s.provinces)} provinces")
+                   f"largest holder's share {s.sovereign_share:.2f}, {len(s.provinces)} provinces, weight {faction_q.weight(w, prop):g}")
     return out
 
 
-def _ending(w: World, player: str, n: int, seasons: int) -> Optional[str]:
-    """The first of the three endings that holds, each a Query: the player holds no seat; an ending is reached; the season count is."""
-    if not w.seat_holds(player):
+def _ending(w: World, player: str, n: int, seasons: int, unseated: Optional[int] = None, linger: int = 0) -> Optional[str]:
+    """The first of the three endings that holds, each a Query: the player holds no seat (`unseated` is the season he was first found without one, and `linger`
+    seasons have run since); an ending is reached; the season count is."""
+    if unseated is not None and n - unseated >= linger:
         return "the player holds no seat"
     reached = world_q.endings_reached(w)
     if reached:
@@ -535,14 +549,124 @@ def _ending(w: World, player: str, n: int, seasons: int) -> Optional[str]:
     return "the season count was reached" if n >= seasons else None
 
 
-def play(seed: int, seasons: int, situation: str, player: Optional[str] = None, pick: Optional[Sequence[int]] = None,
-         out: Callable[[str], None] = print) -> dict:
+# THE FIVE LINKS' VERBS, and the kinds each makes, read off `VERB_TABLE` (every degree's branch, the refusal kinds taken out: a refused act is no attempt). The two
+# kinds named here are the ones the engine reads by name elsewhere (`TENURE_CLOSED`, `COMPLIANCE_WITHHELD`).
+_ANSWERS = ("comply", "evade / defy", "construe")
+_RESPONSES = ("revoke", "open_case", "arrest")
+_MADE = {v: _kinds_of(v) - frozenset(VERB_TABLE[v].emits_on_refusal) for v in ("issue", *_ANSWERS, *_RESPONSES)}
+# A SEAT-HOLD OPENS in the successful bands of the two verbs that give one (the Failure band writes no tenure); the kind a close takes is the one they share.
+_OPENS = frozenset(k for v in ("confer", "succeed") for degree, ks in VERB_TABLE[v].emits_by_degree.items()
+                   if degree != DEGREE_LABEL[Degree.FAILURE] for k in ks) - {TENURE_CLOSED}
+# WHAT CLOSED A SEAT-HOLD, by the verb of the act that closed it; no act is a death (the seat's own receipt, `Subject.seat`) or a term running out. `confer` and
+# `succeed` close the incumbent's hold as they give the seat on, so the seat is never empty: not a vacating.
+_CLOSED_BY = {"release": "release", "revoke": "revocation", "seize": "seizure"}
+LOOP_LINKS = ("ordered", "answered", "responded", "vacated", "filled")
+
+
+def loop_closed(w: World, since: int) -> dict:
+    """WHETHER THE LOOP CLOSED over `w.log[since:]`, A PURE READER (the log, the act store, `w.tenures` and `w.records`; it writes nothing): an order, an answer to
+    it, a response to a withheld answer, a seat closed, a seat filled. Each count is of ACTS (one act that emits two kinds is one), read through the act that
+    caused the Event (`causing_act`):
+      `ordered`   `issue`'s acts that made a writ;
+      `answered`  `comply`'s, `evade / defy`'s and `construe`'s acts whose actor is an addressee of the writ the act names (`person_q.addressed_to`);
+      `responded` ATTEMPTED `revoke`, `open_case` and `arrest` acts (a resisted `revoke` is one, a refused act is none) whose actor issued a writ that their
+                  subject, or a holder of the seat they name, had withheld compliance on EARLIER in the log; `responded_bands` is the band each reached
+                  (`None`: the verb draws none);
+      `vacated`   closes of a seat-`hold`, by cause (`vacated_by`: death, release, revocation, term, seizure);
+      `filled`    opens of a seat-`hold` on an Office with an earlier close of a `hold` on it not yet filled;
+      `persons`   the distinct actors of the acts above.
+    `closed` is the five links all above zero. A writ made before `since` is outside the reading."""
+    log = w.log[since:]
+    edges = {t.id: t for t in w.tenures}
+    held: dict = {}                       # person -> the seats he holds or held (a revoked man's closed hold stays on his own list)
+    for t in w.tenures:
+        if t.kind == "hold" and t.object in w.offices:
+            held.setdefault(t.subject, set()).add(t.object)
+    writ_by: dict = {}                    # record id -> the `issue` act of the Event that first named it
+    withheld: dict = {}                   # writ id -> the addressees who withheld compliance on it
+    ordered, answered, responses, closes, vacant, filled = set(), set(), {}, [], {}, 0
+    actors: set = set()
+    for e in log:
+        act = causing_act(w, e)
+        verb = act.verb if act is not None else None
+        if verb == "issue" and e.kind in _MADE["issue"]:
+            ordered.add(act.id)
+            actors.add(act.actor)
+            for c in e.changes:
+                writ_by.setdefault(c.subject, act)
+        elif verb in _ANSWERS and e.kind in _MADE[verb]:
+            writ = act.payload.get("subject") if isinstance(act.payload, dict) else None
+            rec = w.records.get(writ)
+            if rec is not None and addressed_to(rec.subject_matter, act.actor):
+                answered.add(act.id)
+                actors.add(act.actor)
+                if e.kind == COMPLIANCE_WITHHELD:
+                    withheld.setdefault(writ, set()).add(act.actor)
+        elif verb in _RESPONSES and e.kind in _MADE[verb] and act.id not in responses:
+            target = act.payload.get("subject") if isinstance(act.payload, dict) else None
+            if any(writ_by[r].actor == act.actor and (target in who or any(target in held.get(a, ()) for a in who))
+                   for r, who in withheld.items() if r in writ_by):
+                responses[act.id] = e.degree
+                actors.add(act.actor)
+        if e.kind == TENURE_CLOSED:
+            for c in e.changes:
+                t = edges.get(c.subject)
+                office = t.object if t is not None and t.kind == "hold" else c.subject if c.subject in w.offices else None
+                if office not in w.offices:
+                    continue
+                if verb in _CLOSED_BY:
+                    cause = _CLOSED_BY[verb]
+                    actors.add(act.actor)
+                elif t is None:
+                    cause = "death"       # the seat's own receipt: a dead man's tenures leave the store with him (`Subject.seat`)
+                elif t.term is not None and e.causes == [t.term.declared_by]:
+                    cause = "term"        # MATTER matured it, citing the act that wound the clock
+                else:
+                    continue
+                closes.append(cause)
+                vacant[office] = vacant.get(office, 0) + 1
+        elif e.kind in _OPENS:
+            for c in e.changes:
+                t = edges.get(c.subject)
+                if t is not None and t.kind == "hold" and t.object in w.offices and vacant.get(t.object):
+                    vacant[t.object] -= 1
+                    filled += 1
+                    if act is not None:
+                        actors.add(act.actor)
+    out = {"ordered": len(ordered), "answered": len(answered), "responded": len(responses), "vacated": len(closes), "filled": filled,
+           "persons": len(actors), "responded_bands": dict(Counter(responses.values())), "vacated_by": dict(Counter(closes))}
+    out["closed"] = all(out[k] > 0 for k in LOOP_LINKS)
+    return out
+
+
+def loop_line(r: dict) -> str:
+    """`loop_closed`'s reading as the one line `play` prints."""
+    bands = ", ".join(f"{b or 'no draw'} x{n}" for b, n in sorted(r["responded_bands"].items(), key=str))
+    by = ", ".join(f"{c} x{n}" for c, n in sorted(r["vacated_by"].items()))
+    return (f"loop: ordered {r['ordered']}, answered {r['answered']}, responded {r['responded']}" + (f" ({bands})" if bands else "")
+            + f", vacated {r['vacated']}" + (f" ({by})" if by else "") + f", filled {r['filled']}; persons {r['persons']}; closed {r['closed']}")
+
+
+def play(seed: int, seasons: int, situation: Optional[str] = None, player: Optional[str] = None, pick: Optional[Sequence[int]] = None,
+         out: Callable[[str], None] = print, *, world: str = "spine") -> dict:
     """Builds the spine, makes `situation`, and runs up to `seasons` seasons with `dispatching_chooser(auto, {player: callback})`, printing the digest and
-    each faction's standing after every season. `pick=None` is the shipped chooser for everyone: the run is `populated.run`'s on the same world (the control).
-    A `pick` (indices into the offer `offered` prints) is spent at the player's FIRST deliberation, through `development_space`; after it the player takes
-    the shipped order (`take_ranked`), so he acts as himself. `pick=()` shows the offer and takes nothing. Stops at the first of: the player holds no seat;
-    `world_q.endings_reached` is non-empty; the season count. `SUCCESSIONS` is the scenario's for the run and restored after it, a run that raises included.
-    Returns `{"world", "ended", "seasons", "acts"}`."""
+    each faction's standing after every season, then `loop_closed`'s line. `pick=None` is the shipped chooser for everyone: the run is `populated.run`'s on the
+    same world (the control). A `pick` (indices into the offer `offered` prints) is spent at the player's FIRST deliberation, through `development_space`; after
+    it the player takes the shipped order (`take_ranked`), so he acts as himself. `pick=()` shows the offer and takes nothing. Stops at the first of: the player
+    holds no seat (`recall`: `LINGER_AFTER_UNSEATED` seasons after the one he was first found without it); `world_q.endings_reached` is non-empty; the season
+    count. `SUCCESSIONS` is the scenario's for the run and restored after it, a run that raises included.
+    `world="realm"` (B21.74) is the built realm, read as it is built: `situation`, `player` and `pick` must be None (no hand-made opening, nobody played), and it
+    runs the season count whole, so it is `populated.run`'s on the same seed with the digest printed.
+    Returns `{"world", "ended", "seasons", "acts", "loop"}` (`loop` is `loop_closed(w, 0)`)."""
+    if world not in WORLDS:
+        raise _refused(f"{world!r} is no world; the table is {WORLDS}", "one of " + "|".join(WORLDS))
+    if world == "realm":
+        if situation is not None or player is not None or pick is not None:
+            raise _refused("the realm is read as it is built: no situation, no player and no pick", "situation=None, player=None, pick=None")
+        out(f"realm, seed {seed}, nobody played")
+        return _run(build_realm(seed), seasons, None, None, out, lambda n: None)
+    if situation is None:
+        raise _refused("the spine needs a situation", "one of " + "|".join(SITUATIONS))
     w = build(seed)
     player = player or default_player(w)
     mapping = successions_for(w, situation, player)
@@ -552,29 +676,46 @@ def play(seed: int, seasons: int, situation: str, player: Optional[str] = None, 
         for line in digest(w, 0):
             out(line)
         verbs = resolvable_verbs()
-        auto = chooser(w, verbs=verbs)
         overrides: dict = {}
         if pick is not None:
             overrides[player] = _callback(w, tuple(pick), verbs, out)
-        choose = dispatching_chooser(auto, overrides)
-        d = SeasonDriver(w)
-        ran, ended = 0, None
-        for n in range(1, seasons + 1):
-            since = len(w.log)
-            d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
-            ran = n
-            out(f"season {n}:")
-            # `digest` is one line per occurrence; the shipped chooser repeats the same refused act, so the printed season folds equal lines into `(xN)`
-            for line, times in Counter(digest(w, since)).items():
-                out(line + (f" (x{times})" if times > 1 else ""))
-            for line in standing_lines(w):
-                out(line)
-            ended = _ending(w, player, n, seasons)
-            if ended:
-                break
-        ended = ended or "the season count was reached"
-        out(f"ended after {ran} season(s): {ended}")
-    return {"world": w, "ended": ended, "seasons": ran, "acts": acts}
+        unseated: list = []
+
+        def ended_at(n: int) -> Optional[str]:
+            if not unseated and not w.seat_holds(player):
+                unseated.append(n)
+            return _ending(w, player, n, seasons, unseated[0] if unseated else None, LINGER_AFTER_UNSEATED.get(situation, 0))
+        res = _run(w, seasons, verbs, overrides, out, ended_at)
+    res["acts"] = acts
+    return res
+
+
+def _run(w: World, seasons: int, verbs, overrides: Optional[dict], out: Callable[[str], None], ended_at: Callable) -> dict:
+    """The season loop `play` shares between its two worlds: one `SeasonDriver` on `chooser(w)` behind `dispatching_chooser(auto, overrides)`, the digest and
+    each faction's standing after every season, `ended_at(n)` asked after it (the realm's never ends it: the count runs whole), and `loop_closed` over the
+    whole log at the end."""
+    verbs = verbs or resolvable_verbs()
+    choose = dispatching_chooser(chooser(w, verbs=verbs), overrides or {})
+    d = SeasonDriver(w)
+    ran, ended = 0, None
+    for n in range(1, seasons + 1):
+        since = len(w.log)
+        d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+        ran = n
+        out(f"season {n}:")
+        # `digest` is one line per occurrence; the shipped chooser repeats the same refused act, so the printed season folds equal lines into `(xN)`
+        for line, times in Counter(digest(w, since)).items():
+            out(line + (f" (x{times})" if times > 1 else ""))
+        for line in standing_lines(w):
+            out(line)
+        ended = ended_at(n)
+        if ended:
+            break
+    ended = ended or "the season count was reached"
+    out(f"ended after {ran} season(s): {ended}")
+    loop = loop_closed(w, 0)
+    out(loop_line(loop))
+    return {"world": w, "ended": ended, "seasons": ran, "acts": [], "loop": loop}
 
 
 def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Callable:
@@ -602,7 +743,8 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    """`governance_spine` prints the census; `governance_spine play SEED SEASONS {vacancy|order|succession} [--player ID] [--pick I,I,...]` plays a scenario.
+    """`governance_spine` prints the census; `governance_spine play SEED SEASONS {vacancy|order|succession|recall} [--player ID] [--pick I,I,...]` plays a scenario,
+    and `governance_spine play SEED SEASONS --world realm` reads the built realm (no situation, no player), both ending in `loop_closed`'s line.
     Seed and seasons have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s scope; `harness/storybar.py` gives the same reason).
     `--pick ''` shows the offer and takes nothing; no `--pick` is the control, the shipped chooser for everyone."""
     argv = list(sys.argv[1:] if argv is None else argv)
@@ -615,12 +757,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     pl = sub.add_parser("play", help="play a scenario on the governance test world")
     pl.add_argument("seed", type=int)
     pl.add_argument("seasons", type=int)
-    pl.add_argument("situation", choices=SITUATIONS)
+    pl.add_argument("situation", nargs="?", choices=SITUATIONS, default=None, help="named for the spine, absent for --world realm")
+    pl.add_argument("--world", choices=WORLDS, default="spine", help="spine: the governance test world and a situation; realm: the built realm, nobody played")
     pl.add_argument("--player", default=None, help="a person id; default the Duke of the first chain (default_player)")
     pl.add_argument("--pick", default=None, help="comma-separated candidate indices, spent at the first deliberation; '' shows the offer only")
     a = ap.parse_args(argv)
     pick = None if a.pick is None else tuple(int(x) for x in a.pick.split(",") if x.strip())
-    play(a.seed, a.seasons, a.situation, a.player, pick)
+    play(a.seed, a.seasons, a.situation, a.player, pick, world=a.world)
     return 0
 
 
