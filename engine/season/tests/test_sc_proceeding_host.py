@@ -110,6 +110,7 @@ def test_the_seat_a_self_plea_is_put_to_is_no_party_and_starts_on_his_own_ties()
     assert seat.start == w.fixtures.get("start_step") * (fmath.ltr_sum(own) / person_q.BEARING_PARTS) > 0
 
 
+def test_a_church_bench_seats_only_church_seats():
     """An `authority: church` row seats the church seat alone, read through the office's faction; the crown seat that would
     sit under a polity row does not; with no church seat the proceeding is refused."""
     w = _world()
