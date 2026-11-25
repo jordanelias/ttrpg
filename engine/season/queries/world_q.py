@@ -37,7 +37,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    INVESTED,
+    INVESTED, SEASONS_OF_YEAR,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
@@ -1269,13 +1269,11 @@ def named(c) -> tuple:
     return tuple(ids) if ids else ()
 
 
-def season_of_year(w: World) -> Optional[int]:
-    """v9 IN-21: which season of the year `w.tick` falls in, or `None` when no year is declared. The
-    year is the length of `season_factor_draw`'s table (one entry per season, in order), so the
-    calendar position is READ OFF `tick` and no field stores it. A world declaring no table has no
-    year to be in, which is the control (`season_factor` alone)."""
-    table = w.fixtures.get("season_factor_draw")
-    return w.tick % len(table) if table else None
+def season_of_year(w: World) -> int:
+    """v9 IN-21: which season of the year `w.tick` falls in -- read off `tick` and the declared year
+    (`rosters.yaml: seasons_of_year`, `SEASONS_OF_YEAR`), so no field stores it and the answer is never
+    `None`. `season_factor_draw`, when declared, holds one entry per season of that year."""
+    return w.tick % len(SEASONS_OF_YEAR)
 
 
 def season_factor_of(w: World, territory: Optional[str] = None) -> float:
@@ -1293,10 +1291,15 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     control arm and returns the bare constant for every territory, drawing nothing, so the default
     world's arithmetic is untouched (`test_season_weather.py` holds the three-hash equality)."""
     base = w.fixtures.get("season_factor")
-    s = season_of_year(w)
-    if s is None:
+    table = w.fixtures.get("season_factor_draw")
+    if not table:
         return base
-    outcomes = w.fixtures.get("season_factor_draw")[s]
+    if len(table) != len(SEASONS_OF_YEAR):
+        raise Unspecified(f"`season_factor_draw` declares {len(table)} seasons but the year "
+                          f"(`rosters.yaml: seasons_of_year`) is {len(SEASONS_OF_YEAR)}", "H-26",
+                          needs="one entry per season of the year, in order, or `()` for the control",
+                          law="IN-21 / ED-IN-0332: the year is the roster's length, and the table is read at `tick % len(year)`")
+    outcomes = table[season_of_year(w)]
     if not outcomes:
         # An empty season entry has nothing to draw from; without this `choose` below dies with a
         # bare IndexError naming neither the fixture nor the season.
@@ -1328,7 +1331,7 @@ def season_factors_by_rung(w: World) -> tuple:
     rungs = _site_rungs(w)
     if not rungs:
         return ()
-    if season_of_year(w) is None:
+    if not w.fixtures.get("season_factor_draw"):
         base = season_factor_of(w)
         return tuple((rid, base) for rid in rungs)
     by_territory: dict = {}

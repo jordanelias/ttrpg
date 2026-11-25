@@ -19,8 +19,12 @@ from __future__ import annotations
 
 import hashlib
 
+import pytest
+
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
+from ..data.rosters import SEASONS_OF_YEAR
+from ..gaps import Unspecified
 from ..harness import populated as POP
 from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
@@ -181,7 +185,32 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
         assert world_q.season_factor_of(w) == year[t % len(year)][0]
         seen += 1
     assert seen == 9
-    # And no table, no year: the control returns the bare constant and no season.
+    # And no table: the control returns the bare constant, and the year is the roster's, not the table's.
     w = _town(())
-    assert world_q.season_of_year(w) is None
+    assert world_q.season_of_year(w) == w.tick % len(SEASONS_OF_YEAR)
     assert world_q.season_factor_of(w) == DEFAULT.get("season_factor")
+
+
+def test_season_of_year_reads_zero_to_three_at_shipped_fixtures():
+    """The year is `rosters.yaml: seasons_of_year`, read by `season_of_year` at the shipped fixtures (no
+    `season_factor_draw` declared): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`."""
+    w = build_realm(0)
+    assert not w.fixtures.get("season_factor_draw"), "fixture: the shipped realm declares a weather table"
+    read = []
+    for t in range(5):
+        w.tick = t
+        read.append(world_q.season_of_year(w))
+    assert read == [0, 1, 2, 3, 0], read
+
+
+def test_nonempty_season_factor_draw_of_wrong_length_is_refused():
+    """A table that is not one entry per season of the declared year is refused where it is first read,
+    naming `season_factor_draw`'s length and the year's."""
+    wrong = ((1.0,),) * (len(SEASONS_OF_YEAR) - 1)
+    w = _town(wrong)
+    with pytest.raises(Unspecified) as e:
+        world_q.season_factor_of(w)
+    assert "season_factor_draw" in str(e.value) and str(len(wrong)) in str(e.value) \
+        and str(len(SEASONS_OF_YEAR)) in str(e.value), str(e.value)
+    # The right length is not refused (non-vacuity: the refusal is the length, not the table).
+    assert world_q.season_factor_of(_town(UNIT)) == DEFAULT.get("season_factor")
