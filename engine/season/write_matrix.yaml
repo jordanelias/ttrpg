@@ -145,6 +145,13 @@ rows:
     social:  "false"
     by:      "v9 SC-03a (K-55): the petition `Record` a docketed matter rose from (`world_q.DOCKET_PETITION`). Written by `open_case` (a hand-built act's payload; `None` on a computed one) and `carry` (the carried petition), in the effect that writes `(DocketItem, matter)`. A ROW for the reason `(DocketItem, arrangement)` gives."
     emits:   "—"
+  - kind:    "DocketItem"
+    field:   "case"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "false"
+    by:      "B24.01 (`IS-B2-SC-02`): the case file `Record` `open_case` minted for a docketed matter (`world_q.DOCKET_CASE`; read through `world_q.case_file_of`, which falls back to `DOCKET_PETITION` for a carried petition). Written by `open_case`, in the effect that writes `(DocketItem, matter)` (`_docket_item`, the one shape owner). A ROW for the reason `(DocketItem, arrangement)` gives: `open_case` writes the key into a slot CALENDAR created."
+    emits:   "—"
   - kind:    "Office"
     field:   "exists"
     steps:   [RES]

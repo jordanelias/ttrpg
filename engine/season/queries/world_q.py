@@ -234,10 +234,20 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 # carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
 DOCKET_ARRANGEMENT = "arrangement"
 DOCKET_PETITION = "petition"
+# B24.01 (`IS-B2-SC-02`): THE CASE FILE THE ITEM NAMES -- the `Record` `open_case` minted for the matter, written by `_docket_item`. A computed or
+# calendar-formed item without one reads `None`; `carry` writes none, a carried petition being its own file (`case_file_of`).
+DOCKET_CASE = "case"
 # B24p.24 (V2 p2 §H): THE TWO KEYS A DOCKET ITEM GAINED -- who arranged its sitting and how hard (`rig`, a `rosters.yaml: rig_levels` member). Written by
 # `_docket_item` and read by `seam/wrappers/sigma.py::arranged_by`, which hands them to the proceeding's builder.
 DOCKET_ARRANGER = "arranger"
 DOCKET_RIG = "rig"
+
+
+def case_file_of(w: World, item: dict) -> Optional[str]:
+    """THE CASE FILE A DOCKET ITEM NAMES (`IS-B2-SC-02`): the Record `open_case` minted for it (`DOCKET_CASE`), else the petition `carry`
+    docketed (`DOCKET_PETITION` -- a carried petition is its own case file), else `None` (a slot CALENDAR formed, a computed item). The one reader:
+    nothing reads the `case` key directly. `w` is the world the id is read in; the id is not checked against `w.records` here."""
+    return item.get(DOCKET_CASE) or item.get(DOCKET_PETITION)
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains

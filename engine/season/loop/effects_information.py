@@ -32,7 +32,7 @@ from ..queries.inputs import ArmyCommand, Outcome
 from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
-    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
+    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
@@ -192,16 +192,18 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
-def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0) -> dict:
+def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0, case=None) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
     acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
     sitting's Date when the matter fills a slot CALENDAR formed (`_eff_open_case`, v9 SC-01
     fired-slot step), else `None`: no sitting was convened for it. `arranger` and `rig` (B24p.24,
     V2 p2 §H) are who arranged its sitting and how hard, a `rig_levels` member: the builder reads
-    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`."""
+    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`. `case` (B24.01, `IS-B2-SC-02`) is the
+    `Record` `open_case` minted for the matter (`DOCKET_CASE`); `carry` mints none and writes `None`, the carried petition being its own file.
+    Read it through `world_q.case_file_of`, never by the key."""
     return {"date": date, "matter": matter,
             DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition,
-            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig}
+            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig, DOCKET_CASE: case}
 
 
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
@@ -430,6 +432,9 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     Where it is drawn up: `_seat_rung`, as `issue`. `via.scope`'s purview reaching the matter is the
     row's precondition (`Basis`, `purview`), asked before this runs.
 
+    B24.01 (`IS-B2-SC-02`): THE ITEM ALSO NAMES THE CASE FILE IT WAS OPENED WITH (`DOCKET_CASE`, the minted Record's id), a filled slot and an
+    appended item alike. Declared MOVER, SC-03a's precedent below: every world in which `open_case` executes gains the key.
+
     ⚠ v9 SC-03a (#453 §10.4 step 2b, K-55): THE ITEM NAMES THE ARRANGEMENT ROW THE MATTER IS HEARD
     UNDER AND THE PETITION IT ROSE FROM, read off the act under the item's own key names
     (`world_q.DOCKET_ARRANGEMENT`/`DOCKET_PETITION`, `TERM_KEY`'s shape: payload keys no typed cell
@@ -464,6 +469,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
+    case = made.subjects[0].id        # the minted Record's id: the item names the file it was opened with (B24.01, `IS-B2-SC-02`)
 
     def perform() -> None:
         made.apply()
@@ -474,9 +480,9 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             convened = w.dates.get(slot.get("date")) or {}
             if level == 0 and convened.get(RIG_KEY):
                 arranger, level = convened.get(DOCKET_ARRANGER), float(convened[RIG_KEY])
-            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level))
+            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level, case))
         else:
-            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level))
+            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level, case))
     return Change(made.subjects, perform)
 
 

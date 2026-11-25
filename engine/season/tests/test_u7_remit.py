@@ -308,7 +308,8 @@ def test_19_open_case_puts_the_matter_on_the_docket_and_the_reader_now_sees_it()
     assert world_q.docketed(w, PARTY) == [{"date": None, "matter": PARTY,
                                            world_q.DOCKET_ARRANGEMENT: None,
                                            world_q.DOCKET_PETITION: None,
-                                           world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}]    # B24p.24: who arranged the sitting, and how hard
+                                           world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0,
+                                           world_q.DOCKET_CASE: "rec:oc"}]    # B24p.24: who arranged the sitting, and how hard; B24.01: the case file
     case = w.records[out[0].changes[0].subject]
     assert case.rung == TREASURY and case.kind == "text" and case.stages, case
     assert _kinds(_fold(w, d, _open("oc2"))) == ["case.refused"]
@@ -358,7 +359,8 @@ def test_19_a_determination_opens_the_disposal_tenure_on_its_subject_via_the_sea
     assert world_q.docketed(w, PARTY) == [] and w.docket == [{"date": None, "matter": None,
                                                               world_q.DOCKET_ARRANGEMENT: None,
                                                               world_q.DOCKET_PETITION: None,
-                                                              world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}]   # B24p.24: the emptied slot keeps who arranged it
+                                                              world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0,
+                                                              world_q.DOCKET_CASE: "rec:oc"}]   # B24p.24: the emptied slot keeps who arranged it (B24.01: and the file it was opened with)
 
 
 def test_19_two_determinations_of_one_matter_in_one_fold_the_second_refuses():
