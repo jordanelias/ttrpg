@@ -3479,10 +3479,14 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         # B09.01: the confidence he holds each claim at NOW (`present_confidence`), a stored value being the deposit's
         confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
+        if rate == 0:
+            w0 = w
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
     assert all(seen[r][0] == 0 for r in seen), (
         f"a `claim.decayed` Event stands in the log: {seen}. B09.01: a fade is computed where a claim is read, never written")
-    assert seen[0][1] == seen[0][2], "confidence moved at rate 0"
+    # B24p merge with B21: the world now holds `told_by` deposits (75) beside the `firsthand` ones (100), so min == max no longer says "nothing faded"; the
+    # claim does: at rate 0 every claim reads the confidence it was deposited at.
+    assert all(present_confidence(c.confidence, c.when, w0.tick, 0) == c.confidence for p in w0.persons.values() for c in p.ledger), "confidence moved at rate 0"
     assert seen[20][1] < seen[5][1] < seen[0][1], (
         f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
         "this sweep is measuring nothing")
@@ -3816,7 +3820,8 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # not tell `chronicle` going dark from `witness_key` going dark, which are different findings
     # (§0.1 pt 2).
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 2 seasons -- under `release` alone `chronicle` fired once on a `tenure.closed`; under `U2` the executed verb set in this world is {create_record, move, reconstruct, research, transfer, work} and it admits nobody]
-    assert inert == ["chronicle", "post_remit"], (
+    # B24p merge with B21 re-pin: `chronicle` fires in the merged world (a binding-decision verb executes here: the GAIN the message below names), so the one inert channel is `post_remit`.
+    assert inert == ["post_remit"], (
         f"the inert channels are {inert}, not the two this item published. `post_remit` needs an "
         "obligee standing at the seat an act was exercised through (since `17a`; before it, an "
         "office whose remit covers the emitting verb), and nobody in this world obliges. "
