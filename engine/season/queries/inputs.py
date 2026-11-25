@@ -112,8 +112,17 @@ class SocialContestInput:
                        contest_input`'s `examined`); `0` for a genuine document, for any subject that
                        is not a Record, and for every contest a prize names; B11.68: the larger of that and
                        the strongest live cover among the doers of the trail an inquiry can uncover
-                       (`epistemic.trail_concealment`). Composed by the module."""
-    pool: float          # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
+                       (`epistemic.trail_concealment`). Composed by the module.
+
+    THE FILED EXHIBITS (B24.20; EVID_B edit 5a), each defaulted, so a record built without them rolls as it did:
+      * `exhibits`     -- the `Item`s shown for a docketed matter, each with its `pairs`, in the order shown; `()` is no case file: the host's `proofs` source
+                         (`world_q.proofs`) is then the whole of the proofs levels (the control);
+      * `proof_level`  -- the named level one whole unit of standing weight is worth, carried RAW; `None` (the fixture's control arm) is no level;
+      * `side`         -- the roller's own side of the case (`"for"` | `"against"`), the one `Item.side` is read against: the docket's for a determiner's draw,
+                         the speaker's for his own `speak`;
+      * `evidence_cap` -- `evidence_cap`, the corroboration cap `evidence.standing` reads; `None` is uncapped.
+    `modules/social_contest/roll.py::proof_levels` is the one reader of the four: they are LEVERAGE, never an obstacle operand (A-25)."""
+    pool: float         # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
@@ -129,6 +138,10 @@ class SocialContestInput:
     ceiling_per_pool: bool = False
     ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; read by `modules/social_contest/roll.py::obstacle`, which refuses any other value
     obstacle_operands: tuple = ()
+    exhibits: tuple = ()
+    proof_level: Optional[str] = None
+    side: str = "for"
+    evidence_cap: Optional[float] = None
 
 
 @dataclass(frozen=True)

@@ -138,3 +138,35 @@ def test_a_sitting_strikes_an_answered_item_by_the_rule_over_the_bands_drawn():
         assert beat.struck == tuple(struck) and ("i1" in struck) == (band in ("Success", "Overwhelming"))
         seen[band] = {i.id: i.weight for i in held}.get("i1")
     assert set(seen) == {"Failure", "Partial", "Success", "Overwhelming"} and seen["Partial"] == 0.5 and seen["Failure"] == 1.0 and seen["Success"] is None
+
+
+# ---- B24.20: the roll adds the standing items as `proofs` levels (EVID_B edit 5a) -----------------------------------------------------
+
+def _roll_rec(exhibits=(), **kw):
+    from ..queries.inputs import SocialContestInput
+    base = dict(pool=2, opposition=8.0, obstacle_ceiling=None, obstacle_refusal_multiple=float("inf"), leverage=0.0, difficulty=0.0, pool_default=4,
+                pool_add=0, opposition_rate=0.5, exhibits=tuple(exhibits), proof_level="minor", side="for")
+    base.update(kw)
+    return SocialContestInput(**base)
+
+
+def test_a_struck_item_adds_no_proofs_level():
+    """KERN_B check 4's companion and EVID_B's falsifier, on the roll's closed form: pool 2 against a score of 8 has different odds with 0 and 4 standing items
+    (the levels are applied) and the SAME obstacle and terms (A-25: nothing favourable is subtracted); a struck item adds no level (an Overwhelming answer
+    strikes it, a Failure leaves it standing); the same weight standing for the other side counts against the roller, one level for one level."""
+    from engine.dice_engine.sigma_leverage import band_odds, net_boost
+    roll = importlib.import_module("modules.social_contest.roll")
+
+    def odds(rec):
+        return band_odds(rec.pool, roll.obstacle(rec)[0], net_boost(roll.leverage(rec), rec.pool))
+    four = [_it(f"f{i}", "for", 1.0, f"o{i}", cell=("s1", "stores.level", i)) for i in range(4)]
+    none, held = _roll_rec(), _roll_rec(four)
+    assert roll.obstacle(none) == roll.obstacle(held)                         # the obstacle is the empty case file's, to the term
+    assert roll.proof_levels(none) == (0, 0) and roll.proof_levels(held) == (4, 0)
+    assert odds(none) != odds(held) and roll.leverage(held) == 4 * 0.25 and roll.leverage(none) == 0.0
+    foe = [_it("g", "against", 1.0, "og", cell=("s1", "stores.level", 9))]
+    assert roll.proof_levels(_roll_rec(four + foe)) == (4, 1) and roll.leverage(_roll_rec(four + foe)) == 3 * 0.25
+    answered = lambda band: [replace(four[0], pairs=(("g", "contradicts"),), answered_band=band), _it("g", "against", 1.0, "og", (("f0", "contradicts"),)), *four[1:]]
+    struck, stood = roll.proof_levels(_roll_rec(answered("Overwhelming"))), roll.proof_levels(_roll_rec(answered("Failure")))
+    assert struck == (3, 1) and stood == (4, 1)                              # the struck one adds none; the answered-and-failed one stands
+    assert roll.leverage(_roll_rec(four, proof_level=None)) == 0.0            # `proof_level` None is the control arm: no level, the counts still reported
