@@ -7246,6 +7246,19 @@ rows:
     cite:      "MEASURED at B11.76 (tree `858cfe776` plus the item), `PYTHONHASHSEED=0`, seeds 0 to 19, two seasons: 0 of 20 runs end by a predicate; `rests` unreachable: 24 `conclusion.reached` events and 0 `concluded:` claims over seeds 0 to 5; the same-seed CLI is deterministic (`scenarios inquiry --seed 0 --seasons 2`, content hash 5d41d93db278a0b966090460bf1d7160). Control for the readers, run once and not kept: on planted worlds `inquiry_ending` returns `determined`, `rests`, `cold` and `fled`; `named_and_actor` names a planted hand and not another."
     source:    "workplan v12 B11.76 (`08_FI_07` falsifier 3; B11's H block)"
 
+  - id:        H-498
+    tier:      1
+    hole:      "NO LIFE IN THE SHIPPED REALM IS WON OR LOST THROUGH PLAY IN TWO SEASONS (v12 B11.79; `IS-B2-CHAR-01`'s falsifier, FIRED). The `life` row of `harness/scenarios.py` reads `fulfilled`, `line_extinct`, `realm_ended` and `unfinished`; seeds 0, 1, 2 over three seats (cohort_set_s_001, p_npc_005, p_npc_090) at two seasons all end `unfinished` / `drawn`, 'no ambition met', tick 2, and no seat died in the nine runs. Cause, measured: in the shipped realm exactly one person holds a met ambition at build (p_npc_052, the rung goal `goal_varfell_oastad_gate`), who ends `fulfilled` / `won` at 0 seasons, before a season is played; and a take-ranked seat leaves the world hash equal to the automated run's, so the seat never moves the world (the control property)."
+    kind:      "RULING"
+    owner:     "`harness/scenarios.py::life_ending`; B10's widening of what reads `met` (`12_ARCS_arcs_as_staged_goals.md`); a seat-aware chooser"
+    grade:     "measured"
+    default:   "the row as built: the four tests that read the machinery pass; the falsifier is a reading, reported and not tuned"
+    site:      "`engine/season/harness/scenarios.py` (`life`, `life_ending`); `queries/world_q.py::aim_state`"
+    sweep:     ["widen what reads `met` (B10's staged goals)", "run four seasons (B99's `argv`)", "a seat-aware chooser that plays a goal"]
+    unblocks:  "a life that can be won through play (CHAR standalone)"
+    cite:      "MEASURED at B11.79 (tree `4b316cb38` plus the item), `PYTHONHASHSEED=0`, seeds 0 to 2 by three seats, two seasons: nine of nine `unfinished` / `drawn`; per-seed content hashes (equal to the automated run's) 22923ad3..., 1246e156..., 792f4f1d...; wall time 67 s at 5 in parallel; a tenth reading, seat p_npc_052, ends `fulfilled` / `won` at 0 seasons."
+    source:    "workplan v12 B11.79 (`IS-B2-CHAR-01` falsifier; B11's H block)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

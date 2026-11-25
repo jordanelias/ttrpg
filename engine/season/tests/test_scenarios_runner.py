@@ -12,6 +12,8 @@ from engine.season.decision.sheet import take_ranked
 from engine.season.harness import headless, populated, scenarios as SC
 from engine.season.loop.driver import mint_token
 from engine.season.loop.matter import _die
+from engine.season.queries import world_q
+from engine.season.state.carriers import Claim
 
 
 def _realm_row(**kw):
@@ -107,7 +109,7 @@ def test_every_ending_name_a_reader_can_return_has_a_kind(monkeypatch):
     checked = 0
     for name, row in SC.SCENARIOS.items():
         w = row.build(0)
-        pid = row.seat(w)
+        pid = sorted(w.persons)[0] if row.seat is None else row.seat(w)       # a row with no default seat is read at a person of its world
         for planted in (False, True):
             if planted:
                 monkeypatch.setattr(SC.world_q, "endings_reached", lambda w: [object()])
@@ -117,3 +119,103 @@ def test_every_ending_name_a_reader_can_return_has_a_kind(monkeypatch):
                     assert got in row.kinds, f"{name}: ending {got!r} has no `kinds` entry"
                     checked += 1
     assert checked >= 1
+
+
+# --- B11.79: the `life` row (`IS-B2-CHAR-01`) ----------------------------------------------------------------------------
+# The seat is a person of the realm; the realm is built once per test (about 8 s) and a season is played only where the test says so.
+GATE = "goal_varfell_oastad_gate"          # the realm's one rung goal whose rung is held at build (`test_fi_referents.py`'s met aim)
+
+
+def _life_seat(w):
+    """A seat that reads `open` at build: the first person in id order, asserted not to be the rung's governing holder."""
+    pid = sorted(w.persons)[0]
+    assert SC.life_ending(w, pid, 1) is None, f"{pid} already holds a met ambition; pick another seat"
+    return pid
+
+
+def test_life_with_take_ranked_reproduces_the_realm_hash():
+    """GAME-STATE, lane season_loop. The realm at seed 0, one season, the seat taking the ranking whole: `populated.run`'s content hash. The
+    seat was asked, and the run played its season, or the equality shows nothing about the row."""
+    w = build_realm(0)
+    pid = _life_seat(w)
+    populated.run(1, 0, w=w)
+    out = SC.run("life", 0, 1, person=pid)
+    assert out["hash"] == w.content_hash()
+    assert out["seat_deliberations"] >= 1 and out["seasons"] == 1
+    assert (out["ending"], out["kind"]) == ("unfinished", "drawn") and out["passed"] == (pid,)
+
+
+def test_a_scripted_pick_moves_the_realm_hash():
+    """GAME-STATE, lane season_loop. One pick changed at lap 1: the seat's first candidate only. The hash moves, so the seat's pick is load-bearing in this row."""
+    w = build_realm(0)
+    pid = _life_seat(w)
+    laps = []
+
+    def ranked(sheet):
+        laps.append(list(take_ranked(sheet)))
+        return laps[-1]
+    base = SC.run("life", 0, 1, person=pid, pick=ranked)
+    assert laps and len(laps[0]) >= 2, "lap 1 offered the seat fewer than two picks; a deviation has nothing to drop"
+    first = []
+
+    def deviating(sheet):
+        first.append(1)
+        return laps[0][:1] if len(first) == 1 else take_ranked(sheet)
+    deviant = SC.run("life", 0, 1, person=pid, pick=deviating)
+    assert deviant["hash"] != base["hash"]
+
+
+def test_a_met_ambition_ends_the_life_as_fulfilled():
+    """GAME-STATE, lane season_loop. PLANTED: a committed man of the realm's met rung goal who has heard who holds the rung reads `met` (`aim_state`), and the run
+    ends `fulfilled` (`won`) at once. CONTROL: the same man, nothing planted, runs on (zero seasons asked of him, so `unfinished`, the clock's name)."""
+    def committed_other(w):
+        governing = world_q.governing_hold(w, "terr_T13")
+        return governing, next(t.subject for t in w.tenures if t.kind == "commit" and t.live and t.object == GATE and t.subject != governing.subject)
+
+    def plant(w):
+        governing, other = committed_other(w)
+        for n, subject in enumerate((governing.subject, governing.object)):          # the two claims a witness of the hold deposits (test_fi_referents.hears_of)
+            w.persons[other].ledger.append(Claim(f"c_heard_{other}_{n}", other, subject, "tenure.opened", True, 0, "told_by", 100, "own", 0))
+    w = build_realm(0)
+    _, other = committed_other(w)
+    control = SC.run("life", 0, 0, person=other)
+    assert (control["ending"], control["kind"], control["seasons"]) == ("unfinished", "drawn", 0)
+    planted = SC.run("life", 0, 0, person=other, on_build=plant)
+    assert (planted["ending"], planted["kind"], planted["seasons"]) == ("fulfilled", "won", 0)
+    assert SC.life_reading(planted["world"], other).endswith(GATE)
+
+
+def test_a_dead_seat_is_offered_its_ties_and_an_empty_offer_ends_the_line(monkeypatch):
+    """GAME-STATE, lane season_loop. The seat dies after the first reading of his ties (planted through the row's `ending`, as the matter step would kill him).
+    (1) His living ties are OFFERED, in `continuation_ties` order, and the pick taken is the one the seat becomes (`passed`). (2) The same death with every tie dead too:
+    the offer is empty, `line_extinct` (`lost`)."""
+    w = build_realm(0)
+    pid = next(p for p in sorted(w.persons) if len(world_q.continuations(w, w.persons[p])) >= 2)
+    ties = world_q.continuations(w, w.persons[pid])
+    row = SC.SCENARIOS["life"]
+    state = {}
+
+    def kill(world, who, doomed):
+        world.step, world._emitted_by_write = Step.MATTER, []
+        for victim in doomed:
+            if victim in world.persons:
+                _die(world, mint_token(world, WriteClass.MATTER), victim)
+
+    def planted(doomed):
+        def ending(world, who, left):
+            if not state.get("done"):
+                state["done"] = True
+                kill(world, who, doomed)
+            return row.ending(world, who, left)
+        return SC.Scenario(build=lambda seed: build_realm(seed), seat=None, ending=ending, kinds=row.kinds)
+
+    monkeypatch.setitem(SC.SCENARIOS, "life_dying", planted([pid]))
+    offers = []
+    out = SC.run("life_dying", 0, 1, person=pid, tie=lambda offer: (offers.append(offer), offer[-1])[1])
+    assert len(offers) == 1 and [c.person for c in offers[0]] == [c.person for c in ties if c.person in out["world"].persons]
+    assert out["passed"] == (pid, ties[-1].person) and out["seat"] == ties[-1].person and pid not in out["world"].persons
+
+    state.clear()
+    monkeypatch.setitem(SC.SCENARIOS, "life_dying", planted([pid] + [c.person for c in ties]))
+    out = SC.run("life_dying", 0, 1, person=pid)
+    assert (out["ending"], out["kind"], out["seat"], out["passed"]) == ("line_extinct", "lost", None, (pid,))
