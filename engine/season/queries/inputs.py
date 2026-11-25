@@ -95,7 +95,9 @@ class SocialContestInput:
     THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
       * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
                        contest_input`'s `examined`); `0` for a genuine document, for any subject that
-                       is not a Record, and for every contest a prize names. Composed by the module."""
+                       is not a Record, and for every contest a prize names; B11.68: the larger of that and
+                       the strongest live cover among the doers of the trail an inquiry can uncover
+                       (`epistemic.trail_concealment`). Composed by the module."""
     pool: float          # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
     obstacle_ceiling: Optional[float]

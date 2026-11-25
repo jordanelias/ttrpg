@@ -73,9 +73,10 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
 from ...data.arrangements import ARRANGEMENTS
-from ...data.rosters import STANCE_MAX
+from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
-from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
+from ...data.verbs import FORM_INQUIRY, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
+from ...epistemic import trail_concealment
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
 from ...queries.person_q import believed_capability, stance_toward
@@ -516,7 +517,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     the act's subject when there is no prize (an inquiry or a task, `graded_tasks`' route), and nothing
     otherwise. Where it names a Record, the record carries that Record's `forgery_quality` (read from
     `w.records`, the one read this builder adds), which the module adds to the obstacle; a site, a
-    person, or a contest a prize names carries `0`."""
+    person, or a contest a prize names carries `0`. B11.68: an INQUIRY (a `graded_tasks` row of `form: inquiry`) also carries the strongest live cover
+    among the doers of the trail it can uncover (`epistemic.trail_concealment`), the larger of the two, so a covered doer's deed is harder to find."""
     fx = w.fixtures
     docketed = _docketed_row(w, subject)                                        # the arrangement row the act's matter is heard under, if one is docketed (B05.21)
     room_terms = {}
@@ -550,7 +552,10 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     office = _seat_modifier(w, via, room)                                       # the seat's own level, where its bench is over the room (B05.20)
     regard = _regard_of(w, claimants[0], subject, room)                         # the counterparty's stance toward the actor, signed, in the clamp unit (B05.21)
     bodies = (_body_of(actor), _body_of(other))                                 # the `wounds` source's operands: his own body, and a person subject's (B05.60)
-    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
+    # B11.68 (`IS-B2-FI-07` (3)): an INQUIRY about a trail meets its doers' covers -- the strongest, once, beside the examined Record's own quality (the larger of the two).
+    concealed = max(doc.forgery_quality if doc is not None else 0.0,
+                    trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
+    inp = _frame(fx, pool, opposition, concealed, room_terms, effort, verb, edge, circumstance, office,
                  docketed=docketed, heard=room is not None, regard=regard, bodies=bodies)
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`

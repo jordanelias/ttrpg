@@ -361,6 +361,23 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
     return sorted(found.values(), key=lambda e: (e.emitted_at, e.id))
 
 
+def trail_concealment(w: World, subject: Optional[str], pid: str) -> float:
+    """B11.68 (`IS-B2-FI-07` (3)): HOW WELL THE DOERS OF THE TRAIL `trail_of(subject, pid)` RETURNS HAVE COVERED IT -- the highest `forgery_quality` among
+    the live covers (`state/attribution.py::live_cover`) of those Events' doers (`actor_of`), `0.0` where there is no trail or no doer holds one.
+
+    The cover's own number, the one the notice draw already reads for the doer of a deed (`notice`): `conceal`'s band written as the cover Record's `forgery_quality`
+    (`loop/effects_information.py::_eff_conceal`). The finder's roll adds it to the obstacle through the input builder's one `forgery_quality` operand
+    (`seam/wrappers/sigma.py::_read_social_roll`, for an inquiry), so the cover stands against the finder's draw as it stands against a bystander's. ONE
+    TERM PER ACT, however many Events the trail holds (the strongest cover counts once); the doer is not read as an opponent, his score in concealing being
+    `pool_default` for everybody (`conceal`'s `capability: none`), which is the `opposed_ob(pool_default)` an inquiry already stands against."""
+    best = 0.0
+    for e in trail_of(w, subject, pid):
+        cover = live_cover(w, actor_of(w, e))
+        if cover is not None:
+            best = max(best, float(w.records[cover].forgery_quality))
+    return best
+
+
 # ---------------------------------------------------------------------------
 # `W6` -- THE FIVE WITNESS CHANNEL PREDICATES. `H-33`.
 #
