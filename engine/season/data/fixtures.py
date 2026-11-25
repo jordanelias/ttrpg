@@ -634,6 +634,16 @@ DEFAULT_FIXTURES = Fixtures(
     # raises (`_lattice_strain`), since a share above the whole gap would overshoot the weakest neighbour.
     # [JUSTIFIED: engine/season/hole_register.yaml H-235 -- `site: Fixtures lattice_coupling`, graded `assumption`; #457 gives the coupling and no magnitude (its only rate is the retired scalar's -1 a year), so it is injected and swept 0 / 250 / 500]
     lattice_coupling=0,                # `H-235`, swept 0 (control, SHIPPED) / 250 / 500
+    # B12a.10 (`09_WR_B_draws_not_thresholds` edit 1): WEAR IS DRAWN. `False` is THE CONTROL, SHIPPED: today's exact rate, no draw taken. `True`
+    # is the arm: per Site per season one keyed draw (`loop/matter.py`, `draw_factory(...)(site.id, "wear")`), the pool `wear_draw_pool`, the
+    # obstacle `wear_draw_ob_step` per point of the Site's wear (the kind's rate plus the lattice pull), the band choosing the wear (Overwhelming
+    # 0, Success half the rate, Partial the rate, Failure twice). The two `[CALIBRATE]` rows ship `None` (the design-dependent values are absent,
+    # E-14; B98 sets them): the arm REFUSES with `Unspecified` naming the row while either is unset.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `wear_draw: False`] for the band multipliers.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-523 -- `site: Fixtures wear_draw`, graded `assumption`; the source draws wear and sizes neither the pool nor the obstacle's per-point size, so the arm and both rows are injected and swept False / True with two planted calibrations]
+    wear_draw=False,                   # `H-523`, swept False (control, SHIPPED) / True (pool 4, step 0.12) / True (pool 6, step 0.08)
+    wear_draw_pool=None,               # `H-523`, [CALIBRATE: the wear pool], read only under `wear_draw` True; `None` refuses
+    wear_draw_ob_step=None,            # `H-523`, [CALIBRATE: the obstacle's per-point size], read only under `wear_draw` True; `None` refuses
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
