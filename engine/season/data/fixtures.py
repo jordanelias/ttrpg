@@ -644,6 +644,16 @@ DEFAULT_FIXTURES = Fixtures(
     wear_draw=False,                   # `H-523`, swept False (control, SHIPPED) / True (pool 4, step 0.12) / True (pool 6, step 0.08)
     wear_draw_pool=None,               # `H-523`, [CALIBRATE: the wear pool], read only under `wear_draw` True; `None` refuses
     wear_draw_ob_step=None,            # `H-523`, [CALIBRATE: the obstacle's per-point size], read only under `wear_draw` True; `None` refuses
+    # B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): ENDINGS ARE REACHED BY A DRAW. `False` is THE CONTROL, SHIPPED: today's reaching (an eligible
+    # row is reached), `endings_near` answers `[]`. `True` is the arm: an eligible row (`world_q._ending_edges` and an act among its antecedents)
+    # takes one keyed draw `(world_seed, tick, "realm", "ending:<name>")` in `world_q.endings_reached` / `endings_near`, the pool `ending_draw_pool_step`
+    # per season the condition has stood (read off the opening Events' ticks) times the share of the edges it reads that an act opened, the
+    # obstacle `ending_draw_ob` plus one per edge it reads that no act opened; Success or Overwhelming reaches it, Partial reports it `near`, Failure
+    # neither. The two `[CALIBRATE]` rows ship `None` (E-14; B98 sets them): the arm REFUSES with `Unspecified` naming the row while either is unset.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-524 -- `site: Fixtures ending_draw`, graded `assumption`; the source draws the ending and sizes neither the pool per season stood nor the obstacle's base, so the arm and both rows are injected and swept False / True with two planted calibrations]
+    ending_draw=False,                 # `H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)
+    ending_draw_pool_step=None,        # `H-524`, [CALIBRATE: the pool per season stood], read only under `ending_draw` True; `None` refuses
+    ending_draw_ob=None,               # `H-524`, [CALIBRATE: the obstacle's base], read only under `ending_draw` True; `None` refuses
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

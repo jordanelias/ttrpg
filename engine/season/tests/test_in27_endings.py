@@ -488,3 +488,123 @@ def test_in27_a_selector_the_query_cannot_enumerate_is_refused_not_read_as_a_run
     w = build_realm(0, 5)
     with pytest.raises(Forbidden, match="no enumerator"):
         world_q._ending_edges(w, SimpleNamespace(holds=("bogus", "x"), under=R.ENDING_ANY_ONE))
+
+
+# ======================================================================================
+# (f) B12a.12: AN ENDING IS REACHED BY A DRAW, BEHIND `ending_draw` (`09_WR_B_draws_not_thresholds` edit 3)
+# ======================================================================================
+# The two `[CALIBRATE]` rows ship `None` (H-524), so each arm plants them with `Fixtures.sweep`: test arms, not chosen values.
+# THE PLANTED WORLD is `_reached_world`'s: a hold opened by a `confer` act and a Crown commit planted by construction, so the condition
+# stands on two edges, one opened by an act and one inherited (a pool share of one half, one unacted edge in the obstacle).
+
+POOL_STEP, ENDING_OB = 6.0, 0.0                    # test arms (H-524's sweep), not chosen values
+SEEDS = range(200)
+
+
+def _drawn(w, pool_step=POOL_STEP, ob=ENDING_OB, arm=True):
+    w.fixtures = (w.fixtures.sweep("ending_draw", arm).sweep("ending_draw_pool_step", pool_step)
+                  .sweep("ending_draw_ob", ob))
+    return w
+
+
+def _stood(w, seasons):
+    """Put the clock so the planted condition has stood `seasons` seasons (the opening Event's tick counts as the first)."""
+    opened = next(e.emitted_at for e in w.log if e.kind == "tenure.opened")
+    w.tick = opened + seasons - 1
+
+
+def _tally(w, seasons):
+    """`(reached, near)` counts over seeds 0..199 at a condition that has stood `seasons` seasons; each seed's two answers are disjoint."""
+    _stood(w, seasons)
+    reached = near = 0
+    for seed in SEEDS:
+        w.world_seed = seed
+        got, close = Q.endings_reached(w), Q.endings_near(w)
+        assert not ({r.ending for r in got} & {r.ending for r in close}), (seed, got, close)
+        reached += bool(got)
+        near += bool(close)
+    return reached, near
+
+
+def test_a_planted_condition_is_reached_at_some_seeds_and_not_others_over_200_seeds(monkeypatch):
+    """`09_WR_B_draws_not_thresholds` gate (3). The control reaches the planted row at every seed (an outcome identical across 200 seeds); the
+    arm reaches it at some and not at others, and reports `near` at some. FALSIFIER: an ending reached while ineligible -- the same world before
+    the `confer`, and the same condition with no act among its antecedents, reach nothing and are near nothing at any of the 200 seeds."""
+    w = _reached_world(monkeypatch)
+    checked = 0
+    _stood(w, 2)
+    for seed in SEEDS:
+        w.world_seed = seed
+        assert [r.ending for r in Q.endings_reached(w)] == ["crowned_reeve"], seed      # the control: today's reaching, every seed
+        checked += 1
+    reached, near = _tally(_drawn(w), 2)
+    assert 0 < reached < len(SEEDS) and near > 0, (reached, near)
+    # ineligible: the condition does not stand, then stands with no act among its antecedents
+    monkeypatch.setattr(Q, "ENDINGS", REEVE_ROW)
+    for build in (lambda: _gov_world()[0], lambda: _planted_no_act()):
+        v = _drawn(build())
+        assert (not Q._ending_edges(v, REEVE_ROW["crowned_reeve"])) or Q.opened_by_acts(
+            v, Q._ending_edges(v, REEVE_ROW["crowned_reeve"])) == {}, "fixture: the row is ineligible"
+        v.tick = 50
+        for seed in SEEDS:
+            v.world_seed = seed
+            assert Q.endings_reached(v) == [] and Q.endings_near(v) == [], seed
+            checked += 1
+    assert checked >= 3 * len(SEEDS), checked
+
+
+def _planted_no_act():
+    """The Reeve seated by construction (no act opened the hold), a Crown man: the condition holds and no act is among its antecedents."""
+    w, _ = _gov_world()
+    w.add_tenure(Tenure("t_mid_crown", "p_mid", CROWN, "commit", 0))
+    w.add_tenure(Tenure("t_reeve_planted", "p_mid", "off_reeve", "hold", 0))
+    return w
+
+
+def test_it_is_reached_more_often_the_longer_it_has_stood(monkeypatch):
+    """The pool grows with the seasons the condition has stood (read off the opening Event's tick; no counter is stored), so over the same 200
+    seeds a condition that has stood 1, 4 and 12 seasons is reached more often at each. FALSIFIER: a draw that ignores the standing time."""
+    w = _drawn(_reached_world(monkeypatch))
+    rates = [_tally(w, s)[0] for s in (1, 4, 12)]
+    assert rates[0] < rates[1] < rates[2] <= len(SEEDS), rates
+    assert rates[0] < len(SEEDS) and rates[2] > rates[0] + 20, rates
+
+
+def test_the_ending_draw_writes_nothing(monkeypatch):
+    """The arm's two Queries leave the log, the gate's writes and the content hash as they were, and a season on the drawn world reports `near`
+    from `endings_near` and moves the world no differently from the same season with both Queries answering `[]`."""
+    w = _drawn(_reached_world(monkeypatch))
+    before, home = _state(w), w.world_seed
+    for seed in range(20):
+        w.world_seed = seed
+        assert Q.endings_reached(w) is not None and Q.endings_near(w) is not None
+        w.world_seed = home
+        assert _state(w) == before, f"calling the drawn Queries at seed {seed} moved the world"
+    real, calls = Q.endings_near, []
+
+    def spy(x):
+        got = real(x)
+        calls.append(got)
+        return got
+    monkeypatch.setattr(Q, "endings_near", spy)
+    kw = dict(contest_max_depth=w.fixtures.get("contest_max_depth"))
+    out = SeasonDriver(w).season(P.NOCHOOSE, question=None, **kw)
+    assert len(calls) == 1 and out["near"] is calls[0], (calls, out.get("near"))
+    other = _drawn(_reached_world(monkeypatch))
+    monkeypatch.setattr(Q, "endings_reached", lambda _w: [])
+    monkeypatch.setattr(Q, "endings_near", lambda _w: [])
+    skipped = SeasonDriver(other).season(P.NOCHOOSE, question=None, **kw)
+    assert skipped["near"] == [] and _state(w) == _state(other), "the ending draw moved the season"
+
+
+def test_the_ending_draw_refuses_an_unset_row(monkeypatch):
+    """`ending_draw` True with either `[CALIBRATE]` row `None` raises `Unspecified` naming the row; the control reads neither."""
+    w = _reached_world(monkeypatch)
+    assert [r.ending for r in Q.endings_reached(w)] == ["crowned_reeve"] and Q.endings_near(w) == []
+    for name in ("ending_draw_pool_step", "ending_draw_ob"):
+        v = _drawn(w)
+        v.fixtures = v.fixtures.sweep(name, None)
+        with pytest.raises(Unspecified, match=name):
+            Q.endings_reached(v)
+        with pytest.raises(Unspecified, match=name):
+            Q.endings_near(v)
