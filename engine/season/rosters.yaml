@@ -3831,15 +3831,19 @@ rosters:
       the hearing's `present`, `answer`, `impugn` and the bench's `rule`, `adjourn` to THIS roster, never a second one; `descends: true`
       (optional, a bool) says a yield also descends one rung of a type that has an issue ladder (`concede`'s). Nothing reads `descends`,
       or the hearing's five rows, until the sitting (B24.08 on): a rite lists the moves it admits, so no rite names them yet.
-      [ASSUMPTION; Jordan to correct: one skill (`argue`) for every drawing move -- basis: V2 names "his rank in the proceeding's skill", one rank;
-      B24.04 gives each rolled move the skill it draws on.]
+      `capability` is a skill id, or a map from EACH `issue_rungs` member to one: the rung argued is what is in issue (D-U1-03), so `argue`
+      and `answer` draw on `law` on a rung of procedure or definition and on `argue` on one of fact or justification. A drawing move carries
+      one; a draw-free move none; `rhetoric` is not a skill (the audience reaches the roll as `reception`). Nothing reads a map's rungs until
+      the sitting builds each speaker's pools (B24.10); `sigma._rank_key` reads the single-id rows meanwhile.
+      [ASSUMPTION; Jordan to correct: `impugn` and `press` draw on `argue` on every rung -- basis: an attack on a source is made to the room, not
+      to the rung (HCAP "What draws on what"); revert: a map for the row.]
     rows:
-      - {id: argue,   effect: track,   draw: true,  capability: argue}
+      - {id: argue,   effect: track,   draw: true,  capability: {procedure: law, definition: law, fact: argue, justification: argue}}
       - {id: press,   effect: strike,  draw: true,  capability: argue}
       - {id: concede, effect: yield,   draw: false, descends: true}
       - {id: rest,    effect: none,    draw: false}
       - {id: present, effect: exhibit, draw: false}
-      - {id: answer,  effect: answer,  draw: true,  capability: argue}
+      - {id: answer,  effect: answer,  draw: true,  capability: {procedure: law, definition: law, fact: argue, justification: argue}}
       - {id: impugn,  effect: impugn,  draw: true,  capability: argue}
       - {id: rule,    effect: rule,    draw: false}
       - {id: adjourn, effect: adjourn, draw: false}

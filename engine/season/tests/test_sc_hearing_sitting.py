@@ -19,7 +19,7 @@ def test_the_hearing_rosters_load_with_the_rows_named():
     effects = R.roster("proceeding_effects", ordered=True)
     assert {PROCEEDING_MOVES[m]["effect"] for m in HEARING_MOVES} == {"exhibit", "answer", "impugn", "rule", "adjourn"} <= set(effects)
     assert [m for m, r in PROCEEDING_MOVES.items() if r["draw"]] == ["argue", "press", "answer", "impugn"]
-    assert {PROCEEDING_MOVES[m]["capability"] for m in ("answer", "impugn")} == {"argue"}
+    assert PROCEEDING_MOVES["impugn"]["capability"] == "argue" and set(PROCEEDING_MOVES["answer"]["capability"]) == set(ISSUE_RUNGS)   # B24.04: answer's is by rung
     assert {m for m, r in PROCEEDING_MOVES.items() if r.get("descends")} == {"concede"}
     # no effect, and so no move, names a winner or a side (V2 p2 §D: the close is each adjudicator's own draw)
     assert not [e for e in effects if any(w in e for w in ("win", "lose", "side", "verdict"))]

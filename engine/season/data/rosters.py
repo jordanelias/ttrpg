@@ -1083,29 +1083,48 @@ def _load_grounds(rows) -> dict:
     return out
 
 
-def _load_proceeding_moves(rows) -> dict:
-    """`rosters.yaml: proceeding_moves`: each row's `effect` a member of `proceeding_effects`, `draw` a bool, `capability`
-    (the skill whose rank joins the dice) a member of `descriptors.CAPABILITIES` and present only on a drawing move, `descends`
+def _load_proceeding_moves(rows, rungs) -> dict:
+    """`rosters.yaml: proceeding_moves`: each row's `effect` a member of `proceeding_effects`, `draw` a bool, `descends`
     (optional) a bool: a yield that also descends one rung of a type with an issue ladder. A repeated id is refused by the shared
-    row grammar (`_proceeding_rows`)."""
+    row grammar (`_proceeding_rows`). `capability` (B24.04; HCAP "Exact edits" 3) is the skill whose rank joins the dice, and it is
+    the cell that says WHAT A DRAWING MOVE DRAWS ON: a drawing move carries one, a draw-free move none, and it is either a member of
+    `descriptors.CAPABILITIES` or a map from EACH member of `rungs` (the `issue_rungs` ids, in this module's order) to one, the
+    rung argued being what is in issue (D-U1-03). An unknown id, a map missing a rung or naming one that is no rung, a skill on a
+    draw-free move and a drawing move with no skill are each refused naming the row."""
     effects = roster("proceeding_effects", ordered=True)
+    where = "rosters.yaml -- proceeding_moves"
     out = _proceeding_rows(rows, "proceeding_moves", frozenset({"effect", "draw", "capability", "descends"}), frozenset({"effect", "draw"}))
     for mid, m in out.items():
         if "descends" in m and not isinstance(m["descends"], bool):
-            raise Unspecified(f"move {mid!r} has `descends: {m['descends']!r}`", "rosters.yaml -- proceeding_moves", needs="true or false",
+            raise Unspecified(f"move {mid!r} has `descends: {m['descends']!r}`", where, needs="true or false",
                               law="a move either descends a rung or it does not; an odd cell is refused, not read as false")
-        require_member(m["effect"], effects, f"move {mid!r} has `effect: {m['effect']!r}`", "rosters.yaml -- proceeding_moves",
+        require_member(m["effect"], effects, f"move {mid!r} has `effect: {m['effect']!r}`", where,
                        "V2 p2 §B -- a move is read by its effect, and no effect names a winner")
         if not isinstance(m["draw"], bool):
-            raise Unspecified(f"move {mid!r} has `draw: {m['draw']!r}`", "rosters.yaml -- proceeding_moves", needs="true or false",
+            raise Unspecified(f"move {mid!r} has `draw: {m['draw']!r}`", where, needs="true or false",
                               law="a move either draws or it does not; a missing or odd cell is refused, not read as false")
-        if "capability" in m:
-            if not m["draw"]:
-                raise Unspecified(f"move {mid!r} draws nothing and names the skill {m['capability']!r}", "rosters.yaml -- proceeding_moves",
-                                  needs="delete the skill, or make the move draw",
-                                  law="V2 p2 §A.1 -- a rank joins the dice of a draw; a move with no draw has none to join")
-            require_member(m["capability"], _CAPABILITIES, f"move {mid!r} names the skill {m['capability']!r}",
-                           "rosters.yaml -- proceeding_moves", "B04 -- one skill roster, `descriptors.CAPABILITIES`")
+        if "capability" not in m:
+            if m["draw"]:
+                raise Unspecified(f"move {mid!r} draws and names no skill", where, needs="`capability:` a skill or a map from each issue rung to one",
+                                  law="V2 p2 §A.1 -- a rank joins the dice of a draw; a rolled move with no skill is a pool nobody built")
+            continue
+        if not m["draw"]:
+            raise Unspecified(f"move {mid!r} draws nothing and names the skill {m['capability']!r}", where,
+                              needs="delete the skill, or make the move draw",
+                              law="V2 p2 §A.1 -- a rank joins the dice of a draw; a move with no draw has none to join")
+        cap = m["capability"]
+        if isinstance(cap, dict):
+            if set(cap) != set(rungs):
+                raise Unspecified(f"move {mid!r} maps the rungs {sorted(cap)} to a skill", where,
+                                  needs=f"exactly one skill for each of {list(rungs)} (missing {sorted(set(rungs) - set(cap))}, "
+                                        f"not a rung {sorted(set(cap) - set(rungs))})",
+                                  law="D-U1-03 -- the rung argued is what is in issue, so a map by rung names every rung and no other")
+            skills = cap.values()
+        else:
+            skills = (cap,)
+        for skill in skills:
+            require_member(skill, _CAPABILITIES, f"move {mid!r} names the skill {skill!r}", where,
+                           "B04 -- one skill roster, `descriptors.CAPABILITIES`")
     return out
 
 
@@ -1168,9 +1187,9 @@ def _load_authority_by_faction(mapping: dict, authorities, factions, templated) 
 # B24p.01: THE PROCEEDING'S CLOSED SETS (V2 p2 §B, §C.2, §C.5, §G, §H), bound here beside `LADDER_RUNGS` so an absent or malformed
 # row refuses at import. Nothing reads them until B24p.07; the module reads cells, never an id (`effect`, `draw`, `reason`).
 GROUNDS = _load_grounds(_roster_rows("grounds"))
-PROCEEDING_MOVES = _load_proceeding_moves(_roster_rows("proceeding_moves"))
 PROCEEDING_ENDS = roster("proceeding_ends", ordered=True)
 ISSUE_RUNGS = _load_issue_rungs(_roster_rows("issue_rungs"), GROUNDS)
+PROCEEDING_MOVES = _load_proceeding_moves(_roster_rows("proceeding_moves"), tuple(ISSUE_RUNGS))     # after the rungs: a `capability:` map is keyed by them (B24.04)
 AUTHORITIES = roster("authorities", ordered=True)
 AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
                                                   roster_map("role_templates", "by_faction"))

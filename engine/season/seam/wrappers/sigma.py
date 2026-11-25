@@ -1481,7 +1481,9 @@ def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) 
 def _rank_key() -> Optional[str]:
     """The one skill whose rank joins the dice of a drawing move (`rosters.yaml: proceeding_moves`' `capability`; V2 p2 §A.1: `rank` is one
     number, his rank in the proceeding's skill), read as `pool._capability` reads a verb's skill: off the person's `capability`."""
-    keys = {m.get("capability") for m in PROCEEDING_MOVES.values() if m["draw"]} - {None}
+    # a MAP `capability:` (B24.04: a skill by issue rung) is the sitting's by-rung read (B24.10), not this one number's: a sitting with no
+    # issue ladder (the speech) has no rung to key it, so only a single-id row names the skill the rank is read from until then
+    keys = {m.get("capability") for m in PROCEEDING_MOVES.values() if m["draw"] and isinstance(m.get("capability"), str)}
     if len(keys) > 1:
         raise Unspecified(f"the drawing moves name {sorted(keys)} as their skill", "rosters.yaml -- proceeding_moves", needs="one skill",
                           law="V2 p2 §A.1 -- `Present.rank` is his rank in the proceeding's skill, one number")
