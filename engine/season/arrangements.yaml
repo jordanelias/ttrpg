@@ -151,7 +151,10 @@ rites:
     silence:          admits
     issues:           [fact, justification]
     concede:          descends
-    moves:            {for: [argue, press, rest], against: [argue, rest, concede]}
+    # B24.09: the rite of the polity's questioning gains the hearing's `present` and `answer` for both sides and the bench's `rule`, `adjourn`
+    # [ASSUMPTION; Jordan to correct; revert: the three cells' old values -- basis: IS-B2-SC-03's `questioned` rite, read as this one: the only rite
+    # whose rows are an inquisition by the polity (`examination`, `inquisition_hearing`); `questioning` is not a determination (B24.12)].
+    moves:            {for: [argue, press, rest, present, answer], against: [argue, rest, concede, present, answer], bench: [rule, adjourn]}
   - id:               trial
     genre:            judicial
     live:             charge
@@ -188,6 +191,29 @@ rites:
     issues:           []
     concede:          accepts
     moves:            {for: [argue, rest], against: [argue, press, rest]}
+  # B24.09 (IS-B2-SC-03, HEAR_B edit 3): THE DEFAULT RITE, a rite as DATA until CR-60's two-valued block (`accusatorial`, `inquisitorial`) replaces
+  # this row without touching the reader. `rite: default` is what `arbitration`, `legal_trial`, `tribunal`, `parliamentary_debate`,
+  # `council_of_state` and `excommunication_deliberation` name. Beside the cells every rite states it carries the hearing's: `bears` as a
+  # MAP `rung -> side` (who bears the question at each rung; sides as HEAR_B's `Exhibit.side`, for or against the party), `moves.bench` (the
+  # bench's own moves), `faults` (`rosters.yaml: proceeding_faults`) and `disclosed` (whether the other side's filings stand on a mover's board).
+  # The rite's opener is the bearer of its first issue. `issues` is the trial's three (the `procedure` rung heads the ladder and is read by the
+  # hearing's reader, B24.10); the structure cells (`genre` to `concede`) are the `trial` rite's, which the three judicial rows already read.
+  # [ASSUMPTION; Jordan to correct; revert: edit this row -- basis: the `bears:` map is `IS-B2-SC-03` step 1's: the accuser (`against`) bears
+  # procedure, fact and definition and the party (`for`) bears justification, the issue ladder HEAR_B carries from the kernel
+  # (`audits/05_SC_audit_addendum_B.md:242`, `:246`); the tree holds no ruled assignment. `moves` are the six the speech and the hearing give
+  # a side, `bench` the two the bench alone has. ⚠ The `against`-side accuser reads `for` as the party, HEAR_B's `Exhibit.side`; a `trial` row in
+  # this file lets `for` open (`bears: for`), so the opener of the six re-pointed rows is now `against`.]
+  - id:               default
+    genre:            judicial
+    live:             charge
+    bears:            {procedure: against, fact: against, definition: against, justification: for}
+    reply:            {for: must, against: must}
+    silence:          refusal
+    issues:           [fact, definition, justification]
+    concede:          descends
+    moves:            {for: [argue, press, concede, rest, present, impugn], against: [argue, press, concede, rest, present, impugn], bench: [rule, adjourn]}
+    faults:           [self_contradiction, silence, forgery_found, irrelevance]
+    disclosed:        true
 
 # ══════════════════════════════════════════════════════════════════════════════════════════════════════════
 # B24p.03: CONTEXT (V2 p2 §I) -- era, regime and strife as CELL DELTAS the builder reads (B24p.13); no code per kind. B24p.03 wrote it AT CONTROL (every
@@ -279,7 +305,7 @@ arrangements:
   # and `given` (the arbiter's reasons ARE known to the parties) are not in tension the way they
   # would be for a multi-member bench; recorded here rather than left silent.
   - id:               arbitration
-    rite:               trial
+    rite:               default
     turns:              [2, 5]
     authority:          parties
     reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
@@ -300,7 +326,7 @@ arrangements:
   # `03_PARAMETERS.md` §E.2, transcribed in full. `records_dissent: true` and the old
   # `verdict_reasons: given` AGREE outright -- no collapse judgment needed.
   - id:               parliamentary_debate
-    rite:               debate
+    rite:               default
     turns:              [2, 4]
     authority:          polity
     reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
@@ -326,7 +352,7 @@ arrangements:
   # inventing one for two rows would be apparatus this position does not need.
   # `records_dissent: false` and the old `verdict_reasons: withheld` AGREE outright.
   - id:               council_of_state
-    rite:               debate
+    rite:               default
     turns:              [2, 4]
     authority:          polity
     reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)
@@ -362,7 +388,7 @@ arrangements:
   # ── legal trial — the issue ladder, in public, with advocates ─────────────────────────────────
   # §E.2, transcribed in full but `disposes:`. `records_dissent: true` + old `given` AGREE.
   - id:               legal_trial
-    rite:               trial
+    rite:               default
     turns:              [2, 5]
     authority:          polity
     reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
@@ -389,7 +415,7 @@ arrangements:
   # built at v9 IN-12: `loop/effects_governance.py::_eff_pardon`); the gate's `determination` closure arm
   # admits a bench's closure of it (`state/gate.py`).
   - id:               tribunal
-    rite:               trial
+    rite:               default
     turns:              [2, 5]
     authority:          polity
     reason_lean:        0.2    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `trial` rite (`sc2/host.py::RITES`)
@@ -474,7 +500,7 @@ arrangements:
   # one without the other]. `parliamentary_debate` is NOT flipped: it disposes a `Record`, which `_eff_determine`
   # declines, so a declared flip there has no opener until a Record disposal site exists.
   - id:               excommunication_deliberation
-    rite:               debate
+    rite:               default
     turns:              [2, 4]
     authority:          church
     reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] the model's `debate` rite (`sc2/host.py::RITES`)

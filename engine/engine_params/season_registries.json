@@ -155,12 +155,20 @@
             "for": [
               "argue",
               "press",
-              "rest"
+              "rest",
+              "present",
+              "answer"
             ],
             "against": [
               "argue",
               "rest",
-              "concede"
+              "concede",
+              "present",
+              "answer"
+            ],
+            "bench": [
+              "rule",
+              "adjourn"
             ]
           }
         },
@@ -264,6 +272,57 @@
               "rest"
             ]
           }
+        },
+        {
+          "id": "default",
+          "genre": "judicial",
+          "live": "charge",
+          "bears": {
+            "procedure": "against",
+            "fact": "against",
+            "definition": "against",
+            "justification": "for"
+          },
+          "reply": {
+            "for": "must",
+            "against": "must"
+          },
+          "silence": "refusal",
+          "issues": [
+            "fact",
+            "definition",
+            "justification"
+          ],
+          "concede": "descends",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "concede",
+              "rest",
+              "present",
+              "impugn"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "concede",
+              "rest",
+              "present",
+              "impugn"
+            ],
+            "bench": [
+              "rule",
+              "adjourn"
+            ]
+          },
+          "faults": [
+            "self_contradiction",
+            "silence",
+            "forgery_found",
+            "irrelevance"
+          ],
+          "disclosed": true
         }
       ],
       "context": {
@@ -518,7 +577,7 @@
       "arrangements": [
         {
           "id": "arbitration",
-          "rite": "trial",
+          "rite": "default",
           "turns": [
             2,
             5
@@ -544,7 +603,7 @@
         },
         {
           "id": "parliamentary_debate",
-          "rite": "debate",
+          "rite": "default",
           "turns": [
             2,
             4
@@ -568,7 +627,7 @@
         },
         {
           "id": "council_of_state",
-          "rite": "debate",
+          "rite": "default",
           "turns": [
             2,
             4
@@ -592,7 +651,7 @@
         },
         {
           "id": "legal_trial",
-          "rite": "trial",
+          "rite": "default",
           "turns": [
             2,
             5
@@ -621,7 +680,7 @@
         },
         {
           "id": "tribunal",
-          "rite": "trial",
+          "rite": "default",
           "turns": [
             2,
             5
@@ -705,7 +764,7 @@
         },
         {
           "id": "excommunication_deliberation",
-          "rite": "debate",
+          "rite": "default",
           "turns": [
             2,
             4

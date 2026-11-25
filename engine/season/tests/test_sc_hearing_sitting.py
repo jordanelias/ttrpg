@@ -115,3 +115,38 @@ def test_a_favourable_exhibit_never_lowers_the_obstacle():
         assert plus.net > none.net > minus.net, (i, plus.net, none.net, minus.net)             # the board is leverage: one level `proof_level` per whole unit of weight
         checked += 1
     assert checked == 40
+
+
+# ---- B24.09: one default rite, as data -----------------------------------------------------------------------------------------------
+
+def test_a_rite_naming_an_unrostered_move_is_refused():
+    """The loader's refusal is the standing contract on what a rite may name: a move or bench move outside `proceeding_moves`, a fault outside
+    `proceeding_faults`, a `bears:` key outside `issue_rungs` or a side outside the two, each stops the load naming the cell. The unplanted
+    `default` row loads (the control: each refusal is the planted cell's, not the row's)."""
+    import copy
+
+    import pytest
+
+    from ..data import arrangements as A
+    from ..data.rosters import load_yaml
+
+    row = next(r for r in load_yaml(A.ARRANGEMENTS_YAML.read_text(encoding="utf-8"))["rites"] if r["id"] == "default")
+    rite = A._load_rite(copy.deepcopy(row))
+    assert rite["bench"] == ("rule", "adjourn") and rite["faults"] == tuple(A.PROCEEDING_FAULTS) and rite["disclosed"] is True
+    assert dict(rite["bears_by_rung"]) == {"procedure": "against", "fact": "against", "definition": "against", "justification": "for"}
+    assert A.RITES["default"] == rite
+    planted = [
+        (lambda r: r["moves"]["for"].append("filibuster"), r"names move\(s\) of the `for` side \['filibuster'\] outside .*proceeding_moves"),
+        (lambda r: r["moves"]["bench"].append("filibuster"), r"names move\(s\) of the `bench` side \['filibuster'\] outside .*proceeding_moves"),
+        (lambda r: r["faults"].append("sulking"), r"names fault\(s\) \['sulking'\] outside .*proceeding_faults"),
+        (lambda r: r["bears"].update(motive="for"), r"`bears: 'motive'`.*issue_rungs"),
+        (lambda r: r["bears"].update(fact="bench"), r"`bears\.fact: 'bench'`"),
+    ]
+    refused = 0
+    for plant, why in planted:
+        bad = copy.deepcopy(row)
+        plant(bad)
+        with pytest.raises(SystemExit, match=why):
+            A._load_rite(bad)
+        refused += 1
+    assert refused == len(planted)

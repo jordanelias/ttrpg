@@ -50,7 +50,7 @@ def test_the_thirteen_arrangements_load():
     # v11 CR-34: the first `declared` row (C-7), `quorum: 2` -- `test_cr34_declared_disposal.py` reads the vote.
     assert (exc["close"], exc["quorum"], exc["floor"], exc["records_dissent"], exc["rite"],
             exc["appeal_basis"], exc["disposal_reach"]) == (
-        "declared", 2, "closed", False, "debate", "determine", "realm")
+        "declared", 2, "closed", False, "default", "determine", "realm")        # B24.09: the one default rite, which the six judicial and deliberative rows name
     assert [r for r, row in A.ARRANGEMENTS.items() if row["close"] == "declared"] == [
         "excommunication_deliberation"]
     assert exc["interposed"] == ("procedure", "ceremony") and exc["term_required"] is True
