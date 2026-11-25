@@ -37,7 +37,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    DECLARED, INVESTED, WON,
+    DECLARED, INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
@@ -2213,17 +2213,9 @@ def marches_into(w: World, target: str) -> Optional[tuple]:
     cap = w.fixtures.get("march_cap_per_territory")
     if not cap:
         return (0, 0)
-    kind = VERB_TABLE["march"].emits_at(DECLARED)[0]
-    here, n = enclosing_territory(w, target) or target, 0
-    for e in reversed(w.log):
-        if e.emitted_at < w.tick:
-            break
-        if e.kind != kind or e.emitted_at != w.tick:
-            continue
-        a = causing_act(w, e)
-        subj = (a.payload or {}).get("subject") if a is not None and isinstance(a.payload, dict) else None
-        if subj in w.rungs and (enclosing_territory(w, subj) or subj) == here:
-            n += 1
+    here = enclosing_territory(w, target) or target
+    n = sum(1 for _a, subj in _march_acts_this_tick(w, DECLARED)
+            if subj in w.rungs and (enclosing_territory(w, subj) or subj) == here)
     return (n + 1, cap)
 
 
@@ -2446,22 +2438,27 @@ def garrison_sites(w: World, rung_id: str) -> list:
     return [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
 
 
-def march_at_band(w: World, place: str, band: str):
-    """THE LATEST `march` ACT WHOSE `band` KIND (`march`'s row, read off it, never spelt here) WAS EMITTED THIS SEASON NAMING `place` AS ITS SUBJECT, or
-    `None`: the one scan of `w.log` that `siege_pressed_by` (`Invested`) and `loop/effects_shared.py::occupying_faction` (`Won`: a field was won there)
-    share. An Event carries no payload, so the place is the causing act's `subject`. Read-only; `w.log` takes a lap's Events at the lap's END
-    (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now."""
-    TRACE.query("march_at_band", "resolver")
+def _march_acts_this_tick(w: World, band: str):
+    """`(act, subject)` FOR EACH `march` ACT WHOSE `band` KIND (`march`'s row, read off it, never spelt here) THE LOG HOLDS FOR THIS `w.tick`, latest first:
+    the one scan of `w.log` that `marches_into` (`Declared`, the cap's count), `march_at_band` and so `siege_pressed_by` (`Invested`) and
+    `loop/effects_shared.py::occupying_faction` (`Won`) share. An Event carries no payload, so the place is the causing act's `subject`. The log is
+    monotone in `emitted_at`, so the walk stops at the first earlier tick. ⚠ `w.log` takes a lap's Events at the lap's END (`loop/driver.py`): the tick's
+    EARLIER laps are read, never the lap folding now."""
     kind = VERB_TABLE["march"].emits_at(band)[0]
     for e in reversed(w.log):
         if e.emitted_at < w.tick:
             break
-        if e.kind != kind or e.emitted_at != w.tick:
+        if e.kind != kind:
             continue
         a = causing_act(w, e)
-        if a is not None and a.verb == "march" and isinstance(a.payload, dict) and a.payload.get("subject") == place:
-            return a
-    return None
+        if a is not None and a.verb == "march" and isinstance(a.payload, dict):
+            yield a, a.payload.get("subject")
+
+
+def march_at_band(w: World, place: str, band: str):
+    """THE LATEST `march` ACT OF `band` THIS SEASON NAMING `place` AS ITS SUBJECT, or `None` (`_march_acts_this_tick`'s scan)."""
+    TRACE.query("march_at_band", "resolver")
+    return next((a for a, subj in _march_acts_this_tick(w, band) if subj == place), None)
 
 
 def siege_pressed_by(w: World, place: str):
@@ -5204,8 +5201,9 @@ class WorldReader:
         if stem in ("march.nth", "march.cap"):
             # v12 B21b.01 (IN-36 (a), A-103): THE MARCH CAP'S TWO READS, `marches_into` the one owner. UNKNOWN for a subject that is
             # no rung (`ID-5`). The person side never answers either (`WORLD_ONLY_STEMS`): the count is the lap's, not a belief.
-            got = marches_into(w, subject)
-            return UNKNOWN if got is None else got[0 if stem == "march.nth" else 1]
+            if subject not in w.rungs:
+                return UNKNOWN
+            return marches_into(w, subject)[0] if stem == "march.nth" else (w.fixtures.get("march_cap_per_territory") or 0)
         if stem == "names":
             # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
             # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the

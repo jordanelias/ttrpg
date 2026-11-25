@@ -14,7 +14,7 @@ asserts either way.
 from engine.season.queries import world_q
 
 from ._dispatch_realm import realm_seating_dispatch as build_realm
-from .test_march import _fold_one, _march_act
+from .test_march import _fold_one, _lap_end, _march_act
 
 CAP = "march_cap_per_territory"
 #: The two seats that may march (`_dispatch_realm.MARCH_SEATS`): the Crown's Spymaster and the Church's Cardinal.
@@ -24,8 +24,7 @@ SPY, CARDINAL = ("p_npc_033", "off_spymaster"), ("p_npc_013", "off_cardinal_prud
 def _march(w, marcher, target, act_id):
     """Fold one real march through RESOLVE and ENCOUNTER, then give its Events to the log as a lap's end does."""
     events = _fold_one(w, _march_act(marcher[0], target, marcher[1], act_id))
-    for e in events:
-        w.log.append(e)
+    _lap_end(w, events)
     return [e.kind for e in events], events
 
 

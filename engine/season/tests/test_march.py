@@ -54,6 +54,7 @@ from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
+from engine.season.loop.effects_shared import occupying_faction
 from engine.season.queries import person_q as PQ
 from engine.season.queries import world_q
 from engine.season.seam.contest import Resolution
@@ -538,15 +539,12 @@ def _no_resident_crown(w):
     """FIXTURE EDIT, NAMED: `build_realm(0)` houses ONE Crown member, `p_npc_037`, in the Church's
     cathedral at `set_s_036`, so the Crown is ALREADY `mustered` there before any march -- and by the
     occupation Query (#453: a faction other than the holder's mustered at a settlement it does not
-    hold) the Church's seat is seizable by a Crown seat at seed 0, with no field fought. Measured at
-    IN-13's build; it is the Query as ruled, not a defect this file fixes. The exits that need the
+    hold) the Church's seat WAS seizable by a Crown seat at seed 0, with no field fought (before B21b.04's plurality, which now refuses the lone
+    resident). Measured at IN-13's build. The exits that need the
     Crown's presence at `set_s_036` to be the ARRIVAL's doing re-house him at `set_s_002` (Crown) first,
     outside any write, so the cause is controlled."""
     assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_037"], "fixture moved: re-read it"
-    for t in w.persons["p_npc_037"].tenures:
-        if t.kind == "contain" and t.live:
-            t.until = w.tick
-    w.add_tenure(Tenure("t_in13_037_moved", "p_npc_037", "b_s_002_cottage", "contain", w.tick))
+    _station(w, ["p_npc_037"], "b_s_002_cottage", "t_in13_037_moved")
     assert world_q.mustered(w, "set_s_036", CROWN) == []
     return w
 
@@ -1080,13 +1078,12 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
     assert world_q.holder_faction_of(w, "set_s_036") == CROWN
 
 
-def test_in13_h212_a_resident_occupies_the_church_seat_at_seed_0_with_no_field_fought():
+def test_in13_h212_a_lone_resident_no_longer_takes_the_church_seat_at_seed_0_with_no_field_fought():
     """H-212's cite, EXECUTED rather than inspected, RE-RECORDED at B21b.04 (CP-T09-04 (b): 'one resident suffices' is replaced by the
     plurality, Pax Pamir's rule): on an UNMODIFIED `build_realm(0)` (no `_no_resident_crown` edit) the Crown is `mustered` at the Church's
     `set_s_036` through its resident `p_npc_037` alone, against the Church's six, so the Crown seat granted `issue` whose purview
     reaches the town (`off_king`, the realm) no longer seizes it with no march and no field: it was `rung.seized` before this
     arm was re-recorded (one Crown resident against the Church's six, `occupying_faction` licenses nobody)."""
-    from engine.season.loop.effects_shared import occupying_faction
     w = build_realm(0)
     assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_037"]
     assert (len(world_q.mustered(w, "set_s_036", CROWN)), len(world_q.mustered(w, "set_s_036", CHURCH))) == (1, 6)
@@ -1110,7 +1107,6 @@ def test_a_taken_territory_still_licenses_the_settlement_held_through_it():
     """B21b.04 and `occupies`' held-through limb: `set_s_007` is held through `terr_T3` (no hold of its own) with nobody of the holder's mustered in
     it, so a faction that has taken the territory has taken the town, with no person of its own in the town to count: the plurality is read where the
     army stands (the territory). Nobody of the seat's faction standing at the territory is no occupation at all."""
-    from engine.season.loop.effects_shared import occupying_faction
     w = build_realm(0)
     holder = world_q.holder_faction_of(w, "set_s_007")
     assert world_q.governing_hold(w, "set_s_007").object == "terr_T3" and holder == CROWN
@@ -1259,7 +1255,6 @@ def test_a_seats_obligee_standing_in_a_town_is_its_occupation():
     settlement, is the presence that makes it the Crown's to take -- one man against none, the obligee counting toward the plurality.
     CONTROLS: the same man unsworn licenses nothing, and one Church member left against the one obligee is a tie, which is not 'strictly
     more'."""
-    from engine.season.loop.effects_shared import occupying_faction
     w = _no_resident_crown(build_realm(0))
     church = world_q.mustered(w, "set_s_036", CHURCH)
     assert len(church) == 6

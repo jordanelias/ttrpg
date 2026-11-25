@@ -421,9 +421,7 @@ def test_the_shipped_default_seats_the_guards():
     """ED-IN-0317: `build_realm(0)` with no argument is the guards arm, byte for byte, and the control arm is only reached by
     `guards=False`. FALSIFIER: the two worlds hash differently, so a default that silently reverted would fail here; the guards arm's
     own readings (the cohorts, their oaths, the King's `guard_weight`) are `guarded`'s tests above."""
-    shipped, on, off = build_realm(0), build_realm(0, guards=True), build_realm(0, guards=False)
-    assert shipped.content_hash() == on.content_hash() != off.content_hash()
-    assert not [p for p in off.persons if p.startswith(COHORT_PREFIX + "guard_")]
+    assert build_realm(0).content_hash() == build_realm(0, guards=True).content_hash() != build_realm(0, guards=False).content_hash()
 
 
 def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():

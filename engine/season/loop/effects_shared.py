@@ -181,9 +181,9 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's AGAINST A
     MARCH: one that lost never arrived, so nothing occupies and nothing is seized. Occupation is PRESENCE (R-6, ruled
     for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
-    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. A held place taken
+    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. A held TOWN taken
     without a won field this lap goes to the faction with strictly more persons mustered there (CP-T09-04 (b), Pax Pamir's rule);
-    after a won field the licence is unchanged. B21b.04, the limit: "a won field" is a `field.won` in `w.log` at this `w.tick` whose causing
+    after a won field the licence is unchanged; a territory's is `occupies` alone. B21b.04, the limit: "a won field" is a `field.won` in `w.log` at this `w.tick` whose causing
     `march` named the place (`world_q.march_at_band`; an Event carries no payload, the act's `subject` is the field's rung), and the log takes a lap's
     Events at the lap's END (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now -- which a `seize` of the same lap precedes,
     RESOLVE before ENCOUNTER, so it could not have read it either. The seat's side is `seat_people_at` (the faction's members and the seat's sworn there), the
@@ -198,15 +198,16 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
         return None
     # B21.79 (CP-T09-07 (b)): the seat's sworn men present at a settlement are presence as its faction's members are
     # (`world_q.seat_people_at`); a territory is occupied by standing AT it, which the union does not widen.
-    if not (occupies(w, rid, mine)
-            or (rung.kind in SUBTREE_OCCUPATION_KINDS and seat_people_at(w, via, rid))):
+    town = rung.kind in SUBTREE_OCCUPATION_KINDS
+    people = seat_people_at(w, via, rid) if town else []
+    if not (occupies(w, rid, mine) or people):
         return None
-    # B21b.04: the place the plurality is counted at. A settlement the seat holds only THROUGH a taken territory (`occupies`' held-through limb) has none of
-    # the seat's people in it; the army stands at the territory, so the count and the won field are read there.
-    at = rid
-    if not seat_people_at(w, via, rid):
-        held = governing_hold(w, rid)
-        at = held.object if held is not None else rid
-    if not march_at_band(w, at, WON) and len(seat_people_at(w, via, at)) <= len(mustered(w, at, holder)):
-        return None
+    # B21b.04, a TOWN: where the plurality is counted. A settlement the seat holds only THROUGH a taken territory (`occupies`' held-through limb: none of its
+    # faction mustered in the town) is counted, with the won field, at that territory, where the army stands. A territory is occupied by standing AT it, a
+    # count the subtree's `mustered` is not, so its licence stays `occupies` alone [ASSUMPTION; medium; Jordan to correct; revert: the plurality at every held place].
+    if town:
+        through = not mustered(w, rid, mine) and occupies(w, rid, mine)
+        at = governing_hold(w, rid).object if through else rid
+        if not march_at_band(w, at, WON) and len(seat_people_at(w, via, at) if through else people) <= len(mustered(w, at, holder)):
+            return None
     return mine
