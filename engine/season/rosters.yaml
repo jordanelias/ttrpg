@@ -1836,8 +1836,12 @@ rosters:
       an obstacle (B24p.19 omits it for an act on the `proceeds=` path). No leverage source is module-bound.
       B24.06 adds `answer` (module-bound, last): the hostile weight of an answered exhibit over its answer, `answer_step x max(0, w_target - w_answer)`,
       on the roll of an `answer` move only (HEAR_B's table; a heavier answer is never a subtraction, A-25, it is the closing draw's `proof_level`).
+      B24.26 adds `first_heard` (module-bound, last; OBS §2 member 11, ADM edit 4): `first_heard_ob` for the answer to an item the room heard FIRST (a `filed`
+      stage's first-heard mark, `Item.first`), the answer move's own roll and the answering `speak`'s (`Input.first_heard`, which the host builder reads off the stages
+      its `answers` name), listed only where it weighs. One reader: the proceeding's `TERMS`; the single-roll host never composes it, the answering `speak` being an
+      act that proceeds.
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity, answer]
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity, answer, first_heard]
     # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after the host's members, so the proceeding's terms follow the
     # host's in composition order; revert: the four rows and their `bound:` cells.]
     bound:
@@ -1857,6 +1861,7 @@ rosters:
       press: module
       gravity: module
       answer: module
+      first_heard: module
 
   lifepaths:
     source: >-

@@ -16,6 +16,8 @@ from __future__ import annotations
 import functools
 import importlib
 
+import pytest
+
 from engine.substrate import composition
 
 from ..data import verbs as _verbs
@@ -168,3 +170,69 @@ def test_a_speak_citing_nothing_files_nothing():
         seen.add(out[0].degree)
         checked += 1
     assert checked == 60 and seen == set(BANDS)
+
+
+# ---- B24.26: an answer to an item first heard faces `first_heard_ob` more (ADM edit 4; OBS §2 member 11) ------------------------------------------------------
+
+def _sitting_terms(first_heard_ob: float) -> dict:
+    """The `Margin.terms` of each move a sitting draws on the board, `{label: dict(terms)}`: the accuser's `i1` (heard first) and `i2` (not) are answered by the accused, `i1` is impugned, and the accuser
+    answers the accused's `j1` and argues a point, at `first_heard_ob` as given."""
+    from ..data.arrangements import GROUNDS
+    from ..queries.inputs import Choice, Item
+    from .test_sc_proceeding_module import P, _dials, _inp, _key, _p, _rite, _sit
+    ground = next(g for g, r in GROUNDS.items() if r["reads"] != "item")
+    cell = lambda n, v: (f"s{n}", "stores.level", v)
+    i1 = Item("i1", "record", 1.0, origin="o1", cell=cell(1, 3), pairs=(("j1", "contradicts"),), first=True)
+    i2 = Item("i2", "record", 1.0, origin="o2", cell=cell(2, 3), pairs=(("j2", "contradicts"),))
+    j1 = Item("j1", "record", 1.0, origin="o3", cell=cell(1, 4), pairs=(("i1", "contradicts"),))
+    j2 = Item("j2", "record", 1.0, origin="o4", cell=cell(2, 4), pairs=(("i2", "contradicts"),))
+    a, b = _p("a", "for", items=(i1, i2)), _p("b", "against", items=(j1, j2))
+    inp = _inp([a, b, _p("j0", decides=True, precedence=1)], _rite(close="bench", turns=8, admits=("record",)), dials=_dials(first_heard_ob=first_heard_ob))
+    st = _sit(inp)
+    for k, (who, item) in enumerate(((a, "i1"), (a, "i2"), (b, "j1"), (b, "j2"))):
+        st, _ = P.exchange(inp, st, who, Choice("present", None, item), _key("fh", k))
+    moves = {"answer_first": (b, Choice("answer", ground, "i1")), "answer_plain": (b, Choice("answer", ground, "i2")), "impugn_first": (b, Choice("impugn", ground, "i1")),
+             "answer_by_first_side": (a, Choice("answer", ground, "j1")), "argue": (a, Choice("argue", ground, None, "raises"))}
+    return {label: dict(P.exchange(inp, st, who, ch, _key("fh", 9))[1].terms) for label, (who, ch) in moves.items()}
+
+
+def test_first_heard_adds_the_term_to_the_answer_only():
+    """ADM edit 4, both halves, on the real draw. INSIDE A SITTING: with `first_heard_ob` 2, the move that answers the item entered first (`Item.first`) names a `first_heard` term of exactly 2.0 in
+    its obstacle, and no other roll does -- not an answer to an item not heard first, not an impugnment of the first-heard one, not the first side's answer to the other's item, not an argument; at the
+    control (0) no roll names it. OUT OF A SITTING, over seeds: the accuser's `speak` that answers a `filed` stage with the first-heard mark is handed `first_heard` and its proceeding's roll names the term (2.0);
+    the same speak answering a stage without the mark, and a speak that files a claim of its own against a standing first-marked stage and answers nothing, do not, and at 0 it is handed True and names nothing (hash equal at the control).
+    FALSIFIER: the term on any roll but the answer to a first-heard item, or an answer to one that does not name it."""
+    plain = _sitting_terms(2.0)
+    assert plain["answer_first"].get("first_heard") == 2.0, plain["answer_first"]
+    assert [m for m, t in plain.items() if "first_heard" in t] == ["answer_first"], plain
+    control = _sitting_terms(0.0)
+    assert not [m for m, t in control.items() if "first_heard" in t] and set(control["answer_first"]) == set(plain["answer_first"]) - {"first_heard"}, control      # the control lists nothing
+    seen, checked = [], 0
+    real = sigma._resolve_proceeding
+
+    def spy(*a, **k):
+        out = real(*a, **k)
+        seen.append((k.get("first_heard"), dict(out.get("terms") or ())))
+        return out
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(sigma, "_resolve_proceeding", spy)
+        for seed in range(8):
+            for ob, plant_first, answers in ((2.0, True, True), (2.0, False, True), (2.0, True, False), (0.0, True, True)):
+                w, d, case = hearing(seed)
+                w.fixtures = w.fixtures.sweep("first_heard_ob", ob)
+                w.records[case].stages.append((1, "filed", "against", "fact", Said(G.ACCUSED, DEED, True, 100), 1.0, G.ACCUSED, "a0", *((True,) if plant_first else ())))
+                w.persons[G.ACCUSER].ledger.append(Claim("c_deny", G.ACCUSER, G.ACCUSED, DEED, False, 0, "firsthand", 100, "own"))
+                payload = {"subject": G.ACCUSED, "cites": ("c_deny",), "cited": {"c_deny": Said(G.ACCUSED, DEED, False, 100)}}
+                if answers:
+                    payload["answers"] = (len(w.records[case].stages) - 1,)
+                else:                                                                                           # a plain filing of his own deed claim, with the first-marked stage standing against him
+                    payload.update(cites=("c_deed",), cited={"c_deed": Said(G.ACCUSED, DEED, True, 100)})
+                before = len(seen)
+                out = fold_and_witness(w, d, Act(id="ans0", actor=G.ACCUSER, verb="speak", payload=payload))
+                assert len(seen) == before + 1 and out, (seed, ob, plant_first, answers)
+                handed, terms = seen[-1]
+                assert handed is (plant_first and answers), (seed, ob, plant_first, answers, handed)          # the host's read of the stage's mark, and of whether the act answers it
+                assert ("first_heard" in terms) is (plant_first and answers and ob > 0) and terms.get("first_heard", 2.0) == 2.0, (seed, ob, plant_first, answers, terms)
+                checked += 1
+    assert checked == 32 and any("first_heard" in t for _, t in seen) and any(h and "first_heard" not in t for h, t in seen)

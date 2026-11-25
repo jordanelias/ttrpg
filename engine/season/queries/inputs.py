@@ -186,7 +186,10 @@ class Item:
     B24.19 (EVID_B edit 3; the same two cells HEAR_B's `Exhibit` names), each defaulted:
       * `pairs` -- `((another filed exhibit's id, "contradicts" | "agrees"), ...)`: the relation the host builder computed with `decision/options.py::contradicts`
         and hands over as data, so `modules/social_contest/evidence.py::standing` reads it and restates no pairing rule;
-      * `answered_band` -- the band label (`dice_engine.DEGREE_LABEL`) of the best answering act drawn against it, `None` while none has been."""
+      * `answered_band` -- the band label (`dice_engine.DEGREE_LABEL`) of the best answering act drawn against it, `None` while none has been.
+
+    B24.26 (ADM edit 4): `first` -- the room heard it first, at the top band (the filed stage's first-heard mark, `is_first`; the host builder `_exhibits_of` fills it): an
+    `answer` to it faces the `first_heard` term. `standing` never reads it."""
     id: str
     kind: str
     weight: float
@@ -200,6 +203,7 @@ class Item:
     forged_found: bool = False
     pairs: tuple = ()
     answered_band: Optional[str] = None
+    first: bool = False
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -434,8 +438,11 @@ EXCHANGE_CELLS = ("entered", "struck")
 #   `(tick, "excluded", side, ref, act)` -- an item the room did not take (the speech's band entered nothing): the record an appeal cites, and no exhibit;
 #   `(tick, "answered", target, band, impeached, act)` -- an answering speech against the filed stage at index `target`: `band` the speech's own band (the target's `answered_band`) and
 #       `impeached` whether the speech cited a finding that the Record is forged (the target's `forged_found`).
+# [JUSTIFIED: `filed` 8 cells, 9 with the first-heard mark: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.25), not a tunable.]
 FILED_STAGE, FILED_CELLS, FIRST_CELLS = "filed", 8, 9
+# [JUSTIFIED: `excluded` 5 cells: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.25), not a tunable.]
 EXCLUDED_STAGE, EXCLUDED_CELLS = "excluded", 5
+# [JUSTIFIED: `answered` 6 cells: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.25), not a tunable.]
 ANSWERED_STAGE, ANSWERED_CELLS = "answered", 6
 
 
@@ -524,7 +531,9 @@ class Input:
       * `rite` -- the `Rite`; `matter` -- what is argued;  `room` -- the `Present` records;
       * `grounds` -- `((ground, reason weight, era weight), ...)`; `dials` -- the settings, a mapping;
       * `state` -- a whole `Sitting` to resume, or `None` (a resume needs no replay);
-      * `frames` -- `((channel, tag), ...)`: the wants and convictions a speech here can be framed on.
+      * `frames` -- `((channel, tag), ...)`: the wants and convictions a speech here can be framed on;
+      * `first_heard` -- B24.26: the act this input is built for answers an item the room heard first (the host's read of the stages its `answers` name,
+        `world_q.answers_first`), so its speech faces the `first_heard` term; `False` for every other act. Inside a sitting the term is the answered `Item.first`'s, never this.
 
     `__post_init__` holds the one invariant (A-139) and refuses, each a `ValueError` whose message begins `refused[<key>]`:
     `one_character`, `abridged_self`, `no_weight`, `no_adjudicator`, `nobody_speaks`, `resume_yielded`, and, a resume being
@@ -536,6 +545,7 @@ class Input:
     dials: Mapping
     state: Optional[Sitting] = None
     frames: tuple = ()
+    first_heard: bool = False
 
     def __post_init__(self):
         room, rite, state = self.room, self.rite, self.state

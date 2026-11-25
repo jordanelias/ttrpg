@@ -50,7 +50,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
+    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
@@ -114,7 +114,7 @@ from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
-                     ProduceInput, Sitting, SubsistInput, Under, is_filed, written)
+                     ProduceInput, Sitting, SubsistInput, Under, is_filed, is_first, written)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -354,6 +354,16 @@ def filings(w: World, a) -> Filings:
         ref = stages[idx][4]
         marked.append((idx, isinstance(ref, str) and any(impeaches(c, ref) for c in claims)))
     return Filings(case, side, tuple(items), tuple(marked), None)
+
+
+def answers_first(w: World, a) -> bool:
+    """B24.26 (ADM edit 4) -- DOES THIS ACT ANSWER AN ITEM THE ROOM HEARD FIRST: a filing verb's act whose `answers` name a filed stage that carries the first-heard mark (`is_first`), read through
+    `filings`, the one reader of what an answering act answers, so a refused act (which is never drawn) and an act that answers nothing read `False`. The answering `speak`'s host builder reads it
+    into the `first_heard` term of the speech's obstacle (`Input.first_heard`)."""
+    if a.verb not in FILING_VERBS:
+        return False
+    f = filings(w, a)
+    return f.refused is None and f.case is not None and any(is_first(w.records[f.case].stages[i]) for i, _ in f.answers)
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
