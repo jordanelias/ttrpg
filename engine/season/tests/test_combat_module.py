@@ -254,8 +254,7 @@ def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_
                 checked += 1
             # B15.10: a wounded party's yield roll is the fight's other roll through `core.resolve`; it is at the `death` obstacle and takes the
             # pool WITHOUT the party's addends (the verb's, not the roll's), so it is told apart by its obstacle and read separately
-            from modules.combat.config import CFG
-            yob = CFG["YIELD_OB"]["death"]
+            yob = importlib.import_module("modules.combat.config").CFG["YIELD_OB"]["death"]   # by name: a function-local `from modules` import raises the ratchet
             assert {k for k in seen if k[1] != yob} == want, (kw, dict(seen))
             assert {p for p, o in seen if o == yob} <= {min(p for p, _ in want)}, (kw, dict(seen))
     finally:
