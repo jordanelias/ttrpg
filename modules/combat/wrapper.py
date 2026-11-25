@@ -272,6 +272,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         # stays and wins). This is the closed-phase lever for the reach-weapon-loses-the-bind residual: cycling
         # approach<->bind, the long weapon wins on accumulated stop-hits instead of a bind it cannot win.
         if closed and beats>1:
+            _consult('bind')   # the hold-or-break decision of a closed beat IS the `bind` phase (PB 03 3): the withdrawer's `bind` lean is read just below, so it is entered here, not only at a bind's own entry (a closed beat can reach this line before any bind of the round)
             base_gap=er[longer]-er[shorter]
             # ATTEMPT a withdrawal only per the inclination (out-leveraged + can threaten at range); no attempt -> no
             # pursuit (fixes the fade case, where 0 attempt-rate must NOT trigger a free pursuing strike every beat).
