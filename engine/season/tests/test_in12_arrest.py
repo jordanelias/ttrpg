@@ -199,6 +199,9 @@ def test_in12_5_k02_a_contested_row_keys_two_kinds_only_where_it_keys_counterpar
         r = _row(doc, "arrest")
         r.pop("counterparty")
         r["emits_on_refusal"].pop("counterparty")
+        # B21.81: a row naming no counterparty that keys `write` takes the `write` kind at its party gap (one kind,
+        # `VerbRow.party_gap_at_write`), so the row is only refused for keying two kinds when it keys no `write` either
+        r["emits_on_refusal"].pop("write", None)
     msg = _loads(strip_counterparty)
     assert msg and "'arrest'" in msg and "keys no `counterparty`" in msg, msg
     # and a row that keys it may carry two kinds (`determine` given back its pre-SC-03b split)
