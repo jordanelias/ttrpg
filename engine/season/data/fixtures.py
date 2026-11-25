@@ -1678,8 +1678,8 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-939 -- site: Fixtures speech_blend (a pointer row, no field), graded `assumption`; the two columns are one blend and are swept together as a scale on V2's column, 0 (control) / 0.5 / 1]
     # `H-620` (B21b.01; IN-36 (a), ED-IN-0317). THE INTERIM TEST CAP ON MARCHES: at most this many `march`es are ADMITTED in one season (one `w.tick`) into each
     # territory, a march on a settlement counted against the territory that contains it, uniform for every marcher, civil-war marches included. It is the
-    # `march_cap` conjunct of `march`'s cell (`verb_table.yaml`), read by the one admission path (`loop/resolve.py::_admits`) through the stems `march.nth`
-    # and `march.cap` (`queries/world_q.py::marches_into`). `0` or unset is NO CAP: the control, and the revert.
+    # second conjunct of `march`'s cell (`verb_table.yaml`), read by the one admission path (`loop/resolve.py::_admits`) through the stems `march.nth`
+    # and `march.cap` (`queries/world_q.py::marches_into`). `0` (or a registered `None`) is NO CAP: the control, and the revert. REACH: it binds across the tick's laps, not within one (the log takes a lap's Events at the lap's end), H-620's STATED REACH.
     # A-103 (2026-11-12): the ruled test limit; a claim to a territory is an occasion, never a gate (`IS-B3-FA-04`).
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`, no cap.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-620 -- site: Fixtures march_cap_per_territory, graded `assumption`; ED-IN-0317 rules the limit and gives one march a season, so it ships at 1 and is swept 0 (control, no cap) / 1 / 2]

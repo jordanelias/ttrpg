@@ -418,26 +418,12 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
 
 
 def test_the_shipped_default_seats_the_guards():
-    """ED-IN-0317: `build_realm(0)` with no argument holds the three guard cohorts, each with a live `oblige` to its seat's
-    seat (`seat_guards`); `guards=False` is the control arm and holds none."""
-    w = build_realm(0)
-    authored = w._office_census["authored"]
-    rows = {r["seat"]: r["weight"] for r in guard_rows()}
-    assert set(rows) == {"off_king", "off_duchess_hafenmark", "off_duke_varfell"}
-    for seat in rows:
-        cohort = f"{COHORT_PREFIX}guard_{seat}"
-        assert cohort in w.persons, seat
-        assert [t for t in w.tenures if t.kind == "oblige" and t.live and t.subject == cohort and t.object == authored[seat]], seat
-    assert not [p for p in build_realm(0, guards=False).persons if p.startswith(COHORT_PREFIX + "guard_")]
-
-
-def test_guard_weight_is_above_zero_at_the_kings_rung():
-    """IN-36's EXIT at the shipped default, seed 0: the King's rung reads the authored weight; the control reads 0 there."""
-    def at_kings_rung(w):
-        holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
-        return world_q.guard_weight(w, world_q.home_of(w)[holder])
-    assert at_kings_rung(build_realm(0)) == {r["seat"]: r["weight"] for r in guard_rows()}["off_king"] > 0
-    assert at_kings_rung(build_realm(0, guards=False)) == 0
+    """ED-IN-0317: `build_realm(0)` with no argument is the guards arm, byte for byte, and the control arm is only reached by
+    `guards=False`. FALSIFIER: the two worlds hash differently, so a default that silently reverted would fail here; the guards arm's
+    own readings (the cohorts, their oaths, the King's `guard_weight`) are `guarded`'s tests above."""
+    shipped, on, off = build_realm(0), build_realm(0, guards=True), build_realm(0, guards=False)
+    assert shipped.content_hash() == on.content_hash() != off.content_hash()
+    assert not [p for p in off.persons if p.startswith(COHORT_PREFIX + "guard_")]
 
 
 def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():

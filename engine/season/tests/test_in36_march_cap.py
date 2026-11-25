@@ -1,6 +1,6 @@
 """v12 B21b.01 (IN-36 (a), A-103): AT MOST ONE MARCH A SEASON INTO EACH TERRITORY, AS A TYPED CONJUNCT OF `march`'S CELL.
 
-`Fixtures.march_cap_per_territory` (shipped 1; 0 or unset = no cap). The conjunct counts the `march.declared` Events of the
+`Fixtures.march_cap_per_territory` (shipped 1; 0 or a registered None = no cap). The conjunct counts the `march.declared` Events of the
 current `w.tick` whose act's target lies in the asked target's territory (a settlement counts for its territory), and holds
 while that count, with this march, is within the cap. It is read by the one admission path, `loop/resolve.py::_admits`, and
 refuses on the row's own `march.refused`. Each test folds REAL acts through the real driver (`test_march.py::_fold_one`) and
@@ -46,6 +46,19 @@ def test_a_second_march_into_one_territory_in_one_season_is_refused():
     # the cap is per territory: the same marcher, a march into another territory, the same tick, is admitted
     other, _ = _march(w, CARDINAL, "set_s_004", "m_cap_3")
     assert "march.declared" in other, other
+    # the count is of the current tick's Events alone: the next season admits a march into the same territory again
+    w.tick += 1
+    next_season, _ = _march(w, CARDINAL, "set_s_002", "m_cap_4")
+    assert "march.declared" in next_season, next_season
+    # the fixture's documented semantic, which is also the mutation of this test: 0 (or a registered None) is no cap,
+    # so the second march into the territory is admitted and the cap's two reads are the no-cap pair (0, 0)
+    for off in (0, None):
+        w_off = build_realm(0)
+        w_off.fixtures = w_off.fixtures.sweep(CAP, off)
+        _march(w_off, SPY, "set_s_001", "m_cap_1")
+        both, events_off = _march(w_off, CARDINAL, "set_s_002", "m_cap_2")
+        assert "march.declared" in both, (off, both)
+        assert _cap_reads(events_off) == {"march.nth": 0, "march.cap": 0}, (off, _cap_reads(events_off))
 
 
 def test_a_march_on_a_settlement_counts_against_its_territory():
@@ -62,24 +75,3 @@ def test_a_march_on_a_settlement_counts_against_its_territory():
     whole, events2 = _march(w2, CARDINAL, "terr_T1", "m_cap_2")
     assert whole == ["march.refused"] and _cap_reads(events2)["march.nth"] == 2, (whole, _cap_reads(events2))
 
-
-def test_the_cap_at_zero_lets_both_through():
-    """The fixture's documented semantic (0 or unset = no cap), which is also the mutation of the first test: with the
-    cap off the second march into the territory is admitted, and the cap's two reads are the no-cap pair (0, 0)."""
-    for off in (0, None):
-        w = build_realm(0)
-        w.fixtures = w.fixtures.sweep(CAP, off)
-        _march(w, SPY, "set_s_001", "m_cap_1")
-        second, events = _march(w, CARDINAL, "set_s_002", "m_cap_2")
-        assert "march.declared" in second, (off, second)
-        assert _cap_reads(events) == {"march.nth": 0, "march.cap": 0}, (off, _cap_reads(events))
-
-
-def test_the_next_season_admits_a_march_again():
-    w = build_realm(0)
-    _march(w, SPY, "set_s_001", "m_cap_1")
-    same_season, _ = _march(w, CARDINAL, "set_s_002", "m_cap_2")
-    assert same_season == ["march.refused"], same_season
-    w.tick += 1                      # the count is of the current tick's Events alone
-    next_season, _ = _march(w, CARDINAL, "set_s_002", "m_cap_3")
-    assert "march.declared" in next_season, next_season

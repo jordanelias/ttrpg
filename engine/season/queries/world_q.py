@@ -37,7 +37,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    INVESTED,
+    DECLARED, INVESTED, WON,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
@@ -2198,32 +2198,31 @@ def admitted_to(w: World, person: str, prop: str) -> bool:
                if other != prop and person in members(w, other))
 
 
-def marches_into(w: World, target: str) -> tuple:
+def marches_into(w: World, target: str) -> Optional[tuple]:
     """`(nth, cap)` -- THE MARCH CAP'S TWO READINGS FOR A MARCH ON `target` (B21b.01, IN-36 (a), A-103; the `march.nth` and `march.cap` stems, one owner).
     `nth` is how many marches the current `w.tick` has ADMITTED into `target`'s territory, with the one asked; `cap` is `Fixtures march_cap_per_territory`.
-    A march is ADMITTED when the log holds its `march.declared` (RESOLVE's deferral fold, emitted only past `_admits`), and it lies in a territory by its act's
-    `subject`, the target the act named, which counts against the nearest territory in the target's own ancestry (a settlement for the territory that
-    contains it, a territory for itself; a target with no territory above it is its own count). `0` or unset is NO CAP and reads `(0, 0)`: nothing is counted and
-    `0 <= 0` holds. `None` for a `target` that is no rung (the stems read UNKNOWN, `ID-5`).
-    ⚠ THE LOG TAKES A LAP'S EVENTS AT THE LAP'S END (`loop/driver.py`), so a march folded in the same lap is not yet counted; the marches of the tick's earlier laps are."""
+    A march is ADMITTED when the log holds its `march.declared` (`march`'s `Declared` kind, read off the row; RESOLVE's deferral fold emits it only past
+    `_admits`), and it lies in a territory by its act's `subject`, the target the act named, which counts against `enclosing_territory` (a settlement for the
+    territory that contains it, a territory for itself; a target with no territory above it is its own count). `0` or `None` is NO CAP and reads `(0, 0)`:
+    nothing is counted and `0 <= 0` holds. `None` for a `target` that is no rung (the stems read UNKNOWN, `ID-5`).
+    ⚠ THE LOG TAKES A LAP'S EVENTS AT THE LAP'S END (`loop/driver.py`), so two marches folded in ONE lap both read `nth` 1: the cap binds across the tick's laps
+    and not within one (H-620's STATED REACH). A march on a settlement razed since is not counted (its subject is no rung)."""
     TRACE.query("marches_into", "resolver")
     if target not in w.rungs:
         return None
     cap = w.fixtures.get("march_cap_per_territory")
     if not cap:
         return (0, 0)
-
-    def territory(rid: str) -> str:
-        return next((r for r in ancestry(w, rid) if w.rungs[r].kind == "territory"), rid)
-    here, n = territory(target), 0
+    kind = VERB_TABLE["march"].emits_at(DECLARED)[0]
+    here, n = enclosing_territory(w, target) or target, 0
     for e in reversed(w.log):
         if e.emitted_at < w.tick:
             break
-        if e.kind != OPENING_MARCH_KIND or e.emitted_at != w.tick:
+        if e.kind != kind or e.emitted_at != w.tick:
             continue
         a = causing_act(w, e)
         subj = (a.payload or {}).get("subject") if a is not None and isinstance(a.payload, dict) else None
-        if subj in w.rungs and territory(subj) == here:
+        if subj in w.rungs and (enclosing_territory(w, subj) or subj) == here:
             n += 1
     return (n + 1, cap)
 
@@ -2447,21 +2446,30 @@ def garrison_sites(w: World, rung_id: str) -> list:
     return [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
 
 
-def siege_pressed_by(w: World, place: str):
-    """THE THREAT A `surrender` ANSWERS (CP-T04-07, AM-C-12): the `march` Act whose `Invested` band pressed a siege on `place`
-    THIS SEASON -- the latest `siege.pressed` Event (`march`'s `Invested` kind, read off the row, never spelt here) with
-    `emitted_at == w.tick` whose causing act is a `march` naming `place` as its subject -- or `None`. The Act, not its actor:
-    the actor is who receives the place, and `via` names the seat he pressed it through. Read-only over `w.log`; the
-    declared unfought `march` (CP-T04-04, held) joins it here when it lands."""
-    TRACE.query("siege_pressed_by", "resolver")
-    kind = VERB_TABLE["march"].emits_at(INVESTED)[0]
+def march_at_band(w: World, place: str, band: str):
+    """THE LATEST `march` ACT WHOSE `band` KIND (`march`'s row, read off it, never spelt here) WAS EMITTED THIS SEASON NAMING `place` AS ITS SUBJECT, or
+    `None`: the one scan of `w.log` that `siege_pressed_by` (`Invested`) and `loop/effects_shared.py::occupying_faction` (`Won`: a field was won there)
+    share. An Event carries no payload, so the place is the causing act's `subject`. Read-only; `w.log` takes a lap's Events at the lap's END
+    (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now."""
+    TRACE.query("march_at_band", "resolver")
+    kind = VERB_TABLE["march"].emits_at(band)[0]
     for e in reversed(w.log):
+        if e.emitted_at < w.tick:
+            break
         if e.kind != kind or e.emitted_at != w.tick:
             continue
         a = causing_act(w, e)
         if a is not None and a.verb == "march" and isinstance(a.payload, dict) and a.payload.get("subject") == place:
             return a
     return None
+
+
+def siege_pressed_by(w: World, place: str):
+    """THE THREAT A `surrender` ANSWERS (CP-T04-07, AM-C-12): the `march` Act whose `Invested` band pressed a siege on `place`
+    THIS SEASON -- `march_at_band(place, Invested)` -- or `None`. The Act, not its actor: the actor is who receives the place, and `via`
+    names the seat he pressed it through. Read-only over `w.log`; the declared unfought `march` (CP-T04-04, held) joins it here when it lands."""
+    TRACE.query("siege_pressed_by", "resolver")
+    return march_at_band(w, place, INVESTED)
 
 
 def training_sites(w: World, person_id: str) -> dict:

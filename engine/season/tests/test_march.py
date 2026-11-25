@@ -1085,12 +1085,13 @@ def test_in13_h212_a_resident_occupies_the_church_seat_at_seed_0_with_no_field_f
     plurality, Pax Pamir's rule): on an UNMODIFIED `build_realm(0)` (no `_no_resident_crown` edit) the Crown is `mustered` at the Church's
     `set_s_036` through its resident `p_npc_037` alone, against the Church's six, so the Crown seat granted `issue` whose purview
     reaches the town (`off_king`, the realm) no longer seizes it with no march and no field: it was `rung.seized` before this
-    arm was re-recorded. CONTROL, one change (the resident re-housed away, the fixture edit the exits above use): the same act is refused."""
+    arm was re-recorded (one Crown resident against the Church's six, `occupying_faction` licenses nobody)."""
+    from engine.season.loop.effects_shared import occupying_faction
     w = build_realm(0)
     assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_037"]
+    assert (len(world_q.mustered(w, "set_s_036", CROWN)), len(world_q.mustered(w, "set_s_036", CHURCH))) == (1, 6)
     assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
-    ctrl = _no_resident_crown(build_realm(0))
-    assert _seize_kinds(ctrl, "set_s_036") == ["seize.refused"]
+    assert occupying_faction(w, "off_king", "set_s_036") is None
     assert _seize_kinds(w, "set_s_036") == ["seize.refused"]
     assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
 
@@ -1105,16 +1106,19 @@ def _station(w, pids, town, tid):
         w.add_tenure(Tenure(f"{tid}_{i}", pid, town, "contain", w.tick))
 
 
-def test_a_town_held_by_the_church_is_not_taken_by_one_crown_resident():
-    """CP-T09-04 (b), the licence at its one owner: at `set_s_036` the Church holds the town with six persons mustered and the Crown has one
-    (the resident `p_npc_037`), no field fought, so `occupying_faction` -- the reading `seize` and `raze` share -- licenses nobody, and
-    the Crown's `seize` is `seize.refused` with the holder unmoved. It read `CROWN` (one resident sufficed) before B21b.04."""
+def test_a_taken_territory_still_licenses_the_settlement_held_through_it():
+    """B21b.04 and `occupies`' held-through limb: `set_s_007` is held through `terr_T3` (no hold of its own) with nobody of the holder's mustered in
+    it, so a faction that has taken the territory has taken the town, with no person of its own in the town to count: the plurality is read where the
+    army stands (the territory). Nobody of the seat's faction standing at the territory is no occupation at all."""
     from engine.season.loop.effects_shared import occupying_faction
     w = build_realm(0)
-    assert (len(world_q.mustered(w, "set_s_036", CROWN)), len(world_q.mustered(w, "set_s_036", CHURCH))) == (1, 6)
-    assert occupying_faction(w, "off_king", "set_s_036") is None
-    assert _seize_kinds(w, "set_s_036") == ["seize.refused"]
-    assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
+    holder = world_q.holder_faction_of(w, "set_s_007")
+    assert world_q.governing_hold(w, "set_s_007").object == "terr_T3" and holder == CROWN
+    assert not world_q.mustered(w, "terr_T3", holder) and not world_q.mustered(w, "set_s_007", CHURCH)
+    assert occupying_faction(w, "off_cardinal_prudence", "set_s_007") is None            # nobody of the Church stands there
+    _station(w, [world_q.members(w, CHURCH)[0]], "terr_T3", "tt")
+    assert world_q.occupies(w, "set_s_007", CHURCH) and not world_q.mustered(w, "set_s_007", CHURCH)   # held through the territory alone
+    assert occupying_faction(w, "off_cardinal_prudence", "set_s_007") == CHURCH
 
 
 def test_a_town_is_taken_when_the_seat_faction_outnumbers_the_holder():
