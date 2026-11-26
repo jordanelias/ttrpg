@@ -3988,7 +3988,7 @@ def test_r7_a_silent_seat_change_moves_no_candidate():
         p = w.persons[pid]
         qs = world_q.questions_for(w, p)
         return (frozenset(q.referents for q in qs if q.source == "need"),
-                frozenset((c.verb, c.subject, tuple(sorted((k, repr(v)) for k, v in (c.operands or {}).items())))
+                frozenset((c.verb, c.subject, tuple(sorted((k, v if getattr(v, '__hash__', None) else repr(v)) for k, v in (c.operands or {}).items())))
                           for q in qs for c in opening_set(p, assemble(p, q, 12), q, w.fixtures)))
 
     def holder(w, seat):
