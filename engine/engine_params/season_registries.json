@@ -3207,6 +3207,9 @@
             "dispatch": {
               "why": "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"
             },
+            "declare": {
+              "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write; a declaration opens a war and moves no one's body, holding or stores (B21b.11) [ASSUMPTION: the producer's sentence]"
+            },
             "comply": {
               "why": "`brute: own` -- the man's own going: he moves his own legs and no one else's (B21.57, A-24) [ASSUMPTION: the producer's sentence, 18-A gives none]"
             },
@@ -6461,6 +6464,7 @@
               "convene": -0.4,
               "found": -0.3,
               "march": -0.5,
+              "declare": -0.5,
               "carry": null,
               "build": null,
               "give": null,
@@ -6512,6 +6516,7 @@
               "survey": 0.3,
               "give": null,
               "march": null,
+              "declare": null,
               "carry": null,
               "commit": null,
               "comply": null,
@@ -6551,6 +6556,7 @@
               "open_case": 0.3,
               "requisition": -0.3,
               "march": -0.4,
+              "declare": -0.5,
               "build": null,
               "found": null,
               "give": null,
@@ -6613,6 +6619,7 @@
               "fight": -0.3,
               "requisition": null,
               "march": null,
+              "declare": null,
               "migrate": null,
               "move": null,
               "oblige": null,
@@ -6653,6 +6660,7 @@
               "found": null,
               "give": null,
               "march": null,
+              "declare": null,
               "survey": null,
               "carry": null,
               "confer": null,
@@ -6700,6 +6708,7 @@
               "build": -0.2,
               "found": -0.3,
               "march": -0.4,
+              "declare": -0.4,
               "survey": 0.2,
               "give": null,
               "migrate": null,
@@ -6762,6 +6771,7 @@
               "deed:body.changed": 0.3,
               "give": -0.2,
               "march": 0.4,
+              "declare": 0.3,
               "migrate": 0.4,
               "survey": 0.3,
               "surveil": null,
@@ -7699,6 +7709,44 @@
           "refusal_note": "B21.81 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_establish` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the seven names, spelled there with their spaces; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `establish` says WHICH clause refused. The predicate's kinds, in branch order: `office resolves` (the constructor refused it, an overlay act the seat does not found over, or an operand missing) `establish.no_office`; `rung held` (no rung the world holds) `establish.no_rung`; `conferral basis` (the office declares none) `establish.no_basis`; `filler` (a seat only the heir's claim opens, no title passing it) `establish.no_filler`; `re-founding` (an id some other class holds, or a different belonging for an existing office) `establish.refounding`; `may fill` (an existing office the seat exercised does not reach) `establish.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `reduction is revocation` (a re-stamp that drops from a sitting holder's grant an act, which is `revoke`'s) `establish.reduces_grant`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `establish.refused`; the row names no `counterparty:`, so the seam's party gap (S27.4's pool under 1D, a contest that reached its depth cap) takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81, on the `task` row's precedent). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal, itself on `seize`'s and `arrest`'s) -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"establish.refused\"]`.]",
           "grade": "assumption",
           "source": "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
+        },
+        {
+          "verb": "declare",
+          "public": true,
+          "stratum": "binding_decision",
+          "eligibility": [
+            "remit:dispatch"
+          ],
+          "eligibility_note": "B21b.11 (CP-T09-02 (a), AM-F-10; `FA \u00a73.3` S2): `remit:dispatch`, `march`'s and `raze`'s eligibility -- the seat that musters the army is the seat that opens the war it musters for (`state/gate.py::MUSTER_ACT`, `may_wage`: the rule `world_q.at_war` asks of each commit). A guard cohort holds no seat, so a computed `declare` is a seated muster-holder's act.",
+          "beneficiary": "none",
+          "brute": "seat",
+          "brute_note": "`remit:dispatch`; a declaration is a seat's act and rolls nothing: what it opens is each man's own `commit`, and what follows (`march`, `seize`) rolls on its own row",
+          "governing_note": "B21b.11 [ASSUMPTION; medium; Jordan to correct at BA1.13]: `dispatch`'s reading -- a brute seat row.",
+          "beneficiary_note": "a war is no person's good and no Candidate carries its beneficiary; the declarer's faction and the target are the Proposition's two parties.",
+          "referent_class": "Proposition",
+          "referent_class_note": "B21b.11 (CP-T09-02 (a), AM-F-11; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the target faction's creed, which is a Proposition (`FACTION_BY_PROP`): the plain referent of the question he answers (`own_referents_of_class`), the Propositions he is committed to or has heard of, and, NEW AT THIS ROW (AM-F-11's re-base check: no existing term stamped a rival's creed for a man who disfavours it, `joinable` passing only those he favours), `world_q.war_targets`: the rostered creeds in his ledger (`propositions_heard`) that he is not a member of and reads below `INDIFFERENCE`, for a member who wages in a seat of his own faction -- stamped through `_stamped` beside `joinable`. So `subject` binds a creed and never a person or a rung. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: that the creed is a rostered faction's, is not the seat's own, and has members is the effect's (`declare.refused`). DECLARED WIDENING, measured: the class is shared with `commit` and `argue`, so `declare` also forms on his own faction's creed, his goals and his ambitions and the fold refuses them (`aperture 1 0`, seed 0: every attempted `declare` named the declarer's own faction).",
+          "requires": "the target is an existing Proposition",
+          "requires_typed": {
+            "form": "existence",
+            "of": "subject",
+            "kind": "Proposition"
+          },
+          "requires_typed_note": "`commit`'s `existence` cell, the target's creed a Proposition. THE REST IS THE EFFECT'S (`loop/effects_information.py::_eff_declare`): the target is a rostered faction's Proposition with members and is not the seat's own faction, and the declarer is a member who sits in a seat of the seat's faction that wages (`gate.may_wage`). A refusal at any is `declare.refused`, nothing minted. [ASSUMPTION; medium; Jordan to correct; revert: delete the row.]",
+          "writes": [
+            "Proposition.exists",
+            "Tenure.since"
+          ],
+          "writes_note": "ONE MINT, ONE WRITE: `_eff_declare` mints the WAR Proposition through `_eff_utter`'s one mint (`_mint_utterance`; mood `WAR`, `world_q.WAR_MOOD`, subject the seat's faction's creed, value the target) and opens the DECLARER'S OWN `commit` to it in the same write (`_commit_edge`, `commit`'s edge), so a war is never 'of one' (FA-G03). The maker's `hold` opens beside it and is not a declared pair (`utter`'s convention). `world_q.at_war` is a Query over the live commits of a Proposition a `declare` made.",
+          "emits": [
+            "war.declared"
+          ],
+          "emits_note": "A NEW KIND, emitted by this row alone (`data/verbs.py::KIND_VERB`), so a witnessed declaration is judged at this row's alignment cells. `binding_decision` is the stratum `rosters.yaml: witness_channels.event_reach.from_stratum` carries to the realm, so `war.declared` reaches every living ledger of the realm the act was done in (AM-F-10: the replacement for `chronicle` publishes it); no `reach` row was added.",
+          "emits_on_refusal": [
+            "declare.refused"
+          ],
+          "grade": "assumption",
+          "grade_note": "CP-T09-02 (a)'s row, `FA \u00a73.3` S2's design; named against `architecture/VOCABULARY.md` (no row for declare, proclaim or war; checked at the build), `give`'s precedent. Its seven alignment cells are content: [ASSUMPTION; content, Jordan's to correct].",
+          "source": "v12 B21b.11 (`workplans/valoria_master_workplan_v12_part21.md`), on CP-T09-02 (a) (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md`), AM-F-10, AM-F-11"
         },
         {
           "verb": "evade / defy",

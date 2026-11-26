@@ -1540,6 +1540,7 @@ rosters:
       oblige:           {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write"}
       convene:          {why: "a sitting is scheduled; what it decides is its members' acts [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       dispatch:         {why: "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      declare:          {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write; a declaration opens a war and moves no one's body, holding or stores (B21b.11) [ASSUMPTION: the producer's sentence]"}
       comply:           {why: "`brute: own` -- the man's own going: he moves his own legs and no one else's (B21.57, A-24) [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       petition:         {why: "filing; the addressee's answer is his act"}
       give:             {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
@@ -5348,6 +5349,7 @@ tables:
         convene:        -0.4    # derived: a `remit:convene` act that gathers a venue's rung -- the remit-act family `dispatch`/`issue` sit in
         found:          -0.3    # reasoned: its effect demands strict ascent into the works' `at` -- a new rung on the containment ladder; `establish`'s reason read for a place, not an office, and `own`-eligible, so smaller
         march:          -0.5    # reasoned: `remit:dispatch`-eligible -- an army sent under an office's remit, `dispatch`'s own cell
+        declare:        -0.5    # B21b.11 [ASSUMPTION; content, Jordan to correct]: `remit:dispatch`-eligible -- a war opened under an office's remit, `march`'s and `dispatch`'s own cell
         carry:          null    # carried absence: the old table refused this cell as "the lowest-magnitude, weakest-justified cell in the set"
         build:          null    # reasoned: `own`-eligible, and the row names no rank -- a works held by its maker, whoever he is
         give:           null    # reasoned: `own`-eligible, a handover between two persons present together; no remit is exercised
@@ -5401,6 +5403,7 @@ tables:
         survey:          0.3    # reasoned: the sheet is the faction's view "AT THE MOMENT OF WRITING" -- the present case, `research`'s archive inverted
         give:           null    # reasoned: handing a held document on is neither a return to a past form nor a new one
         march:          null    # reasoned: the row says nothing of where the decision to march is sought
+        declare:        null    # B21b.11 [ASSUMPTION; content, Jordan to correct]: the row says nothing of whether a declaration returns to or breaks a form -- considered, no lean
         # no source (draft §3.2, "the other 28")
         carry:          null
         commit:         null
@@ -5442,6 +5445,7 @@ tables:
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it
         requisition:           -0.3    # derived: rank drawing on subjects -- one's own office's take
         march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `requisition`'s reason, stronger
+        declare:        -0.5    # B21b.11 [ASSUMPTION; content, Jordan to correct]: war declared for one's own faction against another, `march`'s -0.4 a notch stronger -- the act names the side before any field is fought
         build:          null    # reasoned: beneficiary `none` -- who gains from the fabric is a world read (its `beneficiary_note`)
         found:          null    # reasoned: beneficiary `none`, for `build`'s reason
         give:           null    # reasoned: partial toward a person, but toward WHOM is the candidate's fact, not the verb's (§3.3's rule for `transfer` and `tell`)
@@ -5509,6 +5513,7 @@ tables:
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
         march:          null
+        declare:        null    # B21b.11: `null` BY DESIGN (the beneficiary column carries it, `beneficiary: none`)
         migrate:        null
         move:           null
         oblige:         null
@@ -5553,6 +5558,7 @@ tables:
         found:          null    # reasoned: as `build`
         give:           null    # reasoned: a handover, neither a course held nor one left
         march:          null    # reasoned: the row's bands record the field's outcome, not whether the marcher would turn back
+        declare:        null    # B21b.11 [ASSUMPTION; content, Jordan to correct]: the row records a decision to open a war, not whether the declarer would turn back -- considered, no lean
         survey:         null    # reasoned: gathering a view commits to no course
         # no source (draft §3.5, "the other 34")
         carry:          null
@@ -5606,6 +5612,7 @@ tables:
         build:          -0.2    # reasoned: adds a fabric to the world -- `establish`'s reason, smaller: a site, not a seat
         found:          -0.3    # reasoned: adds a hearth to the world -- `establish`'s own reason and magnitude
         march:          -0.4    # reasoned: declared before the realm (`march.declared`) -- between `fight`'s -0.3 and `challenge`'s -0.6
+        declare:        -0.4    # B21b.11 [ASSUMPTION; content, Jordan to correct]: declared before the realm (`war.declared` reaches it), `march`'s own cell
         survey:          0.2    # reasoned: a private act -- it emits a kind neither broadcast channel reads (its `emits_note`)
         give:           null    # reasoned: one-to-one in presence, and broadcast by neither channel -- `tell`'s reading, not a display
         migrate:        null    # reasoned: the row records a change of residence, not a showing
@@ -5676,6 +5683,7 @@ tables:
         "deed:body.changed":  0.3   # derived: `fight`'s attempt landed short of death -- `fight`'s own cell
         give:           -0.2    # reasoned: the row writes no return to the giver -- the non-ledger counterpart of `exchange` and `transfer`; mild
         march:           0.4    # reasoned: `fight`'s attempt, larger because the casualties land on many others -- defenders and one's own claimants -- for the outcome
+        declare:        0.3     # B21b.11 [ASSUMPTION; content, Jordan to correct]: a war opened as the means to an end, smaller than `march`'s 0.4 because no casualty is yet caused
         migrate:         0.4    # reasoned: `move`'s journey (`_relocate`, one body for both) and `move`'s reason, smaller for a settled choice than for flight
         survey:          0.3    # reasoned: intelligence before action -- `research`'s calculated route to a finding
         surveil:        null    # CONFLICT resolved to null: the old -0.8 was a COST (fieldwork_v30 §4.2's Surveil +2 Exposure) wearing an axis cell

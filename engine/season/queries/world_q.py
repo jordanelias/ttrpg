@@ -3794,6 +3794,22 @@ def joinable(w: World, p: Person, heard: tuple) -> tuple:
     return tuple(o for o in heard if o not in rivals or o in keep)
 
 
+def war_targets(w: World, p: Person, heard: tuple) -> tuple:
+    """THE RIVAL CREEDS A SEATED MUSTER-HOLDER MAY DECLARE WAR ON (B21b.11, CP-T09-02 (a), AM-F-11's re-base check; [ASSUMPTION; medium; Jordan to correct;
+    revert: `questions_for` appends no `war_targets`, and `declare` forms only on a creed some other term already stamps]): of `heard`
+    (`propositions_heard`'s output) the rostered factions' Propositions (`FACTION_BY_PROP`) he is not a member of and READS BELOW INDIFFERENCE (`opinion_of`),
+    for a person who belongs to a faction in whose seat he wages (`gate.may_wage`) -- `joinable`'s mirror, the creeds he favours over his own being its.
+    `questions_for` adds them as `Proposition`-classed referents (`_stamped`), so `declare` (and the class-wide `commit` and `argue`, the declared widening)
+    form on them; whether the act then passes is the fold's (`_eff_declare`). Computed when asked, stored nowhere; `()` for a man in no wagers' seat."""
+    rivals = [o for o in heard if o in FACTION_BY_PROP]
+    if not rivals:
+        return ()
+    mine = own_factions(w, p)
+    if not any(may_wage(w, p.id, f) for f in mine):
+        return ()
+    return tuple(o for o in rivals if o not in mine and opinion_of(w, p, o) < INDIFFERENCE)
+
+
 def leave_referents(w: World, p: Person, refs: tuple, memo: Optional[dict] = None) -> tuple:
     """THE FACTIONS HE WOULD LEAVE, as referents of a question about the people he regards (B21b.08, CP-T09-01's leave body; [ASSUMPTION; medium; Jordan to
     correct; revert: `questions_for` appends no `leave_referents`]): for each faction `p` belongs to (`own_factions`) whose `opinion_of` is BELOW
@@ -4543,23 +4559,21 @@ def at_war(w: World, a: str, b: str) -> bool:
     commit by an unseated member, or by the declarer after he releases his seat's `hold`, keeps
     no war alive. Peace is still the commit's own release -- `until` written on that edge by its
     owner, exactly as a faction's own membership commits close -- and a second wager's commit
-    keeps the war alive after the first's release.
+    keeps the war alive after the first's release. B21b.11 (CP-T09-02 (a)): and the Proposition was minted by a `declare` -- the creating Event's causing act
+    (`_creating_act`, `causing_act` of the first Event naming it) is a `declare`, the second conjunct beside `may_wage`.
 
-    ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
-    BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
-    shipped, uncontested, `own`-eligible verbs, so a hand-built `Act(verb="utter", payload=
-    {"mood": WAR_MOOD, "subject": a, "value": b})` followed by a `commit` to the Proposition it
-    mints is a REAL fold today, not a hypothetical one -- `10_FACTIONS_AND_DEPLOYMENT.md` §4.1's
-    gap list (`F.33`) is about whether `at_war` may gate a verb's `requires`, which is a narrower,
-    still-open question than whether the Proposition can exist. No world-generation code (`cast`,
-    `boot/realm.py`'s `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
-    and populated-realm world reads `False` for every pair -- a fact about what nothing yet
-    chooses to utter, not about this Query. The falsifier this module's test file carries drives
-    the real fold rather than planting a Tenure by hand, to prove that."""
+    ⚠ A WAR UTTERED AND COMMITTED TO BY HAND IS NO WAR (B21b.11): `_eff_utter` (generic over `mood`) and `_eff_commit` still mint such a chain through the real
+    fold, and it reads `False`; only `declare` (`loop/effects_information.py::_eff_declare`, the one mint plus the declarer's own `commit`) makes a war. No
+    world-generation code (`cast`, `boot/realm.py`'s `build_realm`, the corpus overlays) authors a declaration, so a world reads `False` for every pair until a
+    seated muster-holder chooses one. The falsifiers (`test_faction_q.py`, `test_cp_t09_declare.py`) drive the real fold rather than planting a Tenure by hand."""
     TRACE.query("at_war", "resolver")
     pair = {a, b}
     for p in w.propositions.values():
         if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
+            continue
+        # B21b.11 (CP-T09-02 (a), AM-F-10; A-20): ONLY A DECLARATION OPENS A WAR -- the Proposition's creating act is a `declare`, so a WAR `utter` plus a
+        # `commit` (a hand-built chain, or an oath sworn to a rumour) is no war however seated its committer.
+        if getattr(_creating_act(w, p.id), "verb", None) != "declare":
             continue
         if any(t.kind == "commit" and t.object == p.id and t.live
                and ((t.subject in members(w, p.subject) and may_wage(w, t.subject, p.subject))     # B21.62: the declarer's own party's seat
@@ -5409,6 +5423,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # the occasion off]): AND, BESIDE THE VACANCIES, THE PERSONS WHOSE DEFIANCE OF HIS WRITS HAS REACHED THE THRESHOLD AND THE SEATS HE
     # MAY STRIP FROM THEM (`recalls`), as `Person` and `Office`. The occasion only; the recall is `revoke`'s draw.
     told = ledger_names(p.ledger)
+    # B21b.11 (CP-T09-02 (a), AM-F-11's re-base check; [ASSUMPTION; medium; Jordan to correct; revert: drop `war_targets` from the splice]): AND, BESIDE `joinable`,
+    # THE RIVAL CREEDS A SEATED MUSTER-HOLDER READS BELOW INDIFFERENCE (`war_targets`), as `Proposition` -- `declare` forms on them (and `commit` and `argue`, the declared widening).
+    heard_props = propositions_heard(w, p)
     founding = holdings_to_found(w, p)
     added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
              + records_held_for_holding_rows(w, p)
@@ -5416,7 +5433,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + founding
              + uncontrolled_in_purview(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + crossed_sites(w, p, since) + joinable(w, p, propositions_heard(w, p)) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + crossed_sites(w, p, since) + joinable(w, p, heard_props) + war_targets(w, p, heard_props) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD

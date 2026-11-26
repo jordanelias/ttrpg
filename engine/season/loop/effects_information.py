@@ -35,13 +35,13 @@ from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
-    siege_pressed_by, slot_for, works_for, works_target,
+    siege_pressed_by, slot_for, works_for, works_target, WAR_MOOD,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
-    may_warrant, may_wage,
+    may_warrant, may_wage, seat_faction,
 )
 from ..state.ids import H
 
@@ -1427,14 +1427,55 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     support = _held_cites(w, a.actor, d.get(CITES_KEY))
     if support is None:
         return NO_CHANGE                  # a cite he does not hold: refused whole, before any write
-    prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
-                       d.get("predicate") or "", d.get("value"), w.tick, support=support)
-    held = _makers_hold(w, a.actor, pid)
+    prop, held = _mint_utterance(w, a.actor, pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
+                                 d.get("predicate") or "", d.get("value"), support)
 
     def perform() -> None:
         w.propositions[pid] = prop
         w.add_tenure(held)
     return Change((Subject.entity("propositions", pid),), perform)
+
+
+def _mint_utterance(w: "World", actor: str, pid: str, mood: str, subject: str, predicate: str, value, support=()) -> tuple:
+    """THE ONE MINT OF A UTTERED PROPOSITION (B21b.11): the immutable `Proposition` and the maker's `hold` on it, as `(prop, held)`, nothing written. `_eff_utter`
+    mints every mood through it and `_eff_declare` the WAR one, so a Proposition and its maker's hold are built in one place. The caller decides whether `pid` is
+    free and writes both in its own `perform`. `"hold"` stays a literal in `_makers_hold`, which the opener walk reads through this call."""
+    return Proposition(pid, mood, subject, predicate, value, w.tick, support=support), _makers_hold(w, actor, pid)
+
+
+def _commit_edge(w: "World", actor: str, prop_id: str, act_id: str) -> Tenure:
+    """THE `commit` EDGE an act opens, salted on the object and the act (`_eff_commit`'s docstring says why): the one construction `_eff_commit` and
+    `_eff_declare` (the declarer's own commit, so a war is never 'of one') share. ⚠ `"commit"` IS A LITERAL HERE: the opener walk
+    (`data/verbs.py::_derive_openers_from_effects`) reads the kind off it through every helper a registered effect calls."""
+    return Tenure(H(w.world_seed, w.tick, actor, f"commit:{prop_id}:{act_id}"), actor, prop_id, "commit", since=w.tick)
+
+
+@effect_for("declare")
+def _eff_declare(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21b.11 (CP-T09-02 (a), AM-F-10, `06_FA_war_lives_in_seats_B` edit 1; A-20): A WAR IS OPENED BY A DECLARATION. A seated muster-holder, through the seat
+    he exercises (`Act.via`, a seat granting `dispatch`), declares war on another faction: the WAR Proposition (`WAR_MOOD`; `subject` the seat's faction,
+    `value` the target, unordered as `at_war` reads it) is minted through `_mint_utterance`, `_eff_utter`'s one mint, and the declarer's own `commit` to it opens
+    in the SAME write (`_commit_edge`, `_eff_commit`'s construction), so a war is never of one man's utterance and no other party (FA-G03). `at_war` asks
+    that this very act made the Proposition (`causing_act` of its creating Event is a `declare`): a hand-built WAR `utter` plus a `commit` is no war.
+    DECLINES (`NO_CHANGE` -> `declare.refused`, nothing minted and no edge opened): the seat has no faction; the target is the seat's own faction or no
+    rostered faction's Proposition (`FACTION_BY_PROP`) or one nobody belongs to; the declarer belongs to no part of his seat's faction or sits in no seat of it
+    that wages (`may_wage`: a war he opens must be one `at_war` can read live); the id was already uttered.
+    G4 -- WHAT IT NAMES: THE PROPOSITION, whole, and the edge. Both always move (absent -> present), and each earns the row's one kind, `war.declared`.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the row and this effect, `at_war` back to B21's `may_wage` conjunct alone.]"""
+    target = _operand(a, "subject")
+    own = seat_faction(w, a.via)
+    pid = f"prop:{a.id}"
+    if (own is None or target == own or target not in FACTION_BY_PROP or target not in w.propositions or pid in w.propositions
+            or a.actor not in faction_q.members(w, own) or not faction_q.members(w, target) or not may_wage(w, a.actor, own)):
+        return NO_CHANGE
+    prop, held = _mint_utterance(w, a.actor, pid, WAR_MOOD, own, "", target)
+    edge = _commit_edge(w, a.actor, pid, a.id)
+
+    def perform() -> None:
+        w.propositions[pid] = prop
+        w.add_tenure(held)
+        w.add_tenure(edge)
+    return Change((Subject.entity("propositions", pid), Subject.edge(edge)), perform)
 
 
 @effect_for("commit")
@@ -1477,8 +1518,9 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     The duplication is real and the fix is not -- this is `create_record`/`issue`/`petition`'s
     `_mint_document` in reverse: that helper is safe to share because all three name the SAME
     literal kind (`hold`) inside it; `commit` and `oblige` do not, so nothing here can be factored
-    without either losing the literal or hand-editing the derived roster back into a second copy."""
+    without either losing the literal or hand-editing the derived roster back into a second copy.
+    B21b.11: `_commit_edge` is the one construction of THIS row's edge, `"commit"` a literal inside it, so `_eff_declare` shares it and the walk still reads
+    `commit`'s openers (`declare` joins them)."""
     prop_id = _operand(a, "subject")
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}:{a.id}"), a.actor, prop_id,
-                "commit", since=w.tick)
+    nt = _commit_edge(w, a.actor, prop_id, a.id)
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
