@@ -559,6 +559,8 @@ class Input:
       * `frames` -- `((channel, tag), ...)`: the wants and convictions a speech here can be framed on;
       * `first_heard` -- B24.26: the act this input is built for answers an item the room heard first (the host's read of the stages its `answers` name,
         `world_q.answers_first`), so its speech faces the `first_heard` term; `False` for every other act. Inside a sitting the term is the answered `Item.first`'s, never this.
+      * `answered_over` -- B24.43: the weight the item the act answers holds over its answer (`world_q.answered_over`), or `None` for an act that answers nothing. The abridged speech
+        is then the sitting's `answer`: its difficulty is `answer_ob` and it meets the `answer` term on this weight. Inside a sitting the weight is the board's own, never this.
 
     `__post_init__` holds the one invariant (A-139) and refuses, each a `ValueError` whose message begins `refused[<key>]`:
     `one_character`, `abridged_self`, `no_weight`, `no_adjudicator`, `nobody_speaks`, `resume_yielded`, and, a resume being
@@ -571,6 +573,7 @@ class Input:
     state: Optional[Sitting] = None
     frames: tuple = ()
     first_heard: bool = False
+    answered_over: Optional[float] = None
 
     def __post_init__(self):
         room, rite, state = self.room, self.rite, self.state

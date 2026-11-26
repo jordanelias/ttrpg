@@ -366,6 +366,26 @@ def answers_first(w: World, a) -> bool:
     return f.refused is None and f.case is not None and any(is_first(w.records[f.case].stages[i]) for i, _ in f.answers)
 
 
+def answered_over(w: World, a) -> Optional[float]:
+    """B24.43 (EVID_B "The answer's odds") -- THE WEIGHT THE ITEM AN ACT ANSWERS HOLDS OVER ITS ANSWER, or `None` for an act that answers nothing (and for one `filings` refuses, which is never drawn). Read through
+    `filings`, the one reader of what an answering act answers and cites, as `answers_first` is. For each stage the act answers: the stage's weight less the heaviest of the act's own cited claims that
+    contradicts it (`contradicts`, the pairing the host's relations read; none, when the answer is a finding that the Record is forged), floored at 0; the greatest of them where it answers several.
+    It is the board's `proceeding._answerable` `over`, read at the speech: the abridged speech's difficulty is `answer_ob`, and it meets the `answer` term on this weight. [ASSUMPTION; Jordan to correct;
+    revert: the plain speech's difficulty -- basis: the answering act's own weights stand in for the board's, which the speech has none of: an answered stage's `weight` is what it was filed at, an answer's is its derived weight before the band's share]"""
+    if a.verb not in FILING_VERBS:
+        return None
+    f = filings(w, a)
+    if f.refused is not None or f.case is None or not f.answers:
+        return None
+    stages = w.records[f.case].stages
+
+    def over(idx: int) -> float:
+        target = stages[idx]
+        answer = max((i.weight for i in f.items if isinstance(target[4], Said) and isinstance(i.ref, Said) and contradicts(i.ref, target[4])), default=0.0)
+        return max(0.0, float(target[5]) - answer)
+    return max(over(idx) for idx, _ in f.answers)
+
+
 def cited_kinds(w: World, a) -> tuple:
     """B24.35 -- THE PROOF KINDS AN ACT CITES: the `matters` members of the items its `cites` file (`filings`, the one reader of what a citing act files), in the order cited, each once; `()`
     for an act that cites nothing and for one that `filings` refuses (it is never drawn). Read by the proceeding's host into `Present.backed`'s `cites` condition."""

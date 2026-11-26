@@ -11,6 +11,8 @@ from __future__ import annotations
 import importlib
 from dataclasses import replace
 
+import pytest
+
 from ..decision import options as OP
 from ..queries import person_q, world_q
 from ..seam.wrappers import sigma
@@ -409,5 +411,78 @@ def test_the_chooser_forms_a_citing_variant_only_on_claims_proof_kind_admits():
         payload = {"subject": G.ACCUSED, CITES_KEY: ops[CITES_KEY], CITED_KEY: ops[CITED_KEY]}
         out = fold_and_witness(w, d, Act(id="sp27", actor=G.ACCUSER, verb="speak", payload=payload))
         assert out and out[0].kind not in refusal and out[0].degree is not None, (seed, [(e.kind, e.degree) for e in out])
+        checked += 1
+    assert checked == 8
+
+
+# ---- B24.43: the hearing is priced one way on every path (EVID_B edits 4 to 6, ADM edit 4) -----------------------------------------------------------------------
+
+def test_believed_and_dealt_proofs_agree_at_case_file():
+    """B24.43 step 1. A hand-built docketed matter, items filed on its case file (distinct cells, the speaker's side). At `evidence_from: case_file` the speaker's BELIEVED record (`odds_of` mode (b), read
+    off the `believed_input` it builds) carries the exhibits he holds a claim of -- a told copy -- and reads his ledger for the matter's proofs not at all (`proofs` 0.0, as the dealt record's): with
+    three of four held his `proof_levels` are the dealt record's over the same three, and the dealt record over all four has one more; at `ledger` (the control) he carries no exhibit and the
+    `proofs` he was handed, as today. FALSIFIER: a believed record that reads the whole file (one more level than he knows), or one that keeps the ledger's proofs beside the exhibits."""
+    from engine.substrate import composition
+    from ..state.carriers import Said
+    from . import test_sc02_reception as R
+    levels = lambda inp: composition.require(sigma.PROOF_LEVELS_ROLE)(inp)
+    stage = lambda n: (1, "filed", "for", "fact", Said(f"s{n}", CELL, 3, 5), 1.0, f"o{n}", "a1")
+    seen = {}
+
+    def read(arm, filed, heard):
+        w, _d = R._judging_world(evidence_from=arm)
+        R._proofs(w, 4)
+        _planted_case(w, R.PARTY, [stage(n) for n in range(filed)])
+        me = w.persons[R.SPEAKER]
+        me.ledger.extend(Claim(f"h{n}", R.SPEAKER, f"s{n}", CELL, 3, 0, "told_by", 5, "own") for n in range(heard))        # the copies a citation told him
+        room = world_q.place_of(w, R.SPEAKER)
+        dealt = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="arrest", subject=R.PARTY, room=room)
+        got, real = [], sigma.believed_input
+
+        def spy(*a, **k):
+            got.append(real(*a, **k))
+            return got[-1]
+        with pytest.MonkeyPatch.context() as mp:                                       # `arrest` is no heard act: the room is handed to `odds_of` as the fold hands a heard one's
+            mp.setattr(sigma, "_rolled_as", lambda *_: ([R.SPEAKER, R.PARTY], R.PARTY, room, None, None, None))
+            mp.setattr(sigma, "believed_input", spy)
+            sigma.odds_of(w, Act(id="b43", actor=R.SPEAKER, verb="arrest", payload={"subject": R.PARTY}), believer=me, believed_room={"reception": 0.0, "proofs": 4.0})
+        assert len(got) == 1 and got[0] is not None, (arm, filed, heard)
+        return dealt, got[0]
+    for arm, filed, heard in (("case_file", 3, 3), ("case_file", 4, 3), ("case_file", 4, 0), ("ledger", 4, 3)):
+        dealt, believed = read(arm, filed, heard)
+        seen[arm, filed, heard] = (levels(dealt), levels(believed), len(believed.exhibits), believed.proofs)
+    assert len(seen) == 4
+    assert seen["case_file", 3, 3] == ((3, 0), (3, 0), 3, 0.0)                         # he heard all that was filed: believed is dealt, and the ledger is read for the matter by neither
+    assert seen["case_file", 4, 3] == ((4, 0), (3, 0), 3, 0.0)                         # an item he never heard: one fewer than dealt
+    assert seen["case_file", 4, 0] == ((4, 0), (0, 0), 0, 0.0)
+    assert seen["ledger", 4, 3][0] == (0, 0) and seen["ledger", 4, 3][1:] == ((0, 0), 0, 4.0)      # the control: no exhibit on either, the proofs he was handed
+
+
+def test_the_citing_variant_cites_a_held_record():
+    """B24.43 step 3 on `build_hearing`, seeds 0 to 7. The accuser holds a petition whose content (his own `content:petition` claim) names the accused, one that names another matter, and a plain text; his `speak`
+    on the accused's matter is formed with a citing variant, and the variant cites the first Record -- beside the claims about the accused he holds -- and neither of the others. The variant folds as a real
+    citing speech (a band, never the refusal) and files the Record on the case file. FALSIFIER: a variant that cites a Record whose content names another subject, or the plain text, or no Record where he holds one."""
+    from ..decision import assemble
+    from ..data.verbs import CITES_KEY
+    from ..state.carriers import Record, Tenure
+    from .test_sc_hearing_admission import G, fold_and_witness
+    refusal, checked = _verbs.VERB_TABLE["speak"].emits_on_refusal, 0
+    for seed in range(8):
+        w, d, case = _filing_world(seed)
+        acc = w.persons[G.ACCUSER]
+        text = [t.object for t in acc.tenures if t.kind == "hold" and t.live and t.object in w.records][0]
+        for rid, about in (("rec_about", G.ACCUSED), ("rec_other", "elsewhere")):
+            w.records[rid] = Record(rid, "Hh", "petition", subject_matter={"terms": about, "to": [G.ACCUSER], "from": G.ACCUSER})
+            w.add_tenure(Tenure(f"t_{rid}", G.ACCUSER, rid, "hold", 0))
+            acc.ledger.append(Claim(f"k_{rid}", G.ACCUSER, rid, "content:petition", person_q.content_value(w.records[rid].subject_matter), 0, "firsthand", 100, "own"))
+        q = world_q.docket_question(w, acc)
+        citing = [c for c in OP.opening_set(acc, assemble(acc, q, 12), q, w.fixtures) if c.verb == "speak" and c.subject == G.ACCUSED and CITES_KEY in c.operands]
+        assert len(citing) == 1, (seed, [c.operands for c in citing])
+        cites = citing[0].operands[CITES_KEY]
+        assert "rec_about" in cites and "rec_other" not in cites and text not in cites and "c_deed" in cites, (seed, cites)
+        out = fold_and_witness(w, d, Act(id="sp43", actor=G.ACCUSER, verb="speak", payload={"subject": G.ACCUSED, CITES_KEY: cites, "cited": citing[0].operands["cited"]}))
+        assert out and out[0].kind not in refusal and out[0].degree is not None, (seed, [(e.kind, e.degree) for e in out])
+        if out[0].degree != "Failure":
+            assert any(st[1] == "filed" and st[4] == "rec_about" for st in w.records[case].stages), seed
         checked += 1
     assert checked == 8

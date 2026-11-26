@@ -602,10 +602,12 @@ def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abr
     Returns `(pool, leverage, record)`; the record's obstacle is composed by `roll.obstacle`, so `Margin.terms` names each term. `over` (B24.06) is
     given for a board move's roll (`answer`, `impugn`): its difficulty is `answer_ob`, and `over` the weight the answered item holds over its answer
     (`TERMS["answer"]`); `None` for every other speech. `first` (B24.26) is given for an `answer` to an item first heard (`TERMS["first_heard"]`); an abridged speech
-    meets it too where the host built the input for an act that answers one (`Input.first_heard`), and no other speech does."""
+    meets it too where the host built the input for an act that answers one (`Input.first_heard`), and no other speech does. So does `over` (B24.43, `Input.answered_over`)."""
     D, r = inp.dials, inp.rite
     c, foe = _d(st.cond)[voice.id], _foe(inp, mover)
     pool = case_pool(inp, voice, ground)
+    if over is None and abridged:
+        over = inp.answered_over    # B24.43: the abridged speech of an act that answers an item is the sitting's `answer` (`Input.answered_over`): difficulty `answer_ob`, the `answer` term on this weight
     if press_on is not None:
         T = press_on
         sig = _lv(D["fit_level"]) * _weight(inp, st, ground) * aim(inp, T, ground, it, tag) + D["room_level"] * heat(inp, st, T) \

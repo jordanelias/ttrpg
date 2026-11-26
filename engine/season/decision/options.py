@@ -511,12 +511,15 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                                 c_ops[CONCLUDED_RANK_KEY] = place
                         out.append(Candidate(verb, subject, operands=c_ops))
                         # B24.27 (EVID_B edit 6; FI_05_B E-1): AND THE SPEECH THAT CITES, where he holds claims about the matter a speech could be admitted on -- the one variant citing
-                        # ALL of them (`held_cites`), each with the `Said` it carries (`CITED_KEY`, copied out of his own ledger now, as `said` is). The variant above, citing nothing, is the
+                        # ALL of them (`held_cites`), each with the `Said` it carries (`CITED_KEY`, copied out of his own ledger now, as `said` is), and the Records he holds whose content names the matter (`held_record_claims`' `subject`, B24.43: a Record's id is cited, its content claim is the reading that names the matter). The variant above, citing nothing, is the
                         # speech as it was. It rides the same score terms; what it costs is the room learning the items and their chain (E-7).
                         if cites_of:
                             held = held_cites(p.ledger, subject)
-                            if held:
-                                out.append(Candidate(verb, subject, operands={**c_ops, CITES_KEY: tuple(c.id for c in held), CITED_KEY: {c.id: cited_said(c) for c in held}}))
+                            if records is None:
+                                records = held_record_claims(p, tick, decay)
+                            kept = tuple(dict.fromkeys(c.subject for c in records if _content_answer(c, "subject") == subject))      # B24.43: the Records he holds whose content names the matter      # B24.43: the Records he holds whose content names the matter
+                            if held or kept:
+                                out.append(Candidate(verb, subject, operands={**c_ops, CITES_KEY: tuple(c.id for c in held) + kept, CITED_KEY: {c.id: cited_said(c) for c in held}}))
     return out
 
 

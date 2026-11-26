@@ -236,3 +236,51 @@ def test_first_heard_adds_the_term_to_the_answer_only():
                 assert ("first_heard" in terms) is (plant_first and answers and ob > 0) and terms.get("first_heard", 2.0) == 2.0, (seed, ob, plant_first, answers, terms)
                 checked += 1
     assert checked == 32 and any("first_heard" in t for _, t in seen) and any(h and "first_heard" not in t for h, t in seen)
+
+
+# ---- B24.43: an answering `speak` is priced as the sitting's `answer` is (EVID_B "The answer's odds") -----------------------------------------------------------
+
+def test_an_answering_speak_meets_answer_ob():
+    """B24.43 step 2, on the real fold, 8 seeds x 3 acts, at `answer_step` 0.25. The accuser's `speak` that ANSWERS a filed stage of the accused's (weight 3.0, answered by his held claim of the same cell) is handed
+    the weight the stage holds over the answer (`world_q.answered_over`: 3.0 less the answer's own derived weight) and its roll's obstacle names `difficulty` at `answer_ob` (not the row's) and `answer` at
+    `answer_step` x that weight; one that answers a stage the answer outweighs (0.5) is at `answer_ob` and names no `answer` term (nothing is owed over it); a plain citing speak of his own is handed `None`,
+    keeps the row's difficulty and names no `answer`. FALSIFIER: an answering speak priced at the row's difficulty, or one that names no `answer` term over a heavier answered item, or a plain speak that names it."""
+    seen, checked = [], 0
+    real = sigma._resolve_proceeding
+
+    def spy(*a, **k):
+        out = real(*a, **k)
+        seen.append((k.get("answered_over"), dict(out.get("terms") or ())))
+        return out
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(sigma, "_resolve_proceeding", spy)
+        for seed in range(8):
+            for planted, kind in ((3.0, "answers"), (0.5, "answers"), (3.0, "plain")):
+                w, d, case = hearing(seed)
+                w.fixtures = w.fixtures.sweep("answer_step", 0.25)
+                answer_ob, row_ob = w.fixtures.get("answer_ob"), sigma._difficulty_term(w.fixtures, {"verb": "speak"})["difficulty"]
+                assert answer_ob != row_ob                                                                     # the two prices differ, so the one named is observable
+                w.records[case].stages.append((1, "filed", "against", "fact", Said(G.ACCUSED, DEED, True, 100), planted, G.ACCUSED, "a0"))
+                acc = w.persons[G.ACCUSER]
+                acc.ledger.append(Claim("c_deny", G.ACCUSER, G.ACCUSED, DEED, False, 0, "firsthand", 100, "own"))
+                payload = {"subject": G.ACCUSED, "cites": ("c_deny",), "cited": {"c_deny": Said(G.ACCUSED, DEED, False, 100)}}
+                if kind == "answers":
+                    payload["answers"] = (len(w.records[case].stages) - 1,)
+                else:
+                    payload.update(cites=("c_deed",), cited={"c_deed": Said(G.ACCUSED, DEED, True, 100)})
+                deny = next(c for c in acc.ledger if c.id == "c_deny")
+                assert person_q.proof_kind(person_q.cited_said(deny)) is None                                    # a denial is no deed: it files as testimony, at the weight his ledger gives the claim (`filings`)
+                answer_w = person_q.teller_weight(acc, w.fixtures, w.tick)(deny)
+                before = len(seen)
+                out = fold_and_witness(w, d, Act(id="ans43", actor=G.ACCUSER, verb="speak", payload=payload))
+                assert len(seen) == before + 1 and out, (seed, planted, kind)
+                over, terms = seen[-1]
+                if kind == "plain":
+                    assert over is None and terms["difficulty"] == row_ob and "answer" not in terms, (seed, over, terms)
+                else:
+                    expect = max(0.0, planted - answer_w)
+                    assert over == expect and terms["difficulty"] == answer_ob, (seed, planted, over, expect, terms)
+                    assert (terms.get("answer") == 0.25 * expect) if expect else ("answer" not in terms), (seed, planted, terms)
+                checked += 1
+    assert checked == 24 and any("answer" in t for _, t in seen) and any(o == 0.0 for o, _ in seen), (checked, seen[:3])
