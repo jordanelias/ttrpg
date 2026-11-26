@@ -74,9 +74,9 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: re-recorded it with the arm on, and B09.99 re-read these): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
 #: RE-READ AT BA1.99, a second time with BA1.02's `manner:` rows held back (the BA1.01, BA1.08 and BA1.12 movers move the arm-off world too; `PYTHONHASHSEED=0`; the earlier values are in `git log`).
-ARM_OFF_PINS = {(0, 1): "ca8c453ff8fa0f432ef2e98324730dfc", (1, 1): "4b786dbb37dbe3b7aeec11b63c0aa8b5", (2, 1): "9c96aa61bcc6e59a2b91c508b120e8b5",
-                (0, 2): "40144b3f055d433eb7779b835469ea9a", (1, 2): "7788763880d34f90b67a7b343736f670", (2, 2): "b3a720f20881a5d092f82c723c8a5ca9"}
-# B24.99 merge with main re-record: the arm-off world on the merged tree (B08, B12a and B24 together; `PYTHONHASHSEED=0`, six readings, each in a fresh process); the earlier values are in `git log`.
+ARM_OFF_PINS = {(0, 1): "db3e8fab56527e19bc13bb2eb2e95ffa", (1, 1): "edac966371e901f52c8f1d57c7aa6d5a", (2, 1): "13b22538c3310d366461199257d5ec5f",
+                (0, 2): "bfd1ea496551c4093039d538827067c0", (1, 2): "62e6645a7cd91cb8ce924d8bc33c9ab8", (2, 2): "02375492f191656010767cea31db2236"}
+# B21b partial re-record on the merge with B08 and B12a (the guards ship on, B21b.02): the arm-off world read once at `PYTHONHASHSEED=0` on the merged tree.
 # B12a.99 re-read, the arm-off world on the merged tree (B08 and this batch together; `PYTHONHASHSEED=0`, six readings): both move the arm-off world too (`_realm_goldens.py`'s B12a.99 paragraph); the earlier values are in `git log`.
 # B08.99 re-record: the arm-off world read at `PYTHONHASHSEED=0` on `ce09a54` (the B08 movers move it too); the S13 base `8142371` read the previous six values.
 # B08.99 second re-record: the close's ruling (`hangs_on` also requires the same counterparty, 44cdf60) moves the arm-off world again; read at `PYTHONHASHSEED=0` on 000d177 plus this edit; the `ce09a54` values are in `git log`.

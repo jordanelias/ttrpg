@@ -846,11 +846,16 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # an `OUGHT` naming the actor and the faction) and no incompatible faction holds him. `commit`'s second conjunct. WORLD-ONLY (below), `names`'
 # reason: who may admit and who belongs where is the world's to decide NOW, and a CELL stem would deposit an `admitted:<actor>` reading into every
 # witness's ledger from each refused `commit`. The person forms the Candidate and the fold refuses it (`commitment.refused`). One stem; no form.
+# ⚠ v12 B21b.01 (IN-36 (a), A-103): `march.nth` and `march.cap`, `declared.votes`/`declared.quorum`'s pair: `scalar_threshold` (form 2) of the count of this
+# season's admitted marches into the subject's territory, WITH the one asked (`march.nth`), `<=` a SECOND READ, the cap (`march.cap`, `Fixtures march_cap_per_territory`).
+# Both read 0 where the cap is 0 or None, so `0 <= 0` holds and nothing is counted. `WorldReader.read` answers `march.nth` through `world_q.marches_into`, the one owner, and `march.cap` from the fixture;
+# WORLD-ONLY (below), `declared.votes`' reason: the count changes with every march a lap logs, so a witness's ledger must not hold one as a belief. No form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "command", "bench", "bench.size", "quorum", "with", "audience", "room",
     "individual", "names", "dispute", "stage_open", "admitted",
+    "march.nth", "march.cap",
 }) | OWN_STATE_STEMS
 
 # THE STEMS A `relation` CELL SPELLS `<stem>:<operand>` (v10 PC-10b): asked of `of` and the named operand,
@@ -894,7 +899,8 @@ WITH_STEM = "with"      # where another person is NOW; named once here for its t
 # fold's own order, never a belief a witness could hold, so WITNESS must not deposit it as a claim into a ledger (`loop/witness.py` skips this set).
 PRECEDENCE_STEM = "precedence"
 WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dispute",
-                              "stage_open", "command", "admitted", PRECEDENCE_STEM}) | SENSITIVITY_STEMS
+                              "stage_open", "command", "admitted",
+                              "march.nth", "march.cap", PRECEDENCE_STEM}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`queries/person_q.py::record`).

@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 521,
-    "uncited": 389,
+    "total": 522,
+    "uncited": 390,
     "of_which_assumption_grade": 9
   },
-  "count": 521,
+  "count": 522,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 45,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 241,
+    "engine.season.settings": 242,
     "engine.season.realm": 9
   },
   "params": [
@@ -6274,6 +6274,17 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.settings.march_cap_per_territory",
+      "name": "march_cap_per_territory",
+      "value": 1,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-620`, swept 0 (control, no cap) / 1 (SHIPPED, IN-36 (a)) / 2",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.settings.sitting_exchanges",
       "name": "sitting_exchanges",
       "value": 1,
@@ -6408,7 +6419,7 @@
     {
       "key": "engine.season.realm.guards",
       "name": "guards",
-      "value": false,
+      "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
       "file": "engine/season/boot/realm.py",

@@ -160,8 +160,12 @@ def test_19c_every_builder_houses_every_person_where_he_stands():
                     ("scarce", scarce.build(0)), ("corpus", C.build_at(case, 0))):
         lives, stands = world_q.residence_of(w), world_q.home_of(w)
         assert len(w.persons) >= 1 and set(lives) == set(w.persons), (name, sorted(w.persons))
-        assert lives == stands, (name, {p: (lives.get(p), stands.get(p)) for p in w.persons
-                                        if lives.get(p) != stands.get(p)})
+        # B21b.02 (the guards ship on): a guard is POSTED at its principal's rung and lives in the town above it (`seat_guards`: "a guard is posted at a door
+        # and lives in the town"), so it is the one person whose residence is the settlement above where he stands; every other person lives where he stands.
+        guards = {p for p in w.persons if p.startswith("cohort_guard_")}
+        assert all(lives[g] == next(r for r in world_q.ancestry(w, stands[g]) if w.rungs[r].kind == "settlement") for g in guards), (name, guards)
+        assert {p: lives[p] for p in lives if p not in guards} == {p: stands[p] for p in stands if p not in guards}, (
+            name, {p: (lives.get(p), stands.get(p)) for p in w.persons if p not in guards and lives.get(p) != stands.get(p)})
 
 
 def _build_dwelling(w, d, at, by, key="wd"):

@@ -9505,8 +9505,10 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     # against their own file rather than folded into the NPC lane's count.
     cast = {pid for pid, p in w.persons.items() if not p.is_cohort}
     n_cast = len(cast)
-    assert c["cohorts"] == len(cohort_rows()) and c["persons"] == n_cast + c["cohorts"], (
-        f"{c['cohorts']} cohorts against {len(cohort_rows())} authored rows")
+    from ..boot.realm import guard_rows            # ED-IN-0317: `guards` ships ON, and a guard is a cohort (`cohorts.yaml: guards`) beside the settlements'
+    authored = len(cohort_rows()) + len(guard_rows())
+    assert c["cohorts"] == authored and c["persons"] == n_cast + c["cohorts"], (
+        f"{c['cohorts']} cohorts against {authored} authored rows")
     assert n_cast == len(load_cases("NPC")), (
         f"{n_cast} persons seated against {len(load_cases('NPC'))} NPC cases. One person "
         "per NPC season loop is the whole specification; ARC cases are situations and are not "

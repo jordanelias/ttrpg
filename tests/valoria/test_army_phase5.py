@@ -14,6 +14,7 @@ from engine.dice_engine import draw
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.tests._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
+from engine.season.boot.realm import COHORT_PREFIX
 from engine.season.data.rosters import WON
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.sides import sides_of
@@ -57,8 +58,13 @@ def _seat(w, who, faction="Valorsmark", rung="r_valoria"):
 
 
 def _governed_cohorts(w, faction):
+    """The settlement cohorts a faction governs: its levy. B21b.02 (`build_realm(guards=True)` by default) seats three guard cohorts
+    (`COHORT_PREFIX + "guard_"`, weight 4/2/2, `oblige`d to a seat, residence in a town): a guard stands at a seat's door, it is not a
+    settlement's people, and its weight is not the shipped 2 this file's arithmetic (30,000 troops, 5 cohorts a unit) is built on, so
+    it is left out of the levy; the Crown's levy stays 15 and Hafenmark's 10."""
     res = world_q.residence_of(w)
-    return sorted(p for p, x in w.persons.items() if x.is_cohort and world_q.holder_faction_of(w, res[p]) == faction)
+    return sorted(p for p, x in w.persons.items() if x.is_cohort and not p.startswith(COHORT_PREFIX + "guard_")
+                  and world_q.holder_faction_of(w, res[p]) == faction)
 
 
 def _crown_levy(w, strategy="advance", troop_type="levy"):
