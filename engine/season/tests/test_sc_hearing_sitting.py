@@ -426,6 +426,31 @@ def test_scripted_player_echoing_the_npc_reproduces_the_auto_hash(monkeypatch):
     assert checked == 2
 
 
+# ---- B24.32: the kernel's `ProofBar` is carried ---------------------------------------------------------------------------------------
+
+def test_swapping_bears_moves_p_carried_over_200_seeds():
+    """KERN_B check 6 (who bears the question): the rite's `bears` is who opens and who carries the burden of putting the matter. On one hand-built bench (one judge, two
+    turns, the other side owing an answer) where both sides rest, the bearer's rest is a charge not pressed, so the room moves against whoever bears: the same 200 keys
+    carry the matter at a lower share when `for` bears than when `against` does, and the closed-form `card_odds` moves the same way. NO SINGLE RESULT IS FIXED by the
+    swap (each arm carries at some keys and fails at others). CONTROL: with `silence: free` no charge is levied and the swap moves nothing (the burden is the whole of what
+    `bears` reaches here). FALSIFIER: a swap that leaves the share, or the card's odds, where it was."""
+    from .test_sc_proceeding_module import P, _bench, _carried, _key, _silent
+
+    shares, odds, free, checked = {}, {}, {}, 0
+    for bears, other in (("for", "against"), ("against", "for")):
+        reply = ((bears, "may"), (other, "must"))
+        inp = _bench("bench", 1, turns=2, bears=bears, reply=reply, silence="refusal")
+        shares[bears] = [_carried(inp, _silent(inp, _key("bears", i))) for i in range(200)]
+        odds[bears] = P.card_odds(inp)
+        loose = _bench("bench", 1, turns=2, bears=bears, reply=reply, silence="free")
+        free[bears] = [_carried(loose, _silent(loose, _key("bears", i))) for i in range(200)]
+        checked += len(shares[bears]) + len(free[bears])
+    assert checked >= 200 and checked == 800
+    assert all(0 < sum(s) < 200 for s in shares.values()), {b: sum(s) for b, s in shares.items()}      # no single result is fixed
+    assert sum(shares["for"]) < sum(shares["against"]) and odds["for"] < odds["against"], (sum(shares["for"]), sum(shares["against"]), odds)
+    assert free["for"] == free["against"]
+
+
 @pytest.mark.slow
 def test_no_constant_decider_wins_on_all_three_hands():
     """GATE 5 (HEAR_B run 5): three constant deciders for the accuser -- always the heaviest `present`, always `argue`, always `rest` -- against the decider the NPC takes (the

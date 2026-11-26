@@ -805,6 +805,41 @@ def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> Worl
     return w
 
 
+# B24.32 -- THE RUN'S SHAPE (KERN_B "What is carried": `narrative.py`'s four arcs, read in the harness over the sitting's own beats). Computed, stored nowhere.
+RUN_SHAPES = ("rout", "reversal", "collapse", "split")
+PLAIN = "plain"                      # a run that is none of the four (the kernel's clear win, nail-biter and deadlock are not carried)
+# [canonical: systems/social_contest/sim/contest/narrative.py ROUT_MARGIN -- a [SEED] there as here, Jordan-calibratable; the lean it reads is `Beat.mood`, the room's lean toward `for` in -1..1]
+ROUT_MARGIN = 0.30
+
+
+def run_shape(exchanges: Sequence, carried: Optional[bool] = None) -> str:
+    """THE SHAPE OF A RUN, one of `RUN_SHAPES` or `PLAIN`, read over `Outcome.beats` (`exchanges`, in order). The room's lean toward `for` at each exchange is that `Beat.mood`
+    (the weighted mean of the deciders' tracks, -1..1); the side who WON is the one the close carried (`carried`: True `for`, False `against`, as the host reads
+    `Outcome.verdicts`), else the side the room leans to at the end. In the order they bind:
+      * `collapse` -- the run ENDS ON A FAULT: its last exchange recorded one (`Beat.fault`), so it was settled by what a side did and not by the merits;
+      * `split`    -- the close went the other way from the room: the room leans to one side at the end (the last `Beat.mood` is not 0) and the close carried the other's;
+      * `reversal` -- the winner CROSSED from behind to ahead in the back half of the run (a crossing at or after the midpoint of the exchanges);
+      * `rout`     -- the winner was NEVER behind at any exchange and the room leans past `ROUT_MARGIN` to him at the end.
+    Anything else is `PLAIN`, and so is a run of no exchanges or one the room ends level. It reads nothing but the beats and the one `carried`; the module records no shape."""
+    beats = tuple(exchanges)
+    if not beats:
+        return PLAIN
+    if beats[-1].fault is not None:
+        return "collapse"
+    leads = [(b.mood > 0) - (b.mood < 0) for b in beats]          # the sign of the room's lean after each exchange
+    room = leads[-1]
+    win = room if carried is None else (1 if carried else -1)
+    if room and win != room:
+        return "split"
+    if not win:
+        return PLAIN
+    if any(leads[k] == win and leads[k - 1] == -win for k in range(max(1, len(leads) // 2), len(leads))):
+        return "reversal"
+    if abs(beats[-1].mood) > ROUT_MARGIN and -win not in leads:
+        return "rout"
+    return PLAIN
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     """`governance_spine` prints the census; `governance_spine play SEED SEASONS {vacancy|order|succession|recall} [--player ID] [--pick I,I,...]` plays a scenario,
     and `governance_spine play SEED SEASONS --world realm` reads the built realm (no situation, no player), both ending in `loop_closed`'s line.

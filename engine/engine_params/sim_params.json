@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 133,
-    "total": 535,
-    "uncited": 402,
+    "total": 536,
+    "uncited": 403,
     "of_which_assumption_grade": 9
   },
-  "count": 535,
+  "count": 536,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 42,
+    "engine.season": 43,
     "mass_battle": 160,
     "social_contest": 32,
     "characters": 5,
@@ -373,6 +373,17 @@
         "recall": 2
       },
       "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/governance_spine.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.ROUT_MARGIN",
+      "name": "ROUT_MARGIN",
+      "value": 0.3,
+      "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/harness/governance_spine.py",
       "note": "",

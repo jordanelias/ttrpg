@@ -9,13 +9,16 @@ seats, the accused `p_mid`, the row `excommunication_deliberation` at its own qu
 """
 from __future__ import annotations
 
+from dataclasses import replace
+
 from engine.dice_engine.dice_engine import DEGREE_ORDINAL, Degree, degree_from_net
 
 from ..data.arrangements import ARRANGEMENTS
 from ..queries import world_q
+from ..queries.inputs import Choice, Item
 from ..seam.wrappers import sigma
 from .test_cr34_declared_disposal import CHURCH, JUDGE_SEAT, ROW, _church_world, _commit
-from .test_sc_proceeding_module import _key
+from .test_sc_proceeding_module import P, _bench, _inp, _key, _p, _rite, _silent, _sit
 from .test_u7_remit import DUKE, PARTY, _determine, _fold, _kinds
 
 SEEDS = 200
@@ -103,3 +106,61 @@ def test_a_declared_determine_resolves_through_the_proceeding_at_no_exchanges():
     assert sorted(dict(out["starts"])) == sorted((*FOR, *AGAINST, PARTY)) and dict(out["starts"])["p_x"] < 0 < dict(out["starts"])["p_low"]
     w2, d2 = _sitting()
     assert _kinds(_fold(w2, d2, _determine("dt2", via=JUDGE_SEAT, actor="p_high")))[0] in ("matter.determined", "matter.undetermined")
+
+
+# ---- B24.32: the kernel's `VoteAtClose` and the armature are carried -----------------------------------------------------------------
+
+def _ballots(out) -> dict:
+    """each seat's ballot as the host grades it: carried is Success or better on his own margin."""
+    return {seat: DEGREE_ORDINAL[degree_from_net(m.net, m.ob)] >= CARRIED for seat, m in out.verdicts}
+
+
+def test_a_seat_can_vote_against_the_board():
+    """KERN_B check 7 (`VoteAtClose`: a ballot per seat that can cross the room): a three-seat `declared` bench (quorum 2) with one exhibit standing FOR the party, 200 seeds,
+    the seats at 0, 0 and -3 (the third has his own commits against). The board is leverage on EVERY seat's close, so each carries more often with it than without; and the
+    third seat votes the other way from the board at some seeds where both others vote with it, and carries less often than either. FALSIFIER: a board that decided the
+    ballot (the third seat never crossing the room), or one that reached no seat (no seat carrying more often with it)."""
+    base = _bench("declared", 3, quorum=2, starts=[0.0, 0.0, -3.0], turns=1, silence="free")
+    exhibit = Item("i1", "record", 3.0, side="for")
+    boarded, bare = replace(base, state=_sit(base, board=((exhibit, "stands"),))), replace(base, state=_sit(base))
+    with_board, without, crossed, checked = dict.fromkeys(("j0", "j1", "j2"), 0), dict.fromkeys(("j0", "j1", "j2"), 0), 0, 0
+    for i in range(SEEDS):
+        out = _silent(boarded, _key("board", i))
+        assert [(it.id, it.side) for it in out.standing] == [("i1", "for")] and len(out.verdicts) == 3     # the board favours `for`; each seat has his own draw
+        said = _ballots(out)
+        crossed += said["j0"] and said["j1"] and not said["j2"]
+        for seat in with_board:
+            with_board[seat] += said[seat]
+            without[seat] += _ballots(_silent(bare, _key("board", i)))[seat]
+        checked += 1
+    assert checked >= 200
+    assert all(with_board[s] > without[s] for s in with_board), (with_board, without)        # the board reaches every seat's close
+    assert crossed > 0 and with_board["j2"] < min(with_board["j0"], with_board["j1"]), (crossed, with_board)
+
+
+def test_a_trait_row_moves_one_seats_ballot_odds_only():
+    """KERN_B check 8 (`armature`: what moves this judge): what a seat holds (`Present.holds`, B24p.02) is his own row of what moves him, read by the `fit` source of a speech
+    framed on it. Two `declared` benches of three alike seats and one speech framed on `t1`, 200 seeds, differing ONLY in what the second seat holds (`t1`, bearing for the
+    speaker): his own track rises and so do his close's odds (`p_carried` at his track), and every other seat's track, odds and ballot margin are the same to the digit.
+    FALSIFIER: a row that moved another seat (a shared reading), or none (a row nothing reads)."""
+    held = (("want", "t1", 0.9, 1.0),)
+
+    def bench(row):
+        seats = [_p(f"j{i}", decides=True, precedence=3 - i, **({"holds": held} if row and i == 1 else {})) for i in range(3)]
+        return replace(_inp([_p("a", "for"), _p("b", "against")] + seats,
+                            _rite(close="declared", quorum=2, turns=1, silence="free", moves=(("for", ("argue", "rest")), ("against", ("rest",))))),
+                       frames=(("want", "t1"),))
+
+    def decide(view, me):
+        o = next(o for o in view.options if (o.ground == "consequence" if me.id == "a" else o.move == "rest"))
+        return Choice(o.move, o.ground, o.item, o.relation)
+    plain, planted, checked = bench(False), bench(True), 0
+    for i in range(SEEDS):
+        a, b = (P.proceed(inp, _key("trait", i), decide=decide) for inp in (plain, planted))
+        ta, tb = dict(a.state.tracks), dict(b.state.tracks)
+        assert tb["j1"] > ta["j1"] and P.p_carried(planted, tb["j1"]) > P.p_carried(plain, ta["j1"]), i       # his own track and his own odds
+        for other in ("a", "b", "j0", "j2"):
+            assert tb[other] == ta[other], (i, other)                                                         # nobody else's
+        assert dict(a.verdicts)["j0"] == dict(b.verdicts)["j0"] and dict(a.verdicts)["j2"] == dict(b.verdicts)["j2"] and dict(a.verdicts)["j1"] != dict(b.verdicts)["j1"]
+        checked += 1
+    assert checked >= 200
