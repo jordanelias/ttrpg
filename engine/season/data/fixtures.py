@@ -81,6 +81,9 @@ class Fixtures:
         return self.get("claim_decay_per_season")
 
     def sweep(self, name: str, value: Any) -> "Fixtures":
+        if name in CLOSED_ARMS and value not in CLOSED_ARMS[name]:      # a swept arm is as closed as the shipped one (`load`): a typo would read the other arm silently
+            raise Forbidden(f"`Fixtures {name}` swept to {value!r}", "data/fixtures.py", needs=f"one of {list(CLOSED_ARMS[name])}",
+                            law="B24.21 -- an arm names where a reading comes from; an unknown name would read the ledger silently")
         f = Fixtures(**self._v)
         f._v[name] = value
         return f
@@ -1722,6 +1725,9 @@ DEFAULT_FIXTURES = Fixtures(
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")
+LEDGER_ARM, CASE_FILE_ARM = EVIDENCE_ARMS      # the two arms by name, so a reader spells neither (the unpacking refuses a third)
+#: The fixtures whose value is a closed arm set, refused where it is shipped (`load`) and where it is swept (`Fixtures.sweep`). The readers name the arm by this tuple's member (`sigma.py::_filed_case`, `_exhibits_of`), never by a literal.
+CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
@@ -1743,9 +1749,10 @@ def load() -> None:
         raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
                         needs=f"roles of the composition registry {sorted(composition.ROLES)}",
                         law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
-    if DEFAULT_FIXTURES.get("evidence_from") not in EVIDENCE_ARMS:
-        raise Forbidden(f"`Fixtures evidence_from` is {DEFAULT_FIXTURES.get('evidence_from')!r}", "data/fixtures.py", needs=f"one of {list(EVIDENCE_ARMS)}",
-                        law="B24.21 -- the arm names where a docketed matter's proofs levels are read from; an unknown name would read the ledger silently")
+    for name, arms in CLOSED_ARMS.items():
+        if DEFAULT_FIXTURES.get(name) not in arms:
+            raise Forbidden(f"`Fixtures {name}` is {DEFAULT_FIXTURES.get(name)!r}", "data/fixtures.py", needs=f"one of {list(arms)}",
+                            law="B24.21 -- the arm names where a docketed matter's proofs levels are read from; an unknown name would read the ledger silently")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",

@@ -4820,7 +4820,13 @@
             "silence",
             "forgery_found",
             "irrelevance"
-          ]
+          ],
+          "levels": {
+            "self_contradiction": 1,
+            "silence": 2,
+            "forgery_found": 0,
+            "irrelevance": 0
+          }
         },
         "proceeding_ends": {
           "source": "V2 p2 \u00a7C.5 -- the three ends of a sitting.",

@@ -1020,6 +1020,21 @@ LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 PROCEEDING_FAULTS = roster("proceeding_faults", ordered=True)
 
 
+def _load_fault_levels(levels: dict, faults) -> dict:
+    """`rosters.yaml: proceeding_faults.levels`: one cell for each `proceeding_faults` member and none for any other, each a whole number of levels (`0` costs none). Refused naming the fault. A function, so a test can plant a bad cell."""
+    missing, extra = sorted(set(faults) - set(levels)), sorted(set(levels) - set(faults))
+    bad = sorted(f for f, n in levels.items() if isinstance(n, bool) or not isinstance(n, int) or n < 0)
+    if missing or extra or bad:
+        raise Unspecified(f"`proceeding_faults.levels` leaves {missing} without a level, names {extra}, and gives {bad} a level that is no whole number >= 0", "rosters.yaml -- proceeding_faults",
+                          needs="one `levels:` cell per fault, a whole number of `fault_step` levels (0 where the fault costs none)",
+                          law="B24.03 -- a fault is a cost on the closing draw; a cell the code lacks would cost it nothing silently, which is a decision made nowhere")
+    return {f: levels[f] for f in faults}
+
+
+#: What each fault costs the side at fault on the closing draw, in `fault_step` levels; handed to the proceeding module in `Input.dials["fault_levels"]` (`sigma.proceeding_dials`).
+FAULT_LEVELS = _load_fault_levels(roster_map("proceeding_faults", "levels"), PROCEEDING_FAULTS)
+
+
 def _roster_rows(name: str):
     """The `rows:` list of a row roster, the one reader (`roster_map`'s refusal for a name the file does not carry)."""
     if name not in _ROSTERS:
@@ -1216,8 +1231,14 @@ AUTHORITIES = roster("authorities", ordered=True)
 AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
                                                   roster_map("role_templates", "by_faction"))
 MATTERS = _load_matters(_roster_rows("matters"), tuple(ISSUE_RUNGS))
+for _ground, _row in GROUNDS.items():      # B24.35: a ground's `backed_by.cites` is a `matters` member (here, where `MATTERS` loads: 04 §A.1, one loader that cross-validates and raises)
+    if (_kind := (_row.get("backed_by") or {}).get("cites")) is not None and _kind not in MATTERS:
+        raise Unspecified(f"ground {_ground!r} is backed by `cites: {_kind!r}`, which is no `matters` member", "rosters.yaml -- grounds",
+                          needs=f"one of {sorted(MATTERS)}", law="a cited kind is a proof kind (`matters`); any other would back nothing, silently")
 #: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated (the one owner: `seam/wrappers/sigma.py::_items_of` and `loop/effects_information.py::_eff_speak` read it).
 RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
+#: The ledger-claim kinds a `matters` row names by its carrier (`Claim:testimony` is `testimony`), read off the roster the same way (`data/verbs.py::CONFESSION_BAND`'s loader reads it).
+CLAIM_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Claim:")}
 
 
 def matter_of_record(kind: str) -> str:

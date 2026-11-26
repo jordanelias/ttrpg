@@ -203,9 +203,9 @@ def test_the_hearing_decider_picks_a_legal_move_by_a_draw(monkeypatch):
 
     axis = "grandiose_humble"
     monkeypatch.setattr(CH, "project", lambda person, shift=0.0, **read: {a: (1.0 if a == axis else 0.0) for a in V.ALIGNMENT})
-    asked, module = [], sigma._proceeding_module()
-    real = module.p_carried
-    monkeypatch.setattr(module, "p_carried", lambda i, track, board=0.0: asked.append(track) or real(i, track, board))
+    from engine.substrate import composition
+    asked, real = [], composition.require(sigma.P_CARRIED_ROLE)
+    monkeypatch.setitem(composition._CACHE, sigma.P_CARRIED_ROLE, lambda i, track, board=0.0: asked.append(track) or real(i, track, board))     # the row the decider reads (F4)
     monkeypatch.setattr(V, "ALIGNMENT", {**V.ALIGNMENT, axis: {**V.ALIGNMENT.get(axis, {}), "choice:hearing_move=argue": 0.3}})
     celled = picks(200)
     assert asked and all(c in menu for c in celled)

@@ -2442,6 +2442,27 @@ def _load_backed_verbs(values) -> frozenset:
 BACKED_VERBS = _load_backed_verbs(roster("backed_verbs"))
 
 
+# B24.23 (CF-E8-4): THE CONFESSION FAMILY -- the event kinds a questioning emits (`verb_table.yaml: interrogate`'s `emits`: `confession.full`, `.made`, `.partial`, `.withheld`) -- AND THE
+# `matters` MEMBER EACH PROOF KIND IS, read by `queries/person_q.py::proof_kind`/`proof_weight`. REFUSED AT IMPORT (04 §A.1: one loader, an absence raises) when the table has no
+# `interrogate` row, the row emits no `confession.*` kind, or `matters` carries no `Record:confession` / `Claim:testimony` row: a missing band would read every withheld confession
+# as full proof (`task_share(None)` is 1), and a missing kind would name no matter.
+def _load_confession_band(table, record_matter, claim_matter, stem: str = "confession", plain: str = "testimony") -> tuple:
+    """`(family prefix, {confession kind: band}, confession's matter, a plain deed's matter)`, checked (above). A function, so a test can plant an absence and watch it refuse."""
+    row = table.get("interrogate")
+    family = stem + "."
+    band = {k: d for d, ks in (row.emits_by_degree.items() if row is not None else ()) for k in ks if k.startswith(family)}
+    if not band or stem not in record_matter or plain not in claim_matter:
+        raise Forbidden(
+            f"the confession family is unread: `interrogate` emits {sorted(band)} at its bands, `matters` carries `Record:{stem}`: {stem in record_matter}, `Claim:{plain}`: {plain in claim_matter}",
+            "verb_table.yaml / rosters.yaml -- matters",
+            needs=f"an `interrogate` row emitting `{family}*` kinds by degree, and `matters` rows carried by `Record:{stem}` and `Claim:{plain}`",
+            law="B24.23 -- a confession is proof by its band's share; a band the table does not give reads full, so absence is a refusal, never full proof")
+    return family, band, record_matter[stem], claim_matter[plain]
+
+
+CONFESSION_FAMILY, CONFESSION_BAND, CONFESSION_MATTER, TESTIMONY_MATTER = _load_confession_band(VERB_TABLE, _rosters.RECORD_MATTER, _rosters.CLAIM_MATTER)
+
+
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own
 # `Person.stance` rows naming it with a valence below zero (`rosters.yaml: own_stance_declines`, read in
 # `opening_set`; `forgive`). Keyed on the row's `writes:`: REFUSED AT IMPORT when a member names a verb the

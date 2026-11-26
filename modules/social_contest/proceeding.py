@@ -9,6 +9,7 @@ precedent): `dials["moves"]` is `{move id: (effect, draw)}` (`rosters.yaml: proc
 (`rosters.yaml: grounds`, `reads` in `item | want | hold | bond`). `want | hold | bond` are also the channel names of `Present.holds` and
 `Input.frames`, and the order of `Present.care` and `.stake`. [ASSUMPTION: `proceeding_dials` does not name them (B24p.04 landed 61 names); B24p.13's
 builder adds the two keys -- basis: the record has no field for a roster and this item may not edit it.]
+`dials["fault_levels"]` is `{fault id: levels}` (`rosters.yaml: proceeding_faults.levels`): what a recorded fault costs the side at fault on the closing draw, in `fault_step` levels; `proceeding_dials` carries it.
 
 DRAWS: every exchange takes `DRAWS_PER_EXCHANGE(G)` normals however it goes, in this order: `view` takes all but the last two, `exchange`
 takes the hold and then the speech. `exchange` asserts its two and, given `mark` (`rng.n` before the view), the whole count; the sitting
@@ -217,9 +218,6 @@ def _voice(inp, mover, it):
 
 
 # ------------------------------------------------------------------ the board (B24.06; HEAR_B "The six moves", "Faults")
-#: What a fault costs the side at fault on the closing draw, in `fault_step` levels: a contradiction one, silence two; `forgery_found` and `irrelevance` cost
-#: what they strike or turn away, not a level. The faults are read by id, as `rosters.yaml: proceeding_faults` says, and only the ones the rite lists (`Rite.faults`) are recorded; none names a winner or a side.
-FAULT_LEVELS = {"self_contradiction": 1, "silence": 2}   # [canonical: HEAR_B "Faults" -- one level against the side at fault, and two for silence]
 STANDS, ANSWERED, STRUCK, WITHDRAWN = "stands", "answered", "struck", "withdrawn"
 #: an `Item`'s status on `Sitting.board`: an answered item stands (its answer failed or halved it); `struck` is what `evidence.standing` struck; `withdrawn` is
 #: what the sitting itself refused at entry (two items of one side disagreeing, the lighter) and `standing` is never shown.
@@ -818,6 +816,14 @@ def accuracy(D, attunement, z) -> float:
     return (1.0 + fmath.tanh((MU_PER_DIE * (attunement - D["attribute_mid"]) + D["read_noise"] * z) / D["read_scale"])) / 2.0
 
 
+def read_sign(D, attunement, sign, rng) -> int:
+    """THE SIGN OF A LEAN AS A READER TAKES IT (B24.29, V2 p2 §C.6): `sign` (+1 or -1) is the true sign, and the reader holds it with chance `(1 + acc) / 2`, `acc` his `accuracy` at the
+    first normal of `rng` (the host's one keyed stream of this reading), the share of the truth `acc` reaches, the rest a guess: the stream's next uniform. A wrong sign is possible at every
+    Attunement, a truer one likelier at a higher. The module owns the outcome and the host keeps the stream and the Attunement. Pure over `rng`."""
+    acc = accuracy(D, attunement, rng.normal(0.0, 1.0))
+    return sign if rng.random() < (1.0 + acc) / 2.0 else -sign
+
+
 def view(inp, st, mover, rng) -> View:
     """what a chooser is shown (V2 p2 §E): own values true, everything else perceived, each number with its own normal. Takes all of the
     exchange's draws but the hold and the speech."""
@@ -912,13 +918,13 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
         moved.append((h.id, d))
         tracks[h.id] += d
 
-    def fault(name, who):                                 # a condition on the board, and a cost on the closing draw (`FAULT_LEVELS`), never a verdict
+    def fault(name, who):                                 # a condition on the board, and a cost on the closing draw (`Input.dials["fault_levels"]`, `rosters.yaml: proceeding_faults`), never a verdict
         if name not in inp.rite.faults:                   # B24.32: a rite lists the faults that apply (`Rite.faults`); one it does not list is not recorded and costs no level
             return
         faults.append((name, who))
         flagged.append(name)
-        if name in FAULT_LEVELS:
-            levels.append((who, FAULT_LEVELS[name]))
+        if inp.dials["fault_levels"][name]:               # a fault that costs no level (`0`) writes none
+            levels.append((who, inp.dials["fault_levels"][name]))
 
     def put(iid, how=None, w=None, band=None):            # one item's row on the board: a status, a weight where it changes, the best band drawn against it
         k = _at(board, iid)
@@ -1036,7 +1042,7 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
                     if s_ not in (STRUCK, WITHDRAWN) and o.origin == tg.origin:
                         put(o.id, None, o.weight / 2.0)
             elif dice_engine.DEGREE_ORDINAL[degree] == FAILURE:
-                levels.append((side, 1))
+                levels.append((side, 1))                # the `impugn` row's own level (a failed impugnment costs its mover one); a fault's levels are `fault_levels`, this one is a move's and no roster column carries it
         else:                                           # the answering act's band is the item's own, and `evidence.standing` reads it: nothing is decided here
             put(tg.id, None, None, dice_engine.DEGREE_LABEL[degree])
     elif effect in ("rule", "adjourn"):                 # the bench's: close on what was said now, or hold the stage to the next sitting (resumable)

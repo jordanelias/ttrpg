@@ -640,13 +640,8 @@ def is_deed(c) -> bool:
     return c.value is True and c.predicate in _verbs.DEED_KINDS
 
 
-# THE FAMILY OF EVENT KINDS A QUESTIONING EMITS (`verb_table.yaml: interrogate`'s `emits`: `confession.full`, `.made`, `.partial`, `.withheld`): a deed claim
-# of one is a confession, not testimony. A family prefix and not a list, so a kind the table adds to it is read as one without an edit here.
-CONFESSION_FAMILY = "confession."
-
-# THE BAND EACH CONFESSION KIND IS EMITTED AT, read off the `interrogate` row's `emits:` (one kind per band), so no kind is spelt twice and a band the table moves is followed.
-_INTERROGATE = _verbs.VERB_TABLE.get("interrogate")
-CONFESSION_BAND = {k: d for d, ks in (_INTERROGATE.emits_by_degree.items() if _INTERROGATE else ()) for k in ks if k.startswith(CONFESSION_FAMILY)}
+# THE CONFESSION FAMILY, THE BAND EACH OF ITS KINDS IS EMITTED AT, and the `matters` member a confession and a plain deed are: loaded and refused-when-absent in `data/verbs.py::_load_confession_band`.
+CONFESSION_FAMILY, CONFESSION_BAND, CONFESSION_MATTER, TESTIMONY_MATTER = _verbs.CONFESSION_FAMILY, _verbs.CONFESSION_BAND, _verbs.CONFESSION_MATTER, _verbs.TESTIMONY_MATTER
 
 
 def proof_weight(c) -> Fraction:
@@ -673,8 +668,8 @@ def proof_kind(c) -> Optional[str]:
     if not is_deed(c):
         return None
     if not c.predicate.startswith(CONFESSION_FAMILY):
-        return "testimony"
-    return "confession" if task_share(CONFESSION_BAND.get(c.predicate)) else None
+        return TESTIMONY_MATTER
+    return CONFESSION_MATTER if task_share(CONFESSION_BAND.get(c.predicate)) else None
 
 
 def impeaches(c, record_id: str) -> bool:

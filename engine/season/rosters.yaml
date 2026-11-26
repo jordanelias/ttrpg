@@ -3900,6 +3900,14 @@ rosters:
       weight and counts the fault. The conditions are read by the sitting's code by id.
       [ASSUMPTION; Jordan to correct: the four ids and the order -- basis: HEAR_B's "Faults" paragraph, which is design intent, not code.]
     values: [self_contradiction, silence, forgery_found, irrelevance]
+    levels:
+      # THE LEVELS EACH FAULT COSTS THE SIDE AT FAULT on the closing draw, in `fault_step` levels, one cell per fault (a fault with none is refused at load,
+      # `data/rosters.py::_load_fault_levels`; `0` is a fault that costs no level), handed to the module through `Input.dials["fault_levels"]` (`sigma.proceeding_dials`).
+      # [canonical: HEAR_B "Faults" -- one level against the side at fault, and two for silence; `forgery_found` and `irrelevance` cost what they strike or turn away.]
+      self_contradiction: 1
+      silence: 2
+      forgery_found: 0
+      irrelevance: 0
 
   proceeding_ends:
     source: "V2 p2 §C.5 -- the three ends of a sitting."

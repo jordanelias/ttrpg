@@ -75,9 +75,10 @@ from engine.dice_engine.sigma_leverage import level as sigma_level, levels_to_ne
 from engine.substrate import composition, descriptors
 
 from ...data.affiliations import AFFILIATION_CEILING
+from ...data.fixtures import CASE_FILE_ARM
 from ...decision.decider import decides_for, make_decider
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
-from ...data.rosters import GRADED_TASKS, STANCE_MAX
+from ...data.rosters import FAULT_LEVELS, GRADED_TASKS, STANCE_MAX
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
                              RUNG_KINDS, matter_of_record)
 from ...data.rosters import ACT_WHEN_KEYS, FACTION_BY_PROP, capability_rows, obstacle_bound, require_use_site, roster, when_holds
@@ -471,10 +472,6 @@ WHEN_BACKING = _bound_to({"cites": _when_cites, "consequence_held": _when_conseq
                           "regard_at_least": _when_regard_at_least}, "capability_when_keys",
                          members=ACT_WHEN_KEYS,
                          law="WGM edit 2 -- a `when` key is evaluated by one function, and a ground names only keys that have one")
-for _ground, _row in GROUNDS.items():
-    if (_kind := (_row.get("backed_by") or {}).get("cites")) is not None and _kind not in MATTERS:
-        raise Unspecified(f"ground {_ground!r} is backed by `cites: {_kind!r}`, which is no `matters` member", "rosters.yaml -- grounds",
-                          needs=f"one of {sorted(MATTERS)}", law="a cited kind is a proof kind (`matters`); any other would back nothing, silently")
 
 
 def _backed(w: Any, hearer: Any, ctx: Any) -> Optional[tuple]:
@@ -714,7 +711,7 @@ def _filed_case(w: Any, room: Optional[str], subject: Optional[str]) -> Optional
     """THE CASE FILE A HEARD ACT'S `proofs` ARE READ FROM, or `None` (B24.21, B24.43): at `evidence_from: case_file`, the file a matter's docket item names where a room hears the act; else `None`, and the ledger
     is read (`world_q.proofs`). The ONE reader of the arm for the single roll, the dealt record (`_read_social_roll`) and the believed one (`odds_of`), so the two cannot read one matter's proofs
     from two places. A verb that proceeds never reaches either: its sitting reads the same file by `case_file_for` (`proceeding_input`; a sitting has no room operand)."""
-    return case_file_for(w, subject) if room is not None and w.fixtures.get("evidence_from") == "case_file" else None
+    return case_file_for(w, subject) if room is not None and w.fixtures.get("evidence_from") == CASE_FILE_ARM else None
 
 
 def _knows(p: Any, ref: Any) -> bool:
@@ -783,7 +780,7 @@ def _heard_on_docket(verb: str) -> bool:
 def _filed_exhibits(w: Any, verb: str, topic: Optional[str], knower: Any = None) -> tuple:
     """THE EXHIBITS A SITTING OF `verb` ON `topic` READS FROM THE CASE FILE (`proceeding_input`): `_exhibits_of` of the file the matter's docket item names, as `knower` knows it
     (`None`: the whole file), at `evidence_from: case_file` for a verb heard on the docket; else `()`."""
-    case = case_file_for(w, topic) if w.fixtures.get("evidence_from") == "case_file" and _heard_on_docket(verb) else None
+    case = case_file_for(w, topic) if w.fixtures.get("evidence_from") == CASE_FILE_ARM and _heard_on_docket(verb) else None
     return _exhibits_of(w, case, known=knower) if case is not None else ()
 
 
@@ -1017,7 +1014,9 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
 # `queries/person_q.py`'s (B04.22: the read the confer term also makes). NOTHING DEPOSITS ONE TODAY, so a believed
 # opposition is `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
-QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"), (PROOF_LEVELS_ROLE, "query"))  # the host's declared need, held at driver construction (`registrar.require_entries`)
+BENCH_READ_ROLE = "social_contest.bench_read"   # the composition row whose module takes the sign of a lean as a viewer reads it (`proceeding.read_sign`)
+P_CARRIED_ROLE = "social_contest.p_carried"     # the composition row whose module gives P(carried) at a track (`proceeding.p_carried`), the chooser's believed chance
+QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"), (PROOF_LEVELS_ROLE, "query"), (BENCH_READ_ROLE, "query"), (P_CARRIED_ROLE, "query"))  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
 
 def _composed_obstacle(inp: SocialContestInput) -> float:
@@ -1489,7 +1488,8 @@ def proceeding_dials(fx: Any) -> Any:
     pool_add, pool_floor = pool_pair(fx)
     d = {name: fx.get(name) for name in PROCEEDING_SETTINGS + HEARING_SETTINGS}
     d.update(pool_add=pool_add, pool_floor=pool_floor, pool_default=fx.get("pool_default"), opposition_rate=fx.get("opposition_rate"),
-             attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING)
+             attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING,
+             fault_levels=FAULT_LEVELS)       # not a setting but a roster the module is handed (`rosters.yaml: proceeding_faults.levels`), as `moves` and `reads` are
     return MappingProxyType(d)
 
 
@@ -1736,19 +1736,17 @@ def public_lean(w: Any, close: str, topic: Optional[str], row: dict) -> Optional
     return tuple(declared_votes_by_member(w, topic, row).items()) if close == "declared" and topic is not None else None
 
 
-def bench_reading(w: Any, viewer: str, seat: str, sign: int) -> int:
-    """B24.29 (V2 p2 §C.6; A-30): THE SIGN OF `seat`'s LEAN AS `viewer` READS IT, `sign` (+1 or -1) the sign the sitting wrote of it. A KEYED DRAW, `H(seed, tick, viewer,
-    "bench_read:<seat>")`, ONE STREAM A READING (`draw_factory`): his accuracy `acc` is the module's own (`accuracy`: his Attunement alone, opposed by nothing, with the stream's
-    first normal for luck), and the sign he holds is the true one with chance `(1 + acc) / 2` -- the share of the truth `acc` reaches, the rest a guess (`_Believed`'s reading
-    of a claim) -- the stream's next uniform. So a wrong sign is possible at every Attunement and a truer one is likelier at a higher. It reads his own Attunement (`w.persons[viewer]`)
-    and the sign given and nothing of the seat; it writes nothing (`loop/witness.py::_sitting_claims` deposits it in his own ledger).
+def bench_reading(w: Any, viewer: str, sitting: str, seat: str, sign: int) -> int:
+    """B24.29 (V2 p2 §C.6; A-30): THE SIGN OF `seat`'s LEAN AS `viewer` READS IT, `sign` (+1 or -1) the sign the sitting `sitting` (its Event id) wrote of it. A KEYED DRAW, `H(seed, tick, viewer,
+    "bench_read:<sitting>:<seat>")`, ONE STREAM A READING (`draw_factory`; two sittings of one tick that share a seat and a viewer read on two streams): the module's `read_sign` (`BENCH_READ_ROLE`) takes
+    it and his Attunement and returns the sign he holds -- the true one with chance `(1 + acc) / 2` (`acc` the module's own `accuracy`, his Attunement alone, opposed by nothing, with the stream's first normal
+    for luck; the rest a guess, as `_Believed`'s reading of a claim), so a wrong sign is possible at every Attunement and a truer one is likelier at a higher. The host keeps the stream and reads his own
+    Attunement (`w.persons[viewer]`); it decides nothing of the outcome and reads nothing of the seat; it writes nothing (`loop/witness.py::_sitting_claims` deposits it in his own ledger).
     [ASSUMPTION; medium; Jordan to correct; basis: the entry's chance `acc` for a two-valued sign; read so, a man below the scale's middle would be wrong more often than right,
     and the gate asks a share above 0.5 at Attunement 2; revert: `d.random() < acc`]"""
-    d = draw_factory(w.world_seed, lambda: w.tick)(viewer, f"bench_read:{seat}")
-    mid = attribute_midpoint()
+    d = draw_factory(w.world_seed, lambda: w.tick)(viewer, f"bench_read:{sitting}:{seat}")
     attunement = (w.persons[viewer].attributes or {}).get(descriptors.ATTRIBUTE_NAMES["attunement"])
-    acc = _proceeding_module().accuracy(proceeding_dials(w.fixtures), mid if attunement is None else attunement, d.normal(0.0, 1.0))
-    return sign if d.random() < (1.0 + acc) / 2.0 else -sign
+    return composition.require(BENCH_READ_ROLE)(proceeding_dials(w.fixtures), attribute_midpoint() if attunement is None else attunement, sign, d)
 
 
 def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[str], topic: Optional[str], effort: int, row: dict,
@@ -2023,7 +2021,7 @@ def _believed_chance(inp: Input, pick: _Pick, option: Any) -> Optional[float]:
         return None
     v = pick.view
     sg = SIDE_SIGN.get(v.side, -1.0)                     # the module's `_sg`: a side that is not `for` reads as `against`
-    carried = _proceeding_module().p_carried(inp, sg * (v.mood * inp.dials["mood_scale"] + option.ev), v.lever)
+    carried = composition.require(P_CARRIED_ROLE)(inp, sg * (v.mood * inp.dials["mood_scale"] + option.ev), v.lever)
     return carried if sg > 0 else 1.0 - carried
 
 
@@ -2032,13 +2030,17 @@ def _npc_decider(w: Any, inp: Input) -> Any:
     `make_decider` pick OVER THE VIEW'S OPTIONS (an item exposed and a person struck are properties of the option, so a move chosen blind first could not avoid a damning
     item): each `Option` is one value whose choice operands are its `hearing_move` (`proceeding_moves`) and its `argument_ground` (`rosters.yaml: grounds`), their cells summed
     into its pursuit, priced by the believed chance after it (`_believed_chance`, on the option's PERCEIVED worth). The stream is `draw_factory(seed, tick)(person,
-    f"hearing:{matter}:{n}")`, `n` the exchange's number. The person is his own, `w.persons[me.id]`, read when he is asked; nothing is written. THE COST TERMS (B24.12)
+    f"hearing:{matter}:{n}")`, `n` the exchange's number. The person is his own, the room's (`w.persons[me.id]` taken at the build), read when he is asked; nothing is written. THE COST TERMS (B24.12)
     ARE NOT HERE. ⚠ FOR A PERSON THIS DECIDES, IT SUPERSEDES `policy`'s `grudge` term (`D["grudge"] * (-_bond(me, foe))`): the automatic policy is not run for him."""
-    fx, base = w.fixtures, draw_factory(w.world_seed, lambda: w.tick)
+    # SNAPSHOT, NOT THE WORLD (04 §A.2: a callable carries no token and no store handle): the clock is fixed for the whole sitting (one call of the entry, inside one tick), and the room's
+    # Persons are the ones the sitting runs on, so what `decide` reads is taken here and `decide` holds no `w`
+    fx, tick = w.fixtures, w.tick
+    base = draw_factory(w.world_seed, lambda: tick)
+    persons = {p.id: w.persons[p.id] for p in inp.room if p.id in w.persons}
 
     def decide(view: Any, me: Any) -> Choice:
         scoped = lambda pid, purpose: base(pid, f"hearing:{inp.matter}:{view.n}:{purpose}")
-        o = make_decider(w.persons[me.id], fx, scoped, key=(HEARING_MOVE_KEY, ARGUMENT_GROUND_KEY), of=lambda o: (o.move, o.ground),
+        o = make_decider(persons[me.id], fx, scoped, key=(HEARING_MOVE_KEY, ARGUMENT_GROUND_KEY), of=lambda o: (o.move, o.ground),
                          odds=lambda pick, o: _believed_chance(inp, pick, o))(_Pick(tuple(view.options), view))
         return Choice(o.move, o.ground, o.item, o.relation)
     return decide
