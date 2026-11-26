@@ -49,7 +49,7 @@ from typing import Any
 from ..queries.inputs import SIDES   # the stdlib-only record leaf: it imports nothing, so `data/` takes no cycle from it
 from . import files
 from .rosters import (
-    AUTHORITIES, DEGREE_BANDS, DIFFICULTY_LEVELS, DISPOSAL_WRITES, GENRES, GROUNDS, INTERPOSITION_KINDS, ISSUE_RUNGS, MATTERS,
+    AUTHORITIES, DEGREE_BANDS, DIFFICULTY_LEVELS, DISPOSAL_WRITES, GENRES, GROUNDS, INTERPOSITION_KINDS, ISSUE_RUNGS, LADDER_RUNGS, MATTERS,
     PROCEEDING_FAULTS, PROCEEDING_MOVES, REMIT_ACTS, RUNG_KINDS, TENURE_KINDS, in_tenths, is_number, load_yaml, roster,
 )
 
@@ -448,6 +448,10 @@ def _load() -> tuple[dict, dict, dict, dict, dict]:
         if row["id"] in kinds:
             raise SystemExit(f"arrangements.yaml: speech_kinds id {row['id']!r} appears more than once")
         kinds[row["id"]] = row
+    if set(kinds) != set(LADDER_RUNGS):
+        raise SystemExit("arrangements.yaml: speech_kinds ids and rosters.yaml: ladder_rungs disagree -- "
+                         f"only in speech_kinds: {sorted(set(kinds) - set(LADDER_RUNGS))}; "
+                         f"only in the roster: {sorted(set(LADDER_RUNGS) - set(kinds))}")
     rites = _load_rites(doc.get("rites"))
     context = _load_context(doc.get("context"))
     disposal = _load_disposal(doc.get("disposal"))
