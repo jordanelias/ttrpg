@@ -202,8 +202,9 @@ def test_said_of_sheet_and_belief_agree_on_every_row_of_a_realm():
     from ..data.rosters import ABSENT_PREDICATE
     from ..queries.person_q import SEEN_PREDICATE
 
-    w = build_realm(0)
-    run(3, 0, w=w)
+    # seed re-picked at B16.99 (the keyed round moved the season): seeds 1/2/3 read 3/5/9 rows against the floor of three; 2 is the first with margin
+    w = build_realm(2)
+    run(3, 2, w=w)
     fx, tick = w.fixtures, w.tick
     assert fx.get("weigh_confidence") is True
     rows = equal = plain_differs = 0
