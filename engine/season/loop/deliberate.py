@@ -341,11 +341,18 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
         return scenes
     out = []
     for sc in scenes:
-        keep = []
+        keep, before_kept = [], True
         for a in sc.acts:
             key = opportunity_key(a.verb, _subject_of(a), a.payload)
-            if key is None or key not in taken:
+            kept = key is None or key not in taken
+            if kept:
+                if not before_kept:
+                    # B08.04: AN INTERACTION HUNG ON THE BAND OF THE ONE BEFORE (`Act.after`, `pack_scenes`) whose predecessor was
+                    # DONE IN AN EARLIER LAP has no band left in this fold to read -- that interaction is not in this scene any
+                    # more -- so it is attempted as a lead is (`None`), never read against another interaction's bands.
+                    a.after = None
                 keep.append(a)
+            before_kept = kept
         if keep:
             sc.acts = keep
             out.append(sc)
