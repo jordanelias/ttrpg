@@ -3563,6 +3563,16 @@ rosters:
       believed chance, `odds_weighting`) and priced by the acts they displace; the best of base and variants is kept.
     values: ["off", "on"]
 
+  journey_verbs:
+    source: >-
+      v12 B12b.04 (CP-T10-01; `09_WR_B_weather` edit 3: "`decision/` prices a `move`/`travel` candidate"): the verbs whose act is a journey over the road.
+      [ASSUMPTION; medium; Jordan to correct; revert: `[move]` -- `migrate` is `move`'s journey and a settling, `verb_table.yaml`: both write through `_relocate`.]
+    note: >-
+      THE VERBS `decision/choose.py::pack_scenes` prices by `data/geography.py::leg_price` when `Fixtures.route_pricing` is `on`: a Candidate of one of
+      them is stamped with its leg (`carriers.LEG`) and its scene costs the leg's points. `march` is not here: an army's march is not a person's
+      journey and `march_postures` own it. At `off` nothing reads the roster's members.
+    values: [move, migrate]
+
   said_slants:
     source: >-
       v9 IN-18 `G3` (telling workplan §5, `ED-IN-0282`): *"slant -- the strongly valenced older

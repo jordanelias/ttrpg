@@ -880,7 +880,7 @@ rows:
     owner:     "the scene (W17)"
     grade:     "assumption"
     default:   "2 — an extended scene spends two of the five"
-    site:      "Fixtures extended_scene_cost, read by Scene.cost in SeasonDriver.deliberate"
+    site:      "Fixtures extended_scene_cost, read by Scene.cost in SeasonDriver.deliberate; B12b.04: Fixtures route_pricing and leg_unit, which price a journey's scene points into the same Scene.cost (decision/choose.py pack_scenes, data/geography.py leg_price)"
     sweep:     [1, 2, 3]
     unblocks:  "the triage S26.3 says the budget exists to create"
     cite:      "⚠ NOT RULED. `PLAN.md` §3.4: \"whether an extended scene costs 2 | **`assumption`, default 2** | same source, same grading\" — the source being `player_agency_v30.md` §6.3, pre-#337 and therefore reference. ⚠ THE SWEEP IS WIDENED FROM PLAN'S `1 · 2` TO `1 · 2 · 3`, AND THE REASON IS STATED RATHER THAN LEFT TO BE FOUND: rule `R2` requires three points, PLAN specifies two, and two of anything cannot separate a control from a trend. `1` IS THE CONTROL — at it an extended scene costs the same as an ordinary one, so `extended` is inert and any verdict that does not move between `1` and `2` is a verdict this cost was never deciding. `3` is the harsher reading. A cost of `0` was considered and rejected: free extension makes the budget unbounded in interactions, which is degenerate rather than informative."

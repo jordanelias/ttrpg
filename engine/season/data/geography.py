@@ -16,10 +16,11 @@ into it (the module only reads it). A test that needs the file re-read sets `_CA
 from __future__ import annotations
 
 import heapq
+import math
 from typing import Optional
 
 from .files import GEOGRAPHY_YAML
-from .rosters import load_yaml, territory_rung_id
+from .rosters import load_yaml, settlement_rung_id, territory_rung_id
 
 _CACHE: Optional[dict] = None
 
@@ -38,26 +39,26 @@ def load() -> dict:
     return geography()
 
 
-def settlement_neighbours() -> dict:
+def settlement_neighbours(geo: Optional[dict] = None) -> dict:
     """B12b.02 (CP-T10-01): `{settlement geography id: tuple of the ids it borders, sorted}`, read off the file's `settlement_adjacency:`
     edges (`from`/`to`) and made UNDIRECTED, as `adjacent_territories` does for the territories. The edge `type:` is not read: what an
-    edge costs is the ground of the settlement it enters (`world_q.route`). Read each call, so a test that swaps `geography()`'s
-    cache sees its own graph; 55 edges."""
+    edge costs is the ground of the settlement it enters (`route_over`). Read each call, so a test that swaps `geography()`'s
+    cache sees its own graph; 55 edges. `geo` is the loaded geography (B12b.04: `leg_price` is handed it); `None` reads `geography()`."""
     out: dict = {}
-    for e in geography().get("settlement_adjacency") or ():
+    for e in (geography() if geo is None else geo).get("settlement_adjacency") or ():
         out.setdefault(e["from"], set()).add(e["to"])
         out.setdefault(e["to"], set()).add(e["from"])
     return {s: tuple(sorted(n)) for s, n in sorted(out.items())}
 
 
-def shortest_path(a: str, b: str, price) -> Optional[tuple]:
+def shortest_path(a: str, b: str, price, geo: Optional[dict] = None) -> Optional[tuple]:
     """B12b.02: THE CHEAPEST PATH from settlement `a` to settlement `b` over `settlement_neighbours()`, as `(path, cost)` -- `path` the
     ids from `a` to `b` inclusive, `cost` the sum of `price(s)` over every settlement ENTERED (`a` itself is not entered). `price(s)` is
     a number, or `None` for a settlement that may not be entered; `None` is returned where `b` cannot be reached without one. A path
     from `a` to itself is `((a,), 0.0)`. DETERMINISTIC: among equal costs the path that sorts first by its ids wins (Dijkstra over
     `(cost, path)` pairs), so no tie breaks on dict order or on a hash. Pure: it reads the graph and `price`, nothing else.
     An id the graph does not hold is no node, and `None` comes back for it."""
-    graph = settlement_neighbours()
+    graph = settlement_neighbours(geo)
     if a not in graph or b not in graph:
         return None
     heap, done = [(0.0, (a,))], set()
@@ -76,6 +77,57 @@ def shortest_path(a: str, b: str, price) -> Optional[tuple]:
             if p is not None:
                 heapq.heappush(heap, (cost + p, path + (n,)))
     return None
+
+
+#: The composition role of the one owner of terrain at a point (`modules/mass_battle/terrain.py::terrain_type_at`, B12b.02); `world_q.QUERY_ENTRIES` registers it.
+TERRAIN_TYPE_AT = "mass_battle.terrain_type_at"
+
+
+def settlement_by_rung(geo: dict) -> dict:
+    """B12b.04: `{settlement Rung id: settlement geography id}` over `geo`'s `settlements:`, the inverse `rosters.settlement_rung_id` documents
+    (read off the file, never off the spelling). The one table `world_q.route` (through `ancestry`) and `leg_price` (a rung it is handed) both resolve a rung by."""
+    return {settlement_rung_id(s): s for s in geo.get("settlements") or ()}
+
+
+def route_over(a: str, b: str, geo: Optional[dict] = None) -> Optional[tuple]:
+    """B12b.02/.04 (CP-T10-01): THE ONE OWNER OF A JOURNEY'S PATH AND PRICE between two SETTLEMENT GEOGRAPHY IDS, `(path of ids, cost)` or `None`
+    where it is blocked. Each step over a `settlement_adjacency` edge costs `terrain_cost_matrix[t]`, `t` the terrain at the coords of the settlement
+    ENTERED (`mass_battle.terrain_type_at`, reached by its `query` role; `plains` where no polygon holds the point), summed by `shortest_path`. A
+    settlement whose ground costs the matrix's `mountain` entry may not be entered. A function of the two ids and `geo`, nothing else: `world_q.route`
+    (which finds each id by `ancestry`) and `leg_price` (which is handed none and finds it in `geo`) both call it. `geo` `None` reads `geography()`."""
+    from engine.substrate import composition        # lazy, as `fixtures.py` does: the loader of the file does not need the module until a journey is priced
+    geo = geography() if geo is None else geo
+    matrix, locate = geo["terrain_cost_matrix"], composition.require(TERRAIN_TYPE_AT)
+    impassable = matrix["mountain"]
+
+    def price(sid: str) -> Optional[float]:
+        cost = matrix[locate(geo["settlements"][sid]["coords"], geography=geo) or "plains"]
+        return None if cost >= impassable else cost
+
+    return shortest_path(a, b, price, geo)
+
+
+def leg_points_of(cost: float, leg_unit: float) -> int:
+    """B12b.02/.04: THE SCENE POINTS a route of `cost` costs, `max(1, ceil(cost / leg_unit))`: the floor is one point. The one formula `world_q.leg_points`
+    and `leg_price` share."""
+    return max(1, math.ceil(cost / leg_unit))
+
+
+def leg_price(a: str, b: str, geo: dict, *, leg_unit: float) -> int:
+    """B12b.04 (CP-T10-01; `09_WR_B_weather` edit 3): THE SCENE POINTS A JOURNEY FROM RUNG `a` TO RUNG `b` COSTS, a pure function of the two rung ids,
+    the loaded geography `geo` and `leg_unit` (the fixture, handed as a keyword): `leg_points_of` over `route_over`'s cost, so it equals
+    `world_q.leg_points` wherever both are asked of settlement rungs. No `World` crosses: this is what `decision/` prices a journey with.
+
+    A rung that is no settlement rung of `geo` (a hearth, a territory, `None`), a journey inside one settlement and a journey `route_over` finds
+    blocked all read the FLOOR, 1: `decision/` cannot walk `ancestry` to the settlement a hearth sits in (AX-2), and whether the road is open
+    stays the fold's read -- a priced journey refused there is `travel.blocked`, how a person learns the road is shut. ⚠ So a person standing
+    in a hearth prices every journey at the floor; `world_q.leg_points` resolves his hearth and does not."""
+    nodes = settlement_by_rung(geo)
+    na, nb = nodes.get(a), nodes.get(b)
+    if na is None or nb is None or na == nb:
+        return 1
+    found = route_over(na, nb, geo)
+    return 1 if found is None else leg_points_of(found[1], leg_unit)
 
 
 _ADJACENT: Optional[dict] = None

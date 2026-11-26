@@ -82,3 +82,64 @@ def test_route_through_mountain_interior_is_none(realm, planted):
     planted("S-002", (800, 150))
     assert world_q.route(realm, S("S-001"), S("S-002")) is None
     assert world_q.leg_points(realm, S("S-001"), S("S-002")) is None
+
+
+# --- B12b.04: the leg's price reaches the chooser -----------------------------------------------------------------------------------------------
+
+def _settler(realm):
+    """A person who stands in a settlement rung (a hearth-dweller prices every journey at the floor: `geography.leg_price`'s docstring) and that rung."""
+    from ..decision.options import containing_rung_of
+    for pid in sorted(realm.persons):
+        where = containing_rung_of(realm.persons[pid])
+        if where in geo_data.settlement_by_rung(geo_data.geography()):
+            return realm.persons[pid], where
+    raise AssertionError("no person of the realm stands in a settlement rung")
+
+
+def _journey_scenes(realm, fx, dest, budget=10):
+    """What the shipped packer returns for `move` to `dest` from a settlement-dweller, through `release` with the loaded geography handed beside `fx`."""
+    from ..decision.choose import release
+    from ..state.carriers import Candidate, Question
+    p, _ = _settler(realm)
+    return release(p, [Candidate("move", dest)], budget, fx, lambda a, b, c: f"{a}:{b}:{c}", Question("q:b12b04", "need", (dest,)), None, geo_data.geography())
+
+
+def test_leg_price_is_pure_and_equals_route_points(realm):
+    """`leg_price` is the world-side `leg_points` without a World: equal over every pair it can resolve (the card's 4 among them), the same twice, and
+    it writes nothing into the geography it is handed."""
+    geo = geo_data.geography()
+    before = copy.deepcopy(geo)
+    assert geo_data.leg_price(S("S-001"), S("S-013"), geo, leg_unit=2.0) == world_q.leg_points(realm, S("S-001"), S("S-013")) == 4
+    checked = 0
+    for b in sorted(geo["settlements"]):
+        want = world_q.leg_points(realm, S("S-001"), S(b))
+        got = geo_data.leg_price(S("S-001"), S(b), geo, leg_unit=2.0)
+        assert got == (1 if want is None else want), b          # a blocked journey reads the floor: the fold, not the price, refuses it
+        assert got == geo_data.leg_price(S("S-001"), S(b), geo, leg_unit=2.0)
+        checked += 1
+    assert checked >= 30 and geo == before
+
+
+def test_off_arm_charges_one_point(realm):
+    """`route_pricing` `off` (shipped): a journey to the far end of the realm is one scene point, as it was, and carries no `leg`."""
+    from ..state.carriers import leg_of
+    _, here = _settler(realm)
+    far = max(geo_data.settlement_by_rung(geo_data.geography()), key=lambda r: world_q.leg_points(realm, here, r) or 0)
+    assert realm.fixtures.get("route_pricing") == "off" and world_q.leg_points(realm, here, far) > 1
+    (scene,) = _journey_scenes(realm, realm.fixtures, far)
+    assert scene.cost(realm.fixtures.get("extended_scene_cost")) == 1 and leg_of(scene.acts[0]) == 1
+
+
+def test_on_arm_prices_a_far_move_above_a_near_one(realm):
+    """`on`: the journey costs its leg's points from the scene budget (the world-side `leg_points` is the oracle); a person who cannot afford it leaves
+    it undone rather than being handed a scene over his remainder."""
+    on, geo = realm.fixtures.sweep("route_pricing", "on"), geo_data.geography()
+    _, here = _settler(realm)
+    ext = on.get("extended_scene_cost")
+    by_points = {r: world_q.leg_points(realm, here, r) for r in sorted(geo_data.settlement_by_rung(geo)) if r != here}
+    near = next(r for r, n in by_points.items() if n == 1)
+    far = max(by_points, key=lambda r: by_points[r] or 0)
+    (near_scene,), (far_scene,) = _journey_scenes(realm, on, near), _journey_scenes(realm, on, far)
+    assert near_scene.cost(ext) == 1
+    assert far_scene.cost(ext) == by_points[far] > near_scene.cost(ext)
+    assert _journey_scenes(realm, on, far, budget=by_points[far] - 1) == []

@@ -1707,7 +1707,7 @@ ARMY_OPTIONS = "mass_battle.army_options"
 #: ED-IN-0306 phase 5c: the commands that raise and organise an army for a faction nobody plays.
 ARMY_PRESET = "mass_battle.army_preset"
 #: B12b.02 (CP-T10-01): terrain at a point, the one owner (`modules/mass_battle/terrain.py::terrain_type_at`), called by `route`.
-TERRAIN_TYPE_AT = "mass_battle.terrain_type_at"
+TERRAIN_TYPE_AT = geo_data.TERRAIN_TYPE_AT       # B12b.04: defined with its reader, `data/geography.py::route_over`
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
                  (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"),
                  (ARMY_ORDER, "query"), (ARMY_OPTIONS, "query"), (ARMY_PRESET, "query"), (TERRAIN_TYPE_AT, "query"))
@@ -2844,7 +2844,7 @@ def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
 
 def route(w: World, a: str, b: str) -> Optional[tuple]:
     """B12b.02 (CP-T10-01): THE ROUTE FROM RUNG `a` TO RUNG `b`, `(path, cost)`, or `None` where the journey is blocked. THE ONE OWNER of a
-    journey's path and price; nothing in the loop calls it while `route_pricing` is `off` (B12b.04 reads it).
+    journey's path and price (the computation is `data/geography.py::route_over`, which `leg_price` calls too); nothing in the loop calls it.
 
     A rung's NODE is the settlement at or above it (`ancestry`, the one walk: the rung itself if it is a settlement, a hearth or Site
     below one reads that settlement). `path` is the tuple of settlement RUNG ids from `a`'s node to `b`'s, both included. Each step
@@ -2856,7 +2856,7 @@ def route(w: World, a: str, b: str) -> Optional[tuple]:
     realm) and a journey inside one settlement cost the FLOOR, `((), 0.0)`, which `leg_points` prices at its minimum of 1.
     `None` too where a node has no edge in the graph. Read-only; traces nothing."""
     geo = geo_data.geography()
-    by_rung = {settlement_rung_id(s): s for s in geo.get("settlements") or ()}
+    by_rung = geo_data.settlement_by_rung(geo)
 
     def node(rung_id: str) -> Optional[str]:
         return next((by_rung[r] for r in ancestry(w, rung_id) if r in by_rung), None)
@@ -2864,14 +2864,7 @@ def route(w: World, a: str, b: str) -> Optional[tuple]:
     na, nb = node(a), node(b)
     if na is None or nb is None or na == nb:
         return ((), 0.0)
-    matrix, locate = geo["terrain_cost_matrix"], _entry(TERRAIN_TYPE_AT)
-    impassable = matrix["mountain"]
-
-    def price(sid: str) -> Optional[float]:
-        cost = matrix[locate(geo["settlements"][sid]["coords"], geography=geo) or "plains"]
-        return None if cost >= impassable else cost
-
-    found = geo_data.shortest_path(na, nb, price)
+    found = geo_data.route_over(na, nb, geo)        # the one owner of the path and its price (`leg_price` calls it too)
     if found is None:
         return None
     path, cost = found
@@ -2885,7 +2878,7 @@ def leg_points(w: World, a: str, b: str) -> Optional[int]:
     found = route(w, a, b)
     if found is None:
         return None
-    return max(1, math.ceil(found[1] / w.fixtures.get("leg_unit")))
+    return geo_data.leg_points_of(found[1], w.fixtures.get("leg_unit"))
 
 
 def closed_uses(w: World, rung_id: str) -> dict:

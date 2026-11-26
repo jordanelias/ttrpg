@@ -1903,12 +1903,12 @@ DEFAULT_FIXTURES = Fixtures(
     first_heard_ob=1,                 # `H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2
     # v12 B12b.02 (CP-T10-01). THE SCENE POINTS A JOURNEY COSTS, PER UNIT OF ROUTE COST: `world_q.route` returns the cost of the cheapest path over the
     # settlement graph (each edge the matrix's price for the ground of the settlement it enters), and a journey's leg points are
-    # `max(1, ceil(cost / leg_unit))` (`world_q.leg_points`). Nothing in the loop prices a journey yet (B12b.04 reads it); a positive number.
+    # `max(1, ceil(cost / leg_unit))` (`world_q.leg_points`). `geography.leg_price` (B12b.04) reads it, handed to the chooser by `boot/chooser.py`, while `route_pricing` is `on`; a positive number.
     # [ASSUMPTION; medium; Jordan to correct; revert: none needed while nothing reads it -- it sizes S-001 -> S-013 at 4 points at 2.0]
     # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- no document gives how much route cost is one scene point, so it is injected and swept 1 / 2 (SHIPPED) / 4; the card proposes 2.0]
     leg_unit=2.0,                     # B12b.02, swept 1.0 / 2.0 (the card's, SHIPPED) / 4.0
-    # v12 B12b.02 (CP-T10-01). WHETHER A JOURNEY IS PRICED BY ITS ROUTE: `off` (SHIPPED, the control) prices nothing -- no caller reads `route` and every
-    # hash is what it was; `on` is the arm B12b.04 and B12b.10 build behind. The same-place rule ships on both arms. The on-arm default does not flip here: B98 sets it.
+    # v12 B12b.02 (CP-T10-01). WHETHER A JOURNEY IS PRICED BY ITS ROUTE: `off` (SHIPPED, the control) prices nothing -- the chooser charges a journey one point and every
+    # hash is what it was; `on` is the arm B12b.04 (the chooser's price: `Scene.cost` adds the leg's points) and B12b.10 build behind. The same-place rule ships on both arms. The on-arm default does not flip here: B98 sets it.
     # A value but `off` and `on` is refused where shipped and where swept (`CLOSED_ARMS`).
     # [ASSUMPTION; medium; Jordan to correct; revert: `off`]
     # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- the card ships route pricing off and rules no flip, so both arms are declared and swept off (the control, SHIPPED) / on]

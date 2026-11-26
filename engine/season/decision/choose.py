@@ -49,12 +49,14 @@ from ..data.matrix import Step
 from ..queries.person_q import (
     believed_capability, cited_support, confliction, deed_align, intent_named, intent_said, ledger_weigh, refused_before, regard, stance_toward,
 )
-from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
+from ..data.fixtures import ROUTE_PRICING_ON
+from ..data.geography import leg_price
+from ..state.carriers import EFFORT, LEG, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 from ..trace_log import TRACE
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
-from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, refusal_tolerance, scruple, seat_of
+from .options import VIOLENT_OPPONENT_VERBS, containing_rung_of, opening_set, project, refusal_tolerance, scruple, seat_of
 # `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
 from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
 from .budget import body_band_penalty
@@ -67,6 +69,8 @@ NPC_EFFORTS = roster("npc_efforts")
 CHOICE_TEMPER = require_use_site("choice_temper")
 # B10.31: the use row that carries a person's own factor on the `risk` term (`nerve`); no row ships, and a site renamed there refuses here at import.
 CHOICE_EXPOSURE = require_use_site("choice_exposure")
+# B12b.04: the verbs `pack_scenes` prices by the leg's points under `route_pricing` `on` (`rosters.yaml: journey_verbs`).
+JOURNEY_VERBS = roster("journey_verbs")
 
 
 _STANCE_SCALE_LOW = 0.2   # [canonical: engine/season/data/fixtures.py §stance_scale (H-464): the gentlest swept value; 0 and STANCE_MAX are the arm's off and its control]
@@ -900,7 +904,8 @@ class Ranked(list):
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                  verbs: Optional[frozenset] = None,
                  draw: Optional[Callable[[str, str], Any]] = None,
-                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list[Act]]:
+                 watch: Optional[Callable[..., None]] = None,
+                 geo: Optional[dict] = None) -> Callable[..., list[Act]]:
     """§F2's decision policy as a FACTORY, so `choose(p, view, sensation, ask_budget)` keeps the
     FOUR-parameter signature §26 states while still reaching its params.
 
@@ -941,7 +946,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         q = getattr(v, "question", None)
         if q is None:
             return []
-        return release(p, rank(p, v), ask_budget(), fx, mint, q, draw)
+        return release(p, rank(p, v), ask_budget(), fx, mint, q, draw, geo)
     return choose
 
 
@@ -1082,7 +1087,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
 
 
 def release(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint, q: "Question",
-            draw=None) -> list:
+            draw=None, geo: Optional[dict] = None) -> list:
     """A person's ORDERED candidates, as the scenes they spend a budget of `n_scenes` on, with any intent
     a telling declares (`declare_intents`). The one owner of that step for both choosers: the automated
     (`make_chooser`, over `make_ranker`'s order) and the player's (`decision/sheet.py`, over the player's).
@@ -1101,7 +1106,10 @@ def release(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint, q: "Qu
     # Telling `T7` (G9): what the person has chosen is known HERE, whole, before any of it runs,
     # so this is where a telling may declare a later chosen act. `intent_disclosure` 0 returns
     # the scenes untouched.
-    return declare_intents(p, pack_scenes(p, ranked, n_scenes, fx, mint, occasion=q), fx, draw)
+    # B12b.04: `geo`, the loaded geography the host hands the chooser beside `fx`, reaches the packer only when `route_pricing` is `on`, so at `off`
+    # (the control) the call is the one it was.
+    legs = {"geo": geo} if geo is not None and fx.get("route_pricing") == ROUTE_PRICING_ON else {}
+    return declare_intents(p, pack_scenes(p, ranked, n_scenes, fx, mint, occasion=q, **legs), fx, draw)
 
 
 def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:
@@ -1183,7 +1191,7 @@ def _payload_of(c: "Candidate") -> Optional[dict]:
 
 
 def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
-                occasion: Optional["Question"] = None) -> list:
+                occasion: Optional["Question"] = None, geo: Optional[dict] = None) -> list:
     """`H-78`: WHICH interactions share one scene. `H-76` says how many; this says which.
 
     `greedy` is the default policy, filling scenes in score order, declared and kept as the control.
@@ -1212,6 +1220,16 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
 
     decide = getattr(ranked, "decide", None)        # a `Ranked`'s: what decided a candidate (`Scene.decided`); `None` of any other list
     forgone_of = getattr(ranked, "forgone_of", None)    # a `Ranked`'s: what his scruple struck (`Scene.forgone`, B10.24); `None` of any other list
+
+    def priced(c: "Candidate") -> "Candidate":
+        """B12b.04 (CP-T10-01): A JOURNEY CANDIDATE CARRIES ITS LEG. With `geo` (handed only under `route_pricing` `on`), a candidate of a `journey_verbs`
+        verb is stamped `LEG` = `leg_price` from where the person is (`containing_rung_of`, read off himself) to his subject, and `Scene.cost` charges
+        the points beyond the first. A leg of one point, any other verb, and every candidate at `off` are returned as they came (no `LEG`: one point,
+        today's price). Pure of the World: the price is the two rung ids, `geo` and `leg_unit`."""
+        if geo is None or c.verb not in JOURNEY_VERBS or not c.subject:
+            return c
+        points = leg_price(containing_rung_of(p), c.subject, geo, leg_unit=fx.get("leg_unit"))
+        return c if points <= 1 else Candidate(c.verb, c.subject, {**(c.operands or {}), LEG: points})
 
     def scene(n: int, chunk: list, lead: Optional["Candidate"] = None) -> "Scene":
         # `lead` is the candidate the Scene's first act was taken from, where `chunk` holds a rebuilt copy of it (the unaffordable effort below)
@@ -1244,7 +1262,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # `H-134`: plus the seat, for a Candidate formed among several.
                      # B08.04: `after` -- the bands of the interaction packed just before it, where it hangs on them (`hangs_on`).
                      [Act(mint(p.id, c.verb, act_key(c.verb, c.subject, c.operands)), p.id, c.verb,
-                          payload=_payload_of(c),
+                          payload=_payload_of(priced(c)),
                           via=seat_of(p, c),
                           after=hangs_on(chunk[i - 1], c) if i else None) for i, c in enumerate(chunk)],
                      # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
@@ -1291,6 +1309,11 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                     c0 = chunk[0]
                     sc = scene(len(out), [Candidate(c0.verb, c0.subject,
                                                     {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})], lead=c0)
+                    if sc.cost(ext) > left:
+                        # B12b.04: a journey whose leg costs more than he has left is LEFT UNDONE -- his triage, not an engine's trim (S26.3: a scene
+                        # over the remainder is the caller's defect, and `deliberate` refuses it). Only a priced journey can reach here: any other
+                        # scene costs the plain point or the extended cost, which the strips above already brought under `left`.
+                        continue
             out.append(sc)
             left -= sc.cost(ext)
         return out
