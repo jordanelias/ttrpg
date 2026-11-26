@@ -2317,6 +2317,24 @@ rosters:
       member here, in this order, and is refused at `season_factor_of` otherwise. The four names are
       `[ASSUMPTION; medium; Jordan to correct]`; the length is the ruling.
     values: [spring, summer, autumn, winter]
+  season_terms:
+    source: "CP-T10-03 (B12b.01), keyed by `seasons_of_year` (ED-IN-0332, D-U1-10: the year has one owner and this row states no length)"
+    open: false
+    note: >-
+      WHAT EACH SEASON OF THE YEAR DOES, one entry per member of `seasons_of_year` (`data/rosters.py::SEASON_TERMS`;
+      the load refuses a row whose keys are not exactly those members, or an entry lacking a number for `yield`,
+      `want`, `illness` or `hardship`). `yield` multiplies `world_q.season_factor_of`'s drawn return (its one owner);
+      `want` scales each `subsistence_weight` entry in `world_q._larder_parts`, rounded to a whole number half up, so
+      REM-50's `hunger`, `demanded` and MATTER's draw read one projection; `illness` is read by CP-T10-05; `hardship`
+      is the weather's obstacle term (read by the spell's draw, B12b.03). SHIPPED AT THE CONTROL: every multiplier 1.0
+      and `hardship` 0, so the calendar runs and moves nothing.
+      THE SWEPT ARM, not shipped, `[ASSUMPTION; medium; Jordan to correct]` (CP-T10-03): winter `yield` 0.25, `want`
+      1.5, `illness` 2.0, every other season 1.0; the `hardship` values are unstated and set by B98 if at all.
+    values:
+      spring: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+      summer: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+      autumn: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+      winter: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99

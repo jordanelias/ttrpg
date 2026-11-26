@@ -940,6 +940,29 @@ HUNGER_BANDS = roster("hunger_bands", ordered=True)
 SEASONS_OF_YEAR = roster("seasons_of_year", ordered=True)   # ED-IN-0332: its length IS the year
 
 
+def check_season_terms(mapping: dict, seasons) -> dict:
+    """B12b.01 / CP-T10-03: `rosters.yaml: season_terms` is keyed by EXACTLY the members of `seasons_of_year` (a key the year lacks is a term nothing
+    reads, a season with no key would index a missing entry) and each entry carries a number for every term the engine reads, `yield`, `want`,
+    `illness` and `hardship` (a `bool` is no number here). A function, so a test can plant a drifted mapping and watch the load refuse."""
+    keys = ("yield", "want", "illness", "hardship")
+    if set(mapping) != set(seasons):
+        raise Unspecified(
+            f"`season_terms` is keyed {sorted(mapping)}, and `seasons_of_year` is {list(seasons)}", "rosters.yaml -- season_terms",
+            needs="one entry per season of the year and no other key",
+            law="D-U1-10 -- the year is `seasons_of_year`; a table keyed off it carries a second year")
+    for season, entry in mapping.items():
+        bad = [k for k in keys if not isinstance(entry, dict) or isinstance(entry.get(k), bool) or not isinstance(entry.get(k), (int, float))]
+        if bad:
+            raise Unspecified(
+                f"`season_terms` entry {season!r} lacks a number for {bad}", "rosters.yaml -- season_terms",
+                needs=f"a number for each of {list(keys)}",
+                law="CP-T10-03 -- each season states every term, so no reader falls back to a default of its own")
+    return {season: dict(entry) for season, entry in mapping.items()}
+
+
+SEASON_TERMS = check_season_terms(roster_map("season_terms", "values"), SEASONS_OF_YEAR)
+
+
 def _check_scale_of_rung(mapping: dict, kinds) -> None:
     """`SCALE_OF_RUNG`'s domain must be EXACTLY `RUNG_KINDS` -- a function and not an inline `if`,
     so the test can plant a drifted mapping and watch it refuse (`CLAUDE.md` §0.1 pt 3: a load

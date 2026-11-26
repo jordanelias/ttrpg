@@ -21,6 +21,7 @@ and `_model_modules()` derives that set from a recursive glob.
 from __future__ import annotations
 
 import functools
+import math
 from collections import namedtuple
 from dataclasses import dataclass, fields, replace
 from fractions import Fraction
@@ -37,7 +38,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    INVESTED, SEASONS_OF_YEAR,
+    INVESTED, SEASONS_OF_YEAR, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
@@ -1491,6 +1492,12 @@ def season_of_year(w: World) -> int:
     return w.tick % len(SEASONS_OF_YEAR)
 
 
+def season_term(w: World, term: str):
+    """B12b.01 / CP-T10-03: the number `rosters.yaml: season_terms` gives `term` (`yield`, `want`, `illness` or `hardship`) for the season of the
+    year `w.tick` falls in. THE ONE READ of the row, so a reader names the term and never the season (`season_factor_of`, `_larder_parts`)."""
+    return SEASON_TERMS[SEASONS_OF_YEAR[season_of_year(w)]][term]
+
+
 def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     """v9 IN-21 / `H-26`: the multiplier on this season's `yield` in `territory`. THE ONE OWNER of the
     term MATTER's yield step scales by.
@@ -1524,7 +1531,7 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
                           law="IN-21: each season of the year holds the equally likely multipliers it draws from")
     draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory,
                                                       "season_factor")
-    return base * draw.pick(outcomes)
+    return base * draw.pick(outcomes) * season_term(w, "yield")
 
 
 def _site_rungs(w: World) -> list:
@@ -1741,7 +1748,11 @@ def _larder_parts(w: World) -> tuple:
                 stores.append((rid, tuple((w.rungs[rid].stores or {}).items())))
         ladders.append((home, tuple(ladder)))
         chains.append((home, chain))
-    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores),
+    # B12b.01 (CP-T10-03, E5 C29): THE SEASON'S `want` TERM IS APPLIED HERE and nowhere else, to each weight, rounded half up to a whole number, so
+    # `demanded`, `hunger` and MATTER's draw (all read `_larder_parts`) cannot disagree; `larder_draw` and `subsist` are unedited.
+    want = season_term(w, "want")
+    scaled = tuple(sorted((kind, math.floor(weight * want + 0.5)) for kind, weight in weights.items()))
+    return (LarderInput(scaled, tuple(eaters), tuple(ladders), tuple(stores),
                         w.fixtures.get("larder_walk")),
             tuple(chains))
 
