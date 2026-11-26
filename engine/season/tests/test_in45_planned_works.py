@@ -30,6 +30,7 @@ from ..data.matrix import WriteClass
 from ..gaps import Unspecified
 from ..boot import realm as boot_realm
 from ..boot.realm import VENUES, _load, build_realm, mint_planned_works, resolve_anchor
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import Act
@@ -136,7 +137,8 @@ def test_the_masters_found_and_build_execute_on_the_planned_works_and_a_stranger
     `set_s_002`); the Steward's `build` stands a `dwelling` Site at the Royal Court at condition 0 (`site.built`,
     the timber consumed out of `set_s_001`). CONTROL: the Steward is not the hearth works' master, the Duke is
     not the dwelling works' -- each is refused on the other's works, and nothing is made."""
-    w = build_realm(0)
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` leaves nothing short and holds no seam in S-001, from which the timber for the Royal Court is paid (`set_s_001` is in T1, whose `ground` row is a harbour alone)
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     d = _tick0(w)
     assert w.rungs["set_s_002"].stores.get("grain", 0) >= 10 and w.rungs["set_s_001"].stores.get("timber", 0) >= 10
     rungs, sites = len(w.rungs), len(w.sites)

@@ -22,11 +22,21 @@ THE RULE (`ED-IN-0246` item 3a, `ED-IN-0255`):
     no weight is not drawn at all, never read as a weight of zero).
   * Per eater in the host's pid order, per weighted kind in kind order: `want = weight x Person.weight`,
     skipped when `<= 0`.
-  * THE WALK: the source is the first rung on the eater's ladder (its home first, then up) holding
-    `> 0` of the kind in the RUNNING view -- what this draw has left, else the rung's own stores. The
-    running view is why two eaters cannot spend the same unit, and how scarcity binds.
-  * `take = min(want, held)`, and the remainder is NOT walked further up. `source None` means no rung
-    on the ladder holds any of that kind: a shortfall, never an error.
+  * THE WALK: the eater's ladder is read home first, then up, and a rung counts only if it holds `> 0`
+    of the kind in the RUNNING view -- what this draw has left, else the rung's own stores. The running
+    view is why two eaters cannot spend the same unit, and how scarcity binds. `LarderInput.walk` says
+    how far it goes (`Fixtures.larder_walk`, `H-528`):
+      - `"first"` (the control; `through` ships since B12a.62's close): the first such rung gives `min(want, held)` and the remainder is NOT walked
+        further up.
+      - `"through"`: each such rung gives `min(want - taken so far, held)` and the walk goes on up the
+        ladder until `want` is met or the ladder ends, so a town with a few units at home reaches the
+        treasury above. The ladder is the eater's own ancestry and nothing else (no rung beside it is
+        reached, `ED-SE-0053`).
+    A cell is `(kind, want, take, source, parts)`: `source` the FIRST rung drawn from (`None` when no rung
+    on the ladder holds any of that kind: a shortfall, never an error), `take` the sum, and `parts` every
+    rung drawn from with its units, `((source, take),)` under `"first"` and `()` where `source` is `None`.
+    The debit (`subsist.py`) is per part, so a draw split across rungs takes from each exactly what it gave.
+    A `walk` outside the two raises, never read as the control.
   * `drawn_under` sums one column (`want` or `take`) over the rows whose home lies in the subtree,
     returned sorted by kind.
 """
@@ -37,6 +47,8 @@ from engine.season.queries.inputs import DrawRecord, DrawRow, LarderInput, Under
 
 def larder_draw(inp: LarderInput) -> DrawRecord:
     """What every housed cohort asks of the larder ladder this season, what it is given, and from where."""
+    if inp.walk not in ("first", "through"):
+        raise ValueError(f"larder_draw walk {inp.walk!r} is neither 'first' nor 'through'")
     if not inp.weights:
         return DrawRecord(())
     ladders = dict(inp.ladders)
@@ -51,20 +63,19 @@ def larder_draw(inp: LarderInput) -> DrawRecord:
             want = wt * e.weight
             if want <= 0:
                 continue
-            src, held = None, 0
+            parts = []        # ((rung, units), ...) in walk order: what each rung gave
             for rung in ladders.get(e.home, ()):
                 held = left.get((rung, kind))
                 if held is None:
                     held = stock.get((rung, kind), 0)
-                if held > 0:
-                    src = rung
+                if held <= 0:
+                    continue
+                part = min(want - sum(u for _, u in parts), held)
+                left[(rung, kind)] = held - part
+                parts.append((rung, part))
+                if inp.walk == "first" or sum(u for _, u in parts) == want:
                     break
-            if src is None:
-                cells.append((kind, want, 0, None))
-                continue
-            take = min(want, held)
-            left[(src, kind)] = held - take
-            cells.append((kind, want, take, src))
+            cells.append((kind, want, sum(u for _, u in parts), parts[0][0] if parts else None, tuple(parts)))
         rows.append(DrawRow(e.pid, e.home, tuple(cells)))
     return DrawRecord(tuple(rows))
 
@@ -77,6 +88,6 @@ def drawn_under(inp: Under) -> tuple:
     for row in inp.record.rows:
         if row.home not in inp.subtree:
             continue
-        for kind, want, take, _src in row.cells:
+        for kind, want, take, _src, _parts in row.cells:
             out[kind] = out.get(kind, 0) + (want if inp.column == "want" else take)
     return tuple(sorted(out.items()))

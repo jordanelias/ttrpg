@@ -390,6 +390,22 @@ def roster_map(name: str, key: str) -> dict:
     return dict(m)
 
 
+def roster_list(name: str, key: str) -> list:
+    """An ORDERED LIST that lives inside a roster row -- `site_endowment.uniform`, whose order is the order its Sites are minted in. `roster_map`'s
+    refusal for a name the file does not carry and for a key that is not the shape asked for, so an absent list cannot answer `[]`."""
+    r = _ROSTERS.get(name)
+    if r is None:
+        raise _absent_roster(name, "returning an empty list would make every lookup silently answer nothing")
+    m = r.get(key)
+    if not isinstance(m, list):
+        raise Unspecified(
+            f"roster {name!r} has no list `{key}:`", "rosters.yaml",
+            needs=f"give {name!r} a `{key}:` list, or read it with roster()/roster_map()/table()",
+            law="rosters.yaml -- the list is the DEFINITION. An absent one cannot be substituted by an empty list "
+                "without inverting the answer it gives")
+    return list(m)
+
+
 # roster-exempt: this is the loader's own grammar -- the two values a `bound:` cell may take -- as `_ptrs`'s key names are; the MEMBERS
 # the cells sort are `rosters.yaml: obstacle_terms`, and no game fact lives here.
 _OBSTACLE_BOUND = ("host", "module")
@@ -921,6 +937,7 @@ LOGGED_KINDS = check_logged_kinds(roster_map("logged_kinds", "values"))
 STANDING_CROSSED = LOGGED_KINDS["standing_crossed"]
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 HUNGER_BANDS = roster("hunger_bands", ordered=True)
+SEASONS_OF_YEAR = roster("seasons_of_year", ordered=True)   # ED-IN-0332: its length IS the year
 
 
 def _check_scale_of_rung(mapping: dict, kinds) -> None:
@@ -2302,23 +2319,28 @@ def load() -> tuple:
 class EndingRow:
     """One `endings` row as the Query reads it. ITS FIELDS ARE THE ROW GRAMMAR -- the keys a row may
     carry beside an annotation (`note`, `*_note`) -- so the schema is written once, here. `holds` is
-    `(selector, value)`."""
+    `(selector, value)`; `settled` is `holds`' optional `settled: true` key (B12a.09), read from INSIDE
+    `holds`, so it is not a key a row carries beside it (`_load_endings` leaves it out of `keys`)."""
     victory: bool
     holds: tuple
     under: str
     source: str
+    settled: bool = False
 
 
 #: This loader's own grammar (`_MODULE_FIELDS`' reason): the two world fields a `holds:` may select
 #: by, and the `under:` token that names no faction.
 ENDING_SELECTORS = ("post", "rung_kind")
+#: The one optional key a `holds:` may carry beside its selector, and only beside `rung_kind` with the value
+#: `true`: the rung must have a `settlement` rung among its descendants (`queries/world_q.py::_ending_edges`).
+ENDING_SETTLED = "settled"
 ENDING_ANY_ONE = "one_faction"
 
 
 def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
     """`{ending id: EndingRow}`, every row refused by name if it is malformed, and the roster refused
     if it marks more than one row `victory` (GD-1)."""
-    keys = [f.name for f in _fields(EndingRow)]
+    keys = [f.name for f in _fields(EndingRow) if f.name != ENDING_SETTLED]
 
     def bad(name, what, needs):
         raise Unspecified(f"`endings` row {name!r} {what}", "rosters.yaml -- endings", needs=needs,
@@ -2336,9 +2358,13 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
         if not isinstance(row.get("victory"), bool):
             bad(name, f"has victory {row.get('victory')!r}", "`victory: true` or `victory: false`")
         holds = row.get("holds")
-        if not isinstance(holds, dict) or len(holds) != 1 or next(iter(holds)) not in ENDING_SELECTORS:
-            bad(name, f"has holds {holds!r}", f"exactly one of {list(ENDING_SELECTORS)}")
-        (sel, val), = holds.items()
+        settled = isinstance(holds, dict) and ENDING_SETTLED in holds
+        picked = {k: v for k, v in holds.items() if k != ENDING_SETTLED} if isinstance(holds, dict) else {}
+        if (not isinstance(holds, dict) or len(picked) != 1 or next(iter(picked)) not in ENDING_SELECTORS
+                or (settled and (holds[ENDING_SETTLED] is not True or "rung_kind" not in picked))):
+            bad(name, f"has holds {holds!r}",
+                f"exactly one of {list(ENDING_SELECTORS)}, plus `{ENDING_SETTLED}: true` beside `rung_kind` only")
+        (sel, val), = picked.items()
         # a list or mapping here is unhashable against `posts` and would raise a bare TypeError
         domain, why, wants = ((posts, "no offices.yaml seat carries", "a post of offices.yaml: seats")
                               if sel == "post" else
@@ -2350,7 +2376,7 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
             bad(name, f"has under {under!r}", f"a `factions` member, or {ENDING_ANY_ONE!r}")
         if not isinstance(row.get("source"), str) or not row["source"].strip():
             bad(name, "names no `source:`", "the GD-1 clause or ruling the row rests on")
-        out[str(name)] = EndingRow(row["victory"], (sel, val), under, row["source"])
+        out[str(name)] = EndingRow(row["victory"], (sel, val), under, row["source"], settled)
     won = sorted(n for n, r in out.items() if r.victory)
     if len(won) > 1:
         raise Unspecified(

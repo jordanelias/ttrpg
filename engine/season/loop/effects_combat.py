@@ -932,7 +932,13 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     DECLINES: a subject that is no person (dead, or never one) is `NO_CHANGE` -> `tend.refused`; a body
     already whole is written to itself, which the gate reads as no change (`NoOpReceipt`) -> `tend.refused`.
     Two tenders on one person in one fold: the first restores him, the second moves nothing and is refused
-    -- the outcome is the same whichever arrives first."""
+    -- the outcome is the same whichever arrives first.
+
+    B12a.69 (U5d_WR §3, F-WR-23) -- A TEND IS WITNESSED: its subject carries the `(who, "body", v)` Observation `_eff_kill` writes (`body_observed`),
+    `v` the MENDED body written (`whole`, a marked man's ceiling), never `p.body` read here (the pre-tend body). It rides the
+    `body.tended` Event, which WITNESS deposits to the tender, so his claim of the wound is superseded by a claim of the mended
+    body (`world_q.wounded_with`: newest claim wins) and the healed man stops drawing `tend`. A refused tend (no person; a body already
+    whole, `NoOpReceipt`) writes nothing and so deposits nothing. MATTER's recovery writes none yet (CP-T10-04)."""
     who = _operand(a, "subject")
     p = w.persons.get(who)
     if p is None:
@@ -943,7 +949,7 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     def perform() -> None:
         p.body = whole
-    return Change((Subject.entity("persons", who, fields=("body",)),), perform)
+    return Change((Subject.entity("persons", who, fields=("body",), observed=body_observed(who, whole)),), perform)
 
 
 @effect_for("train")

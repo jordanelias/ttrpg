@@ -26,8 +26,8 @@ from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_s
 from ..state.ids import H
 
 from .effects_information import _mint_document, _seat_rung
-from .effects_shared import (_exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _share, _shift,
-                             effect_for)
+from .effects_shared import (_decline_amount, _exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled,
+                             _share, _shift, effect_for, whole_amount)
 
 
 def _provisional(res: "Resolution | None") -> bool:
@@ -591,9 +591,10 @@ def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> C
     requisitions on one larder, and the second finds it short and emits `requisition.refused`.
 
     DECLINES (`NO_CHANGE` -> the row's `write` clause, `requisition.refused`): a side that is no rung --
-    the hand-built act that skipped the precondition, `_eff_transfer`'s branch -- and, through G4
-    rather than a line here, a requisition of a seat's own rung into itself (both sides one store: nothing
-    moves, `NoOpReceipt`), or of `0`.
+    the hand-built act that skipped the precondition, `_eff_transfer`'s branch -- an amount that is not a
+    whole number of units, at least one (`whole_amount`, H-306: a requisition of `0`, of a fraction or of a
+    negative, after the band's share), and, through G4 rather than a line here, a requisition of a seat's own
+    rung into itself (both sides one store: nothing moves, `NoOpReceipt`).
 
     G4 -- WHAT IT NAMES: BOTH RUNGS, requisitioned first, each whole and each earning `requisition.taken`, as
     `_eff_transfer` names its two. NOT a Tenure write, so F3 asks nothing of it: the seat's authority
@@ -611,5 +612,7 @@ def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> C
         return NO_CHANGE
     # B07.02 (18-A edit 5): "the share of `amount` taken" is the band's (`_scaled`; no band, or a full one, takes it all).
     amount = _scaled(amount, res) if isinstance(amount, int) else amount
+    if not whole_amount(amount):    # H-306: a requisition of 0 (or a band's share of it floored to 0) is declined here
+        return _decline_amount("requisition", amount)
     return Change((Subject.entity("rungs", src.id), Subject.entity("rungs", dst.id)),
                   lambda: _shift(src, dst, kind, amount))

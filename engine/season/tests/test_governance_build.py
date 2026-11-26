@@ -2553,8 +2553,10 @@ def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
     shape `dwelling` already has: one per unit, `SITE_YIELD` never keys it, `wear_per_season`/
     `band_floors` both ship it a control-arm `0`/`{}}`). A dwelling or garrison id that collided
     with a producing Site's would overwrite it, and the first count would drop."""
-    from ..data.fixtures import SITE_YIELD
-    w = build_realm(0)
+    from ..data.fixtures import DEFAULT_FIXTURES, SITE_ENDOWMENT, SITE_YIELD
+    # B12a.99: the shipped realm is `ground` since B12a.54 (a harbour or a seam in some settlements, a `field` in others, none in the rest); the census this test derives is the
+    # `uniform` arm's (one of each producing kind in every settlement), so the world is pinned to it (the arm is named in `SITE_ENDOWMENT["uniform"]` below).
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     # ED-IN-0310: the Altonian settlement (`foreign_cast`) sits outside every realm rung and the realm mint gives it no Site of any kind (MEASURED
     # at seed 0, asserted below as a control), so it is not counted here. Schoenland's settlement is outside the realm too and IS minted its Sites,
     # in both arms, so it stays in the count: this excludes the Altonian town by name, not "everything outside the realm".
@@ -2563,7 +2565,8 @@ def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
     alt = {f"set_{_slug(p['settlement']['code'])}" for p in FOREIGN_CAST.values()}
     settlements = [r for r in w.rungs.values() if r.kind == "settlement" and r.id not in alt]
     outside = [r for r in w.rungs.values() if r.id in alt]
-    producing = [k for k in sorted(SITE_YIELD) if SITE_YIELD[k]]
+    # B12a.51: the producing Sites a realm mints are its `endowment_mode`'s list (`uniform`, shipped: `harbour`, `seam`), not every `SITE_YIELD` kind (`field` is the `ground` arm's).
+    producing = [k for k in SITE_ENDOWMENT["uniform"] if SITE_YIELD[k]]
     assert settlements and producing, "fixture: no settlement or no producing kind"
     others = Counter(s.kind for s in w.sites.values() if s.kind not in ("dwelling", "garrison"))
     assert others == Counter({k: len(settlements) for k in producing}), others
@@ -2640,13 +2643,17 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     condition) is UNCHANGED, and the new dwelling questions are the ORDINARY `claim_landed` shape,
     sourced from a real resident's real ledger claim about their own hearth's dwelling -- not a
     new channel, a new referent kind, or a broadcast."""
+    from ..data.fixtures import DEFAULT_FIXTURES
     from ..harness import populated
     from ..loop import driver
 
     heads = {False: [], True: []}       # v10 REM-22: the question each delivery puts FIRST, per arm
+    # B12a.99: pinned to the `uniform` endowment arm (the realm the act counts below were measured at). Under the shipped `ground` (B12a.54) with `granary_seasons` 4 (B12a.55) the
+    # two arms read (408, 408) at seed 0, one season, so the act-count parting this test polices (the last assertion) is not observable there; at `uniform` they part, (392, 391) (the pin below).
+    uniform = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
 
     def season(strip):
-        w = build_realm(0)
+        w = build_realm(0, fixtures=uniform)
         if strip:
             for s in _dwellings(w):
                 del w.sites[s.id]
@@ -2675,7 +2682,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # v9 IN-45 `migrate`: WHERE EACH PERSON STOOD WHEN HE WAS ASKED, not only where the season left
     # him -- a computed `migrate` now executes in this season (`aperture 1 0`: 1), and a person asked
     # about his hearth's dwelling before he settled elsewhere stands somewhere else at the end.
-    home_at_build = world_q.home_of(build_realm(0))
+    home_at_build = world_q.home_of(build_realm(0, fixtures=uniform))
     scale = w.fixtures.get("condition_scale")
     assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
     assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
@@ -2932,7 +2939,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
     # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
     # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (392, 391), (      # B08.99 second re-record (the close's counterparty ruling): (377, 376) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B08.99 re-record: (392, 391) -> (377, 376) (`_realm_goldens.CENSUS[(0, 1)]` records the 377); B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
+    assert (out["acts"], cout["acts"]) == (392, 391), (      # B12a.99: at the `uniform` arm the merged tree (B08 and this batch) reads (392, 391), as B08.99 did, so the pin stands; the shipped `ground` arm reads (408, 408) and parts nothing; B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what

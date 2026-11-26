@@ -59,7 +59,7 @@ from ..harness import probes as P
 from ..harness import scarce as S
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import world_q
-from ..state.carriers import Claim, Person, Question, Rung, Tenure, View
+from ..state.carriers import Act, Claim, Person, Question, Rung, Tenure, View
 from ..state.ids import H, draw_factory
 
 WEIGHTS = DEFAULT_FIXTURES.get("subsistence_weight")
@@ -416,3 +416,63 @@ def test_19d_the_next_season_delivers_more_where_the_steward_holds_the_town():
     c_after = control["seasons"][2]["delivered"]
     assert sum(t_after.values()) > sum(c_after.values()) == 0, (t_after, c_after)
     assert not [t for s in control["seasons"] for t in s["transfers"] if t["claim_sourced"]]
+
+
+# ======================================================================================
+# AN AMOUNT IS A POSITIVE WHOLE NUMBER (H-306; 07_SE_kernel_repairs A)
+# ======================================================================================
+
+@pytest.mark.parametrize("value", [-5, 0, 1, 2.5, True])
+def test_h306_only_a_whole_positive_transfer_amount_moves_stock(value):
+    """Through the real fold on `scarce.build`: only `1` moves stock; every other value emits
+    `transfer.refused` and leaves every rung's stores and the content hash equal to the no-act arm.
+    Today `-5`, `2.5` and `True` move stock (H-306)."""
+    def at_resolve():
+        w = S.build()
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        w.step = Step.RESOLVE
+        return w, d
+
+    control, _ = at_resolve()
+    w, d = at_resolve()
+    out = d._fold(w, mint_token(w, WriteClass.ACTS), Act(
+        id="tr_whole", actor=S.STEWARD, verb="transfer",
+        payload={"subject": S.GRANARY, "from": S.GRANARY, "to": S.HUNGRY, "kind": "grain",
+                 "amount": value}))
+    kinds = [e.kind for e in out]
+    stores = {r: dict(w.rungs[r].stores) for r in (S.GRANARY, S.HUNGRY)}
+    before = {r: dict(control.rungs[r].stores) for r in stores}
+    if value == 1 and value is not True:
+        assert "transfer.made" in kinds and "transfer.refused" not in kinds, kinds
+        assert stores != before
+    else:
+        assert "transfer.refused" in kinds and "transfer.made" not in kinds, (value, kinds)
+        assert stores == before, value
+        assert w.content_hash() == control.content_hash(), value
+
+
+# ======================================================================================
+# 4 -- THE WALK (B12a.53, H-303): the remainder goes on up the ladder under `larder_walk` `through`
+# ======================================================================================
+
+def _h303_world(walk: str):
+    """H-303's pair: a cohort of 6 wanting one grain each, 1 grain at home, 1,000 on the rung above."""
+    w = S.build(fixtures=DEFAULT_FIXTURES.sweep("subsistence_weight", {"grain": 1}).sweep("larder_walk", walk))
+    w.persons[S.POPULACE].weight = 6
+    w.rungs[S.HUNGRY].stores = {"grain": 1}
+    w.rungs["terr_march"].stores = {"grain": 1000}
+    return w
+
+
+def test_h303_first_takes_one_through_takes_six_and_splits_the_debit():
+    for walk, take, home_left, above_left in (("first", 1, 0, 1000), ("through", 6, 0, 995)):
+        w = _h303_world(walk)
+        (_, cells), = world_q.subsistence_draw(w).values()
+        assert cells["grain"] == (6, take, S.HUNGRY), (walk, cells)
+        assert world_q.delivered(w, S.HUNGRY) == {"grain": take}
+        _matter(w)
+        assert w.rungs[S.HUNGRY].stores.get("grain", 0) == home_left, walk
+        assert w.rungs["terr_march"].stores["grain"] == above_left, walk
+        # the two debits sum to the take: no matter made or lost by the split
+        assert 1001 - w.rungs[S.HUNGRY].stores.get("grain", 0) - w.rungs["terr_march"].stores["grain"] == take, walk

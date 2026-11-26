@@ -187,10 +187,11 @@ scales:
       `verb_table.yaml` (`found`, `build`, `work`, `tend`, `restore`, `requisition`);
       `references/module_contracts.yaml` declares no `domain_actions` or `settlement_economy`
       contract (both retired: A-10, ED-IN-0232). The loop has `Site`, `stores` and `condition`; `found`, `build`, `restore` and
-      `work` are declared in `verb_table.yaml`; none of the four executes in the shipped realm: `restore` forms only
-      on a Site below a floor and no Site crosses one (wear-0 dwellings and garrisons; no wound, H-235/H-236),
-      and `found`, `build` and `work` are formed and refused because no computed act declares a works
-      (`H-165`); no domain-action mechanism exists.
+      `work` are declared in `verb_table.yaml`. READING `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0`
+      @39ef2916f, realm block, two seasons: `restore` formed 1, attempted 0; `work` formed 1, attempted 0; `found`
+      formed 11, attempted 0; `build` formed 11, attempted 1, refused 1 (`clause:exists`); `migrate` attempted 3,
+      executed 0, refused 2; `transfer` attempted 41, executed 3, refused 38. Of the six, only `transfer` executes;
+      no computed act declares a works (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
     conjunct:  R-04.c7
