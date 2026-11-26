@@ -148,7 +148,7 @@ lane_ids:
     GO: { name: "Godot",               next_free: 10 }   # ED-GO-0002 = Jordan's 2026-10-09 engine-version ruling. LANE ACTIVATED 2026-08-14 (Jordan ruling; ED-GO-0001 = the activation). Was next_free 1 with no ED ever allocated, which read as neglect rather than dormancy. Detail: registers/handoffs/HANDOFF_GO.md
     # SE number 0056 RESERVED 2026-10-15 at the fold of v9 B-X (SE-06's cohort temperaments; written only if its ask-then is answered yes and it is built).
     # SE next_free 65: the v12 plan's id-block table pre-allocates the SE ED blocks up to here (workplans/valoria_master_workplan_v12_part2_cont2.md, section 9).
-    SE: { name: "Settlements",         next_free: 65 }  # ED-SE-0055 allocated 2026-09-25 (the 24d dwelling-Site substrate ruling), ED-SE-0054 allocated 2026-09-19 (Jordan accepts P1/P3/P4 for build). Narrative: id_reservations_history.md#se
+    SE: { name: "Settlements",         next_free: 66 }  # ED-SE-0065 allocated 2026-11-26 (B12a's five calls for Jordan). ED-SE-0055 allocated 2026-09-25 (the 24d dwelling-Site substrate ruling), ED-SE-0054 allocated 2026-09-19 (Jordan accepts P1/P3/P4 for build). Narrative: id_reservations_history.md#se
 
 wiring_status:
   file_live: true

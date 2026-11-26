@@ -23,10 +23,10 @@ from collections import Counter, defaultdict
 from ..data import cast, files
 from ..data import goals as goals_data
 from ..queries.person_q import BOND_STEM, DUTY_TAKEN, SELF_STEM, holds_self_key, known_persons
-from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
-                               home_of as home_of_q, landing_floor, members)
+from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, demanded, enclosing_territory,
+                               home_of as home_of_q, landing_floor, members, subsistence_draw, treasury_above)
 from ..gaps import Forbidden, Unowned, Unspecified
-from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
+from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD, endowment_for
 from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
@@ -976,6 +976,34 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
         w.add_tenure(Tenure(f"t_{pid}_oblige", pid, oid, "oblige", 0))
 
 
+def seed_stores(w: World, geo: dict) -> None:
+    """B12a.52 (`07_SE_treasury_granary_B` R-SE-28, §4 (b)): THE STOCK A `ground` WORLD STARTS WITH, two world-gen writes before any season (the
+    precedent is `harness/scarce.py`'s planted treasury). The starting value is the centre of A-50's bounded draw at zero width (B39).
+      * each settlement's `stores`: one season of its Sites' base yield (`SITE_YIELD`, at full condition and factor 1);
+      * the treasury above each settlement (`world_q.treasury_above`, the nearest rung above it where an Office sits; None where no seat
+        stands on its ladder, as Schoenland's, which then seeds nothing): `granary_seasons` x `max(0, want_k - yield_k)` per eaten kind, where `want_k` is what the cohorts
+        under the settlement ask of the larder (`world_q.demanded`) and `yield_k` its Sites' base yield. `granary_seasons` 0 (the control) writes
+        no key."""
+    draw = subsistence_draw(w)
+    seasons = w.fixtures.get("granary_seasons")
+    for sid in geo["settlements"]:
+        srid = f"set_{_slug(sid)}"
+        made: dict = {}
+        for site in sorted(w.sites.values(), key=lambda s: s.id):
+            if site.rung == srid:
+                for k, n in (SITE_YIELD.get(site.kind) or {}).items():
+                    made[k] = made.get(k, 0) + n
+        if made:
+            w.rungs[srid].stores = dict(made)
+        t = treasury_above(w, srid)
+        if t is None:
+            continue
+        for k, want in demanded(w, srid, draw).items():
+            owed = seasons * max(0, want - made.get(k, 0))
+            if owed:
+                w.rungs[t].stores = {**(w.rungs[t].stores or {}), k: (w.rungs[t].stores or {}).get(k, 0) + owed}
+
+
 # THE KEYS OF ONE `venues.yaml: planned_works` ROW -- a closed set, so a misspelt key REFUSES rather than
 # reading as an absent one (the loader-refuses-per-data-family rule `cohort_rows` and `guard_rows` keep).
 PLANNED_WORKS_FIELDS = frozenset({"id", "kind", "plan", "at", "rung", "master", "terms"})
@@ -1292,8 +1320,13 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
                 guards: bool = True, acquaintances: bool = True, cast_attributes: bool = True,
-                fixtures=None) -> World:
+                fixtures=None, wound: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `wound` (B12a.07) mints the Calamity's source: the one Site `valoria_geography_v30.yaml` T15's `wound:` row names
+    (`kind`, `condition`), on `terr_T15`, its id built as the producing Sites' are (`s_` + the place's key + `_` + kind).
+    `False` (the default) is the CONTROL ARM: no row is read and the realm is byte-identical to the build without it.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the row] The row's kind, `harbour`, is a kind the roster holds.
 
     `fixtures` (None: `DEFAULT_FIXTURES`) is the injection point of a sweep: `fixtures=DEFAULT_FIXTURES.sweep("generated_attribute_range", (2, 2))` builds the world H-856's control reads.
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
@@ -1482,12 +1515,17 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # -- a site per producing kind, at the settlement ---------------------------
     # Same rule `build_at` uses, one layer up: `work` needs somewhere to be done, and a world whose
     # sites are all in one place is the co-location defect again by another route.
+    # B12a.51 (CP-T08-02): WHAT A PLACE IS ENDOWED WITH is `data/fixtures.py::endowment_for`'s answer -- one Site per entry of the settlement's list
+    # under `endowment_mode`. The id is `s_<slug>_<kind>` for the first Site of a kind and `s_<slug>_<kind>_<n>` (n the 1-based ordinal) for the
+    # rest, so the `uniform` arm (`harbour`, `seam`) mints today's ids byte for byte. (Looping every `SITE_YIELD` kind would mint a `field` at
+    # every settlement once the table has the row.)
     for sid in geo["settlements"]:
-        for k in sorted(SITE_YIELD):
-            if SITE_YIELD[k]:
-                s_id = f"s_{_slug(sid)}_{k}"
-                w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
-                                     condition=w.fixtures.get("condition_scale"))
+        minted: dict = {}
+        for k in endowment_for(w.fixtures, sid, geo["settlements"][sid]["territory"]):
+            minted[k] = minted.get(k, 0) + 1
+            s_id = f"s_{_slug(sid)}_{k}" if minted[k] == 1 else f"s_{_slug(sid)}_{k}_{minted[k]}"
+            w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
+                                 condition=w.fixtures.get("condition_scale"))
 
     # -- a dwelling per hearth, at the hearth (`ED-SE-0055`) -----------------------------------
     # `ED-SE-0051`'s `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and the
@@ -1525,6 +1563,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         s_id = f"s_{_slug(sid)}_garrison"
         w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", "garrison",
                              condition=w.fixtures.get("condition_scale"))
+
+    # -- the wound (B12a.07; `wound=True` only) ---------------------------------------------------
+    # One Site per province whose geography row carries a `wound:` (Askeheim, T15, at shipped content). Off, nothing here runs.
+    if wound:
+        for code in sorted(c for c, p in geo["provinces"].items() if "wound" in p):       # the rows the geography file authors; none is named here
+            row = geo["provinces"][code]["wound"]
+            s_id = f"s_{_slug(code)}_{row['kind']}"
+            w.sites[s_id] = Site(s_id, territory_rung_id(code), row["kind"], condition=row["condition"])
 
     # -- the cast ---------------------------------------------------------------
     # ⚠ **NPC CASES ARE PEOPLE; ARC CASES ARE NOT.** The NPC lane names persons -- "Carin Vedel",
@@ -2164,6 +2210,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # cohort above can have read them; an empty `venues.yaml: planned_works` is the control.
     mint_planned_works(w, ven.get("planned_works") or [], anchors, w._office_census["authored"],
                        partial=cap is not None)
+    # B12a.52 (`07_SE_treasury_granary_B` §4 (b), superseding `07_SE_ground_and_granaries` §4 (c)'s seed): THE TREASURY IS THE GRANARY. Under `ground`
+    # only; AFTER the offices are seated (the seed reads them) and the cohorts (it reads their want), beside the works. `uniform` writes nothing here.
+    if w.fixtures.get("endowment_mode") == "ground":
+        seed_stores(w, geo)
     # -- WHO KNOWS WHOM AT THE START (CR-81, `ED-IN-0318`): last, once every person, seat and membership exists.
     # `acquaintances=False` is the control arm.
     if acquaintances:

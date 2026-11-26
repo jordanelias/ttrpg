@@ -19,8 +19,12 @@ from __future__ import annotations
 
 import hashlib
 
+import pytest
+
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
+from ..data.rosters import SEASONS_OF_YEAR
+from ..gaps import Unspecified
 from ..harness import populated as POP
 from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
@@ -93,7 +97,7 @@ def _seasons(w, n: int):
 #: The one-season event count and digest of the season with `thread_read` added to `withheld_verbs`. A change detector:
 #: since B08.03 (scenes fold in their own order) it EQUALS the shipped season (`_realm_goldens.SHIPPED`, seed 0, one season),
 #: which is what the test below reads. Its re-record history is in `git log`.
-THREAD_READ_WITHHELD_EVENTS_1 = (10188, "433d4acb5feb335d8dccea205f379e9a0a03381f4e43025de45146844412e83c")   # B21b partial re-record on the merge with B08: (9319, e5b3ab7c..) -> (10188, 433d4acb..), equal to the shipped season the guards-on realm reads; B08 re-pin: (9320, 39763260..) -> (9319, e5b3ab7c..)
+THREAD_READ_WITHHELD_EVENTS_1 = (9447, "57ef8c00332691b3c8ba983ed8493d7e43a1a643eddec4d3efe64cd6d0fe9b4d")   # B21b partial re-record on the merge with B08 and B12a: (8660, 3e0eb0c8..) -> (9447, 57ef8c00..), equal to the shipped season the guards-on realm reads; B12a.99: (9319, e5b3ab7c..) -> (8660, 3e0eb0c8..)
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():
@@ -183,7 +187,32 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
         assert world_q.season_factor_of(w) == year[t % len(year)][0]
         seen += 1
     assert seen == 9
-    # And no table, no year: the control returns the bare constant and no season.
+    # And no table: the control returns the bare constant, and the year is the roster's, not the table's.
     w = _town(())
-    assert world_q.season_of_year(w) is None
+    assert world_q.season_of_year(w) == w.tick % len(SEASONS_OF_YEAR)
     assert world_q.season_factor_of(w) == DEFAULT.get("season_factor")
+
+
+def test_season_of_year_reads_zero_to_three_at_shipped_fixtures():
+    """The year is `rosters.yaml: seasons_of_year`, read by `season_of_year` at the shipped fixtures (no
+    `season_factor_draw` declared): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`."""
+    w = build_realm(0)
+    assert not w.fixtures.get("season_factor_draw"), "fixture: the shipped realm declares a weather table"
+    read = []
+    for t in range(5):
+        w.tick = t
+        read.append(world_q.season_of_year(w))
+    assert read == [0, 1, 2, 3, 0], read
+
+
+def test_nonempty_season_factor_draw_of_wrong_length_is_refused():
+    """A table that is not one entry per season of the declared year is refused where it is first read,
+    naming `season_factor_draw`'s length and the year's."""
+    wrong = ((1.0,),) * (len(SEASONS_OF_YEAR) - 1)
+    w = _town(wrong)
+    with pytest.raises(Unspecified) as e:
+        world_q.season_factor_of(w)
+    assert "season_factor_draw" in str(e.value) and str(len(wrong)) in str(e.value) \
+        and str(len(SEASONS_OF_YEAR)) in str(e.value), str(e.value)
+    # The right length is not refused (non-vacuity: the refusal is the length, not the table).
+    assert world_q.season_factor_of(_town(UNIT)) == DEFAULT.get("season_factor")

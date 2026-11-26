@@ -17,7 +17,8 @@ from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
 from ..trace_log import TRACE
 
-from .effects_shared import _exercised_office, _oblige_term, _operand, _share, _shift, effect_for
+from .effects_shared import (_decline_amount, _exercised_office, _oblige_term, _operand, _share, _shift, effect_for,
+                             whole_amount)
 
 
 @effect_for("work")
@@ -196,10 +197,17 @@ def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     finish what somebody else began"* (r2 §A.6.7) with no special case anywhere.
 
     DECLINES: a site that does not exist (a hand-built act that skipped the precondition) is
-    `NO_CHANGE` -> `restore.refused`."""
+    `NO_CHANGE` -> `restore.refused`; so is a BROKEN site (`condition <= 0`, `loop/matter.py::_broken_near`'s
+    reading) while `lattice_coupling` is non-zero -- a hole in the fabric is not repaired with mortar
+    (B12a.65; the Mend that will answer it is B35's). At weight 0 the decline is unreached."""
     sid = _operand(a, "site")
     site = w.sites.get(sid)
     if site is None:
+        return NO_CHANGE
+    if site.condition <= 0 and w.fixtures.get("lattice_coupling"):
+        TRACE.decision(f"restore at a broken Site (condition 0) while the lattice coupling runs -> {a.actor} at {sid!r}", "B12a.65",
+                       chose="change nothing, so the fold emits the refusal",
+                       alternatives=["raise the broken Site by `_rise` (the mortar the calamity's hole is not repaired with)"])
         return NO_CHANGE
     delta = _rise(w, site, res)
     cell = Subject.staged("Site", sid, "condition")
@@ -238,6 +246,8 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
                        chose="change nothing, so the fold emits the refusal",
                        alternatives=["move the giver's side anyway (matter leaves the world)"])
         return NO_CHANGE
+    if not whole_amount(amount):
+        return _decline_amount("transfer", amount)
 
     renewed = _renewals(w, a, src.id, dst.id, amount)
 
@@ -288,6 +298,9 @@ def _eff_exchange(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
                        "E3/S27.1", chose="change nothing, so the fold emits the refusal",
                        alternatives=["move one side anyway (matter leaves the world)"])
         return NO_CHANGE
+    for what, n in (("amount", amount), ("return_amount", back_amount)):
+        if not whole_amount(n):
+            return _decline_amount(f"exchange's {what}", n)
 
     def perform() -> None:
         _shift(src, dst, kind, amount)

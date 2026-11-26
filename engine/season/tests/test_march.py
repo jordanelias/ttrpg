@@ -983,20 +983,37 @@ def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     assert world_q.holder_faction_of(w, "terr_T7") == "fac_hafenmark", "the territory changed hands"
 
 
-def test_in13_exit_vi_control_an_occupied_unheld_settlement_is_nobodys_to_seize():
-    """EXIT (vi)'s third decline (`holder is None`: H-166, who holds an unheld place is unruled), asked of
-    the EFFECT: at seed 0 no seat's purview reaches `set_s_037`, so the fold refuses the act earlier
-    (`seize.unauthorized`, the `authority` conjunct) and the arm is unobservable through it. The Crown
-    marches on and occupies it (`army.arrived`, `mustered` there), the effect declines (`NO_CHANGE`);
-    CONTROL, one change (the town is Hafenmark-held, `set_s_016`, occupied the same way): the same
-    effect, actor and seat returns a `Change`, so the decline is the unheld arm's and not the occupation's."""
+def test_an_unheld_settlement_occupied_by_the_seats_faction_is_seized():
+    """`09_WR_world_motion` edit 2 (B12a.08): an unheld place is taken by occupation, the rule the effect states for
+    held land. At seed 0 no seat's purview reaches `set_s_037`, so the fold refuses the act earlier
+    (`seize.unauthorized`, the `authority` conjunct) and the arm is asked of the EFFECT. The Crown marches on and
+    occupies it (`army.arrived`, `mustered` there); the effect returns a `Change` whose one subject is the actor's
+    OPENED `hold` -- nothing to close, so no second edge -- and applying it leaves the actor holding the town.
+    CONTROL, one change (the town is Hafenmark-held, `set_s_016`, occupied the same way): a `Change` too, the
+    held-land rule this edit leaves as it was (`test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder`)."""
     unheld, held = build_realm(0), build_realm(0)
     assert world_q.holder_faction_of(unheld, "set_s_037") is None
     for w, town in ((unheld, "set_s_037"), (held, "set_s_016")):
         _occupy(w, town, "p_npc_033", "off_spymaster")
         assert world_q.mustered(w, town, CROWN), "the Crown does not stand there"
-    assert EFFECTS["seize"](held, _seize_act("set_s_016")) is not G.NO_CHANGE
-    assert EFFECTS["seize"](unheld, _seize_act("set_s_037")) is G.NO_CHANGE
+    ctrl = EFFECTS["seize"](held, _seize_act("set_s_016"))
+    assert ctrl is not G.NO_CHANGE
+    change = EFFECTS["seize"](unheld, _seize_act("set_s_037"))
+    assert change is not G.NO_CHANGE
+    assert len(change.subjects) == 1, "an unheld place has no holder's hold to close"
+    change.apply()
+    assert world_q.hold_force(unheld, "set_s_037").subject == "p_npc_020"
+    assert world_q.holder_faction_of(unheld, "set_s_037") == CROWN
+
+
+def test_an_unheld_settlement_the_seats_faction_does_not_occupy_is_refused():
+    """The falsifier of edit 2 (*"a seat whose faction does not occupy an unheld place seizes it"*): `set_s_037`
+    is unheld and the Crown stands nowhere under it (no march), so the effect declines (`NO_CHANGE`). The control
+    arm, the same effect once the Crown has marched on it, is the test above."""
+    w = build_realm(0)
+    assert world_q.holder_faction_of(w, "set_s_037") is None
+    assert not world_q.occupies(w, "set_s_037", CROWN) and not world_q.seat_people_at(w, "off_king", "set_s_037")
+    assert EFFECTS["seize"](w, _seize_act("set_s_037")) is G.NO_CHANGE
 
 
 def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_nothing():

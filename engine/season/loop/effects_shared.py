@@ -142,10 +142,33 @@ def _provisional_term(w: "World", a: "Act") -> Optional["Term"]:
     return Term(w.tick + n, a.id)
 
 
+def whole_amount(amount) -> bool:
+    """A store move's amount: a whole number of units, at least one. `bool` is refused (YAML `yes`).
+    The one reading of it (H-306, A-81): an effect that moves stores returns `NO_CHANGE` when it is false,
+    before it builds its `Change` (the fold then emits the row's own refusal), and `_debit`/`_shift` raise on
+    it, so a caller that skipped the check fails loudly rather than moving matter."""
+    return isinstance(amount, int) and not isinstance(amount, bool) and amount >= 1
+
+
+def _decline_amount(verb: str, amount) -> Change:
+    """The refusal of a store move whose amount is not a whole positive number: one `TRACE.decision` line
+    naming the amount, then `NO_CHANGE` so the fold emits the row's own refusal. The backstop, not the path:
+    formation excludes such an amount first (`whole_amount`'s docstring)."""
+    TRACE.decision(f"{verb} carries an amount of {amount!r}, which is not a whole number of units, at least one",
+                   "H-306/A-81", chose="change nothing, so the fold emits the refusal",
+                   alternatives=["move the stores anyway (a negative amount reverses the move, a fraction splits a unit)"])
+    return NO_CHANGE
+
+
 def _debit(rung, kind: str, amount) -> None:
     """`rung`'s stores down by `amount` of `kind`: copied before it is written, as `_eff_transfer`
     always did, so no other holder of the old dict sees it change. The one body of the debit side of
-    `_shift` and of `build`'s one-sided consumption (the cost goes into the fabric)."""
+    `_shift` and of `build`'s one-sided consumption (the cost goes into the fabric). A non-whole amount
+    is an `InstrumentDefect` (`whole_amount`): the effect declines it before it gets here."""
+    if not whole_amount(amount):
+        raise InstrumentDefect(f"a store move of {amount!r} of {kind!r} reached `_debit`: an amount is a whole "
+                               f"number of units, at least one, and the calling effect should have declined it "
+                               f"(`whole_amount`)")
     rung.stores = dict(rung.stores or {})
     rung.stores[kind] = rung.stores.get(kind, 0) - amount
 
@@ -157,7 +180,8 @@ def _shift(src, dst, kind: str, amount) -> None:
     *"six grain left the world and arrived nowhere"* was a transfer that decremented one side and
     forgot the other. Each store is copied before it is written, as `_eff_transfer` always did, so
     no other holder of the old dict sees it change. Called only from inside a `Change.apply`: the
-    gate reads both rungs either side of it (G4)."""
+    gate reads both rungs either side of it (G4). A non-whole amount raises in `_debit`, before either
+    side is written."""
     _debit(src, kind, amount)
     dst.stores = dict(dst.stores or {})
     dst.stores[kind] = dst.stores.get(kind, 0) + amount
@@ -171,13 +195,15 @@ def _exercised_office(w: "World", a: "Act") -> Optional["Office"]:
     return w.offices.get(a.via) if a.via else None
 
 
-def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
+def occupying_faction(w: "World", via: str, rid: str, unheld: bool = False) -> Optional[str]:
     """THE LICENCE OF OCCUPATION (#453 §10.4 steps 8 and 11), the one reading `seize` (a Rung) and `raze` share:
     the faction of the exercised seat `via`, when it OCCUPIES the place `rid` (`world_q.occupies`, the one
     reading of that: mustered under a settlement, arrived at a territory, and a taken territory's settlements
     with it) and the place is held by ANOTHER faction (`holder_faction_of`).
+    `unheld=True` (`seize`'s Rung half; `09_WR_world_motion` edit 2) also passes a place NOBODY holds, on the same
+    occupation: the rule for held land is the rule for unheld land. `raze` leaves it `False` and keeps its decline.
     `None` -- the licence fails -- for a subject that is no Rung or no `march_target_kinds` kind, a seat with
-    no faction, a place nobody holds (H-166: who holds an unheld place is unruled) or the seat's own
+    no faction, a place nobody holds (H-166: who holds an unheld place is unruled; passed when `unheld`) or the seat's own
     faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's AGAINST A
     MARCH: one that lost never arrived, so nothing occupies and nothing is seized. Occupation is PRESENCE (R-6, ruled
     for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
@@ -194,7 +220,7 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
         return None
     holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine:
+    if holder == mine or (holder is None and not unheld):
         return None
     # B21.79 (CP-T09-07 (b)): the seat's sworn men present at a settlement are presence as its faction's members are
     # (`world_q.seat_people_at`); a territory is occupied by standing AT it, which the union does not widen.
@@ -209,7 +235,9 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if town:
         held = governing_hold(w, rid)
         places = [rid] + ([held.object] if held is not None and held.object != rid and occupies(w, held.object, mine) else [])
-        if not any(march_at_band(w, at, WON) or len(people if at == rid else seat_people_at(w, via, at)) > len(mustered(w, at, holder))
+        # an UNHELD town (`unheld`, B12a: the rule for held land is the rule for unheld land) has no holder's people to outnumber; B21b.06 adds the plurality among
+        # the factions mustered there
+        if not any(march_at_band(w, at, WON) or len(people if at == rid else seat_people_at(w, via, at)) > (len(mustered(w, at, holder)) if holder else 0)
                    for at in places):
             return None
     return mine

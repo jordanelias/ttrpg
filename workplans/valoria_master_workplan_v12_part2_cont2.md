@@ -480,7 +480,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0; H-940 unused) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-941 (the block grew from 54 at the V2 fold: V2's 55 settings, the fold's counted table of 24 and the `speech_blend` pointer row, then fell to 79 at the V2 stress-test pass, which cut `sympathy_step`; `case_rows`' note row and the `audience_room` pointer row cut). The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
 | B11F1-flow-se | SE | ED-SE-0057..0058 (0+2) | H-499..H-505 (2+5) | same |
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) | ED shifted |
-| B12a-world-motion-and-ground | SE+WR | ED-SE-0059..0060 (0+2) | H-523..H-540 (13+5) | same |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) | same |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
 | B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) | H shifted |

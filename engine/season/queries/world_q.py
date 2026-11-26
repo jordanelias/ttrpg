@@ -26,7 +26,7 @@ from dataclasses import dataclass, fields, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
-from engine.dice_engine.dice_engine import MARGIN_SCALE
+from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, degree_from_net
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
@@ -37,7 +37,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    DECLARED, INVESTED,
+    DECLARED, INVESTED, SEASONS_OF_YEAR,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
@@ -1269,13 +1269,11 @@ def named(c) -> tuple:
     return tuple(ids) if ids else ()
 
 
-def season_of_year(w: World) -> Optional[int]:
-    """v9 IN-21: which season of the year `w.tick` falls in, or `None` when no year is declared. The
-    year is the length of `season_factor_draw`'s table (one entry per season, in order), so the
-    calendar position is READ OFF `tick` and no field stores it. A world declaring no table has no
-    year to be in, which is the control (`season_factor` alone)."""
-    table = w.fixtures.get("season_factor_draw")
-    return w.tick % len(table) if table else None
+def season_of_year(w: World) -> int:
+    """v9 IN-21: which season of the year `w.tick` falls in -- read off `tick` and the declared year
+    (`rosters.yaml: seasons_of_year`, `SEASONS_OF_YEAR`), so no field stores it and the answer is never
+    `None`. `season_factor_draw`, when declared, holds one entry per season of that year."""
+    return w.tick % len(SEASONS_OF_YEAR)
 
 
 def season_factor_of(w: World, territory: Optional[str] = None) -> float:
@@ -1293,10 +1291,16 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     control arm and returns the bare constant for every territory, drawing nothing, so the default
     world's arithmetic is untouched (`test_season_weather.py` holds the three-hash equality)."""
     base = w.fixtures.get("season_factor")
-    s = season_of_year(w)
-    if s is None:
+    table = w.fixtures.get("season_factor_draw")
+    if not table:
         return base
-    outcomes = w.fixtures.get("season_factor_draw")[s]
+    if len(table) != len(SEASONS_OF_YEAR):
+        raise Unspecified(f"`season_factor_draw` declares {len(table)} seasons but the year "
+                          f"(`rosters.yaml: seasons_of_year`) is {len(SEASONS_OF_YEAR)}", "H-26",
+                          needs="one entry per season of the year, in order, or `()` for the control",
+                          law="IN-21 / ED-IN-0332: the year is the roster's length, and the table is read at `tick % len(year)`")
+    s = season_of_year(w)
+    outcomes = table[s]
     if not outcomes:
         # An empty season entry has nothing to draw from; without this `choose` below dies with a
         # bare IndexError naming neither the fixture nor the season.
@@ -1328,7 +1332,7 @@ def season_factors_by_rung(w: World) -> tuple:
     rungs = _site_rungs(w)
     if not rungs:
         return ()
-    if season_of_year(w) is None:
+    if not w.fixtures.get("season_factor_draw"):
         base = season_factor_of(w)
         return tuple((rid, base) for rid in rungs)
     by_territory: dict = {}
@@ -1522,7 +1526,8 @@ def _larder_parts(w: World) -> tuple:
                 stores.append((rid, tuple((w.rungs[rid].stores or {}).items())))
         ladders.append((home, tuple(ladder)))
         chains.append((home, chain))
-    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores)),
+    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores),
+                        w.fixtures.get("larder_walk")),
             tuple(chains))
 
 
@@ -1531,10 +1536,51 @@ def subsist_input(w: World) -> SubsistInput:
     chain, the `body_step` fixture and every eater's `Person.body`. Read-only; it writes nothing and
     traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's, less those rows (the
     `demanded`, `delivered` and `descendants` rows `subsistence_draw`'s A4 note names). MATTER calls the
-    entry with it once a season and makes every write from the outcome."""
+    entry with it once a season and makes every write from the outcome. `severity` is `_hunger_severity`'s (B12a.61): `()` at the control
+    `hunger_severity_draw: False` (the shipped arm is True since B12a.62), else one keyed multiple per eater short."""
     larder, chains = _larder_parts(w)
-    return SubsistInput(larder, chains, w.fixtures.get("body_step"),
-                        tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters))
+    bodies = tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters)
+    return SubsistInput(larder, chains, w.fixtures.get("body_step"), bodies, _hunger_severity(w, larder, bodies))
+
+
+def _hunger_rows(w: World) -> tuple:
+    """`(band_steps, body_pool, depth_obstacle)`, the three rows of the hunger draw (B12a.57's conversion, `H-530` to `H-532`), each refused naming
+    the row when it does not stand: a body or depth row left `None`, or a `hunger_band_steps` whose keys are not exactly the ladder's band names
+    (`DEGREE_LABEL`'s four), which would index a missing band or leave one dead (the draw refuses rather than reading a default)."""
+    steps, pool, depth = (w.fixtures.get(name) for name in ("hunger_band_steps", "hunger_body_pool", "hunger_depth_obstacle"))
+    for name, value in (("hunger_body_pool", pool), ("hunger_depth_obstacle", depth)):
+        if value is None:
+            raise Unspecified(f"`hunger_severity_draw` is on and the fixture `{name}` is unset", "B12a.61 / H-531, H-532",
+                              needs=f"a value for `{name}`; the control is `hunger_severity_draw: False`")
+    if set(steps or ()) != set(DEGREE_LABEL.values()):
+        raise Unspecified(f"`hunger_severity_draw` is on and the fixture `hunger_band_steps` has keys {sorted(steps or ())}, not the ladder's "
+                          f"bands {sorted(DEGREE_LABEL.values())}", "B12a.61 / H-530",
+                          needs="one multiple per band name of `dice_engine.DEGREE_LABEL`; the control is `hunger_severity_draw: False`")
+    return steps, pool, depth
+
+
+def _hunger_severity(w: World, larder: LarderInput, bodies: tuple) -> tuple:
+    """`SubsistInput.severity` (B12a.61, `16_PESSIMIST_GAME_the_world_draws` edit 3): `((pid, multiplier), ...)` for each eater short this season, in
+    the record's order, `()` at the control (`hunger_severity_draw: False`: nothing is drawn). WHO IS SHORT is read by running `larder_draw` on the
+    SAME `LarderInput` the projection built, `subsist`'s own first step, so the depth the draw reads and the loss `subsist` writes cannot disagree.
+    Per short eater ONE keyed draw `(world_seed, tick, pid, "hunger_severity")` through `draw_factory` (a Query's draw advances no ordinal:
+    `season_factor_of`'s precedent), rolled on the one sampler with the cohort's own body as the pool (`pool_of`, the shared `pool_add` and
+    `pool_floor`, B12a.57 s1) against an obstacle of `hunger_depth_obstacle` times the share of its want the larder fell short (s2), graded on the one
+    ladder; the band names the multiple, `hunger_band_steps[band]`."""
+    if not w.fixtures.get("hunger_severity_draw"):
+        return ()
+    steps, pool_k, depth_k = _hunger_rows(w)
+    scale, pool_add, pool_floor = (w.fixtures.get(name) for name in ("condition_scale", "pool_add", "pool_floor"))
+    keyed, body, out = draw_factory(w.world_seed, lambda: w.tick), dict(bodies), []
+    for row in _entry(LARDER_DRAW)(larder).rows:
+        want = sum(cell[1] for cell in row.cells)
+        short = sum(cell[1] - cell[2] for cell in row.cells)
+        if short <= 0:
+            continue
+        pool = _sigma_leverage.pool_of(pool_k * body[row.pid] / scale, 0, pool_add, pool_floor)
+        net = _sigma_leverage.roll_net_continuous(pool, rng=keyed(row.pid, "hunger_severity"))
+        out.append((row.pid, steps[DEGREE_LABEL[degree_from_net(net, depth_k * short / want)]]))
+    return tuple(out)
 
 
 def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
@@ -1556,13 +1602,16 @@ def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
 
 def _draw_dict(record: DrawRecord) -> dict:
     """`DrawRecord` -> `{pid: (home, {kind: (want, take, source)})}`, in the record's order."""
-    return {r.pid: (r.home, {k: (want, take, src) for k, want, take, src in r.cells})
+    return {r.pid: (r.home, {k: (want, take, src) for k, want, take, src, _parts in r.cells})
             for r in record.rows}
 
 
 def _draw_record(draw: dict) -> DrawRecord:
-    """The inverse of `_draw_dict`, for a caller holding the dict (the `draw=` argument; tests)."""
-    return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell) for k, cell in row.items()))
+    """The inverse of `_draw_dict`, for a caller holding the dict (the `draw=` argument; tests). The dict's cell names the first
+    source only, so `parts` is rebuilt as `((source, take),)` (`()` where there is no source): exact under `larder_walk` `first`,
+    and under `through` a cell split across rungs reads as one part -- harmless to the one reader (`drawn_under` sums `want`/`take`)."""
+    return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell, ((cell[2], cell[1]),) if cell[2] is not None else ())
+                                                     for k, cell in row.items()))
                             for pid, (home, row) in draw.items()))
 
 
@@ -2740,6 +2789,15 @@ def governing_hold(w: World, rung_id: str) -> Optional[Tenure]:
     return None
 
 
+def treasury_above(w: World, rung_id: str) -> Optional[str]:
+    """B12a.52 (`07_SE_treasury_granary_B` R-SE-28): The nearest rung strictly above `rung_id` at which some Office sits, or None. The one
+    owner of *whose treasury relieves this place*; read-only; traces as a resolver. `ancestry` includes `rung_id` itself, so `[1:]` is
+    "strictly above". A stock held at a rung no Office names has no keeper (`loop/effects_governance.py`: the treasury is the seat's rung)."""
+    TRACE.query("treasury_above", "resolver")
+    seated = {o.rung for o in w.offices.values() if o.rung is not None}
+    return next((r for r in ancestry(w, rung_id)[1:] if r in seated), None)
+
+
 def faction_of(w: World, subject: str) -> Optional[str]:
     """WHICH FACTION `subject` COHERES UNDER, whatever it is -- the faction Proposition id, or `None`.
     The one dispatch over the two owners below it, by `World.class_of` (which tries `Person` BEFORE
@@ -2840,14 +2898,46 @@ def endings_reached(w: World) -> list:
     condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. It is NOT
     "reached only with a person's act among the crossing's antecedents". Revert: every edge the
     condition reads opened by an act -- under which every seeded territory hold must be re-opened by
-    an act and `terr_T15`'s, unheld at build, by a verb that does not exist (`H-186`), so
-    `peninsular_sovereignty` becomes unreachable by construction.
+    an act, so `peninsular_sovereignty` becomes unreachable by construction (`terr_T15`, unheld at build
+    and settled by no verb, `H-186`, is excluded from the edges by `settled: true`).
 
     ⚠ NO `TRACE.query` ROW, `ambitions`' reason: `SeasonDriver.season` calls this once per season, the
     probe corpus runs seasons, and a row here moved the committed `runs/TRACE.txt` and `results.json`
     (`test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`) -- a read-only
     step must move no artifact. It reads through `governing_hold`, not `holder_faction_of`, for the same
-    reason."""
+    reason.
+
+    B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): UNDER `ending_draw` THE CONDITION IS ELIGIBILITY AND A KEYED DRAW DECIDES (A-47: the crossing
+    decides nothing): an eligible row is reached on Success or Overwhelming (`_ending_degree` says how the draw is sized) and `endings_near` reports
+    it on Partial. At the control (`ending_draw: False`, shipped) an eligible row is reached, as before, and no draw is taken."""
+    arm = _ending_draw_rows(w)
+    return [_reached(name, row, edges, opened)
+            for name, row, edges, opened in _eligible_endings(w)
+            if arm is None or _ending_degree(w, name, edges, opened, arm) in (Degree.OVERWHELMING, Degree.SUCCESS)]
+
+
+def endings_near(w: World) -> list:
+    """B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): THE ENDINGS THE DRAW READ PARTIAL -- `endings_reached`'s own eligibility and the SAME keyed
+    draw, so a row is in one answer or the other or neither, never both. `[]` at the control (`ending_draw: False`: nothing is drawn, so nothing
+    is near). Each is an `EndingReached`, in file order. A read like `endings_reached`: no token, no Event, no write; the season reports it
+    as `near` and nothing reads it back [ASSUMPTION: a second Query rather than a widened return -- basis: CLAUDE.md §5.1, the reading that changes less]."""
+    arm = _ending_draw_rows(w)
+    if arm is None:
+        return []
+    return [_reached(name, row, edges, opened) for name, row, edges, opened in _eligible_endings(w)
+            if _ending_degree(w, name, edges, opened, arm) is Degree.PARTIAL]
+
+
+def _reached(name: str, row, edges: tuple, opened: dict) -> EndingReached:
+    return EndingReached(name, row.victory,
+                         tuple(sorted(t.id for t in edges if t.kind == "hold")),
+                         tuple(sorted({e.id for e, _ in opened.values()})),
+                         tuple(sorted({a.id for _, a in opened.values()})))
+
+
+def _eligible_endings(w: World) -> list:
+    """`[(name, row, edges, opened)]` for each row whose condition stands (`_ending_edges`) with an act among its antecedents (`opened_by_acts`), in
+    file order: the eligibility `endings_reached` has always read, and the one the draw stands on (A-47: the selector is eligibility)."""
     out: list = []
     for name, row in ENDINGS.items():
         edges = _ending_edges(w, row)
@@ -2856,21 +2946,55 @@ def endings_reached(w: World) -> list:
         opened = opened_by_acts(w, edges)
         if not opened:
             continue
-        out.append(EndingReached(name, row.victory,
-                                 tuple(sorted(t.id for t in edges if t.kind == "hold")),
-                                 tuple(sorted({e.id for e, _ in opened.values()})),
-                                 tuple(sorted({a.id for _, a in opened.values()}))))
+        out.append((name, row, edges, opened))
     return out
 
 
+def _ending_draw_rows(w: World) -> Optional[tuple]:
+    """`(pool_step, ob)` when the fixture `ending_draw` is on, `None` when it is off (the control: today's reaching, no draw taken). The two
+    `[CALIBRATE]` rows ship `None` (E-14), and an arm on an unset row REFUSES naming the row rather than drawing on a default (`H-524`)."""
+    if not w.fixtures.get("ending_draw"):
+        return None
+    rows = tuple(w.fixtures.get(name) for name in ("ending_draw_pool_step", "ending_draw_ob"))
+    for name, value in zip(("ending_draw_pool_step", "ending_draw_ob"), rows):
+        if value is None:
+            raise Unspecified(
+                f"`ending_draw` is on and the fixture `{name}` is unset", "B12a.12 / H-524",
+                needs=f"a value for `{name}` (a [CALIBRATE] row, set by B98); the control is `ending_draw: False`")
+    return rows
+
+
+def _ending_degree(w: World, name: str, edges: tuple, opened: dict, rows: tuple) -> Degree:
+    """The band of an eligible row's ONE keyed draw `(world_seed, tick, "realm", "ending:<name>")` (a Query's draw advances no ordinal:
+    `season_factor_of`'s precedent), rolled by the one roller and graded on the one ladder. The pool is `pool_step` per season the condition has
+    stood times the share of the edges it reads that an act opened; the obstacle is `ob` plus one per edge it reads that no act opened (inherited
+    at build, so conquest counts for more than inheritance). The seasons stood are read off the antecedent Events' ticks, none stored: the
+    latest opening Event's `emitted_at` through this season, counted inclusively (the season an ending is first reachable is its first), the
+    nearest the record places the crossing [ASSUMPTION; medium; Jordan to correct: the crossing may be authorless and later (`T-a`); revert:
+    none, the arm ships off]. The edges read are the holds AND the sole commits the condition stands on (`_ending_edges`), as `T-b` credits
+    them: a king who converts opens a commit, not a hold."""
+    pool_step, ob = rows
+    stood = w.tick - max(e.emitted_at for e, _ in opened.values()) + 1
+    acted = sum(1 for t in edges if t.id in opened)
+    pool = pool_step * stood * acted / len(edges)
+    net = _sigma_leverage.roll_net_continuous(pool, rng=draw_factory(w.world_seed, lambda: w.tick)("realm", f"ending:{name}"))
+    return degree_from_net(net, ob + (len(edges) - acted))
+
+
 def _ending_edges(w: World, row) -> tuple:
-    """The live edges an `endings` row's condition reads, or `()` when it does not hold."""
+    """The live edges an `endings` row's condition reads, or `()` when it does not hold. A `rung_kind` row with
+    `settled: true` selects only the rungs with a `settlement` among their descendants (an unsettled territory,
+    `terr_T15`, is not asked for: no verb holds it, `H-186`)."""
     sel, val = row.holds
     if sel == "post":
         holds = [hold_force(w, o) for o in sorted(w.offices) if w.offices[o].post == val]
     elif sel == "rung_kind":
+        # `settled: true` (B12a.09): a SETTLED rung has a `settlement` rung among its descendants, read as the ancestry of
+        # every settlement rung (`descendants` writes a `TRACE.query` row, and this step must write none: the docstring above)
+        settled = {a for r in w.rungs if w.rungs[r].kind == "settlement" for a in ancestry(w, r)} if row.settled else None
         holds = [governing_hold(w, r) for r in sorted(w.rungs) if w.rungs[r].kind == val
-                 and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))]
+                 and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))
+                 and (settled is None or r in settled)]
     else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
         raise Forbidden(f"ending selector {sel!r} has no enumerator", "queries/world_q.py::_ending_edges",
                         f"a branch for it, beside `ENDING_SELECTORS`' two")
@@ -3738,6 +3862,26 @@ def works_sites(w: World, p: Person) -> tuple:
     return tuple(sorted(s.id for s in w.sites.values() if (s.kind, s.rung) in targets))
 
 
+#: v12 B12a.66 (`16_PESSIMIST_WR_B` edit 4): the Event kinds WITNESS deposits as a claim whose subject is the Site that crossed or broke.
+CROSSING_KINDS = frozenset(("condition.band_crossed", "site.ruptured"))
+
+
+def crossed_sites(w: World, p: Person, since: Optional[tuple] = None) -> tuple:
+    """THE SITES AT HIS OWN RUNG THAT A CROSSING OR A BREAK HAS JUST BEEN WITNESSED OF (v12 B12a.66, `16_PESSIMIST_WR_B` edit 4, [ASSUMPTION; medium;
+    Jordan to correct; revert: drop the term in `questions_for`]), sorted by id: each Site that a claim NEW to `p` (`landing_floor`, the boundary Q2 reads)
+    holds a `CROSSING_KINDS` Event of, where the Site stands at the rung `p` does (`place_of`, `with`'s one owner). A STANDING OCCASION, `works_sites`'
+    shape: `questions_for` adds the ids to the question he answers as CLASSED referents (`_stamped`, `Site`), so `restore` forms for him. Without it the
+    Site reaches a question's classes only as the plain referent of its own `claim_landed` question, and only when that question sorts first.
+    Resolver-side and read-only: `p`'s own ledger, and where the Site and he stand. `()` for a man who has witnessed no crossing beside him."""
+    floor = landing_floor(w, since)
+    seen = sorted({c.subject for c in p.ledger
+                   if c.predicate in CROSSING_KINDS and (c.when, c.lap) >= floor and c.subject in w.sites})
+    if not seen:
+        return ()
+    here = place_of(w, p.id)
+    return tuple(s for s in seen if here is not None and place_of(w, s) == here)
+
+
 def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
     [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
@@ -4322,12 +4466,16 @@ def wounded_with(w: World, p: Person) -> tuple:
     where the others stand. So it does not repeat the AX-7 tension `vacancies` carries (H-207): a wounded man whom
     nobody saw hurt is stamped only for himself. Ceiling, not scale, for himself (he knows his own mark); scale for
     another (a believed value names no ceiling).
-    ⚠ STATED LIMIT -- NOTHING CLEARS A BELIEVED WOUND. Only `_eff_kill` writes a `(pid, "body", v)` Observation;
-    `_eff_tend` and MATTER write none. So a healed man stays stamped for every believer, and so does a MARKED
-    survivor sitting at his ceiling (his written body is clamped at or under the mark while this comparison is
-    against `condition_scale`): `tend` forms on him and is refused at its write as a no-op (`_eff_tend`'s
-    `NoOpReceipt`) each season. The believed-body arm forms near zero today. Carrying the ceiling with the body
-    Observation is the repair, deferred. [GAP: a believed ceiling is not carried] Stamped by `questions_for`
+    ⚠ STATED LIMIT -- A TEND CLEARS A BELIEVED WOUND AND MATTER'S RECOVERY DOES NOT YET. `_eff_kill` and (B12a.69,
+    U5d_WR §3) `_eff_tend` write a `(pid, "body", v)` Observation, a tend's `v` the MENDED body, so the tender's claim of
+    the wound is superseded by a claim of the mended body (newest by `(when, lap)`); a recovery MATTER writes (CP-T10-04,
+    unbuilt) writes none. A MARKED survivor sitting at his ceiling stays stamped for his believers (his written body is
+    clamped at or under the mark while this comparison is against `condition_scale`): `tend` forms on him and is refused at
+    its write as a no-op (`_eff_tend`'s `NoOpReceipt`) each season. Carrying the ceiling with the body Observation is the
+    repair, deferred. [GAP: a believed ceiling is not carried] MEASURED (realm, seeds 0 to 2, PYTHONHASHSEED=0), `tend`
+    executions on a man already whole by another person (one season / two): 1, 0, 0 / 1, 0, 1 before and after B12a.69,
+    and no `tend` heals anybody in either arm (`body.tended` 0 at every seed), so the Observation is never written in the
+    realm and the pairs forming `tend` on a healed man read 0 at every seed (the earlier 0, 3, 9 is not reproduced). Stamped by `questions_for`
     as `Person` (`World.class_of`), so `tend` (`referent_class: Person`) forms on it -- and so do the other rows
     declaring `Person` (the shared class; the fold disposes). Resolver-side and read-only. `()` for a whole man who
     holds no belief of a wounded body beside him."""
@@ -4863,6 +5011,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
     # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
     # which no question a master answers carried. REVERT: drop the term.
+    # v12 B12a.66 (`16_PESSIMIST_WR_B` edit 4; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, BESIDE THEM, THE SITES AT HIS RUNG A
+    # CROSSING OR A BREAK HAS JUST BEEN WITNESSED OF (`crossed_sites`), as `Site` -- `restore` forms on them. A world with no crossing is byte-identical.
     # v11 CR-28 (G-04 (a); CP-T02-05's re-take; [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE
     # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
     # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
@@ -4901,7 +5051,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + crossed_sites(w, p, since) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
@@ -5390,6 +5540,10 @@ OPENING_MARCH_VERB = "march"   # the verb whose act `march_side` reads
 OPENING_DEATH_KIND = PERSON_DIED   # `state/gate.py`'s one spelling of the death kind
 OPENING_DEATH_VERBS = frozenset({"fight", "accept"})
 PETITION_RECORD_KIND = "petition"
+# A-46 (B12a.05): the one `never` kind `flows_in` admits as a move, keyed (`_creed_released`): the vow-break a
+# `release` of a creed `commit` earns (`verb_table.yaml: release` emits `commitment.ended` when an edge it closes is
+# a `commit`). A head seat's release is already a move through `joins` (`tenure.closed`).
+CREED_RELEASE_KIND = "commitment.ended"
 # What a petition is about: `person_q.ABOUT_KEYS`, the one owner of what a document is about (`_eff_petition`
 # mints it from the act's `subject`). `.get`, so a lost row reaches `check_strife_openers`'s refusal, not a KeyError.
 PETITION_MATTER_KEY = ABOUT_KEYS.get(PETITION_RECORD_KIND)
@@ -5427,14 +5581,21 @@ OPENING_KINDS = (*sorted(OPENS_KINDS), OPENING_MARCH_KIND, OPENING_DEATH_KIND, *
 
 
 def check_strife_openers(joins, verb_table, record_keys) -> None:
-    """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): every opener beyond `opens` is a `joins` kind, every
-    opener verb (`OPENING_MARCH_VERB`, `OPENING_DEATH_VERBS`) is a row of `verb_table`, and the `petition` record
-    kind still keys `PETITION_MATTER_KEY`. Callable so a test can plant each refusal."""
+    """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): every opener beyond `opens` is a `joins` kind, no
+    content-opening kind (`CONTENT_OPENING_KINDS`) is also a concluding kind (`CONCLUDING_KINDS`: the claim that
+    begins a movement ends nothing, B12a.05, A-45), every opener verb (`OPENING_MARCH_VERB`,
+    `OPENING_DEATH_VERBS`) is a row of `verb_table`, and the `petition` record kind still keys
+    `PETITION_MATTER_KEY`. Callable so a test can plant each refusal."""
     for k in OPENING_KINDS[len(OPENS_KINDS):]:
         if k not in joins:
             raise Unspecified(
                 f"world reading opener {k!r} is not a `strife_kinds.joins` kind", "rosters.yaml -- strife_kinds",
                 needs=f"{k!r} in `joins`, or the opener dropped", law="CR-75 -- the world reading opens on joins kinds only")
+    for k in CONTENT_OPENING_KINDS:
+        if k in CONCLUDING_KINDS:
+            raise Unspecified(
+                f"content-opening kind {k!r} is also a `strife_kinds.concludes` kind", "rosters.yaml -- strife_kinds",
+                needs=f"{k!r} out of `concludes`", law="A-45 -- a content opener concludes nothing at the person reading")
     for v in (OPENING_MARCH_VERB, *sorted(OPENING_DEATH_VERBS)):
         if v not in verb_table:
             raise Unspecified(
@@ -5646,6 +5807,20 @@ def _content_matter(rd: _StrifeReading, e, a=None) -> Optional[tuple]:
     return read(rd, e, a) if read is not None else None
 
 
+def _creed_released(rd: _StrifeReading, e) -> bool:
+    """A-46: is `e` a `commitment.ended` whose closed edge is a `commit` to a faction's creed Proposition
+    (`FACTION_BY_PROP`)? The closed edge is the Tenure a change of `e` names on `until` (what `_eff_release`
+    writes); the key is that edge's kind and object, never the releaser's id. A `commit` to any other Proposition
+    (a cause, a war) is a routine release and no move."""
+    if e.kind != CREED_RELEASE_KIND:
+        return False
+    for c in e.changes:
+        t = rd.tenures.get(c.subject)
+        if c.field == "until" and t is not None and t.kind == "commit" and t.object in FACTION_BY_PROP:
+            return True
+    return False
+
+
 def _parents(rd: _StrifeReading, refs) -> set:
     """The rungs one step above `refs` (`_StrifeReading.parent`), the realm never among them."""
     return {p for p in (rd.parent(r) for r in refs) if p is not None}
@@ -5659,6 +5834,7 @@ class _Chain:
         self.refs: set = set()
         self.parents: set = set()
         self.doers: set = set()
+        self.openers: set = set()      # the doers of its opening moves (`opened_by`)
 
     def take(self, rd: "_StrifeReading", mv: Move) -> None:
         self.moves.append(mv)
@@ -5666,18 +5842,26 @@ class _Chain:
         self.parents |= _parents(rd, mv.referents)
         if mv.doer is not None:
             self.doers.add(mv.doer)
+            if mv.opens:
+                self.openers.add(mv.doer)
+
+    def opened_by(self, doer: str) -> bool:
+        """True when `doer` did one of the chain's opening moves (A-45: the same-doer link is bounded by it)."""
+        return doer in self.openers
 
     def absorb(self, other: "_Chain") -> None:
         self.moves += other.moves
         self.refs |= other.refs
         self.parents |= other.parents
         self.doers |= other.doers
+        self.openers |= other.openers
 
 
 def _links(m: Move, up: set, s: _Chain) -> bool:
     """`strife-00` §4's linking rule (A9), ONE OWNER FOR BOTH READINGS: a shared referent; a referent the parent
     or child of one of the strand's, one rung step apart (`up` is the move's `_parents`, read once per move by the
-    caller); or the same doer (`Move.doer`). Never through the
+    caller); or the same doer (`Move.doer`), bounded (A-45): the doer must have opened the strand, or the move must
+    itself be an opener. Never through the
     realm rung (it is in no referent set and no parent set); never by who holds a rung (no holder is read).
     THE SAME-DOER CLAUSE READS `Move.doer` AND NOTHING ELSE; who fills it decides what it reaches. The world
     reading fills it from the act store (`causing_act(...).actor`, `actor_of`'s body), so there it links any two
@@ -5689,7 +5873,7 @@ def _links(m: Move, up: set, s: _Chain) -> bool:
     from what he saw, not a read of the act store."""
     if m.referents & s.refs or up & s.refs or m.referents & s.parents:
         return True
-    return m.doer is not None and m.doer in s.doers
+    return m.doer is not None and m.doer in s.doers and (m.kind in OPENS_KINDS or s.opened_by(m.doer))
 
 
 def _merge(live: list, s0: _Chain, others) -> _Chain:
@@ -5782,13 +5966,15 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     """THE WORLD READING (`strife-00` §4, §5): the strands in the log, and the eras over them. `terminal(e, a)`
     says whether an Event (with its causing act, or `None`) is a terminal move; default `default_terminal`.
 
-    STRANDS. Moves are read in log order. A move linking to one or more strands joins them (merged, the oldest id
+    STRANDS. Moves are read in log order; a move is an Event of a `MOVE_KINDS` kind, or a creed's release
+    (`_creed_released`, A-46: a `commitment.ended` closing a `commit` to a faction's creed). A move linking to one or more strands joins them (merged, the oldest id
     kept: new events fold into existing flows, R3); a move linking to none starts a strand only if it opens one.
     A content opener's earlier same-matter moves that no strand holds are taken into the strand it opens (the
     first petition belongs to the movement the second makes), whether the opener started a strand or linked to
     one; and every other strand a taken earlier move links to is merged in, as `_attach` merges for the move
-    itself. A move that content-opens, and each earlier move it takes, is an OPENING move and is never terminal,
-    though its kind is in `concludes` (two petitions start the movement; neither ends it). A strand is read at the lowest rung
+    itself. An OPENING move (by kind, by side, by death verb or by content), and each earlier move a content
+    opener takes, is never terminal, though its kind may be in `concludes` (two petitions start the movement;
+    neither ends it). An authority's march (side A) does not open and stays terminal where its code is. A strand is read at the lowest rung
     covering its moves (it zooms).
 
     A STATED LIMIT: a march's side (`march_side`) and every referent's parent (`_StrifeReading.parent`) are read
@@ -5808,7 +5994,7 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     held: set = set()
     earlier: dict = {}
     for i, e in enumerate(w.log):
-        if e.kind not in MOVE_KINDS:
+        if e.kind not in MOVE_KINDS and not _creed_released(rd, e):
             continue
         a = causing_act(w, e)
         refs = _move_referents(rd, e, a)
@@ -5818,8 +6004,9 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
         matter = _content_matter(rd, e, a)
         prior = earlier.setdefault(matter, []) if matter is not None else None
         content_opens = bool(prior)
-        m = Move(e.id, i, e.kind, a.actor if a is not None else None, refs, None, opens or content_opens,
-                 bool(term(e, a)) and not content_opens)
+        opening = opens or content_opens
+        m = Move(e.id, i, e.kind, a.actor if a is not None else None, refs, None, opening,
+                 bool(term(e, a)) and not opening)
         s0 = _attach(rd, live, m)
         if s0 is None:
             if prior is not None:

@@ -174,13 +174,86 @@ def test_in27_peninsular_sovereignty_is_reached_by_the_last_holders_act_and_not_
     # THE REALM'S TERRITORIES ARE SELECTED, AND THE FOREIGN ROOT IS NOT (an unheld selected rung
     # would have made the condition false and the report empty)
     selected = {t.object for t in Q._ending_edges(w, row) if t.kind == "hold"}
-    assert "terr_T16" not in selected and selected == set(_realm_territories(w)), selected
+    assert "terr_T16" not in selected and selected == set(_settled_territories(w)), selected
+    assert set(_realm_territories(w)) - selected == {"terr_T15"}, "only the unsettled territory is not asked for"
 
     control = build_realm(0)
     last = _all_but_one_under_the_crown(control)
     control.add_tenure(Tenure("t_in27_last_crown", last, CROWN, "commit", 0))
     assert Q._ending_edges(control, row), "control: the planted condition does not hold"
     assert Q.endings_reached(control) == [], "GD-1's row fired with no person's act among its antecedents"
+
+
+def _settled_territories(w):
+    """The realm's territories with a `settlement` rung among their descendants -- what the shipped
+    `peninsular_sovereignty` row's `settled: true` selects (B12a.09)."""
+    return [r for r in _realm_territories(w)
+            if any(x in w.rungs and w.rungs[x].kind == "settlement" for x in Q.descendants(w, r))]
+
+
+def _settled_all_but_one_under_the_crown(w):
+    """`_all_but_one_under_the_crown`, then every UNSETTLED realm territory (`terr_T15`, which the helper
+    gave the King) left unheld again, so the planted world holds exactly the settled territories. Returns
+    the last holder."""
+    last = _all_but_one_under_the_crown(w)
+    settled = set(_settled_territories(w))
+    unsettled = [r for r in _realm_territories(w) if r not in settled]
+    assert unsettled, "fixture: the realm has an unsettled territory (terr_T15)"
+    for r in unsettled:
+        for t in w.tenures:
+            if t.live and t.kind == "hold" and t.object == r:
+                t.until = w.tick
+        assert Q.governing_hold(w, r) is None, "fixture"
+    return last
+
+
+def test_peninsular_sovereignty_is_reached_when_every_settled_territory_is_held_under_one_faction_by_an_act():
+    """B12a.09 / `09_WR_world_motion` gate (3): the unsettled `terr_T15` stays unheld (no verb holds it), every
+    SETTLED territory is a Crown man's but one holder's, and that holder's own `commit` reaches the shipped
+    row, naming his act; the selected holds are the settled territories and no other. FALSIFIER: the row
+    reached with a SETTLED territory unheld (the last arm)."""
+    w = build_realm(0)
+    last = _settled_all_but_one_under_the_crown(w)
+    settled = set(_settled_territories(w))
+    assert len(settled) >= 14 and "terr_T15" not in settled, settled
+    assert Q.governing_hold(w, "terr_T15") is None, "fixture: the unsettled territory is unheld"
+    _admit(w, last, CROWN, "crown9")
+    kinds = _fold(w, SeasonDriver(w), Act(id="in27_swear9", actor=last, verb="commit", payload={"subject": CROWN}))
+    assert kinds[-1] == "commitment.made", kinds
+    (got,) = Q.endings_reached(w)
+    assert got.ending == "peninsular_sovereignty" and got.victory is True and got.acts == ("in27_swear9",), got
+    selected = {t.object for t in Q._ending_edges(w, _row("peninsular_sovereignty")) if t.kind == "hold"}
+    assert selected == settled, selected
+    # the leak arm: one settled territory unheld -> not reached, though every other condition stands
+    gone = sorted(settled)[0]
+    for t in w.tenures:
+        if t.live and t.kind == "hold" and t.object == gone:
+            t.until = w.tick
+    assert Q.governing_hold(w, gone) is None, "fixture"
+    assert Q.endings_reached(w) == [], "reached with a settled territory unheld"
+
+
+def test_it_is_not_reached_when_one_settled_territory_is_held_by_another_faction():
+    """The same planted world, but one settled territory's holder coheres under the Church: not reached; with
+    that holder back under the Crown it is (the same act is credited), so the one difference is the holder."""
+    w = build_realm(0)
+    last = _settled_all_but_one_under_the_crown(w)
+    king = _king(w)[1]
+    other = next(Q.governing_hold(w, r).subject for r in sorted(_settled_territories(w))
+                 if Q.governing_hold(w, r).subject not in (last, king))
+    for t in w.persons[other].tenures:
+        if t.kind == "commit" and t.live and t.object in R.FACTION_BY_PROP:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_in27_other_church", other, CHURCH, "commit", 0))
+    assert Q.faction_holding(w, other) == CHURCH, "fixture"
+    _admit(w, last, CROWN, "crown9b")
+    _fold(w, SeasonDriver(w), Act(id="in27_swear9b", actor=last, verb="commit", payload={"subject": CROWN}))
+    assert Q.endings_reached(w) == [], "a Church man's territory was read as one faction's"
+    for t in w.persons[other].tenures:
+        if t.kind == "commit" and t.live and t.object == CHURCH:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_in27_other_crown", other, CROWN, "commit", 0))
+    assert [r.ending for r in Q.endings_reached(w)] == ["peninsular_sovereignty"]
 
 
 def test_in27_one_faction_is_not_met_by_a_holder_who_commits_elsewhere():
@@ -340,6 +413,11 @@ def _load(members):
     (dict(_GOOD, threshold=3), "unknown key"),
     (dict(_GOOD, victory="yes"), "victory"),
     (dict(_GOOD, holds={"post": "King", "rung_kind": "territory"}), "holds"),
+    (dict(_GOOD, holds={"rung_kind": "territory", "settled": False}), "holds"),            # `settled: true` only
+    (dict(_GOOD, holds={"rung_kind": "territory", "settled": "yes"}), "holds"),
+    (dict(_GOOD, holds={"post": "King", "settled": True}), "holds"),                       # beside `rung_kind` only
+    (dict(_GOOD, holds={"rung_kind": "territory", "settled": True, "post": "King"}), "holds"),
+    (dict(_GOOD, holds={"settled": True}), "holds"),
     (dict(_GOOD, holds={"seat": "off_king"}), "holds"),
     (dict(_GOOD, holds={"post": "Emperor"}), "no offices.yaml seat carries"),
     (dict(_GOOD, holds={"rung_kind": "continent"}), "not a rung_kinds member"),
@@ -353,6 +431,13 @@ def test_in27_the_loader_refuses_a_malformed_ending_row_naming_it(row, says):
     with pytest.raises(Unspecified) as e:
         _load({"ok": _GOOD, "bad_row": row})
     assert "'bad_row'" in str(e.value) and says in str(e.value), str(e.value)
+
+
+def test_in27_the_loader_admits_settled_true_beside_rung_kind():
+    """The control of the refusals above: the optional key is admitted where it may stand."""
+    row = _load({"ok": dict(_GOOD, holds={"rung_kind": "territory", "settled": True})})["ok"]
+    assert row.holds == ("rung_kind", "territory") and row.settled is True, row
+    assert _load({"ok": dict(_GOOD, holds={"rung_kind": "territory"})})["ok"].settled is False
 
 
 def test_in27_the_loader_refuses_a_second_victory_row():
@@ -403,3 +488,123 @@ def test_in27_a_selector_the_query_cannot_enumerate_is_refused_not_read_as_a_run
     w = build_realm(0, 5)
     with pytest.raises(Forbidden, match="no enumerator"):
         world_q._ending_edges(w, SimpleNamespace(holds=("bogus", "x"), under=R.ENDING_ANY_ONE))
+
+
+# ======================================================================================
+# (f) B12a.12: AN ENDING IS REACHED BY A DRAW, BEHIND `ending_draw` (`09_WR_B_draws_not_thresholds` edit 3)
+# ======================================================================================
+# The two `[CALIBRATE]` rows ship `None` (H-524), so each arm plants them with `Fixtures.sweep`: test arms, not chosen values.
+# THE PLANTED WORLD is `_reached_world`'s: a hold opened by a `confer` act and a Crown commit planted by construction, so the condition
+# stands on two edges, one opened by an act and one inherited (a pool share of one half, one unacted edge in the obstacle).
+
+POOL_STEP, ENDING_OB = 6.0, 0.0                    # test arms (H-524's sweep), not chosen values
+SEEDS = range(200)
+
+
+def _drawn(w, pool_step=POOL_STEP, ob=ENDING_OB, arm=True):
+    w.fixtures = (w.fixtures.sweep("ending_draw", arm).sweep("ending_draw_pool_step", pool_step)
+                  .sweep("ending_draw_ob", ob))
+    return w
+
+
+def _stood(w, seasons):
+    """Put the clock so the planted condition has stood `seasons` seasons (the opening Event's tick counts as the first)."""
+    opened = next(e.emitted_at for e in w.log if e.kind == "tenure.opened")
+    w.tick = opened + seasons - 1
+
+
+def _tally(w, seasons):
+    """`(reached, near)` counts over seeds 0..199 at a condition that has stood `seasons` seasons; each seed's two answers are disjoint."""
+    _stood(w, seasons)
+    reached = near = 0
+    for seed in SEEDS:
+        w.world_seed = seed
+        got, close = Q.endings_reached(w), Q.endings_near(w)
+        assert not ({r.ending for r in got} & {r.ending for r in close}), (seed, got, close)
+        reached += bool(got)
+        near += bool(close)
+    return reached, near
+
+
+def test_a_planted_condition_is_reached_at_some_seeds_and_not_others_over_200_seeds(monkeypatch):
+    """`09_WR_B_draws_not_thresholds` gate (3). The control reaches the planted row at every seed (an outcome identical across 200 seeds); the
+    arm reaches it at some and not at others, and reports `near` at some. FALSIFIER: an ending reached while ineligible -- the same world before
+    the `confer`, and the same condition with no act among its antecedents, reach nothing and are near nothing at any of the 200 seeds."""
+    w = _reached_world(monkeypatch)
+    checked = 0
+    _stood(w, 2)
+    for seed in SEEDS:
+        w.world_seed = seed
+        assert [r.ending for r in Q.endings_reached(w)] == ["crowned_reeve"], seed      # the control: today's reaching, every seed
+        checked += 1
+    reached, near = _tally(_drawn(w), 2)
+    assert 0 < reached < len(SEEDS) and near > 0, (reached, near)
+    # ineligible: the condition does not stand, then stands with no act among its antecedents
+    monkeypatch.setattr(Q, "ENDINGS", REEVE_ROW)
+    for build in (lambda: _gov_world()[0], lambda: _planted_no_act()):
+        v = _drawn(build())
+        assert (not Q._ending_edges(v, REEVE_ROW["crowned_reeve"])) or Q.opened_by_acts(
+            v, Q._ending_edges(v, REEVE_ROW["crowned_reeve"])) == {}, "fixture: the row is ineligible"
+        v.tick = 50
+        for seed in SEEDS:
+            v.world_seed = seed
+            assert Q.endings_reached(v) == [] and Q.endings_near(v) == [], seed
+            checked += 1
+    assert checked >= 3 * len(SEEDS), checked
+
+
+def _planted_no_act():
+    """The Reeve seated by construction (no act opened the hold), a Crown man: the condition holds and no act is among its antecedents."""
+    w, _ = _gov_world()
+    w.add_tenure(Tenure("t_mid_crown", "p_mid", CROWN, "commit", 0))
+    w.add_tenure(Tenure("t_reeve_planted", "p_mid", "off_reeve", "hold", 0))
+    return w
+
+
+def test_it_is_reached_more_often_the_longer_it_has_stood(monkeypatch):
+    """The pool grows with the seasons the condition has stood (read off the opening Event's tick; no counter is stored), so over the same 200
+    seeds a condition that has stood 1, 4 and 12 seasons is reached more often at each. FALSIFIER: a draw that ignores the standing time."""
+    w = _drawn(_reached_world(monkeypatch))
+    rates = [_tally(w, s)[0] for s in (1, 4, 12)]
+    assert rates[0] < rates[1] < rates[2] <= len(SEEDS), rates
+    assert rates[0] < len(SEEDS) and rates[2] > rates[0] + 20, rates
+
+
+def test_the_ending_draw_writes_nothing(monkeypatch):
+    """The arm's two Queries leave the log, the gate's writes and the content hash as they were, and a season on the drawn world reports `near`
+    from `endings_near` and moves the world no differently from the same season with both Queries answering `[]`."""
+    w = _drawn(_reached_world(monkeypatch))
+    before, home = _state(w), w.world_seed
+    for seed in range(20):
+        w.world_seed = seed
+        assert Q.endings_reached(w) is not None and Q.endings_near(w) is not None
+        w.world_seed = home
+        assert _state(w) == before, f"calling the drawn Queries at seed {seed} moved the world"
+    real, calls = Q.endings_near, []
+
+    def spy(x):
+        got = real(x)
+        calls.append(got)
+        return got
+    monkeypatch.setattr(Q, "endings_near", spy)
+    kw = dict(contest_max_depth=w.fixtures.get("contest_max_depth"))
+    out = SeasonDriver(w).season(P.NOCHOOSE, question=None, **kw)
+    assert len(calls) == 1 and out["near"] is calls[0], (calls, out.get("near"))
+    other = _drawn(_reached_world(monkeypatch))
+    monkeypatch.setattr(Q, "endings_reached", lambda _w: [])
+    monkeypatch.setattr(Q, "endings_near", lambda _w: [])
+    skipped = SeasonDriver(other).season(P.NOCHOOSE, question=None, **kw)
+    assert skipped["near"] == [] and _state(w) == _state(other), "the ending draw moved the season"
+
+
+def test_the_ending_draw_refuses_an_unset_row(monkeypatch):
+    """`ending_draw` True with either `[CALIBRATE]` row `None` raises `Unspecified` naming the row; the control reads neither."""
+    w = _reached_world(monkeypatch)
+    assert [r.ending for r in Q.endings_reached(w)] == ["crowned_reeve"] and Q.endings_near(w) == []
+    for name in ("ending_draw_pool_step", "ending_draw_ob"):
+        v = _drawn(w)
+        v.fixtures = v.fixtures.sweep(name, None)
+        with pytest.raises(Unspecified, match=name):
+            Q.endings_reached(v)
+        with pytest.raises(Unspecified, match=name):
+            Q.endings_near(v)

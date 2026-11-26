@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 528,
-    "uncited": 396,
+    "total": 542,
+    "uncited": 410,
     "of_which_assumption_grade": 9
   },
-  "count": 528,
+  "count": 542,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 41,
@@ -17,8 +17,8 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 222,
-    "engine.season.realm": 8
+    "engine.season.settings": 235,
+    "engine.season.realm": 9
   },
   "params": [
     {
@@ -4605,6 +4605,154 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.settings.wear_draw",
+      "name": "wear_draw",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-523`, swept False (control, SHIPPED) / True (pool 4, step 0.12) / True (pool 6, step 0.08)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ending_draw",
+      "name": "ending_draw",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.arrival_report",
+      "name": "arrival_report",
+      "value": "off",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-525`, swept off (control, SHIPPED) / on",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.endowment_mode",
+      "name": "endowment_mode",
+      "value": "ground",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-526`, swept uniform (control) / ground (SHIPPED, B12a.54's flip)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.granary_seasons",
+      "name": "granary_seasons",
+      "value": 4,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-527`, swept 0 (control) / 4 (SHIPPED, B12a.55's flip) / 8",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.larder_walk",
+      "name": "larder_walk",
+      "value": "through",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-528`, swept first (control) / through (SHIPPED, B12a.56's flip) / through where the home rung holds the whole want (the walk stops at once)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_severity_draw",
+      "name": "hunger_severity_draw",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-529`, swept False (control) / True (SHIPPED, B12a.62's flip; pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_band_steps",
+      "name": "hunger_band_steps",
+      "value": {
+        "Overwhelming": 0.0,
+        "Success": 0.5,
+        "Partial": 1.0,
+        "Failure": 2.0
+      },
+      "kind": "table",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-530`, swept shipped (0 / 0.5 / 1 / 2) / flat (1 / 1 / 1 / 1) / harsher tail (0 / 0.25 / 1 / 3)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_body_pool",
+      "name": "hunger_body_pool",
+      "value": 4,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-531`, swept 0 (the body term off) / 4 (SHIPPED) / 8",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_depth_obstacle",
+      "name": "hunger_depth_obstacle",
+      "value": 4.5,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-532`, swept 3 / 4.5 (SHIPPED) / 6",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rupture_band",
+      "name": "rupture_band",
+      "value": 100,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-533`, swept 50 / 100 (SHIPPED) / 200",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rupture_base",
+      "name": "rupture_base",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-534`, swept 1 / 2 (SHIPPED) / 4",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.rupture_pool_cap",
+      "name": "rupture_pool_cap",
+      "value": 6,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-535`, swept 3 / 6 (SHIPPED) / 12",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.settings.wound_harm_model",
       "name": "wound_harm_model",
       "value": "scene_fraction",
@@ -6566,6 +6714,17 @@
       "key": "engine.season.realm.cast_attributes",
       "name": "cast_attributes",
       "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/boot/realm.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.wound",
+      "name": "wound",
+      "value": false,
       "kind": "scalar",
       "module": "engine.season.realm",
       "file": "engine/season/boot/realm.py",
