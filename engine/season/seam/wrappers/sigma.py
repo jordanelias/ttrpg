@@ -2163,8 +2163,7 @@ class _Believed:
                 if said is not None:
                     held[name] = mid + self.acc * (float(said) - mid)
             shell = copy.copy(self.w.persons[pid])
-            shell.attributes, shell.pursuits, shell.conviction, shell.stance, shell.ledger = held, {}, {}, [], []
-            shell.traits = frozenset()               # B24.35: what moves him is no more known than his pursuits (WGM edit 5, the arguer's own knowledge of it, is not built)
+            shell.attributes, shell.pursuits, shell.conviction, shell.stance, shell.ledger, shell.traits = held, {}, {}, [], [], frozenset()      # B24.35: traits too -- what moves him is no more known than his pursuits (WGM edit 5, the arguer's own knowledge of it, is not built)
             self.shells[pid] = shell
         return self.shells[pid]
 
