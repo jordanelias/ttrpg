@@ -63,7 +63,7 @@ from ..state.world import World
 from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .carin import build_world
-from .governance_spine import ACCUSER, build_hearing
+from .governance_spine import ACCUSED, ACCUSER, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
 from .play_surface import board, carry_on, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
@@ -494,13 +494,23 @@ SCENARIOS["life"] = Scenario(build=build_realm, seat=None, ending=life_ending, k
 HEARING_VERBS = frozenset({"speak", "determine", "argue", "tell", "lie", "petition", "carry", "open_case", "commit", "utter", "give"})   # `IS-B2` §1.0 "verb set"
 
 
-def hearing_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
-    """THE HEARING'S ENDING: `None` until B24.38 (`IS-B2-SC-08` (5)) lands `hearing_ending` and the row's `kinds`; the run goes the seasons it is given.
-    [ASSUMPTION: a row with no ending names is admitted -- basis: `IS-B2-CORE-01` refuses a row without `kinds` "for a name its `ending` reader can return", and this reader returns none.]"""
-    return None
+#: What each ending is for the seated person (`IS-B2-SC-08` (5)). [ASSUMPTION: the seated person is a party or an advocate, not a bench member -- basis: HEAR_B's seat list; a seated bench member reads
+#: `drawn` for every name, and the row has no field for a seat's side (B34 splits it as `IS-B3-GO-02` does for `season`). `dismissed` reads `matter.undetermined` until B27 (`governance_spine.hearing_ending`).]
+HEARING_KINDS = {"carried": "won", "carried_in_part": "won", "agreed": "won", "dismissed": "lost", "adjourned": "drawn", "lapsed": "drawn", "parted": "drawn"}
 
 
-SCENARIOS["hearing"] = Scenario(build=build_hearing, seat=lambda w: ACCUSER, ending=hearing_ending, verbs=HEARING_VERBS,
+def hearing_stop(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
+    """THE HEARING'S ENDING (`IS-B2-SC-08`): `governance_spine.hearing_ending` of the accuser's matter (`ACCUSED`) once a sitting has been held on it, or once no season is left (then `lapsed`
+    if none was); `None` while neither, so the run goes on to the season that holds one."""
+    return hearing_ending(w, ACCUSED) if sitting_events(w, ACCUSED) or seasons_left <= 0 else None
+
+
+def hearing_reading(w: World, pid: Optional[str]) -> str:
+    """The hearing row's figure on the summary line: the items the sittings entered or struck, and the durable writes the matter's Events made (the budget debit is none; A-81)."""
+    return f"exchanges {sitting_exchanges(w, ACCUSED)} · writes {sum(sitting_writes(w, ACCUSED).values())}"
+
+
+SCENARIOS["hearing"] = Scenario(build=build_hearing, seat=lambda w: ACCUSER, ending=hearing_stop, verbs=HEARING_VERBS, kinds=HEARING_KINDS, reading=hearing_reading,
                                 role="social_contest.proceeding")
 
 

@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 133,
-    "total": 505,
-    "uncited": 372,
+    "total": 506,
+    "uncited": 373,
     "of_which_assumption_grade": 9
   },
-  "count": 505,
+  "count": 506,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 43,
+    "engine.season": 44,
     "mass_battle": 160,
     "social_contest": 1,
     "characters": 5,
@@ -363,6 +363,17 @@
       "module": "engine.season",
       "file": "engine/season/harness/governance_spine.py",
       "note": "`IS-B2` §1.0: \"two parties each with three filed exhibits\"",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.HEARING_OPENS",
+      "name": "HEARING_OPENS",
+      "value": 1,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/governance_spine.py",
+      "note": "",
       "citation": null,
       "citation_grade": null
     },

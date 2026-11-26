@@ -98,7 +98,9 @@ def main() -> int:
             if who is None:
                 raise SystemExit(f"{a.world} has no default seat: --play takes a person id")
         r = scenarios.run(a.world, a.seed, a.seasons, host=None if who is None else scenarios.played_host(who), person=who)
-        print(f"{a.world} · {r['seasons']} season(s) · seed {a.seed} · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}")
+        reading = scenarios.SCENARIOS[a.world].reading           # the row's own figure for its summary line (the hearing's: its exchanges and the durable writes of its Events)
+        print(f"{a.world} · {r['seasons']} season(s) · seed {a.seed} · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}"
+              + ("" if reading is None else f" · {reading(r['world'], r['seat'])}"))
         print(f"CONTENT HASH: {r['hash']}")
         return 0
     if a.case != CASE:

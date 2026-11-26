@@ -557,3 +557,86 @@ def test_no_constant_decider_wins_on_all_three_hands():
     best = {h: max(arms, key=lambda n: (share[h, n], n)) for h in hands}
     assert not (len(set(best.values())) == 1 and "chooser" not in best.values()), (best, share)
     assert len(set(share.values())) > 3, share
+
+
+# ---- B24.38: every ending of a sitting writes (IS-B2-SC-08) --------------------------------------------------------------------------
+
+def test_every_ending_of_a_sitting_leaves_a_durable_write():
+    """`headless --world hearing --auto` at seeds 0 to 19 (the same `scenarios.run` call, two seasons): each run ends by one of the seven kinds, the row's reading is the exchange count and the
+    write count of the matter's Events (case-file stages, Tenures opened or closed, claims deposited), and the write count is above 0 in every run. FALSIFIER: a run that ends with nothing written,
+    or an ending outside the seven, or twenty runs of one kind (the loop cannot pass by one kind)."""
+    from collections import Counter
+
+    from ..harness import governance_spine as G
+    from ..harness import scenarios as S
+
+    kinds, checked = Counter(), 0
+    for seed in range(20):
+        r = S.run("hearing", seed, 2)
+        w, tally = r["world"], G.sitting_writes(r["world"], G.ACCUSED)
+        assert r["ending"] in G.HEARING_ENDINGS and r["kind"] in S.ENDING_KINDS, (seed, r["ending"])
+        assert sum(tally.values()) > 0, (seed, r["ending"], tally)
+        assert S.SCENARIOS["hearing"].reading(w, r["seat"]).endswith(f"writes {sum(tally.values())}"), seed
+        kinds[r["ending"]] += 1
+        checked += 1
+    assert checked == 20 and len(kinds) >= 3, kinds
+
+
+def test_an_adjourned_stage_is_read_by_the_next_sitting():
+    """A bench that adjourns (the sitting ends `budget` on the bench member's own `adjourn`) leaves ONE `adjourned` stage on the case file, under the act of the member who adjourned, and
+    the Event reads `adjourned`; the next sitting of the matter on the same file finds it (`world_q.adjournments` reads 1 before it sits, and the stage stays one after it), and its own
+    ending reads by its band. CONTROL: the same sitting with its last move `rule` writes no `adjourned` stage; a sitting whose item names no case file writes none either."""
+    from dataclasses import replace as _replace
+
+    from ..data.matrix import WriteClass
+    from ..harness import governance_spine as G
+    from ..loop.driver import mint_token
+    from ..queries import world_q
+    from ..seam import Resolution
+    from .test_sc_proceeding_host import _beat, _planted
+    from .test_u7_remit import JUDGE, PARTY, _determine, _fold, _open, _world
+
+    def sit(w, d, act_id, last, degree="Success", ended="budget"):
+        beats = [_beat(1, "p_low", "for", 0.1), _replace(_beat(2, "p_mid", "against", -0.1), move=last)]
+        act = _determine(act_id)
+        w.acts.append(act)                                           # the act store holds it, as RESOLVE leaves it: the log's reader asks which act caused an Event
+        return d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(degree, _planted(beats, ended=ended)))
+
+    w, d = _world(**JUDGE)
+    _fold(w, d, _open("oc"))
+    file = w.records["rec:oc"]
+    before = list(file.stages)
+    w.tick = G.HEARING_OPENS
+    first = [e for e in sit(w, d, "dt1", "adjourn") if e.kind == "matter.determined"]
+    w.log.extend(first)
+    assert first and file.stages == before + [("adjourned", "p_mid")] and world_q.adjournments(w, "rec:oc") == 1
+    assert G.hearing_ending(w, PARTY) == "adjourned"
+    for item in w.docket:                                           # the matter is back before the room (the disposal took it off), the file the same, the first edge spent
+        item["matter"] = PARTY
+    for t in w.tenures:
+        if t.kind == "oblige" and t.subject == PARTY:
+            t.until = w.tick
+    assert world_q.adjournments(w, "rec:oc") == 1                   # what the next sitting reads, before it sits
+    w.tick += 1
+    second = [e for e in sit(w, d, "dt2", "rule") if e.kind == "matter.determined"]
+    w.log.extend(second)
+    assert second and world_q.adjournments(w, "rec:oc") == 1 and G.hearing_ending(w, PARTY) == "carried"
+    # the control: a closing `rule` writes no adjourned stage
+    w2, d2 = _world(**JUDGE)
+    _fold(w2, d2, _open("oc"))
+    w2.tick = G.HEARING_OPENS
+    assert [e for e in sit(w2, d2, "dt1", "rule") if e.kind == "matter.determined"] and world_q.adjournments(w2, "rec:oc") == 0
+
+
+def test_a_sitting_with_its_case_file_writes_suppressed_counts_zero():
+    """THE COUNTER CAN READ ZERO. `sitting_writes` counts what the matter's Events wrote SINCE THE OPENING: on the world `build_hearing` hands over, whose opening acts (`open_case`'s case file and
+    clock stages, the Tenures and the claims they made) were folded before it, every cell reads 0, with the case file full of its clock's stages; after one season of the same world the cells that
+    a sitting moves read above 0. FALSIFIER: a counter that reads the premise's own writes (a case file's clock stages, an opened Tenure) as the sitting's, so that no ending could fail to write."""
+    from ..harness import governance_spine as G
+    from ..harness import scenarios as S
+
+    w = G.build_hearing(1)
+    assert any(rec.stages for rec in w.records.values()) and w.tenures                  # the premise did write: a file with its stages, and Tenures
+    assert dict(G.sitting_writes(w, G.ACCUSED)) == {"stages": 0, "tenures": 0, "claims": 0} and G.hearing_ending(w, G.ACCUSED) == "lapsed"
+    ran = G.sitting_writes(S.run("hearing", 1, 1)["world"], G.ACCUSED)
+    assert ran["claims"] > 0 and ran["stages"] > 0, ran

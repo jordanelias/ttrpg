@@ -471,6 +471,17 @@ EXCLUDED_STAGE, EXCLUDED_CELLS = "excluded", 5
 ANSWERED_STAGE, ANSWERED_CELLS = "answered", 6
 
 
+# B24.38 -- THE STAGE A BENCH'S ADJOURNMENT WRITES, beside the exchange stages (the ONE OWNER of the shape; `loop/effects_information.py::_eff_determine` writes it, `queries/world_q.py::adjournments`
+# reads it): `("adjourned", the bench member whose `adjourn` held the sitting)` -- two cells like an exchange's `(kind, item)`, the second a person because an adjournment enters no item.
+# [JUSTIFIED: `adjourned` 2 cells: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.38), not a tunable.]
+ADJOURNED_STAGE, ADJOURNED_CELLS = "adjourned", 2
+
+
+def is_adjourned(st) -> bool:
+    """IS `st` AN ADJOURNED STAGE: a tuple of `ADJOURNED_CELLS` cells labelled `ADJOURNED_STAGE` (an exchange stage is labelled by `EXCHANGE_CELLS`, a filed one by `FILED_STAGE`)."""
+    return isinstance(st, tuple) and len(st) == ADJOURNED_CELLS and st[0] == ADJOURNED_STAGE
+
+
 def is_filed(st) -> bool:
     """IS `st` A FILED STAGE (an exhibit): a tuple of `FILED_CELLS` cells, or `FIRST_CELLS` with the first-heard mark, labelled `FILED_STAGE`."""
     return isinstance(st, tuple) and len(st) in (FILED_CELLS, FIRST_CELLS) and st[1] == FILED_STAGE

@@ -1728,6 +1728,10 @@ if SITTING_SOURCE not in CLAIM_SOURCES:
     raise Unspecified(f"`sitting_claims` has `claim.source: {SITTING_SOURCE!r}`", "rosters.yaml -- sitting_claims", needs="a `claim_sources` member",
                       law="V2 p2 §J -- a claim is held by one of the ways a person comes to hold one")
 EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE, *_HEARING_EFFECTS = roster("proceeding_effects", ordered=True)
+EFFECT_ADJOURN = "adjourn"          # B24.38: the bench's move that holds the stage to the next sitting; a member of the closed set above, refused below if the roster loses it
+if EFFECT_ADJOURN not in _HEARING_EFFECTS:
+    raise Unspecified(f"`proceeding_effects` holds no {EFFECT_ADJOURN!r}", "rosters.yaml -- proceeding_effects", needs="an `adjourn` member",
+                      law="B24.38 -- a sitting's ending is read by the effect of its last move")
 *STANCE_BANDS, STANCE_DECIDED = roster("stance_bands", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
 DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)

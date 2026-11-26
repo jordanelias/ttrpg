@@ -29,12 +29,12 @@ from ..data.rosters import (
 from ..gaps import Forbidden
 from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ANSWERED_STAGE, EXCLUDED_STAGE, FILED_STAGE, ArmyCommand, Outcome, exchanges
+from ..queries.inputs import ADJOURNED_STAGE, ANSWERED_STAGE, EXCLUDED_STAGE, FILED_STAGE, ArmyCommand, Outcome, exchanges
 from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
-    case_file_of, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
+    adjourned_by, case_file_of, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
@@ -655,6 +655,11 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     Nothing is appended where no item was entered or struck (every sitting at `sitting_exchanges` 0), where the item names no case file (a computed or calendar
     item: its list is on the Event alone), or at `Failure` (the row writes `[]`, this body is not called).
 
+    B24.38 (IS-B2-SC-08) -- AN ADJOURNMENT IS WRITTEN TOO: where the sitting's last move was the bench's `adjourn` (`world_q.adjourned_by`), ONE more stage `(ADJOURNED_STAGE, the bench member)` is
+    appended after the exchanges, on the same file and under the same act, so the next sitting of the matter finds it (`world_q.adjournments`). It is not on the Event's `exchange` list
+    (the Event's beats already end on the `adjourn`). ⚠ THE DISPOSAL IS NOT HELD BACK BY IT: an adjourned sitting still draws its close, and at a non-Failure band opens the edge and takes the
+    matter off the docket as any other; named, not decided (the bench's `adjourn` is reached by no computed sitting today: `proceed` gives a seat that decides without a side no turn).
+
     ⚠ v9 SC-02 `22b` STEP 24 -- AND THE DETERMINER'S OWN PURSUITS, BY CONSEQUENCE (`19_PLAN.md` step 24,
     *"Conviction moves by consequence"*; the plan's `convictions` is `(Person, pursuits)` since
     `ED-IN-0261` item 1 -- `Person.conviction`, IN-08's affiliations, is another field). The same write
@@ -707,6 +712,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         # receipt is named -- where no beat entered or struck an item (every sitting at `sitting_exchanges` 0), or where the item has no case file.
         out = res.result.get("proceeding") if isinstance(res.result, dict) else None
         listed = tuple(exchanges(out.beats)) if isinstance(out, Outcome) else ()
+        bench = adjourned_by(out.beats) if isinstance(out, Outcome) else None            # B24.38: the bench member whose `adjourn` closed the sitting, if one did
+        listed += () if bench is None else ((ADJOURNED_STAGE, bench),)
         case = next((c for c in (case_file_of(w, i) for i in items) if c in w.records), None) if listed else None
         if case is not None:
             subjects += (Subject.entity("records", case, earns=band_kind, fields=("stages",)),)

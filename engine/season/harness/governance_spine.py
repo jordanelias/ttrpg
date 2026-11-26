@@ -49,7 +49,7 @@ from engine.substrate import names as _names
 from ..boot.chooser import chooser
 from ..boot.realm import build_realm, place_person
 from ..data import files
-from ..data.matrix import Step, WriteClass
+from ..data.matrix import Step, WriteClass, matrix_row
 from ..data.rosters import FACTION_BY_PROP, RESTRAINT_KINDS, SUCCESSIONS, load_yaml, remit_or_default
 from ..data.verbs import REFUSAL_KINDS, VERB_TABLE
 from ..decision.choose import make_ranker
@@ -60,7 +60,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import faction_q, world_q
 from ..queries.person_q import COMPLIANCE_WITHHELD, addressed_to
 from ..state.attribution import causing_act
-from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
+from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes, is_clock_stage
 from ..state.containment import parent_of
 from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, draw_factory
@@ -801,8 +801,72 @@ def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> Worl
                 _open(w, d, Act(id=f"hear:file:{who}:{n}", actor=who, verb="create_record", payload={"kind": "text"}))
     finally:
         w.fixtures = played
-    w.tick += 1
+    w.tick = HEARING_OPENS
     return w
+
+
+# B24.38 (IS-B2-SC-08) -- HOW A SITTING ENDED, AND WHAT ITS ENDING WROTE. Computed over the log and the case file, stored nowhere.
+HEARING_ENDINGS = ("carried", "carried_in_part", "dismissed", "adjourned", "lapsed", "agreed", "parted")     # the one owner of the seven names; `scenarios.SCENARIOS["hearing"].kinds` keys them
+# [JUSTIFIED: tick 1: the tick `build_hearing` hands the world at (the opening acts are folded at tick 0), so an Event before it is the premise's; a tick of the world, not a tunable.]
+HEARING_OPENS = 1
+_DISPOSAL = frozenset(k for ks in VERB_TABLE["determine"].emits_by_degree.values() for k in ks) - frozenset(matrix_row("Person", "pursuits").emits)   # `determine`'s band kinds, its pursuit move out
+
+
+def _matter_of(w: World, e) -> Optional[str]:
+    """The `subject` of the act that caused Event `e` (the matter a verb is about), `None` where no act did or the act names none."""
+    a = causing_act(w, e)
+    return a.payload.get("subject") if a is not None and isinstance(a.payload, dict) else None
+
+
+def sitting_events(w: World, matter: str) -> list:
+    """The Events, in log order, of every SITTING HELD on `matter` since the opening: the disposal Events (`determine`'s band kinds, never its refusal or its vote, which carry no sitting) of
+    a `determine` act whose subject is `matter`."""
+    return [e for e in w.log if e.kind in _DISPOSAL and e.emitted_at >= HEARING_OPENS and world_q.ending_arrangement(e) is not None
+            and getattr(causing_act(w, e), "verb", None) == "determine" and _matter_of(w, e) == matter]
+
+
+def hearing_ending(w: World, matter: str) -> str:
+    """HOW THE LAST SITTING HELD ON `matter` ENDED: one of `HEARING_ENDINGS`, read off the log (its Event's beats, card and band) and nothing else; no sitting held is `lapsed`. In this order:
+      * `adjourned`       -- the sitting's last move was the bench's `adjourn` (`world_q.adjourned_by`; it ends `budget`, B24.06): the matter is put off to a later sitting;
+      * `agreed`/`parted` -- NOBODY DECIDES (`card.decided_by` empty: a consent room, where each party's own accept is the act): `agreed` where the sitting ended `yielded` (an accept is `ended
+                             == "yielded"`), `parted` where it ended any other way. [No consent sitting is hosted until B28 (`_eff_determine`, B24.31), so neither is reached today.]
+      * `dismissed`       -- the band is `Failure`: `matter.undetermined`, which `determine` emits where the room heard the matter and disposed of nothing
+                             [ASSUMPTION: `dismissed` reads `matter.undetermined` until B27's acquittal makes it reachable as the row's own -- basis: `verb_table.yaml: determine` emits it at Failure today];
+      * `carried_in_part` -- the band is `Partial` (the held matter: the disposal opens graded `Partial`);
+      * `carried`         -- `Success` or `Overwhelming`: the disposal opens at that band.
+    The LAST sitting is the matter's present standing; an earlier one's ending is not what the matter now is."""
+    held = sitting_events(w, matter)
+    if not held:
+        return "lapsed"
+    e = held[-1]
+    if world_q.adjourned_by(world_q.ending_beats(e)) is not None:
+        return "adjourned"
+    if not world_q.ending_card(e).decided_by:
+        return "agreed" if world_q.ending_sitting(e).ended == "yielded" else "parted"
+    if e.degree == DEGREE_LABEL[Degree.FAILURE]:
+        return "dismissed"
+    return "carried_in_part" if e.degree == DEGREE_LABEL[Degree.PARTIAL] else "carried"
+
+
+def sitting_exchanges(w: World, matter: str) -> int:
+    """The items the sittings held on `matter` entered or struck: `world_q.ending_exchanges` summed over their Events."""
+    return sum(len(world_q.ending_exchanges(e)) for e in sitting_events(w, matter))
+
+
+def sitting_writes(w: World, matter: str) -> Counter:
+    """THE DURABLE WRITES THE MATTER'S EVENTS MADE since the opening (A-81: no ending leaves the stage bare), by kind: `stages` -- the case-file stages that are no clock's (an exchange, an
+    adjournment, a filed, excluded or answered item) on each case file an Event of the matter wrote; `tenures` -- Tenures opened or closed by them; `claims` -- `claim.deposited` Events caused by
+    them, the claims their witnesses were given. The Events are those of every act whose subject is `matter`; a `determine`'s budget debit is not a write and is not counted. A reader: it
+    changes nothing, and each cell reads 0 where nothing of its kind was written."""
+    mine = {e.id for e in w.log if e.emitted_at >= HEARING_OPENS and _matter_of(w, e) == matter}
+    tenures = {t.id for t in w.tenures}
+    files, opened = set(), 0
+    for e in w.log:
+        if e.id in mine:
+            files.update(c.subject for c in e.changes if c.subject in w.records)
+            opened += sum(1 for c in e.changes if c.subject in tenures)
+    return Counter(stages=sum(1 for f in files for st in w.records[f].stages if not is_clock_stage(st)), tenures=opened,
+                   claims=sum(1 for e in w.log if e.kind == "claim.deposited" and any(c in mine for c in e.causes)))
 
 
 # B24.32 -- THE RUN'S SHAPE (KERN_B "What is carried": `narrative.py`'s four arcs, read in the harness over the sitting's own beats). Computed, stored nowhere.

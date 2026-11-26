@@ -35,7 +35,7 @@ from ..data.requires import (
     KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
-    ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
+    ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, MATTERS, RECORD_MATTER, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
@@ -114,7 +114,7 @@ from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
-                     ProduceInput, Sitting, SubsistInput, Under, is_filed, is_first, written)
+                     ProduceInput, Sitting, SubsistInput, Under, is_adjourned, is_filed, is_first, written)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -738,6 +738,21 @@ def ending_exchanges(event) -> tuple:
     """`((kind, item id), ...)`: the items a sitting entered and struck, as its Event listed them (B24.14; `queries/inputs.py::exchanges` is the value
     `_eff_determine` appends to the case file's `Record.stages`); `()` for an Event that lists none."""
     return tuple((x[1], x[2]) for x in _tagged(event, ENDING_EXCHANGE))
+
+
+def adjourned_by(beats) -> Optional[str]:
+    """B24.38 -- WHO ADJOURNED THE SITTING: the mover of the last of `beats` (a `Beat` of the Outcome, or an `EndedBeat` of an Event) where that beat's move has the effect `adjourn`
+    (`proceeding_moves`: the bench's own move, which ends the sitting `budget` and holds the stage to the next sitting), else `None`. The one owner of the reading:
+    `loop/effects_information.py::_eff_determine` writes the stage by it and `harness/governance_spine.py::hearing_ending` reads the ending by it."""
+    last = beats[-1] if beats else None
+    return last.mover if last is not None and PROCEEDING_MOVES[last.move]["effect"] == EFFECT_ADJOURN else None
+
+
+def adjournments(w: World, case: str) -> int:
+    """B24.38 -- HOW MANY TIMES THE BENCH HELD THIS CASE FILE'S MATTER OVER: the `adjourned` stages on the Record `case` (`inputs.ADJOURNED_STAGE`), 0 for a file that is not one. What the
+    next sitting of the matter finds on its file."""
+    rec = w.records.get(case)
+    return 0 if rec is None else sum(1 for st in rec.stages if is_adjourned(st))
 
 
 def ending_bench(event) -> tuple:
