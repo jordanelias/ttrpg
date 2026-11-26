@@ -107,8 +107,8 @@ scales:
       `PYTHONHASHSEED=0 python -m engine.season.harness.corpus_run --seasons 2 <seed>` at seeds 0 and 1 -- its `DEGREES RESOLVED BY
       VERB` block names the social verbs that rolled and the bands they resolved at"
     note: >-
-      The kernel under `systems/social_contest` is not reached by the loop (it retires at plan position `2-ii`,
-      `workplans/valoria_master_workplan_v9.md`); the roll the loop runs is the module entry `social_contest.roll`
+      The kernel under `systems/social_contest` was not reached by the loop (it retired at B24.33, `ED-SC-0045`);
+      the roll the loop runs is the module entry `social_contest.roll`
       (`modules/social_contest/roll.py`), called by the `social_contest` provider through `seam/wrappers/sigma.py`, and it
       resolves through `degree_from_net` (`engine/dice_engine/dice_engine.py`) and `roll_net_continuous`
       (`engine/dice_engine/sigma_leverage.py`). ⚠ REWRITTEN (B05.19): this note used to say the loop does NOT reach the
@@ -518,9 +518,28 @@ rows:
         text: >-
           social contests and debates: `headless --world hearing` prints the same content hash
           twice (`05_SC_playable_hearing_B`). Last recorded `no` ("seam unbuilt"); carried by B24
-        argv: ["python", "-m", "engine.season.harness.headless", "--world", "hearing"]
+        argv: ["python", "-m", "engine.season.harness.headless", "--world", "hearing", "--seed", "0", "--auto"]
         expects: "the same content hash twice"
-        holds: "unread"
+        holds: "yes"
+        reading:    # written by B24.99 (IS-A-12); A-114: no `status:` edited
+          tree: "B24's closing tree `d04348d6e` merged with `origin/main` (B08 and B12a); the merge commit is the tree read, B24 edits no engine file after it. Re-read at the close after the Phase 3 fix (a person presents nothing about himself: the hearing's writes read 35 where 173 before it)"
+          date: "2026-11-26"
+          seed: 0
+          seasons: "1 (the run stops at the first season holding a sitting of the matter; B24.38)"
+          line: |-
+            hearing · 1 season(s) · seed 0 · tick 2 · ending dismissed · kind lost · exchanges 0 · writes 35
+            CONTENT HASH: 62086fa8f6e23cf5b76b62333de45907
+          control: >-
+            `PYTHONHASHSEED=0 python -m engine.season.harness.headless --world hearing --seed 0 --auto`
+            run twice in separate processes: both runs print the line above, hash `62086fa8f6e23cf5b76b62333de45907`
+            (the two outputs are byte-identical, `diff` reads nothing). The realm the hearing is built on reads
+            `cb2a542dabd0f014548a717c08be2dda` at seed 0, one season, on the same tree (a different world: this hash is the hearing's)
+          does_not_show: >-
+            one seed (0), one command line: the same hash twice is determinism, not that the hearing is reached by
+            computed play (R1's after-arm reads 0: no `matter.determined` in the realm lists an exchange, B24.39); the
+            batch gate's second half (the log holds a `matter.determined` whose `ending` lists exchanges) is NOT met at
+            this seed (`exchanges 0`; seed 1 reads 3 in its own `--auto` run, B24.38), and the conjunct as worded asks for
+            the hash alone
       - id: R-04.c4
         text: >-
           mass battles and strategy warfare: `field.won + field.lost` above 0 in computed play at

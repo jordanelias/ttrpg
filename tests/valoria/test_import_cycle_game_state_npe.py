@@ -26,7 +26,7 @@ counted as a real cycle. canonical_accord moved to engine/substrate/canon_bucket
 leaf both modules import at top level now), which deletes the npe -> game_state edge outright.
 
 Two other cycle families are OUT OF SCOPE and must NOT move:
-  - the 9-module systems.social_contest.sim.contest.* cycle (documented intentional-during-rebuild)
+  - the 9-module systems.social_contest.sim.contest.* cycle (documented intentional-during-rebuild; retired with the SC05 kernel, B24.33)
   - the 2 mass-battle cycles (systems.mass_battle.sim.massbattle <-> .units;
     the 5-module systems.mass_battle.sim.* cycle) — routed to the MB session's own plan
 """
@@ -50,8 +50,9 @@ def _real_cycles():
     return sa._cycles(scc, g_code)
 
 
-def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
-    """THREE since step 8 of the decomposition (ED-IN-0203; renamed from `..._four_...`), and the
+def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
+    """THREE since the SC05 kernel retired (B24.33: the `systems.social_contest.sim.contest` cycle died with its files; the
+    count had been FOUR), and THREE before that since step 8 of the decomposition (ED-IN-0203; renamed from `..._four_...`), and the
     drop is a DISSOLUTION, not a fix reached for here. `engine.season.combat_seam` <->
     `engine.season.shape` is GONE: step 8 moved `body_band_penalty` (already in `decision.py`
     since step 7) into `combat_seam.py`'s own module-level imports and re-pointed its
@@ -105,15 +106,14 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
     result this repository usually only claims in prose.
     """
     cycles = _real_cycles()
-    assert len(cycles) == 4, (
-        f"expected exactly 4 remaining cycles (contest + the canon MB family + the declared "
+    assert len(cycles) == 3, (
+        f"expected exactly 3 remaining cycles (the canon MB family + the declared "
         f"battle_loop one + the one declared engine.season one), got {len(cycles)}: {cycles}"
     )
 
     def _matches(cyc, prefix):
         return all(m.startswith(prefix) for m in cyc)
 
-    contest = [c for c in cycles if _matches(c, 'systems.social_contest.sim.contest')]
     # The canon MB family moved whole with `massbattle.py`'s import closure to `modules/mass_battle/` at
     # plan position `31c`; its prefix is the package's.
     # B10-12 / CP-T04-03 (ED-1043's trigger) added a second, declared MB cycle, matched by its EXACT member set:
@@ -143,7 +143,6 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
 
     checked = 0
     for family_name, family in (
-        ('social_contest.contest', contest),
         ('modules.mass_battle', mb_canon),
         ('modules.mass_battle battle_loop <-> orchestration', battle_loop),
         ('engine.season harness __main__ edge', harness_main),
@@ -152,9 +151,9 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
         assert len(family) == 1, f"{family_name}: expected exactly one cycle, found {family}"
     # assert-that-asserted (CLAUDE.md §0.1 point 2): confirm every named family was actually
     # looked up, not skipped by an early return.
-    assert checked == 4
+    assert checked == 3
 
     # No family is a partial/renamed match of another — the union covers every cycle found, so a
     # fourth cycle cannot hide behind a family that matched two.
-    accounted = contest + mb_canon + battle_loop + harness_main
-    assert len(accounted) == len(cycles) == 4
+    accounted = mb_canon + battle_loop + harness_main
+    assert len(accounted) == len(cycles) == 3

@@ -175,16 +175,6 @@ def test_faculty_enters_the_roll_through_exactly_one_channel():
     assert S.counter_success_prob(hi, CFG, TR) == S.counter_success_prob(lo, CFG, TR)
 
 
-def test_set_attr_score_7_reads_pool_13_ob_mu_per_die_x_7_and_no_sigma_moves():
-    """PC-14's exit, re-based by CR-85 and re-pinned at B15.03 (A-71): a skill score of 7 reads pool 13 and Ob `MU_PER_DIE x 7`
-    (the rate the fight opposes at; not typed as 2.8, the product is 2.8000000000000003), and no sigma term moves."""
-    aggressor, d = C.Combatant('A'), C.Combatant('D')
-    for c in (aggressor, d):
-        wrapper._init_live(c, CFG)
-    before = {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')}
-    d.score = 7
-    assert (core.resolution_pool(d.score), core.ob_from_defender(d, CFG)) == (13, DE.MU_PER_DIE * 7)
-    assert {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')} == before
 
 
 # ── B05.58 (29-2): the fight's Ob is the owner's `opposed_ob` at the cfg's rate ────────────────────

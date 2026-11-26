@@ -21,14 +21,14 @@ from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
 from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, DECLARED, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route, roster,
-                            ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
+                            ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
                             SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import PRECEDENCE_STEM, UNKNOWN, AllOf, Observation, ScalarThreshold, Verdict, binding_from_act, evaluate
-from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK, SEQUENCE_CLAUSE,
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FILING_VERBS, FORM_TASK, SEQUENCE_CLAUSE,
                           VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow, _OPENERS_FROM_EFFECTS, social_roll_verbs)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
@@ -42,11 +42,11 @@ from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import faculty, pool_pair
 from ..seam.wrappers.edge import site_net_sigma
 from ..seam.wrappers.sigma import arranged_by, precedence_net, topic_of
-from ..queries.inputs import Beat, Outcome
+from ..queries.inputs import Beat, Outcome, Sitting, exchanges, written
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
-from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
+from ..queries.world_q import CITES_CLAUSE, WorldReader, ceiling, demanded_person, filings, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..seam.ladder import is_margin_result
 from ..state.carriers import Act, Event, StateChange, effort_of, operand_of, subject_of
@@ -522,6 +522,13 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
                            alternatives=["admit a self-relation (a fiat)"])
             return (False, _demand_earned(w, a, row.refusal_for(COUNTERPARTY_CLAUSE), False)
                     or (FOLD_REFUSED,), verdict)
+    # B24.25 (EVID_B edit 4, FI_05_B E-1): A CITING SPEECH IS REFUSED BEFORE THE DRAW -- a cite he does not hold, of a kind the matter's row does not admit, one that contradicts what already
+    # stands for his own side, or an answer naming no filed stage of the other side. An ELIGIBILITY refusal in the order of the others: it emits the row's refusal kind and decides no outcome, and
+    # `filings` (`queries/world_q.py`) is its one reader, which `_eff_speak` then writes from, so what is admitted here is what is filed. A verb the roster does not list files nothing and asks nothing.
+    if a.verb in FILING_VERBS and filings(w, a).refused is not None:
+        TRACE.decision(f"{a.verb} by {a.actor}: a cite or an answer is refused", "B24.25",
+                       chose="emit the refusal before the draw", alternatives=["draw, and file nothing", "admit an item the actor does not hold"])
+        return (False, _demand_earned(w, a, row.refusal_for(CITES_CLAUSE), False) or (FOLD_REFUSED,), verdict)
     return (True, (), verdict)
 
 
@@ -573,7 +580,7 @@ def _margin_ending(resolution: "Resolution | None") -> tuple:
     return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()
 
 
-_BEAT_CELLS = tuple(f.name for f in fields(Beat) if f.name != "terms")   # the beat's cells a written sitting carries, in the record's order
+_BEAT_CELLS = written(Beat)   # the beat's cells a written sitting carries, in the record's order (`queries/inputs.py::UNWRITTEN` owns which are not)
 
 
 def _milli(x: float) -> int:
@@ -606,7 +613,8 @@ def _proceeding_ending(resolution: "Resolution | None") -> tuple:
     `rosters.yaml: proceeding_endings`: the head `("proceeding", arrangement, form, ended, ended_by)`; a `("beat", ...)` per beat, `terms` (the true values)
     never written and `mood` written as its STANCE, named only at the beat that turns it (the first, and each whose band differs from the one before) and as
     `decided` on the beat a yield settled the act on (the act's band read no verdict); the whole `Sitting`, so a resume needs no replay; a
-    `("verdict", id, band)` per verdict, graded on the one ladder by `degree_of`. Every real is milli-rounded. `Sitting.tracks` is asserted equal to each
+    `("verdict", id, band)` per verdict, graded on the one ladder by `degree_of`; B24.14: after the card, an `("exchange", kind, item)` per item a beat
+    entered or struck (`queries/inputs.py::exchanges`; none where none, so such an ending is unchanged). Every real is milli-rounded. `Sitting.tracks` is asserted equal to each
     track as the sitting began (`result["starts"]`) plus the beats' moves on him (`04` G.1.5: a stored aggregate decides nothing, a reader rebuilds it)."""
     r = resolution.result if resolution is not None else None
     out = r.get("proceeding") if isinstance(r, dict) else None
@@ -629,7 +637,9 @@ def _proceeding_ending(resolution: "Resolution | None") -> tuple:
     verdicts = tuple((ENDING_VERDICT, who, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob))) for who, m in out.verdicts)
     card = r["card"]       # B24p.22: the card's public cells (who decided, who tilted the forum and how far) and a played judge's departures, which the witnesses read
     held = (ENDING_CARD, tuple(card.decided_by), card.arranged_by, _milli(card.tilt), card.tilted_against, _plain(out.ruled))
-    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *_plain(out.state)), *verdicts, held)
+    listed = tuple((ENDING_EXCHANGE, kind, iid) for kind, iid in exchanges(out.beats))     # B24.14: the items the beats entered and struck, none where none were
+    bench = ((ENDING_BENCH, tuple(r["bench"])),) if r.get("bench") else ()     # B24.29: the public lean of the seats who decide, none where none holds a commit (the shipped cast)
+    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *(_plain(getattr(out.state, name)) for name in written(Sitting))), *verdicts, held, *listed, *bench)
 
 
 def _refusal_degree(row: "VerbRow", degree):

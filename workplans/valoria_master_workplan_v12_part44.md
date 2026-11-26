@@ -56,7 +56,7 @@ GATE: Batch B21s-strife-supply
 GATE: Batch B22-mb-armies
 GATE: Batch B23-land
 GATE: Batch B24p-sc-proceeding @ba108d1
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning
 GATE: Batch B26-fi-inquiry
@@ -117,7 +117,7 @@ C(B98-dials): this batch's entries; the plan's head parts (`valoria_master_workp
 PARALLEL: S23, alone in the plan (`V12_STRUCTURE.md` §2.3). No sibling; no merge position.
 BACKGROUND RUN: each probe over many fights or seeds (rows 4, 32, 47, 55, 61: 200 to 6,000 fights; rows 30, 96: 200 planted seeds or eight draw seeds; row 66: 50 planted seeds; row 81: B31.11's 200-seed field and gate 3 at n 200 per `ob`; row 102: PG-5 (d) over seeds 0–19 from the cache) is sized on two small runs at the batch's open, launched in the background (`exec python -u … > log 2>&1`, the skill's "Running a slow instrument"), and read at its item's gate; each item's commit body records the wall time and worker count. No run passes two seasons.
 COST: calibration (one value per commit, read against its target); producer `valoria-author` on `sonnet`, `high`; the probe asserts each numeric target and `opus` reads, before the commit, only a target with no numeric bar (U8); BLOCKED positions are reading on `sonnet`, `low`.
-EST: 39.7 h [estimate: `valoria_master_workplan_v12.md` §5's formula over 88 positions (87 and B98.87, Batch B24p-sc-proceeding @ba108d1): 0.4 h × 88 + 2.5 h for the close + 2 h for the probes; the structure's 8 h predates the member list]
+EST: 40.1 h [estimate: `valoria_master_workplan_v12.md` §5's formula over 89 positions (87, B98.87, Batch B24p-sc-proceeding @ba108d1, and B98.90, Batch B24-sc-hearing): 0.4 h × 89 + 2.5 h for the close + 2 h for the probes; the structure's 8 h predates the member list]
 
 The position table, in landing order (the handles follow part 2 §4's rows, UNDECIDED U1; landing order is the table's except B98.76 before B98.75, U2). Every flip also gates on the last committed flip before it (the control arm's chain); that edge is not repeated per row. The SERIAL EDGES and FILE CENSUS lines are at the batch's end, in `valoria_master_workplan_v12_part44_cont2.md` (E-11).
 
@@ -212,7 +212,8 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.87 | the six roles' fifty-five settings are re-read on the finished realm | row 106; B24p.23; V2 p2 §K | READING | EQUAL | Batch B24p-sc-proceeding @ba108d1 |
 | B98.88 | a man will not do what he holds wrong, and gives way by a draw: `refusal_axis` and `scruple_temperature` leave control | no row of §4; B10.32 (the reading only); B10.22 gate 2; `U5a_CHAR_owed_amendments` §8 item 2; `16_PESSIMIST_CHAR_C` | BUILD (flip, two settings) | MOVER(behaviour) | Batch B10; Batch BA1 |
 | B98.89 | the telling ships `unshared_first` and `seen_since_move`, if the two-hop gate reads | no row of §4; B11.85 (not made); `U5c_FI_residue` §6 and §2 row 3; `08_FI_02` edits 4 and 5 | BUILD (flip, two settings, conditional) | MOVER(behaviour) | Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc |
-| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.89 |
+| B98.90 | the hearing's two settings stay at control: `fault_step`, and the hearing's decider role | B24 DIALS AT CONTROL; B24.07 (H-661..H-664 block), B24.13; H-482 | BLOCKED (design: no target reading; content: no hearing choice cell) | EQUAL | Batch B24-sc-hearing; Batch B16-pc-round (B16.09 step 6) |
+| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.90 |
 
 ---
 

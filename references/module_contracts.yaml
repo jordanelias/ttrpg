@@ -58,12 +58,24 @@ composition_roles:
   social_contest.proceeding:
     target: "modules.social_contest.proceeding:proceed"
     entry: verb_call
-    verb: argue
+    verb: determine   # B24.08: the verb whose prize (`a verdict`) names this entry (`manifest/registry.py::_bound_verb_contests_it`); the registrar holds one verb per entry, and every other `proceeds:` verb reaches it through the provider path below, not through this cell
     needed_by: "engine/season/seam/wrappers/sigma.py — the provider path for a verb row carrying `proceeds:` (B24p.14): it builds the typed `Input` (B24p.13), calls this entry through `manifest.MODULE_ENTRIES` and reads the `Outcome`'s verdicts on the one ladder. `proceed` draws the whole sitting and its close from the one keyed `Draw` it is handed (V2 p2 §C to §D)."
+  social_contest.bench_read:
+    target: "modules.social_contest.proceeding:read_sign"
+    entry: query
+    needed_by: "engine/season/seam/wrappers/sigma.py — `bench_reading` (B24.29, called by `loop/witness.py::_sitting_claims`): `(dials, attunement, sign, rng) -> sign`, the sign of a seat's lean as a viewer reads it. The module owns the outcome (`accuracy`'s chance for a two-valued sign); the host keeps the keyed stream (`bench_read:<sitting>:<seat>`) and the viewer's Attunement. Declared in `sigma.QUERY_ENTRIES`."
+  social_contest.p_carried:
+    target: "modules.social_contest.proceeding:p_carried"
+    entry: query
+    needed_by: "engine/season/seam/wrappers/sigma.py — `_npc_decider`'s decide callable: `(inp, track, board) -> P(carried)`, the closed form of the close at a track, which the chooser's view of a vote reads. Declared in `sigma.QUERY_ENTRIES`, so a rename refuses at driver construction and not at the first sitting."
   social_contest.obstacle:
     target: "modules.social_contest.roll:obstacle"
     entry: query
     needed_by: "engine/season/seam/wrappers/sigma.py — `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  social_contest.proof_levels:
+    target: "modules.social_contest.roll:proof_levels"
+    entry: query
+    needed_by: "engine/season/seam/wrappers/sigma.py — `_with_exhibits` (B24.21): the `(n_for, n_against)` levels the filed exhibits bring, which the host adds to `resolve`'s `levels` and applied `leverage` beside the module's own roll, so the record names what was rolled. `modules/social_contest/evidence.py` stays no role (called by the roll inside the module); this is the roll's own reader of it. Declared in `sigma.QUERY_ENTRIES`."
 
   combat.resolve:
     target: "modules.combat.core:resolve"
@@ -474,9 +486,9 @@ modules:
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
     doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    sim_module: modules/social_contest/   # the running entry is `modules/social_contest/roll.py` (composition rows `social_contest.roll`, `social_contest.obstacle`); the evaluated predecessor `systems/social_contest/sim/contest/` is kept, not deleted (`roll.py`'s docstring)
+    sim_module: modules/social_contest/   # the running entry is `modules/social_contest/roll.py` (composition rows `social_contest.roll`, `social_contest.obstacle`); the SC05 kernel that preceded it is retired (B24.33)
     scales: [scene]
-    resolver: d_sigma   # [ASSUMPTION: the rest of this row is B24.33's to repoint]
+    resolver: d_sigma   # the sigma-leverage d10 resolver the engine owns (ED-SC-0037), composed in `roll.py`
     state: []   # the module keeps no state (04 §A.2; B24p.12): the proceeding's tracks are a `Sitting` the host holds, never a persuasion track the module writes
     transitions:
       - {via: "scale_transitions §3.4 Scene → Faction (Domain Echo)"}
@@ -492,7 +504,7 @@ modules:
       godot: python-oracle
       port_rank: 1
       parity: seam-io
-      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. `roll` runs only when a contest over one of those prizes forms (gated); `obstacle` is entered every season, so the row reads live."
+      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. `roll` runs only when a contest over one of those prizes forms (gated); `obstacle` is entered every season, so the row reads live. `social_contest.evidence` is not a composition role: it is called by `roll` and `proceed` inside the module, never by the host or the loop; the host reaches the roll's evidence levels through the query row `social_contest.proof_levels` (target `roll:proof_levels`), which is why `evidence` stays no role."
 
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -754,7 +766,7 @@ modules:
       godot: python-oracle
       port_rank: 3
       parity: seam-io
-      note: "`systems/social_contest/sim/contest/faction.py` succession/coalition math (`vote`, `succession`) exists but has no caller."
+      note: "the succession/coalition math that once sat in the retired SC05 kernel (`faction.py`: `vote`, `succession`) was deleted with it (B24.33); nothing replaces it here."
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary

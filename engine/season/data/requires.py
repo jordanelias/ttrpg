@@ -834,12 +834,6 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # dispute, so a man challenges only one he holds a wrong against. `WorldReader.read` answers it off the ACTOR'S OWN
 # ledger (`claim.held`'s F8 carve-out). WORLD-ONLY (below), for `names`' reason: a witness's ledger must not gain a
 # `dispute:<actor>` reading from a refusal it saw. CR-88 re-points it to `grievance_against`. One stem; no form.
-# ⚠ v11 CR-34 (B10-13; C-7, `ED-SC-0034`): `declared.votes` and `declared.quorum`: `determine`'s `vote` conjunct, a
-# `scalar_threshold` (form 2) of the live commits bench members hold against the matter, against the arrangement row's OWN
-# `quorum:` key -- `quorum`'s shape, a SECOND READ, so no operand is added and nothing is stored. Both are 0 for a matter
-# heard under no declared row, so the conjunct is vacuous there. `WorldReader.read` answers both through
-# `world_q.declared_sitting`/`declared_votes`; WORLD-ONLY (below): a tally changes whenever a commit opens or ends, so a
-# witness's ledger must not hold one as a belief. No form, no operand.
 # ⚠ v12 B11.17 (`08_FI_04` §4): `stage_open`: `relation` (form 5) asked of a RECORD -- *has a declared stage of `of`
 # not yet matured*, `state/attribution.py::a_stage_unmatured`, the one owner, with a Record that declares no stage
 # open (nothing of it can lapse). `comply`'s conjunct: a writ ends when its last declared stage matures, so a
@@ -860,7 +854,7 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "command", "bench", "bench.size", "quorum", "with", "audience", "room",
-    "individual", "names", "dispute", "declared.votes", "declared.quorum", "stage_open", "admitted",
+    "individual", "names", "dispute", "stage_open", "admitted",
     "march.nth", "march.cap",
 }) | OWN_STATE_STEMS
 
@@ -905,7 +899,7 @@ WITH_STEM = "with"      # where another person is NOW; named once here for its t
 # fold's own order, never a belief a witness could hold, so WITNESS must not deposit it as a claim into a ledger (`loop/witness.py` skips this set).
 PRECEDENCE_STEM = "precedence"
 WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dispute",
-                              "declared.votes", "declared.quorum", "stage_open", "command", "admitted",
+                              "stage_open", "command", "admitted",
                               "march.nth", "march.cap", PRECEDENCE_STEM}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a

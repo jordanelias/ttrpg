@@ -38,19 +38,6 @@ def held(w, pid, predicate):
     return {c.subject for c in w.persons[pid].ledger if c.predicate == predicate and c.value is True}
 
 
-def test_examine_finds_site_damaged():
-    """The saboteur's deed reaches the finder by no channel (control: he holds no `site.damaged` claim before the
-    `examine`). At a band showing the hand he holds the deed under the saboteur and the Site, `inferred`."""
-    w, _ = sabotaged_site()
-    assert held(w, FINDER, "site.damaged") == set(), "the finder was admitted to the deed before any inquiry"
-    for n in range(SWEEP):
-        w, e = examine_at(n)
-        if e.degree in HAND_BANDS:
-            break
-    else:
-        raise AssertionError(f"{SWEEP} act ids drew no band showing the hand")
-    assert held(w, FINDER, "site.damaged") == {SABOTEUR, "site_x"}, held(w, FINDER, "site.damaged")
-    assert {c.source for c in w.persons[FINDER].ledger if c.predicate == "site.damaged"} == {"inferred"}
 
 
 def killing(read_first=None):

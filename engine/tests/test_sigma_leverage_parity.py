@@ -46,11 +46,62 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
 from engine.dice_engine import sigma_leverage as SL  # noqa: E402
-# ED-SC-0032: `degree` and the de-saturation bar MOVED out of the engine into the subsystem
-# that owns them. This file still tests the sigma layer; the degree half now addresses the
-# contest package, and that relocation is itself the point of the ruling being executed.
-from systems.social_contest.sim.contest import degree_extension as CD  # noqa: E402
 from engine.dice_engine import draw
+from engine.dice_engine.dice_engine import BandExtension  # noqa: E402
+
+# ED-SC-0032: `degree` and the de-saturation bar MOVED out of the engine into the subsystem
+# that owned them. That subsystem (the SC05 kernel's `degree_extension.py`) is retired and the
+# game reaches the ladder through the owner's `degree_from_net` alone, so the pool-aware rule
+# below is a TEST-LOCAL `BandExtension` double: it is what the seam's contract is exercised
+# against (the one declared context key `pool`, and a bar that may only demote Overwhelming).
+# `CD` keeps the name the tests below were written against; it is this double, not a module.
+_OVERWHELM_SIGMA = 0.85
+
+
+def _overwhelm_bar(pool):
+    return SL.MU_PER_DIE * pool + _OVERWHELM_SIGMA * SL.SD_PER_DIE * math.sqrt(max(1, pool))
+
+
+class _PoolDesaturation(BandExtension):
+    name = "test:pool-desaturation"
+    context_keys = ("pool",)
+
+    def may_overwhelm(self, net, ob, pool=None, **context):
+        return True if pool is None else net >= _overwhelm_bar(pool)
+
+
+_EXTENSION = _PoolDesaturation()
+
+
+def _owner_overwhelming_margin():
+    """The owner's Overwhelming margin, read off the owner's ladder rather than typed."""
+    from engine.dice_engine.dice_engine import Degree, degree_from_net
+    return next(m / 4 for m in range(0, 41)
+                if degree_from_net(m / 4, 0.0) is Degree.OVERWHELMING)
+
+
+def _crossover_pool(ob):
+    """Smallest integer pool at which the double can demote, for this `ob`; None if never."""
+    owner_bar = ob + _owner_overwhelming_margin()
+    if owner_bar < 0:
+        return 1
+    for pool in range(1, math.ceil(owner_bar / SL.MU_PER_DIE) + 2):
+        if _overwhelm_bar(pool) > owner_bar:
+            return pool
+    return None
+
+
+def _degree(net, ob, pool=None):
+    from engine.dice_engine.dice_engine import DEGREE_ORDINAL, degree_from_net
+    return DEGREE_ORDINAL[degree_from_net(net, ob, extension=_EXTENSION, pool=pool)]
+
+
+class CD:                                           # the names the tests below read
+    OVERWHELM_SIGMA = _OVERWHELM_SIGMA
+    degree = staticmethod(_degree)
+    overwhelm_bar = staticmethod(_overwhelm_bar)
+    owner_overwhelming_margin = staticmethod(_owner_overwhelming_margin)
+    crossover_pool = staticmethod(_crossover_pool)
 
 # ---------------------------------------------------------------------------
 # Golden table — the parity oracle, committed as data.

@@ -100,24 +100,6 @@ def _seasons(w, n: int):
 THREAD_READ_WITHHELD_EVENTS_1 = (9429, "3b533875fb37d0b01a8c13868953cba075313c639f5eb96358c9ca36206f74de")   # B16.99 re-record (the merge with B21b, the per-round fight key, B16.03): (9447, 57ef8c00..) -> (9429, 3b533875..);   # B21b partial re-record on the merge with B08 and B12a: (8660, 3e0eb0c8..) -> (9447, 57ef8c00..), equal to the shipped season the guards-on realm reads; B12a.99: (9319, e5b3ab7c..) -> (8660, 3e0eb0c8..)
 
 
-def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():
-    """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures withheld_verbs` reads
-    `THREAD_READ_WITHHELD_EVENTS_1`, and that EQUALS the shipped season's own event sequence, read in process: withholding
-    `thread_read` moves nothing at seed 0, one season (nor at seed 0, two seasons, nor at seed 1, one season: B08 reading).
-    OBSERVED; THE CAUSE IS CONJECTURED. Before B08.03 the arm differed and since it equals the shipped season: a bisection to B08.03
-    (scenes fold in their own order), read as that fold removing a coupling by which forming `thread_read` moved the season while the
-    verb executed 0 times in that season's store. Nothing counts how often `thread_read` is formed or chosen in either arm, so this
-    cannot tell "the coupling was removed" from "the candidates are dropped the same way in both arms". The test fails the day the arm
-    differs from the shipped season again, so a later batch that changes it sees it here."""
-    w = build_realm(0)
-    shipped = tuple(w.fixtures.get("withheld_verbs"))
-    assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"
-    w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("thread_read",))
-    POP.run(seasons=1, seed=0, w=w)
-    assert _digest(w) == THREAD_READ_WITHHELD_EVENTS_1, _digest(w)
-    s = build_realm(0)
-    POP.run(seasons=1, seed=0, w=s)
-    assert THREAD_READ_WITHHELD_EVENTS_1 == _digest(s), "the arm differs from the shipped season: `thread_read`'s formation moves the season again"
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():

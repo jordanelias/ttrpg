@@ -107,99 +107,6 @@ def test_lb1_commit_refuses_a_proposition_that_does_not_exist():
         "a refused `commit` still opened a Tenure")
 
 
-def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
-    """**LB-1, half two — BO-9/BO-10's OWN RE-MEASUREMENT, HONEST RATHER THAN REPAIRED.**
-    `01_THE_BUILD_ORDER.md` §7.2 measured `commitment.made: 0 / commitment.refused: 42` on one
-    populated season before this effect shipped, diagnosed as structural: no source in
-    `questions_for` offers a Proposition as a REFERENT (`decision/options.py::_REFERENT_OPERANDS`
-    binds `commit`'s `subject` to the question's referent, and every live referent today is a
-    person id), and BO-10 named items 5/7/8 (`15`/`15c`/`15b`) as what would open that channel.
-
-    ⚠ HISTORY, SUPERSEDED BY THE v9 IN-11 PARAGRAPH BELOW -- this paragraph records the state
-    BEFORE IN-11 and no longer describes what the test asserts. THEY WERE ALL DONE, AND THE GATE WAS
-    STILL SHUT. `15c`'s operand-widening
-    (`decision/options.py::_derive_operand`) answers `to`/`kind`/`amount` from a held writ's
-    content; `15b`/`15`'s content-claim/deposit machinery widens which `claim_landed` questions
-    REACH a person (`world_q.questions_for`'s clause 3, `named(c)`). Neither touches `subject`,
-    which stays a bare `_REFERENT_OPERANDS` bind to the question's own referent. So `commit`'s
-    typed cell (`existence(of: subject, kind: Proposition)`) still asks about a person id and
-    still refused, every time, on this corpus. **This test then asserted that gap was still open, on
-    purpose** — the falsifier this position's brief named explicitly refuses to invent a repair
-    (widening Q4 was tried and refused in §7.2, with its own measurement: 1 made / 57 refused,
-    because a standing question cannot be the producer of the commitment that raises it). The one
-    thing that DID move is `resolvable_verbs()`, which is asserted moving the other way.
-
-    ⚠⚠ v9 IN-11 (#453 §10.4 step 2) CLOSED THE GATE, AND THIS TEST NOW ASSERTS THE CLOSURE -- UPDATED
-    AS ITS OWN MESSAGE ASKED, NOT RE-PINNED SILENTLY. The producer is not a widened Q4 (the refused
-    repair above) and not a new operand: `_eff_utter` opens the utterer's `hold` on the Proposition,
-    so it is in his `reach` (limb 2) and Q2 raises his own claim about it as a question whose
-    referent IS the Proposition -- `subject` still binds to the referent, unchanged. MEASURED, this
-    season: `commitment.made` 2 where it was 0, `commitment.refused` 38 where it was 35 (the old
-    person-id referents still form and refuse; `H-156`'s (a)/(b) stays registered). The full
-    falsifier is `test_in11_utter_hold_commit.py`. ⚠ SINCE v9 IN-45 `migrate` THIS TEST NO LONGER
-    ASSERTS THE CLOSURE IN THE REALM: its two seed-0 execution assertions were retired under v9 §0.5
-    (the note at the assertion); what stays is that `commit` is resolvable, formed and attempted."""
-    from collections import Counter
-    from ..decision import make_chooser
-    from ..decision.options import opening_set
-    from ..state.ids import H, draw_factory
-    w = build_realm(0)
-    d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    chooser = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                           draw=draw_factory(w.world_seed, lambda: w.tick))
-    formed = set()          # (person, subject) of every `commit` Candidate `opening_set` forms; read-only
-
-    def watched(p, v, s, ask_budget):
-        q = getattr(v, "question", None)
-        if q is not None:
-            formed.update((p.id, c.subject) for c in opening_set(p, v, q, w.fixtures) if c.verb == "commit")
-        return chooser(p, v, s, ask_budget)
-
-    d.season(watched, question=None,
-             contest_max_depth=w.fixtures.get("contest_max_depth"))
-    kinds = Counter(e.kind for e in w.log)
-
-    assert "commit" in resolvable_verbs(), (
-        "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
-    # ⚠⚠ v10 REM-24 (B10-05): THE ATTEMPT FLOOR BECOMES A FORMATION FLOOR, A RE-RECORD WITH THE UNIT THAT MOVED
-    # IT, FOR THE SAME REASON REM-23'S COUNT BECAME A PROPERTY. `petition` declares `referent_class: Person`, so
-    # the realm's act mix moved (`aperture 1 0`: 532 -> 529 acts) and the one `commit` this season had left
-    # standing -- `cohort_set_s_032`'s on `prop:e5a168fb...`, an attempt REM-23 recorded as a reading of a seeded
-    # trajectory ("1/1/1 ... not a claim that `commit` executes") -- is not chosen any more. MEASURED, this season,
-    # the REM-23 tree (`409c467b`, a `git worktree`) as control, the same script on both: `commit` acts 1 -> 0,
-    # `commitment.made` 1 -> 0, `commitment.refused` 0 -> 0; and what the floor stood for -- "the verb is still
-    # FORMED, a different regression from the gap this test documents" -- is untouched: `opening_set` forms
-    # `commit` for the same 6 persons, every Candidate on a Proposition (7 against 6 Candidates, one person's
-    # question having changed with the trajectory). So the floor is asserted on the formation, which is what the
-    # class governs, and the attempts below are held to the class's property without a floor of their own.
-    assert formed, "no `commit` Candidate was formed at all on this corpus -- the verb stopped being formed"
-    assert all(subject in w.propositions for _, subject in formed), (
-        "a `commit` Candidate was formed on an id that names no Proposition -- `referent_class: Proposition` "
-        f"no longer holds: {sorted(s for _, s in formed if s not in w.propositions)}")
-    # ⚠ RETIRED AT v9 IN-45 `migrate` (B-K, 2026-10-16) UNDER v9 §0.5's 2026-10-13 RULING (*"No test
-    # asserts that a verb executed in the seed-0 realm"*), which these two survived by oversight:
-    # `commitment.made >= 1` and a `commit` act naming a real Proposition, both in this one seed-0
-    # season. They went red when `migrate`'s destination channel moved the realm's act mix
-    # (`aperture 1 0`: `commit` att 38, ex 2 -> 0) -- the chooser's selection, not IN-11's wiring.
-    # Deleted, never skipped; the closure is proven on hand-built worlds by
-    # `test_in11_utter_hold_commit.py` block 1.
-    # ⚠⚠ v10 REM-23 (B10-05): `commitment.refused` 36 -> 0, A RE-RECORD WITH THE UNIT THAT MOVED IT, AND THE
-    # COUNT WAS A PROXY FOR THE PROPERTY, SO THE PROPERTY IS ASSERTED. `commit` declares `referent_class:
-    # Proposition`, so it forms only on a Proposition the question names and the person-id, rung and Record
-    # referents it was refused on (`exists:Proposition=0`, every one of the 36) are no longer formed: MEASURED,
-    # this season, REM-22 tree as control (the same script on both): `commit` attempted 38 -> 1, the Events
-    # `commitment.refused` 36 -> 0 and `commitment.made` 0 -> 1. What this assertion guarded -- "the verb is
-    # still ATTEMPTED, a different regression from the gap this test documents" -- is the formation floor above
-    # plus the next one, which reads the ACT STORE (a refused act is in it) and asks the class's own property of
-    # every attempt: it names a Proposition. AT REM-24 the floor on the attempts moved to the formation (above) and
-    # the attempts are held to the formation instead: every `commit` attempted was a Candidate `opening_set` formed.
-    attempted = [a for a in w.acts if a.verb == "commit"]
-    assert all(subject_of(a) in w.propositions for a in attempted), (
-        "a `commit` was formed on an id that names no Proposition -- `referent_class: Proposition` "
-        f"no longer holds: {[subject_of(a) for a in attempted if subject_of(a) not in w.propositions]}")
-    assert {(a.actor, subject_of(a)) for a in attempted} <= formed, (
-        "a `commit` was attempted that `opening_set` did not form for that person")
 
 
 # ---------------------------------------------------------------------------
@@ -2607,6 +2514,263 @@ def test_24d_i_the_loader_refuses_dwelling_without_its_wear_or_floor_row(monkeyp
     assert checked == 2, checked
 
 
+# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal after scoring, in `make_ranker` (B10.24; it was `opening_set`'s), not a score term:
+# the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
+# past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
+# names, so these tests take the axis that `pursuit_axes.refusing_pole` authors (`_h2_axis`).
+#
+# Falsifier (`proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.2): a synthetic
+# projection/alignment injected through the rebinds the readers actually resolve --
+# `data.verbs.ALIGNMENT` (the `H-66` sweep's own, `alignment_at`) and
+# `data.verbs.PURSUIT_PROJECTION` (read bare by `data.pursuits.to_axes`) -- must stop the refused
+# Candidate forming and leave every survivor's score untouched.
+# =================================================================================================
+
+
+def _h2_setup():
+    from ..state.carriers import Question
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    q = Question("q:h2", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    return w, p, q, v
+
+
+def _h2_base(min_verbs=3):
+    """`_h2_setup` plus the option set it forms today, ungated -- shared by every `test_h2_*` so a
+    change to `opening_set`'s call shape or the minimum-verb guard is edited once, not per test."""
+    from ..decision import options as _options
+    w, p, q, v = _h2_setup()
+    base = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
+    verbs = sorted({vb for vb, _ in base})
+    assert len(verbs) >= min_verbs, (
+        f"only {verbs} form here; the H-146 gate tests need >= {min_verbs}")
+    return w, p, q, v, base, verbs
+
+
+from .test_cr21_cells import _deontological_axis as _h2_axis    # noqa: E402 -- the one authored refusing-pole axis
+
+
+def _h2_inject(p, axis, weight, cells):
+    """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
+    import math
+    from ..data import verbs as _verbs
+    from ..data.rosters import _ROSTERS, PURSUIT_AXES
+    saved =(_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits), _ROSTERS["pursuit_axes"]["refusable"])
+    # The tolerance is the axis's SHARE of the projected vector (B10.22), so a lone axis would put it at ±1: a second
+    # axis of the roster carries the rest of a unit vector and leaves the share at `weight`.
+    other = next(a for a in sorted(PURSUIT_AXES) if a != axis)
+    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight, other: math.sqrt(1.0 - weight ** 2)}}
+    _verbs.ALIGNMENT = {axis: dict(cells)}
+    _ROSTERS["pursuit_axes"]["refusable"] = {axis: sorted(cells)}      # B10.21: the gate refuses a listed verb only
+    p.pursuits = {"h2_synthetic": 1.0}
+
+    def restore():
+        _verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, p.pursuits, _ROSTERS["pursuit_axes"]["refusable"] = saved
+    return restore
+
+
+def _h2_ranked(fx, p, v):
+    """The candidates the chooser orders: `opening_set`'s, less what his scruple struck. The gate moved there from `opening_set` (B10.24), so the set
+    a gate test reads is the ranker's; `choice_temperature` 0 takes the score order and needs no draw."""
+    from ..decision import choose as _choose
+    return _choose.make_ranker(fx.sweep("choice_temperature", 0))(p, v)
+
+
+def test_h2_the_shipped_arm_is_the_control_and_refuses_nothing():
+    """`refusal_axis` ships unset, and unset is a no-op: the same synthetic tables that make the
+    gate refuse below form the full set here. Without this arm the refusal test cannot tell the
+    gate from some other change to `opening_set`."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.rosters import PURSUIT_AXES
+    from ..decision import options as _options
+    assert DEFAULT_FIXTURES.get("refusal_axis") is None, (
+        "the shipped arm is no longer the control; `H-146` and this test disagree")
+
+    w, p, q, v, base, verbs = _h2_base()
+    restore = _h2_inject(p, sorted(PURSUIT_AXES)[0], -0.4, {vb: 0.9 for vb in verbs})
+    try:
+        got = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
+    finally:
+        restore()
+    assert got == base, f"the unset gate changed the option set: {sorted(base ^ got)}"
+
+
+def test_h2_a_verb_past_the_persons_weight_never_forms():
+    """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
+    verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
+    and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
+    w, p, q, v, base, verbs = _h2_base()
+    refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
+    axis = _h2_axis()
+    fx = w.fixtures.sweep("refusal_axis", axis)
+    restore = _h2_inject(p, axis, -0.4,
+                         {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
+    try:
+        got = {(c.verb, c.subject) for c in _h2_ranked(fx, p, v)}
+    finally:
+        restore()
+
+    formed = {vb for vb, _ in got}
+    assert refused_pos not in formed and refused_neg not in formed, (
+        f"a verb whose `{axis}` cell exceeds the person's weight still formed: {sorted(formed)}")
+    assert tolerated in formed, f"{tolerated!r} sits below the weight and was refused anyway"
+    expected = {(vb, s) for vb, s in base if vb not in (refused_pos, refused_neg)}
+    assert got == expected, (
+        f"the gate moved candidates it does not govern: {sorted(expected ^ got)}")
+
+
+def test_h2_survivors_score_exactly_as_they_did_ungated():
+    """The gate filters and never re-weights: every Candidate that survives it reaches the score
+    with the value it had with the gate unset. Observed through `_sample_order`, the one place
+    `make_chooser` hands the scores on, so this reads the chooser's own numbers."""
+    from ..decision import choose as _choose
+    from ..decision import options as _options
+    from ..state.carriers import Sensation
+
+    w, p, q, v, base, verbs = _h2_base()
+    refused, tolerated = verbs[0], verbs[1]
+    axis = _h2_axis()
+    fx0 = w.fixtures.sweep("choice_temperature", 0)
+
+    def scores(fx):
+        seen = {}
+        inner = _choose._sample_order
+
+        def spy(ranked, score, person, fx_, draw):
+            seen.update({(c.verb, c.subject): score(c) for c in ranked})
+            return inner(ranked, score, person, fx_, draw)
+        _choose._sample_order = spy
+        try:
+            _choose.make_chooser(fx, lambda a, b, c: f"{a}:{b}:{c}")(
+                p, v, Sensation(), lambda: 1)
+        finally:
+            _choose._sample_order = inner
+        return seen
+
+    restore = _h2_inject(p, axis, -0.4, {refused: 0.5, tolerated: -0.9})
+    try:
+        ungated = scores(fx0)
+        gated = scores(fx0.sweep("refusal_axis", axis))
+    finally:
+        restore()
+    assert ungated and any(vb == refused for vb, _ in ungated), (
+        "the ungated arm scored nothing, or never scored the verb the gate should refuse")
+    assert not any(vb == refused for vb, _ in gated), f"{refused!r} reached the score gated"
+    assert set(gated) == {k for k in ungated if k[0] != refused}
+    moved = {k: (ungated[k], gated[k]) for k in gated if gated[k] != ungated[k]}
+    assert not moved, f"the gate changed survivors' scores: {moved}"
+    assert any(ungated[k] for k in gated), "every survivor scored 0; unchanged proves nothing"
+
+
+def test_h2_an_unrostered_axis_refuses_rather_than_gating_on_nothing():
+    """A name off `pursuit_axes` must raise `Unspecified`, not silently answer. (Without
+    `require_member` this would raise a bare `KeyError` inside `to_axes` instead -- still a raise,
+    just an unnamed one -- so this test also pins that the failure is the NAMED hole, not any
+    exception.)"""
+    from ..decision import options as _options
+    from ..gaps import Unspecified
+
+    w, p, q, v = _h2_setup()
+    with pytest.raises(Unspecified):
+        _h2_ranked(w.fixtures.sweep("refusal_axis", "h2_not_an_axis"), p, v)
+
+
+def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
+    """**LB-1, half two — BO-9/BO-10's OWN RE-MEASUREMENT, HONEST RATHER THAN REPAIRED.**
+    `01_THE_BUILD_ORDER.md` §7.2 measured `commitment.made: 0 / commitment.refused: 42` on one
+    populated season before this effect shipped, diagnosed as structural: no source in
+    `questions_for` offers a Proposition as a REFERENT (`decision/options.py::_REFERENT_OPERANDS`
+    binds `commit`'s `subject` to the question's referent, and every live referent today is a
+    person id), and BO-10 named items 5/7/8 (`15`/`15c`/`15b`) as what would open that channel.
+
+    ⚠ HISTORY, SUPERSEDED BY THE v9 IN-11 PARAGRAPH BELOW -- this paragraph records the state
+    BEFORE IN-11 and no longer describes what the test asserts. THEY WERE ALL DONE, AND THE GATE WAS
+    STILL SHUT. `15c`'s operand-widening
+    (`decision/options.py::_derive_operand`) answers `to`/`kind`/`amount` from a held writ's
+    content; `15b`/`15`'s content-claim/deposit machinery widens which `claim_landed` questions
+    REACH a person (`world_q.questions_for`'s clause 3, `named(c)`). Neither touches `subject`,
+    which stays a bare `_REFERENT_OPERANDS` bind to the question's own referent. So `commit`'s
+    typed cell (`existence(of: subject, kind: Proposition)`) still asks about a person id and
+    still refused, every time, on this corpus. **This test then asserted that gap was still open, on
+    purpose** — the falsifier this position's brief named explicitly refuses to invent a repair
+    (widening Q4 was tried and refused in §7.2, with its own measurement: 1 made / 57 refused,
+    because a standing question cannot be the producer of the commitment that raises it). The one
+    thing that DID move is `resolvable_verbs()`, which is asserted moving the other way.
+
+    ⚠⚠ v9 IN-11 (#453 §10.4 step 2) CLOSED THE GATE, AND THIS TEST NOW ASSERTS THE CLOSURE -- UPDATED
+    AS ITS OWN MESSAGE ASKED, NOT RE-PINNED SILENTLY. The producer is not a widened Q4 (the refused
+    repair above) and not a new operand: `_eff_utter` opens the utterer's `hold` on the Proposition,
+    so it is in his `reach` (limb 2) and Q2 raises his own claim about it as a question whose
+    referent IS the Proposition -- `subject` still binds to the referent, unchanged. MEASURED, this
+    season: `commitment.made` 2 where it was 0, `commitment.refused` 38 where it was 35 (the old
+    person-id referents still form and refuse; `H-156`'s (a)/(b) stays registered). The full
+    falsifier is `test_in11_utter_hold_commit.py`. ⚠ SINCE v9 IN-45 `migrate` THIS TEST NO LONGER
+    ASSERTS THE CLOSURE IN THE REALM: its two seed-0 execution assertions were retired under v9 §0.5
+    (the note at the assertion); what stays is that `commit` is resolvable, formed and attempted."""
+    from collections import Counter
+    from ..decision import make_chooser
+    from ..decision.options import opening_set
+    from ..state.ids import H, draw_factory
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    chooser = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                           draw=draw_factory(w.world_seed, lambda: w.tick))
+    formed = set()          # (person, subject) of every `commit` Candidate `opening_set` forms; read-only
+
+    def watched(p, v, s, ask_budget):
+        q = getattr(v, "question", None)
+        if q is not None:
+            formed.update((p.id, c.subject) for c in opening_set(p, v, q, w.fixtures) if c.verb == "commit")
+        return chooser(p, v, s, ask_budget)
+
+    d.season(watched, question=None,
+             contest_max_depth=w.fixtures.get("contest_max_depth"))
+    kinds = Counter(e.kind for e in w.log)
+
+    assert "commit" in resolvable_verbs(), (
+        "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
+    # ⚠⚠ v10 REM-24 (B10-05): THE ATTEMPT FLOOR BECOMES A FORMATION FLOOR, A RE-RECORD WITH THE UNIT THAT MOVED
+    # IT, FOR THE SAME REASON REM-23'S COUNT BECAME A PROPERTY. `petition` declares `referent_class: Person`, so
+    # the realm's act mix moved (`aperture 1 0`: 532 -> 529 acts) and the one `commit` this season had left
+    # standing -- `cohort_set_s_032`'s on `prop:e5a168fb...`, an attempt REM-23 recorded as a reading of a seeded
+    # trajectory ("1/1/1 ... not a claim that `commit` executes") -- is not chosen any more. MEASURED, this season,
+    # the REM-23 tree (`409c467b`, a `git worktree`) as control, the same script on both: `commit` acts 1 -> 0,
+    # `commitment.made` 1 -> 0, `commitment.refused` 0 -> 0; and what the floor stood for -- "the verb is still
+    # FORMED, a different regression from the gap this test documents" -- is untouched: `opening_set` forms
+    # `commit` for the same 6 persons, every Candidate on a Proposition (7 against 6 Candidates, one person's
+    # question having changed with the trajectory). So the floor is asserted on the formation, which is what the
+    # class governs, and the attempts below are held to the class's property without a floor of their own.
+    assert formed, "no `commit` Candidate was formed at all on this corpus -- the verb stopped being formed"
+    assert all(subject in w.propositions for _, subject in formed), (
+        "a `commit` Candidate was formed on an id that names no Proposition -- `referent_class: Proposition` "
+        f"no longer holds: {sorted(s for _, s in formed if s not in w.propositions)}")
+    # ⚠ RETIRED AT v9 IN-45 `migrate` (B-K, 2026-10-16) UNDER v9 §0.5's 2026-10-13 RULING (*"No test
+    # asserts that a verb executed in the seed-0 realm"*), which these two survived by oversight:
+    # `commitment.made >= 1` and a `commit` act naming a real Proposition, both in this one seed-0
+    # season. They went red when `migrate`'s destination channel moved the realm's act mix
+    # (`aperture 1 0`: `commit` att 38, ex 2 -> 0) -- the chooser's selection, not IN-11's wiring.
+    # Deleted, never skipped; the closure is proven on hand-built worlds by
+    # `test_in11_utter_hold_commit.py` block 1.
+    # ⚠⚠ v10 REM-23 (B10-05): `commitment.refused` 36 -> 0, A RE-RECORD WITH THE UNIT THAT MOVED IT, AND THE
+    # COUNT WAS A PROXY FOR THE PROPERTY, SO THE PROPERTY IS ASSERTED. `commit` declares `referent_class:
+    # Proposition`, so it forms only on a Proposition the question names and the person-id, rung and Record
+    # referents it was refused on (`exists:Proposition=0`, every one of the 36) are no longer formed: MEASURED,
+    # this season, REM-22 tree as control (the same script on both): `commit` attempted 38 -> 1, the Events
+    # `commitment.refused` 36 -> 0 and `commitment.made` 0 -> 1. What this assertion guarded -- "the verb is
+    # still ATTEMPTED, a different regression from the gap this test documents" -- is the formation floor above
+    # plus the next one, which reads the ACT STORE (a refused act is in it) and asks the class's own property of
+    # every attempt: it names a Proposition. AT REM-24 the floor on the attempts moved to the formation (above) and
+    # the attempts are held to the formation instead: every `commit` attempted was a Candidate `opening_set` formed.
+    attempted = [a for a in w.acts if a.verb == "commit"]
+    assert all(subject_of(a) in w.propositions for a in attempted), (
+        "a `commit` was formed on an id that names no Proposition -- `referent_class: Proposition` "
+        f"no longer holds: {[subject_of(a) for a in attempted if subject_of(a) not in w.propositions]}")
+    assert {(a.actor, subject_of(a)) for a in attempted} <= formed, (
+        "a `commit` was attempted that `opening_set` did not form for that person")
+
+
 def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     """FALSIFIER (c) -- AND `24d-i`'s `DONE·INERT` MEASUREMENT DOES NOT SURVIVE POSITION `11a`,
     WHICH IS RECORDED HERE RATHER THAN HIDDEN. The name and the back half of this test changed;
@@ -2650,7 +2814,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
 
     heads = {False: [], True: []}       # v10 REM-22: the question each delivery puts FIRST, per arm
     # B12a.99: pinned to the `uniform` endowment arm (the realm the act counts below were measured at). Under the shipped `ground` (B12a.54) with `granary_seasons` 4 (B12a.55) the
-    # two arms read (408, 408) at seed 0, one season, so the act-count parting this test polices (the last assertion) is not observable there; at `uniform` they part, (392, 391) (the pin below).
+    # two arms read (408, 408) at seed 0, one season, so the act-count parting this test polices (the last assertion) is not observable there; at `uniform` they part, (391, 390) (the pin below).
     uniform = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
 
     def season(strip):
@@ -2947,163 +3111,3 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # is drawn and asked. The act sequences and the `claim.deposited` totals are equal in both arms at B10.99 (11776 each; the
     # B10.72 release fix removed the one difference those two read), so they no longer observe a parting the pinned counts do not.
     assert out["acts"] != cout["acts"], "the two arms' act counts are equal: deleting 211 Sites parted nothing"
-# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal after scoring, in `make_ranker` (B10.24; it was `opening_set`'s), not a score term:
-# the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
-# past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
-# names, so these tests take the axis that `pursuit_axes.refusing_pole` authors (`_h2_axis`).
-#
-# Falsifier (`proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.2): a synthetic
-# projection/alignment injected through the rebinds the readers actually resolve --
-# `data.verbs.ALIGNMENT` (the `H-66` sweep's own, `alignment_at`) and
-# `data.verbs.PURSUIT_PROJECTION` (read bare by `data.pursuits.to_axes`) -- must stop the refused
-# Candidate forming and leave every survivor's score untouched.
-# =================================================================================================
-
-
-def _h2_setup():
-    from ..state.carriers import Question
-    w = P.tiny_world()
-    p = w.persons["p_mid"]
-    q = Question("q:h2", "need", ("rec_writ",))
-    v = View(p.id, [], w.fixtures.get("view_k"), q)
-    return w, p, q, v
-
-
-def _h2_base(min_verbs=3):
-    """`_h2_setup` plus the option set it forms today, ungated -- shared by every `test_h2_*` so a
-    change to `opening_set`'s call shape or the minimum-verb guard is edited once, not per test."""
-    from ..decision import options as _options
-    w, p, q, v = _h2_setup()
-    base = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
-    verbs = sorted({vb for vb, _ in base})
-    assert len(verbs) >= min_verbs, (
-        f"only {verbs} form here; the H-146 gate tests need >= {min_verbs}")
-    return w, p, q, v, base, verbs
-
-
-from .test_cr21_cells import _deontological_axis as _h2_axis    # noqa: E402 -- the one authored refusing-pole axis
-
-
-def _h2_inject(p, axis, weight, cells):
-    """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
-    import math
-    from ..data import verbs as _verbs
-    from ..data.rosters import _ROSTERS, PURSUIT_AXES
-    saved =(_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits), _ROSTERS["pursuit_axes"]["refusable"])
-    # The tolerance is the axis's SHARE of the projected vector (B10.22), so a lone axis would put it at ±1: a second
-    # axis of the roster carries the rest of a unit vector and leaves the share at `weight`.
-    other = next(a for a in sorted(PURSUIT_AXES) if a != axis)
-    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight, other: math.sqrt(1.0 - weight ** 2)}}
-    _verbs.ALIGNMENT = {axis: dict(cells)}
-    _ROSTERS["pursuit_axes"]["refusable"] = {axis: sorted(cells)}      # B10.21: the gate refuses a listed verb only
-    p.pursuits = {"h2_synthetic": 1.0}
-
-    def restore():
-        _verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, p.pursuits, _ROSTERS["pursuit_axes"]["refusable"] = saved
-    return restore
-
-
-def _h2_ranked(fx, p, v):
-    """The candidates the chooser orders: `opening_set`'s, less what his scruple struck. The gate moved there from `opening_set` (B10.24), so the set
-    a gate test reads is the ranker's; `choice_temperature` 0 takes the score order and needs no draw."""
-    from ..decision import choose as _choose
-    return _choose.make_ranker(fx.sweep("choice_temperature", 0))(p, v)
-
-
-def test_h2_the_shipped_arm_is_the_control_and_refuses_nothing():
-    """`refusal_axis` ships unset, and unset is a no-op: the same synthetic tables that make the
-    gate refuse below form the full set here. Without this arm the refusal test cannot tell the
-    gate from some other change to `opening_set`."""
-    from ..data.fixtures import DEFAULT_FIXTURES
-    from ..data.rosters import PURSUIT_AXES
-    from ..decision import options as _options
-    assert DEFAULT_FIXTURES.get("refusal_axis") is None, (
-        "the shipped arm is no longer the control; `H-146` and this test disagree")
-
-    w, p, q, v, base, verbs = _h2_base()
-    restore = _h2_inject(p, sorted(PURSUIT_AXES)[0], -0.4, {vb: 0.9 for vb in verbs})
-    try:
-        got = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
-    finally:
-        restore()
-    assert got == base, f"the unset gate changed the option set: {sorted(base ^ got)}"
-
-
-def test_h2_a_verb_past_the_persons_weight_never_forms():
-    """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
-    verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
-    and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
-    w, p, q, v, base, verbs = _h2_base()
-    refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
-    axis = _h2_axis()
-    fx = w.fixtures.sweep("refusal_axis", axis)
-    restore = _h2_inject(p, axis, -0.4,
-                         {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
-    try:
-        got = {(c.verb, c.subject) for c in _h2_ranked(fx, p, v)}
-    finally:
-        restore()
-
-    formed = {vb for vb, _ in got}
-    assert refused_pos not in formed and refused_neg not in formed, (
-        f"a verb whose `{axis}` cell exceeds the person's weight still formed: {sorted(formed)}")
-    assert tolerated in formed, f"{tolerated!r} sits below the weight and was refused anyway"
-    expected = {(vb, s) for vb, s in base if vb not in (refused_pos, refused_neg)}
-    assert got == expected, (
-        f"the gate moved candidates it does not govern: {sorted(expected ^ got)}")
-
-
-def test_h2_survivors_score_exactly_as_they_did_ungated():
-    """The gate filters and never re-weights: every Candidate that survives it reaches the score
-    with the value it had with the gate unset. Observed through `_sample_order`, the one place
-    `make_chooser` hands the scores on, so this reads the chooser's own numbers."""
-    from ..decision import choose as _choose
-    from ..decision import options as _options
-    from ..state.carriers import Sensation
-
-    w, p, q, v, base, verbs = _h2_base()
-    refused, tolerated = verbs[0], verbs[1]
-    axis = _h2_axis()
-    fx0 = w.fixtures.sweep("choice_temperature", 0)
-
-    def scores(fx):
-        seen = {}
-        inner = _choose._sample_order
-
-        def spy(ranked, score, person, fx_, draw):
-            seen.update({(c.verb, c.subject): score(c) for c in ranked})
-            return inner(ranked, score, person, fx_, draw)
-        _choose._sample_order = spy
-        try:
-            _choose.make_chooser(fx, lambda a, b, c: f"{a}:{b}:{c}")(
-                p, v, Sensation(), lambda: 1)
-        finally:
-            _choose._sample_order = inner
-        return seen
-
-    restore = _h2_inject(p, axis, -0.4, {refused: 0.5, tolerated: -0.9})
-    try:
-        ungated = scores(fx0)
-        gated = scores(fx0.sweep("refusal_axis", axis))
-    finally:
-        restore()
-    assert ungated and any(vb == refused for vb, _ in ungated), (
-        "the ungated arm scored nothing, or never scored the verb the gate should refuse")
-    assert not any(vb == refused for vb, _ in gated), f"{refused!r} reached the score gated"
-    assert set(gated) == {k for k in ungated if k[0] != refused}
-    moved = {k: (ungated[k], gated[k]) for k in gated if gated[k] != ungated[k]}
-    assert not moved, f"the gate changed survivors' scores: {moved}"
-    assert any(ungated[k] for k in gated), "every survivor scored 0; unchanged proves nothing"
-
-
-def test_h2_an_unrostered_axis_refuses_rather_than_gating_on_nothing():
-    """A name off `pursuit_axes` must raise `Unspecified`, not silently answer. (Without
-    `require_member` this would raise a bare `KeyError` inside `to_axes` instead -- still a raise,
-    just an unnamed one -- so this test also pins that the failure is the NAMED hole, not any
-    exception.)"""
-    from ..decision import options as _options
-    from ..gaps import Unspecified
-
-    w, p, q, v = _h2_setup()
-    with pytest.raises(Unspecified):
-        _h2_ranked(w.fixtures.sweep("refusal_axis", "h2_not_an_axis"), p, v)

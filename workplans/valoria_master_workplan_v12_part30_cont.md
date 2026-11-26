@@ -16,7 +16,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B12c-material-verbs-and-valley
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
   (Earlier in the schedule but not edges of §2.1, read by STOPS IF steps rather than added: B24a (CR-61's `case` Record kind, S15; B25.09) and B21 (A-23's detained-questioner clause in `_req_interrogate`, `U5d_FA_owed_edits` §2, S12; B25.11). B04, B05 and B07 are reached through B11.)
 REQUIREMENT: R-04.a (`open_case`) → its `via` column at least 1 on `aperture 2 --seeds 0 1 2` (four seasons in the source's `aperture 4 0`; A-114); `BUILT OUT`: `construe`, `interrogate`, `tie` → each built out; the verb table reads 68 by command (IS-A §12.2 row B25). `status:` is not edited (A-114).
@@ -88,8 +88,10 @@ Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lan
 ### B25.01 — the oracle fails loudly · FI08 §2 · BUILD · HASH EQUAL
 - SOURCE: FI08 "Edits and decisions" 2 (copied), "Gate" §2, named test; closes R-50 of `audits/08_FI_audit_addendum_B.md` (the 2026-08-08 churn audit's D6 second layer).
 - ADVANCES: none of the nine; the oracle that FI's port validates against cannot hide a failed import (CLAUDE.md §7).
-- INSTRUCTION (copied): "Delete both `try/except` wrappers in `knots.py`. An oracle whose callee cannot be imported should raise; `engine/tests/test_knots_ed912.py` then observes the lateral calls it asserts on." The two wrappers are the `try:` / `except (ImportError, AttributeError): pass` pairs in `systems/fieldwork/sim/knots.py` (at `9700714`: `try:` at lines 348 and 374, `except` at 365 and 378; cited by symbol at the open, the enclosing functions named in the commit body).
-- WHERE: `systems/fieldwork/sim/knots.py`; NEW `engine/season/tests/test_knots_season_form.py`.
+- INSTRUCTION (copied; step 1):
+  1. "Delete both `try/except` wrappers in `knots.py`. An oracle whose callee cannot be imported should raise; `engine/tests/test_knots_ed912.py` then observes the lateral calls it asserts on." The two wrappers are the `try:` / `except (ImportError, AttributeError): pass` pairs in `systems/fieldwork/sim/knots.py` (at `9700714`: `try:` at lines 348 and 374, `except` at 365 and 378; cited by symbol at the open, the enclosing functions named in the commit body).
+  2. `knots.py`'s gate and pool read Attunement, not the retired `bonds`/`spirit` (`getattr(..., 'bonds', 0)` is a silent default of the kind step 1 removes; CR-92 (5), `CR-92_social_attributes_on_others.md`; `KNOT_ATTUNEMENT_MIN` 5 `[ASSUMPTION; Jordan to correct]`); `references/module_contracts.yaml` fieldwork `unplugged.state` loses its `Bonds` row.
+- WHERE: `systems/fieldwork/sim/knots.py`; `references/module_contracts.yaml`; NEW `engine/season/tests/test_knots_season_form.py`.
 - TESTS: `test_knots_season_form.py::test_the_oracle_raises_on_a_failed_lateral_import`, written first, red ("with the conviction module's name misspelt on purpose the same test errors where today it passes", monkeypatched in the test); `engine/tests/test_knots_ed912.py` green.
 - FALSIFIER and CONTROL: a misspelt lateral module that the oracle swallows. Control: `engine/tests/test_knots_ed912.py` green before and after; realm hashes unchanged (the oracle is unplugged from the season).
 - GATE: `python -m pytest engine/season/tests/test_knots_season_form.py engine/tests/test_knots_ed912.py -q` → pass.
@@ -127,6 +129,7 @@ Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lan
 - FALSIFIER and CONTROL: "If any of these forms on the other, the partition is not carrying the class." Control: the base reading of `speak`, `open_case` executions (`reading @<sha>`).
 - GATE: `python -m pytest engine/season/tests/test_vm_s2_a_formation.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s`, s = 0, 1, 2 → the two refusal counts 0, executions not lower ("A fall is the stopping rule … revert that edit").
 - HASH MOVERS: declared, every world (refusal Events stop). B25.99.
+- CARRIED FROM B24 (close; no position added): `decision/options.py` forms only the `none` and `all citing` variants of a `speak` on a docketed matter, so B24.27's third variant (an answering variant carrying `ANSWERS_KEY`) is not formed and the answered stage, B24.26's out-of-sitting `first_heard` and B24.43's `answered_over` run only on hand-built acts; and `argue` forms no `cites` in computed play, so a hearer seated on evidence alone is moved by no ground. Both are formation owed on the `Matter` referent this item stamps.
 - DEPENDS ON: EXISTS-IN-TREE `world_q.docket_question`, `::questions_for`, `::own_referents_of_class`, `state/carriers.py::Question` (`classes`, IN-53 D1); V12 B25.02.
 - GLOSSARY: *matter* (step 5).
 - COST and TIER: edit; `sonnet`, `medium`.

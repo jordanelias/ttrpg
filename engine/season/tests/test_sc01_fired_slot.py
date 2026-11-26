@@ -121,7 +121,7 @@ def test_open_case_with_no_open_slot_holding_the_matter_still_appends_the_datele
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     assert w.docket == [{"date": None, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: None,
                          world_q.DOCKET_PETITION: None,
-                         world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}], w.docket
+                         world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0, world_q.DOCKET_CASE: "rec:oc"}], w.docket
     w, d = _world()
     w.rungs["S2"] = Rung("S2", "settlement")
     w.add_tenure(Tenure("t_s2", "S2", "D", "contain", since=0))
@@ -133,7 +133,7 @@ def test_open_case_with_no_open_slot_holding_the_matter_still_appends_the_datele
     assert w.docket == [{"date": did, "matter": None},
                         {"date": None, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: None,
                          world_q.DOCKET_PETITION: None,
-                         world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}], w.docket
+                         world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0, world_q.DOCKET_CASE: "rec:oc"}], w.docket
 
 
 def test_open_case_fills_the_nearest_fired_slot_holding_the_matter_and_appends_nothing():
@@ -147,7 +147,7 @@ def test_open_case_fills_the_nearest_fired_slot_holding_the_matter_and_appends_n
     filled, = world_q.docketed(w, PARTY)
     assert filled == {"date": near, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: None,
                       world_q.DOCKET_PETITION: None,
-                      world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}, filled
+                      world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0, world_q.DOCKET_CASE: "rec:oc"}, filled
     assert world_q.open_slots(w, "D") == [{"date": far, "matter": None}]
     # A second matter in the same duchy fills the far sitting's slot (`S`'s is taken).
     assert _kinds(_fold(w, d, _open("oc2", subject="p_low"))) == ["case.opened"]
@@ -210,7 +210,7 @@ def test_a_matter_that_is_no_person_fills_no_slot_and_raises_no_bench_question()
     assert world_q.open_slots(w, VENUE) == [{"date": did, "matter": None}], w.docket
     assert world_q.docketed(w, "Hh") == [{"date": None, "matter": "Hh", world_q.DOCKET_ARRANGEMENT: None,
                                           world_q.DOCKET_PETITION: None,
-                                          world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}], w.docket
+                                          world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0, world_q.DOCKET_CASE: "rec:oc_rung"}], w.docket
     assert world_q.sittings_before(w, duke) == []
     assert not [q for q in world_q.questions_for(w, duke)
                 if q.id.startswith("q:sitting:") and "Hh" in q.referents]
@@ -242,14 +242,16 @@ def test_each_sitting_is_asked_on_its_own_firing_and_not_on_a_later_one():
 def test_a_slot_refilled_in_one_resolve_is_asked_under_a_new_question_id():
     """The question's id names its matters: a determination and a new case in ONE RESOLVE empty the
     slot and refill it, so the judge's question changes id with what is before him. (Strong judge, as
-    above: the determination must open for the slot to empty.)"""
+    above: the determination must open for the slot to empty.) B24.10 REPOINT: a determination is sat at ENCOUNTER, after the whole RESOLVE, so the new
+    case no longer refills a slot the same RESOLVE emptied (it is filed first and takes no slot); the determination and the new case are two folds of
+    one sitting (the determination's lap, then the next case), and what is asserted is the same: the slot is emptied and refilled and the id changes."""
     w, d = _world(**JUDGE)
     duke = w.persons[DUKE]
     did = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     before = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
-    assert _kinds(_fold(w, d, _determine("dt"), _open("oc2", subject="p_low"))) == [
-        "matter.determined", "case.opened"]
+    assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    assert _kinds(_fold(w, d, _open("oc2", subject="p_low"))) == ["case.opened"]
     assert world_q.docketed(w, "p_low")[0]["date"] == did, w.docket
     after = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
     assert len(before) == len(after) == 1 and before != after, (before, after)
@@ -272,7 +274,7 @@ def _w26_run():
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]   # fills the slot
     assert w.docket == [{"date": did, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: None,
                          world_q.DOCKET_PETITION: None,
-                         world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0}], "no `{'date': None}` item may be appended"
+                         world_q.DOCKET_ARRANGER: DUKE, world_q.DOCKET_RIG: 0.0, world_q.DOCKET_CASE: "rec:oc"}], "no `{'date': None}` item may be appended"
     # The bench member's COMPUTED question names the docketed party ...
     q, = [q for q in world_q.questions_for(w, duke) if PARTY in q.referents and q.id.startswith("q:sitting:")]
     # ... the person-side opening set forms the determination on it ...

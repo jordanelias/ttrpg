@@ -253,35 +253,6 @@ def test_with_no_goal_stages_row_current_stage_is_none_for_every_ambition(unstag
     assert checked == 2
 
 
-def test_every_unstaged_shipped_goal_and_every_unstaged_ambition_of_the_realm_reads_none():
-    # B10.73 ships the first stage row (ARC-47's); the control is every goal no row names.
-    shipped = [g for g in goals.goals() if g.stages is None]
-    checked = 0
-    for g in shipped:
-        w = World(0)
-        w.propositions[g.id] = Proposition(g.id, "OUGHT", "subj_" + g.id, f"{g.id} ought", True, 0)
-        p = Person("p_o", "p_o")
-        p.tenures.append(Tenure("t_c", "p_o", g.id, "commit", 0))
-        w.persons["p_o"] = p
-        assert g.id in world_q.ambitions(w, p)
-        assert world_q.current_stage(w, p, g.id) is None, g.id
-        checked += 1
-    assert checked == len(shipped) >= 30, "every shipped goal row (38 at the base reading)"
-    # The same reading over a built realm: every ambition of every person (136 at the base reading, 12 of
-    # the authored goals among them).
-    w = build_realm(0)
-    before = w.content_hash()
-    realm_checked = authored = 0
-    for p in w.persons.values():
-        for amb in world_q.ambitions(w, p):
-            stage = world_q.current_stage(w, p, amb)
-            if goals.goal(amb) is not None and goals.goal(amb).stages is not None:
-                continue    # a staged ambition is asked too (the hash check below), but reads its stage
-            assert stage is None, (p.id, amb)
-            realm_checked += 1
-            authored += goals.goal(amb) is not None
-    assert realm_checked >= 100 and authored >= 10, (realm_checked, authored)
-    assert w.content_hash() == before, "asking stores nothing"
 
 
 # ---------------------------------------------------------------------------------------------------

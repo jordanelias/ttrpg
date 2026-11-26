@@ -30,15 +30,15 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, d
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
-from ..data.arrangements import ARRANGEMENTS, in_form      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
+from ..data.arrangements import ARRANGEMENTS, in_form      # B24p.16: `proceeding_row`
 from ..data.requires import (
     KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
-    ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    DECLARED, INVESTED, SEASONS_OF_YEAR,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
+    INVESTED, SEASONS_OF_YEAR,
+    MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
     remove_distance, require_member, require_mortal_cause,
@@ -50,7 +50,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
+    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
@@ -68,8 +68,10 @@ from .person_q import (
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
 from .person_q import holders_named, vacant_named
-# v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`_disagrees`) and reads the teller's `record`.
-from .person_q import _disagrees, is_cell, record as record_of
+# v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
+from .person_q import contradicts, is_cell, record as record_of
+# B24.25: `filings` derives what a cited item is as proof, what it weighs and whether it impeaches a Record, off the one owners.
+from .person_q import cited_said, claim_origin, impeaches, proof_kind, proof_weight, teller_weight
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -82,7 +84,7 @@ from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import (  # noqa: F401 -- re-exported
     a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
-from ..state.carriers import Person, Question, Site, Tenure
+from ..state.carriers import Person, Question, Said, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
 # which may not import this module. These names are the same function objects as `state/containment`'s.
@@ -112,7 +114,7 @@ from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
-                     ProduceInput, Sitting, SubsistInput, Under)
+                     ProduceInput, Sitting, SubsistInput, Under, is_adjourned, is_filed, is_first, written)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -234,10 +236,183 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 # carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
 DOCKET_ARRANGEMENT = "arrangement"
 DOCKET_PETITION = "petition"
+# B24.01 (`IS-B2-SC-02`): THE CASE FILE THE ITEM NAMES -- the `Record` `open_case` minted for the matter, written by `_docket_item`. A computed or
+# calendar-formed item without one reads `None`; `carry` writes none, a carried petition being its own file (`case_file_of`).
+DOCKET_CASE = "case"
 # B24p.24 (V2 p2 §H): THE TWO KEYS A DOCKET ITEM GAINED -- who arranged its sitting and how hard (`rig`, a `rosters.yaml: rig_levels` member). Written by
 # `_docket_item` and read by `seam/wrappers/sigma.py::arranged_by`, which hands them to the proceeding's builder.
 DOCKET_ARRANGER = "arranger"
 DOCKET_RIG = "rig"
+
+
+def case_file_of(w: World, item: dict) -> Optional[str]:
+    """THE CASE FILE A DOCKET ITEM NAMES (`IS-B2-SC-02`): the Record `open_case` minted for it (`DOCKET_CASE`), else the petition `carry`
+    docketed (`DOCKET_PETITION` -- a carried petition is its own case file), else `None` (a slot CALENDAR formed, a computed item). The one reader:
+    nothing reads the `case` key directly. `w` is the world the id is read in; the id is not checked against `w.records` here."""
+    return item.get(DOCKET_CASE) or item.get(DOCKET_PETITION)
+
+
+def case_file_for(w: World, matter: Optional[str]) -> Optional[str]:
+    """THE CASE FILE A MATTER'S DOCKET ITEM NAMES (`case_file_of`) where the world still holds that Record, else `None`: a computed or calendar item names none. The one reading of
+    'the case file of this matter' for the speech that files an item (`filings`), the sitting that is written on it (`_eff_determine`) and the host that reads its exhibits (`sigma`)."""
+    return next((c for c in (case_file_of(w, i) for i in docketed(w, matter)) if c in w.records), None)
+
+
+def docketed_row(w: World, subject: Optional[str]) -> Optional[dict]:
+    """The `arrangements.yaml` row the act's matter (its `subject`) is docketed under, or `None`: nothing docketed, an item naming no row (every
+    computed `open_case`, H-80), or more than one row on one matter (a hand-planted docket, which `_eff_determine` declines rather than choosing
+    between: absence refuses, never a guessed row). The one reader: the host's roll (`seam/wrappers/sigma.py`) and the speech that files an item (`filings`) both ask it."""
+    rows = docketed_under(w, subject)
+    (row,) = rows if len(rows) == 1 else (None,)
+    return ARRANGEMENTS.get(row) if isinstance(row, str) else None
+
+
+def admitted_kinds(fx, docketed: Optional[dict]) -> Optional[tuple]:
+    """The proof kinds the docketed row admits -- or `None` for no filter: nothing docketed, or `proof_admission` `off`. The one reader of the admission, for `proofs`' filter and for
+    the speech that files an item (`filings`)."""
+    return tuple(docketed["admits"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+
+
+def side_of(actor: str, subject: Optional[str]) -> str:
+    """The side a speech to a matter is on (`SocialContestInput.side`; the `side` of a stage a speech files): the accused's where he speaks to his own matter (the self-plea), else `for`, the
+    bearer's -- and the docket's `for` for a determiner's draw. [ASSUMPTION; Jordan to correct; revert: always `for`. Basis: `proceeding_input` seats the first claimant as `for` and the
+    matter's other party as `against`.]"""
+    return "against" if subject == actor else "for"
+
+
+#: THE CLAUSE A CITING SPEECH IS REFUSED AT (`filings`): its `cites` or `answers` cell. The row is flat, so the refusal's kind is the row's one (`speech.unheard`) and this names the clause on the Verdict.
+CITES_CLAUSE = "cites"
+
+
+class Filing(NamedTuple):
+    """ONE CITED ITEM A SPEECH FILES: `ref` what the stage carries (the citer's `Said` of a claim, or the id of a Record), `kind` the `matters` member it is as proof, `rung` the issue rung that kind
+    bears on, `weight` its derived weight before the band's share, `origin` the root of its chain."""
+    ref: object
+    kind: str
+    rung: str
+    weight: float
+    origin: str
+
+
+class Filings(NamedTuple):
+    """WHAT A CITING SPEECH PUTS BEFORE A MATTER: `case` the Record the matter's docket item names (`None` where it names none), `side` the speaker's, `items` each `Filing`, `answers` for each
+    stage answered `(index, impeached)`, and `refused` the clause the speech is refused at (`CITES_CLAUSE`) or `None`."""
+    case: Optional[str]
+    side: str
+    items: tuple
+    answers: tuple
+    refused: Optional[str]
+
+
+def filings(w: World, a) -> Filings:
+    """B24.25 (EVID_B "Exact edits" 4; FI_05_B E-1, E-2; ADM) -- WHAT AN ACT THAT CITES OR ANSWERS FILES, AND WHETHER IT MAY BE ATTEMPTED AT ALL. The ONE READER: `loop/resolve.py::_admits` refuses
+    on `refused` BEFORE THE DRAW, and `loop/effects_information.py::_eff_speak` writes the stages from `items` and `answers`, so what was admitted is what is written.
+    `Act.payload["cites"]` is ids only (E-1), each a `Claim` in the actor's OWN ledger or a Record he holds (a live `hold`), refused otherwise, and refused where its kind is not one the matter's row
+    admits (`proof_kind` for a claim, the Record's `matters` carrier for a Record; `admitted_kinds`), and refused where it contradicts an item already standing for the actor's own side or another cite of
+    the same act (rule 2, the filing refusal). A claim's stage carries the `Said` the act carries for it (`CITED_KEY`, copied at CHOOSE) else one read off his own ledger (F8: no other person's is opened);
+    its weight is `proof_weight` times how much the actor's own ledger weighs it (`teller_weight`, the hop discount of a told one), a Record's 1; its origin the root of the claim's chain, else the actor
+    (a firsthand claim is his own), else the Record itself. `answers` are the places of filed stages of the OTHER side, each `impeached` where a cite is a held finding that the answered Record is forged
+    (`person_q.impeaches`).
+    [ASSUMPTION; Jordan to correct; revert: refuse a claim `proof_kind` has no kind for, always -- basis: an ANSWER cites a claim of the same cell and a different value, which is no deed, so its kind is
+    `None`; one that answers is read as `testimony`, one that does not is refused as no proof (a withheld confession, B24.23, among them)]
+    [ASSUMPTION: a Record's origin is the Record itself -- the tree carries no maker for one to name -- and a cited oath edge has no stage shape, so a cite that is no Record or ledger claim is refused]."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    cites, answers = d.get(CITES_KEY), d.get(ANSWERS_KEY)
+    side = side_of(a.actor, d.get("subject"))
+    if cites is None and answers is None:
+        return Filings(None, side, (), (), None)
+    refuse = Filings(None, side, (), (), CITES_CLAUSE)
+    p = w.persons.get(a.actor)
+    if p is None or not isinstance(cites if cites is not None else (), (list, tuple)) or not isinstance(answers if answers is not None else (), (list, tuple)):
+        return refuse
+    case = case_file_for(w, d.get("subject"))
+    stages = w.records[case].stages if case is not None else []
+    admits = admitted_kinds(w.fixtures, docketed_row(w, d.get("subject")))
+    answering = bool(answers)
+    own = {c.id: c for c in p.ledger} if cites else {}      # read only by a cite
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    cited, weigh = d.get(CITED_KEY) or {}, teller_weight(p, w.fixtures, w.tick)
+    standing = [st[4] for st in stages if is_filed(st) and st[2] == side and isinstance(st[4], Said)]       # what stands for his own side already
+    items, claims = [], []
+    if any(not isinstance(cid, str) for cid in (cites or ())):      # BEFORE the dedupe hashes them: an unhashable cite (a list) is a refusal, not a TypeError
+        return refuse
+    for cid in dict.fromkeys(cites or ()):
+        if cid in own:
+            c = own[cid]
+            ref = cited.get(cid) or cited_said(c)
+            kind = proof_kind(ref) or ("testimony" if answering else None)
+            if kind is None or any(contradicts(ref, o) for o in (*standing, *(i.ref for i in items if isinstance(i.ref, Said)))):
+                return refuse
+            weight = (float(proof_weight(ref)) if proof_kind(ref) is not None else 1.0) * weigh(c)
+            item, claims = Filing(ref, kind, MATTERS[kind]["bears_on"], weight, claim_origin(ref.chain, a.actor)), [*claims, c]
+        elif cid in held and cid in w.records:
+            kind = matter_of_record(w.records[cid].kind)
+            item = Filing(cid, kind, MATTERS[kind]["bears_on"], 1.0, cid)
+        else:
+            return refuse
+        if admits is not None and item.kind not in admits:
+            return refuse
+        items.append(item)
+    marked = []
+    for idx in answers or ():
+        if not isinstance(idx, int) or isinstance(idx, bool) or not 0 <= idx < len(stages) or not is_filed(stages[idx]) or stages[idx][2] == side:
+            return refuse
+        ref = stages[idx][4]
+        marked.append((idx, isinstance(ref, str) and any(impeaches(c, ref) for c in claims)))
+    return Filings(case, side, tuple(items), tuple(marked), None)
+
+
+def answers_first(w: World, a) -> bool:
+    """B24.26 (ADM edit 4) -- DOES THIS ACT ANSWER AN ITEM THE ROOM HEARD FIRST: a filing verb's act whose `answers` name a filed stage that carries the first-heard mark (`is_first`), read through
+    `filings`, the one reader of what an answering act answers, so a refused act (which is never drawn) and an act that answers nothing read `False`. The answering `speak`'s host builder reads it
+    into the `first_heard` term of the speech's obstacle (`Input.first_heard`)."""
+    return a.verb in FILING_VERBS and _first_heard(w, filings(w, a))
+
+
+def _first_heard(w: World, f: Filings) -> bool:
+    """`answers_first`'s reading of one `Filings`: it is not refused, names a case file and answers a stage carrying the first-heard mark."""
+    return f.refused is None and f.case is not None and any(is_first(w.records[f.case].stages[i]) for i, _ in f.answers)
+
+
+def answered_over(w: World, a) -> Optional[float]:
+    """B24.43 (EVID_B "The answer's odds") -- THE WEIGHT THE ITEM AN ACT ANSWERS HOLDS OVER ITS ANSWER, or `None` for an act that answers nothing (and for one `filings` refuses, which is never drawn). Read through
+    `filings`, the one reader of what an answering act answers and cites, as `answers_first` is. For each stage the act answers: the stage's weight less the heaviest of the act's own cited claims that
+    contradicts it (`contradicts`, the pairing the host's relations read; none, when the answer is a finding that the Record is forged), floored at 0; the greatest of them where it answers several.
+    It is the board's `proceeding._answerable` `over`, read at the speech: the abridged speech's difficulty is `answer_ob`, and it meets the `answer` term on this weight. [ASSUMPTION; Jordan to correct;
+    revert: the plain speech's difficulty -- basis: the answering act's own weights stand in for the board's, which the speech has none of: an answered stage's `weight` is what it was filed at, an answer's is its derived weight before the band's share]"""
+    return _answer_over(w, filings(w, a)) if a.verb in FILING_VERBS else None
+
+
+def _answer_over(w: World, f: Filings) -> Optional[float]:
+    """`answered_over`'s reading of one `Filings`: `None` where it is refused, names no case file or answers nothing."""
+    if f.refused is not None or f.case is None or not f.answers:
+        return None
+    stages = w.records[f.case].stages
+
+    def over(idx: int) -> float:
+        target = stages[idx]
+        answer = max((i.weight for i in f.items if isinstance(target[4], Said) and isinstance(i.ref, Said) and contradicts(i.ref, target[4])), default=0.0)
+        return max(0.0, float(target[5]) - answer)
+    return max(over(idx) for idx, _ in f.answers)
+
+
+def cited_kinds(w: World, a) -> tuple:
+    """B24.35 -- THE PROOF KINDS AN ACT CITES: the `matters` members of the items its `cites` file (`filings`, the one reader of what a citing act files), in the order cited, each once; `()`
+    for an act that cites nothing and for one that `filings` refuses (it is never drawn). Read by the proceeding's host into `Present.backed`'s `cites` condition."""
+    return _kinds_cited(filings(w, a))
+
+
+def _kinds_cited(f: Filings) -> tuple:
+    """`cited_kinds`'s reading of one `Filings`."""
+    return () if f.refused is not None else tuple(dict.fromkeys(i.kind for i in f.items))
+
+
+def hearing_terms(w: World, a) -> tuple:
+    """`(answers_first, cited_kinds, answered_over)` OF ONE ACT FROM ONE `filings` READ: what the proceeding's host (`seam/contest.py`) and the chooser's believed odds
+    (`sigma._believed_proceeding_chance`) hand a hearing's builder together, each equal to the single reader of its own name."""
+    f = filings(w, a)
+    filing = a.verb in FILING_VERBS
+    return filing and _first_heard(w, f), _kinds_cited(f), _answer_over(w, f) if filing else None
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
@@ -532,9 +707,9 @@ def proceeding_row(w: World, act) -> tuple:
 # B24p.20 -- A PROCEEDING'S ENDING, READ BACK (`rosters.yaml: proceeding_endings`; the one writer is `loop/resolve.py::_proceeding_ending`). Pure
 # readers over `Event.ending`: they hold nothing and decide nothing, and an Event no proceeding wrote answers empty.
 # ---------------------------------------------------------------------------------------------------------------------------------------
-#: A written beat: a `Beat`'s fields in declared order, `terms` left out (the true values are never written) and `mood` read as `stance` (its band, named
+#: A written beat: `written(Beat)` in declared order (`terms`, the true values, and the board's cells, which are not a beat's cells: `queries/inputs.py::UNWRITTEN`, are left out) and `mood` read as `stance` (its band, named
 #: only where the room turns; `None` at the beats that leave it as it was; the clamped number is not in the record).
-EndedBeat = namedtuple("EndedBeat", [("stance" if f.name == "mood" else f.name) for f in fields(Beat) if f.name != "terms"])
+EndedBeat = namedtuple("EndedBeat", [("stance" if name == "mood" else name) for name in written(Beat)])
 
 
 def _tagged(event, tag: str) -> list:
@@ -579,6 +754,34 @@ def ending_card(event) -> Optional[EndedCard]:
         return None
     _, decided_by, arranged_by, tilt, tilted_against, ruled = held[0]
     return EndedCard(tuple(decided_by), arranged_by, tilt / MARGIN_SCALE, tilted_against, tuple((who, d / MARGIN_SCALE) for who, d in ruled))
+
+
+def ending_exchanges(event) -> tuple:
+    """`((kind, item id), ...)`: the items a sitting entered and struck, as its Event listed them (B24.14; `queries/inputs.py::exchanges` is the value
+    `_eff_determine` appends to the case file's `Record.stages`); `()` for an Event that lists none."""
+    return tuple((x[1], x[2]) for x in _tagged(event, ENDING_EXCHANGE))
+
+
+def adjourned_by(beats) -> Optional[str]:
+    """B24.38 -- WHO ADJOURNED THE SITTING: the mover of the last of `beats` (a `Beat` of the Outcome, or an `EndedBeat` of an Event) where that beat's move has the effect `adjourn`
+    (`proceeding_moves`: the bench's own move, which ends the sitting `budget` and holds the stage to the next sitting), else `None`. The one owner of the reading:
+    `loop/effects_information.py::_eff_determine` writes the stage by it and `harness/governance_spine.py::hearing_ending` reads the ending by it."""
+    last = beats[-1] if beats else None
+    return last.mover if last is not None and PROCEEDING_MOVES[last.move]["effect"] == EFFECT_ADJOURN else None
+
+
+def adjournments(w: World, case: str) -> int:
+    """B24.38 -- HOW MANY TIMES THE BENCH HELD THIS CASE FILE'S MATTER OVER: the `adjourned` stages on the Record `case` (`inputs.ADJOURNED_STAGE`), 0 for a file that is not one. What the
+    next sitting of the matter finds on its file."""
+    rec = w.records.get(case)
+    return 0 if rec is None else sum(1 for st in rec.stages if is_adjourned(st))
+
+
+def ending_bench(event) -> tuple:
+    """B24.29: `((seat, sign), ...)`, the public lean of each seat who decided a sitting, `sign` +1 for the motion and -1 against it (the sign of his live commits,
+    `declared_votes_by_member`), as the sitting wrote it; `()` for an Event that holds none (every sitting of a bench with no public commit)."""
+    held = _tagged(event, ENDING_BENCH)
+    return tuple((seat, sign) for seat, sign in held[0][1]) if held else ()
 
 
 def ending_arrangement(event) -> Optional[str]:
@@ -819,47 +1022,33 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     return seats
 
 
-def declared_sitting(w: World, matter: Optional[str]):
-    """v11 CR-34 (C-7, `ED-SC-0034`): THE ARRANGEMENT ROW `matter` IS HEARD UNDER WHEN THAT ROW DECLARES ITS
-    DISPOSAL (`close: declared`, B24p.03: was `disposal`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
-    `declared.votes` and `declared.quorum` stems of `determine`'s `vote` conjunct. The row comes from the
-    docket item (`docketed_under`); a computed `open_case` names none (H-80), so every computed matter is
-    `None` here. More than one row on one matter (a hand-planted docket, which `_eff_determine` declines
-    rather than choosing between) is `UNKNOWN` when any of them declares: absence refuses, never a guessed row."""
-    rows = docketed_under(w, matter)
-    declared = [ARRANGEMENTS[r] for r in rows
-                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["close"] == "declared"]
-    if not declared:
-        return None
-    return declared[0] if len(rows) == 1 else UNKNOWN
-
-
-def declared_votes(w: World, matter: str, row: dict) -> int:
-    """v11 CR-34: HOW MANY DISTINCT MEMBERS OF THE BENCH AT `matter`'S PLACE VOTE AGAINST HIM under the declared
-    `row` -- those holding a LIVE `commit` to an OUGHT Proposition whose subject is the matter (the party) and
-    whose predicate names the kind the row `disposes:` (`ban` for `excommunication_deliberation`).
-    COMPUTED WHEN READ AND STORED NOWHERE (`commit_count_guard`'s shape): `ambitions` is the one owner of
-    *a live `commit` to an OUGHT* and returns live edges only, so an ended commit is no vote, and the bench is
-    `judging_set`'s, counted as distinct persons (`bench.size`'s rule).
-
-    THE SUBJECT TEST IS THE RULE, NOT AN ADDENDUM: a commit to a faction creed has the faction's LEADER as its
-    subject (`boot/realm.py`'s creed Propositions), so a member's loyal creed is a vote against nobody
-    unless the leader is the one on trial -- and then only if the creed's predicate names the disposal, which
-    it does not. `names` is equality with the kind: a predicate that merely mentions it is not a vote
-    [ASSUMPTION; medium; Jordan to correct; revert: any Proposition about the party]. A matter with no place has
-    no bench: 0."""
+def declared_votes_by_member(w: World, matter: str, row: dict) -> dict:
+    """B24.11 (`U5c_SC_proceedings_residue.md` §6 item 2): THE LIVE COMMITS EACH MEMBER OF THE BENCH AT `matter`'S PLACE HOLDS ON THE MOTION to dispose
+    of the matter as the declared `row` does, SIGNED -- `{member: n}`, `n` the count of his live commits to an OUGHT Proposition whose subject is the
+    matter (the party) and whose predicate names the kind the row `disposes:` (`ban` for `excommunication_deliberation`), less the count of his live
+    commits to the NEGATION of it (the same Proposition with `value` false: *he ought not be banned*). `n` is positive for the motion, negative against
+    it, and a member with no commit on it is absent. The host reads it as where each seat's track STARTS (`sigma._present`: one `lean_level` a commit),
+    never as a gate and never as a leverage source at the close.
+    COMPUTED WHEN READ AND STORED NOWHERE (`commit_count_guard`'s shape): `ambitions` is the one owner of *a live `commit` to an OUGHT* and returns
+    live edges only, each Proposition once, so an ended commit counts for nothing and two edges to one Proposition are one; the bench is `judging_set`'s,
+    counted as distinct persons. THE SUBJECT TEST IS THE RULE, NOT AN ADDENDUM: a commit to a faction creed has the faction's LEADER as its subject
+    (`boot/realm.py`'s creed Propositions), so a member's loyal creed counts for nobody unless the leader is the one on trial -- and then only if the
+    creed's predicate names the disposal, which it does not. `names` is equality with the kind [ASSUMPTION; medium; Jordan to correct; revert: any
+    Proposition about the party]. A commit is public where it is a `commit` edge, which every edge is here [HOOK: no edge carries a privacy]. A matter
+    with no place has no bench: `{}`."""
     venue = place_of(w, matter)
     if venue is None:
-        return 0
-    kind = row["disposes"]
-    votes = 0
-    for member in set(judging_set(w, venue, matter)):
+        return {}
+    kind, signed = row["disposes"], {}
+    for member in dict.fromkeys(judging_set(w, venue, matter)):
         p = w.persons.get(member)
-        if p is not None and any(
-                w.propositions[i].subject == matter and w.propositions[i].predicate == kind
-                for i in ambitions(w, p)):
-            votes += 1
-    return votes
+        if p is None:
+            continue
+        n = sum((1 if w.propositions[i].value else -1) for i in ambitions(w, p)
+                if w.propositions[i].subject == matter and w.propositions[i].predicate == kind)
+        if n:
+            signed[member] = n
+    return signed
 
 
 # ===========================================================================
@@ -888,57 +1077,81 @@ def remove_weight(source: str) -> float:
 _UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)
 
 
-def reception(w: World, speaker: str, audience: tuple) -> float:
-    """HOW THE `audience` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
-    who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
+def _live_commit_propositions(w: World, who: str) -> list:
+    """THE PROPOSITIONS `who` IS PUBLICLY BOUND TO: the object of each live `commit` Tenure he owns, in edge order, that names a Proposition the world holds
+    (a commit to a faction or to nothing names none). A World edge, read off the committer's own edge list and in nobody's ledger
+    (`_eff_commit` writes it; `Proposition` is immutable), so reading it reads no person's ledger: `reception` and `proofs` ask no other."""
+    p = w.persons.get(who)
+    if p is None:
+        return []
+    return [w.propositions[t.object] for t in p.tenures if t.kind == "commit" and t.live and t.object in w.propositions]
 
-        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · present_confidence(c)/full · v_h(c)
 
-      * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room
-        the prize row says hears the act (B07.04; the bench is `judging_set(w, venue)`, the one owner of
-        who sits over a rung) -- each person once, never the speaker himself (a man does not receive
+def reception(w: World, target: str, audience: tuple, actor: str) -> float:
+    """HOW THE `audience` RECEIVES `target` -- `19_PLAN.md` step 17, the room reading the person it is asked about (for a `speak`, the speaker; `actor`
+    is `claimants[0]`, `contest_input`'s). Signed: above zero the bench is disposed toward him, below it against him. It stores nothing.
+
+    F8 HOLDS (`04_CODE_ARCHITECTURE.md` §B.2; SC-02, option B, ED-SC-0040; B24.02): THE FOLD MAY ASK THE ACTOR'S OWN LEDGER AND NO OTHER, so the
+    sum has two terms and no judge's ledger is read for any `h != actor`:
+
+        reception = Σ_h∈bench, h≠actor  Σ_P∈commits_h(target)  deed_valence(projected_axes(h), P)        THE COMMIT TERM
+                  + Σ_c∈deeds_actor(target)  remove_weight(c.source) · present_confidence(c)/full · v_actor(c)      THE OWN TERM
+
+      * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room the prize row says hears the act (B07.04; the
+        bench is `judging_set(w, venue)`, the one owner of who sits over a rung) -- each person once, never the target himself (a man does not receive
         himself);
-      * `deeds_h(speaker)` is `person_q.attributed_deeds` over `h`'s OWN ledger: the deed claims that
-        record an act of the speaker's, a paired kind's doer read off its sighting's `seen.who`
-        (R8.1's struct, `21_RECONCILIATION.md` PHASE 3's correction), never a bare subject;
-      * `v_h(c)` is `person_q.deed_term` -- `h`'s own projected pursuits against the alignment of the
-        act's kind (`data/verbs.py::align_kind`), the valence `regard` already reads. ⚠ THE VALENCE
-        SOURCE IS ARM 1 (step 17's swept choice), the existing alignment table, SHIPPED BY DEFAULT,
-        NOT BY WINNING. Arm 2, the dedicated regard table the plan names, is not authored;
-        `hole_register.yaml` H-215 carries the sweep's numbers and says it is open. The conflation
-        arm 1 names -- what a hearer prefers to DO standing in for how he REGARDS a doer -- is
-        recorded there, not resolved;
-      * `full` is `confidence_default`, so a claim decayed to half counts half.
+      * THE COMMIT TERM: each other member's LIVE `commit` Tenures (`_live_commit_propositions`) whose Proposition is `mood == "HOLDS"` and has
+        `subject == target` -- *he did `predicate`*, bound to in public -- each valued by `person_q.deed_valence`, the one valuation owner (it reads a
+        Proposition's `.predicate` and `.value` as it reads a claim's), so a predicate outside `DEED_KINDS`, a `value` other than `True` and a
+        `PAIRED_KINDS` predicate count 0 as they do for a claim. A live commit is a firsthand claim at full confidence: weight 1 (`remove_weight("firsthand")`).
+        One judge's commits to two Propositions of one `(predicate, value)` count once. An `OUGHT` commit counts 0 (it is what he wants done, and `determine`'s
+        `vote` conjunct counts it: one commit in two operands of one verdict is refused). No reconstruction from the log, and no sighting, so no erosion.
+        [ASSUMPTION; medium; Jordan to correct; revert: the commit term counts 0 -- `reception` reads the own term alone.]
+      * THE OWN TERM is the actor's, where he sits in the audience and is not the target (for a `speak` the speaker is the target, so it is empty):
+        `person_q.attributed_deeds` over `w.persons[actor].ledger`, each claim `remove_weight(c.source) · present_confidence(...)/full · v(c)` with `v` =
+        `person_q.deed_term` -- the actor's own projected pursuits against the alignment of the act's kind (`data/verbs.py::align_kind`), the valence
+        `regard` already reads. ⚠ THE VALENCE SOURCE IS ARM 1 (step 17's swept choice), the existing alignment table, SHIPPED BY DEFAULT, NOT BY WINNING.
+        Arm 2, the dedicated regard table the plan names, is not authored; `hole_register.yaml` H-215 carries the sweep's numbers and says it is open.
+        `full` is `confidence_default`, so a claim decayed to half counts half.
 
-    STEP 20, ROUTE EROSION, INSIDE THE SUM: a hearer who holds, UNTOLD, a `dominance`-route deed done
-    TO the speaker by somebody else (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has
-    called his bluff: every `dominance`-route deed of the speaker's that hearer holds no newer
-    (`(when, lap)`) than the latest such sighting counts zero. ⚠ `(when, lap)` IS THE CLAIM'S
-    DEPOSIT TIME, NOT THE DEED'S: a told or found copy is stamped with the tick it was deposited
-    (`loop/witness.py`), so a hearer told after the bluff of a deed from before it keeps that copy
-    at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One
-    success against him is enough, and only the witnesses who saw it are moved; a challenger who
-    fails suffers the deed himself, so the speaker's weight stands. A later coercive deed counts
-    again.
+    STEP 20, ROUTE EROSION, INSIDE THE OWN TERM ALONE: an actor who holds, UNTOLD, a `dominance`-route deed done TO the target by somebody else
+    (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has called his bluff: every `dominance`-route deed of the target's that actor holds no
+    newer (`(when, lap)`) than the latest such sighting counts zero. ⚠ `(when, lap)` IS THE CLAIM'S DEPOSIT TIME, NOT THE DEED'S: a told or found copy
+    is stamped with the tick it was deposited (`loop/witness.py`), so an actor told after the bluff of a deed from before it keeps that copy at full
+    weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One success against him is enough, and only the witnesses who saw it
+    are moved. A later coercive deed counts again. COST, STATED: a commit is not a sighting, so step 20 no longer reaches a `speak`'s bench.
 
-    An empty audience (a placeless speaker has no bench) -> 0.0: nobody is in the room."""
+    An empty audience (a placeless target has no bench), an unknown target -> 0.0: nobody is in the room."""
     TRACE.query("reception", "resolver")
-    if speaker not in w.persons:
+    if target not in w.persons:
+        return 0.0
+    bench = [h for h in dict.fromkeys(audience) if h in w.persons and h != target]
+    if not bench:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
     decay = w.fixtures.claim_decay()
     shift, hold, mass = w.fixtures.get("scar_weight_shift"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     total = 0.0
-    for hid in dict.fromkeys(audience):
-        h = w.persons.get(hid)
-        if h is None or hid == speaker:
-            continue
-        called = _UNREAD            # the latest bluff called, read on the first dominance-route deed
+    for hid in bench:
+        h = w.persons[hid]
         axis_w = None
-        for c in attributed_deeds(h.ledger, speaker):
+        if hid != actor:                       # THE COMMIT TERM: what `h` has bound himself to in public, never `h.ledger`
+            counted = set()
+            for prop in _live_commit_propositions(w, hid):
+                if prop.mood != "HOLDS" or prop.subject != target or (prop.predicate, prop.value) in counted:
+                    continue
+                if axis_w is None:
+                    axis_w = projected_axes(h, shift, hold=hold, mass=mass)
+                v = deed_valence(axis_w, prop)
+                if v:
+                    counted.add((prop.predicate, prop.value))
+                    total += v
+            continue
+        called = _UNREAD                       # THE OWN TERM: the actor's own ledger. The latest bluff called, read on the first dominance-route deed
+        for c in attributed_deeds(h.ledger, target):
             if c.predicate in DOMINANCE_KINDS:
                 if called is _UNREAD:
-                    called = max(((s.when, s.lap) for s in suffered_deeds(h.ledger, speaker)
+                    called = max(((s.when, s.lap) for s in suffered_deeds(h.ledger, target)
                                   if s.predicate in DOMINANCE_KINDS), default=None)
                 if called is not None and (c.when, c.lap) <= called:
                     continue
@@ -948,39 +1161,41 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
     return total
 
 
-def proofs(w: World, speaker: str, opponent: Optional[str], audience: tuple, admitted: Optional[tuple] = None) -> float:
-    """THE PROOFS `speaker` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
-    -- `19_PLAN.md` step 18, a Query over two ledgers. Each deed claim in the speaker's OWN ledger
-    recording an act of the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`,
-    UNLESS THE OPPONENT CAN MIRROR IT: he holds a claim with the same subject and predicate
-    (`18_FINDINGS.md`'s mirror test, *does the opponent hold a claim with the same subject and
-    predicate?*), and then it counts exactly zero. A non-person opponent holds no ledger and mirrors
-    nothing. `audience` is the persons of the room that hears the speaker (`reception`'s): with nobody in it
-    besides him there is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
+def proofs(w: World, actor: str, opponent: Optional[str], audience: tuple, admitted: Optional[tuple] = None) -> float:
+    """THE PROOFS `actor` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
+    -- `19_PLAN.md` step 18. Each deed claim in the actor's OWN ledger (`actor` is `claimants[0]`: for a `speak` the speaker) recording an act of
+    the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`, UNLESS THE OPPONENT CAN MIRROR IT.
+
+    F8 HOLDS (SC-02, option B; B24.02): THE MIRROR IS THE OPPONENT'S COMMITS, NOT HIS LEDGER. He mirrors a proof by having answered it on the record: a live
+    `commit` Tenure of his (`_live_commit_propositions`) to a Proposition with the proof's `(subject, predicate)`, any value (a denial answers a charge as
+    well as an assent does) and any mood, and then it counts exactly zero. A non-person opponent owns no edges and mirrors nothing. THE MIRROR IS NO LONGER
+    TOTAL: at the base WITNESS deposited a doer's own act to him, so it zeroed every proof in computed play (`H-216` (4)); now it zeroes only a pair
+    he has committed on. `audience` is the persons of the room that hears the actor (`reception`'s): with nobody in it besides him there is no one to
+    spend a proof on, and the answer is 0.0, the rule `reception` states.
 
     `admitted` (B05.21, T13 edit 4; `H-427`) is the docketed row's `proofs:` column, PASSED IN by the host builder -- this query reads no
     arrangement itself -- or `None` (no filter: nothing docketed, or `Fixtures.proof_admission` `off`). Given, a claim counts only if the kind of
-    proof it is (`rosters.yaml: proof_kind_of_source`, by its `source`) is among them; a claim whose source is no kind of proof counts 0.
+    proof it is (`person_q.proof_kind`, derived from the claim and not from how it came to be held: a told deed is `testimony`, a confession `confession`) is among them;
+    given, a claim that is no proof (`proof_kind` is `None`: a withheld confession) counts 0; with `admitted` `None` it counts as any attributed deed does.
 
     ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
     docketed (the plan's text asks for neither); and the mirror keys on (subject, predicate) alone.
 
-    ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE SPEAKER HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
+    ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE ACTOR HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
     design spends proofs one at a time inside a nested run (`21_RECONCILIATION.md` step 15, unbuilt),
     which is where hoarding one becomes a choice; one `speak` is one act, so it spends its whole
-    inventory. The mirror is still hidden from him -- nothing person-side reads it."""
+    inventory."""
     TRACE.query("proofs", "resolver")
-    who = w.persons.get(speaker)
-    if who is None or opponent is None or opponent == speaker:
+    who = w.persons.get(actor)
+    if who is None or opponent is None or opponent == actor:
         return 0.0
     held = list(attributed_deeds(who.ledger, opponent))
-    if not held or not any(hid != speaker for hid in audience):
+    if not held or not any(hid != actor for hid in audience):
         return 0.0
-    opp = w.persons.get(opponent)
-    mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
+    mirror = {(prop.subject, prop.predicate) for prop in _live_commit_propositions(w, opponent)}
     return ltr_sum(remove_weight(c.source) for c in held
                if (c.subject, c.predicate) not in mirror
-               and (admitted is None or PROOF_KIND_OF_SOURCE[c.source] in admitted))
+               and (admitted is None or proof_kind(c) in admitted))
 
 
 def place_of(w: World, x: Optional[str], homes: Optional[dict] = None) -> Optional[str]:
@@ -4746,7 +4961,7 @@ def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> 
     LIAR IS A QUESTION -- `standing_crossed`'s sibling, about the people whose word a look has contradicted.
 
     For each firsthand CELL claim `c` that landed in `p`'s own ledger since he last deliberated (`landing_floor`, the boundary `questions_for`'s Q2 and `standing_crossed` read), the
-    tellers of a claim of his on the same cell that `c` disagrees with (`person_q._disagrees`, `record`'s own pairing step) and whose `record(p, teller)` is BELOW NEUTRAL (the
+    tellers of a claim of his on the same cell that `c` disagrees with (`person_q.contradicts`, `record`'s own pairing step) and whose `record(p, teller)` is BELOW NEUTRAL (the
     hearer's reading of the liar, `record`'s owner) are the referents of ONE `claim_landed` question whose `about` is `c`: `tell`, `petition`, `challenge`, `forgive` then form on
     the liar by the ordinary rows. No new deposit, source or Event kind, and nothing is stored: the price of a lie is the hearer's own grading of the teller (CR-83, design §3).
     The id is its own (`q:liar:<claim>`), so the claim's own Q2 question beside it is neither replaced nor doubled. `[]` for a person who holds no fresh firsthand cell or no
@@ -4764,7 +4979,7 @@ def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> 
     for c in fresh:
         tellers: list = []
         for t in told:
-            if (t.subject, t.predicate) == (c.subject, c.predicate) and t.teller not in tellers and _disagrees(t, c):
+            if (t.subject, t.predicate) == (c.subject, c.predicate) and t.teller not in tellers and contradicts(t, c):
                 if t.teller not in below:
                     below[t.teller] = record_of(p, t.teller, w.fixtures, tick) < 1.0
                 if below[t.teller]:
@@ -5192,6 +5407,13 @@ class WorldReader:
                 return ()
             return tuple(Observation(subject, f"held_by:{h}", True)
                          for h in sorted({t.subject for t in w.tenures if t.kind == "hold" and t.object == subject and t.live}))
+        if read == "holds":
+            # B24.34 (ARCS item 4): WHO HAS A RECORD IN HIS KEEPING, said of the holder -- `(holder, holds, record)` per person on a live `hold` Tenure over it
+            # (a Record's holder is that Tenure, `state/carriers.py::Record` carries no holder field), as `hold_force` reads it. A Record only: a Rung's holders are `held_by`'s.
+            if subject not in w.records:
+                return ()
+            return tuple(Observation(h, "holds", subject)
+                         for h in sorted({t.subject for t in w.tenures if t.kind == "hold" and t.object == subject and t.live and t.subject in w.persons}))
         if read == "content":
             rec = w.records.get(subject)
             said = None if rec is None else content_value(rec.subject_matter)
@@ -5426,19 +5648,6 @@ class WorldReader:
             # `bench_quorum` (`H-161`), the stand-in for an arrangement's own `quorum:` until a
             # docketed matter maps to its arrangement row. The same for every subject today.
             return w.fixtures.get("bench_quorum")
-        if stem in ("declared.votes", "declared.quorum"):
-            # v11 CR-34 (C-7): `determine`'s `vote` conjunct, `quorum`'s shape -- a computed scalar against a
-            # SECOND READ on the same subject (the matter). Both sides are 0 for a matter heard under no
-            # declared row (every computed matter: no docket item names an arrangement, H-80), so `0 >= 0`
-            # holds and the conjunct is vacuous there. Under a declared row the left is `declared_votes`
-            # (live commits of distinct bench members, computed now, stored nowhere) and the right is the
-            # row's OWN `quorum:` key. UNKNOWN for an ambiguous docket (`declared_sitting`), which refuses.
-            row = declared_sitting(w, subject)
-            if row is None:
-                return 0
-            if row is UNKNOWN:
-                return UNKNOWN
-            return declared_votes(w, subject, row) if stem == "declared.votes" else row["quorum"]
         if stem in SENSITIVITY_STEMS:     # B10.59: `held_by`, `dispute` and `individual` are answered above, from the world
             # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, through
             # `person_q.OwnStateReader` -- the one answerer, which the person's own formation asks

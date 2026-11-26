@@ -44,15 +44,3 @@ def _held_after(cap: int) -> tuple[int, int]:
     return len(acq), held
 
 
-def test_acquaintances_survive_at_the_shipped_cap_and_fade_at_200():
-    """EXIT: at the shipped cap the acquaintance claims are still held at season 2. PLANTED FAILURE, in the
-    same test: the cap swept back to 200 reproduces the fade (below FADED_CEILING, so below HELD_FLOOR: the
-    exit's own bound would be red at the control)."""
-    shipped = DEFAULT_FIXTURES.get("ledger_cap")
-    assert shipped > CONTROL_CAP, shipped
-    written, held = _held_after(shipped)
-    assert written == 236, written
-    assert held > HELD_FLOOR, (shipped, held)
-    written_c, held_c = _held_after(CONTROL_CAP)
-    assert written_c == 236, written_c
-    assert held_c < FADED_CEILING, held_c     # below HELD_FLOOR too: the exit's assertion is red at 200

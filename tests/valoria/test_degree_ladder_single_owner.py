@@ -119,13 +119,19 @@ def _combat_engine():
 
 
 def _contest_surface():
-    # MOVED 2026-08-27 (ED-SC-0032): this was `engine.dice_engine.sigma_leverage.degree`. The
-    # contest's pool-aware rule left the engine for the subsystem that owns it, and now reaches
-    # the ladder through `dice_engine.BandExtension` instead of post-filtering the owner's answer.
-    from systems.social_contest.sim.contest import degree_extension
-    # Pool-less form: the contest kernel's unit-test contract. The pool-aware branch is a
-    # different function of (net, ob, pool) and is not on this two-argument domain at all.
-    return lambda net, ob: degree_extension.degree(net, ob)
+    # The contest's own degree surface (SC05 kernel `degree_extension.py`, ED-SC-0032) is RETIRED;
+    # what stays enrolled is the SEAM it used: a test-local `BandExtension` double that declares
+    # the one key `pool` and, given none, abstains. Pool-less, the owner's ladder must stand
+    # unmodified through the injection path. The pool-aware branch is off this two-argument domain.
+    class _PoolAbstains(dice_engine.BandExtension):
+        name = 'test:pool-abstains'
+        context_keys = ('pool',)
+
+        def may_overwhelm(self, net, ob, pool=None, **context):
+            return True if pool is None else net >= pool
+
+    ext = _PoolAbstains()
+    return lambda net, ob: band(dice_engine.degree_from_net(net, ob, extension=ext, pool=None))
 
 
 def _dice_model_skill():
@@ -144,7 +150,7 @@ LADDERS = {
     # two-argument domain entirely (it needs `pool`), which is why enrolling the pool-less form
     # here is the whole claim and not a partial one. The extension's own contract is pinned by
     # engine/tests/test_sigma_leverage_parity.py::TestPoolAwareDegree.
-    'systems/social_contest/sim/contest/degree_extension.py': _contest_surface,
+    'test-local BandExtension double (the seam; the contest surface is retired)': _contest_surface,
     # MIGRATED out of HELD (workplan PC-02; supersedes ED-IN-0187's hold and ED-PC-0003). `degree()`
     # returns `degree_from_net`'s bands relabelled to combat's lower-case spelling, with no local
     # re-banding (the ER-2 continuity shift went with the old ladder). Ob is the defender's
@@ -212,8 +218,8 @@ RULINGS = {
         "cleanly.' BOTH CLAUSES NOW EXECUTED. ED-SC-0031 did the first (the bands became the "
         "owner's). ED-SC-0032 did the second: `dice_engine.BandExtension` is the seam, the "
         "contest's de-saturation rule MOVED OUT of the engine to "
-        "`systems/social_contest/sim/contest/degree_extension.py`, and "
-        "`wrapper._resolve_agon` injects it. The demote-only constraint is STRUCTURAL now, not "
+        "`systems/social_contest/sim/contest/degree_extension.py` (since retired with the SC05 "
+        "kernel), and `wrapper._resolve_agon` injected it. The demote-only constraint is STRUCTURAL now, not "
         "a comment: `may_overwhelm` returns a bool consulted in one branch, so no extension can "
         "promote a band or move a lower boundary whatever it wants to do."),
     '2026-08-15 — combat, and the sequence': (

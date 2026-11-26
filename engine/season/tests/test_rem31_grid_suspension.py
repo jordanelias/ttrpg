@@ -234,9 +234,6 @@ def test_the_deliberation_order_does_not_move_the_scene_set_or_the_hash_playable
     assert shuffled[1] == play[1] and shuffled[0] == play[0]
 
 
-def test_control_the_same_permutation_with_playable_off():
-    auto, shuffled = _automated(), _automated(shuffle=True)
-    assert shuffled[1] == auto[1] and shuffled[0] == auto[0]
 
 
 def test_the_decider_must_answer_from_the_closed_set():

@@ -6,17 +6,17 @@ A MODULE ENTRY: reached by the composition row whose target is `roll` below (`en
 called by the host adapter `seam/wrappers/sigma.py::resolve` -- the `@provider("contest",
 "social_contest")` the prize rows `a standing`, `a proposition` and `a matter` name (ED-SC-0033 clause (2)).
 
-It takes the host's typed input record and a seeded `rng`, and imports the dice engine and the record
-types, nothing else. It never reads or writes `World`, holds no token and keeps no state between calls
+It takes the host's typed input record and a seeded `rng`, and imports the dice engine, the record
+types and `.evidence` (B24.20: the filed exhibits' `proofs` levels, `proof_levels`), nothing else. It never reads or writes `World`, holds no token and keeps no state between calls
 (A-25). It returns a `Margin` (`queries/inputs.py`) -- a margin, never a winner; the host adapter refuses
 any other return. S27.4's refusal stays with the host adapter, which applies it to the pair this entry
 returns (since step 14 the obstacle is composed here, so the host has no pair until the entry has run).
 
-SC-05 (2026-10-16, step 15): THIS ROLL IS KEPT; THE KERNEL (`systems/social_contest/sim/contest/`) IS NOT ADOPTED
-(the timing of its retirement is Jordan's, `SM-15`). The kernel draws on the GLOBAL stream rather than a seeded
+SC-05 (2026-10-16, step 15): THIS ROLL IS KEPT; THE KERNEL (`systems/social_contest/sim/contest/`) WAS NOT ADOPTED
+and is RETIRED (B24.33, `ED-SC-0033` clause 2; its files are `FORK:` rows in `references/restructure_ledger.md`). The kernel drew on the GLOBAL stream rather than a seeded
 `rng` (`04 §C.12`'s rejection 4 and `04 PART D row 35`'s per-act generator cannot be honoured without editing it),
-returns a winner (side labels, no `net`/`ob` pair to hand `degree_from_net`) where the seam wants *a MARGIN, never a
-winner* (`08_SEAM.md`; a degree adapter would be the second resolver S27.2 refuses), and reads a faculty, not the
+returned a winner (side labels, no `net`/`ob` pair to hand `degree_from_net`) where the seam wants *a MARGIN, never a
+winner* (`08_SEAM.md`; a degree adapter would be the second resolver S27.2 refuses), and read a faculty, not the
 host's record. The proceedings design's nested run (`21_RECONCILIATION.md` step 15) is not this entry either.
 
 RULED, ED-SC-0037 (Jordan, 2026-09-09): *"we have the sigma leverage d10 resolver in engine to use."*
@@ -40,8 +40,9 @@ import functools
 from typing import Optional
 
 from engine.dice_engine.draw import Draw
-from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, even_line, net_boost, opposed_ob, roll_net_continuous, saturate
+from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, even_line, levels_to_net_sigma, net_boost, opposed_ob, roll_net_continuous, saturate
 from engine.season.queries.inputs import Margin, SocialContestInput
+from .evidence import standing
 
 
 @functools.lru_cache(maxsize=None)
@@ -161,6 +162,40 @@ def obstacle(inp: SocialContestInput) -> tuple:
     return ob, tuple(terms)
 
 
+def _units(x: float) -> int:
+    """whole units of a weight, rounded half up (OBS §3); a negative one is no unit. The host's `proofs` source counts its own quantity the same way."""
+    return int(max(0.0, x) + 0.5)
+
+
+def proof_levels(inp: SocialContestInput) -> tuple:
+    """`(n_for, n_against)`: THE `proofs` LEVELS THE FILED EXHIBITS BRING (B24.20; EVID_B edit 5a, "The evidence term"): `evidence.standing` over `inp.exhibits`
+    (a filed finding is the item's own `forged_found`, `inp.evidence_cap` the corroboration cap), then one `proof_level` per whole unit of weight standing
+    for the roller's side (`inp.side`) and one against him per whole unit standing for the other's. `(0, 0)` with no exhibits. A struck item is not in
+    `standing`, so it adds none. These are LEVERAGE and nothing else: they never enter `obstacle` (A-25)."""
+    if not inp.exhibits:
+        return 0, 0
+    held, _, _ = standing(tuple(inp.exhibits), tuple(it.id for it in inp.exhibits if it.forged_found), inp.evidence_cap)
+    return standing_levels(held, inp.side)
+
+
+def standing_levels(held, side: str) -> tuple:
+    """`(n_for, n_against)`: THE ONE COUNTER OF WHAT STANDING WEIGHT IS WORTH IN LEVELS (B24.21): whole units of the weight `held` (items `standing` left) puts for `side` and,
+    separately, of the weight it puts for the other side, each rounded half up (`_units`; OBS §3). `proof_levels` counts the roll's exhibits with it and `proceeding.py::_lever`
+    the sitting's board, so one quantity has one rounding. An item with no side counts for neither."""
+    mine = sum(it.weight for it in held if it.side == side)
+    theirs = sum(it.weight for it in held if it.side is not None and it.side != side)
+    return _units(mine), _units(theirs)
+
+
+def leverage(inp: SocialContestInput) -> float:
+    """the leverage the roll applies: the record's own (the host's sources, `world_q.proofs` among them) and, where exhibits are filed, their `proofs` levels
+    (`proof_levels`), `proof_level` each, through the one level table (`levels_to_net_sigma`). A record with no exhibits, or no `proof_level`, is its own `leverage`."""
+    n_for, n_against = proof_levels(inp)
+    if inp.proof_level is None or not (n_for or n_against):
+        return inp.leverage
+    return inp.leverage + levels_to_net_sigma([inp.proof_level] * n_for, [inp.proof_level] * n_against)
+
+
 def roll(inp: SocialContestInput, rng: Draw) -> Margin:
     """Roll one contested act -> `Margin(net, ob, terms)`.
 
@@ -168,6 +203,7 @@ def roll(inp: SocialContestInput, rng: Draw) -> Margin:
     builds it from the run seed and the seam passes it down, as it passes `World`.
     `ob` and `terms` are `obstacle(inp)`, this module's, and are returned so the host can grade the margin, apply S27.4 on the pair
     (`seam/wrappers/sigma.py::resolve`) and record why that obstacle was thrown at. The pool and leverage are the
-    record's own, which the host already holds, so the margin does not carry them back."""
+    record's own, which the host already holds, so the margin does not carry them back; the filed exhibits' levels (`proof_levels`) are added to that
+    leverage here, and the obstacle never sees them."""
     ob, terms = obstacle(inp)
-    return Margin(net=roll_net_continuous(inp.pool, rng=rng) + net_boost(inp.leverage, inp.pool), ob=ob, terms=terms)
+    return Margin(net=roll_net_continuous(inp.pool, rng=rng) + net_boost(leverage(inp), inp.pool), ob=ob, terms=terms)

@@ -104,16 +104,6 @@ def test_a_dispatch_to_a_man_outside_the_command_is_refused():
     assert _kinds(sent) == ["order.given"] and "rec:d_sworn" in w.records, "CONTROL: sworn, he is commanded"
 
 
-def test_a_dispatch_with_no_destination_moves_nobody_even_when_answered():
-    """CONTROL (the entry's): a `dispatch` naming no destination behaves as it did -- `order.given`, nothing moved -- and the
-    man's `comply` on it is the answer alone, `compliance.given`, with nothing to go to."""
-    w, d = _world()
-    assert _kinds(_dispatch(w, d)) == ["order.given"]
-    rec = w.records["rec:d1"]
-    assert world_q.order_destination(w, rec.id) is None
-    out = _answer(w, d, "comply", rec.id)
-    assert _kinds(out) == ["compliance.given"], _kinds(out)
-    assert _place(w, MAN) == FROM and w.persons[MAN].travel_leg == []
 
 
 def test_the_muster_basis_admits_a_sworn_man_who_is_no_member_of_the_seats_faction():

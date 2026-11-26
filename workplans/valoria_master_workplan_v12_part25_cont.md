@@ -15,7 +15,7 @@ GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B16-pc-round                                                  (added by this part, not in `V12_STRUCTURE.md` §2.1: UNDECIDED U1)
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c1 (the sheet) → the creation-sheet test green (`IS_A_NINE_part2.md` §12.2, row B34): `engine/season/tests/test_seat_holders_from_ledger.py::test_creation_sheet_marks_cohorts_and_holdings` and `engine/season/tests/test_season_shape.py::test_creation_sheet_shows_holdings_for_a_seat_holder` pass on the closing tree; the conjunct's `reading:` record is written at B34.99; `status:` is not edited (A-114).

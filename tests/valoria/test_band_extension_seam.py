@@ -130,8 +130,14 @@ def test_the_lower_bands_never_consult_the_extension_at_all():
 def test_an_undeclared_context_key_is_refused_not_swallowed():
     """The silent-no-op hole: `**context` used to accept anything, and an extension defaulting
     its parameter turned a misspelled key into a band change with no error."""
-    from systems.social_contest.sim.contest.degree_extension import CONTEST_DEGREE_EXTENSION as C
+    class _PoolBar(BandExtension):          # a declaring extension: one key, `pool`
+        name = "probe:pool-bar"
+        context_keys = ("pool",)
 
+        def may_overwhelm(self, net, ob, pool=None, **context):
+            return pool is None or net >= pool
+
+    C = _PoolBar()
     assert degree_from_net(6, 2, extension=C, pool=20) is Degree.SUCCESS
     with pytest.raises(TypeError, match="does not declare context key"):
         degree_from_net(6, 2, extension=C, poool=20)

@@ -33,7 +33,8 @@ def decides_for(fx: "Fixtures", role: str, host_plays: bool) -> bool:
     return not host_plays and role in fx.get("npc_decider_roles")
 
 
-def make_decider(p: Person, fx: "Fixtures", draw: Callable[[str, str], Any], *, key: str,
+def make_decider(p: Person, fx: "Fixtures", draw: Callable[[str, str], Any], *, key: Any,
+                 of: Optional[Callable[[Any], tuple]] = None,
                  odds: Optional[Callable[[Any, Any], Optional[float]]] = None,
                  bias: Optional[Callable[[Any, Any], float]] = None,
                  watch: Optional[Callable[..., None]] = None) -> Callable[[Any], Any]:
@@ -44,6 +45,9 @@ def make_decider(p: Person, fx: "Fixtures", draw: Callable[[str, str], Any], *, 
         `choose.weigh_by_chance` gives the believed chance `odds(view, value)` where the caller hands an `odds` (the module's pure estimate: `p_carried` for a
         hearing, `fight_estimate` for a fight), exactly as it prices a candidate; no `odds`, the arm `none` and an answer of `None` read 1.0. A value whose
         score is exactly 0.0 is not asked the query, as `score_terms` does not ask it;
+      * `key` MAY BE A TUPLE of keys and `of` then names, for a legal value, the value it takes under each key, in the keys' order (`of(v) -> (value of keys[0], ...)`;
+        B24.13: a hearing's option is one value whose choice operands are its `hearing_move` and its `argument_ground`): the value's pursuit is the SUM of its cells over
+        the keys, as `score_terms` sums a candidate's choice operands (B10.56); a lone `key` is `(key,)` and `of` `v -> (v,)`, which is the arithmetic above to the byte;
       * `bias` -- an optional `(view, value) -> float`, added to the value's score after the pricing (`None` adds nothing: `IS-MB-03`'s window decider is its one
         caller, with its `window_responses` weights);
       * `draw` -- `(person id, purpose) -> Random`, `state/ids.py::draw_factory`'s product, ALREADY BOUND to the wrapper's scope (`role:scene id:n`): the
@@ -61,11 +65,16 @@ def make_decider(p: Person, fx: "Fixtures", draw: Callable[[str, str], Any], *, 
             return legal[0]
         memo = deliberation_memo(p, fx)
         axis_w, damp = memo[_AXIS_W], memo[_DAMP]
-        cands = [Candidate(key, str(v)) for v in legal]         # the value's spelling is its candidate's subject: what the sampler keys its stream by
+        keys = (key,) if isinstance(key, str) else tuple(key)
+        label, operands = "+".join(keys), (lambda v: (v,)) if of is None else of
+        cands = [Candidate(label, str(v)) for v in legal]         # the value's spelling is its candidate's subject: what the sampler keys its stream by
         value_of = {id(c): v for c, v in zip(cands, legal)}
         terms_of, scores = {}, {}
         for c, v in zip(cands, legal):
-            pursuit = damp * ltr_sum(axis_w[ax] * align_choice(key, v, ax) for ax in _AXES)
+            vals = tuple(operands(v))
+            assert len(vals) == len(keys), (keys, vals)      # `zip` would truncate: a tuple key with no `of` (or a short one) would score a cell fewer, silently
+            # AXIS-MAJOR, as `choose.score_terms` sums a candidate's choice operands: each axis weighs the sum of the cells, so a value's score is one number by either owner (B10.56)
+            pursuit = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, kv, ax) for k, kv in zip(keys, vals)) for ax in _AXES)
             pursuit *= weigh_by_chance(fx, None if odds is None or pursuit == 0.0 else (lambda v=v: odds(view, v)))
             extra = 0.0 if bias is None else float(bias(view, v))
             terms_of[id(c)], scores[id(c)] = (pursuit, extra), pursuit + extra if extra else pursuit

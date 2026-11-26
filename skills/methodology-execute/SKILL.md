@@ -40,7 +40,7 @@ review roles and never name a producer. **This skill's BATCH-CLOSE *is* `methodo
 1–3, unmodified**, plus the accretion pass; a change to that sequence is made once, in that file.
 
 **Cadence.** The expensive pass — the agonist/antagonist fan, `/code-review`→`/simplify`→
-`layer-conformance`, the full suite, the terminal critique — runs once per batch, never per item
+`layer-conformance`, the batch's suites (`tests/valoria` and its lane's subsystem suite), the terminal critique — runs once per batch, never per item
 (CLAUDE.md §0.4; RULED, Jordan 2026-10-06: *"code review and simplify to be at batch close"*). Every
 item still gets its own commit. Deferred is not skipped: a batch whose items were built and which
 never reached BATCH-CLOSE has closed nothing, and reporting it "closed" is the false claim
@@ -238,9 +238,10 @@ working-tree diff. A batch has one close unless the live plan names a **range cl
    - **The one suite run is `tests/valoria` plus the batch's lanes, and nothing else** (Jordan, 2026-11-22:
      *"methodology execute should only run tests/valoria. All other test calls to be specified by workplan
      according to subsystem test suite or season test"*; 2026-11-23: *"every batch concerns a lane ... identify
-     them based on our lanes"*). The batch's lanes are the test lane the live plan maps its `lane` column to
-     (v12: part 2 §1's table, mapped by the head's rule P18) and any lane an item's `TESTS:` or `GATE:` line
-     names. This skill chooses no lane and does not use `tools/tests_for_diff.py`. It runs at most once per
+     them based on our lanes"*). The batch's lanes are the SUBSYSTEM SUITE the live plan maps its `lane` column to
+     (v12: part 2 §1's table, mapped by the head's rule P18; every `engine/season/tests` file carries exactly one suite
+     marker, `conftest.py`'s `SEASON_SUITES`, so a batch runs its own lane's suite and never `-m season_loop` whole; Jordan, 2026-11-26)
+     and any lane an item's `TESTS:` or `GATE:` line names. This skill chooses no lane and does not use `tools/tests_for_diff.py`. It runs at most once per
      batch, only if it can observe something CI will not (CLAUDE.md §0.4 cl.1), and no item runs it.
    - **It starts as Phase 1 opens, in the background**, on a snapshot of `HEAD` (`git worktree add --detach
      <scratchpad>/suite-<sha> HEAD`), launched as *Running a slow instrument* step 2 says: Phase 1's critics

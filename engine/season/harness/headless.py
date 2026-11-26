@@ -80,13 +80,27 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--log", action="store_true", help="print the Event log with its causes[]")
     ap.add_argument("--world", help="a name in `harness/scenarios.py::SCENARIOS`; plays it with that registry's `run` instead of Carin's case")
+    how = ap.add_mutually_exclusive_group()
+    how.add_argument("--auto", action="store_true", help="with --world: every decider in a sitting is the engine's (the default; named so a command line says which)")
+    how.add_argument("--play", nargs="?", const="", metavar="ID", help="with --world: the person ID (default: the row's seat) makes his own moves in a sitting, one option index a line from "
+                                                                         "stdin (blank: the first); every other decider and every act of the season is the engine's")
     a = ap.parse_args()
+    if a.world is None and (a.auto or a.play is not None):
+        raise SystemExit("--auto and --play are modes of a scenario: name one with --world")
     if a.world is not None:
         from . import scenarios                    # lazy: the registry is the one owner of names, this file keeps no list
         if a.world not in scenarios.SCENARIOS:
             raise SystemExit(f"no scenario {a.world!r}; registered: {sorted(scenarios.SCENARIOS) or 'none'}")
-        r = scenarios.run(a.world, a.seed, a.seasons)
-        print(f"{a.world} · {r['seasons']} season(s) · seed {a.seed} · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}")
+        who = None
+        if a.play is not None:
+            row = scenarios.SCENARIOS[a.world]
+            who = a.play or (None if row.seat is None else row.seat(row.build(a.seed)))
+            if who is None:
+                raise SystemExit(f"{a.world} has no default seat: --play takes a person id")
+        r = scenarios.run(a.world, a.seed, a.seasons, host=None if who is None else scenarios.played_host(who), person=who)
+        reading = scenarios.SCENARIOS[a.world].reading           # the row's own figure for its summary line (the hearing's: its exchanges and the durable writes of its Events)
+        print(f"{a.world} · {r['seasons']} season(s) · seed {a.seed} · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}"
+              + ("" if reading is None else f" · {reading(r['world'], r['seat'])}"))
         print(f"CONTENT HASH: {r['hash']}")
         return 0
     if a.case != CASE:

@@ -129,6 +129,13 @@
       "verb": null,
       "needed_by": "engine/season/loop/matter.py \u2014 MATTER (v9 IN-07 E2, A-25) builds the typed input record (`queries/world_q.py::subsist_input` -> `queries/inputs.py::SubsistInput`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`, the lookup `fieldwork.find`'s host makes; MATTER runs only inside a driver), and makes every write from the `SubsistOutcome`: the body writes and their crossings, deaths, the debit writes with `observed=`, `World._subsistence_shortfall`. `entry: step_call` because a loop step calls it, before the yield (#353 \u00a725). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
     },
+    "social_contest.bench_read": {
+      "target": "modules.social_contest.proceeding:read_sign",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `bench_reading` (B24.29, called by `loop/witness.py::_sitting_claims`): `(dials, attunement, sign, rng) -> sign`, the sign of a seat's lean as a viewer reads it. The module owns the outcome (`accuracy`'s chance for a two-valued sign); the host keeps the keyed stream (`bench_read:<sitting>:<seat>`) and the viewer's Attunement. Declared in `sigma.QUERY_ENTRIES`."
+    },
     "social_contest.obstacle": {
       "target": "modules.social_contest.roll:obstacle",
       "kind": "callable",
@@ -136,12 +143,26 @@
       "verb": null,
       "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
     },
+    "social_contest.p_carried": {
+      "target": "modules.social_contest.proceeding:p_carried",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `_npc_decider`'s decide callable: `(inp, track, board) -> P(carried)`, the closed form of the close at a track, which the chooser's view of a vote reads. Declared in `sigma.QUERY_ENTRIES`, so a rename refuses at driver construction and not at the first sitting."
+    },
     "social_contest.proceeding": {
       "target": "modules.social_contest.proceeding:proceed",
       "kind": "callable",
       "entry": "verb_call",
-      "verb": "argue",
+      "verb": "determine",
       "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 the provider path for a verb row carrying `proceeds:` (B24p.14): it builds the typed `Input` (B24p.13), calls this entry through `manifest.MODULE_ENTRIES` and reads the `Outcome`'s verdicts on the one ladder. `proceed` draws the whole sitting and its close from the one keyed `Draw` it is handed (V2 p2 \u00a7C to \u00a7D)."
+    },
+    "social_contest.proof_levels": {
+      "target": "modules.social_contest.roll:proof_levels",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `_with_exhibits` (B24.21): the `(n_for, n_against)` levels the filed exhibits bring, which the host adds to `resolve`'s `levels` and applied `leverage` beside the module's own roll, so the record names what was rolled. `modules/social_contest/evidence.py` stays no role (called by the roll inside the module); this is the roll's own reader of it. Declared in `sigma.QUERY_ENTRIES`."
     },
     "social_contest.roll": {
       "target": "modules.social_contest.roll:roll",

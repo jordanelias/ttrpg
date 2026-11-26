@@ -35,7 +35,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, CITES_KEY, CONTEXT_KEY, CONTEXT_TERMS, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, CITED_KEY, CITES_KEY, CONTEXT_KEY, CONTEXT_TERMS, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, FILING_VERBS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_EDGE_DECLINES, OWN_STANCE_DECLINES, RIGGED_VERBS, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -45,8 +45,8 @@ from ..gaps import Forbidden
 # import `decision/`); re-bound here by name, as `opening_set` and `standing_of` call them and the tests reach them as `options.<name>`.
 from ..queries.person_q import (
     BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
-    commanded_read, competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
-    is_cell as _is_cell, ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
+    cited_said, commanded_read, contradicts, competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
+    held_cites, is_cell as _is_cell, ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
 )
@@ -326,7 +326,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # `reconstruct` share the form unnamed and carry nothing (telling workplan, "From Batch 1").
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
+        cites_of = verb in FILING_VERBS and CITES_KEY in CHOICE_SOURCED.get(verb, ())      # B24.27: a filing verb whose choice line names `cites` forms a citing variant
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
+        held_of_entity: dict = {}           # entity -> `held_cites` (the claims he could cite about it, read once for every seat and conclusion that forms on it)
         concluded = None                    # B11.73: `conclusion_cites` of his own ledger, read once per call for a row that reports a conclusion
         # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
         # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
@@ -509,6 +511,19 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                             if len(conclusions) > 1:
                                 c_ops[CONCLUDED_RANK_KEY] = place
                         out.append(Candidate(verb, subject, operands=c_ops))
+                        # B24.27 (EVID_B edit 6; FI_05_B E-1): AND THE SPEECH THAT CITES, where he holds claims about the matter a speech could be admitted on -- the one variant citing
+                        # ALL of them (`held_cites`), each with the `Said` it carries (`CITED_KEY`, copied out of his own ledger now, as `said` is), and the Records he holds whose content names the matter (`held_record_claims`' `subject`, B24.43: a Record's id is cited, its content claim is the reading that names the matter). The variant above, citing nothing, is the
+                        # speech as it was. It rides the same score terms; what it costs is the room learning the items and their chain (E-7).
+                        # NEVER ON HIS OWN PLEA (`subject == p.id`): the ledger arm weighs the opponent's deeds and reads 0.0 where the opponent is the actor (`world_q.proofs`), so a citing variant there is a speech no proof backs.
+                        if cites_of and subject != p.id:
+                            if subject not in held_of_entity:
+                                held_of_entity[subject] = held_cites(p.ledger, subject)
+                            cited_held = held_of_entity[subject]      # NOT `held`: that name is the person's titles above (`OWN_TITLE_DECLINES`), read by every later verb of this call
+                            if records is None:
+                                records = held_record_claims(p, tick, decay)
+                            kept = tuple(dict.fromkeys(c.subject for c in records if _content_answer(c, "subject") == subject))      # B24.43: the Records he holds whose content names the matter
+                            if cited_held or kept:
+                                out.append(Candidate(verb, subject, operands={**c_ops, CITES_KEY: tuple(c.id for c in cited_held) + kept, CITED_KEY: {c.id: cited_said(c) for c in cited_held}}))
     return out
 
 

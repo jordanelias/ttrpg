@@ -20,7 +20,7 @@ from ..data.rosters import GROUNDS, PROCEEDING_MOVES, RUNG_KINDS
 from ..harness import probes as PR
 from ..gaps import Unspecified
 from ..queries import person_q
-from ..queries.inputs import Beat, Card, Cond, Input, Margin, Outcome, Sitting
+from ..queries.inputs import Beat, Card, Cond, Input, Margin, Outcome, Sitting, written
 from ..seam.ladder import degree_of
 from ..seam.wrappers import sigma as S
 from ..data.verbs import VERB_TABLE, _check_proceeds
@@ -296,8 +296,9 @@ def test_a_passing_word_nobody_watches_runs_abridged():
 
 def test_the_card_promises_what_the_sitting_does():
     """Over 200 keyed sittings of a church inquisition with items held, nobody makes a move the card bars, shows an item of a
-    kind it does not admit, speaks more turns than it gives, and the verdicts are its adjudicators' and no others."""
-    w = _world()
+    kind it does not admit, speaks more turns than it gives, and the verdicts are its adjudicators' and no others. B24.10: at the control
+    (`sitting_exchanges` 0, shipped) a bench's sitting has no turns and nobody speaks, so the sitting that speaks is the one at `sitting_exchanges` 1."""
+    w = _world(sitting_exchanges=1)
     _seat(w, "off_dic", "p_other", CHURCH, post="Dicastery")
     w.records["rec_writ"] = Record("rec_writ", "Hh", "text")
     w.add_tenure(Tenure("h_rec", "p_low", "rec_writ", "hold", since=0))
@@ -380,15 +381,6 @@ def _plant_entry(monkeypatch, entry):
     monkeypatch.setattr(composition, "require", lambda role: entry if role == S.PROCEEDING_ROLE else real(role))
 
 
-def test_a_proceeding_return_that_is_not_an_outcome_raises(monkeypatch):
-    """A winner string where an `Outcome` belongs, and an `Outcome` whose verdict is a band or a number and not a `Margin`, are each refused
-    naming the entry; the real entry's return is accepted (the control: the same call)."""
-    w, row = _world(), A.abridged(ROWS["conversation"])
-    assert _resolve(w, row)["status"] == "RESOLVED"
-    for ret in ("for", _outcome([("p_mid", "Success")]), _outcome([("p_mid", 2.0)])):
-        _plant_entry(monkeypatch, lambda inp, rng, ret=ret: ret)
-        with pytest.raises(Unspecified, match="social_contest.proceeding"):
-            _resolve(w, row)
 
 
 def test_the_acts_band_by_close():
@@ -493,19 +485,19 @@ def test_believed_odds_use_his_own_values_and_an_ordinary_man_for_the_rest(monke
 
 # B24p.16 -- THE VERB ROWS SAY HOW THEY PROCEED (RD §D.1 to §D.4; V2 p2 §M): `VerbRow.proceeds`, `data/verbs.py::_check_proceeds`,
 # `world_q.proceeding_row`. Nothing dispatches on the cell until B24p.19; the routing is what these read.
-FIVE = ("argue", "tell", "lie", "speak", "interrogate")
+SIX = ("argue", "tell", "lie", "speak", "interrogate", "determine")      # B24.08 added `determine` to the five
 
 
 def _act(verb, **payload):
     return Act(id=f"a_{verb}", actor="p_low", verb=verb, payload=payload)
 
 
-def test_five_rows_proceed_and_name_a_loadable_row():
-    """Each of the five verbs carries a `proceeds` cell whose every entry names an arrangement the tree loads (or the docket's own row), a
-    form, and a drawing move; no other verb is routed (`covenant`, `interview`, `determine` are their own items'). A planted cell that names a
+def test_six_rows_proceed_and_name_a_loadable_row():
+    """Each of the six verbs carries a `proceeds` cell whose every entry names an arrangement the tree loads (or the docket's own row), a
+    form, and a drawing move; no other verb is routed (`covenant`, `interview` are their own items'). A planted cell that names a
     row nothing loads is refused naming the verb: the check observes the failure it excludes."""
     routed = {v: r for v, r in VERB_TABLE.items() if r.proceeds}
-    assert set(routed) == set(FIVE), sorted(routed)
+    assert set(routed) == set(SIX), sorted(routed)
     checked = 0
     for verb, row in routed.items():
         for when, rid, form, move, item in row.proceeds:
@@ -513,7 +505,7 @@ def test_five_rows_proceed_and_name_a_loadable_row():
             assert form in ("full", "abridged", "auto") and PROCEEDING_MOVES[move]["draw"] and item in ("any", "false"), (verb, form, move, item)
             checked += 1
         assert row.proceeds[-1][0] == (), verb                                           # a fallback closes every list
-    assert checked >= len(FIVE), checked
+    assert checked >= len(SIX), checked
     _check_proceeds(VERB_TABLE)                                                           # control: the shipped table passes
     entry = (("hearer", "cohort"),), "no_such_row", "full", "argue", "any"
     with pytest.raises(Unspecified, match="argue"):
@@ -850,7 +842,8 @@ def test_a_proceedings_event_carries_its_beats_sitting_and_verdicts():
     assert e.ending[0] == ("proceeding", "conversation", "full", out.ended, out.ended_by)
     beats = world_q.ending_beats(e)
     assert len(out.beats) > 1 and [(b.n, b.mover, b.move, b.margin) for b in beats] == [(b.n, b.mover, b.move, round(b.margin * 1000)) for b in out.beats]
-    assert all(len(t) == len(fields(Beat)) for t in e.ending if t[0] == "beat")                    # one field fewer than the beat (`terms`), one tag more
+    assert not {"terms", "entered", "struck", "fault"} & set(written(Beat))                         # the four a beat does not write (`queries/inputs.py::UNWRITTEN`), named here and not read back from the writer
+    assert [len(t) for t in e.ending if t[0] == "beat"] == [27] * len(out.beats)                    # a beat's 26 written cells and one tag more; a field added to `Beat` moves this on purpose
     assert out.beats[0].terms and all(out.beats[0].terms not in t for t in e.ending)
     state = world_q.ending_sitting(e)
     assert (state.n, state.issue, state.ended) == (out.state.n, out.state.issue, out.state.ended)

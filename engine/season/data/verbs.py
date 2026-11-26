@@ -2266,8 +2266,15 @@ SITE_KEY = "site"
 # (`opening_set`), and the held ids are what a CONCLUSION cites, not what `utter` forms on, so no Candidate carries `cites` until typed `utter` (B25,
 # `14_VERBS_SOCIAL2_B` §1) forms one from a held claim; `_fanned_choices` never fans it (no closed range), so the shipped season forms what it formed.
 CITES_KEY = "cites"
+# B24.24 (FI_05_B E-3): `CITED_KEY` IS WHAT THE CITED CLAIMS SAID, `{claim id: Said}`, carried on the act beside `cites` for the told deposit alone -- WITNESS opens no
+# citer's ledger (`F8`), so the `Said` of each cited claim is copied out of his own at CHOOSE as `said` is (`person_q.said_of`). A cited Record needs none: its content is
+# read off `w.records`. Read by `loop/witness.py::_told_items`; bound by no cell, dropped by `binding_of`, and not a choice (no `CHOICE_RANGES`/`CHOICE_CARRIER` entry).
+CITED_KEY = "cited"
+# B24.25 (EVID_B rules 1-2): `ANSWERS_KEY` IS THE FILED STAGES AN ACT ANSWERS, a tuple of their places on the case file (`Record.stages` indexes, the number an exhibit's id ends in), carried beside
+# `cites`. The act's own band is the `answered_band` of each (`queries/inputs.py::ANSWERED_STAGE`). Read by `queries/world_q.py::filings`; bound by no cell and not a choice (as `CITED_KEY`).
+ANSWERS_KEY = "answers"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
-                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists",
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: ("Proposition.exists", "Record.stages"),
                   CONCLUDED_KEY: CONCLUSION_KIND}
 # v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
 # (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
@@ -2299,13 +2306,20 @@ LEDGER_RANGES = _check_ledger_ranges(roster_map("choice_sourced", "ledger_ranges
 # `news.told` branch reads `said`, `_circle_of` reads `in_confidence`): the row must emit it.
 
 
+def _carries(key: str, row) -> bool:
+    """WHETHER `row` writes or emits a carrier of choice `key` (`CHOICE_CARRIER`): one string, or, for `cites` (B24.27), the two a citation is read from -- the Proposition an `utter` stores it
+    on, the case-file stage a `speak` files it on."""
+    carrier = CHOICE_CARRIER[key]
+    return any(c in (*row.writes, *row.emits) for c in ((carrier,) if isinstance(carrier, str) else carrier))
+
+
 def _load_choice_sourced(values: dict) -> dict:
     """`rosters.yaml: choice_sourced`'s `values`, checked and frozen -- refused per line (above)."""
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
         if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k not in (SAID_KEY, CITES_KEY, CONCLUDED_KEY) and k not in LEDGER_RANGES)
-                                        or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
+                                        or not _carries(k, row) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
                 f"its row writes or emits no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_CARRIER)}",
@@ -2405,6 +2419,61 @@ def _load_write_optional(values: dict) -> dict:
 
 
 WRITE_OPTIONAL = _load_write_optional(roster_map("write_optional", "values"))
+
+
+# B24.25 (EVID_B edit 4, ADM edit 3): THE VERBS THAT FILE WHAT THEY CITE (`rosters.yaml: filing_verbs`, read in `loop/resolve.py::_admits`; `speak`). REFUSED AT IMPORT when a member
+# names a verb the table lacks or one whose row writes no `Record.stages`: a refusal for cites that no stage the verb writes could carry would guard nothing.
+def _load_filing_verbs(values) -> frozenset:
+    """`rosters.yaml: filing_verbs`' `values`, checked and frozen -- refused per member (above). A function, so a test can plant a bad line and watch it refuse."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or "Record.stages" not in row.writes:
+            raise Forbidden(
+                f"`rosters.yaml: filing_verbs` names {v!r}, and the verb table carries no such verb or its row writes no `Record.stages`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose row writes `Record.stages` (the case file a filing is written on)",
+                law="B24.25 -- an item is filed on the case file by the speech that cites it; a row that writes no stage files nothing")
+    return out
+
+
+FILING_VERBS = _load_filing_verbs(roster("filing_verbs"))
+
+
+# B24.35 (WGM edit 3): THE VERBS WHOSE SPEECH A HEARER'S SUSCEPTIBILITY GATES (`rosters.yaml: backed_verbs`, read in `seam/wrappers/sigma.py::_backed`; `argue`). REFUSED AT IMPORT when a
+# member names a verb the table lacks: a gate on a verb nothing forms would narrow no speech.
+def _load_backed_verbs(values) -> frozenset:
+    """`rosters.yaml: backed_verbs`' `values`, checked and frozen -- refused per member (above). A function, so a test can plant a bad line and watch it refuse."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        if v not in VERB_TABLE:
+            raise Forbidden(f"`rosters.yaml: backed_verbs` names {v!r}, and the verb table carries no such verb", "rosters.yaml",
+                            needs="a `verb_table.yaml` verb whose speech a hearer's susceptibility gates",
+                            law="B24.35 -- a ground backs an act of a verb; a member no verb has gates nothing")
+    return out
+
+
+BACKED_VERBS = _load_backed_verbs(roster("backed_verbs"))
+
+
+# B24.23 (CF-E8-4): THE CONFESSION FAMILY -- the event kinds a questioning emits (`verb_table.yaml: interrogate`'s `emits`: `confession.full`, `.made`, `.partial`, `.withheld`) -- AND THE
+# `matters` MEMBER EACH PROOF KIND IS, read by `queries/person_q.py::proof_kind`/`proof_weight`. REFUSED AT IMPORT (04 §A.1: one loader, an absence raises) when the table has no
+# `interrogate` row, the row emits no `confession.*` kind, or `matters` carries no `Record:confession` / `Claim:testimony` row: a missing band would read every withheld confession
+# as full proof (`task_share(None)` is 1), and a missing kind would name no matter.
+def _load_confession_band(table, record_matter, claim_matter, stem: str = "confession", plain: str = "testimony") -> tuple:
+    """`(family prefix, {confession kind: band}, confession's matter, a plain deed's matter)`, checked (above). A function, so a test can plant an absence and watch it refuse."""
+    row = table.get("interrogate")
+    family = stem + "."
+    band = {k: d for d, ks in (row.emits_by_degree.items() if row is not None else ()) for k in ks if k.startswith(family)}
+    if not band or stem not in record_matter or plain not in claim_matter:
+        raise Forbidden(
+            f"the confession family is unread: `interrogate` emits {sorted(band)} at its bands, `matters` carries `Record:{stem}`: {stem in record_matter}, `Claim:{plain}`: {plain in claim_matter}",
+            "verb_table.yaml / rosters.yaml -- matters",
+            needs=f"an `interrogate` row emitting `{family}*` kinds by degree, and `matters` rows carried by `Record:{stem}` and `Claim:{plain}`",
+            law="B24.23 -- a confession is proof by its band's share; a band the table does not give reads full, so absence is a refusal, never full proof")
+    return family, band, record_matter[stem], claim_matter[plain]
+
+
+CONFESSION_FAMILY, CONFESSION_BAND, CONFESSION_MATTER, TESTIMONY_MATTER = _load_confession_band(VERB_TABLE, _rosters.RECORD_MATTER, _rosters.CLAIM_MATTER)
 
 
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own

@@ -242,7 +242,7 @@ mechanics:
       - "systems/social_contest/social_contest_v30.md"
       - "systems/_architecture/complete_systems_reference.md#part-3"
     params: "engine/params/contest.md"
-    sim_module: systems/social_contest/sim/contest/   # CORRECTED (ED-IN-0025, C-VERIFY-4): sim/personal/contest.py no longer exists; live kernel is this package (contest_rebuild Stages 0-3 landed) — see CURRENT.md Social-contest row
+    sim_module: modules/social_contest/   # the SC05 kernel `systems/social_contest/sim/contest/` is retired (B24.33); the running entry is `modules/social_contest/roll.py` — see CURRENT.md Social-contest row
     test_status: not_implemented   # ⚠️ STALE (ED-IN-0025, C-VERIFY-4): Stages 0-3 landed (ED-1055..1062); needs re-survey, not a blind flip
     dependencies:
       mechanics: [die_rule_d10, conviction_scar, beliefs]

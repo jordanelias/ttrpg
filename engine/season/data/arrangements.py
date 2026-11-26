@@ -49,8 +49,8 @@ from typing import Any
 from ..queries.inputs import SIDES   # the stdlib-only record leaf: it imports nothing, so `data/` takes no cycle from it
 from . import files
 from .rosters import (
-    AUTHORITIES, DEGREE_BANDS, DIFFICULTY_LEVELS, DISPOSAL_WRITES, GENRES, GROUNDS, INTERPOSITION_KINDS, ISSUE_RUNGS, MATTERS,
-    PROCEEDING_MOVES, REMIT_ACTS, RUNG_KINDS, TENURE_KINDS, in_tenths, is_number, load_yaml, roster,
+    AUTHORITIES, DEGREE_BANDS, DIFFICULTY_LEVELS, DISPOSAL_WRITES, GENRES, GROUNDS, INTERPOSITION_KINDS, ISSUE_RUNGS, LADDER_RUNGS, MATTERS,
+    PROCEEDING_FAULTS, PROCEEDING_MOVES, REMIT_ACTS, RUNG_KINDS, TENURE_KINDS, in_tenths, is_number, load_yaml, roster,
 )
 
 
@@ -84,7 +84,10 @@ _ARRANGEMENT_KEYS = frozenset({
     "id", "rite", "turns", "authority", "reason_lean", "admits", "close", "bench_basis", "floor", "records_dissent",
     "venue_min_rank", "term_required", "appeal_basis", "interposed", "disposes", "disposal_reach", "quorum", "standard",
 })
-_RITE_KEYS = frozenset({"id", "genre", "live", "bears", "reply", "silence", "issues", "concede", "moves"})
+_RITE_KEYS = frozenset({"id", "genre", "live", "bears", "reply", "silence", "issues", "concede", "moves", "faults", "disclosed"})
+# B24.09 (the hearing's cells, HEAR_B edit 3): a rite that has no hearing states neither, and reads as no faults and nothing disclosed.
+_RITE_HEARING_KEYS = frozenset({"faults", "disclosed"})
+_BENCH = "bench"       # the third key of a rite's `moves:` (the bench's own moves); `SIDES` are the two a room's speakers take
 # the context tables' own field names (V2 p2 §I); an era's fields are the `GROUNDS`, a regime's `power` the `AUTHORITIES`
 _REGIME_KEYS = frozenset({"unlawful", "gravity", "standard", "reason_lean", "admits_add", "admits_drop", "power", "silence", "floor"})
 _STRIFE_KEYS = frozenset({"turns", "unrest", "gravity", "care_want"})
@@ -177,27 +180,55 @@ def _word(name: str, kind: str, key: str, value) -> str:
 def _load_rite(row: dict) -> dict:
     """One `rites:` row (V2 p2 §B): the type's structure, which no module compares by id. The sides are `queries/inputs.py::SIDES`; `moves` and `reply`
     are per side; a side with no move has no reply (the crowd of a `rally`); `bears` (who opens) is a side that has a move; `issues` is a
-    list of `ISSUE_RUNGS` members, empty for the one undivided issue, the matter itself."""
+    list of `ISSUE_RUNGS` members, empty for the one undivided issue, the matter itself. B24.09 (the hearing's cells): `bears` may instead be a
+    map `rung -> side` (who bears each rung; `bears` then reads as the bearer of the first issue, and the map is `bears_by_rung`); `moves` may
+    carry `bench` (the bench's own moves); `faults` (`proceeding_faults` members) and `disclosed` (whether the other side's filings stand on a
+    mover's board) are optional and read as `()` and false."""
     if not isinstance(row, dict) or not row.get("id"):
         raise SystemExit(f"arrangements.yaml: a `rites:` row has no `id`: {row!r}")
     name = str(row["id"])
     _refuse_unknown(row, _RITE_KEYS, name, "rite")
-    missing = sorted(_RITE_KEYS - set(row))
+    missing = sorted(_RITE_KEYS - _RITE_HEARING_KEYS - set(row))
     if missing:
         raise SystemExit(f"arrangements.yaml: rite {name!r} has no {missing}; a rite states every cell (V2 p2 §B).")
-    genre, live, bears = (_word(name, "rite", k, row[k]) for k in ("genre", "live", "bears"))
+    genre, live = (_word(name, "rite", k, row[k]) for k in ("genre", "live"))
     moves_in, reply_in = row["moves"], row["reply"]
-    if not isinstance(moves_in, dict) or not isinstance(reply_in, dict) or set(moves_in) != set(SIDES):
+    if not isinstance(moves_in, dict) or not isinstance(reply_in, dict) or not set(SIDES) <= set(moves_in) <= {*SIDES, _BENCH}:
         raise SystemExit(f"arrangements.yaml: rite {name!r} must give `moves:` for each of {list(SIDES)} (an empty list for a side "
-                         f"with none) and `reply:` as a mapping from a side.")
-    moves = {}
-    for side in SIDES:
-        ms = list(moves_in[side] or ())
+                         f"with none; `{_BENCH}` is optional) and `reply:` as a mapping from a side.")
+    moves, bench = {}, ()
+    for side in (*SIDES, _BENCH):
+        ms = list(moves_in.get(side) or ())
         _refuse_any_not_in(name, "rite", f"move(s) of the `{side}` side", ms, PROCEEDING_MOVES, "`rosters.yaml: proceeding_moves`",
                            repr_fn=list)
-        moves[side] = tuple(ms)
+        if side == _BENCH:
+            bench = tuple(ms)
+        else:
+            moves[side] = tuple(ms)
+    issues = list(row["issues"] or ())
+    _refuse_any_not_in(name, "rite", "issue(s)", issues, ISSUE_RUNGS, "`rosters.yaml: issue_rungs`", repr_fn=list)
+    # `bears` is a side (who opens, one bearer for the whole live thing) or a map from an `issue_rungs` member to the side that bears that
+    # rung (the kernel's proof bar, HEAR_B edit 3); a map's opener is the bearer of the rite's first issue, so every reader of `bears` keeps a side
+    bears_in, bears_by_rung = row["bears"], {}
+    if isinstance(bears_in, dict):
+        for rung, side in bears_in.items():
+            _refuse_not_in(name, "bears", rung, ISSUE_RUNGS, "an `issue_rungs` member", repr_fn=list)
+            _refuse_not_in(name, f"bears.{rung}", side, SIDES, "a side")
+            bears_by_rung[rung] = side
+        unborne = [i for i in issues if i not in bears_by_rung]
+        if not issues or unborne:
+            raise SystemExit(f"arrangements.yaml: rite {name!r} has a `bears:` map and issue(s) {unborne or 'none'}; every issue the rite runs "
+                             f"through needs a side to bear it ({list(ISSUE_RUNGS)}).")
+        bears = bears_by_rung[issues[0]]
+    else:
+        bears = _word(name, "rite", "bears", bears_in)
     if bears not in SIDES or not moves[bears]:
         raise SystemExit(f"arrangements.yaml: rite {name!r} has `bears: {bears!r}`, not a side with a move ({list(SIDES)}).")
+    faults = list(row.get("faults") or ())
+    _refuse_any_not_in(name, "rite", "fault(s)", faults, PROCEEDING_FAULTS, "`rosters.yaml: proceeding_faults`", repr_fn=list)
+    disclosed = row.get("disclosed", False)
+    if not isinstance(disclosed, bool):
+        raise SystemExit(f"arrangements.yaml: rite {name!r} has `disclosed: {disclosed!r}`, not true or false.")
     reply = {}
     for side, r in reply_in.items():
         _refuse_not_in(name, f"reply.{side}", side, SIDES)
@@ -206,14 +237,12 @@ def _load_rite(row: dict) -> dict:
     unanswering = [side for side in SIDES if moves[side] and side not in reply]
     if unanswering:
         raise SystemExit(f"arrangements.yaml: rite {name!r} gives {unanswering} moves and no `reply:` (must, may or raise).")
-    issues = list(row["issues"] or ())
-    _refuse_any_not_in(name, "rite", "issue(s)", issues, ISSUE_RUNGS, "`rosters.yaml: issue_rungs`", repr_fn=list)
     silence, concede = row["silence"], row["concede"]
     _refuse_not_in(name, "silence", silence, _SILENCE_VALUES)
     _refuse_not_in(name, "concede", concede, _CONCEDE_VALUES)
     # roster-exempt: MECHANISM -- the return shape's own field names, not a second roster.
     return {"id": name, "genre": genre, "live": live, "bears": bears, "reply": reply, "silence": silence, "issues": tuple(issues),
-            "concede": concede, "moves": moves}
+            "concede": concede, "moves": moves, "bench": bench, "bears_by_rung": bears_by_rung, "faults": tuple(faults), "disclosed": disclosed}
 
 
 def _load_rites(rows) -> dict:
@@ -419,6 +448,10 @@ def _load() -> tuple[dict, dict, dict, dict, dict]:
         if row["id"] in kinds:
             raise SystemExit(f"arrangements.yaml: speech_kinds id {row['id']!r} appears more than once")
         kinds[row["id"]] = row
+    if set(kinds) != set(LADDER_RUNGS):
+        raise SystemExit("arrangements.yaml: speech_kinds ids and rosters.yaml: ladder_rungs disagree -- "
+                         f"only in speech_kinds: {sorted(set(kinds) - set(LADDER_RUNGS))}; "
+                         f"only in the roster: {sorted(set(LADDER_RUNGS) - set(kinds))}")
     rites = _load_rites(doc.get("rites"))
     context = _load_context(doc.get("context"))
     disposal = _load_disposal(doc.get("disposal"))

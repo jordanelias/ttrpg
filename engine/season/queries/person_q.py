@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import functools
 import math
+from fractions import Fraction
 from dataclasses import dataclass
 from typing import Any, Callable, NamedTuple, Optional
 
@@ -54,8 +55,8 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
-    roster, roster_map,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, matter_of_record, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    roster, roster_map, task_share,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
 from .inputs import SIDE_SIGN, Item
@@ -637,6 +638,68 @@ def is_deed(c) -> bool:
     WITNESS's first deposit writes, or a told copy of it (a `Claim` or a `Said`). A kind some row
     emits on refusal (`REFUSAL_KINDS`) is no deed: it reports an act that did not happen."""
     return c.value is True and c.predicate in _verbs.DEED_KINDS
+
+
+# THE CONFESSION FAMILY, THE BAND EACH OF ITS KINDS IS EMITTED AT, and the `matters` member a confession and a plain deed are: loaded and refused-when-absent in `data/verbs.py::_load_confession_band`.
+CONFESSION_FAMILY, CONFESSION_BAND, CONFESSION_MATTER, TESTIMONY_MATTER = _verbs.CONFESSION_FAMILY, _verbs.CONFESSION_BAND, _verbs.CONFESSION_MATTER, _verbs.TESTIMONY_MATTER
+
+
+def proof_weight(c) -> Fraction:
+    """HOW MUCH OF A PROOF A HELD CLAIM IS (B24.23, CF-E8-4): `0` for a claim that is no proof (`proof_kind` is `None`), the share of its band
+    (`rosters.yaml: task_fraction` through `task_share`) for a `confession.*` deed -- full and made 1, partial 0.5, withheld 0 -- and `1` for any other proof.
+    [ASSUMPTION: the confession's weight by band is the case-file share table's (`task_fraction`: Overwhelming and Success 1, Partial 0.5), as
+    `14_VERBS_SOCIAL2_C_case_question_confession.md` §5 weights the case-file entry; a `confession.*` kind the table emits at no band reads the full 1]. World-free."""
+    if proof_kind(c) is None:
+        return Fraction(0)
+    return task_share(CONFESSION_BAND.get(c.predicate)) if c.predicate.startswith(CONFESSION_FAMILY) else Fraction(1)
+
+
+def proof_kind(c) -> Optional[str]:
+    """WHAT KIND OF PROOF A HELD CLAIM IS -- A `matters` MEMBER, DERIVED FROM THE CLAIM AND NEVER DECLARED (FI_05_B E-1; the one reader, World-free). A DEED CLAIM (`is_deed`, a `Claim`
+    or a told `Said`) of the `confession.` family is `confession`; any other deed claim is `testimony`, told or not: how far it has travelled is `decision/options.py::teller_weight`'s
+    WEIGHT (`told_weight ** hops`), never a kind. A claim that is no deed (a cell, a refusal kind, a value that is not `True`) is no proof: `None`.
+    A CONFESSION THAT WAS WITHHELD IS NO PROOF EITHER (B24.23, H-311): a `confession.*` kind whose band's share is zero (`proof_weight`; `confession.withheld`, emitted at
+    `Failure`) reads `None`, so a prisoner who gave nothing is not worse off than one never questioned. The kind is derived from the band's share, not from a spelt kind.
+    A Record's kind (`record`) and an edge's (`oath`, cited by its Tenure id) are the host's hold check, not a claim's, so this reader never answers them.
+    [ASSUMPTION: E-1's "about its own subject" is not tested -- the claim carries no second subject to compare, so a `confession.*` deed is `confession` wherever held; `world_q.proofs`
+    already reads only the opponent's own deeds (`attributed_deeds`)]
+    THE ONE READER (B24.44): a citing speech's admission (`world_q.filings`, and so the case file's exhibits), the ledger arm's (`world_q.proofs`' admission filter, `sigma._items_of`) and
+    `dossier`'s `proof_kind` column all read this, never the claim's SOURCE: how a claim came to be held is its weight (`remove_weight`, `teller_weight`), not its kind."""
+    if not is_deed(c):
+        return None
+    if not c.predicate.startswith(CONFESSION_FAMILY):
+        return TESTIMONY_MATTER
+    return CONFESSION_MATTER if task_share(CONFESSION_BAND.get(c.predicate)) else None
+
+
+def impeaches(c, record_id: str) -> bool:
+    """DOES A HELD CLAIM IMPEACH THE DOCUMENT `record_id`? A deed claim (`is_deed`) whose subject is the Record and whose kind is a `rosters.yaml: covert_kinds` member
+    (today `record.forged`, which a finder who graded `Partial` or better deposits, `loop/witness.py::_found_claims`). World-free: it reads the claim and the id. The told
+    copy keeps its subject (the kind is unpaired), so a hearer of the finder's telling impeaches too."""
+    return is_deed(c) and c.subject == record_id and c.predicate in COVERT_KINDS
+
+
+def cited_said(c) -> Said:
+    """THE `Said` A CITED CLAIM CARRIES (`payload["cited"][id]`, B24.24; B24.27): the claim as he holds it, its confidence and chain as stored. The one construction of it: the chooser
+    copies it onto the act at CHOOSE (`held_cites`' claims), and `world_q.filings` builds the same for a cite whose act carries none."""
+    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+
+
+def claim_origin(chain, holder: str) -> str:
+    """THE ORIGIN OF A HELD CLAIM: the root of its `chain` where it was told, else `holder`, whose own it is (a firsthand claim). The one reading of it, for the support a claim has
+    (`Reader._support`), the weight a filed claim carries (`world_q.filings`) and the item a held claim makes (`sigma._items_of`)."""
+    return chain[0] if chain else holder
+
+
+def held_cites(ledger, subject) -> tuple:
+    """THE CLAIMS HE HOLDS ABOUT `subject` THAT A SPEECH MAY CITE (B24.27, EVID_B edit 6; FI_05_B E-1): his own ledger's claims about what `subject` DID or SAID and which `proof_kind` has a kind
+    for, in ledger order -- the ones a citing `speak` could be admitted on. "Whose deed" is `attributed_deeds`' rule, the one the ledger arm (`world_q.proofs`) reads: a `PAIRED_KINDS`
+    deed is `subject`'s when its sighting names him doer (its own subject may be the patient), any other claim when its subject is `subject`. A claim that is no proof (a cell, a refusal kind,
+    a withheld confession) is never formed on. World-free; whether the matter's row admits the KIND is the fold's pre-draw refusal (`world_q.filings`), as it is for any act.
+    ⚠ CARRIED (B25, H-666's neighbour): `cited_said` still builds the `Said` from the STORED confidence with no pairing, where `said_of` tells `reader.present(c)` and the pairing."""
+    proven = [c for c in ledger if proof_kind(c) is not None]
+    paired = {id(c) for c in attributed_deeds(ledger, subject)} if any(c.predicate in PAIRED_KINDS for c in proven) else ()      # the doer test only where a paired kind stands to be asked
+    return tuple(c for c in proven if (id(c) in paired if c.predicate in PAIRED_KINDS else c.subject == subject))
 
 
 def deed_valence(axis_w: dict, c) -> float:
@@ -1574,7 +1637,7 @@ class LedgerReader:
             else:
                 groups.append([key, {}])
                 i = len(groups) - 1
-            origin = c.chain[0] if c.chain else c.holder
+            origin = claim_origin(c.chain, c.holder)
             wt = self._weigh(c)
             g = groups[i][1]
             g[origin] = max(g.get(origin, 0.0), wt)
@@ -2594,10 +2657,10 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
     return agree, dis
 
 
-def _disagrees(a: Claim, b: Claim) -> bool:
-    """DOES THE PAIRING RULE MARK `b` AS DISAGREEING WITH `a`? One local call of `_pair` on the cell key `(subject, predicate)` -- the key `record` and `dissents` pair a cell claim on --
-    so `dossier.against` asks the tree's one pairing step and never restates `==`. (`decision/options.py::contradicts` is EVID_B edit 2's exposure of this same predicate; until it
-    lands, this is the one call that is replaced there.)"""
+def contradicts(a: Claim, b: Claim) -> bool:
+    """DO TWO CLAIMS CONTRADICT? THE PAIRING RULE'S ANSWER, EXPOSED ONCE: the same cell `(subject, predicate)` and a different value (`_pair`'s whole-value `==`, run on the cell key
+    `record` and `dissents` pair a cell claim on). It is the one call of `_pair` the host (`dossier.against`, `world_q.contradicted_tellers`) and the modules ask, so none
+    restates `==`. `decision/options.py` re-binds it by name (`options.contradicts`)."""
     return _pair([a], [b], lambda c: (c.subject, c.predicate), None)[1] == 1
 
 
@@ -2605,7 +2668,8 @@ def _disagrees(a: Claim, b: Claim) -> bool:
 class DossierRow:
     """ONE CLAIM ON THE CASE BOARD (`11_GO_player_surface_contract_B.md` §5's fields). The rows that share `(subject, predicate, value)` are one GROUP and carry one `support`.
     `record` is the id of the document on his live `hold` this claim is the content of (a `content:<kind>` claim of a record he holds), else `None`; `proof_kind` is
-    `rosters.yaml: proof_kind_of_source`'s kind for the claim's source (`""` where its way of holding is no kind of proof); `against` the ids of his other claims on
+    the kind a Record's content claim has as a document (`matter_of_record` of its `content:<kind>`, as `world_q.filings` reads a held Record's) where `record` is set, else `proof_kind`'s
+    kind of the claim (`""` where it is no proof: a cell, a refusal kind, a withheld confession); `against` the ids of his other claims on
     the same cell that disagree with this one."""
     claim: Optional[Claim]
     record: Optional[str]
@@ -2620,7 +2684,7 @@ def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = No
 
     `support` is `LedgerReader._support` over the group's claims, read under `ledger_weigh(p, fx, tick)` -- the closure clause 4 reads his ledger by -- so the board shows what his
     decisions weigh: `1 - PROD over distinct origins (1 - weigh(c))`, a doer named by two tellers standing above one named by a single teller repeating himself. With no `fx` (a
-    hand-built read), or a ledger `ledger_weigh` takes the plain reader for, every claim weighs 1.0. `against` is `_disagrees` over the claim's CELL (`is_cell`): a claim of any other
+    hand-built read), or a ledger `ledger_weigh` takes the plain reader for, every claim weighs 1.0. `against` is `contradicts` over the claim's CELL (`is_cell`): a claim of any other
     shape (an event kind, a `seen` struct, a `content:` claim) names no cell and nothing it could disagree with."""
     tick, decay = fade_of(p)
     weigh = ledger_weigh(p, fx, tick) if fx is not None else None
@@ -2640,9 +2704,9 @@ def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = No
     for _key, members in groups:
         support = 1.0 if weigh is None else LedgerReader(members, weigh, tick=tick, decay=decay)._support(members)[0]
         for c in members:
-            rows.append(DossierRow(c, c.subject if content_kind(c) is not None and c.subject in held else None,
-                                   PROOF_KIND_OF_SOURCE.get(c.source) or "", support,
-                                   tuple(o.id for o in p.ledger if o is not c and is_cell(c) and _disagrees(c, o))))
+            rec = c.subject if content_kind(c) is not None and c.subject in held else None
+            rows.append(DossierRow(c, rec, (matter_of_record(content_kind(c)) if rec is not None else proof_kind(c)) or "", support,
+                                   tuple(o.id for o in p.ledger if o is not c and is_cell(c) and contradicts(c, o))))
     return tuple(rows)
 
 

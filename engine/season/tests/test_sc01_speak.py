@@ -1,7 +1,7 @@
 """v9 SC-01 step 12 -- `speak` (`workplans/valoria_master_workplan_v9_part6.md` §SC-01, the CARRIED
-block's *Step 12*): a typed cell, `contests: "a matter"`, four bands. `_eff_speak` only if `writes:` is
-non-empty -- and it is empty at every band (the row's `writes_note` and `H-63`'s step-12 clause say why),
-so no effect exists and none is asserted.
+block's *Step 12*): a typed cell, `contests: "a matter"`, four bands. B24.25: `writes:` is `Record.stages` at every
+band and `_eff_speak` files what a speech cites by its band (`test_sc_hearing_admission.py`); a speech that cites nothing
+writes nothing, as it did when `writes:` was `[]` at every band (H-63's step-12 clause).
 
 WHAT IS BUILT, each asked of the real loader, the real fold and the real seam on a HAND-BUILT world
 (`probes.tiny_world`: `p_high` holds `off_duke`; `p_low`, `p_mid` live in `Hh`):
@@ -74,8 +74,9 @@ def test_sc01_s12_speak_is_a_typed_contested_cell_with_four_ladder_bands():
     # Each band reports its own outcome: four bands, four distinct kinds, no kind shared.
     kinds = [tuple(row.emits_at(b)) for b in sorted(BANDS)]
     assert len(set(kinds)) == 4 and all(len(k) == 1 for k in kinds), kinds
-    # `writes:` is empty at every band, so no effect is registered (the row's `writes_note`).
-    assert row.writes == () and "speak" not in EFFECTS
+    # B24.25: `writes:` is the case file's stages at every band (the citing speech files by its band; `Failure` writes the `excluded` stage) and the effect is registered; a speech that cites nothing
+    # writes nothing, `write_optional` (`test_sc01_s12_a_speak_writes_nothing_and_leaves_the_docket_as_it_was`).
+    assert set(row.writes) == {"Record.stages"} and all(row.writes_by_degree[b] == ["Record.stages"] for b in BANDS) and "speak" in EFFECTS
     # A refusal is the cell's one kind; the party-gap refusal emits the same union.
     assert row.emits_on_refusal == ("speech.unheard",), row.emits_on_refusal
     # The prize routes to a registered provider, so the verb is resolvable. Interim at step 12; steps 13
@@ -183,24 +184,26 @@ def test_sc01_s12_the_loader_control_the_shipped_row_loads():
     assert _verbs._load_verb_table()["speak"].contests == "a matter"
 
 
-def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash(monkeypatch):
-    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `determine` (B24p.99: `speak` proceeds, and its draw is the proceeding's, so
-    the single roll's refusal is read through the verb still on it) by a bench whose pool is under 1D comes back as the verb's refusal kind,
-    where it used to raise an uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves.
-    B05.99 rewrite: B05.09 floors a held rank at the untrained score and B05.25/B05.23 make the pool the governing score + rank +
-    the base 6 (floor 5), so no held rank gives a pool under one die; the pool is PLANTED at the one pool reader the record
-    reads (`sigma.faculty`) for the judge alone (was: `copying` held at 0, 0.5, 1)."""
-    from ..seam.wrappers import sigma
-    real = sigma.faculty
+def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash():
+    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `speak` whose speech's obstacle is over the multiple of the speaker's pool comes back as the
+    verb's refusal kind (`speech.unheard`, the matter still docketed), where it used to raise an uncaught `Unspecified` out of the season (found at B-N's
+    `/code-review`). Control: the shipped multiple resolves the same speech. B24.10 REPOINT: the refusal was read on a judge's pool under 1D through
+    `determine` (B24p.99: `speak` proceeds and its pool is the proceeding's); `determine` proceeds too now and its close, a bench's draw, is never refused, so
+    the S27.4 a proceeding still makes is the abridged speech's (`_resolve_proceeding`, the `exchange` close), read through `speak`, with the multiple swept
+    to 0 (every obstacle is over it) where the shipped one lets it through. B05.99: no held rank gives a pool under one die, so the ratio is swept, not the pool."""
+    from ..data.fixtures import DEFAULT_FIXTURES
     checked = 0
-    for pool, refused in ((0, True), (0.5, True), (1, False)):
-        w, d = _world()
+    for multiple, refused in ((0, True), (DEFAULT_FIXTURES.get("obstacle_refusal_multiple"), False)):
+        w, d = _world(obstacle_refusal_multiple=multiple)
         _docket(w, d)
-        monkeypatch.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == DUKE else real(w_, p, verb))
-        out = _fold(w, d, Act(id=f"zpool{pool}", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY}))
-        assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
+        out = _fold(w, d, _speak(f"zmult{multiple}"))
+        assert bool(out) and (_kinds(out) == ["speech.unheard"]) is refused, (multiple, _kinds(out))
+        if refused:
+            assert out[0].degree is None and len(world_q.docketed(w, PARTY)) == 1
+        else:
+            assert out[0].degree in BANDS
         checked += 1
-    assert checked == 3
+    assert checked == 2
 
 
 @pytest.mark.parametrize("status", ["PARTY-GAP", "REFUSED", "ENGINE-UNAVAILABLE", "NO-SUCH-STATUS"])
