@@ -68,7 +68,7 @@ def test_the_pool_is_the_governing_score_plus_the_rank_and_the_score_is_the_oppo
     p = w.persons["p_mid"]
     add, floor = w.fixtures.get("pool_add"), w.fixtures.get("pool_floor")
     checked = 0
-    for verb in ("determine", "arrest", "research"):                # B05.25: `fight` is a subsystem's row and names no `governing:`, so `faculty` refuses it
+    for verb in ("issue", "arrest", "research"):                    # B24.10: `issue` for `determine`, which proceeds. B05.25: `fight` is a subsystem's row and names no `governing:`, so `faculty` refuses it
         addends = sum(int(a(w, p, verb)) for a in pool.POOL_ADDENDS)
         assert pool.faculty(w, p, verb) == pool_of(pool.governing_score(w, p, verb) + pool.rank(p, verb), addends, add, floor)
         assert pool.faculty(w, p, verb) != pool.score(w, p, verb) + addends     # at the shipped base, not the old rule

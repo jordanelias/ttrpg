@@ -26,7 +26,8 @@ from ..data.rosters import (
     PROCEEDING_MOVES, PROCLAIMED, READ_TO_ADDRESSEE, RECORD_CONTENT, SITTING_CLAIMS, SITTING_PREDICATES, SITTING_SOURCE, TERMS_SUPPLIED_BY, UNDEPOSITED_KINDS,
     WITNESS_CHANNELS, require_member, roster,
 )
-from ..data.verbs import CONCLUDED_KEY, CONCLUDED_STEM, CONCLUSION_KIND, EMITTED_KINDS, IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
+from ..data.verbs import (CITED_KEY, CITES_KEY, CONCLUDED_KEY, CONCLUDED_STEM, CONCLUSION_KIND, EMITTED_KINDS, IN_CONFIDENCE_KEY, KIND_VERB, QUANTITY_STEMS,
+                          VERB_TABLE)
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
 # store. Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
 # in `queries/person_q.py` (B11.21, D-74: `ledger_weigh` and `refracted_confidence` moved there; this step imports nothing from `decision/`);
@@ -48,11 +49,12 @@ from ..queries import cache, world_q
 from ..queries.person_q import LedgerReader, addressed_to, conflict, content_value, drifted, ledger_weigh, refracted_confidence   # `content_value`: moved to person_q at B11.71, still importable from here
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
-from ..state.carriers import Claim, Event
+from ..state.carriers import Claim, Event, Said
 from ..state import ledgers
 from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
 from .resolve import _milli
+from ..seam.wrappers.sigma import bench_reading
 
 # B11.66: THE KIND OF EVENT WHOSE HEARER'S DEPOSIT IS THE TOLD CHANNEL'S, `claim.held` of what was said -- not a deed SEEN, so no notice draw reaches it (the source's "a telling ... is unchanged").
 TELLING_KIND = "news.told"
@@ -118,6 +120,38 @@ def _told_content(act):
     test. `act_refs` still owns *what is this act about* (§8); this reads the one other key."""
     pay = getattr(act, "payload", None)
     return pay.get("said") if isinstance(pay, dict) else None
+
+
+_BAND_LABELS = frozenset(DEGREE_LABEL.values())
+
+
+def _told_items(w, e: Event, act, conf) -> tuple:
+    """B24.24 (FI_05_B E-3: A CITATION IS A TELLING): THE `Said`s THIS EVENT'S TOLD DEPOSIT PASSES ON, in the order the act gave them -- `said` (for the telling's own
+    Event, `_told_content`), then one per id in `cites`: the `Said` the act carries for a cited claim (`CITED_KEY`, fixed at CHOOSE from the citer's own ledger, never
+    opened here), or, for a cited Record, its content as a `content:<kind>` claim at `conf` with no chain (a Record carries no hold of its own; the deposit extends
+    the chain by the citer). An id that is neither is passed on as nothing.
+
+    ⚠ A CITATION IS TOLD AT EVERY BAND THE ACT GRADES, `Failure` included (ADM: the room heard it said even though the bench did not take it), so it is gated on the
+    band alone and never on a filing or an admission. It fires on the Events the citing verb's OWN row emits (`KIND_VERB`) at a graded band: a refusal kind has no band
+    (nothing was said), and an Event a later effect of the act emits (a conviction moved, a scar) is no telling and would deposit the same copy a second time.
+    ⚠ Shape: `payload` is not always a dict (`_told_content`), and a `cites` that is not a tuple or list of ids is read as none."""
+    items = []
+    said = _told_content(act) if e.kind == TELLING_KIND else None
+    if said is not None:
+        items.append(said)
+    pay = getattr(act, "payload", None)
+    cites = pay.get(CITES_KEY) if isinstance(pay, dict) else None
+    if isinstance(cites, (list, tuple)) and e.degree in _BAND_LABELS and KIND_VERB.get(e.kind) == act.verb:
+        cited = pay.get(CITED_KEY) or {}
+        stem = RECORD_CONTENT.get("predicate")
+        for cid in cites:
+            if cid in cited:
+                items.append(cited[cid])
+            else:
+                rec = w.records.get(cid)
+                if rec is not None and rec.subject_matter is not None:
+                    items.append(Said(rec.id, f"{stem}:{rec.kind}", content_value(rec.subject_matter), conf))
+    return tuple(items)
 
 
 def _circle_of(w, act, rate: float):
@@ -440,7 +474,9 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
         for the two parties; `rigged` of the arranger where the card shows a tilt; `overruled` of a played adjudicator whose ruling departed from his track;
       * `heard` -- held by each person present who neither speaks nor decides, of the man who bore the matter (B21: he learns, he does not rule);
       * `yielded` / `hinted` -- the questioned man, held by the questioner under the `yield` disposal at the Event's band, at `confidence_default` times
-        that write's `weight` (`arrangements.yaml: disposal`, `rosters.yaml: disposal_writes`; the `record:confession` stage is B24.14's).
+        that write's `weight` (`arrangements.yaml: disposal`, `rosters.yaml: disposal_writes`; the `record:confession` stage is B24.14's);
+      * `leans` (B24.29) -- of a seat who decides, `±1`, held by each person present who does not decide, as HE reads the sign the sitting wrote of the seat's public
+        commits (`world_q.ending_bench`): his own keyed draw (`sigma.bench_reading`), so it is sometimes wrong, and never the seat's true lean to a man who cannot read it.
 
     A man holds no claim of himself. A claim two beats would both make (one rattle of one man by one speaker) is held once. Deposited in the room's own order."""
     sitting, card = world_q.ending_sitting(e), world_q.ending_card(e)
@@ -488,6 +524,7 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
             kind, weight = write.partition(":")[2], DISPOSAL_WRITES[write].get("weight")
             if kind in SITTING_CLAIMS and weight is not None and questioned is not None:
                 facts.append((kind, questioned, beats[-1].issue, (bearer,), int(round(conf * weight))))
+    bench = world_q.ending_bench(e)
     out, held = [], set()
     for who in present:
         p = w.persons[who]
@@ -497,6 +534,12 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
             held.add((kind, subject, value, who))
             out.append((p, Claim(H(w.world_seed, w.tick, who, f"sitting:{e.id}:{len(held)}"), who, subject, SITTING_PREDICATES[kind], value, w.tick,
                                  SITTING_SOURCE, conf if confidence is None else confidence, "own", self.lap, doer=None)))
+        # B24.29: what each seat's public lean looks like to a man who does not decide: HIS OWN keyed reading of the sign the sitting wrote (`sigma.bench_reading`), into his own ledger
+        for seat, sign in (bench if who not in card.decided_by else ()):
+            read = bench_reading(w, who, e.id, seat, sign)
+            held.add(("leans", seat, read, who))
+            out.append((p, Claim(H(w.world_seed, w.tick, who, f"sitting:{e.id}:{len(held)}"), who, seat, SITTING_PREDICATES["leans"], read, w.tick,
+                                 SITTING_SOURCE, conf, "own", self.lap, doer=None)))
     return out
 
 
@@ -786,6 +829,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                    for pid, e, _c in fan if reported.get((pid, e.id)) is None
                    for entity, kind in _ended_by_event.setdefault(e.id, tuple(_ended_entities(w, e)))}
     w._in_parallel_map = True
+    told: dict = {}                    # Event id -> `_told_items` of it, read at the first hearer who needs it
     for pid, e, channel in fan:
         p = w.persons.get(pid)
         if p is None:
@@ -998,6 +1042,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 if str(o.predicate).partition(":")[0] in looks:
                     if str(o.predicate).partition(":")[0] not in FINDING_TERMS.get(e.degree, ()):
                         continue
+                    if o.subject == pid:
+                        continue      # B24.34: a look teaches a man no claim about himself (only `holds` names a person: a holder who looks at what he holds)
                     value = _told_value(w, pid, e, o, H(w.world_seed, w.tick, pid, f"look:{e.id}:{o.subject}:{o.predicate}"),
                                         str(o.predicate).partition(":")[0])
                 if (pid, o.subject, o.predicate) in ended_cells:
@@ -1115,11 +1161,20 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
         # so storing it makes its own content true.
         _act = self.act_of.get(e.id)
-        if e.kind == TELLING_KIND and _act is not None and pid != _act.actor and only is None:
-            _held = _told_content(_act)   # the `Said` the act carries -- fixed at CHOOSE
-            _held_stem = str(_held.predicate).partition(":")[0] if _held is not None else None
-            if (_held is not None
-                    and _held_stem not in LEDGER_DERIVED_STEMS):
+        # B24.24 (FI_05_B E-3): ONE LOOP OVER WHAT THE ACT PASSES ON -- the `Said` a telling carries (fixed at CHOOSE) and each claim a citation carries; `_told_items` owns
+        # which Events and which items, and nothing below it changes: each lands through the same guard, refraction and credit.
+        if _act is not None and pid != _act.actor and only is None:
+            if e.id not in told:                  # what an Event's telling passes on is the Event's, not the hearer's: read once for the fan
+                told[e.id] = _told_items(w, e, _act, conf)
+            _passed = told[e.id]
+        else:
+            _passed = ()
+        for _i, _held in enumerate(_passed):
+            # The claim ids mint from the telling's id; the first item keeps it exactly, and a later one (a second citation) takes its place as a suffix, so no two
+            # claims an act passes on share an id (`cites` names them by id).
+            _tid = f"told:{e.id}" + (f":{_i}" if _i else "")
+            _held_stem = str(_held.predicate).partition(":")[0]
+            if _held_stem not in LEDGER_DERIVED_STEMS:
                 # PLAN POSITION `15b` (r2 `02` §A.10, `ED-IN-0222`). WHAT LANDS IN THE HEARER'S
                 # LEDGER IS `_told_value`'s RETURN, NOT `_held.value` DIRECTLY -- verbatim at
                 # every band but `Partial`, lossy by exactly one mechanism there. Computed here,
@@ -1135,7 +1190,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # dedup guard below drops most tellings regardless of degree, so computing it for
                 # every degree would pay a blake2b digest per telling for nothing. Deferred to the
                 # Claim-id site below for any degree that is not `Partial`.
-                _told_hash = (H(w.world_seed, w.tick, pid, f"told:{e.id}")
+                _told_hash = (H(w.world_seed, w.tick, pid, _tid)
                               if e.degree == "Partial" else None)
                 _told_val = _told_value(w, pid, e, _held, _told_hash, _held_stem)
                 # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
@@ -1184,7 +1239,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # read as a chain of one-character hops.
                     # `G6` (`H-197`): the circle line -- `_circle_of` owns it.
                     _circle = _circle_of(w, _act, privacy)
-                    tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
+                    tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, _tid),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
                                "told_by", _held.confidence, _circle or "own", self.lap,
                                chain=_held.chain + (_act.actor,))
@@ -1206,7 +1261,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                         _pv = _told_pairing(e, _pairing)
                         if not any(c.subject == _held.subject and c.predicate == SEEN_PREDICATE and c.value == _pv
                                    and (not c.chain or c.chain[0] == _origin) for c in p.ledger):
-                            pc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}:seen"),
+                            pc = Claim(H(w.world_seed, w.tick, pid, f"{_tid}:seen"),
                                        pid, _held.subject, SEEN_PREDICATE, _pv, w.tick,
                                        "told_by", _held.confidence, _circle or "own", self.lap,
                                        chain=_held.chain + (_act.actor,))

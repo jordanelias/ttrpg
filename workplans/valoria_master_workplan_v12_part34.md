@@ -25,7 +25,7 @@ GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B21b-fa-war
 GATE: Batch B21c-fa-seats
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning
 GATE: Batch B27-sc-proceedings

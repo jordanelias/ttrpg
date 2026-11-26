@@ -968,7 +968,14 @@ rosters:
       forum, how far and against which side) and a played adjudicator's departures (`Outcome.ruled`, `((decider, departure), ...)`), every real in
       milli-units; read by `world_q.ending_card`. It holds no true attribute: what the witnesses read of who decided and what the forum was is what the
       card showed every participant. `loop/witness.py` deposits what the sitting showed into each man's own ledger from the beats and this tuple.
-    values: [proceeding, beat, sitting, verdict, card]
+      B24.14: AFTER THE CARD, one `("exchange", kind, item id)` per item a beat entered or struck (`queries/inputs.py::exchanges`, `kind` an `EXCHANGE_CELLS`
+      name), in the beats' order, and NONE for a sitting that entered or struck nothing (so the ending of every such sitting is what it was); read by
+      `world_q.ending_exchanges`. The same list is appended to the case file's `Record.stages` by `loop/effects_information.py::_eff_determine`.
+      B24.29: AFTER THE EXCHANGES, one `("bench", ((seat, sign), ...))` where a seat who decides holds PUBLIC commits on the motion (`world_q.declared_votes_by_member`:
+      a commit is public), `sign` the sign of his signed count (+1 for the motion, -1 against), in the bench's order; NONE where no seat holds one (every sitting
+      the shipped cast holds, so such an ending is what it was); read by `world_q.ending_bench`. It is what every witness is shown of the bench; what each man comes
+      to HOLD of it is his own drawn reading (`sitting_claims: leans`).
+    values: [proceeding, beat, sitting, verdict, card, exchange, bench]
 
   stance_bands:
     source: "B24p.20 (V2 p2 §C.1; p4 §L 20): how a proceeding's `Event.ending` names the room's stance"
@@ -1004,10 +1011,16 @@ rosters:
       is the bearer and not the matter, because `said_of` would otherwise offer the hearer's newest claim on the matter in place of what he believes
       of it; `partial` is deposited only where a decider's conflict reaches `recuse_at` (the host's own line for a partial seat); a sitting's claims are
       first-hand and never refracted (they are the typed record of what a man saw in the room, not a reading of an act).]
+      B24.29: `leans` -- a seat's lean on the motion, `±1` (+1 toward the motion), the seat as subject, held by each person in the room who does not decide, as that
+      man READS it: the sign the sitting wrote (`proceeding_endings: bench`), drawn on a keyed stream (`H(seed, tick, viewer, "bench_read:<seat>")`) and true with
+      chance `(1 + acc) / 2`, `acc` his accuracy (`modules/social_contest/proceeding.py::accuracy`: his Attunement alone, opposed by nothing), so at `acc` 0 he guesses and
+      at `acc` 1 he reads it truly; a wrong sign is possible at every Attunement. [ASSUMPTION; medium; Jordan to correct; basis: the entry's "the chance the deposited sign is
+      the true one is `acc`" read for a two-valued sign as the share of the truth `acc` reaches (`_Believed`'s reading of a claim), the rest a guess: read as `acc` itself
+      a man of Attunement 2 would be wrong more often than right; revert: the chance is `acc`]
     claim:
       predicate: sitting
       source: firsthand
-    values: [rattled, shown, conceded, contumacy, hypocrite, temper, partial, rigged, overruled, heard, yielded, hinted]
+    values: [rattled, shown, conceded, contumacy, hypocrite, temper, partial, rigged, overruled, heard, yielded, hinted, leans]
 
   duel_terms:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
@@ -1756,8 +1769,14 @@ rosters:
   # B04.10 (DEF Edit 2): the keys a row's `when` may carry. `rank_at_least: <n>` holds when the holder's SKILL rank (the held rank
   # on the row's `scale`, never a seat rank) in the row's `key` is at least `n`: it selects which of two rows on one key apply
   # (`data/rosters.py::when_holds`), and is never a condition of attempting an act (A-11: a `gate` row takes no `when`).
+  # B24.35 (WGM edit 2, `02_CHAR_which_ground_moves_whom`): FOUR MORE MEMBERS, the conditions under which a ground backs an act. They are read at the PROCEEDING's host
+  # (`seam/wrappers/sigma.py::WHEN_BACKING`, one function each, bound to this roster both ways at import) and by NO uses row's reader: `rank_at_least` is the one key a
+  # row's `when` may carry (`data/rosters.py::ROW_WHEN_KEYS`), and the loader refuses a row naming any other. The condition a ground needs is the ground's own `backed_by` cell
+  # (`grounds`, below): `cites: <matters member>` -- the act cites a held item of that kind; `consequence_held: true` -- the ARGUER's own ledger holds a deed claim about the
+  # matter's subject that the HEARER's own pursuits score against; `creed_committed: true` -- the matter is a faction's creed Proposition and the hearer holds a live `commit` to it;
+  # `regard_at_least: n` -- the hearer's stance toward the arguer, clamped at `STANCE_MAX`, is at least `n` stance steps. None reads the hearer's ledger (`04` §B.2 F8).
   capability_when_keys:
-    values: [rank_at_least]
+    values: [rank_at_least, cites, consequence_held, creed_committed, regard_at_least]
 
   # A-11 (U1 §3 item 5): a `gate` row is closed to its one held value, at the two sites that gate on it.
   capability_gate_keys:
@@ -1831,8 +1850,14 @@ rosters:
       a `host` member with no function (and a function with no member) and, at the first call of the module, a `module` member the
       module's `TERMS` lacks. `standard` stays `host`: inside a proceeding the venue's standard is Grace's `esteem` on the leverage, never
       an obstacle (B24p.19 omits it for an act on the `proceeds=` path). No leverage source is module-bound.
+      B24.06 adds `answer` (module-bound, last): the hostile weight of an answered exhibit over its answer, `answer_step x max(0, w_target - w_answer)`,
+      on the roll of an `answer` move only (HEAR_B's table; a heavier answer is never a subtraction, A-25, it is the closing draw's `proof_level`).
+      B24.26 adds `first_heard` (module-bound, last; OBS §2 member 11, ADM edit 4): `first_heard_ob` for the answer to an item the room heard FIRST (a `filed`
+      stage's first-heard mark, `Item.first`), the answer move's own roll and the answering `speak`'s (`Input.first_heard`, which the host builder reads off the stages
+      its `answers` name), listed only where it weighs. One reader: the proceeding's `TERMS`; the single-roll host never composes it, the answering `speak` being an
+      act that proceeds.
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity]
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, weary, standing, press, gravity, answer, first_heard]
     # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after the host's members, so the proceeding's terms follow the
     # host's in composition order; revert: the four rows and their `bound:` cells.]
     bound:
@@ -1851,6 +1876,8 @@ rosters:
       standing: module
       press: module
       gravity: module
+      answer: module
+      first_heard: module
 
   lifepaths:
     source: >-
@@ -1883,7 +1910,9 @@ rosters:
       those are super outdated. you are allowed to refer to the currently existing python work for
       those systems (and only those systems) in repository."* So the LIVE artifact for each is its
       Python, not its `*_v30.md`: `systems/combat/combat_engine_v1/`,
-      `systems/mass_battle/sim/`, `systems/social_contest/sim/contest/`. `contest_subsystem` reads
+      `systems/mass_battle/sim/`, and for the social contest `modules/social_contest/` (its SC05
+      kernel, `systems/social_contest/sim/contest/`, was retired at B24.33, ED-SC-0045: its game lives
+      in the hearing). `contest_subsystem` reads
       `sim_module:` and never `doc:` for that reason.
       This roster maps a PRIZE to the subsystem that owns it. The prize is what Part E's column
       carries; the subsystem is what `module_contracts.yaml` already names, so neither half is
@@ -1954,7 +1983,7 @@ rosters:
         person_inputs: "pool"
         provider: "social_contest"   # as `a standing`'s
         module_entry: "social_contest.roll"   # as `a standing`'s
-        # `determine` contests it (`speak` -> `a matter`, `tell` -> `a standing`).
+        # `argue` and `interrogate` contest it, each through its `proceeds:` row (B24.08); `speak` -> `a matter`, `tell` -> `a standing`.
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"
@@ -1981,6 +2010,17 @@ rosters:
         heard_by: "residents"   # the persons residing at the act's place (`audience_of`).
         toward: "to"   # the residents' stance toward whoever would hold the place: the room is asked about the receiver, not the actor (`sigma.py::_read_social_roll`).
         cite:     "U5c_VERBS_residue §2 edits 3 and 4 (B07.04)."
+      # B24.03 (`U5c_VERBS_residue` §2's prize table, edit 3: "`a verdict` lands with the hearing, not here"; C-25, U1 ledger S-23): the prize `determine` will contest
+      # (B24.08), the bench's own close: `determine` contests it since B24.08.
+      "a verdict":
+        module:   "social_contest"
+        person_inputs: "pool"   # as `a matter`'s: a verb that `proceeds:` is exempt from naming attributes, its dice being the proceeding's own
+        provider: "social_contest"   # as `a matter`'s
+        module_entry: "social_contest.proceeding"   # the proceeding's entry (B24p.12), not `roll`: `determine` `proceeds:`. `manifest/registry.py::_bound_verb_contests_it` asks that the composition row's `verb:` contest this prize, and that row is bound to `determine` (`references/module_contracts.yaml`; the registrar holds one `verb_call` entry per verb, so the row names the one verb that contests a prize).
+        heard_by: "bench"   # the bench at the act's rung hears this prize (`manifest/registry.py::_check_heard_by`)
+        step:     "ENCOUNTER"   # `the body`'s and `a field`'s pair: declared at RESOLVE, sat at ENCOUNTER
+        declares: "Declared"
+        cite:     "B24.03 (HEAR_B edit 1; U5c_VERBS_residue §2): the prize of the bench's close, A-14 (the ballot is inside it), A-38."
     # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` would be a declared-but-unread key (`04 §B.13` ID-12) and `roster()` would return an EMPTY frozenset, which is the silent-false this file's own header forbids.
 
   # titles: DELETED -- its domains live in `engine/season/offices.yaml: titles:`
@@ -2914,6 +2954,11 @@ rosters:
       `decision/choose.py::settle_conclusions` keeps ONE, drawn in proportion to each doer's support over distinct origins (`LedgerReader._support`) at a nonzero
       `choice_temperature` (the best-supported at 0). One doer is no choice: the Candidate carries no rank and no act is renamed. The carrier is the kind the row
       emits (`conclusion.reached`). [ASSUMPTION; medium; Jordan to correct; revert: delete the `reconstruct` line and `settle_conclusions`, and the first doer his ledger names rides, as B11.73.]
+      B24.27 (EVID_B edit 6; FI_05_B E-1): `speak` CARRIES `cites` AND IT IS A CHOICE THE CHOOSER FORMS, NOT A FAN OVER A ROSTER (`utter`'s shape: no `CHOICE_RANGES` entry). A `speak`
+      is formed twice on a matter where he holds claims about it that `person_q.proof_kind` has a kind for (`person_q.held_cites`): the speech that cites nothing (every `speak` before) and
+      the speech that cites ALL of them, each with the `Said` it carries for the told deposit (`cited`, `CITED_KEY`). The carrier is the stage a `speak` files (`Record.stages`). The
+      answering variant (a held item that contradicts one already filed against his side, EVID_B's third shape) is NOT formed: it needs the filed stage's place (`answers`), which no
+      person-side reading gives, and a deed claim cannot contradict another by value. [ASSUMPTION; medium; Jordan to correct; revert: delete the `speak` line and the variant is the one speech.]
     values:
       marshal: [role, retreat_at]
       march: [posture]
@@ -2922,6 +2967,7 @@ rosters:
       examine: [site]
       utter: [cites]
       reconstruct: [concluded]
+      speak: [cites]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
     # `condition.band_crossed` and `site.ruptured` (B12a.64) the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
@@ -3032,8 +3078,11 @@ rosters:
       table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit.
       [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused
       `compliance.impossible`, and `comply`'s write is `[]` again.]
+      B24.25: `speak` is listed beside it, with the four kinds its bands emit. A speech that cites nothing (every computed `speak` until B24.27) files no stage, so its
+      `(Record, stages)` write declines and the speech is answered as it was, by its band's own kind -- `emits_at` still picks the one the band declares.
     values:
       comply: [compliance.given]
+      speak: [matter.carried, matter.advanced, matter.held, matter.turned]
 
   lie_verbs:
     source: >-
@@ -3051,6 +3100,18 @@ rosters:
       Without it `lie` forms on 2405, 2394 and 2606 more (person, question) pairs at seeds 0-2 and carries the claim as held,
       not a false value, on 1858, 1828 and 1884 others (191 pairs at lap 0 on each seed).
     values: [lie]
+
+  filing_verbs:
+    source: >-
+      B24.25 (EVID_B "Exact edits" 4, ADM edit 3): the speech that puts held items on a matter's case file.
+    note: >-
+      WHICH VERBS FILE THE ITEMS THEY CITE -- a list of verbs. A listed verb's act may carry `cites` (held claim ids and Record ids) and `answers` (the filed stages it
+      answers), and `loop/resolve.py::_admits` refuses it BEFORE THE DRAW when a cite is not held, is of a kind the matter's row does not admit, or contradicts an item already
+      standing for the citer's own side, or an answer names no filed stage of the other side (`queries/world_q.py::filings`, the one reader); the verb's effect then writes the
+      case file's stages by the speech's own band (`queries/inputs.py`: `filed`, `excluded`, `answered`). ONE LOADER, `data/verbs.py::FILING_VERBS`, refused at import when a
+      member names a verb the table lacks or one whose row writes no `Record.stages`. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and no act is
+      refused for its cites; the stage writes stay, filing nothing.]
+    values: [speak]
 
   army_verbs:
     source: >-
@@ -3801,29 +3862,12 @@ rosters:
       "which genres it is apt in" column already needs somewhere closed to point at.
     values: [forensic, deliberative, epideictic]
 
-  proof_kind_of_source:
-    source: "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it"
-    from_roster: claim_sources
-    note: >-
-      THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the
-      speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the
-      `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way
-      ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows
-      name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`).
-      [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own
-      words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath;
-      what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four.
-      Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]
-    proof_kind:
-      firsthand: testimony
-      firsthand_via_knot: oath
-      told_by: record
-      inferred: null
-
   ladder_rungs:
-    source: "`18_FINDINGS.md`:180 and §5 item 5 (Fig. 27) -- the forensic ISSUE LADDER a party descends under `interrogation`'s `order: scripted` / `registers: [restricted]`, verbatim: \"deny, cite something incompatible, impugn the motive, concede the fact, concede the harm, hand the error back.\" Plan position `18` (PROC-A)."
+    source: "`18_FINDINGS.md`:180 and §5 item 5 (Fig. 27) -- the forensic CHARGE LADDER a party descends under `interrogation`'s `order: scripted` / `registers: [restricted]`, verbatim: \"deny, cite something incompatible, impugn the motive, concede the fact, concede the harm, hand the error back.\" Plan position `18` (PROC-A)."
     open: true
     note: >-
+      THE CHARGE LADDER (Fig. 27): the positions a party takes under a charge. It is not the issue ladder (`issue_rungs`: the questions a
+      court tries, from procedure to justification); the two share no member.
       ⚠ SIX RUNGS, ORDERED HIGH-TO-LOW (deny is the strongest position; handing the error back
       concedes everything). `speech_kinds` reuses these SAME SIX AS ITS ONLY SIX MEMBERS (below,
       itself flagged partial against the ten `19_PLAN.md` step 7 promises) rather than minting a
@@ -3838,6 +3882,11 @@ rosters:
   # through `data/rosters.py`'s loaders (`GROUNDS`, `PROCEEDING_MOVES`, `PROCEEDING_ENDS`, `ISSUE_RUNGS`, `AUTHORITIES`,
   # `AUTHORITY_BY_FACTION`, `MATTERS`), which refuse a malformed row at import naming it. A row is `{id, <cells>}` in a list, so the
   # order is the roster's and a repeated id is refused.
+  # B24.35 (WGM edit 3's rows' `verb: argue`): THE VERBS WHOSE SPEECH A HEARER'S SUSCEPTIBILITY GATES. `seam/wrappers/sigma.py::_backed` narrows a hearer's grounds only for an act of
+  # these verbs; every other act that proceeds (a `tell`, a `lie`, a `speak` at a sitting) hears him as it always did.
+  backed_verbs:
+    values: [argue]
+
   ground_reads:
     source: "V2 p2 §A.2 -- what a ground's fit reads: a channel of the bearing reading, or the item's `credit` for `evidence`."
     cite: "B24p.01"
@@ -3851,9 +3900,12 @@ rosters:
     cite: "B24p.01"
     note: >-
       THE CLOSED SET `proceeding_moves`' `effect` cell is a member of. `track` -- the speech moves each listener's own track; `strike` --
-      it presses the man who made the point on the table; `yield` -- the speaker concedes the issue; `none` -- he rests. No effect names
-      a winner or a side: the close is each adjudicator's own draw (V2 p2 §D).
-    values: [track, strike, yield, none]
+      it presses the man who made the point on the table; `yield` -- the speaker concedes the issue; `none` -- he rests. B24.03 adds the
+      hearing's five (HEAR_B's six moves): `exhibit` -- a party enters an item of his side on the board; `answer` -- he contradicts a
+      standing item, or a finding that its origin is forged; `impugn` -- he attacks the origin of an opposing item; `rule` -- the bench
+      closes the sitting now; `adjourn` -- the bench holds the stage to the next sitting. No effect names a winner or a side: the close
+      is each adjudicator's own draw (V2 p2 §D), and the hearing's closing draw is the determiner's.
+    values: [track, strike, yield, none, exhibit, answer, impugn, rule, adjourn]
 
   grounds:
     source: "V2 p2 §C.2 (`content[g]`, Reason's share of a speech's dice by ground, R11) and §A.2 (`reads`); V2 p4 §F 10 (`consequence` is pathos, `evidence` alone logos)."
@@ -3864,11 +3916,17 @@ rosters:
       `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone);
       B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2).
       [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.]
+      B24.35 (WGM edits 2-3): `backed_by` (optional) is what has to hold for the ground to BACK an act with a hearer who is moved by it -- a `when` key of
+      `capability_when_keys` (not `rank_at_least`) and its argument. The hearer's own `Person.traits` say which grounds move him (`descriptors.TRAITS[*].seated_by` is a ground id);
+      one who holds none is moved by every ground as before, and one who holds some is moved by those grounds whose `backed_by` holds for this act and by none other
+      (`seam/wrappers/sigma.py::_backed`, `Present.backed`). A ground with no `backed_by` is backed wherever it is a susceptibility.
+      [ASSUMPTION; medium; Jordan to correct: each `backed_by` below is the entry's own, `record` for the cited kind and a regard floor of 3 -- basis: WGM edit 3's four rows' `when`;
+      revert: delete the cell and the ground backs wherever it is a susceptibility.]
     rows:
-      - {id: evidence,    reason: 0.8, reads: item}
-      - {id: consequence, reason: 0.7, reads: want}
-      - {id: authority,   reason: 0.4, reads: hold}
-      - {id: solidarity,  reason: 0.2, reads: bond}
+      - {id: evidence,    reason: 0.8, reads: item, backed_by: {cites: record}}
+      - {id: consequence, reason: 0.7, reads: want, backed_by: {consequence_held: true}}
+      - {id: authority,   reason: 0.4, reads: hold, backed_by: {creed_committed: true}}
+      - {id: solidarity,  reason: 0.2, reads: bond, backed_by: {regard_at_least: 3}}
 
   proceeding_moves:
     source: "V2 p2 §B (a move is read by its `effect`), §A.1 (`rank`, his rank in the proceeding's skill); V2 p4 §F 1 (the ploy is carried by `insincerity` on `argue` and `press`; `deceive` and `divert` are not built)."
@@ -3876,14 +3934,48 @@ rosters:
     note: >-
       THE MOVES A SPEAKER MAY MAKE, ONE ROW EACH, so that no move id is ever compared in code: the module reads `effect` and `draw`.
       `draw: true` moves roll the speaker's dice; `capability` is the skill whose rank joins them and is refused on a `draw: false` row.
-      Whom a move is resisted by is not a cell: Will is the resisting attribute of every listener (A-137, V2 p4 §F 26). B24.03 adds
-      the hearing's moves to THIS roster, never a second one.
-      [ASSUMPTION; Jordan to correct: one skill (`argue`) for both drawing moves -- basis: V2 names "his rank in the proceeding's skill", one rank.]
+      Whom a move is resisted by is not a cell: Will is the resisting attribute of every listener (A-137, V2 p4 §F 26). B24.03 added
+      the hearing's `present`, `answer`, `impugn` and the bench's `rule`, `adjourn` to THIS roster, never a second one; `descends: true`
+      (optional, a bool) says a yield also descends one rung of a type that has an issue ladder (`concede`'s). The sitting reads `descends`
+      and the hearing's five rows; a rite lists the moves it admits, and the `default` and `inquisition` rites name them.
+      `capability` is a skill id, or a map from EACH `issue_rungs` member to one: the rung argued is what is in issue (D-U1-03), so `argue`
+      and `answer` draw on `law` on a rung of procedure or definition and on `argue` on one of fact or justification. A drawing move carries
+      one; a draw-free move none; `rhetoric` is not a skill (the audience reaches the roll as `reception`). A map's rungs are read at the
+      first rung of a rite's `issues` only (`sigma.py`, `rite.issues[0]`); `sigma._rank_key` reads the single-id rows.
+      [ASSUMPTION; Jordan to correct: `impugn` and `press` draw on `argue` on every rung -- basis: an attack on a source is made to the room, not
+      to the rung (HCAP "What draws on what"); revert: a map for the row.]
     rows:
-      - {id: argue,   effect: track,  draw: true,  capability: argue}
-      - {id: press,   effect: strike, draw: true,  capability: argue}
-      - {id: concede, effect: yield,  draw: false}
-      - {id: rest,    effect: none,   draw: false}
+      - {id: argue,   effect: track,   draw: true,  capability: {procedure: law, definition: law, fact: argue, justification: argue}}
+      - {id: press,   effect: strike,  draw: true,  capability: argue}
+      - {id: concede, effect: yield,   draw: false, descends: true}
+      - {id: rest,    effect: none,    draw: false}
+      - {id: present, effect: exhibit, draw: false}
+      - {id: answer,  effect: answer,  draw: true,  capability: {procedure: law, definition: law, fact: argue, justification: argue}}
+      - {id: impugn,  effect: impugn,  draw: true,  capability: argue}
+      - {id: rule,    effect: rule,    draw: false}
+      - {id: adjourn, effect: adjourn, draw: false}
+
+  proceeding_faults:
+    source: "HEAR_B (`05_SC_playable_hearing_B.md`) \"Faults\": a fault is a condition on the typed board, and none names a winner."
+    cite: "B24.03"
+    note: >-
+      THE FAULTS A SITTING RECORDS, in the order HEAR_B states them; a rite lists those that apply. Each is a condition on
+      the board and a cost on the closing draw, never a verdict: no row names a winner or a side, and the bench may still find for the
+      party at fault. `self_contradiction` -- two standing items of one side disagree: the lighter is struck, one level against that side.
+      `silence` -- the bearing side rests with nothing standing on the rung, or the other side rests under an unanswered standing item: two
+      levels against that side on the closing draw, never an automatic concession. `forgery_found` -- recorded only by an `answer` graded
+      Overwhelming: every item of the forged Record's origin is struck. `irrelevance` -- an item entered off the rung tried enters at half
+      weight and counts the fault. The conditions are read by the sitting's code by id.
+      [ASSUMPTION; Jordan to correct: the four ids and the order -- basis: HEAR_B's "Faults" paragraph, which is design intent, not code.]
+    values: [self_contradiction, silence, forgery_found, irrelevance]
+    levels:
+      # THE LEVELS EACH FAULT COSTS THE SIDE AT FAULT on the closing draw, in `fault_step` levels, one cell per fault (a fault with none is refused at load,
+      # `data/rosters.py::_load_fault_levels`; `0` is a fault that costs no level), handed to the module through `Input.dials["fault_levels"]` (`sigma.proceeding_dials`).
+      # [canonical: HEAR_B "Faults" -- one level against the side at fault, and two for silence; `forgery_found` and `irrelevance` cost what they strike or turn away.]
+      self_contradiction: 1
+      silence: 2
+      forgery_found: 0
+      irrelevance: 0
 
   proceeding_ends:
     source: "V2 p2 §C.5 -- the three ends of a sitting."
@@ -3898,9 +3990,11 @@ rosters:
     cite: "B24p.01, A-134"
     note: >-
       THE ISSUES A MATTER MAY BE DIVIDED INTO, in the order a sitting takes them; `weighs` maps a ground to the weight it carries on
-      that issue, and a ground a rung does not name weighs 1.0 (so a rung with no `weighs` names none). B24.03 adds `procedure`.
+      that issue, and a ground a rung does not name weighs 1.0 (so a rung with no `weighs` names none). `procedure` (B24.03) heads them and
+      names none: every ground weighs alike on whether the matter is properly before the court.
       [ASSUMPTION; Jordan to correct: each weight below -- basis: V2 p2 §B's stasis table; the running model is evidence only.]
     rows:
+      - {id: procedure}
       - {id: fact,          weighs: {evidence: 1.25, consequence: 0.75, solidarity: 0.75}}
       - {id: definition,    weighs: {authority: 1.25, consequence: 0.75}}
       - {id: justification, weighs: {consequence: 1.25, solidarity: 1.25, evidence: 0.75}}
@@ -3938,19 +4032,28 @@ rosters:
       holds. `brings` and `cost` are the table's own words as tokens, checked only as present, until a reader names a closed set.
       [ASSUMPTION; Jordan to correct: the spelling of every `brings` and `cost` token and of the `carrier` suffix after the colon --
       basis: V2 p2 §G's table gives them in prose.]
+      `bears_on` (B24.17; EVID_B "Exact edits" 1) is the `issue_rungs` member an exhibit of the kind bears on: an item's `rung` is derived
+      from its kind, read off this column, never typed on the item. It is a member of `issue_rungs`, refused at import
+      (`data/rosters.py::_load_matters`).
+      [ASSUMPTION; Jordan to correct: `fact` for the four kinds `proofs` held (record, testimony, oath, confession) -- basis: EVID_B's
+      "`fact` for all four members"; and `fact` for the other eight -- basis: none in a document, the same reading carried over, so that
+      no kind bears on a rung the evidence rule does not yet weigh (V2 p2 §G names `precedent` as bearing on `definition`, and EVID_B
+      leaves that fifth member to FI, so it stays `fact` here).]
+      [ASSUMPTION: the refusal of a `bears_on` outside `issue_rungs` -- basis: every closed-set column in this roster file is refused
+      by its loader, `_refuse_not_in`'s practice.]
     rows:
-      - {id: record,         carrier: Record,            brings: holder,                cost: disclosure}
-      - {id: testimony,      carrier: "Claim:testimony", brings: witness_or_caller,     cost: speaks_and_may_be_pressed}
-      - {id: deed,           carrier: "Claim:deed",      brings: holder,                cost: names_source}
-      - {id: oath,           carrier: "Tenure:oblige",   brings: party,                 cost: binds_again}
-      - {id: debt,           carrier: "Tenure:oblige",   brings: party,                 cost: spent_when_called}
-      - {id: title,          carrier: "Tenure:hold",     brings: holder,                cost: puts_title_in_question}
-      - {id: precedent,      carrier: case_file_stages,  brings: witness,               cost: none}
-      - {id: law,            carrier: "Record:decree",   brings: anyone,                cost: disclosure}
-      - {id: treaty,         carrier: "Record:covenant", brings: party,                 cost: disclosure}
-      - {id: rumour,         carrier: "Claim:hearsay",   brings: holder,                cost: low_weight}
-      - {id: state_of_realm, carrier: strife_reading,    brings: anyone_in_realm,       cost: none}
-      - {id: confession,     carrier: "Record:confession", brings: bench_or_questioner, cost: none}
+      - {id: record,         carrier: Record,            brings: holder,                cost: disclosure, bears_on: fact}
+      - {id: testimony,      carrier: "Claim:testimony", brings: witness_or_caller,     cost: speaks_and_may_be_pressed, bears_on: fact}
+      - {id: deed,           carrier: "Claim:deed",      brings: holder,                cost: names_source, bears_on: fact}
+      - {id: oath,           carrier: "Tenure:oblige",   brings: party,                 cost: binds_again, bears_on: fact}
+      - {id: debt,           carrier: "Tenure:oblige",   brings: party,                 cost: spent_when_called, bears_on: fact}
+      - {id: title,          carrier: "Tenure:hold",     brings: holder,                cost: puts_title_in_question, bears_on: fact}
+      - {id: precedent,      carrier: case_file_stages,  brings: witness,               cost: none, bears_on: fact}
+      - {id: law,            carrier: "Record:decree",   brings: anyone,                cost: disclosure, bears_on: fact}
+      - {id: treaty,         carrier: "Record:covenant", brings: party,                 cost: disclosure, bears_on: fact}
+      - {id: rumour,         carrier: "Claim:hearsay",   brings: holder,                cost: low_weight, bears_on: fact}
+      - {id: state_of_realm, carrier: strife_reading,    brings: anyone_in_realm,       cost: none, bears_on: fact}
+      - {id: confession,     carrier: "Record:confession", brings: bench_or_questioner, cost: none, bears_on: fact}
 
   disposal_writes:
     source: "V2 p2 §J -- the typed writes the fold performs on a sitting's outcome; `arrangements.yaml: disposal:` names them by id."
@@ -4123,10 +4226,14 @@ rosters:
       thing is the sight a good look gives), a number through the lossy-copy rule (`loop/witness.py::_told_value`); at `Failure` -- no row --
       none, and the reads the row's own cell made (the gating reads) are deposited at every band and on a refusal, as before.
       [ASSUMPTION; medium; Jordan to correct; revert: every look read at every finding band, `held_by` included.]
+      B24.34 (ARCS item 4; [ASSUMPTION; medium; Jordan to correct; revert: drop `holds` from the three bands and from `look_reads`]): `holds` -- WHO HAS A
+      RECORD IN HIS KEEPING, as a claim about the holder -- is listed at EVERY finding band, `Partial` included: the finder learns the person even
+      where `held_by`, the same fact said of the Record, is withheld. That is two bands for one fact, kept because ARCS's gate reads `Partial` and the
+      B11.71 withholding is its own assumption.
     bands:
-      Overwhelming: [stratum, marks, who, condition, stores, held_by, content]
-      Success:      [stratum, marks, who, condition, stores, held_by, content]
-      Partial:      [stratum, marks, condition, stores, content]
+      Overwhelming: [stratum, marks, who, condition, stores, held_by, content, holds]
+      Success:      [stratum, marks, who, condition, stores, held_by, content, holds]
+      Partial:      [stratum, marks, condition, stores, content, holds]
 
   look_reads:
     source: >-
@@ -4139,7 +4246,11 @@ rosters:
       Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is
       `queries/world_q.py::WorldReader.look`, which dispatches on exactly these members and answers nothing for a subject of another class; a
       member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load.
-    values: [condition, stores, held_by, content]
+      B24.34 (ARCS item 4; `12_ARCS_cited_evidence` named an `observation_terms` member `holder`, but `observation_terms` IS `epistemic.Seen`'s struct, a
+      mask over a `seen` claim about a trail, and a look at a Record is not a trail; this roster is the one a look is listed in): `holds` of a Record
+      (`(holder, holds, record)` for each live `hold` a PERSON has over it, the claim about the holder, held WITHOUT taking the hold). Named for its predicate, as
+      every member is. A look never teaches a man a claim about himself (`loop/witness.py`).
+    values: [condition, stores, held_by, content, holds]
 
   covert_kinds:
     source: >-

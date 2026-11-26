@@ -50,7 +50,7 @@ def test_the_thirteen_arrangements_load():
     # v11 CR-34: the first `declared` row (C-7), `quorum: 2` -- `test_cr34_declared_disposal.py` reads the vote.
     assert (exc["close"], exc["quorum"], exc["floor"], exc["records_dissent"], exc["rite"],
             exc["appeal_basis"], exc["disposal_reach"]) == (
-        "declared", 2, "closed", False, "debate", "determine", "realm")
+        "declared", 2, "closed", False, "default", "determine", "realm")        # B24.09: the one default rite, which the six judicial and deliberative rows name
     assert [r for r, row in A.ARRANGEMENTS.items() if row["close"] == "declared"] == [
         "excommunication_deliberation"]
     assert exc["interposed"] == ("procedure", "ceremony") and exc["term_required"] is True
@@ -83,13 +83,34 @@ def test_the_thirteen_arrangements_load():
 def test_the_six_seeded_speech_kinds_load_and_only_impugn_motive_carries_a_cap():
     # `arrangements.yaml`'s `speech_kinds:` reuses `rosters.yaml: ladder_rungs` as its own six ids
     # (see that roster's own note); read it rather than re-typing the six names a third time.
-    assert set(A.SPEECH_KINDS) == set(LADDER_RUNGS)
+    # The loader holds the two to each other (`_load` refuses a disagreement); the shipped rows loaded to import this module.
+    assert len(A.SPEECH_KINDS) == len(LADDER_RUNGS) > 0
     for kind, row in A.SPEECH_KINDS.items():
         if kind == "impugn_motive":
             assert row["reachable_bands"] == ("Partial",), row
         else:
             assert row["reachable_bands"] == (), (
                 f"{kind} carries an authored cap this position's sources do not state: {row}")
+
+
+def test_a_speech_kind_outside_the_ladder_rungs_roster_fails_the_load(monkeypatch, tmp_path):
+    """The loader refuses a `speech_kinds:` row whose id is not a `rosters.yaml: ladder_rungs` rung (and a rung with no row): `_load` run
+    over a copy of the shipped document with a seventh id planted, then with one rung dropped; the shipped document still loads."""
+    doc = load_yaml(A.ARRANGEMENTS_YAML.read_text(encoding="utf-8"))
+    planted = dict(doc["speech_kinds"][0], id="seventh_kind")
+
+    def load_copy(speech_kinds):
+        import yaml
+        path = tmp_path / "arrangements.yaml"
+        path.write_text(yaml.safe_dump(dict(doc, speech_kinds=speech_kinds)), encoding="utf-8")
+        monkeypatch.setattr(A, "ARRANGEMENTS_YAML", path)
+        return A._load()
+
+    assert set(load_copy(list(doc["speech_kinds"]))[4]) == set(LADDER_RUNGS)
+    with pytest.raises(SystemExit, match=r"only in speech_kinds: \['seventh_kind'\]"):
+        load_copy(list(doc["speech_kinds"]) + [planted])
+    with pytest.raises(SystemExit, match=r"only in the roster: \['" + doc["speech_kinds"][0]["id"] + r"'\]"):
+        load_copy(list(doc["speech_kinds"])[1:])
 
 
 def _reload_with(extra_yaml_text: str):

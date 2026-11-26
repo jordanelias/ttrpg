@@ -17,7 +17,7 @@ GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B16-pc-round
 GATE: Batch B20-mb-orders
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B22-mb-armies
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c5, the grid (`IS_A_NINE.md:194`; `IS_A_NINE_part2.md:392`: "B30 | MB | R-04.c5 (the grid) | `test_squad_field.py` green") → `python -m pytest engine/season/tests/test_squad_field.py -q` green on the closing tree; the PC mode 2 reading of `IS_B1_PC_MB_DICE.md` §1.1 row 11 ("**mode 2**: a grid attack is one round") → `IS-PC-02`'s test green. No `status:` edited (A-114).

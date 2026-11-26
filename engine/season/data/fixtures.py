@@ -82,6 +82,9 @@ class Fixtures:
         return self.get("claim_decay_per_season")
 
     def sweep(self, name: str, value: Any) -> "Fixtures":
+        if name in CLOSED_ARMS and value not in CLOSED_ARMS[name]:      # a swept arm is as closed as the shipped one (`load`): a typo would read the other arm silently
+            raise Forbidden(f"`Fixtures {name}` swept to {value!r}", "data/fixtures.py", needs=f"one of {list(CLOSED_ARMS[name])}",
+                            law="B24.21 -- an arm names where a reading comes from; an unknown name would read the ledger silently")
         f = Fixtures(**self._v)
         f._v[name] = value
         return f
@@ -1401,7 +1404,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-612 -- site: Fixtures recall_suspicion, graded `assumption`; the design names a threshold and gives no number, so it ships at 3 (above its audit escape's two) and is swept 1 / 3 / 5, with None the revert]
     recall_suspicion=3,                # `H-612`, swept 1 / 3 (SHIPPED) / 5; `None` the revert (the occasion off)
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
-    # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
+    # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`person_q.proof_kind`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).
     # [ASSUMPTION; medium; Jordan to correct; revert: `off`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-427 -- site: Fixtures proof_admission, graded `assumption`; T13 T5 gives `on` as the calibrated value and no document derives it, so it is injected and swept off / on]
@@ -1562,8 +1565,10 @@ DEFAULT_FIXTURES = Fixtures(
     crisis_obstacle=None,              # `H-473`, swept plain / routine / demanding / hard; None (SHIPPED, absent until B98)
     # B10.57 (`IS-B2-CHAR-02` step 5). THE COMPOSITION ROLES WHOSE NPC PARTY DECIDES A CHOICE BY `decision/decider.py::make_decider`: a wrapper passes that decider as its module's
     # `decide=` only for a role named here and a party the host does not play (`decider.decides_for`); for any other role the module runs its interim policy as it does
-    # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL and SHIPS: no role is named, no
-    # wrapper passes a decider. The first role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
+    # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL: no role is named, no
+    # wrapper passes a decider. A role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
+    # B24.13: `social_contest.proceeding` is read here (`seam/wrappers/sigma.py::_played_by`): a speaker the host does not play decides his move by `make_decider`. NOT LISTED AT SHIP:
+    # the realm's own `tell`/`lie` sittings are one-turn `hearers` closes that ask a move even at `sitting_exchanges` 0, so listing it moves what NPCs say (the flip is B98's).
     npc_decider_roles=(),
     # `H-481` (B10.58; `IS-B2-CHAR-07`, A-108). THE LARGEST STORED MANNER OFFSET A CAST ROW MAY AUTHOR: `data/cast.py::manner_offset_of` refuses a `manner:` value outside
     # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). No row authors an
@@ -1844,7 +1849,53 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`, no cap.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-620 -- site: Fixtures march_cap_per_territory, graded `assumption`; ED-IN-0317 rules the limit and gives one march a season, so it ships at 1 and is swept 0 (control, no cap) / 1 / 2]
     march_cap_per_territory=1,         # `H-620`, swept 0 (control, no cap) / 1 (SHIPPED, IN-36 (a)) / 2
+    # ---- the hearing's settings (B24.07; HEAR_B edit 10, EVID_B `answer_ob`). Read by `proceeding.py` and `evidence.py` through `Input.dials`; four were set at B24.37 (`sitting_exchanges`, `answer_step`, `first_heard_ob`, `evidence_from`) and the rest stand at their control
+    # (`argument_step` is struck: standing arguments are the track, whose setting is `track_step`, `H-903`, so no second ladder is made).
+    # `sitting_exchanges`: whether the attendees at a sitting spend their own act's `effort` as exchanges, a SWITCH read as 0 or 1 (`sigma._rite_of` reads it as truthy). `0` is the control: a sitting has no exchanges beyond the filed items.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. Shipped (B24.37) means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 and the shipped value is `1` -- basis: HEAR_B "shipped: the attendees' effort" and `person_q.effort_of`, "the turns he prepares", B24p.06.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-661 -- `site: Fixtures sitting_exchanges`, graded `assumption`; HEAR_B gives the control and no number, so it is injected at the shipped switch and swept 0 / 1 / 2 (the register wants three distinct points; the switch reads 2 as 1)]
+    sitting_exchanges=1,              # `H-661`, swept 0 (control) / 1 (shipped: the attendees' effort, SHIPPED) / 2 (read as 1: a switch)
+    # `fault_step`: the `LEVEL_SIGMA` name of one fault, a level against the side at fault (never an obstacle term). `None` is the control: a fault brings no level.
+    # [ASSUMPTION; Jordan to correct; revert: `None`. The sweep's two non-control points are `LEVEL_SIGMA`'s two smallest names -- no source states them.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-662 -- `site: Fixtures fault_step`, graded `assumption`; HEAR_B gives no first value, so it is injected at the control and swept None / minor / moderate]
+    fault_step=None,                  # `H-662`, swept None (control, SHIPPED) / minor / moderate
+    # `answer_step`: the obstacle one unit of weight an answered exhibit holds over its answer adds to `answer`'s roll (`answer_ob + answer_step x max(0, w_target - w_answer)`, a hostile term). `0` is the control.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. A new fixture rather than reviving `proof_step`, which OBS §3 deletes; basis R2 §7b-9 #4. The shipped value (B24.37) is the first value, the former `proof_step`'s 0.25.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-663 -- `site: Fixtures answer_step`, graded `assumption`; no document derives the weight unit, so it is injected at the first value and swept 0 / 0.25 / 0.5]
+    answer_step=0.25,                 # `H-663`, swept 0 (control) / 0.25 (first value, SHIPPED) / 0.5
+    # `answer_ob`: the base obstacle of an `answer` (EVID_B `standing` rules: a fixture, proposed 2), before `answer_step`'s weight term and the room's hostile terms.
+    # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points in its H row are the alternatives).]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-664 -- `site: Fixtures answer_ob`, graded `assumption`; EVID_B proposes 2 and no document derives it, so it is injected at 2 and swept 1 / 2 / 4]
+    answer_ob=2,                      # `H-664`, swept 1 / 2 (proposed, SHIPPED) / 4
+    # `lean_level`: the `LEVEL_SIGMA` name of one live commit a bench member holds on a declared sitting's motion (B24.11; `U5c_SC_proceedings_residue.md` §6): each seat's signed count
+    # (`world_q.declared_votes_by_member`) is where his track STARTS, one `lean_level` a commit, read through `level` and the close's own slope (`track_step`), never a leverage source
+    # at the close. `None` is the control: a commit moves no seat. Read only where a declared row is heard, so the shipped value moves no computed play.
+    # [ASSUMPTION; Jordan to correct; revert: `None`. The shipped first value is the smallest name -- no source sizes it; the sweep's points are `LEVEL_SIGMA`'s two smallest.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-671 -- `site: Fixtures lean_level`, graded `assumption`; no document derives the level of one commit, so it is injected at `minor` and swept None / minor / moderate]
+    lean_level="minor",               # `H-671`, swept None (control) / minor (SHIPPED) / moderate
+    # `evidence_cap`: the ceiling on the weight of one corroborated cell (B24.17; EVID_B `standing` rule 4): the same cell, same value, same side, from distinct origins is one item of weight `1 - Prod(1 - w_i)` (FI's
+    # noisy-OR, `ED-IN-0322`), capped at `evidence_cap`; the same origin twice counts once. `evidence.standing` reads it through `Input.dials`; noisy-OR never exceeds 1.0, so a cap >= 1.0 never binds.
+    # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points are the alternatives). EVID_B proposes 2.0 -- basis: none; the sweep's points are the proposed value +/- 1.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-666 -- `site: Fixtures evidence_cap`, graded `assumption`; EVID_B proposes 2.0 and no document derives it, so it is injected at 2.0 and swept 1.0 / 2.0 / 3.0]
+    evidence_cap=2.0,                 # `H-666`, swept 1.0 / 2.0 (proposed, SHIPPED) / 3.0
+    # `evidence_from`: WHERE A DOCKETED MATTER'S `proofs` LEVELS COME FROM (B24.21; EVID_B edit 5), an arm of `EVIDENCE_ARMS`: `ledger` -- `world_q.proofs`, the speaker's own unmirrored deed claims, the
+    # control and as it was; `case_file` -- the exhibits filed on the matter's case file (`seam/wrappers/sigma.py::_exhibits_of`), which `modules/social_contest/roll.py::proof_levels` counts, and the
+    # ledger is then read for that matter by nothing. A matter with no case file reads the ledger at either arm. Nothing files an exhibit in computed play until B24.25, so the arm moved no run before B24.37 set it.
+    # [ASSUMPTION; Jordan to correct; revert: `ledger`. A switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line. B24.37 ships `case_file`: the exhibits filed on the case file are what a docketed matter's roll counts.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-667 -- `site: Fixtures evidence_from`, graded `assumption`; EVID_B gives the two arms and no document says which ships, so it is injected at `case_file` and swept ledger / case_file / case_file at a larger `evidence_cap`]
+    evidence_from="case_file",        # `H-667`, swept ledger (control) / case_file (SHIPPED) / case_file with `evidence_cap` 3.0
+    # `first_heard_ob`: the obstacle an answer to an item first heard at the top band adds to its roll (B24.25, ADM "The resolution, decided": an `Overwhelming` filing is marked first heard and the answering act's
+    # obstacle reads `answer_ob + first_heard_ob` against it; OBS §2 member 11). B24.26 reads it: `proceeding.py`'s `first_heard` term, through `Input.dials`. `0` is the control: the term is then listed by no roll and every hash is what it was.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. ADM proposes 1 and no document derives it, so the proposed value is the sweep's middle point and (B24.37) the shipped one.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-668 -- `site: Fixtures first_heard_ob`, graded `assumption`; ADM proposes 1 and no document derives it, so it is injected at 1 and swept 0 / 1 / 2]
+    first_heard_ob=1,                 # `H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2
 )
+
+#: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
+EVIDENCE_ARMS = ("ledger", "case_file")
+LEDGER_ARM, CASE_FILE_ARM = EVIDENCE_ARMS      # the two arms by name, so a reader spells neither (the unpacking refuses a third)
+#: The fixtures whose value is a closed arm set, refused where it is shipped (`load`) and where it is swept (`Fixtures.sweep`). The readers name the arm by this tuple's member (`sigma.py::_filed_case`, `_exhibits_of`), never by a literal.
+CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
@@ -1866,6 +1917,10 @@ def load() -> None:
         raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
                         needs=f"roles of the composition registry {sorted(composition.ROLES)}",
                         law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
+    for name, arms in CLOSED_ARMS.items():
+        if DEFAULT_FIXTURES.get(name) not in arms:
+            raise Forbidden(f"`Fixtures {name}` is {DEFAULT_FIXTURES.get(name)!r}", "data/fixtures.py", needs=f"one of {list(arms)}",
+                            law="B24.21 -- the arm names where a docketed matter's proofs levels are read from; an unknown name would read the ledger silently")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",

@@ -3988,7 +3988,7 @@ def test_r7_a_silent_seat_change_moves_no_candidate():
         p = w.persons[pid]
         qs = world_q.questions_for(w, p)
         return (frozenset(q.referents for q in qs if q.source == "need"),
-                frozenset((c.verb, c.subject, tuple(sorted((c.operands or {}).items())))
+                frozenset((c.verb, c.subject, tuple(sorted((k, v if getattr(v, '__hash__', None) else repr(v)) for k, v in (c.operands or {}).items())))
                           for q in qs for c in opening_set(p, assemble(p, q, 12), q, w.fixtures)))
 
     def holder(w, seat):
@@ -4734,8 +4734,9 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # and dropped by `binding_of`, so naming them here coins no operand either.
     # v12 B11.10: `said_rank` is `said`'s case again -- the claim's rank among those a telling's fan held, read by the deposit, bound by no cell, dropped by `binding_of`.
     # AND `reconstruct`'s `concluded` / `concluded_rank` / `cites` (B11.72-B11.74): payload keys the deposit reads, bound by no cell, in the same case.
-    from ..data.verbs import CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, SAID_RANK_KEY
-    carry_ok = {"subject", "said", SAID_RANK_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CITES_KEY}
+    # B24.27: `cited` is `cites`' `Said`s (`speak`'s citing variant, copied at CHOOSE for the told deposit), bound by no cell, dropped by `binding_of`.
+    from ..data.verbs import CITED_KEY, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, SAID_RANK_KEY
+    carry_ok = {"subject", "said", SAID_RANK_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CITES_KEY, CITED_KEY}
     carried = {k for a in minted for k in (a.payload or {})}
     assert carried <= set(REQUIRES_OPERANDS) | carry_ok | set(CHOICE_RANGES), (
         f"a minted act carries "
@@ -8653,7 +8654,7 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # folds it through the real seam over 40 seeds (all four bands; the writ minted at each, its `force` the band).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
-                         "determine": "a proposition", "argue": "a proposition",
+                         "determine": "a verdict", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
                          "capture": "the body", "lie": "a standing", "establish": "a seat",
                          "confer": "a seat", "revoke": "a seat", "succeed": "a seat",

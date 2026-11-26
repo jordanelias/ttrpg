@@ -2814,7 +2814,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
 
     heads = {False: [], True: []}       # v10 REM-22: the question each delivery puts FIRST, per arm
     # B12a.99: pinned to the `uniform` endowment arm (the realm the act counts below were measured at). Under the shipped `ground` (B12a.54) with `granary_seasons` 4 (B12a.55) the
-    # two arms read (408, 408) at seed 0, one season, so the act-count parting this test polices (the last assertion) is not observable there; at `uniform` they part, (392, 391) (the pin below).
+    # two arms read (408, 408) at seed 0, one season, so the act-count parting this test polices (the last assertion) is not observable there; at `uniform` they part, (391, 390) (the pin below).
     uniform = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
 
     def season(strip):

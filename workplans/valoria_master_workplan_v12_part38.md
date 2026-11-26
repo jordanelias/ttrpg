@@ -25,7 +25,7 @@ GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B25-fi-questioning
 GATE: Batch B26-fi-inquiry
 GATE: Batch B27-sc-proceedings

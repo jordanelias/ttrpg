@@ -8,10 +8,10 @@ name, ED-SC-0033 clause (2)). The file keeps its name because its automated mode
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
 DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and reads the obstacle's raw
 operands from what the actor and the subject genuinely have -- for a prize a room hears (`heard_by:`),
-that includes the bench's and the opponent's LEDGERS through `queries/world_q.py`'s `reception` and
-`proofs`, a read `04_CODE_ARCHITECTURE.md` §B.2:250 (F8) words for the fold's own ledger query and
-§A.2:168 permits `world_q` ("any store, via World"): the tension is recorded in `hole_register.yaml`
-H-215/H-216, not resolved here -- and freezes them into `queries/inputs.py::SocialContestInput` (the hostile half as the obstacle's
+that includes the room's reading of the actor and the actor's unmirrored proofs through `queries/world_q.py`'s `reception` and
+`proofs`. F8 HOLDS for both (`04_CODE_ARCHITECTURE.md` §B.2:250; B24.02, option B): each reads the ACTOR'S OWN ledger (`claimants[0]`, passed as `actor`) and
+no other, and what the rest of the bench and the opponent have said in public is read off their live `commit` edges, which are World edges
+and in no ledger (`hole_register.yaml` H-215 (7), H-216 (7)) -- and freezes them into `queries/inputs.py::SocialContestInput` (the hostile half as the obstacle's
 `reception` term, what the speaker brings -- `proofs`, a friendly bench's `favour` -- as leverage, B05.17);
 `resolve` (the adapter) calls the module entry the prize row names (`module_entry:`, registered in
 `manifest.MODULE_ENTRIES` from its composition row), keeps S27.4's refusal on the pair it returns, and
@@ -63,7 +63,7 @@ from __future__ import annotations
 import copy
 import functools
 import sys
-from dataclasses import asdict, replace
+from dataclasses import asdict, dataclass, replace
 from types import MappingProxyType, SimpleNamespace
 from typing import Any, Mapping, NamedTuple, Optional
 
@@ -75,18 +75,20 @@ from engine.dice_engine.sigma_leverage import level as sigma_level, levels_to_ne
 from engine.substrate import composition, descriptors
 
 from ...data.affiliations import AFFILIATION_CEILING
+from ...data.fixtures import CASE_FILE_ARM
+from ...decision.decider import decides_for, make_decider
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
-from ...data.rosters import GRADED_TASKS, STANCE_MAX
+from ...data.rosters import FAULT_LEVELS, GRADED_TASKS, STANCE_MAX
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
-                             PROOF_KIND_OF_SOURCE, RUNG_KINDS)
-from ...data.rosters import capability_rows, obstacle_bound, require_use_site, roster, when_holds
-from ...data.verbs import FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
+                             RUNG_KINDS, matter_of_record)
+from ...data.rosters import ACT_WHEN_KEYS, FACTION_BY_PROP, capability_rows, obstacle_bound, require_use_site, roster, when_holds
+from ...data.verbs import BACKED_VERBS, FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...epistemic import NOTICE_ROLL, trail_concealment
 from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
-from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, conflict, false_items, stance_toward, strain_carried,
-                                 takes_side, tie)
+from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, claim_origin, conflict, contradicts, false_items, held_cites, holds_dispute, proof_kind, stance_toward,
+                                 strain_carried, takes_side, tie)
 from ...queries.person_q import care as person_care
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -96,13 +98,14 @@ from ...manifest.providers import provider
 from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS, RESIDENTS, SEAT_BODY, TOWARD_TO, call as _provider_for,
                                   resolve as _prize_row)
 from ...queries import world_q as _world_q
-from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Input, Item, Margin, Outcome, Point, Present, Rite, SocialContestInput,
-                               other_side)
+from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Choice, Input, Item, Margin, Outcome, Point, Present, Rite, SocialContestInput,
+                               is_answered, is_filed, is_first, other_side)
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.faction_q import weight as faction_weight
-from ...queries.world_q import docketed_under, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
-from ...state.carriers import EFFORT, effort_of
+from ...queries.world_q import admitted_kinds, ambitions, case_file_for, declared_votes_by_member, docketed_row, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of, side_of
+from ...state.carriers import EFFORT, Said, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
+from ...state.ids import draw_factory
 from ...state.ledgers import present_confidence
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
@@ -254,7 +257,9 @@ def _units(x: float) -> int:
 
 
 def _proof_levels(fx: Any, operands: dict) -> tuple:
-    """`proofs`' levels: one `proof_level` per whole unit of `operands["proofs"]` -- FOR the roller: `(levels, [])`. Empty where the fixture is `None`."""
+    """`proofs`' levels: one `proof_level` per whole unit of `operands["proofs"]` -- FOR the roller: `(levels, [])`. Empty where the fixture is `None`.
+    B24.21: THE LEDGER'S LEVELS ONLY. For a docketed matter whose case file is the source (`evidence_from: case_file`) `_read_social_roll` hands it `proofs` 0.0, so it brings nothing, and the case file's
+    exhibits bring theirs through the roll (`roll.proof_levels`, counted onto `resolve`'s `levels` by `_with_exhibits`): one matter's proofs are never read from both."""
     level = fx.get("proof_level")
     return ([] if level is None else [level] * _units(operands.get("proofs", 0.0))), []
 
@@ -420,6 +425,67 @@ def advantage_sigma(fx: Any, operands: dict) -> float:
     return levels_to_net_sigma(for_, against)
 
 
+# ---------------------------------------------------------------------------------------------
+# THE FOUR CONDITIONS OF AN ACT (B24.35, WGM edit 2): the `capability_when_keys` members a uses row's reader does not read (`data/rosters.py::ROW_WHEN_KEYS`).
+# Each is the host-side function of one key, `fn(w, ctx, hearer, arg) -> bool`, over `ctx` (the sitting's operands: its arguer `for_id`, its matter `topic`
+# and the kinds the act cites, `cited`) and the HEARER (a `Person`, his interior only): it reads the act's payload, the ARGUER'S OWN ledger and the hearer's
+# interior fields -- his stance, pursuits and live edges -- and never the hearer's ledger (`04` §B.2 F8). `arg` is the ground's `backed_by` value
+# (`rosters.yaml: grounds`). They decide which grounds BACK an act with a hearer (`_backed`, `Present.backed`), where `fit_level` alone sizes what a ground is worth.
+# ---------------------------------------------------------------------------------------------
+def _when_cites(w: Any, ctx: Any, hearer: Any, kind: str) -> bool:
+    """`cites: <matters member>`: the act cites at least one held item of `kind` (`world_q.cited_kinds`, carried as `ctx.cited`)."""
+    return kind in ctx.cited
+
+
+def _matter_subject(w: Any, topic: Optional[str]) -> Optional[str]:
+    """Whom the argued matter is about: the subject of the Proposition `topic` names, else `topic` itself (a matter that is a person or a case)."""
+    prop = w.propositions.get(topic) if topic is not None else None
+    return topic if prop is None else prop.subject
+
+
+def _when_consequence_held(w: Any, ctx: Any, hearer: Any, want: bool) -> bool:
+    """`consequence_held: true`: the ARGUER'S own ledger holds a deed claim about the matter's subject that the HEARER'S own pursuits score against (`person_q.holds_dispute`,
+    the one owner of that judgement, asked of a copy of the hearer carrying the arguer's ledger: his pursuits, stance and scars judge, and his own ledger is never opened)."""
+    arguer, subject = w.persons.get(ctx.for_id), _matter_subject(w, ctx.topic)
+    if arguer is None or subject is None or arguer is hearer:
+        return not want
+    judge = copy.copy(hearer)
+    judge.ledger = arguer.ledger
+    fx = w.fixtures
+    return holds_dispute(judge, subject, fx.get("scar_weight_shift"), fx.get("sworn_bond"), fx.get("deed_counterparty"), fx.get("scar_hold"),
+                         fx.get("scar_primary_mass")) == want
+
+
+def _when_creed_committed(w: Any, ctx: Any, hearer: Any, want: bool) -> bool:
+    """`creed_committed: true`: the matter is a faction's creed Proposition (`FACTION_BY_PROP`) and the hearer holds a live `commit` to it (`world_q.ambitions`, the one owner of
+    a live commit to an OUGHT; his own edges, never a ledger) [ASSUMPTION: the creed half of the design's Authority, kept; basis: the hearer's live Tenures are interior fields]."""
+    return (ctx.topic in FACTION_BY_PROP and ctx.topic in ambitions(w, hearer)) == want
+
+
+def _when_regard_at_least(w: Any, ctx: Any, hearer: Any, n: float) -> bool:
+    """`regard_at_least: n`: the hearer's stance toward the arguer, clamped at `STANCE_MAX` (`person_q.stance_toward`, his own rows), is at least `n`."""
+    return min(stance_toward(hearer, ctx.for_id), STANCE_MAX) >= n
+
+
+#: THE CONDITIONS' BINDING (`_bound_to`: refused at import if `capability_when_keys` and these functions differ either way; `rank_at_least` is a row's, not bound here).
+WHEN_BACKING = _bound_to({"cites": _when_cites, "consequence_held": _when_consequence_held, "creed_committed": _when_creed_committed,
+                          "regard_at_least": _when_regard_at_least}, "capability_when_keys",
+                         members=ACT_WHEN_KEYS,
+                         law="WGM edit 2 -- a `when` key is evaluated by one function, and a ground names only keys that have one")
+
+
+def _backed(w: Any, hearer: Any, ctx: Any) -> Optional[tuple]:
+    """`Present.backed` OF `hearer` FOR THIS ACT (B24.35, WGM edits 2-3): `None` (every ground) for an act whose verb is not a `rosters.yaml: backed_verbs` member, for the arguer
+    himself and for a hearer who holds no trait that a ground seats (`descriptors.TRAITS[*].seated_by`, the grounds that move him); else the tuple of THOSE grounds whose `backed_by` holds -- each of its conditions (`WHEN_BACKING`), the ground's
+    own cell. So a ground must be chosen (the speaker's) AND backed (the act's), and `fit_level` alone sizes what it is worth. [ASSUMPTION; medium; Jordan to correct: the act's arguer
+    is the bearer, `claimants[0]`, for every speech of the sitting; revert: `return None`.]"""
+    held = {descriptors.TRAITS[t].seated_by for t in (hearer.traits or ()) if t in descriptors.TRAITS}
+    moved_by = tuple(g for g in GROUNDS if g in held)
+    if not moved_by or hearer.id == ctx.for_id or ctx.verb not in BACKED_VERBS:
+        return None
+    return tuple(g for g in moved_by if all(WHEN_BACKING[k](w, ctx, hearer, v) for k, v in (GROUNDS[g].get("backed_by") or {}).items()))
+
+
 def _advantage_operands(effort: int, edge: tuple, room_terms: dict, office: Optional[str] = None, regard: Optional[float] = None,
                         body: Optional[tuple] = None, subject_body: Optional[tuple] = None) -> dict:
     """WHAT THE ACT BRINGS, named once: `contest_input` and `believed_input` both reach the sources through here, so they cannot diverge.
@@ -482,8 +548,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     and with no `dice` row a pool of 0 (nothing read the actor's score).
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject), `w.fixtures`, `w.records` (the
-    Record an inquiry examines) and, for a prize a room hears, the bench's and the opponent's ledgers
-    through `queries/world_q.py::reception` and `proofs`; the module that consumes the record never sees
+    Record an inquiry examines) and, for a prize a room hears, the actor's own ledger and the bench's and the opponent's live commits
+    through `queries/world_q.py::reception` and `proofs` (the actor, `claimants[0]`, is the one whose ledger they may read); the module that consumes the record never sees
     `World`. §A.2's wrapper row types the column *"the projection"*: this builder reads `World`, the
     deviation named above (`combat.resolve` is its precedent), CONVENTION. Its precondition is the adapter's
     PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
@@ -515,12 +581,15 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     fx = w.fixtures
     docketed = _docketed_row(w, subject)                                        # the arrangement row the act's matter is heard under, if one is docketed (B05.21)
     room_terms = {}
+    # B24.21 (EVID_B edit 5): WHERE THE PROOFS COME FROM. At `evidence_from: case_file` a matter whose docket item names a case file in the world has its exhibits filed there as its proofs, so the ledger is read for
+    # it by nothing (`proofs` 0.0: `_proof_levels` brings no level, and the exhibits' levels are the roll's own, `roll.proof_levels`); at `ledger` (the control) and for a matter with no case file, `world_q.proofs` as before.
+    case = _filed_case(w, room, subject)
     if room is not None:
         audience = audience_of(w, HeardAct(claimants[0], via, room), heard_by)
         # `toward: to` (U5c §2 edit 4): the room is asked about the receiver, here the act's person counterparty [ASSUMPTION: `to` is the roll's `subject`; no row declares it until `a holding`'s verb lands].
-        room_terms = dict(reception=reception(w, subject if toward == TOWARD_TO else claimants[0], audience),
+        room_terms = dict(reception=reception(w, subject if toward == TOWARD_TO else claimants[0], audience, claimants[0]),
                           reception_gain=fx.get("reception_gain"),
-                          proofs=proofs(w, claimants[0], subject, audience, admitted=_admitted_proofs(fx, docketed)))
+                          proofs=0.0 if case is not None else proofs(w, claimants[0], subject, audience, admitted=_admitted_proofs(fx, docketed)))
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
@@ -552,7 +621,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     concealed = max(doc.forgery_quality if doc is not None else 0.0,
                     trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
     inp = _frame(fx, pool, opposition, concealed, room_terms, effort, verb, edge, circumstance, office,
-                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts)
+                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts,
+                 exhibits=_exhibits_of(w, case) if case is not None else (), side=_side_of(claimants[0], subject))
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
@@ -638,18 +708,135 @@ def _weighing(name: str, raw: float, step: float) -> dict:
     return {"obstacle_operands": ((name, raw, step),)} if raw * step > 0 else {}
 
 
-def _docketed_row(w: Any, subject: Optional[str]) -> Optional[dict]:
-    """The `arrangements.yaml` row the act's matter (its `subject`) is docketed under, or `None`: nothing docketed, an item naming no row (every
-    computed `open_case`, H-80), or more than one row on one matter (a hand-planted docket, which `_eff_determine` declines rather than choosing
-    between: absence refuses, never a guessed row)."""
-    rows = docketed_under(w, subject)
-    (row,) = rows if len(rows) == 1 else (None,)
-    return ARRANGEMENTS.get(row) if isinstance(row, str) else None
+# `_docketed_row` and `_admitted_proofs` are `world_q.docketed_row` and `world_q.admitted_kinds` (B24.25: the speech that files an item and this host read the one row and the one admission).
+_docketed_row, _admitted_proofs = docketed_row, admitted_kinds
 
 
-def _admitted_proofs(fx: Any, docketed: Optional[dict]) -> Optional[tuple]:
-    """The proof kinds the docketed row admits, for `world_q.proofs`' filter -- or `None` for no filter: nothing docketed, or `proof_admission` `off`."""
-    return tuple(docketed["admits"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+# ---------------------------------------------------------------------------------------------
+# THE CASE FILE'S EXHIBITS (B24.21; EVID_B "Exact edits" 5). Where `Fixtures.evidence_from` is `case_file`, the `proofs` a docketed matter's act brings are the exhibits filed on the matter's
+# case file, not the speaker's ledger: this reader turns the file's `filed` stages into the `Item`s `SocialContestInput.exhibits` carries, each with its relation to the others, and
+# nothing else. The host does NOT call `standing` and imports nothing of the evidence module: the roll counts them (`roll.proof_levels`, reached by its composition row, `_with_exhibits`),
+# and a sitting's close counts them (`proceeding._lever`, on `Input.exhibits`, which `proceeding_input` builds by this same reader: B24's close, R1).
+# ---------------------------------------------------------------------------------------------
+# THE STAGES ARE `queries/inputs.py`'s (`is_filed`, `is_answered`: the ONE owner of their shapes; `_eff_speak` writes them, this reads them).
+_CONTRADICTS, _AGREES = "contradicts", "agrees"       # the two relations `Item.pairs` names; the module reads the words, the host does not import it
+
+
+def _filed_case(w: Any, room: Optional[str], subject: Optional[str]) -> Optional[str]:
+    """THE CASE FILE A HEARD ACT'S `proofs` ARE READ FROM, or `None` (B24.21, B24.43): at `evidence_from: case_file`, the file a matter's docket item names where a room hears the act; else `None`, and the ledger
+    is read (`world_q.proofs`). The ONE reader of the arm for the single roll, the dealt record (`_read_social_roll`) and the believed one (`odds_of`), so the two cannot read one matter's proofs
+    from two places. A verb that proceeds never reaches either: its sitting reads the same file by `case_file_for` (`proceeding_input`; a sitting has no room operand)."""
+    return case_file_for(w, subject) if room is not None and w.fixtures.get("evidence_from") == CASE_FILE_ARM else None
+
+
+def _knows(p: Any, ref: Any) -> bool:
+    """DOES `p` KNOW OF A FILED ITEM (B24.43): a claim `ref` where his own ledger holds that cell (his own claim, or the copy a citation told him, B24.24), a Record `ref` where he holds it or holds a claim
+    about it (the content claim a citation of it tells). What he knows was filed is what he heard cited or filed himself. [ASSUMPTION; Jordan to correct; revert: the full case file]"""
+    if isinstance(ref, Said):
+        return any((c.subject, c.predicate, c.value) == (ref.subject, ref.predicate, ref.value) for c in p.ledger)
+    return any(t.kind == "hold" and t.live and t.object == ref for t in p.tenures) or any(c.subject == ref for c in p.ledger)
+
+
+def _relation(a: Said, b: Said) -> Optional[str]:
+    """How two filed claims stand: `contradicts` where the pairing rule's owner says so (`person_q.contradicts`, the one call of `_pair`), `agrees` where they are of the same cell and do
+    not, else `None` (another cell). The same cell is `(subject, predicate)`, the key the owner pairs on."""
+    if (a.subject, a.predicate) != (b.subject, b.predicate):
+        return None
+    return _CONTRADICTS if contradicts(a, b) else _AGREES
+
+
+def _exhibits_of(w: Any, case: str, known: Optional[Any] = None) -> tuple:
+    """THE EXHIBITS OF A CASE FILE, in the order filed: one `Item` for each `filed` stage, its id the stage's place on the file (`<case>#<index>`, the index an answer names), its `side`, `rung`,
+    `weight` and `origin` the stage's, its `kind` what the claim is as proof (`person_q.proof_kind`; a Record's is the kind its `matters` carrier names, as `_items_of`), its `cell` the claim's own, and
+    its `pairs` the relation to every other filed claim (`_relation`). EVERY FILED STAGE IS AN EXHIBIT: the filing admitted it (B24.25 refuses a kind the row does not admit before the draw), so a
+    claim `proof_kind` has no kind for (a cell, which the hearing's gates file) is a `testimony`, the kind of a claim a person holds and tells [ASSUMPTION; Jordan to correct; revert: drop such a stage;
+    basis: `kind` is read by the sitting's admission and by neither the roll nor `standing`]. `answered_band` is the BEST band among the `answered` stages that name the exhibit
+    (the sitting keeps the best, B24.19) and `forged_found` whether any of them cited a finding that the Record is forged (`inputs.ANSWERED_STAGE`, written by `_eff_speak`). `first` is
+    the stage's first-heard mark (`inputs.is_first`, B24.26): an `answer` to the exhibit meets the `first_heard` term.
+    `known` (B24.43) is the believer, a `Person`, or `None` for the dealt record (the whole file): the file as HE knows it (`_knows`), a stage he knows nothing of no exhibit, and no relation
+    to or from it (he cannot see a clash with what he has not heard), the stage places and the answers the file's own."""
+    items = []
+    stages = w.records[case].stages
+    by_target: dict = {}                                    # the `answered` stages by the exhibit they name, in the file's order
+    for sa in stages:
+        if is_answered(sa):
+            by_target.setdefault(sa[2], []).append(sa)
+    for i, st in enumerate(stages):
+        if not is_filed(st) or (known is not None and not _knows(known, st[4])):
+            continue
+        _, _, side, rung, ref, weight, origin, *_ = st
+        rec = None if isinstance(ref, Said) else w.records.get(ref)
+        kind = (proof_kind(ref) or "testimony") if isinstance(ref, Said) else matter_of_record(rec.kind) if rec is not None else "record"
+        iid = f"{case}#{i}"
+        answers = [(_BAND_PLACE[sa[3]], sa[3], sa[4]) for sa in by_target.get(i, ())]      # the answers drawn against this exhibit
+        best = max(answers)[1] if answers else None                                                                                   # the best band, as the sitting keeps it (B24.19)
+        items.append(Item(iid, kind, float(weight), about=ref.subject if isinstance(ref, Said) else ref, side=side, rung=rung, origin=origin,
+                          cell=(ref.subject, ref.predicate, ref.value) if isinstance(ref, Said) else (), answered_band=best,
+                          forged_found=any(imp for _, _, imp in answers), first=is_first(st)))
+    return _paired(items)
+
+
+def _paired(items) -> tuple:
+    """EACH `Item` WITH ITS `pairs` (B24.19's cell): `(other id, _relation of the two cells)` for every other item of `items` that has a `cell`, the relation the pairing rule's
+    owner gives (`person_q.contradicts`, through `_relation`). THE ONE PASS the host computes `Item.pairs` by: a case file's exhibits (`_exhibits_of`) and a sitting's hands with
+    the matter's exhibits together (`proceeding_input`, B24's close R2), so a sitting's `answer`, agreement and corroboration read the same relation as the case file's. An item
+    with no cell (a Record, a seat, an oath, a false word) is paired with nothing."""
+    said = [Said(*it.cell, 0) if it.cell else None for it in items]
+    return tuple(replace(it, pairs=tuple((o.id, how) for o, b in zip(items, said) if o.id != it.id and a is not None and b is not None and (how := _relation(a, b)) is not None))
+                 for it, a in zip(items, said))
+
+
+def _heard_on_docket(verb: str) -> bool:
+    """IS `verb` A HEARING OF A DOCKETED MATTER: its `proceeds:` cell names the docket's row (`speak`, `determine`). The one reading of the cell for the arrangement the docket
+    gives a sitting (`arranged_by`) and for the case file a sitting reads its exhibits from (`proceeding_input`)."""
+    return any(entry[1] == PROCEEDS_DOCKET for entry in getattr(VERB_TABLE.get(verb), "proceeds", ()))
+
+
+def _filed_exhibits(w: Any, verb: str, topic: Optional[str], knower: Any = None) -> tuple:
+    """THE EXHIBITS A SITTING OF `verb` ON `topic` READS FROM THE CASE FILE (`proceeding_input`): `_exhibits_of` of the file the matter's docket item names, as `knower` knows it
+    (`None`: the whole file), at `evidence_from: case_file` for a verb heard on the docket; else `()`."""
+    case = case_file_for(w, topic) if w.fixtures.get("evidence_from") == CASE_FILE_ARM and _heard_on_docket(verb) else None
+    return _exhibits_of(w, case, known=knower) if case is not None else ()
+
+
+def _sitting_items(w: Any, room: tuple, exhibits: tuple) -> tuple:
+    """`(room, exhibits)` OF ONE SITTING, PAIRED (B24's close, R1 and R2): every item in a hand and every filed exhibit, each with its relation to all the others (`_paired`, one
+    pass), so an item filed and also held is the same cell to `evidence.standing` (the same origin corroborates once, the other side's same cell counts for neither). A Record
+    filed on the case file has no cell to pair by, so it leaves its holder's hand: it is before the room already, and shown twice it would count twice."""
+    filed = {e.about for e in exhibits if not e.cell and e.about in w.records}
+    hands = [tuple(it for it in p.items if it.id not in filed) for p in room]
+    paired = _paired((*exhibits, *(it for h in hands for it in h)))
+    out, k = [], len(exhibits)
+    for p, h in zip(room, hands):
+        out.append(replace(p, items=paired[k:k + len(h)]))
+        k += len(h)
+    return tuple(out), paired[:len(exhibits)]
+
+
+def _on_axis(exhibits: tuple, bearer_side: str) -> tuple:
+    """THE EXHIBITS ON A SITTING'S AXIS: a filed stage's `side` is the case's (`world_q.side_of`: `for` the accusation, `against` the accused's own plea), a sitting's is the
+    bearer's (`for` is `claimants[0]`, `proceeding_input`). Where the bearer is on the case's `against` (the accused speaking to his own matter) every side turns over; else
+    they are the same axis and nothing changes."""
+    if bearer_side == "for":
+        return exhibits
+    return tuple(replace(e, side=None if e.side is None else other_side(e.side)) for e in exhibits)
+
+
+_side_of = side_of     # `world_q.side_of`: the side a speech to a matter is on, read by the host's roller and by the speech that files his exhibits (B24.25)
+
+
+PROOF_LEVELS_ROLE = "social_contest.proof_levels"   # the composition row whose module counts the filed exhibits' levels (`roll.proof_levels`)
+
+
+def _with_exhibits(inp: SocialContestInput, levels: tuple) -> tuple:
+    """`(levels, leverage)` AS ROLLED: the record's own `levels` (`_levels_count`) and `leverage` with the filed exhibits' levels added, the counts the roll's own reader gives (`roll.proof_levels`,
+    by role) put on the `proofs` member and one `proof_level` each through the one level table -- exactly what `roll.leverage` applies, so the record names what was rolled. Unchanged where nothing is
+    filed or `proof_level` names no level (the control)."""
+    n_for, n_against = composition.require(PROOF_LEVELS_ROLE)(inp) if inp.exhibits and inp.proof_level is not None else (0, 0)
+    if not (n_for or n_against):
+        return levels, inp.leverage
+    return (tuple((name, f + n_for, a + n_against) if name == "proofs" else (name, f, a) for name, f, a in levels),
+            inp.leverage + levels_to_net_sigma([inp.proof_level] * n_for, [inp.proof_level] * n_against))
 
 
 def _regard_of(w: Any, actor: str, subject: Optional[str], room: Optional[str]) -> Optional[float]:
@@ -812,7 +999,8 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
-           regard: Optional[float] = None, bodies: tuple = (None, None), counts: Optional[dict] = None) -> SocialContestInput:
+           regard: Optional[float] = None, bodies: tuple = (None, None), counts: Optional[dict] = None,
+           exhibits: tuple = (), side: str = "for") -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -827,6 +1015,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
         forgery_quality=forgery_quality,
+        exhibits=exhibits, proof_level=fx.get("proof_level"), side=side, evidence_cap=fx.get("evidence_cap"),     # B24.21: the four the roll's `proof_levels` reads, carried RAW; leverage, never an obstacle operand
         **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
                                      reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard,
                                      **(counts or {}))),
@@ -840,7 +1029,9 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
 # `queries/person_q.py`'s (B04.22: the read the confer term also makes). NOTHING DEPOSITS ONE TODAY, so a believed
 # opposition is `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
-QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at driver construction (`registrar.require_entries`)
+BENCH_READ_ROLE = "social_contest.bench_read"   # the composition row whose module takes the sign of a lean as a viewer reads it (`proceeding.read_sign`)
+P_CARRIED_ROLE = "social_contest.p_carried"     # the composition row whose module gives P(carried) at a track (`proceeding.p_carried`), the chooser's believed chance
+QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"), (PROOF_LEVELS_ROLE, "query"), (BENCH_READ_ROLE, "query"), (P_CARRIED_ROLE, "query"))  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
 
 def _composed_obstacle(inp: SocialContestInput) -> float:
@@ -860,7 +1051,7 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
     ob = _composed_obstacle(inp)
     if ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return None
-    return record_odds(inp.pool, ob, inp.leverage)
+    return record_odds(inp.pool, ob, _with_exhibits(inp, ())[1])      # the leverage AS ROLLED: the filed exhibits' levels the roll applies (`roll.leverage`), read by the same count
 
 
 _ORDINARY = SimpleNamespace(capability={}, attributes={}, traits=())    # AN ORDINARY PERSON, the one `believed_prior` `ordinary` takes an unknown opponent for: he holds nothing (B05.62)
@@ -877,7 +1068,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                    pool: float, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
                    effort: int = 0, office: Optional[str] = None, docketed: Optional[dict] = None,
-                   tick: int = 0) -> Optional[SocialContestInput]:
+                   tick: int = 0, exhibits: tuple = ()) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
 
     AX-2: it reads `p` (his own ledger) and the fixtures, never the World; the
@@ -899,14 +1090,17 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         difficulty (the verb row's, public).
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
         -> unknown.
-      * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
-        passes his own believed `room` (`{"reception": .., "proofs": ..}`).
+      * the room's terms (`reception`, `proofs`) read the bench's and the opponent's public commits, which are not the believer's own
+        claims: unknown unless the caller passes his own believed `room` (`{"reception": .., "proofs": ..}`).
     His `effort` is his own act's, held with certainty like his pool (CP-T01-05), and so is the level of the seat he acts through
     (`office`, B05.20): the caller's, read off the seat's own row (`_seat_modifier`), as `person_subject` is the caller's. So is the arrangement
     row the matter is docketed under (`docketed`, B05.21): the docket is public, the caller reads it. THE COUNTERPARTY'S STANCE TOWARD THE ACTOR IS
     HIS INTERIOR, held in no claim of the believer's: where `regard_step` is not 0 and one person stands alone opposite, it is unknown to him (`None`),
     never a figure; at 0 the term reads nothing, so the answer is as it was; AT THE `ordinary` PRIOR it is read neutral (regard 0, an ordinary
-    person's), so he gets a figure."""
+    person's), so he gets a figure.
+    `exhibits` (B24.43) are the items of the matter's case file that HE knows were filed (`_exhibits_of(w, case, known=him)`, which `odds_of` reads: the file is public, the docket's), at
+    `evidence_from: case_file`; they reach the record through `_frame` as the dealt record's do, and the `proofs` of `room` are then zero (`odds_of` hands them so), as the dealt record's are:
+    one matter's proofs are never read from both. `()` at `ledger`, where nothing is filed to know."""
     roles = {r.role for r in _social_rows()}
     decay = fx.claim_decay()        # B09.01: his claims are read at `tick`, faded (`state/ledgers.py::present_confidence`), never as stored
     ordinary = fx.get("believed_prior") == "ordinary"        # B05.62 (H-435): a person he holds no claim about is taken for an ordinary one
@@ -957,7 +1151,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"), proofs=room["proofs"])
     return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance, office,
-                  docketed=docketed, heard=heard, bodies=(_body_of(p), None))      # his own body is his to know; another person's is not without a claim (B05.60)
+                  docketed=docketed, heard=heard, bodies=(_body_of(p), None), exhibits=exhibits, side=_side_of(p.id, subject))      # his own body is his to know; another person's is not without a claim (B05.60)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
@@ -1077,12 +1271,15 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
                                             examined=examined, effort=effort, via=act.via,
                                             seat=seat,
                                             **hearing))
+    case = _filed_case(w, room, subject)        # B24.43: the dealt record's own reading of where the proofs come from
     inp = believed_input(believer, act.verb, subject, w.fixtures,
                          pool=faculty(w, believer, act.verb),
                          person_subject=bool(subject) and subject in w.persons,
                          examined_record=examined is not None and examined in w.records,
-                         room=believed_room, heard=room is not None, effort=effort, office=_seat_modifier(w, act.via, room),
-                         docketed=_docketed_row(w, subject), tick=w.tick)
+                         room=believed_room if case is None or believed_room is None else {**believed_room, "proofs": 0.0},
+                         heard=room is not None, effort=effort, office=_seat_modifier(w, act.via, room),
+                         docketed=_docketed_row(w, subject), tick=w.tick,
+                         exhibits=_exhibits_of(w, case, known=believer) if case is not None else ())
     return None if inp is None else _odds_of_input(inp)
 
 
@@ -1143,7 +1340,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             rung: Optional[str] = None,
             module_entry: Optional[str] = None, effort: int = 0, host: Any = None, via: Optional[str] = None,
             proceeds: Optional[tuple] = None, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0,
-            seat: Optional[str] = None) -> dict:
+            seat: Optional[str] = None, first_heard: bool = False, cited: tuple = (), answered_over: Optional[float] = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
@@ -1152,7 +1349,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     opponent is another operand, the docket's matter where the opponent is the `subject`). Given, the act is a PROCEEDING instead: `_resolve_proceeding` builds the
     room (`proceeding_input`), calls the entry the composition row `social_contest.proceeding` names, holds its return to an `Outcome` of
     `Margin` verdicts and reads the act's record off it (`act_band`). `prize`, `rung`, `module_entry` and `via` are not read on that path.
-    `arranger` and `rig` (B24p.24) are the arrangement the docket gave the sitting (`arranged_by`), read by the builder on that path alone.
+    `arranger` and `rig` (B24p.24) are the arrangement the docket gave the sitting (`arranged_by`), read by the builder on that path alone. `first_heard` (B24.26) is
+    `world_q.answers_first` of the act, read on that path alone. `cited` (B24.35) is `world_q.cited_kinds` of the act, read on that path alone. `answered_over` (B24.43) is `world_q.answered_over` of the act, read on that path alone.
 
     `host` (v10 REM-31) is accepted and NOT USED HERE: the seam's call is uniform, and only the
     personal-combat provider has a PLAYABLE mode (`seam/wrappers/combat.py::resolve`).
@@ -1219,7 +1417,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             raise InstrumentDefect(f"{__name__}.resolve was handed no `rng` by {caller.f_globals.get('__name__', '?')}.{caller.f_code.co_name}: "
                                    f"a proceeding is drawn on the act's own generator, passed down by parameter (04 §C.12)")
         return _resolve_proceeding(w, claimants, rng, verb=verb, subject=subject, topic=topic, effort=effort, proceeds=proceeds,
-                                   arranger=arranger, rig=rig)
+                                   arranger=arranger, rig=rig, host=host, first_heard=first_heard, cited=cited, answered_over=answered_over)
     # The room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
@@ -1252,6 +1450,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     # B05.14: every term of the obstacle, named, on the roll's record -- `Margin.terms`, the entry's own (`roll.py::obstacle`); it replaces
     # lane A's `ob_terms` dict (C3-L5). A stub entry's `()` is a margin with no composition behind it.
     terms = margin.terms
+    levels, leverage = _with_exhibits(inp, levels)      # B24.21: the filed exhibits' levels the roll applied (`roll.proof_levels`), named on the record beside the host's own sources
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, terms=terms,
@@ -1262,7 +1461,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     settled = margin.net - margin.ob
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage, settled_margin=settled,
+                **asdict(margin), leverage=leverage, settled_margin=settled,
                 levels=levels, fed_by=_fed_by(reads, inp, terms))
 
 
@@ -1287,6 +1486,11 @@ PROCEEDING_SETTINGS = (
     # the host
     "start_step", "presume_step", "power_scale", "strain_fade", "recuse_at",
 )
+#: THE SIX SETTINGS THE HEARING'S BOARD READS (B24.06, HEAR_B edit 10; `H-216`, `H-662` to `H-664`; B24.19, `H-666`; B24.26, `H-668`), beside the fifty-four: the closing draw's
+#: `proof_level` (one per whole unit of net standing weight) and `fault_step` (one per level owed), an `answer`'s `answer_ob` (its difficulty) and `answer_step`
+#: (the weight term), `evidence_cap` (what corroboration may gain, read by `evidence.standing`) and `first_heard_ob` (what an answer to an item first heard adds).
+#: Not V2's settings, so not in `PROCEEDING_SETTINGS`; `proceeding_dials` names both tuples.
+HEARING_SETTINGS = ("proof_level", "fault_step", "answer_ob", "answer_step", "evidence_cap", "first_heard_ob")
 
 
 def proceeding_dials(fx: Any) -> Any:
@@ -1294,12 +1498,13 @@ def proceeding_dials(fx: Any) -> Any:
     beside the dice settings the proceeding shares with the single roll -- `pool_add` and `pool_floor` (`pool_pair`, the one reader of
     the `social_roll` site's `dice` row), `pool_default` and `opposition_rate` -- and the attribute scale's three numbers
     (`descriptors.ATTRIBUTE_FLOOR` and `ATTRIBUTE_CEILING`, and `pool.attribute_midpoint()`, the one mid-point), sixty-one names in all,
-    as a read-only mapping. The fold's `fold_*` coefficients are not in it. `proceeding_input` (B24p.13) reads it and adds the two rosters
-    the module is handed (`moves`, `reads`), which are not settings."""
+    as a read-only mapping (sixty-five with B24.06's four). The fold's `fold_*` coefficients are not in it. `proceeding_input` (B24p.13) reads it and adds the two rosters
+    the module is handed (`moves`, `reads`), which are not settings. B24.06 adds the four `HEARING_SETTINGS` the board reads (`Input.dials`, B24.05)."""
     pool_add, pool_floor = pool_pair(fx)
-    d = {name: fx.get(name) for name in PROCEEDING_SETTINGS}
+    d = {name: fx.get(name) for name in PROCEEDING_SETTINGS + HEARING_SETTINGS}
     d.update(pool_add=pool_add, pool_floor=pool_floor, pool_default=fx.get("pool_default"), opposition_rate=fx.get("opposition_rate"),
-             attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING)
+             attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING,
+             fault_levels=FAULT_LEVELS)       # not a setting but a roster the module is handed (`rosters.yaml: proceeding_faults.levels`), as `moves` and `reads` are
     return MappingProxyType(d)
 
 
@@ -1316,8 +1521,6 @@ def proceeding_dials(fx: Any) -> Any:
 ERA, REGIME, STRIFE = "plain", "crown", "peace"
 
 _SIX = ("focus", "reason", "attunement", "presence", "grace", "will")      # the six attributes a `Present` carries, by the module's names
-#: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated.
-_RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
 
 
 class Arrangement(NamedTuple):
@@ -1343,6 +1546,9 @@ class _Sitting(NamedTuple):
     factions: dict
     presume: float
     rank_key: Optional[str]
+    lean: Optional[tuple] = None     # B24.11: `((member, signed live commits on the motion), ...)` of a `declared` sitting (`world_q.declared_votes_by_member`), else `None`
+    cited: tuple = ()                # B24.35: the `matters` kinds the act's cited items are (`world_q.cited_kinds`), what `cites` reads
+    verb: str = ""                   # B24.35: the act's verb, which `_backed` asks `rosters.yaml: backed_verbs`
 
 
 def _refuse(key: str, why: str) -> None:
@@ -1368,13 +1574,18 @@ def _rung_ordinal(w: Any, office: Any) -> int:
     return RUNG_KINDS.index(rung.kind) if rung is not None else 0
 
 
+def _top_seat(w: Any, pid: str) -> Optional[Any]:
+    """His highest seat (by rung ordinal, then id), or `None` for a man with none: the one seat `_power` and the declared ballot (`_ballot_start`) read."""
+    seats = _seats_held(w, pid)
+    return max(seats, key=lambda o: (_rung_ordinal(w, o), o.id)) if seats else None
+
+
 def _power(w: Any, pid: str, regime: dict) -> tuple:
     """`(power, precedence)` of a person (V2 p2 §H): his highest seat's rung ordinal, plus twice the level of its `modifier`, plus the
     regime's weight for the authority of its faction. A man with no seat has none (0, 0)."""
-    seats = _seats_held(w, pid)
-    if not seats:
+    top = _top_seat(w, pid)
+    if top is None:
         return 0.0, 0
-    top = max(seats, key=lambda o: (_rung_ordinal(w, o), o.id))
     rank = _rung_ordinal(w, top)
     modifier = 2.0 * sigma_level(top.modifier) if top.modifier else 0.0
     return rank + modifier + regime["power"].get(AUTHORITY_BY_FACTION.get(top.faction), 0.0), rank
@@ -1389,17 +1600,25 @@ def _lawful(regime: dict, row: dict) -> bool:
 
 
 def _rite_of(fx: Any, verb: str, row: dict, effort: int, regime: dict, strife: dict) -> Rite:
-    """The rite's cells with the row's, then the context's deltas (V2 p2 §B, §I). Every number here is a cell of a table or a setting."""
+    """The rite's cells with the row's, then the context's deltas (V2 p2 §B, §I). Every number here is a cell of a table or a setting.
+
+    B24.10 (HEAR_B edit 6; `IS-B2-SC-03` step 3): THE RITE IS READ OFF THE ARRANGEMENT ROW (`row["rite"]`), with the hearing's cells it carries (the bench's own
+    moves beside the two sides', `faults`, `disclosed`, `bears_by_rung`). THE SWITCH: a BENCH'S OWN SITTING (a row whose `close` is `bench` or `declared`, in the full
+    form: `abridged` is a speech, whose close is `exchange`) spends no exchange at `Fixtures.sitting_exchanges` 0 (the control): its turns are `(0, 0)`, so
+    nobody speaks and the close is the one draw it was before the hearing, through the same `roll` (HEAR_B gate 1)."""
     cells, (lo, hi) = RITES[row["rite"]], row["turns"]
+    if row["close"] in ("bench", "declared") and not fx.get("sitting_exchanges"):
+        lo = hi = 0
     silence = cells["silence"]
     if regime["silence"] is not None and not (silence == "free" and "must" not in cells["reply"].values()):
         silence = regime["silence"]
     if silence == "free" and "must" in cells["reply"].values():
         silence = "refusal"                                   # never free where an answer is owed (A-145; V2 p4 §L 6)
     admits = tuple(dict.fromkeys(k for k in (*row["admits"], *regime["admits_add"]) if k not in regime["admits_drop"]))
-    moves = row.get("moves") or cells["moves"]
+    moves = row.get("moves") or {**cells["moves"], **({"bench": cells["bench"]} if cells["bench"] else {})}
     return Rite(id=cells["id"], live=cells["live"], bears=cells["bears"], reply=tuple(cells["reply"].items()), silence=silence,
                 issues=tuple(cells["issues"]), concede=cells["concede"], moves=tuple((s, tuple(ms)) for s, ms in moves.items()),
+                faults=tuple(cells["faults"]), disclosed=cells["disclosed"], bears_by_rung=tuple(cells["bears_by_rung"].items()),
                 weighs=tuple((i, tuple(ISSUE_RUNGS[i]["weighs"].items())) for i in cells["issues"] if ISSUE_RUNGS[i]["weighs"]),
                 close=row["close"], turns=max(lo, min(hi, effort + 1 + strife["turns"])), quorum=row.get("quorum"),
                 standard=attribute_midpoint() + DIFFICULTY_LEVELS.index(row["standard"]) + regime["standard"],     # [ASSUMPTION; Jordan to correct: mid plus the level's ordinal -- basis: V2's model reads plain 4, formal 5, solemn 6]
@@ -1442,7 +1661,7 @@ def _holds(p: Any, bears: dict) -> tuple:
 def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
     """The things he holds of the kinds the rite admits (V2 p2 §G), from his own edges and his own ledger: the `Record`s he holds (a kind a
     `matters` row names by its carrier, else `record`), the seats he holds (`title`), the oaths he swore, the claims he holds on the matter (by
-    the kind of their source, `PROOF_KIND_OF_SOURCE`), and, for a speaker, his own false word (`false_items`). `debt` (an oath owed to him is on
+    the kind of proof each is, `person_q.proof_kind`: a cell or a withheld confession is none and is no item), and, for a speaker, his own false word (`false_items`). `debt` (an oath owed to him is on
     the debtor's side) and `precedent`, `confession` and `state_of_realm` (the case file and the strife reading) have no carrier he holds `[HOOK]`."""
     out = []
     for t in p.tenures:
@@ -1450,20 +1669,35 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
             continue
         if t.kind == "hold" and t.object in w.records:
             rec = w.records[t.object]
-            out.append(Item(rec.id, _RECORD_MATTER.get(rec.kind, "record"), 1.0, source=p.id))
+            out.append(Item(rec.id, matter_of_record(rec.kind), 1.0, source=p.id, origin=rec.id))     # a Record's origin is itself (`world_q.filings`' rule)
         elif t.kind == "hold" and t.object in w.offices:
             out.append(Item(t.id, "title", 1.0, source=p.id, about=t.object))
         elif t.kind == "oblige" and not t.imposed and t.subject == p.id:
             out.append(Item(t.id, "oath", 1.0, source=p.id, about=t.object))
     if ctx.topic is not None:
         full, decay = ctx.fx.get("confidence_default"), ctx.fx.claim_decay()
-        for c in p.ledger:
-            kind = PROOF_KIND_OF_SOURCE.get(c.source)
-            if c.subject == ctx.topic and kind is not None:
-                out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject))
+        for c in (held_cites(p.ledger, ctx.topic) if p.id != ctx.topic else ()):      # the claims a speech may cite (`person_q.held_cites`, the one owner of whose deed a claim is), and none on his own plea (`opening_set`'s, `world_q.proofs`' rule): his own deed presented by him would count for his side
+            kind = proof_kind(c)
+            out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject,
+                            rung=MATTERS[kind]["bears_on"],              # the rung the matter bears on (`world_q.filings`' rule), so `irrelevance` and the half-weight off-rung entry can fire
+                            cell=(c.subject, c.predicate, c.value),      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)
+                            origin=claim_origin(c.chain, p.id)))     # the root of its chain, else his own (`world_q.filings`' rule): what `impugn` halves by (R2)
         if side is not None:
             out.extend(false_items(p, ctx.topic, side, ctx.fx, w.tick))
     return tuple(it for it in out if it.kind in ctx.admits)
+
+
+def _ballot_start(fx: Any, signed: int, modifier: Optional[str]) -> float:
+    """B24.11 (`U5c_SC_proceedings_residue.md` §6 items 2 and 3): WHERE A SEAT'S TRACK STARTS AT A `declared` SITTING, in track units, the close's own slope (`track_step`) turning each
+    level into the start that closes on it: `signed` (his live commits for the motion less those against, `world_q.declared_votes_by_member`) times one `lean_level` a commit, plus
+    the one level his seat row's `modifier:` names (his help on his own ballot, D-U1-01; none where the row names none), each read through `level`. A seat's commits are where his
+    track starts, never a leverage source at the close (V2 p1 §B D8; `lean` is not an `advantage_sources` member). `0.0` for a `track_step` of 0, and no commit moves him at a
+    `lean_level` of `None` (the control) [ASSUMPTION; medium; Jordan to correct; revert: drop the `modifier` term -- the seat's help enters his start in the same units as a
+    commit because the module has no per-seat leverage channel; `_power` already reads the modifier for his station]."""
+    step, lean = fx.get("track_step"), fx.get("lean_level")
+    if not step:
+        return 0.0
+    return ((signed * sigma_level(lean) if signed and lean is not None else 0.0) + (sigma_level(modifier) if modifier else 0.0)) / step
 
 
 def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) -> Present:
@@ -1481,31 +1715,60 @@ def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) 
     bonds = tuple((q, b) for q in ctx.room if q != p.id
                   and (b := tie(p, q, edges=p.tenures, shared_faction=ctx.factions[q] is not None and ctx.factions[q] == ctx.factions[p.id])))
     start = fx.get("start_step") * (ltr_sum(stake) / BEARING_PARTS) + (ctx.presume if decides and side is None else 0.0)
+    if decides and ctx.lean is not None:
+        top = _top_seat(w, p.id)
+        start += _ballot_start(fx, dict(ctx.lean).get(p.id, 0), top.modifier if top is not None else None)      # B24.11: a declared seat's commits and his seat's help
     power, precedence = _power(w, p.id, ctx.regime)
     return Present(id=p.id, weight=int(p.weight), side=side, decides=decides, **attr,
                    rank=float((p.capability or {}).get(ctx.rank_key) or 0) if ctx.rank_key else 0.0,
                    care=care, stake=stake, bonds=bonds, start=start, holds=_holds(p, ctx.bears),
                    believes=believes(p, ctx.topic, fx, w.tick) if ctx.topic is not None else 0.0,
                    bias=0.0,                                  # [HOOK: his stable misjudgement has no carrier]
-                   power=power, precedence=precedence, items=_items_of(w, p, ctx, side),
+                   power=power, precedence=precedence, items=_items_of(w, p, ctx, side), backed=_backed(w, p, ctx),
                    # what he carries in is the rattles of this season's sittings (`world_q.rattled_since`, B24p.20), his OWN: a person a chooser pictures
                    # (`_Believed`'s shell, an ordinary man) is no world's person and carries none
                    strain=strain_carried(rattled_since(w, p.id) if w.persons.get(p.id) is p else (), fx))
 
 
-def _rank_key() -> Optional[str]:
+def _rank_key(issue: Optional[str] = None) -> Optional[str]:
     """The one skill whose rank joins the dice of a drawing move (`rosters.yaml: proceeding_moves`' `capability`; V2 p2 §A.1: `rank` is one
-    number, his rank in the proceeding's skill), read as `pool._capability` reads a verb's skill: off the person's `capability`."""
-    keys = {m.get("capability") for m in PROCEEDING_MOVES.values() if m["draw"]} - {None}
+    number, his rank in the proceeding's skill), read as `pool._capability` reads a verb's skill: off the person's `capability`.
+    B24.10 (HEAR_B edit 6; HCAP edit 6): a `capability:` cell is a skill id or a MAP by issue rung (B24.04), read AT `issue`, the rung the sitting opens on
+    (the first of its rite's issues); a sitting with no issue ladder (a speech) has no rung to key a map, so only a single-id cell names its skill.
+    Every drawing move must name the same skill at that rung, since `Present.rank` is one number a sitting: a rung where two moves name two (`argue` on
+    `law` at a definition, `press` on `argue`) is a sitting the module must read `rank` per rung for, which this reader refuses rather than choose."""
+    keys = {k for m in PROCEEDING_MOVES.values() if m["draw"]
+            for k in ((m["capability"],) if isinstance(m["capability"], str) else (m["capability"].get(issue),)) if k is not None}
     if len(keys) > 1:
-        raise Unspecified(f"the drawing moves name {sorted(keys)} as their skill", "rosters.yaml -- proceeding_moves", needs="one skill",
+        raise Unspecified(f"the drawing moves name {sorted(keys)} as their skill at {issue or 'a sitting with no issue ladder'}",
+                          "rosters.yaml -- proceeding_moves", needs="one skill",
                           law="V2 p2 §A.1 -- `Present.rank` is his rank in the proceeding's skill, one number")
     return next(iter(keys), None)
 
 
+def public_lean(w: Any, close: str, topic: Optional[str], row: dict) -> Optional[tuple]:
+    """B24.29: `((member, signed live commits on the motion), ...)` of a `declared` sitting (`world_q.declared_votes_by_member`: a commit is public), else `None`. The one
+    reader of the bench's public lean: `proceeding_input` starts each seat's track on it, `_resolve_proceeding` writes its signs on the sitting."""
+    return tuple(declared_votes_by_member(w, topic, row).items()) if close == "declared" and topic is not None else None
+
+
+def bench_reading(w: Any, viewer: str, sitting: str, seat: str, sign: int) -> int:
+    """B24.29 (V2 p2 §C.6; A-30): THE SIGN OF `seat`'s LEAN AS `viewer` READS IT, `sign` (+1 or -1) the sign the sitting `sitting` (its Event id) wrote of it. A KEYED DRAW, `H(seed, tick, viewer,
+    "bench_read:<sitting>:<seat>")`, ONE STREAM A READING (`draw_factory`; two sittings of one tick that share a seat and a viewer read on two streams): the module's `read_sign` (`BENCH_READ_ROLE`) takes
+    it and his Attunement and returns the sign he holds -- the true one with chance `(1 + acc) / 2` (`acc` the module's own `accuracy`, his Attunement alone, opposed by nothing, with the stream's first normal
+    for luck; the rest a guess, as `_Believed`'s reading of a claim), so a wrong sign is possible at every Attunement and a truer one is likelier at a higher. The host keeps the stream and reads his own
+    Attunement (`w.persons[viewer]`); it decides nothing of the outcome and reads nothing of the seat; it writes nothing (`loop/witness.py::_sitting_claims` deposits it in his own ledger).
+    [ASSUMPTION; medium; Jordan to correct; basis: the entry's chance `acc` for a two-valued sign; read so, a man below the scale's middle would be wrong more often than right,
+    and the gate asks a share above 0.5 at Attunement 2; revert: `d.random() < acc`]"""
+    d = draw_factory(w.world_seed, lambda: w.tick)(viewer, f"bench_read:{sitting}:{seat}")
+    attunement = (w.persons[viewer].attributes or {}).get(descriptors.ATTRIBUTE_NAMES["attunement"])
+    return composition.require(BENCH_READ_ROLE)(proceeding_dials(w.fixtures), attribute_midpoint() if attunement is None else attunement, sign, d)
+
+
 def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[str], topic: Optional[str], effort: int, row: dict,
                      arranger: Optional[str] = None, rig: float = 0.0, form: str = "auto", state: Any = None,
-                     seen: Optional[Mapping] = None) -> tuple:
+                     seen: Optional[Mapping] = None, first_heard: bool = False, cited: tuple = (), answered_over: Optional[float] = None,
+                     knower: Any = None, exhibits: Optional[tuple] = None) -> tuple:
     """`(Input, Card)`: THE HOST BUILDER OF A PROCEEDING (V2 p2 §A, §H, §I; B24p.13). `claimants[0]` is the bearer (`for`); the other party is the
     next claimant, else `subject` where he is a person other than the bearer, else (where the rite gives the other side moves) the most opposed
     man on the floor. `row` is an arrangement row (a seeded one, or `abridged(row)`'s); `form` is `full`, `abridged` or `auto` (abridged where
@@ -1517,7 +1780,15 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
 
     `seen` (B24p.14) is the persons as a READER sees them, `{id: Person}`, each `Present` built from his entry where it has one and from the
     world's otherwise: who sits, who is a party and what is public (seats, ties, weight) are the world's either way; the believed odds
-    (`believed_proceeding_odds`) pass the chooser's picture of the others."""
+    (`believed_proceeding_odds`) pass the chooser's picture of the others. `first_heard` (B24.26) is `world_q.answers_first` of the act: the speech answers an item the room heard first,
+    and meets the `first_heard` term (`Input.first_heard`). `cited` (B24.35) is `world_q.cited_kinds` of the act: the proof kinds it cites, which `cites` (`WHEN_BACKING`) reads
+    into each hearer's `Present.backed`; the arguer of every speech of the sitting is the bearer, `claimants[0]`. `answered_over` (B24.43) is `world_q.answered_over` of the act: the weight the item it answers
+    holds over its answer (`Input.answered_over`), which makes the abridged speech the sitting's `answer` (difficulty `answer_ob`, the `answer` term on this weight).
+    THE CASE FILE (B24's close, R1; B24.20, B24.21): for a verb heard on the docket (`_heard_on_docket`) at `evidence_from: case_file`, the matter's filed exhibits
+    (`_exhibits_of` of `case_file_for(topic)`, the file as `knower` knows it where a reader's odds are built, `believed_proceeding`) are `Input.exhibits`, on the sitting's
+    axis (`_on_axis`), paired with every item in a hand (`_sitting_items`); the module counts them on the close (`proceeding._lever`). Never the board. `exhibits` is that
+    file's `_filed_exhibits` where the caller built it already (`believed_proceeding`, which builds two sittings of one file), else read here.
+    """
     fx = w.fixtures
     era, regime, strife = CONTEXT["eras"][ERA], CONTEXT["regimes"][REGIME], CONTEXT["strife"][STRIFE]
     if not claimants:
@@ -1535,6 +1806,8 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
         _refuse("unlawful", f"{row['id']} is not lawful under {REGIME}")
     venue = place_of(w, topic) or place_of(w, fid)         # [ASSUMPTION; Jordan to correct: the matter's place, not the actor's (the seam's own rule is the act's venue: loop/sides.py); basis: B24p.13's builder reads the matter's venue]
     floor = row["floor"] if regime["floor"] is None else regime["floor"]
+    # B24.10, the engagement read (HEAR_B edit 6): until Batch B28 (`28_CORE_scene_access_A`) lands it, every attendee at the venue is present and free to
+    # sit ("at its control the sitting assumes attendees free", NEG's Depends line); `presence` is that read, and B28's engagement filter composes here
     here = [x for x in dict.fromkeys(presence(w, venue)) if x in w.persons] if venue is not None else []
     watchers = [x for x in _watchers(w, here, floor, row["floor_basis"] if regime["floor"] is None else None) if x not in (fid, aid)]
     if form == "abridged" or (form == "auto" and effort <= 0 and not watchers):
@@ -1611,14 +1884,17 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
         tilt = 0.0                                            # only a party decides (a conversation, a questioning, a negotiation): nothing to tilt
     ctx = _Sitting(fx=fx, regime=regime, strife=strife, topic=topic, admits=rite.admits, bears=bears, for_id=fid, against_id=aid,
                    room=tuple(cells), factions=factions, presume=fx.get("presume_step") * tilt * SIDE_SIGN[arr_side] if tilt > 0 else 0.0,
-                   rank_key=_rank_key())
+                   rank_key=_rank_key(rite.issues[0] if rite.issues else None),
+                   lean=public_lean(w, close, topic, row), cited=tuple(cited), verb=verb)
     room = tuple(_present(w, (seen or {}).get(x, w.persons[x]), side, decides, ctx) for x, (side, decides) in cells.items())
+    filed = _filed_exhibits(w, verb, topic, knower) if exhibits is None else exhibits
+    room, exhibits = _sitting_items(w, room, _on_axis(filed, _side_of(fid, subject)))
     dials = dict(proceeding_dials(fx))
     dials["moves"] = {m: (r["effect"], r["draw"]) for m, r in PROCEEDING_MOVES.items()}      # the two rosters the module is handed (its head)
     dials["reads"] = {g: r["reads"] for g, r in GROUNDS.items()}
     inp = Input(rite=rite, matter=topic if topic is not None else (subject or ""), room=room,
                 grounds=tuple((g, r["reason"], era[g]) for g, r in GROUNDS.items()), dials=MappingProxyType(dials), state=state,
-                frames=tuple(sorted({(c, t) for p in room for c, t, _, _ in p.holds})))
+                frames=tuple(sorted({(c, t) for p in room for c, t, _, _ in p.holds})), first_heard=first_heard, answered_over=answered_over, exhibits=exhibits)
     return inp, card(inp, row, Arrangement(arr if tilt > 0 else None, tilt, None if tilt <= 0 else other_side(arr_side), tuple(recused)))
 
 
@@ -1741,10 +2017,75 @@ def _draw_of(inp: Input, out: Outcome, band: dict, weights: Mapping) -> tuple:
 _DATA_DEFECTS = ("refused[bad_weight]", "refused[no_weight]")
 
 
+HEARING_MOVE_KEY, ARGUMENT_GROUND_KEY = "hearing_move", "argument_ground"   # the two choice keys of a hearing: values `proceeding_moves` and `rosters.yaml: grounds`
+
+
+@dataclass(frozen=True)
+class _Pick:
+    """What `make_decider` is handed: the `legal` values, which are the `View`'s own `Option`s, and the `View` they are read from, which the pick's `odds` reads."""
+    legal: tuple
+    view: Any
+
+
+def _believed_chance(inp: Input, pick: _Pick, option: Any) -> Optional[float]:
+    """`odds=` OF THE PICK (B24.13): the chance the matter goes the mover's way on the room as HE reads it after `option`. `Option.ev` is the option's PERCEIVED worth to
+    the mover in track units (it carries what the option costs him, which is how the Class S costs of B24.12 reach the believed verdict), so the believed track it
+    leaves, toward `for`, is `t + _sg(side) * ev` with `t = _sg(side) * view.mood * mood_scale` (`view_odds`' reading). `p_carried` is P(carried) toward `for` (the module's
+    pure closed form), so the chance is it for a `for` mover and `1 - it` for an `against` mover, on the board's leverage the view carries (`View.lever`, the close's own
+    `_lever`: one ladder with `view_odds` and the close, R12). Nothing true enters it. `None` where nothing is drawn (a `consent` close)."""
+    if inp.rite.close == "consent":
+        return None
+    v = pick.view
+    sg = SIDE_SIGN.get(v.side, -1.0)                     # the module's `_sg`: a side that is not `for` reads as `against`
+    carried = composition.require(P_CARRIED_ROLE)(inp, sg * (v.mood * inp.dials["mood_scale"] + option.ev), v.lever)
+    return carried if sg > 0 else 1.0 - carried
+
+
+def _npc_decider(w: Any, inp: Input) -> Any:
+    """THE NPC'S DECIDER OF A HEARING (B24.13; HEAR_B "Who decides"; `IS-B2-CHAR-02`): `(view, me) -> Choice`, the `decide=` callback the entry takes. ONE
+    `make_decider` pick OVER THE VIEW'S OPTIONS (an item exposed and a person struck are properties of the option, so a move chosen blind first could not avoid a damning
+    item): each `Option` is one value whose choice operands are its `hearing_move` (`proceeding_moves`) and its `argument_ground` (`rosters.yaml: grounds`), their cells summed
+    into its pursuit, priced by the believed chance after it (`_believed_chance`, on the option's PERCEIVED worth). The stream is `draw_factory(seed, tick)(person,
+    f"hearing:{matter}:{n}")`, `n` the exchange's number. The person is his own, the room's (`w.persons[me.id]` taken at the build), read when he is asked; nothing is written. THE COST TERMS (B24.12)
+    ARE NOT HERE. ⚠ FOR A PERSON THIS DECIDES, IT SUPERSEDES `policy`'s `grudge` term (`D["grudge"] * (-_bond(me, foe))`): the automatic policy is not run for him."""
+    # SNAPSHOT, NOT THE WORLD (04 §A.2: a callable carries no token and no store handle): the clock is fixed for the whole sitting (one call of the entry, inside one tick), and the room's
+    # Persons are the ones the sitting runs on, so what `decide` reads is taken here and `decide` holds no `w`
+    fx, tick = w.fixtures, w.tick
+    base = draw_factory(w.world_seed, lambda: tick)
+    persons = {p.id: w.persons[p.id] for p in inp.room if p.id in w.persons}
+
+    def decide(view: Any, me: Any) -> Choice:
+        scoped = lambda pid, purpose: base(pid, f"hearing:{inp.matter}:{view.n}:{purpose}")
+        o = make_decider(persons[me.id], fx, scoped, key=(HEARING_MOVE_KEY, ARGUMENT_GROUND_KEY), of=lambda o: (o.move, o.ground),
+                         odds=lambda pick, o: _believed_chance(inp, pick, o))(_Pick(tuple(view.options), view))
+        return Choice(o.move, o.ground, o.item, o.relation)
+    return decide
+
+
+def _played_by(w: Any, host: Any, inp: Input) -> dict:
+    """THE DECIDER PASS (B24.10, B24.13; `PlayHost.deciders`, B24.05): the keyword the entry takes for the persons of THIS room who decide their own moves,
+    `{"deciders": {person: callback}}`, else `{}` (the sitting is automatic, as it was). A person the host plays takes the host's decider for the role
+    (`decide(view) -> choice`; the entry's callback is `(view, person)`, so it is the host's closed over), and none where the host has none for it; any other
+    speaker takes the NPC decider (`_npc_decider`) where `Fixtures npc_decider_roles` names this role (`decider.decides_for`), else the automatic policy."""
+    decide = getattr(host, "deciders", {}).get(PROCEEDING_ROLE)
+    plays = getattr(host, "persons", frozenset())
+    npc = None
+    mine = {}
+    for p in inp.room:
+        if p.id in plays:
+            if decide is not None:
+                mine[p.id] = lambda view, me, d=decide: d(view)
+        elif inp.rite.close != "exchange" and p.side and p.id in w.persons and decides_for(w.fixtures, PROCEEDING_ROLE, False):   # an abridged close asks no callback
+            npc = npc or _npc_decider(w, inp)
+            mine[p.id] = npc
+    return {"deciders": mine} if mine else {}
+
+
 def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
-                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> dict:
-    """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (every sitting of this batch is
-    automatic: no callback is handed in), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
+                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0, host: Any = None, first_heard: bool = False,
+                        cited: tuple = (), answered_over: Optional[float] = None) -> dict:
+    """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (the persons a `host` plays are handed their
+    decider, B24.10 `_played_by`; every other speaker takes `_npc_decider` where `Fixtures npc_decider_roles` names the role, B24.13, else the automatic policy), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
     the module boundary), read the act's record (`act_band`) and refuse S27.4 on an `exchange` close's pair only (a close is an adjudicator's
     draw and is never refused). RESOLVED -> `dict(status, module, resolver, pool, net, ob, leverage, terms, settled_margin, proceeding, card, arrangement, form, topic, read, starts)`
     (the last five are what `loop/resolve.py::_proceeding_ending` writes and `loop/effects_information.py::_eff_argue` reads, B24p.20).
@@ -1756,13 +2097,13 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
     try:
         inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject,
                                       topic=subject if topic is None else topic, effort=effort, row=row, form=form,
-                                      arranger=arranger, rig=rig)
+                                      arranger=arranger, rig=rig, first_heard=first_heard, cited=cited, answered_over=answered_over)
     except ValueError as refused:
         if not str(refused).startswith("refused[") or str(refused).startswith(_DATA_DEFECTS):
             raise                                # a weight that is no whole head count is a data defect, not a room the game refuses
         return dict(status="REFUSED", why=str(refused), module=_PROVIDER, resolver=_RESOLVER, pool=None, terms=())
     entry = composition.require(PROCEEDING_ROLE)
-    out = entry(inp, rng)
+    out = entry(inp, rng, **_played_by(w, host, inp))
     if not isinstance(out, Outcome) or not all(isinstance(v, tuple) and len(v) == 2 and isinstance(v[1], Margin) for v in out.verdicts):
         raise Unspecified(
             f"module entry {PROCEEDING_ROLE!r} ({entry.__module__}.{getattr(entry, '__qualname__', '?')}) returned {type(out).__name__} "
@@ -1774,8 +2115,11 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
     # What the fold writes of this sitting (B24p.20): the arrangement and form it was held under, the matter, the verdicts the act's margin was read from
     # (`()` where a yield decided) and each person's track as the sitting began (a given `state`'s, else his `start`), which the fold's written tracks are asserted against.
     begun = dict(inp.state.tracks) if inp.state is not None else {p.id: p.start for p in inp.room}
+    # B24.29: what the bench's public commits show of each seat who decides here, `(seat, sign)`; the signs are written on the sitting for each witness to read in his own way (`bench_reading`)
+    deciding = {p.id for p in inp.room if p.decides}
+    bench = tuple((m, 1 if n > 0 else -1) for m, n in (public_lean(w, inp.rite.close, inp.matter, row) or ()) if m in deciding)
     held = dict(module=_PROVIDER, resolver=_RESOLVER, proceeding=out, card=card_, arrangement=row["id"], form=form, topic=inp.matter,
-                read=band["read"], starts=tuple(begun.items()))
+                read=band["read"], starts=tuple(begun.items()), bench=bench)
     if band["status"] == "IMPASSE":
         return dict(status="IMPASSE", pool=None, terms=(), **held)
     pool, leverage = _draw_of(inp, out, band, weights)
@@ -1819,7 +2163,7 @@ class _Believed:
                 if said is not None:
                     held[name] = mid + self.acc * (float(said) - mid)
             shell = copy.copy(self.w.persons[pid])
-            shell.attributes, shell.pursuits, shell.conviction, shell.stance, shell.ledger = held, {}, {}, [], []
+            shell.attributes, shell.pursuits, shell.conviction, shell.stance, shell.ledger, shell.traits = held, {}, {}, [], [], frozenset()      # B24.35: traits too -- what moves him is no more known than his pursuits (WGM edit 5, the arguer's own knowledge of it, is not built)
             self.shells[pid] = shell
         return self.shells[pid]
 
@@ -1836,7 +2180,8 @@ def topic_of(act: Any, subject: Optional[str]) -> Optional[str]:
 
 
 def believed_proceeding_odds(w: Any, believer: Any, claimants: list, *, verb: str, subject: Optional[str], effort: int,
-                             proceeds: tuple, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> Optional[float]:
+                             proceeds: tuple, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0,
+                             first_heard: bool = False, cited: tuple = (), answered_over: Optional[float] = None) -> Optional[float]:
     """THE CHOOSER'S OWN ODDS that the proceeding `proceeds` names carries (V2 p2 §E; B05.62): `view_odds` on an `Input` built from what
     he holds, read as his own view reads it, without luck. Himself at his true values, every other person an ordinary man (`_Believed`),
     so the odds are the close before an unmoved ordinary bench at the starts he believes `[ASSUMPTION: the chooser prices a full
@@ -1845,20 +2190,24 @@ def believed_proceeding_odds(w: Any, believer: Any, claimants: list, *, verb: st
     `None` where nothing is drawn (`consent`) or the proceeding is refused him (`refused[...]`); read-only, no draw. `arranger` and `rig`
     are the arrangement the sitting is held under (B24p.24), as `proceeding_input` reads them."""
     read = believed_proceeding(w, believer, claimants, verb=verb, subject=subject, effort=effort, proceeds=proceeds, topic=topic,
-                               arranger=arranger, rig=rig)
+                               arranger=arranger, rig=rig, first_heard=first_heard, cited=cited, answered_over=answered_over)
     return None if read is None else read[0]
 
 
 def believed_proceeding(w: Any, believer: Any, claimants: list, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
-                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> Optional[tuple]:
+                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0, first_heard: bool = False,
+                        cited: tuple = (), answered_over: Optional[float] = None) -> Optional[tuple]:
     """`(odds, tilt)` as `believed_proceeding_odds` reads the odds, with the tilt the same build gave the forum (B24p.24: the chooser prices a
     rig on the odds it buys and the tilt it costs, from one room). `None` where `believed_proceeding_odds` is."""
     row, form, _move, _item = proceeds
     mod = _proceeding_module()
+    topic = subject if topic is None else topic
+    filed = _filed_exhibits(w, verb, topic, believer)      # the case file as he knows it (B24.43's `_knows`), read once for the two passes below
 
     def read(acc: float) -> tuple:
-        inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject, topic=subject if topic is None else topic,
-                                      effort=effort, row=row, form=form, arranger=arranger, rig=rig, seen=_Believed(w, believer, acc))
+        inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject, topic=topic,
+                                      effort=effort, row=row, form=form, arranger=arranger, rig=rig, seen=_Believed(w, believer, acc), first_heard=first_heard,
+                                      cited=cited, answered_over=answered_over, knower=believer, exhibits=filed)
         return inp, card_, mod.view(inp, mod.start(inp), mod.who(inp, believer.id), _NoNoise())
     try:
         inp, _, first = read(1.0)
@@ -1875,8 +2224,7 @@ def arranged_by(w: Any, act: Any, topic: Optional[str]) -> tuple:
     item `docketed` lists for the matter says who arranged its sitting and how hard (`_docket_item`). The arranger is named only where there is a
     rig to work (`rig > 0`): at rig 0 he arranges nothing, and a builder asked to find him would refuse the sitting if he were gone. Any other
     act, and a matter on no docket, has none."""
-    row = VERB_TABLE.get(act.verb)
-    if not any(entry[1] == PROCEEDS_DOCKET for entry in getattr(row, "proceeds", ())):
+    if not _heard_on_docket(act.verb):
         return None, 0.0
     items = _world_q.docketed(w, topic)
     if not items:
@@ -1897,7 +2245,10 @@ def _hearing(w: Any) -> Optional[tuple]:
 def _docket_hearing() -> Optional[tuple]:
     for verb, row in sorted(VERB_TABLE.items()):
         entries = getattr(row, "proceeds", ())
-        if any(entry[1] == PROCEEDS_DOCKET for entry in entries):
+        # B24.08, B24.10: the hearing an OPENER reads is a SPEECH at the sitting he files for (`speak`: the docket's row, abridged, and the seat's `audience`
+        # where the item names none), never the bench's own close (`determine`: the docket's row in the full form, which the bench alone makes): a verb
+        # whose docket entry is the full form is the judge's, so it is not the one an opener prices.
+        if any(entry[1] == PROCEEDS_DOCKET and entry[2] == "abridged" for entry in entries):
             _when, rid, form, move, item = entries[-1]
             arrangement = ARRANGEMENTS[rid]
             return verb, (in_form(arrangement, form), form, move, item)
@@ -1942,8 +2293,9 @@ def _believed_proceeding_chance(w: Any, believer: Any, act: Any, bands: Any) -> 
         return None
     topic = topic_of(act, called[1])
     arranger, rig = arranged_by(w, act, topic)
+    first_heard, cited, over = _world_q.hearing_terms(w, act)
     p = believed_proceeding_odds(w, believer, called[0], verb=act.verb, subject=called[1], effort=effort_of(act), proceeds=row, topic=topic,
-                                 arranger=arranger, rig=rig)
+                                 arranger=arranger, rig=rig, first_heard=first_heard, cited=cited, answered_over=over)
     carried = {DEGREE_LABEL[d] for d, n in DEGREE_ORDINAL.items() if n >= mod.CARRIED}
     held = set(bands)
     return None if p is None else p if held == carried else 1.0 - p if held == set(DEGREE_LABEL.values()) - carried else None

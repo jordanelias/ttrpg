@@ -1033,6 +1033,23 @@ REMIT_ACTS = roster("remit_acts")
 INTERPOSITION_KINDS = roster("interposition_kinds")
 GENRES = roster("genres")
 LADDER_RUNGS = roster("ladder_rungs", ordered=True)
+# B24.03: the faults a sitting records (`rosters.yaml: proceeding_faults`), a tuple in the file's order beside the charge ladder.
+PROCEEDING_FAULTS = roster("proceeding_faults", ordered=True)
+
+
+def _load_fault_levels(levels: dict, faults) -> dict:
+    """`rosters.yaml: proceeding_faults.levels`: one cell for each `proceeding_faults` member and none for any other, each a whole number of levels (`0` costs none). Refused naming the fault. A function, so a test can plant a bad cell."""
+    missing, extra = sorted(set(faults) - set(levels)), sorted(set(levels) - set(faults))
+    bad = sorted(f for f, n in levels.items() if isinstance(n, bool) or not isinstance(n, int) or n < 0)
+    if missing or extra or bad:
+        raise Unspecified(f"`proceeding_faults.levels` leaves {missing} without a level, names {extra}, and gives {bad} a level that is no whole number >= 0", "rosters.yaml -- proceeding_faults",
+                          needs="one `levels:` cell per fault, a whole number of `fault_step` levels (0 where the fault costs none)",
+                          law="B24.03 -- a fault is a cost on the closing draw; a cell the code lacks would cost it nothing silently, which is a decision made nowhere")
+    return {f: levels[f] for f in faults}
+
+
+#: What each fault costs the side at fault on the closing draw, in `fault_step` levels; handed to the proceeding module in `Input.dials["fault_levels"]` (`sigma.proceeding_dials`).
+FAULT_LEVELS = _load_fault_levels(roster_map("proceeding_faults", "levels"), PROCEEDING_FAULTS)
 
 
 def _roster_rows(name: str):
@@ -1086,7 +1103,7 @@ def _load_grounds(rows) -> dict:
     """`rosters.yaml: grounds`: each row's `reason` a number in [0, 1] and a whole number of tenths, its `reads` a member of
     `ground_reads`. R11: `reason` is Reason's share of a speech's dice on that ground (V2 p2 §C.2)."""
     reads = roster("ground_reads", ordered=True)
-    out = _proceeding_rows(rows, "grounds", frozenset({"reason", "reads"}), frozenset({"reason", "reads"}))
+    out = _proceeding_rows(rows, "grounds", frozenset({"reason", "reads", "backed_by"}), frozenset({"reason", "reads"}))
     for gid, g in out.items():
         r = g["reason"]
         if not in_tenths(r, 0, 1):
@@ -1095,27 +1112,68 @@ def _load_grounds(rows) -> dict:
                 law="R11 -- the dice are a blend of Reason and Presence by content; the share is set in tenths, as every other dial of the blend is")
         require_member(g["reads"], reads, f"ground {gid!r} has `reads: {g['reads']!r}`", "rosters.yaml -- grounds",
                        "V2 p2 §A.2 -- a ground's fit reads one channel of the bearing reading, or the item's credit")
+        if "backed_by" in g:
+            _refuse_backed_by(gid, g["backed_by"])
     return out
 
 
-def _load_proceeding_moves(rows) -> dict:
-    """`rosters.yaml: proceeding_moves`: each row's `effect` a member of `proceeding_effects`, `draw` a bool, `capability`
-    (the skill whose rank joins the dice) a member of `descriptors.CAPABILITIES` and present only on a drawing move."""
+#: THE `when` KEYS A USES ROW'S READER EVALUATES (`when_holds`): the rest of `capability_when_keys` are the conditions of an ACT, read at the proceeding's host (B24.35).
+ROW_WHEN_KEYS = ("rank_at_least",)
+#: THE CONDITIONS OF AN ACT: the `capability_when_keys` members a ROW does not read (`ROW_WHEN_KEYS`), in the roster's order -- the keys a ground's `backed_by` may name and `sigma.WHEN_BACKING` binds.
+ACT_WHEN_KEYS = tuple(k for k in roster("capability_when_keys", ordered=True) if k not in ROW_WHEN_KEYS)
+
+
+def _refuse_backed_by(gid: str, cond) -> None:
+    """B24.35: a ground's `backed_by` is a non-empty mapping whose every key is a `capability_when_keys` member a ROW does not read (`ROW_WHEN_KEYS`): the conditions the
+    proceeding's host evaluates (`seam/wrappers/sigma.py::WHEN_BACKING`, which binds the roster to its functions both ways). An unknown key, `rank_at_least` and an empty map
+    are refused naming the ground; the argument's type is the function's to refuse."""
+    if not isinstance(cond, dict) or not cond or not set(cond) <= set(ACT_WHEN_KEYS):
+        raise Unspecified(f"ground {gid!r} has `backed_by: {cond!r}`", "rosters.yaml -- grounds", needs=f"a mapping from one or more of {list(ACT_WHEN_KEYS)} to its argument",
+                          law="WGM edit 2 -- a ground is backed by a condition of the act, from the closed `when` roster; a key nothing evaluates would back it silently")
+
+
+def _load_proceeding_moves(rows, rungs) -> dict:
+    """`rosters.yaml: proceeding_moves`: each row's `effect` a member of `proceeding_effects`, `draw` a bool, `descends`
+    (optional) a bool: a yield that also descends one rung of a type with an issue ladder. A repeated id is refused by the shared
+    row grammar (`_proceeding_rows`). `capability` (B24.04; HCAP "Exact edits" 3) is the skill whose rank joins the dice, and it is
+    the cell that says WHAT A DRAWING MOVE DRAWS ON: a drawing move carries one, a draw-free move none, and it is either a member of
+    `descriptors.CAPABILITIES` or a map from EACH member of `rungs` (the `issue_rungs` ids, in this module's order) to one, the
+    rung argued being what is in issue (D-U1-03). An unknown id, a map missing a rung or naming one that is no rung, a skill on a
+    draw-free move and a drawing move with no skill are each refused naming the row."""
     effects = roster("proceeding_effects", ordered=True)
-    out = _proceeding_rows(rows, "proceeding_moves", frozenset({"effect", "draw", "capability"}), frozenset({"effect", "draw"}))
+    where = "rosters.yaml -- proceeding_moves"
+    out = _proceeding_rows(rows, "proceeding_moves", frozenset({"effect", "draw", "capability", "descends"}), frozenset({"effect", "draw"}))
     for mid, m in out.items():
-        require_member(m["effect"], effects, f"move {mid!r} has `effect: {m['effect']!r}`", "rosters.yaml -- proceeding_moves",
+        if "descends" in m and not isinstance(m["descends"], bool):
+            raise Unspecified(f"move {mid!r} has `descends: {m['descends']!r}`", where, needs="true or false",
+                              law="a move either descends a rung or it does not; an odd cell is refused, not read as false")
+        require_member(m["effect"], effects, f"move {mid!r} has `effect: {m['effect']!r}`", where,
                        "V2 p2 §B -- a move is read by its effect, and no effect names a winner")
         if not isinstance(m["draw"], bool):
-            raise Unspecified(f"move {mid!r} has `draw: {m['draw']!r}`", "rosters.yaml -- proceeding_moves", needs="true or false",
+            raise Unspecified(f"move {mid!r} has `draw: {m['draw']!r}`", where, needs="true or false",
                               law="a move either draws or it does not; a missing or odd cell is refused, not read as false")
-        if "capability" in m:
-            if not m["draw"]:
-                raise Unspecified(f"move {mid!r} draws nothing and names the skill {m['capability']!r}", "rosters.yaml -- proceeding_moves",
-                                  needs="delete the skill, or make the move draw",
-                                  law="V2 p2 §A.1 -- a rank joins the dice of a draw; a move with no draw has none to join")
-            require_member(m["capability"], _CAPABILITIES, f"move {mid!r} names the skill {m['capability']!r}",
-                           "rosters.yaml -- proceeding_moves", "B04 -- one skill roster, `descriptors.CAPABILITIES`")
+        if "capability" not in m:
+            if m["draw"]:
+                raise Unspecified(f"move {mid!r} draws and names no skill", where, needs="`capability:` a skill or a map from each issue rung to one",
+                                  law="V2 p2 §A.1 -- a rank joins the dice of a draw; a rolled move with no skill is a pool nobody built")
+            continue
+        if not m["draw"]:
+            raise Unspecified(f"move {mid!r} draws nothing and names the skill {m['capability']!r}", where,
+                              needs="delete the skill, or make the move draw",
+                              law="V2 p2 §A.1 -- a rank joins the dice of a draw; a move with no draw has none to join")
+        cap = m["capability"]
+        if isinstance(cap, dict):
+            if set(cap) != set(rungs):
+                raise Unspecified(f"move {mid!r} maps the rungs {sorted(cap)} to a skill", where,
+                                  needs=f"exactly one skill for each of {list(rungs)} (missing {sorted(set(rungs) - set(cap))}, "
+                                        f"not a rung {sorted(set(cap) - set(rungs))})",
+                                  law="D-U1-03 -- the rung argued is what is in issue, so a map by rung names every rung and no other")
+            skills = cap.values()
+        else:
+            skills = (cap,)
+        for skill in skills:
+            require_member(skill, _CAPABILITIES, f"move {mid!r} names the skill {skill!r}", where,
+                           "B04 -- one skill roster, `descriptors.CAPABILITIES`")
     return out
 
 
@@ -1137,14 +1195,19 @@ def _load_issue_rungs(rows, grounds) -> dict:
     return out
 
 
-def _load_matters(rows) -> dict:
-    """`rosters.yaml: matters`: each row names its `carrier`, `brings` and `cost`, each a non-empty string."""
-    out = _proceeding_rows(rows, "matters", frozenset({"carrier", "brings", "cost"}), frozenset({"carrier", "brings", "cost"}))
+def _load_matters(rows, rungs) -> dict:
+    """`rosters.yaml: matters`: each row names its `carrier`, `brings`, `cost` and `bears_on`, each a non-empty string, and
+    `bears_on` (B24.17) a member of `rungs` (the `issue_rungs` ids): the rung an exhibit of the kind bears on, from which an item's
+    `rung` is derived (EVID_B "Exact edits" 1). A `bears_on` outside `rungs` is refused naming the row."""
+    cells = frozenset({"carrier", "brings", "cost", "bears_on"})
+    out = _proceeding_rows(rows, "matters", cells, cells)
     for mid, m in out.items():
         for k, v in m.items():
             if not isinstance(v, str) or not v:
                 raise Unspecified(f"matter {mid!r} has `{k}: {v!r}`", "rosters.yaml -- matters", needs="a non-empty token",
-                                  law="V2 p2 §G -- an item is a typed reference; its carrier, who brings it and what it costs are each named")
+                                  law="V2 p2 §G -- an item is a typed reference; its carrier, who brings it, what it costs and the rung it bears on are each named")
+        require_member(m["bears_on"], rungs, f"matter {mid!r} has `bears_on: {m['bears_on']!r}`", "rosters.yaml -- matters",
+                       "V2 p2 §B -- an exhibit bears on one issue of the matter, and the issues are the `issue_rungs`")
     return out
 
 
@@ -1178,13 +1241,28 @@ def _load_authority_by_faction(mapping: dict, authorities, factions, templated) 
 # B24p.01: THE PROCEEDING'S CLOSED SETS (V2 p2 §B, §C.2, §C.5, §G, §H), bound here beside `LADDER_RUNGS` so an absent or malformed
 # row refuses at import. Nothing reads them until B24p.07; the module reads cells, never an id (`effect`, `draw`, `reason`).
 GROUNDS = _load_grounds(_roster_rows("grounds"))
-PROCEEDING_MOVES = _load_proceeding_moves(_roster_rows("proceeding_moves"))
 PROCEEDING_ENDS = roster("proceeding_ends", ordered=True)
 ISSUE_RUNGS = _load_issue_rungs(_roster_rows("issue_rungs"), GROUNDS)
+PROCEEDING_MOVES = _load_proceeding_moves(_roster_rows("proceeding_moves"), tuple(ISSUE_RUNGS))     # after the rungs: a `capability:` map is keyed by them (B24.04)
 AUTHORITIES = roster("authorities", ordered=True)
 AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
                                                   roster_map("role_templates", "by_faction"))
-MATTERS = _load_matters(_roster_rows("matters"))
+MATTERS = _load_matters(_roster_rows("matters"), tuple(ISSUE_RUNGS))
+for _ground, _row in GROUNDS.items():      # B24.35: a ground's `backed_by.cites` is a `matters` member (here, where `MATTERS` loads: 04 §A.1, one loader that cross-validates and raises)
+    if (_kind := (_row.get("backed_by") or {}).get("cites")) is not None and _kind not in MATTERS:
+        raise Unspecified(f"ground {_ground!r} is backed by `cites: {_kind!r}`, which is no `matters` member", "rosters.yaml -- grounds",
+                          needs=f"one of {sorted(MATTERS)}", law="a cited kind is a proof kind (`matters`); any other would back nothing, silently")
+#: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated (the one owner: `seam/wrappers/sigma.py::_items_of` and `loop/effects_information.py::_eff_speak` read it).
+RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
+#: The ledger-claim kinds a `matters` row names by its carrier (`Claim:testimony` is `testimony`), read off the roster the same way (`data/verbs.py::CONFESSION_BAND`'s loader reads it).
+CLAIM_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Claim:")}
+
+
+def matter_of_record(kind: str) -> str:
+    """The `matters` member a Record of `kind` is as proof (`RECORD_MATTER`), `record` for a kind no row carries."""
+    return RECORD_MATTER.get(kind, "record")
+
+
 # B24p.03: THE TYPED WRITES OF `arrangements.yaml: disposal:` (V2 p2 §J). `MATTERS` absorbed the `proofs` roster, which was deleted here.
 DISPOSAL_WRITES = _load_disposal_writes(_roster_rows("disposal_writes"))
 # ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.
@@ -1306,17 +1384,6 @@ def remove_distance(source: str) -> float:
     return REMOVE_ORDINAL.index(source) / len(REMOVE_ORDINAL)
 
 
-# THE KIND OF PROOF A DEED CLAIM IS, BY HOW ITS HOLDER CAME TO HOLD IT (B05.21, T13 edit 3 / T5): `queries/world_q.py::proofs` reads it where the
-# arrangement row's `admits:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `MATTERS` (the
-# roster that absorbed `proofs` at B24p.03) or `None`, a way of holding that is no kind the rows name, refused at import: a claim whose source maps
-# nowhere would weigh by a guess.
-PROOF_KIND_OF_SOURCE = roster_map("proof_kind_of_source", "proof_kind")
-if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(MATTERS):
-    raise Unspecified(
-        f"`proof_kind_of_source.proof_kind` is {PROOF_KIND_OF_SOURCE!r}; it must key exactly the claim sources {sorted(CLAIM_SOURCES)} "
-        f"and name only `matters` members {sorted(MATTERS)} (or null)", "rosters.yaml",
-        needs="one `matters` member (or null) for every `claim_sources` member",
-        law="T13 T5 -- the kind of a deed claim is its source mapped to the `matters` roster, a roster row and not a code literal")
 # The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
 # no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
 # _check_dominance_kinds`).
@@ -1695,9 +1762,10 @@ def require_mortal_cause(cause) -> None:
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
-ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD = roster("proceeding_endings", ordered=True)   # B24p.20, .22: the tags of a proceeding's `Event.ending`
+ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD, ENDING_EXCHANGE, ENDING_BENCH = roster("proceeding_endings", ordered=True)   # B24p.20, .22, B24.14, B24.29: the tags of a proceeding's `Event.ending`
 # B24p.22: the kinds of claim a sitting leaves with those who saw it (`rosters.yaml: sitting_claims`), each kind's predicate `<stem>:<kind>`; and the four
-# effects a move may have (`proceeding_effects`), so a witness reads a beat's move by its effect and never by its id.
+# effects a move may have (`proceeding_effects`: the four of the speech, then B24.03's five of the hearing), so a witness reads a beat's move by
+# its effect and never by its id.
 SITTING_CLAIMS = roster("sitting_claims", ordered=True)
 _SITTING_CLAIM = roster_map("sitting_claims", "claim")
 SITTING_PREDICATES = {kind: f"{_SITTING_CLAIM['predicate']}:{kind}" for kind in SITTING_CLAIMS}
@@ -1705,7 +1773,11 @@ SITTING_SOURCE = _SITTING_CLAIM["source"]
 if SITTING_SOURCE not in CLAIM_SOURCES:
     raise Unspecified(f"`sitting_claims` has `claim.source: {SITTING_SOURCE!r}`", "rosters.yaml -- sitting_claims", needs="a `claim_sources` member",
                       law="V2 p2 §J -- a claim is held by one of the ways a person comes to hold one")
-EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE = roster("proceeding_effects", ordered=True)
+EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE, *_HEARING_EFFECTS = roster("proceeding_effects", ordered=True)
+EFFECT_ADJOURN = "adjourn"          # B24.38: the bench's move that holds the stage to the next sitting; a member of the closed set above, refused below if the roster loses it
+if EFFECT_ADJOURN not in _HEARING_EFFECTS:
+    raise Unspecified(f"`proceeding_effects` holds no {EFFECT_ADJOURN!r}", "rosters.yaml -- proceeding_effects", needs="an `adjourn` member",
+                      law="B24.38 -- a sitting's ending is read by the effect of its last move")
 *STANCE_BANDS, STANCE_DECIDED = roster("stance_bands", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
 DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
@@ -2104,6 +2176,10 @@ def _refuse_when(i, row, when, when_keys, refuse) -> None:
     if unknown:
         refuse(i, row, f"has `when` key {unknown[0]!r}", f"only {sorted(when_keys)}",
                "MAP §C -- the `when` keys are a closed roster; an unregistered one is a condition nothing reads")
+    act_scoped = [k for k in when if k in ACT_WHEN_KEYS]
+    if act_scoped:
+        refuse(i, row, f"has `when` key {act_scoped[0]!r}", f"only {list(ROW_WHEN_KEYS)}",
+               "B24.35 -- that key is a condition of the act read at the proceeding's host (`grounds`' `backed_by`), which no row's reader evaluates")
     if "rank_at_least" in when:
         n, key = when["rank_at_least"], row["key"]
         if key not in _CAPABILITIES:
@@ -2126,7 +2202,7 @@ def when_holds(row: CapabilityUse, holder) -> bool:
     if not when:
         return True
     for k, n in when.items():
-        if k != "rank_at_least":
+        if k not in ROW_WHEN_KEYS:
             raise Unspecified(f"`when` key {k!r} has no comparison", _CAPABILITY_USES_WHERE,
                               needs=f"a comparison for {k!r} here, or remove it from `capability_when_keys`",
                               law="MAP §C -- a closed `when` key is read by one function; a registered key nothing reads silently holds")

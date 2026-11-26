@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import pytest
+
 from ..data import verbs as V
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import PURSUIT_AXES
@@ -68,3 +70,22 @@ def test_a_single_legal_value_draws_nothing(monkeypatch):
     def refuse(pid, purpose):
         raise AssertionError("a draw was taken on a single legal value")
     assert make_decider(p, DEFAULT_FIXTURES, refuse, key=_KEY)(_View((_B,))) == _B
+
+
+def test_a_two_key_value_scores_the_sum_of_its_cells_and_a_tuple_key_with_no_of_is_refused(monkeypatch):
+    """B24.13's option is one value with two choice cells; its pursuit is `damp * w * (cell_a + cell_b)` (axis-major, as `choose.score_terms` sums a candidate's choice operands), and a
+    tuple key with no `of` is refused rather than scored a cell short (`zip` would truncate)."""
+    keys = ("retreat_at", "in_confidence")
+    monkeypatch.setattr(CH, "project", lambda person, shift=0.0, **read: _weights(1))
+    monkeypatch.setattr(V, "ALIGNMENT", V._load_alignment(choices={"retreat_at": {_A: {_AXIS: 0.3}, _B: {_AXIS: -0.4}}, "in_confidence": {True: {_AXIS: 0.2}}}))
+    p = Person(id="p_decider", name="d")
+    pursuit = {}
+    decide = make_decider(p, DEFAULT_FIXTURES, _scoped(draw_factory(0, lambda: 0), 0), key=keys, of=lambda v: (v, True),
+                          watch=lambda p_, view, ranked, terms, sampled: pursuit.update({v: t[0] for v, t in zip(ranked, terms)}))
+    decide(_View((_A, _B)))
+    damp = CH.deliberation_memo(p, DEFAULT_FIXTURES)[CH._DAMP]
+    assert set(pursuit) == {_A, _B}
+    assert abs(pursuit[_A] - damp * (0.3 + 0.2)) < 1e-12 and abs(pursuit[_B] - damp * (-0.4 + 0.2)) < 1e-12, (pursuit, damp)
+    assert damp != 0.0                                       # the sums above are not both 0 by construction
+    with pytest.raises(AssertionError):
+        make_decider(p, DEFAULT_FIXTURES, _scoped(draw_factory(0, lambda: 0), 1), key=keys)(_View((_A, _B)))

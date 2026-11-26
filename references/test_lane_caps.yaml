@@ -8,7 +8,16 @@
 lanes:
   season_loop:
     base: 3234
-    warrants: []
+    warrants:
+      - {batch: B24-sc-hearing, added: 19, behaviour: "a filed exhibit is weighed by one rule: corroboration is noisy-OR by origin, an off-rung item enters at half, an answer strikes by its band and an impeachment strikes origin-wide only at Overwhelming; an exhibit moves the close and never the obstacle; the believed and dealt proofs agree"}
+      - {batch: B24-sc-hearing, added: 13, behaviour: "a speak that cites is refused before the draw when it cites what the speaker does not hold or what the matter's row does not admit; an admitted cite enters at the citing band's weight, every band deposits the told copy, first-heard and answer terms move the answer only, and one kind of proof per claim"}
+      - {batch: B24-sc-hearing, added: 4, behaviour: "a docketed matter names its case file, a carried petition is its own case file and keeps what a sitting wrote"}
+      - {batch: B24-sc-hearing, added: 6, behaviour: "an inquiry finds who holds a record and a failed one deposits no holds claim, a holder is taught no claim about himself"}
+      - {batch: B24-sc-hearing, added: 20, behaviour: "a sitting of exchanges appends to the case file, ends in one of the seven kinds each leaving a durable write, closes by the shipped roll at no exchanges, never lowers the obstacle for a favourable exhibit, swaps bears to move p_carried, and no constant decider wins on all three hands; run shapes occur; the carried rows load and run a sitting"}
+      - {batch: B24-sc-hearing, added: 4, behaviour: "a declared sitting carries at some seeds only, resolves through the proceeding at no exchanges, a seat can vote against the board, a trait row moves one seat's ballot odds only"}
+      - {batch: B24-sc-hearing, added: 9, behaviour: "each rolled move draws on the skill its rung names, a rolled move with no capability is refused, a capability cell the roster cannot close is refused, and the bench's reading is drawn and can be wrong at every insight"}
+      - {batch: B24-sc-hearing, added: 5, behaviour: "two NPC negotiations auto-run to the same hash, a held breach claim changes acceptance, an accept is a concession drawing nothing, each oblige is opened by its own party's act"}
+      - {batch: B24-sc-hearing, added: 8, behaviour: "(net of six declared-disposal tests the batch rewrote into the per-member commit reading, cr34: a declared determine with no commit is sat, a commit is read per member and ends with its tenure) a bench's commit moves the reception of a hearing and an off-bench or ended commit moves nothing; a told claim counts less than firsthand; a verdict can be lost on the shipped hearing and the zero-act hearing runs twice byte-identical; a solidarity hearer is moved only when the condition holds, each ground is backed by its own condition alone; a two-key value scores the sum of its cells; a speech kind outside the ladder rungs roster fails the load"}
   engine:
     base: 1043
     warrants: []

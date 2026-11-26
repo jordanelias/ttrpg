@@ -21,6 +21,7 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
+    DEGREE_STEP, task_share,
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_AS, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
     ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
@@ -28,15 +29,15 @@ from ..data.rosters import (
 from ..gaps import Forbidden
 from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ArmyCommand, Outcome
+from ..queries.inputs import ADJOURNED_STAGE, ANSWERED_STAGE, EXCLUDED_STAGE, FILED_STAGE, ArmyCommand, Outcome, exchanges
 from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
-    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
+    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
+    adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
-from ..state.carriers import Proposition, Record, Tenure
+from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
@@ -192,16 +193,27 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
-def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0) -> dict:
+def _determinable(row_id: str) -> bool:
+    """B24.31 (NEG edit 5, C-07) -- WHETHER A DETERMINATION MAY DISPOSE OF `row_id`: its `disposes:` is a Tenure kind `determine` can open (`DISPOSABLE_KINDS`) AND its close is
+    not `consent`. A `consent` row's agreement is each party's own (`close: consent`: nothing is adjudicated, `bench_basis: none`), so an edge a bench opened on it would be opened under
+    the judge's act, not the act of the party it binds; its `oblige` is opened by that party's own act (the `oblige` verb, `own`-eligible, `_eff_oblige`). `open_case` asks it before it docks
+    and `_eff_determine` before it opens, so a matter is never docked for a determination that declines it forever."""
+    row = ARRANGEMENTS[row_id]
+    return row["disposes"] in DISPOSABLE_KINDS and row["close"] != "consent"
+
+
+def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0, case=None) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
     acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
     sitting's Date when the matter fills a slot CALENDAR formed (`_eff_open_case`, v9 SC-01
     fired-slot step), else `None`: no sitting was convened for it. `arranger` and `rig` (B24p.24,
     V2 p2 §H) are who arranged its sitting and how hard, a `rig_levels` member: the builder reads
-    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`."""
+    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`. `case` (B24.01, `IS-B2-SC-02`) is the
+    `Record` `open_case` minted for the matter (`DOCKET_CASE`); `carry` mints none and writes `None`, the carried petition being its own file.
+    Read it through `world_q.case_file_of`, never by the key."""
     return {"date": date, "matter": matter,
             DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition,
-            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig}
+            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig, DOCKET_CASE: case}
 
 
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
@@ -430,6 +442,9 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     Where it is drawn up: `_seat_rung`, as `issue`. `via.scope`'s purview reaching the matter is the
     row's precondition (`Basis`, `purview`), asked before this runs.
 
+    B24.01 (`IS-B2-SC-02`): THE ITEM ALSO NAMES THE CASE FILE IT WAS OPENED WITH (`DOCKET_CASE`, the minted Record's id), a filled slot and an
+    appended item alike. Declared MOVER, SC-03a's precedent below: every world in which `open_case` executes gains the key.
+
     ⚠ v9 SC-03a (#453 §10.4 step 2b, K-55): THE ITEM NAMES THE ARRANGEMENT ROW THE MATTER IS HEARD
     UNDER AND THE PETITION IT ROSE FROM, read off the act under the item's own key names
     (`world_q.DOCKET_ARRANGEMENT`/`DOCKET_PETITION`, `TERM_KEY`'s shape: payload keys no typed cell
@@ -447,12 +462,11 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     rig = d.get(RIG_KEY, 0)
     # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
     # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
-    # (`DISPOSABLE_KINDS`) -- else the matter would dock and `determine` decline it forever, and
+    # (`DISPOSABLE_KINDS`) and that is not a `consent` row (`_determinable`) -- else the matter would dock and `determine` decline it forever, and
     # `docketed` would block any second `open_case` (a wedge). `None` -- every computed case -- is
     # the realm's path, unchanged.
     if arrangement is not None and not (
-            isinstance(arrangement, str) and arrangement in ARRANGEMENTS
-            and ARRANGEMENTS[arrangement]["disposes"] in DISPOSABLE_KINDS):
+            isinstance(arrangement, str) and arrangement in ARRANGEMENTS and _determinable(arrangement)):
         return NO_CHANGE
     if petition is not None and not (
             isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
@@ -464,6 +478,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
+    case = made.subjects[0].id        # the minted Record's id: the item names the file it was opened with (B24.01, `IS-B2-SC-02`)
 
     def perform() -> None:
         made.apply()
@@ -474,9 +489,9 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             convened = w.dates.get(slot.get("date")) or {}
             if level == 0 and convened.get(RIG_KEY):
                 arranger, level = convened.get(DOCKET_ARRANGER), float(convened[RIG_KEY])
-            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level))
+            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level, case))
         else:
-            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level))
+            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level, case))
     return Change(made.subjects, perform)
 
 
@@ -492,9 +507,11 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         file: where `open_case` mints a case file and winds its clock, a carried petition already is
         the document, so the carriage winds the clock on it, and MATTER's maturation of those stages
         cites the carriage (`loop/matter.py`'s `prior` is the last Event whose changes name the
-        petition, which is this act's). REPLACED, not appended: an appended list could repeat a
-        `(due, label)` the filing wound on the same tick. [ASSUMPTION; medium; Jordan to correct;
-        revert: append the carriage's stages to the filing's.]
+        petition, which is this act's). THE CLOCK IS REPLACED, not appended: an appended list could
+        repeat a `(due, label)` the filing wound on the same tick; the stages that are no clock (a
+        sitting's `filed`, `entered`, `struck`, `excluded`, `answered`, `adjourned`) are KEPT, after
+        the new clock. [ASSUMPTION; medium; Jordan to correct; revert: append the carriage's stages
+        to the filing's.]
       * THE DOCKET ITEM -- `_docket_item(<terms>, None, <petition>)`: the matter is the petition's
         `terms`, what it is ABOUT (`rosters.yaml: record_kinds.content`: `terms` is the filing act's
         `subject`), and the item names the petition it rose from (v9 SC-03a, K-55). Precedent:
@@ -533,12 +550,16 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if not isinstance(matter, str) or docketed(w, matter):
         return NO_CHANGE
     stages = _declared_stages(w, a)
-    if stages == list(rec.stages):
+    # THE CLOCK IS RE-WOUND, THE FILE IS KEPT: a case file's `stages` also hold what a sitting wrote (`filed`, `entered`, `struck`, `excluded`, `answered`, `adjourned`: no clock,
+    # `is_clock_stage`), and a petition carried again after a `determine` took its matter off the docket must not lose them. The clock first, the writes after in their order (as a filing
+    # leaves them), so an index a later `answers` names stays where it was while the clock keeps its length.
+    kept = [st for st in rec.stages if not is_clock_stage(st)]
+    if stages == [st for st in rec.stages if is_clock_stage(st)]:
         return NO_CHANGE
     item = _docket_item(matter, None, pid)
 
     def perform() -> None:
-        rec.stages = stages
+        rec.stages = stages + kept
         w.docket.append(item)
     return Change((Subject.entity("records", pid),), perform)
 
@@ -617,6 +638,13 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     _admits`, plan position `14`, on this row's `counterparty: subject`) is asked of neither and
     cannot fire for this row.
 
+    B24.31 (NEG edit 5; C-07, `04` PART D row 10a) -- A `consent` ROW IS NEVER DETERMINED: a negotiation's agreement is each party's own, so this body writes NO EDGE under the determiner's act for
+    it (it declines like the two arrangement declines above, and `open_case` docks no matter under such a row). Each party's `oblige` is opened by that party's own act -- the `oblige` verb (`own`
+    eligibility, `_eff_oblige`; the gate's `T-m` admits an owner's own edge and no other), so the `Act.actor` of an agreement's edge is the party it binds. ⚠ WHAT THIS DOES NOT DO, AND THE ENTRY
+    ASKED: link the acceptance to the two acts. An effect returns a `Change` under ITS act's actor and gate; the Acts a fold resolves are minted at DELIBERATE and enter `w.acts` at RESOLVE
+    alone, so no effect can form or fold a party's act, and the tree has no `accepted` field (an accept is `Outcome.ended == "yielded"`, `ended_by` its accepter) nor a verb that hosts a
+    consent sitting (NEG edit 6, B28). Named, not built.
+
     G3 -- THE EDGE IS SOMEBODY ELSE'S, AND ITS BASIS IS `determination` (`state/gate.py::
     may_determine`, the EIGHTH): a judging seat the actor sits in, whose bench's ground holds the
     party's home. The row's `bench` conjunct asks that same function first, so the fold refuses (and
@@ -625,6 +653,18 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     off the docket with no edge opened. The shared predicate is what keeps that unreachable.
 
     G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present).
+
+    B24.14 (HEAR_B edit 7) -- THE SITTING IS WRITTEN ON THE CASE FILE, ITS OWN RECEIPT: where the contest was a sitting that entered or struck items, each is
+    appended to `Record.stages` of the file the docket item names (`world_q.case_file_of`) as a two-cell stage `(kind, item id)`, `kind` an `inputs.
+    EXCHANGE_CELLS` name -- the list `inputs.exchanges` returns, which `loop/resolve.py::_proceeding_ending` carries on the Event's `ending` too. A stage of
+    a clock is `(due, label, act)` and MATTER ripens only a stage of three cells (`loop/matter.py`), so an item-stage ripens nothing and is read by its length.
+    Nothing is appended where no item was entered or struck (every sitting at `sitting_exchanges` 0), where the item names no case file (a computed or calendar
+    item: its list is on the Event alone), or at `Failure` (the row writes `[]`, this body is not called).
+
+    B24.38 (IS-B2-SC-08) -- AN ADJOURNMENT IS WRITTEN TOO: where the sitting's last move was the bench's `adjourn` (`world_q.adjourned_by`), ONE more stage `(ADJOURNED_STAGE, the bench member)` is
+    appended after the exchanges, on the same file and under the same act, where a later sitting of the matter can find it (`world_q.adjournments`; no computed play reaches that sitting yet: a second hearing follows a Failure band, which writes nothing here). It is not on the Event's `exchange` list
+    (the Event's beats already end on the `adjourn`). ⚠ THE DISPOSAL IS NOT HELD BACK BY IT: an adjourned sitting still draws its close, and at a non-Failure band opens the edge and takes the
+    matter off the docket as any other; named, not decided (the bench's `adjourn` is reached by no computed sitting today: `proceed` gives a seat that decides without a side no turn).
 
     ⚠ v9 SC-02 `22b` STEP 24 -- AND THE DETERMINER'S OWN PURSUITS, BY CONSEQUENCE (`19_PLAN.md` step 24,
     *"Conviction moves by consequence"*; the plan's `convictions` is `(Person, pursuits)` since
@@ -648,8 +688,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if seat is None or len(rows) > 1:
         return NO_CHANGE
     row = next(iter(rows), None)
-    if row is not None and row not in ARRANGEMENTS:
-        return NO_CHANGE                  # a hand-planted item naming no row `open_case` admits
+    if row is not None and (row not in ARRANGEMENTS or not _determinable(row)):
+        return NO_CHANGE                  # a hand-planted item naming no row `open_case` admits, or a `consent` row (B24.31: no edge under the judge's act)
     kind = ARRANGEMENTS[row]["disposes"] if row is not None else UNDECLARED_DISPOSAL
     if any(t.kind == kind and t.subject == party and t.object == seat and t.live
            for t in w.tenures):
@@ -659,7 +699,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         return NO_CHANGE
     items = docketed(w, party)
     judge = w.persons.get(a.actor)
-    moved = None
+    moved, case, listed = None, None, ()
     subjects = (Subject.edge(nt),)        # a hand-built call with no contest: the edge, as before
     if res is not None:
         if judge is not None:
@@ -673,6 +713,16 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         if moved is not None:
             subjects += (Subject.entity("persons", a.actor, earns=PURSUIT_MOVED,
                                         fields=("pursuits",)),)
+        # B24.14 -- THE SITTING IS WRITTEN ON THE CASE FILE: the exchange list (`queries/inputs.py::exchanges`, the value the Event's `ending` carries too) is
+        # appended to the file the docket item names (`case_file_for`) as its own receipt, so the stages and the Event are one list. Nothing is appended -- and no
+        # receipt is named -- where no beat entered or struck an item (every sitting at `sitting_exchanges` 0), or where the item has no case file.
+        out = res.result.get("proceeding") if isinstance(res.result, dict) else None
+        listed = tuple(exchanges(out.beats)) if isinstance(out, Outcome) else ()
+        bench = adjourned_by(out.beats) if isinstance(out, Outcome) else None            # B24.38: the bench member whose `adjourn` closed the sitting, if one did
+        listed += () if bench is None else ((ADJOURNED_STAGE, bench),)
+        case = case_file_for(w, party) if listed else None
+        if case is not None:
+            subjects += (Subject.entity("records", case, earns=band_kind, fields=("stages",)),)
 
     def perform() -> None:
         w.add_tenure(nt)
@@ -680,7 +730,51 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             item["matter"] = None
         if moved is not None:
             judge.pursuits = moved
+        if case is not None:
+            w.records[case].stages = [*w.records[case].stages, *listed]
     return Change(subjects, perform)
+
+
+@effect_for("speak")
+def _eff_speak(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B24.25 (EVID_B "Exact edits" 4 with ADM edit 3) -- THE CITING SPEECH FILES ITS ITEMS BY ITS OWN BAND, on the case file the docket item names (`world_q.case_file_of`). Writes
+    `(Record, stages)` at all four bands, `Failure` too, since `Failure` writes the `excluded` stage. No second roll: the band is the one the speech drew (`seam/ladder.py::degree_of`).
+
+        Failure        every cited item `(tick, "excluded", side, ref, act)` -- the room heard it said and the bench did not take it; no exhibit, so no `proofs` level (the told copy the
+                       told channel deposits is `witness.py`'s and fires at every band)
+        Partial        `(tick, "filed", side, rung, ref, weight x its share, origin, act)`, the share the band's `task_fraction` (one half): entered contested
+        Success        the same at its derived weight
+        Overwhelming   the same at its derived weight, with the ninth cell `True`: first heard (`inputs.is_first`; B24.26 reads it)
+
+    AN `answers` ACT also writes `(tick, "answered", target, band, impeached, act)` for each stage it names, at every band: the band is the target's `answered_band`, which the host reads when it builds
+    the exhibits (`sigma._exhibits_of`) and which `evidence.standing` acts on; the band decides the answer, and the answering speech's OWN items are entered or excluded by the same band (a failed answer
+    does not enter the item it cited). What may be cited, what each weighs and what each answers is `world_q.filings`'s, read before the draw, so no refusal reaches here.
+
+    Declines (`NO_CHANGE`) where the act cites and answers nothing -- every computed `speak` today -- or the matter names no case file: `rosters.yaml: write_optional` lists the verb, so the fold
+    answers it by the band's own kind and not as a refusal, and the speech is the Event it always was. `res` is `None` only for a hand-built call with no contest: the full share, no `answered` stage.
+    G4 -- WHAT IT NAMES: THE CASE FILE, `fields=("stages",)`, earning the band's own kind (the speech's `emits:` at its band), as `determine`'s listed exchange does."""
+    f = filings(w, a)
+    if f.refused is not None or f.case is None:
+        return NO_CHANGE
+    band = res.degree if res is not None else None
+    share = task_share(band)
+    top = max(DEGREE_STEP, key=DEGREE_STEP.get)
+    new = []
+    for it in f.items:
+        if not share:
+            new.append((w.tick, EXCLUDED_STAGE, f.side, it.ref, a.id))
+        else:
+            st = (w.tick, FILED_STAGE, f.side, it.rung, it.ref, it.weight * float(share), it.origin, a.id)
+            new.append(st + (True,) if band == top else st)
+    if band is not None:
+        new.extend((w.tick, ANSWERED_STAGE, idx, band, impeached, a.id) for idx, impeached in f.answers)
+    if not new:
+        return NO_CHANGE
+    earns = VERB_TABLE[a.verb].emits_at(band)[0] if band is not None else None
+
+    def perform() -> None:
+        w.records[f.case].stages = [*w.records[f.case].stages, *new]
+    return Change((Subject.entity("records", f.case, earns=earns, fields=("stages",)),), perform)
 
 
 @effect_for("argue")

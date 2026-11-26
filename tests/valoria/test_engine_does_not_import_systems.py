@@ -675,15 +675,16 @@ def test_a_value_role_still_fails_on_an_attribute_that_does_not_exist():
     """The falsifier for the ONE guard S5a relaxed (§0.1 pt 2, pt 5's "a guard must earn it").
 
     `_resolve` used to reject any target that was not callable. Two roles now declare
-    `kind: value` — `systems.social_contest.sim.contest`'s side labels `A`/`B`, which
-    `scene_dispatch.py` compares a verdict against and which no callable role could carry. Relaxing
+    `kind: value` — `modules.combat.wrapper:DUEL_TERMS`, a closed set the combat host adapter
+    checks its terms against and which no callable role could carry. (The role first written for
+    this, the SC05 kernel's side labels `A`/`B`, went when that kernel was retired.) Relaxing
     a guard to fit the case in front of you is how guards die, so this pins what SURVIVED the
     relaxation: a `value` row is still resolved at export time, and a target naming an attribute
     that does not exist still fails the blocking gate.
 
     Without this, `kind: value` would be a hole: any typo'd constant name would export cleanly and
-    then compare false forever at runtime, silently — which for `contest_side.a` means the
-    emergency-council echo quietly degrades to 'Partial' and only a golden diff ever says so.
+    then compare false forever at runtime, silently — a roster check that passes everything and
+    only a golden diff ever says so.
     """
     import importlib.util
     import pytest
@@ -695,17 +696,17 @@ def test_a_value_role_still_fails_on_an_attribute_that_does_not_exist():
 
     # A real module, a constant that is not there.
     with pytest.raises(SystemExit) as exc:
-        mod._resolve('systems.social_contest.sim.contest:NO_SUCH_CONSTANT', 'value')
+        mod._resolve('modules.combat.wrapper:NO_SUCH_CONSTANT', 'value')
     assert 'has no' in str(exc.value)
 
     # And the callable guard is intact for every row that did NOT opt out.
     with pytest.raises(SystemExit) as exc2:
-        mod._resolve('systems.social_contest.sim.contest:A', 'callable')
+        mod._resolve('modules.combat.wrapper:DUEL_TERMS', 'callable')
     assert 'non-callable' in str(exc2.value)
 
     # The real rows still resolve, in both kinds.
-    assert mod._resolve('systems.social_contest.sim.contest:A', 'value') is not None
-    assert callable(mod._resolve('systems.social_contest.sim.contest:build_contest', 'callable'))
+    assert mod._resolve('modules.combat.wrapper:DUEL_TERMS', 'value') is not None
+    assert callable(mod._resolve('modules.social_contest.roll:roll', 'callable'))
 
 
 def test_every_declared_composition_role_resolves():

@@ -217,13 +217,13 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
     # composes the obstacle, not its terms (`test_obstacle_form.py`'s)
     w = P.tiny_world(CONTROL_SIZES)                  # B05.99: at the control sizes, where the obstacle is score / 2
     SeasonDriver(w)                                  # the registrar fills MODULE_ENTRIES
-    w.persons["p_mid"].capability = {"argue": 3}
-    w.persons["p_mid"].attributes = {VERB_TABLE["determine"].opposed_attribute: 0}
-    seen = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine", subject="p_mid",
+    w.persons["p_mid"].capability = {"arms": 3}
+    w.persons["p_mid"].attributes = {VERB_TABLE["arrest"].opposed_attribute: 0}
+    seen = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest", subject="p_mid",
                          rng=draw.seeded(draw.H2("test_sc01_obstacle_ceiling", 0)))
     assert seen["status"] == "RESOLVED" and seen["ob"] == 1.5, seen
     monkeypatch.setattr(mod, "obstacle", lambda inp: (1.25, ()))
-    moved = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine", subject="p_mid",
+    moved = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest", subject="p_mid",
                           rng=draw.seeded(draw.H2("test_sc01_obstacle_ceiling", 0)))
     assert moved["ob"] == 1.25, (
         f"the act's obstacle did not follow the owner ({moved}): something else composes it")
@@ -235,11 +235,11 @@ def _arm(ceiling):
     # ceiling bounds the form's obstacle the same way (`roll.py::obstacle`'s `ceiling` term)
     w = P.tiny_world(CONTROL_SIZES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling))   # B05.99: the control sizes
     SeasonDriver(w)
-    for who in ("p_mid", "p_other", "p_king", "p_low"):
-        w.persons[who].attributes = {VERB_TABLE["determine"].opposed_attribute: 0}
+    for who in ("p_mid", "p_other", "p_king"):    # B24.10: not the roller (`p_low`): `arrest`'s resisting attribute, Strength, is also one of the two it rolls on, where `determine`'s Will was not
+        w.persons[who].attributes = {VERB_TABLE["arrest"].opposed_attribute: 0}
     # roster-exempt: TEST FIXTURE capabilities -- one matter far over every sweep point, one under.
-    w.persons["p_mid"].capability = {"argue": 10}       # score/2 = 5
-    w.persons["p_other"].capability = {"argue": 3}      # score/2 = 1.5
+    w.persons["p_mid"].capability = {"arms": 10}       # score/2 = 5
+    w.persons["p_other"].capability = {"arms": 3}      # score/2 = 1.5
     return w
 
 
@@ -255,7 +255,7 @@ def test_the_ceiling_is_injected_and_bounds_each_matter_on_its_own(subject, want
     who is no person (a site: nobody opposite).
     PER MATTER (ED-SC-0038): each subject's draw is bounded on its own; nothing aggregates them."""
     for c, ob in want.items():
-        out = sigma.resolve(_arm(c), ["p_low"], ["c"], "a proposition", verb="determine", subject=subject,
+        out = sigma.resolve(_arm(c), ["p_low"], ["c"], "a standing", verb="arrest", subject=subject,
                             rng=draw.seeded(draw.H2("test_sc01_obstacle_ceiling", 0)))
         assert out["status"] == "RESOLVED" and out["ob"] == ob, (c, out)
 
@@ -265,7 +265,7 @@ def test_changing_the_ceiling_changes_the_outcome():
     hits, differ = {}, 0
     worlds = {c: _arm(c) for c in (2, 3)}
     for s in range(300):
-        bands = {c: ladder.degree_of(sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine",
+        bands = {c: ladder.degree_of(sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest",
                                                    subject="p_mid", rng=draw.seeded(draw.H2("test_sc01_obstacle_ceiling", s))))
                  for c, w in worlds.items()}
         for c, b in bands.items():
@@ -395,9 +395,9 @@ def test_the_chance_floor_reaches_the_resolved_act_through_the_seam():
         fx = CONTROL_SIZES.sweep("ceiling_per_pool", per_pool)       # B05.99: the control sizes (pool 2, score / 2)
         w = P.tiny_world(fx)
         SeasonDriver(w)
-        w.persons["p_mid"].capability = {"argue": 10}       # roster-exempt: TEST FIXTURE, score/2 = 5
-        w.persons["p_mid"].attributes = {VERB_TABLE["determine"].opposed_attribute: 0}   # B05.14: his resisting attribute adds nothing
-        out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine", subject="p_mid",
+        w.persons["p_mid"].capability = {"arms": 10}       # roster-exempt: TEST FIXTURE, score/2 = 5
+        w.persons["p_mid"].attributes = {VERB_TABLE["arrest"].opposed_attribute: 0}   # B05.14: his resisting attribute adds nothing
+        out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest", subject="p_mid",
                             rng=draw.seeded(draw.H2("test_sc01_obstacle_ceiling", 0)))
         assert out["status"] == "RESOLVED", out
         if per_pool:

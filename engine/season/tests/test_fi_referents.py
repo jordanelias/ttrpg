@@ -51,7 +51,7 @@ def _candidates(w, pid, classless=False) -> frozenset:
     for q in world_q.questions_for(w, p):
         for c in opening_set(p, assemble(p, q, 12), q, w.fixtures):
             if not classless or VERB_TABLE[c.verb].referent_class is None:
-                out.add((c.verb, c.subject, tuple(sorted((c.operands or {}).items()))))
+                out.add((c.verb, c.subject, tuple(sorted((k, v if getattr(v, '__hash__', None) else repr(v)) for k, v in (c.operands or {}).items()))))
     return frozenset(out)
 
 

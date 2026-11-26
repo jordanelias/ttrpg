@@ -47,7 +47,7 @@ optional argument) and `CombatTurnView` (what its per-turn decider reads, handed
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import Callable, Mapping, NamedTuple, Optional
 
 # THE MATTER'S TWO SIDES, signed toward `for` (the sign every `stake` and `believes` is read in), and the flip to the other: the one owner
@@ -112,8 +112,17 @@ class SocialContestInput:
                        contest_input`'s `examined`); `0` for a genuine document, for any subject that
                        is not a Record, and for every contest a prize names; B11.68: the larger of that and
                        the strongest live cover among the doers of the trail an inquiry can uncover
-                       (`epistemic.trail_concealment`). Composed by the module."""
-    pool: float          # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
+                       (`epistemic.trail_concealment`). Composed by the module.
+
+    THE FILED EXHIBITS (B24.20; EVID_B edit 5a), each defaulted, so a record built without them rolls as it did:
+      * `exhibits`     -- the `Item`s shown for a docketed matter, each with its `pairs`, in the order shown; `()` is no case file: the host's `proofs` source
+                         (`world_q.proofs`) is then the whole of the proofs levels (the control);
+      * `proof_level`  -- the named level one whole unit of standing weight is worth, carried RAW; `None` (the fixture's control arm) is no level;
+      * `side`         -- the roller's own side of the case (`"for"` | `"against"`), the one `Item.side` is read against: the docket's for a determiner's draw,
+                         the speaker's for his own `speak`;
+      * `evidence_cap` -- `evidence_cap`, the corroboration cap `evidence.standing` reads; `None` is uncapped.
+    `modules/social_contest/roll.py` reads the four (`proof_levels` the counts, `leverage` the level they add): they are LEVERAGE, never an obstacle operand (A-25)."""
+    pool: float         # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
@@ -129,6 +138,10 @@ class SocialContestInput:
     ceiling_per_pool: bool = False
     ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; read by `modules/social_contest/roll.py::obstacle`, which refuses any other value
     obstacle_operands: tuple = ()
+    exhibits: tuple = ()
+    proof_level: Optional[str] = None
+    side: str = "for"
+    evidence_cap: Optional[float] = None
 
 
 @dataclass(frozen=True)
@@ -161,13 +174,57 @@ class Item:
       * `weight`  -- how much it weighs where it is shown;
       * `source`  -- whose it is (the holder, the witness, the one implicated), where it has one;
       * `about`   -- whom or what it bears on, where it has one;
-      * `sincere` -- `False`: its holder knows it false (his own false word, or a forgery)."""
+      * `sincere` -- `False`: its holder knows it false (his own false word, or a forgery).
+
+    B24.05: the item SHOWN at a sitting is this record (HEAR_B's `Exhibit` is not a second one), so it also carries, each defaulted
+    (a record built without them is the record it was):
+      * `side`   -- `"for"` | `"against"` the party it is shown for, `None` before it is entered;
+      * `rung`   -- the `rosters.yaml: issue_rungs` member it bears on;
+      * `cell`   -- `(subject, predicate, value)` as filed;  `origin` -- the root of its chain, the thing `impugn` halves by;
+      * `forged_found` -- a filed finding names the Record it comes from forged.
+
+    B24.19 (EVID_B edit 3; the same two cells HEAR_B's `Exhibit` names), each defaulted:
+      * `pairs` -- `((another filed exhibit's id, "contradicts" | "agrees"), ...)`: the relation the host builder computed with `decision/options.py::contradicts`
+        and hands over as data, so `modules/social_contest/evidence.py::standing` reads it and restates no pairing rule;
+      * `answered_band` -- the band label (`dice_engine.DEGREE_LABEL`) of the best answering act drawn against it, `None` while none has been.
+
+    B24.26 (ADM edit 4): `first` -- the room heard it first, at the top band (the filed stage's first-heard mark, `is_first`; the host builder `_exhibits_of` fills it): an
+    `answer` to it faces the `first_heard` term. `standing` never reads it."""
     id: str
     kind: str
     weight: float
     source: Optional[str] = None
     about: Optional[str] = None
     sincere: bool = True
+    side: Optional[str] = None
+    rung: Optional[str] = None
+    cell: tuple = ()
+    origin: Optional[str] = None
+    forged_found: bool = False
+    pairs: tuple = ()
+    answered_band: Optional[str] = None
+    first: bool = False
+
+
+@dataclass(frozen=True)
+class Offer:
+    """B24.30 (NEG "Exact edits" 2, as V2 corrects it): the terms a party puts at a negotiation, a typed record and never text.
+
+      * `id`     -- the offer's own id;  `by` -- the party who makes it (his own standing, conditional `oblige`);
+      * `terms`  -- `((term kind, what), ...)`: an `oblige` term (the one kind an offer carries today);
+      * `stores` -- `None`: the DORMANT form of `exchange`'s stores (IS-B2-SC-06, blocked: SE names the act and its operands); an offer carries an obligation term only.
+
+    NO MOVE, NO CLOSING FIELD, NO ACCEPTED FIELD: an offer is a raised point under the `negotiation` rite, whose live thing is an offer, and `item()` is what that point
+    shows (an `oath`, the `matters` kind whose carrier is `Tenure:oblige`; `cell` is the term as filed); an accept is the other side's `concede` (`rites: negotiation`'s
+    `concede: accepts`, effect `yield`), which ends the sitting `yielded` with `Outcome.ended_by` naming the accepter. Under `close: consent` nothing is drawn to close it.
+    [ASSUMPTION; Jordan to correct; revert: `debt`, the other `Tenure:oblige` kind -- basis: an offer is the offerer's own obligation, as an oath is.]"""
+    id: str
+    by: str
+    terms: tuple
+    stores: Optional[tuple] = None
+
+    def item(self) -> Item:
+        return Item(self.id, "oath", 1.0, source=self.by, cell=(self.by, "oblige", self.terms))
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -190,7 +247,10 @@ class Present:
       * `believes`     -- what he KNOWS of the matter, -1..1 toward `for` (his own ledger);
       * `bias`         -- his stable misjudgement of what his options are worth: -1 pessimist .. +1 optimist;
       * `power`, `precedence` -- his circumstances: seat, office, wealth, influence, faction (host);
-      * `items`        -- the `Item`s he holds;  `strain` -- what he carries in from earlier rattles."""
+      * `items`        -- the `Item`s he holds;  `strain` -- what he carries in from earlier rattles;
+      * `backed`       -- B24.35 (WGM edits 2-3): the grounds that move HIM for this act, `None` for every ground (the default: he is moved by any, as he was), else the tuple of
+        those whose `backed_by` condition holds for the act (`seam/wrappers/sigma.py::_backed`). A ground outside it counts none of its positive fit with him
+        (`proceeding.speech`): a misfit still counts. (`None` and not the roster's tuple, because this leaf imports nothing of the host's rosters.)"""
     id: str
     weight: int = 1
     side: Optional[str] = None
@@ -213,6 +273,7 @@ class Present:
     precedence: int = 0
     items: tuple = ()
     strain: float = 0.0
+    backed: Optional[tuple] = None
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -231,7 +292,12 @@ class Rite:
       * `turns`   -- each speaker's turns this sitting; `standard` -- the Grace the occasion asks; `reason_lean` -- the
         venue's lean on Reason's share of the dice; `admits` -- the kinds of matter shown here;
       * `difficulty`, `gravity` -- the obstacle the close is drawn against; `gravity` is how grave the times make a change
-        (renamed from `stakes`); `quorum` -- read by a `declared` close; `unrest` -- the pull of the times (Focus holds against it)."""
+        (renamed from `stakes`); `quorum` -- read by a `declared` close; `unrest` -- the pull of the times (Focus holds against it).
+
+    B24.10 (the hearing's cells, from the rite; each defaulted, so a rite built without them is the rite it was):
+    `faults` -- the `proceeding_faults` the sitting records, read by the module's board (B24.06); `disclosed` -- whether the other side's filings stand on a mover's board;
+    `bears_by_rung` -- `((rung, side), ...)`, who bears each rung of the issue ladder (`bears` is the bearer of the first). `disclosed` and `bears_by_rung` are carried; no module
+    reader yet."""
     id: str
     live: str
     bears: str
@@ -250,6 +316,9 @@ class Rite:
     gravity: float
     quorum: Optional[int] = None
     unrest: float
+    faults: tuple = ()
+    disclosed: bool = False
+    bears_by_rung: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -284,7 +353,12 @@ class Sitting:
       * `live` -- `((side, the side's live point id | None), ...)`: one live point a side;
       * `tracks` -- `((person, value), ...)`, each person's own running `start + the beats' moves` (never a verdict);
       * `cond` -- `((person, Cond), ...)`; `used` -- grounds and items used, for staleness;
-      * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`."""
+      * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`.
+
+    B24.06 adds the board (each defaulted, and each in `UNWRITTEN`: carried on the sitting, not written to `Event.ending`): `board` -- `((Item, status), ...)` in the order
+    entered, an `Item` carrying the side it stands for and the weight it entered at (what it counts for now is `evidence.standing`'s, B24.19), `status` `stands` |
+    `answered` (stands, an answer tried and failed or halved it) | `struck` (by `standing`) | `withdrawn` (refused at entry, the lighter of two of one side's); `faults` -- `((a `proceeding_faults` member, the side at fault), ...)` in order; `levels` -- `((side, how many), ...)`, each a
+    level against that side on the closing draw (a fault's, or a failed `impugn`'s)."""
     n: int = 0
     issue: int = 0
     points: tuple = ()
@@ -294,6 +368,9 @@ class Sitting:
     used: tuple = ()
     last_voice: tuple = _NO_POINT
     ended: Optional[str] = None
+    board: tuple = ()
+    faults: tuple = ()
+    levels: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -329,7 +406,13 @@ class Beat:
       * `rattled` -- whom it rattled; `frame` -- the frame of an argument or the object of a press;
       * `relevance` (Reason), `heard` (Presence), `esteem` (Grace) -- the operands of the speech;
       * `broke` -- he spoke with his temper broken; `moved` -- each listener's move; `closed` -- how it ended the sitting;
-      * `mood` -- the room's, named only at the beat that turns it; `terms` -- true values."""
+      * `mood` -- the room's, named only at the beat that turns it; `terms` -- true values.
+
+    B24.06 adds the board's three cells, each defaulted and after `terms`: `entered` -- the ids of the items this exchange put on the board;
+    `struck` -- the ids it struck; `fault` -- the first `proceeding_faults` member it recorded. The item a move uses is `item`, as it always was.
+
+    ⚠ EVERY FIELD BUT THOSE IN `UNWRITTEN["Beat"]` IS WRITTEN: `loop/resolve.py::_BEAT_CELLS` and `queries/world_q.py::EndedBeat` both read `written(Beat)`,
+    so a field added here and left out of `UNWRITTEN` is a cell of every proceeding's `Event.ending` and moves the content hash."""
     n: int
     mover: str
     voice: str
@@ -357,6 +440,76 @@ class Beat:
     closed: Optional[str]
     mood: float
     terms: tuple = ()
+    entered: tuple = ()
+    struck: tuple = ()
+    fault: Optional[str] = None
+
+
+#: THE CELLS OF A RECORD THE EVENT'S `ending` DOES NOT CARRY AS CELLS, by record name (B24.06; the ONE OWNER, read through `written`): `Beat.terms` (the true
+#: values are never written) and the board's cells (a cell on every beat and every sitting of every proceeding is a hash mover, the realm's own `tell` sittings
+#: among them). B24.14 WRITES `Beat.entered` and `Beat.struck` AS THE EXCHANGE LIST (`exchanges`, one `("exchange", kind, item)` tuple beside the beats, only
+#: where a sitting entered or struck an item), so they stay in this row: they are not a cell of a beat. `Beat.fault` and `Sitting.board`, `.faults`, `.levels`
+#: are carried on the sitting, not written to `Event.ending`.
+UNWRITTEN = {"Beat": ("terms", "entered", "struck", "fault"), "Sitting": ("board", "faults", "levels")}
+
+#: THE BEAT CELLS THAT ARE THE EXCHANGE LIST, in the order an exchange lists them (B24.14): an item an exchange put on the board, then one it struck. Each
+#: cell's name is the kind of the stage written.
+EXCHANGE_CELLS = ("entered", "struck")
+
+
+# B24.25 -- THE STAGES A CITING SPEECH WRITES ON A CASE FILE, beside the sitting's two-cell exchange stages above (the ONE OWNER of the shapes; `loop/effects_information.py::_eff_speak`
+# writes them, `seam/wrappers/sigma.py::_exhibits_of` reads them; none is a clock stage, `state/carriers.py::is_clock_stage`):
+#   `(tick, "filed", side, rung, ref, weight, origin, act)` -- an item the room took, `ref` the cited claim as the citer said it (a `Said`) or the id of the cited Record, `weight` what it was
+#       entered at (its derived weight times the speech band's share), `origin` the root of its chain; the 9-cell form adds a ninth, `True`, at the top band only (the first-heard mark, B24.26);
+#   `(tick, "excluded", side, ref, act)` -- an item the room did not take (the speech's band entered nothing): the record an appeal cites, and no exhibit;
+#   `(tick, "answered", target, band, impeached, act)` -- an answering speech against the filed stage at index `target`: `band` the speech's own band (the target's `answered_band`) and
+#       `impeached` whether the speech cited a finding that the Record is forged (the target's `forged_found`).
+# [JUSTIFIED: `filed` 8 cells, 9 with the first-heard mark: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.25), not a tunable.]
+FILED_STAGE, FILED_CELLS, FIRST_CELLS = "filed", 8, 9
+# [JUSTIFIED: `excluded` 5 cells: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.25), not a tunable.]
+EXCLUDED_STAGE, EXCLUDED_CELLS = "excluded", 5
+# [JUSTIFIED: `answered` 6 cells: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.25), not a tunable.]
+ANSWERED_STAGE, ANSWERED_CELLS = "answered", 6
+
+
+# B24.38 -- THE STAGE A BENCH'S ADJOURNMENT WRITES, beside the exchange stages (the ONE OWNER of the shape; `loop/effects_information.py::_eff_determine` writes it, `queries/world_q.py::adjournments`
+# reads it): `("adjourned", the bench member whose `adjourn` held the sitting)` -- two cells like an exchange's `(kind, item)`, the second a person because an adjournment enters no item.
+# [JUSTIFIED: `adjourned` 2 cells: the cell count of the stage shape written above, a width read to tell one stage from another in a case file's `Record.stages` (B24.38), not a tunable.]
+ADJOURNED_STAGE, ADJOURNED_CELLS = "adjourned", 2
+
+
+def is_adjourned(st) -> bool:
+    """IS `st` AN ADJOURNED STAGE: a tuple of `ADJOURNED_CELLS` cells labelled `ADJOURNED_STAGE` (an exchange stage is labelled by `EXCHANGE_CELLS`, a filed one by `FILED_STAGE`)."""
+    return isinstance(st, tuple) and len(st) == ADJOURNED_CELLS and st[0] == ADJOURNED_STAGE
+
+
+def is_filed(st) -> bool:
+    """IS `st` A FILED STAGE (an exhibit): a tuple of `FILED_CELLS` cells, or `FIRST_CELLS` with the first-heard mark, labelled `FILED_STAGE`."""
+    return isinstance(st, tuple) and len(st) in (FILED_CELLS, FIRST_CELLS) and st[1] == FILED_STAGE
+
+
+def is_first(st) -> bool:
+    """DID THE ROOM HEAR THIS FILED STAGE FIRST -- the mark a top-band speech writes (`FIRST_CELLS`)."""
+    return is_filed(st) and len(st) == FIRST_CELLS and bool(st[-1])
+
+
+def is_answered(st) -> bool:
+    """IS `st` AN ANSWERED STAGE: a tuple of `ANSWERED_CELLS` cells labelled `ANSWERED_STAGE`."""
+    return isinstance(st, tuple) and len(st) == ANSWERED_CELLS and st[1] == ANSWERED_STAGE
+
+
+def exchanges(beats) -> tuple:
+    """B24.14 -- THE EXCHANGE LIST OF A SITTING: `((kind, item id), ...)`, one for each item a beat entered or struck, in the beats' order and within a beat
+    in `EXCHANGE_CELLS` order. The one owner of the list: `loop/resolve.py::_proceeding_ending` carries it on the Event's `ending` and
+    `loop/effects_information.py::_eff_determine` appends it to the case file's `Record.stages`, so the two are one value. `()` where no beat entered
+    or struck an item (every sitting at `sitting_exchanges` 0)."""
+    return tuple((cell, iid) for b in beats for cell in EXCHANGE_CELLS for iid in getattr(b, cell))
+
+
+def written(cls) -> tuple:
+    """The names of `cls`'s fields the Event's `ending` carries, in the record's declared order: every field but `UNWRITTEN[cls.__name__]`.
+    `loop/resolve.py::_proceeding_ending` writes them and `queries/world_q.py::EndedBeat` reads them back, both through this."""
+    return tuple(f.name for f in fields(cls) if f.name not in UNWRITTEN.get(cls.__name__, ()))
 
 
 @dataclass(frozen=True)
@@ -370,7 +523,11 @@ class View:
       * `broke` -- his temper has broken: he cannot hold his tongue, and `rest` is not on his menu (A-146);
       * `visible` -- each speaker's rattles; `mood`, `odds` -- the room as he reads it, and P(carried) on that reading before an ordinary bench;
       * `intent` -- the perceived stake of the man opposite; `acc` -- his accuracy;
-      * `burden` -- he bears the matter and no point of his stands: resting is a charge not pressed."""
+      * `burden` -- he bears the matter and no point of his stands: resting is a charge not pressed;
+      * B24.05 (each defaulted): `board` -- the `Item`s standing and struck, as the rite discloses them to him;
+        `hand` -- his own `Item`s not yet shown;
+      * `lever` -- the board's leverage on the closing draw as it stands (`proceeding._lever`: the standing items, the filed exhibits, the faults owed), the one figure
+        `odds` and the NPC decider's believed chance (`sigma._believed_chance`) read it from, so the close and both readings are one ladder; `0.0` by default."""
     n: int
     mover: str
     side: str
@@ -390,6 +547,9 @@ class View:
     intent: float
     acc: float
     burden: bool = False
+    board: tuple = ()
+    hand: tuple = ()
+    lever: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -411,7 +571,15 @@ class Input:
       * `rite` -- the `Rite`; `matter` -- what is argued;  `room` -- the `Present` records;
       * `grounds` -- `((ground, reason weight, era weight), ...)`; `dials` -- the settings, a mapping;
       * `state` -- a whole `Sitting` to resume, or `None` (a resume needs no replay);
-      * `frames` -- `((channel, tag), ...)`: the wants and convictions a speech here can be framed on.
+      * `frames` -- `((channel, tag), ...)`: the wants and convictions a speech here can be framed on;
+      * `first_heard` -- B24.26: the act this input is built for answers an item the room heard first (the host's read of the stages its `answers` name,
+        `world_q.answers_first`), so its speech faces the `first_heard` term; `False` for every other act. Inside a sitting the term is the answered `Item.first`'s, never this.
+      * `answered_over` -- B24.43: the weight the item the act answers holds over its answer (`world_q.answered_over`), or `None` for an act that answers nothing. The abridged speech
+        is then the sitting's `answer`: its difficulty is `answer_ob` and it meets the `answer` term on this weight. Inside a sitting the weight is the board's own, never this.
+      * `exhibits` -- B24's close (R1; B24.20): the `Item`s filed on the matter's case file (`sigma._exhibits_of`, at `evidence_from: case_file`), each `side` on THIS sitting's axis
+        (`for` the bearer's), with their `pairs` to one another and to every item in a hand; `()` where nothing is filed. NEVER ON THE BOARD (nothing enters, answers or strikes
+        them in a sitting): `proceeding._lever` counts them with the board's standing items in one `evidence.standing`, so they reach the close as leverage only (A-25), and an
+        abridged speech's own leverage the same way.
 
     `__post_init__` holds the one invariant (A-139) and refuses, each a `ValueError` whose message begins `refused[<key>]`:
     `one_character`, `abridged_self`, `no_weight`, `no_adjudicator`, `nobody_speaks`, `resume_yielded`, and, a resume being
@@ -423,6 +591,9 @@ class Input:
     dials: Mapping
     state: Optional[Sitting] = None
     frames: tuple = ()
+    first_heard: bool = False
+    answered_over: Optional[float] = None
+    exhibits: tuple = ()
 
     def __post_init__(self):
         room, rite, state = self.room, self.rite, self.state
@@ -457,13 +628,18 @@ class Outcome:
     and `ruled` -- `((decider, how far his ruling departed from his own track), ...)` for a played judge.
 
     `verdicts` is a tuple of `(id, Margin)`: margins, never a band, a side or a winner: the host grades each on the one
-    ladder (`seam/ladder.py::degree_of`)."""
+    ladder (`seam/ladder.py::degree_of`).
+
+    B24.05 (each defaulted): `standing` -- the `Item`s left standing on the board at the close; `faults` -- the `proceeding_faults`
+    members recorded over the sitting, in order. Neither names a side or a winner."""
     beats: tuple
     state: Sitting
     ended: str
     ended_by: Optional[str]
     verdicts: tuple
     ruled: tuple = ()
+    standing: tuple = ()
+    faults: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -727,9 +903,14 @@ class PlayHost:
                      (`modules/combat/wrapper.py::TURN_CHOICES`). It is written to draw nothing, write nothing and
                      hold no token (CONVENTION; `test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended` checks the shipped deciders): it is called inside the provider's frame, with the driver below it on
                      the stack (a call-out, not a return), and its return is the only resume.
+      * `deciders` -- B24.05, `module role -> decide(view) -> choice` (`social_contest.proceeding`, ...): the role-keyed form `decide` is
+                     the first of. `decide` stays for `combat.fight` until B34 folds it into `deciders["combat.fight"]`. The wrapper
+                     resolves a role's decider here and passes it as `decide=`; a role with none is automated for this host. Empty by
+                     default, so a host built as before is the host it was.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
     persons: frozenset
     decide: Callable
+    deciders: Mapping[str, Callable] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

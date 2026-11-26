@@ -29,7 +29,7 @@ from ..decision.budget import bands_below
 from ..gaps import Unspecified
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
-from ..state.carriers import Event
+from ..state.carriers import Event, is_clock_stage
 from ..state.gate import PERSON_DIED, Change, Token, death_subjects
 from ..state.ids import H, ROOT, draw_factory
 from ..trace_log import TRACE
@@ -444,7 +444,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # nothing of which; no per-stage count is stored.
         matured_by = None
         for n, st in enumerate(list(rec.stages)):
-            if not (isinstance(st, tuple) and len(st) >= 3):
+            if not is_clock_stage(st):     # B24.25: a filed/excluded/answered stage of a case file is no clock and ripens nothing
                 continue
             due, label, wound_by = st[0], st[1], st[2]
             if due > w.tick:

@@ -1070,6 +1070,18 @@ class Record:
                     "key is an operand no reader can bind; an extra key is a second vocabulary")
 
 
+#: A CLOCK STAGE IS EXACTLY `(due, label, the act that wound the clock)` -- the one stage shape MATTER ripens and `a_stage_unmatured` counts (B24.25). A case file's `Record.stages` also holds
+#: stages that are no clock (`queries/inputs.py`: a sitting's two-cell `entered`/`struck`, a citing speech's `filed`, `excluded` and `answered`, each its own width), so a stage is a clock
+#: only at this width; one that read `>= 3` would ripen every filed exhibit and emit a `term.matured` for it.
+# [JUSTIFIED: the WIDTH of a clock stage, `(due, label, act)`: three cells, the shape every clock in the tree has (B24.25); a width, not a tunable.]
+CLOCK_STAGE_CELLS = 3
+
+
+def is_clock_stage(st) -> bool:
+    """IS `st` A CLOCK'S STAGE -- a tuple of exactly `CLOCK_STAGE_CELLS` cells, `(due, label, act)`. The one test MATTER (`loop/matter.py`) and `state/attribution.py::a_stage_unmatured` both ask."""
+    return isinstance(st, tuple) and len(st) == CLOCK_STAGE_CELLS
+
+
 def subject_of(a: "Act") -> str:
     """The act's subject, or `""`. THE ONE READ, beside the carrier it reads.
 

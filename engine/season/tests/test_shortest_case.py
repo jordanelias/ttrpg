@@ -166,7 +166,8 @@ def test_every_claim_appears_in_one_board_group():
     one, two = (weigh(c) for c in (by_id["c_t1"].claim, by_id["c_t2"].claim))
     assert by_id["c_t1"].support == by_id["c_t2"].support == by_id["c_t3"].support == 1.0 - (1.0 - one) * (1.0 - two) > max(one, two), "two origins do not stand higher than one"
     assert by_id["c_t4"].support == 1.0 - (1.0 - weigh(by_id["c_t4"].claim)) and set(by_id["c_t1"].against) == {"c_t4"} and set(by_id["c_t4"].against) == {"c_t1", "c_t2", "c_t3"}
-    assert by_id["c_t1"].proof_kind == "record" and by_id["c_deed"].proof_kind == "testimony" and by_id["c_deed"].against == ()
+    assert by_id["c_t1"].proof_kind == "" and by_id["c_deed"].proof_kind == "testimony" and by_id["c_deed"].against == ()      # B24.44: `person_q.proof_kind` -- a cell is no proof
+    assert by_id["c_doc"].proof_kind == "record"                                                                                # a held Record's, `RECORD_MATTER` or `record`
     docs = [x for x in board(p, w.fixtures) if x["kind"] == "document"]
     assert [x.claim.id for x in rows if x.record][-1:] == ["c_doc"] and by_id["c_doc"].record == "rec_doc" and len(docs) == len(held_before) + 1
     assert docs[-1] == {"kind": "document", "id": "rec_doc", "of": "dispensation", "about": {"terms": "t", "to": (me,), "at": None}}

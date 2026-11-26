@@ -252,7 +252,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
-| S13 | B16 (PC), B21b (FA), B24 (SC) |
+| S13 | B16 (PC), B21b (FA) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
@@ -269,7 +269,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | **M1 · every outcome is drawn** | B08 | B05 (B08 landed at `3cf56673c`) | R-03 (with R-03.c); R-09.a, .c, .d, .e | R-09 short of R-09.b only |
 | **M2 · persons** | BA1 | — (BA1 landed at `ce61cbf30`) | R-06, R-08, R-09; R-07 if R-07.c reads with its receipt | R-06, R-08, R-09 hold; R-07 holds or is one conjunct short |
 | **M3 · every verb** | B35 | B12a (landed at `ee641cbdd`), B12b, B12c, B21b, B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
-| **M4 · every scale** | B36 | B16, B19a, B19, B20, B24, B30, B34, B36 | R-04 | every R-04 conjunct holds |
+| **M4 · every scale** | B36 | B16, B19a, B19, B20, B24 (landed at `d04348d6e`), B30, B34, B36 | R-04 | every R-04 conjunct holds |
 | **M5 · the rulings beyond the nine, and the carried positions** | B40 | B18, B31, B33, B37, B38, B39, B40, B41, B11F1, B11F2, B21d, B21s, B37p | none new; R-05 re-read at B38, R-06.e and R-09.b at B39, all nine at B40 | all nine hold |
 | **the settings, then the re-take** | B99 | B98, B99 | all nine, on B98's closing tree (the settings as set) | `m1_acceptance --summary` row 3 reads what the readings say |
 
@@ -378,7 +378,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B21s-strife-supply | IN | ED-IN-0395..0396 (0+2) | H-642..H-646 (0+5) |
 | B22-mb-armies | MB | ED-MB-0095..0096 (0+2) | H-647..H-653 (2+5) |
 | B23-land | FA | ED-FA-0048..0049 (0+2) | H-654..H-660 (2+5) |
-| B24-sc-hearing | SC | ED-SC-0045..0047 (1+2) | H-661..H-675 (10+5) |
 | B24a-sc-outside-the-room | SC | ED-SC-0048..0049 (0+2) | H-676..H-681 (1+5) |
 | B25-fi-questioning | FI | ED-FI-0012..0013 (0+2) | H-682..H-686 (0+5) |
 | B26-fi-inquiry | FI | ED-FI-0014..0015 (0+2) | H-687..H-693 (2+5) |
@@ -439,7 +438,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 |---|---|
 
 | B21b-fa-war | `valoria_master_workplan_v12_part21.md`, `_part21_cont.md` |
-| B24-sc-hearing | `valoria_master_workplan_v12_part22.md`, `_part22_cont.md` |
 | B16-pc-round | `valoria_master_workplan_v12_part23.md` |
 | B12b-weather-arcs-population | `valoria_master_workplan_v12_part24.md`, `_part24_cont.md` |
 | B19a-mb-contact-instrument, B29-pc-custody | `valoria_master_workplan_v12_part24_cont.md` |
