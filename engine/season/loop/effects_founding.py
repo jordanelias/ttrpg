@@ -13,7 +13,7 @@ adds `raze`, the closer of `H-166` limit 3: the one verb that ends a Rung (`w.ru
 from __future__ import annotations
 
 from ..data.rosters import RAZE_TARGET_KINDS, RUNG_KINDS, SITE_KINDS
-from ..queries.world_q import mustered, works_target
+from ..queries.world_q import holder_faction_of, mustered, works_target
 from ..state.carriers import Rung, Site, Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -263,8 +263,9 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         and seized and never razed; occupation is defined only at the places a march arrives at) [ASSUMPTION; medium; Jordan to
         correct; revert: any Rung kind, the licence still occupation];
       * the exercised seat has no faction;
-      * nobody holds the settlement (H-166: who holds an unheld place is unruled; `occupying_faction`'s default,
-        which `_seize_rung` lifts with `unheld=True`) or the seat's own faction does -- a faction does not raze its own town;
+      * nobody holds the settlement (`holder_faction_of` is `None`: the explicit decline of B21b.06, CP-T09-04 (a), which stands whatever
+        `occupying_faction`'s `unheld` default is -- `_seize_rung` lifts that default with `unheld=True`, `raze` never does) or the seat's own
+        faction does -- a faction does not raze its own town;
       * the seat's faction is not mustered there (NO ARMY: the entry's falsifier).
       * (B21b.04, CP-T09-04 (b), through `occupying_faction`) no field was won there this season and the seat's people there are not strictly more than the
         holder's (`world_q.seat_people_at` against `mustered`): a held town is razed by the larger party, as it is seized.
@@ -290,6 +291,10 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
     rid = _operand(a, "subject")
     # ED-IN-0306 phase 4: a territory is marched on and occupied now, and still not razed (`raze_target_kinds`).
+    # B21b.06 (CP-T09-04 (a)): nobody holds the place -> declined HERE, explicitly, whatever `occupying_faction`'s `unheld` default is (`seize` lifts it for its
+    # Rung half; razing a place nobody holds is no act of an army against a holder).
+    if rid in w.rungs and holder_faction_of(w, rid) is None:
+        return NO_CHANGE
     mine = occupying_faction(w, a.via, rid) if rid in w.rungs and w.rungs[rid].kind in RAZE_TARGET_KINDS else None
     # Razing stays the act of the army that is IN the town: a territory's occupation carries a settlement's
     # SEIZURE (the title), not its destruction.

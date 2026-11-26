@@ -16,7 +16,7 @@ from typing import Optional
 
 from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, WON, is_season_count, task_share
 from ..gaps import Forbidden, InstrumentDefect
-from ..queries.world_q import governing_hold, holder_faction_of, march_at_band, mustered, occupies, seat_people_at
+from ..queries.world_q import faction_props, governing_hold, holder_faction_of, march_at_band, mustered, occupies, seat_people_at
 from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, seat_faction
 from ..trace_log import TRACE
@@ -209,7 +209,9 @@ def occupying_faction(w: "World", via: str, rid: str, unheld: bool = False) -> O
     for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
     settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. A held TOWN taken
     without a won field this lap goes to the faction with strictly more persons mustered there (CP-T09-04 (b), Pax Pamir's rule);
-    after a won field the licence is unchanged; a territory's is `occupies` alone. B21b.04, the limit: "a won field" is a `field.won` in `w.log` at this `w.tick` whose causing
+    after a won field the licence is unchanged; a territory's is `occupies` alone. An UNHELD town (`unheld=True`) has no holder to outnumber, so the seat's
+    people there must be strictly more than EVERY other faction's `mustered` there (B21b.06, CP-T09-04 (a); HR-4's first residue: every mustered faction counts;
+    its second, two armies arriving at one empty target, is a stated limit -- the licence goes to the one faction that outnumbers). B21b.04, the limit: "a won field" is a `field.won` in `w.log` at this `w.tick` whose causing
     `march` named the place (`world_q.march_at_band`; an Event carries no payload, the act's `subject` is the field's rung), and the log takes a lap's
     Events at the lap's END (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now -- which a `seize` of the same lap precedes,
     RESOLVE before ENCOUNTER, so it could not have read it either. The seat's side is `seat_people_at` (the faction's members and the seat's sworn there), the
@@ -235,9 +237,14 @@ def occupying_faction(w: "World", via: str, rid: str, unheld: bool = False) -> O
     if town:
         held = governing_hold(w, rid)
         places = [rid] + ([held.object] if held is not None and held.object != rid and occupies(w, held.object, mine) else [])
-        # an UNHELD town (`unheld`, B12a: the rule for held land is the rule for unheld land) has no holder's people to outnumber; B21b.06 adds the plurality among
-        # the factions mustered there
-        if not any(march_at_band(w, at, WON) or len(people if at == rid else seat_people_at(w, via, at)) > (len(mustered(w, at, holder)) if holder else 0)
+        # B21b.06 (CP-T09-04 (a), HR-4's first residue; [ASSUMPTION; medium; Jordan to correct; revert: an unheld town's rival count 0, one seat person licenses it]): an
+        # UNHELD town (`unheld`, B12a) has no holder's people to outnumber, so the seat's people there must outnumber EVERY other faction mustered there --
+        # the rival is the most of them (`faction_props`, the one owner of what a faction is); a held town's rival is still the holder's alone.
+        def rivals(at: str) -> int:
+            if holder:
+                return len(mustered(w, at, holder))
+            return max((len(mustered(w, at, f)) for f in faction_props(w) if f != mine), default=0)
+        if not any(march_at_band(w, at, WON) or len(people if at == rid else seat_people_at(w, via, at)) > rivals(at)
                    for at in places):
             return None
     return mine

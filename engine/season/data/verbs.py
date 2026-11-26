@@ -2817,6 +2817,9 @@ if HOLDING_CLASS not in REFERENT_CLASSES:
 # union over the `Rung` rows) is NOT this set: it carries `issue` and `convene`, through which no `establish` is
 # eligible.
 FOUNDING_REMIT_ACTS = _remit_acts_of(VERB_TABLE["establish"])
+# B21b.06 (CP-T09-04 (d)): THE ACTS A SEAT TAKES LAND THROUGH -- `seize`'s own `remit:` alternatives (`issue` today), read off the row, so
+# `queries/world_q.py::uncontrolled_in_purview` offers an unheld territory only to a holder of a seat the fold's eligibility would admit.
+SEIZE_REMIT_ACTS = _remit_acts_of(VERB_TABLE["seize"])
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a

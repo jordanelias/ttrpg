@@ -55,6 +55,7 @@ from engine.season.decision.options import opening_set
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.loop.effects_shared import occupying_faction
+from engine.season.loop.matter import _die
 from engine.season.queries import person_q as PQ
 from engine.season.queries import world_q
 from engine.season.seam.contest import Resolution
@@ -1014,6 +1015,60 @@ def test_an_unheld_settlement_the_seats_faction_does_not_occupy_is_refused():
     assert world_q.holder_faction_of(w, "set_s_037") is None
     assert not world_q.occupies(w, "set_s_037", CROWN) and not world_q.seat_people_at(w, "off_king", "set_s_037")
     assert EFFECTS["seize"](w, _seize_act("set_s_037")) is G.NO_CHANGE
+
+
+def _unheld_town_with(crown, church=0, guilds=0):
+    """`build_realm(0)` with the unheld `set_s_037` standing `crown`, `church` and `guilds` of those factions' members (FIXTURE EDIT, NAMED: `_station`, outside any
+    write; nobody stands there at the build). Returns the world; the arms ask `EFFECTS["seize"]` of it, as the arms above do (no seat's purview reaches the town,
+    so the fold would refuse earlier, at the `authority` conjunct)."""
+    w = build_realm(0)
+    assert world_q.holder_faction_of(w, "set_s_037") is None and not any(
+        world_q.mustered(w, "set_s_037", f) for f in (CROWN, CHURCH, "fac_guilds"))
+    for fac, n in ((CROWN, crown), (CHURCH, church), ("fac_guilds", guilds)):
+        _station(w, world_q.members(w, fac)[:n], "set_s_037", f"t_b21b06_{fac}")
+        assert len(world_q.mustered(w, "set_s_037", fac)) == n, (fac, n)
+    assert len(world_q.seat_people_at(w, "off_king", "set_s_037")) == crown, "a sworn man of another faction stands there and joins the seat's count"
+    return w
+
+
+def test_an_unheld_town_goes_to_the_strict_plurality_of_the_factions_mustered_there():
+    """B21b.06, CP-T09-04 (a), HR-4's first residue: an unheld town licenses the seat's faction only when its people there are strictly more than EVERY other
+    faction's mustered there. The Crown (the seat `off_king`'s faction) at `set_s_037`: one against the Church's two is refused (before this item one person
+    licensed it), two against two is a tie and refused, three against two takes it -- the actor then holds the town; three against the Church's two AND
+    the Guilds' four is refused, the third faction counting. Each arm one change from the next."""
+    for crown, church, guilds in ((1, 2, 0), (2, 2, 0), (3, 2, 4)):
+        w = _unheld_town_with(crown, church, guilds)
+        assert occupying_faction(w, "off_king", "set_s_037", unheld=True) is None, (crown, church, guilds)
+        assert EFFECTS["seize"](w, _seize_act("set_s_037")) is G.NO_CHANGE, (crown, church, guilds)
+    w = _unheld_town_with(3, 2)
+    assert occupying_faction(w, "off_king", "set_s_037", unheld=True) == CROWN
+    change = EFFECTS["seize"](w, _seize_act("set_s_037"))
+    assert change is not G.NO_CHANGE
+    change.apply()
+    assert world_q.holder_faction_of(w, "set_s_037") == CROWN
+
+
+def test_a_seat_holder_is_offered_the_uncontrolled_territory_his_faction_stands_in(monkeypatch):
+    """B21b.06, CP-T09-04 (d), IN-30's EXIT: the King dead, the territories nobody holds (`terr_T1` among them) are a standing occasion for a holder of a seat
+    that may `seize` (`uncontrolled_in_purview`), stamped on the question he answers as a `Rung`; `march` -- which forms on a stamped `Rung` -- is formed on
+    `terr_T1` for the spymaster `p_npc_033` (his faction stands there). CONTROL, one change (the term out): no pair is stamped and no `march` forms on it.
+    THE PLAN'S `seize` DOES NOT FORM from this stamp: `seize` declares no `referent_class` and forms only on a subject a held warrant names
+    (`rosters.yaml: warrant_sourced`); `issue` is `Proposition`-classed and forms on no `Rung`."""
+    w = build_realm(0)
+    w.step = Step.MATTER
+    w._emitted_by_write = []
+    _die(w, mint_token(w, WriteClass.MATTER), "p_npc_020")
+    p = w.persons["p_npc_033"]
+    assert "terr_T1" in world_q.uncontrolled(w, "r_valoria") and world_q.mustered(w, "terr_T1", CROWN)
+
+    def formed():
+        q = world_q.questions_for(w, p)[0]
+        cands = opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+        return ("terr_T1", "Rung") in q.classes, {c.verb for c in cands if c.subject == "terr_T1"}
+    stamped, verbs = formed()
+    assert stamped and "march" in verbs, (stamped, verbs)
+    monkeypatch.setattr(world_q, "uncontrolled_in_purview", lambda w_, p_: ())
+    assert formed() == (False, set())
 
 
 def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_nothing():

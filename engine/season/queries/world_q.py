@@ -37,7 +37,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    INVESTED, SEASONS_OF_YEAR,
+    DECLARED, INVESTED, SEASONS_OF_YEAR,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     FACTION_CREED, faction_prop_id, factions_compatible,
@@ -51,7 +51,7 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDING_REMIT_ACTS,
-    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
+    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS, SEIZE_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -3074,18 +3074,35 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
     Query. `rung_id` SCOPES the answer, as `provinces_of` and `density` take theirs; it is not
     contiguity. `H-186` registers what is missing and why.
 
-    ⚠ ITS ONE CALLER IS A REPORT: `harness/populated.py::census` counts it over each realm. That
-    meets the letter of r2 `05` §A.1.5 RULED (d), as `establishment_of` below records (*a Query
-    with no consumer is a false N-line*), and no more: nothing in the loop or the chooser asks it,
-    so the content hash cannot move by it and, under `CLAUDE.md` §0.2, it is a tested read that a
-    harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier.
-    ⚠ v9 IN-30 FOUND NO CALLER FOR IT: no existing verb takes or governs unheld land
-    (`seize` declines it, `march` moves presence only), and the `Rung` stamp reaches only `migrate`
-    and `requisition`, which read no holding -- so any caller needs a ruling first (`H-186`)."""
+    ⚠ ITS CALLERS: `harness/populated.py::census` counts it over each realm, and, since B21b.06 (IN-30's EXIT), `uncontrolled_in_purview` --
+    which `questions_for` stamps as a `Rung` occasion, so the loop and the chooser ask it. `engine/season/tests/test_revolt_query.py` is the
+    report's falsifier. (v9 IN-30 found no caller: no verb then took unheld land, `seize` declined it -- since `09_WR_world_motion` edit 2
+    it does not -- and the `Rung` stamp reached only rows that read no holding; `H-186` registers what is still missing.)"""
     TRACE.query("uncontrolled", "resolver")
     return sorted(r for r in _subtree(w, rung_id)
                   if r in w.rungs and w.rungs[r].kind == "territory"
                   and holder_faction_of(w, r) is None)
+
+
+def uncontrolled_in_purview(w: World, p: Person) -> tuple:
+    """B21b.06 (v11 CP-T09-04 (d), IN-30's production caller; `[ASSUMPTION: the name]`; [ASSUMPTION; medium; Jordan to correct; revert: drop the term in
+    `questions_for`]). THE UNHELD TERRITORIES `p`'S SEAT MAY TAKE, sorted by id: for each live `hold` of `p` on a seat whose grant carries a `seize` remit act
+    (`data/verbs.py::SEIZE_REMIT_ACTS`, read off the row), the rungs `uncontrolled(w, seat.rung)` returns that `state/gate.py::purview_reaches` admits and where
+    the seat's own faction is `mustered` (`seat_faction`) -- a seat's faction with nobody standing in an empty territory has no occasion to take it. The occasion only:
+    `questions_for` stamps them as `Rung`; whether an act forms on one, and whether it is licensed (`occupying_faction`), is the row's and the fold's. `()` for a
+    person with no such seat, which is nearly everyone, so nothing else is read for him. `uncontrolled` is asked of the seat's own rung, so a rung reached only by
+    `purview_reaches`' oblige clause (a sworn seat's ground) is not offered here."""
+    seats = [w.offices[o] for o in dict.fromkeys(
+        t.object for t in p.tenures
+        if t.kind == "hold" and t.live and t.object in w.offices
+        and not SEIZE_REMIT_ACTS.isdisjoint(t.granted_acts))]
+    out: set = set()
+    for s in seats:
+        faction = seat_faction(w, s.id)
+        if faction is None or s.rung is None:
+            continue
+        out.update(r for r in uncontrolled(w, s.rung) if purview_reaches(w, s, r) and mustered(w, r, faction))
+    return tuple(sorted(out))
 
 
 @dataclass(frozen=True)
@@ -5237,6 +5254,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # AFTER THE LARDERS, THE HOLDINGS HE MAY FOUND AN OFFICE OVER (`holdings_to_found`), as `Rung` --
     # `establish` forms on them; "never twice" is `_stamped`'s REM-21 (iv-b) dedup, so a holding that is also
     # a larder in purview or a place named keeps its first pair.
+    # v11 CP-T09-04 (d) (B21b.06; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, BESIDE THEM, THE UNHELD TERRITORIES HIS SEAT MAY TAKE THAT
+    # HIS FACTION STANDS IN (`uncontrolled_in_purview`), as `Rung`, never twice. REVERT: drop the term.
     # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, AFTER THOSE, THE QUESTION'S OWN
     # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
@@ -5284,6 +5303,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding
+             + uncontrolled_in_purview(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + crossed_sites(w, p, since) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
