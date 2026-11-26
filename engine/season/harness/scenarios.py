@@ -63,7 +63,7 @@ from ..state.world import World
 from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .carin import build_world
-from .governance_spine import ACCUSED, ACCUSER, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
+from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
 from .play_surface import board, carry_on, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
@@ -497,6 +497,7 @@ HEARING_VERBS = frozenset({"speak", "determine", "argue", "tell", "lie", "petiti
 #: What each ending is for the seated person (`IS-B2-SC-08` (5)). [ASSUMPTION: the seated person is a party or an advocate, not a bench member -- basis: HEAR_B's seat list; a seated bench member reads
 #: `drawn` for every name, and the row has no field for a seat's side (B34 splits it as `IS-B3-GO-02` does for `season`). `dismissed` reads `matter.undetermined` until B27 (`governance_spine.hearing_ending`).]
 HEARING_KINDS = {"carried": "won", "carried_in_part": "won", "agreed": "won", "dismissed": "lost", "adjourned": "drawn", "lapsed": "drawn", "parted": "drawn"}
+assert set(HEARING_KINDS) == set(HEARING_ENDINGS), (set(HEARING_KINDS) ^ set(HEARING_ENDINGS))      # the names are `governance_spine.HEARING_ENDINGS`' (the one owner); a name added there is a kind owed here
 
 
 def hearing_stop(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:

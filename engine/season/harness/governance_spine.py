@@ -771,7 +771,7 @@ def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> Worl
         B24.25's (`speak` writes them), so none is planted here.
       * THE SEATED ACCUSER is a person of his own sheet: a `justice` pursuit and a `commit` to an OUGHT whose subject is the accused (his charge), so the sitting question is
         the first he answers (`world_q.attention_key`, tier 0) and `determine` of the accused is among his candidates.
-    The world runs at its OWN arm of two settings, set here and nowhere else (the shipped realm is a separate world and keeps its control): `sitting_exchanges` 1 (the attendees'
+    The world runs at its OWN arm of two settings, set here and nowhere else (the shipped realm is a separate world that ships `sitting_exchanges` 1 as well; the `.sweep` here is this fixture's own arm, kept so the world does not move with the shipped value): `sitting_exchanges` 1 (the attendees'
     effort is exchanges) and `npc_decider_roles` naming the proceeding role (the NPC attendees decide by a draw over their own interior). The opening acts are folded at the flat
     fold (no task draw); the world plays at its own arm. Returns the world at tick 1, the sitting due."""
     from ..data.matrix import WriteClass as _WC
@@ -856,9 +856,10 @@ def sitting_exchanges(w: World, matter: str) -> int:
 def sitting_writes(w: World, matter: str) -> Counter:
     """THE DURABLE WRITES THE MATTER'S EVENTS MADE since the opening (A-81: no ending leaves the stage bare), by kind: `stages` -- the case-file stages that are no clock's (an exchange, an
     adjournment, a filed, excluded or answered item) on each case file an Event of the matter wrote; `tenures` -- Tenures opened or closed by them; `claims` -- `claim.deposited` Events caused by
-    them, the claims their witnesses were given. The Events are those of every act whose subject is `matter`; a `determine`'s budget debit is not a write and is not counted. A reader: it
-    changes nothing, and each cell reads 0 where nothing of its kind was written."""
-    mine = {e.id for e in w.log if e.emitted_at >= HEARING_OPENS and _matter_of(w, e) == matter}
+    them, the claims their witnesses were given. The Events are the sittings' own (`sitting_events`: the disposal Events of the `determine`s on `matter`), not every act that names it, so an
+    ending's count is what its sitting wrote; `stages` reads the whole of each case file such an Event wrote, a sitting's filed items among them. A `determine`'s budget debit is not a write
+    and is not counted. A reader: it changes nothing, and each cell reads 0 where nothing of its kind was written."""
+    mine = {e.id for e in sitting_events(w, matter)}
     tenures = {t.id for t in w.tenures}
     files, opened = set(), 0
     for e in w.log:
@@ -884,7 +885,8 @@ def run_shape(exchanges: Sequence, carried: Optional[bool] = None) -> str:
       * `split`    -- the close went the other way from the room: the room leans to one side at the end (the last `Beat.mood` is not 0) and the close carried the other's;
       * `reversal` -- the winner CROSSED from behind to ahead in the back half of the run (a crossing at or after the midpoint of the exchanges);
       * `rout`     -- the winner was NEVER behind at any exchange and the room leans past `ROUT_MARGIN` to him at the end.
-    Anything else is `PLAIN`, and so is a run of no exchanges or one the room ends level. It reads nothing but the beats and the one `carried`; the module records no shape."""
+    Anything else is `PLAIN`, and so is a run of no exchanges, and (only where `carried` is `None`) one the room ends level: a given `carried` names a winner even over a level end, so it
+    may still read `reversal`. It reads nothing but the beats and the one `carried`; the module records no shape."""
     beats = tuple(exchanges)
     if not beats:
         return PLAIN

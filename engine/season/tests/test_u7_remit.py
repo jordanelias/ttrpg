@@ -367,12 +367,16 @@ def test_19_a_determination_opens_the_disposal_tenure_on_its_subject_via_the_sea
                                                               world_q.DOCKET_CASE: "rec:oc"}]   # B24p.24: the emptied slot keeps who arranged it (B24.01: and the file it was opened with)
 
 
-def test_19_two_determinations_of_one_matter_in_one_fold_the_second_refuses():
+def test_19_two_determinations_of_one_matter_in_one_fold_the_second_refuses(monkeypatch):
     """The docket's scarcity: the first determination takes the matter off it, so the second reads 0
-    on the `docket` conjunct -- one edge, not two."""
+    on the `docket` conjunct -- one edge, not two. The effect is called ONCE (counted below): the second never reaches it."""
+    from ..loop.effects import EFFECTS
+    calls, real = [], EFFECTS["determine"]
+    monkeypatch.setitem(EFFECTS, "determine", lambda *a, **k: (calls.append(1), real(*a, **k))[1])
     w, d = _world(**JUDGE)
     _fold(w, d, _open("oc"))
     out = _fold(w, d, _determine("dt1"), _determine("dt2"))
+    assert len(calls) == 1, calls          # the effect's own one-edge-per-pair decline would need a second call to decline
     assert sorted(_kinds(out)) == ["determine.refused", "matter.determined"], _kinds(out)
     assert len(_obliges(w)) == 1
     # AND IT IS THE DOCKET THAT REFUSED, NOT THE EFFECT'S ONE-EDGE-PER-PAIR DECLINE (which would also refuse a second binding). B24.10 REPOINT: both acts were
@@ -1286,16 +1290,26 @@ def test_sc03b_a_bench_close_reads_no_judges_dice_so_a_judge_of_the_least_is_nev
     the row's one refusal kind, with no degree. A determination is the BENCH'S close now (`social_contest.proceeding`): drawn by an ordinary bench at the middle
     of the scale (`close_record`; no judge's own dice enter it) and, by the module's own rule, never refused (`_resolve_proceeding`: S27.4 is read on an
     `exchange` close alone). So a judge holding the least of every attribute, on the same act id, lands the same Event, band and disposal as the shipped judge,
-    and takes the matter off the docket as it did. CONTROL: the shipped judge's own fold, which resolves to a band."""
-    from ..seam.wrappers import sigma  # noqa: F401  (the provider the fold reaches)
-    from engine.substrate import descriptors
+    and takes the matter off the docket as it did, and the Event's whole ending (every beat's margin and each verdict's band) is the same. THE POOL FLOOR IS THE SHIPPED ONE, not `JUDGE`'s 60:
+    at 60 every judge floors to the same pool and equality would hold whether the judge's dice entered or not. The judge's pool is PLANTED at the one pool reader (`sigma.faculty`), for
+    the judge alone, as the single-roll test this replaced did, and the fold ASKS THE POOL READER NOTHING (recorded: an attribute is not the dice, and a least-attribute judge DOES move the
+    sitting at the shipped floor, because a bench member also decides in the room: observed `matter.undetermined` where the shipped judge's reads `matter.determined`; what the close
+    never reads is the judge's pool). CONTROL: the shipped judge's own fold resolves to a band; the planted pools (0, one die, a hundred) are not the judge's own."""
+    from ..seam.wrappers import sigma
 
-    def run(least):
-        w, d = _ready("determine")
-        if least:
-            w.persons[DUKE].attributes = {name: descriptors.ATTRIBUTE_FLOOR for name in descriptors.ATTRIBUTE_NAMES.values()}
-        out = _fold(w, d, _determine("zpool"))
-        assert len(out) == 1 and out[0].kind != "determine.refused", (least, _kinds(out))
-        return out[0].kind, out[0].degree, len(_obliges(w)), len(world_q.docketed(w, PARTY))
-    control = run(False)
-    assert control[1] in BANDS and run(True) == control, control
+    real = sigma.faculty
+
+    def run(pool):
+        w, d = _ready("determine", pool_floor=DEFAULT_FIXTURES.get("pool_floor"))
+        asked, mp = [], pytest.MonkeyPatch()
+        mp.setattr(sigma, "faculty", lambda w_, p, verb: (asked.append((p.id, verb)), real(w_, p, verb) if pool is None or p.id != DUKE else pool)[1])
+        try:
+            out = _fold(w, d, _determine("zpool"))
+        finally:
+            mp.undo()
+        assert len(out) == 1 and out[0].kind != "determine.refused", (pool, _kinds(out))
+        assert asked == [], (pool, asked)                      # the bench close asks nobody's pool: no judge's dice enter it
+        return out[0].kind, out[0].degree, out[0].ending, len(_obliges(w)), len(world_q.docketed(w, PARTY))
+    control = run(None)
+    assert control[1] in BANDS and control[2], control
+    assert run(0) == control == run(1) == run(100), control

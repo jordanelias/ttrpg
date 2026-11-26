@@ -691,10 +691,14 @@ def cited_said(c) -> Said:
 
 
 def held_cites(ledger, subject) -> tuple:
-    """THE CLAIMS HE HOLDS ABOUT `subject` THAT A SPEECH MAY CITE (B24.27, EVID_B edit 6; FI_05_B E-1): his own ledger's claims whose subject it is and which `proof_kind` has a kind
-    for, in ledger order -- the ones a citing `speak` could be admitted on. A claim that is no proof (a cell, a refusal kind, a withheld confession) is never formed on. World-free;
-    whether the matter's row admits the KIND is the fold's pre-draw refusal (`world_q.filings`), as it is for any act."""
-    return tuple(c for c in ledger if c.subject == subject and proof_kind(c) is not None)
+    """THE CLAIMS HE HOLDS ABOUT `subject` THAT A SPEECH MAY CITE (B24.27, EVID_B edit 6; FI_05_B E-1): his own ledger's claims about what `subject` DID or SAID and which `proof_kind` has a kind
+    for, in ledger order -- the ones a citing `speak` could be admitted on. "Whose deed" is `attributed_deeds`' rule, the one the ledger arm (`world_q.proofs`) reads: a `PAIRED_KINDS`
+    deed is `subject`'s when its sighting names him doer (its own subject may be the patient), any other claim when its subject is `subject`. A claim that is no proof (a cell, a refusal kind,
+    a withheld confession) is never formed on. World-free; whether the matter's row admits the KIND is the fold's pre-draw refusal (`world_q.filings`), as it is for any act.
+    ⚠ CARRIED (B25, H-666's neighbour): `cited_said` still builds the `Said` from the STORED confidence with no pairing, where `said_of` tells `reader.present(c)` and the pairing."""
+    paired = {id(c) for c in attributed_deeds(ledger, subject)}
+    return tuple(c for c in ledger if proof_kind(c) is not None
+                 and (id(c) in paired if c.predicate in PAIRED_KINDS else c.subject == subject))
 
 
 def deed_valence(axis_w: dict, c) -> float:

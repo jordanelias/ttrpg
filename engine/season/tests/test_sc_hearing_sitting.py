@@ -495,7 +495,7 @@ def test_an_attendees_turns_grow_with_effort_within_the_rows_bounds():
     it is one term of the rite's turns (`sigma._rite_of`: `max(lo, min(hi, effort + 1 + strife))`) and every shipped bench row has a floor `lo` of at least 1, so an
     attendee at effort 0 speaks exactly the row's floor. Through `sigma.resolve` on the `arbitration` row at `sitting_exchanges` 1: at effort 0 each speaker speaks
     the floor and no more, no effort ever gives a speaker more than the ceiling, and a speaker's beats are non-decreasing in effort over 0..5 and do grow somewhere
-    (so effort is read). THE SWITCH: at the shipped `sitting_exchanges` 0 nobody speaks at any effort. FALSIFIER (run once, not kept): turns taken as the floor whatever the
+    (so effort is read). THE SWITCH: at the control `sitting_exchanges` 0 nobody speaks at any effort. FALSIFIER (run once, not kept): turns taken as the floor whatever the
     effort leaves every speaker's beats flat and reddens the growth arm."""
     from collections import Counter
 
@@ -523,7 +523,7 @@ def test_an_attendees_turns_grow_with_effort_within_the_rows_bounds():
         checked += 1
     per = [max(ran[e].values()) for e in efforts]
     assert per == sorted(per) and per[-1] > per[0] and ran[9] == ran[5] == Counter({s: hi for s in ran[0]}), per    # non-decreasing, growing, and capped at the ceiling
-    assert all(not spoken(0, e) for e in efforts)                               # the switch: shipped, nobody speaks at any effort
+    assert all(not spoken(0, e) for e in efforts)                               # the switch: the control, nobody speaks at any effort
     assert checked == 7
 
 
@@ -563,23 +563,29 @@ def test_no_constant_decider_wins_on_all_three_hands():
 
 def test_every_ending_of_a_sitting_leaves_a_durable_write():
     """`headless --world hearing --auto` at seeds 0 to 19 (the same `scenarios.run` call, two seasons): each run ends by one of the seven kinds, the row's reading is the exchange count and the
-    write count of the matter's Events (case-file stages, Tenures opened or closed, claims deposited), and the write count is above 0 in every run. FALSIFIER: a run that ends with nothing written,
-    or an ending outside the seven, or twenty runs of one kind (the loop cannot pass by one kind)."""
+    write count of the SITTING'S OWN Events (`sitting_events`: the disposal Events of a `determine`; case-file stages, Tenures opened or closed, claims deposited to attendees), and the write count
+    is above 0 in every run whose ending is a sitting held. `lapsed` IS THE ONE KIND THAT READS 0, BY DEFINITION: it is "no sitting held" (`hearing_ending`), so no Event of a sitting exists to
+    write, and the test asserts the 0 there rather than skip it. FALSIFIER: a held sitting that ends with nothing written, a `lapsed` run that reads a write, an ending outside the seven, or
+    twenty runs of one kind (the loop cannot pass by one kind)."""
     from collections import Counter
 
     from ..harness import governance_spine as G
     from ..harness import scenarios as S
 
-    kinds, checked = Counter(), 0
+    kinds, checked, held = Counter(), 0, 0
     for seed in range(20):
         r = S.run("hearing", seed, 2)
         w, tally = r["world"], G.sitting_writes(r["world"], G.ACCUSED)
         assert r["ending"] in G.HEARING_ENDINGS and r["kind"] in S.ENDING_KINDS, (seed, r["ending"])
-        assert sum(tally.values()) > 0, (seed, r["ending"], tally)
+        if r["ending"] == "lapsed":
+            assert sum(tally.values()) == 0 and not G.sitting_events(w, G.ACCUSED), (seed, tally)
+        else:
+            assert sum(tally.values()) > 0, (seed, r["ending"], tally)
+            held += 1
         assert S.SCENARIOS["hearing"].reading(w, r["seat"]).endswith(f"writes {sum(tally.values())}"), seed
         kinds[r["ending"]] += 1
         checked += 1
-    assert checked == 20 and len(kinds) >= 3, kinds
+    assert checked == 20 and held >= 10 and len(kinds) >= 3, kinds
 
 
 def test_an_adjourned_stage_is_read_by_the_next_sitting():

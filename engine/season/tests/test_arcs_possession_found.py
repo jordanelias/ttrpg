@@ -72,7 +72,12 @@ def test_a_failed_inquiry_deposits_no_holds_claim():
 
 
 def test_a_holder_who_looks_at_what_he_holds_is_taught_no_claim_about_himself():
-    """`p_mid` researches the Record he holds: his own look names him, and a look teaches a man no claim about himself."""
+    """`p_mid` researches the Record he holds: his own look names him, and a look teaches a man no claim about himself. CONTROL: the look is no refusal and DID teach him
+    something (the finding and what it read of the Record), so the empty `holds` set is the look's rule and not a look that did nothing."""
     w, d = _world()
-    _research(w, d, "Success", actor=HOLDER)
+    before = {c.id for c in w.persons[HOLDER].ledger}
+    out = _research(w, d, "Success", actor=HOLDER)
+    assert [e.kind for e in out] == ["finding.made"], [e.kind for e in out]
+    taught = {c.predicate for c in w.persons[HOLDER].ledger if c.id not in before}
+    assert "finding.made" in taught and "content:petition" in taught, taught
     assert not _holds(w, HOLDER), _holds(w, HOLDER)

@@ -3,7 +3,7 @@ acts, twice, byte-identical including the hash*, *a verdict that can be lost*, a
 redden it*.
 
 THE WORLD IS `governance_spine.build_hearing(seed)` -- the world `harness/scenarios.py::SCENARIOS["hearing"]` plays -- at the fixtures it builds itself (`DEFAULT_FIXTURES`
-with its own two arms, `sitting_exchanges` 1 and the proceeding role as the NPC attendees' decider; the shipped realm keeps its control, so the entry's "`DEFAULT_FIXTURES`"
+with its own two arms, `sitting_exchanges` 1 and the proceeding role as the NPC attendees' decider; the shipped realm ships `sitting_exchanges` 1 too and the world's arm is its own (the control is 0), so the entry's "`DEFAULT_FIXTURES`"
 is the world's own fixtures and not the bare ones). It replaces the world this file used to find by sweeping 1,815 runs of a three-person `tiny_world` at a judge pool of 60
 (`BAR_FIXTURES`, off the declared sweep and global to every contested verb), whose proceedings the file re-traced a dozen times as the act mix moved. The hearing's sitting is
 opened by the game's own acts at build (a Mayor `convene`s, CALENDAR fires the Date, the Mayor `open_case`s the accused: `premise` below), and every act of the run is the real

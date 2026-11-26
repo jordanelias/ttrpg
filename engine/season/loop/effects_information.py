@@ -37,7 +37,7 @@ from ..queries.world_q import (
     adjourned_by, case_file_of, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
-from ..state.carriers import Proposition, Record, Tenure
+from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
@@ -507,9 +507,11 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         file: where `open_case` mints a case file and winds its clock, a carried petition already is
         the document, so the carriage winds the clock on it, and MATTER's maturation of those stages
         cites the carriage (`loop/matter.py`'s `prior` is the last Event whose changes name the
-        petition, which is this act's). REPLACED, not appended: an appended list could repeat a
-        `(due, label)` the filing wound on the same tick. [ASSUMPTION; medium; Jordan to correct;
-        revert: append the carriage's stages to the filing's.]
+        petition, which is this act's). THE CLOCK IS REPLACED, not appended: an appended list could
+        repeat a `(due, label)` the filing wound on the same tick; the stages that are no clock (a
+        sitting's `filed`, `entered`, `struck`, `excluded`, `answered`, `adjourned`) are KEPT, after
+        the new clock. [ASSUMPTION; medium; Jordan to correct; revert: append the carriage's stages
+        to the filing's.]
       * THE DOCKET ITEM -- `_docket_item(<terms>, None, <petition>)`: the matter is the petition's
         `terms`, what it is ABOUT (`rosters.yaml: record_kinds.content`: `terms` is the filing act's
         `subject`), and the item names the petition it rose from (v9 SC-03a, K-55). Precedent:
@@ -548,12 +550,16 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if not isinstance(matter, str) or docketed(w, matter):
         return NO_CHANGE
     stages = _declared_stages(w, a)
-    if stages == list(rec.stages):
+    # THE CLOCK IS RE-WOUND, THE FILE IS KEPT: a case file's `stages` also hold what a sitting wrote (`filed`, `entered`, `struck`, `excluded`, `answered`, `adjourned`: no clock,
+    # `is_clock_stage`), and a petition carried again after a `determine` took its matter off the docket must not lose them. The clock first, the writes after in their order (as a filing
+    # leaves them), so an index a later `answers` names stays where it was while the clock keeps its length.
+    kept = [st for st in rec.stages if not is_clock_stage(st)]
+    if stages == [st for st in rec.stages if is_clock_stage(st)]:
         return NO_CHANGE
     item = _docket_item(matter, None, pid)
 
     def perform() -> None:
-        rec.stages = stages
+        rec.stages = stages + kept
         w.docket.append(item)
     return Change((Subject.entity("records", pid),), perform)
 

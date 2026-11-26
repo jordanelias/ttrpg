@@ -217,3 +217,25 @@ def test_in45_carry_at_stages_arm_0_is_refused():
     w, d = _filed()
     assert DEFAULT_FIXTURES.get("record_stages_default") >= 1
     assert _kinds(_fold(w, d, _carry("c3"))) == ["petition.carried"]
+
+
+def test_a_petition_carried_again_after_a_determine_keeps_what_a_sitting_wrote():
+    """`_eff_carry` re-winds the petition's CLOCK and keeps the stages that are no clock (a sitting's `filed`, `answered`, `adjourned`: `is_clock_stage`). The petition is carried, a
+    sitting's filed item is on it, the bench `determine`s the matter off the docket, and the same petition is carried again: the filed stage is still there at the index it had (the clock
+    first, so an index an `answers` names holds), and the clock is the second carriage's: it names the second carrying act only."""
+    from ..state.carriers import Said, is_clock_stage
+    fixtures = DEFAULT_FIXTURES
+    for name, value in JUDGE.items():
+        fixtures = fixtures.sweep(name, value)
+    w, d = _filed(fixtures)
+    assert _kinds(_fold(w, d, _carry("c1"))) == ["petition.carried"]
+    filed = (w.tick, "filed", "for", "fact", Said(PARTY, "x", True, 100), 1.0, PETITIONER, "a0")
+    w.records[PETITION].stages.append(filed)
+    at = w.records[PETITION].stages.index(filed)
+    out = _fold(w, d, Act(id="dt1", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY}))
+    assert _kinds(out) == ["matter.determined"] and world_q.docketed(w, PARTY) == [], _kinds(out)
+    assert _kinds(_fold(w, d, _carry("c2"))) == ["petition.carried"]
+    stages = w.records[PETITION].stages
+    clock = [s for s in stages if is_clock_stage(s)]
+    assert filed in stages and stages.index(filed) == at, (at, stages)
+    assert clock and all(s[2] == "c2" for s in clock), clock

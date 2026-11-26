@@ -353,6 +353,16 @@ def test_an_impeachment_strikes_origin_wide_only_at_overwhelming():
     assert checked == 200 and set(seen) == {"Failure", "Partial", "Success", "Overwhelming"} and 0 < struck < 200, (seen, struck)
 
 
+def test_a_cite_that_is_no_id_is_refused_not_a_type_error():
+    """`world_q.filings` checks every cite is a string BEFORE it dedupes them (the dedupe hashes): a list inside `cites` is the refusal, as any non-id is, never a `TypeError`. CONTROL: the
+    held id beside it is no refusal alone."""
+    from .test_sc_hearing_admission import cite
+    w, _d, _case = _filing_world(0)
+    assert world_q.filings(w, cite(w, ("c_deed",))).refused is None
+    for bad in (("c_deed", ["c_deed"]), (3,)):
+        assert world_q.filings(w, cite(w, bad)).refused is not None, bad
+
+
 def test_a_same_side_contradicting_cite_is_refused_at_filing():
     """EVID_B rule 2's filing refusal: a `speak` whose cite contradicts an item already standing for the citer's OWN side is refused BEFORE THE DRAW -- the row's refusal kind, no band, no stage -- and so is
     one that cites two claims that contradict each other. The same cell with the same value is no contradiction (it is agreement) and files; the other side's contradicting item is an answer, not a refusal.
@@ -411,6 +421,11 @@ def test_the_chooser_forms_a_citing_variant_only_on_claims_proof_kind_admits():
         payload = {"subject": G.ACCUSED, CITES_KEY: ops[CITES_KEY], CITED_KEY: ops[CITED_KEY]}
         out = fold_and_witness(w, d, Act(id="sp27", actor=G.ACCUSER, verb="speak", payload=payload))
         assert out and out[0].kind not in refusal and out[0].degree is not None, (seed, [(e.kind, e.degree) for e in out])
+        # A SELF-PLEA forms no citing variant: the ledger arm weighs the opponent's deeds and reads 0.0 where the opponent is the actor (`world_q.proofs`), so a variant citing his own
+        # claims is a speech no proof backs. The plain speech on himself is still formed (the control: the subject is reachable, and `held` below is not empty).
+        selfq = replace(q, referents=(*q.referents, G.ACCUSER))               # `c_else` is a proof about himself: held, and never cited on his own plea
+        selfspeaks = [c for c in OP.opening_set(acc, assemble(acc, selfq, 12), selfq, w.fixtures) if c.verb == "speak" and c.subject == G.ACCUSER]
+        assert person_q.held_cites(acc.ledger, G.ACCUSER) and selfspeaks and all(CITES_KEY not in c.operands for c in selfspeaks), (seed, [c.operands for c in selfspeaks])
         checked += 1
     assert checked == 8
 

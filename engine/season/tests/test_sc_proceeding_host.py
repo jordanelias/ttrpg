@@ -494,19 +494,19 @@ def test_believed_odds_use_his_own_values_and_an_ordinary_man_for_the_rest(monke
 
 # B24p.16 -- THE VERB ROWS SAY HOW THEY PROCEED (RD §D.1 to §D.4; V2 p2 §M): `VerbRow.proceeds`, `data/verbs.py::_check_proceeds`,
 # `world_q.proceeding_row`. Nothing dispatches on the cell until B24p.19; the routing is what these read.
-FIVE = ("argue", "tell", "lie", "speak", "interrogate", "determine")      # B24.08 added `determine`: the six
+SIX = ("argue", "tell", "lie", "speak", "interrogate", "determine")      # B24.08 added `determine` to the five
 
 
 def _act(verb, **payload):
     return Act(id=f"a_{verb}", actor="p_low", verb=verb, payload=payload)
 
 
-def test_five_rows_proceed_and_name_a_loadable_row():
-    """Each of the five verbs carries a `proceeds` cell whose every entry names an arrangement the tree loads (or the docket's own row), a
+def test_six_rows_proceed_and_name_a_loadable_row():
+    """Each of the six verbs carries a `proceeds` cell whose every entry names an arrangement the tree loads (or the docket's own row), a
     form, and a drawing move; no other verb is routed (`covenant`, `interview` are their own items'). A planted cell that names a
     row nothing loads is refused naming the verb: the check observes the failure it excludes."""
     routed = {v: r for v, r in VERB_TABLE.items() if r.proceeds}
-    assert set(routed) == set(FIVE), sorted(routed)
+    assert set(routed) == set(SIX), sorted(routed)
     checked = 0
     for verb, row in routed.items():
         for when, rid, form, move, item in row.proceeds:
@@ -514,7 +514,7 @@ def test_five_rows_proceed_and_name_a_loadable_row():
             assert form in ("full", "abridged", "auto") and PROCEEDING_MOVES[move]["draw"] and item in ("any", "false"), (verb, form, move, item)
             checked += 1
         assert row.proceeds[-1][0] == (), verb                                           # a fallback closes every list
-    assert checked >= len(FIVE), checked
+    assert checked >= len(SIX), checked
     _check_proceeds(VERB_TABLE)                                                           # control: the shipped table passes
     entry = (("hearer", "cohort"),), "no_such_row", "full", "argue", "any"
     with pytest.raises(Unspecified, match="argue"):
@@ -851,7 +851,8 @@ def test_a_proceedings_event_carries_its_beats_sitting_and_verdicts():
     assert e.ending[0] == ("proceeding", "conversation", "full", out.ended, out.ended_by)
     beats = world_q.ending_beats(e)
     assert len(out.beats) > 1 and [(b.n, b.mover, b.move, b.margin) for b in beats] == [(b.n, b.mover, b.move, round(b.margin * 1000)) for b in out.beats]
-    assert all(len(t) == len(written(Beat)) + 1 for t in e.ending if t[0] == "beat")               # the beat's written cells (`queries/inputs.py::UNWRITTEN`), one tag more
+    assert not {"terms", "entered", "struck", "fault"} & set(written(Beat))                         # the four a beat does not write (`queries/inputs.py::UNWRITTEN`), named here and not read back from the writer
+    assert [len(t) for t in e.ending if t[0] == "beat"] == [27] * len(out.beats)                    # a beat's 26 written cells and one tag more; a field added to `Beat` moves this on purpose
     assert out.beats[0].terms and all(out.beats[0].terms not in t for t in e.ending)
     state = world_q.ending_sitting(e)
     assert (state.n, state.issue, state.ended) == (out.state.n, out.state.issue, out.state.ended)

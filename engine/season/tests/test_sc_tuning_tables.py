@@ -63,7 +63,7 @@ def test_planted_grid_moves_the_single_rolls_cells():
     # single roll's grid is read through `arrest` (B24.10: `determine` proceeds too), a verb still on it: it names a skill (`arms`) and an opposing attribute (strength), which the
     # two retired cells (`interrogate`'s skill, `lie`'s attribute) each read one half of. `lie`'s "a held skill moves nothing on a verb that
     # names none" died with it: no verb left on the single roll names an opposing attribute and no skill.
-    # determine: the counterparty's skill score, from the untrained score up
+    # arrest (a verb still on the single roll): the counterparty's skill score, from the untrained score up
     w = TOF._world()
     key = V.VERB_CAPABILITY["arrest"]
     assert key is not None
@@ -79,7 +79,7 @@ def test_planted_grid_moves_the_single_rolls_cells():
     for (r0, ob0, o0), (r1, ob1, o1) in zip(read, read[1:]):
         assert ob1 > ob0 and abs((o1 - o0) - rate * (r1 - r0)) < 1e-9, read
 
-    # determine: the counterparty's opposing attribute (his skill score held at the untrained one)
+    # arrest: the counterparty's opposing attribute (his skill score held at the untrained one)
     assert V.VERB_TABLE["arrest"].opposed_attribute
     attr = V.VERB_TABLE["arrest"].opposed_attribute
     w = TOF._world()
@@ -93,7 +93,7 @@ def test_planted_grid_moves_the_single_rolls_cells():
     for (a0, ob0, o0), (a1, ob1, o1) in zip(read, read[1:]):
         assert ob1 > ob0 and abs((o1 - o0) - rate * (a1 - a0)) < 1e-9, read
 
-    # determine, B24p.99 (was `speak`): under each of the nine rows, docketed; T2's standard is the row's level's size, and the four levels compose four obstacles
+    # arrest, B24p.99 (was `speak`; the roll is read through `arrest`, still on the single roll): under each of the nine rows, docketed; T2's standard is the row's level's size, and the four levels compose four obstacles
     assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items()} == {**{row: "plain" for row in ARR.ARRANGEMENTS}, **T2_FIRST_VALUES}   # B24p.03: the four new rows are `plain` and not T2's
     by_level: dict = {}
     for row, level in T2_FIRST_VALUES.items():

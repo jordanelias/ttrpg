@@ -60,7 +60,8 @@ def test_a_run_of_the_module_has_one_shape_and_the_shapes_occur():
                    _rite(close="bench", turns=3, silence="refusal"))
         out = P.proceed(inp, _key("shape", i))
         shape = run_shape(out.beats, _carried(inp, out))
-        assert shape in (*RUN_SHAPES, PLAIN) and shape == run_shape(out.beats, _carried(inp, out)), shape
+        again = P.proceed(inp, _key("shape", i))                         # the same run replayed: the shape is read from the run, stored nowhere, so it is the run's
+        assert shape in (*RUN_SHAPES, PLAIN) and shape == run_shape(again.beats, _carried(inp, again)), shape
         seen[shape] = seen.get(shape, 0) + 1
         checked += 1
     assert checked >= 200

@@ -328,9 +328,9 @@ def filings(w: World, a) -> Filings:
     cited, weigh = d.get(CITED_KEY) or {}, teller_weight(p, w.fixtures, w.tick)
     standing = [st[4] for st in stages if is_filed(st) and st[2] == side and isinstance(st[4], Said)]       # what stands for his own side already
     items, claims = [], []
+    if any(not isinstance(cid, str) for cid in (cites or ())):      # BEFORE the dedupe hashes them: an unhashable cite (a list) is a refusal, not a TypeError
+        return refuse
     for cid in dict.fromkeys(cites or ()):
-        if not isinstance(cid, str):
-            return refuse
         if cid in own:
             c = own[cid]
             ref = cited.get(cid) or cited_said(c)
@@ -1160,7 +1160,7 @@ def proofs(w: World, actor: str, opponent: Optional[str], audience: tuple, admit
     `admitted` (B05.21, T13 edit 4; `H-427`) is the docketed row's `proofs:` column, PASSED IN by the host builder -- this query reads no
     arrangement itself -- or `None` (no filter: nothing docketed, or `Fixtures.proof_admission` `off`). Given, a claim counts only if the kind of
     proof it is (`person_q.proof_kind`, derived from the claim and not from how it came to be held: a told deed is `testimony`, a confession `confession`) is among them;
-    a claim that is no proof (`proof_kind` is `None`: a withheld confession) counts 0.
+    given, a claim that is no proof (`proof_kind` is `None`: a withheld confession) counts 0; with `admitted` `None` it counts as any attributed deed does.
 
     ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
     docketed (the plan's text asks for neither); and the mirror keys on (subject, predicate) alone.

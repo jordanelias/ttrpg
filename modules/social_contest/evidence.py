@@ -5,7 +5,7 @@ WHICH of the exhibits shown at a sitting still count, at what weight, which are 
 is read, never regraded here.
 
 THE RELATION IS DATA. This module names no `engine/season` module and restates no pairing rule: the host builder computes `contradicts` (the one owner,
-`decision/options.py::contradicts`) and hands it over as `Item.pairs`, `((other exhibit id, "contradicts" | "agrees"), ...)` over the other filed
+`queries/person_q.py::contradicts`) and hands it over as `Item.pairs`, `((other exhibit id, "contradicts" | "agrees"), ...)` over the other filed
 exhibits. `pair_of` is the one reader of that field.
 
 THE RULES, in order, each over the items still standing after the one before:
@@ -16,7 +16,7 @@ THE RULES, in order, each over the items still standing after the one before:
      (`not sincere`). An item with no answering act is never struck.
   3. AGREEMENT -- the same cell and value put by BOTH sides counts for neither (struck by nothing: it is simply not counted).
   4. CORROBORATION -- the same cell and value put by one side from DISTINCT origins is one item of weight `1 - prod(1 - w)`, no lighter than its
-     heaviest member and gaining no more than `evidence_cap` over it; the same origin twice counts once.
+     heaviest member and capped at `evidence_cap` (an absolute weight: noisy-OR never exceeds 1.0, so a cap >= 1.0 never binds); the same origin twice counts once.
 
 An item with no `origin` is its own origin (nothing says it comes from anything another item does).
 

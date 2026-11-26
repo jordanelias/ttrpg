@@ -71,7 +71,10 @@ def make_decider(p: Person, fx: "Fixtures", draw: Callable[[str, str], Any], *, 
         value_of = {id(c): v for c, v in zip(cands, legal)}
         terms_of, scores = {}, {}
         for c, v in zip(cands, legal):
-            pursuit = damp * ltr_sum(axis_w[ax] * align_choice(k, kv, ax) for k, kv in zip(keys, operands(v)) for ax in _AXES)
+            vals = tuple(operands(v))
+            assert len(vals) == len(keys), (keys, vals)      # `zip` would truncate: a tuple key with no `of` (or a short one) would score a cell fewer, silently
+            # AXIS-MAJOR, as `choose.score_terms` sums a candidate's choice operands: each axis weighs the sum of the cells, so a value's score is one number by either owner (B10.56)
+            pursuit = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, kv, ax) for k, kv in zip(keys, vals)) for ax in _AXES)
             pursuit *= weigh_by_chance(fx, None if odds is None or pursuit == 0.0 else (lambda v=v: odds(view, v)))
             extra = 0.0 if bias is None else float(bias(view, v))
             terms_of[id(c)], scores[id(c)] = (pursuit, extra), pursuit + extra if extra else pursuit
