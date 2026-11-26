@@ -136,7 +136,7 @@ def test_light_against_heavy_plated_man_felled_sometimes():
     for s in range(1500):
         tr = []
         _fight('light', 'heavy', s, trace=tr)
-        felled += any(e['kind'] == 'engagement_end' and e['felled'] == 'B' for e in tr)
+        felled += any(e['kind'] == 'round_end' and e['felled'] == 'B' for e in tr)
     assert felled > 0, "the plated man was felled in 0 of 1500: plate is an immunity"
 
 
@@ -187,7 +187,7 @@ def test_no_turned_event_between_unarmoured_men():
             tr = []
             _fight(armor, armor, s, trace=tr)
             count += sum(e['kind'] == 'turned' for e in tr)
-            rounds += sum(e['kind'] == 'engagement_end' for e in tr)
+            rounds += sum(e['kind'] == 'round_end' for e in tr)
         assert rounds >= 100
         turned[armor] = count
     assert turned['none'] == 0 and turned['heavy'] > 0, turned

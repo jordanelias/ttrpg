@@ -247,7 +247,7 @@ function renderTrace(events){
   const add=h=>{const d=document.createElement('div');d.innerHTML=h;el.appendChild(d.firstElementChild||d);};
   for(const e of events){
     if(e.kind==='fight_start'){ add(`<div class="meta">${e.A} (${e.weapon_A}/${e.tradition_A}) vs ${e.B} (${e.weapon_B}/${e.tradition_B})</div>`); }
-    else if(e.kind==='turn_start'){ add(`<div class="turn">Turn ${e.turn} — ${e.first} moves first</div>`); }
+    else if(e.kind==='round_start'){ add(`<div class="turn">Turn ${e.round} — ${e.first} moves first</div>`); }
     else if(e.kind==='engagement_start'){ add(`<div class="meta">${e.closed?'begin closed':'begin at measure, gap '+e.measure_gap+' ('+e.longer+' longer)'}</div>`); }
     else if(e.kind==='approach'){ add(nodeRow(`<span class="tag">approach</span> ${e.shorter} closes (gap ${e.gap}); ${e.longer} stop-hit ${pct(e.stophit_p)}${e.just_closed?' → closed':''}`,e)); }
     else if(e.kind==='stophit'){ add(nodeRow(`<span class="tag">stop-hit</span> ${e.longer} → ${degSpan(e.degree)}`,e)); }
@@ -262,7 +262,7 @@ function renderTrace(events){
       else if(e.riposte){cls='rip';txt=`${e.defender} ripostes (flip)`;}
       if(beat) beat.innerHTML+=`<div class="node"><span class="${cls}">→ ${txt}</span> <span class="meta">(${e.A_wounds}/${e.B_wounds} wounds)</span></div>`;
     }
-    else if(e.kind==='engagement_end'){ add(`<div class="sep">— ${e.felled?e.felled+' is felled':'they separate'}</div>`); beat=null; }
+    else if(e.kind==='round_end'){ add(`<div class="sep">— ${e.felled?e.felled+' is felled':'they separate'}</div>`); beat=null; }
     else if(e.kind==='fight_result'){ add(`<div class="result">${e.winner?e.winner+' wins':'unresolved'}</div>`); }
   }
 }

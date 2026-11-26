@@ -57,7 +57,7 @@ oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
     seen = []
-    r = wrapper.fight(A, B, cfg=None, rng=draw.seeded(draw.H2("test_combat_module", seed)), trace=seen.append)
+    r = wrapper.fight(A, B, cfg=None, rng=draw.seeded(draw.H2("test_combat_module", seed)), trace=seen.append, keyed_rounds=True)
     oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}, seen))
 print(repr((loaded, out, oracle)))
 """
@@ -84,7 +84,7 @@ def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_load
         # THE ORACLE COMPARISON, re-pointed at the record's fields: the engine called directly, its trackers and its trace
         assert rec["wounds"] == wt, f"{role}: seed {seed} lifted {rec['wounds']}, the trackers read {wt}"
         assert list(rec["trace"]) == seen, f"{role}: seed {seed} returned a trace that is not the engine's own"
-        assert rec["rounds"] == sum(1 for e in seen if e["kind"] == "turn_start"), (seed, rec["rounds"])
+        assert rec["rounds"] == sum(1 for e in seen if e["kind"] == "round_start"), (seed, rec["rounds"])
         # the integer `wrapper.fight` returns is not lifted: the engine's own `fight_result` event names it
         assert [e["result"] for e in seen if e["kind"] == "fight_result"] == [r], (seed, r)
         assert len(rec["trace"]) > 0, f"{role}: seed {seed} recorded no trace -- `_TRACE` was not captured"
@@ -761,3 +761,98 @@ def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
         deaths += sum(m.mortal for m in drawn.mortal.values())
         checked += 1
     assert checked == 300 and deaths >= 150, (checked, deaths)
+
+
+def _round_from_key(key, r):
+    """ROUND `r`'S DRAW, the law spelled out of the engine's own primitives and NOT through the module's `round_draw` (B16.03, PB 2, A-30): the fight's key is
+    `H2(<the Draw's key>, "fight:0")` (a fresh `Draw` sits at position 0 when the fight takes its one uniform), the round's `H2(<fight key>, "round:<r>")`. A test
+    that called the module's own functions would agree with any `round_draw` that ignored `r`; this one does not."""
+    return draw.seeded(draw.H2(draw.H2(key, "fight:0"), f"round:{r}"))
+
+
+def _round_inp(seed, ends=(4, 4), kits=(), terms="death"):
+    from ..queries.inputs import PersonalCombatInput
+    return PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, kits=kits, terms=terms,
+                               wound_quantities=("felled", "wounds", "max_wounds", "health_remaining", "health_full"))
+
+
+def _fight_by_rounds(inp, rng, fight_round, limit=12):
+    """The rounds of one fight called by hand, the `DuelState`s and the measure threaded in this frame: yields each round's outcome."""
+    from ..queries.inputs import DuelRoundInput, DuelState
+    states, prev_closed = (DuelState(), DuelState()), False
+    for r in range(1, limit + 1):
+        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), _round_from_key(rng.key, r))
+        yield out
+        states, prev_closed = out.states, out.closed
+        if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
+            return
+
+
+def test_round_keeps_no_state_between_calls():
+    """B16.01 (PB step 1): `fight_round` keeps nothing. One round input and one key give one outcome, however many other fights and rounds were called
+    in between, and the engine's trace hook is not left bound; what a round takes from another is the `DuelState` it is handed and nothing else (the same
+    input with a hurt `DuelState` is another round). FALSIFIER: a second call that differs from the first, a bound `_TRACE`, or a state that moves nothing."""
+    import dataclasses
+    import importlib
+    from engine.substrate import composition
+    from ..queries.inputs import DuelRoundInput, DuelState
+    fight, fight_round = composition.require("combat.fight"), composition.require("combat.round")
+    wrapper = importlib.import_module("modules.combat.wrapper")
+    inp = _round_inp(5, kits=(("longsword", "heavy"), ("arming", "light")))
+    rin = DuelRoundInput(fighters=inp, states=(DuelState(), DuelState()), plans=({}, {}), round=1)
+    first = fight_round(rin, draw.seeded(draw.H2("test_round_state", 1)))
+    for s in range(5):    # other fights, and other rounds, called between the two
+        fight(_round_inp(s, ends=(2, 5)), draw.seeded(draw.H2("test_round_state_other", s)))
+        fight_round(dataclasses.replace(rin, round=3), draw.seeded(draw.H2("test_round_state_other", s)))
+    again = fight_round(rin, draw.seeded(draw.H2("test_round_state", 1)))
+    assert again == first, "a second call of the same round, on the same key, differs: the module kept something"
+    assert wrapper._TRACE is None, "the round left the engine's trace hook bound"
+    hurt = dataclasses.replace(rin, states=(DuelState(cumulative_damage=first.states[0].cumulative_damage + 6, stamina=5.0, conc=2.0, poise=0.4), DuelState()))
+    other = fight_round(hurt, draw.seeded(draw.H2("test_round_state", 1)))
+    assert other.states != first.states and other.trace != first.trace, "a carried state moved nothing in the round"
+
+
+def test_round_outcome_names_how_it_ended():
+    """B16.01 (PCR-2): over 100 fights (a different matchup per seed, the three duel terms among them), each round of each: `ended_by` is `felled` where
+    the round felled a party, else the reason of its one `separation` event, and a member of `ROUND_ENDS`; `exchanges` is its `outcome` events;
+    `sum(attempts.values())` its `roll`, `stophit` and pursued `disengage` events. The between-round recovery is taken at the end of a round the fight
+    goes on from and never after a felling or a yield (counted at `wrapper.recover`). There is no `winner` on the round. FALSIFIER: an `ended_by` that
+    disagrees with the trace, a count that does not, a recovery after a felling, a `winner` field."""
+    import dataclasses
+    import importlib
+    from engine.substrate import composition
+    from ..queries.inputs import DuelRoundOutcome
+    fight_round = composition.require("combat.round")
+    wrapper = importlib.import_module("modules.combat.wrapper")
+    vocabulary = importlib.import_module("modules.combat.vocabulary")
+    assert "winner" not in {f.name for f in dataclasses.fields(DuelRoundOutcome)}
+    recoveries = []
+    real = wrapper.recover
+    wrapper.recover = lambda A, B, cfg: (recoveries.append(1), real(A, B, cfg))[1]
+    kit_sets = ((), (("longsword", "heavy"), ("arming", "light")), (("spear", "light"), ("mace", "medium")), (("rapier", "none"), ("longsword", "heavy")))
+    checked, ends_seen, felled_rounds, recovered_rounds = 0, set(), 0, 0
+    try:
+        for seed in range(100):
+            inp = _round_inp(seed, ends=((4, 4), (3, 5), (2, 4))[seed % 3], kits=kit_sets[seed % 4], terms=("death", "blood", "yield")[seed % 3])
+            recoveries.clear()
+            for out in _fight_by_rounds(inp, draw.seeded(draw.H2("test_round_ended_by", seed)), fight_round):
+                seps = [e["reason"] for e in out.trace if e["kind"] == "separation"]
+                assert out.ended_by == ("felled" if out.felled else seps[-1]), (seed, out.ended_by, out.felled, seps)
+                assert out.ended_by in vocabulary.ROUND_ENDS, out.ended_by
+                assert len(seps) == (0 if out.felled else 1), (seed, seps)
+                assert out.exchanges == sum(e["kind"] == "outcome" for e in out.trace), seed
+                assert sum(out.attempts.values()) == sum(bool(e["kind"] in ("roll", "stophit") or (e["kind"] == "disengage" and e.get("pursued")))
+                                                         for e in out.trace), seed
+                assert set(out.attempts) == {"p_a", "p_b"}
+                goes_on = out.felled is None and out.yielded is None and not any(e["kind"] == "fight_result" for e in out.trace)
+                assert len(recoveries) == goes_on, (seed, "the recovery is taken exactly where the fight goes on", out.ended_by, out.felled, out.yielded)
+                recoveries.clear()
+                recovered_rounds += goes_on
+                ends_seen.add(out.ended_by)
+                felled_rounds += out.felled is not None
+                checked += 1
+    finally:
+        wrapper.recover = real
+    assert checked >= 100, checked
+    assert felled_rounds > 0 and recovered_rounds > 0 and len(ends_seen) >= 4, (
+        f"the fights ended rounds by {sorted(ends_seen)} only ({felled_rounds} felled, {recovered_rounds} recovered): the comparison cannot tell endings apart")

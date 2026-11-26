@@ -32,7 +32,7 @@ def _fight(seed, cfg, pair=('arming', 'arming')):
 
 
 def _round_of(trace, i):
-    return sum(1 for e in trace[:i + 1] if e['kind'] == 'turn_start')
+    return sum(1 for e in trace[:i + 1] if e['kind'] == 'round_start')
 
 
 def test_finalblow_riposte_event_changes_the_tracker():
@@ -52,7 +52,7 @@ def test_finalblow_riposte_event_changes_the_tracker():
             assert e['_cum'][e['by']] < by.wt.health_full, (seed, e)                                 # and he is not felled
             assert e['_cum'] == trace[i - 1]['_cum'], (seed, e)                                       # the turned blow moved no tracker
             assert e['round'] == _round_of(trace, i), (seed, e)
-            continued += any(x['kind'] in ('wound', 'turn_start') for x in trace[i + 2:])
+            continued += any(x['kind'] in ('wound', 'round_start') for x in trace[i + 2:])
             checked += 1
         yielded = next((e['by'] for e in trace if e['kind'] == 'yield'), None)   # a failed yield roll (B15.10) ends the scene with the yielder standing
         if yielded is None:

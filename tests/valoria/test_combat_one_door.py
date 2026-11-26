@@ -47,7 +47,7 @@ def wb_balance():
 
 
 # Each matchup is one pair of fighters written twice: as the Combatants the workbench is handed, and as the record the
-# entry is handed. `max_bouts`/`cfg`/`terms` ride beside, where the matchup uses them.
+# entry is handed. `max_rounds`/`cfg`/`terms` ride beside, where the matchup uses them.
 def _matchups():
     return [
         dict(name="defaults",
@@ -70,7 +70,7 @@ def _matchups():
         dict(name="duel terms, a config overlay, a bout cap",
              A=dict(label="A", weapon="arming"), B=dict(label="B", weapon="sabre"),
              rec=dict(claimants=("A", "B"), ends=(4, 4), terms="blood", kits=(("arming", "light"), ("sabre", "light"))),
-             terms="blood", cfg=dict(CFG, UPSET_FLOOR=0.5), max_bouts=5),
+             terms="blood", cfg=dict(CFG, UPSET_FLOOR=0.5), max_rounds=5),
     ]
 
 
@@ -89,7 +89,7 @@ def _raw_events(m, seed):
     wrapper._TRACE = seen.append
     try:
         kw = dict(terms=m["terms"]) if "terms" in m else {}
-        result = wrapper.fight(A, B, m.get("cfg"), draw.seeded(draw.H2("fight_trace", seed)), max_bouts=m.get("max_bouts", 12), **kw)
+        result = wrapper.fight(A, B, m.get("cfg"), draw.seeded(draw.H2("fight_trace", seed)), max_rounds=m.get("max_rounds", 12), keyed_rounds=True, **kw)
     finally:
         wrapper._TRACE = None
     return result, seen
@@ -102,11 +102,11 @@ def test_workbench_trace_and_entry_give_identical_events(wb_trace, monkeypatch):
     checked = 0
     for m in _matchups():
         for seed in range(8):
-            out = real(_record(m), draw.seeded(draw.H2("fight_trace", seed)), cfg=m.get("cfg"), max_bouts=m.get("max_bouts"))
+            out = real(_record(m), draw.seeded(draw.H2("fight_trace", seed)), cfg=m.get("cfg"), max_rounds=m.get("max_rounds"))
             A, B = _combatants(m)
             kw = dict(terms=m["terms"]) if "terms" in m else {}
             result, events = wb_trace.run_traced_fight(A, B, cfg=m.get("cfg"), seed=seed,
-                                                       max_bouts=m.get("max_bouts", 12), **kw)
+                                                       max_rounds=m.get("max_rounds", 12), **kw)
             assert events == list(out.trace), f"{m['name']}: seed {seed}: the workbench's events differ from the entry's"
             raw_result, raw = _raw_events(m, seed)
             assert events == raw, f"{m['name']}: seed {seed}: the entry's events differ from the engine called directly"
@@ -139,7 +139,7 @@ def test_winrate_is_the_same_fights_through_the_entry(wb_balance, monkeypatch):
                       weapon=(specA if swap else specB).get("weapon", "arming"),
                       armor=(specA if swap else specB).get("armor", "light"),
                       tradition=(specA if swap else specB).get("tradition", "none"))
-        r = wrapper.fight(X, Y, CFG, rng)
+        r = wrapper.fight(X, Y, CFG, rng, keyed_rounds=True)   # the entry's law: the sweep reaches `entry.fight`, whose rounds are keyed (B16.03)
         r = -r if swap else r
         if r == 1:
             aw += 1; dec += 1

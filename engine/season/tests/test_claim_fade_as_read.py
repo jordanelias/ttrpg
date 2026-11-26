@@ -46,7 +46,7 @@ from engine.season.state.carriers import Claim
 # `PYTHONHASHSEED=0`, on the B10.99 closing tree (after B10.72's release fix); still no `claim.decayed`.
 # BA1.99 RE-PIN, 12998 -> 13348 (read at 12933 with BA1.02's `manner:` rows in; they are held back): the BA1 movers (BA1.01, BA1.08, BA1.12; `_realm_goldens.py`'s
 # BA1.99 paragraph) move the season's log once more; same reading, seed 0, `PYTHONHASHSEED=0`, on the BA1.99 closing tree; still no `claim.decayed`.
-BEFORE_SEASON_ONE_ENTRIES = 9439       # B21b partial re-record on the merge with B08 and B12a: 8648 -> 9439 (the guards ship on, B21b.02; no `claim.decayed`); B12a.99 re-pin: 9317 -> 8648
+BEFORE_SEASON_ONE_ENTRIES = 9421       # B16.99 re-pin: 9439 -> 9421 (the per-round fight key, B16.03; this chooser's log, seed 0, `PYTHONHASHSEED=0`, merged with B21b; `populated.run`'s CENSUS[(0, 1)] reads 9429, the same 8 apart as before); B21b partial re-record on the merge with B08 and B12a: 8648 -> 9439 (the guards ship on, B21b.02; no `claim.decayed`); B12a.99 re-pin: 9317 -> 8648
 BEFORE_SEASON_ONE_DECAYED = 0
 
 

@@ -268,7 +268,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 191 | `engine/season/tests/test_arrival_report.py` | test file | B12a.16 | — |
 | 192 | `engine/season/tests/test_endowment.py` | test file | B12a.51 | — |
 | 193 | `proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md` | design file | B12a.57 | — |
-| 194 | `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py` | module | B16.04 | — |
 | 195 | `test_approach_responses.py` | test file | B16.09 | — |
 | 196 | `tests/test_approach_responses.py` | test file | B16.09 | — |
 | 197 | `engine/season/harness/duel_scene.py` | harness module | B16.11 | — |

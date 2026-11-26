@@ -23,8 +23,8 @@ from modules.combat import vocabulary
 
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {
-    'fight_start', 'turn_start', 'engagement_start', 'approach', 'stophit',
-    'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
+    'fight_start', 'round_start', 'engagement_start', 'approach', 'stophit',
+    'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'round_end', 'fight_result',
     'yield',   # §11.4 (PC-01): a Phase-1 declaration; an unrefused one ends the fight at FinalResult via Yielded
     'wound',   # PC-13: every point of damage the tracker takes, from the ONE helper wrapper._wound (pursuit, stophit, displace_graze, exchange, bind, finalblow_riposte)
     'finalblow_riposte',   # B15.09: a felling blow turned (`UPSET_FLOOR`): it is not applied and he lands the blow back, the fight going on; no state of its own (HitLanded -> AwaitTempo)
@@ -36,7 +36,7 @@ TRACE_KINDS = {
 TRACE_KINDS |= set(vocabulary.YIELD_ROLL_EVENTS)
 
 # Separation reasons the engine can emit (wrapper.engagement `return None` sites): the round endings (`vocabulary.ROUND_ENDS`, the owner) but
-# `felled`, which is the ending of a round that fell a party and emits `engagement_end`, never a `separation`. The dynamic coverage check
+# `felled`, which is the ending of a round that fell a party and emits `round_end`, never a `separation`. The dynamic coverage check
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
 SEPARATION_REASONS = set(vocabulary.ROUND_ENDS) - {'felled'}
@@ -50,7 +50,7 @@ SEPARATION_REASONS = set(vocabulary.ROUND_ENDS) - {'felled'}
 STATES = {
     # ---- outer loop (fight) ----
     'FightInit':      {'entry': True, 'to': ['EngagementInit', 'Yielded', 'Withdrawal'], 'emits': ['fight_start'], 'site': 'wrapper.fight'},
-    'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['turn_start', 'engagement_start'], 'site': 'wrapper.engagement'},
+    'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['round_start', 'engagement_start'], 'site': 'wrapper.engagement'},
     # ---- inner loop (engagement), per beat ----
     'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit', 'wound'], 'site': 'wrapper.engagement'},
     'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach', 'Felled', 'Separation'], 'emits': ['disengage', 'wound'], 'site': 'wrapper.engagement'},   # disengage (+ its pursuit wound) and the terms separation are beat-head events
@@ -64,8 +64,8 @@ STATES = {
     # three, since a grab is opportunistic on ANY of the three opening_created precondition sites.
     'Contact':        {'to': ['AwaitTempo', 'Separation'], 'emits': ['contact'], 'site': 'wrapper.engagement (outcome tail, contact-axis block)'},
     # ---- engagement terminals -> back to the outer loop ----
-    'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement'},
-    'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement'},
+    'Felled':         {'to': ['Decided'], 'emits': ['round_end'], 'site': 'wrapper.engagement'},
+    'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'round_end'], 'site': 'wrapper.engagement'},
     'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded', 'Withdrawal'], 'emits': [], 'site': 'wrapper.fight'},
     # ---- decision ----
     # §11.4 (PC-01): an unrefused Yield, declared at Phase 1 of a turn (so from FightInit or InterTurn), ends the fight
@@ -168,7 +168,7 @@ def fired_states_from_events(events):
         if k == 'yield':
             if e.get('refused') is None: fired.add('Yielded')   # a refused declaration falls through: no state of its own
         elif k == 'fight_start': fired.add('FightInit')
-        elif k == 'turn_start': fired.add('EngagementInit')
+        elif k == 'round_start': fired.add('EngagementInit')
         elif k == 'engagement_start': fired.add('AwaitTempo' if e['closed'] else 'Approach')
         elif k == 'approach': fired.add('Approach'); fired.add('AwaitTempo') if e.get('just_closed') else None
         elif k in ('commit', 'read', 'mode', 'roll'): fired.add('Exchange')
@@ -181,7 +181,7 @@ def fired_states_from_events(events):
         elif k == 'withdraw': fired.add('Withdrawal')
         elif k == 'stophit': fired.add('Approach')   # a stop-thrust that fells ends the engagement before the `approach` emit
         elif k == 'separation': fired.add('Separation'); fired.add('InterTurn')
-        elif k == 'engagement_end':
+        elif k == 'round_end':
             fired.add('Felled' if e['felled'] else 'Separation')
             fired.add('Decided' if e['felled'] else 'InterTurn')
         elif k == 'fight_result':
@@ -270,13 +270,13 @@ if __name__ == '__main__':
     for s in range(120):
         A = Combatant('A', weapon='greatsword', strength=6); B = Combatant('B', weapon='dagger', strength=2, end=2)
         _, ev = run_traced_fight(A, B, seed=s)
-        if any(e['kind'] == 'engagement_end' and e['felled'] for e in ev):
+        if any(e['kind'] == 'round_end' and e['felled'] for e in ev):
             felled_seen = True; break
     checks.append(felled_seen); print(f"(f) Felled terminal reachable (a kill occurs): {'OK' if felled_seen else 'FAIL'}")
 
     # (g) the §11.4 yield path (PC-01): an unrefused Yield visits Yielded and FinalResult and skips the decision nodes
     _B = Combatant('B')
-    _ev = _traced(Combatant('A'), _B, 0, yield_decl=_W.Yield(by=_B, turn=1))
+    _ev = _traced(Combatant('A'), _B, 0, yield_decl=_W.Yield(by=_B, round=1))
     _fy = fired_states_from_events(_ev)
     g_ok = {'Yielded', 'FinalResult'} <= _fy and 'Decided' not in _fy
     checks.append(g_ok); print(f"(g) yield path (Yielded -> FinalResult, decision nodes skipped): {'OK' if g_ok else 'FAIL — ' + str(sorted(_fy))}")

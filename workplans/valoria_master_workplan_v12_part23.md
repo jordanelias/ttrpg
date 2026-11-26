@@ -52,15 +52,12 @@ C(B16-pc-round): this batch's entries; the plan's head parts; `unified/U1_GLOSSA
 SERIAL EDGES: within the batch (U3 §1 item 16 and §1.2's B16 row, with the source orders): B16.01 (PB step 1 with PCR-2: the entry and the three dataclasses) → B16.02 (PCR-3: "same files as PCR-2, so after it") → B16.03 (PB step 2: the key is drawn per round, so the round entry must exist) → B16.04 (step 3's probe, written before 3a so its baseline is the step-2 tree) → B16.05 (3a) → B16.06 (3b) → B16.07 (3e) → B16.08 (3c at 0, and step 3's gate read on all of 3a–3e) → B16.09 (step 4 with `EXITS` Part A: the consults of 3a get their deciders; "the menu is not shipped" if B16.08's gate fails) → B16.10 (POINTER: the first proposal superseded, once its build is PB's) → B16.11 (`IS-PC-01`: "B16 steps 1–4" first) → B16.12 (READING) → B16.99 (the re-pin, last).
   With other batches, by file (U3 §5.1 rows; `→` is landing order in time): `modules/combat/wrapper.py`, `fight.py`, `config.py`: B13 → B14 → B15 → **B16** → B30 (B19a reads them); `engine/season/queries/inputs.py`: B05 → B14 → B17 → B15 → **B16** (with B12a and B24 in S13, different classes) → B19 → B22 → B34 → B35; `engine/season/seam/wrappers/combat.py`: B04 → B06 → B14 → B15 → **B16**; `references/module_contracts.yaml`: B03 → B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 → B04 → B05 → **B16** (with B12a and B24 in S13, different `composition_roles:` keys) → B19 → B35; `engine/season/decision/choose.py`: B04 → B09 → B10 → B08 and **B16** in S13 (`pack_scenes` and `approach_of`: different functions) → B28 → B34 → B38; `engine/season/data/verbs.py`: B04 → B07 → B10 → B08 and **B16** in S13 (`SEQUENCE_CLAUSE` and the loader; `CHOICE_RANGES`: different names); `engine/season/data/fixtures.py`: B08 (`rival_precedence`) and **B16** (`npc_decider_roles`) in S13, different keys; `engine/season/rosters.yaml`: **B16** adds the top-level key `approach_responses` at the end of its family's block (CIP part 2 §5 note 1); `engine/season/harness/scenarios.py`: B11 → **B16** (`duel`) → B20 (`field`) → B30 (`squad`), each row appended at the end of the mapping; `harness/duel_scene.py`: **B16** → B34 (its `FIXTURES["duel"]` line, `IS-PC-01` step 6).
 PARALLEL: S13 with B08-scene-order (IN), B12a-world-motion-and-ground (SE+WR), B21b-fa-war (FA), B24-sc-hearing (SC). Shared with B08: `decision/choose.py`, `data/verbs.py`, `data/fixtures.py` (different functions, names and keys; kept by hand at merge, §7.3). Shared with B12a and B24: `queries/inputs.py`, `references/module_contracts.yaml`, `rosters.yaml` (U3 §5.1 lists all three batches on each; different classes and keys); the coordinator reads the census at the step's open and serialises a pair that fails §7.3. Merge position: after B08 and B12a (both movers), before B21b and B24 (§2.1's order, §7.4); B16 rebases on B12a's merge and re-pins once.
+LANDED (the batch's partial close, `db34c1d63` on branch `ccr-0a461ba3-emwwmh`, merged with main at B08's merge `842026ea3`): B16.01 to B16.04 and B16.99's re-pin part (the realm pins and the seeded picks, read on the merge with B08), with their readings in that branch's commit bodies. A reference below to B16.01 to B16.04 reads satisfied; what they built is `modules/combat/fight.py::fight_round` and `wrapper.round_draw`/`fight_draw`, the rename (`max_rounds`, `round_start`, `CombatRoundView`) and the per-round key; the probe of B16.04 was deleted (no caller). B16.05 to B16.07 were built and reverted by B16.08's STOPS IF (`engine/season/hole_register.yaml` H-580, Jordan rules); B16.08 was not built; B16.09 and B16.11 need the approach menu and wait on that ruling; B16.99's batch-gate readings and its rebase on B12a's merge remain; the in-round `(r, beat, site)` keying B16.03 names is H-581.
 COST: small builds; producer `valoria-author` on `sonnet`, `high`; PCR-3's rename `haiku` with a `sonnet` check (PCR); the workbench sweeps of B16.05–B16.08 run by `haiku` (`valoria-measure`) and read by `opus` (PB §7, "a calibration judgment"); the close's terminal critique `opus`.
 EST: 10 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 13 positions (0.4 h × 13 + 2.5 h) + 2 h for the n ≥ 2,000 workbench sweeps; no close timed; the schedule uses part 2 §1.3's 7.7 h (E-15: the head parts recompute; R2c, K5 F19)]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B16.01 | one round as its own entry; the fight a loop over it; the round says how it ended | PB step 1 with PCR-2 | BUILD | EQUAL | Batch B15 (PCR-1), Batch B06 |
-| B16.02 | one word in code for the round | PCR-3 | BUILD | EQUAL (stops if a pin moves) | B16.01 |
-| B16.03 | each round drawn from its own key | PB step 2 (A-30) | BUILD | MOVER(behaviour) | B16.01; Batch B06 |
-| B16.04 | the approach-policy probe, written before the leans | PB §7 row "—" (step 3's added gate) | BUILD (probe) | EQUAL | B16.03 |
 | B16.05 | the approach, the three phases, the consult points; the lean on commit depth and counter selection | PB step 3a | BUILD (probe) | EQUAL | B16.04 |
 | B16.06 | the lean on the fighting withdrawal in a bind | PB step 3b | BUILD (probe) | EQUAL | B16.05 |
 | B16.07 | the standing initiative bonus for aggression retired | PB step 3e | BUILD (probe) | EQUAL (season); the workbench table moves | B16.05 |
@@ -72,103 +69,6 @@ EST: 10 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 13 pos
 | B16.99 | re-pin and close readings | E-1 | BUILD | MOVER (the re-pin) | B16.01 to B16.12 |
 
 Not in this batch, and where each is: PB step 5 (the `duel` callable through `nested_entry`, B30); PB step 3d (unscheduled, UNDECIDED (6)); `IS-PC-01` step 6 (`harness/scene.py::FIXTURES["duel"]`, B34); `IS-PC-02` (B30); `EXITS` Part B (adopts `14_VERBS_PHYSICAL_A` A3, landed in B15) and Part C (carried by `14_VERBS_MATERIAL_A_mending.md` §6, B12c); PCR-1 (B15, first item; its three-element return from `wrapper.engagement` is on this batch's base); PCR-4 (B04).
-
-### B16.01 — one round as its own entry; the fight a loop over it; the round says how it ended · PB step 1 with PCR-2 · BUILD · HASH EQUAL
-- SOURCE: PB §2, §7 row 1, "Implementation (test 9)"; PCR "Item: PCR-2"; U3 §1 item 16; A-4, A-30, A-101; closes F-PC-13, F-PC-14's round half. What is not copied is cited by PB or PCR section (E-12; R2c, K5 F6).
-- ADVANCES: none of the nine by itself; the round M4 reads, and the entry B19a's MBA-02 and B30's PB step 5 call.
-- INSTRUCTION (PB §2 with PCR-2's four amendments):
-  1. `engine/season/queries/inputs.py`, beside `PersonalCombatInput`, three frozen dataclasses (PB §2; PCR-2 (2)'s fields on the outcome):
-     ```python
-     @dataclass(frozen=True)
-     class DuelState:  # what one party carries from round to round, in the FRAME of the loop that calls
-         # `fight_round`, for one provider call; no adapter, module attribute or World field holds it.
-         cumulative_damage: int = 0
-         stamina: Optional[float] = None  # None: start of a fight (the module derives the maximum)
-         conc: Optional[float] = None
-         poise: float = 1.0
-         form: Optional[str] = None  # the weapon record in hand when the last round ended; None: the kit's own
-
-     @dataclass(frozen=True)
-     class DuelRoundInput:
-         fighters: PersonalCombatInput  # who they are, and the roll's numbers raw (scores, addends, pool_add,
-         # pool_floor, opposition_rate; D-U1-08; carried once, here)
-         states: tuple  # (DuelState, DuelState), in claimant order
-         plans: tuple  # per party: {phase: approach}; a missing phase is `normal`
-         round: int  # 1-based
-         prev_closed: bool = False  # the measure the last round ended in
-
-     @dataclass(frozen=True)
-     class DuelRoundOutcome:
-         states: tuple
-         wounds: Mapping  # id -> the lifted wound quantities, as the fight returns them
-         felled: Optional[str]
-         yielded: Optional[str]
-         closed: bool
-         trace: tuple  # this round's events, each `approach` consult among them
-         ended_by: str  # a member of modules/combat/vocabulary.py::ROUND_ENDS (PCR-2 (2))
-         exchanges: int  # the round's `outcome` events
-         attempts: Mapping  # claimant id -> attack attempts: its `roll`, `stophit`, pursued `disengage` events
-     ```
-     No `winner` field on the round (PCR-2's falsifier).
-  2. `modules/combat/fight.py::fight_round(inp: DuelRoundInput, rng, deciders=None) -> DuelRoundOutcome` (PCR-2 (1): not `round`, the builtin): "build the two Combatants; apply each `DuelState` (damage, stamina, concentration, poise, form); draw `first` (the coin `wrapper.fight` draws …, moved inside the round …); call `wrapper.engagement` once; apply the between-round recovery …; lift the states. It keeps nothing." The recovery only when `ended_by` is a separation, not `felled` or `terms` (PCR-2 (3)); `ended_by` is `engagement`'s third element (PCR-1, B15); `exchanges` and `attempts` from what `engagement` returns and the round's trace (PCR-2 (2)).
-  3. `fight.py::fight(inp, rng, decide)` becomes the loop over `fight_round` "with the states in its own frame" (PB §2), up to twelve rounds (`max_rounds`, B16.02), stopping on a felling, a yield, a withdrawal or the twelfth round; it no longer calls `wrapper.fight`, which stays as the workbench's loop. One stream: `fight_round` draws from the `rng` it is handed, in today's order (PB §7 step 1).
-  4. `references/module_contracts.yaml` `composition_roles:`: a second combat row, role `combat.round` (PCR-2 (1)), target `"modules.combat.fight:fight_round"`, `needed_by:` B19a's instrument and B30's `nested_entry`.
-  5. Glossary row *round* (§K): owner `fight_round` (P) → (T), pointing at `modules/combat/fight.py::fight_round`.
-- WHERE: `engine/season/queries/inputs.py`; `modules/combat/fight.py`; `references/module_contracts.yaml`; `engine/season/tests/test_rem31_grid_suspension.py`, `test_combat_module.py`; `unified/U1_GLOSSARY.md`.
-- TESTS (PB "Implementation", PCR-2 "Tests"), red first (no `fight_round`): `test_rem31_grid_suspension.py::test_twelve_round_calls_equal_one_fight` (by hand, three seeds, a longsword against plate among them); `test_combat_module.py::test_round_keeps_no_state_between_calls`; `test_combat_module.py::test_round_outcome_names_how_it_ended` (over 100 seeds `ended_by` equals the trace's last `separation` reason or `felled`, `exchanges` its `outcome` count, `sum(attempts.values())` its `roll` + `stophit` + pursued `disengage` count; `assert checked >= 100`).
-- FALSIFIER and CONTROL: "a round outcome whose `ended_by` disagrees with its trace; a recovery applied after a felling; a `winner` field on the round" (PCR-2); a resumed fight without its `form` that equals the uninterrupted one for a half-swording weapon (PB §9). Control: twelve calls by hand equal `fight` at three seeds; every combat test and the season hash unchanged.
-- GATE: `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_combat_module.py -q` → pass; `python -m pytest tests/valoria -q -m combat` → pass, unchanged (PB §7 step 1); realm hash (`HASH READING`), seed 2, one season → equal to the previous item's.
-- HASH MOVERS: none (PCR-2); the dataclasses are outside `World.content_hash()`: no encoding mover (D-04).
-- DEPENDS ON: V12 Batch B15 (PCR-1: `ROUND_ENDS`, `engagement`'s three-element return; `IS-PC-05`'s skill score); V12 Batch B14 (`03_PC_weapon_form_at_round_start`: `form` carries the selected weapon); V12 Batch B05 (the `PersonalCombatInput` fields); EXISTS-IN-TREE `modules/combat/wrapper.py::engagement`, `::fight`, `modules/combat/fight.py::fight`, `queries/inputs.py::PersonalCombatInput`, `module_contracts.yaml` `combat.fight`.
-- GLOSSARY: *round* (step 5).
-- NAMES: PB's `fight.round`, `round(...)` → `fight_round` (PCR-2); flat `import core` → `from modules.combat import …` (B13; `pc_engine.load()` gone, D-09); `faculties` → the skill score (B15, `IS-PC-05`).
-- COST and TIER: small build; `sonnet`, `high`.
-- LANDS IT: B16's producer (worktree); `Item: B16.01`, `[skip ci]`.
-
-### B16.02 — one word in code for the round · PCR-3 · BUILD · HASH EQUAL
-- SOURCE: PCR "Item: PCR-3"; U3 §1 item 16 ("PCR-3 (one word in code for the round, hash EQUAL)"), §5.1 row "PCR-3's fourteen files"; `V12_STRUCTURE_part2.md` §5.10 B16 row; rulings A-101; closes the *round* and *turn* rows' rename candidate (glossary §K).
-- ADVANCES: none of the nine; `STAGES.md`'s word test and "the glossary always matches" rule 2.
-- INSTRUCTION (PCR-3, copied): "in one commit, with the glossary row (`unified/U1_GLOSSARY.md` §K) replaced by a pointer to the code owner: `wrapper.fight(max_bouts=12)` → `max_rounds`; trace kinds `turn_start` → `round_start`, `engagement_end` → `round_end`, and every event field `turn=` → `round=` (`yield`, `withdraw`, `turn_start`, `engagement_end`); `Yield.turn` → `Yield.round`; `TURN_CHOICES` → `ROUND_CHOICES`; `CombatTurnView` (and its `.turn`) → `CombatRoundView` (`.round`); `modules/combat/fight.py`'s docstrings ("one bout scene" → "one fight"); `seam/wrappers/combat.py`'s `bouts` → `rounds` (or, if B14 has deleted `bouts`, `CombatOutcome.rounds` as `03_PC_typed_outcome_one_door.md` now reads); `config.py`'s "per-TURN burst ceiling". `wrapper.engagement` keeps its name (a function called `round` would shadow the builtin the file calls at every emit)." Added by this plan: B16.01's `fight` loop budget is `max_rounds`; the seam's count of rounds reads the `round_start` kind (at `aa31fd2` `seam/wrappers/combat.py` counts `turn_start` events into `bouts`). First step: open `seam/wrappers/combat.py` and record in the commit body whether B14 left `bouts` or `CombatOutcome.rounds`, then edit the branch found.
-- WHERE (PCR-3's measured list; `git grep -ln "turn_start\|engagement_end\|CombatTurnView\|max_bouts" -- '*.py'` at `aa31fd2` returns these fifteen plus two files outside the game code, `.audit/…/trace_backward.py` and `proposals/2026-09-04-degree-sweep/arm2_onramp.py`, which are not edited: `.audit/` is loaded by nothing, CLAUDE.md §3): `modules/combat/wrapper.py`, `fight.py`, `config.py`; `engine/season/queries/inputs.py`; `engine/season/seam/wrappers/combat.py`; `systems/combat/combat_engine_v1/workbench/trace.py`, `commentary.py`, `narrate.py`; `systems/combat/combat_engine_v1/state_graph.py`; `engine/season/tests/test_rem31_grid_suspension.py`, `test_pc10b_challenge_record.py`; `tests/valoria/test_combat_duel_terms.py`, `test_combat_yield.py`; `tools/build_identifier_census.py`; `unified/U1_GLOSSARY.md` (§K *round*, *turn*).
-- TESTS: none new; the four test files above are edited with the rename and stay green.
-- FALSIFIER and CONTROL: "a remaining `turn_start` or `max_bouts` in the combat files (`git grep`); a season hash that moves. Control: the combat goldens and the season pins unchanged." (PCR-3.)
-- GATE: "the four named test files and the workbench narrator's own run green; season golden pins EQUAL" (PCR-3): `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_pc10b_challenge_record.py tests/valoria/test_combat_duel_terms.py tests/valoria/test_combat_yield.py -q` → pass; `python systems/combat/combat_engine_v1/workbench/narrate.py` → exit 0 `[ASSUMPTION: the narrator runs with no arguments — basis: PCR-3 names "its own run" and no command]`; `git grep -n "turn_start\|engagement_end\|CombatTurnView\|max_bouts\|TURN_CHOICES" -- modules engine systems tools tests` → no hit; the realm content hash (`HASH READING`) after one season at seeds 0 and 2 → equal to the same seeds read on B16.01's tree at this item's open (`reading @<sha>`).
-- STOPS IF: a season pin moves ("if the season pin moves, the assumption was wrong and the item stops", PCR-3: `[ASSUMPTION: trace event names and the round count do not enter World.content_hash(); the pins are the check]`). At `aa31fd2` the seam derives `bouts` from the trace and `content_hash` folds Event frames and state collections; the gate is the reading.
-- HASH MOVERS: none expected.
-- DEPENDS ON: V12 B16.01 ("same files, same batch"); V12 Batch B14 (`03_PC_typed_outcome_one_door`: `bouts` or `CombatOutcome.rounds`); EXISTS-IN-TREE `modules/combat/wrapper.py::TURN_CHOICES`, `::fight(max_bouts=12)`, `engine/season/queries/inputs.py::CombatTurnView`, `systems/combat/combat_engine_v1/state_graph.py`.
-- GLOSSARY: §K *round* and *turn*: the rename candidate notes struck, the owner column a pointer to `fight_round` and `wrapper.engagement`, the rejected column (**turn**, **bout**, **engagement** in prose) kept; *bout* (§E): "the combat code's `max_bouts` counts rounds, rename candidate PCR-3" struck.
-- NAMES: `max_bouts` → `max_rounds`; `turn_start` → `round_start`; `engagement_end` → `round_end`; `CombatTurnView` → `CombatRoundView`; `TURN_CHOICES` → `ROUND_CHOICES` (§5.10's B16 row); `Yield.turn` → `Yield.round`; `bouts` → `rounds`.
-- COST and TIER: wide mechanical (a rename across the sixteen files of WHERE; class corrected by check lane K5 from "small mechanical rename", which is not a §5.3 class); `haiku` for the edits with a `sonnet` check (PCR-3).
-- LANDS IT: B16's producer; `Item: B16.02`, `[skip ci]`.
-
-### B16.03 — each round drawn from its own key · PB step 2 · BUILD · HASH MOVER(behaviour)
-- SOURCE: PB §2 second bullet, §7 row 2, "Implementation"; PB header (the A-101 round lane: "the in-round key adds the beat (`(r, beat, site)`)"); rulings A-30, A-101; `11_GO_one_draw_owner.md` (`Draw.u`, B06).
-- ADVANCES: none of the nine by itself; a round recomputable from its key, which a grid attack between other units' acts needs (`IS-B1` §1.1 row 5).
-- INSTRUCTION: "Round `r` draws from the key `H(fight_key, 'round', r)`; each draw inside the round is keyed `(r, phase, purpose)`; no draw depends on another round's count (A-30). The function that makes a key into a draw is `11_GO_one_draw_owner.md`'s `Draw.u`. Round `r` is recomputable from `(fight_key, r)`." (PB §2.) The in-round key is `(r, beat, site)` (PB header, A-101 lane: a round holds several beats). In `modules/combat/fight.py`: `fight` derives each round's `Draw` from `fight_key` and `r` and hands it to `fight_round`; `fight_round` draws `first` and every in-round draw from the keyed sub-draws. `fight_key` is the key of the `Draw` the fight is handed `[ASSUMPTION: PB names `fight_key` and no constructor; after B06 `fight` "takes its stream" as a `Draw` (`11_GO_one_draw_owner.md`'s Option A) — basis: that file's Reconciled line]`.
-- WHERE: `modules/combat/fight.py` (`fight`, `fight_round`); `modules/combat/wrapper.py` (`engagement`'s draw sites, keyed); `engine/season/tests/test_rem31_grid_suspension.py`.
-- TESTS: `test_rem31_grid_suspension.py::test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_the_key` (PB "Implementation", steps 1–2), written before the edit and read red (round calls from `(fight_key, r)` alone cannot reproduce a fight drawn on one sequential stream).
-- FALSIFIER and CONTROL: "a fight in one call and the same fight as separate `round` calls from `(fight_key, r)`" that differ (PB §7 step 2). Control: B16.01's `test_twelve_round_calls_equal_one_fight` stays green on the keyed stream.
-- GATE: `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_combat_module.py -q` → pass; the realm content hash (`HASH READING`) after one season at seed 2 → moved (declared), the value quoted in the commit body.
-- EXPECTED RED UNTIL B16.99: the season realm pins in `engine/season/tests/_realm_goldens.py` and any seeded combat golden on a fight's draw sequence (re-pinned once there, under `[skip ci]` until then).
-- HASH MOVERS: "step 2 (every season fight, once, declared)" (PB "Implementation"); and any combat golden pinned on a seeded fight's draws `[ASSUMPTION: PB names season pins only — basis: the step changes where every round's draws come from]`. Declared; B16's one re-pin in B16.99.
-- DEPENDS ON: V12 B16.01; V12 Batch B06 (`engine/dice_engine/draw.py::Draw`, `H2`, `seeded`).
-- GLOSSARY: none.
-- COST and TIER: small build; `sonnet`, `high` (PB "Lands": "steps 1–2 `sonnet`").
-- LANDS IT: B16's producer; `Item: B16.03`, `[skip ci]`.
-
-### B16.04 — the approach-policy probe, written before the leans · PB §7 row "—" · BUILD (probe) · HASH EQUAL
-- SOURCE: PB §7, the unnumbered row between steps 2 and 3a ("Step 3 as a whole gains one gate … this step first writes it as `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py`"); rulings A-31, D-40; closes the pessimist's R-6 (PB's added gate); U3 §6.2 row `pI_approach2.py` (a scratch probe restated as a committed file).
-- ADVANCES: none of the nine; the instrument step 3's gate is read on (B16.08).
-- INSTRUCTION: write `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py`, beside `build_levers.py` and in its shape (a sweep table printed, `n` an argument): (1) the default mode prints, "per named matchup, the state-reading policy's win share, never-lean's, and the disjoint-seed interval at n ≥ 2,000" (PB §7); the state-reading policy is "press the wounded; guard when hurt" (PB §7): a fighter whose foe carries a wound plans `aggressive`, one who carries a wound plans `defensive`, else `normal`, given as `DuelRoundInput.plans` per round from the `DuelState`s the loop holds (B16.01); never-lean plans `normal` throughout; the named matchups are PB §3's ("a dagger against an arming sword", "against a low-Endurance opponent", "a lightly armoured fighter against plate", the arming, mace and rapier mirrors). (2) a `leans` mode printing each approach against a `normal` fighter per named matchup and per mirror at n ≥ 2,000, the "`build_levers.py`-style table" steps 3a and 3c read `[ASSUMPTION: one probe file carries both tables — basis: PB names a "`build_levers.py`-style table" for 3a and no file; one instrument fewer]`. The file draws through the fight's own entry only (`fight_round`, B16.01; `fight`), never re-implementing a round (PB §6). Run both modes on this tree and keep the printed tables in the commit body: with no lean built every column equals `normal`'s within the interval (the control that the probe cannot make a difference the engine does not have).
-- WHERE: NEW `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py`.
-- TESTS: none new (a workbench instrument; its control is the run above).
-- FALSIFIER and CONTROL: on this tree (no lean exists) the probe prints a difference beyond its interval in any row: the probe, not the engine, makes it. Control: the realm hash unmoved (no game file edited).
-- GATE: `python systems/combat/combat_engine_v1/workbench/approach_policy_probe.py 2000` → a table with every named matchup, every difference inside its interval; `… leans 2000` → every approach within its interval of `normal`; both tables in the commit body (`reading @<sha>`).
-- HASH MOVERS: none.
-- DEPENDS ON: V12 B16.01 (`fight_round`, `plans`), B16.03; EXISTS-IN-TREE `systems/combat/combat_engine_v1/workbench/build_levers.py` (the shape).
-- GLOSSARY: none.
-- COST and TIER: small build; `sonnet`; the n ≥ 2,000 runs `haiku` (`valoria-measure`), read by `opus` (PB "Lands": "the workbench sweep run by `haiku` … and read by `opus` (a calibration judgment)").
-- LANDS IT: B16's producer; `Item: B16.04`, `[skip ci]`.
 
 ### B16.05 — the approach, the three phases, the consult points; the lean on commit depth and counter selection · PB step 3a · BUILD (probe) · HASH EQUAL
 - SOURCE: PB §3 (vocabulary; "What a lean does, phase by phase", rows 1–2; the starting values), §4 (consult points), §7 row 3a; rulings A-31, D-40, ED-PC-0023 (a lean is a prior on a gate the engine already rolls).

@@ -46,8 +46,8 @@ def render(events, seed=None):
             line(f"  {ev['A']:<8} — {ev['weapon_A']}, {ev['armor_A']} armour, {ev['tradition_A']} tradition")
             line(f"  {ev['B']:<8} — {ev['weapon_B']}, {ev['armor_B']} armour, {ev['tradition_B']} tradition")
             line()
-        elif k == 'turn_start':
-            line(f"  Turn {ev['turn']} — {ev['first']} moves first.")
+        elif k == 'round_start':
+            line(f"  Turn {ev['round']} — {ev['first']} moves first.")
         elif k == 'engagement_start':
             if ev['closed']:
                 line(f"    they begin already closed (measure {ev['measure_gap']})")
@@ -85,7 +85,7 @@ def render(events, seed=None):
                 line(f"        -> {ev['defender']} ripostes — initiative flips  {wounds}")
             else:
                 line(f"        -> clean defence, no effect  {wounds}")
-        elif k == 'engagement_end':
+        elif k == 'round_end':
             if ev['felled']:
                 line(f"    — engagement ends: {ev['felled']} is felled")
             else:

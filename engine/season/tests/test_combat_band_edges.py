@@ -195,7 +195,7 @@ def test_the_shipped_edges_reproduce_the_old_literal_on_real_fights():
 @needs_engine
 def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouched():
     """PLAN POSITION 8'S FALSIFIER (ii), AT THE `max_wounds` ARM. On the scene `test_we_the_band_is_read_off_the_subject_and_
-    not_off_the_loser` names (`we0`: `p_low` is felled, `p_mid` stands with wounds), the shipped edge
+    not_off_the_loser` names (`we3`: `p_low` is felled, `p_mid` stands with wounds), the shipped edge
     reads `p_mid` `Wounded`; at `wounds > max_wounds` it reads `Untouched`. The `Felled` edge is the
     engine's own verdict and is NOT swept, so `p_low` stays `Felled` -- the claim is about every
     STANDING fought subject, and `standing >= 1` is asserted.
@@ -206,7 +206,7 @@ def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouch
     THE UNIVERSAL CLAIM: the universal one (every STANDING fought subject, over the 24 real ones) is
     `test_an_unreachable_arm_grades_every_standing_fought_subject_untouched`, and the cap case is
     `test_a_standing_subject_at_the_wound_cap_still_reads_wounded_at_max_wounds`."""
-    raw = _scene("we0")   # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we1, B15.04; we3, B06.99; we0)
+    raw = _scene("we3")   # seed re-picked at B16.03: the per-round key moved the stream (was we0, B15.10; we9, B15.07; we1, B15.04; we3, B06.99)
     fx = DEFAULT_FIXTURES.sweep("combat_wounded_above", "max_wounds")
     standing = 0
     for subject, st in raw["wound_state"].items():
@@ -320,7 +320,7 @@ def test_a_scene_that_does_not_lift_a_quantity_an_edge_reads_refuses():
 def test_the_swept_fixture_reaches_the_fold():
     """The same act folded at two arms writes at two bands: through the driver, so the fixture is read
     where `loop/resolve.py` hands it to `degree_of` and `_eff_kill` hands it to `party_degree`, not only
-    where a test hands it directly. CP-T03-00: on `we0` the ACTOR (`p_low`) is felled and the subject
+    where a test hands it directly. CP-T03-00: on `we3` the ACTOR (`p_low`) is felled and the subject
     (`p_mid`) bled, so the fight is `Felled` at both arms; what the arm moves is the SUBJECT's band --
     `Wounded` (a `body.changed` about him) at the shipped edge, `Untouched` (none) at `max_wounds`."""
     degrees, kinds = {}, {}
@@ -332,8 +332,8 @@ def test_the_swept_fixture_reaches_the_fold():
         # v10 REM-31: RESOLVE declares the fight (`the body`'s `step: ENCOUNTER`); the fight's Events are ENCOUNTER's.
         evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
                           d.resolve(mint_token(d.w, WriteClass.ACTS),
-                                    # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we1, B15.04; we3, B06.99; we0)
-                                    [Act(id="we0", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
+                                    # seed re-picked at B16.03: the per-round key moved the stream (was we0, B15.10; we9, B15.07; we1, B15.04; we3, B06.99)
+                                    [Act(id="we3", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
         degrees[arm] = {e.degree for e in evs}
         kinds[arm] = {e.kind for e in evs}
         assert w.fixtures.reads.get("combat_wounded_above", 0) >= 1, "the fixture was never read"
@@ -344,7 +344,7 @@ def test_the_swept_fixture_reaches_the_fold():
 
 @needs_engine
 def test_state_lifts_exactly_the_rosters_quantities_in_order():
-    raw = _scene("we0")
+    raw = _scene("we3")
     for subject, st in raw["wound_state"].items():
         assert list(st) == ["available", *WOUND_QUANTITIES], (subject, list(st))
         assert type(st["felled"]) is bool
@@ -358,4 +358,4 @@ def test_a_roster_quantity_the_tracker_does_not_carry_refuses_by_name_at_the_sce
         w = P.tiny_world()
         w.step = Step.RESOLVE
         with pytest.raises(Unspecified, match="hit_points"):
-            contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
+            contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we3"])

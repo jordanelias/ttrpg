@@ -52,7 +52,7 @@ def test_fighters_across_the_line_sometimes_fight_on():
             yielded += len(ylds)
             for i, e in enumerate(trace):
                 if e.get('reason') == 'terms':   # the burst-breaker cut a round at a crossing: did the fight go on past it?
-                    fought_on += any(x['kind'] == 'turn_start' for x in trace[i + 1:])
+                    fought_on += any(x['kind'] == 'round_start' for x in trace[i + 1:])
             if terms == 'yield' and ylds:
                 y = A if ylds[0]['by'] == 'A' else B
                 above += y.wt.health_remaining > CFG['YIELD_HEALTH_FRAC'] * y.wt.health_full
@@ -99,7 +99,7 @@ def test_yield_roll_is_keyed_by_turn_and_party(monkeypatch):
         A, B = C.Combatant('A', weapon='arming'), C.Combatant('B', weapon='arming')
         trace = []
         wrapper.fight(A, B, CFG, rng, terms='blood', trace=trace.append)
-        rounds = [e['turn'] for e in trace if e['kind'] == 'turn_start']
+        rounds = [e['round'] for e in trace if e['kind'] == 'round_start']
         keys = [k for _, k in seen]
         assert len(set(keys)) == len(keys)
         assert all(k in {KD.H2(rng.key, f"yield:0:{t}:{p}") for t in rounds for p in 'AB'} for k in keys), seed

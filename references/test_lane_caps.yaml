@@ -18,12 +18,14 @@ lanes:
       - {batch: B24-sc-hearing, added: 9, behaviour: "each rolled move draws on the skill its rung names, a rolled move with no capability is refused, a capability cell the roster cannot close is refused, and the bench's reading is drawn and can be wrong at every insight"}
       - {batch: B24-sc-hearing, added: 5, behaviour: "two NPC negotiations auto-run to the same hash, a held breach claim changes acceptance, an accept is a concession drawing nothing, each oblige is opened by its own party's act"}
       - {batch: B24-sc-hearing, added: 8, behaviour: "(net of six declared-disposal tests the batch rewrote into the per-member commit reading, cr34: a declared determine with no commit is sat, a commit is read per member and ends with its tenure) a bench's commit moves the reception of a hearing and an off-bench or ended commit moves nothing; a told claim counts less than firsthand; a verdict can be lost on the shipped hearing and the zero-act hearing runs twice byte-identical; a solidarity hearer is moved only when the condition holds, each ground is backed by its own condition alone; a two-key value scores the sum of its cells; a speech kind outside the ladder rungs roster fails the load"}
+      - {batch: B16-pc-round, added: 4, behaviour: "a fight is the loop over one-round entries: the rounds called by hand, each handed the states the last returned and its own key, equal the fight in one call; a round keeps nothing between calls and says how it ended (felled, yielded, tied, the recovery only where the fight goes on); each round is a function of the fight's key and its index alone, recomputable last round first"}
   engine:
     base: 1043
     warrants: []
   combat:
     base: 497
-    warrants: []
+    warrants:
+      - {batch: B16-pc-round, added: 1, behaviour: "an exact tie on the duel terms through the HOST entry ends the fight unresolved with nobody yielded, after one round, as the workbench loop does"}
   mass_battle:
     base: 324
     warrants: []
