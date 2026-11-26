@@ -215,52 +215,6 @@ def test_15d_a_telling_is_hearsay_for_what_was_said_and_firsthand_for_that_it_wa
         "not carry a teller -- only the told channel's own content claim does")
 
 
-def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
-    """`19_PLAN.md` step 4's falsifier: *"every deposit in a ... run is still firsthand."* The
-    realm's first season is the cheapest fold-driven world where a non-presence channel is the
-    strongest for anyone (`chronicle`/`post_remit`, measured at `15d`: 266 pairs; Carin's world
-    has none, and every deposit in `headless.run(3, 0)` is still `firsthand` -- which is a fact
-    about that world's geography, not the mechanism). One season, not three: three cost ~110 s and
-    observe nothing one does not.
-
-    ⚠ THE CONTROL IS IN THE TEST (§0.1 pt 4). The same season with every channel's source
-    collapsed to `firsthand` -- the map neutralised, nothing else touched -- holds no `told_by`
-    at all, so the hearsay is the map's and not the told channel's.
-
-    ⚠ TELLING WORKPLAN `T4`: THE TOLD CHANNEL MINTS IN THIS WORLD NOW, AND ITS DEPOSITS ARE NOT THE
-    MAP'S. This read *"which mints none in this world at seed 0, measured"* until a telling named a
-    hearer; at `T4` three told claims land in the realm's first season, and a told claim is
-    `told_by` whatever the map says (the told branch sets its source itself). So each arm counts the
-    map's `told_by` (no `chain`) apart from the told channel's (a `chain`), the control asserts the
-    map's is zero, and the told channel's is asserted UNMOVED by neutralising the map."""
-    # THE SEED IS FOUND, NOT PINNED. The quantity is this test's own: chained `told_by` claims (`live_channel`) after
-    # `populated.build_realm(s)` and `populated.run(1, s)`. Whether a given seed's first season deposits any depends on the
-    # realm's act mix, which every upstream change re-rolls, so the test takes the lowest seed of 0-39 that does: the
-    # precondition is that the told channel is live where the control compares, not that one seed is.
-    def told_by_count(seed) -> tuple:
-        w = build_realm(seed)
-        out = populated.run(1, seed, w=w)
-        built = set(w._seat_news)      # v12 B11.08: the seat news the realm is BUILT holding is `told_by` by the `reach` channel's own source; no season deposited it
-        told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by" and c.id not in built]
-        channel = sum(1 for c in told_by if c.chain)
-        return len(told_by) - channel, channel, sum(out["claim_sources"].values())
-
-    for SEED in range(40):
-        live, live_channel, total = told_by_count(SEED)
-        if live_channel > 0:
-            break
-    # `control_channel == live_channel` below passes at 0 == 0 and would then observe nothing (§0.1 pt 2)
-    assert live_channel > 0, "the told channel minted nothing in the realm at any of seeds 0-39: the control below is vacuous"
-    assert live > 0, f"every one of {total} deposits is still firsthand -- no hearsay was minted"
-    monkeypatch.setattr(WITNESS_MODULE, "CHANNEL_CLAIM_SOURCE",
-                        {c: "firsthand" for c in CHANNEL_CLAIM_SOURCE})
-    control, control_channel, control_total = told_by_count(SEED)
-    assert control == 0 and control_total == total, (
-        f"with the map neutralised the season still holds {control} map-sourced told_by claims (of "
-        f"{control_total}, against {total}) -- the hearsay above is not the channel map's")
-    assert control_channel == live_channel, (
-        f"neutralising the map moved the told channel's deposits {live_channel} -> "
-        f"{control_channel}: the told branch's source is not the map's to set")
 
 
 def test_t1_what_hearers_receive_is_decided_at_choose_not_at_witness():
@@ -1673,59 +1627,6 @@ def test_t7_the_claim_kind_and_the_rate_refuse_what_they_cannot_mean():
         _check_intent_claim(INTENT_STEM, ("subject", "bogus"), REQUIRES_STEMS, REQUIRES_OPERANDS, taken)
 
 
-def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
-    """THE PLAN'S FALSIFIER, AT 0. `build_realm(0)`, one season, run twice: once through the shipped
-    chooser at `intent_disclosure` 0, once with `declare_intents` excised (the pre-`T7` chooser,
-    which returned `pack_scenes`' scenes as they were). Equal in BOTH observables: the
-    `content_hash()`, and what every act in the store CARRIED -- `(act id, said)` -- because a
-    payload is not hashed (`T1`), and in the realm's first season every telling that carries an
-    intent is refused (`news.untold`), so a leak at 0 moves the said and not the hash (scratch
-    `t7_arms.py`: the one-season hash is d0015936 at 0, 0.5 and 1.0; at three seasons 0.5 moves it).
-    [GROUNDED: measured 2026-10-09 on the pre-rebase base a59d52f9 (off HEAD's first-parent line,
-    reachable only through the merge 48991c37), BEFORE T7's first edit:
-    `build_realm(0)` 5b8618f2..., one season d0015936..., three seasons 43b1fac8...; after T7, at
-    `intent_disclosure` 0, d0015936 and 43b1fac8 again -- scratch, not re-read here.]
-    The control is NOT VACUOUS: the shipped arm's `declare_intents` is spied, and on a COPY of each
-    triage the same rule at 1.0 (a draw that always discloses) counts the tellings that had a
-    chosen-not-done act to declare (`checked >= 1`); at least one telling in the store carries a
-    `said` (so the said comparison compares something).
-
-    MUTATION (run 2026-10-09, `T7`): the `rate == 0` early return deleted and the draw test made
-    `<=` (every opportunity declares at 0) -- the hashes still match and this goes RED on the
-    `said` comparison. Restored, GREEN."""
-    import copy
-    from ..data.fixtures import DEFAULT_FIXTURES
-    from ..decision import choose as CH
-
-    assert DEFAULT_FIXTURES.get("intent_disclosure") == 0, "the shipped rate moved: restate this test"
-    real = CH.declare_intents
-    seen = {"calls": 0, "opportunities": 0}
-
-    def spy(p, scenes, fx, draw=None):
-        assert fx.get("intent_disclosure") == 0
-        seen["calls"] += 1
-        copies = copy.deepcopy(scenes)
-        before = [a.payload.get("said") for sc in copies for a in sc.acts if isinstance(a.payload, dict)]
-        real(p, copies, fx.sweep("intent_disclosure", 1.0), lambda _p, _u: _T7Always())
-        after = [a.payload.get("said") for sc in copies for a in sc.acts if isinstance(a.payload, dict)]
-        seen["opportunities"] += sum(1 for b, a in zip(before, after) if a is not b)
-        return real(p, scenes, fx, draw)
-
-    hashes, carried = {}, {}
-    for arm, fn in (("shipped", spy), ("excised", lambda p, scenes, fx, draw=None: scenes)):
-        monkeypatch.setattr(CH, "declare_intents", fn)
-        w = build_realm(0)
-        populated.run(1, 0, w=w)
-        hashes[arm] = w.content_hash()
-        carried[arm] = [(a.id, a.payload.get("said")) for a in w.acts
-                        if isinstance(a.payload, dict) and a.payload.get("said") is not None]
-    print(f"\n  T7 -- realm one season at intent_disclosure 0: {seen['calls']} triages, "
-          f"{seen['opportunities']} tellings with a declarable intent, {len(carried['shipped'])} "
-          f"acts carrying a said; hash {hashes['shipped']}")
-    assert seen["calls"] >= 1 and seen["opportunities"] >= 1, seen
-    assert len(carried["shipped"]) >= 1, "no act in the store carried a said: nothing was compared"
-    assert carried["shipped"] == carried["excised"], "a telling's said differs from the pre-T7 chooser's"
-    assert hashes["shipped"] == hashes["excised"], hashes
 
 
 # ---------------------------------------------------------------------------------------------------

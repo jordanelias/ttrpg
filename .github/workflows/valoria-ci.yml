@@ -450,17 +450,29 @@ jobs:
       - run: |
           HEAVY="engine/season/tests/test_season_shape.py engine/season/tests/test_interactions_log.py engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_storybar.py engine/season/tests/test_told_by_channel.py"
           if [ "${{ matrix.shard }}" = heavy ]; then
-            python -m pytest $HEAVY -q -n auto --dist worksteal --durations=25
+            python -m pytest $HEAVY -q -n auto --dist worksteal --durations=15 --junitxml=leg.xml
           else
             K=${{ matrix.shard }}; K=${K#rest}
             FILES=$(ls engine/season/tests/test_*.py | grep -vxF -f <(printf '%s\n' $HEAVY) | awk -v k="$K" 'NR%3==k')
-            python -m pytest $FILES -q -n auto --dist worksteal --durations=25
+            python -m pytest $FILES -q -n auto --dist worksteal --durations=15 --junitxml=leg.xml
           fi
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
       # ⚠ `-m`, AND UNDER `harness/`. The decomposition (ED-IN-0203) made this a package
       # module: run as a loose script it has no package, its relative imports fail, and the
       # step dies before it can check a single row.
+      # Per-FILE seconds of this leg (the junit file the step above wrote), so the next rebalance reads data and not a guess: bytes
+      # proved a poor proxy (run 45737148512: rest2 held the most bytes and ran 4m48s against rest0's 20m55s).
+      - if: ${{ always() }}
+        run: |
+          python3 - <<'PY'
+          import collections, xml.etree.ElementTree as E
+          t = collections.Counter()
+          for c in E.parse('leg.xml').iter('testcase'):
+              t[c.get('classname').rsplit('.', 1)[-1] if c.get('classname', '').rsplit('.', 1)[-1].startswith('test_') else c.get('classname').rsplit('.', 2)[-2]] += float(c.get('time', 0))
+          print('PER-FILE SECONDS (cpu, summed over workers)')
+          for f, s in t.most_common(): print(f'{s:8.0f} {f}')
+          PY
       - if: ${{ matrix.shard == 'rest0' }}
         run: python -m engine.season.harness.register --requirements
 
