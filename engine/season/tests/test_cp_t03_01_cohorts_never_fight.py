@@ -24,6 +24,7 @@ import pytest
 from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
 from ..boot.realm import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..data.requires import CELL_STEMS, REQUIRES_STEMS, WORLD_ONLY_STEMS, UNKNOWN
 from ..data.verbs import VERB_TABLE
@@ -168,7 +169,10 @@ def _individual_reads(e):
 def _realm_two_seasons(seed):
     """Two seasons of the shipped chooser on `build_realm(seed)`. Returns `(how many `individual` reads there were, how
     many Events a False one refused)`."""
-    w = build_realm(seed)
+    # B12a.99: pinned to the `uniform` endowment arm. The shipped `ground` (B12a.54) removes the refusal this seed was picked for: seeds 1..16, two seasons, under the reverts below,
+    # read 0 refusals on `individual` at `ground` (145 to 203 `individual` reads each); at `uniform` seed 10 reads 1 of 90 (`uniform` seeds no granary: `boot/realm.py` seeds stores under `ground` only; at `ground`
+    # with `granary_seasons` 0 seed 10 still reads 0 of 89, so B12a.54 is the mover and B12a.55 is not). Main (`842026ea3`, before the batch) read seed 10 at 2 of 150. Each seed read in a fresh process, `PYTHONHASHSEED=0`.
+    w = build_realm(seed, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     # v10 CP-T03-09: `capture` is WITHHELD FROM THE CHOOSER HERE. It forms for the seats granting `dispatch` and moves every

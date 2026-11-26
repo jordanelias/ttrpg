@@ -20,7 +20,7 @@ from ..state.ids import H
 from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
 
-from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for, occupying_faction
+from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for, occupying_faction, whole_amount
 
 
 def _works_named(w: "World", a: "Act") -> tuple:
@@ -63,6 +63,7 @@ def _cost(w: "World", rec, plan: str):
       * the plan has NO PRICE (no `works_cost` row -- `body`, `person`, `settlement` and above:
         the roster's note says why each); a missing row is not a cost of zero;
       * the works' rung is no rung;
+      * a price cell is not a whole number of units, at least one (`whole_amount`, H-306);
       * the rung cannot meet every kind of the price -- r2 §A.6.6's MATTER-STALL, *"a scaffolding
         standing empty"*, refused at the act that would have raised it.
     ⚠ NOT A TYPED CELL: the threshold is `works_cost[plan]` read off the works' CONTENT and the
@@ -75,6 +76,10 @@ def _cost(w: "World", rec, plan: str):
         why = f"no `works_cost` row prices a {plan!r}, so nobody can pay for one"
     elif payer is None:
         why = f"the works' rung {rec.rung!r} is no rung, so nothing can pay its price"
+    elif any(not whole_amount(n) for n in price.values()):
+        # H-306/A-81: a price cell is an amount like any store move's; `_shift` and `_debit` would raise on it.
+        why = (f"the {plan} costs {dict(sorted(price.items()))}: a price cell that is not a whole number of "
+               f"units, at least one, is no price")
     else:
         short = {k: n for k, n in sorted(price.items()) if (payer.stores or {}).get(k, 0) < n}
         if short:
@@ -258,8 +263,8 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         and seized and never razed; occupation is defined only at the places a march arrives at) [ASSUMPTION; medium; Jordan to
         correct; revert: any Rung kind, the licence still occupation];
       * the exercised seat has no faction;
-      * nobody holds the settlement (H-166: who holds an unheld place is unruled, `_seize_rung`'s
-        reading) or the seat's own faction does -- a faction does not raze its own town;
+      * nobody holds the settlement (H-166: who holds an unheld place is unruled; `occupying_faction`'s default,
+        which `_seize_rung` lifts with `unheld=True`) or the seat's own faction does -- a faction does not raze its own town;
       * the seat's faction is not mustered there (NO ARMY: the entry's falsifier).
     ⚠ NOT COPIED FROM `_seize_rung`: its decline on an actor not committed to the seat's faction. Its
     stated reason is that `seize` writes the ACTOR'S OWN `hold`; `raze` writes no title, so the reason

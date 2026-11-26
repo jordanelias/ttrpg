@@ -193,6 +193,6 @@ planned_works:
      rung: {settlement: "S-002"}, master: off_duke_valorsmark, terms: 3}
   # [ASSUMPTION; medium; Jordan to correct; revert: option (A), a works-declaring operand or verb with
   # its own position, re-pin and J-4 re-measure] The Lord Steward, who lives at the Royal Court
-  # (`b_s_001_court`), builds a dwelling there; Valorsplatz's seam pays the timber.
+  # (`b_s_001_court`), builds a dwelling there; Valorsplatz's seam pays the timber UNDER `uniform` ONLY: under the shipped `ground` S-001 is in T1, a harbour alone, and holds no timber, so this works cannot be paid (a content call: an `site_endowment` override for S-001 or another `rung:`; B12a.99 close; test_in45 pins `uniform`).
   - {id: works_dwelling_court, kind: works, plan: dwelling, at: {hearth: "S-001:court"},
      rung: {settlement: "S-001"}, master: off_lord_steward, terms: 3}

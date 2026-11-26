@@ -3601,7 +3601,8 @@
             "barracks",
             "archery_range",
             "stable",
-            "siege_workshop"
+            "siege_workshop",
+            "field"
           ]
         },
         "matter_kinds": {
@@ -3629,7 +3630,7 @@
         "wear_per_season": {
           "source": "#353 \u00a722 assigns `wear per site kind` to params; no in-chain table exists. `H-07`.",
           "row": "H-07",
-          "note": "\u26a0 `W8`: per-kind wear and floors are registry rows rather than `DEFAULT_FIXTURES` literals. `DEFAULT_FIXTURES` READS this mapping, so the declaration lives once. \u26a0 `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY, and it is `H-07`'s own *\"no wear at all\"* sweep point applied to one kind. \u26a0 **NOT THE SAME SHAPE AS `body_step = 0`**: that arm `continue`s past the write itself (`loop/matter.py`), so nothing is emitted at its control arm. `wear_per_season` skips the same way since `H-135` (B09.21): MATTER does not write a Site whose wear is 0, so `dwelling: 0` emits nothing (see below). A dwelling sits AT a hearth and persons live in hearths. A non-zero rate together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it; the crossing Event is witnessed `co_located`, and the claim it deposits (subject = the dwelling) would then reach every co-located resident as a live `claim_landed` question, once `reach`/`place_of` (`queries/world_q.py`) admit a claim about a place through a person's own ledger. That would put a dwelling-condition Question in front of every resident every season, which is exactly what `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s control-arm identity pins against. Either half at its control arm blocks the crossing; both ship there. At 0 no dwelling's condition moves. \u26a0 ZERO IS SILENT SINCE `H-135` (B09.21). `loop/matter.py`'s wear loop writes a Site only where its wear this season is non-zero, and `World.write` emits one `condition.worn` per write (`H-12`), so a dwelling emits no wear Event and its residents witness no claim of it. A non-zero rate is chosen with a consumer in front of it, at `24e`/`24f`, never here. \u26a0 `garrison: 0` IS `dwelling`'s CONTROL ARM FOR THE SAME REASON (M4, `ED-IN-0279` clause (a)): a non-zero rate would erode every garrison's condition every season, silently drifting every field battle's fortification term toward zero over a long campaign. The rate is a pacing decision (where every fabric sits at rest), registered rather than taken -- `H-165` and `H-07` (the rate). `restore` executes on the populated realm's SETTLEMENT fabrics (harbour, seam -- rate 10, a cohort stands beside them), so `H-165`'s limit is the DWELLING/GARRISON rate specifically, both `0`.",
+          "note": "\u26a0 `W8`: per-kind wear and floors are registry rows rather than `DEFAULT_FIXTURES` literals. `DEFAULT_FIXTURES` READS this mapping, so the declaration lives once. \u26a0 `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY, and it is `H-07`'s own *\"no wear at all\"* sweep point applied to one kind. \u26a0 **NOT THE SAME SHAPE AS `body_step = 0`**: that arm `continue`s past the write itself (`loop/matter.py`), so nothing is emitted at its control arm. `wear_per_season` skips the same way since `H-135` (B09.21): MATTER does not write a Site whose wear is 0, so `dwelling: 0` emits nothing (see below). A dwelling sits AT a hearth and persons live in hearths. A non-zero rate together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it; the crossing Event is witnessed `co_located`, and the claim it deposits (subject = the dwelling) would then reach every co-located resident as a live `claim_landed` question, once `reach`/`place_of` (`queries/world_q.py`) admit a claim about a place through a person's own ledger. That would put a dwelling-condition Question in front of every resident every season, which is exactly what `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s control-arm identity pins against. Either half at its control arm blocks the crossing; both ship there. At 0 no dwelling's condition moves. \u26a0 ZERO IS SILENT SINCE `H-135` (B09.21). `loop/matter.py`'s wear loop writes a Site only where its wear this season is non-zero, and `World.write` emits one `condition.worn` per write (`H-12`), so a dwelling emits no wear Event and its residents witness no claim of it. A non-zero rate is chosen with a consumer in front of it, at `24e`/`24f`, never here. \u26a0 `garrison: 0` IS `dwelling`'s CONTROL ARM FOR THE SAME REASON (M4, `ED-IN-0279` clause (a)): a non-zero rate would erode every garrison's condition every season, silently drifting every field battle's fortification term toward zero over a long campaign. The rate is a pacing decision (where every fabric sits at rest), registered rather than taken -- `H-165` and `H-07` (the rate). `restore` is formed nowhere since REM-22 (its `verb_table.yaml` row: no question the realm delivers carries a Site among its referents) until `16_PESSIMIST_WR_B` edit 4 (B12a.66), and since then only where a person witnesses a crossing at the rung he stands on; at a broken Site it is declined under the coupling (B12a.65). The settlement fabrics (harbour, seam) wear at rate 10, so `H-165`'s limit is the DWELLING/GARRISON rate specifically, both `0`.",
           "rates": {
             "harbour": 10,
             "seam": 10,
@@ -3639,7 +3640,8 @@
             "barracks": 0,
             "archery_range": 0,
             "stable": 0,
-            "siege_workshop": 0
+            "siege_workshop": 0,
+            "field": 10
           }
         },
         "capacity_floor": {
@@ -3660,7 +3662,8 @@
             "barracks": 0,
             "archery_range": 0,
             "stable": 0,
-            "siege_workshop": 0
+            "siege_workshop": 0,
+            "field": 0
           }
         },
         "works_cost": {
@@ -3702,8 +3705,77 @@
             },
             "siege_workshop": {
               "timber": 10
+            },
+            "field": {
+              "timber": 10
             }
           }
+        },
+        "site_endowment": {
+          "source": "CP-T08-02 as amended (proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_ground_and_granaries.md)",
+          "row": "H-07",
+          "keys": [
+            "territories",
+            "site_kinds"
+          ],
+          "note": "WHAT PRODUCING SITES A SETTLEMENT IS GIVEN AT THE WORLD'S MAKING, keyed on the geography's territory code and, past it, on a settlement code (`data/fixtures.py::endowment_for` is the one reader; `boot/realm.py::build_realm`'s site loop the one minter). `uniform` is the control, today's placement at every settlement; `ground` is the arm, read when `Fixtures.endowment_mode` is `ground`. A list names one Site per entry; a kind named twice is two Sites. The loader (`data/fixtures.py::_check_site_endowment`) refuses a territory holding a settlement with no row, a kind outside `site_kinds`, an empty list, and a key no geography row carries. Every row is [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode` `uniform`]. T15 holds no settlement, so it has no row.",
+          "uniform": [
+            "harbour",
+            "seam"
+          ],
+          "ground": {
+            "T1": [
+              "harbour"
+            ],
+            "T2": [
+              "field"
+            ],
+            "T3": [
+              "seam"
+            ],
+            "T4": [
+              "seam"
+            ],
+            "T5": [
+              "field",
+              "field"
+            ],
+            "T6": [
+              "field"
+            ],
+            "T7": [
+              "seam"
+            ],
+            "T8": [
+              "harbour"
+            ],
+            "T9": [
+              "seam"
+            ],
+            "T10": [
+              "seam"
+            ],
+            "T11": [
+              "harbour"
+            ],
+            "T12": [
+              "harbour"
+            ],
+            "T13": [
+              "harbour"
+            ],
+            "T14": [
+              "field"
+            ],
+            "T16": [
+              "harbour"
+            ],
+            "T17": [
+              "seam",
+              "seam"
+            ]
+          },
+          "settlement": {}
         },
         "subsistence_weight": {
           "source": "`H-11` \u2014 *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*.",
@@ -3724,6 +3796,18 @@
             "hungry",
             "lean",
             "fed"
+          ]
+        },
+        "seasons_of_year": {
+          "source": "ED-IN-0332 (RULED, D-U1-10): the year is a roster; `data/fixtures.py` already speaks of \"two years at four seasons\"",
+          "open": false,
+          "ordered": true,
+          "note": "THE YEAR, IN ORDER; ITS LENGTH IS THE YEAR (`data/rosters.py::SEASONS_OF_YEAR`, the one owner). The season of the year a tick falls in is `tick % len(SEASONS_OF_YEAR)` (`world_q.season_of_year`), read off the clock and stored nowhere; every age in seasons, every yearly term and the weather read the length and no file states a literal. `season_factor_draw`, when non-empty, holds one entry per member here, in this order, and is refused at `season_factor_of` otherwise. The four names are `[ASSUMPTION; medium; Jordan to correct]`; the length is the ruling.",
+          "values": [
+            "spring",
+            "summer",
+            "autumn",
+            "winter"
           ]
         },
         "factions": {
@@ -4049,7 +4133,8 @@
               "exists:Site",
               "condition",
               "condition.worn",
-              "condition.band_crossed"
+              "condition.band_crossed",
+              "site.ruptured"
             ]
           }
         },
@@ -4396,6 +4481,14 @@
             "crossing",
             "season",
             "off"
+          ]
+        },
+        "arrival_reports": {
+          "source": "v12 B12a.16 (`07_SE_kernel_repairs` D, `H-327`): *\"`arrival_report` (`off`, shipped; `on`)\"*.",
+          "note": "THE ARMS OF `Fixtures.arrival_report` (`H-525`), read by `loop/matter.py` at MATTER's `travel.ended` write (once per barrier) and refused outside this set. `off` is the CONTROL, shipped: the write carries no Observation, the tree before the item exactly. `on`: it carries `Observation(rung, \"stores:<default_store_kind>\", units)` and `Observation(rung, \"held_by\", holder id or None)` about the rung the traveller now stands in, which WITNESS deposits to the write's witnesses, the traveller among them. `\"off\"` is QUOTED: bare, YAML reads it as the boolean false.",
+          "values": [
+            "off",
+            "on"
           ]
         },
         "beneficiary_kinds": {
@@ -5075,7 +5168,7 @@
         "strife_kinds": {
           "source": "CR-75 (workplan v11, batch B11-S3): which Event KINDS the person reading may count as a strife move. Read by `data/rosters.py::STRIFE_KINDS`; checked at import against `EVENT_KINDS` in `data/verbs.py::_check_strife_kinds`. A step of the loop reads it: `queries/world_q.py::questions_for` through `flows_known` and `flow_stakes` (CR-78's stamp, `stamp_flow_stakes`, shipped ON).",
           "cite": "ED-IN-0316",
-          "note": "WHY A KIND LIST. The person reading sees an Event's kind and nothing else, and the registry's `kinds` columns (`harness/strife_moves.yaml`) are upper bounds: read as the definition of a move they would make `news.told`, `duty.taken` and `travel.moved` strife, and strands ordinary life. THE FOUR LISTS (under `lists:`, because `roster_map` returns a mapping; `values:` names them, so the loader spells none of them and refuses a missing or an extra list):\n  opens     a kind whose presence alone meets the study's test, so one claim of it starts a strand.\n  joins     a kind that is a move only in company: it attaches to a strand an `opens` kind started\n            and may conclude it, and never starts one.\n  never     everyday or refusal kinds. Explicit, so every kind the registry names has a decision\n            (`tests/test_strife_kinds.py` refuses a registry kind in none of the three).\n  concludes the kinds that may conclude a strand AT THE PERSON READING: a kind concludes only if\n            every code it maps to in `strife_moves.yaml` is terminal (`ends` above 0 and not XP),\n            so a kind that maps to one code which never ends a case does not conclude (`detention.ended`\n            and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;\n            `requisition.taken` to VI). Of those only `field.won` and `field.lost` conclude in the\n            world reading, which knows their code (WA) through the verb and side; the rest end no case\n            in either reading. A hand-maintained list over the opens and joins kinds, checked\n            by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule\n            disagree). Top-down the world sees a war end; bottom-up a\n            person who holds only a field's outcome may still doubt it.\nThe checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of opens, joins and never; a `concludes` kind outside opens and joins. `concludes` is checked against `ends` counts hand-read from the study and cross-checked against it (A3, `strife-00` \u00a710; `strife_moves.yaml`). [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` \u00a76 reverses alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert `concludes`, make it an empty derivation in code: a code edit at `Move.terminal`'s construction in both readings (`queries/world_q.py::flows_in` and `_known_moves`) and in `_check_strife_kinds`. Dropping `concludes` from `values:`/`lists:` raises a KeyError at import (`world_q` and `data/verbs.py` index it directly). With no concluding kinds no strand ever concludes.]",
+          "note": "WHY A KIND LIST. The person reading sees an Event's kind and nothing else, and the registry's `kinds` columns (`harness/strife_moves.yaml`) are upper bounds: read as the definition of a move they would make `news.told`, `duty.taken` and `travel.moved` strife, and strands ordinary life. THE FOUR LISTS (under `lists:`, because `roster_map` returns a mapping; `values:` names them, so the loader spells none of them and refuses a missing or an extra list):\n  opens     a kind whose presence alone meets the study's test, so one claim of it starts a strand.\n  joins     a kind that is a move only in company: it attaches to a strand an `opens` kind started\n            and may conclude it, and never starts one.\n  never     everyday or refusal kinds. Explicit, so every kind the registry names has a decision\n            (`tests/test_strife_kinds.py` refuses a registry kind in none of the three).\n  concludes the kinds that may conclude a strand AT THE PERSON READING: a kind concludes only if\n            every code it maps to in `strife_moves.yaml` is terminal (`ends` above 0 and not XP),\n            so a kind that maps to one code which never ends a case does not conclude (`detention.ended`\n            and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;\n            `requisition.taken` to VI). Of those `field.won` and `field.lost` ended a case in the world reading (code WA, through the verb\n            and side) until B12a.04, which made them OPENING moves (never terminal); the rest end no case\n            in either reading. A hand-maintained list over the opens and joins kinds, checked\n            by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule\n            disagree). B12a.05 (A-45): a content-opening kind (`queries/world_q.py::CONTENT_OPENING_KINDS`:\n            `succession.claimed`, `petition.filed`) is never in it, whatever its codes -- a claim of the\n            movement's own beginning is no end of it; `check_strife_openers` refuses the overlap at import.\n            Top-down the world sees a war end; bottom-up a\n            person who holds only a field's outcome may still doubt it.\nThe checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of opens, joins and never; a `concludes` kind outside opens and joins. `concludes` is checked against `ends` counts hand-read from the study and cross-checked against it (A3, `strife-00` \u00a710; `strife_moves.yaml`). [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` \u00a76 reverses alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert `concludes`, make it an empty derivation in code: a code edit at `Move.terminal`'s construction in both readings (`queries/world_q.py::flows_in` and `_known_moves`) and in `_check_strife_kinds`. Dropping `concludes` from `values:`/`lists:` raises a KeyError at import (`world_q` and `data/verbs.py` index it directly). With no concluding kinds no strand ever concludes.]",
           "values": [
             "opens",
             "joins",
@@ -5136,8 +5229,6 @@
             ],
             "concludes": [
               "army.arrived",
-              "succession.claimed",
-              "petition.filed",
               "petition.carried",
               "covenant.offered",
               "matter.determined",
@@ -5162,16 +5253,17 @@
         "endings": {
           "source": "v9 IN-27 (END-VICTORY), on #457 D6's adopted answer (`workplans/valoria_master_workplan_v9_part5.md` RS-21 row 3): *\"the ending vocabulary is a Query over holds and seats that the season reports -- never an actor\"*. Read by `queries/world_q.py::endings_reached`, reported by `loop/driver.py::SeasonDriver.season` as `endings`.",
           "cite": "H-176; GD-1; #457 D6; T-b",
-          "note": "WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the loader reads them (`CLAUDE.md` \u00a74): an ENDING is a row here; it is REACHED when every hold its `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is not credited). \u26a0 THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) completes the condition, and no pure read can locate the crossing, because the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. Revert: every edge the condition reads opened by an act -- which makes `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:` selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id, and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm` RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is outside the realm and not selected). `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction, whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and writes nothing (`SeasonDriver.season` reports it). \u26a0 NOT CARRIED, BY THE CUTS: no stored stability or legitimacy value, no threshold counter, no clock (#457 \u00a75; `T-a`, `T-b`, `T-c`).",
+          "note": "WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the loader reads them (`CLAUDE.md` \u00a74): an ENDING is a row here; it is REACHED when every hold its `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is not credited). \u26a0 THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) completes the condition, and no pure read can locate the crossing, because the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. Revert: every edge the condition reads opened by an act -- which makes `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:` selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id, and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm` RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is outside the realm and not selected), which may carry `settled: true` beside it and nothing else (only the rungs with a `settlement` rung among their descendants). `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction, whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and writes nothing (`SeasonDriver.season` reports it). \u26a0 NOT CARRIED, BY THE CUTS: no stored stability or legitimacy value, no threshold counter, no clock (#457 \u00a75; `T-a`, `T-b`, `T-c`).",
           "members": {
             "peninsular_sovereignty": {
               "victory": true,
               "holds": {
-                "rung_kind": "territory"
+                "rung_kind": "territory",
+                "settled": true
               },
               "under": "one_faction",
               "source": "GD-1 (`canon/04_game_design_constraints.md`): *\"Peninsular Sovereignty is the sole victory condition ... control all 15 territories\"*.",
-              "assumption_note": "[ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2` and `Political Stability <= 6` read stored scalars #457 \u00a75 cuts, `sustained 2 consecutive seasons` is a clock, and `treaties counting` has no carrier. Every territory under a `realm` rung counts, not a fixed 15; the foreign root (`terr_T16`, Schoenland's, kept out of the realm by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY whoever holds what: `terr_T15` is Uncontrolled at build (`H-186`) and no verb opens a `hold` on any territory (`H-176`). A consumer that treats `victory: true` as the game's end must carry this caveat itself -- the row is GD-1 minus its sustain, Accord and Stability clauses, and nothing in the loop halts on it (`SeasonDriver.season` only reports `endings`). Revert: Jordan names a carrier for any of them."
+              "assumption_note": "[ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2` and `Political Stability <= 6` read stored scalars #457 \u00a75 cuts, `sustained 2 consecutive seasons` is a clock, and `treaties counting` has no carrier. Every SETTLED territory under a `realm` rung counts (`settled: true`: a `settlement` rung among its descendants), not a fixed 15; `terr_T15`, which has none, and the foreign root (`terr_T16`, Schoenland's, kept out of the realm by `build_realm`) are not asked for. A structural predicate, no territory id named. A consumer that treats `victory: true` as the game's end must carry this caveat itself -- the row is GD-1 minus its sustain, Accord and Stability clauses, and nothing in the loop halts on it (`SeasonDriver.season` only reports `endings`). Revert: Jordan names a carrier for any of them."
             },
             "theocracy": {
               "victory": false,
@@ -5240,7 +5332,8 @@
               "rung.seized"
             ],
             "Site": [
-              "condition.band_crossed"
+              "condition.band_crossed",
+              "site.ruptured"
             ],
             "Proposition": [
               "proposition.uttered"
@@ -5376,7 +5469,10 @@
               "ore": 50,
               "timber": 10
             },
-            "body": {}
+            "body": {},
+            "field": {
+              "grain": 40
+            }
           }
         },
         "band_floors": {
@@ -5411,7 +5507,8 @@
             "barracks": {},
             "archery_range": {},
             "stable": {},
-            "siege_workshop": {}
+            "siege_workshop": {},
+            "field": {}
           }
         },
         "lifepath_templates": {
@@ -11028,7 +11125,7 @@
           "class": "MATTER/ACTS",
           "social": "false",
           "by": "DR-1",
-          "emits": "`condition.worn` \u00b7 `condition.band_crossed`"
+          "emits": "`condition.worn` \u00b7 `condition.band_crossed` \u00b7 `site.ruptured`"
         },
         {
           "kind": "Site",
@@ -15986,6 +16083,10 @@
           "proximity_calamity": 0,
           "starting_pros": 0,
           "settlements": [],
+          "wound": {
+            "kind": "harbour",
+            "condition": 0
+          },
           "description": "Calamity epicenter. Forgetting zone. Two gates: Oastad (T13) and Stillhelm (T6)."
         },
         "T16": {

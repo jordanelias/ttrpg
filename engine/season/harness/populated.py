@@ -64,10 +64,55 @@ import sys
 from collections import Counter
 
 from ..boot.realm import build_realm
-from ..queries.world_q import HUNGER_KIND, closed_uses, home_of as home_of_q, hunger, subsistence_draw, uncontrolled
+from ..data.verbs import VERB_TABLE
+from ..queries.world_q import (HUNGER_KIND, closed_uses, descendants, home_of as home_of_q, hunger, subsistence_draw,
+                               uncontrolled)
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.world import World
 from . import probes as P
+
+
+#: The verbs whose act moves stores from one rung to another. THE KIND EACH EMITS IS READ OFF THE ROW (`VERB_TABLE[v].emits[0]`,
+#: the kind whose Event names the two rungs it wrote, giver first), never typed: `transfer`'s second kind, `term.renewed`, names edges.
+MOTION_VERBS = ("transfer", "requisition", "exchange")
+BAND_CROSSED = "condition.band_crossed"
+
+
+def settlement_motion(w: World, draw: dict | None = None, bands: Counter | None = None) -> dict:
+    """IS-B3-SE-03: THE SETTLEMENT SCALE'S MOTION, five counts read from `w.log` and the stores as they stand. A reader: it writes
+    nothing and moves no hash (`aperture`'s CONTROL line and `test_aperture.py` observe it).
+
+      * `stores_moved_between_settlements` -- units moved between two DIFFERENT settlement rungs by an act, summed by the act's
+        `amount`, over the Events of `MOTION_VERBS`' kinds. The pair is the Event's two `stores` receipts (giver first), so a
+        transfer to self (refused as a no-op: no such Event) and a move to or from a hearth or a territory add nothing.
+        An `exchange`'s count is its `amount` (the outgoing side), a `requisition`'s the act's `amount` before the band's share.
+      * `hunger_bands_standing` -- distinct hunger bands over the settlements at the end (the NEXT draw, `census`'s own reading);
+      * `larder_draws_from_another_rung` -- cells of that draw whose source rung is not the eater's home;
+      * `bands_crossed` -- `condition.band_crossed` Events in the log;
+      * `settlements_empty` -- settlements whose own stores and those of every rung beneath hold nothing."""
+    kinds = {VERB_TABLE[v].emits[0]: v for v in MOTION_VERBS}
+    acts = {a.id: a for a in w.acts}
+    moved = 0
+    for e in w.log:
+        verb = kinds.get(e.kind)
+        if verb is None:
+            continue
+        pair = [c.subject for c in e.changes if c.field == "stores"]
+        if len(pair) != 2 or pair[0] == pair[1] or any(
+                (r := w.rungs.get(p)) is None or r.kind != HUNGER_KIND for p in pair):
+            continue
+        a = next((acts[c] for c in e.causes if c in acts and acts[c].verb == verb), None)
+        if a is not None and isinstance(a.payload, dict) and isinstance(a.payload.get("amount"), int):
+            moved += a.payload["amount"]
+    draw = subsistence_draw(w) if draw is None else draw
+    if bands is None:
+        bands = Counter(hunger(w, r.id, draw)[0] for r in w.rungs.values() if r.kind == HUNGER_KIND)
+    empty = sum(1 for r in w.rungs.values() if r.kind == HUNGER_KIND
+                and not any((w.rungs[x].stores or {}).values() for x in (r.id, *descendants(w, r.id))))
+    return {"stores_moved_between_settlements": moved, "hunger_bands_standing": len(bands),
+            "larder_draws_from_another_rung": sum(1 for home, row in draw.values()
+                                                  for _, _, src in row.values() if src is not None and src != home),
+            "bands_crossed": sum(1 for e in w.log if e.kind == BAND_CROSSED), "settlements_empty": empty}
 
 
 def census(w: World) -> dict:
@@ -119,7 +164,9 @@ def census(w: World) -> dict:
                 if (n := len(closed_uses(w, r)))},
             # REM-50: `world_q.hunger`'s only caller until CP-T10-05 -- `uncontrolled`'s precedent above: a
             # report, not a rule. Each settlement's band, from the NEXT draw; D = 0 counts as `fed`.
-            "hunger_by_settlement": dict(sorted(hunger_bands.items()))}
+            "hunger_by_settlement": dict(sorted(hunger_bands.items())),
+            # IS-B3-SE-03 (B12a.01): the settlement scale's motion, one block, a reader like the rows above.
+            "settlement_motion": settlement_motion(w, next_draw, hunger_bands)}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:

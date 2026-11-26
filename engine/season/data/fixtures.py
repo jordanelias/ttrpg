@@ -21,7 +21,8 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_map, table
+from .geography import geography
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_list, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -198,9 +199,71 @@ def _check_works_cost(costs, plans: set, mk: set) -> dict:
     return {plan: dict(cell) for plan, cell in costs.items()}
 
 
+def _load_site_endowment() -> dict:
+    """B12a.51 (CP-T08-02 as amended): `rosters.yaml: site_endowment`, `{uniform: [kind, ...], ground: {territory: [kind, ...]}, settlement:
+    {geography code: [kind, ...]}}`, the geography file's settlements read once (`data/geography.py`'s cache) for the check below."""
+    settled = {sid: row["territory"] for sid, row in (geography().get("settlements") or {}).items()}
+    return _check_site_endowment(roster_list("site_endowment", "uniform"), roster_map("site_endowment", "ground"),
+                                 roster_map("site_endowment", "settlement"), set(roster("site_kinds")), settled,
+                                 set(geography().get("provinces") or {}))
+
+
+def _check_site_endowment(uniform, ground, override, kinds: set, settled: dict, provinces: set) -> dict:
+    """`_load_site_endowment`'s refusals, with the rosters and the map passed in so a test can plant each one (`_check_works_cost`'s precedent,
+    §0.1 pt 3). `settled` is `{settlement code: its territory}` and `provinces` the geography's territory codes. A territory holding a settlement with no `ground` row is UNGRADED (a place
+    nothing says what to make of: a missing row is not an empty endowment); an empty list is UNGRADED; a kind outside `site_kinds`, or a
+    `ground` key no geography territory carries, or an override key no settlement carries, is FORBIDDEN (a table keyed past its own roster). Returns
+    the validated copy, every list a tuple."""
+    territories = set(settled.values())
+    lists = {"uniform": uniform, **{f"ground[{t}]": v for t, v in ground.items()}, **{f"settlement[{c}]": v for c, v in override.items()}}
+    for name, kinds_listed in lists.items():
+        if not isinstance(kinds_listed, (list, tuple)) or not kinds_listed:
+            raise Ungraded(
+                f"site_endowment.{name} is {kinds_listed!r}: an endowment is a non-empty list of site kinds", "rosters.yaml",
+                needs="one site kind per Site the place is given, at least one",
+                law="CP-T08-02 -- a place endowed with nothing is a settlement that produces nothing; an empty list is refused, not a choice")
+        if set(kinds_listed) - kinds:
+            raise Forbidden(
+                f"site_endowment.{name} names site kind(s) no roster carries: {sorted(set(kinds_listed) - kinds)}", "rosters.yaml",
+                needs="add the kind to `site_kinds`, or drop it from the list",
+                law="S42.2.1 -- a table keyed past its own roster answers for a kind nobody declared")
+    if set(ground) - provinces:
+        raise Forbidden(
+            f"site_endowment.ground names territor(ies) the map does not carry: {sorted(set(ground) - provinces)}", "rosters.yaml",
+            needs="a territory code of `valoria_geography_v30.yaml: provinces`, or drop the row",
+            law="S42.2.1 -- a table keyed past its own roster answers for a place nobody declared")
+    if set(override) - set(settled):
+        raise Forbidden(
+            f"site_endowment.settlement names settlement(s) the map does not carry: {sorted(set(override) - set(settled))}", "rosters.yaml",
+            needs="a settlement code of `valoria_geography_v30.yaml`, or drop the override",
+            law="S42.2.1 -- a table keyed past its own roster answers for a place nobody declared")
+    if territories - set(ground):
+        raise Ungraded(
+            f"site_endowment.ground has no row for territor(ies) holding a settlement: {sorted(territories - set(ground))}", "rosters.yaml",
+            needs="a `ground` row per territory a settlement stands in",
+            law="CP-T08-02 -- a settlement in a territory no row names has no endowment, and the loader will not choose one for it")
+    return {"uniform": tuple(uniform), "ground": {t: tuple(v) for t, v in ground.items()},
+            "settlement": {c: tuple(v) for c, v in override.items()}}
+
+
 WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 CAPACITY_FLOORS = _load_capacity_floor()
 WORKS_COST = _load_works_cost()
+SITE_ENDOWMENT = _load_site_endowment()
+
+
+def endowment_for(fixtures: "Fixtures", sid: str, territory: str) -> tuple:
+    """B12a.51: THE ONE READER of `rosters.yaml: site_endowment` -- the producing Site kinds settlement `sid` (a geography code) in
+    `territory` is given, one Site per entry, in minting order. `endowment_mode` `uniform` (the control) is the `uniform` list at every
+    settlement; `ground` is the settlement's own override where the roster has one, else its territory's row. An arm outside the two raises."""
+    mode = fixtures.get("endowment_mode")
+    if mode == "uniform":
+        return SITE_ENDOWMENT["uniform"]
+    if mode == "ground":
+        return SITE_ENDOWMENT["settlement"].get(sid) or SITE_ENDOWMENT["ground"][territory]
+    raise Forbidden(
+        f"endowment_mode {mode!r} is no arm", "data/fixtures.py", needs="`uniform` (the control) or `ground`",
+        law="CP-T08-02 -- an arm outside the two is refused, never read as the control")
 
 # `H-424`'s CONTROL ARM (B05.21, T13 edit 1; B05.23): `Fixtures.difficulty_ob` below is the shipped arm -- the CALIBRATED one since B05.23,
 # 0 / 0.8 / 1.6 / 2.4 above the even line -- and this is the CONTROL, 0 / 1 / 2 / 3 (with an unopposed act's opposition at
@@ -634,13 +697,103 @@ DEFAULT_FIXTURES = Fixtures(
     illness_rate=0.0,                  # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
     age_at_build=0,                    # v9 IN-34, a declared default (seasons old at tick 0)
     # v9 IN-35 FORCE-HAZARD (#457 `:123-143`): THE LATTICE COUPLING WEIGHT -- the share, on
-    # `condition_scale`, of a Site's gap down to the weakest Site in its own or a bordering territory that
+    # `condition_scale`, of a Site's gap down to a BROKEN Site (condition 0) in its own or a bordering territory (B12a.63: it pulls toward a broken neighbour only) that
     # it loses PER SEASON (SEAM-CLOCK, #457 `:174`: one unit, the season), added to its kind's wear in
     # `loop/matter.py`'s wear loop. `0` is THE CONTROL, SHIPPED: the pass returns before reading any Site,
     # so the season is today's (`body_step`'s and `age_step`'s shape). In [0, condition_scale]; outside it
-    # raises (`_lattice_strain`), since a share above the whole gap would overshoot the weakest neighbour.
+    # raises (`_lattice_strain`), since a share above the whole gap would overshoot the broken neighbour.
     # [JUSTIFIED: engine/season/hole_register.yaml H-235 -- `site: Fixtures lattice_coupling`, graded `assumption`; #457 gives the coupling and no magnitude (its only rate is the retired scalar's -1 a year), so it is injected and swept 0 / 250 / 500]
     lattice_coupling=0,                # `H-235`, swept 0 (control, SHIPPED) / 250 / 500
+    # B12a.10 (`09_WR_B_draws_not_thresholds` edit 1): WEAR IS DRAWN. `False` is THE CONTROL, SHIPPED: today's exact rate, no draw taken. `True`
+    # is the arm: per Site per season one keyed draw (`loop/matter.py`, `draw_factory(...)(site.id, "wear")`), the pool `wear_draw_pool`, the
+    # obstacle `wear_draw_ob_step` per point of the Site's wear (the kind's rate plus the lattice pull), the band choosing the wear (Overwhelming
+    # 0, Success half the rate, Partial the rate, Failure twice). The two `[CALIBRATE]` rows ship `None` (the design-dependent values are absent,
+    # E-14; B98 sets them): the arm REFUSES with `Unspecified` naming the row while either is unset.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `wear_draw: False`] for the band multipliers.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-523 -- `site: Fixtures wear_draw`, graded `assumption`; the source draws wear and sizes neither the pool nor the obstacle's per-point size, so the arm and both rows are injected and swept False / True with two planted calibrations]
+    wear_draw=False,                   # `H-523`, swept False (control, SHIPPED) / True (pool 4, step 0.12) / True (pool 6, step 0.08)
+    wear_draw_pool=None,               # `H-523`, [CALIBRATE: the wear pool], read only under `wear_draw` True; `None` refuses
+    wear_draw_ob_step=None,            # `H-523`, [CALIBRATE: the obstacle's per-point size], read only under `wear_draw` True; `None` refuses
+    # B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): ENDINGS ARE REACHED BY A DRAW. `False` is THE CONTROL, SHIPPED: today's reaching (an eligible
+    # row is reached), `endings_near` answers `[]`. `True` is the arm: an eligible row (`world_q._ending_edges` and an act among its antecedents)
+    # takes one keyed draw `(world_seed, tick, "realm", "ending:<name>")` in `world_q.endings_reached` / `endings_near`, the pool `ending_draw_pool_step`
+    # per season the condition has stood (read off the opening Events' ticks) times the share of the edges it reads that an act opened, the
+    # obstacle `ending_draw_ob` plus one per edge it reads that no act opened; Success or Overwhelming reaches it, Partial reports it `near`, Failure
+    # neither. The two `[CALIBRATE]` rows ship `None` (E-14; B98 sets them): the arm REFUSES with `Unspecified` naming the row while either is unset.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-524 -- `site: Fixtures ending_draw`, graded `assumption`; the source draws the ending and sizes neither the pool per season stood nor the obstacle's base, so the arm and both rows are injected and swept False / True with two planted calibrations]
+    ending_draw=False,                 # `H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)
+    ending_draw_pool_step=None,        # `H-524`, [CALIBRATE: the pool per season stood], read only under `ending_draw` True; `None` refuses
+    ending_draw_ob=None,               # `H-524`, [CALIBRATE: the obstacle's base], read only under `ending_draw` True; `None` refuses
+    # B12a.16 (`07_SE_kernel_repairs` D, `H-327`): ARRIVING TEACHES THE TRAVELLER THE PLACE. `off` is THE CONTROL, SHIPPED: MATTER's `travel.ended` write carries nothing,
+    # as before the item. `on`: it carries `loop/matter.py::_arrival_report` -- the stores of the rung he now stands in (`stores:<default_store_kind>`, as `_stock_report`
+    # builds it) and its holder (`held_by`, through `world_q.governing_hold`) -- which WITNESS deposits to the write's witnesses, the traveller among them. An arm outside
+    # `rosters.yaml: arrival_reports` is refused at the barrier. No source names a setter or a calibration: the flip is B98's. Injection site: this line.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-525 -- `site: Fixtures arrival_report`, graded `assumption`; the source ships the arm `off` and names neither a setter nor a reading that flips it, so it is injected at the control and swept off / on]
+    arrival_report="off",              # `H-525`, swept off (control, SHIPPED) / on
+    # B12a.51 (`07_SE_ground_and_granaries` §4 (b), CP-T08-02): WHICH PRODUCING SITES A SETTLEMENT IS ENDOWED WITH at the world's making
+    # (`boot/realm.py::build_realm`'s site loop, through `endowment_for`, which reads `rosters.yaml: site_endowment`). `uniform` places `harbour` and `seam`
+    # at every settlement (today's placement, B12a.51's control); `ground` places each territory's own row.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode: uniform`]
+    # B12a.54 FLIPPED IT to `ground` (a declared HASH MOVER): each territory's own row of `site_endowment` is the placement. `uniform` is THE CONTROL, the arm the
+    # flip came from (`harbour` and `seam` at every settlement; the realm hash and Site ids of B12a.53's tree byte for byte). Revert: `uniform`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-526 -- `site: Fixtures endowment_mode`, graded `assumption`; CP-T08-02 gives the arm and no territory's row, so the arm is injected and swept uniform (control) / ground (SHIPPED)]
+    endowment_mode="ground",           # `H-526`, swept uniform (control) / ground (SHIPPED, B12a.54's flip)
+    # B12a.51 (`07_SE_ground_and_granaries` §4 (b)): SEASONS OF THE EATEN-KIND DEFICIT A GRANARY RUNG STARTS WITH under `ground`
+    # (`07_SE_treasury_granary_B`'s seed, B12a.52). `0` is THE CONTROL: no territory stock. B12a.55 FLIPPED IT to `4` (a declared HASH MOVER):
+    # every settlement's first rung above it is stocked at world-gen with four seasons of the grain and salt its settlements lack, so no cohort
+    # is short at season 0 and the treasury is the clock. `0` under `ground` reproduces B12a.54's realm byte for byte. Revert: `0`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `granary_seasons: 0`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-527 -- `site: Fixtures granary_seasons`, graded `assumption`; the source gives the seed's shape and no count of seasons, so the count is injected at the control and swept 0 / 4 / 8]
+    granary_seasons=4,                 # `H-527`, swept 0 (control) / 4 (SHIPPED, B12a.55's flip) / 8
+    # B12a.53 (`07_SE_ground_and_granaries` §4 (d), H-303): HOW FAR THE LARDER WALK GOES. `first` is THE CONTROL: the draw is the first
+    # stocked rung's alone and the remainder is not walked on (the rule before B12a.56). `through` walks the remainder up the ladder, so a short town
+    # with a few units at home reaches the treasury above, and the debit is per rung. Projected by `world_q._larder_parts` into `LarderInput.walk`,
+    # read by `modules/settlements/larder.py::larder_draw`. B12a.56 FLIPPED IT to `through` (a declared HASH MOVER): R4 is a completeness rule, so the
+    # walk is shipped whether or not a seeded realm reaches it (B12a.56's reading: no draw cell names two rungs at seeds 0 to 2, two seasons).
+    # `first` reproduces B12a.55's realm byte for byte. Revert: `first`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `larder_walk: first`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-528 -- `site: Fixtures larder_walk`, graded `assumption`; the source gives the continued walk and names no setting that ships it, so the arm is injected and swept first (control) / through (SHIPPED)]
+    larder_walk="through",             # `H-528`, swept first (control) / through (SHIPPED, B12a.56's flip) / through where the home rung holds the whole want (the walk stops at once)
+    # B12a.58 (`16_PESSIMIST_GAME_the_world_draws` edit 1; the conversion rows are B12a.57's design): HUNGER IS DRAWN. `False` is THE CONTROL: today's
+    # exact step (`body_step` times the units short), no draw taken, none of the three rows below read. `True` is the arm: per eater short this season one keyed
+    # draw (`draw_factory(...)(pid, "hunger_severity")`), graded on the one ladder, the band choosing the multiple of that step (`hunger_band_steps`), read by
+    # `world_q._hunger_severity` (B12a.61). B12a.62 FLIPPED IT to `True` (a declared HASH MOVER): a hard year is a draw per hungry eater, not one fall for
+    # every cohort. `False` reproduces B12a.61's realm byte for byte. Revert: `False`. The shape matches `wear_draw`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-529 -- `site: Fixtures hunger_severity_draw`, graded `assumption`; the source draws the hunger step and names no setting that ships it, so the arm is injected and swept False (control) / True (SHIPPED, pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)]
+    hunger_severity_draw=True,         # `H-529`, swept False (control) / True (SHIPPED, B12a.62's flip; pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)
+    # The multiples of `body_step x units short` each band charges (`09_WR_B_draws_not_thresholds` edit 2; the wear draw's shape, `_WEAR_BAND_SHARE`'s):
+    # Overwhelming spares, Success half, Partial today's step, Failure twice. Keyed by the ladder's band names; read only under `hunger_severity_draw` True.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-530 -- `site: Fixtures hunger_band_steps`, graded `assumption`; the source gives the four multiples and no document derives them, so they are injected and swept the shipped four / every band the control's one step / a harsher tail]
+    hunger_band_steps={"Overwhelming": 0.0, "Success": 0.5, "Partial": 1.0, "Failure": 2.0},   # `H-530`, swept shipped (0 / 0.5 / 1 / 2) / flat (1 / 1 / 1 / 1) / harsher tail (0 / 0.25 / 1 / 3)
+    # B12a.57's conversion (`proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md` §1): THE POOL A COHORT'S BODY GIVES, the
+    # score `hunger_body_pool x Person.body / condition_scale` through `sigma_leverage.pool_of` with the shared `pool_add` and `pool_floor` (never a hunger-local floor).
+    # Read only under `hunger_severity_draw` True; `0` takes the body term off (the pool is `pool_add`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-531 -- `site: Fixtures hunger_body_pool`, graded `assumption`; the design gives the form and chooses the value so that depth moves Failure further than the body does, so it is injected and swept 0 / 4 / 8]
+    hunger_body_pool=4,                # `H-531`, swept 0 (the body term off) / 4 (SHIPPED) / 8
+    # B12a.57's conversion (§2): THE OBSTACLE A SHORTFALL GIVES, `hunger_depth_obstacle x (sum of want - take / sum of want)` over the eater's cells -- one share in (0, 1] of
+    # the cohort's own want. 4.5 is the value at which the middle state (half the want short, a half body) keeps today's expected loss to three decimals; the anchor is itself an assumption.
+    # Read only under `hunger_severity_draw` True.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-532 -- `site: Fixtures hunger_depth_obstacle`, graded `assumption`; the design anchors the value to the control's expected loss at one named state and no document sets it, so it is injected and swept 3 / 4.5 / 6]
+    hunger_depth_obstacle=4.5,         # `H-532`, swept 3 / 4.5 (SHIPPED) / 6
+    # B12a.64 (`16_PESSIMIST_WR_B` edit 2): A STRAINED SITE BREAKS, HOLDS OR KNITS BY A DRAW. After the wear write, a Site beside a broken Site (the pull's own reading,
+    # `loop/matter.py::_broken_near`) that stands below the lowest floor of its kind takes one keyed draw; a kind whose `band_floors` cell is `{}` has no floor, so its one
+    # edge is THIS ROW. Read only while `lattice_coupling` is non-zero (the control reads no row and takes no draw).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-533 -- `site: Fixtures rupture_band`, graded `assumption`; the source names the row for a kind with no floor and gives its value, no document derives it, so it is injected and swept]
+    rupture_band=100,                  # `H-533`, swept 50 / 100 (SHIPPED) / 200
+    # B12a.64: THE OBSTACLE'S BASE, what holds a strained Site before any sound fabric beside it is counted (each Site of its own territory standing in its top band adds one).
+    # The pool and the base were sized on the whole-dice sampler: re-read at the joint calibration of A-5/A-6 before the weight leaves 0.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-534 -- `site: Fixtures rupture_base`, graded `assumption`; the source gives the value and no document derives it, so it is injected and swept]
+    rupture_base=2,                    # `H-534`, swept 1 / 2 (SHIPPED) / 4
+    # B12a.64: THE CAP ON THE POOL, the strain upon a Site (the count of broken Sites in its own and bordering territories, up to this).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `lattice_coupling: 0`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-535 -- `site: Fixtures rupture_pool_cap`, graded `assumption`; the source gives the value and no document derives it, so it is injected and swept]
+    rupture_pool_cap=6,                # `H-535`, swept 3 / 6 (SHIPPED) / 12
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

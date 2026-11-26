@@ -44,7 +44,7 @@ FOUGHT = tuple(b for b in COMBAT_BANDS if b != DECLARED)           # the bands a
 # season, `PYTHONHASHSEED=0` (the plan's HASH READING), reading @769f305cc6a809d4cc0c9f22ee78806cfb5bc973 -- B08's base
 # before B08.02 edited any game code. A TEST-LOCAL PIN NO OTHER ITEM MAY MOVE: with one interaction per scene there is
 # no within-scene order and no previous interaction, so neither the `after` read nor B08.03's scene key may move it.
-ONE_INTERACTION_SEASON_1 = "0325a35125b97745272e900f5a926db0"
+ONE_INTERACTION_SEASON_1 = "468230ebb76644d59f69ceb917d952c9"   # B12a.99 RE-PIN: "0325a351.." -> "468230eb.." (seed 0, one season, `PYTHONHASHSEED=0`, the tree merged with B08): the batch's movers (B12a.15, .54, .55) move the world this arm shares with the shipped one; B08's own property (one interaction per scene reads no `after` and no scene key) is no longer observed by this pin alone
 
 
 @pytest.fixture(autouse=True)

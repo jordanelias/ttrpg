@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from ..data.rosters import ARRIVAL_ONLY_KINDS
 from ..queries.person_q import addressed_to
-from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, order_destination, place_of, residence_of, restrained
+from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, home_of, order_destination, place_of, residence_of, restrained
 from ..state.carriers import Tenure, subject_of
 from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE, Change, Subject
@@ -60,6 +60,14 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # mint one register entry per pair and leave the label reading mid-sentence.
         return _decline_ascent(
             f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}")
+    # B12a.15 (`H-140`; ruling A-81 consequence 1): A MOVE TO WHERE THE MOVER STANDS IS NO JOURNEY. It would close his leg,
+    # open an identical one and pad `travel_leg`, a digest move F9 reads as `travel.moved`. `_eff_migrate`'s decline of a
+    # migration that changes no residence is the same shape; the formation side is B12b's, so this is the backstop.
+    if home_of(w).get(a.actor) == dest:
+        TRACE.decision(f"a move to where the mover already stands -> {a.actor} into {dest!r}", "H-140",
+                       chose="change nothing, so the fold emits the row's refusal",
+                       alternatives=["re-open the same leg under a new id (a digest move published as travel)"])
+        return NO_CHANGE
     # ⚠ PLAN POSITION `19c`: WHAT A `move` LEAVES BEHIND IS THE MOVER'S `reside` EDGE -- it is not
     # touched here, so a traveller still lives where he lived (`_eff_migrate`'s docstring).
     # B07.02: the band decides how far he gets (`_reached`); no band is `dest`, the move as it was.
