@@ -78,6 +78,8 @@ def pytest_collection_modifyitems(config, items):
             lane = next((m for m, pat in SUBSYSTEM_FILES.items() if pat.match(base)), None)
         if lane:
             item.add_marker(getattr(pytest.mark, lane))
+        if lane == "season_loop" and "engine/season/tests/" not in path:
+            item.add_marker(getattr(pytest.mark, IN_SEASON))   # the registrar, the providers, the exports: cross-cutting by nature
         if "engine/season/tests/" in path:
             base = os.path.basename(path)[:-3]
             item.add_marker(getattr(pytest.mark, SEASON_SUITE_OF.get(base[len("test_"):], IN_SEASON)))

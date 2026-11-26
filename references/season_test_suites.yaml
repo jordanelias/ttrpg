@@ -23,7 +23,6 @@ suites:
     - pairs
     - pc10b_challenge_record
     - rem31_grid_suspension
-    - strife_execution
     - vm_phy_a_custody
   mb:
     - in36_march_cap
@@ -67,6 +66,7 @@ suites:
     - u1_seat_modifier
     - vres_task_and_prize
   fa:
+    - strife_execution
     - command_basis
     - cp_t02_01_death_names_seats
     - cp_t02_02_seat_ids
