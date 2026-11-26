@@ -1,64 +1,56 @@
-# Defer the shipped-output pins to the end of the workplan
+# Defer the stored goldens to the end of the workplan; keep the readings
 
-## Status: PROPOSED
-## Lane: IN (cross-cutting). Owner of the decision: Jordan.
+## Status: PROPOSED, amended after an Opus audit (2026-11-26). Rulings below were delegated to that audit by Jordan; nothing is applied.
+## Lane: IN (cross-cutting).
 
-Jordan, 2026-11-26: *"I am okay with reusing pins or literally just ignoring them until the workplan itself is built out entirely"*; *"the game needs to be balanced topdown and bottom-up, and we are currently wasting so much time trying to keep same balance bottom-up when we haven't even built all the slices"*; *"P10 has exceptions if testing specifically for narrative/stories/arcs"*.
+Jordan, 2026-11-26: *"I am okay with reusing pins or literally just ignoring them until the workplan itself is built out entirely"*; *"we are currently wasting so much time trying to keep same balance bottom-up when we haven't even built all the slices"*; *"P10 has exceptions if testing specifically for narrative/stories/arcs"*; the goal is the least time per batch **without losing the ability to tell whether a batch worked**, with a targeted post-workplan run (B99) once everything is built. Figures marked `[MEASURE]` are not measured.
 
-This document proposes how to stop paying for pins during the build without losing what they were protecting. It is a plan, not a ruling; nothing in it is applied. Figures marked `[MEASURE]` are not measured.
+## 1. How a batch's efficacy is decided, and what a pin adds
 
-## 1. What "a pin" is here, and what is not one
+A batch works if (a) each item's falsifier and control pass on a hand-built world (P9), (b) the batch gate's readings hold (`aperture 2 s` executed counts, `register --check`, `--requirements`, `m1_acceptance`, BUILT OUT), and (c) the batch's recorded per-batch hash readings show the realm hash moved only where the batch declared a mover, and not at all for an EQUAL item (v12 part 29:26, 117; P17(3)). All three need **no stored file**: each is a base-against-head reading taken inside the batch.
 
-Three different things share the word. Only the first is deferred.
+A stored golden adds exactly two things: whole-realm determinism across processes and machines (CI sets no `PYTHONHASHSEED`, so a match with a literal proves seed independence), and drift between batches, which every batch's entry reading already covers (P16(2)). The rest of the pin machinery (the `.99` re-record edit, the ~15 "RE-PIN" paragraphs in `_realm_goldens.py`, the "re-pin" comments in about 60 test files) says nothing about whether a batch worked.
 
-| Class | What it is | Where | Deferred? |
-|---|---|---|---|
-| **A. Stored shipped-output goldens** | A literal (hash, count, set) of the shipped realm after one or two seasons, compared by a test | `engine/season/tests/_realm_goldens.py` (`SHIPPED`, `BUILD`, `CENSUS`), read by 21 season test files and `test_go07_canonical_digest.py`; 5 more season test files hold inline 32-hex literals; `engine/season/runs/results.json` (byte-check, see §6); CI job `field-goldens` (`tools/ci_golden_modes_check.py` `FIELD_PINS`, about 7 minutes) and its drift guard `tests/valoria/test_field_golden_pins.py` | **Yes** |
-| **B. In-process equalities** | Two worlds built in one process and compared to each other: same seed twice, an arm `off` against absent, a control arm | the acceptance probe (`tools/m1_acceptance.py`), `requirements.yaml` rows reading "the same content hash twice", control-arm falsifiers | **No.** They need no stored file and cost nothing to keep valid |
-| **C. Plan machinery for pins** | The process that keeps A current: hash movers named per item and batch (P14), re-record in the batch's `.99` commit (P15), carry-forward readings (P16(2)), `## Readings` blocks, the batch table's hash column (30 MOVER, 4 EQUAL), the BATCH-CLOSE go07 blocking pin (P17(3)) | `workplans/valoria_master_workplan_v12*.md`, `skills/methodology-execute/SKILL.md` | **Yes** |
+## 2. Defer, keep, replace
 
-Also not pins, and kept: the exporter round-trip `--check` for `engine/engine_params/`, `test_morale_write_sweep.py`, the compile gate, the test-lane ratchet, the `canonical_sha__*` freshness gate (it covers documents, not game output).
+**Defer to B99** (stored literals, no per-batch reading): the `SHIPPED`, `BUILD` and `CENSUS` edits in `_realm_goldens.py`; inline realm-hash literals (in `endowment`, `rival_precedence`, `scene_sequence`, `task_draw`, and the count pins such as `BEFORE_SEASON_ONE_ENTRIES` in `claim_fade_as_read`); `engine/season/runs/results.json` regeneration (asserted by `test_w15`, `test_season_shape.py:1153`); the go07 control tests; B41's `oracle_pins --build`.
 
-## 2. What must stay (the required exceptions)
+**Keep:** P14 sentences 1 and 2 (hash movers declared; a mover's before-reading is the previous item's after-reading); P16(2) (carry-forward readings, a speed rule); P17(3) first half (EQUAL items record no hash, one seed-0 reading per EQUAL run, bisect only on inequality, seeds 1 and 2 only for movers); the batch table's hash column; each `.99`, renamed in effect "close readings": seeds 0 to 2 base and close hash recorded in the commit body, plus aperture, register and requirements, with **no golden edit**; `## Readings` minus its re-pin lines; the `field-goldens` job (see §4(b)).
 
-1. **Determinism:** the same seed twice gives the same hash (class B). Observed by `engine/season/tests/test_season_shape.py` and the acceptance probe. Nothing changes.
-2. **EQUAL batches** (behaviour-preserving, 4 in the batch table): each keeps one in-process before/after comparison, base SHA against head, with no stored file. This is the only proof a refactor moved nothing.
-3. **THE NINE at B99:** the longer re-take stays the plan's last item (P10 exception 1).
-4. **Narrative, story and arc tests** run the seasons the arc needs (P10 exception 2, written 2026-11-26, `dc5777a4a`); they are tests, not pins, and are unaffected by this proposal.
-5. **Pins return at B99, once.** Deferral means "re-record all at the end", not "never": B99 runs the pin tests, records every golden in one commit that says plainly it re-recorded them, and re-takes THE NINE.
+**Replace:** (i) one blocking test: the realm hash at seed 0 after one season, equal in two subprocesses under `PYTHONHASHSEED` 0 and 1 (class B, in-process; it recovers the one signal only a stored literal gave); (ii) the arm-off pins that compare to a stored literal (`test_task_draw.py:96`, `test_notice_draw.py:40`) re-expressed as arm off against arm absent in one process.
 
-## 3. The structural condition: stale pins must be excluded, not skipped
+## 3. Structural conditions
 
-Stored goldens go stale at the first batch that moves the world. A stale golden test fails. P8 forbids skipping, xfailing or quarantining a test, so the exclusion has to be a **marker deselection**, which `pytest.ini`'s "ONE RULE" reserves to Jordan as a coverage cut. This proposal asks for that ruling for the `shipped_pin` marker only. Without the exclusion CI stays red for the rest of the plan.
+1. **Stale goldens must be deselected, not skipped** (P8 forbids skip, xfail, quarantine). That is a marker deselection, which `pytest.ini`'s ONE RULE reserves to Jordan; ruled in §4(a). Without it CI is red until B99.
+2. **The marker is broken today** and must be rebuilt before anything relies on it. Measured: `-m shipped_pin` marks 14 tests, of which 8 are false positives (`co_names` matches local and attribute names: the 5 tests of `test_b01a_generated_attributes`, a local `SHIPPED=(1,6)`; `Step.CENSUS` in `test_season_shape` w2 and in 2 `test_territorial_subsistence` falsifiers), 6 are true pins, and it misses the aliases (`ARM_OFF_PINS`, `REALM_PIN_SEED_0_TWO_SEASONS`), the inline literals and `test_w15`. Only 7 files import `_realm_goldens` (an earlier figure of 21 counted comment mentions).
+3. **B41-go-port-gate as scheduled is unsafe.** Its gate runs `test_go07_canonical_digest.py` (reads `SHIPPED`) and it writes `oracle_pins.json` at W17, which B98's 38 behaviour movers then stale. Under deferral its go07 gate line is dropped and `oracle_pins --build` moves to B99.
 
-## 4. The change, in order
+## 4. Rulings (delegated by Jordan to the audit; none is his alone: process text, no change to the game or canon)
 
-Each step is independently shippable and leaves CI no worse.
+- **(a) Marker deselection in blocking jobs: YES WITH CHANGES.** Rebuild the marker **by identity** (a global the test reads that is, or holds a value of, the `_realm_goldens` object). Derive the member set once with a perturbation run: change one golden and one trivial world-move; each red is either moved to read its literal from `_realm_goldens` (so it is marked) or rewritten as a control. Add `test_w15` by its owner, `files.RESULTS_JSON`. Amend P8 to read "except the `shipped_pin` deselection until B99 (Jordan, 2026-11-26)". Deselects pins and nothing else.
+- **(b) Take `field-goldens` out of the KEPT list and out of `ci-summary`: NO.** It is the mass-battle sim's byte-exact oracle and the only behaviour-preservation proof for MB refactors (the B12b gate uses it as the EQUAL proof). It runs as a parallel CI job and batches never wait on CI (§11), so it costs a batch about nothing. No `CLAUDE.md` edit. An MB batch that moves it re-records it in that batch.
+- **(c) Delete P14, P15, P16(2), P17(3), the `.99` re-records: YES WITH CHANGES.** Delete only: P15 whole; P14's last sentence; P17(3)'s go07 sentence and P17(5); the re-record INSTRUCTION, WHERE and golden-file TESTS lines of each `.99` (36 items); the pin clause of each `EXPECTED RED UNTIL`; B41's go07 gate line. Keep the rest (§2). The kept parts cost about one 15 s hash reading per tree and are what shows a batch moved only what it declared.
 
-**Step 1: make the marker complete.** `conftest.py` marks `shipped_pin` today for a test that names `SHIPPED`, `BUILD` or `CENSUS`; it marks 14 of about 4,100 tests because most pin tests read the goldens through module-level aliases (for example `ARM_OFF_PINS = SHIPPED[...]`). Change it to follow aliases: in a file that imports from `_realm_goldens`, mark a test whose function reads a module global that is, or was built from, a golden value. Add the 5 files with inline hash literals. Derive it from the owner (the golden module's names); list no test by hand. *Falsifier, run once and not kept:* change one golden value; exactly the marked tests that read it must fail, and no unmarked test.
+## 5. B99, the targeted post-workplan run
 
-**Step 2: exclude in the blocking jobs.** Add `-m "not shipped_pin"` to the `unit-tests` job and the `season-tests` legs, and to every batch lane command (P18). *Check:* `pytest --collect-only` ids for (marked) plus (unmarked) equal the unfiltered collection, with no duplicates, as for the earlier shard split.
+1. `pytest -m shipped_pin`; re-record every red in one commit that says plainly it re-recorded goldens.
+2. Regenerate `runs/results.json` with `harness/report`.
+3. `oracle_pins --build`, then `--check` under `PYTHONHASHSEED` 0 and 1.
+4. `tools/freshness_gate.py --update`, only for pins whose covered code moved.
+5. THE NINE re-take on that tree.
 
-**Step 3: take the field goldens out of the blocking tier.** Remove `field-goldens` from `ci-summary`'s `needs`, as `lanchester-signature` already is; run it only on demand (`workflow_dispatch`). This needs Jordan's ruling because `CLAUDE.md` §0.1 pt 5 names the golden-modes check in its KEPT list.
+Attribution of a late drift comes from the chain of close readings in the commit bodies; a bisect has little to test against, since all 30 mover batches change the hash on purpose.
 
-**Step 4: delete the machinery (class C).** In the workplan head replace P14, P15, P16(2) and P17(3) with one rule: *pins are not re-recorded during the build; a batch's close reads no golden; B99 re-records them once.* Delete the `.99` re-record items and the `## Readings` blocks that serve only pins, and drop the batch table's hash column except the EQUAL flag. In `methodology-execute` remove the readings and re-record steps from BATCH OPEN, the item gate and BATCH-CLOSE; the EQUAL in-process comparison replaces them for those 4 batches. In `CLAUDE.md`, edit §0.1 pt 5 (drop the golden-modes check from KEPT) and §7 (the pin paragraph) in place; the file is at its 645-line cap, so no line is added.
+## 6. Order of work
 
-**Step 5: the rule that keeps it from regrowing.** A new pin test must import from `_realm_goldens` so the marker catches it, or it observes behaviour and is not a pin. This is a reader's discipline; no guard is built (§0.1 pt 5).
+1. Rebuild the marker by identity; run the perturbation once; list what it finds. (No CI or plan change yet.)
+2. Add the subprocess determinism test and re-express the two arm-off pins.
+3. Add `-m "not shipped_pin"` to `unit-tests`, the `season-tests` legs and the P18 lane commands; check that marked plus unmarked equal the full collection with no duplicates.
+4. Edit the plan and `methodology-execute` per §4(c); amend P8 per §4(a); drop B41's go07 gate line.
+5. B99 as in §5.
 
-**Step 6: B99.** Run `pytest -m shipped_pin` and the field goldens, record every moved golden in one commit that says it re-recorded them, run `tools/freshness_gate.py --update`, and re-take THE NINE.
+## 7. Not verified, and not covered
 
-## 5. What it saves `[MEASURE]`
+Timings (`[MEASURE]`); whether any batch moves the `bat.py` field digests; how many of the 60 "re-pin" files hold realm-output literals rather than combat tables. It does not remove the carried reds on `main` (combat (7, 5) cell, `test_shortest_case`, two `test_playable_inquiry`, `test_rumour`), or change THE NINE, class B equalities, or the narrative exception to P10.
 
-Known: `field-goldens` took 6m56s per run (run 45737148512); `test_go07_canonical_digest` reads seeds 0 to 2 at one and two seasons, about nine realm seasons at about 15 s each; the marked tests are a small share of a leg. Larger and unmeasured: the per-batch `.99` re-record item (44 in the plan), the `## Readings` blocks, and the before/after runs every mover item takes. Measure first: record `--durations` for the 14 marked tests plus the aliased ones, and count the `.99` and readings positions in `workplans/valoria_master_workplan_v12_part*.md`, before claiming a figure.
-
-## 6. Risks and open questions
-
-1. **Attribution is late.** A drift from an early batch surfaces at B99. `git bisect` over the batch commits on one realm-hash test is about 7 runs for 69 batches; each batch's recorded mover declarations narrow the suspects.
-2. **B41-go-port-gate** (EQUAL, wave W17) precedes B98 and B99 (W23, W24). If it validates a port against pinned oracle values, those will be stale. Not read; check before ruling.
-3. **`engine/season/runs/results.json`** is a derived artifact a byte-check compares (P15). Which test or tool asserts it, and whether the marker catches it, is unconfirmed.
-4. **A pin test that also asserts behaviour** (a count that doubles as a design claim) would be excluded with the pins. Step 1's falsifier will list these; split them or leave them marked.
-5. **Rulings needed:** (a) the `shipped_pin` marker deselection in blocking jobs (§3); (b) removing `field-goldens` from the KEPT list (§4 step 3); (c) deleting P14, P15, P16(2), P17(3) and the `.99` re-record items.
-
-## 7. What this does not do
-
-It does not remove the carried reds on `main` (the combat (7, 5) cell, `test_shortest_case`, two `test_playable_inquiry` tests, `test_rumour`), which are separate failures. It does not change THE NINE's definition or the narrative exception. It does not touch class B.
+Corrections from the audit to the first draft: 36 `.99` items, not 44; about 5,100 tests, not 4,100; 7 files import `_realm_goldens`, not 21; 4 inline-hex files besides go07, not 5; `field-goldens` is not a class-A pin.
