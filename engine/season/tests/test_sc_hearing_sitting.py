@@ -357,7 +357,8 @@ def test_scripted_player_echoing_the_npc_reproduces_the_auto_hash(monkeypatch):
         built.clear()
         assert S.run("hearing", seed, 1, host=host(lambda view: built["npc"](view, SimpleNamespace(id=view.mover))), person=ACCUSER)["hash"] == auto, seed
         built.clear()
-        assert S.run("hearing", seed, 1, host=host(lambda view: Choice("rest")), person=ACCUSER)["hash"] != auto, seed
+        rests = lambda view: next((Choice(o.move, o.ground, o.item, o.relation) for o in view.options if o.move == "rest"), None) or Choice(view.options[0].move, view.options[0].ground, view.options[0].item, view.options[0].relation)      # a man whose temper has broken has no `rest` on his menu (A-146, `_legal`): his first move then
+        assert S.run("hearing", seed, 1, host=host(rests), person=ACCUSER)["hash"] != auto, seed
         checked += 1
     assert checked == 2
 

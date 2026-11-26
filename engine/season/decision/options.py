@@ -518,12 +518,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         if cites_of and subject != p.id:
                             if subject not in held_of_entity:
                                 held_of_entity[subject] = held_cites(p.ledger, subject)
-                            held = held_of_entity[subject]
+                            cited_held = held_of_entity[subject]      # NOT `held`: that name is the person's titles above (`OWN_TITLE_DECLINES`), read by every later verb of this call
                             if records is None:
                                 records = held_record_claims(p, tick, decay)
                             kept = tuple(dict.fromkeys(c.subject for c in records if _content_answer(c, "subject") == subject))      # B24.43: the Records he holds whose content names the matter
-                            if held or kept:
-                                out.append(Candidate(verb, subject, operands={**c_ops, CITES_KEY: tuple(c.id for c in held) + kept, CITED_KEY: {c.id: cited_said(c) for c in held}}))
+                            if cited_held or kept:
+                                out.append(Candidate(verb, subject, operands={**c_ops, CITES_KEY: tuple(c.id for c in cited_held) + kept, CITED_KEY: {c.id: cited_said(c) for c in cited_held}}))
     return out
 
 
