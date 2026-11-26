@@ -17,7 +17,7 @@ from engine.season.decision.choose import _payload_of
 from engine.season.decision.options import seat_of
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q as Q
-from engine.season.state.carriers import Act, Claim
+from engine.season.state.carriers import Act, Claim, Tenure
 
 from .test_in53_vacancy_need import _formed
 
@@ -141,3 +141,47 @@ def test_a_leaver_with_a_land_hold_is_offered_the_creed_utter():
     assert "prop:a_found" in Q.faction_props(w) and not Q.creed_occasion(w, w.persons[founder]), "a creed uttered is not offered twice"
     qs = Q.questions_for(w, w.persons[landless])
     assert qs and not any(c.verb == "utter" and c.operands.get("predicate") for c in _formed(w, landless, qs[0]))
+
+
+# ---- B21b.10 (CP-T09-05, AM-F-14): LAND REWARDS THE SWORN -- `world_q.sworn_holdings`. Reward arm absent (BLOCKED on IN-08's `deed:rung.ceded` cell). ----
+
+LORD, SWORN = "p_npc_020", "p_npc_050"      # the king (seats `off_king`, `off_duke_valorsmark`; six territories) and a man sworn to `off_king`
+
+
+def _beside_the_lord(w):
+    """The lord knows `SWORN` (a claim about him, so the question he answers is about him) and `SWORN` stands where he does (`give`'s `with`)."""
+    for t in w.persons[SWORN].tenures:
+        if t.kind == "contain" and t.live:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_beside_lord", SWORN, Q.place_of(w, LORD), "contain", since=0))
+    w.persons[LORD].ledger.append(_claim_about(LORD, SWORN, f"c_about_{LORD}"))
+
+
+def _gives_of_land(w):
+    q = _question_about(w, LORD, SWORN)
+    return [c for c in _formed(w, LORD, q) if c.verb == "give" and c.subject in w.rungs]
+
+
+def test_a_holder_with_a_sworn_man_beside_him_forms_give_of_his_territory():
+    """The king, with `SWORN` live-obliged to `off_king` and standing beside him, answers a question about him: `give {subject: a territory he holds, to: SWORN}`
+    forms, and folded the rung is `rung.ceded` and `SWORN` holds it."""
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    _beside_the_lord(w)
+    assert SWORN in Q.establishment_of(w, "off_king"), "fixture"
+    gives = [c for c in _gives_of_land(w) if c.operands.get("to") == SWORN]
+    assert gives and {c.subject for c in gives} <= set(Q.holdings_of(w, LORD)), gives
+    land = gives[0].subject
+    assert "rung.ceded" in _fold(w, d, _act(w, LORD, gives[0], "a_grant"))
+    assert Q.hold_force(w, land).subject == SWORN
+
+
+def test_a_holder_with_no_obligee_forms_no_give_of_the_rung():
+    """The control, one change from the arm above: `SWORN`'s `oblige` is closed, so he is nobody's sworn man and the same question forms no `give` of land."""
+    w = build_realm(0)
+    _beside_the_lord(w)
+    for t in w.tenures:
+        if t.kind == "oblige" and t.subject == SWORN and t.live:
+            t.until = w.tick
+    assert SWORN not in Q.establishment_of(w, "off_king") and Q.holdings_of(w, LORD), "fixture"
+    assert _gives_of_land(w) == []

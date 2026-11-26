@@ -3817,6 +3817,24 @@ def leave_referents(w: World, p: Person, refs: tuple, memo: Optional[dict] = Non
     return tuple(out)
 
 
+def sworn_holdings(w: World, p: Person, refs: tuple, memo: Optional[dict] = None) -> tuple:
+    """THE LAND HE HOLDS, as plain referents of a question about a man sworn to his seat (B21b.10, CP-T09-05, AM-F-14: land rewards the sworn; [ASSUMPTION;
+    medium; Jordan to correct; revert: `questions_for` appends no `sworn_holdings`]): `holdings_of` `p` (every rung a live `hold` of his names) when some
+    referent of the question is a person with a live `oblige` to a seat `p` holds (`establishment_of`), `()` otherwise -- for a man who holds no seat or no
+    land, for a question about nobody sworn to him. PLAIN referents (`opinion_referents`' shape), so the unclassed `give` forms on them; its `to` is
+    `give`'s own (every person he knows, the sworn man among them: the occasion is bounded, the receiver is not, and `to` is not bound to the referent).
+    The reward arm (the grantee's regard of the giver rising on `rung.ceded`) is absent: it needs IN-08's `deed:rung.ceded` cell pair, content. `memo` is
+    `opinion_referents`' per-call cache, shared."""
+    if memo is None:
+        memo = {}
+    if "sworn" not in memo:
+        seats = dict.fromkeys(t.object for t in p.tenures if t.kind == "hold" and t.live and t.object in w.offices)
+        memo["sworn"] = frozenset(x for s in seats for x in establishment_of(w, s)) if seats else frozenset()
+    if not memo["sworn"] or not any(r in memo["sworn"] for r in refs):
+        return ()
+    return holdings_of(w, p.id)
+
+
 def creed_occasion(w: World, p: Person) -> bool:
     """IS THE CREED `utter` HIS TO OFFER (B21b.08, IN-30's occasion; [ASSUMPTION; medium; Jordan to correct; revert: `questions_for` stamps no `Founder`]):
     he has left a faction (a closed `commit` Tenure on a faction Proposition), belongs to none now, holds no creed he uttered already (a live `hold` on a
@@ -5234,7 +5252,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
             # B21b.08 (CP-T09-01's leave body): AND A QUESTION ABOUT A PERSON HE REGARDS ON HIS OWN FACTION'S BEHALF carries that faction where his opinion of it is
             # below indifference, so `release` forms on his own `commit`. After the subject and the opinion referents; never twice. REVERT: drop these two lines.
             leave = tuple(x for x in leave_referents(w, p, (c.subject,) + extra, opinions) if x != c.subject and x not in extra)
-            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra + leave, c.id))
+            # B21b.10 (CP-T09-05, AM-F-14): AND, AFTER THOSE, THE LAND HE HOLDS where the question is about a man sworn to one of his seats (`sworn_holdings`), as
+            # plain referents, so `give` forms on them; never twice. REVERT: drop the `land` line and `+ land`.
+            land = tuple(x for x in sworn_holdings(w, p, (c.subject,) + extra + leave, opinions) if x != c.subject and x not in extra and x not in leave)
+            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra + leave + land, c.id))
 
     # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
     # above). It is the person-keyed crossing, which no witness carries. Still `claim_landed`, no source added: the claims that
