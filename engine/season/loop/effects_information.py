@@ -662,7 +662,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     item: its list is on the Event alone), or at `Failure` (the row writes `[]`, this body is not called).
 
     B24.38 (IS-B2-SC-08) -- AN ADJOURNMENT IS WRITTEN TOO: where the sitting's last move was the bench's `adjourn` (`world_q.adjourned_by`), ONE more stage `(ADJOURNED_STAGE, the bench member)` is
-    appended after the exchanges, on the same file and under the same act, so the next sitting of the matter finds it (`world_q.adjournments`). It is not on the Event's `exchange` list
+    appended after the exchanges, on the same file and under the same act, where a later sitting of the matter can find it (`world_q.adjournments`; no computed play reaches that sitting yet: a second hearing follows a Failure band, which writes nothing here). It is not on the Event's `exchange` list
     (the Event's beats already end on the `adjourn`). ⚠ THE DISPOSAL IS NOT HELD BACK BY IT: an adjourned sitting still draws its close, and at a non-Failure band opens the edge and takes the
     matter off the docket as any other; named, not decided (the bench's `adjourn` is reached by no computed sitting today: `proceed` gives a seat that decides without a side no turn).
 

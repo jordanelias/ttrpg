@@ -87,7 +87,7 @@ from ...epistemic import trail_concealment
 from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
-from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, claim_origin, conflict, contradicts, false_items, holds_dispute, proof_kind, stance_toward,
+from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, claim_origin, conflict, contradicts, false_items, held_cites, holds_dispute, proof_kind, stance_toward,
                                  strain_carried, takes_side, tie)
 from ...queries.person_q import care as person_care
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
@@ -1036,7 +1036,7 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
     ob = _composed_obstacle(inp)
     if ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return None
-    return record_odds(inp.pool, ob, inp.leverage)
+    return record_odds(inp.pool, ob, _with_exhibits(inp, ())[1])      # the leverage AS ROLLED: the filed exhibits' levels the roll applies (`roll.leverage`), read by the same count
 
 
 _ORDINARY = SimpleNamespace(capability={}, attributes={}, traits=())    # AN ORDINARY PERSON, the one `believed_prior` `ordinary` takes an unknown opponent for: he holds nothing (B05.62)
@@ -1661,11 +1661,12 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
             out.append(Item(t.id, "oath", 1.0, source=p.id, about=t.object))
     if ctx.topic is not None:
         full, decay = ctx.fx.get("confidence_default"), ctx.fx.claim_decay()
-        for c in p.ledger:
-            if c.subject == ctx.topic and (kind := proof_kind(c)) is not None:
-                out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject,
-                                cell=(c.subject, c.predicate, c.value),      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)
-                                origin=claim_origin(c.chain, p.id)))     # the root of its chain, else his own (`world_q.filings`' rule): what `impugn` halves by (R2)
+        for c in (held_cites(p.ledger, ctx.topic) if p.id != ctx.topic else ()):      # the claims a speech may cite (`person_q.held_cites`, the one owner of whose deed a claim is), and none on his own plea (`opening_set`'s, `world_q.proofs`' rule): his own deed presented by him would count for his side
+            kind = proof_kind(c)
+            out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject,
+                            rung=MATTERS[kind]["bears_on"],              # the rung the matter bears on (`world_q.filings`' rule), so `irrelevance` and the half-weight off-rung entry can fire
+                            cell=(c.subject, c.predicate, c.value),      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)
+                            origin=claim_origin(c.chain, p.id)))     # the root of its chain, else his own (`world_q.filings`' rule): what `impugn` halves by (R2)
         if side is not None:
             out.extend(false_items(p, ctx.topic, side, ctx.fx, w.tick))
     return tuple(it for it in out if it.kind in ctx.admits)

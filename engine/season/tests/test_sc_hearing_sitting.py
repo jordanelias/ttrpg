@@ -524,7 +524,7 @@ def test_every_ending_of_a_sitting_leaves_a_durable_write():
     assert checked == 20 and held >= 10 and len(kinds) >= 3, kinds
 
 
-def test_an_adjourned_stage_is_read_by_the_next_sitting():
+def test_an_adjourned_stage_is_found_on_the_file_by_a_later_sitting():
     """A bench that adjourns (the sitting ends `budget` on the bench member's own `adjourn`) leaves ONE `adjourned` stage on the case file, under the act of the member who adjourned, and
     the Event reads `adjourned`; the next sitting of the matter on the same file finds it (`world_q.adjournments` reads 1 before it sits, and the stage stays one after it), and its own
     ending reads by its band. CONTROL: the same sitting with its last move `rule` writes no `adjourned` stage; a sitting whose item names no case file writes none either."""

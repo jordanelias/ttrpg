@@ -471,6 +471,10 @@ def test_believed_and_dealt_proofs_agree_at_case_file():
     assert seen["case_file", 4, 3] == ((4, 0), (3, 0), 3, 0.0)                         # an item he never heard: one fewer than dealt
     assert seen["case_file", 4, 0] == ((4, 0), (0, 0), 0, 0.0)
     assert seen["ledger", 4, 3][0] == (0, 0) and seen["ledger", 4, 3][1:] == ((0, 0), 0, 4.0)      # the control: no exhibit on either, the proofs he was handed
+    dealt, _believed = read("case_file", 4, 3)                                           # Phase 3: the single roll's ODDS apply the exhibits the roll applies (`roll.leverage`), not the record's bare leverage
+    roll = importlib.import_module("modules.social_contest.roll")
+    assert roll.leverage(dealt) != dealt.leverage
+    assert sigma._odds_of_input(dealt) == sigma.record_odds(dealt.pool, sigma._composed_obstacle(dealt), roll.leverage(dealt))
 
 
 def test_the_citing_variant_cites_a_held_record():
@@ -555,7 +559,7 @@ def test_a_filed_exhibit_moves_the_hearings_close_and_never_its_obstacle():
 
 def test_a_sittings_held_items_carry_their_relation_and_origin():
     """B24's close (R2): the items a sitting's hands hold (`_items_of`) carry the relation the case file's exhibits carry (`pairs`, by the one pairing pass) and the origin `world_q.filings` gives a
-    filed one (the root of the chain, else the holder; a Record itself), so the board's rules run on a computed sitting. On `build_hearing`, the accused holds the accuser's own deed cell: the two
+    filed one (the root of the chain, else the holder; a Record itself), so the board's rules run on a computed sitting. On `build_hearing`, with a third person for the topic (a person presents nothing about himself: `held_cites` on his own plea is empty, so the topic is not either party), the accused holds the accuser's own deed cell: the two
     are paired `agrees`, and shown by both sides they count for neither (agreement); and once the accused has shown an item the accuser may `impugn` its origin (offered on his menu).
     FALSIFIER: items with no `pairs` (both count) or no `origin` (no `impugn` is ever offered)."""
     from ..queries.inputs import Choice
@@ -563,16 +567,21 @@ def test_a_sittings_held_items_carry_their_relation_and_origin():
     from .test_sc_proceeding_module import _key
     P = importlib.import_module("modules.social_contest.proceeding")
     w, _d, _case = hearing(0, "case_file")
-    w.persons[G.ACCUSED].ledger.append(Claim("c_mine", G.ACCUSED, G.ACCUSED, DEED, True, 0, "firsthand", 100, "own"))
+    third = "lp_hearth_b"
+    w.persons[G.ACCUSER].ledger.append(Claim("c_deed3", G.ACCUSER, third, DEED, True, 0, "firsthand", 100, "own"))
+    w.persons[G.ACCUSED].ledger.append(Claim("c_mine", G.ACCUSED, third, DEED, True, 0, "firsthand", 100, "own"))
     act = Act(id="t:r2", actor=G.ACCUSER, verb="determine", via=G.ACCUSER_SEAT, payload={"subject": G.ACCUSED})
     row, form, _m, _i = world_q.proceeding_row(w, act)
-    inp, _card = sigma.proceeding_input(w, [G.ACCUSER, G.ACCUSED], verb="determine", subject=G.ACCUSED, topic=G.ACCUSED, effort=0, row=row, form=form)
+    inp, _card = sigma.proceeding_input(w, [G.ACCUSER, G.ACCUSED], verb="determine", subject=G.ACCUSED, topic=third, effort=0, row=row, form=form)
     me, him = (next(p for p in inp.room if p.id == x) for x in (G.ACCUSER, G.ACCUSED))
-    mine, his = (next(it for it in p.items if it.id == cid) for p, cid in ((me, "c_deed"), (him, "c_mine")))
-    assert (mine.origin, his.origin) == (G.ACCUSER, G.ACCUSED) and ("c_mine", "agrees") in mine.pairs and ("c_deed", "agrees") in his.pairs, (mine, his)
+    mine, his = (next(it for it in p.items if it.id == cid) for p, cid in ((me, "c_deed3"), (him, "c_mine")))
+    assert (mine.origin, his.origin) == (G.ACCUSER, G.ACCUSED) and ("c_mine", "agrees") in mine.pairs and ("c_deed3", "agrees") in his.pairs, (mine, his)
     assert all(it.origin == it.id for it in me.items if it.kind == "record")
     st, _b = P.exchange(inp, P.start(inp), him, Choice("present", None, "c_mine"), _key("b24_r2", 0))
     offered = [o for o in P.menu(inp, st, me, inp.rite.turns)[0] if o[3] == "impugns" and o[2] == "c_mine"]
     assert offered, "the accused's shown item has an origin to impugn"
-    st, _b = P.exchange(inp, st, me, Choice("present", None, "c_deed"), _key("b24_r2", 1))
-    assert {it.id for it, _s in st.board} == {"c_mine", "c_deed"} and not {it.id for it in P._standing(inp, st.board)} & {"c_mine", "c_deed"}, st.board
+    st, _b = P.exchange(inp, st, me, Choice("present", None, "c_deed3"), _key("b24_r2", 1))
+    assert {it.id for it, _s in st.board} == {"c_mine", "c_deed3"} and not {it.id for it in P._standing(inp, st.board)} & {"c_mine", "c_deed3"}, st.board
+    w.persons[G.ACCUSED].ledger.append(Claim("c_self", G.ACCUSED, G.ACCUSED, DEED, True, 0, "firsthand", 100, "own"))      # Phase 3: a person presents nothing about himself (his own deed would count for his side)
+    inp, _card = sigma.proceeding_input(w, [G.ACCUSER, G.ACCUSED], verb="determine", subject=G.ACCUSED, topic=G.ACCUSED, effort=0, row=row, form=form)
+    assert "c_self" not in {it.id for p in inp.room for it in p.items} and "c_deed" in {it.id for it in next(p for p in inp.room if p.id == G.ACCUSER).items}
