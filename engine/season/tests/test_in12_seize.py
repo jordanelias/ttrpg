@@ -105,7 +105,7 @@ def test_seize_is_a_resolvable_celled_verb_that_opens_hold():
     # Record-typed existence the Rung half cannot pass; 'Record or Rung' is no grammar form).
     assert row.writes == ("Tenure.until", "Tenure.since")
     assert row.emits == ("record.seized", "rung.seized")
-    assert set(row.refusals_by_clause) == {"eligibility", "authority", "write"}
+    assert set(row.refusals_by_clause) == {"eligibility", "authority", "write", "sequence"}   # B08.02: every keyed row keys `sequence`
     assert "seize" in resolvable_verbs()
     assert "seize" in _OPENERS_FROM_EFFECTS["hold"], _OPENERS_FROM_EFFECTS["hold"]
     # IN-08: celled on EVERY axis (a number or an explicit null), not declared `uncelled:`

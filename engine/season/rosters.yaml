@@ -3479,6 +3479,15 @@ rosters:
       draws (`epistemic.py::notice`) -- a Failure deposits nothing, a Partial the deed with the hand withheld, a Success as at `off`, an Overwhelming at the full confidence.
     values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
 
+  rival_precedence_arms:
+    source: >-
+      v12 B08.05 (`18_DETERMINISM_rival_acts_in_one_fold` "The resolution, decided"): *"`Fixtures rival_precedence: draw | hash`"*; ships `draw`.
+    note: >-
+      THE ARMS OF `Fixtures.rival_precedence` (`H-30`), read by `loop/resolve.py::_canonical_order_with_precedence` and refused outside this set, so a misspelt
+      arm cannot read as the control. `hash` is the CONTROL (the revert): scenes stay in the content-hash order. `draw` is SHIPPED: a rivalry group of scenes
+      is re-ordered among the positions it holds by a keyed draw per scene, the highest net first (`loop/resolve.py::_precedence_order`).
+    values: ["hash", "draw"]
+
   stock_reports:
     source: >-
       v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;
