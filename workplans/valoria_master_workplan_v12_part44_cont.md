@@ -39,7 +39,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - DEPENDS ON: V12 Batch B12a, B12a.16.
 - COST and TIER: calibration; `sonnet`, high; `opus` reads (a) and (b) (U8). LANDS IT: B98's producer; `Item: B98.25`, `[skip ci]`.
 
-### B98.26 — `APPROACH_SIGMA_K` stays 0: a ruling on the coefficient is owed · row 32; B16.08; PB §7 step 3c, §11 · BLOCKED (design: Jordan's ruling, D2-1) · HASH EQUAL
+### B98.26 — `APPROACH_SIGMA_K` stays 0: a ruling on the coefficient is owed · row 32; B16.08; PB §7 step 3c, §11 · RETIRED (B16.08 was not built, the menu was ruled not shipped: no `CFG['APPROACH_SIGMA_K']` exists, so the GATE below reads absent; `engine/season/hole_register.yaml` H-580) · HASH EQUAL
 - SOURCE: part 2 §4 row 32 ("TARGETED, with a ruling on the coefficient"; corrected here, U9); B16.08 ("`APPROACH_SIGMA_K=0.0`, tagged `[SIM-CALIBRATE]`, its comment naming B98"); `proposals/03_PC_duel_round_and_approach_B.md` (PB) §7 row 3c: "at 0, byte-identical; at the chosen value the nine-cell arming mirror is level within the control band, mean rounds are monotone in the summed lean, and the undecided share is reported"; the D-40 reconciliation: "no coefficient is chosen before the calibration batch"; §11: "Step 3c: small build plus a calibration pass on the workbench and a ruling on its coefficient". PB names no candidate value.
 - SETTING: `modules/combat/config.py` (`CFG['APPROACH_SIGMA_K']`) = 0.0, exported in `engine/engine_params/combat_engine_v1.json`.
 - TARGET, recorded: PB §7 row 3c above, on `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py`.
