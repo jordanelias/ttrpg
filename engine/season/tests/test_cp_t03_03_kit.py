@@ -44,7 +44,7 @@ from ..state.carriers import Rung, Tenure
 
 ACTOR, SUBJECT = "p_low", "p_mid"            # tiny_world: both reside at the hearth `Hh`
 N = 400                                      # the falsifier's fights (the home's n)
-HOME_RATE = 0.65                             # B15.99 re-record: 0.975 -> 0.65 (T03 §3's 97.5 % was the pre-B15 fight; read here at seeds 1-5, 7 and n = 400: 0.645-0.6775, and 0.64 at n = 4000)
+HOME_RATE = 0.65                             # B15.99 re-record: 0.975 -> 0.65 (T03 §3's 97.5 % was the pre-B15 fight; read here at seeds 1-5, 7 and n = 400: 0.645-0.6775, and 0.64 at n = 4000; B16.03's keyed rounds re-read at seeds 1-10, n = 400: 0.6225-0.68, so 0.65 stands)
 # [JUSTIFIED: a 4-sigma band on a binomial share at n = 400 and p = 0.975 (sigma 0.0078), rounded up; sampling, not a tuned figure]
 TOL = 0.04
 
@@ -239,7 +239,11 @@ def _asymmetry_holds(w):
 
 def test_a_plated_subject_fells_the_actor_at_the_homes_rate_and_the_unplated_pair_does_not(armed):
     armed_share, control = _asymmetry_holds(_world())
-    assert armed_share - control > 0.35, (armed_share, control)
+    # B16.99: 0.35 -> 0.2. Read at the keyed-round stream (B16.03), n = 400, seeds 1-10: armed 0.62-0.68, control 0.32-0.37, the gap 0.27-0.35
+    # (mean 0.315, sd 0.03 -- the binomial sd of a difference of two n = 400 shares is 0.034). The old 0.35 sat AT the expected gap
+    # (0.65 - 0.34 = 0.31 at the home's rate and the bare pair's), so it passed or failed on the seed's luck. A seam that drops the plate has a
+    # gap of 0 (the pair is then the control): 0.2 is six sd under the expected gap and six over a dropped plate.
+    assert armed_share - control > 0.2, (armed_share, control)
 
 
 def test_combat_input_carries_a_kit_per_party_in_claimants_order(armed):

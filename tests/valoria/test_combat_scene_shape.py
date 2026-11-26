@@ -146,25 +146,26 @@ def test_a_seed_1003_fight_carries_its_shape():
     """THE S1 PROBE RESTATED (U3 §6.2): one `fight` at world seed 1003, `p_low` on `p_mid`, through RESOLVE, ENCOUNTER and
     WITNESS. The scratch probe (`pS_season.py`, at 826b747) read 8 rounds, 5 wounds; its act id is not in the repository and
     the scene is keyed on the act id (the seam's seed is `H(world_seed, tick, actor, "contest:<prize>:<act id>")`), so the act
-    id here, `x61` (was `x43`, and `x24` before the keyed stream, B06; B15.99 re-pick: the calibration batch's fight
-    draws no scene at `x0`..`x60` that holds the precondition), is the first of a scan (`s1`, then `x0`..`x60`) whose scene holds the precondition: several rounds,
-    `p_mid` felled, `p_low` standing and first to draw blood, the lead changing twice (5 rounds here; the 8 of the probe's
-    scene is not reachable in the scan, and the test reads rounds, not 8). The numbers below are READ AT THIS TREE from
+    id here, `x123` (was `x61`, `x43`, and `x24` before the keyed stream, B06; B15.99 re-pick, twice: B16.03 drew each round from
+    its own key, so every seeded fight is a different fight), is the first of a scan (`s1`, then `x0`..`x199`) whose scene holds the
+    precondition with FOUR OR MORE ROUNDS: `p_mid` felled, `p_low` standing and first to draw blood, the lead changing twice, and
+    a bystander witnessing the death (`x17`, 3 rounds, is the first without the round count; `x125` holds 7; the 8 of the probe's
+    scene is not reachable, and the test reads rounds, not 8). The numbers below are READ AT THIS TREE from
     the trace of that scene, folded by hand in the comments.
 
     The success Events (`person.died`, `body.changed`, `capability.raised`) each carry the scene's Observations once;
     `fight.declared` is RESOLVE's, written before any scene is fought, and carries none."""
-    w, d, declared, fought, out = _fought("x61")
+    w, d, declared, fought, out = _fought("x123")
     assert [e.kind for e in declared] == ["fight.declared"]
     assert [e.kind for e in fought] == ["person.died", "body.changed", "capability.raised"], [e.kind for e in fought]
-    # the trace, folded by hand (read at `x61`; was `x43`'s 4 rounds, cums 13/26/29/49, before B15.99, and `x24`'s 8 rounds
-    # before B06): 5 round_starts; wounds p_low->p_mid 16 (cum 16), p_mid->p_low 19 (cum 19), p_low->p_mid 16 (cum 32),
-    # p_low->p_mid 16 (cum 48, felled); Health 40 each: p_low ahead (24/40 against 40/40), then p_mid ahead (21/40 against
-    # 24/40), then p_low ahead again (8/40 against 21/40): 2 changes
-    assert sum(1 for e in out.trace if e["kind"] == "round_start") == 5
+    # the trace, folded by hand (read at `x123`; was `x61`'s 5 rounds, cums 16/19/32/48, before B16.03, and `x24`'s 8 rounds
+    # before B06): 4 round_starts; wounds p_low->p_mid cum 9, p_mid->p_low cum 14, p_low->p_mid cum 29, p_low->p_mid cum 46
+    # (felled); Health 40 each: p_low ahead (p_mid 31/40 against 40/40), then p_mid ahead (p_low 26/40 = .65 against p_mid
+    # 31/40 = .775), then p_low ahead again (p_mid 11/40 against p_low 26/40): 2 changes
+    assert sum(1 for e in out.trace if e["kind"] == "round_start") == 4
     assert [(e["by"], e["cumulative"]) for e in out.trace if e["kind"] == "wound"] == [
-        ("p_low", 16), ("p_mid", 19), ("p_low", 32), ("p_low", 48)]
-    want = {("p_low", "blows_landed"): 3, ("p_mid", "blows_landed"): 1, ("p_low", "fight_rounds"): 5,
+        ("p_low", 9), ("p_mid", 14), ("p_low", 29), ("p_low", 46)]
+    want = {("p_low", "blows_landed"): 3, ("p_mid", "blows_landed"): 1, ("p_low", "fight_rounds"): 4,
             ("p_low", "first_blood"): True, ("p_low", "lead_changes"): 2}
     assert _shape_obs(declared) == {"fight.declared": []}
     checked = 0
@@ -176,11 +177,11 @@ def test_a_seed_1003_fight_carries_its_shape():
     assert checked == 3
     assert sum(v for (pid, p), v in want.items() if p == "blows_landed") == 4
     # the seam's returned shape is the same numbers, as a dict (the way `beat` and `surrender` ride the result)
-    assert out.shape == SceneShape(rounds=5, blows={"p_low": 3, "p_mid": 1}, first_blood="p_low", lead_changes=2,
-                                   nearest={"p_low": 21, "p_mid": 0})
-    # CONTROL, a scene that took no blow of one party and no lead change: the shorter scene `x4` (1 round, 3 blows by p_low;
-    # B15.99 re-pick, was `x17` at 1 round and 2 blows, and `s1` before the keyed stream (B06))
-    _w, _d, _dec, fought_s1, out_s1 = _fought("x4")
+    assert out.shape == SceneShape(rounds=4, blows={"p_low": 3, "p_mid": 1}, first_blood="p_low", lead_changes=2,
+                                   nearest={"p_low": 26, "p_mid": 0})
+    # CONTROL, a scene that took no blow of one party and no lead change: the shorter scene `x34` (1 round, 3 blows by p_low;
+    # B16.03 re-pick, was `x4` (B15.99), `x17` at 1 round and 2 blows, and `s1` before the keyed stream (B06))
+    _w, _d, _dec, fought_s1, out_s1 = _fought("x34")
     assert out_s1.shape.rounds == 1 and out_s1.shape.blows == {"p_low": 3, "p_mid": 0} and out_s1.shape.lead_changes == 0
     for e in fought_s1:
         got = {(o.subject, o.predicate): o.value for o in _shape_obs([e])[e.kind]}
@@ -230,7 +231,7 @@ def test_bystanders_hold_no_scene_shape_under_the_shipped_deposit_mode():
     `(first_blood-holder, "first_blood", True)` is the actor's, and witnesses of the death admitted by the other channels hold
     none. The entry's constraint that `first_blood` reach only channels whose `observation_terms.supplied_by` includes `who`
     is NOT enforced by any mechanism in this tree and is not asserted: see the receipt. Read on the real WITNESS."""
-    w, d, declared, fought, out = _fought("x61", fan="total", witness=True)     # was `x24` (B06), then `x43` (B15.99): see the shape test
+    w, d, declared, fought, out = _fought("x123", fan="total", witness=True)     # was `x24` (B06), `x43` (B15.99), `x61`: see the shape test
     holders = {p.id for p in w.persons.values()
                if any(c.predicate == "first_blood" and c.subject == "p_low" and c.value is True for c in p.ledger)}
     assert holders == {"p_low"}, holders
@@ -241,7 +242,7 @@ def test_bystanders_hold_no_scene_shape_under_the_shipped_deposit_mode():
         assert not [c for c in w.persons[pid].ledger if c.predicate in ("first_blood", "blows_landed", "fight_rounds", "lead_changes")], pid
     # and the actor holds the whole shape: the counts and the name
     mine = {(c.subject, c.predicate): c.value for c in w.persons["p_low"].ledger if c.predicate in SHAPE_PREDICATES}
-    assert mine == {("p_low", "blows_landed"): 3, ("p_mid", "blows_landed"): 1, ("p_low", "fight_rounds"): 5,
+    assert mine == {("p_low", "blows_landed"): 3, ("p_mid", "blows_landed"): 1, ("p_low", "fight_rounds"): 4,
                     ("p_low", "first_blood"): True, ("p_low", "lead_changes"): 2}, mine
 
 
@@ -250,21 +251,21 @@ def test_the_chronicle_line_of_a_fight_names_its_shape():
     `(n rounds, first blood X, k lead changes)`, X the person's name as the line names its actor; a scene in which no blow
     landed says no first blood was drawn; an act whose Events carry no `fight_rounds` gains nothing."""
     from engine.season.harness import chronicle as CH
-    w, d, declared, fought, out = _fought("x61")      # was `x24` (B06), then `x43` (B15.99): see the shape test
-    act = d.act_of["x61"] if "x61" in d.act_of else next(iter(d.act_of.values()))
+    w, d, declared, fought, out = _fought("x123")      # was `x24` (B06), `x43` (B15.99), `x61`: see the shape test
+    act = d.act_of["x123"] if "x123" in d.act_of else next(iter(d.act_of.values()))
     log = declared + fought
     name = w.persons["p_low"].name
-    assert CH._shapes(log, d.act_of, w.persons) == {act.id: f"(5 rounds, first blood {name}, 2 lead changes)"}
+    assert CH._shapes(log, d.act_of, w.persons) == {act.id: f"(4 rounds, first blood {name}, 2 lead changes)"}
     rows = {act.id: {"depth": 1, "cross": [], "season": 0, "actor": "p_low"}}
     ls = CH.lines(log, d.act_of, rows, w.persons)
-    assert ls[0]["shape"] == f"(5 rounds, first blood {name}, 2 lead changes)"
-    assert f"(5 rounds, first blood {name}, 2 lead changes) | opens the chain" in CH.render(log, d.act_of, rows, w.persons)
+    assert ls[0]["shape"] == f"(4 rounds, first blood {name}, 2 lead changes)"
+    assert f"(4 rounds, first blood {name}, 2 lead changes) | opens the chain" in CH.render(log, d.act_of, rows, w.persons)
     # no blow: the Events a scene with `first_blood` withheld carries read `no first blood`; and an act with no `fight_rounds` gains nothing
     bare = [e for e in declared]
     assert CH._shapes(bare, d.act_of, w.persons) == {}
     assert CH.lines(bare, d.act_of, rows, w.persons)[0]["shape"] == ""
     quiet = [dataclasses.replace(e, observed=tuple(o for o in e.observed if o.predicate != "first_blood")) for e in fought]
-    assert CH._shapes(quiet, d.act_of, w.persons) == {act.id: "(5 rounds, no first blood, 2 lead changes)"}
+    assert CH._shapes(quiet, d.act_of, w.persons) == {act.id: "(4 rounds, no first blood, 2 lead changes)"}
 
 
 # ---------------------------------------------------------------------------------------------------------------------
