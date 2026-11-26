@@ -180,6 +180,8 @@ def _combatants(inp: PersonalCombatInput, cfg: dict, states: tuple = (DuelState(
     """The record's two Combatants, each carrying its `DuelState`: built from the typed input, re-derived on `cfg` (`Combatant.rederive`, the one
     derivation path), then the state laid on -- damage, Stamina and Concentration (`None` is the derived maximum, a fight's start), poise and the
     weapon in hand (`None` is the kit's own); initiative is the round's to take. A fresh pair each call: nothing of an earlier pair survives."""
+    if len(states) != 2:
+        raise ValueError(f"a round takes one DuelState per party, in claimants order: got {len(states)}")
     a_id, b_id = inp.claimants
     a_end, b_end = inp.ends
     # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record
@@ -319,7 +321,7 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     the default) is the engine's own engage-every-round loop exactly.
 
     `cfg` (a config overlay) and `max_rounds` (a round cap) are the WORKBENCH's (B14.11); the host
-    never passes them, and `None` is the engine's own `CFG` and round cap. """
+    never passes them, and `None` is the engine's own `CFG` and round cap."""
     a_id, b_id = inp.claimants
     _check_terms(inp.terms)
     cfg_ = _fight_cfg(inp, cfg) or CFG
