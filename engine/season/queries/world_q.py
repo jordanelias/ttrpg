@@ -5163,6 +5163,13 @@ class WorldReader:
                 return ()
             return tuple(Observation(subject, f"held_by:{h}", True)
                          for h in sorted({t.subject for t in w.tenures if t.kind == "hold" and t.object == subject and t.live}))
+        if read == "holds":
+            # B24.34 (ARCS item 4): WHO HAS A RECORD IN HIS KEEPING, said of the holder -- `(holder, holds, record)` per person on a live `hold` Tenure over it
+            # (a Record's holder is that Tenure, `state/carriers.py::Record` carries no holder field), as `hold_force` reads it. A Record only: a Rung's holders are `held_by`'s.
+            if subject not in w.records:
+                return ()
+            return tuple(Observation(h, "holds", subject)
+                         for h in sorted({t.subject for t in w.tenures if t.kind == "hold" and t.object == subject and t.live and t.subject in w.persons}))
         if read == "content":
             rec = w.records.get(subject)
             said = None if rec is None else content_value(rec.subject_matter)

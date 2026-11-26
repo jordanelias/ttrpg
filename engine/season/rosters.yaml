@@ -4153,10 +4153,14 @@ rosters:
       thing is the sight a good look gives), a number through the lossy-copy rule (`loop/witness.py::_told_value`); at `Failure` -- no row --
       none, and the reads the row's own cell made (the gating reads) are deposited at every band and on a refusal, as before.
       [ASSUMPTION; medium; Jordan to correct; revert: every look read at every finding band, `held_by` included.]
+      B24.34 (ARCS item 4; [ASSUMPTION; medium; Jordan to correct; revert: drop `holds` from the three bands and from `look_reads`]): `holds` -- WHO HAS A
+      RECORD IN HIS KEEPING, as a claim about the holder -- is listed at EVERY finding band, `Partial` included: the finder learns the person even
+      where `held_by`, the same fact said of the Record, is withheld. That is two bands for one fact, kept because ARCS's gate reads `Partial` and the
+      B11.71 withholding is its own assumption.
     bands:
-      Overwhelming: [stratum, marks, who, condition, stores, held_by, content]
-      Success:      [stratum, marks, who, condition, stores, held_by, content]
-      Partial:      [stratum, marks, condition, stores, content]
+      Overwhelming: [stratum, marks, who, condition, stores, held_by, content, holds]
+      Success:      [stratum, marks, who, condition, stores, held_by, content, holds]
+      Partial:      [stratum, marks, condition, stores, content, holds]
 
   look_reads:
     source: >-
@@ -4169,7 +4173,11 @@ rosters:
       Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is
       `queries/world_q.py::WorldReader.look`, which dispatches on exactly these members and answers nothing for a subject of another class; a
       member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load.
-    values: [condition, stores, held_by, content]
+      B24.34 (ARCS item 4; `12_ARCS_cited_evidence` named an `observation_terms` member `holder`, but `observation_terms` IS `epistemic.Seen`'s struct, a
+      mask over a `seen` claim about a trail, and a look at a Record is not a trail; this roster is the one a look is listed in): `holds` of a Record
+      (`(holder, holds, record)` for each live `hold` a PERSON has over it, the claim about the holder, held WITHOUT taking the hold). Named for its predicate, as
+      every member is. A look never teaches a man a claim about himself (`loop/witness.py`).
+    values: [condition, stores, held_by, content, holds]
 
   covert_kinds:
     source: >-

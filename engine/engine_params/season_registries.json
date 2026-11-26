@@ -5178,7 +5178,7 @@
         "finding_terms": {
           "source": "v9 FI-03 (`ED-FI-0002`): what a graded finding learns of a trail, by its degree. The terms are `observation_terms`' (`epistemic.Seen`'s fields): the finder holds what a witness of the act would have held, through the same deposit shapes, masked to these terms.",
           "cite": "ED-FI-0002",
-          "note": "[ASSUMPTION; medium; Jordan to correct; revert: every finding band shows the hand (the partial band gains `who`)]. KEYED BY DEGREE BAND (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`, the one owner; a key off the ladder is refused at load, `data/rosters.py::_load_finding_terms`) and valued in `observation_terms` members (a term outside them is refused). A band with no row uncovers nothing: the failing band has none, and an ungraded finding has no band. In words: a partial finding learns THAT the deed was done to the thing, and a better one also learns WHOSE HAND did it. \u26a0 A PARTIAL FINDING WITHHOLDS `who` FROM THE FINDER (an inference is less than a sight) -- both the `seen` claim's `who` term and the event-kind claim anchored on the actor. A WITNESS'S anchor claim is NOT masked: a witness admitted by any channel holds `(actor, kind, True)` under `claim_subject_rule: both` whatever its channel shows of `who`. So the two quantities differ BY DESIGN -- a finder's knowledge of a hand is graded, a witness's event-kind claim is not. `why` is never shown to a finder: no band lists it (`epistemic._term_why`'s antecedent is a witness's). The better bands are identical: depth has no carrier (FI-01's own note on the finding bands). \u26a0 `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster scan), so the ladder would have read as declared twice. B11.71 (`08_FI_03` \u00a72, FRES \u00a78): THE SAME ROW ALSO LISTS WHICH `look_reads` A BAND DEPOSITS, so one band-keyed table owns what a finding shows -- of a trail (the terms) and of what is looked at (the reads), never two tables. A row lists a read by its `look_reads` name; a verb row's `observes:` says WHAT IS LOOKED AT and never a band, and `loop/witness.py` deposits an observed read only where the Event's band lists its stem. In words: a look at `Overwhelming` or `Success` teaches every read; at `Partial` all but `held_by` (who holds a thing is the sight a good look gives), a number through the lossy-copy rule (`loop/witness.py::_told_value`); at `Failure` -- no row -- none, and the reads the row's own cell made (the gating reads) are deposited at every band and on a refusal, as before. [ASSUMPTION; medium; Jordan to correct; revert: every look read at every finding band, `held_by` included.]",
+          "note": "[ASSUMPTION; medium; Jordan to correct; revert: every finding band shows the hand (the partial band gains `who`)]. KEYED BY DEGREE BAND (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`, the one owner; a key off the ladder is refused at load, `data/rosters.py::_load_finding_terms`) and valued in `observation_terms` members (a term outside them is refused). A band with no row uncovers nothing: the failing band has none, and an ungraded finding has no band. In words: a partial finding learns THAT the deed was done to the thing, and a better one also learns WHOSE HAND did it. \u26a0 A PARTIAL FINDING WITHHOLDS `who` FROM THE FINDER (an inference is less than a sight) -- both the `seen` claim's `who` term and the event-kind claim anchored on the actor. A WITNESS'S anchor claim is NOT masked: a witness admitted by any channel holds `(actor, kind, True)` under `claim_subject_rule: both` whatever its channel shows of `who`. So the two quantities differ BY DESIGN -- a finder's knowledge of a hand is graded, a witness's event-kind claim is not. `why` is never shown to a finder: no band lists it (`epistemic._term_why`'s antecedent is a witness's). The better bands are identical: depth has no carrier (FI-01's own note on the finding bands). \u26a0 `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster scan), so the ladder would have read as declared twice. B11.71 (`08_FI_03` \u00a72, FRES \u00a78): THE SAME ROW ALSO LISTS WHICH `look_reads` A BAND DEPOSITS, so one band-keyed table owns what a finding shows -- of a trail (the terms) and of what is looked at (the reads), never two tables. A row lists a read by its `look_reads` name; a verb row's `observes:` says WHAT IS LOOKED AT and never a band, and `loop/witness.py` deposits an observed read only where the Event's band lists its stem. In words: a look at `Overwhelming` or `Success` teaches every read; at `Partial` all but `held_by` (who holds a thing is the sight a good look gives), a number through the lossy-copy rule (`loop/witness.py::_told_value`); at `Failure` -- no row -- none, and the reads the row's own cell made (the gating reads) are deposited at every band and on a refusal, as before. [ASSUMPTION; medium; Jordan to correct; revert: every look read at every finding band, `held_by` included.] B24.34 (ARCS item 4; [ASSUMPTION; medium; Jordan to correct; revert: drop `holds` from the three bands and from `look_reads`]): `holds` -- WHO HAS A RECORD IN HIS KEEPING, as a claim about the holder -- is listed at EVERY finding band, `Partial` included: the finder learns the person even where `held_by`, the same fact said of the Record, is withheld. That is two bands for one fact, kept because ARCS's gate reads `Partial` and the B11.71 withholding is its own assumption.",
           "bands": {
             "Overwhelming": [
               "stratum",
@@ -5187,7 +5187,8 @@
               "condition",
               "stores",
               "held_by",
-              "content"
+              "content",
+              "holds"
             ],
             "Success": [
               "stratum",
@@ -5196,26 +5197,29 @@
               "condition",
               "stores",
               "held_by",
-              "content"
+              "content",
+              "holds"
             ],
             "Partial": [
               "stratum",
               "marks",
               "condition",
               "stores",
-              "content"
+              "content",
+              "holds"
             ]
           }
         },
         "look_reads": {
           "source": "B11.71 (`08_FI_03` \u00a72, FRES \u00a78; C-24, R-35, H-218): THE READS A LOOK MAY TAKE -- the closed set a verb row's `observes:` entry names (`data/verbs.py::Look.read`) and a `finding_terms` band row lists. A read is named by the predicate stem it deposits under.",
           "cite": "08_FI_03 \u00a72; U5c_FI_residue \u00a78",
-          "note": "`condition` of a Site (`(site, condition, n)`); `stores` of a Rung (`(rung, stores:<kind>, n)` for each kind it holds; a Site's look reads the rung it stands in); `held_by` of a Rung or a Record (`(thing, held_by:<holder>, True)` for each live `hold`); `content` of a Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is `queries/world_q.py::WorldReader.look`, which dispatches on exactly these members and answers nothing for a subject of another class; a member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load.",
+          "note": "`condition` of a Site (`(site, condition, n)`); `stores` of a Rung (`(rung, stores:<kind>, n)` for each kind it holds; a Site's look reads the rung it stands in); `held_by` of a Rung or a Record (`(thing, held_by:<holder>, True)` for each live `hold`); `content` of a Record (`(record, content:<kind>, <what it says>)`, the claim a holder's deposit mints, read without taking the hold). The answerer is `queries/world_q.py::WorldReader.look`, which dispatches on exactly these members and answers nothing for a subject of another class; a member no row's `observes:` names is a read nothing takes. Disjoint from `observation_terms` (the trail's terms), refused at load. B24.34 (ARCS item 4; `12_ARCS_cited_evidence` named an `observation_terms` member `holder`, but `observation_terms` IS `epistemic.Seen`'s struct, a mask over a `seen` claim about a trail, and a look at a Record is not a trail; this roster is the one a look is listed in): `holds` of a Record (`(holder, holds, record)` for each live `hold` a PERSON has over it, the claim about the holder, held WITHOUT taking the hold). Named for its predicate, as every member is. A look never teaches a man a claim about himself (`loop/witness.py`).",
           "values": [
             "condition",
             "stores",
             "held_by",
-            "content"
+            "content",
+            "holds"
           ]
         },
         "covert_kinds": {
@@ -10001,9 +10005,13 @@
             {
               "of": "subject",
               "read": "content"
+            },
+            {
+              "of": "subject",
+              "read": "holds"
             }
           ],
-          "observes_note": "B11.71 (`08_FI_03` \u00a72, FRES \u00a78; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::WorldReader.look`, through `.looks`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial).",
+          "observes_note": "B11.71 (`08_FI_03` \u00a72, FRES \u00a78; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::WorldReader.look`, through `.looks`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial). B24.34 (ARCS item 4): AND WHO HOLDS IT, said of the holder -- `(holder, holds, record)`, at every finding band (`look_reads`' `holds`).",
           "source": "investigation_systems_v30.md:217; fieldwork_v30.md:295 (\u00a74.2), :319 (\u00a74.3)"
         },
         {

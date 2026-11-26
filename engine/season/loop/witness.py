@@ -1041,6 +1041,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 if str(o.predicate).partition(":")[0] in looks:
                     if str(o.predicate).partition(":")[0] not in FINDING_TERMS.get(e.degree, ()):
                         continue
+                    if o.subject == pid:
+                        continue      # B24.34: a look teaches a man no claim about himself (only `holds` names a person: a holder who looks at what he holds)
                     value = _told_value(w, pid, e, o, H(w.world_seed, w.tick, pid, f"look:{e.id}:{o.subject}:{o.predicate}"),
                                         str(o.predicate).partition(":")[0])
                 if (pid, o.subject, o.predicate) in ended_cells:

@@ -2190,7 +2190,8 @@ verbs:
     observes:
       - {of: subject, read: held_by}
       - {of: subject, read: content}
-    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::WorldReader.look`, through `.looks`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial)."
+      - {of: subject, read: holds}
+    observes_note: "B11.71 (`08_FI_03` §2, FRES §8; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): WHAT CONSULTING A RECORD TEACHES -- who holds it and what it says as its holder reads it (the `content:<kind>` claim), WITHOUT taking the hold (`queries/world_q.py::WorldReader.look`, through `.looks`). Non-gating; names what is looked at and never a band (`rosters.yaml: finding_terms`: no `content:` claim at Failure, no `held_by` at Partial). B24.34 (ARCS item 4): AND WHO HOLDS IT, said of the holder -- `(holder, holds, record)`, at every finding band (`look_reads`' `holds`)."
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
     public:      false
