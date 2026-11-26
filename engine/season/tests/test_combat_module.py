@@ -763,6 +763,13 @@ def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
     assert checked == 300 and deaths >= 150, (checked, deaths)
 
 
+def _round_from_key(key, r):
+    """ROUND `r`'S DRAW, the law spelled out of the engine's own primitives and NOT through the module's `round_draw` (B16.03, PB 2, A-30): the fight's key is
+    `H2(<the Draw's key>, "fight:0")` (a fresh `Draw` sits at position 0 when the fight takes its one uniform), the round's `H2(<fight key>, "round:<r>")`. A test
+    that called the module's own functions would agree with any `round_draw` that ignored `r`; this one does not."""
+    return draw.seeded(draw.H2(draw.H2(key, "fight:0"), f"round:{r}"))
+
+
 def _round_inp(seed, ends=(4, 4), kits=(), terms="death"):
     from ..queries.inputs import PersonalCombatInput
     return PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, kits=kits, terms=terms,
@@ -772,11 +779,9 @@ def _round_inp(seed, ends=(4, 4), kits=(), terms="death"):
 def _fight_by_rounds(inp, rng, fight_round, limit=12):
     """The rounds of one fight called by hand, the `DuelState`s and the measure threaded in this frame: yields each round's outcome."""
     from ..queries.inputs import DuelRoundInput, DuelState
-    from modules.combat import wrapper
     states, prev_closed = (DuelState(), DuelState()), False
-    fkey = wrapper.fight_draw(draw.seeded(rng.key))
     for r in range(1, limit + 1):
-        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), wrapper.round_draw(fkey, r))
+        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), _round_from_key(rng.key, r))
         yield out
         states, prev_closed = out.states, out.closed
         if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
