@@ -388,13 +388,14 @@ class SeasonDriver:
         # token, no Event, no write, and the run does not halt on it; `world_q.endings_reached` says
         # what an ending is and why the realm as built reaches none.
         endings = world_q.endings_reached(w)
+        near = world_q.endings_near(w)        # B12a.12: the rows the ending draw read Partial; `[]` at the control, a read like `endings`
         w.tick += 1
         # `rounds` (the lap count; the output key keeps its string) IS REPORTED because the tick is otherwise invisible in the artifacts: the
         # summary's `acts/events/deposits` are also what a one-pass season produces. It is a
         # SEASON-LEVEL FIGURE and no Event carries a lap (`D-21`: the lap index is a driver
         # local; `Claim.lap` is the one carrier field, because `questions_for`'s `since` reads it).
         return dict(acts=n_acts, events=n_events, rounds=laps,
-                    deposits=deposits, hash=w.content_hash(), endings=endings)
+                    deposits=deposits, hash=w.content_hash(), endings=endings, near=near)
 
 # ---------------------------------------------------------------------------
 # THE SEVEN STEPS, BOUND BACK ONTO THE CLASS (unit L5, ED-IN-0206; the seventh, `encounter`,

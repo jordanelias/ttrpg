@@ -441,7 +441,7 @@ rows:
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1"
-    emits:   "`condition.worn` · `condition.band_crossed`"
+    emits:   "`condition.worn` · `condition.band_crossed` · `site.ruptured`"
   - kind:    "Site"
     field:   "exists"
     steps:   [RES]

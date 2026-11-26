@@ -23,6 +23,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import DETAIN_KIND
 from ..data.verbs import VERB_TABLE
 from ..decision import assemble
@@ -144,12 +145,16 @@ def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_f
 def test_rem52s_fall_is_tended_by_30_of_37_while_the_seat_news_floods_oblige():
     """THE REALM READING, PINNED (seed 0, one season), AS IT NOW STANDS: REM-52's hunger lowers every short cohort's body in MATTER,
     `wounded_with` stamps each for himself below his ceiling, and `_eff_tend` restores the whole headroom to the persons who choose it --
-    30 of the 37 short, each named by a `body.tended`, every one tended whole, none tended who was not short. THE SIX THE OLD READING TENDED
+    30 of the 37 short (29 since B12a.99, at the `uniform` arm: the pin below), each named by a `body.tended`, every one tended whole, none tended who was not short. THE SIX THE OLD READING TENDED
     ARE A REGRESSION THIS PIN RECORDS, NOT A FINDING: (37, 37) -> (37, 31) at v12 B11.08 (and (37, 30) at B11.14), whose `seed_seat_news` tells every person of every
     seat of his realm, so `seats_named` stamps ~31 Offices on his question and `oblige` forms on them for everyone (`hole_register.yaml`'s
     B11.08 row); the cohorts spend the season on it. The mechanism itself (`wounded_with`, `_eff_tend`'s whole-headroom magnitude, CP-T10-04's
     `tend_share`, unbuilt) is the hand-built tests of this file, unmoved."""
-    w = build_realm(0)
+    # B12a.99: the shipped realm leaves nobody short at season 0 (B12a.55's `granary_seasons` 4: every treasury is stocked), so the fall this test reads cannot be
+    # observed there; the world is pinned to the `uniform` arm (every settlement a harbour and a seam, every larder empty at build, so all 37 cohorts are short at
+    # the first draw), the arm the (37, 30) was measured at, as B12a.54 pinned its sibling tests (`test_hunger.py`'s `UNIFORM`). The arm is set at call time so the
+    # `flat_fold` mark's `task_draw_arm: off` is kept.
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     run(1, 0, w=w)
     short = {pid for pid in w._subsistence_shortfall if pid in w.persons}
     tended = {c.subject for e in w.log if e.kind == "body.tended" for c in e.changes}
@@ -165,4 +170,7 @@ def test_rem52s_fall_is_tended_by_30_of_37_while_the_seat_news_floods_oblige():
     # v12 B11.08 re-pin, SAID PLAINLY: (37, 37) -> (37, 31); the cause is the docstring's.
     # v12 B11.14 (one more cohort no longer tends, attributed to B11.14 by the B11.99 reading):
     # (37, 31) -> (37, 30). A measured pin moved by a declared mover, re-recorded here; the six lost to the flood stand.
-    assert (len(short), len(tended)) == (37, 30)
+    # B12a.99 re-pin, at the `uniform` arm: (37, 30) -> (37, 29). The mover is B12a.62's `hunger_severity_draw` flip (False -> True): one cohort's draw differs where a cohort
+    # is short (read at `PYTHONHASHSEED=0`, one season, seed 0, `task_draw_arm: off`: the flip alone, `False` reads (37, 30), `True` (37, 29); `larder_walk` `first` or `through` reads the
+    # same). B12a.15 (a same-place `move` refused) and the other movers of the batch leave (37, 30) at this arm (its reading on B12a.15's tree and on B12a.55's: 37, 30).
+    assert (len(short), len(tended)) == (37, 29)

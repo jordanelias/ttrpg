@@ -87,7 +87,7 @@ systems:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."
   territories:
     geographic_data: systems/settlements/valoria_geography_v30.yaml
-    canonical_sha__systems__settlements__valoria_geography_v30_yaml: "53e92edae79ca49b5543141bbebddb2fbb5f7b5c"
+    canonical_sha__systems__settlements__valoria_geography_v30_yaml: "7c63daf5d1f21c5ab6d159e3fd05f1738b803cbb"
     geographic_map: systems/settlements/valoria_map_v30.svg
     canonical_sha__systems__settlements__valoria_map_v30_svg: "570bde5ccfb7cd0cada8f326cbb79360b47e6b0b"
   mass_combat:

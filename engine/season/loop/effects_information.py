@@ -1205,8 +1205,8 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
 
     THE LICENCE IS OCCUPATION, read at the effect as `raze`'s will be (#453 §10.4 steps 8 and 11): the
     exercised seat's FACTION (`faction_prop_id` of its display faction) `mustered` at the settlement
-    (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction
-    (`holder_faction_of`). It asks nothing of the defenders: an opposed `Won` that removed nobody still
+    (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction or by
+    nobody (`holder_faction_of`). It asks nothing of the defenders: an opposed `Won` that removed nobody still
     leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
     (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
       * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
@@ -1216,16 +1216,19 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
         hold) [ASSUMPTION; medium; Jordan to correct; revert: drop the decline];
       * the seat's faction does not occupy it (`world_q.occupies`: mustered beneath a settlement, standing AT a
         territory, or holding the territory a settlement is held through);
-      * nobody holds the settlement (H-166: who holds an unheld place is unruled) or the seat's own
-        faction already does (nothing to take);
+      * the seat's own faction already holds it (nothing to take). A PLACE NOBODY HOLDS IS NO LONGER A
+        DECLINE (`09_WR_world_motion` edit 2; it was H-166's *who holds an unheld place is unruled*): occupation
+        alone licenses it, `occupying_faction(..., unheld=True)`, the one place the unheld admission lives
+        (`raze` keeps its decline, the helper's default). With no hold to close the write is the opening alone,
+        `T-m`; `held` is `None` and `_take_hold` closes nothing;
       * the actor already holds it, or the closure's holder is one the seat may not seize from
         (`may_seize` with the rung as the place, so an act the precondition admitted is never killed
-        at the gate).
+        at the gate; asked only when `hold_force` returns a holder to seize from).
     ⚠ THE RUNG HALF'S FORMATION AND EXECUTION LICENCES DIFFER: it forms person-side wherever a held
     dispensation's `terms` names the rung (`rosters.yaml: warrant_sourced`; `test_season_shape.py` plants
     one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
     of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
-    mine = occupying_faction(w, a.via, rid)
+    mine = occupying_faction(w, a.via, rid, unheld=True)
     if mine is None:
         return NO_CHANGE
     # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is

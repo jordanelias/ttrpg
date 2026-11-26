@@ -24,6 +24,7 @@ import pytest
 from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
 from ..boot.realm import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..data.requires import CELL_STEMS, REQUIRES_STEMS, WORLD_ONLY_STEMS, UNKNOWN
 from ..data.verbs import VERB_TABLE
@@ -168,7 +169,10 @@ def _individual_reads(e):
 def _realm_two_seasons(seed):
     """Two seasons of the shipped chooser on `build_realm(seed)`. Returns `(how many `individual` reads there were, how
     many Events a False one refused)`."""
-    w = build_realm(seed)
+    # B12a.99: pinned to the `uniform` endowment arm. The shipped `ground` (B12a.54) removes the refusal this seed was picked for: seeds 1..16, two seasons, under the reverts below,
+    # read 0 refusals on `individual` at `ground` (145 to 203 `individual` reads each); at `uniform` seed 10 reads 1 of 90 (`uniform` seeds no granary: `boot/realm.py` seeds stores under `ground` only; at `ground`
+    # with `granary_seasons` 0 seed 10 still reads 0 of 89, so B12a.54 is the mover and B12a.55 is not). Main (`842026ea3`, before the batch) read seed 10 at 2 of 150. Each seed read in a fresh process, `PYTHONHASHSEED=0`.
+    w = build_realm(seed, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     # v10 CP-T03-09: `capture` is WITHHELD FROM THE CHOOSER HERE. It forms for the seats granting `dispatch` and moves every
@@ -189,7 +193,7 @@ def _realm_two_seasons(seed):
 
 
 def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts(monkeypatch):
-    """Seed 11 (re-picked at B24.99; seed 10 at the B11 close; seed 2 since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
+    """Seed 10 (re-picked at the B24.99 merge with main; seed 11 at B24.99 before it; seed 10 at the B11 close; seed 2 since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
     The same seed now refuses that act on `individual` -- the mover the position declares; the realm's hash is
     `_realm_goldens.py`'s. Read with CR-87 at its revert (CR-87's contexts leave no `fight` formed in these realms, so the
     conjunct would never be read) and (v11) CP-T03-04's formation mover at its revert, so the seed forms the cohort-party
@@ -210,5 +214,7 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     # 0,0,0,0,0,0,0,0,0,1,1,0, so 10 is the first (seed 7 reads 0: 202 `individual` reads, none refused)
     # RE-PICKED AT B24.99 (B24's movers moved seed 10 off it; the same five reverts, `PYTHONHASHSEED=0`, two seasons): seeds 1..12 refused
     # 0,0,0,0,0,0,0,0,0,0,1,0, so 11 is the first (seed 10 reads 0: 144 `individual` reads, none refused)
-    reads, refused_on_it = _realm_two_seasons(11)
-    assert refused_on_it > 0, "no act was refused on `individual` at seed 11 (re-picked from 10)"
+    # RE-PICKED AT THE B24.99 MERGE WITH MAIN (B08, B12a and B24 together; the same five reverts, `PYTHONHASHSEED=0`, two seasons): seeds 1..14 refused
+    # 0,0,0,0,0,0,0,0,0,4,0,0,0,0, so 10 is the first and the only one (seed 11 reads 0: 99 `individual` reads, none refused)
+    reads, refused_on_it = _realm_two_seasons(10)
+    assert refused_on_it > 0, "no act was refused on `individual` at seed 10 (re-picked from 11)"

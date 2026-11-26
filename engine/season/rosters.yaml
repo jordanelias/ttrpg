@@ -2078,7 +2078,7 @@ rosters:
     # which troop type trains where). They take `garrison`'s treatment in every table below and for its reason: nothing
     # wears them down (`wear_per_season` 0), they have no floor and no band (`capacity_floor` 0, `band_floors` {}), and
     # `works_cost` prices them like any fabric so `found`/`build` can raise one. [ASSUMPTION; medium; Jordan to correct.]
-    values: [harbour, seam, body, dwelling, garrison, barracks, archery_range, stable, siege_workshop]
+    values: [harbour, seam, body, dwelling, garrison, barracks, archery_range, stable, siege_workshop, field]
 
   matter_kinds:
     source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
@@ -2150,8 +2150,11 @@ rosters:
       a non-zero rate would erode every garrison's condition every season, silently drifting every
       field battle's fortification term toward zero over a long campaign. The rate is a pacing
       decision (where every fabric sits at rest), registered rather than taken -- `H-165` and
-      `H-07` (the rate). `restore` executes on the populated realm's SETTLEMENT fabrics (harbour,
-      seam -- rate 10, a cohort stands beside them), so `H-165`'s limit is the DWELLING/GARRISON
+      `H-07` (the rate). `restore` is formed nowhere since REM-22 (its `verb_table.yaml` row: no
+      question the realm delivers carries a Site among its referents) until `16_PESSIMIST_WR_B`
+      edit 4 (B12a.66), and since then only where a person witnesses a crossing at the rung he
+      stands on; at a broken Site it is declined under the coupling (B12a.65). The settlement
+      fabrics (harbour, seam) wear at rate 10, so `H-165`'s limit is the DWELLING/GARRISON
       rate specifically, both `0`.
     rates:
       harbour:  10
@@ -2163,6 +2166,7 @@ rosters:
       archery_range:  0
       stable:         0
       siege_workshop: 0
+      field:          10
 
   capacity_floor:
     source: "`RULINGS.yaml` RR-2 (`ED-SE-0051`, ruled 2026-09-17): *\"a `capacity(w, rung)` QUERY over the rung's dwelling Sites, with a FLOOR — never a fixture table\"*; `01_THE_BUILD_ORDER.md` S10: *\"the floor is a table keyed on site kind, beside `band_floors`\"*. Plan position `24d-ii`, landed with its caller at `19c`."
@@ -2196,6 +2200,7 @@ rosters:
       archery_range:  0
       stable:         0
       siege_workshop: 0
+      field:          0     # [ASSUMPTION; JQ-6] B12a.51: a field holds no housing floor, `dwelling`'s is the only one
 
   works_cost:
     source: "v9 IN-28 (`H-166` limit 1, its own design order: the cost first). r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.6 (intent): *\"the cost is paid by `transfer` into the works' rung\"*, and nothing debited that rung when the place rose. `proposals/2026-09-10-settlements-factions-populations/04_EVALUATION.md` §6 (intent): `found` costs *\"the stake\"*, `build` costs *\"timber\"*."
@@ -2239,6 +2244,38 @@ rosters:
       archery_range:  {timber: 10}
       stable:         {timber: 10}
       siege_workshop: {timber: 10}
+      field:     {timber: 10}      # [ASSUMPTION; JQ-6] B12a.51: the one number every fabric row holds
+
+  site_endowment:
+    source: "CP-T08-02 as amended (proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_ground_and_granaries.md)"
+    row: H-07
+    keys: [territories, site_kinds]
+    note: >-
+      WHAT PRODUCING SITES A SETTLEMENT IS GIVEN AT THE WORLD'S MAKING, keyed on the geography's territory code and, past it, on a settlement
+      code (`data/fixtures.py::endowment_for` is the one reader; `boot/realm.py::build_realm`'s site loop the one minter). `uniform` is the
+      control, today's placement at every settlement; `ground` is the arm, read when `Fixtures.endowment_mode` is `ground`. A list names one
+      Site per entry; a kind named twice is two Sites. The loader (`data/fixtures.py::_check_site_endowment`) refuses a territory holding a
+      settlement with no row, a kind outside `site_kinds`, an empty list, and a key no geography row carries. Every row is
+      [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode` `uniform`]. T15 holds no settlement, so it has no row.
+    uniform: [harbour, seam]            # the control: today's placement, every settlement
+    ground:                             # [ASSUMPTION; medium; Jordan to correct; revert: endowment_mode uniform]
+      T1:  [harbour]                    # capital, river-sea nexus
+      T2:  [field]                      # heartland farmland
+      T3:  [seam]                       # border fortress, mountain pass
+      T4:  [seam]                       # highland timber
+      T5:  [field, field]               # breadbasket
+      T6:  [field]                      # southern farmland
+      T7:  [seam]                       # timber valley
+      T8:  [harbour]                    # west sea trade
+      T9:  [seam]                       # mountain ridge
+      T10: [seam]                       # border castle
+      T11: [harbour]                    # central fjords
+      T12: [harbour]                    # western fjords
+      T13: [harbour]                    # southern fjords
+      T14: [field]                      # central plains
+      T16: [harbour]                    # island republic
+      T17: [seam, seam]                 # northern mines
+    settlement: {}                      # optional override, keyed by geography code (S-NNN)
 
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
@@ -2268,6 +2305,18 @@ rosters:
       floors (`world_q.HUNGER_FLOOR_BANDS`). A roster of fewer than two members cannot name `starving`
       and `fed` and raises at import (`world_q`'s unpack).
     values: [starving, hungry, lean, fed]
+  seasons_of_year:
+    source: "ED-IN-0332 (RULED, D-U1-10): the year is a roster; `data/fixtures.py` already speaks of \"two years at four seasons\""
+    open: false
+    ordered: true
+    note: >-
+      THE YEAR, IN ORDER; ITS LENGTH IS THE YEAR (`data/rosters.py::SEASONS_OF_YEAR`, the one owner). The
+      season of the year a tick falls in is `tick % len(SEASONS_OF_YEAR)` (`world_q.season_of_year`), read
+      off the clock and stored nowhere; every age in seasons, every yearly term and the weather read the
+      length and no file states a literal. `season_factor_draw`, when non-empty, holds one entry per
+      member here, in this order, and is refused at `season_factor_of` otherwise. The four names are
+      `[ASSUMPTION; medium; Jordan to correct]`; the length is the ruling.
+    values: [spring, summer, autumn, winter]
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99
@@ -2921,9 +2970,9 @@ rosters:
       speak: [cites]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
-    # and `condition.band_crossed` the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
+    # `condition.band_crossed` and `site.ruptured` (B12a.64) the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
     ledger_ranges:
-      site: ["exists:Site", "condition", "condition.worn", "condition.band_crossed"]
+      site: ["exists:Site", "condition", "condition.worn", "condition.band_crossed", "site.ruptured"]
 
   vocation_sourced:
     source: >-
@@ -3540,6 +3589,15 @@ rosters:
       draws (`epistemic.py::notice`) -- a Failure deposits nothing, a Partial the deed with the hand withheld, a Success as at `off`, an Overwhelming at the full confidence.
     values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
 
+  rival_precedence_arms:
+    source: >-
+      v12 B08.05 (`18_DETERMINISM_rival_acts_in_one_fold` "The resolution, decided"): *"`Fixtures rival_precedence: draw | hash`"*; ships `draw`.
+    note: >-
+      THE ARMS OF `Fixtures.rival_precedence` (`H-30`), read by `loop/resolve.py::_canonical_order_with_precedence` and refused outside this set, so a misspelt
+      arm cannot read as the control. `hash` is the CONTROL (the revert): scenes stay in the content-hash order. `draw` is SHIPPED: a rivalry group of scenes
+      is re-ordered among the positions it holds by a keyed draw per scene, the highest net first (`loop/resolve.py::_precedence_order`).
+    values: ["hash", "draw"]
+
   stock_reports:
     source: >-
       v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;
@@ -3553,6 +3611,16 @@ rosters:
       CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung
       (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `"off"` is QUOTED: bare, YAML reads it as the boolean false.
     values: [crossing, season, "off"]
+
+  arrival_reports:
+    source: >-
+      v12 B12a.16 (`07_SE_kernel_repairs` D, `H-327`): *"`arrival_report` (`off`, shipped; `on`)"*.
+    note: >-
+      THE ARMS OF `Fixtures.arrival_report` (`H-525`), read by `loop/matter.py` at MATTER's `travel.ended` write (once per barrier) and refused outside this set. `off` is the CONTROL,
+      shipped: the write carries no Observation, the tree before the item exactly. `on`: it carries `Observation(rung, "stores:<default_store_kind>", units)` and
+      `Observation(rung, "held_by", holder id or None)` about the rung the traveller now stands in, which WITNESS deposits to the write's witnesses, the traveller among them.
+      `"off"` is QUOTED: bare, YAML reads it as the boolean false.
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
 
   beneficiary_kinds:
     source: >-
@@ -4239,11 +4307,14 @@ rosters:
                   every code it maps to in `strife_moves.yaml` is terminal (`ends` above 0 and not XP),
                   so a kind that maps to one code which never ends a case does not conclude (`detention.ended`
                   and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;
-                  `requisition.taken` to VI). Of those only `field.won` and `field.lost` conclude in the
-                  world reading, which knows their code (WA) through the verb and side; the rest end no case
+                  `requisition.taken` to VI). Of those `field.won` and `field.lost` ended a case in the world reading (code WA, through the verb
+                  and side) until B12a.04, which made them OPENING moves (never terminal); the rest end no case
                   in either reading. A hand-maintained list over the opens and joins kinds, checked
                   by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule
-                  disagree). Top-down the world sees a war end; bottom-up a
+                  disagree). B12a.05 (A-45): a content-opening kind (`queries/world_q.py::CONTENT_OPENING_KINDS`:
+                  `succession.claimed`, `petition.filed`) is never in it, whatever its codes -- a claim of the
+                  movement's own beginning is no end of it; `check_strife_openers` refuses the overlap at import.
+                  Top-down the world sees a war end; bottom-up a
                   person who holds only a field's outcome may still doubt it.
       The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
       opens, joins and never; a `concludes` kind outside opens and joins.
@@ -4265,9 +4336,8 @@ rosters:
               tenure.opened, office.established, rung.founded, army.recruited, army.formed, army.assigned]
       never: [argument.lost, argument.won, commitment.ended, commitment.made, date.scheduled, duty.refused,
               duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved, travel.ordered]
-      concludes: [army.arrived, succession.claimed, petition.filed, petition.carried, covenant.offered,
-                  matter.determined, dispensation.issued, rung.ceded, record.given, transfer.made,
-                  record.destroyed, tenure.opened]
+      concludes: [army.arrived, petition.carried, covenant.offered, matter.determined, dispensation.issued,
+                  rung.ceded, record.given, transfer.made, record.destroyed, tenure.opened]
 
   foreign_factions:
     source: >-
@@ -4309,7 +4379,8 @@ rosters:
       that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id,
       and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
       RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
-      outside the realm and not selected).
+      outside the realm and not selected), which may carry `settled: true` beside it and nothing else
+      (only the rungs with a `settlement` rung among their descendants).
       `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
       whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
       second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
@@ -4318,7 +4389,7 @@ rosters:
     members:
       peninsular_sovereignty:
         victory: true
-        holds: {rung_kind: territory}
+        holds: {rung_kind: territory, settled: true}
         under: one_faction
         source: >-
           GD-1 (`canon/04_game_design_constraints.md`): *"Peninsular Sovereignty is the sole victory
@@ -4326,10 +4397,10 @@ rosters:
         assumption_note: >-
           [ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2`
           and `Political Stability <= 6` read stored scalars #457 §5 cuts, `sustained 2 consecutive
-          seasons` is a clock, and `treaties counting` has no carrier. Every territory under a `realm`
-          rung counts, not a fixed 15; the foreign root (`terr_T16`, Schoenland's, kept out of the realm
-          by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY whoever holds what: `terr_T15`
-          is Uncontrolled at build (`H-186`) and no verb opens a `hold` on any territory (`H-176`).
+          seasons` is a clock, and `treaties counting` has no carrier. Every SETTLED territory under a `realm`
+          rung counts (`settled: true`: a `settlement` rung among its descendants), not a fixed 15;
+          `terr_T15`, which has none, and the foreign root (`terr_T16`, Schoenland's, kept out of the
+          realm by `build_realm`) are not asked for. A structural predicate, no territory id named.
           A consumer that treats `victory: true` as the game's end must carry this caveat itself --
           the row is GD-1 minus its sustain, Accord and Stability clauses, and nothing in the loop
           halts on it (`SeasonDriver.season` only reports `endings`).
@@ -4431,7 +4502,7 @@ rosters:
       Person:      [body.changed]              # `wounded_with`
       Detainee:    [person.captured, arrest.made]
       Rung:        [stores.changed, rung.seized]
-      Site:        [condition.band_crossed]
+      Site:        [condition.band_crossed, site.ruptured]       # B12a.64: a rupture is a Site's standing occasion too (`world_q.CROSSING_KINDS`)
       Proposition: [proposition.uttered]
 
 tables:
@@ -4517,6 +4588,8 @@ tables:
         ore:    50
         timber: 10
       body: {}
+      field:
+        grain: 40
 
   band_floors:
     source: "#353 §12.1 / L5 — the band edges a crossing fires on. `H-08`."
@@ -4567,6 +4640,7 @@ tables:
       archery_range:  {}
       stable:         {}
       siege_workshop: {}
+      field: {}          # [ASSUMPTION; JQ-6] B12a.51: `dwelling`'s empty control cell -- no floor, no band edge, no crossing Event
 
   # v10 CR-33 -- THE 34 LIFEPATHS AS CREATION TEMPLATES: WHICH CAPABILITY KEYS A LIFEPATH'S STARTING SKILLS NAME.
   # A cast row's `lifepath:` key is expanded by `data/cast.py::capability_of` into `Person.capability` entries

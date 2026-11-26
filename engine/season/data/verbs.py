@@ -391,7 +391,7 @@ class VerbRow:
         A FLAT row answers its flat tuple for every clause. A KEYED row answers the clause's own kinds -- and a clause it does not
         key RAISES, because the loader has already required a key for every clause that can fail
         (`ELIGIBILITY_CLAUSE` if an alternative can decline, each named conjunct, `WRITE_CLAUSE` if
-        the row writes, `COUNTERPARTY_CLAUSE` if it names a second party). Reaching this with an
+        the row writes, `COUNTERPARTY_CLAUSE` if it names a second party, `SEQUENCE_CLAUSE` always). Reaching this with an
         unkeyed clause is therefore a FOLD defect -- a new
         refusal point nobody declared -- and emitting the union instead would publish kinds for
         conjuncts that did not fail, which is `ID-9` inside the scarcity channel."""
@@ -523,10 +523,15 @@ COUNTERPARTY_CLAUSE = "counterparty"
 # B07.01 (18-A item 2, item 4): THE FOURTH KEY, AND NOT A REFUSAL -- a `form: task` row's lost draw. A row keys it iff its
 # `graded_tasks` route is `form: task`; its kinds are the row's `draw_kinds`, kept out of the refusal union.
 DRAW_CLAUSE = "draw"
-# B09.19: THE FOUR THE FOLD OWNS. Any other key of a keyed UNTYPED row with a precondition is a clause its PREDICATE declared
+# B08.02 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 3; ruling A-9): THE FIFTH -- an interaction refused
+# because the interaction before it in its scene did not reach a band it names (`Act.after`; `loop/resolve.py::
+# _sequence_refusal`). Declared here, not invented at the fold (`04` §B.13 inv. 4). EVERY keyed row keys it, because every
+# row can be a second interaction: the rule is per row, not per verb named; a FLAT row answers its flat kind for it already.
+SEQUENCE_CLAUSE = "sequence"
+# B09.19: THE CLAUSES THE FOLD OWNS. Any other key of a keyed UNTYPED row with a precondition is a clause its PREDICATE declared
 # (`loop/predicates.py::requires_predicate(clauses=)`), which this loader may not import: `VerbRow.precondition_evaluable` checks
 # those against the predicate table, and the loader below lets them through as keys it cannot judge.
-FOLD_CLAUSES = frozenset({ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE})
+FOLD_CLAUSES = frozenset({ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE, SEQUENCE_CLAUSE})
 # B07.01 (18-A item 2): THE TWO SHAPES OF A `graded_tasks` ROUTE. `inquiry` keys `emits:` by Degree and writes nothing (FI-01, as
 # before); `task` carries a flat `writes:` and `emits:` and keys `emits_on_refusal:` with `DRAW_CLAUSE`. The loader branches on them.
 FORM_INQUIRY = "inquiry"
@@ -1323,10 +1328,11 @@ def _load_verb_table() -> dict:
         #   * every NAMED top-level conjunct of its typed cell (`conjunct:`, `data/requires.py`) --
         #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, OR be an untyped PREDICATE row
         #     (B09.19): a predicate's clauses (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
-        #     import, so it lets the keys beyond the fold's own four through and requires at least one; that they are
+        #     import, so it lets the keys beyond the fold's own (`FOLD_CLAUSES`) through and requires at least one; that they are
         #     exactly the predicate's declared clauses is `VerbRow.precondition_evaluable`'s, asked of the predicate table;
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`);
-        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`.
+        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`;
+        #   * `SEQUENCE_CLAUSE`      on EVERY keyed row (B08.02): any row can be a scene's second interaction.
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
@@ -1347,6 +1353,8 @@ def _load_verb_table() -> dict:
                 _expected.add(COUNTERPARTY_CLAUSE)
             if _form == FORM_TASK:
                 _expected.add(DRAW_CLAUSE)      # B07.01: a `task` row's lost draw (18-A item 4)
+            if by_clause:
+                _expected.add(SEQUENCE_CLAUSE)  # B08.02: any keyed row can be a scene's second interaction
             if not by_clause:
                 _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
             # B07.01 (UNDECIDED (11) (ii)): a precondition may stay UNNAMED where the row declares ONE refusal kind -- its
@@ -1836,6 +1844,13 @@ def act_key(verb: str, subject, operands) -> str:
     return key
 
 
+def counterparty_of(verb: str, operands) -> Optional[str]:
+    """THE OPERAND A VERB'S ROW NAMES AS ITS `counterparty:`, or `None` where the verb has no row, the row names none, or `operands` is not a
+    dict. The one read `opportunity_key` (identity of an opportunity) and `decision/choose.py::hangs_on` (a hang only on the same counterparty) share."""
+    row = VERB_TABLE.get(verb)
+    return operands.get(row.counterparty) if row is not None and row.counterparty and isinstance(operands, dict) else None
+
+
 def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     """WHAT MAKES TWO ACTS ONE OPPORTUNITY, FOR THE ONCE-PER-SEASON FILTER: `(verb, subject)`, plus
     the counterparty where the row names one -- `(verb, subject, <the operand its `counterparty:`
@@ -1856,9 +1871,7 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     `act_key`, which reads the same operands for the act's id, and needs no `World` or carrier."""
     if not subject:
         return None
-    row = VERB_TABLE.get(verb)
-    ops = operands if isinstance(operands, dict) else {}
-    other = ops.get(row.counterparty) if row is not None and row.counterparty else None
+    other = counterparty_of(verb, operands)
     # ⚠ `H-134`: THE SEAT IS NOT IN THIS KEY, and that is chosen, not forgotten. `act_key` carries it
     # (ids must stay distinct), but an opportunity is the verb on the subject (and counterparty) for
     # the ACTOR, however many seats could have done it: the key's shape must not depend on how many
@@ -2696,6 +2709,16 @@ def social_roll_verbs() -> frozenset:
     provider resolves, a `graded_tasks` route to it). Read off the rows and the two rosters, no verb named."""
     prizes = _PRIZES
     return frozenset(v for v, r in VERB_TABLE.items() if social_rolled(v, r, prizes))
+
+
+def prize_step(contests: str) -> Optional[str]:
+    """THE STEP A PRIZE DECLARES (`rosters.yaml: contest_subsystems.prizes`' `step:`, the cell `manifest.resolve("contest", ..)` reads), or `None`
+    for a prize with none or no such prize: it is fought where its verb is admitted. Read by the chooser (`decision/choose.py::_prize_step`), which may
+    not import `manifest` (`04` §C.3: `decision/` imports `person_q` and `data/`), so the declaration is read off the roster both read.
+    The row's `step:` has a second reader, `loop/resolve.py::_deferred_prize` (through `manifest.resolve`); the two are accepted, not merged,
+    because `decision/` may not import `manifest`."""
+    row = _PRIZES.get(contests)
+    return row.get("step") if isinstance(row, dict) else None
 
 
 def _derive_rung_remit_acts() -> frozenset:

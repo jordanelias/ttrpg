@@ -19,8 +19,12 @@ from __future__ import annotations
 
 import hashlib
 
+import pytest
+
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
+from ..data.rosters import SEASONS_OF_YEAR
+from ..gaps import Unspecified
 from ..harness import populated as POP
 from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
@@ -90,19 +94,21 @@ def _seasons(w, n: int):
     return stores, shorts
 
 
-#: The one-season event count and digest of the season with `thread_read` added to `withheld_verbs`, a change
-#: detector: it must differ from the shipped season (`_realm_goldens.SHIPPED`), which is what the test below reads.
-#: Its re-record history is in `git log`; the constants it was once recorded against (`BASE_HASHES`, `BASE_EVENTS`) are gone.
-THREAD_READ_WITHHELD_EVENTS_1 = (9320, "39763260c40d8fd1f280aa2de02b2ea1465a5c1992207cb95f239f519c69ac47")   # B11 merge with main re-record: (9149, e84c9948..) -> (9320, 39763260..); B24p merge with B21 re-record: (14311, bb1f94a7..) -> (9149, e84c9948..); B24p merge re-record: (13526, 0e7259ba..) -> (14311, bb1f94a7..); B15.99 re-record: (13316, b39e8c22..) -> (13526, 0e7259ba..); BA1.99 re-pin, second time, manner rows held back (the cast's content, `_realm_goldens.py`'s BA1.99 paragraph): was (12935, 4eefade9...) with them, (12967, 8a41d09f...) before   # B10.99 re-pin (the B10 movers, `_realm_goldens.py`'s B10.99 paragraph): was (11821, a239fa1f...)   # B09.99 re-pin (the B09 movers, `_realm_goldens.py`'s list): was (11937, b9754d7d...)   # B07 close: `_reached` reads `_arrival_only` at the rung one leg short (shipped 11936); before: (11928, 5f9295f9..); B07.99 re-pin (the task draw on, B07.05; a refusal carries no band, B07.10; reconstruct routine, B07.11): was (12584, 6670c942...)     # B06/B14 merge re-pin (B14's combat record read against the keyed stream): was (12604, 6b918b8c...)   # B06.99 re-pin (the uniform's source changes from CPython's generator to the keyed mix, B06.04; a stream change, not a balance change): was (14150, d120e7df...)   # B05.99 re-pin (the B05 movers, `_realm_goldens.py`'s list): was (14276, 23047403...)   # B01 re-pin (B11 lane A, both commits rebased): was (13366, b7632953...); B10-13 pin commit: was 13441 / 9f23e5f1...   # CP-T03-08: was 13387 / 1cdf25c4...   # CP-T03-04: was 13386 / 2cea2d08...   # CR-87: was 11767 / c35ef751...   # PC-10b: was 11586 / 860b0d23...   # CP-T03-09: was 11582 / e23a1f6e...   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
+#: The one-season event count and digest of the season with `thread_read` added to `withheld_verbs`. A change detector:
+#: since B08.03 (scenes fold in their own order) it EQUALS the shipped season (`_realm_goldens.SHIPPED`, seed 0, one season),
+#: which is what the test below reads. Its re-record history is in `git log`.
+THREAD_READ_WITHHELD_EVENTS_1 = (8668, "da0cfccae6fd24839adbae634bfc95fc99a59c3590076774a8c22d7f2ab69622")   # B24.99 merge with main re-record (merged tree; the arm equals the shipped season): (8660, 3e0eb0c8..) -> (8668, da0cfcca..); B12a.99 re-record (merged tree, `_realm_goldens.py`'s B12a.99 paragraph): (9319, e5b3ab7c..) -> (8660, 3e0eb0c8..); B08 re-pin: (9320, 39763260..) -> (9319, e5b3ab7c..), equal to the shipped season (the close's counterparty ruling moved it from (7804, 1b04b800..))
 
 
-def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():
-    """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures
-    withheld_verbs` reads `THREAD_READ_WITHHELD_EVENTS_1` -- the arm's own event count and digest on the IN-59 tree, no
-    longer the PRE-K-3 sequence it was recorded as at K-3 (IN-59 (a) moved that arm too; see the
-    constant's comment) -- and that differs from the shipped season's own event sequence, read in process, so
-    `thread_read`'s formation still moves what a season does. The K-3-time control (the arm equalling the
-    pre-K-3 sequence) can no longer be read on one tree."""
+def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():
+    """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures withheld_verbs` reads
+    `THREAD_READ_WITHHELD_EVENTS_1`, and that EQUALS the shipped season's own event sequence, read in process: withholding
+    `thread_read` moves nothing at seed 0, one season (nor at seed 0, two seasons, nor at seed 1, one season: B08 reading).
+    OBSERVED; THE CAUSE IS CONJECTURED. Before B08.03 the arm differed and since it equals the shipped season: a bisection to B08.03
+    (scenes fold in their own order), read as that fold removing a coupling by which forming `thread_read` moved the season while the
+    verb executed 0 times in that season's store. Nothing counts how often `thread_read` is formed or chosen in either arm, so this
+    cannot tell "the coupling was removed" from "the candidates are dropped the same way in both arms". The test fails the day the arm
+    differs from the shipped season again, so a later batch that changes it sees it here."""
     w = build_realm(0)
     shipped = tuple(w.fixtures.get("withheld_verbs"))
     assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"
@@ -111,7 +117,7 @@ def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_sea
     assert _digest(w) == THREAD_READ_WITHHELD_EVENTS_1, _digest(w)
     s = build_realm(0)
     POP.run(seasons=1, seed=0, w=s)
-    assert THREAD_READ_WITHHELD_EVENTS_1 != _digest(s), "the arm equals the shipped season -- withholding `thread_read` moved nothing"
+    assert THREAD_READ_WITHHELD_EVENTS_1 == _digest(s), "the arm differs from the shipped season: `thread_read`'s formation moves the season again"
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():
@@ -181,7 +187,32 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
         assert world_q.season_factor_of(w) == year[t % len(year)][0]
         seen += 1
     assert seen == 9
-    # And no table, no year: the control returns the bare constant and no season.
+    # And no table: the control returns the bare constant, and the year is the roster's, not the table's.
     w = _town(())
-    assert world_q.season_of_year(w) is None
+    assert world_q.season_of_year(w) == w.tick % len(SEASONS_OF_YEAR)
     assert world_q.season_factor_of(w) == DEFAULT.get("season_factor")
+
+
+def test_season_of_year_reads_zero_to_three_at_shipped_fixtures():
+    """The year is `rosters.yaml: seasons_of_year`, read by `season_of_year` at the shipped fixtures (no
+    `season_factor_draw` declared): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`."""
+    w = build_realm(0)
+    assert not w.fixtures.get("season_factor_draw"), "fixture: the shipped realm declares a weather table"
+    read = []
+    for t in range(5):
+        w.tick = t
+        read.append(world_q.season_of_year(w))
+    assert read == [0, 1, 2, 3, 0], read
+
+
+def test_nonempty_season_factor_draw_of_wrong_length_is_refused():
+    """A table that is not one entry per season of the declared year is refused where it is first read,
+    naming `season_factor_draw`'s length and the year's."""
+    wrong = ((1.0,),) * (len(SEASONS_OF_YEAR) - 1)
+    w = _town(wrong)
+    with pytest.raises(Unspecified) as e:
+        world_q.season_factor_of(w)
+    assert "season_factor_draw" in str(e.value) and str(len(wrong)) in str(e.value) \
+        and str(len(SEASONS_OF_YEAR)) in str(e.value), str(e.value)
+    # The right length is not refused (non-vacuity: the refusal is the length, not the table).
+    assert world_q.season_factor_of(_town(UNIT)) == DEFAULT.get("season_factor")

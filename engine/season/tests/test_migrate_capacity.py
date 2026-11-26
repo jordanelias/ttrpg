@@ -112,6 +112,30 @@ def test_19c_after_n_moves_the_legs_end_at_the_next_matter_and_the_penalty_retur
     assert not [e for e in _season(w, d) if e.kind == "travel.ended"]
 
 
+def test_h140_a_move_to_where_the_mover_stands_is_refused_and_one_rung_up_moves():
+    """B12a.15 (`H-140`; ruling A-81 consequence 1): a `move` whose `to` is the rung its mover already
+    stands in is no journey -- it used to close his leg and open an identical one, pad `travel_leg`
+    and publish `travel.moved`. It declines now, so the fold emits the row's refusal, `travel.blocked`,
+    and writes nothing: his `contain` legs (the Tenure ids, not only the rung) and his `travel_leg` are
+    what they were. CONTROL, same world and mover: one rung up (`Hh` -> `S`) is a journey and moves.
+    The two keys are those whose draw succeeds, so the refusal read is the effect's, not a failed draw's."""
+    w, d = _world()
+    who = w.persons[TRAVELLER]
+    stands = next(t.object for t in who.tenures if t.kind == "contain" and t.live)
+    assert stands == "Hh", stands
+    legs = [(t.id, t.object, t.live) for t in who.tenures if t.kind == "contain"]
+
+    same = _fold(w, d, _move("same", stands))
+    assert _kinds(same) == ["travel.blocked"], _kinds(same)
+    assert [(t.id, t.object, t.live) for t in who.tenures if t.kind == "contain"] == legs
+    assert who.travel_leg == []
+
+    up = _fold(w, d, _move("m1", "S"))
+    assert _kinds(up) == ["travel.moved"], _kinds(up)
+    assert who.travel_leg == ["S"]
+    assert next(t.object for t in who.tenures if t.kind == "contain" and t.live) == "S"
+
+
 # ======================================================================================
 # 2 -- RESIDENCE: EVERY BUILDER MINTS IT, `move` LEAVES IT, `migrate` RE-HOMES IT
 # ======================================================================================

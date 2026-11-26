@@ -110,7 +110,10 @@ def _formed(w, pid, q):
 
 def _acts(w, pid, cands):
     mint = lambda who, verb, subj: H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
-    return [a for s in pack_scenes(w.persons[pid], cands, 99, w.fixtures, mint) for a in s.acts]
+    acts = [a for s in pack_scenes(w.persons[pid], cands, 99, w.fixtures, mint) for a in s.acts]
+    for a in acts:
+        a.after = None      # B08.04: each act is folded ALONE below, out of its scene, so none has a previous interaction to hang on
+    return acts
 
 
 def _resolve(w, d, *acts):

@@ -83,7 +83,7 @@ def readers_for(w) -> Readers:
         return world_q.march_side(w, causing_act(w, e))     # the side read's one owner (CR-76)
 
     def victim_held(e):
-        victims = {c.subject for c in e.changes if c.field == "exists"}
+        victims = {c.subject for c in e.changes if c.field in ("exists", "body")}
         return any(t.kind == DETAIN_KIND and t.subject in victims and t.since <= e.emitted_at
                    and (t.until is None or t.until >= e.emitted_at) for t in w.tenures)
 

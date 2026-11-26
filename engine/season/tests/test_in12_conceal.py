@@ -138,7 +138,7 @@ def test_conceal_is_a_resolvable_own_verb_that_opens_hold_and_is_declared_uncell
     assert row.emits == ("cover.assumed",) and tuple(row.emits_on_refusal) == ("conceal.refused",)
     # B10.60: its one precondition is `fight`'s `individual` conjunct of the actor (a population does not take it)
     assert row.refusals_by_clause == {"individual": ("conceal.refused",), "write": ("conceal.refused",),
-                                      "draw": ("conceal.failed",)}
+                                      "draw": ("conceal.failed",), "sequence": ("conceal.refused",)}   # B08.02
     assert row.requires_typed.conjuncts() == ("individual",) and row.requires_typed.stems() == ("individual",)
     assert "conceal" in resolvable_verbs()
     assert "conceal" in _OPENERS_FROM_EFFECTS["hold"], _OPENERS_FROM_EFFECTS["hold"]
@@ -329,7 +329,8 @@ def test_a_covered_moves_deposit_names_the_alias_and_not_the_mover_and_his_trave
         w, d = _world()
         if cover:
             _resolve(w, d, Act(id="cc", actor=WATCHER, verb="conceal", payload={"subject": WATCHER}))
-        mv = _resolve(w, d, Act(id="mv", actor=WATCHER, verb="move", payload={"to": "S"}))
+        # B12a.15: a `move` to where the mover stands is refused, and `_world` stands the watcher at S; he leaves for `Hh`, the deposit and the travel end being the same
+        mv = _resolve(w, d, Act(id="mv", actor=WATCHER, verb="move", payload={"to": "Hh"}))
         (moved,) = [e for e in mv if e.kind == "travel.moved"]
         subjects = claim_subjects(w, moved, "both")
         if cover:

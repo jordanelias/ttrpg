@@ -726,6 +726,15 @@ class Act:
     # per act. Set person-side at the mint (`decision/choose.py::pack_scenes`), from the same grant
     # `person_side_eligible` admitted on; the gate refuses a `via` the actor does not occupy.
     via: Optional[str] = None
+    # B08.02 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 2; ruling A-9: a scene is a short sequence): THE
+    # BANDS OF THE SCENE'S PREVIOUS INTERACTION AT WHICH THIS ONE IS ATTEMPTED -- band labels, the strings the verb table
+    # keys degrees by (`writes:`/`emits:` maps; `DEGREE_LABEL`'s values for a four-band row). `None`: always, as before.
+    # Read by the fold only (`loop/resolve.py::_sequence_refusal`, ID-13): outside the named bands the interaction is
+    # refused at the clause `sequence` (`data/verbs.py::SEQUENCE_CLAUSE`). A tuple of band labels (`loop/deliberate.py` rebinds it to `None` where its
+    # predecessor was dropped). Not in `World.content_hash` (the act store is not hashed). `04` §B.9's `Act` tuple has no `after` and §C.4's
+    # A-9 clause names the hang without naming its carrier; it rides the Act, not the Scene, because the chooser sets it per interaction from
+    # the row and the fold reads it per act (CONVENTION departure from §B.9, as `changes`, `reads`, `contests` and `stratum` are).
+    after: Optional[tuple] = field(default=None, compare=False)   # out of equality: `ActStore.append` treats equal acts on one id as a no-op (acts.py:71-82)
 
     def __post_init__(self) -> None:
         # `04` §B.9 `via : SeatId?`, §B.1: the seat exercised is a TYPED seat id -- the same string,

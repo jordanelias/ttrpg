@@ -17,7 +17,9 @@ and the `TRACE.note` sample.
 THE RULE (items 3a/3b and plan position `19d`):
   * THE DRAW is `larder_draw`'s (`larder.py`) -- the same function, so the draw MATTER writes from and the
     one `demanded`/`delivered` sum cannot disagree: one module computes both (`ED-IN-0246` item 3a).
-  * THE DEBIT: per source rung, `take` summed per kind, kinds in the order the draw first debited them.
+  * THE DEBIT: per rung drawn from, each cell's `parts` summed per kind (under `larder_walk` `first` a
+    cell's one part is `(source, take)`; under `through` a draw splits across rungs and each loses what it
+    gave), kinds in the order the draw first debited them.
     `larder_after` is the source's stores less that debit, kept only where a unit moved. The draw capped
     every take at what was held, so nothing goes below zero and no `max(0, ...)` hides an error.
   * SHORT: an eater is short a kind by `want - take` where `take < want`. A source that gave out with a
@@ -25,8 +27,10 @@ THE RULE (items 3a/3b and plan position `19d`):
   * THE DRAINED RUNG'S GAP: per drained kind, `demanded - delivered` over the rung's subtree -- the
     eaters whose home's chain passes through it, summed by `drawn_under` -- kept only where positive.
     It NESTS (a hearth and its settlement can both report one hungry household): the Query's meaning.
-  * THE BODY: `lost = body_step x (units short, summed in kind order)`; nothing falls at `lost <= 0`
-    (the `body_step = 0` control arm); the body falls to `max(0, body - lost)`, and dies at `<= 0`.
+  * THE BODY: `lost = body_step x (units short, summed in kind order) x the eater's severity multiplier
+    (1 when none is given)`, truncated to an int; the multiplier is the host's draw (`SubsistInput.severity`),
+    this module draws nothing. Nothing falls at `lost <= 0` (the `body_step = 0` control arm, or a severity
+    of 0); the body falls to `max(0, body - lost)`, and dies at `<= 0`.
   The ORDER RULE (#353 §25: draw before produce) is the host's: MATTER calls this before the yield.
 """
 from __future__ import annotations
@@ -43,14 +47,15 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
     short: dict = {}          # pid -> {kind: units short}, record order
     drained: dict = {}        # source rung -> {kinds it ran out of with a mouth unfed}
     for row in draw.rows:
-        for kind, want, take, src in row.cells:
-            if src is not None:
-                given = debit.setdefault(src, {})
-                given[kind] = given.get(kind, 0) + take
+        for kind, want, take, src, parts in row.cells:
+            for rung, units in parts:
+                given = debit.setdefault(rung, {})
+                given[kind] = given.get(kind, 0) + units
             if take < want:
                 short.setdefault(row.pid, {})[kind] = want - take
-                if src is not None:
-                    drained.setdefault(src, set()).add(kind)
+                # a short cell gave out EVERY rung it drew from (under `through` a draw splits across rungs: each emptied)
+                for rung in (r for r, _ in parts) if parts else ((src,) if src is not None else ()):
+                    drained.setdefault(rung, set()).add(kind)
 
     shortfalls = []
     for src in sorted(drained):
@@ -66,9 +71,10 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
             shortfalls.append((src, tuple(gaps)))
 
     bodies = dict(inp.bodies)
+    sev = dict(inp.severity)
     falls = []
     for pid in sorted(short):
-        lost = inp.body_step * sum(short[pid].values())
+        lost = int(inp.body_step * sum(short[pid].values()) * sev.get(pid, 1))
         if lost <= 0:
             continue
         after = max(0, bodies[pid] - lost)

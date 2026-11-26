@@ -146,6 +146,11 @@ def governed(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = Tru
     first season's draw is unchanged, because `set_hungry` holds some of each kind and the walk stops
     at the nearest rung holding any. A SEPARATE BUILDER, NOT A FLAG ON `build`, on this module's own
     reason: the shipped `build` answers `19d`'s question and its measurements stay its own."""
+    # B12a.99: the walk is pinned to `first`, the arm this chain was measured at: under the shipped `through` (B12a.60) the cohort drains its own larder AND the
+    # treasury in the first season, so `set_hungry` is no longer short and the IN-22 chain has no shortfall to carry (`scarce.build`'s first-season draw, above, is `first`'s)
+    fixtures = fixtures.sweep("larder_walk", "first")
+    # and `hunger_severity_draw` at its control (B12a.62): REM-52's tests read the loss as `body_step` times the units short, which a drawn multiple (0 to 2) is not
+    fixtures = fixtures.sweep("hunger_severity_draw", False)
     w = build(seed, fixtures, steward_holds)
     w.rungs[MARCH].stores = dict(MARCH_TREASURY)
     w.rungs[FAR_TERRITORY] = Rung(FAR_TERRITORY, "territory")

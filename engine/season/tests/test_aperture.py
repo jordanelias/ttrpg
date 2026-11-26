@@ -57,8 +57,9 @@ from ...substrate import composition
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
 from ..harness import aperture as A
-from ..harness import governance_spine
+from ..harness import governance_spine, populated
 from ..boot.realm import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..harness.corpus_run import (_attribute_acts, _emission_id, attempts, attribute, foreign_kinds,
                                   graded_loss, graded_losses, unrowed_acts)
@@ -75,7 +76,8 @@ from .test_u7_remit import _fold, _world
 
 @pytest.fixture(scope="module")
 def realm():
-    return A.measure_world(build_realm, 0, 1)
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` reads this test RED (B12a.99 bisection of the shipped arms; the cause is not traced further), whose pooled rolls `test_cr18` reads
+    return A.measure_world(lambda seed, **kw: build_realm(seed, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"), **kw), 0, 1)
 
 
 def test_aperture_the_measured_season_is_the_populated_season(realm):
@@ -983,6 +985,44 @@ def test_the_engines_reading_says_why_it_did_not_count(monkeypatch):
     assert why and "3.12" in why
     lines = A.engine_lines({"engines": None, "engines_why": why})
     assert any(why in ln for ln in lines)
+
+
+def test_settlement_motion_counts_a_planted_transfer_between_two_settlements_and_not_one_to_self():
+    """IS-B3-SE-03, the settlement scale's motion read as one block. `tiny_world` plus a second settlement (`S2`), an
+    empty third (`S3`) and an unstocked hearth (`Hh2`, a cohort's home) under `S`. Three real folds: `S` -> `S2` (three
+    grain, counted), `S` -> `S` (refused by the gate as a no-op, so no `transfer.made` and nothing counted: the realm's
+    computed transfers read to self) and `S` -> `Hh` (a settlement to a hearth, moved but not between two settlements);
+    then `S2` -> `S` (two grain). The sum is by amount, over both directions. The block's other four counts are read on
+    the same world. No realm count is asserted here (V2): the realm's reading is the CLI's."""
+    from ..state.carriers import Rung, Tenure
+    w = P.tiny_world()
+    for rid, kind, stores, parent in (("S2", "settlement", {"grain": 10}, "D"), ("S3", "settlement", None, "D"),
+                                      ("Hh2", "hearth", None, "S")):
+        w.rungs[rid] = Rung(rid, kind, stores=stores)
+        w.add_tenure(Tenure(f"t_{rid}", rid, parent, "contain", since=0))
+    P.plant_cohort(w, "c_motion", "Hh2")
+    d = SeasonDriver(w)
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    before = populated.settlement_motion(w)
+    assert set(before) == {"stores_moved_between_settlements", "hunger_bands_standing", "larder_draws_from_another_rung",
+                           "bands_crossed", "settlements_empty"}, before
+    assert before["stores_moved_between_settlements"] == 0, "no act has run: the block reads the log, not the stores"
+    for aid, src, dst, n in (("a_mv_ok", "S", "S2", 3), ("a_mv_self", "S", "S", 3), ("a_mv_down", "S", "Hh", 3),
+                             ("a_mv_back", "S2", "S", 2)):
+        out = d.resolve(mint_token(w, WriteClass.ACTS),
+                        [Act(id=aid, actor="p_high", verb="transfer",
+                             payload={"from": src, "to": dst, "kind": "grain", "amount": n})],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        w.log.extend(out)
+    kinds = {e.kind for e in w.log if e.causes and e.causes[0] == "a_mv_self"}
+    assert kinds == {"transfer.refused"}, f"fixture: the to-self transfer was not refused ({kinds})"
+    after = populated.settlement_motion(w)
+    assert after["stores_moved_between_settlements"] == 5, after        # 3 + 2: not the to-self three, not the hearth's three
+    assert after["settlements_empty"] == 1, after                       # `S3` alone: `S` and `S2` hold grain
+    assert after["larder_draws_from_another_rung"] >= 1, after         # the cohort at `Hh2` eats from `S`, the first rung holding any
+    assert after["hunger_bands_standing"] >= 1 and after["bands_crossed"] == sum(
+        1 for e in w.log if e.kind == "condition.band_crossed"), after
+    assert populated.census(w)["settlement_motion"] == after, "`census` carries the block"
 
 
 def test_the_engines_reading_frees_its_tool_id_when_the_run_raises():

@@ -159,7 +159,7 @@ STEP_READS = (
     # loop/witness.py::witness -- `evict_over_cap`; emits nothing
     Process("WITNESS: eviction comparator", (("Person.claim_ledger", "+"),),
             (("Person.claim_ledger", "-"),), "WIT"),
-    # loop/matter.py::_lattice_strain (v9 IN-35) -- a LOWER neighbour means MORE pull (`-`), and the
+    # loop/matter.py::_lattice_strain (v9 IN-35) -- a BROKEN neighbour pulls (`-`; B12a.63), and the
     # pull is wear (`-`); emits through the wear write's `condition.worn`
     Process("MATTER: lattice coupling", (("Site.condition", "-"),),
             (("Site.condition", "-"), (EVENT, "+")), "MAT"),
@@ -172,7 +172,7 @@ DECLARED_CYCLES = {
     "H-102": ((ACTS, EVENT, "Person.claim_ledger"), (EVENT, "Person.claim_ledger")),
     "H-104": (("Person.claim_ledger",),),
     "H-112": ((EVENT,),),
-    # the lattice coupling: a worn Site wears its neighbours, which wear theirs (v9 IN-35)
+    # the lattice coupling: a broken Site pulls its neighbours down, which break and pull theirs (v9 IN-35, B12a.63)
     "H-235": (("Site.condition",),),
 }
 

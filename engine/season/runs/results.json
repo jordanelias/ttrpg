@@ -10745,7 +10745,7 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
+   "what": "a (Rung, stores) write by p_mid changed nothing: every subject it named reads the same after it -- Hh, Hh",
    "where": "F9",
    "needs": "a write that moves at least one subject it names",
    "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
@@ -10754,7 +10754,7 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "a (Rung, stores) write by p_mid changed nothing: every subject it named reads the same after it -- Hh, Hh",
+   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
    "where": "F9",
    "needs": "a write that moves at least one subject it names",
    "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
@@ -11207,7 +11207,7 @@
   "STEP": 7185,
   "BARRIER": 1892,
   "DECISION": 1945,
-  "QUERY": 30013,
+  "QUERY": 30033,
   "WRITE": 2305,
   "EVENT": 2335,
   "ACT": 95,

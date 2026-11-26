@@ -83,7 +83,7 @@ from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, I
                              RUNG_KINDS, matter_of_record)
 from ...data.rosters import ACT_WHEN_KEYS, FACTION_BY_PROP, capability_rows, obstacle_bound, require_use_site, roster, when_holds
 from ...data.verbs import BACKED_VERBS, FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
-from ...epistemic import trail_concealment
+from ...epistemic import NOTICE_ROLL, trail_concealment
 from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
@@ -517,6 +517,21 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     rows' reads and for the levels, which `resolve` takes from the same call)."""
     return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort, via=via,
                              heard_by=heard_by, toward=toward, seat=seat)[0]
+
+
+def precedence_net(w: Any, a: Any, rng: Draw) -> float:
+    """B08.05: THE NET OF ONE PRECEDENCE DRAW for act `a`, rolled by the module entry `NOTICE_ROLL` (the social roll every social act's pool is rolled by, so the host never rolls)
+    on the actor's own pool -- the pool the act would roll at, `contest_input`'s, which is `pool.py::faculty`'s (D-U1-08) -- at ZERO leverage: the bare pool roll (`roll_net_continuous`, the one sampler,
+    A-5), with no effort, favour or proof added, since none of them is the rival's skill. Returns `Margin.net` and nothing of the obstacle, which the
+    module composes and a precedence draw has no use for. `rng` is the caller's keyed `Draw` (A-30). Refused (`Unspecified`) when no driver has
+    registered the entry, as `resolve` is. [ASSUMPTION; low; Jordan to correct; revert: name another registered entry's role] A rivalry for a seat, a
+    Record or a larder is a contest of the rivals' skills, and the social roll is the one roll a skill has."""
+    entry, refusal = entry_for(None, _PROVIDER, NOTICE_ROLL)
+    if entry is None:
+        raise Unspecified(f"a precedence draw reaches {NOTICE_ROLL!r}, which MODULE_ENTRIES does not hold: {refusal['why']}", "S39.4",
+                          needs="a SeasonDriver constructed before the fold (the registrar fills MODULE_ENTRIES)",
+                          law="B08.05 -- the host draws through the module's entry and rolls nothing itself (S27.2)")
+    return entry.fn(replace(contest_input(w, [a.actor], verb=a.verb, via=a.via), leverage=0.0), rng).net
 
 
 def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
