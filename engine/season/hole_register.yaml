@@ -8470,10 +8470,10 @@ rows:
     tier:      1
     hole:      "THE LEVEL ONE FAULT BRINGS AGAINST THE SIDE AT FAULT -- `fault_step`, a `sigma_leverage.LEVEL_SIGMA` name (HEAR_B edit 10): the closing draw takes the board through the leverage channel, standing exhibits as `proofs` levels for a side and faults as levels against it, never an obstacle term (A-25). No document sizes the level."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fault_step` the one home. READERS: none at B24.07; the hearing's closing draw reads it through `Input.dials`"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.fault_step` the one home. READERS: `modules/social_contest/proceeding.py` (`_cost`, `_lever`: the faults' levels owed on the closing draw), through `Input.dials`"
     grade:     "assumption"
     default:   "None -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: None]: a fault brings no level, so the closing draw is what it was. HEAR_B gives no first value; B98 writes it BLOCKED (design: no target reading)"
-    site:      "Fixtures fault_step, read by nothing at B24.07; the hearing's closing draw reads it through `Input.dials`"
+    site:      "Fixtures fault_step, read by `proceeding.py::_cost` and `::_lever` (the closing draw's levels owed) through `Input.dials`; at the control None a fault brings no level"
     sweep:     [null, "minor", "moderate"]
     unblocks:  "a fault counting against the side at fault in the closing draw, and B98's sweep of the level"
     cite:      "HEAR_B 'Exact edits' 10: `fault_step` a `LEVEL_SIGMA` name, control `None`. [ASSUMPTION: the sweep's two non-control points are `minor` and `moderate` -- basis: `LEVEL_SIGMA`'s two smallest names; no source states them]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
@@ -8483,10 +8483,10 @@ rows:
     tier:      1
     hole:      "THE OBSTACLE ONE UNIT OF WEIGHT ADDS TO AN ANSWER -- `answer_step`, the unit of `answer`'s weight difference (R2 §7b-9 #4): the obstacle of an `answer` is `answer_ob + answer_step x max(0, w_target - w_answer)`, a hostile term only; a heavier answer reaches the roll as `proofs` levels for the mover, never a subtraction (A-25). A new fixture rather than reviving `proof_step`, which OBS §3 deletes. No document gives the unit."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_step` the one home. READERS: none at B24.07; B24.06's `answer` reads it through `Input.dials`"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_step` the one home. READERS: `modules/social_contest/proceeding.py::_answer_term` (B24.06's `answer`), through `Input.dials`"
     grade:     "assumption"
     default:   "0.25 -- THE FIRST VALUE, the former `proof_step`'s, SHIPPED at B24.37 [ASSUMPTION; Jordan to correct; revert: 0 -- the control (B24.07), under which a heavier exhibit does not harden its answer; R2 §7b-9 #4 -- a new fixture rather than reviving `proof_step`, which OBS §3 deletes]"
-    site:      "Fixtures answer_step, read by nothing at B24.07; B24.06's `answer` reads it through `Input.dials`"
+    site:      "Fixtures answer_step, read by `proceeding.py::_answer_term` (an `answer`'s obstacle) through `Input.dials`"
     sweep:     [0, 0.25, 0.5]
     unblocks:  "a weightier exhibit being harder to answer, and B98's sweep of the unit"
     cite:      "HEAR_B 'Exact edits' 10 and EVID_B (`proposals/2026-11-12-subsystem-audit-suite/proposals/05_SC_evidence_and_rebuttal_B.md`) `standing` rules: `answer_step` control 0, first value 0.25. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
@@ -8496,10 +8496,10 @@ rows:
     tier:      1
     hole:      "THE BASE OBSTACLE OF AN ANSWER -- `answer_ob`, a hostile term of `answer`'s obstacle (EVID_B `standing` rules: 'a fixture, proposed 2, NUMBER row'), before `answer_step`'s weight term and the room's hostile terms. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_ob` the one home. READERS: none at B24.07; B24.06's `answer` reads it through `Input.dials` (B24.05)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_ob` the one home. READERS: `modules/social_contest/proceeding.py::speech` (the difficulty of a board move's roll and of an answering `speak`, B24.43), through `Input.dials` (B24.05)"
     grade:     "assumption"
     default:   "2 -- EVID_B's PROPOSED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (EVID_B gives it no control); the sweep's other points are the alternatives]. Nothing reads it before B24.06, so shipping it moves no run"
-    site:      "Fixtures answer_ob, read by nothing at B24.07; B24.06's `answer` reads it through `Input.dials`"
+    site:      "Fixtures answer_ob, read by `proceeding.py::speech` through `Input.dials` (B24.06's `answer`, B24.43's answering `speak`)"
     sweep:     [1, 2, 4]
     unblocks:  "B24.06's `answer` having an obstacle, and B98's sweep of it"
     cite:      "EVID_B `standing` rules: `answer_ob` a fixture, proposed 2, NUMBER row. [ASSUMPTION: the sweep is a half, the proposed value, a double -- basis: none; EVID_B names the proposed value only]. CONTROL: nothing reads the setting, so no run moves by it. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
@@ -8522,10 +8522,10 @@ rows:
     tier:      1
     hole:      "THE CEILING ON ONE CORROBORATED CELL'S WEIGHT -- `evidence_cap`, a number (EVID_B `standing` rule 4: 'capped at `evidence_cap`'): the same cell, same value, same side, from distinct origins is one item of weight `1 - Prod(1 - w_i)` (FI's ruled noisy-OR, `ED-IN-0322`), and that weight is capped here; the same origin twice counts once. No document derives the value."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_cap` the one home. READERS: `modules/social_contest/evidence.py::standing` (rule 4), through `Input.dials` (`seam/wrappers/sigma.py::HEARING_SETTINGS`), from B24.19; no caller feeds exhibits to a realm sitting yet, so no run moves by it"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_cap` the one home. READERS: `modules/social_contest/evidence.py::standing` (rule 4), through `Input.dials` (`seam/wrappers/sigma.py::HEARING_SETTINGS`) and `inp.evidence_cap` (`roll.py`). The cap is an absolute weight and noisy-OR never exceeds 1.0, so a cap >= 1.0 never binds: every value of the sweep [1.0, 2.0, 3.0] is inert, and a re-sweep below 1 is B98's"
     grade:     "assumption"
     default:   "2.0 -- EVID_B's PROPOSED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (EVID_B gives it no control); the sweep's other points are the alternatives]. Nothing reads it at B24.17, so shipping it moves no run"
-    site:      "Fixtures evidence_cap, read by nothing at B24.17; the `standing` rule's corroboration step reads it through `Input.dials`"
+    site:      "Fixtures evidence_cap, read by `evidence.standing`'s corroboration step through `Input.dials` and `inp.evidence_cap`; a cap >= 1.0 never binds (noisy-OR is at most 1.0)"
     sweep:     [1.0, 2.0, 3.0]
     unblocks:  "corroboration having a cap in the evidence term (R-04.c3), and B98's sweep of it"
     cite:      "EVID_B `standing` rule 4 and 'Exact edits' 1: `evidence_cap` proposed 2.0, NUMBER row, three-point sweep. [ASSUMPTION: the sweep 1.0 / 2.0 / 3.0 -- basis: the proposed value +/- 1]. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.14's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
@@ -8535,10 +8535,10 @@ rows:
     tier:      1
     hole:      "WHERE A DOCKETED MATTER'S `proofs` LEVELS COME FROM -- `evidence_from`, `ledger` or `case_file` (EVID_B 'Exact edits' 5: 'the control arm (`evidence_from: ledger`, a fixture) keeps `world_q.proofs` through the host's `proofs` source'). `ledger`: the speaker's own unmirrored deed claims (`world_q.proofs`), as before. `case_file`: the exhibits filed on the matter's case file, which the roll's `proof_levels` counts; the ledger is then read for that matter by nothing, so one matter's proofs are never read from both. No document says which ships."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_from` the one home (`EVIDENCE_ARMS` its closed set, refused by `load`). READER: `engine/season/seam/wrappers/sigma.py::_read_social_roll`, which fills `SocialContestInput.exhibits` (`_exhibits_of`) and leaves `proofs` at 0 for a matter whose case file is the source; B24.37 set the shipped value"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_from` the one home (`EVIDENCE_ARMS` its closed set, refused by `load`). READER: `engine/season/seam/wrappers/sigma.py::_filed_case`, read by `_read_social_roll` (the dealt roll, which fills `SocialContestInput.exhibits` through `_exhibits_of` and leaves `proofs` at 0 for a matter whose case file is the source) and by `odds_of` (the believed one); a verb that proceeds reads no exhibit until B24's close repair; B24.37 set the shipped value"
     grade:     "assumption"
     default:   "case_file -- SHIPPED at B24.37 [ASSUMPTION; Jordan to correct; revert: ledger]: a docketed matter's `proofs` levels are the exhibits filed on its case file. `ledger` is the control (B24.21), under which every docketed matter reads `world_q.proofs` and no exhibit is built"
-    site:      "Fixtures evidence_from, read ONLY by `seam/wrappers/sigma.py::_read_social_roll` (the dealt roll of a prize a room hears); `believed_input` reads no exhibit and stays on the ledger until the flip"
+    site:      "Fixtures evidence_from, read by `seam/wrappers/sigma.py::_filed_case` for the dealt roll (`_read_social_roll`) and the believed one (`odds_of`); a verb that proceeds reads no exhibit until B24's close repair. CARRIED to B25: `person_q.cited_said` builds its `Said` at the stored confidence with no pairing, where `said_of` tells `reader.present(c)` and the pairing (a cited claim's confidence is laundered)"
     sweep:     ["ledger", "case_file", "case_file with evidence_cap 3.0"]
     unblocks:  "the case file's filed exhibits being the proofs of a docketed matter (R-04.c3), and B98's sweep of the arm"
     cite:      "EVID_B 'Exact edits' 5. [ASSUMPTION: a switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line] [ASSUMPTION: the sweep's third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: the register's R2 refuses fewer than 3 DISTINCT points]. CONTROL: at `ledger` the realm hashes at seeds 0 to 2 read equal to B24.22's. FALSIFIER: `engine/season/tests/test_sc_hearing_evidence.py::test_the_case_file_is_the_proofs_of_a_docketed_matter_and_the_ledger_is_not` (a matter whose case file holds one filed item rolls with that item's level and none from its ledger at `case_file`; the same world at `ledger` rolls the ledger's) and `python tools/ci_sim_fabrication_check.py`."

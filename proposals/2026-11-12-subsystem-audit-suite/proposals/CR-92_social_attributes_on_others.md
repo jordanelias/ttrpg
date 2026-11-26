@@ -2,7 +2,7 @@
 
 # The social attributes acting on others: Grace on regard, promotion and the venue's standard; Presence on obedience; Attunement on bonds
 
-**Source.** `workplans/valoria_master_workplan_v12_part22_cont.md` B24.41 (lines 210-224), which copies the intake's CR-92
+**Source.** `workplans/valoria_master_workplan_v12_part22_cont.md` B24.41 (lines 242-255), which copies the intake's CR-92
 REMAINING UNBUILT text. `master/eval/E1.md` "### CR-92", which the entry names as the carry-forward, **is not in the tree**
 (`master/eval/` holds `E6.md` and `E7.md` only); this file works from the entry's copy. Jordan's words are
 `proposals/2026-11-05-attribute-rulings-by-subject.md` (ED-IN-0347): AR-29 (Presence), AR-30, AR-31 (Attunement), AR-32 to

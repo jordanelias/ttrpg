@@ -106,7 +106,7 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B25-fi-questioning | FI | W16 | S16 | 0 | 30_cont | 22 (B17 P3 R2) | MOVER (behaviour 11) | 11.3 | B00, B01, B02, B11, B12c, B24 |
 | B26-fi-inquiry | FI | W17 | S17 | 1 | 33_cont | 18 (B17 DF1) | MOVER (behaviour 13) | 9.7 | B00, B01, B02, B10, B11, B12c, B24, B25 |
 | B27-sc-proceedings | SC | W16 | S16 | 0 | 31, 31_cont | 30 (B21 R1 H1 DF6; +B27.28 B, V2 fold; +B27.29 B) | MOVER (behaviour 12) | 14.5 | B00, B01, B01a (B01a.05), B02, B11, B24, B24a, B24p @ba108d1 |
-| B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 36 (B31 P1 R1 BL1 DF2; +B28.34 DF, +B28.35 B, 2026-11-13) | MOVER (behaviour 17) | 16.9 | B00, B01, B01a (B01a.05), B02, B05, B07, B08, B11, B15, B21, B24a +R, B24p @ba108d1, B25, B27 +R |
+| B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 37 (B31 P1 R1 BL1 DF2; +B28.34 DF, +B28.35 B, 2026-11-13; +B28.36 B, B24 close) | MOVER (behaviour 18) | 17.3 | B00, B01, B01a (B01a.05), B02, B05, B07, B08, B11, B15, B21, B24a +R, B24p @ba108d1, B25, B27 +R |
 | B29-pc-custody | PC | W14 | S14 | 0 | 24_cont | 4 (B4) | MOVER (behaviour 2, conditional 1) | 4.1 | B00, B01, B02, B15, B16, B21 |
 | B30-mb-nested | MB | W17 → **W18** | S18 | 4 | 37_cont | 11 (B10 DF1) | MOVER (behaviour 4) | 6.9 | B00, B01, B02, B16L, B05, B15, B16, B20, B22 +R, B24 |
 | B31-mb-loadout-economy | MB | W16 → **W18** | S19 | 4 | 39_cont | 21 (B17 P2 C1 DF1) | MOVER (behaviour 5) | 10.9 | B00, B01, B02, B16L, B17, B18, B19, B20 +R, B22 +R |
@@ -211,7 +211,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | S17 | B11F2 | — | — | 10 | `B11F2.99` | 1 of 6 movers |
 | S17 | B22 | 04, 05, 06, 07, 08, 09, 12, 13, 20, 29, 30, 31, 33, 34, 35 | — | — | `B22.99` (B22.35 step 3 moved, R1) | 2 of 6 movers |
 | S17 | B26 | 01, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17 | — | — | `B26.99` (B26.17 step 3 moved, R1) | 3 of 6 movers |
-| S17 | B28 | 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 29, 30, 32, 33 | — | — | `B28.99` | 4 of 6 movers |
+| S17 | B28 | 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 29, 30, 32, 33, 35, 36 | — | — | `B28.99` | 4 of 6 movers |
 | S17 | B32 | 05, 08, 12, 13, 14, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 32 | 27 | — | `B32.99` | 5 of 6 movers |
 | S17 | B37p | 01, 02, 04, 05 | 03 | — | `B37p.99` | 6 of 6 movers |
 | S18 | B21s | — | — | — | `B21s.99` records the EQUAL reading | any (EQUAL, §7.4) |

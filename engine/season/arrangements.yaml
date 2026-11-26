@@ -198,8 +198,8 @@ rites:
   # `council_of_state` and `excommunication_deliberation` name. Beside the cells every rite states it carries the hearing's: `bears` as a
   # MAP `rung -> side` (who bears the question at each rung; sides as HEAR_B's `Exhibit.side`, for or against the party), `moves.bench` (the
   # bench's own moves), `faults` (`rosters.yaml: proceeding_faults`) and `disclosed` (whether the other side's filings stand on a mover's board).
-  # The rite's opener is the bearer of its first issue. `issues` is the trial's three (the `procedure` rung heads the ladder and is read by the
-  # hearing's reader, B24.10); the structure cells (`genre` to `concede`) are the `trial` rite's, which the three judicial rows already read.
+  # The rite's opener is the bearer of its first issue. `issues` is the trial's three (`procedure` heads no rite's `issues`, so its bearer
+  # cell is unread); the structure cells (`genre` to `concede`) are the `trial` rite's, which the three judicial rows already read.
   # [ASSUMPTION; Jordan to correct; revert: edit this row -- basis: the `bears:` map keeps `IS-B2-SC-03` step 1's assignment (the accuser bears
   # procedure, fact and definition and the party bears justification, the issue ladder HEAR_B carries from the kernel,
   # `audits/05_SC_audit_addendum_B.md:242`, `:246`) and writes it in THIS file's side words: `for` is the bearer, the speaker `claimants[0]` the

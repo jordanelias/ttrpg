@@ -476,7 +476,7 @@ modules:
     doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: modules/social_contest/   # the running entry is `modules/social_contest/roll.py` (composition rows `social_contest.roll`, `social_contest.obstacle`); the SC05 kernel that preceded it is retired (B24.33)
     scales: [scene]
-    resolver: d10_sigma   # the sigma-leverage d10 resolver the engine owns (ED-SC-0037), composed in `roll.py`
+    resolver: d_sigma   # the sigma-leverage d10 resolver the engine owns (ED-SC-0037), composed in `roll.py`
     state: []   # the module keeps no state (04 §A.2; B24p.12): the proceeding's tracks are a `Sitting` the host holds, never a persuasion track the module writes
     transitions:
       - {via: "scale_transitions §3.4 Scene → Faction (Domain Echo)"}

@@ -107,8 +107,8 @@ scales:
       `PYTHONHASHSEED=0 python -m engine.season.harness.corpus_run --seasons 2 <seed>` at seeds 0 and 1 -- its `DEGREES RESOLVED BY
       VERB` block names the social verbs that rolled and the bands they resolved at"
     note: >-
-      The kernel under `systems/social_contest` is not reached by the loop (it retires at plan position `2-ii`,
-      `workplans/valoria_master_workplan_v9.md`); the roll the loop runs is the module entry `social_contest.roll`
+      The kernel under `systems/social_contest` was not reached by the loop (it retired at B24.33, `ED-SC-0045`);
+      the roll the loop runs is the module entry `social_contest.roll`
       (`modules/social_contest/roll.py`), called by the `social_contest` provider through `seam/wrappers/sigma.py`, and it
       resolves through `degree_from_net` (`engine/dice_engine/dice_engine.py`) and `roll_net_continuous`
       (`engine/dice_engine/sigma_leverage.py`). ⚠ REWRITTEN (B05.19): this note used to say the loop does NOT reach the

@@ -1678,7 +1678,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `speech_blend` (a POINTER, no field): Reason's share of a speech's dice is two columns tuned as one table -- `rosters.yaml: grounds[*].reason` (B24p.01, 1.0 on every ground at the control) and
     # `arrangements.yaml` rows' `reason_lean` (B24p.03, 0 on every row at the control); B24p.23 writes V2's model column of each (`sc2/host.py::GROUNDS`, `::RITES`).
     # [JUSTIFIED: engine/season/hole_register.yaml H-939 -- site: Fixtures speech_blend (a pointer row, no field), graded `assumption`; the two columns are one blend and are swept together as a scale on V2's column, 0 (control) / 0.5 / 1]
-    # ---- the hearing's settings (B24.07; HEAR_B edit 10, EVID_B `answer_ob`). Nothing reads them until B24.06 (`answer`, through `Input.dials`) and the items after it; every one stands at its control
+    # ---- the hearing's settings (B24.07; HEAR_B edit 10, EVID_B `answer_ob`). Read by `proceeding.py` and `evidence.py` through `Input.dials`; four were set at B24.37 (`sitting_exchanges`, `answer_step`, `first_heard_ob`, `evidence_from`) and the rest stand at their control
     # (`argument_step` is struck: standing arguments are the track, whose setting is `track_step`, `H-903`, so no second ladder is made).
     # `sitting_exchanges`: whether the attendees at a sitting spend their own act's `effort` as exchanges, a SWITCH read as 0 or 1 (`sigma._rite_of` reads it as truthy). `0` is the control: a sitting has no exchanges beyond the filed items.
     # [ASSUMPTION; Jordan to correct; revert: `0`. Shipped (B24.37) means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 and the shipped value is `1` -- basis: HEAR_B "shipped: the attendees' effort" and `person_q.effort_of`, "the turns he prepares", B24p.06.]
@@ -1703,7 +1703,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-671 -- `site: Fixtures lean_level`, graded `assumption`; no document derives the level of one commit, so it is injected at `minor` and swept None / minor / moderate]
     lean_level="minor",               # `H-671`, swept None (control) / minor (SHIPPED) / moderate
     # `evidence_cap`: the ceiling on the weight of one corroborated cell (B24.17; EVID_B `standing` rule 4): the same cell, same value, same side, from distinct origins is one item of weight `1 - Prod(1 - w_i)` (FI's
-    # noisy-OR, `ED-IN-0322`), capped at `evidence_cap`; the same origin twice counts once. Nothing reads it until the `standing` rule reads it through `Input.dials`, so the shipped value moves no run.
+    # noisy-OR, `ED-IN-0322`), capped at `evidence_cap`; the same origin twice counts once. `evidence.standing` reads it through `Input.dials`; noisy-OR never exceeds 1.0, so a cap >= 1.0 never binds.
     # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points are the alternatives). EVID_B proposes 2.0 -- basis: none; the sweep's points are the proposed value +/- 1.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-666 -- `site: Fixtures evidence_cap`, graded `assumption`; EVID_B proposes 2.0 and no document derives it, so it is injected at 2.0 and swept 1.0 / 2.0 / 3.0]
     evidence_cap=2.0,                 # `H-666`, swept 1.0 / 2.0 (proposed, SHIPPED) / 3.0
@@ -1720,7 +1720,7 @@ DEFAULT_FIXTURES = Fixtures(
     first_heard_ob=1,                 # `H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2
 )
 
-#: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_read_social_roll` reads the setting).
+#: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

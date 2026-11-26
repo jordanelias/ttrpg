@@ -129,6 +129,7 @@ Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lan
 - FALSIFIER and CONTROL: "If any of these forms on the other, the partition is not carrying the class." Control: the base reading of `speak`, `open_case` executions (`reading @<sha>`).
 - GATE: `python -m pytest engine/season/tests/test_vm_s2_a_formation.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s`, s = 0, 1, 2 → the two refusal counts 0, executions not lower ("A fall is the stopping rule … revert that edit").
 - HASH MOVERS: declared, every world (refusal Events stop). B25.99.
+- CARRIED FROM B24 (close; no position added): `decision/options.py` forms only the `none` and `all citing` variants of a `speak` on a docketed matter, so B24.27's third variant (an answering variant carrying `ANSWERS_KEY`) is not formed and the answered stage, B24.26's out-of-sitting `first_heard` and B24.43's `answered_over` run only on hand-built acts; and `argue` forms no `cites` in computed play, so a hearer seated on evidence alone is moved by no ground. Both are formation owed on the `Matter` referent this item stamps.
 - DEPENDS ON: EXISTS-IN-TREE `world_q.docket_question`, `::questions_for`, `::own_referents_of_class`, `state/carriers.py::Question` (`classes`, IN-53 D1); V12 B25.02.
 - GLOSSARY: *matter* (step 5).
 - COST and TIER: edit; `sonnet`, `medium`.
