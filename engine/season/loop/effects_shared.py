@@ -14,9 +14,9 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, is_season_count, task_share
+from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, WON, is_season_count, task_share
 from ..gaps import Forbidden, InstrumentDefect
-from ..queries.world_q import holder_faction_of, occupies, seat_people_at
+from ..queries.world_q import governing_hold, holder_faction_of, march_at_band, mustered, occupies, seat_people_at
 from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, seat_faction
 from ..trace_log import TRACE
@@ -207,8 +207,13 @@ def occupying_faction(w: "World", via: str, rid: str, unheld: bool = False) -> O
     faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's AGAINST A
     MARCH: one that lost never arrived, so nothing occupies and nothing is seized. Occupation is PRESENCE (R-6, ruled
     for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
-    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. Every
-    decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
+    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. A held TOWN taken
+    without a won field this lap goes to the faction with strictly more persons mustered there (CP-T09-04 (b), Pax Pamir's rule);
+    after a won field the licence is unchanged; a territory's is `occupies` alone. B21b.04, the limit: "a won field" is a `field.won` in `w.log` at this `w.tick` whose causing
+    `march` named the place (`world_q.march_at_band`; an Event carries no payload, the act's `subject` is the field's rung), and the log takes a lap's
+    Events at the lap's END (`loop/driver.py`), so it reads the tick's EARLIER laps, never the lap folding now -- which a `seize` of the same lap precedes,
+    RESOLVE before ENCOUNTER, so it could not have read it either. The seat's side is `seat_people_at` (the faction's members and the seat's sworn there), the
+    holder's `mustered`; for a settlement held through a taken territory the territory is read too (either place licenses). THE WON FIELD IS READ OFF THE SEASON'S EARLIER LAPS: a field won in a season's LAST lap exempts nothing, and the next season's seizure meets the plurality against defenders the win did not remove. Every decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
     committed to the seat's faction, and `may_seize` over the hold it replaces)."""
     rung = w.rungs.get(rid)
     mine = seat_faction(w, via)
@@ -219,7 +224,20 @@ def occupying_faction(w: "World", via: str, rid: str, unheld: bool = False) -> O
         return None
     # B21.79 (CP-T09-07 (b)): the seat's sworn men present at a settlement are presence as its faction's members are
     # (`world_q.seat_people_at`); a territory is occupied by standing AT it, which the union does not widen.
-    if not (occupies(w, rid, mine)
-            or (rung.kind in SUBTREE_OCCUPATION_KINDS and seat_people_at(w, via, rid))):
+    town = rung.kind in SUBTREE_OCCUPATION_KINDS
+    people = seat_people_at(w, via, rid) if town else []
+    if not (occupies(w, rid, mine) or people):
         return None
+    # B21b.04, a TOWN: the plurality is read at the town and, for a town held only THROUGH a taken territory (`occupies`' held-through limb), also at that
+    # territory, where the army stands; either place licenses, so more presence never revokes a licence. A won field at either place exempts it. The count at
+    # the territory is the subtree's (the holder's people in the territory's other towns count against the army), a harder test than seizing the territory
+    # itself, which `occupies` alone licenses [ASSUMPTION; medium; Jordan to correct; revert: the plurality at every held place, or at the town alone].
+    if town:
+        held = governing_hold(w, rid)
+        places = [rid] + ([held.object] if held is not None and held.object != rid and occupies(w, held.object, mine) else [])
+        # an UNHELD town (`unheld`, B12a: the rule for held land is the rule for unheld land) has no holder's people to outnumber; B21b.06 adds the plurality among
+        # the factions mustered there
+        if not any(march_at_band(w, at, WON) or len(people if at == rid else seat_people_at(w, via, at)) > (len(mustered(w, at, holder)) if holder else 0)
+                   for at in places):
+            return None
     return mine

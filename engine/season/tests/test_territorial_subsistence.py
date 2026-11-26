@@ -98,6 +98,12 @@ def _cohorts(w) -> dict:
     return {pid: p for pid, p in w.persons.items() if p.is_cohort}
 
 
+def _population_cohorts(w) -> dict:
+    """The settlement cohorts, `cohorts.yaml`'s population rows: the guard cohorts (B21b.02: `guards` ships on) are posted beside a principal, hold no pursuit
+    vector (`seat_guards`: "a guard is a cohort, not a character") and are not the population file's rows."""
+    return {pid: p for pid, p in _cohorts(w).items() if not pid.startswith(COHORT_PREFIX + "guard_")}
+
+
 def _matter(w):
     """MATTER alone, through the real barrier and a real MATTER token."""
     d = SeasonDriver(w)
@@ -123,7 +129,7 @@ def realm():
 
 def test_24f_the_realm_seats_exactly_the_authored_rows_beside_an_unchanged_cast(realm):
     rows = cohort_rows()
-    cohorts = _cohorts(realm)
+    cohorts = _population_cohorts(realm)
     assert rows, "the file is empty; every assertion below would pass over nothing"
     assert set(cohorts) == {f"{COHORT_PREFIX}{r['rung']}" for r in rows}, (
         "the world's cohorts are not the file's rows -- something minted one, or dropped one")
@@ -759,7 +765,7 @@ def test_se06_the_poles_are_not_interchangeable_alpha_is_read_on_the_instrumenta
 
 
 def test_se06_every_cohort_holds_a_vector_and_two_of_one_territory_are_identical(realm):
-    cohorts = _cohorts(realm)
+    cohorts = _population_cohorts(realm)
     checked = 0
     by_terr: dict = {}
     for pid, p in cohorts.items():

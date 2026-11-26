@@ -20,7 +20,7 @@ import pytest
 from engine.season.harness import army_presets as AP
 from engine.season.harness import military_menu as MM
 from engine.season.harness.play_surface import dispatching_chooser
-from engine.season.boot.realm import build_realm
+from engine.season.boot.realm import COHORT_PREFIX, build_realm
 from engine.season.data.rosters import WON
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
@@ -274,6 +274,10 @@ def _realm_crown_army(strategy="line", sites=True):
     w = build_realm(0)
     for i, c in enumerate(_governed_cohorts(w, CROWN)):
         w.persons[c].weight = CROWN_COHORT_WEIGHT if i < CROWN_COHORTS else 1
+    # B21b.02 (guards ship on): the guard cohorts (weight 4/2/2) are mustered at their settlement like any cohort and would add their own troops to the
+    # field's headcount; like the seven dropped above they are not part of the Crown's levy this fixture sizes, so they weigh 1 (raised by nobody).
+    for g in [p for p in w.persons if p.startswith(COHORT_PREFIX + "guard_")]:
+        w.persons[g].weight = 1
     if sites:
         _sites(w, CROWN)
     return w, AP.install(w, [CROWN], strategy=strategy)

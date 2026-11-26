@@ -1112,8 +1112,9 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     THE LICENCE IS OCCUPATION, read at the effect as `raze`'s will be (#453 §10.4 steps 8 and 11): the
     exercised seat's FACTION (`faction_prop_id` of its display faction) `mustered` at the settlement
     (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction or by
-    nobody (`holder_faction_of`). It asks nothing of the defenders: an opposed `Won` that removed nobody still
-    leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
+    nobody (`holder_faction_of`). It asks nothing of the defenders AFTER A WON FIELD: an opposed `Won` that removed nobody still
+    leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)); a held TOWN taken with no field won this season goes to the
+    strictly larger party (`occupying_faction`, B21b.04, CP-T09-04 (b)). DECLINES
     (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
       * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
         hearth; a territory IS one since ED-IN-0306 phase 4) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
