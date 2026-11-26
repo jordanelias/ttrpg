@@ -100,7 +100,7 @@ def test_an_answer_of_the_same_value_strikes_nothing():
 
 def test_an_answer_acts_by_its_band_on_the_item_it_answers():
     """Rules 1 and 2, band by band, on the answering act's own band: contradiction (Failure stands, Partial halves it and its answer, Success strikes it,
-    Overwhelming strikes it and charges its citer if he knew it false, else its origin) and forgery (Failure: the impeacher bears `failed_impeachment`; Partial
+    Overwhelming strikes it and charges its citer if he knew it false, and no one else: B24.44) and forgery (Failure: it stands and `standing` owes nothing, the impeacher's cost is the answering act's Event; Partial
     halves; Success strikes it alone; Overwhelming strikes every item of its origin and records `forgery_found`). An item never answered is never struck."""
     def board(band, **kw):
         return [_it("t", "for", 1.0, "o1", (("r", "contradicts"),), band=band, **kw), _it("r", "against", 0.5, "o2", (("t", "contradicts"),)),
@@ -108,10 +108,10 @@ def test_an_answer_acts_by_its_band_on_the_item_it_answers():
     ws = lambda b, f=(), **kw: {i.id: i.weight for i in _standing(board(b, **kw), f)[0]}
     assert ws(None) == ws("Failure") == {"t": 1.0, "r": 0.5, "m": 1.0}
     assert ws("Partial") == {"t": 0.5, "r": 0.25, "m": 1.0}
-    assert _standing(board("Success"))[1:] == (("t",), ()) and _standing(board("Overwhelming"))[1:] == (("t",), (("discredited_source", "o1"),))
+    assert _standing(board("Success"))[1:] == (("t",), ()) and _standing(board("Overwhelming"))[1:] == (("t",), ())
     assert _standing(board("Overwhelming", sincere=False))[2] == (("self_contradiction", "for"),)
     checked = 0
-    for band, want in (("Failure", ((), (("failed_impeachment", "against"),))), ("Partial", ((), ())), ("Success", (("t",), ())),
+    for band, want in (("Failure", ((), ())), ("Partial", ((), ())), ("Success", (("t",), ())),
                        ("Overwhelming", (("t", "m"), (("forgery_found", "for"),)))):
         _, struck, faults = _standing(board(band), findings=("t",))
         assert (struck, faults) == want, band
@@ -322,7 +322,7 @@ def test_an_answer_strikes_by_its_band_in_a_share_strictly_between_0_and_1():
 def test_an_impeachment_strikes_origin_wide_only_at_overwhelming():
     """EVID_B gate 3 and FI_05_B (c): the accused's filed Record (a forgery) counts like any Record until answered (`standing` holds it whole, weight 1); the examiner, holding the finding
     `(record, record.forged, True)`, answers it by an `answers` speech that cites the finding: over 200 seeds all four bands occur, and the Record is struck in a share strictly between 0 and 1 --
-    `Failure` it stands and its impeacher bears `failed_impeachment`, `Partial` it is halved, `Success` it alone is struck, `Overwhelming` it and every item of its origin are struck and `forgery_found`
+    `Failure` it stands (and `standing` owes the impeacher's cost nothing: B24.44), `Partial` it is halved, `Success` it alone is struck, `Overwhelming` it and every item of its origin are struck and `forgery_found`
     is recorded against the side that filed it. FALSIFIER: an origin-wide strike at `Success`."""
     from .test_sc_hearing_admission import G, records_of
     ev = _ev()
@@ -338,7 +338,7 @@ def test_an_impeachment_strikes_origin_wide_only_at_overwhelming():
         assert {i.id: i.weight for i in before if i.side == "against"} == {record.id: 1.0, items[1].id: 1.0}, seed       # a forgery counts, as a true Record does, until it is answered
         held, gone, faults = ev.standing(tuple(items), (record.id,), 2.0)
         if band == "Failure":
-            assert gone == () and ("failed_impeachment", "for") in faults, (seed, gone, faults)
+            assert gone == () and faults == (), (seed, gone, faults)
         elif band == "Partial":
             assert gone == () and {i.id: i.weight for i in held}[record.id] == 0.5, (seed, gone)
         elif band == "Success":

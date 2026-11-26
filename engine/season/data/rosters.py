@@ -1338,17 +1338,6 @@ def remove_distance(source: str) -> float:
     return REMOVE_ORDINAL.index(source) / len(REMOVE_ORDINAL)
 
 
-# THE KIND OF PROOF A DEED CLAIM IS, BY HOW ITS HOLDER CAME TO HOLD IT (B05.21, T13 edit 3 / T5): `queries/world_q.py::proofs` reads it where the
-# arrangement row's `admits:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `MATTERS` (the
-# roster that absorbed `proofs` at B24p.03) or `None`, a way of holding that is no kind the rows name, refused at import: a claim whose source maps
-# nowhere would weigh by a guess.
-PROOF_KIND_OF_SOURCE = roster_map("proof_kind_of_source", "proof_kind")
-if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(MATTERS):
-    raise Unspecified(
-        f"`proof_kind_of_source.proof_kind` is {PROOF_KIND_OF_SOURCE!r}; it must key exactly the claim sources {sorted(CLAIM_SOURCES)} "
-        f"and name only `matters` members {sorted(MATTERS)} (or null)", "rosters.yaml",
-        needs="one `matters` member (or null) for every `claim_sources` member",
-        law="T13 T5 -- the kind of a deed claim is its source mapped to the `matters` roster, a roster row and not a code literal")
 # The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
 # no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
 # _check_dominance_kinds`).

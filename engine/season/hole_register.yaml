@@ -6728,9 +6728,9 @@ rows:
 
   - id:        H-427
     tier:      1
-    hole:      "WHETHER THE ARRANGEMENT ROW'S ADMITTED PROOFS FILTER WHAT A SPEAKER'S PROOFS WEIGH -- `proof_admission`, `off` or `on` (T13 T5, edit 4). `on`: under a docketed row only the deed claims whose kind of proof (`rosters.yaml: proof_kind_of_source`, by the claim's `source`) the row's `proofs:` column admits count in `world_q.proofs`, the rest weigh 0. Closes H-216's named limit (*the arrangement's admitted `proofs` column is not read here*) at the owner. No document derives the claim-source to proof-kind mapping."
+    hole:      "WHETHER THE ARRANGEMENT ROW'S ADMITTED PROOFS FILTER WHAT A SPEAKER'S PROOFS WEIGH -- `proof_admission`, `off` or `on` (T13 T5, edit 4). `on`: under a docketed row only the deed claims whose kind of proof (`queries/person_q.py::proof_kind`, derived from the claim itself, B24.44) the row's `proofs:` column admits count in `world_q.proofs`, the rest weigh 0. Closes H-216's named limit (*the arrangement's admitted `proofs` column is not read here*) at the owner."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.proof_admission` the one home. READER: `engine/season/seam/wrappers/sigma.py::_admitted_proofs`, which passes the docketed row's `proofs:` to `queries/world_q.py::proofs` (`world_q` reads no arrangement itself). The mapping is `rosters.yaml: proof_kind_of_source`"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.proof_admission` the one home. READER: `engine/season/seam/wrappers/sigma.py::_admitted_proofs`, which passes the docketed row's `proofs:` to `queries/world_q.py::proofs` (`world_q` reads no arrangement itself). The kind a claim is, is `queries/person_q.py::proof_kind`, the one reader (B24.44; `rosters.yaml: proof_kind_of_source` is retired)"
     grade:     "assumption"
     default:   "on -- SHIPPED, LIVE (T13 T5), set by B05.23 against T5's falsifier [ASSUMPTION; medium; Jordan to correct; revert: off, THE CONTROL: every deed claim counts, `world_q.proofs` as it was]"
     site:      "Fixtures proof_admission, read ONLY by `seam/wrappers/sigma.py::_admitted_proofs`, called from `_read_social_roll` for a prize a room hears"
@@ -8556,6 +8556,19 @@ rows:
     unblocks:  "the top band of a filing meaning something in the room (R-04.c3), and B98's sweep of the term"
     cite:      "ADM 'The resolution, decided' (`proposals/2026-11-12-subsystem-audit-suite/proposals/19_LACUNA_admission_rides_the_citing_draw.md`): `first_heard_ob` proposed 1, three-point sweep 0 / 1 / 2, control 0. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.24's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row; `engine/season/tests/test_sc_hearing_admission.py` observes the first-heard mark at the top band only."
     source:    "workplan v12 B24.25 (ADM edit 3; B24's H block slot 8)"
+
+  - id:        H-672
+    tier:      1
+    hole:      "WHAT A FAILED IMPEACHMENT COSTS THE ONE WHO MADE IT: a failed impeachment costs the impeacher in the room: RULED by Jordan, the judges who witness it hold it against him, through a deed valence on the answering speech's Failure kind that moves their regard of him (`person_q.deed_valence`)"
+    kind:      "RULING"
+    owner:     "`queries/world_q.py::reception` / `queries/person_q.py::deed_valence`"
+    grade:     "assumption"
+    default:   "no cost -- TODAY: `reception` reads the judges' commits (SC-02, B24.02), not told claims, and `modules/social_contest/evidence.py::standing` no longer emits `failed_impeachment` (B24.44; `fault()` records only `inp.rite.faults`, `ae8976d07`) [ASSUMPTION; Jordan to correct; revert: the build below not made]"
+    site:      "`world_q.reception` and `person_q.deed_valence`, through `deeds_judged`'s judged half of `regard`: no site reads a failed impeachment today"
+    sweep:     ["no cost (today)", "a deed valence on the answering speech's Failure kind, moving the witnessing judges' regard of the impeacher", "that valence scaled by a gain"]
+    unblocks:  "B27.29: a lost impeachment felt by those who saw it, the build of this ruling (the plan's position, `workplans/valoria_master_workplan_v12_part31_cont.md`)"
+    cite:      "MEASURED at B24.25's FI (d) reading: a failed impeachment cost the impeacher nothing in 60 of 60 runs. B24.44 took the consequence out of `standing`'s faults, the answering act's Event being what the room witnesses (B24.24, B24.25). RULED by Jordan: the cost falls on the impeacher, in the room, through those who witnessed it."
+    source:    "workplan v12 B24.44 (step 3; B24 block slot 12); needs_jordan false (ruled)"
 
 discharges:
   D1:   "row:H-01"

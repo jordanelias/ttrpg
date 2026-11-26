@@ -415,7 +415,7 @@ def test_the_levels_are_the_sources_the_leverage_sums():
 from ..data import arrangements as ARR
 from ..data import fixtures as FX
 from ..data import rosters as ROS
-from ..queries import world_q
+from ..queries import person_q, world_q
 from . import test_sc02_reception as R
 
 NEW_MEMBERS = CONDITIONAL
@@ -574,8 +574,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     admits `testimony`, the kind of a firsthand claim) with admission `on` he shows them too -- the filter is the row's, not a blanket zero."""
     assert ARR.ARRANGEMENTS["parliamentary_debate"]["admits"] == () and "testimony" in ARR.ARRANGEMENTS["arbitration"]["admits"]
     assert DEFAULT_FIXTURES.get("proof_admission") == "on"                                       # shipped at commit 2 (B05.23); each arm is set below
-    kinds = ROS.roster_map("proof_kind_of_source", "proof_kind")
-    assert kinds["firsthand"] == "testimony" and set(kinds) == set(roster("claim_sources")), kinds
+    assert person_q.proof_kind(R._claim("probe", R.SPEAKER, R.PARTY, sorted(V.DEED_KINDS - person_q.PAIRED_KINDS)[0])) == "testimony"      # the kind of a firsthand deed claim
 
     def proofs_levels(row, admission):
         w, _d = R._judging_world(proof_admission=admission)
@@ -593,6 +592,33 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     held = 4 * world_q.remove_weight("firsthand")
     assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=()) == 0.0
     assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=("testimony",)) == held
+
+
+def test_one_kind_of_proof_per_claim():
+    """B24.44 (FI_05_B E-1): every reader of what kind of proof a claim is reads `person_q.proof_kind`, whatever its source. For each claim source against
+    a plain deed, a refusal kind, a covert deed, a full and a withheld confession, the kind the ledger arm admits it under -- `world_q.proofs`' filter
+    (`admitted`), `sigma._items_of`'s item and the dossier's `proof_kind` column -- is `proof_kind`'s: a claim of a kind the row does not admit weighs 0,
+    one of a kind it admits weighs `remove_weight(source)`, and a claim that is no proof (`None`) is admitted by no row, listed by no item, `""` on the board.
+    FALSIFIER: a `told_by` deed (`record` by source before, `testimony` as a claim) admitted under a row that names `testimony` only, or refused under `record`."""
+    deeds = sorted(V.DEED_KINDS - person_q.PAIRED_KINDS)
+    kinds = (deeds[0], sorted(V.REFUSAL_KINDS)[0], sorted(set(ROS.COVERT_KINDS) - person_q.PAIRED_KINDS)[0], "confession.full", "confession.withheld")
+    assert all(k in V.DEED_KINDS or k in V.REFUSAL_KINDS for k in kinds), kinds
+    checked, nones = 0, 0
+    for source in roster("claim_sources"):
+        for kind in kinds:
+            w, _d = R._judging_world()
+            claim = R._claim("probe", R.SPEAKER, R.PARTY, kind, source=source)
+            w.persons[R.SPEAKER].ledger.append(claim)
+            want, room = person_q.proof_kind(claim), world_q.judging_set(w, "Hh")
+            weight = world_q.remove_weight(source)
+            assert world_q.proofs(w, R.SPEAKER, R.PARTY, room, admitted=(want,) if want else ()) == (weight if want and kind in V.DEED_KINDS else 0.0), (source, kind)
+            assert world_q.proofs(w, R.SPEAKER, R.PARTY, room, admitted=tuple(m for m in ROS.MATTERS if m != want)) == 0.0, (source, kind)
+            ctx = SimpleNamespace(topic=R.PARTY, fx=w.fixtures, admits=frozenset(ROS.MATTERS))
+            assert [i.kind for i in sigma._items_of(w, w.persons[R.SPEAKER], ctx, None)] == ([want] if want else []), (source, kind)
+            assert [x.proof_kind for x in person_q.dossier(w.persons[R.SPEAKER], R.PARTY)] == [want or ""], (source, kind)
+            checked += 1
+            nones += want is None
+    assert checked == 5 * len(roster("claim_sources")) and nones == 2 * len(roster("claim_sources")), (checked, nones)
 
 
 def test_a_subject_above_the_exercised_seat_is_a_rank_gap_term_by_each_branch():

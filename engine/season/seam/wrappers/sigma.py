@@ -79,7 +79,7 @@ from ...decision.decider import decides_for, make_decider
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
 from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
-                             PROOF_KIND_OF_SOURCE, RECORD_MATTER, RUNG_KINDS)
+                             RECORD_MATTER, RUNG_KINDS)
 from ...data.rosters import FACTION_BY_PROP, ROW_WHEN_KEYS, capability_rows, obstacle_bound, require_use_site, roster, when_holds
 from ...data.verbs import FORM_INQUIRY, PROCEEDS_DOCKET, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...epistemic import trail_concealment
@@ -1579,7 +1579,7 @@ def _holds(p: Any, bears: dict) -> tuple:
 def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
     """The things he holds of the kinds the rite admits (V2 p2 §G), from his own edges and his own ledger: the `Record`s he holds (a kind a
     `matters` row names by its carrier, else `record`), the seats he holds (`title`), the oaths he swore, the claims he holds on the matter (by
-    the kind of their source, `PROOF_KIND_OF_SOURCE`), and, for a speaker, his own false word (`false_items`). `debt` (an oath owed to him is on
+    the kind of proof each is, `person_q.proof_kind`: a cell or a withheld confession is none and is no item), and, for a speaker, his own false word (`false_items`). `debt` (an oath owed to him is on
     the debtor's side) and `precedent`, `confession` and `state_of_realm` (the case file and the strife reading) have no carrier he holds `[HOOK]`."""
     out = []
     for t in p.tenures:
@@ -1595,7 +1595,7 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
     if ctx.topic is not None:
         full, decay = ctx.fx.get("confidence_default"), ctx.fx.claim_decay()
         for c in p.ledger:
-            kind = PROOF_KIND_OF_SOURCE.get(c.source)
+            kind = proof_kind(c)
             if c.subject == ctx.topic and kind is not None:
                 out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject,
                                 cell=(c.subject, c.predicate, c.value)))      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)

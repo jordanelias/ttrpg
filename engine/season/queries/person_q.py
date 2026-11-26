@@ -55,7 +55,7 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, PROOF_KIND_OF_SOURCE, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, RECORD_MATTER, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map, task_share,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
@@ -668,9 +668,8 @@ def proof_kind(c) -> Optional[str]:
     A Record's kind (`record`) and an edge's (`oath`, cited by its Tenure id) are the host's hold check, not a claim's, so this reader never answers them.
     [ASSUMPTION: E-1's "about its own subject" is not tested -- the claim carries no second subject to compare, so a `confession.*` deed is `confession` wherever held; `world_q.proofs`
     already reads only the opponent's own deeds (`attributed_deeds`)]
-    ⚠ `rosters.yaml: proof_kind_of_source` also names a kind per claim, by SOURCE (`world_q.proofs`' admission filter, `dossier`'s `proof_kind` column, `sigma._items_of`): the two disagree
-    (a `told_by` claim is `record` there, `testimony` here). B24.25 DECIDED: a citing speech's admission (`world_q.filings`, and so the case file's exhibits) reads THIS reader, the one derived from the
-    claim; `proof_kind_of_source` is the ledger arm's mapping (`Fixtures evidence_from: ledger`, the control) and is read by no filing."""
+    THE ONE READER (B24.44): a citing speech's admission (`world_q.filings`, and so the case file's exhibits), the ledger arm's (`world_q.proofs`' admission filter, `sigma._items_of`) and
+    `dossier`'s `proof_kind` column all read this, never the claim's SOURCE: how a claim came to be held is its weight (`remove_weight`, `teller_weight`), not its kind."""
     if not is_deed(c):
         return None
     if not c.predicate.startswith(CONFESSION_FAMILY):
@@ -2664,7 +2663,8 @@ def contradicts(a: Claim, b: Claim) -> bool:
 class DossierRow:
     """ONE CLAIM ON THE CASE BOARD (`11_GO_player_surface_contract_B.md` §5's fields). The rows that share `(subject, predicate, value)` are one GROUP and carry one `support`.
     `record` is the id of the document on his live `hold` this claim is the content of (a `content:<kind>` claim of a record he holds), else `None`; `proof_kind` is
-    `rosters.yaml: proof_kind_of_source`'s kind for the claim's source (`""` where its way of holding is no kind of proof); `against` the ids of his other claims on
+    the kind a Record's content claim has as a document (`RECORD_MATTER` of its `content:<kind>`, as `world_q.filings` reads a held Record's) where `record` is set, else `proof_kind`'s
+    kind of the claim (`""` where it is no proof: a cell, a refusal kind, a withheld confession); `against` the ids of his other claims on
     the same cell that disagree with this one."""
     claim: Optional[Claim]
     record: Optional[str]
@@ -2699,8 +2699,8 @@ def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = No
     for _key, members in groups:
         support = 1.0 if weigh is None else LedgerReader(members, weigh, tick=tick, decay=decay)._support(members)[0]
         for c in members:
-            rows.append(DossierRow(c, c.subject if content_kind(c) is not None and c.subject in held else None,
-                                   PROOF_KIND_OF_SOURCE.get(c.source) or "", support,
+            rec = c.subject if content_kind(c) is not None and c.subject in held else None
+            rows.append(DossierRow(c, rec, (RECORD_MATTER.get(content_kind(c), "record") if rec is not None else proof_kind(c)) or "", support,
                                    tuple(o.id for o in p.ledger if o is not c and is_cell(c) and contradicts(c, o))))
     return tuple(rows)
 

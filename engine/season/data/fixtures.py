@@ -1241,7 +1241,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-612 -- site: Fixtures recall_suspicion, graded `assumption`; the design names a threshold and gives no number, so it ships at 3 (above its audit escape's two) and is swept 1 / 3 / 5, with None the revert]
     recall_suspicion=3,                # `H-612`, swept 1 / 3 (SHIPPED) / 5; `None` the revert (the occasion off)
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
-    # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
+    # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`person_q.proof_kind`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).
     # [ASSUMPTION; medium; Jordan to correct; revert: `off`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-427 -- site: Fixtures proof_admission, graded `assumption`; T13 T5 gives `on` as the calibrated value and no document derives it, so it is injected and swept off / on]

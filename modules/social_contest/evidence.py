@@ -9,17 +9,19 @@ THE RELATION IS DATA. This module names no `engine/season` module and restates n
 exhibits. `pair_of` is the one reader of that field.
 
 THE RULES, in order, each over the items still standing after the one before:
-  1. FORGERY -- an item a filed finding names forged (`findings`), answered: Failure it stands and the impeacher (the other side) bears
-     `failed_impeachment`; Partial it is halved; Success it is struck; Overwhelming it and every item of its origin are struck and `forgery_found` is
+  1. FORGERY -- an item a filed finding names forged (`findings`), answered: Failure it stands; Partial it is halved; Success it is struck; Overwhelming it and every item of its origin are struck and `forgery_found` is
      recorded against its side.
   2. CONTRADICTION -- an answered item the other side holds an item against: Failure it stands; Partial it and its answer (the heaviest such item) are
      halved; Success it is struck; Overwhelming it is struck and `self_contradiction` is recorded against its side if its holder knew it false
-     (`not sincere`), else `discredited_source` against its origin. An item with no answering act is never struck.
+     (`not sincere`). An item with no answering act is never struck.
   3. AGREEMENT -- the same cell and value put by BOTH sides counts for neither (struck by nothing: it is simply not counted).
   4. CORROBORATION -- the same cell and value put by one side from DISTINCT origins is one item of weight `1 - prod(1 - w)`, no lighter than its
      heaviest member and gaining no more than `evidence_cap` over it; the same origin twice counts once.
 
 An item with no `origin` is its own origin (nothing says it comes from anything another item does).
+
+THE COST OF A FAILED IMPEACHMENT AND OF A DISCREDITED SOURCE IS NOT A FAULT HERE: `standing` emits neither `failed_impeachment` nor `discredited_source`. What an answering act costs
+the one who made it, or the one it discredits, is the answering act's Event, which the room witnesses (B24.24, B24.25), never a fault this function owes.
 """
 from __future__ import annotations
 
@@ -49,10 +51,6 @@ def pair_of(a, b) -> Optional[str]:
     return None
 
 
-def _other(side):
-    return {"for": "against", "against": "for"}.get(side)
-
-
 def _rank(it) -> tuple:
     return (it.weight, it.id)
 
@@ -63,7 +61,7 @@ def standing(presented: tuple, findings: tuple = (), cap: Optional[float] = None
 
     `findings` -- the ids of the items a filed finding names forged; `cap` -- `evidence_cap` (`None`: uncapped).
     `standing` -- the items that count, in the order shown, each at the weight it now carries; `struck` -- the ids struck; `faults` -- `((a
-    `proceeding_faults` member or `failed_impeachment`/`discredited_source`, who bears it), ...)`. Pure: the same board gives the same answer, so a caller
+    `proceeding_faults` member, who bears it), ...)`. Pure: the same board gives the same answer, so a caller
     recomputes it at every change rather than keeping what a past change left."""
     by_id = {it.id: it for it in presented}
     forged = frozenset(findings)
@@ -72,11 +70,9 @@ def standing(presented: tuple, findings: tuple = (), cap: Optional[float] = None
         b = band_of(it.answered_band)
         if b is None or it.id not in forged:
             continue
-        if b == FAILURE:
-            faults.append(("failed_impeachment", _other(it.side)))
-        elif b == PARTIAL:
+        if b == PARTIAL:
             halved.add(it.id)
-        else:
+        elif b >= SUCCESS:                                                       # Failure: it stands, and the impeacher's cost is the answering act's Event, not a fault
             struck.add(it.id)
             if b == OVERWHELMING:
                 struck.update(o.id for o in presented if it.origin is not None and o.origin == it.origin)
@@ -92,8 +88,8 @@ def standing(presented: tuple, findings: tuple = (), cap: Optional[float] = None
             halved.update((it.id, max(mine, key=_rank).id))
         elif b >= SUCCESS:
             struck.add(it.id)
-            if b == OVERWHELMING:
-                faults.append(("self_contradiction", it.side) if not it.sincere else ("discredited_source", it.origin))
+            if b == OVERWHELMING and not it.sincere:
+                faults.append(("self_contradiction", it.side))
     live = [replace(it, weight=it.weight / 2.0) if it.id in halved else it for it in presented if it.id not in struck]
     agreed = {it.id for it in live for o in live if it.side is not None and o.side is not None and o.side != it.side and pair_of(it, o) == AGREES}   # 3.
     live = [it for it in live if it.id not in agreed]

@@ -38,7 +38,7 @@ from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, MATTERS, RECORD_MATTER, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    MARCH_TARGET_KINDS, MATTERS, RECORD_MATTER, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
     remove_distance, require_member, require_mortal_cause,
@@ -1124,7 +1124,8 @@ def proofs(w: World, actor: str, opponent: Optional[str], audience: tuple, admit
 
     `admitted` (B05.21, T13 edit 4; `H-427`) is the docketed row's `proofs:` column, PASSED IN by the host builder -- this query reads no
     arrangement itself -- or `None` (no filter: nothing docketed, or `Fixtures.proof_admission` `off`). Given, a claim counts only if the kind of
-    proof it is (`rosters.yaml: proof_kind_of_source`, by its `source`) is among them; a claim whose source is no kind of proof counts 0.
+    proof it is (`person_q.proof_kind`, derived from the claim and not from how it came to be held: a told deed is `testimony`, a confession `confession`) is among them;
+    a claim that is no proof (`proof_kind` is `None`: a withheld confession) counts 0.
 
     ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
     docketed (the plan's text asks for neither); and the mirror keys on (subject, predicate) alone.
@@ -1143,7 +1144,7 @@ def proofs(w: World, actor: str, opponent: Optional[str], audience: tuple, admit
     mirror = {(prop.subject, prop.predicate) for prop in _live_commit_propositions(w, opponent)}
     return ltr_sum(remove_weight(c.source) for c in held
                if (c.subject, c.predicate) not in mirror
-               and (admitted is None or PROOF_KIND_OF_SOURCE[c.source] in admitted))
+               and (admitted is None or proof_kind(c) in admitted))
 
 
 def place_of(w: World, x: Optional[str], homes: Optional[dict] = None) -> Optional[str]:

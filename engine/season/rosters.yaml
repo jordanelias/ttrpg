@@ -3794,28 +3794,6 @@ rosters:
       "which genres it is apt in" column already needs somewhere closed to point at.
     values: [forensic, deliberative, epideictic]
 
-  proof_kind_of_source:
-    source: "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it"
-    from_roster: claim_sources
-    note: >-
-      THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the
-      speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the
-      `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way
-      ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows
-      name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`).
-      B24.25: THIS IS THE LEDGER ARM'S MAPPING (`evidence_from: ledger`, the control: `world_q.proofs`' filter, `sigma._items_of`, `dossier`); what a citing speech files is admitted by
-      `queries/person_q.py::proof_kind`, the kind derived from the claim itself, which disagrees here (a `told_by` claim is `record` below, `testimony` there) and is the reader the case
-      file's exhibits follow. The roster stays while the ledger arm does.
-      [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own
-      words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath;
-      what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four.
-      Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]
-    proof_kind:
-      firsthand: testimony
-      firsthand_via_knot: oath
-      told_by: record
-      inferred: null
-
   ladder_rungs:
     source: "`18_FINDINGS.md`:180 and §5 item 5 (Fig. 27) -- the forensic CHARGE LADDER a party descends under `interrogation`'s `order: scripted` / `registers: [restricted]`, verbatim: \"deny, cite something incompatible, impugn the motive, concede the fact, concede the harm, hand the error back.\" Plan position `18` (PROC-A)."
     open: true
