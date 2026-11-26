@@ -124,7 +124,6 @@
 | `S/tests/test_endowment.py` | B12a.51 | S13 |
 | `S/tests/test_approach_responses.py` | B16.09 | S13 |
 | `S/tests/test_duel_scene.py` | B16.11 | S13 |
-| `S/tests/test_in36_march_cap.py` | B21b.01 | S13 |
 | `S/tests/test_in30_faction_props.py` | B21b.05 | S13 |
 | `S/tests/test_cp_t09_allegiance.py` | B21b.08 | S13 |
 | `S/tests/test_cp_t09_declare.py` | B21b.11 | S13 |
@@ -402,7 +401,7 @@
 | 21 | `:396` | WR | NM-W6 | "HELD · UNBUILT" (fragment bake); no trigger stated (E1:3531) | none | — |
 | 22 | `:397` | WR | NM-W7 | "HELD · UNBUILT" (scale lines); no trigger stated (E1:3560) | none | — |
 | 23 | `:398` | WR | NM-W8 | "HELD · UNBUILT" (occasion ladder); no trigger stated (E1:3570) | none | — |
-| 24 | `:399` | WR | CL-THRUST | "its other pieces held"; the ladders are Jordan's content (E1:2392) | none: content | cited by B21b.03, B27.18, B28.32, B35.21 (pointers) |
+| 24 | `:399` | WR | CL-THRUST | "its other pieces held"; the ladders are Jordan's content (E1:2392) | none: content | cited by B27.18, B28.32, B35.21 (pointers) |
 | 25 | `:400` | WR | ED-595 | "a Jordan-authored arc lands in Ehrenwall's registry row (NPC-070) or a case under `engine/season/cases/`" (E4:749) | none: content | — |
 | 26 | `:401` | WR | ED-596 | as ED-595, Torsvald (NPC-005) (E4:755) | none: content | — |
 | 27 | `:402` | WR | ED-597 | as ED-595, Vossen (NPC-003) (E4:761) | none: content | — |

@@ -173,4 +173,5 @@ def test_rem52s_fall_is_tended_by_30_of_37_while_the_seat_news_floods_oblige():
     # B12a.99 re-pin, at the `uniform` arm: (37, 30) -> (37, 29). The mover is B12a.62's `hunger_severity_draw` flip (False -> True): one cohort's draw differs where a cohort
     # is short (read at `PYTHONHASHSEED=0`, one season, seed 0, `task_draw_arm: off`: the flip alone, `False` reads (37, 30), `True` (37, 29); `larder_walk` `first` or `through` reads the
     # same). B12a.15 (a same-place `move` refused) and the other movers of the batch leave (37, 30) at this arm (its reading on B12a.15's tree and on B12a.55's: 37, 30).
-    assert (len(short), len(tended)) == (37, 29)
+    # B21b.02 (the guards ship on, three guard cohorts join the realm), on the merge with B12a: (37, 29) -> (40, 30), read at PYTHONHASHSEED=0; `tended <= short` above still holds.
+    assert (len(short), len(tended)) == (40, 30)

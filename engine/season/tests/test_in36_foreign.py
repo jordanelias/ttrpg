@@ -388,9 +388,12 @@ def _the_witness_seed_reaches_the_seam_in_a_full_season(seed):
 
 # The guard reading is IN-60's Query, `world_q.guard_weight` (`test_in60_guard_weight.py` holds its falsifiers).
 
-def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
-    assert not [p for p in control.persons if p.startswith(COHORT_PREFIX + "guard_")]
-    assert all(world_q.guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
+def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth():
+    # ED-IN-0317: `guards` now defaults to True, so the no-guard control arm is asked for by name (the `control` fixture stays
+    # `foreign=False` alone: its other tests compare it with the `foreign` fixture, which carries the shipped guards).
+    off = build_realm(0, foreign=False, guards=False)
+    assert not [p for p in off.persons if p.startswith(COHORT_PREFIX + "guard_")]
+    assert all(world_q.guard_weight(off, r) == 0 for r in off.rungs if off.rungs[r].kind == "hearth")
 
 
 def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_than_a_duke(guarded):
@@ -412,6 +415,13 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
     # the guard is a cohort (S9) and holds no title and no commitment
     for pid in (p for p in w.persons if p.startswith(COHORT_PREFIX + "guard_")):
         assert w.persons[pid].weight > 1 and not [t for t in w.tenures if t.subject == pid and t.kind in ("hold", "commit")]
+
+
+def test_the_shipped_default_seats_the_guards():
+    """ED-IN-0317: `build_realm(0)` with no argument is the guards arm, byte for byte, and the control arm is only reached by
+    `guards=False`. FALSIFIER: the two worlds hash differently, so a default that silently reverted would fail here; the guards arm's
+    own readings (the cohorts, their oaths, the King's `guard_weight`) are `guarded`'s tests above."""
+    assert build_realm(0).content_hash() == build_realm(0, guards=True).content_hash() != build_realm(0, guards=False).content_hash()
 
 
 def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():

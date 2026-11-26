@@ -2348,7 +2348,8 @@ def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
     withs = [r for r in _seat_rows() if r.get("obligees")]
     assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], withs
     # CR-86 (ED-IN-0342): the King's three are the Grand Master and the two vassals (the Duchess, the Duke), in row order
-    for row_id, sworn in (("off_king", ["p_npc_070", "p_npc_050", "p_npc_052"]), ("off_restoration_leader", ["p_npc_041"])):
+    # B21b.02 (the guards ship on): the King's guard cohort holds a live `oblige` to his seat as well (`seat_guards`; ED-IN-0317)
+    for row_id, sworn in (("off_king", ["p_npc_070", "p_npc_050", "p_npc_052", "cohort_guard_off_king"]), ("off_restoration_leader", ["p_npc_041"])):
         seat = w._office_census["authored"][row_id]   # a seat a row overlays keeps the row's id (CP-T02-02), so this is the identity
         assert sorted(world_q.establishment_of(w, seat)) == sorted(sworn)
         for t in (t for t in w.tenures if t.kind == "oblige" and t.object == seat):
@@ -3103,7 +3104,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
     # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
     # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (392, 391), (      # B12a.99: at the `uniform` arm the merged tree (B08 and this batch) reads (392, 391), as B08.99 did, so the pin stands; the shipped `ground` arm reads (408, 408) and parts nothing; B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
+    assert (out["acts"], cout["acts"]) == (414, 413), (      # B21b partial re-record on the merge with B08 and B12a: (392, 391) -> (414, 413) (the guards ship on, B21b.02); B12a.99: at the `uniform` arm the merged tree (B08 and this batch) reads (392, 391), as B08.99 did, so the pin stands; the shipped `ground` arm reads (408, 408) and parts nothing; B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what

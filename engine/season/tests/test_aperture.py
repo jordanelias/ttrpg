@@ -794,9 +794,11 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # B11 merge with main re-pin (B11's declared movers with B21 and B24p; 20 pools, 10.4, 10.8 and 12.5 gained, 11.8 and 15.8 lost): still many pools in one season, persons apart. Read at `PYTHONHASHSEED=0`, seed 0, one season.
     # B24p merge with B21 re-pin (the five influence verbs on the proceeding, merged with B21's seats, drawn verbs and command basis): 19 pools; still many pools in one season,
     # persons apart. Read at `PYTHONHASHSEED=0`, seed 0, one season, twice equal.
+    # B21b close re-pin (B21b.01 the march cap, B21b.02 `build_realm(guards=True)` default: three guard cohorts, B21b.04): 19 pools, 9.945 gained, 12.5 and 15.2 lost;
+    # still many pools in one season, persons apart. Read at `PYTHONHASHSEED=0`, seed 0, one season.
     # [JUSTIFIED: a measured reading of the shipped seed-0 season, not a game value -- a pin on an exactness claim, `PYTHONHASHSEED=0`]
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.4, 10.5, 10.8, 11.0, 11.2, 11.5, 12.0, 12.5, 13.0, 13.5, 14.0, 15.2, 15.5}
+        7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 9.944999999999999, 10.0, 10.4, 10.5, 10.8, 11.0, 11.2, 11.5, 12.0, 13.0, 13.5, 14.0, 15.5}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")
