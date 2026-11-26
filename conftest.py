@@ -61,7 +61,18 @@ SEASON_SUITES = {
     "sc_season": re.compile(r"^test_(sc\d|sc_|social_contest|stress_proceedings|settle_margin|contest_kernel)"),
     "mb_season": re.compile(r"^test_(march|mass_battle_|levy_feed)"),
     "pc_season": re.compile(r"^test_(combat_|cp_t\d|cl_thrust_|b11a_)"),
+    # The rest of the season tests, one suite per workplan lane (P18; Jordan, 2026-11-26). By FILE NAME, so the rule is one regex a mover edits;
+    # a file the three above or these name belongs to that suite, and one that none names falls to `in_season` (cross-cutting; see below).
+    "fa_season": re.compile(r"^test_(fa\d*_|faction|governance|command_basis|dispatch|grant_|sworn|tenure|in09|in10|in12_|in31|in61_succession|"
+                            r"in64|vb_|vm_|rival_precedence|offer$|record_kind|u1_seat|u7_|arrangements|cr25|cr30|cr31|cr56)"),
+    "fi_season": re.compile(r"^test_(fi\d*_|finding|claim_|conclusion|deed_trail|rumour|rival_teller|told_|information|notice_draw|shorcase|"
+                            r"playable_inquiry|scenarios_runner|self_knowledge|seen_why|in53|in59|in61_heir|cr27|cr28|cr81|cr82|"
+                            r"refusal_memory|one_reader|storybar|pairs)"),
+    "se_season": re.compile(r"^test_(settlements|works_founding|territorial|hunger|migrate|in45|home_presence|term_upkeep|demand_delivery|"
+                            r"in22|in35|rem32|scale_of_rung|cr86)"),
+    "wr_season": re.compile(r"^test_(thread_operations|k3_thread|season_weather)"),
 }
+IN_SEASON = "in_season"   # every `engine/season/tests` file no suite above names: the loop's own cross-cutting tests (the IN lane)
 
 
 def pytest_collection_modifyitems(config, items):
@@ -75,9 +86,9 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(getattr(pytest.mark, lane))
         if "engine/season/tests/" in path:
             base = os.path.basename(path)[:-3]
-            for suite, pat in SEASON_SUITES.items():
-                if pat.match(base):
-                    item.add_marker(getattr(pytest.mark, suite))
+            named = [suite for suite, pat in SEASON_SUITES.items() if pat.match(base)]
+            for suite in named or [IN_SEASON]:
+                item.add_marker(getattr(pytest.mark, suite))
         # `shipped_pin`: the test reads a name the realm-goldens module owns (Jordan, 2026-11-26: the shipped-output pins are a
         # POST-WORKPLAN gate). Derived from that owner, never listed per test: a new pin that imports `SHIPPED`, `BUILD` or `CENSUS` is marked.
         fn = getattr(item, "function", None)
