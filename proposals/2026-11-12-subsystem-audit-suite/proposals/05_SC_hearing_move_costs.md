@@ -1,6 +1,6 @@
 # What a move costs the person who makes it: the NPC decider's terms inside a hearing
 
-## Status: PROPOSED — the design pass HEAR_B edit 8 left open (`05_SC_playable_hearing_B.md` "Not decidable here"); master workplan v12 item B24.12. Design only: no code lands with this file. B24.13 ships the hearing's decider with every term below ABSENT (E-14) and lists them under `DIALS AT CONTROL`; the build of this file is not scheduled in v12.
+## Status: RATIFIED on merge (ED-1094) — the design pass HEAR_B edit 8 left open (`05_SC_playable_hearing_B.md` "Not decidable here"); master workplan v12 item B24.12. Design only: no code lands with this file. B24.13 ships the hearing's decider with every term below ABSENT (E-14) and lists them under `DIALS AT CONTROL`; the build of this file is not scheduled in v12.
 
 Source: `05_SC_playable_hearing_B.md` "Who decides" (*"less the move's cost in his own terms (an item
 exposed, an enemy made, a concession witnessed, effort)"*) and "Exact edits" 8; `IS-B2-SC-04` (the cost

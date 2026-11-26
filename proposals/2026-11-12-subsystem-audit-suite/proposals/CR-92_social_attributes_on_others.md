@@ -1,4 +1,4 @@
-## Status: PROPOSED — CR-92 (workplan v12 B24.41, DESIGN-FIRST). No code. All six items are answered by the ladder; nothing is escalated.
+## Status: RATIFIED on merge (ED-1094) — CR-92 (workplan v12 B24.41, DESIGN-FIRST). No code. All six items are answered by the ladder; nothing is escalated.
 
 # The social attributes acting on others: Grace on regard, promotion and the venue's standard; Presence on obedience; Attunement on bonds
 
