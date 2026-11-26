@@ -67,7 +67,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 
-| S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
+| S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
@@ -101,7 +101,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B21s-strife-supply | IN | W16 | S18 | 3 | 35_cont | 3 (B3) | **EQUAL** (§2.2: per entry) | 3.7 | B12c, B21, B24a +R, B29 +R |
 | B22-mb-armies | MB | W17 | S17 | 1 | 33, 33_cont | 36 (B34 P1 DF1) | MOVER (behaviour 15) | 16.9 | B00, B01, B02, B16L, B04, B05, B07, B10, B12c, B17, B19, B20, B21, B21b |
 | B23-land | FA | W18 | S18 | 1 | 37 | 19 (B14 P3 C1 DF1; H3: B23.07 "BUILD (HELD if …)" read as BUILD) | MOVER (behaviour 8, conditional 1) | 10.1 | B00, B01, B02, B07, B12c, B17, B19, B20, B21, B21b, B22, B26 +R1 |
-| B24-sc-hearing | SC | W13 | S13 | 0 | 22, 22_cont | 45 (B39 P1 R1 DF2; +B24.43, B24.44 B) | MOVER (behaviour 13) | 20.5 | B00, B01, B01a (B01a.05), B02, B03, B04, B07, B10, B11, B24p @ba108d1 |
 | B24a-sc-outside-the-room | SC | W15 | S15 | 0 | 28_cont | 9 (B8 DF1) | MOVER (behaviour 5) | 6.1 | B21c, B24, B01a (B01a.05), B24p @ba108d1 |
 | B25-fi-questioning | FI | W16 | S16 | 0 | 30_cont | 22 (B17 P3 R2) | MOVER (behaviour 11) | 11.3 | B00, B01, B02, B11, B12c, B24 |
 | B26-fi-inquiry | FI | W17 | S17 | 1 | 33_cont | 18 (B17 DF1) | MOVER (behaviour 13) | 9.7 | B00, B01, B02, B10, B11, B12c, B24, B25 |
@@ -154,7 +153,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B21s-strife-supply | 35_cont:456 | yes | 4 | yes | none | — |
 | B22-mb-armies | 33_cont:337 | yes | 14 | yes | none | — |
 | B23-land | 37:359 | yes | 12 | yes | none | —, R1: B26 |
-| B24-sc-hearing | 22_cont:257 | yes | 10 | yes | none | B01a (B01a.05); B24p (2026-11-14) |
 | B24a-sc-outside-the-room | 28_cont:465 | yes | 4 | yes | none | B01a (B01a.05); B24p (2026-11-14) |
 | B25-fi-questioning | 30_cont:475 | yes | 6 | yes | none | — |
 | B26-fi-inquiry | 33_cont:863 | yes | 8 | yes | none | — |
@@ -192,7 +190,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | S13 | B12a | 03, 05, 06, 08, 14, 15, 54, 55, 56, 62, 66, 69 | — | 09 | `B12a.99` | 2 of 5 movers |
 | S13 | B16 | 03 | — | — | `B16.99` | 3 of 5 movers |
 | S13 | B21b | 01, 02, 04, 06, 08, 10, 11, 12, 13, 14, 16, 18, 21, 25, 26 | — | 05 | `B21b.99` | 4 of 5 movers |
-| S13 | B24 | 01, 02, 10, 11, 14, 27, 34, 35, 37, 38, 40, 43, 44 | — | — | `B24.99` | 5 of 5 movers |
 | S14 | B12b | 12, 16, 21, 25, 28, 33, 40, 41, 42, 43, 44, 47 | 18 | — | `B12b.99` | 1 of 4 movers |
 | S14 | B19a | — | — | — | `B19a.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |

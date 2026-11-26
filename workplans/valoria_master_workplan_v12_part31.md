@@ -21,7 +21,7 @@ GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab 
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B24p-sc-proceeding @ba108d1
-GATE: Batch B24-sc-hearing
+GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B24a-sc-outside-the-room
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — no conjunct of the nine is closed here (`V12_STRUCTURE.md` §2.2, B27 row: "none of its own (the proceedings B32 and B36 read)"); what the batch serves: the standing requirement that each subsystem plays alone (`IS_A_NINE_part2.md:363`, "B18, B27, B40"), the hearing's `dismissed` ending (`IS-B2` §1.0 step 8: "the dismissed ending exists; A-80's control in `test_arrangements.py`"), and rulings A-24, A-37, A-38, A-39, A-79, A-80, A-81. No `status:` is edited (A-114); the close quotes `register --requirements` as a reading only.
