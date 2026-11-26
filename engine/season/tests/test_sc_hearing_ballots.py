@@ -95,7 +95,7 @@ def test_a_declared_sitting_carries_at_some_seeds_only():
 def test_a_declared_determine_resolves_through_the_proceeding_at_no_exchanges():
     """Item 1: a `determine` on a row whose close is `declared` resolves through `social_contest.proceeding` also at `sitting_exchanges` 0 -- the sitting spoke
     nothing (no beat) and drew one close for each of the five seats, and the fold admits it with no `vote` conjunct (two commits for it carry the matter's odds, not its form)."""
-    w, d = _sitting()
+    w, d = _sitting(sitting_exchanges=0)                                          # the control, set here: the shipped realm spends the attendees' effort (B24.37)
     assert w.fixtures.get("sitting_exchanges") == 0 and "vote" not in world_q.VERB_TABLE["determine"].requires_typed.conjuncts()
     act = _determine("dt", via=JUDGE_SEAT, actor="p_high")
     row, form, _move, _item = world_q.proceeding_row(w, act)
@@ -104,7 +104,7 @@ def test_a_declared_determine_resolves_through_the_proceeding_at_no_exchanges():
     assert (row["id"], row["close"], out["status"]) == (ROW, "declared", "RESOLVED")
     assert out["proceeding"].beats == () and len(out["proceeding"].verdicts) == 5 and out["arrangement"] == ROW
     assert sorted(dict(out["starts"])) == sorted((*FOR, *AGAINST, PARTY)) and dict(out["starts"])["p_x"] < 0 < dict(out["starts"])["p_low"]
-    w2, d2 = _sitting()
+    w2, d2 = _sitting(sitting_exchanges=0)
     assert _kinds(_fold(w2, d2, _determine("dt2", via=JUDGE_SEAT, actor="p_high")))[0] in ("matter.determined", "matter.undetermined")
 
 

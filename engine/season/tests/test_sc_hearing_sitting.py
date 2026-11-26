@@ -169,14 +169,14 @@ def test_a_computed_case_is_heard_under_the_default_rite():
     """`IS-B2-SC-03` step 3 (falsifier): `proceeding_input` reads the rite of the docket item's arrangement row, and `default` where the item names none (every
     computed `open_case`, `world_q.proceeding_row`'s second entry for a `determine`): the built `Rite` carries the default's own cells (the bench's moves beside
     the sides', the faults, `disclosed`, who bears each rung). CONTROL, one change: a case filed under `examination` is heard under ITS rite (`inquisition`:
-    nothing disclosed; B24.32 gave it the four faults), so the reading is the row's and not a constant. And the switch: at `sitting_exchanges` 0 (shipped) a bench's sitting
+    nothing disclosed; B24.32 gave it the four faults), so the reading is the row's and not a constant. And the switch: at `sitting_exchanges` 0 (the control, set here: shipped is 1, B24.37) a bench's sitting
     has no turns, at 1 it has the row's own."""
     from ..data.arrangements import RITES
     from ..data.rosters import PROCEEDING_FAULTS
     from ..queries import world_q
     from .test_u7_remit import DUKE, PARTY, _determine, _fold, _kinds, _open, _petition, _world
 
-    w, d = _world()
+    w, d = _world(sitting_exchanges=0)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     assert world_q.docketed(w, PARTY)[0][world_q.DOCKET_ARRANGEMENT] is None            # a computed case: the item names no row
     row, form, inp = _heard(w, _determine("dt"), [DUKE, PARTY])
@@ -208,7 +208,7 @@ def test_a_sitting_of_no_exchanges_is_todays_roll_through_the_host():
     from .test_sc_proceeding_module import ROLL, _key
     from .test_u7_remit import DUKE, PARTY, _determine, _fold, _kinds, _open, _world
 
-    w, d = _world()
+    w, d = _world(sitting_exchanges=0)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     row, form, inp = _heard(w, _determine("dt"), [DUKE, PARTY])
     seat, = [p for p in inp.room if p.decides]

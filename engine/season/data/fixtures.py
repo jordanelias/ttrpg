@@ -1680,18 +1680,18 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-939 -- site: Fixtures speech_blend (a pointer row, no field), graded `assumption`; the two columns are one blend and are swept together as a scale on V2's column, 0 (control) / 0.5 / 1]
     # ---- the hearing's settings (B24.07; HEAR_B edit 10, EVID_B `answer_ob`). Nothing reads them until B24.06 (`answer`, through `Input.dials`) and the items after it; every one stands at its control
     # (`argument_step` is struck: standing arguments are the track, whose setting is `track_step`, `H-903`, so no second ladder is made).
-    # `sitting_exchanges`: whether the attendees at a sitting spend their own act's `effort` as exchanges, a SWITCH read as 0 or 1. `0` is the control: a sitting has no exchanges beyond the filed items.
-    # [ASSUMPTION; Jordan to correct; revert: `0`. Shipped means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 -- basis: HEAR_B "shipped: the attendees' effort" and `person_q.effort_of`, "the turns he prepares", B24p.06.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-661 -- `site: Fixtures sitting_exchanges`, graded `assumption`; HEAR_B gives the control and no number, so it is injected at the control and swept 0 / 1 / 2 (the register wants three distinct points; the switch reads 2 as 1)]
-    sitting_exchanges=0,              # `H-661`, swept 0 (control, SHIPPED) / 1 (shipped: the attendees' effort) / 2 (read as 1: a switch)
+    # `sitting_exchanges`: whether the attendees at a sitting spend their own act's `effort` as exchanges, a SWITCH read as 0 or 1 (`sigma._rite_of` reads it as truthy). `0` is the control: a sitting has no exchanges beyond the filed items.
+    # [ASSUMPTION; Jordan to correct; revert: `0`. Shipped (B24.37) means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 and the shipped value is `1` -- basis: HEAR_B "shipped: the attendees' effort" and `person_q.effort_of`, "the turns he prepares", B24p.06.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-661 -- `site: Fixtures sitting_exchanges`, graded `assumption`; HEAR_B gives the control and no number, so it is injected at the shipped switch and swept 0 / 1 / 2 (the register wants three distinct points; the switch reads 2 as 1)]
+    sitting_exchanges=1,              # `H-661`, swept 0 (control) / 1 (shipped: the attendees' effort, SHIPPED) / 2 (read as 1: a switch)
     # `fault_step`: the `LEVEL_SIGMA` name of one fault, a level against the side at fault (never an obstacle term). `None` is the control: a fault brings no level.
     # [ASSUMPTION; Jordan to correct; revert: `None`. The sweep's two non-control points are `LEVEL_SIGMA`'s two smallest names -- no source states them.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-662 -- `site: Fixtures fault_step`, graded `assumption`; HEAR_B gives no first value, so it is injected at the control and swept None / minor / moderate]
     fault_step=None,                  # `H-662`, swept None (control, SHIPPED) / minor / moderate
     # `answer_step`: the obstacle one unit of weight an answered exhibit holds over its answer adds to `answer`'s roll (`answer_ob + answer_step x max(0, w_target - w_answer)`, a hostile term). `0` is the control.
-    # [ASSUMPTION; Jordan to correct; revert: `0`. A new fixture rather than reviving `proof_step`, which OBS §3 deletes; basis R2 §7b-9 #4. The first value is the former `proof_step`'s 0.25.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-663 -- `site: Fixtures answer_step`, graded `assumption`; no document derives the weight unit, so it is injected at the control and swept 0 / 0.25 / 0.5]
-    answer_step=0.0,                  # `H-663`, swept 0 (control, SHIPPED) / 0.25 (first value) / 0.5
+    # [ASSUMPTION; Jordan to correct; revert: `0`. A new fixture rather than reviving `proof_step`, which OBS §3 deletes; basis R2 §7b-9 #4. The shipped value (B24.37) is the first value, the former `proof_step`'s 0.25.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-663 -- `site: Fixtures answer_step`, graded `assumption`; no document derives the weight unit, so it is injected at the first value and swept 0 / 0.25 / 0.5]
+    answer_step=0.25,                 # `H-663`, swept 0 (control) / 0.25 (first value, SHIPPED) / 0.5
     # `answer_ob`: the base obstacle of an `answer` (EVID_B `standing` rules: a fixture, proposed 2), before `answer_step`'s weight term and the room's hostile terms.
     # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points in its H row are the alternatives).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-664 -- `site: Fixtures answer_ob`, graded `assumption`; EVID_B proposes 2 and no document derives it, so it is injected at 2 and swept 1 / 2 / 4]
@@ -1709,15 +1709,15 @@ DEFAULT_FIXTURES = Fixtures(
     evidence_cap=2.0,                 # `H-666`, swept 1.0 / 2.0 (proposed, SHIPPED) / 3.0
     # `evidence_from`: WHERE A DOCKETED MATTER'S `proofs` LEVELS COME FROM (B24.21; EVID_B edit 5), an arm of `EVIDENCE_ARMS`: `ledger` -- `world_q.proofs`, the speaker's own unmirrored deed claims, the
     # control and as it was; `case_file` -- the exhibits filed on the matter's case file (`seam/wrappers/sigma.py::_exhibits_of`), which `modules/social_contest/roll.py::proof_levels` counts, and the
-    # ledger is then read for that matter by nothing. A matter with no case file reads the ledger at either arm. Nothing files an exhibit in computed play until B24.25, so the arm moves no run before B24.37 sets it.
-    # [ASSUMPTION; Jordan to correct; revert: `ledger`. A switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-667 -- `site: Fixtures evidence_from`, graded `assumption`; EVID_B gives the two arms and no document says which ships, so it is injected at the control and swept ledger / case_file / case_file at a larger `evidence_cap`]
-    evidence_from="ledger",           # `H-667`, swept ledger (control, SHIPPED) / case_file / case_file with `evidence_cap` 3.0
+    # ledger is then read for that matter by nothing. A matter with no case file reads the ledger at either arm. Nothing files an exhibit in computed play until B24.25, so the arm moved no run before B24.37 set it.
+    # [ASSUMPTION; Jordan to correct; revert: `ledger`. A switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` -- basis: `reception_gain`'s tagged line. B24.37 ships `case_file`: the exhibits filed on the case file are what a docketed matter's roll counts.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-667 -- `site: Fixtures evidence_from`, graded `assumption`; EVID_B gives the two arms and no document says which ships, so it is injected at `case_file` and swept ledger / case_file / case_file at a larger `evidence_cap`]
+    evidence_from="case_file",        # `H-667`, swept ledger (control) / case_file (SHIPPED) / case_file with `evidence_cap` 3.0
     # `first_heard_ob`: the obstacle an answer to an item first heard at the top band adds to its roll (B24.25, ADM "The resolution, decided": an `Overwhelming` filing is marked first heard and the answering act's
     # obstacle reads `answer_ob + first_heard_ob` against it; OBS §2 member 11). B24.26 reads it: `proceeding.py`'s `first_heard` term, through `Input.dials`. `0` is the control: the term is then listed by no roll and every hash is what it was.
-    # [ASSUMPTION; Jordan to correct; revert: `0`. ADM proposes 1 and no document derives it, so the proposed value is the sweep's middle point and the shipped one is the control.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-668 -- `site: Fixtures first_heard_ob`, graded `assumption`; ADM proposes 1 and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
-    first_heard_ob=0,                 # `H-668`, swept 0 (control, SHIPPED) / 1 (ADM's proposed value) / 2
+    # [ASSUMPTION; Jordan to correct; revert: `0`. ADM proposes 1 and no document derives it, so the proposed value is the sweep's middle point and (B24.37) the shipped one.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-668 -- `site: Fixtures first_heard_ob`, graded `assumption`; ADM proposes 1 and no document derives it, so it is injected at 1 and swept 0 / 1 / 2]
+    first_heard_ob=1,                 # `H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_read_social_roll` reads the setting).

@@ -8457,9 +8457,9 @@ rows:
     tier:      1
     hole:      "WHETHER THE ATTENDEES AT A SITTING SPEND EXCHANGES -- `sitting_exchanges`, a SWITCH read as 0 or 1 (HEAR_B edit 10): at 0 a sitting holds no exchanges beyond what is filed; at 1 each attendee spends his own act's `effort` as the turns he prepares. No document gives a count."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sitting_exchanges` the one home. READER: `seam/wrappers/sigma.py::_rite_of` (B24.10), which gives a bench's sitting no turns at 0; B24.37 flips the shipped value"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.sitting_exchanges` the one home. READER: `seam/wrappers/sigma.py::_rite_of` (B24.10), which gives a bench's sitting no turns at 0; B24.37 set the shipped value"
     grade:     "assumption"
-    default:   "0 -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: 0]: no sitting spends an exchange, so every roll and every hash is what it was. 'Shipped' at B24.37 means each attendee spends his own act's `effort` (HEAR_B: 'the attendees' effort'; `person_q.effort_of`, B24p.06), so the setting is a switch read as 0 or 1"
+    default:   "1 -- THE ATTENDEES' EFFORT, SHIPPED at B24.37 [ASSUMPTION; Jordan to correct; revert: 0]: each attendee spends his own act's `effort` (HEAR_B: 'the attendees' effort'; `person_q.effort_of`, B24p.06), so the setting is a switch read as 0 or 1 (1 is the lowest value that is the switch on). 0 is the control (B24.07), under which no sitting spends an exchange"
     site:      "Fixtures sitting_exchanges, read by `sigma._rite_of` (B24.10): a bench's sitting (a row whose close is `bench` or `declared`, full form) has turns (0, 0) at 0"
     sweep:     [0, 1, 2]
     unblocks:  "the hearing's sitting running its attendees' exchanges (B24.37's flip), and B98's sweep of the switch"
@@ -8485,7 +8485,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.answer_step` the one home. READERS: none at B24.07; B24.06's `answer` reads it through `Input.dials`"
     grade:     "assumption"
-    default:   "0 -- THE CONTROL, SHIPPED at B24.07 [ASSUMPTION; Jordan to correct; revert: 0]: a heavier exhibit does not harden its answer. The first value is 0.25, the former `proof_step`'s, set in this batch at B24.37 [ASSUMPTION: R2 §7b-9 #4 -- a new fixture rather than reviving `proof_step`, which OBS §3 deletes]"
+    default:   "0.25 -- THE FIRST VALUE, the former `proof_step`'s, SHIPPED at B24.37 [ASSUMPTION; Jordan to correct; revert: 0 -- the control (B24.07), under which a heavier exhibit does not harden its answer; R2 §7b-9 #4 -- a new fixture rather than reviving `proof_step`, which OBS §3 deletes]"
     site:      "Fixtures answer_step, read by nothing at B24.07; B24.06's `answer` reads it through `Input.dials`"
     sweep:     [0, 0.25, 0.5]
     unblocks:  "a weightier exhibit being harder to answer, and B98's sweep of the unit"
@@ -8535,9 +8535,9 @@ rows:
     tier:      1
     hole:      "WHERE A DOCKETED MATTER'S `proofs` LEVELS COME FROM -- `evidence_from`, `ledger` or `case_file` (EVID_B 'Exact edits' 5: 'the control arm (`evidence_from: ledger`, a fixture) keeps `world_q.proofs` through the host's `proofs` source'). `ledger`: the speaker's own unmirrored deed claims (`world_q.proofs`), as before. `case_file`: the exhibits filed on the matter's case file, which the roll's `proof_levels` counts; the ledger is then read for that matter by nothing, so one matter's proofs are never read from both. No document says which ships."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_from` the one home (`EVIDENCE_ARMS` its closed set, refused by `load`). READER: `engine/season/seam/wrappers/sigma.py::_read_social_roll`, which fills `SocialContestInput.exhibits` (`_exhibits_of`) and leaves `proofs` at 0 for a matter whose case file is the source; B24.37 flips the shipped value"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_from` the one home (`EVIDENCE_ARMS` its closed set, refused by `load`). READER: `engine/season/seam/wrappers/sigma.py::_read_social_roll`, which fills `SocialContestInput.exhibits` (`_exhibits_of`) and leaves `proofs` at 0 for a matter whose case file is the source; B24.37 set the shipped value"
     grade:     "assumption"
-    default:   "ledger -- THE CONTROL, SHIPPED at B24.21 [ASSUMPTION; Jordan to correct; revert: ledger]: every docketed matter reads `world_q.proofs` and no exhibit is built, so every roll and every hash is what it was. B24.37 sets `case_file`"
+    default:   "case_file -- SHIPPED at B24.37 [ASSUMPTION; Jordan to correct; revert: ledger]: a docketed matter's `proofs` levels are the exhibits filed on its case file. `ledger` is the control (B24.21), under which every docketed matter reads `world_q.proofs` and no exhibit is built"
     site:      "Fixtures evidence_from, read ONLY by `seam/wrappers/sigma.py::_read_social_roll` (the dealt roll of a prize a room hears); `believed_input` reads no exhibit and stays on the ledger until the flip"
     sweep:     ["ledger", "case_file", "case_file with evidence_cap 3.0"]
     unblocks:  "the case file's filed exhibits being the proofs of a docketed matter (R-04.c3), and B98's sweep of the arm"
@@ -8550,7 +8550,7 @@ rows:
     kind:      "NUMBER"
     owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.first_heard_ob` the one home. READER: B24.26 -- `modules/social_contest/proceeding.py::_first_heard_term` (the sitting's `answer` to an `Item.first`, and the answering `speak`'s `Input.first_heard`, which the host builder reads with `world_q.answers_first`)"
     grade:     "assumption"
-    default:   "0 -- THE CONTROL, SHIPPED at B24.25 [ASSUMPTION; Jordan to correct; revert: 0]: a first-heard item is no harder to answer, so every roll and every hash is what it was. ADM proposes 1, which B24.37 sets"
+    default:   "1 -- ADM's PROPOSED value, SHIPPED at B24.37 [ASSUMPTION; Jordan to correct; revert: 0 -- the control (B24.25), under which a first-heard item is no harder to answer]"
     site:      "Fixtures first_heard_ob, read by `proceeding.py::_first_heard_term` through `Input.dials` (B24.26); the answering `speak`'s builder reads the filed stage's first mark off the act's `answers`"
     sweep:     [0, 1, 2]
     unblocks:  "the top band of a filing meaning something in the room (R-04.c3), and B98's sweep of the term"

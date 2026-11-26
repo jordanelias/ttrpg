@@ -6110,22 +6110,22 @@
     {
       "key": "engine.season.settings.sitting_exchanges",
       "name": "sitting_exchanges",
-      "value": 0,
+      "value": 1,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-661`, swept 0 (control, SHIPPED) / 1 (shipped: the attendees' effort) / 2 (read as 1: a switch)",
+      "note": "`H-661`, swept 0 (control) / 1 (shipped: the attendees' effort, SHIPPED) / 2 (read as 1: a switch)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.answer_step",
       "name": "answer_step",
-      "value": 0.0,
+      "value": 0.25,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-663`, swept 0 (control, SHIPPED) / 0.25 (first value) / 0.5",
+      "note": "`H-663`, swept 0 (control) / 0.25 (first value, SHIPPED) / 0.5",
       "citation": null,
       "citation_grade": null
     },
@@ -6165,22 +6165,22 @@
     {
       "key": "engine.season.settings.evidence_from",
       "name": "evidence_from",
-      "value": "ledger",
+      "value": "case_file",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-667`, swept ledger (control, SHIPPED) / case_file / case_file with `evidence_cap` 3.0",
+      "note": "`H-667`, swept ledger (control) / case_file (SHIPPED) / case_file with `evidence_cap` 3.0",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.first_heard_ob",
       "name": "first_heard_ob",
-      "value": 0,
+      "value": 1,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-668`, swept 0 (control, SHIPPED) / 1 (ADM's proposed value) / 2",
+      "note": "`H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2",
       "citation": null,
       "citation_grade": null
     },
