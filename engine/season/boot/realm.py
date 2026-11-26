@@ -27,7 +27,7 @@ from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, dema
                                home_of as home_of_q, landing_floor, members, subsistence_draw, treasury_above)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD, endowment_for
-from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
+from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTION_CREED, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_id_of, territory_rung_id, title_domain)
@@ -1727,7 +1727,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             w.propositions[fid] = Proposition(fid, "HOLDS", fac_name,
                                               "is a faction of this world", True, 0)
             continue
-        w.propositions[fid] = Proposition(fid, "OUGHT", lead_pid, "carries the creed of",
+        # B21b.05 (IN-30): the creed's mood and predicate are `rosters.yaml: factions.creed`'s, the shape `world_q.faction_props` reads
+        w.propositions[fid] = Proposition(fid, FACTION_CREED["mood"], lead_pid, FACTION_CREED["predicate"],
                                           fac_name, 0, scope=template)
     unplaced: list = []
     for case in cases:

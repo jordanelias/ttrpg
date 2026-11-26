@@ -3911,7 +3911,11 @@
             "L\u00f6wenritter": "off_grand_master",
             "Restoration Movement": "off_restoration_leader"
           },
-          "compatible_with": {}
+          "compatible_with": {},
+          "creed": {
+            "mood": "OUGHT",
+            "predicate": "carries the creed of"
+          }
         },
         "role_templates": {
           "source": "`systems/factions/reference/faction_canon_v30.md` \u00a74 'Role Templates and Expected Convictions', per PP-686 \u00a73.3.1 over the PP-684 13-Conviction taxonomy.",

@@ -40,7 +40,7 @@ from ..data.rosters import (
     INVESTED, SEASONS_OF_YEAR,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
-    faction_prop_id, factions_compatible,
+    FACTION_CREED, faction_prop_id, factions_compatible,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
@@ -2938,6 +2938,21 @@ def provinces_of(w: World, rung_id: str) -> dict:
     return out
 
 
+def faction_props(w: World) -> frozenset:
+    """THE ONE OWNER OF "IS THIS A FACTION" (B21b.05, IN-30): the faction Proposition ids -- the roster's
+    (`data/rosters.py::FACTION_BY_PROP`) and every `w.propositions` id whose mood and predicate are
+    `rosters.yaml: factions.creed`'s (`FACTION_CREED`). An EMERGED creed is a faction while a Proposition of the
+    shape exists: a person who `utter`s one about himself and `commit`s to it founds a faction, and its display
+    name is its founder's (the Proposition's `subject`); a rostered faction's stays the roster's. Stores nothing,
+    counts nothing, no threshold (IN-30: "No threshold, counter or stored entity."); membership is the existing
+    `commit` (`members`). A roster id whose Proposition the world lacks (a foreign faction not seated) is still in
+    the set, as `FACTION_BY_PROP` always answered; a caller that needs the Proposition tests `w.propositions` too.
+    ⚠ NO `TRACE.query` ROW: `faction_holding` reads it on `endings_reached`'s route, which must write none."""
+    mood, predicate = FACTION_CREED["mood"], FACTION_CREED["predicate"]
+    return frozenset(FACTION_BY_PROP).union(pid for pid, q in w.propositions.items()
+                                            if q.mood == mood and q.predicate == predicate)
+
+
 def faction_holding(w: World, subject: str) -> "str | None":
     """WHICH FACTION A `hold`'s SUBJECT COHERES UNDER — the faction Proposition id, or `None`.
 
@@ -2962,13 +2977,17 @@ def faction_holding(w: World, subject: str) -> "str | None":
     holds land that coheres into no province -- which is the same reading `Uncontrolled` already
     gets, and a thing to play for. A holder committed to two is a genuine question this Query does
     not get to answer by picking one: canon states no precedence between a magnate's two
-    allegiances, so inventing one here would put a ruling in a Query."""
-    if subject in w.propositions and subject in FACTION_BY_PROP:
+    allegiances, so inventing one here would put a ruling in a Query.
+
+    B21b.05 (IN-30): "a faction" is `faction_props`' answer, so a holder committed to an EMERGED creed holds land
+    under it and that land is not `uncontrolled`."""
+    factions = faction_props(w)
+    if subject in w.propositions and subject in factions:
         return subject
     if subject not in w.persons:
         return None
     facs = {t.object for t in w.persons[subject].tenures
-            if t.kind == "commit" and t.live and t.object in FACTION_BY_PROP}
+            if t.kind == "commit" and t.live and t.object in factions}
     return next(iter(facs)) if len(facs) == 1 else None
 
 
@@ -3045,7 +3064,7 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
         and a holder's death closes his `hold` (`remove_person`), so a succession gap reads the same;
       * a holder committed to NO rostered faction, or to MORE THAN ONE -> uncontrolled, because
         `faction_holding` returns `None` for both (read as `provinces_of` reads it; a Proposition
-        not on the roster counts as none, `FACTION_BY_PROP`);
+        that is no faction counts as none, `faction_props`: an emerged creed is one, B21b.05);
       * an unheld territory beneath a faction-held rung -> NOT uncontrolled: `holder_faction_of`
         walks `ancestry`, so the nearest held title governs (the oracle had no cascade).
 
@@ -6018,14 +6037,14 @@ def _content_matter(rd: _StrifeReading, e, a=None) -> Optional[tuple]:
 
 def _creed_released(rd: _StrifeReading, e) -> bool:
     """A-46: is `e` a `commitment.ended` whose closed edge is a `commit` to a faction's creed Proposition
-    (`FACTION_BY_PROP`)? The closed edge is the Tenure a change of `e` names on `until` (what `_eff_release`
+    (`faction_props`, B21b.05: an emerged creed too)? The closed edge is the Tenure a change of `e` names on `until` (what `_eff_release`
     writes); the key is that edge's kind and object, never the releaser's id. A `commit` to any other Proposition
     (a cause, a war) is a routine release and no move."""
     if e.kind != CREED_RELEASE_KIND:
         return False
     for c in e.changes:
         t = rd.tenures.get(c.subject)
-        if c.field == "until" and t is not None and t.kind == "commit" and t.object in FACTION_BY_PROP:
+        if c.field == "until" and t is not None and t.kind == "commit" and t.object in faction_props(rd.w):
             return True
     return False
 
@@ -6144,8 +6163,9 @@ def open_referents(w: World, parties, referents) -> list:
         for k in (DETAIN_KIND, BAN_KIND):
             if restrained(w, p, k):
                 out.append((k, p))
+    factions = faction_props(w)
     facs = sorted({f for f in (faction_of(w, x) if x in w.persons else
-                               (x if x in FACTION_BY_PROP and x in w.propositions else None)
+                               (x if x in factions and x in w.propositions else None)
                                for x in set(parties) | set(referents)) if f is not None})
     for i, fa in enumerate(facs):
         for fb in facs[i + 1:]:

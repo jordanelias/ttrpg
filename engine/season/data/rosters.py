@@ -1956,6 +1956,16 @@ for _name in {n for _cf, _others in COMPATIBLE_WITH.items() for n in (_cf, *(_ot
                    needs="a `token_class: faction` name, as key and in each list")
 
 
+#: `{mood, predicate}` -- B21b.05 (IN-30): the shape of a creed Proposition (`rosters.yaml: factions.creed`). The realm builder mints
+#: each rostered faction's creed in it; `queries/world_q.py::faction_props` reads every Proposition of this shape as a faction.
+FACTION_CREED = roster_map("factions", "creed")
+if set(FACTION_CREED) != {"mood", "predicate"} or not all(isinstance(v, str) and v for v in FACTION_CREED.values()):
+    raise Unspecified(
+        f"rosters.yaml `factions.creed` is {FACTION_CREED!r}, not exactly a non-empty `mood` and `predicate`", "rosters.yaml -- factions",
+        needs="`creed: {mood: <a Proposition mood>, predicate: <the creed predicate>}` and no other key",
+        law="B21b.05 (IN-30) -- a creed Proposition is identified by its mood and predicate alone; any other key would be read by nothing")
+
+
 def factions_compatible(a: str, b: str) -> bool:
     """MAY ONE PERSON BELONG TO BOTH `a` AND `b`? (B21.63, `16_PESSIMIST_FA_B` edit 3.) The two are FACTION NAMES, the roster's own
     (`FACTION_BY_PROP` turns a Proposition id into one). THE DEFAULT IS INCOMPATIBLE for two different rostered factions, and a

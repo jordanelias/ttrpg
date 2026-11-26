@@ -2366,6 +2366,12 @@ rosters:
     # which will not admit into a faction a person who belongs to an incompatible one (he leaves it first: his own `release`).
     # [ASSUMPTION; medium; Jordan to correct; revert: delete this key and `COMPATIBLE_WITH`, and any admitted person may belong to any number]
     compatible_with: {}
+    # B21b.05 (IN-30): THE SHAPE OF A CREED PROPOSITION -- the mood and predicate a faction's own Proposition carries. `boot/realm.py`
+    # mints each rostered faction's creed in it, and `queries/world_q.py::faction_props` (the one owner of "is this a faction") reads
+    # every Proposition of this shape as a faction: so a person who `utter`s one about himself and `commit`s to it founds a faction
+    # (an EMERGED faction), with no threshold, counter or stored entity; membership is the existing `commit`. Loaded by
+    # `data/rosters.py::FACTION_CREED`, which refuses any key but these two.
+    creed: {mood: OUGHT, predicate: "carries the creed of"}
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
