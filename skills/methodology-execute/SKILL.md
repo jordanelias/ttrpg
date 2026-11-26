@@ -242,7 +242,7 @@ working-tree diff. A batch has one close unless the live plan names a **range cl
      engine/season/tests engine/tests -m "<expr>"`), so a subsystem lane still takes its `tests/valoria` files; the
      rest of `tests/valoria` is CI's. The batch's lanes are the SUBSYSTEM SUITE the live plan maps its `lane` column to
      (v12: part 2 §1's table, mapped by the head's rule P18; every `engine/season/tests` file carries exactly one suite
-     marker, `conftest.py`'s `SEASON_SUITES`, so a batch runs its own lane's suite and never `-m season_loop` whole; Jordan, 2026-11-26)
+     marker, placed in `references/season_test_suites.yaml`, so a batch runs its own lane's suite and never `-m season_loop` whole; Jordan, 2026-11-26)
      and any lane an item's `TESTS:` or `GATE:` line names. This skill chooses no lane and does not use `tools/tests_for_diff.py`. It runs at most once per
      batch, only if it can observe something CI will not (CLAUDE.md §0.4 cl.1), and no item runs it.
    - **It starts as Phase 1 opens, in the background**, on a snapshot of `HEAD` (`git worktree add --detach
@@ -284,7 +284,11 @@ working-tree diff. A batch has one close unless the live plan names a **range cl
    The orchestrator runs it in its own tree, over what the batch ADDED
    (`git diff --diff-filter=A --name-only <open sha>..HEAD -- tools tests engine`), the tests it
    edited, what it made redundant (an old tool or test an item replaced; CLAUDE.md §2 retires it in
-   the same change), and every test the suite run's `--durations` reading puts over its budget.
+   the same change), every test the suite run's `--durations` reading puts over its budget, **and every test of the batch's
+   lane suite that has become superfluous, whoever added it** (Jordan, 2026-11-26: *"we should be removing any and all tests from
+   suites as soon as they are irrelevant going forward esp ones that are being used to build mechanics but become superfluous once
+   built"*): a test written to build a mechanic is retired the batch the mechanic is built, since its item's commit already records
+   its falsifier; the lane suite is read at each close, not only the batch's additions.
    **A reader's discipline, with ONE mechanical backstop, `tools/ci_test_lane_ratchet.py` (Jordan,
    2026-11-23: *"Do NOT allow unwarranted accretion to happen"*): build no other guard (§0.1 pt 5); a retirement runs
    `python tools/ci_test_lane_ratchet.py --tighten` and commits `references/test_lane_caps.yaml`, and growth needs a warrant
