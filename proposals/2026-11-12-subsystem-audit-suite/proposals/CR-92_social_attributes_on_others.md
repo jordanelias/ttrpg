@@ -282,8 +282,8 @@ control 0 and ships dark, with the switch left to its own swept hole-register ro
 **Nothing caps the chooser at five terms.** `score_terms` returns a tuple (`choose.py:453`); no rule fixes its length. Of
 `IS-B2-CHAR-02` (`master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md:133`), only step (2) (`:135`) speaks to terms. That step
 constrains the in-contest DECIDER, `make_decider`, which `decision/decider.py:5-6` reads as *"it adds no term the chooser
-does not have"*. It does not constrain `score_terms`. The instruction suite itself is `## Status: PROPOSED`
-(`IS_B2_SC_FI_CORE_CHAR.md:3`), not canon.
+does not have"*. It does not constrain `score_terms`. (The instruction suite is part of the plan v12 adopted by merge, so it
+is ratified: CLAUDE.md §2, ED-1094. The ruling rests on step (2)'s text, not on its status.)
 
 **The ladder.**
 1. **Superseded:** no later ruling decides it.
