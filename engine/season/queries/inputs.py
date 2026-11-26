@@ -206,6 +206,27 @@ class Item:
     first: bool = False
 
 
+@dataclass(frozen=True)
+class Offer:
+    """B24.30 (NEG "Exact edits" 2, as V2 corrects it): the terms a party puts at a negotiation, a typed record and never text.
+
+      * `id`     -- the offer's own id;  `by` -- the party who makes it (his own standing, conditional `oblige`);
+      * `terms`  -- `((term kind, what), ...)`: an `oblige` term (the one kind an offer carries today);
+      * `stores` -- `None`: the DORMANT form of `exchange`'s stores (IS-B2-SC-06, blocked: SE names the act and its operands); an offer carries an obligation term only.
+
+    NO MOVE, NO CLOSING FIELD, NO ACCEPTED FIELD: an offer is a raised point under the `negotiation` rite, whose live thing is an offer, and `item()` is what that point
+    shows (an `oath`, the `matters` kind whose carrier is `Tenure:oblige`; `cell` is the term as filed); an accept is the other side's `concede` (`rites: negotiation`'s
+    `concede: accepts`, effect `yield`), which ends the sitting `yielded` with `Outcome.ended_by` naming the accepter. Under `close: consent` nothing is drawn to close it.
+    [ASSUMPTION; Jordan to correct; revert: `debt`, the other `Tenure:oblige` kind -- basis: an offer is the offerer's own obligation, as an oath is.]"""
+    id: str
+    by: str
+    terms: tuple
+    stores: Optional[tuple] = None
+
+    def item(self) -> Item:
+        return Item(self.id, "oath", 1.0, source=self.by, cell=(self.by, "oblige", self.terms))
+
+
 @dataclass(frozen=True, kw_only=True)
 class Present:
     """Everyone in the room: participant, adjudicator, audience (V2 p2 §A.1). Built by the host from `World`; read-only.
