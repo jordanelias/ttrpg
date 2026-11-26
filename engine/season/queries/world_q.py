@@ -50,7 +50,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDING_REMIT_ACTS,
+    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDER_CLASS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS, SEIZE_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
@@ -3656,6 +3656,12 @@ def engaged_poles(faction: str) -> tuple:
                  and g.object["kind"] == "deed_doers" and "engaging" in g.object)
 
 
+#: B21b.08 (CP-T09-01): THE INDIFFERENCE POINT, NAMED ONCE -- `opinion_of`'s zero, every term's midpoint (`person_q.opinion`). The one sign test
+#: three readers share: IN-70's gate (`opinion_referents`: below it turns `p` toward a doer's faction), the leave body (`leave_referents`: his own
+#: faction below it) and the join filter (`joinable`: a rival creed passes only above it).
+INDIFFERENCE = 0.0
+
+
 def opinion_of(w: World, p: Person, faction: str) -> float:
     """v9 IN-70 (RS-23, RS-24; ED-IN-0293 (6)): `p`'s OPINION OF THE FACTION whose Proposition id is
     `faction`, on `[-3, +3]`, computed when asked and stored nowhere (A-29, T-a). The formula and its
@@ -3673,28 +3679,38 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
         membership is `commit`, a World read of other persons' edges: the `seat_holders` precedent it cited was reversed at v12 B11.08, and
         this read is `opinion_referents`' own and untouched, an open residual of `08_FI_01`'s R-03). `p` himself never.
 
-    `Unspecified` for an id that is no rostered faction's Proposition: a non-faction has no opinion,
-    and none is guessed.
+    `Unspecified` for an id that is no faction's Proposition (`faction_props`): a non-faction has no opinion,
+    and none is guessed. An EMERGED creed (B21b.08) is one: it expects nothing and engages no pole, so its opinion
+    is the regard term alone (`faction_regarded`: its founder, the creed's subject, and the members his ledger names).
 
     [ASSUMPTION; medium; Jordan to correct; revert: the entry's own wording, a SUM of the three terms'
     inputs rather than the affiliation and regard MEANS: a term then leaves `[-1, +1]` with the number
     of poles or regarded persons] The affiliation and regard terms are MEANS, so each stays on `[-1, +1]`."""
     name = FACTION_BY_PROP.get(faction)
-    if name is None:
+    if name is None and not (faction in w.propositions and faction in faction_props(w)):
         raise Unspecified(f"{faction!r} is not a faction's Proposition", "rosters.yaml: factions",
-                          needs="a faction Proposition id (`FACTION_BY_PROP`)",
+                          needs="a faction Proposition id (`faction_props`)",
                           law="v9 IN-70 -- an opinion is of a faction")
+    # an EMERGED creed (B21b.08; `faction_props`) has no roster name, so it expects nothing and engages no pole: its opinion is the regard term alone
+    expected, poles = (_goals.expected("faction", name), engaged_poles(name)) if name is not None else ({}, ())
+    return opinion(p, expected, poles, faction_regarded(w, p, faction), w.fixtures)
+
+
+def faction_regarded(w: World, p: Person, faction: str) -> tuple:
+    """WHOM `p` REGARDS ON A FACTION'S BEHALF -- `opinion_of`'s regard term's input, and the persons whose mention turns `p` toward it (B21b.08's leave
+    body asks the same set): the faction's PRESENT head (`head`, a succession moves it) or, where it has none, the subject of its creed Proposition (a
+    living person), then every doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind) who is a live member of it. `p` himself never."""
     inside = set(members(w, faction))
     creed = w.propositions.get(faction)
+    name = FACTION_BY_PROP.get(faction)
     present = head(w, faction)
     # the creed's subject leads only a faction with NO head seat; a headed faction whose seat stands vacant has no leader (B21.65)
     leader = (present if present is not None and present in w.persons
               else creed.subject if (creed is not None and HEAD_SEAT.get(name) is None and creed.subject in w.persons) else None)
-    regarded = tuple(x for x in dict.fromkeys(
+    return tuple(x for x in dict.fromkeys(
         ((leader,) if leader is not None else ())
         + tuple(d for d in deed_doers(p.ledger, {"kinds": DEED_KINDS}, p.id) if d in inside))
         if x != p.id)
-    return opinion(p, _goals.expected("faction", name), engaged_poles(name), regarded, w.fixtures)
 
 
 def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tuple:
@@ -3704,7 +3720,7 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     JUDGES -- `person_q.paired_deed_term`, the ONE scorer (IN-58, IN-72): his pursuits lean on its kind
     (the authored `deed:` cells, a death or a wound) and its `seen.who` pairing names one doer, never a
     guess -- whose doer coheres under exactly one faction (`faction_holding`) and of which `p`'s
-    `opinion_of` is BELOW INDIFFERENCE (`< 0`, every term's midpoint): the doer, then every other live
+    `opinion_of` is BELOW INDIFFERENCE (`< INDIFFERENCE`, 0, every term's midpoint): the doer, then every other live
     member of that faction, `members` order, `p` himself never. `()` otherwise -- a hidden hand, a deed
     `p` does not judge (a `finding.made`), a doer of no single faction (LIMIT: a DEAD doer is in no
     `members` and so in no faction -- `faction_holding` reads a living person's `commit` edges), a
@@ -3747,11 +3763,82 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
         return ()
     if ("opinion", faction) not in memo:
         memo[("opinion", faction)] = opinion_of(w, p, faction)
-    if memo[("opinion", faction)] >= 0:
+    if memo[("opinion", faction)] >= INDIFFERENCE:
         return ()
     if ("members", faction) not in memo:
         memo[("members", faction)] = members(w, faction)
     return (doer,) + tuple(m for m in memo[("members", faction)] if m not in (doer, p.id))
+
+
+def own_factions(w: World, p: Person) -> tuple:
+    """THE FACTIONS `p` BELONGS TO, sorted: the objects of his own live `commit` Tenures that are faction Propositions (`faction_props`). One for nearly
+    everyone; none for a person in no faction; two where he joined before leaving (`faction_holding` then reads `None`, B21b.08: declared, not prevented)."""
+    factions = faction_props(w)
+    return tuple(sorted({t.object for t in p.tenures if t.kind == "commit" and t.live and t.object in factions}))
+
+
+def joinable(w: World, p: Person, heard: tuple) -> tuple:
+    """`heard` (`propositions_heard`'s output) WITH THE CREEDS HE DOES NOT FAVOUR TAKEN OUT (B21b.08, CP-T09-01 (rulings sheet R9): *join is a filter,
+    not a route*; [ASSUMPTION; medium; Jordan to correct; revert: `questions_for` appends `propositions_heard` unfiltered]). A rival creed -- a faction
+    Proposition (`faction_props`, the roster's and an emerged one) of a faction he is not in -- passes iff `opinion_of(p, F) > max(INDIFFERENCE,
+    opinion_of(p, own))`, `own` the best of his own factions' opinions and `INDIFFERENCE` for a person in none; so `commit` forms only on a creed he
+    favours over his own. Every other Proposition, and a creed of a faction he is already in (`held_edge_declines` answers that one), passes
+    untouched and in order. Computed when asked, stored nowhere. Read by `questions_for` only: the term itself (`propositions_heard`) is unchanged."""
+    factions = faction_props(w)
+    mine = own_factions(w, p)
+    rivals = [o for o in heard if o in factions and o not in mine]
+    if not rivals:
+        return heard
+    bar = max((INDIFFERENCE,) + tuple(opinion_of(w, p, f) for f in mine))
+    keep = {o for o in rivals if opinion_of(w, p, o) > bar}
+    return tuple(o for o in heard if o not in rivals or o in keep)
+
+
+def leave_referents(w: World, p: Person, refs: tuple, memo: Optional[dict] = None) -> tuple:
+    """THE FACTIONS HE WOULD LEAVE, as referents of a question about the people he regards (B21b.08, CP-T09-01's leave body; [ASSUMPTION; medium; Jordan to
+    correct; revert: `questions_for` appends no `leave_referents`]): for each faction `p` belongs to (`own_factions`) whose `opinion_of` is BELOW
+    INDIFFERENCE, the faction's id when some referent of the question is a person he regards on its behalf (`faction_regarded`: its head, or the doers his
+    own ledger names who are its members). `release` forms on a referent he holds a releasable edge toward (`rosters.yaml: own_edge_declines`), so the
+    faction's id there is what offers him his own `commit`'s release; the score is untouched (`decision/choose.py`). `()` for a person in no faction, for
+    a faction he favours or is indifferent to, and for a question about nobody he regards. A cohort answers no question, so none reaches it; a person with
+    no pursuits reads a cosine of 0 (`pursuit_cosine_axes`). `memo` is `opinion_referents`' per-call cache, shared."""
+    if memo is None:
+        memo = {}
+    out = []
+    for f in own_factions(w, p):
+        if ("opinion", f) not in memo:
+            memo[("opinion", f)] = opinion_of(w, p, f)
+        if memo[("opinion", f)] >= INDIFFERENCE:
+            continue
+        if ("regarded", f) not in memo:
+            memo[("regarded", f)] = faction_regarded(w, p, f)
+        if any(r in memo[("regarded", f)] for r in refs):
+            out.append(f)
+    return tuple(out)
+
+
+def creed_occasion(w: World, p: Person) -> bool:
+    """IS THE CREED `utter` HIS TO OFFER (B21b.08, IN-30's occasion; [ASSUMPTION; medium; Jordan to correct; revert: `questions_for` stamps no `Founder`]):
+    he has left a faction (a closed `commit` Tenure on a faction Proposition), belongs to none now, holds no creed he uttered already (a live `hold` on a
+    creed-shaped Proposition whose subject is he), and holds a seat or land (a live `hold` on an Office, or on a territory or a settlement). Read off his own
+    Tenures and the world's class of each object; stores nothing."""
+    factions = faction_props(w)
+    mood, predicate = FACTION_CREED["mood"], FACTION_CREED["predicate"]
+    left = False
+    seated = False
+    for t in p.tenures:
+        if t.kind == "commit":
+            if t.object in factions:
+                if t.live:
+                    return False
+                left = True
+        elif t.kind == "hold" and t.live:
+            q = w.propositions.get(t.object)
+            if q is not None and q.mood == mood and q.predicate == predicate and q.subject == p.id:
+                return False
+            if t.object in w.offices or (t.object in w.rungs and w.rungs[t.object].kind in ("territory", "settlement")):
+                seated = True
+    return left and seated
 
 
 def _persons_named(w: World, ids) -> tuple:
@@ -5144,7 +5231,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
             # opinion of it is below indifference (`opinion_referents`); the subject stays first, and
             # admission (the three clauses above) is untouched. REVERT: `(c.subject,)` alone.
             extra = tuple(x for x in opinion_referents(w, p, c, opinions) if x != c.subject)
-            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra, c.id))
+            # B21b.08 (CP-T09-01's leave body): AND A QUESTION ABOUT A PERSON HE REGARDS ON HIS OWN FACTION'S BEHALF carries that faction where his opinion of it is
+            # below indifference, so `release` forms on his own `commit`. After the subject and the opinion referents; never twice. REVERT: drop these two lines.
+            leave = tuple(x for x in leave_referents(w, p, (c.subject,) + extra, opinions) if x != c.subject and x not in extra)
+            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra + leave, c.id))
 
     # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
     # above). It is the person-keyed crossing, which no witness carries. Still `claim_landed`, no source added: the claims that
@@ -5305,7 +5395,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + founding
              + uncontrolled_in_purview(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + crossed_sites(w, p, since) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + crossed_sites(w, p, since) + joinable(w, p, propositions_heard(w, p)) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
@@ -5326,6 +5416,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # grievance beside him, and then the output is byte-identical. A grievance raises a question of its own when he
     # has none (the `need` head below), as a prisoner does: it is an occasion, not a context.
     held += tuple((d, DISPUTANT_CLASS) for d in disputes_held(w, p))
+    # B21b.08 (IN-30's occasion; CP-T09-01): AND, LAST, HIMSELF AS A FOUNDER where he has left a faction and holds a seat or land (`creed_occasion`), as `Founder` --
+    # no collection, `Detainee`'s shape; `decision/options.py::opening_set` offers the creed `utter` on it. REVERT: drop these two lines.
+    if creed_occasion(w, p):
+        held += ((p.id, FOUNDER_CLASS),)
     if out or added or held:
         held += tuple((e, ENEMY_CLASS) for e in enemies_heard(w, p))
     if added or held:
