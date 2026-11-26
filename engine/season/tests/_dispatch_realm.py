@@ -13,8 +13,8 @@ from ..boot.realm import build_realm as _shipped_realm
 MARCH_SEATS = (("p_npc_033", "off_spymaster"), ("p_npc_013", "off_cardinal_prudence"))
 
 
-def realm_seating_dispatch(seed):
-    w = _shipped_realm(seed)
+def realm_seating_dispatch(seed, **kw):
+    w = _shipped_realm(seed, **kw)
     for pid, seat_id in MARCH_SEATS:
         seat = w.offices[seat_id]
         seat.remit_acts = list(seat.remit_acts) + ["dispatch"]

@@ -329,7 +329,8 @@ def test_a_covered_moves_deposit_names_the_alias_and_not_the_mover_and_his_trave
         w, d = _world()
         if cover:
             _resolve(w, d, Act(id="cc", actor=WATCHER, verb="conceal", payload={"subject": WATCHER}))
-        mv = _resolve(w, d, Act(id="mv", actor=WATCHER, verb="move", payload={"to": "S"}))
+        # B12a.15: a `move` to where the mover stands is refused, and `_world` stands the watcher at S; he leaves for `Hh`, the deposit and the travel end being the same
+        mv = _resolve(w, d, Act(id="mv", actor=WATCHER, verb="move", payload={"to": "Hh"}))
         (moved,) = [e for e in mv if e.kind == "travel.moved"]
         subjects = claim_subjects(w, moved, "both")
         if cover:
