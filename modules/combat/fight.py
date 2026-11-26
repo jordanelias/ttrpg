@@ -314,6 +314,8 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     `cfg` (a config overlay) and `max_rounds` (a round cap) are the WORKBENCH's (B14.11); the host
     never passes them, and `None` is the engine's own `CFG` and round cap."""
     a_id, b_id = inp.claimants
+    if a_id == b_id:   # the loop names the felled or yielding party by id (the old loop compared the Combatants): two parties of one id read as one
+        raise ValueError(f"the two parties of a fight must have different ids, got {a_id!r} twice")
     wrapper.check_terms(inp.terms)
     cfg_ = _fight_cfg(inp, cfg) or CFG
     A, B = _combatants(inp, cfg_)
@@ -336,7 +338,7 @@ def fight(inp: PersonalCombatInput, rng: Draw,
                           wrapper.round_draw(fkey, rnd), cfg=cfg)
         trace.extend(out.trace)
         states, wound_state, prev_closed = out.states, out.wounds, out.closed
-        loser = out.felled or out.yielded
+        loser = out.felled if out.felled is not None else out.yielded   # `is not None`, not truthiness: an empty id still names a party
         if loser is not None:   # +1 => A won; a yielder stands, and the other party holds the field
             result = -1 if loser == a_id else 1
             break

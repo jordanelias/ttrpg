@@ -104,8 +104,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     felling, else the reason of the `separation` event it emitted). A and B are fixed
     objects throughout — never swapped. `terms` is `fight`'s non-lethal duel terms (RS-25), or None under lethal
     ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop.
-    `turn` is this round's index in the fight (1-based, the `round_start` count) and `scene` the fight's `rng.n` where it began:
-    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`)."""
+    `turn` is this round's index in the fight (1-based, the `round_start` count) and `scene` 0 under keyed rounds (B16.03) and else the fight's `rng.n` where it began:
+    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`), on `rng`, the round's own `Draw` under keyed rounds."""
     blow = 0
     def _strike(attacker, defender, deg, **kw):
         """`core.strike` with the blow's keyed coverage-gap draw (PC_D, A-30). Returns (damage, bare) for the caller to carry to
@@ -679,7 +679,7 @@ def play_round(A, B, first, cfg, rd, prev_closed, stop, rnd, scene=0):
     _emit('round_end', round=rnd, felled=(loser.label if loser is not None else None), ended_by=ended_by)
     return loser, closed, ended_by, wounds0
 
-def settle_round(A, B, wounds0, terms, cfg, rng, scene, turn, decisiveness):
+def settle_round(A, B, wounds0, terms, cfg, rng, scene, rnd, decisiveness):
     """THE END OF A ROUND THAT DID NOT FELL (A-101; the one site `_fight` and `fight.py::fight_round` both call): the yield roll of each party who took a
     wound gate since `wounds0` (B15.10, A-24), once, on the party's own keyed sub-draw (a function of the fight's key, the round and the party, never of
     how many uniforms the stream has taken: B15.05's form). A Partial shakes him (`conc` down), an Overwhelming rallies him (`conc` full). A FAILED ROLL ENDS
@@ -691,18 +691,18 @@ def settle_round(A, B, wounds0, terms, cfg, rng, scene, turn, decisiveness):
     for side, c in (('A', A), ('B', B)):
         if not _gate_crossed(c, wounds0):
             continue
-        deg = _yield_roll(c, terms, decisiveness[0 if c is A else 1], cfg, KD.seeded(KD.H2(rng.key, f"yield:{scene}:{turn}:{side}")))
+        deg = _yield_roll(c, terms, decisiveness[0 if c is A else 1], cfg, KD.seeded(KD.H2(rng.key, f"yield:{scene}:{rnd}:{side}")))
         if deg == 'fail':
             failed.append(c)
         elif deg == 'partial':
-            c.conc = max(0, c.conc - cfg['CONC_DRAIN_LOSS']); _emit(V.EV_SHAKEN, round=turn, by=c.label)
+            c.conc = max(0, c.conc - cfg['CONC_DRAIN_LOSS']); _emit(V.EV_SHAKEN, round=rnd, by=c.label)
         elif deg == 'overwhelming':
-            c.conc = c.conc_max; _emit(V.EV_RALLIED, round=turn, by=c.label)
+            c.conc = c.conc_max; _emit(V.EV_RALLIED, round=rnd, by=c.label)
     if not failed:
         return False, None
     yielder = _terms_yielder(A, B, failed)
     if yielder is not None:
-        _emit('yield', round=turn, by=yielder.label, accepted=(None if terms == LETHAL_TERMS else True), refused=None, terms=terms, degree='fail')
+        _emit('yield', round=rnd, by=yielder.label, accepted=(None if terms == LETHAL_TERMS else True), refused=None, terms=terms, degree='fail')
     return True, yielder
 
 def recover(A, B, cfg):
