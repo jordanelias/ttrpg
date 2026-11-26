@@ -12,11 +12,15 @@ from engine.dice_engine import draw
 
 from ..data import arrangements as A
 from ..data.rosters import PROCEEDING_MOVES
+from ..loop.effects_information import _docket_item
+from ..queries import world_q
 from ..queries.inputs import PlayHost
 from ..seam.ladder import degree_of
 from ..seam.wrappers import sigma as S
-from ..state.carriers import Claim
+from ..state.attribution import actor_of
+from ..state.carriers import Act, Claim
 from . import test_sc_proceeding_module as M
+from . import test_u7_remit as U
 from .test_sc_proceeding_host import _build, _world
 
 SEEDS = range(40)
@@ -41,7 +45,7 @@ def _digest(out) -> str:
 
 
 def test_two_npc_negotiation_auto_twice_same_hash():
-    """GATE 1 (NEG gate 1; the `oblige` arm is read at B24.31): the seeded `negotiation` row builds a consent sitting nobody adjudicates (two people, no seat), and its
+    """GATE 1 (NEG gate 1; the `oblige` arm is `test_each_oblige_is_opened_by_its_own_partys_act`, below): the seeded `negotiation` row builds a consent sitting nobody adjudicates (two people, no seat), and its
     sitting is the same value twice over the same seeds, whatever the seed's ending. It ends in an accept, a withdrawal, an all-rest or the turns running out, over the seeds.
     FALSIFIER: two digests of one seed, or a row that seats an adjudicator, or a run that never ends in an accept."""
     ends, checked = set(), 0
@@ -114,3 +118,34 @@ def test_an_accept_is_a_concession_and_nothing_is_drawn():
             assert band["status"] == "IMPASSE"
         checked += 1
     assert checked == len(SEEDS) and bands == {"p_mid": "Success", "p_low": "Failure"}, bands
+
+
+def _opener(w, edge):
+    """WHO ACTED to open `edge`: the actor of the logged Event whose receipt names it (`state/attribution.py::actor_of`, the cause's act)."""
+    return next(actor_of(w, e) for e in w.log if any(c.subject == edge.id for c in e.changes))
+
+
+def test_each_oblige_is_opened_by_its_own_partys_act():
+    """GATE 1's `oblige` arm (NEG edit 5, B24.31): an `oblige` an agreement opens is opened by the act of the party it binds. A determination does not agree: it is a bench's, and `determine`
+    opens no edge for a `consent` row (the judge's act would be the opener, C-07). The real fold on `tiny_world`: (1) CONTROL, a bench row (`arbitration`) determined by the Duke opens the party's
+    edge under the DUKE's act, so the reading below can tell a bench's opening from a party's; (2) `open_case` refuses to dock the `negotiation` row, and a determination of a hand-planted
+    docket item under it is refused and opens nothing; (3) each party's own `oblige` act opens his edge, and the act that opened every edge is his. FALSIFIER: an edge whose opener is
+    not the party it binds, or a `consent` row a determination opens an edge for."""
+    w, d = U._world(**U.JUDGE)
+    assert U._kinds(U._fold(w, d, U._open("oc", arrangement="arbitration"))) == ["case.opened"]
+    assert U._kinds(U._fold(w, d, U._determine("dt"))) == ["matter.determined"]
+    sentence, = U._obliges(w)
+    assert (_opener(w, sentence), sentence.subject) == (U.DUKE, U.PARTY)             # control: the judge's act opened a party's edge
+
+    w, d = U._world(**U.JUDGE)
+    assert A.ARRANGEMENTS["negotiation"]["close"] == "consent"
+    assert U._kinds(U._fold(w, d, U._open("oc", arrangement="negotiation"))) == ["case.refused"] and world_q.docketed(w, U.PARTY) == []
+    w.docket.append(_docket_item(U.PARTY, "negotiation", None))
+    assert U._kinds(U._fold(w, d, U._determine("dt"))) == ["determine.refused"] and U._obliges(w) == []
+
+    seat, parties = "off_dicastery", ("p_low", "p_mid")
+    for who in parties:
+        assert U._kinds(U._fold(w, d, Act(id=f"ob_{who}", actor=who, verb="oblige", payload={"subject": seat}))) == ["duty.taken"], who
+    edges = [t for t in w.tenures if t.kind == "oblige" and t.object == seat and t.live]
+    assert sorted(t.subject for t in edges) == sorted(parties)
+    assert all(_opener(w, t) == t.subject for t in edges)

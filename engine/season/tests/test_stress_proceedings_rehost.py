@@ -118,10 +118,10 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     """RE-HOSTS ST-14 (`00_DERIVATION.md` §A.6). The tracer's finding (F-14, blocking): `determine` can
     GRADE a Tenure and cannot OPEN one, so *`disposes:` NAMES A WRITE AND HAS NO WRITER*. REVERSED by v9
     SC-03: `_eff_determine` opens the kind the docketed row `disposes:`. Asked of every seeded row that
-    disposes a Tenure kind -- the seven, `excommunication_deliberation` (SC-04's row) and `negotiation` (B10-13 SC-04's) among them -- through the
+    disposes a Tenure kind but a `consent` close (B24.31: `negotiation`'s agreement is each party's own act), `excommunication_deliberation` (SC-04's row) among them -- through the
     real fold: the matter is docketed under the row, a strong judge determines it, and ONE live edge of
     exactly the row's kind appears, owned by the party, on the seat exercised, graded at the band the
-    contest decided, and no edge of any other disposal kind. The loop asserts it asserted (eight rows: seven at the B10-13 pin commit, `audience` at B24p.03).
+    contest decided, and no edge of any other disposal kind. The loop asserts it asserted (seven rows).
     THE HALF THAT IS STILL OPEN: the two `Record`-disposing rows (`parliamentary_debate`, `council_of_state`)
     have no writer -- `open_case` REFUSES to dock under them (`case.refused`), asserted below, so the gap is
     observed and not skipped."""
@@ -130,7 +130,7 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     checked, record_rows = 0, []
     for name, row in sorted(A.ARRANGEMENTS.items()):
         w, d = _world(**JUDGE)
-        if row["disposes"] not in DISPOSABLE_KINDS:
+        if row["disposes"] not in DISPOSABLE_KINDS or row["close"] == "consent":      # B24.31: a `consent` row is no determination's (`_determinable`)
             record_rows.append(name)
             assert _kinds(_fold(w, d, _open("oc", arrangement=name))) == ["case.refused"], name
             continue
@@ -154,9 +154,9 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
         assert all(not _edges(w, other) for other in disposal_kinds if other != row["disposes"]), (
             name, [(t.kind, t.subject) for t in w.tenures if t.object == SEAT])
         checked += 1
-    assert checked == 8, checked      # B24p.03: `audience` (disposes `oblige`) is the eighth; B10-13 pin commit (SC-04's `negotiation` row) made it 7
+    assert checked == 7, checked      # B24p.03: `audience` (disposes `oblige`) is the seventh; B24.31: `negotiation` (a `consent` close, its agreement each party's own act) left the eight
     # B24p.03: the rows disposing a non-Tenure kind are `conversation`, `rally` (`none`) and `interrogation` (`yield`) beside the two `Record` rows
-    assert record_rows == ["conversation", "council_of_state", "interrogation", "parliamentary_debate", "rally"], record_rows
+    assert record_rows == ["conversation", "council_of_state", "interrogation", "negotiation", "parliamentary_debate", "rally"], record_rows
 
 
 def test_st15_an_adjudicator_acts_as_a_seat_and_a_private_opinion_is_not_a_determination():

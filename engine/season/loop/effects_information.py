@@ -193,6 +193,15 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
+def _determinable(row_id: str) -> bool:
+    """B24.31 (NEG edit 5, C-07) -- WHETHER A DETERMINATION MAY DISPOSE OF `row_id`: its `disposes:` is a Tenure kind `determine` can open (`DISPOSABLE_KINDS`) AND its close is
+    not `consent`. A `consent` row's agreement is each party's own (`close: consent`: nothing is adjudicated, `bench_basis: none`), so an edge a bench opened on it would be opened under
+    the judge's act, not the act of the party it binds; its `oblige` is opened by that party's own act (the `oblige` verb, `own`-eligible, `_eff_oblige`). `open_case` asks it before it docks
+    and `_eff_determine` before it opens, so a matter is never docked for a determination that declines it forever."""
+    row = ARRANGEMENTS[row_id]
+    return row["disposes"] in DISPOSABLE_KINDS and row["close"] != "consent"
+
+
 def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0, case=None) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
     acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
@@ -453,12 +462,11 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     rig = d.get(RIG_KEY, 0)
     # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
     # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
-    # (`DISPOSABLE_KINDS`) -- else the matter would dock and `determine` decline it forever, and
+    # (`DISPOSABLE_KINDS`) and that is not a `consent` row (`_determinable`) -- else the matter would dock and `determine` decline it forever, and
     # `docketed` would block any second `open_case` (a wedge). `None` -- every computed case -- is
     # the realm's path, unchanged.
     if arrangement is not None and not (
-            isinstance(arrangement, str) and arrangement in ARRANGEMENTS
-            and ARRANGEMENTS[arrangement]["disposes"] in DISPOSABLE_KINDS):
+            isinstance(arrangement, str) and arrangement in ARRANGEMENTS and _determinable(arrangement)):
         return NO_CHANGE
     if petition is not None and not (
             isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
@@ -624,6 +632,13 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     _admits`, plan position `14`, on this row's `counterparty: subject`) is asked of neither and
     cannot fire for this row.
 
+    B24.31 (NEG edit 5; C-07, `04` PART D row 10a) -- A `consent` ROW IS NEVER DETERMINED: a negotiation's agreement is each party's own, so this body writes NO EDGE under the determiner's act for
+    it (it declines like the two arrangement declines above, and `open_case` docks no matter under such a row). Each party's `oblige` is opened by that party's own act -- the `oblige` verb (`own`
+    eligibility, `_eff_oblige`; the gate's `T-m` admits an owner's own edge and no other), so the `Act.actor` of an agreement's edge is the party it binds. ⚠ WHAT THIS DOES NOT DO, AND THE ENTRY
+    ASKED: link the acceptance to the two acts. An effect returns a `Change` under ITS act's actor and gate; the Acts a fold resolves are minted at DELIBERATE and enter `w.acts` at RESOLVE
+    alone, so no effect can form or fold a party's act, and the tree has no `accepted` field (an accept is `Outcome.ended == "yielded"`, `ended_by` its accepter) nor a verb that hosts a
+    consent sitting (NEG edit 6, B28). Named, not built.
+
     G3 -- THE EDGE IS SOMEBODY ELSE'S, AND ITS BASIS IS `determination` (`state/gate.py::
     may_determine`, the EIGHTH): a judging seat the actor sits in, whose bench's ground holds the
     party's home. The row's `bench` conjunct asks that same function first, so the fold refuses (and
@@ -662,8 +677,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if seat is None or len(rows) > 1:
         return NO_CHANGE
     row = next(iter(rows), None)
-    if row is not None and row not in ARRANGEMENTS:
-        return NO_CHANGE                  # a hand-planted item naming no row `open_case` admits
+    if row is not None and (row not in ARRANGEMENTS or not _determinable(row)):
+        return NO_CHANGE                  # a hand-planted item naming no row `open_case` admits, or a `consent` row (B24.31: no edge under the judge's act)
     kind = ARRANGEMENTS[row]["disposes"] if row is not None else UNDECLARED_DISPOSAL
     if any(t.kind == kind and t.subject == party and t.object == seat and t.live
            for t in w.tenures):
