@@ -176,7 +176,10 @@ def test_control_a_minted_arms_rank_adds_nothing_to_a_roll_only_an_authored_hold
     # at most seeds fights nobody -- `seen` is empty at seed 2). THE SWEEP, this test's own body at `build_realm(s)` / `run(1, s)`, seeds 0..7, run once and not
     # kept: it holds at seed 0 and fails at 1..7 (no roll read, so no minted holder); the first is taken. A selected-seed existence claim, not a rate.
     # [ASSUMPTION; medium; Jordan to correct; revert: seed 2, with B21.03's `remit_unruled` retirement undone.]
-    w = build_realm(0)
+    # RE-PICKED AT THE B21b CLOSE, seed 0 -> 2 (B21b.01's march cap, B21b.02's three guard cohorts and B21b.04's plurality licence moved the season: at seed 0 the
+    # season's fights still roll, but no survivor of a bloodied fight is minted a rank, so `minted` is empty). THE SWEEP, this test's own body at seeds 0..7,
+    # `PYTHONHASHSEED=0`, run once and not kept: `minted` is non-empty at 2 and 5 only (one holder each, at 1); the first is taken.
+    w = build_realm(2)
     # BA1.99 re-point (BA1.01 authors `arms` 3 or 5 on 11 persons, so "nobody holds one at the build" is no longer the world): the rolls read
     # the untrained score alone for every person who authors none, and the authored holders read their own score (each raised by `_grown` at
     # most up to the value they hold after the season); a roll reads no other pool or Ob.
@@ -184,7 +187,7 @@ def test_control_a_minted_arms_rank_adds_nothing_to_a_roll_only_an_authored_hold
     from ..seam.wrappers.pool import FIGHT_DICE_SITE, pool_pair, untrained
     authored = {pid: p.capability[KEY] for pid, p in w.persons.items() if KEY in (p.capability or {})}
     assert len(authored) == 11 and set(authored.values()) == {3, 5}, authored
-    run(1, 0, w=w)
+    run(1, 2, w=w)
     held = {pid: p.capability[KEY] for pid, p in w.persons.items() if KEY in (p.capability or {})}
     # B10.99 re-read: B10.72 moved the season's fights, and a survivor of two bloodied fights now holds 2 here (was: every holder at 1);
     # what the claim needs is that no MINTED holder stands above the untrained score (`pool_default`), so a minted rank adds nothing to a roll

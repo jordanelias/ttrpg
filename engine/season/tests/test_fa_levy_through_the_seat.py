@@ -135,7 +135,8 @@ def test_army_presets_mint_three_armies_by_seated_leaders():
         every = sorted(c for c, x in w.persons.items() if x.is_cohort and x.weight > 1 and world_q.raisable_by(w, c, f))
         assert sorted(raised) == every, (f, commander, sorted(set(every) - raised))
         counts[f] = len(raised)
-    assert counts == {HAFEN: 10, CROWN: 15, VARFELL: 10}, counts
+    # B21b.02 (the guards ship on): the three guard cohorts are governed by the Crown's holdings, 15 -> 18 (`_governed_cohorts`' reading)
+    assert counts == {HAFEN: 10, CROWN: 18, VARFELL: 10}, counts
 
 
 def test_a_seated_resident_is_not_levied_unless_sworn_or_revocable():

@@ -140,7 +140,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `modules/mass_battle/orderofbattle.py` | B19.03, B19.04, B19.17, B19.18, B19.19, B19.21, B20.01, B20.02, B20.20, B22.24, B31.03, B31.10, B31.14 | B19 → B20 → B22 → B31 |  | listed |
 | `engine/engine_params/combat_engine_v1.json` | B05.58, B15.02, B15.15, B15.99, B16.05, B16.06, B16.07, B16.08, B34.07, B18.02, B18.03, B18.06, B18.07 | B15 → B16 → B34 → B18 |  | listed |
 | `state/world.py` | B09.10, B11.17, B11.63, B12b.25, B21c.01, B34.21, B37.12, B37p.03, B41.04 | B09 → B11 → B12b → B21c → B34 → B37 → B37p → B41 |  | listed |
-| `tests/test_march.py` | B21.79, B12a.08, B21b.04, B21b.06, B19.60, B19.61, B20.13, B20.14, B22.11, B23.02, B23.09, B23.12, B23.99, B31.13 | B21 → B12a → B21b → B19 → B20 → B22 → B23 → B31 |  | **not listed** |
+| `tests/test_march.py` | B21.79, B12a.08, B21b.06, B19.60, B19.61, B20.13, B20.14, B22.11, B23.02, B23.09, B23.12, B23.99, B31.13 | B21 → B12a → B21b → B19 → B20 → B22 → B23 → B31 |  | **not listed** |
 | `modules/mass_battle/config.py` | B05.03, B19.03, B19.07, B19.14, B19.51, B19.55, B19.63, B19.64, B19.68, B31.04, B31.06 | B19 → B31 |  | listed |
 | `references/npc_registry.yaml` | B10.62, B10.64, BA1.01, BA1.02, BA1.08, BA1.09, BA1.12, B21b.26, B37p.01, B33.09, B38.20, B39.25, B39.32 | B10 → BA1 → B21b → B37p → B33 → B38 → B39 |  | listed |
 | `decision/sheet.py` | B01a.01, B09.07, B09.15, B09.17, B10.27, B10.64, B10.65, B34.02, B34.03, B34.06, B34.12, B34.16, B38.75 | B01a → B09 → B10 → B34 → B38 |  | listed |
@@ -155,9 +155,9 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/test_storybar.py` | B36.13, B36.14, B38.02, B38.18, B38.68, B38.71, B38.73, B38.81, B39.30 | B36 → B38 → B39 |  | listed |
 | `modules/combat/combat_systems.py` | B05.61, B15.02, B15.04, B16.05, B16.06, B16.08, B18.07, B18.09 | B15 → B16 → B18 |  | listed |
 | `modules/mass_battle/battle_loop.py` | B19.07, B19.08, B19.51, B19.54, B19.58, B19.59, B19.68, B20.03, B30.03, B30.10 | B19 → B20 → B30 |  | listed |
-| `harness/populated.py` | B01.02, B01a.01, B12a.01, B21b.02, B12b.20, B24a.04, B39.10 (B05.16 no longer edits it, 2026-11-14) | B01 → B01a → B12a → B21b → B12b → B24a → B39 |  | listed |
+| `harness/populated.py` | B01.02, B01a.01, B12a.01, B12b.20, B24a.04, B39.10 (B05.16 no longer edits it, 2026-11-14) | B01 → B01a → B12a → B12b → B24a → B39 |  | listed |
 | `harness/strife.py` | B12a.68, B11F2.03, B11F2.06, B21s.01, B21s.02, B36.02, B36.04, B38.57, B38.59, B38.62, B38.64 | B12a → B11F2 → B21s → B36 → B38 |  | listed |
-| `loop/effects_shared.py` | B21.12, B21.79, B12a.08, B12a.13, B12a.72, B21b.04, B21b.06, B12b.28, B12c.04, B22.28, B28.24 | B21 → B12a → B21b → B12b → B12c → B22 → B28 |  | listed |
+| `loop/effects_shared.py` | B21.12, B21.79, B12a.08, B12a.13, B12a.72, B21b.06, B12b.28, B12c.04, B22.28, B28.24 | B21 → B12a → B21b → B12b → B12c → B22 → B28 |  | listed |
 | `tests/test_mass_battle_module.py` | B05.03, B19.22, B19.53, B19.55, B19.70, B19.68, B20.07, B31.07 | B19 → B20 → B31 |  | **not listed** |
 | `tests/test_strife_flows.py` | B12a.04, B12a.05, B12a.06, B11F2.07, B38.57, B38.58, B38.59, B38.60, B38.61, B38.62, B39.27 | B12a → B11F2 → B38 → B39 |  | **not listed** |
 | `modules/social_contest/roll.py` | B01.02, B05.02, B05.14, B05.17, B05.51, B05.54, B05.56, B05.59, B24.20, B33.15, B33.34 | B01 → B24 → B33 |  | listed |

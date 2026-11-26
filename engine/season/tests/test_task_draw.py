@@ -74,11 +74,12 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: re-recorded it with the arm on, and B09.99 re-read these): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
 #: RE-READ AT BA1.99, a second time with BA1.02's `manner:` rows held back (the BA1.01, BA1.08 and BA1.12 movers move the arm-off world too; `PYTHONHASHSEED=0`; the earlier values are in `git log`).
-ARM_OFF_PINS = {(0, 1): "cc2625e80385e444949949401ab4e2f1", (1, 1): "bf76c0b9c2c3bf445ee4691c904dbb88", (2, 1): "cb5401ee49bc754608ee8af871bc3d6e", (0, 2): "f3a94df4e3c9f555e36088fe6e7b0ef3", (1, 2): "49203d49d5287faba0302934f357d819", (2, 2): "30fe189082520a34a7e3523c8a019713"}
+ARM_OFF_PINS = {(0, 1): "1f49216cfc6ace0e8eaebc75c1986dd3", (1, 1): "edac966371e901f52c8f1d57c7aa6d5a", (2, 1): "c92cc2da16d29a384493cf397d88a073", (0, 2): "34ce5cccd72169e674b952fa280f00fa", (1, 2): "62e6645a7cd91cb8ce924d8bc33c9ab8", (2, 2): "16532d552484ffd7f2bdedcd0e35dde5"}
+# B21b partial re-record on the merge with B08 and B12a (the guards ship on, B21b.02): the arm-off world read once at `PYTHONHASHSEED=0` on the merged tree.
 # B12a.99 re-read, the arm-off world on the merged tree (B08 and this batch together; `PYTHONHASHSEED=0`, six readings): both move the arm-off world too (`_realm_goldens.py`'s B12a.99 paragraph); the earlier values are in `git log`.
 # B08.99 re-record: the arm-off world read at `PYTHONHASHSEED=0` on `ce09a54` (the B08 movers move it too); the S13 base `8142371` read the previous six values.
 # B08.99 second re-record: the close's ruling (`hangs_on` also requires the same counterparty, 44cdf60) moves the arm-off world again; read at `PYTHONHASHSEED=0` on 000d177 plus this edit; the `ce09a54` values are in `git log`.
-# B16.99 re-record: B16.03's per-round fight key moves the arm-off world (seed 1 at one season reads equal); read at `PYTHONHASHSEED=0` on the merge with B12a's main; the previous values are in `git log`.
+# B16.99 re-record: B16.03's per-round fight key moves the arm-off world; read at `PYTHONHASHSEED=0` on the merge with B21b's main; the previous values are in `git log`.
 # B11 merge with main re-record: the arm-off world read twice equal at `PYTHONHASHSEED=0` on the merged tree; each earlier value is in `git log`.
 
 

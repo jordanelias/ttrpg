@@ -77,32 +77,35 @@ RE-PINNED A SECOND TIME AT B08.99 (every `SHIPPED` and `CENSUS` value; BUILD unm
 
 RE-PINNED AT B12a.99 (every value below, BUILD too), ONCE for the batch B12a-world-motion-and-ground (37 commits since the open commit `8142371d0`, the B11-fi-readers close: B08-scene-order merged to main while this batch was open, so the values below are read on the MERGED tree (`ce20d65e0`: this batch on B08's main) and the pre-B08 chain here is the batch's alone). The movers that moved the shipped realm are three, each read on its own tree at `PYTHONHASHSEED=0`: B12a.15 (a `move` to where the mover stands is refused, H-140), B12a.54 (`endowment_mode` `uniform` -> `ground`: the Site set and the starting stores) and B12a.55 (`granary_seasons` 0 -> 4: the treasuries' starting stores). Seed 0, hash build / one season / two seasons: `08a3ac15..` / `94dc5293..` / `ba502b30..` (open) -> `08a3ac15..` / `6671e3c6..` / `a5182a4e..` (B12a.15) -> `a241435e..` / `3c86e3a6..` / `09f8202f..` (B12a.54) -> `ba0ecd0e..` / `6a39e62c..` / `404a6137..` (B12a.55, and the closing tree: B12a.56 to B12a.99 read equal at the shipped realm). Seed 1 one season `f2b715d1..` -> `3557c4c7..` (.15) -> `24b33bce..` (.54) -> `b0473a33..` (.55, the closing tree), two seasons `6703a00f..` -> `9f6cb705..` -> `e8c0be9b..` -> `adc54867..`; seed 2 one season `c30707ca..` -> `df0e620a..` -> `8d6dba9a..` -> `1dc0d1c7..`, two seasons `2b121693..` -> `6492bbf1..` -> `d905acea..` -> `65fd9e7e..`; the build hash reads `ba0ecd0e..` / `a8ebd0f1..` / `c9a8221e..` at seeds 0 to 2 (it moves at .54 and .55 only). Declared movers that read INERT at the shipped realm (hash equal, seeds 0 to 2 or 0 to 3, their commit bodies say why): B12a.05, .06, .08, .14, .56, .62, .66, .69; B12a.03 built nothing. The values these replace are in `git log`. The merged-tree values (B08 and this batch together), read once at `PYTHONHASHSEED=0`, seed 0: build `ba0ecd0e..` (B08 does not move it), one season `56d183c1..` (the batch-only tree read `6a39e62c..`), two seasons `a2e6baef..`; the six `SHIPPED` and `CENSUS` values are those.
 
-RE-PINNED AT B16.99 (every `SHIPPED` and `CENSUS` value but seed 1 at one season; `BUILD` unmoved, `ba0ecd0e..`), ONCE for the batch B16-pc-round, on the merge with main at B12a's merge (`602d737a2`, which holds the previous pins; B08's merge `842026ea3` was merged first and its pins read back the same way). The one mover is B16.03 (PB step 2, A-30): every fight's rounds draw from `H2(fight_key, "round:<r>")` and not from one sequential stream, a stream change and not a balance change; B16.01, B16.02 and B16.04 read equal (seed 2 one season on the S13 base `c30707ca..`, before B08 and B12a). Read once on the merged tree (`PYTHONHASHSEED=0`), one season: seed 0 `56d183c1..` -> `63e0af00..`, seed 1 `dd2d323e..` (equal: no fight in its first season), seed 2 `c65ea69b..` -> `427e8237..`; two seasons: seed 0 `a2e6baef..` -> `5d9e94db..`, seed 1 `bae6f6db..` -> `69028025..`, seed 2 `61066f35..` -> `e7f71f50..`. The previous pin of each reads back on main (B12a's tree).
+RE-PINNED AT THE B21b PARTIAL CLOSE, on the merge with main's B08 and B12a (every value below, BUILD too; a partial batch, so B21b.99 re-pins the rest later): B21b.02's `guards` default flip (the three guard cohorts are seated at build: BUILD `ba0ecd0e..` (B12a.99) -> `bc0df867..`, seed 0 one season `56d183c1..` (B12a.99) -> `78be13f7..`), B21b.01's march cap (every march event now carries its `march.nth` and `march.cap` reads in `observed`, so a world with a march moves; no march formed at seed 0, one season, and the hash with the cap off is the hash with it on) and B21b.04's plurality licence. Read once on the merged tree (`PYTHONHASHSEED=0`). The control: `build_realm(0, guards=False)` at seed 0, one season reads `56d183c1..`, B12a.99's value, so the flip alone moved it; the other cells have no cap-off or guards-off control.
+
+
+RE-PINNED AT B16.99 (every `SHIPPED` and `CENSUS` value but seed 1 at both spans; `BUILD` unmoved, main's), ONCE for the batch B16-pc-round (a partial batch: B16.01 to B16.04), on the merge with main at B21b's merge (`ac899f123`, which holds the previous pins; B08's `842026ea3` and B12a's `602d737a2` were merged before it). The one mover is B16.03 (PB step 2, A-30): every fight's rounds draw from `H2(fight_key, "round:<r>")` and not from one sequential stream, a stream change and not a balance change; B16.01, B16.02 and B16.04 read equal (seed 2 one season on the S13 base `c30707ca..`, before B08 and B12a). Read once on the merged tree (`PYTHONHASHSEED=0`), one season: seed 0 `78be13f7..` -> `bd82f41c..`, seed 1 `891221f8..` (equal: no fight), seed 2 `249e63ee..` -> `4eb478f8..`; two seasons: seed 0 `131f0afc..` -> `709bcbbb..`, seed 1 `b9e5f6e5..` (equal), seed 2 `d1cdb411..` -> `3af84a38..`. The previous pin of each reads back on main (B21b's tree).
 """
 
-BUILD = {0: "ba0ecd0e8b11b259792818a689583771"}                      # build_realm(seed), unplayed
+BUILD = {0: "bc0df8674b6fb849a759d92b3e4c59a8"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "63e0af00d5b84ee8b959a2147913de14",
-           (0, 2): "5d9e94dba0dbe274c720fe09dc27df88",
-           (1, 1): "dd2d323ef9349821f6d60bbb39c6b7a0",
-           (1, 2): "6902802521ac4270a4e8e57122a1c169",
-           (2, 1): "427e823712c8c9525e21eac76ebc9b46",
-           (2, 2): "e7f71f506dae64525f5d7e915ee7d87b"}    # B16.99 re-record on the merge with B12a (the docstring); the earlier values are in `git log`
+SHIPPED = {(0, 1): "bd82f41c0f1ac60cc63606efcc6deeb9",
+           (0, 2): "709bcbbb6fba61d5e13a06ddd6edf9b7",
+           (1, 1): "891221f8507a9b85d9cf2259faa3d85f",
+           (1, 2): "b9e5f6e5a9828f15fc73ce23236ca2e2",
+           (2, 1): "4eb478f85906030c8496982ff9a04380",
+           (2, 2): "3af84a38a3dc33322c240981a220710a"}    # B16.99 re-record on the merge with B21b (the docstring); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=404, log=8632,
-                 census="1d979f0f50726def33def760fa7ff216aa68e8b06ae591793e814e4570e8388d"),
-    (0, 2): dict(acts=862, log=19819,
-                 census="e3a95cc52c7ae2582d9b7bcc79ab5acdbb7c1de5ca4f894884baed3778b5004e"),
-    (1, 1): dict(acts=435, log=8647,
-                 census="8fdd4526b3328b8a240885db672a98ad00e95ffbd272aac4c951aeb1f3ca5421"),
-    (1, 2): dict(acts=933, log=21828,
-                 census="3e0bc1530170ad0c884bdc05de5131edef72a4c05afc7aaacdc2641dbe78f2e2"),
-    (2, 1): dict(acts=420, log=9705,
-                 census="848ade8630096b84010c2612899de7fcd78b92298bb1416ba08cb7b66def7f43"),
-    (2, 2): dict(acts=917, log=20916,
-                 census="6a6537724f899d404cdf8352f17da0c4a3c692e8428c05f61b0475ad34eeb0d3"),
+    (0, 1): dict(acts=417, log=9429,
+                 census="cdfc3b56cc9f91a63d92c92a0ee4fba0efdbccaebaea343001cfa1835a3ca3dd"),
+    (0, 2): dict(acts=900, log=21584,
+                 census="3eee707ae07f698a343c4d9af63bb53bec2b3fd0c4b3fad21932e082ed5cceae"),
+    (1, 1): dict(acts=467, log=10197,
+                 census="beadee626a0a3526bfe23317239b002e0b682138a5cf6030beccef0169f30acf"),
+    (1, 2): dict(acts=936, log=25568,
+                 census="7a78d79e4f71911b2b11b7febc9b940f6b808e9bc591be67a38c687fec270405"),
+    (2, 1): dict(acts=434, log=10179,
+                 census="06584483d3f0ff638169be3f8ec05d1823ab0ddb2f9f10e2913ce7ad3165ce89"),
+    (2, 2): dict(acts=963, log=22603,
+                 census="03333fdf0234044a0768bfe74f6264774d6ad3f3622219855857cdb9c6fdab3d"),
 }

@@ -47,7 +47,7 @@ from ..queries.world_q import faction_holding
 from ._realm_goldens import BUILD
 
 SEEDS = (0, 1, 2)
-KNOW_NONE_AT_BUILD = 41          # of 83, every seed (read, see the docstring)
+KNOW_NONE_AT_BUILD = 44          # of 86, every seed (read, see the docstring; B21b.02: the three guard cohorts, like the 37, know no one)
 JORDANS_EXAMPLE = frozenset({"King", "Queen", "Duke", "Duchess"})   # his words, an independent pin on the floor
 
 
@@ -100,13 +100,13 @@ def _oath_knowers(w) -> set:
 
 def test_the_realm_starts_with_acquaintances_on_every_seed(worlds):
     """EXIT: every faction co-member pair and every pair among the high-status seats is known, at build, on
-    seeds 0-2; the count of persons who know no one falls from 83 of 83 (the control) to the pin."""
+    seeds 0-2; the count of persons who know no one falls from 86 of 86 (the control) to the pin (B21b.02: 83 + the three guard cohorts, a guard being a person)."""
     checked = 0
     for s, (on, off) in worlds.items():
-        assert len(on.persons) == len(off.persons) == 83
+        assert len(on.persons) == len(off.persons) == 86
         knowers = _oath_knowers(off)
         assert knowers, "the step-off arm holds no oath claim: the subtraction below observes nothing"
-        assert _know_none(off) == 83 - len(knowers), (_know_none(off), sorted(knowers))
+        assert _know_none(off) == 86 - len(knowers), (_know_none(off), sorted(knowers))
         checked += _assert_acquainted(on)
         assert sorted(on._acquaintances) == sorted(f"c_acq_{a}_{b}" for a, b in _expected_pairs(on))
     assert checked == 3 * 236, checked
@@ -130,7 +130,8 @@ def test_tell_forms_for_persons_it_formed_for_none(worlds):
     sides of it), on 37 -> 42: every person is told of every seat of his realm (`seed_seat_news`, B11.08), which gives five more of them something
     to tell; B21's oath step is unmoved."""
     on, off = worlds[0]
-    assert _tell_formers(off) == len(_oath_knowers(off)) == 2, (_tell_formers(off), sorted(_oath_knowers(off)))
+    # B21b.02: the guards' oaths give the King, the Duchess and the Duke a `duty.taken` claim each, 2 -> 4 (the test's own derivation)
+    assert _tell_formers(off) == len(_oath_knowers(off)) == 4, (_tell_formers(off), sorted(_oath_knowers(off)))
     assert _tell_formers(on) == 42
 
 
@@ -160,4 +161,4 @@ def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_ou
                 if c.id in added and c.id not in held_off:
                     assert c.holder == pid and c.predicate == KNOWN_PERSON_CLAIM["predicate"] and c.value
             persons += 1
-    assert persons == 3 * 83
+    assert persons == 3 * 86

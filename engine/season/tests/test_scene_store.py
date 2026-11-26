@@ -24,11 +24,12 @@ from ..harness import headless as HL
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Act, Question, Scene
+from ._realm_goldens import SHIPPED
 
 # The realm pin at seed 0, two seasons: `build_realm(0)` played by `populated.run`'s composition (`test_choose_watch._play`).
 # It is `_realm_goldens.SHIPPED[(0, 2)]` (B09.99 re-recorded it with the other realm pins; B09.15 took the first reading of
-# this world), the same world, held here as a literal.
-REALM_PIN_SEED_0_TWO_SEASONS = "5d9e94dba0dbe274c720fe09dc27df88"        # B16.99 re-pin (`_realm_goldens.SHIPPED[(0, 2)]`, the merge with B12a: a2e6baef.. -> 5d9e94db..); B12a.99 re-pin (merged tree): 3e017756.. -> a2e6baef..; B08.99 second re-record (the close's counterparty ruling, `_realm_goldens.SHIPPED[(0, 2)]`): 47aef4c0.. -> 3e017756..; B08.99 re-record (`_realm_goldens.SHIPPED[(0, 2)]`): ba502b30.. -> 47aef4c0..; B11 merge with main re-record (`_realm_goldens.SHIPPED[(0, 2)]`): f313e280.. -> ba502b30..; B24p merge with B21 re-record: c9bba3fa.. -> f313e280..; B24p merge re-record: e6466cf7.. -> c9bba3fa..; B15.99 re-record: aea26494.. -> e6466cf7..; BA1.99 re-pin, second time, manner rows held back (the cast's content, `_realm_goldens.SHIPPED[(0, 2)]`): was e66b5058.. with them; before: f18fd036..; B10.99 re-pin: was e03202af..
+# this world): imported, not copied.
+REALM_PIN_SEED_0_TWO_SEASONS = SHIPPED[(0, 2)]        # the one owner of the realm literals (B21b partial: the copy that sat here is retired)
 
 
 def _play_headless(seasons: int = 2):

@@ -97,7 +97,7 @@ def _seasons(w, n: int):
 #: The one-season event count and digest of the season with `thread_read` added to `withheld_verbs`. A change detector:
 #: since B08.03 (scenes fold in their own order) it EQUALS the shipped season (`_realm_goldens.SHIPPED`, seed 0, one season),
 #: which is what the test below reads. Its re-record history is in `git log`.
-THREAD_READ_WITHHELD_EVENTS_1 = (8632, "8ae4882616aaf17838ad21fa6683f2058132412d143ce3e78f301e70a0815ecc")   # B16.99 re-record (the merge with B12a, the per-round fight key, B16.03): (8660, 3e0eb0c8..) -> (8632, 8ae48826..); B12a.99 re-record (merged tree, `_realm_goldens.py`'s B12a.99 paragraph): (9319, e5b3ab7c..) -> (8660, 3e0eb0c8..); B08 re-pin: (9320, 39763260..) -> (9319, e5b3ab7c..), equal to the shipped season (the close's counterparty ruling moved it from (7804, 1b04b800..))
+THREAD_READ_WITHHELD_EVENTS_1 = (9429, "3b533875fb37d0b01a8c13868953cba075313c639f5eb96358c9ca36206f74de")   # B16.99 re-record (the merge with B21b, the per-round fight key, B16.03): (9447, 57ef8c00..) -> (9429, 3b533875..);   # B21b partial re-record on the merge with B08 and B12a: (8660, 3e0eb0c8..) -> (9447, 57ef8c00..), equal to the shipped season the guards-on realm reads; B12a.99: (9319, e5b3ab7c..) -> (8660, 3e0eb0c8..)
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():

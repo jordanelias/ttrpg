@@ -212,5 +212,7 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     # refused 0,0,0,0,0,0,0,3,0,0,0,1,0 -- 7 is the first
     # RE-PICKED AT THE B11 MERGE WITH MAIN (B24p and B21 landed while B11 was open; the same five reverts, `PYTHONHASHSEED=0`, two seasons): seeds 1..12 refused
     # 0,0,0,0,0,0,0,0,0,1,1,0, so 10 is the first (seed 7 reads 0: 202 `individual` reads, none refused)
-    reads, refused_on_it = _realm_two_seasons(10)
-    assert refused_on_it > 0, "no act was refused on `individual` at seed 10 (re-picked from 7)"
+    # RE-PICKED AT THE B21b CLOSE (B21b.01's march cap, B21b.02's three guard cohorts, B21b.04's plurality licence moved the season; seed 10 now reads 139, none refused): the
+    # same five reverts, `PYTHONHASHSEED=0`, two seasons, seeds 0..11 refused 2,0,2,0,0,0,0,0,0,0,0,1 -- 0 is the first, run once and not kept
+    reads, refused_on_it = _realm_two_seasons(0)
+    assert refused_on_it > 0, "no act was refused on `individual` at seed 0 (re-picked from 10)"

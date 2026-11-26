@@ -63,7 +63,7 @@ def test_decisiveness_is_the_projected_vector_length():
 
 def test_the_development_sheet_shows_the_readers_decisiveness():
     w = build_realm(0)
-    pid = sorted(w.persons)[0]
+    pid = sorted(p for p, x in w.persons.items() if not x.is_cohort)[0]     # B21b.02: a guard cohort (`cohort_guard_*`) now sorts first and holds no pursuit
     p = w.persons[pid]
     w.fixtures = w.fixtures.sweep("scar_weight_shift", 0.5)
     held = [e for e, v in p.pursuits.items() if float(v) > 0]
