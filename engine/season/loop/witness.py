@@ -54,6 +54,7 @@ from ..state import ledgers
 from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
 from .resolve import _milli
+from ..seam.wrappers.sigma import bench_reading
 
 # B11.66: THE KIND OF EVENT WHOSE HEARER'S DEPOSIT IS THE TOLD CHANNEL'S, `claim.held` of what was said -- not a deed SEEN, so no notice draw reaches it (the source's "a telling ... is unchanged").
 TELLING_KIND = "news.told"
@@ -473,7 +474,9 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
         for the two parties; `rigged` of the arranger where the card shows a tilt; `overruled` of a played adjudicator whose ruling departed from his track;
       * `heard` -- held by each person present who neither speaks nor decides, of the man who bore the matter (B21: he learns, he does not rule);
       * `yielded` / `hinted` -- the questioned man, held by the questioner under the `yield` disposal at the Event's band, at `confidence_default` times
-        that write's `weight` (`arrangements.yaml: disposal`, `rosters.yaml: disposal_writes`; the `record:confession` stage is B24.14's).
+        that write's `weight` (`arrangements.yaml: disposal`, `rosters.yaml: disposal_writes`; the `record:confession` stage is B24.14's);
+      * `leans` (B24.29) -- of a seat who decides, `±1`, held by each person present who does not decide, as HE reads the sign the sitting wrote of the seat's public
+        commits (`world_q.ending_bench`): his own keyed draw (`sigma.bench_reading`), so it is sometimes wrong, and never the seat's true lean to a man who cannot read it.
 
     A man holds no claim of himself. A claim two beats would both make (one rattle of one man by one speaker) is held once. Deposited in the room's own order."""
     sitting, card = world_q.ending_sitting(e), world_q.ending_card(e)
@@ -521,6 +524,7 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
             kind, weight = write.partition(":")[2], DISPOSAL_WRITES[write].get("weight")
             if kind in SITTING_CLAIMS and weight is not None and questioned is not None:
                 facts.append((kind, questioned, beats[-1].issue, (bearer,), int(round(conf * weight))))
+    bench = world_q.ending_bench(e)
     out, held = [], set()
     for who in present:
         p = w.persons[who]
@@ -530,6 +534,12 @@ def _sitting_claims(self, w, e: Event, conf: int) -> list:
             held.add((kind, subject, value, who))
             out.append((p, Claim(H(w.world_seed, w.tick, who, f"sitting:{e.id}:{len(held)}"), who, subject, SITTING_PREDICATES[kind], value, w.tick,
                                  SITTING_SOURCE, conf if confidence is None else confidence, "own", self.lap, doer=None)))
+        # B24.29: what each seat's public lean looks like to a man who does not decide: HIS OWN keyed reading of the sign the sitting wrote (`sigma.bench_reading`), into his own ledger
+        for seat, sign in (bench if who not in card.decided_by else ()):
+            read = bench_reading(w, who, seat, sign)
+            held.add(("leans", seat, read, who))
+            out.append((p, Claim(H(w.world_seed, w.tick, who, f"sitting:{e.id}:{len(held)}"), who, seat, SITTING_PREDICATES["leans"], read, w.tick,
+                                 SITTING_SOURCE, conf, "own", self.lap, doer=None)))
     return out
 
 

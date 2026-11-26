@@ -787,6 +787,12 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
     return out, T, P, S
 
 
+def accuracy(D, attunement, z) -> float:
+    """HIS ACCURACY (V2 p2 §C.6): his Attunement alone, with a little luck `z` (a standard normal), opposed by nothing: 0.5 at the middle of the scale. THE ONE LADDER OF A
+    READING: `view` reads it for the exchange's view, and the host reads it for a reading of the bench (B24.29) with its own keyed `z`."""
+    return (1.0 + fmath.tanh((MU_PER_DIE * (attunement - D["attribute_mid"]) + D["read_noise"] * z) / D["read_scale"])) / 2.0
+
+
 def view(inp, st, mover, rng) -> View:
     """what a chooser is shown (V2 p2 §E): own values true, everything else perceived, each number with its own normal. Takes all of the
     exchange's draws but the hold and the speech."""
@@ -795,7 +801,7 @@ def view(inp, st, mover, rng) -> View:
     c = _d(st.cond)[mover.id]
     turns_left = inp.rite.turns - c.spoken
     # his accuracy is his Attunement, with a little luck: 0.5 at the middle of the scale; nothing opposes it
-    acc = (1.0 + fmath.tanh((MU_PER_DIE * (mover.attunement - D["attribute_mid"]) + D["read_noise"] * _z(rng)) / D["read_scale"])) / 2.0
+    acc = accuracy(D, mover.attunement, _z(rng))
     xarg, xprs = {g: _z(rng) for g in G}, {g: _z(rng) for g in G}
     xc, xm, xt, xo, xi, xe, xr, xw = (_z(rng) for _ in range(8))
     xfa, xfb, xoa, xob = ({g: _z(rng) for g in G} for _ in range(4))

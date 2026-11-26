@@ -1596,6 +1596,27 @@ def _rank_key(issue: Optional[str] = None) -> Optional[str]:
     return next(iter(keys), None)
 
 
+def public_lean(w: Any, close: str, topic: Optional[str], row: dict) -> Optional[tuple]:
+    """B24.29: `((member, signed live commits on the motion), ...)` of a `declared` sitting (`world_q.declared_votes_by_member`: a commit is public), else `None`. The one
+    reader of the bench's public lean: `proceeding_input` starts each seat's track on it, `_resolve_proceeding` writes its signs on the sitting."""
+    return tuple(declared_votes_by_member(w, topic, row).items()) if close == "declared" and topic is not None else None
+
+
+def bench_reading(w: Any, viewer: str, seat: str, sign: int) -> int:
+    """B24.29 (V2 p2 §C.6; A-30): THE SIGN OF `seat`'s LEAN AS `viewer` READS IT, `sign` (+1 or -1) the sign the sitting wrote of it. A KEYED DRAW, `H(seed, tick, viewer,
+    "bench_read:<seat>")`, ONE STREAM A READING (`draw_factory`): his accuracy `acc` is the module's own (`accuracy`: his Attunement alone, opposed by nothing, with the stream's
+    first normal for luck), and the sign he holds is the true one with chance `(1 + acc) / 2` -- the share of the truth `acc` reaches, the rest a guess (`_Believed`'s reading
+    of a claim) -- the stream's next uniform. So a wrong sign is possible at every Attunement and a truer one is likelier at a higher. It reads his own Attunement (`w.persons[viewer]`)
+    and the sign given and nothing of the seat; it writes nothing (`loop/witness.py::_sitting_claims` deposits it in his own ledger).
+    [ASSUMPTION; medium; Jordan to correct; basis: the entry's chance `acc` for a two-valued sign; read so, a man below the scale's middle would be wrong more often than right,
+    and the gate asks a share above 0.5 at Attunement 2; revert: `d.random() < acc`]"""
+    d = draw_factory(w.world_seed, lambda: w.tick)(viewer, f"bench_read:{seat}")
+    mid = attribute_midpoint()
+    attunement = (w.persons[viewer].attributes or {}).get(descriptors.ATTRIBUTE_NAMES["attunement"])
+    acc = _proceeding_module().accuracy(proceeding_dials(w.fixtures), mid if attunement is None else attunement, d.normal(0.0, 1.0))
+    return sign if d.random() < (1.0 + acc) / 2.0 else -sign
+
+
 def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[str], topic: Optional[str], effort: int, row: dict,
                      arranger: Optional[str] = None, rig: float = 0.0, form: str = "auto", state: Any = None,
                      seen: Optional[Mapping] = None, first_heard: bool = False) -> tuple:
@@ -1708,7 +1729,7 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
     ctx = _Sitting(fx=fx, regime=regime, strife=strife, topic=topic, admits=rite.admits, bears=bears, for_id=fid, against_id=aid,
                    room=tuple(cells), factions=factions, presume=fx.get("presume_step") * tilt * SIDE_SIGN[arr_side] if tilt > 0 else 0.0,
                    rank_key=_rank_key(rite.issues[0] if rite.issues else None),
-                   lean=tuple(declared_votes_by_member(w, topic, row).items()) if close == "declared" and topic is not None else None)
+                   lean=public_lean(w, close, topic, row))
     room = tuple(_present(w, (seen or {}).get(x, w.persons[x]), side, decides, ctx) for x, (side, decides) in cells.items())
     dials = dict(proceeding_dials(fx))
     dials["moves"] = {m: (r["effect"], r["draw"]) for m, r in PROCEEDING_MOVES.items()}      # the two rosters the module is handed (its head)
@@ -1930,8 +1951,11 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
     # What the fold writes of this sitting (B24p.20): the arrangement and form it was held under, the matter, the verdicts the act's margin was read from
     # (`()` where a yield decided) and each person's track as the sitting began (a given `state`'s, else his `start`), which the fold's written tracks are asserted against.
     begun = dict(inp.state.tracks) if inp.state is not None else {p.id: p.start for p in inp.room}
+    # B24.29: what the bench's public commits show of each seat who decides here, `(seat, sign)`; the signs are written on the sitting for each witness to read in his own way (`bench_reading`)
+    deciding = {p.id for p in inp.room if p.decides}
+    bench = tuple((m, 1 if n > 0 else -1) for m, n in (public_lean(w, inp.rite.close, inp.matter, row) or ()) if m in deciding)
     held = dict(module=_PROVIDER, resolver=_RESOLVER, proceeding=out, card=card_, arrangement=row["id"], form=form, topic=inp.matter,
-                read=band["read"], starts=tuple(begun.items()))
+                read=band["read"], starts=tuple(begun.items()), bench=bench)
     if band["status"] == "IMPASSE":
         return dict(status="IMPASSE", pool=None, terms=(), **held)
     pool, leverage = _draw_of(inp, out, band, weights)

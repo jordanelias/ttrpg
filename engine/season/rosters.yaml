@@ -971,7 +971,11 @@ rosters:
       B24.14: AFTER THE CARD, one `("exchange", kind, item id)` per item a beat entered or struck (`queries/inputs.py::exchanges`, `kind` an `EXCHANGE_CELLS`
       name), in the beats' order, and NONE for a sitting that entered or struck nothing (so the ending of every such sitting is what it was); read by
       `world_q.ending_exchanges`. The same list is appended to the case file's `Record.stages` by `loop/effects_information.py::_eff_determine`.
-    values: [proceeding, beat, sitting, verdict, card, exchange]
+      B24.29: AFTER THE EXCHANGES, one `("bench", ((seat, sign), ...))` where a seat who decides holds PUBLIC commits on the motion (`world_q.declared_votes_by_member`:
+      a commit is public), `sign` the sign of his signed count (+1 for the motion, -1 against), in the bench's order; NONE where no seat holds one (every sitting
+      the shipped cast holds, so such an ending is what it was); read by `world_q.ending_bench`. It is what every witness is shown of the bench; what each man comes
+      to HOLD of it is his own drawn reading (`sitting_claims: leans`).
+    values: [proceeding, beat, sitting, verdict, card, exchange, bench]
 
   stance_bands:
     source: "B24p.20 (V2 p2 §C.1; p4 §L 20): how a proceeding's `Event.ending` names the room's stance"
@@ -1007,10 +1011,16 @@ rosters:
       is the bearer and not the matter, because `said_of` would otherwise offer the hearer's newest claim on the matter in place of what he believes
       of it; `partial` is deposited only where a decider's conflict reaches `recuse_at` (the host's own line for a partial seat); a sitting's claims are
       first-hand and never refracted (they are the typed record of what a man saw in the room, not a reading of an act).]
+      B24.29: `leans` -- a seat's lean on the motion, `±1` (+1 toward the motion), the seat as subject, held by each person in the room who does not decide, as that
+      man READS it: the sign the sitting wrote (`proceeding_endings: bench`), drawn on a keyed stream (`H(seed, tick, viewer, "bench_read:<seat>")`) and true with
+      chance `(1 + acc) / 2`, `acc` his accuracy (`modules/social_contest/proceeding.py::accuracy`: his Attunement alone, opposed by nothing), so at `acc` 0 he guesses and
+      at `acc` 1 he reads it truly; a wrong sign is possible at every Attunement. [ASSUMPTION; medium; Jordan to correct; basis: the entry's "the chance the deposited sign is
+      the true one is `acc`" read for a two-valued sign as the share of the truth `acc` reaches (`_Believed`'s reading of a claim), the rest a guess: read as `acc` itself
+      a man of Attunement 2 would be wrong more often than right; revert: the chance is `acc`]
     claim:
       predicate: sitting
       source: firsthand
-    values: [rattled, shown, conceded, contumacy, hypocrite, temper, partial, rigged, overruled, heard, yielded, hinted]
+    values: [rattled, shown, conceded, contumacy, hypocrite, temper, partial, rigged, overruled, heard, yielded, hinted, leans]
 
   duel_terms:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."

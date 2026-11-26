@@ -62,3 +62,42 @@ def test_a_rolled_move_with_no_capability_is_refused():
 def test_a_capability_cell_the_roster_cannot_close_is_refused(cell, draw, said):
     with pytest.raises(Unspecified, match=said):
         R._load_proceeding_moves(_move(draw=draw, capability=cell), _RUNGS)
+
+
+# B24.29 -- a reading of the bench, drawn and never revealed (HCAP edit 4). A sitting that wrote one seat's public lean is witnessed; each man in its room who does not decide holds
+# his OWN keyed reading of the sign, true with chance (1 + acc) / 2 on his Attunement (`sigma.bench_reading`). A game-state test of the `sc_season` lane.
+def _bench_read(attunement, trials, bench=(("p_mid", -1),)):
+    """`(true, wrong)` over `trials` seeds: the readings of the seat's lean `p_low` (a speaker) and `p_other` (a bystander) hold, at `attunement`, about the seat `p_mid`."""
+    from .test_sc_proceeding_host import _beat, _folded, _held, _planted, _room, _world
+    true = wrong = 0
+    for seed in range(trials):
+        w = _world()
+        w.world_seed = seed
+        for who in ("p_low", "p_other"):
+            w.persons[who].attributes[descriptors.ATTRIBUTE_NAMES["attunement"]] = attunement
+        result = _planted([_beat(1, "p_low", "for", 0.0), _beat(2, "p_mid", "against", 0.0)], **_room())
+        result["bench"] = bench
+        _folded(w, result, witness=True)
+        assert _held(w, "p_mid", "leans") == []                                      # a man holds no reading of himself
+        for who in ("p_low", "p_other"):
+            held = _held(w, who, "leans")
+            assert [(s, v in (-1, 1)) for _, s, v, _ in held] == ([("p_mid", True)] if bench else [])
+            true += sum(v == bench[0][1] for _, _, v, _ in held)
+            wrong += sum(v == -bench[0][1] for _, _, v, _ in held)
+    return true, wrong
+
+
+def test_bench_reading_is_drawn_and_can_be_wrong_at_every_insight():
+    """GATE 2 (`insight` is not a row: his Attunement is the reading, V2 p2 §C.6): over 400 seeds the share of readings that hold the seat's lean with the true sign is
+    strictly between 0.5 and 1 at Attunement 2 and at 5, and higher at 5; a wrong sign is possible at both. CONTROL: a sitting that wrote no public lean deposits no
+    `leans`. FALSIFIER: a share of 1.0 (a turn view that shows the true lean), a share that does not rise with Attunement, or a reading that is no man's own."""
+    checked, share = 0, {}
+    for attunement in (2, 5):
+        true, wrong = _bench_read(attunement, 400)
+        checked += true + wrong
+        assert true + wrong == 800 and wrong > 0, (attunement, true, wrong)
+        share[attunement] = true / (true + wrong)
+        assert 0.5 < share[attunement] < 1.0, (attunement, share[attunement])
+    assert share[5] > share[2], share
+    assert checked >= 400
+    assert _bench_read(5, 5, bench=()) == (0, 0)

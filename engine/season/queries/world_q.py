@@ -36,7 +36,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, MATTERS, RECORD_MATTER, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
@@ -711,6 +711,13 @@ def ending_exchanges(event) -> tuple:
     """`((kind, item id), ...)`: the items a sitting entered and struck, as its Event listed them (B24.14; `queries/inputs.py::exchanges` is the value
     `_eff_determine` appends to the case file's `Record.stages`); `()` for an Event that lists none."""
     return tuple((x[1], x[2]) for x in _tagged(event, ENDING_EXCHANGE))
+
+
+def ending_bench(event) -> tuple:
+    """B24.29: `((seat, sign), ...)`, the public lean of each seat who decided a sitting, `sign` +1 for the motion and -1 against it (the sign of his live commits,
+    `declared_votes_by_member`), as the sitting wrote it; `()` for an Event that holds none (every sitting of a bench with no public commit)."""
+    held = _tagged(event, ENDING_BENCH)
+    return tuple((seat, sign) for seat, sign in held[0][1]) if held else ()
 
 
 def ending_arrangement(event) -> Optional[str]:
