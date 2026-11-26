@@ -38,7 +38,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ALL_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     DECLARED, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
@@ -3187,11 +3187,14 @@ def endings_reached(w: World) -> list:
 
     B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): UNDER `ending_draw` THE CONDITION IS ELIGIBILITY AND A KEYED DRAW DECIDES (A-47: the crossing
     decides nothing): an eligible row is reached on Success or Overwhelming (`_ending_degree` says how the draw is sized) and `endings_near` reports
-    it on Partial. At the control (`ending_draw: False`, shipped) an eligible row is reached, as before, and no draw is taken."""
+    it on Partial. At the control (`ending_draw: False`, shipped) an eligible row is reached, as before, and no draw is taken.
+
+    B12b.05: A `site_band` ROW IS A LOSS AND IS ALWAYS DRAWN, whatever `ending_draw` says (`_ending_verdict`): it is eligible when a Site of its kinds is at or
+    below the band, no act among its antecedents (`_band_crossings`: the crossing Events), and a Failure reaches it."""
     arm = _ending_draw_rows(w)
     return [_reached(name, row, edges, opened)
             for name, row, edges, opened in _eligible_endings(w)
-            if arm is None or _ending_degree(w, name, edges, opened, arm) in (Degree.OVERWHELMING, Degree.SUCCESS)]
+            if _ending_verdict(w, name, row, edges, opened, arm) == "reached"]
 
 
 def endings_near(w: World) -> list:
@@ -3200,17 +3203,31 @@ def endings_near(w: World) -> list:
     is near). Each is an `EndingReached`, in file order. A read like `endings_reached`: no token, no Event, no write; the season reports it
     as `near` and nothing reads it back [ASSUMPTION: a second Query rather than a widened return -- basis: CLAUDE.md §5.1, the reading that changes less]."""
     arm = _ending_draw_rows(w)
-    if arm is None:
-        return []
     return [_reached(name, row, edges, opened) for name, row, edges, opened in _eligible_endings(w)
-            if _ending_degree(w, name, edges, opened, arm) is Degree.PARTIAL]
+            if _ending_verdict(w, name, row, edges, opened, arm) == "near"]
+
+
+def _ending_verdict(w: World, name: str, row, edges: tuple, opened: dict, arm: Optional[tuple]) -> str:
+    """`"reached"`, `"near"` or `"none"` for one eligible row: the one place the two answers are cut, so a row is in one or neither. A `site_band` row
+    (B12b.05, `09_WR_B_weather_with_memory_and_the_year` edit 4) is ALWAYS drawn (`_site_band_degree`) and is a LOSS: Failure reaches it, Partial is `near`,
+    Success or better nothing. Any other row is reached outright at the control (`arm` None) and otherwise by `_ending_degree`: Success or Overwhelming
+    reaches it, Partial is `near`."""
+    if row.holds[0] == "site_band":
+        degree = _site_band_degree(w, name, row)
+        return "reached" if degree is Degree.FAILURE else "near" if degree is Degree.PARTIAL else "none"
+    if arm is None:
+        return "reached"
+    degree = _ending_degree(w, name, edges, opened, arm)
+    return "reached" if degree in (Degree.OVERWHELMING, Degree.SUCCESS) else "near" if degree is Degree.PARTIAL else "none"
 
 
 def _reached(name: str, row, edges: tuple, opened: dict) -> EndingReached:
+    """`holds` is the ids the condition reads: the selected `hold`s, or the fallen Sites of a `site_band` row. `acts` is the opening acts, none where
+    nobody acted (a Site's crossing is MATTER's)."""
     return EndingReached(name, row.victory,
-                         tuple(sorted(t.id for t in edges if t.kind == "hold")),
+                         tuple(sorted(t.id for t in edges if isinstance(t, Site) or t.kind == "hold")),
                          tuple(sorted({e.id for e, _ in opened.values()})),
-                         tuple(sorted({a.id for _, a in opened.values()})))
+                         tuple(sorted({a.id for _, a in opened.values() if a is not None})))
 
 
 def _eligible_endings(w: World) -> list:
@@ -3221,10 +3238,27 @@ def _eligible_endings(w: World) -> list:
         edges = _ending_edges(w, row)
         if not edges:
             continue
+        if row.holds[0] == "site_band":     # a Site's condition is eligibility alone: no act need be among its antecedents (MATTER wears it)
+            out.append((name, row, edges, _band_crossings(w, edges)))
+            continue
         opened = opened_by_acts(w, edges)
         if not opened:
             continue
         out.append((name, row, edges, opened))
+    return out
+
+
+def _band_crossings(w: World, sites: tuple) -> dict:
+    """`{site id: (the latest `condition.band_crossed` Event anchored on it, its causing Act or None)}` for each of `sites` that has one: the Events
+    that took a fallen Site there, as `endings_reached`'s antecedents. A Site that stands below the band with no crossing logged (planted, or built so)
+    has none, and is still a fallen Site. The Event names no band, so the latest crossing of ANY floor is read [ASSUMPTION; medium; Jordan to correct]."""
+    wanted = {s.id for s in sites}
+    out: dict = {}
+    for e in w.log:
+        if e.kind == "condition.band_crossed":
+            site = anchor_of(w, e)
+            if site in wanted:
+                out[site] = (e, causing_act(w, e))
     return out
 
 
@@ -3259,11 +3293,41 @@ def _ending_degree(w: World, name: str, edges: tuple, opened: dict, rows: tuple)
     return degree_from_net(net, ob + (len(edges) - acted))
 
 
+def _site_band_sites(w: World, row) -> tuple:
+    """`(selected, fallen, below)` for a `site_band` row (B12b.05): the Sites under a `realm` rung of the kinds `of:` names (`all`: every kind whose floors
+    name the band), in id order; the ones whose condition stands AT or below that kind's floor for the band; and the number of bands below the named one
+    (the kind's floors under its floor for the band; of `all`, the most over the kinds). Read off the fixture `band_floors`, the table MATTER's crossings read."""
+    band, of = row.holds[1], row.of
+    floors = w.fixtures.get("band_floors")
+    kinds = {k for k, cell in floors.items() if band in (cell or {}) and of in (ENDING_ALL_KINDS, k)}
+    selected = tuple(w.sites[i] for i in sorted(w.sites) if w.sites[i].kind in kinds
+                     and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, w.sites[i].rung)))
+    fallen = tuple(s for s in selected if s.condition <= floors[s.kind][band])
+    below = max((sum(1 for f in floors[k].values() if f < floors[k][band]) for k in kinds), default=0)
+    return selected, fallen, below
+
+
+def _site_band_degree(w: World, name: str, row) -> Degree:
+    """The band of a `site_band` row's ONE keyed draw `(world_seed, tick, "realm", "ending:<name>")` (a Query's draw advances no ordinal: `season_factor_of`'s
+    precedent), rolled by the one roller and graded on the one ladder. The pool is the selected Sites still above the band times the fixture
+    `site_band_pool_scale`, by the one pool rule (`pool_of`: never below `pool_floor`, so a realm with every Site fallen still rolls); the obstacle is the
+    Sites at or below the band plus one per band below the named one. A restored Site moves from the obstacle to the pool [CALIBRATE: pool scale and
+    per-Site obstacle, joint calibration, OWED §B]."""
+    selected, fallen, below = _site_band_sites(w, row)
+    fx = w.fixtures
+    pool = _sigma_leverage.pool_of((len(selected) - len(fallen)) * fx.get("site_band_pool_scale"), 0, fx.get("pool_add"), fx.get("pool_floor"))
+    net = _sigma_leverage.roll_net_continuous(pool, rng=draw_factory(w.world_seed, lambda: w.tick)("realm", f"ending:{name}"))
+    return degree_from_net(net, len(fallen) + below)
+
+
 def _ending_edges(w: World, row) -> tuple:
     """The live edges an `endings` row's condition reads, or `()` when it does not hold. A `rung_kind` row with
     `settled: true` selects only the rungs with a `settlement` among their descendants (an unsettled territory,
-    `terr_T15`, is not asked for: no verb holds it, `H-186`)."""
+    `terr_T15`, is not asked for: no verb holds it, `H-186`). A `site_band` row (B12b.05) reads the Sites at or below its band: its edges are
+    the fallen Sites, `()` when none is (eligibility; `endings_reached` says what then decides)."""
     sel, val = row.holds
+    if sel == "site_band":
+        return _site_band_sites(w, row)[1]
     if sel == "post":
         holds = [hold_force(w, o) for o in sorted(w.offices) if w.offices[o].post == val]
     elif sel == "rung_kind":
@@ -3275,7 +3339,7 @@ def _ending_edges(w: World, row) -> tuple:
                  and (settled is None or r in settled)]
     else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
         raise Forbidden(f"ending selector {sel!r} has no enumerator", "queries/world_q.py::_ending_edges",
-                        f"a branch for it, beside `ENDING_SELECTORS`' two")
+                        f"a branch for it, beside `ENDING_SELECTORS`' three")
     if not holds or any(t is None for t in holds):
         return ()
     facs = [faction_holding(w, t.subject) for t in holds]

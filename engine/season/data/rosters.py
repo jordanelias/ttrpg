@@ -2455,28 +2455,39 @@ def load() -> tuple:
 class EndingRow:
     """One `endings` row as the Query reads it. ITS FIELDS ARE THE ROW GRAMMAR -- the keys a row may
     carry beside an annotation (`note`, `*_note`) -- so the schema is written once, here. `holds` is
-    `(selector, value)`; `settled` is `holds`' optional `settled: true` key (B12a.09), read from INSIDE
-    `holds`, so it is not a key a row carries beside it (`_load_endings` leaves it out of `keys`)."""
+    `(selector, value)`; `settled` is `holds`' optional `settled: true` key (B12a.09) and `of` its `of:` key
+    (B12b.05: required beside `site_band` and beside no other selector), both read from INSIDE `holds`, so
+    they are not keys a row carries beside it (`_load_endings` leaves them out of `keys`). A `site_band` row
+    carries no `under:`, so its `under` is `""`."""
     victory: bool
     holds: tuple
     under: str
     source: str
     settled: bool = False
+    of: str = ""
 
 
-#: This loader's own grammar (`_MODULE_FIELDS`' reason): the two world fields a `holds:` may select
-#: by, and the `under:` token that names no faction.
-ENDING_SELECTORS = ("post", "rung_kind")
+#: This loader's own grammar (`_MODULE_FIELDS`' reason): the three world fields a `holds:` may select
+#: by, and the `under:` token that names no faction. `site_band` (B12b.05) selects the Sites under the realm of
+#: the kinds `of:` names, by the band floor their condition stands at or below (`queries/world_q.py::_ending_edges`).
+ENDING_SELECTORS = ("post", "rung_kind", "site_band")
 #: The one optional key a `holds:` may carry beside its selector, and only beside `rung_kind` with the value
 #: `true`: the rung must have a `settlement` rung among its descendants (`queries/world_q.py::_ending_edges`).
 ENDING_SETTLED = "settled"
+#: The key a `holds:` carries beside `site_band` and beside nothing else: a `site_kinds` member with non-empty
+#: `band_floors`, or `ENDING_ALL_KINDS`, every kind whose floors name the band.
+ENDING_OF = "of"
+ENDING_ALL_KINDS = "all"
 ENDING_ANY_ONE = "one_faction"
 
 
-def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
+def _load_endings(members: dict, factions, rung_kinds, posts, site_kinds=None, band_floors=None) -> dict:
     """`{ending id: EndingRow}`, every row refused by name if it is malformed, and the roster refused
-    if it marks more than one row `victory` (GD-1)."""
-    keys = [f.name for f in _fields(EndingRow) if f.name != ENDING_SETTLED]
+    if it marks more than one row `victory` (GD-1). `site_kinds` and `band_floors` are what a `site_band`
+    row is checked against (default: the shipped roster and table)."""
+    site_kinds = SITE_KINDS if site_kinds is None else site_kinds
+    band_floors = table("band_floors") if band_floors is None else band_floors
+    keys = [f.name for f in _fields(EndingRow) if f.name not in (ENDING_SETTLED, ENDING_OF)]
 
     def bad(name, what, needs):
         raise Unspecified(f"`endings` row {name!r} {what}", "rosters.yaml -- endings", needs=needs,
@@ -2495,12 +2506,26 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
             bad(name, f"has victory {row.get('victory')!r}", "`victory: true` or `victory: false`")
         holds = row.get("holds")
         settled = isinstance(holds, dict) and ENDING_SETTLED in holds
-        picked = {k: v for k, v in holds.items() if k != ENDING_SETTLED} if isinstance(holds, dict) else {}
+        has_of = isinstance(holds, dict) and ENDING_OF in holds
+        picked = ({k: v for k, v in holds.items() if k not in (ENDING_SETTLED, ENDING_OF)}
+                  if isinstance(holds, dict) else {})
         if (not isinstance(holds, dict) or len(picked) != 1 or next(iter(picked)) not in ENDING_SELECTORS
-                or (settled and (holds[ENDING_SETTLED] is not True or "rung_kind" not in picked))):
+                or (settled and (holds[ENDING_SETTLED] is not True or "rung_kind" not in picked))
+                or (has_of and "site_band" not in picked)):
             bad(name, f"has holds {holds!r}",
-                f"exactly one of {list(ENDING_SELECTORS)}, plus `{ENDING_SETTLED}: true` beside `rung_kind` only")
+                f"exactly one of {list(ENDING_SELECTORS)}, plus `{ENDING_SETTLED}: true` beside `rung_kind` only "
+                f"and `{ENDING_OF}:` beside `site_band` only")
         (sel, val), = picked.items()
+        if sel == "site_band":
+            of_kind = _check_site_band(name, val, holds.get(ENDING_OF), site_kinds, band_floors, bad)
+            if row["victory"]:
+                bad(name, "is `victory: true` beside `site_band`", "`victory: false`: a fall of the realm's Sites is no win path")
+            if "under" in row:
+                bad(name, f"carries `under:` {row['under']!r} beside `site_band`", "no `under:`: the Sites' condition is no faction's")
+            if not isinstance(row.get("source"), str) or not row["source"].strip():
+                bad(name, "names no `source:`", "the clause or ruling the row rests on")
+            out[str(name)] = EndingRow(False, (sel, val), "", row["source"], False, of_kind)
+            continue
         # a list or mapping here is unhashable against `posts` and would raise a bare TypeError
         domain, why, wants = ((posts, "no offices.yaml seat carries", "a post of offices.yaml: seats")
                               if sel == "post" else
@@ -2520,6 +2545,23 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
             needs="one victory row; every other row is an ending, not a win path",
             law="GD-1 -- *Peninsular Sovereignty is the sole victory condition*; the alternates are STRUCK")
     return out
+
+
+def _check_site_band(name, band, of, site_kinds, band_floors, bad) -> str:
+    """A `site_band` row's `of:` and band, refused by name: `of:` is required, a `site_kinds` member whose `band_floors` cell is non-empty, or
+    `ENDING_ALL_KINDS`; the band is one of that kind's floors (of `all`: of at least one kind's). Returns `of:`."""
+    if not isinstance(of, str):
+        bad(name, f"selects site_band {band!r} with no `of:` ({of!r})", f"`of:` a site_kinds member with floors, or {ENDING_ALL_KINDS!r}")
+    if of != ENDING_ALL_KINDS:
+        if of not in site_kinds:
+            bad(name, f"has `of:` {of!r}, which is not a site_kinds member", f"a site_kinds member with floors, or {ENDING_ALL_KINDS!r}")
+        if not band_floors.get(of):
+            bad(name, f"has `of:` {of!r}, whose band_floors cell is empty", "a kind with floors: a kind with none has no band to fall below")
+    kinds = sorted(band_floors) if of == ENDING_ALL_KINDS else [of]
+    if not isinstance(band, str) or not any(band in (band_floors.get(k) or {}) for k in kinds):
+        bad(name, f"names band {band!r}, which is not in the floors of `of:` {of!r}",
+            f"a band of {of!r}'s `band_floors` cell: {sorted({b for k in kinds for b in (band_floors.get(k) or {})})}")
+    return of
 
 
 #: The `post`s an `offices.yaml` seat carries -- what an `endings` row's `post:` selector may name.

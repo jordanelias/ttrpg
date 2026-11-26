@@ -739,6 +739,11 @@ DEFAULT_FIXTURES = Fixtures(
     ending_draw=False,                 # `H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)
     ending_draw_pool_step=None,        # `H-524`, [CALIBRATE: the pool per season stood], read only under `ending_draw` True; `None` refuses
     ending_draw_ob=None,               # `H-524`, [CALIBRATE: the obstacle's base], read only under `ending_draw` True; `None` refuses
+    # B12b.05 (`09_WR_B_weather_with_memory_and_the_year` edit 4): THE POOL SCALE OF AN ENDING OVER THE CONDITION OF SITES (`rosters.yaml: endings`' `site_band`
+    # selector). The row's pool is the count of its selected Sites still above the band times this, through the one pool rule (`pool_of`, the shared `pool_add`
+    # and `pool_floor`), so a realm with every Site fallen still rolls. Read only by a `site_band` row, and none ships. 1.0 is the unscaled count.
+    # [ASSUMPTION; medium; Jordan to correct; revert: none, no roster row reads it] [CALIBRATE: pool scale and per-Site obstacle, joint calibration, OWED §B]
+    site_band_pool_scale=1.0,
     # B12a.16 (`07_SE_kernel_repairs` D, `H-327`): ARRIVING TEACHES THE TRAVELLER THE PLACE. `off` is THE CONTROL, SHIPPED: MATTER's `travel.ended` write carries nothing,
     # as before the item. `on`: it carries `loop/matter.py::_arrival_report` -- the stores of the rung he now stands in (`stores:<default_store_kind>`, as `_stock_report`
     # builds it) and its holder (`held_by`, through `world_q.governing_hold`) -- which WITNESS deposits to the write's witnesses, the traveller among them. An arm outside

@@ -608,3 +608,113 @@ def test_the_ending_draw_refuses_an_unset_row(monkeypatch):
             Q.endings_reached(v)
         with pytest.raises(Unspecified, match=name):
             Q.endings_near(v)
+
+
+# ======================================================================================
+# (g) B12b.05: AN ENDING OVER THE CONDITION OF SITES, REACHED BY A DRAW (`09_WR_B_weather_with_memory_and_the_year` edit 4)
+# ======================================================================================
+# THE PLANTED WORLD: the built realm cut to THREE harbours (`_three_harbours`), each set to a condition. The row is the loader's own product, so the
+# grammar the loader admits is the grammar the Query reads. Nothing here is a shipped row: none uses the selector.
+
+BAND_ROW = {"victory": False, "holds": {"site_band": "bulk_shipping", "of": "harbour"}, "source": "a test fixture"}
+
+
+def _three_harbours(monkeypatch, *conditions):
+    """The built realm with only three harbours left, at `conditions` (the `bulk_shipping` floor is 800), and the planted row in the roster."""
+    monkeypatch.setattr(Q, "ENDINGS", _load({"harbours_fail": BAND_ROW}))
+    w = build_realm(0)
+    keep = sorted(s for s in w.sites if w.sites[s].kind == "harbour")[:3]
+    for s in [s for s in w.sites if w.sites[s].kind == "harbour" and s not in keep]:
+        del w.sites[s]
+    for s, c in zip(keep, conditions):
+        w.sites[s].condition = c
+    w.tick = 3
+    return w
+
+
+def _band_tally(w):
+    """`reached` count over seeds 0..199, each seed's `near` disjoint from it."""
+    reached = 0
+    for seed in SEEDS:
+        w.world_seed = seed
+        got, close = Q.endings_reached(w), Q.endings_near(w)
+        assert not ({r.ending for r in got} & {r.ending for r in close}), seed
+        reached += bool(got)
+    return reached
+
+
+def test_site_band_ineligible_never_reached(monkeypatch):
+    """Gate (5), first clause, and the FALSIFIER's first arm (eligibility leaked): no harbour at or below the band's floor (800 reads AT it, so
+    801 is above) is reached at no seed and `near` at none."""
+    w = _three_harbours(monkeypatch, 1000, 900, 801)
+    assert not Q._ending_edges(w, Q.ENDINGS["harbours_fail"]), "fixture: no harbour is at or below the floor"
+    checked = 0
+    for seed in SEEDS:
+        w.world_seed = seed
+        assert Q.endings_reached(w) == [] and Q.endings_near(w) == [], seed
+        checked += 1
+    assert checked >= 200
+    w.sites[sorted(s for s in w.sites if w.sites[s].kind == "harbour")[0]].condition = 800
+    assert len(Q._ending_edges(w, Q.ENDINGS["harbours_fail"])) == 1, "control: a harbour AT the floor is eligible"
+
+
+def test_site_band_reached_at_most_seeds_not_all(monkeypatch):
+    """Gate (5), second clause: every harbour below the band, over 200 seeds, reached at most seeds and not at all of them (the draw has not
+    collapsed into a threshold, the falsifier's second arm)."""
+    w = _three_harbours(monkeypatch, 0, 100, 800)
+    assert len(Q._ending_edges(w, Q.ENDINGS["harbours_fail"])) == 3
+    reached = _band_tally(w)
+    assert len(SEEDS) / 2 < reached < len(SEEDS), reached
+
+
+def test_site_band_partial_eligibility_reached_less_often(monkeypatch):
+    """Gate (5), third clause: one harbour in three below it is reached at fewer seeds than with every harbour below, and at more than none.
+    A restored harbour moves from the obstacle to the pool, so restoring one lowers the odds."""
+    all_below = _band_tally(_three_harbours(monkeypatch, 0, 100, 800))
+    one_below = _band_tally(_three_harbours(monkeypatch, 0, 1000, 1000))
+    two_below = _band_tally(_three_harbours(monkeypatch, 0, 100, 1000))
+    assert 0 < one_below < two_below < all_below, (one_below, two_below, all_below)
+
+
+def test_site_band_two_calls_one_answer_no_ordinal(monkeypatch):
+    """Gate (6): two calls in one season answer the same, and the content hash, the log, the gate's writes and the draw ordinal are as they were
+    (the answer is a keyed draw inside a Query)."""
+    w = _three_harbours(monkeypatch, 0, 100, 800)
+    ordinal = lambda: dict(getattr(w, "draw_ordinals", {}) or {})
+    before, ords, checked, hits = _state(w), ordinal(), 0, []
+    for seed in range(40):
+        w.world_seed = seed
+        first, near = Q.endings_reached(w), Q.endings_near(w)
+        assert (Q.endings_reached(w), Q.endings_near(w)) == (first, near), seed
+        hits += first
+        checked += 1
+    assert checked >= 40 and hits and _state(w) == before and ordinal() == ords
+    got = hits[0]
+    assert got.ending == "harbours_fail" and len(got.holds) == 3, got
+
+
+BAND_REFUSALS = [
+    ({"site_band": "bulk_shipping", "of": "harbour"}, {"under": "Valorsmark"}, "under"),
+    ({"site_band": "bulk_shipping", "of": "harbour"}, {"victory": True}, "victory"),
+    ({"site_band": "bulk_shipping"}, {}, "no `of:`"),
+    ({"site_band": "deep_mining", "of": "harbour"}, {}, "not in"),
+    ({"site_band": "bulk_shipping", "of": "dwelling"}, {}, "floors"),
+    ({"site_band": "bulk_shipping", "of": "nowhere"}, {}, "site_kinds"),
+    ({"site_band": "no_such_band", "of": "all"}, {}, "not in"),
+    ({"site_band": "bulk_shipping", "of": "harbour", "settled": True}, {}, "holds"),
+    ({"post": "King", "of": "harbour"}, {"under": "Valorsmark"}, "holds"),
+]
+
+
+def test_site_band_refused_with_under_or_victory():
+    """Gate (7): the loader refuses `site_band` beside `under:` and beside `victory: true`, with no `of:`, with a band the kind's floors lack, with
+    an `of:` that is no kind or a kind with no floors, and `of:` beside any other selector. The controls: the good row loads, `of: all` loads."""
+    assert _load({"ok": BAND_ROW})["ok"].holds == ("site_band", "bulk_shipping")
+    assert _load({"ok": dict(BAND_ROW, holds={"site_band": "bulk_shipping", "of": "all"})})["ok"].of == "all"
+    checked = 0
+    for holds, row_extra, says in BAND_REFUSALS:
+        with pytest.raises(Unspecified) as e:
+            _load({"ok": BAND_ROW, "bad_row": dict(BAND_ROW, holds=holds, **row_extra)})
+        assert "'bad_row'" in str(e.value) and says in str(e.value), str(e.value)
+        checked += 1
+    assert checked == len(BAND_REFUSALS) >= 9

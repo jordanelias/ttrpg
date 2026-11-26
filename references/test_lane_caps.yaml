@@ -22,6 +22,7 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a journey between two settlements is priced by the cheapest path over the settlement graph, each step the ground of the settlement entered, at the leg unit's scene points with a floor of one; a settlement inside a pass nested in a mountain costs the pass's price and one in the mountain's interior may not be entered; a journey into a foreign territory is still blocked"}
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a journey the chooser prices under route pricing costs its leg's points from the scene budget, far above near and equal to the world-side leg points, one point at the shipped off arm, and a journey over the person's remainder is left undone"}
       - {batch: B12b-weather-arcs-population, added: 5, behaviour: "a region's spell term over a year is one value for every territory under one parent rung and moves with the year and the region, and a spell with no season table or a season table that is not one entry per season of the year is refused"}
+      - {batch: B12b-weather-arcs-population, added: 5, behaviour: "an ending over the condition of Sites is reached by one keyed draw: never while no selected Site is at or below the band, at most seeds but not all when every one is, at fewer seeds when one in three is, with the same answer on two calls and no draw ordinal moved; the loader refuses it beside a faction or a victory flag"}
   engine:
     base: 1043
     warrants: []

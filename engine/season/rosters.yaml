@@ -4420,7 +4420,11 @@ rosters:
       and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
       RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
       outside the realm and not selected), which may carry `settled: true` beside it and nothing else
-      (only the rungs with a `settlement` rung among their descendants).
+      (only the rungs with a `settlement` rung among their descendants), or `{site_band: <a band of band_floors>, of: <a
+      site_kinds member with floors, or all>}` (B12b.05: the Sites under the realm of those kinds, each compared with the band's floor;
+      ELIGIBLE when one is at or below it, and then ONE KEYED DRAW decides, `(seed, tick, row)`: the pool the Sites still above the
+      band times the fixture `site_band_pool_scale`, the obstacle those at or below plus one per band below the named one, so a Failure
+      REACHES the ending and a Partial reports it `near`; such a row carries `victory: false` and no `under:`, and needs no act).
       `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
       whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
       second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
