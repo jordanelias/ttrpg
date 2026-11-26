@@ -107,6 +107,8 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 from ..state.gate import sworn_to
 # B21.58 (A-20): `at_war`'s last line asks the gate's `may_wage` of each live commit's subject.
 from ..state.gate import commands_a_seated, may_admit, may_wage
+# B21b.12 (CP-T09-02 (c)): the two remit acts a seat that wages or warrants carries, the war's target set reads them (`war_fields`).
+from ..state.gate import MUSTER_ACT, SEIZURE_ACT
 from ..state.ids import H, ROOT, draw_factory
 from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
@@ -3810,6 +3812,52 @@ def war_targets(w: World, p: Person, heard: tuple) -> tuple:
     return tuple(o for o in rivals if o not in mine and opinion_of(w, p, o) < INDIFFERENCE)
 
 
+WOUND_KIND = "body.changed"        # the Event kind a wound deposits (`person_q.PAIRED_KINDS`: a death is the other, and H-209 holds its claim back)
+
+
+def grievance_creeds(w: World, p: Person, doers: tuple) -> tuple:
+    """THE CREEDS A WOUND TURNS A SEATED MUSTER-HOLDER'S ANGER TOWARD (B21b.12, CP-T09-02 (b), the grievance occasion; [ASSUMPTION; medium; Jordan to correct;
+    revert: `questions_for` appends no `grievance_creeds`, and `declare` forms on a rival's creed only through `war_targets` or a creed he has heard]): of `doers`
+    -- the doers of the WOUNDS (`WOUND_KIND`) whose questions `opinion_referents` turned toward a faction (`questions_for` collects them: a wound `p` judges,
+    by a doer whose faction `p` regards below indifference, the gate that function owns) -- each doer's faction (`faction_holding`) he is not a member of,
+    for a person who belongs to a faction in whose seat he wages (`gate.may_wage`), in `doers` order, none twice. Stamped as `Proposition`, so `declare` forms
+    on a creed no one told him of (and, the declared widening, `commit` and `argue`, as `war_targets`). A KILLING RAISES NOTHING: a dead victim's claim never reaches a
+    question (H-209), so no death is a doer here until it does. Computed when asked, stored nowhere; `()` for a man in no wagers' seat."""
+    if not doers:
+        return ()
+    mine = own_factions(w, p)
+    if not any(may_wage(w, p.id, f) for f in mine):
+        return ()
+    return tuple(dict.fromkeys(f for f in (faction_holding(w, d) for d in doers) if f is not None and f not in mine))
+
+
+def war_fields(w: World, p: Person) -> tuple:
+    """THE WAR'S TARGET SET, `at_war`'s FIRST PRODUCTION READER (B21b.12, CP-T09-02 (c); [ASSUMPTION; medium; Jordan to correct; revert: `questions_for` appends no
+    `war_fields`: a seat's targets are the towns its own ledger names]): for each live `hold` of `p` on a seat granting `MUSTER_ACT` or `SEIZURE_ACT` (`dispatch`
+    or `issue`), when the seat's own faction (`seat_faction`) is one of the two parties of a war that is LIVE (`at_war`: a declaration and a seated committer), the
+    settlements the OTHER party holds (`holder_faction_of`) that the seat's purview reaches (`gate.purview_reaches`), sorted by id. The seat decides the side, as
+    `sides_of` and `occupying_faction` do; `side_in`, an ally's side (CP-T09-03), is B21b.14's. `march` and the seat's warrant (`issue`) form on them as `Rung`,
+    and `seize` through `warrant_sourced`, whatever the marcher's ledger names: war widens a seat's targets from the towns it was told of to every enemy town it
+    reaches. When every committer has released the war `at_war` reads False and the term withdraws. Nothing is refused (a march needs no war). Computed when asked,
+    stored nowhere; `()` for a man in no such seat, which is nearly everyone, and in every world with no declared war."""
+    seats = [w.offices[o] for o in dict.fromkeys(
+        t.object for t in p.tenures
+        if t.kind == "hold" and t.live and t.object in w.offices and not {MUSTER_ACT, SEIZURE_ACT}.isdisjoint(t.granted_acts))]
+    if not seats:
+        return ()
+    wars = [x for x in w.propositions.values() if x.mood == WAR_MOOD and x.subject != x.value]
+    if not wars:
+        return ()
+    out: set = set()
+    for s in seats:
+        own = seat_faction(w, s.id)
+        foes = {x.value if x.subject == own else x.subject for x in wars if own in (x.subject, x.value) and at_war(w, x.subject, x.value)}
+        if foes:
+            out.update(r.id for r in w.rungs.values()
+                       if r.kind == "settlement" and holder_faction_of(w, r.id) in foes and purview_reaches(w, s, r.id))
+    return tuple(sorted(out))
+
+
 def leave_referents(w: World, p: Person, refs: tuple, memo: Optional[dict] = None) -> tuple:
     """THE FACTIONS HE WOULD LEAVE, as referents of a question about the people he regards (B21b.08, CP-T09-01's leave body; [ASSUMPTION; medium; Jordan to
     correct; revert: `questions_for` appends no `leave_referents`]): for each faction `p` belongs to (`own_factions`) whose `opinion_of` is BELOW
@@ -5245,6 +5293,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     gone = _believed_gone(p.ledger)
     known = frozenset(known_persons(p.ledger, p.id))
     opinions: dict = {}                    # `opinion_referents`' per-call memo of `opinion_of` by faction
+    wound_doers: list = []                 # B21b.12 (b): the doers of the wounds that turned him toward a faction (`grievance_creeds`)
     for c in p.ledger:
         if (c.when, c.lap) < floor:
             continue
@@ -5262,7 +5311,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
             # v9 IN-70: a paired deed's question also turns `p` toward the doer's faction where his
             # opinion of it is below indifference (`opinion_referents`); the subject stays first, and
             # admission (the three clauses above) is untouched. REVERT: `(c.subject,)` alone.
-            extra = tuple(x for x in opinion_referents(w, p, c, opinions) if x != c.subject)
+            drawn = opinion_referents(w, p, c, opinions)
+            extra = tuple(x for x in drawn if x != c.subject)
+            # B21b.12 (CP-T09-02 (b)): the wound's doer (`drawn[0]`, `opinion_referents`' first) is collected for the splice below.
+            if drawn and c.predicate == WOUND_KIND:
+                wound_doers.append(drawn[0])
             # B21b.08 (CP-T09-01's leave body): AND A QUESTION ABOUT A PERSON HE REGARDS ON HIS OWN FACTION'S BEHALF carries that faction where his opinion of it is
             # below indifference, so `release` forms on his own `commit`. After the subject and the opinion referents; never twice. REVERT: drop these two lines.
             leave = tuple(x for x in leave_referents(w, p, (c.subject,) + extra, opinions) if x != c.subject and x not in extra)
@@ -5435,7 +5488,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + crossed_sites(w, p, since) + joinable(w, p, heard_props) + war_targets(w, p, heard_props) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
-             + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
+             + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ())
+             # B21b.12 (CP-T09-02 (b), (c); [ASSUMPTION; medium; Jordan to correct]), APPENDED LAST, one term per sub-edit. (d), THE RALLY, IS NO TERM: the `war.declared` claim's subject is the WAR Proposition, so `propositions_heard` already stamps it as `Proposition` for every hearer and `commit` forms on it for a defender as for a declarer (`test_cp_t09_declare.py`).
+             # (b) THE CREEDS A WOUND HE JUDGES TURNS A SEATED MUSTER-HOLDER AGAINST (`grievance_creeds`), as `Proposition` -- `declare` forms on them. REVERT: drop the term.
+             + grievance_creeds(w, p, tuple(wound_doers))
+             # (c) THE ENEMY TOWNS HIS SEAT REACHES IN A LIVE WAR (`war_fields`), as `Rung` -- `march` and the seat's warrant form on them, `seize` through `warrant_sourced`. REVERT: drop the term.
+             + war_fields(w, p))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
