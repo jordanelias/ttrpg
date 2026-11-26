@@ -362,7 +362,9 @@ def test_go07_the_realm_hash_is_the_same_in_two_fresh_processes_under_two_hash_s
     season depends on set or dict order or on a process-level source. Two cold subprocesses, one season each."""
     probe = ("from engine.season.boot.realm import build_realm\n"
              "import engine.season.harness.populated as P\n"
-             "print(P.run(1, 0, w=build_realm(0))['hash'])\n")
+             "w = build_realm(0)\n"
+             "P.run(1, 0, w=w)\n"
+             "print(w.content_hash())\n")
     root = ROOT
     got = []
     for hash_seed in ("0", "1"):
