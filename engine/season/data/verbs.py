@@ -2261,7 +2261,7 @@ CITED_KEY = "cited"
 # `cites`. The act's own band is the `answered_band` of each (`queries/inputs.py::ANSWERED_STAGE`). Read by `queries/world_q.py::filings`; bound by no cell and not a choice (as `CITED_KEY`).
 ANSWERS_KEY = "answers"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
-                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists",
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: ("Proposition.exists", "Record.stages"),
                   CONCLUDED_KEY: CONCLUSION_KIND}
 # v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
 # (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
@@ -2293,13 +2293,20 @@ LEDGER_RANGES = _check_ledger_ranges(roster_map("choice_sourced", "ledger_ranges
 # `news.told` branch reads `said`, `_circle_of` reads `in_confidence`): the row must emit it.
 
 
+def _carries(key: str, row) -> bool:
+    """WHETHER `row` writes or emits a carrier of choice `key` (`CHOICE_CARRIER`): one string, or, for `cites` (B24.27), the two a citation is read from -- the Proposition an `utter` stores it
+    on, the case-file stage a `speak` files it on."""
+    carrier = CHOICE_CARRIER[key]
+    return any(c in (*row.writes, *row.emits) for c in ((carrier,) if isinstance(carrier, str) else carrier))
+
+
 def _load_choice_sourced(values: dict) -> dict:
     """`rosters.yaml: choice_sourced`'s `values`, checked and frozen -- refused per line (above)."""
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
         if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k not in (SAID_KEY, CITES_KEY, CONCLUDED_KEY) and k not in LEDGER_RANGES)
-                                        or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
+                                        or not _carries(k, row) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
                 f"its row writes or emits no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_CARRIER)}",

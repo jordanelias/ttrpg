@@ -2887,6 +2887,11 @@ rosters:
       `decision/choose.py::settle_conclusions` keeps ONE, drawn in proportion to each doer's support over distinct origins (`LedgerReader._support`) at a nonzero
       `choice_temperature` (the best-supported at 0). One doer is no choice: the Candidate carries no rank and no act is renamed. The carrier is the kind the row
       emits (`conclusion.reached`). [ASSUMPTION; medium; Jordan to correct; revert: delete the `reconstruct` line and `settle_conclusions`, and the first doer his ledger names rides, as B11.73.]
+      B24.27 (EVID_B edit 6; FI_05_B E-1): `speak` CARRIES `cites` AND IT IS A CHOICE THE CHOOSER FORMS, NOT A FAN OVER A ROSTER (`utter`'s shape: no `CHOICE_RANGES` entry). A `speak`
+      is formed twice on a matter where he holds claims about it that `person_q.proof_kind` has a kind for (`person_q.held_cites`): the speech that cites nothing (every `speak` before) and
+      the speech that cites ALL of them, each with the `Said` it carries for the told deposit (`cited`, `CITED_KEY`). The carrier is the stage a `speak` files (`Record.stages`). The
+      answering variant (a held item that contradicts one already filed against his side, EVID_B's third shape) is NOT formed: it needs the filed stage's place (`answers`), which no
+      person-side reading gives, and a deed claim cannot contradict another by value. [ASSUMPTION; medium; Jordan to correct; revert: delete the `speak` line and the variant is the one speech.]
     values:
       marshal: [role, retreat_at]
       march: [posture]
@@ -2895,6 +2900,7 @@ rosters:
       examine: [site]
       utter: [cites]
       reconstruct: [concluded]
+      speak: [cites]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
     # and `condition.band_crossed` the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).

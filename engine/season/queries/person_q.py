@@ -685,6 +685,19 @@ def impeaches(c, record_id: str) -> bool:
     return is_deed(c) and c.subject == record_id and c.predicate in COVERT_KINDS
 
 
+def cited_said(c) -> Said:
+    """THE `Said` A CITED CLAIM CARRIES (`payload["cited"][id]`, B24.24; B24.27): the claim as he holds it, its confidence and chain as stored. The one construction of it: the chooser
+    copies it onto the act at CHOOSE (`held_cites`' claims), and `world_q.filings` builds the same for a cite whose act carries none."""
+    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+
+
+def held_cites(ledger, subject) -> tuple:
+    """THE CLAIMS HE HOLDS ABOUT `subject` THAT A SPEECH MAY CITE (B24.27, EVID_B edit 6; FI_05_B E-1): his own ledger's claims whose subject it is and which `proof_kind` has a kind
+    for, in ledger order -- the ones a citing `speak` could be admitted on. A claim that is no proof (a cell, a refusal kind, a withheld confession) is never formed on. World-free;
+    whether the matter's row admits the KIND is the fold's pre-draw refusal (`world_q.filings`), as it is for any act."""
+    return tuple(c for c in ledger if c.subject == subject and proof_kind(c) is not None)
+
+
 def deed_valence(axis_w: dict, c) -> float:
     """How a holder whose projected pursuits are `axis_w` judges one deed claim `c`:
     `Σ_axis axis_w[axis] · align_kind(c.predicate, axis)`; 0 for a claim that is no deed, and 0 for

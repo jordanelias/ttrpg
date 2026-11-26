@@ -71,7 +71,7 @@ from .person_q import holders_named, vacant_named
 # v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
 from .person_q import contradicts, is_cell, record as record_of
 # B24.25: `filings` derives what a cited item is as proof, what it weighs and whether it impeaches a Record, off the one owners.
-from .person_q import impeaches, proof_kind, proof_weight, teller_weight
+from .person_q import cited_said, impeaches, proof_kind, proof_weight, teller_weight
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -333,7 +333,7 @@ def filings(w: World, a) -> Filings:
             return refuse
         if cid in own:
             c = own[cid]
-            ref = cited.get(cid) or Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+            ref = cited.get(cid) or cited_said(c)
             kind = proof_kind(ref) or ("testimony" if answering else None)
             if kind is None or any(contradicts(ref, o) for o in (*standing, *(i.ref for i in items if isinstance(i.ref, Said)))):
                 return refuse

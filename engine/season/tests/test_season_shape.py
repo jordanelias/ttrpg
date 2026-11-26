@@ -4734,8 +4734,9 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # and dropped by `binding_of`, so naming them here coins no operand either.
     # v12 B11.10: `said_rank` is `said`'s case again -- the claim's rank among those a telling's fan held, read by the deposit, bound by no cell, dropped by `binding_of`.
     # AND `reconstruct`'s `concluded` / `concluded_rank` / `cites` (B11.72-B11.74): payload keys the deposit reads, bound by no cell, in the same case.
-    from ..data.verbs import CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, SAID_RANK_KEY
-    carry_ok = {"subject", "said", SAID_RANK_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CITES_KEY}
+    # B24.27: `cited` is `cites`' `Said`s (`speak`'s citing variant, copied at CHOOSE for the told deposit), bound by no cell, dropped by `binding_of`.
+    from ..data.verbs import CITED_KEY, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, SAID_RANK_KEY
+    carry_ok = {"subject", "said", SAID_RANK_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CITES_KEY, CITED_KEY}
     carried = {k for a in minted for k in (a.payload or {})}
     assert carried <= set(REQUIRES_OPERANDS) | carry_ok | set(CHOICE_RANGES), (
         f"a minted act carries "

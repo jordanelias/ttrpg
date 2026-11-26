@@ -376,3 +376,38 @@ def test_a_same_side_contradicting_cite_is_refused_at_filing():
         assert out3[0].degree is not None and out3[0].kind not in refusal, (seed, out3)
         checked += 1
     assert checked == 20
+
+
+# ---- B24.27: the chooser forms a `speak` that cites (EVID_B edit 6) -----------------------------------------------------------------------------------------
+
+def test_the_chooser_forms_a_citing_variant_only_on_claims_proof_kind_admits():
+    """On `build_hearing`, the accuser holds deed claims about the accused, a cell that is no proof and a deed about himself. His `speak` on the accused's matter is formed TWICE: the one that cites
+    nothing (as before) and the one that cites exactly the held claims about the accused that `proof_kind` has a kind for, each with the `Said` copied from his own ledger. The variant folds as a real
+    citing speech (a band, never the refusal). FALSIFIER: a variant citing a claim `proof_kind` has no kind for, one about another subject or an id he does not hold; no variant where he holds a proof;
+    or a `cited` that is not the ledger's own claim."""
+    from ..decision import assemble
+    from ..data.verbs import CITED_KEY, CITES_KEY
+    from .test_sc_hearing_admission import DEED, OTHER_DEED, G, fold_and_witness
+    refusal = _verbs.VERB_TABLE["speak"].emits_on_refusal
+    checked = 0
+    for seed in range(8):
+        w, d, case = _filing_world(seed)
+        acc = w.persons[G.ACCUSER]
+        acc.ledger += [Claim("c_deed2", G.ACCUSER, G.ACCUSED, OTHER_DEED, True, 0, "firsthand", 100, "own"),
+                       Claim("c_cell", G.ACCUSER, G.ACCUSED, CELL, 3, 0, "firsthand", 100, "own"),
+                       Claim("c_else", G.ACCUSER, G.ACCUSER, DEED, True, 0, "firsthand", 100, "own")]
+        q = world_q.docket_question(w, acc)
+        speaks = [c for c in OP.opening_set(acc, assemble(acc, q, 12), q, w.fixtures) if c.verb == "speak" and c.subject == G.ACCUSED]
+        plain = [c for c in speaks if CITES_KEY not in c.operands]
+        citing = [c for c in speaks if CITES_KEY in c.operands]
+        proofs = tuple(c.id for c in acc.ledger if c.subject == G.ACCUSED and person_q.proof_kind(c) is not None)
+        assert len(plain) == 1 and len(citing) == 1 and len(proofs) >= 2, (seed, [c.operands for c in speaks], proofs)
+        ops = citing[0].operands
+        assert ops[CITES_KEY] == proofs and "c_cell" not in proofs and "c_else" not in proofs, (seed, ops[CITES_KEY], proofs)
+        held = {c.id: c for c in acc.ledger}
+        assert set(ops[CITED_KEY]) == set(proofs) and all(ops[CITED_KEY][i] == person_q.cited_said(held[i]) for i in proofs), (seed, ops[CITED_KEY])
+        payload = {"subject": G.ACCUSED, CITES_KEY: ops[CITES_KEY], CITED_KEY: ops[CITED_KEY]}
+        out = fold_and_witness(w, d, Act(id="sp27", actor=G.ACCUSER, verb="speak", payload=payload))
+        assert out and out[0].kind not in refusal and out[0].degree is not None, (seed, [(e.kind, e.degree) for e in out])
+        checked += 1
+    assert checked == 8
