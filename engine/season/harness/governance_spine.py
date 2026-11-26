@@ -774,7 +774,6 @@ def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> Worl
     The world runs at its OWN arm of two settings, set here and nowhere else (the shipped realm is a separate world that ships `sitting_exchanges` 1 as well; the `.sweep` here is this fixture's own arm, kept so the world does not move with the shipped value): `sitting_exchanges` 1 (the attendees'
     effort is exchanges) and `npc_decider_roles` naming the proceeding role (the NPC attendees decide by a draw over their own interior). The opening acts are folded at the flat
     fold (no task draw); the world plays at its own arm. Returns the world at tick 1, the sitting due."""
-    from ..data.matrix import WriteClass as _WC
     from ..seam.wrappers.sigma import PROCEEDING_ROLE
     from .flat_fold import flat_fold_fixtures
     w = build(seed)
@@ -792,9 +791,9 @@ def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> Worl
         d = SeasonDriver(w)
         _open(w, d, Act(id="hear:convene", actor=mayor, verb="convene", via=seat, payload={"subject": HEARING_VENUE, "when": w.tick}))
         w.step = Step.CALENDAR
-        fired = d.calendar(mint_token(w, _WC.CALENDAR))                       # the Date is due this tick: it fires, and the bench is told
+        fired = d.calendar(mint_token(w, WriteClass.CALENDAR))                       # the Date is due this tick: it fires, and the bench is told
         w.log.extend(fired)
-        d.witness(mint_token(w, _WC.INTERIOR), fired)
+        d.witness(mint_token(w, WriteClass.INTERIOR), fired)
         _open(w, d, Act(id="hear:case", actor=mayor, verb="open_case", via=seat, payload={"subject": ACCUSED}))
         for who, held in zip((ACCUSER, ACCUSED), exhibits):
             for n in range(held):

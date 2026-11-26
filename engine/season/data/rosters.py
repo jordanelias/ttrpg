@@ -1087,15 +1087,16 @@ def _load_grounds(rows) -> dict:
 
 #: THE `when` KEYS A USES ROW'S READER EVALUATES (`when_holds`): the rest of `capability_when_keys` are the conditions of an ACT, read at the proceeding's host (B24.35).
 ROW_WHEN_KEYS = ("rank_at_least",)
+#: THE CONDITIONS OF AN ACT: the `capability_when_keys` members a ROW does not read (`ROW_WHEN_KEYS`), in the roster's order -- the keys a ground's `backed_by` may name and `sigma.WHEN_BACKING` binds.
+ACT_WHEN_KEYS = tuple(k for k in roster("capability_when_keys", ordered=True) if k not in ROW_WHEN_KEYS)
 
 
 def _refuse_backed_by(gid: str, cond) -> None:
     """B24.35: a ground's `backed_by` is a non-empty mapping whose every key is a `capability_when_keys` member a ROW does not read (`ROW_WHEN_KEYS`): the conditions the
     proceeding's host evaluates (`seam/wrappers/sigma.py::WHEN_BACKING`, which binds the roster to its functions both ways). An unknown key, `rank_at_least` and an empty map
     are refused naming the ground; the argument's type is the function's to refuse."""
-    keys = [k for k in roster("capability_when_keys", ordered=True) if k not in ROW_WHEN_KEYS]
-    if not isinstance(cond, dict) or not cond or not set(cond) <= set(keys):
-        raise Unspecified(f"ground {gid!r} has `backed_by: {cond!r}`", "rosters.yaml -- grounds", needs=f"a mapping from one or more of {keys} to its argument",
+    if not isinstance(cond, dict) or not cond or not set(cond) <= set(ACT_WHEN_KEYS):
+        raise Unspecified(f"ground {gid!r} has `backed_by: {cond!r}`", "rosters.yaml -- grounds", needs=f"a mapping from one or more of {list(ACT_WHEN_KEYS)} to its argument",
                           law="WGM edit 2 -- a ground is backed by a condition of the act, from the closed `when` roster; a key nothing evaluates would back it silently")
 
 
@@ -1217,6 +1218,13 @@ AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_
 MATTERS = _load_matters(_roster_rows("matters"), tuple(ISSUE_RUNGS))
 #: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated (the one owner: `seam/wrappers/sigma.py::_items_of` and `loop/effects_information.py::_eff_speak` read it).
 RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
+
+
+def matter_of_record(kind: str) -> str:
+    """The `matters` member a Record of `kind` is as proof (`RECORD_MATTER`), `record` for a kind no row carries."""
+    return RECORD_MATTER.get(kind, "record")
+
+
 # B24p.03: THE TYPED WRITES OF `arrangements.yaml: disposal:` (V2 p2 §J). `MATTERS` absorbed the `proofs` roster, which was deleted here.
 DISPOSAL_WRITES = _load_disposal_writes(_roster_rows("disposal_writes"))
 # ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.
@@ -2130,7 +2138,7 @@ def _refuse_when(i, row, when, when_keys, refuse) -> None:
     if unknown:
         refuse(i, row, f"has `when` key {unknown[0]!r}", f"only {sorted(when_keys)}",
                "MAP §C -- the `when` keys are a closed roster; an unregistered one is a condition nothing reads")
-    act_scoped = [k for k in when if k not in ROW_WHEN_KEYS]
+    act_scoped = [k for k in when if k in ACT_WHEN_KEYS]
     if act_scoped:
         refuse(i, row, f"has `when` key {act_scoped[0]!r}", f"only {list(ROW_WHEN_KEYS)}",
                "B24.35 -- that key is a condition of the act read at the proceeding's host (`grounds`' `backed_by`), which no row's reader evaluates")

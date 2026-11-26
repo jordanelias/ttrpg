@@ -355,7 +355,7 @@ class Sitting:
       * `cond` -- `((person, Cond), ...)`; `used` -- grounds and items used, for staleness;
       * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`.
 
-    B24.06 adds the board (each defaulted, and each in `UNWRITTEN`: no sitting writes them yet, B24.14): `board` -- `((Item, status), ...)` in the order
+    B24.06 adds the board (each defaulted, and each in `UNWRITTEN`: carried on the sitting, not written to `Event.ending`): `board` -- `((Item, status), ...)` in the order
     entered, an `Item` carrying the side it stands for and the weight it entered at (what it counts for now is `evidence.standing`'s, B24.19), `status` `stands` |
     `answered` (stands, an answer tried and failed or halved it) | `struck` (by `standing`) | `withdrawn` (refused at entry, the lighter of two of one side's); `faults` -- `((a `proceeding_faults` member, the side at fault), ...)` in order; `levels` -- `((side, how many), ...)`, each a
     level against that side on the closing draw (a fault's, or a failed `impugn`'s)."""
@@ -449,7 +449,7 @@ class Beat:
 #: values are never written) and the board's cells (a cell on every beat and every sitting of every proceeding is a hash mover, the realm's own `tell` sittings
 #: among them). B24.14 WRITES `Beat.entered` and `Beat.struck` AS THE EXCHANGE LIST (`exchanges`, one `("exchange", kind, item)` tuple beside the beats, only
 #: where a sitting entered or struck an item), so they stay in this row: they are not a cell of a beat. `Beat.fault` and `Sitting.board`, `.faults`, `.levels`
-#: are written by nobody yet.
+#: are carried on the sitting, not written to `Event.ending`.
 UNWRITTEN = {"Beat": ("terms", "entered", "struck", "fault"), "Sitting": ("board", "faults", "levels")}
 
 #: THE BEAT CELLS THAT ARE THE EXCHANGE LIST, in the order an exchange lists them (B24.14): an item an exchange put on the board, then one it struck. Each

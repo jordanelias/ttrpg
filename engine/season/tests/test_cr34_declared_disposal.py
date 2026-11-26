@@ -2,7 +2,7 @@
 
 `determine` on a matter whose docket item names an arrangement row closing `declared` once carried a fifth conjunct, `vote` (the row's own `quorum:` of
 live commits as a hard precondition). B24.11 deleted it: the count is the odds, not a gate. What stays here is the READING of the commits
-(`world_q.declared_votes_by_member`, signed per member; `declared_votes`, the members for the motion), which `sigma._present` turns into each seat's
+(`world_q.declared_votes_by_member`, signed per member), which `sigma._present` turns into each seat's
 starting track, and the control that the matter is no longer refused for want of them. The sitting those starts feed is `test_sc_hearing_ballots.py`'s.
 `excommunication_deliberation` is the first declared row, `quorum: 2`.
 
@@ -64,6 +64,11 @@ def _by_member(w):
     return world_q.declared_votes_by_member(w, PARTY, _row())
 
 
+def _for_the_motion(w):
+    """The members whose signed count is positive: how many distinct members vote for the motion."""
+    return sum(1 for n in _by_member(w).values() if n > 0)
+
+
 def test_the_bench_is_three_church_seat_holders_and_the_row_is_declared_at_two():
     """The setup's control: the bench the commits are read over is the three planted holders, the shipped row is `declared` with `quorum: 2`, and the
     `vote` conjunct is gone from `determine` (the keyed refusal with it)."""
@@ -85,13 +90,13 @@ def test_a_declared_determine_with_no_commit_at_all_is_admitted_and_sat():
 
 def test_a_commit_is_read_per_member_signed_for_the_motion_or_against_it():
     """One live commit to an OUGHT about the accused naming `ban` is `+1` for the member; the same Proposition's NEGATION (`value` false) is `-1`; a member with neither is
-    absent; `declared_votes` counts the members for the motion only."""
+    absent; the members for the motion are those read positive."""
     w, _ = _church_world()
     _vote_against(w, "p_low")
     w.propositions["prop_spare"] = Proposition("prop_spare", "OUGHT", PARTY, "ban", False, 0)
     _commit(w, "p_other", "prop_spare")
     assert _by_member(w) == {"p_low": 1, "p_other": -1}
-    assert world_q.declared_votes(w, PARTY, _row()) == 1
+    assert _for_the_motion(w) == 1
 
 
 def test_a_commit_to_a_creed_whose_subject_is_the_accused_is_no_commit_on_the_motion():
@@ -128,7 +133,7 @@ def test_two_commits_by_one_member_are_two_levels_and_one_member():
     w, _ = _church_world()
     _vote_against(w, "p_low")
     _commit(w, "p_low", "prop_ban_mid_again")
-    assert _by_member(w) == {"p_low": 2} and world_q.declared_votes(w, PARTY, _row()) == 1
+    assert _by_member(w) == {"p_low": 2} and _for_the_motion(w) == 1
 
 
 def test_a_matter_with_no_place_has_no_bench():

@@ -229,10 +229,11 @@ def _at(board, iid) -> Optional[int]:
     return next((k for k, (it, _) in enumerate(board) if it.id == iid), None)
 
 
-def _ruled(inp, board) -> tuple:
+def _ruled(inp, board, filed=()) -> tuple:
     """THE ONE EVIDENCE RULE ON THIS BOARD (B24.19): `evidence.standing` over the items shown, at the weight each was entered at. Nothing else here decides which
-    item counts, at what weight, or what is struck or owed for it; a filed finding is the item's own `forged_found`, `evidence_cap` a dial."""
-    shown = tuple(it for it, s in board if s != WITHDRAWN)
+    item counts, at what weight, or what is struck or owed for it; a filed finding is the item's own `forged_found`, `evidence_cap` a dial. `filed` is the matter's filed
+    exhibits (`_counted`), counted with the board's items in the same call."""
+    shown = (*filed, *(it for it, s in board if s != WITHDRAWN))
     return standing(shown, tuple(it.id for it in shown if it.forged_found), inp.dials.get("evidence_cap"))
 
 
@@ -249,6 +250,11 @@ def _settle(inp, board) -> list:
 
 def _on_rung(it, issue) -> bool:
     return it.rung is None or it.rung == issue
+
+
+def _entry_weight(it, issue) -> float:
+    """the weight `it` enters a sitting at: its own on the rung tried, half off it (the `irrelevance` fault counts it)."""
+    return it.weight if _on_rung(it, issue) else it.weight / 2.0
 
 
 def _hand(inp, st, mover) -> list:
@@ -277,25 +283,28 @@ def _answerable(inp, st, mover, effect) -> list:
     return out
 
 
+def _track(inp, dial, n) -> float:
+    """`n` levels of the `dial` (`proof_level`, `fault_step`) in TRACK units, read through the close's own slope (`track_step`); `0.0` where there is none."""
+    D = inp.dials
+    return n * _lv(D[dial]) / D["track_step"] if D["track_step"] else 0.0
+
+
 def _worth(inp, w) -> float:
     """`w` of standing weight as the closing draw's leverage, read in TRACK units through the close's own slope (`track_step`): what the menu prices an
     exhibit at. [ASSUMPTION; Jordan to correct: this price is the menu's only -- the NPC decider's cost terms are B24.12's, which replaces it]"""
-    D = inp.dials
-    return w * _lv(D["proof_level"]) / D["track_step"] if D["track_step"] else 0.0
+    return _track(inp, "proof_level", w)
 
 
 def _cost(inp, n) -> float:
     """`n` levels owed, in track units, the same way (`fault_step`)."""
-    D = inp.dials
-    return n * _lv(D["fault_step"]) / D["track_step"] if D["track_step"] else 0.0
+    return _track(inp, "fault_step", n)
 
 
 def _counted(inp, board) -> tuple:
     """WHAT COUNTS ON THE CLOSE (B24's close, R1; B24.20): `evidence.standing` over the matter's filed exhibits (`Input.exhibits`) AND the board's items shown, in one call, so an item
     filed and shown again is one item (the same cell and origin corroborate once, the other side's same cell counts for neither) and one quantity has one rule. Never the board's
     own reading (`_ruled`): a filed exhibit is never entered, answered, struck or owed for in a sitting. With nothing filed it is `_ruled`'s standing, to the call."""
-    shown = (*inp.exhibits, *(it for it, s in board if s != WITHDRAWN))
-    return standing(shown, tuple(it.id for it in shown if it.forged_found), inp.dials.get("evidence_cap"))[0]
+    return _ruled(inp, board, inp.exhibits)[0]
 
 
 def _lever(inp, st) -> float:
@@ -441,7 +450,7 @@ def _first_heard_term(inp, v, c, foe, pressed=False, abridged=False, over=None, 
 
 
 #: The proceeding's own obstacle terms, the `rosters.yaml: obstacle_terms` members `bound: module`, in the roster's order:
-#: `fn(inp, voice, cond, foe, pressed, abridged) -> (raw, step)`, or `None` where the term does not weigh on this speech. `roll.obstacle` composes
+#: `fn(inp, voice, cond, foe, pressed, abridged, over, first) -> (raw, step)`, or `None` where the term does not weigh on this speech. `roll.obstacle` composes
 #: each as `raw x step` and names it in `Margin.terms`. Will: `weary`; Reason: `standing`; `press` is a press's and `gravity` the abridged form's;
 #: `answer` is an exhibit answer's (`over`, B24.06); `first_heard` is an answer's to an item first heard (`first`, B24.26).
 TERMS = {"weary": _weary_term, "standing": _standing_term, "press": _press_term, "gravity": _gravity_term, "answer": _answer_term, "first_heard": _first_heard_term}
@@ -780,7 +789,7 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
             out.append((mid, None, None, "concedes", ev, None, None))
         elif effect == "exhibit":                    # B24.06: each admitted item of his hand not yet shown, at what it would weigh on this rung
             for x_it in _hand(inp, st, mover):
-                out.append((mid, None, x_it.id, "presents", _worth(inp, x_it.weight if _on_rung(x_it, _issue(inp, st)) else x_it.weight / 2.0), None, None))
+                out.append((mid, None, x_it.id, "presents", _worth(inp, _entry_weight(x_it, _issue(inp, st))), None, None))
         elif effect in ("answer", "impugn"):         # B24.06: each standing item of the other side he may answer, or whose origin he may impugn, on each ground
             for tg, ans, over in _answerable(inp, st, mover, effect):
                 for g in G:
@@ -991,7 +1000,7 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
     elif effect == "exhibit":                           # B24.06: an item of his hand enters the board; nothing is drawn but the exchange's own two
         if it is None or it not in mover.items or it.kind not in r.admits or _at(board, it.id) is not None:
             raise ValueError(f"refused[exhibit]: {ch.item!r} is not an admitted item of {mover.id}'s hand not yet shown")
-        w = it.weight if _on_rung(it, issue) else it.weight / 2.0       # off the rung tried it enters at half, and the `irrelevance` fault counts it
+        w = _entry_weight(it, issue)                    # off the rung tried it enters at half, and the `irrelevance` fault counts it
         if w != it.weight:
             fault("irrelevance", side)
         board.append((replace(it, side=side, weight=w), STANDS))

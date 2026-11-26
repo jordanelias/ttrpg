@@ -328,6 +328,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         opposes_subject = subject_is_opponent(row)
         cites_of = verb in FILING_VERBS and CITES_KEY in CHOICE_SOURCED.get(verb, ())      # B24.27: a filing verb whose choice line names `cites` forms a citing variant
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
+        held_of_entity: dict = {}           # entity -> `held_cites` (the claims he could cite about it, read once for every seat and conclusion that forms on it)
         concluded = None                    # B11.73: `conclusion_cites` of his own ledger, read once per call for a row that reports a conclusion
         # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
         # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
@@ -515,7 +516,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         # speech as it was. It rides the same score terms; what it costs is the room learning the items and their chain (E-7).
                         # NEVER ON HIS OWN PLEA (`subject == p.id`): the ledger arm weighs the opponent's deeds and reads 0.0 where the opponent is the actor (`world_q.proofs`), so a citing variant there is a speech no proof backs.
                         if cites_of and subject != p.id:
-                            held = held_cites(p.ledger, subject)
+                            if subject not in held_of_entity:
+                                held_of_entity[subject] = held_cites(p.ledger, subject)
+                            held = held_of_entity[subject]
                             if records is None:
                                 records = held_record_claims(p, tick, decay)
                             kept = tuple(dict.fromkeys(c.subject for c in records if _content_answer(c, "subject") == subject))      # B24.43: the Records he holds whose content names the matter

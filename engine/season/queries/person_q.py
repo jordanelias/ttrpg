@@ -55,7 +55,7 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, RECORD_MATTER, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, matter_of_record, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map, task_share,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
@@ -690,15 +690,21 @@ def cited_said(c) -> Said:
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
 
 
+def claim_origin(chain, holder: str) -> str:
+    """THE ORIGIN OF A HELD CLAIM: the root of its `chain` where it was told, else `holder`, whose own it is (a firsthand claim). The one reading of it, for the support a claim has
+    (`Reader._support`), the weight a filed claim carries (`world_q.filings`) and the item a held claim makes (`sigma._items_of`)."""
+    return chain[0] if chain else holder
+
+
 def held_cites(ledger, subject) -> tuple:
     """THE CLAIMS HE HOLDS ABOUT `subject` THAT A SPEECH MAY CITE (B24.27, EVID_B edit 6; FI_05_B E-1): his own ledger's claims about what `subject` DID or SAID and which `proof_kind` has a kind
     for, in ledger order -- the ones a citing `speak` could be admitted on. "Whose deed" is `attributed_deeds`' rule, the one the ledger arm (`world_q.proofs`) reads: a `PAIRED_KINDS`
     deed is `subject`'s when its sighting names him doer (its own subject may be the patient), any other claim when its subject is `subject`. A claim that is no proof (a cell, a refusal kind,
     a withheld confession) is never formed on. World-free; whether the matter's row admits the KIND is the fold's pre-draw refusal (`world_q.filings`), as it is for any act.
     ⚠ CARRIED (B25, H-666's neighbour): `cited_said` still builds the `Said` from the STORED confidence with no pairing, where `said_of` tells `reader.present(c)` and the pairing."""
-    paired = {id(c) for c in attributed_deeds(ledger, subject)}
-    return tuple(c for c in ledger if proof_kind(c) is not None
-                 and (id(c) in paired if c.predicate in PAIRED_KINDS else c.subject == subject))
+    proven = [c for c in ledger if proof_kind(c) is not None]
+    paired = {id(c) for c in attributed_deeds(ledger, subject)} if any(c.predicate in PAIRED_KINDS for c in proven) else ()      # the doer test only where a paired kind stands to be asked
+    return tuple(c for c in proven if (id(c) in paired if c.predicate in PAIRED_KINDS else c.subject == subject))
 
 
 def deed_valence(axis_w: dict, c) -> float:
@@ -1636,7 +1642,7 @@ class LedgerReader:
             else:
                 groups.append([key, {}])
                 i = len(groups) - 1
-            origin = c.chain[0] if c.chain else c.holder
+            origin = claim_origin(c.chain, c.holder)
             wt = self._weigh(c)
             g = groups[i][1]
             g[origin] = max(g.get(origin, 0.0), wt)
@@ -2667,7 +2673,7 @@ def contradicts(a: Claim, b: Claim) -> bool:
 class DossierRow:
     """ONE CLAIM ON THE CASE BOARD (`11_GO_player_surface_contract_B.md` §5's fields). The rows that share `(subject, predicate, value)` are one GROUP and carry one `support`.
     `record` is the id of the document on his live `hold` this claim is the content of (a `content:<kind>` claim of a record he holds), else `None`; `proof_kind` is
-    the kind a Record's content claim has as a document (`RECORD_MATTER` of its `content:<kind>`, as `world_q.filings` reads a held Record's) where `record` is set, else `proof_kind`'s
+    the kind a Record's content claim has as a document (`matter_of_record` of its `content:<kind>`, as `world_q.filings` reads a held Record's) where `record` is set, else `proof_kind`'s
     kind of the claim (`""` where it is no proof: a cell, a refusal kind, a withheld confession); `against` the ids of his other claims on
     the same cell that disagree with this one."""
     claim: Optional[Claim]
@@ -2704,7 +2710,7 @@ def dossier(p: Person, subject: Optional[str] = None, fx: "Fixtures | None" = No
         support = 1.0 if weigh is None else LedgerReader(members, weigh, tick=tick, decay=decay)._support(members)[0]
         for c in members:
             rec = c.subject if content_kind(c) is not None and c.subject in held else None
-            rows.append(DossierRow(c, rec, (RECORD_MATTER.get(content_kind(c), "record") if rec is not None else proof_kind(c)) or "", support,
+            rows.append(DossierRow(c, rec, (matter_of_record(content_kind(c)) if rec is not None else proof_kind(c)) or "", support,
                                    tuple(o.id for o in p.ledger if o is not c and is_cell(c) and contradicts(c, o))))
     return tuple(rows)
 

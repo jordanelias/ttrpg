@@ -34,7 +34,7 @@ from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
-    adjourned_by, case_file_of, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
+    adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
@@ -714,13 +714,13 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             subjects += (Subject.entity("persons", a.actor, earns=PURSUIT_MOVED,
                                         fields=("pursuits",)),)
         # B24.14 -- THE SITTING IS WRITTEN ON THE CASE FILE: the exchange list (`queries/inputs.py::exchanges`, the value the Event's `ending` carries too) is
-        # appended to the file the docket item names (`case_file_of`) as its own receipt, so the stages and the Event are one list. Nothing is appended -- and no
+        # appended to the file the docket item names (`case_file_for`) as its own receipt, so the stages and the Event are one list. Nothing is appended -- and no
         # receipt is named -- where no beat entered or struck an item (every sitting at `sitting_exchanges` 0), or where the item has no case file.
         out = res.result.get("proceeding") if isinstance(res.result, dict) else None
         listed = tuple(exchanges(out.beats)) if isinstance(out, Outcome) else ()
         bench = adjourned_by(out.beats) if isinstance(out, Outcome) else None            # B24.38: the bench member whose `adjourn` closed the sitting, if one did
         listed += () if bench is None else ((ADJOURNED_STAGE, bench),)
-        case = next((c for c in (case_file_of(w, i) for i in items) if c in w.records), None) if listed else None
+        case = case_file_for(w, party) if listed else None
         if case is not None:
             subjects += (Subject.entity("records", case, earns=band_kind, fields=("stages",)),)
 

@@ -51,7 +51,7 @@ def records_of(w, who: str) -> list:
 def cite(w, ids: tuple, key: str = "sp0", **extra) -> Act:
     """The accuser's `speak` on the accused's matter citing `ids`, each claim with the `Said` CHOOSE would have copied from his own ledger."""
     ledger = {c.id: c for c in w.persons[G.ACCUSER].ledger}
-    said = {i: Said(c.subject, c.predicate, c.value, c.confidence, c.chain) for i, c in ledger.items() if i in ids}
+    said = {i: person_q.cited_said(c) for i, c in ledger.items() if i in ids}
     return Act(id=key, actor=G.ACCUSER, verb="speak", payload={"subject": G.ACCUSED, "cites": tuple(ids), "cited": said, **extra})
 
 

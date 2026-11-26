@@ -38,7 +38,7 @@ from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, MATTERS, RECORD_MATTER, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible,
     remove_distance, require_member, require_mortal_cause,
@@ -71,7 +71,7 @@ from .person_q import holders_named, vacant_named
 # v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
 from .person_q import contradicts, is_cell, record as record_of
 # B24.25: `filings` derives what a cited item is as proof, what it weighs and whether it impeaches a Record, off the one owners.
-from .person_q import cited_said, impeaches, proof_kind, proof_weight, teller_weight
+from .person_q import cited_said, claim_origin, impeaches, proof_kind, proof_weight, teller_weight
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -252,6 +252,12 @@ def case_file_of(w: World, item: dict) -> Optional[str]:
     return item.get(DOCKET_CASE) or item.get(DOCKET_PETITION)
 
 
+def case_file_for(w: World, matter: Optional[str]) -> Optional[str]:
+    """THE CASE FILE A MATTER'S DOCKET ITEM NAMES (`case_file_of`) where the world still holds that Record, else `None`: a computed or calendar item names none. The one reading of
+    'the case file of this matter' for the speech that files an item (`filings`), the sitting that is written on it (`_eff_determine`) and the host that reads its exhibits (`sigma`)."""
+    return next((c for c in (case_file_of(w, i) for i in docketed(w, matter)) if c in w.records), None)
+
+
 def docketed_row(w: World, subject: Optional[str]) -> Optional[dict]:
     """The `arrangements.yaml` row the act's matter (its `subject`) is docketed under, or `None`: nothing docketed, an item naming no row (every
     computed `open_case`, H-80), or more than one row on one matter (a hand-planted docket, which `_eff_determine` declines rather than choosing
@@ -319,11 +325,11 @@ def filings(w: World, a) -> Filings:
     p = w.persons.get(a.actor)
     if p is None or not isinstance(cites if cites is not None else (), (list, tuple)) or not isinstance(answers if answers is not None else (), (list, tuple)):
         return refuse
-    case = next((c for c in (case_file_of(w, i) for i in docketed(w, d.get("subject"))) if c in w.records), None)
+    case = case_file_for(w, d.get("subject"))
     stages = w.records[case].stages if case is not None else []
     admits = admitted_kinds(w.fixtures, docketed_row(w, d.get("subject")))
     answering = bool(answers)
-    own = {c.id: c for c in p.ledger}
+    own = {c.id: c for c in p.ledger} if cites else {}      # read only by a cite
     held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
     cited, weigh = d.get(CITED_KEY) or {}, teller_weight(p, w.fixtures, w.tick)
     standing = [st[4] for st in stages if is_filed(st) and st[2] == side and isinstance(st[4], Said)]       # what stands for his own side already
@@ -338,9 +344,9 @@ def filings(w: World, a) -> Filings:
             if kind is None or any(contradicts(ref, o) for o in (*standing, *(i.ref for i in items if isinstance(i.ref, Said)))):
                 return refuse
             weight = (float(proof_weight(ref)) if proof_kind(ref) is not None else 1.0) * weigh(c)
-            item, claims = Filing(ref, kind, MATTERS[kind]["bears_on"], weight, ref.chain[0] if ref.chain else a.actor), [*claims, c]
+            item, claims = Filing(ref, kind, MATTERS[kind]["bears_on"], weight, claim_origin(ref.chain, a.actor)), [*claims, c]
         elif cid in held and cid in w.records:
-            kind = RECORD_MATTER.get(w.records[cid].kind, "record")
+            kind = matter_of_record(w.records[cid].kind)
             item = Filing(cid, kind, MATTERS[kind]["bears_on"], 1.0, cid)
         else:
             return refuse
@@ -360,9 +366,11 @@ def answers_first(w: World, a) -> bool:
     """B24.26 (ADM edit 4) -- DOES THIS ACT ANSWER AN ITEM THE ROOM HEARD FIRST: a filing verb's act whose `answers` name a filed stage that carries the first-heard mark (`is_first`), read through
     `filings`, the one reader of what an answering act answers, so a refused act (which is never drawn) and an act that answers nothing read `False`. The answering `speak`'s host builder reads it
     into the `first_heard` term of the speech's obstacle (`Input.first_heard`)."""
-    if a.verb not in FILING_VERBS:
-        return False
-    f = filings(w, a)
+    return a.verb in FILING_VERBS and _first_heard(w, filings(w, a))
+
+
+def _first_heard(w: World, f: Filings) -> bool:
+    """`answers_first`'s reading of one `Filings`: it is not refused, names a case file and answers a stage carrying the first-heard mark."""
     return f.refused is None and f.case is not None and any(is_first(w.records[f.case].stages[i]) for i, _ in f.answers)
 
 
@@ -372,9 +380,11 @@ def answered_over(w: World, a) -> Optional[float]:
     contradicts it (`contradicts`, the pairing the host's relations read; none, when the answer is a finding that the Record is forged), floored at 0; the greatest of them where it answers several.
     It is the board's `proceeding._answerable` `over`, read at the speech: the abridged speech's difficulty is `answer_ob`, and it meets the `answer` term on this weight. [ASSUMPTION; Jordan to correct;
     revert: the plain speech's difficulty -- basis: the answering act's own weights stand in for the board's, which the speech has none of: an answered stage's `weight` is what it was filed at, an answer's is its derived weight before the band's share]"""
-    if a.verb not in FILING_VERBS:
-        return None
-    f = filings(w, a)
+    return _answer_over(w, filings(w, a)) if a.verb in FILING_VERBS else None
+
+
+def _answer_over(w: World, f: Filings) -> Optional[float]:
+    """`answered_over`'s reading of one `Filings`: `None` where it is refused, names no case file or answers nothing."""
     if f.refused is not None or f.case is None or not f.answers:
         return None
     stages = w.records[f.case].stages
@@ -389,8 +399,20 @@ def answered_over(w: World, a) -> Optional[float]:
 def cited_kinds(w: World, a) -> tuple:
     """B24.35 -- THE PROOF KINDS AN ACT CITES: the `matters` members of the items its `cites` file (`filings`, the one reader of what a citing act files), in the order cited, each once; `()`
     for an act that cites nothing and for one that `filings` refuses (it is never drawn). Read by the proceeding's host into `Present.backed`'s `cites` condition."""
-    f = filings(w, a)
+    return _kinds_cited(filings(w, a))
+
+
+def _kinds_cited(f: Filings) -> tuple:
+    """`cited_kinds`'s reading of one `Filings`."""
     return () if f.refused is not None else tuple(dict.fromkeys(i.kind for i in f.items))
+
+
+def hearing_terms(w: World, a) -> tuple:
+    """`(answers_first, cited_kinds, answered_over)` OF ONE ACT FROM ONE `filings` READ: what the proceeding's host (`seam/contest.py`) and the chooser's believed odds
+    (`sigma._believed_proceeding_chance`) hand a hearing's builder together, each equal to the single reader of its own name."""
+    f = filings(w, a)
+    filing = a.verb in FILING_VERBS
+    return filing and _first_heard(w, f), _kinds_cited(f), _answer_over(w, f) if filing else None
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
@@ -1027,12 +1049,6 @@ def declared_votes_by_member(w: World, matter: str, row: dict) -> dict:
         if n:
             signed[member] = n
     return signed
-
-
-def declared_votes(w: World, matter: str, row: dict) -> int:
-    """HOW MANY DISTINCT MEMBERS OF THE BENCH VOTE FOR THE MOTION -- those whose signed count (`declared_votes_by_member`) is positive: one body, two
-    readings (v11 CR-34's count, B24.11). It gates nothing now (`determine`'s `vote` conjunct is deleted: the count is the odds, not a gate)."""
-    return sum(1 for n in declared_votes_by_member(w, matter, row).values() if n > 0)
 
 
 # ===========================================================================

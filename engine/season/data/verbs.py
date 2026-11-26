@@ -2426,6 +2426,22 @@ def _load_filing_verbs(values) -> frozenset:
 FILING_VERBS = _load_filing_verbs(roster("filing_verbs"))
 
 
+# B24.35 (WGM edit 3): THE VERBS WHOSE SPEECH A HEARER'S SUSCEPTIBILITY GATES (`rosters.yaml: backed_verbs`, read in `seam/wrappers/sigma.py::_backed`; `argue`). REFUSED AT IMPORT when a
+# member names a verb the table lacks: a gate on a verb nothing forms would narrow no speech.
+def _load_backed_verbs(values) -> frozenset:
+    """`rosters.yaml: backed_verbs`' `values`, checked and frozen -- refused per member (above). A function, so a test can plant a bad line and watch it refuse."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        if v not in VERB_TABLE:
+            raise Forbidden(f"`rosters.yaml: backed_verbs` names {v!r}, and the verb table carries no such verb", "rosters.yaml",
+                            needs="a `verb_table.yaml` verb whose speech a hearer's susceptibility gates",
+                            law="B24.35 -- a ground backs an act of a verb; a member no verb has gates nothing")
+    return out
+
+
+BACKED_VERBS = _load_backed_verbs(roster("backed_verbs"))
+
+
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own
 # `Person.stance` rows naming it with a valence below zero (`rosters.yaml: own_stance_declines`, read in
 # `opening_set`; `forgive`). Keyed on the row's `writes:`: REFUSED AT IMPORT when a member names a verb the

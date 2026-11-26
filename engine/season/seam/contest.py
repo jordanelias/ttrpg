@@ -18,7 +18,7 @@ from typing import Any, Optional
 from ..data.verbs import VERB_TABLE
 from ..gaps import Forbidden, Unspecified
 from ..manifest import resolve as manifest_resolve
-from ..queries.world_q import answered_over, answers_first, cited_kinds, proceeding_row
+from ..queries.world_q import hearing_terms, proceeding_row
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -267,8 +267,9 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             proceeds = {}
             if act is not None and getattr(VERB_TABLE.get(act.verb), "proceeds", ()):
                 try:
-                    proceeds = dict(proceeds=proceeding_row(w, act), topic=topic, arranger=arranger, rig=rig, first_heard=answers_first(w, act),
-                                    cited=cited_kinds(w, act), answered_over=answered_over(w, act))
+                    row = proceeding_row(w, act)
+                    first_heard, cited, over = hearing_terms(w, act)
+                    proceeds = dict(proceeds=row, topic=topic, arranger=arranger, rig=rig, first_heard=first_heard, cited=cited, answered_over=over)
                 except Unspecified as no_row:
                     if no_row.where != "world_q.proceeding_row":
                         raise

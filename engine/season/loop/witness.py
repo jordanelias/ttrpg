@@ -829,6 +829,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                    for pid, e, _c in fan if reported.get((pid, e.id)) is None
                    for entity, kind in _ended_by_event.setdefault(e.id, tuple(_ended_entities(w, e)))}
     w._in_parallel_map = True
+    told: dict = {}                    # Event id -> `_told_items` of it, read at the first hearer who needs it
     for pid, e, channel in fan:
         p = w.persons.get(pid)
         if p is None:
@@ -1162,7 +1163,13 @@ def witness(self, token: Token, events: list[Event]) -> int:
         _act = self.act_of.get(e.id)
         # B24.24 (FI_05_B E-3): ONE LOOP OVER WHAT THE ACT PASSES ON -- the `Said` a telling carries (fixed at CHOOSE) and each claim a citation carries; `_told_items` owns
         # which Events and which items, and nothing below it changes: each lands through the same guard, refraction and credit.
-        for _i, _held in enumerate(_told_items(w, e, _act, conf) if _act is not None and pid != _act.actor and only is None else ()):
+        if _act is not None and pid != _act.actor and only is None:
+            if e.id not in told:                  # what an Event's telling passes on is the Event's, not the hearer's: read once for the fan
+                told[e.id] = _told_items(w, e, _act, conf)
+            _passed = told[e.id]
+        else:
+            _passed = ()
+        for _i, _held in enumerate(_passed):
             # The claim ids mint from the telling's id; the first item keeps it exactly, and a later one (a second citation) takes its place as a suffix, so no two
             # claims an act passes on share an id (`cites` names them by id).
             _tid = f"told:{e.id}" + (f":{_i}" if _i else "")
