@@ -1910,7 +1910,9 @@ rosters:
       those are super outdated. you are allowed to refer to the currently existing python work for
       those systems (and only those systems) in repository."* So the LIVE artifact for each is its
       Python, not its `*_v30.md`: `systems/combat/combat_engine_v1/`,
-      `systems/mass_battle/sim/`, `systems/social_contest/sim/contest/`. `contest_subsystem` reads
+      `systems/mass_battle/sim/`, and for the social contest `modules/social_contest/` (its SC05
+      kernel, `systems/social_contest/sim/contest/`, was retired at B24.33, ED-SC-0045: its game lives
+      in the hearing). `contest_subsystem` reads
       `sim_module:` and never `doc:` for that reason.
       This roster maps a PRIZE to the subsystem that owns it. The prize is what Part E's column
       carries; the subsystem is what `module_contracts.yaml` already names, so neither half is
@@ -1981,7 +1983,7 @@ rosters:
         person_inputs: "pool"
         provider: "social_contest"   # as `a standing`'s
         module_entry: "social_contest.roll"   # as `a standing`'s
-        # `determine` contests it (`speak` -> `a matter`, `tell` -> `a standing`).
+        # `argue` and `interrogate` contest it, each through its `proceeds:` row (B24.08); `speak` -> `a matter`, `tell` -> `a standing`.
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"

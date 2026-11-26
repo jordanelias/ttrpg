@@ -7151,7 +7151,7 @@ rows:
     default:   "() -- THE CONTROL, SHIPPED: no role is decided by the person's own cells, so every content hash is the one before B10.57 [ASSUMPTION; medium; Jordan to correct; revert: ()]"
     site:      "Fixtures npc_decider_roles, read by `decision/decider.py::decides_for` once per contest wrapper's choice; a role outside `engine.substrate.composition.ROLES` is refused at load (data/fixtures.py)"
     sweep:     ["() (control, SHIPPED)", "(combat.fight,)", "(combat.fight, mass_battle.army_order)"]
-    unblocks:  "B16's round choices and the wrappers of B22 and B24 deciding a choice by the person's own cells; B98's flip of the roles"
+    unblocks:  "B16's `combat.fight`; `social_contest.proceeding` and `mass_battle.resolve_field` wait on authored choice cells (content) and are B98's BLOCKED rows"
     cite:      "Workplan v12 B10.57 (IS-B2-CHAR-02 steps 1 to 5) and `decision/decider.py::make_decider` and `::decides_for`; the composition roles are `engine/substrate/composition.py` ROLES. Added by the batch orchestrator after B10.57's commit left `test_season_shape.py::test_w9_check3_every_fixture_read_resolves_to_a_register_site` red (a fixture the run reads names no site on any row). [ASSUMPTION; medium; Jordan to correct: the sweep points are the roles a wrapper could name, not a reading.]"
     source:    "workplan v12 B10.57; batch B10-character orchestrator, 2026-11-23"
 
