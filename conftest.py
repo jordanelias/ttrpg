@@ -22,6 +22,8 @@ import re
 
 import pytest
 
+PIN_NAMES = frozenset({"SHIPPED", "BUILD", "CENSUS"})   # the public names of engine/season/tests/_realm_goldens.py
+
 # marker -> a pattern over the test file's base name (without `.py`). One owner of the table.
 #
 # EVERY TEST BELONGS TO ONE LANE (Jordan, 2026-11-22: "each lane/subsystem is to have its own test suite ... no test
@@ -76,6 +78,11 @@ def pytest_collection_modifyitems(config, items):
             for suite, pat in SEASON_SUITES.items():
                 if pat.match(base):
                     item.add_marker(getattr(pytest.mark, suite))
+        # `shipped_pin`: the test reads a name the realm-goldens module owns (Jordan, 2026-11-26: the shipped-output pins are a
+        # POST-WORKPLAN gate). Derived from that owner, never listed per test: a new pin that imports `SHIPPED`, `BUILD` or `CENSUS` is marked.
+        fn = getattr(item, "function", None)
+        if fn is not None and PIN_NAMES.intersection(getattr(fn, "__code__", None).co_names if hasattr(fn, "__code__") else ()):
+            item.add_marker(pytest.mark.shipped_pin)
 
 
 @pytest.fixture(autouse=True)
