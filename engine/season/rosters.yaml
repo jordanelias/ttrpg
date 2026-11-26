@@ -719,7 +719,11 @@ rosters:
       `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337).
       `Holding` (VB-A): a rung the person holds and may found an office over, not yet founded (`world_q.holdings_to_found`); not a
       collection, stamped explicitly; `establish` declares it.
-    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding]
+      `Founder` (B21b.08, IN-30's occasion [ASSUMPTION; medium; Jordan to correct; revert: drop the value, the stamp and `opening_set`'s founding lines]):
+      A PERSON WHO HAS LEFT A FACTION AND HOLDS A SEAT OR LAND, stamped by `queries/world_q.py::creed_occasion` onto his own question, `Enemy`'s shape
+      (no collection; named by `data/verbs.py::FOUNDER_CLASS`). No row declares it: `opening_set` offers the creed `utter` on it
+      (`data/verbs.py::FOUNDING_VERB`, `FOUNDING_OPERANDS`).
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding, Founder]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"

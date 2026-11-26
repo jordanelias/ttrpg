@@ -2777,6 +2777,22 @@ if ENEMY_CLASS not in REFERENT_CLASSES:
                     needs="the war-context class in the closed roster",
                     law="v11 CR-87 -- a class stamped by name must be one the roster declares")
 
+# B21b.08 (IN-30's occasion, CP-T09-01; [ASSUMPTION; medium; Jordan to correct; revert: drop the value, the stamp and `opening_set`'s `founding` lines]):
+# A PERSON WHO HAS LEFT A FACTION AND HOLDS A SEAT OR LAND, as a referent of his own question -- `Enemy`'s shape (no collection, stamped by name by
+# `queries/world_q.py::creed_occasion`, refused at import off `rosters.yaml: referent_classes`). No row declares it. `FOUNDING_VERB` (the verb a creed
+# is founded by, B21b.05: no new verb) is offered on it, carrying `FOUNDING_OPERANDS`: the creed's mood and predicate (`rosters.yaml: factions.creed`),
+# so the Proposition it makes is a faction (`world_q.faction_props`).
+FOUNDER_CLASS = "Founder"
+if FOUNDER_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{FOUNDER_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the founding-occasion class in the closed roster",
+                    law="B21b.08 -- a class stamped by name must be one the roster declares")
+FOUNDING_VERB = "utter"
+if FOUNDING_VERB not in VERB_TABLE:
+    raise Forbidden(f"the founding verb {FOUNDING_VERB!r} is no verb-table row", "verb_table.yaml",
+                    needs="the row a creed is founded by (B21b.05)", law="B21b.08 -- the occasion offers a verb the table has")
+FOUNDING_OPERANDS = {"mood": _rosters.FACTION_CREED["mood"], "predicate": _rosters.FACTION_CREED["predicate"]}
+
 # v11 CR-56 (reasons-to-convene RL1 [ASSUMPTION; medium; Jordan to correct; revert: drop with
 # `queries/world_q.py::matters_awaiting`]): THE REMIT ACTS A SEAT CONVENES A SITTING THROUGH -- the `remit:`
 # alternatives of every row that writes a Date's `due_at` (`convene`'s, today `convene`), read off the rows'

@@ -1082,7 +1082,10 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
 def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None) -> float:
     """`p`'s OPINION OF A FACTION, on `[-3, +3]`: the sum of `opinion_terms` (v9 IN-70). `0` is
     indifference -- each term's own midpoint -- so the sign is the side. Computed when asked, never
-    written (A-29, T-a). Person-side; the World half is `world_q.opinion_of`. Added left to right, not
+    written (A-29, T-a). Person-side; the World half is `world_q.opinion_of`. Consumed through ONE point,
+    `world_q.INDIFFERENCE`, as `<` (IN-70's gate in `opinion_referents`, and B21b.08's leave body: a member's opinion of his
+    own faction below it offers him the release) and as `>` (B21b.08's join filter, `world_q.joinable`: a rival creed passes only
+    above both it and his opinion of his own). Added left to right, not
     by `sum()`, whose float summation is compensated since Python 3.12: one order, one number (`fmath.ltr_sum`'s
     rule; the means inside `opinion_terms` go through it too)."""
     pursuit, affiliation, reg = opinion_terms(p, expected, engaged, regarded, fx)
