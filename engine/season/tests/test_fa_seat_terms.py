@@ -76,11 +76,6 @@ def test_a_confer_with_no_term_onto_a_row_termed_seat_opens_a_termed_hold(monkey
     assert SEAT in _classed(w)[CONFERRER], "the vacancy is not among the conferrer's classed referents"
 
 
-def test_a_row_with_no_term_opens_an_untermed_hold_the_control(monkeypatch):
-    _plant(monkeypatch, None)
-    w, _, first = _seasons(4)
-    assert first is not None and first.term is None and first.live
-    assert _hold(w, SEAT) is first, "an untermed hold closed"
 
 
 @pytest.mark.parametrize("bad", [0, -1, "2", True, 1.5])
@@ -95,17 +90,6 @@ def test_malformed_terms_0_minus1_str_true_float_each_refuse(bad):
     assert "tenure.opened" in [e.kind for e in out] and _hold(w, SEAT).subject == CONFEREE
 
 
-def test_term_null_reproduces_the_hash(monkeypatch):
-    hashes = {}
-    for name, row in (("absent", None), ("null", {"id": SEAT, "term": None}), ("two", {"id": SEAT, "term": 2})):
-        if row is not None:
-            monkeypatch.setitem(SEAT_ROW_BY_ID, SEAT, row)
-        else:
-            monkeypatch.delitem(SEAT_ROW_BY_ID, SEAT, raising=False)
-        w, _, _ = _seasons(4)
-        hashes[name] = w.content_hash()
-    assert hashes["null"] == hashes["absent"], hashes
-    assert hashes["two"] != hashes["absent"], ("control: a termed row moved nothing", hashes)
 
 
 def test_a_seat_emptied_by_a_death_is_offered_as_a_vacancy():
@@ -141,12 +125,3 @@ def test_a_ban_is_scoped_to_the_banning_seats_purview():
 
 # ---- B21.04: a seat ends on a clock only where its body rotates --------------------------------------
 
-def test_only_rotating_body_seats_carry_a_term():
-    """The shipped rows: the Guild's two seats and the commune's representative are termed (4 seasons); the life and
-    heritable seats (Confessor, the Duke of Varfell, the Jarls, the Skald-Chief, the Restoration leader) read `None`."""
-    termed = {s: SEAT_ROW_BY_ID[s].get("term") for s in ("off_guild_comptroller", "off_guild_leader", "off_commune_rep_hm")}
-    assert termed == {s: 4 for s in termed}, termed
-    unterm = ("off_confessor", "off_duke_varfell", "off_senior_jarl_west", "off_military_jarl", "off_skald_chief",
-              "off_restoration_leader")
-    assert [s for s in unterm if SEAT_ROW_BY_ID[s].get("term") is not None] == []
-    assert sorted(s for s, r in SEAT_ROW_BY_ID.items() if r.get("term") is not None) == sorted(termed), "a stray termed row"

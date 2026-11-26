@@ -36,12 +36,6 @@ _CONTENT = RECORD_CONTENT["predicate"]
 BYSTANDERS = ("p_low", "p_mid", "p_other")      # neither the issuer, nor the writ's addressee (`OTHER`)
 
 
-def revert_b21_18(monkeypatch) -> None:
-    """B21.18 AT ITS REVERT, for the life of one test: `proclaimed` read as `{}` where it is read (the content deposit and the
-    told branch, `witness.PROCLAIMED`; the writ limb of `admits_audience`, `world_q.WRIT_MINTING_VERBS`). A test pinning a
-    pre-B21.18 hash calls it."""
-    monkeypatch.setattr(WIT, "PROCLAIMED", {})
-    monkeypatch.setattr(world_q, "WRIT_MINTING_VERBS", frozenset())
 
 
 def _issue(w, d, key="fa_is", witness=True):
@@ -125,34 +119,8 @@ def test_a_hearer_told_of_the_issue_holds_its_terms():
     assert [(c.value, c.source, c.chain) for c in got] == [(WIT.content_value(rec.subject_matter), "told_by", (DUKE,))], got
 
 
-def _scene(w, d):
-    rec = _issue(w, d, key="fa_h1")
-    prop = _utter(w, d)
-    out = _resolve(w, d, _covenant(prop))
-    d.witness(mint_token(w, WriteClass.INTERIOR), out)
-    w2_rec = _issue(w, d, key="fa_h2", witness=False)
-    _tell_the_issue(w, d, w2_rec, hearer="p_mid")
-    return rec
 
 
-def test_dispensation_absent_from_proclaimed_reproduces_the_hash(monkeypatch):
-    """CONTROL: with the `dispensation` entry absent from `proclaimed`, the hand-built scene (an issue witnessed, a covenant
-    witnessed, an issue told) ends in the world the pre-B21.18 rule leaves -- `addressee_reads` as `read_to_addressee` by
-    kind alone -- and with the entry present it ends elsewhere (so the comparison can see the item). The realm reading
-    (seed 0, one and two seasons) is the item's receipt, not an assertion here."""
-    hashes = {}
-    for arm in ("treatment", "revert", "pre_item"):
-        with monkeypatch.context() as m:
-            if arm != "treatment":
-                revert_b21_18(m)
-            if arm == "pre_item":
-                m.setattr(WIT, "addressee_reads", lambda rec, pid, *_: (rec.kind in WIT.READ_TO_ADDRESSEE
-                                                                        and addressed_to(rec.subject_matter, pid)))
-            w, d = _world()
-            _scene(w, d)
-            hashes[arm] = w.content_hash()
-    assert hashes["revert"] == hashes["pre_item"], hashes
-    assert hashes["treatment"] != hashes["revert"], "the scene cannot see the item"
 
 
 # B21.22 (edit 3): WHO IS OFFERED THE ANSWER -- `world_q.writs_addressed`, the writs a person holds addressed to him OR

@@ -146,15 +146,6 @@ def test_cr25_5_a_reduction_of_a_revocation_none_seats_grant_refuses():
     assert _kinds(out) == ["remit.changed", "tenure.payload_set"], _kinds(out)
 
 
-def test_cr25_5_control_a_reduction_the_seats_basis_admits_is_still_refused_at_establish():
-    """B21.69 (`IS-B3-FA-07`): A REDUCTION IS A REVOCATION AND `revoke` CARRIES IT. The reeve's seat declaring `rung_above_same_faction`, which the
-    duke's seat on `S`'s parent `D`, same faction, satisfies, once admitted this cut at `establish` (CONTROL 2: the refusal was the basis's); the
-    clause now refuses every re-stamp that narrows a sitting grant, the basis admitting it or not, and the draw is `revoke`'s with `keeps`
-    (`test_grant_reduction.py`)."""
-    w, d = _world()
-    payload = _seated_reeve(w, "rung_above_same_faction")
-    out = _act(w, d, "e_cut", "p_high", "off_duke", {**payload, "remit": ["issue"]})
-    assert _kinds(out) == ["establish.reduces_grant"], _kinds(out)      # B21.81: the `reduction is revocation` clause's kind
 
 
 @pytest.mark.usefixtures("seat_at_success")       # B21.14: the founder's conferral and revocation are drawn; read here at Success

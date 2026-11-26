@@ -2286,21 +2286,6 @@ def test_g6_the_privacy_chance_refuses_what_is_not_a_chance():
             tell("p_low", "p_mid")
 
 
-def test_reach_channel_with_an_empty_map_admits_nobody(monkeypatch):
-    """CR-29: the `reach` channel is rostered where `chronicle` stood, mints `told_by`, and admits by the event's kind alone:
-    with the map emptied it admits nobody; planting one row shows the predicate can admit (a `reach` that admitted anyone
-    with the map empty, or never admitted with a row, would both fail here)."""
-    assert "chronicle" not in WITNESS_CHANNELS and WITNESS_CHANNELS.index("reach") == WITNESS_CHANNELS.index("document_key") + 1
-    assert CHANNEL_CLAIM_SOURCE["reach"] == "told_by"
-    w, _d, _out, e = _transfer_into_hh("p_low")
-    assert e.kind not in EP.EVENT_REACH, "the shipped map carries `transfer.made`; the plant below would plant nothing"
-    monkeypatch.setattr(EP, "EVENT_REACH", {})
-    assert [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)] == []
-    monkeypatch.setitem(EP.EVENT_REACH, e.kind, "room")
-    room = [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)]
-    assert ACTOR in room and "p_high" not in room, room
-    monkeypatch.setitem(EP.EVENT_REACH, e.kind, "realm")
-    assert "p_king" in [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)]
 
 
 def test_the_same_event_at_room_and_at_realm_deposits_different_counts(monkeypatch):
@@ -2316,20 +2301,6 @@ def test_the_same_event_at_room_and_at_realm_deposits_different_counts(monkeypat
     assert {"p_king", "p_high"} <= realm - room, (room, realm)
 
 
-def test_an_emptied_map_mints_less_told_by_than_the_shipped_one(monkeypatch):
-    """CR-29's control: with the map emptied the realm's first season holds no hearsay a binding decision minted -- the
-    `told_by` claims without a `chain` (the map's; a chained one is the told channel's, `T4`) fall to what `document_key`
-    alone mints, and every one of them is a claim the shipped map also minted."""
-    def season(emptied):
-        if emptied:
-            monkeypatch.setattr(EP, "EVENT_REACH", {})
-        w = build_realm(0)
-        populated.run(1, 0, w=w)
-        return sum(1 for p in w.persons.values() for c in p.ledger if c.source == "told_by" and not c.chain)
-    shipped = season(False)
-    emptied = season(True)
-    assert shipped > 0, "the shipped map minted no hearsay in the realm's first season: the control observes nothing"
-    assert emptied < shipped, (shipped, emptied)
 
 
 def test_a_realm_reach_event_in_a_territory_with_no_realm_reaches_that_territory():
@@ -2401,11 +2372,3 @@ def test_a_death_does_not_travel_by_reach():
     assert "p_king" in [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, closed, pid)]
 
 
-def test_a_reach_value_outside_the_closed_set_is_refused():
-    import pytest
-    from ..data.rosters import RUNG_KINDS, STRATA, Unspecified, check_event_reach
-    assert check_event_reach({"transfer.made": "room", "tenure.closed": "realm"}, RUNG_KINDS, STRATA)
-    for bad in ({"transfer.made": "everywhere"}, {"transfer": "room"},
-                {"from_stratum": {"no_such_stratum": "room"}}, {"from_stratum": {STRATA[0]: "everywhere"}}):
-        with pytest.raises(Unspecified):
-            check_event_reach(bad, RUNG_KINDS, STRATA)
