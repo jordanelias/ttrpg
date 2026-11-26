@@ -107,7 +107,7 @@ SIGMA_N_COEFF = 0.8     # sigma_N = 0.8 * sqrt(Pool)      # [canonical: modifier
 OB_MIN = 1              # the floor a favourable modifier may not push an obstacle below (`eff_ob`); `modules/social_contest/roll.py::obstacle` lifts a composed obstacle to it
 
 # Per-die stats (params/core.md §Expected Value): TN7 μ/σ per die. GENERAL, not contest-specific
-# — the contest's de-saturation extension reads them from here (ED-SC-0032).
+# (the contest's de-saturation extension, ED-SC-0032, read them from here until it was retired; see below).
 MU_PER_DIE = dice_engine.MU_PER_DIE        # alias of the owner (engine/dice_engine/dice_engine.py)
 SD_PER_DIE = dice_engine.SIGMA_PER_DIE     # alias of the owner; the owner's name is SIGMA_PER_DIE
 # OVERWHELM_SIGMA was a contest constant (ED-SC-0032) and left this module with the contest's
@@ -420,5 +420,5 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, *, rng: Draw) -> flo
 # WHAT TO CALL INSTEAD: `dice_engine.degree_from_net(net, ob, extension=..., **context)` for the
 # ladder.
 #
-# The MU/SD per-die constants stay here: those ARE general, and the extension reads them from
-# this module.
+# The MU/SD per-die constants stay here: those ARE general (`modules/social_contest/proceeding.py`
+# reads them); the retired extension read them from this module too.

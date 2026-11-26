@@ -74,21 +74,34 @@ def derived(w) -> tuple:
     return person_q.teller_weight(w.persons[G.ACCUSER], w.fixtures, w.tick)(claim) * float(person_q.proof_weight(claim)), 1.0
 
 
+def _close_read(w) -> tuple:
+    """`(lever, terms)` OF THE MATTER'S OWN CLOSE (B24's close, R1): the accuser's `determine` of the accused as the host builds it (`proceeding_input` on the docket's row), the board's leverage on
+    its opening sitting (`proceeding._lever`: here the filed exhibits alone) and the obstacle terms of the presiding seat's draw at that leverage (`close_record`)."""
+    P = importlib.import_module("modules.social_contest.proceeding")
+    act = Act(id="t:close", actor=G.ACCUSER, verb="determine", via=G.ACCUSER_SEAT, payload={"subject": G.ACCUSED})
+    row, form, _m, _i = world_q.proceeding_row(w, act)
+    inp, _card = sigma.proceeding_input(w, [G.ACCUSER, G.ACCUSED], verb="determine", subject=G.ACCUSED, topic=G.ACCUSED, effort=0, row=row, form=form)
+    lever = P._lever(inp, P.start(inp))
+    return lever, dict(P.obstacle(P.close_record(inp, 0.0, lever)[1])[1])
+
+
 @functools.lru_cache(maxsize=None)
 def _filing_run(seed: int) -> dict:
     """ONE FILING SPEECH, `seed`'s: the band drawn, the stages it appended, the told claims each hearer then held about the accused, and what the case file's exhibits are at `case_file` with the levels
-    they bring (`roll.proof_levels`) and the obstacle terms the roll then reads."""
+    they bring to the single roll (`roll.proof_levels`) and the obstacle terms it then reads, and the leverage they bring to the matter's own close (`_close_read`) with that close's terms."""
     w, d, case = hearing(seed, "case_file")
     before = len(w.records[case].stages)
     rec = records_of(w, G.ACCUSER)[0]
     roll = importlib.import_module("modules.social_contest.roll")
     read = lambda: sigma.contest_input(w, [G.ACCUSER, G.ACCUSED], verb="arrest", subject=G.ACCUSED, room=world_q.place_of(w, G.ACCUSER))
     bare = dict(roll.obstacle(read())[1])                                                      # the obstacle with nothing filed
+    close_bare = _close_read(w)
     out = fold_and_witness(w, d, cite(w, ("c_deed", rec)))
     inp = read()
     told = {p: [c for c in w.persons[p].ledger if c.source == "told_by" and c.subject == G.ACCUSED and c.predicate == DEED] for p in hearers(w)}
     return dict(band=out[0].degree, kind=out[0].kind, changes=out[0].changes, stages=tuple(w.records[case].stages[before:]), derived=derived(w), rec=rec,
-                exhibits=inp.exhibits, levels=composition.require(sigma.PROOF_LEVELS_ROLE)(inp), terms=dict(roll.obstacle(inp)[1]), bare=bare, told=told, proofs=inp.proofs)
+                exhibits=inp.exhibits, levels=composition.require(sigma.PROOF_LEVELS_ROLE)(inp), terms=dict(roll.obstacle(inp)[1]), bare=bare, told=told, proofs=inp.proofs,
+                close=_close_read(w), close_bare=close_bare)
 
 
 def test_admission_follows_the_citing_band_over_200_seeds():
@@ -117,18 +130,25 @@ def test_admission_follows_the_citing_band_over_200_seeds():
 def test_excluded_items_add_no_proofs_level():
     """ADM's falsifier: an excluded item changes nothing the roll reads. At `case_file` the exhibits of the matter after a `Failure` filing are NONE and the `proofs` levels (0, 0), the speaker's own ledger
     read for the matter by nothing (`proofs` 0.0); the same filing at `Partial` brings ONE level (half of 1.95) and at `Success` and `Overwhelming` TWO; and at every band the obstacle terms are the empty
-    case file's, to the term (A-25: standing items are leverage, never an obstacle term). FALSIFIER: an `excluded` stage counted as an exhibit gives `Failure` the levels of `Success`."""
-    levels, checked = {}, 0
+    case file's, to the term (A-25: standing items are leverage, never an obstacle term). THE MATTER'S OWN CLOSE reads the same (B24's close, R1: `determine` proceeds, so it reads the file itself):
+    its board leverage before the filing is 0.0 and after it is the same count of `proof_level` levels (none at `Failure`), its terms the empty file's.
+    FALSIFIER: an `excluded` stage counted as an exhibit gives `Failure` the levels of `Success`; a close that reads no exhibit stays at 0.0 after every band."""
+    from engine.dice_engine.sigma_leverage import levels_to_net_sigma
+    levels, closes, checked = {}, {}, 0
     for seed in range(SEEDS):
         r = _filing_run(seed)
         levels.setdefault(r["band"], set()).add(r["levels"])
+        closes.setdefault(r["band"], set()).add(r["close"][0])
         if r["band"] == "Failure":
             assert r["exhibits"] == () and r["levels"] == (0, 0) and r["proofs"] == 0.0, (seed, r["exhibits"])
         else:
             assert len(r["exhibits"]) == 2, seed
         assert r["terms"] == r["bare"], (seed, r["band"])
+        assert r["close_bare"][0] == 0.0 and r["close"][1] == r["close_bare"][1], (seed, r["band"], r["close"], r["close_bare"])
         checked += 1
     assert checked == SEEDS and levels == {"Failure": {(0, 0)}, "Partial": {(1, 0)}, "Success": {(2, 0)}, "Overwhelming": {(2, 0)}}, levels
+    lv = lambda n: levels_to_net_sigma(["minor"] * n, [])
+    assert closes == {"Failure": {lv(0)}, "Partial": {lv(1)}, "Success": {lv(2)}, "Overwhelming": {lv(2)}}, closes
 
 
 def test_partial_enters_at_half_weight():

@@ -703,7 +703,8 @@ _docketed_row, _admitted_proofs = docketed_row, admitted_kinds
 # ---------------------------------------------------------------------------------------------
 # THE CASE FILE'S EXHIBITS (B24.21; EVID_B "Exact edits" 5). Where `Fixtures.evidence_from` is `case_file`, the `proofs` a docketed matter's act brings are the exhibits filed on the matter's
 # case file, not the speaker's ledger: this reader turns the file's `filed` stages into the `Item`s `SocialContestInput.exhibits` carries, each with its relation to the others, and
-# nothing else. The host does NOT call `standing` and imports nothing of the evidence module: the roll counts them (`roll.proof_levels`, reached by its composition row, `_with_exhibits`).
+# nothing else. The host does NOT call `standing` and imports nothing of the evidence module: the roll counts them (`roll.proof_levels`, reached by its composition row, `_with_exhibits`),
+# and a sitting's close counts them (`proceeding._lever`, on `Input.exhibits`, which `proceeding_input` builds by this same reader: B24's close, R1).
 # ---------------------------------------------------------------------------------------------
 # THE STAGES ARE `queries/inputs.py`'s (`is_filed`, `is_answered`: the ONE owner of their shapes; `_eff_speak` writes them, this reads them).
 _CONTRADICTS, _AGREES = "contradicts", "agrees"       # the two relations `Item.pairs` names; the module reads the words, the host does not import it
@@ -716,7 +717,8 @@ def _case_file_of_matter(w: Any, subject: Optional[str]) -> Optional[str]:
 
 def _filed_case(w: Any, room: Optional[str], subject: Optional[str]) -> Optional[str]:
     """THE CASE FILE A HEARD ACT'S `proofs` ARE READ FROM, or `None` (B24.21, B24.43): at `evidence_from: case_file`, the file a matter's docket item names where a room hears the act; else `None`, and the ledger
-    is read (`world_q.proofs`). The ONE reader of the arm, for the dealt record (`_read_social_roll`) and the believed one (`odds_of`), so the two cannot read one matter's proofs from two places."""
+    is read (`world_q.proofs`). The ONE reader of the arm for the single roll, the dealt record (`_read_social_roll`) and the believed one (`odds_of`), so the two cannot read one matter's proofs
+    from two places. A verb that proceeds never reaches either: its sitting reads the same file by `_case_file_of_matter` (`proceeding_input`; a sitting has no room operand)."""
     return _case_file_of_matter(w, subject) if room is not None and w.fixtures.get("evidence_from") == "case_file" else None
 
 
@@ -746,7 +748,7 @@ def _exhibits_of(w: Any, case: str, known: Optional[Any] = None) -> tuple:
     the stage's first-heard mark (`inputs.is_first`, B24.26): an `answer` to the exhibit meets the `first_heard` term.
     `known` (B24.43) is the believer, a `Person`, or `None` for the dealt record (the whole file): the file as HE knows it (`_knows`), a stage he knows nothing of no exhibit, and no relation
     to or from it (he cannot see a clash with what he has not heard), the stage places and the answers the file's own."""
-    refs, items = {}, []
+    items = []
     stages = w.records[case].stages
     for i, st in enumerate(stages):
         if not is_filed(st) or (known is not None and not _knows(known, st[4])):
@@ -755,14 +757,51 @@ def _exhibits_of(w: Any, case: str, known: Optional[Any] = None) -> tuple:
         rec = None if isinstance(ref, Said) else w.records.get(ref)
         kind = (proof_kind(ref) or "testimony") if isinstance(ref, Said) else RECORD_MATTER.get(rec.kind, "record") if rec is not None else "record"
         iid = f"{case}#{i}"
-        refs[iid] = ref if isinstance(ref, Said) else None
         answers = [(_BAND_PLACE[sa[3]], sa[3], sa[4]) for sa in stages if is_answered(sa) and sa[2] == i]      # the answers drawn against this exhibit
         best = max(answers)[1] if answers else None                                                                                   # the best band, as the sitting keeps it (B24.19)
         items.append(Item(iid, kind, float(weight), about=ref.subject if isinstance(ref, Said) else ref, side=side, rung=rung, origin=origin,
                           cell=(ref.subject, ref.predicate, ref.value) if isinstance(ref, Said) else (), answered_band=best,
                           forged_found=any(imp for _, _, imp in answers), first=is_first(st)))
-    return tuple(replace(it, pairs=tuple((o.id, how) for o in items if o.id != it.id and refs[it.id] is not None and refs[o.id] is not None
-                                         and (how := _relation(refs[it.id], refs[o.id])) is not None)) for it in items)
+    return _paired(items)
+
+
+def _paired(items) -> tuple:
+    """EACH `Item` WITH ITS `pairs` (B24.19's cell): `(other id, _relation of the two cells)` for every other item of `items` that has a `cell`, the relation the pairing rule's
+    owner gives (`person_q.contradicts`, through `_relation`). THE ONE PASS the host computes `Item.pairs` by: a case file's exhibits (`_exhibits_of`) and a sitting's hands with
+    the matter's exhibits together (`proceeding_input`, B24's close R2), so a sitting's `answer`, agreement and corroboration read the same relation as the case file's. An item
+    with no cell (a Record, a seat, an oath, a false word) is paired with nothing."""
+    said = [Said(*it.cell, 0) if it.cell else None for it in items]
+    return tuple(replace(it, pairs=tuple((o.id, how) for o, b in zip(items, said) if o.id != it.id and a is not None and b is not None and (how := _relation(a, b)) is not None))
+                 for it, a in zip(items, said))
+
+
+def _heard_on_docket(verb: str) -> bool:
+    """IS `verb` A HEARING OF A DOCKETED MATTER: its `proceeds:` cell names the docket's row (`speak`, `determine`). The one reading of the cell for the arrangement the docket
+    gives a sitting (`arranged_by`) and for the case file a sitting reads its exhibits from (`proceeding_input`)."""
+    return any(entry[1] == PROCEEDS_DOCKET for entry in getattr(VERB_TABLE.get(verb), "proceeds", ()))
+
+
+def _sitting_items(w: Any, room: tuple, exhibits: tuple) -> tuple:
+    """`(room, exhibits)` OF ONE SITTING, PAIRED (B24's close, R1 and R2): every item in a hand and every filed exhibit, each with its relation to all the others (`_paired`, one
+    pass), so an item filed and also held is the same cell to `evidence.standing` (the same origin corroborates once, the other side's same cell counts for neither). A Record
+    filed on the case file has no cell to pair by, so it leaves its holder's hand: it is before the room already, and shown twice it would count twice."""
+    filed = {e.about for e in exhibits if not e.cell and e.about in w.records}
+    hands = [tuple(it for it in p.items if it.id not in filed) for p in room]
+    paired = _paired((*exhibits, *(it for h in hands for it in h)))
+    out, k = [], len(exhibits)
+    for p, h in zip(room, hands):
+        out.append(replace(p, items=paired[k:k + len(h)]))
+        k += len(h)
+    return tuple(out), paired[:len(exhibits)]
+
+
+def _on_axis(exhibits: tuple, bearer_side: str) -> tuple:
+    """THE EXHIBITS ON A SITTING'S AXIS: a filed stage's `side` is the case's (`world_q.side_of`: `for` the accusation, `against` the accused's own plea), a sitting's is the
+    bearer's (`for` is `claimants[0]`, `proceeding_input`). Where the bearer is on the case's `against` (the accused speaking to his own matter) every side turns over; else
+    they are the same axis and nothing changes."""
+    if bearer_side == "for":
+        return exhibits
+    return tuple(replace(e, side=None if e.side is None else other_side(e.side)) for e in exhibits)
 
 
 _side_of = side_of     # `world_q.side_of`: the side a speech to a matter is on, read by the host's roller and by the speech that files his exhibits (B24.25)
@@ -1609,7 +1648,7 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
             continue
         if t.kind == "hold" and t.object in w.records:
             rec = w.records[t.object]
-            out.append(Item(rec.id, RECORD_MATTER.get(rec.kind, "record"), 1.0, source=p.id))
+            out.append(Item(rec.id, RECORD_MATTER.get(rec.kind, "record"), 1.0, source=p.id, origin=rec.id))     # a Record's origin is itself (`world_q.filings`' rule)
         elif t.kind == "hold" and t.object in w.offices:
             out.append(Item(t.id, "title", 1.0, source=p.id, about=t.object))
         elif t.kind == "oblige" and not t.imposed and t.subject == p.id:
@@ -1620,7 +1659,8 @@ def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
             kind = proof_kind(c)
             if c.subject == ctx.topic and kind is not None:
                 out.append(Item(c.id, kind, _clip01(present_confidence(c.confidence, c.when, w.tick, decay) / full), source=p.id, about=c.subject,
-                                cell=(c.subject, c.predicate, c.value)))      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)
+                                cell=(c.subject, c.predicate, c.value),      # the cell as held, the shape `_exhibits_of` gives a filed claim (B24.21)
+                                origin=c.chain[0] if c.chain else p.id))     # the root of its chain, else his own (`world_q.filings`' rule): what `impugn` halves by (R2)
         if side is not None:
             out.extend(false_items(p, ctx.topic, side, ctx.fx, w.tick))
     return tuple(it for it in out if it.kind in ctx.admits)
@@ -1708,7 +1748,8 @@ def bench_reading(w: Any, viewer: str, seat: str, sign: int) -> int:
 
 def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[str], topic: Optional[str], effort: int, row: dict,
                      arranger: Optional[str] = None, rig: float = 0.0, form: str = "auto", state: Any = None,
-                     seen: Optional[Mapping] = None, first_heard: bool = False, cited: tuple = (), answered_over: Optional[float] = None) -> tuple:
+                     seen: Optional[Mapping] = None, first_heard: bool = False, cited: tuple = (), answered_over: Optional[float] = None,
+                     knower: Any = None) -> tuple:
     """`(Input, Card)`: THE HOST BUILDER OF A PROCEEDING (V2 p2 §A, §H, §I; B24p.13). `claimants[0]` is the bearer (`for`); the other party is the
     next claimant, else `subject` where he is a person other than the bearer, else (where the rite gives the other side moves) the most opposed
     man on the floor. `row` is an arrangement row (a seeded one, or `abridged(row)`'s); `form` is `full`, `abridged` or `auto` (abridged where
@@ -1723,7 +1764,10 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
     (`believed_proceeding_odds`) pass the chooser's picture of the others. `first_heard` (B24.26) is `world_q.answers_first` of the act: the speech answers an item the room heard first,
     and meets the `first_heard` term (`Input.first_heard`). `cited` (B24.35) is `world_q.cited_kinds` of the act: the proof kinds it cites, which `cites` (`WHEN_BACKING`) reads
     into each hearer's `Present.backed`; the arguer of every speech of the sitting is the bearer, `claimants[0]`. `answered_over` (B24.43) is `world_q.answered_over` of the act: the weight the item it answers
-    holds over its answer (`Input.answered_over`), which makes the abridged speech the sitting's `answer` (difficulty `answer_ob`, the `answer` term on this weight)."""
+    holds over its answer (`Input.answered_over`), which makes the abridged speech the sitting's `answer` (difficulty `answer_ob`, the `answer` term on this weight).
+    THE CASE FILE (B24's close, R1; B24.20, B24.21): for a verb heard on the docket (`_heard_on_docket`) at `evidence_from: case_file`, the matter's filed exhibits
+    (`_exhibits_of` of `_case_file_of_matter(topic)`, the file as `knower` knows it where a reader's odds are built, `believed_proceeding`) are `Input.exhibits`, on the sitting's
+    axis (`_on_axis`), paired with every item in a hand (`_sitting_items`); the module counts them on the close (`proceeding._lever`). Never the board."""
     fx = w.fixtures
     era, regime, strife = CONTEXT["eras"][ERA], CONTEXT["regimes"][REGIME], CONTEXT["strife"][STRIFE]
     if not claimants:
@@ -1822,12 +1866,14 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
                    rank_key=_rank_key(rite.issues[0] if rite.issues else None),
                    lean=public_lean(w, close, topic, row), cited=tuple(cited), verb=verb)
     room = tuple(_present(w, (seen or {}).get(x, w.persons[x]), side, decides, ctx) for x, (side, decides) in cells.items())
+    case = _case_file_of_matter(w, topic) if fx.get("evidence_from") == "case_file" and _heard_on_docket(verb) else None
+    room, exhibits = _sitting_items(w, room, _on_axis(_exhibits_of(w, case, known=knower) if case is not None else (), _side_of(fid, subject)))
     dials = dict(proceeding_dials(fx))
     dials["moves"] = {m: (r["effect"], r["draw"]) for m, r in PROCEEDING_MOVES.items()}      # the two rosters the module is handed (its head)
     dials["reads"] = {g: r["reads"] for g, r in GROUNDS.items()}
     inp = Input(rite=rite, matter=topic if topic is not None else (subject or ""), room=room,
                 grounds=tuple((g, r["reason"], era[g]) for g, r in GROUNDS.items()), dials=MappingProxyType(dials), state=state,
-                frames=tuple(sorted({(c, t) for p in room for c, t, _, _ in p.holds})), first_heard=first_heard, answered_over=answered_over)
+                frames=tuple(sorted({(c, t) for p in room for c, t, _, _ in p.holds})), first_heard=first_heard, answered_over=answered_over, exhibits=exhibits)
     return inp, card(inp, row, Arrangement(arr if tilt > 0 else None, tilt, None if tilt <= 0 else other_side(arr_side), tuple(recused)))
 
 
@@ -1964,12 +2010,13 @@ def _believed_chance(inp: Input, pick: _Pick, option: Any) -> Optional[float]:
     """`odds=` OF THE PICK (B24.13): the chance the matter goes the mover's way on the room as HE reads it after `option`. `Option.ev` is the option's PERCEIVED worth to
     the mover in track units (it carries what the option costs him, which is how the Class S costs of B24.12 reach the believed verdict), so the believed track it
     leaves, toward `for`, is `t + _sg(side) * ev` with `t = _sg(side) * view.mood * mood_scale` (`view_odds`' reading). `p_carried` is P(carried) toward `for` (the module's
-    pure closed form), so the chance is it for a `for` mover and `1 - it` for an `against` mover. Nothing true enters it. `None` where nothing is drawn (a `consent` close)."""
+    pure closed form), so the chance is it for a `for` mover and `1 - it` for an `against` mover, on the board's leverage the view carries (`View.lever`, the close's own
+    `_lever`: one ladder with `view_odds` and the close, R12). Nothing true enters it. `None` where nothing is drawn (a `consent` close)."""
     if inp.rite.close == "consent":
         return None
     v = pick.view
     sg = SIDE_SIGN.get(v.side, -1.0)                     # the module's `_sg`: a side that is not `for` reads as `against`
-    carried = _proceeding_module().p_carried(inp, sg * (v.mood * inp.dials["mood_scale"] + option.ev))
+    carried = _proceeding_module().p_carried(inp, sg * (v.mood * inp.dials["mood_scale"] + option.ev), v.lever)
     return carried if sg > 0 else 1.0 - carried
 
 
@@ -2134,7 +2181,7 @@ def believed_proceeding(w: Any, believer: Any, claimants: list, *, verb: str, su
     def read(acc: float) -> tuple:
         inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject, topic=subject if topic is None else topic,
                                       effort=effort, row=row, form=form, arranger=arranger, rig=rig, seen=_Believed(w, believer, acc), first_heard=first_heard,
-                                      cited=cited, answered_over=answered_over)
+                                      cited=cited, answered_over=answered_over, knower=believer)      # the case file as he knows it (B24.43's `_knows`)
         return inp, card_, mod.view(inp, mod.start(inp), mod.who(inp, believer.id), _NoNoise())
     try:
         inp, _, first = read(1.0)
@@ -2151,8 +2198,7 @@ def arranged_by(w: Any, act: Any, topic: Optional[str]) -> tuple:
     item `docketed` lists for the matter says who arranged its sitting and how hard (`_docket_item`). The arranger is named only where there is a
     rig to work (`rig > 0`): at rig 0 he arranges nothing, and a builder asked to find him would refuse the sitting if he were gone. Any other
     act, and a matter on no docket, has none."""
-    row = VERB_TABLE.get(act.verb)
-    if not any(entry[1] == PROCEEDS_DOCKET for entry in getattr(row, "proceeds", ())):
+    if not _heard_on_docket(act.verb):
         return None, 0.0
     items = _world_q.docketed(w, topic)
     if not items:

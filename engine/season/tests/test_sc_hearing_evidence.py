@@ -486,3 +486,78 @@ def test_the_citing_variant_cites_a_held_record():
             assert any(st[1] == "filed" and st[4] == "rec_about" for st in w.records[case].stages), seed
         checked += 1
     assert checked == 8
+
+
+# ---- B24's close (R1, R2): a filed exhibit reaches the hearing's own close; a sitting's held items carry their relations and origins ------------------------------------
+
+def _heard_act(w, verb, stage=None, i=0, exchanges=None):
+    """The accuser's `verb` (`determine` or `speak`) of the accused's matter on `build_hearing`, resolved by the REAL path (`sigma.resolve` with the verb row's `proceeds`, as the fold hands it):
+    `stage` (a `filed` stage) appended to the matter's case file first, `exchanges` the `sitting_exchanges` setting where given. Returns `(resolve's dict, the Input the host built)`."""
+    from .test_sc_hearing_admission import G
+    from .test_sc_proceeding_module import _key
+    if exchanges is not None:
+        w.fixtures = w.fixtures.sweep("sitting_exchanges", exchanges)
+    case = world_q.case_file_of(w, world_q.docketed(w, G.ACCUSED)[0])
+    if stage is not None:
+        w.records[case].stages.append(stage)
+    act = Act(id="t:r1", actor=G.ACCUSER, verb=verb, via=G.ACCUSER_SEAT if verb == "determine" else None, payload={"subject": G.ACCUSED})
+    row = world_q.proceeding_row(w, act)
+    built, real = [], sigma.proceeding_input
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(sigma, "proceeding_input", lambda *a, **k: built.append(real(*a, **k)) or built[-1])
+        out = sigma.resolve(w, [G.ACCUSER, G.ACCUSED], ["t:r1"], None, verb=verb, subject=G.ACCUSED, rng=_key("b24_r1", i), proceeds=row, topic=G.ACCUSED)
+    assert out["status"] == "RESOLVED" and len(built) == 1, out
+    return out, built[0][0]
+
+
+def test_a_filed_exhibit_moves_the_hearings_close_and_never_its_obstacle():
+    """B24.20 / B24.21 at the hearing (B24's close, R1): `speak` and `determine` PROCEED, so the single roll's exhibit reader (`_read_social_roll`) is never reached for them; the sitting reads the
+    case file itself. On `build_hearing` at `evidence_from: case_file`, one `filed` stage for the accuser (`for`) moves a bench close's net UP at the same key and leaves its obstacle and terms the
+    empty file's (A-25: an exhibit is leverage, never an obstacle term); the same stage filed for the accused (`against`) moves it DOWN; and the accuser's abridged `speak` (its one speech is its close)
+    is moved up the same way where the speaker makes the same speech (the filing changes what each option is worth to him, so at some keys he picks another ground: those keys compare two
+    different speeches and are not read). The built `Input` carries the exhibit on the sitting's axis (the accuser, `claimants[0]`, is `for`). `sitting_exchanges` 0 keeps the bench close one draw on
+    one key. FALSIFIER: a net equal with and without the filing (the exhibit read by no close), an obstacle or term that moves with it, or an `against` filing that helps the accuser."""
+    from .test_sc_hearing_admission import G, OTHER_DEED, hearing
+    said = Said(G.ACCUSED, OTHER_DEED, True, 100)
+    stage = lambda side: (1, "filed", side, "fact", said, 1.0, f"o_{side}", "a_r1")
+    checked = {"determine": 0, "speak": 0}
+    for i in range(8):
+        for verb, exchanges in (("determine", 0), ("speak", None)):
+            bare, _ = _heard_act(hearing(0, "case_file")[0], verb, None, i, exchanges)
+            up, inp = _heard_act(hearing(0, "case_file")[0], verb, stage("for"), i, exchanges)
+            assert [(e.side, e.cell) for e in inp.exhibits] == [("for", (G.ACCUSED, OTHER_DEED, True))], inp.exhibits
+            assert (up["ob"], up["terms"]) == (bare["ob"], bare["terms"]), (verb, i, up["terms"], bare["terms"])
+            speech = lambda out: [(b.move, b.ground, b.item) for b in out["proceeding"].beats]
+            if speech(up) != speech(bare):
+                continue
+            assert up["net"] > bare["net"], (verb, i, up["net"], bare["net"])
+            if verb == "determine":
+                down, _ = _heard_act(hearing(0, "case_file")[0], verb, stage("against"), i, exchanges)
+                assert down["net"] < bare["net"] and (down["ob"], down["terms"]) == (bare["ob"], bare["terms"]), (i, down["net"], bare["net"])
+            checked[verb] += 1
+    assert checked["determine"] == 8 and checked["speak"] >= 6, checked
+
+
+def test_a_sittings_held_items_carry_their_relation_and_origin():
+    """B24's close (R2): the items a sitting's hands hold (`_items_of`) carry the relation the case file's exhibits carry (`pairs`, by the one pairing pass) and the origin `world_q.filings` gives a
+    filed one (the root of the chain, else the holder; a Record itself), so the board's rules run on a computed sitting. On `build_hearing`, the accused holds the accuser's own deed cell: the two
+    are paired `agrees`, and shown by both sides they count for neither (agreement); and once the accused has shown an item the accuser may `impugn` its origin (offered on his menu).
+    FALSIFIER: items with no `pairs` (both count) or no `origin` (no `impugn` is ever offered)."""
+    from ..queries.inputs import Choice
+    from .test_sc_hearing_admission import DEED, G, hearing
+    from .test_sc_proceeding_module import _key
+    P = importlib.import_module("modules.social_contest.proceeding")
+    w, _d, _case = hearing(0, "case_file")
+    w.persons[G.ACCUSED].ledger.append(Claim("c_mine", G.ACCUSED, G.ACCUSED, DEED, True, 0, "firsthand", 100, "own"))
+    act = Act(id="t:r2", actor=G.ACCUSER, verb="determine", via=G.ACCUSER_SEAT, payload={"subject": G.ACCUSED})
+    row, form, _m, _i = world_q.proceeding_row(w, act)
+    inp, _card = sigma.proceeding_input(w, [G.ACCUSER, G.ACCUSED], verb="determine", subject=G.ACCUSED, topic=G.ACCUSED, effort=0, row=row, form=form)
+    me, him = (next(p for p in inp.room if p.id == x) for x in (G.ACCUSER, G.ACCUSED))
+    mine, his = (next(it for it in p.items if it.id == cid) for p, cid in ((me, "c_deed"), (him, "c_mine")))
+    assert (mine.origin, his.origin) == (G.ACCUSER, G.ACCUSED) and ("c_mine", "agrees") in mine.pairs and ("c_deed", "agrees") in his.pairs, (mine, his)
+    assert all(it.origin == it.id for it in me.items if it.kind == "record")
+    st, _b = P.exchange(inp, P.start(inp), him, Choice("present", None, "c_mine"), _key("b24_r2", 0))
+    offered = [o for o in P.menu(inp, st, me, inp.rite.turns)[0] if o[3] == "impugns" and o[2] == "c_mine"]
+    assert offered, "the accused's shown item has an origin to impugn"
+    st, _b = P.exchange(inp, st, me, Choice("present", None, "c_deed"), _key("b24_r2", 1))
+    assert {it.id for it, _s in st.board} == {"c_mine", "c_deed"} and not {it.id for it in P._standing(inp, st.board)} & {"c_mine", "c_deed"}, st.board

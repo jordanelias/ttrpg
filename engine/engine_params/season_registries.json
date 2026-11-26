@@ -307,7 +307,8 @@
               "concede",
               "rest",
               "present",
-              "impugn"
+              "impugn",
+              "answer"
             ],
             "against": [
               "argue",
@@ -315,7 +316,8 @@
               "concede",
               "rest",
               "present",
-              "impugn"
+              "impugn",
+              "answer"
             ],
             "bench": [
               "rule",

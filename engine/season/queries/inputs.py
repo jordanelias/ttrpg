@@ -121,7 +121,7 @@ class SocialContestInput:
       * `side`         -- the roller's own side of the case (`"for"` | `"against"`), the one `Item.side` is read against: the docket's for a determiner's draw,
                          the speaker's for his own `speak`;
       * `evidence_cap` -- `evidence_cap`, the corroboration cap `evidence.standing` reads; `None` is uncapped.
-    `modules/social_contest/roll.py::proof_levels` is the one reader of the four: they are LEVERAGE, never an obstacle operand (A-25)."""
+    `modules/social_contest/roll.py` reads the four (`proof_levels` the counts, `leverage` the level they add): they are LEVERAGE, never an obstacle operand (A-25)."""
     pool: float         # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
     obstacle_ceiling: Optional[float]
@@ -294,9 +294,10 @@ class Rite:
       * `difficulty`, `gravity` -- the obstacle the close is drawn against; `gravity` is how grave the times make a change
         (renamed from `stakes`); `quorum` -- read by a `declared` close; `unrest` -- the pull of the times (Focus holds against it).
 
-    B24.10 (the hearing's cells, from the rite and read by the module's board, B24.06; each defaulted, so a rite built without them is the rite it was):
-    `faults` -- the `proceeding_faults` the sitting records; `disclosed` -- whether the other side's filings stand on a mover's board;
-    `bears_by_rung` -- `((rung, side), ...)`, who bears each rung of the issue ladder (`bears` is the bearer of the first)."""
+    B24.10 (the hearing's cells, from the rite; each defaulted, so a rite built without them is the rite it was):
+    `faults` -- the `proceeding_faults` the sitting records, read by the module's board (B24.06); `disclosed` -- whether the other side's filings stand on a mover's board;
+    `bears_by_rung` -- `((rung, side), ...)`, who bears each rung of the issue ladder (`bears` is the bearer of the first). `disclosed` and `bears_by_rung` are carried; no module
+    reader yet."""
     id: str
     live: str
     bears: str
@@ -524,7 +525,9 @@ class View:
       * `intent` -- the perceived stake of the man opposite; `acc` -- his accuracy;
       * `burden` -- he bears the matter and no point of his stands: resting is a charge not pressed;
       * B24.05 (each defaulted): `board` -- the `Item`s standing and struck, as the rite discloses them to him;
-        `hand` -- his own `Item`s not yet shown."""
+        `hand` -- his own `Item`s not yet shown;
+      * `lever` -- the board's leverage on the closing draw as it stands (`proceeding._lever`: the standing items, the filed exhibits, the faults owed), the one figure
+        `odds` and the NPC decider's believed chance (`sigma._believed_chance`) read it from, so the close and both readings are one ladder; `0.0` by default."""
     n: int
     mover: str
     side: str
@@ -546,6 +549,7 @@ class View:
     burden: bool = False
     board: tuple = ()
     hand: tuple = ()
+    lever: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -572,6 +576,10 @@ class Input:
         `world_q.answers_first`), so its speech faces the `first_heard` term; `False` for every other act. Inside a sitting the term is the answered `Item.first`'s, never this.
       * `answered_over` -- B24.43: the weight the item the act answers holds over its answer (`world_q.answered_over`), or `None` for an act that answers nothing. The abridged speech
         is then the sitting's `answer`: its difficulty is `answer_ob` and it meets the `answer` term on this weight. Inside a sitting the weight is the board's own, never this.
+      * `exhibits` -- B24's close (R1; B24.20): the `Item`s filed on the matter's case file (`sigma._exhibits_of`, at `evidence_from: case_file`), each `side` on THIS sitting's axis
+        (`for` the bearer's), with their `pairs` to one another and to every item in a hand; `()` where nothing is filed. NEVER ON THE BOARD (nothing enters, answers or strikes
+        them in a sitting): `proceeding._lever` counts them with the board's standing items in one `evidence.standing`, so they reach the close as leverage only (A-25), and an
+        abridged speech's own leverage the same way.
 
     `__post_init__` holds the one invariant (A-139) and refuses, each a `ValueError` whose message begins `refused[<key>]`:
     `one_character`, `abridged_self`, `no_weight`, `no_adjudicator`, `nobody_speaks`, `resume_yielded`, and, a resume being
@@ -585,6 +593,7 @@ class Input:
     frames: tuple = ()
     first_heard: bool = False
     answered_over: Optional[float] = None
+    exhibits: tuple = ()
 
     def __post_init__(self):
         room, rite, state = self.room, self.rite, self.state

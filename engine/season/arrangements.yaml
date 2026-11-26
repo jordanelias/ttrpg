@@ -204,8 +204,9 @@ rites:
   # procedure, fact and definition and the party bears justification, the issue ladder HEAR_B carries from the kernel,
   # `audits/05_SC_audit_addendum_B.md:242`, `:246`) and writes it in THIS file's side words: `for` is the bearer, the speaker `claimants[0]` the
   # sitting places there (`sigma.proceeding_input`), every `trial` and `inquisition` row says `bears: for`, and `Item.side` is the mover's side; so the
-  # accuser is `for` and the party `against` (B24.12's ruling; B24.09 had written it inverted). `moves` are the six the speech and the hearing
-  # give a side, `bench` the two the bench alone has.]
+  # accuser is `for` and the party `against` (B24.12's ruling; B24.09 had written it inverted). `moves` are the seven the speech and the hearing
+  # give a side (the speech's `argue`, `press`, `concede`, `rest`; the hearing's `present`, `impugn`, `answer`: B24's close added `answer`, which HEAR_B names and the row
+  # had dropped), `bench` the two the bench alone has.]
   - id:               default
     genre:            judicial
     live:             charge
@@ -214,7 +215,7 @@ rites:
     silence:          refusal
     issues:           [fact, definition, justification]
     concede:          descends
-    moves:            {for: [argue, press, concede, rest, present, impugn], against: [argue, press, concede, rest, present, impugn], bench: [rule, adjourn]}
+    moves:            {for: [argue, press, concede, rest, present, impugn, answer], against: [argue, press, concede, rest, present, impugn, answer], bench: [rule, adjourn]}
     faults:           [self_contradiction, silence, forgery_found, irrelevance]
     disclosed:        true
 
