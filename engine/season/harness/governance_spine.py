@@ -755,6 +755,7 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
 HEARING_VENUE, HEARING_PLACE = "lr_settlement_a", "lr_hearth_a"     # where the sitting is held / where the matter lives: the spine's first chain, a settlement and a hearth under it
 ACCUSER, ACCUSED = "lp_accuser", "lp_accused"
 ACCUSER_SEAT, CHARGE = "lo_accuser", "prop:hear:charge"
+# [JUSTIFIED: IS-B2 §1.0 -- "two parties each with three filed exhibits", the instrument scenario's hand size, not an engine constant]
 EXHIBITS = 3                                                          # `IS-B2` §1.0: "two parties each with three filed exhibits"
 
 

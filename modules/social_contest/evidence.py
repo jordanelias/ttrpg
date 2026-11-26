@@ -55,6 +55,7 @@ def _rank(it) -> tuple:
     return (it.weight, it.id)
 
 
+# [JUSTIFIED: a memo bound on a pure function over frozen Items -- it changes no output, only how many results are kept; not a game quantity]
 @functools.lru_cache(maxsize=4096)
 def standing(presented: tuple, findings: tuple = (), cap: Optional[float] = None) -> tuple:
     """`(standing, struck, faults)` over `presented` (the `Item`s shown, at the weight they were entered at, in the order shown).
