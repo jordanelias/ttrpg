@@ -4381,6 +4381,14 @@
             "on"
           ]
         },
+        "rival_precedence_arms": {
+          "source": "v12 B08.05 (`18_DETERMINISM_rival_acts_in_one_fold` \"The resolution, decided\"): *\"`Fixtures rival_precedence: draw | hash`\"*; ships `draw`.",
+          "note": "THE ARMS OF `Fixtures.rival_precedence` (`H-30`), read by `loop/resolve.py::_canonical_order_with_precedence` and refused outside this set, so a misspelt arm cannot read as the control. `hash` is the CONTROL (the revert): scenes stay in the content-hash order. `draw` is SHIPPED: a rivalry group of scenes is re-ordered among the positions it holds by a keyed draw per scene, the highest net first (`loop/resolve.py::_precedence_order`).",
+          "values": [
+            "hash",
+            "draw"
+          ]
+        },
         "stock_reports": {
           "source": "v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium; Jordan to correct; revert: stock_report = off]).",
           "note": "THE ARMS OF `Fixtures.stock_report` (`H-243`), read by `loop/matter.py` at MATTER's last actorless `stores` write to a rung in the barrier (the credit write where the rung yields, else the debit write). `crossing` (SHIPPED) attaches `Observation(rung, \"stores:<default_store_kind>\", units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier differs from after; `season` attaches it to every such write; `off` attaches nothing and is the CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `\"off\"` is QUOTED: bare, YAML reads it as the boolean false.",
@@ -6554,6 +6562,9 @@
             ],
             "draw": [
               "carry.failed"
+            ],
+            "sequence": [
+              "carry.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -6716,6 +6727,9 @@
             ],
             "counterparty": [
               "arrest.refused"
+            ],
+            "sequence": [
+              "arrest.refused"
             ]
           },
           "refusal_note": "#453 \u00a79.1: *'eligibility -> `arrest.unauthorized`; party, write, counterparty -> `arrest.refused`'*. TWO KINDS ON A CONTESTED KEYED ROW ARE LAWFUL SINCE v9 IN-12 step 5's PARTY-GAP FOLD EDIT (K-02): the seam's party gap and S27.4's under-1D refusal emit `row.refusal_for(COUNTERPARTY_CLAUSE)` (`loop/resolve.py::_refuse_party_gap`), and the loader's contested-row rule narrows to rows that key no `counterparty` (`data/verbs.py`). \u26a0 S27.4's refusal is labelled with the counterparty kind (`arrest.refused`) though it is the actor's pool, not the counterparty, that failed [ASSUMPTION; medium; Jordan to correct; revert: one kind under every key].",
@@ -6861,6 +6875,9 @@
             ],
             "draw": [
               "conceal.failed"
+            ],
+            "sequence": [
+              "conceal.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -6963,6 +6980,9 @@
               "confer.refused"
             ],
             "counterparty": [
+              "confer.refused"
+            ],
+            "sequence": [
               "confer.refused"
             ]
           },
@@ -7249,6 +7269,9 @@
             ],
             "counterparty": [
               "determine.refused"
+            ],
+            "sequence": [
+              "determine.refused"
             ]
           },
           "refusal_note": "KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half, F7; `data/verbs.py` checks the keys are exactly this row's failable clauses), BUT ONE KIND: `determine.refused` under every key (v9 SC-03b). The row is contested, and the loader refuses a contested row keying more than one refusal kind unless it keys `counterparty` (`data/verbs.py`, invariant 4's contested half: the seam's party-gap refusal, `loop/resolve.py::_refuse_party_gap`, no clause names, and it emits the UNION, so two kinds would publish a kind for a clause that did not fail; v9 IN-12 step 5 narrowed this for a row that keys the counterparty clause, as `arrest` does). The keys stay -- they are the failable clauses, and the fold reads `row.refusal_for(clause)` -- and they all answer alike. What is lost: the SEAT's `determine.unauthorized` (none exercised grants `determine`, or the one exercised does not sit in judgment over the party) is not split from the WORLD's `determine.refused` (the matter is no person, is on no docket, the bench is below quorum, the vote falls short of a declared row's `quorum:`, or the effect found nothing to open); the reason survives on the Event's `observed` for the `bench` conjunct only, and an eligibility refusal carries none (`loop/resolve.py`'s ineligibility return is `Verdict(UNKNOWN, ())`). [ASSUMPTION; medium; Jordan to correct; revert: the two-kind keys, and the row uncontested.] \u26a0 `determine.unseated`, the proceedings design's second kind (`04_VERBS.md` \u00a7B.2), is NOT taken: read cold it names an Event in which somebody was UNSEATED -- `revoke`'s outcome -- which is the opposite of a refusal (`CLAUDE.md` \u00a74). The design's struck `determine.unheard` (P-23) stays struck. The S27.4 refusal (`Ob > 2 x Pool`, a judge whose pool is under 1D) takes this kind too, as `speak`'s does. THE ROW NAMES `counterparty: subject`, AND THAT CLAUSE (`loop/resolve.py::_admits`, asked only AFTER the precondition passes) CAN NEVER FIRE FOR THIS ROW: a self-determination is refused by the `bench` conjunct (`may_determine`, `state/gate.py` conjunct 2, *a judge does not bind himself*) and an act naming no subject dies at `party`, both as `determine.refused`. The `counterparty:` key under `emits_on_refusal` is in `data/verbs.py`'s expected set BY DERIVATION from the row's `counterparty:` column, so the loader refuses a keyed row without it: THE LOADER CANNOT JUDGE REACHABILITY, only that a key names a clause the row derives.",
@@ -7374,6 +7397,9 @@
               "establish.reduces_grant"
             ],
             "write": [
+              "establish.refused"
+            ],
+            "sequence": [
               "establish.refused"
             ]
           },
@@ -7518,6 +7544,9 @@
             ],
             "draw": [
               "forge.failed"
+            ],
+            "sequence": [
+              "forge.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -7601,6 +7630,9 @@
               "tell.refused"
             ],
             "counterparty": [
+              "tell.refused"
+            ],
+            "sequence": [
               "tell.refused"
             ]
           },
@@ -7699,6 +7731,9 @@
             ],
             "draw": [
               "found.failed"
+            ],
+            "sequence": [
+              "found.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -7765,6 +7800,9 @@
             ],
             "draw": [
               "build.failed"
+            ],
+            "sequence": [
+              "build.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -7913,6 +7951,9 @@
               "issue.refused"
             ],
             "counterparty": [
+              "issue.refused"
+            ],
+            "sequence": [
               "issue.refused"
             ]
           },
@@ -8317,6 +8358,9 @@
             ],
             "draw": [
               "requisition.failed"
+            ],
+            "sequence": [
+              "requisition.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -8463,6 +8507,9 @@
             ],
             "draw": [
               "marshal.failed"
+            ],
+            "sequence": [
+              "marshal.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -8510,6 +8557,9 @@
               "surrender.unauthorized"
             ],
             "write": [
+              "surrender.refused"
+            ],
+            "sequence": [
               "surrender.refused"
             ]
           },
@@ -8585,6 +8635,9 @@
             ],
             "draw": [
               "travel.failed"
+            ],
+            "sequence": [
+              "migrate.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -8647,6 +8700,9 @@
             ],
             "draw": [
               "travel.failed"
+            ],
+            "sequence": [
+              "travel.blocked"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -8703,6 +8759,9 @@
             ],
             "counterparty": [
               "duty.refused"
+            ],
+            "sequence": [
+              "duty.refused"
             ]
           },
           "grade": "ruled",
@@ -8752,6 +8811,9 @@
               "case.unauthorized"
             ],
             "write": [
+              "case.refused"
+            ],
+            "sequence": [
               "case.refused"
             ]
           },
@@ -9004,6 +9066,9 @@
             ],
             "draw": [
               "restore.failed"
+            ],
+            "sequence": [
+              "restore.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -9089,6 +9154,9 @@
             ],
             "write": [
               "revoke.refused"
+            ],
+            "sequence": [
+              "revoke.refused"
             ]
           },
           "refusal_note": "B21.82 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_revoke` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the five names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `revoke` says WHICH clause refused. The predicate's kinds, in branch order: `office` (the act names no office the world holds) `revoke.no_office`; `disposal` (the seat's conferral basis has no revocation disposal) `revoke.no_disposal`; `authority` (the seat exercised has no revocation authority over the seat) `revoke.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `keeps` (the `keeps` operand is no list of acts, B21.69) `revoke.bad_keeps`; `held` (a seat nobody holds) `revoke.no_holder`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `revoke.refused`; the row names no `counterparty:`, so the seam's party gap takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal) -- basis: CLAUDE.md \u00a70 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"revoke.refused\"]`.]",
@@ -9167,6 +9235,9 @@
             ],
             "draw": [
               "sabotage.failed"
+            ],
+            "sequence": [
+              "sabotage.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -9221,6 +9292,9 @@
             ],
             "draw": [
               "raze.failed"
+            ],
+            "sequence": [
+              "raze.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -9269,6 +9343,9 @@
               "seize.unauthorized"
             ],
             "write": [
+              "seize.refused"
+            ],
+            "sequence": [
               "seize.refused"
             ]
           },
@@ -9443,6 +9520,9 @@
             ],
             "draw": [
               "survey.failed"
+            ],
+            "sequence": [
+              "survey.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -9508,6 +9588,9 @@
             ],
             "draw": [
               "tend.failed"
+            ],
+            "sequence": [
+              "tend.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -9585,6 +9668,9 @@
               "tell.refused"
             ],
             "counterparty": [
+              "tell.refused"
+            ],
+            "sequence": [
               "tell.refused"
             ]
           },
@@ -9941,6 +10027,9 @@
             ],
             "draw": [
               "thread_read.failed"
+            ],
+            "sequence": [
+              "inquiry.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -10081,6 +10170,9 @@
             ],
             "draw": [
               "train.failed"
+            ],
+            "sequence": [
+              "train.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -10148,6 +10240,9 @@
             ],
             "draw": [
               "recruit.failed"
+            ],
+            "sequence": [
+              "recruit.refused"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
@@ -10489,6 +10584,9 @@
             ],
             "draw": [
               "work.failed"
+            ],
+            "sequence": [
+              "work.unavailable"
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",

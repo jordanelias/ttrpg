@@ -39,8 +39,10 @@ from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
     BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
+    counterparty_of, prize_step,
 )
 from ..gaps import Unspecified
+from ..data.matrix import Step
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
@@ -204,6 +206,42 @@ def _writing_bands(c: Candidate) -> Optional[tuple]:
         return None
     bands = tuple(b for b, written in row.writes_by_degree.items() if written)
     return bands or None
+
+
+def _prize_step(c: Candidate) -> Optional[str]:
+    """The step at which a CONTESTED candidate's prize is fought when that is not RESOLVE (the prize row's `step:`, `data/verbs.py::prize_step`:
+    `the body` and `a field` declare ENCOUNTER), else `None` -- the prize fights where its verb is admitted. The reading the fold's
+    own deferral test makes (`loop/resolve.py::_deferred_prize`, off `manifest.resolve`, the same roster row), taken at the chooser from the row."""
+    row = VERB_TABLE.get(c.verb)
+    step = prize_step(row.contests) if row is not None and row.contests else None
+    return None if step in (None, Step.RESOLVE.value) else step
+
+
+def hangs_on(prev: Candidate, c: Candidate) -> Optional[tuple]:
+    """B08.04 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 4; ruling A-9: *a step may hang on the band of the one
+    before*): `Act.after` OF `c`, the interaction packed straight after `prev` in one scene -- the bands in which `prev`'s row wrote
+    anything (`_writing_bands`, off `writes_by_degree`), or `None` (`c` is attempted whatever `prev` does, as before). No verb is
+    named; the rule reads the row. Set only for a CONTESTED `prev` (a roll that can land outside the bands it writes in; an
+    uncontested one, and a contested one that writes in no band, name no band) that `c` follows on the SAME subject (a second
+    interaction about the same thing is the one a first's outcome conditions; one about another thing is not) AND, where both rows name
+    a `counterparty:`, the SAME counterparty (`opportunity_key`'s identity of "the same opportunity": `argue` P->B and `argue` P->C are
+    two independent interactions on one Proposition, and B's refusal at admission conditions nothing about C). A prior that names none
+    still conditions `c`.
+
+    ⚠ NEVER A HANG THE FOLD CANNOT DEFER (`loop/resolve.py::_sequence_refusal`): where `prev`'s prize is fought at a later step
+    (`_prize_step`), the fold declares `prev` and defers what hangs on it, which `c` can take only if its OWN prize is fought at
+    that same step; a `c` that is not raises `Unspecified` at RESOLVE. So the hang is set there only when both are fought at one
+    later step, and never otherwise."""
+    bands = _writing_bands(prev)
+    if bands is None or not prev.subject or prev.subject != c.subject:
+        return None
+    other, mine = counterparty_of(prev.verb, prev.operands), counterparty_of(c.verb, c.operands)
+    if other is not None and mine is not None and other != mine:
+        return None
+    held = _prize_step(prev)
+    if held is not None and _prize_step(c) != held:
+        return None
+    return bands
 
 
 def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable]) -> float:
@@ -1204,9 +1242,11 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # the person holds several that grant the act, else `exercised_seat`'s one.
                      # `T4`: the id is of `act_key` -- the subject, plus `tell`'s hearer (`data/verbs.py`);
                      # `H-134`: plus the seat, for a Candidate formed among several.
+                     # B08.04: `after` -- the bands of the interaction packed just before it, where it hangs on them (`hangs_on`).
                      [Act(mint(p.id, c.verb, act_key(c.verb, c.subject, c.operands)), p.id, c.verb,
                           payload=_payload_of(c),
-                          via=seat_of(p, c)) for c in chunk],
+                          via=seat_of(p, c),
+                          after=hangs_on(chunk[i - 1], c) if i else None) for i, c in enumerate(chunk)],
                      # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
                      occasion=occasion,
                      decided="" if decide is None else decide(chunk[0] if lead is None else lead),
