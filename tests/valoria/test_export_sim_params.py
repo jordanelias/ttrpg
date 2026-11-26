@@ -150,14 +150,14 @@ def test_the_season_settings_are_exported_and_a_rename_cannot_empty_them(tmp_pat
     # parameter whose default is a literal (`seed` and the seven booleans; `cap` and `fixtures` default to
     # None, which `_literal` cannot tell from a non-literal, so they are skipped). The values are the
     # shipped defaults as the signature has them; `cast_attributes` ships True since B11 lane A (the item's
-    # L-08 reading, False, is the control arm), `foreign` True.
+    # L-08 reading, False, is the control arm), `foreign` True; `wound` (False) is the realm arm B12a.07 added: it mints the Calamity's source Site.
     import inspect
     from engine.season.boot.realm import build_realm
     arms = {r["key"]: r for r in rows if r["module"] == "engine.season.realm"}
     sig = inspect.signature(build_realm).parameters
     literal_defaults = {n: p.default for n, p in sig.items() if isinstance(p.default, (bool, int, str, float))}
     assert set(literal_defaults) == {"seed", "from_roster", "goals", "goals_complete", "foreign", "guards",
-                                     "acquaintances", "cast_attributes"}, sorted(literal_defaults)
+                                     "acquaintances", "cast_attributes", "wound"}, sorted(literal_defaults)
     assert set(arms) == {"engine.season.realm." + n for n in literal_defaults}, sorted(arms)
     for n, v in literal_defaults.items():
         assert arms["engine.season.realm." + n]["value"] == v, n
