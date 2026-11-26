@@ -126,7 +126,7 @@ def test_h206_an_act_caused_event_of_the_dead_actor_in_the_dying_tick_is_not_pla
 
 def _fight(i):
     """The real fold, the real `fight`: p_near fights p_high under `wound_harm_model = total` (a
-    wound kills) as act `h206_<i>`. Returns the world and the Events if that act killed him, else None."""
+    wound kills) as act `h206_<i>`. Returns the world and the Events if that act killed him and the killer lived, else None."""
     w = _world()
     w.step = Step.RESOLVE
     w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
@@ -137,7 +137,7 @@ def _fight(i):
     # v10 REM-31: `the body` defers to ENCOUNTER, so RESOLVE declares the fight and ENCOUNTER fights it; the
     # round's Events are both lists, in that order, as `SeasonDriver.season` assembles them.
     evs = evs + d.encounter(mint_token(w, WriteClass.ACTS), evs, md)
-    if HOLDER in w.persons:
+    if HOLDER in w.persons or "p_near" not in w.persons:   # he died AND the killer lived: a fight can fell both (the mortal draw), and the tests below need the killer alive
         return None
     for ev in evs:                      # `resolve` returns the Events; the caller logs them (as a barrier does)
         w.log.append(ev)

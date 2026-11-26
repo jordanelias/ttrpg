@@ -8294,7 +8294,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
 # ASSIGNED. Each hid the next, so a partial success and an overwhelming one were the same event.
 # ===========================================================================
 
-def _we_bands(model="scene_fraction", ids=range(24)):
+def _we_bands(model="scene_fraction", ids=range(3, 27)):   # B16.03: the per-round key moved every fight; the window starts at 3 so the first Wounded party of the `total` control is a subject who is written (`body.changed` then `person.died`), not an actor whose death alone is published (ids 1, 2 and 11 read that, at the old base too)
     """Fold `fight` through the REAL road -- `SeasonDriver.resolve` -> `contest()` ->
     `combat_seam` -> `wrapper.fight` -- once per act id, and report what each band did.
 
