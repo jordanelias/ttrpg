@@ -64,11 +64,11 @@ SEASON_SUITES = {
     # The rest of the season tests, one suite per workplan lane (P18; Jordan, 2026-11-26). By FILE NAME, so the rule is one regex a mover edits;
     # a file the three above or these name belongs to that suite, and one that none names falls to `in_season` (cross-cutting; see below).
     "fa_season": re.compile(r"^test_(fa\d*_|faction|governance|command_basis|dispatch|grant_|sworn|tenure|in09|in10|in12_|in31|in61_succession|"
-                            r"in64|vb_|vm_|rival_precedence|offer$|record_kind|u1_seat|u7_|arrangements|cr25|cr30|cr31|cr56)"),
+                            r"in64|vb_|vm_|rival_precedence|offer$|record_kind|u1_seat|u7_|arrangements|cr25|cr30|cr31|cr56|territorial)"),
     "fi_season": re.compile(r"^test_(fi\d*_|finding|claim_|conclusion|deed_trail|rumour|rival_teller|told_|information|notice_draw|shorcase|"
                             r"playable_inquiry|scenarios_runner|self_knowledge|seen_why|in53|in59|in61_heir|cr27|cr28|cr81|cr82|"
                             r"refusal_memory|one_reader|storybar|pairs)"),
-    "se_season": re.compile(r"^test_(settlements|works_founding|territorial|hunger|migrate|in45|home_presence|term_upkeep|demand_delivery|"
+    "se_season": re.compile(r"^test_(settlements|works_founding|hunger|migrate|in45|home_presence|term_upkeep|demand_delivery|"
                             r"in22|in35|rem32|scale_of_rung|cr86)"),
     "wr_season": re.compile(r"^test_(thread_operations|k3_thread|season_weather)"),
 }
