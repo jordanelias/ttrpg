@@ -106,7 +106,8 @@ def test_an_unprovisioned_side_fields_nobody_and_eats_nothing():
 def _world(on: bool, treasury_a=None, treasury_b=None):
     """`build_realm(0)` at the arm, with the two treasuries' stores PLANTED (hand-built: `requisition`
     executes 0 times in computed play, `H-163` limit 3(a), and the realm seeds no treasury)."""
-    w = build_realm(0)
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` leaves nothing short and holds no seam in S-001, (the treasuries are PLANTED here, and `ground` seeds one under `granary_seasons` 4)
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     w.fixtures = w.fixtures.sweep("field_provisioning", on)
     assert w.offices[SEAT].rung == TREASURY_A, "the march seat's treasury moved; re-pick the fixture"
     assert world_q.governing_hold(w, TARGET).object == TREASURY_B, "the target's held rung moved"

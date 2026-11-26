@@ -1299,7 +1299,8 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
                           f"(`rosters.yaml: seasons_of_year`) is {len(SEASONS_OF_YEAR)}", "H-26",
                           needs="one entry per season of the year, in order, or `()` for the control",
                           law="IN-21 / ED-IN-0332: the year is the roster's length, and the table is read at `tick % len(year)`")
-    outcomes = table[season_of_year(w)]
+    s = season_of_year(w)
+    outcomes = table[s]
     if not outcomes:
         # An empty season entry has nothing to draw from; without this `choose` below dies with a
         # bare IndexError naming neither the fixture nor the season.
@@ -1536,7 +1537,7 @@ def subsist_input(w: World) -> SubsistInput:
     traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's, less those rows (the
     `demanded`, `delivered` and `descendants` rows `subsistence_draw`'s A4 note names). MATTER calls the
     entry with it once a season and makes every write from the outcome. `severity` is `_hunger_severity`'s (B12a.61): `()` at the shipped
-    `hunger_severity_draw: False`, else one keyed multiple per eater short."""
+    `hunger_severity_draw: False` (shipped True since B12a.62), else one keyed multiple per eater short."""
     larder, chains = _larder_parts(w)
     bodies = tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters)
     return SubsistInput(larder, chains, w.fixtures.get("body_step"), bodies, _hunger_severity(w, larder, bodies))
@@ -2862,8 +2863,8 @@ def endings_reached(w: World) -> list:
     condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. It is NOT
     "reached only with a person's act among the crossing's antecedents". Revert: every edge the
     condition reads opened by an act -- under which every seeded territory hold must be re-opened by
-    an act and `terr_T15`'s, unheld at build, by a verb that does not exist (`H-186`), so
-    `peninsular_sovereignty` becomes unreachable by construction.
+    an act, so `peninsular_sovereignty` becomes unreachable by construction (`terr_T15`, unheld at build
+    and settled by no verb, `H-186`, is excluded from the edges by `settled: true`).
 
     ⚠ NO `TRACE.query` ROW, `ambitions`' reason: `SeasonDriver.season` calls this once per season, the
     probe corpus runs seasons, and a row here moved the committed `runs/TRACE.txt` and `results.json`
@@ -2953,11 +2954,12 @@ def _ending_edges(w: World, row) -> tuple:
     if sel == "post":
         holds = [hold_force(w, o) for o in sorted(w.offices) if w.offices[o].post == val]
     elif sel == "rung_kind":
+        # `settled: true` (B12a.09): a SETTLED rung has a `settlement` rung among its descendants, read as the ancestry of
+        # every settlement rung (`descendants` writes a `TRACE.query` row, and this step must write none: the docstring above)
+        settled = {a for r in w.rungs if w.rungs[r].kind == "settlement" for a in ancestry(w, r)} if row.settled else None
         holds = [governing_hold(w, r) for r in sorted(w.rungs) if w.rungs[r].kind == val
                  and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))
-                 # `settled: true` (B12a.09): a SETTLED rung has a `settlement` rung among its descendants
-                 and (not row.settled or any(d in w.rungs and w.rungs[d].kind == "settlement"
-                                             for d in descendants(w, r)))]
+                 and (settled is None or r in settled)]
     else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
         raise Forbidden(f"ending selector {sel!r} has no enumerator", "queries/world_q.py::_ending_edges",
                         f"a branch for it, beside `ENDING_SELECTORS`' two")

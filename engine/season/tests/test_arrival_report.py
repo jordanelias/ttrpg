@@ -3,14 +3,14 @@
 THE ARM. MATTER's `travel.ended` write is the arrival. At `arrival_report: on` it carries `observed=_arrival_report(...)`: at most two
 `Observation`s about the rung the traveller now stands in -- `(rung, "stores:<default_store_kind>", units)` as `_stock_report` builds it,
 and `(rung, "held_by", the holder's id)` read through `world_q.governing_hold` -- and WITNESS deposits them to the write's witnesses, the
-traveller among them. `off` (shipped) is the control: the write carries nothing, as before the item.
+traveller among them. `off` (shipped) is the control: the write carries nothing, as before the item (read once at B12a.16, not kept).
 
 THE WORLD is `probes.tiny_world`: `p_low` lives in `Hh`, moves to `S` (which holds grain 40 and, planted by the holder test, a `hold`); `p_high`
 stands in `S`; `p_mid` stays in `Hh`.
 
 THE FALSIFIERS, each able to see what it excludes: the claim lands only in a co-located resident's ledger (the traveller's holds none);
-every ledger in the world gets it (the stayer's does); the control deposits it anyway; the holder line is deposited with no holder, or
-without the hold's holder when there is one.
+every ledger in the world gets it (the stayer's does); the holder line is deposited with no holder, or without the hold's holder when there
+is one. The `off` control (the write carries nothing; the base hash) was read once at B12a.16 and is not kept as a test.
 """
 
 from __future__ import annotations

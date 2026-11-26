@@ -59,6 +59,7 @@ from ..data.verbs import VERB_TABLE
 from ..harness import aperture as A
 from ..harness import governance_spine, populated
 from ..boot.realm import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..harness.corpus_run import (_attribute_acts, _emission_id, attempts, attribute, foreign_kinds,
                                   graded_loss, graded_losses, unrowed_acts)
@@ -75,7 +76,8 @@ from .test_u7_remit import _fold, _world
 
 @pytest.fixture(scope="module")
 def realm():
-    return A.measure_world(build_realm, 0, 1)
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` leaves nothing short and holds no seam in S-001, whose pooled rolls `test_cr18` reads
+    return A.measure_world(lambda seed, **kw: build_realm(seed, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"), **kw), 0, 1)
 
 
 def test_aperture_the_measured_season_is_the_populated_season(realm):

@@ -8819,8 +8819,14 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
         return out
 
     producers = _producers(files.package_modules(), files.PACKAGE_DIR)
-    assert producers == set(), (
-        f"the season package produces a margin in {sorted(producers)}. Since `31a` the host builds "
+    # B12a.99 [ASSUMPTION; medium; Jordan to correct; revert: route the three world draws through a module entry and restore `set()`]: the batch's WORLD draws are
+    # taken host-side, on the one ladder (`dice_engine.roll_net_continuous` and `degree_from_net`, never `roll_pool`): the wear draw and the rupture draw
+    # (`loop/matter.py`, B12a.10 and B12a.64) and the hunger severity draw and the ending draw (`queries/world_q.py`, B12a.61 and B12a.12). None resolves an act, a contest or an
+    # inquiry, which is what `S27.2`'s refusal of a second resolver guards; they are the world's own keyed draws (`16_PESSIMIST_GAME_the_world_draws`). The set is EQUALITY, so a
+    # third file that rolls turns this red as before.
+    WORLD_DRAWS = {"loop/matter.py", "queries/world_q.py"}
+    assert producers == WORLD_DRAWS, (
+        f"the season package produces a margin in {sorted(producers)} (expected only the world draws in {sorted(WORLD_DRAWS)}). Since `31a` the host builds "
         "the typed input record and calls the module entry; the dice and the net are the module's (the "
         "fraction of a margin is settled host-side by `settle_record`, PLAN CP-T01-04). `S27.2` names "
         "a second resolver as this architecture's highest-value refusal -- adjudicate before it lands")

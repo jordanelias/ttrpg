@@ -1566,11 +1566,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                              condition=w.fixtures.get("condition_scale"))
 
     # -- the wound (B12a.07; `wound=True` only) ---------------------------------------------------
-    # One Site on Askeheim (T15), the row the geography file authors. Off, nothing here runs.
+    # One Site per province whose geography row carries a `wound:` (Askeheim, T15, at shipped content). Off, nothing here runs.
     if wound:
-        row = geo["provinces"]["T15"]["wound"]
-        s_id = f"s_{_slug('T15')}_{row['kind']}"
-        w.sites[s_id] = Site(s_id, territory_rung_id("T15"), row["kind"], condition=row["condition"])
+        for code in sorted(c for c, p in geo["provinces"].items() if "wound" in p):       # the rows the geography file authors; none is named here
+            row = geo["provinces"][code]["wound"]
+            s_id = f"s_{_slug(code)}_{row['kind']}"
+            w.sites[s_id] = Site(s_id, territory_rung_id(code), row["kind"], condition=row["condition"])
 
     # -- the cast ---------------------------------------------------------------
     # ⚠ **NPC CASES ARE PEOPLE; ARC CASES ARE NOT.** The NPC lane names persons -- "Carin Vedel",

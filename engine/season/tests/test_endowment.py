@@ -126,7 +126,9 @@ def test_ground_reaches_produce_the_settlements_do_not_share_one_band():
 
 # --- B12a.52: THE TREASURY IS THE GRANARY (`07_SE_treasury_granary_B` §4 (a), (b)) ------------------------------------------------------
 def _ground_with(granary_seasons: int):
-    return GROUND.sweep("granary_seasons", granary_seasons)
+    # `hunger_severity_draw` False: "every seam cohort fell" would otherwise hold only if no keyed severity draw of the 10 or more is Overwhelming (multiple 0,
+    # no fall; about 8% each at the shipped rows), green by luck of the draw; `test_territorial_subsistence.py` pins it the same way.
+    return GROUND.sweep("granary_seasons", granary_seasons).sweep("hunger_severity_draw", False)
 
 
 def _cohorts_by_settlement(w) -> dict:

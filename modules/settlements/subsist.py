@@ -53,8 +53,9 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
                 given[kind] = given.get(kind, 0) + units
             if take < want:
                 short.setdefault(row.pid, {})[kind] = want - take
-                if src is not None:
-                    drained.setdefault(src, set()).add(kind)
+                # a short cell gave out EVERY rung it drew from (under `through` a draw splits across rungs: each emptied)
+                for rung in (r for r, _ in parts) if parts else ((src,) if src is not None else ()):
+                    drained.setdefault(rung, set()).add(kind)
 
     shortfalls = []
     for src in sorted(drained):

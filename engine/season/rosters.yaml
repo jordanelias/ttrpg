@@ -2924,9 +2924,9 @@ rosters:
       reconstruct: [concluded]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
-    # and `condition.band_crossed` the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
+    # `condition.band_crossed` and `site.ruptured` (B12a.64) the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
     ledger_ranges:
-      site: ["exists:Site", "condition", "condition.worn", "condition.band_crossed"]
+      site: ["exists:Site", "condition", "condition.worn", "condition.band_crossed", "site.ruptured"]
 
   vocation_sourced:
     source: >-
@@ -4196,8 +4196,8 @@ rosters:
                   every code it maps to in `strife_moves.yaml` is terminal (`ends` above 0 and not XP),
                   so a kind that maps to one code which never ends a case does not conclude (`detention.ended`
                   and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;
-                  `requisition.taken` to VI). Of those only `field.won` and `field.lost` conclude in the
-                  world reading, which knows their code (WA) through the verb and side; the rest end no case
+                  `requisition.taken` to VI). Of those `field.won` and `field.lost` ended a case in the world reading (code WA, through the verb
+                  and side) until B12a.04, which made them OPENING moves (never terminal); the rest end no case
                   in either reading. A hand-maintained list over the opens and joins kinds, checked
                   by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule
                   disagree). B12a.05 (A-45): a content-opening kind (`queries/world_q.py::CONTENT_OPENING_KINDS`:
@@ -4391,7 +4391,7 @@ rosters:
       Person:      [body.changed]              # `wounded_with`
       Detainee:    [person.captured, arrest.made]
       Rung:        [stores.changed, rung.seized]
-      Site:        [condition.band_crossed]
+      Site:        [condition.band_crossed, site.ruptured]       # B12a.64: a rupture is a Site's standing occasion too (`world_q.CROSSING_KINDS`)
       Proposition: [proposition.uttered]
 
 tables:

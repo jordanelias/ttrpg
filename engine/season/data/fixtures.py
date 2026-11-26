@@ -697,11 +697,11 @@ DEFAULT_FIXTURES = Fixtures(
     illness_rate=0.0,                  # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
     age_at_build=0,                    # v9 IN-34, a declared default (seasons old at tick 0)
     # v9 IN-35 FORCE-HAZARD (#457 `:123-143`): THE LATTICE COUPLING WEIGHT -- the share, on
-    # `condition_scale`, of a Site's gap down to the weakest Site in its own or a bordering territory that
+    # `condition_scale`, of a Site's gap down to a BROKEN Site (condition 0) in its own or a bordering territory (B12a.63: it pulls toward a broken neighbour only) that
     # it loses PER SEASON (SEAM-CLOCK, #457 `:174`: one unit, the season), added to its kind's wear in
     # `loop/matter.py`'s wear loop. `0` is THE CONTROL, SHIPPED: the pass returns before reading any Site,
     # so the season is today's (`body_step`'s and `age_step`'s shape). In [0, condition_scale]; outside it
-    # raises (`_lattice_strain`), since a share above the whole gap would overshoot the weakest neighbour.
+    # raises (`_lattice_strain`), since a share above the whole gap would overshoot the broken neighbour.
     # [JUSTIFIED: engine/season/hole_register.yaml H-235 -- `site: Fixtures lattice_coupling`, graded `assumption`; #457 gives the coupling and no magnitude (its only rate is the retired scalar's -1 a year), so it is injected and swept 0 / 250 / 500]
     lattice_coupling=0,                # `H-235`, swept 0 (control, SHIPPED) / 250 / 500
     # B12a.10 (`09_WR_B_draws_not_thresholds` edit 1): WEAR IS DRAWN. `False` is THE CONTROL, SHIPPED: today's exact rate, no draw taken. `True`

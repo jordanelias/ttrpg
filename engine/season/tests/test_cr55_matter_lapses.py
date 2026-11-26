@@ -27,6 +27,7 @@ from __future__ import annotations
 
 from ..data.matrix import Step, WriteClass
 from ..boot.realm import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..decision import make_chooser
@@ -324,7 +325,8 @@ def test_a_stage_wound_by_an_act_matures_once_though_no_logged_event_touches_the
 # ======================================================================================
 
 def _realm(lapse):
-    w = build_realm(0)
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` leaves nothing short and holds no seam in S-001, where the first season dockets the items the lapse reads
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     w.fixtures = w.fixtures.sweep("docket_lapse", lapse)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
