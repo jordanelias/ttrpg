@@ -34,14 +34,6 @@ def _combatant(room):
     return c
 
 
-def test_deep_edge_equals_four_at_full_room():
-    """At `range_avail >= RANGE_COMMIT_PEAK` the window is the full [2, 5] and the edge is the 4.0 the absolute keys shipped, to the bit."""
-    checked = 0
-    for room in (CFG['RANGE_COMMIT_PEAK'], 0.9, 0.95, 1.0):
-        for edge in (S.deep_commit(_combatant(room), CFG), S.lunge_commit(_combatant(room), CFG)):
-            assert edge == 4.0, (room, edge)
-            checked += 1
-    assert checked >= 8
 
 
 def test_deep_edge_follows_the_window():

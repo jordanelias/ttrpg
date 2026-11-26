@@ -399,18 +399,23 @@ jobs:
     # [RAISED 30 -> 40, 2026-11-22, Jordan: "Caps should be 40 minutes."] Run 44988774829 (PR #627 @9d24f935) cancelled both
     # shards at 30 minutes with no test failing; the heavy shard on @2381202 took 1506 s.
     timeout-minutes: 40
+    # FOUR LEGS, 2026-11-26: `rest` is split into `rest0`..`rest2`. Run 45650553649 (@8142371d): `heavy` took
+    # 22m40s, `rest` was cancelled at this cap 96% through (about 41 min), with no test failing. Each `rest` leg
+    # is every non-heavy `test_*.py`, sorted, dealt round-robin by index (`NR%3`), so a NEW test file lands in
+    # exactly one leg and is always run; `register --requirements` runs in `rest0` only. `--durations=25` prints
+    # the evidence for splitting `heavy` next (it is the new floor). Seed process pools were weighed and rejected:
+    # no CI test runs a multi-seed harness command, and in-test seed loops already share 4 cores under xdist.
     # TWO SHARDS, 2026-11-06 (B10-10b's card ran 12.5 h; this job was the CI critical path at 724 s of
     # pytest against 390 s locally, for the same 2148 tests). `heavy` is the five files that weigh
     # about half the suite (per-file call+setup+teardown from one `--durations=0` run; the five are
     # `test_season_shape`, `test_interactions_log`, `test_rem31_grid_suspension`, `test_storybar`,
-    # `test_told_by_channel`); `rest` is everything else by `--ignore`, so a NEW test file lands in
-    # `rest` and is always run. `needs.season-tests.result` is success only if both legs are, which is
+    # `test_told_by_channel`); `rest` was everything else by `--ignore` (now the three legs above). `needs.season-tests.result` is success only if every leg is, which is
     # all `ci-summary` reads. The union is checked by `pytest --collect-only -q` ids equal to the
     # unsharded list. Same tests, same flags: it changes WHERE they run, never WHICH.
     strategy:
       fail-fast: false
       matrix:
-        shard: [heavy, rest]
+        shard: [heavy, rest0, rest1, rest2]
     permissions:
       contents: read
     steps:
@@ -445,16 +450,30 @@ jobs:
       - run: |
           HEAVY="engine/season/tests/test_season_shape.py engine/season/tests/test_interactions_log.py engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_storybar.py engine/season/tests/test_told_by_channel.py"
           if [ "${{ matrix.shard }}" = heavy ]; then
-            python -m pytest $HEAVY -q -n auto --dist worksteal
+            python -m pytest $HEAVY -q -n auto --dist worksteal --durations=15 --junitxml=leg.xml
           else
-            python -m pytest engine/season/tests -q -n auto --dist worksteal $(for f in $HEAVY; do printf -- '--ignore=%s ' "$f"; done)
+            K=${{ matrix.shard }}; K=${K#rest}
+            FILES=$(ls engine/season/tests/test_*.py | grep -vxF -f <(printf '%s\n' $HEAVY) | awk -v k="$K" 'NR%3==k')
+            python -m pytest $FILES -q -n auto --dist worksteal --durations=15 --junitxml=leg.xml
           fi
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
       # ⚠ `-m`, AND UNDER `harness/`. The decomposition (ED-IN-0203) made this a package
       # module: run as a loose script it has no package, its relative imports fail, and the
       # step dies before it can check a single row.
-      - if: ${{ matrix.shard == 'rest' }}
+      # Per-FILE seconds of this leg (the junit file the step above wrote), so the next rebalance reads data and not a guess: bytes
+      # proved a poor proxy (run 45737148512: rest2 held the most bytes and ran 4m48s against rest0's 20m55s).
+      - if: ${{ always() }}
+        run: |
+          python3 - <<'PY'
+          import collections, xml.etree.ElementTree as E
+          t = collections.Counter()
+          for c in E.parse('leg.xml').iter('testcase'):
+              t[c.get('classname').rsplit('.', 1)[-1] if c.get('classname', '').rsplit('.', 1)[-1].startswith('test_') else c.get('classname').rsplit('.', 2)[-2]] += float(c.get('time', 0))
+          print('PER-FILE SECONDS (cpu, summed over workers)')
+          for f, s in t.most_common(): print(f'{s:8.0f} {f}')
+          PY
+      - if: ${{ matrix.shard == 'rest0' }}
         run: python -m engine.season.harness.register --requirements
 
   sim-regression:

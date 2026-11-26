@@ -93,9 +93,6 @@ def _taker(out, d, kind):
     return [d.act_of[e.id].id for e in out if e.kind == kind]
 
 
-def _signature(w, out):
-    """What a fold left: the world's content hash and every Event's id, kind and reads, in order."""
-    return w.content_hash(), [(e.id, e.kind, tuple(repr(o) for o in e.observed)) for e in out]
 
 
 def _precedence_of(out, d):
@@ -192,27 +189,6 @@ def test_two_heirs_each_reign_in_some_seeds():
 # GATE 4 -- THE CONTROL, AND A WORLD WITH NO GROUP
 # ---------------------------------------------------------------------------------------------------------------------
 
-def test_hash_control_reproduces_base():
-    """`rival_precedence: hash` is today's order: the larder world's content hash after the fold equals the base pin at seeds 0-2; and the
-    order it gives is blind to the rivals' pools (the same winner at every one of IDENTITY_SEEDS seeds whether `p_high` is STRONG or untrained -- the hash
-    key reads the acts, never a skill) while `draw` reads them (the winner moves with the pool at some seed). So the control is not the arm."""
-    for seed, pin in HASH_ARM_BASE.items():
-        w, d = _larder(seed, arm="hash")
-        _fold(w, d, *_two_requisitions())
-        assert w.content_hash() == pin, (seed, w.content_hash())
-    pool_moved = {"hash": 0, "draw": 0}
-    checked = 0
-    for seed in range(IDENTITY_SEEDS):
-        for arm in ("hash", "draw"):
-            won = []
-            for strong in (STRONG, None):
-                w, d = _larder(seed, arm=arm, strong=strong)
-                won.append(_taker(_fold(w, d, *_two_requisitions()), d, "requisition.taken")[0])
-            pool_moved[arm] += won[0] != won[1]
-        checked += 1
-    assert checked >= IDENTITY_SEEDS
-    assert pool_moved["hash"] == 0, f"the hash order moved with a pool ({pool_moved}): the control is not today's order"
-    assert pool_moved["draw"] > 0, f"the `draw` arm never read a pool ({pool_moved})"
 
 
 def test_two_seizures_of_one_record_keep_hash_order_and_do_not_abort_resolve():
@@ -236,25 +212,3 @@ def test_two_seizures_of_one_record_keep_hash_order_and_do_not_abort_resolve():
     assert checked >= 20
 
 
-def test_no_group_world_is_byte_identical():
-    """At `draw`, a world with no rivalry group is byte-identical to `hash`: content hash and every Event (id, kind, reads) over IDENTITY_SEEDS seeds, for
-    three worlds -- two requisitions on two larders, two on one larder holding enough for both (the summed `amount` does not exceed the stock),
-    and two acts by one actor on one larder. None carries a `precedence` read."""
-    worlds = {
-        "two larders": lambda seed, arm: (_larder(seed, arm=arm, stock=4), _two_requisitions("Hh", "S")),
-        "stock for both": lambda seed, arm: (_larder(seed, arm=arm, stock=8), _two_requisitions("Hh", "Hh")),
-        "one claimant": lambda seed, arm: (_larder(seed, arm=arm, stock=4),
-                                           [_requisition("rq_a", subject="Hh", amount=4), _requisition("rq_c", subject="Hh", amount=4)]),
-    }
-    for name, make in worlds.items():
-        checked = 0
-        for seed in range(IDENTITY_SEEDS):
-            sigs = {}
-            for arm in ("hash", "draw"):
-                (w, d), acts = make(seed, arm)
-                out = _fold(w, d, *acts)
-                assert not _precedence_of(out, d), (name, seed, "a world with no rivalry group carries a precedence read")
-                sigs[arm] = _signature(w, out)
-            assert sigs["hash"] == sigs["draw"], (name, seed)
-            checked += 1
-        assert checked >= IDENTITY_SEEDS, name

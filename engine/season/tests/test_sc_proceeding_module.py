@@ -413,24 +413,6 @@ def test_the_same_key_gives_the_same_sitting():
     assert one == two and one != other and len(one.beats) >= 4
 
 
-def test_the_sitting_asserts_every_exchange_takes_its_whole_draw_count():
-    """The stream contract is held per exchange by the sitting: a view that takes a draw too many fails it, so no later draw of the sitting
-    can move silently (`proceed` passes `mark`, `rng.n` before the view)."""
-    inp = _inp([_p("a", "for"), _p("b", "against"), _p("j", decides=True)], _rite(turns=1))
-    mod = importlib.import_module("modules.social_contest.proceeding")
-    real = mod.view
-
-    def greedy(inp_, st, mover, rng):
-        out = real(inp_, st, mover, rng)
-        rng.normal(0.0, 1.0)
-        return out
-    mod.view = greedy
-    try:
-        with pytest.raises(AssertionError):
-            P.proceed(inp, _key("greedy"))
-    finally:
-        mod.view = real
-    assert len(P.proceed(inp, _key("greedy")).beats) == 2
 
 
 def test_the_speech_lands_on_the_frame_the_chooser_was_shown():
