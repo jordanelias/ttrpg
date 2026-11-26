@@ -366,6 +366,13 @@ def answers_first(w: World, a) -> bool:
     return f.refused is None and f.case is not None and any(is_first(w.records[f.case].stages[i]) for i, _ in f.answers)
 
 
+def cited_kinds(w: World, a) -> tuple:
+    """B24.35 -- THE PROOF KINDS AN ACT CITES: the `matters` members of the items its `cites` file (`filings`, the one reader of what a citing act files), in the order cited, each once; `()`
+    for an act that cites nothing and for one that `filings` refuses (it is never drawn). Read by the proceeding's host into `Present.backed`'s `cites` condition."""
+    f = filings(w, a)
+    return () if f.refused is not None else tuple(dict.fromkeys(i.kind for i in f.items))
+
+
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
 # on it, and `sittings_before` reads it; WITNESS deposits it as the claim's predicate
 # (`Claim.predicate` is `e.kind`).

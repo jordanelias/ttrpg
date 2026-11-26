@@ -3472,7 +3472,11 @@
         },
         "capability_when_keys": {
           "values": [
-            "rank_at_least"
+            "rank_at_least",
+            "cites",
+            "consequence_held",
+            "creed_committed",
+            "regard_at_least"
           ]
         },
         "capability_gate_keys": {
@@ -4678,6 +4682,11 @@
             "hand_error_back"
           ]
         },
+        "backed_verbs": {
+          "values": [
+            "argue"
+          ]
+        },
         "ground_reads": {
           "source": "V2 p2 \u00a7A.2 -- what a ground's fit reads: a channel of the bearing reading, or the item's `credit` for `evidence`.",
           "cite": "B24p.01",
@@ -4708,27 +4717,39 @@
         "grounds": {
           "source": "V2 p2 \u00a7C.2 (`content[g]`, Reason's share of a speech's dice by ground, R11) and \u00a7A.2 (`reads`); V2 p4 \u00a7F 10 (`consequence` is pathos, `evidence` alone logos).",
           "cite": "B24p.01, R11",
-          "note": "WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order. `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1]; `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone); B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2). [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.]",
+          "note": "WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order. `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1]; `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone); B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2). [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.] B24.35 (WGM edits 2-3): `backed_by` (optional) is what has to hold for the ground to BACK an act with a hearer who is moved by it -- a `when` key of `capability_when_keys` (not `rank_at_least`) and its argument. The hearer's own `Person.traits` say which grounds move him (`descriptors.TRAITS[*].seated_by` is a ground id); one who holds none is moved by every ground as before, and one who holds some is moved by those grounds whose `backed_by` holds for this act and by none other (`seam/wrappers/sigma.py::_backed`, `Present.backed`). A ground with no `backed_by` is backed wherever it is a susceptibility. [ASSUMPTION; medium; Jordan to correct: each `backed_by` below is the entry's own, `record` for the cited kind and a regard floor of 3 -- basis: WGM edit 3's four rows' `when`; revert: delete the cell and the ground backs wherever it is a susceptibility.]",
           "rows": [
             {
               "id": "evidence",
               "reason": 0.8,
-              "reads": "item"
+              "reads": "item",
+              "backed_by": {
+                "cites": "record"
+              }
             },
             {
               "id": "consequence",
               "reason": 0.7,
-              "reads": "want"
+              "reads": "want",
+              "backed_by": {
+                "consequence_held": true
+              }
             },
             {
               "id": "authority",
               "reason": 0.4,
-              "reads": "hold"
+              "reads": "hold",
+              "backed_by": {
+                "creed_committed": true
+              }
             },
             {
               "id": "solidarity",
               "reason": 0.2,
-              "reads": "bond"
+              "reads": "bond",
+              "backed_by": {
+                "regard_at_least": 3
+              }
             }
           ]
         },

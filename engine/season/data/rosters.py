@@ -1071,7 +1071,7 @@ def _load_grounds(rows) -> dict:
     """`rosters.yaml: grounds`: each row's `reason` a number in [0, 1] and a whole number of tenths, its `reads` a member of
     `ground_reads`. R11: `reason` is Reason's share of a speech's dice on that ground (V2 p2 §C.2)."""
     reads = roster("ground_reads", ordered=True)
-    out = _proceeding_rows(rows, "grounds", frozenset({"reason", "reads"}), frozenset({"reason", "reads"}))
+    out = _proceeding_rows(rows, "grounds", frozenset({"reason", "reads", "backed_by"}), frozenset({"reason", "reads"}))
     for gid, g in out.items():
         r = g["reason"]
         if not in_tenths(r, 0, 1):
@@ -1080,7 +1080,23 @@ def _load_grounds(rows) -> dict:
                 law="R11 -- the dice are a blend of Reason and Presence by content; the share is set in tenths, as every other dial of the blend is")
         require_member(g["reads"], reads, f"ground {gid!r} has `reads: {g['reads']!r}`", "rosters.yaml -- grounds",
                        "V2 p2 §A.2 -- a ground's fit reads one channel of the bearing reading, or the item's credit")
+        if "backed_by" in g:
+            _refuse_backed_by(gid, g["backed_by"])
     return out
+
+
+#: THE `when` KEYS A USES ROW'S READER EVALUATES (`when_holds`): the rest of `capability_when_keys` are the conditions of an ACT, read at the proceeding's host (B24.35).
+ROW_WHEN_KEYS = ("rank_at_least",)
+
+
+def _refuse_backed_by(gid: str, cond) -> None:
+    """B24.35: a ground's `backed_by` is a non-empty mapping whose every key is a `capability_when_keys` member a ROW does not read (`ROW_WHEN_KEYS`): the conditions the
+    proceeding's host evaluates (`seam/wrappers/sigma.py::WHEN_BACKING`, which binds the roster to its functions both ways). An unknown key, `rank_at_least` and an empty map
+    are refused naming the ground; the argument's type is the function's to refuse."""
+    keys = [k for k in roster("capability_when_keys", ordered=True) if k not in ROW_WHEN_KEYS]
+    if not isinstance(cond, dict) or not cond or not set(cond) <= set(keys):
+        raise Unspecified(f"ground {gid!r} has `backed_by: {cond!r}`", "rosters.yaml -- grounds", needs=f"a mapping from one or more of {keys} to its argument",
+                          law="WGM edit 2 -- a ground is backed by a condition of the act, from the closed `when` roster; a key nothing evaluates would back it silently")
 
 
 def _load_proceeding_moves(rows, rungs) -> dict:
@@ -2121,6 +2137,10 @@ def _refuse_when(i, row, when, when_keys, refuse) -> None:
     if unknown:
         refuse(i, row, f"has `when` key {unknown[0]!r}", f"only {sorted(when_keys)}",
                "MAP §C -- the `when` keys are a closed roster; an unregistered one is a condition nothing reads")
+    act_scoped = [k for k in when if k not in ROW_WHEN_KEYS]
+    if act_scoped:
+        refuse(i, row, f"has `when` key {act_scoped[0]!r}", f"only {list(ROW_WHEN_KEYS)}",
+               "B24.35 -- that key is a condition of the act read at the proceeding's host (`grounds`' `backed_by`), which no row's reader evaluates")
     if "rank_at_least" in when:
         n, key = when["rank_at_least"], row["key"]
         if key not in _CAPABILITIES:
@@ -2143,7 +2163,7 @@ def when_holds(row: CapabilityUse, holder) -> bool:
     if not when:
         return True
     for k, n in when.items():
-        if k != "rank_at_least":
+        if k not in ROW_WHEN_KEYS:
             raise Unspecified(f"`when` key {k!r} has no comparison", _CAPABILITY_USES_WHERE,
                               needs=f"a comparison for {k!r} here, or remove it from `capability_when_keys`",
                               law="MAP §C -- a closed `when` key is read by one function; a registered key nothing reads silently holds")

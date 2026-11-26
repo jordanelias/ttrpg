@@ -616,7 +616,10 @@ def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abr
         return pool, sig, _record(inp, pool, opp, sig, 0.0, _operands(inp, voice, c, foe, pressed=True))
     v = validation(inp, h)
     rl = 1.0 + 2.0 * v * (relevance(inp, voice) - 1.0)    # how sound the speech is, as far as HE can validate it
-    f = fit(inp, h, voice, mover.side, ground, it, tag) + D["rel_gain"] * (rl - 1.0) \
+    fitted = fit(inp, h, voice, mover.side, ground, it, tag)
+    if h.backed is not None and ground not in h.backed:
+        fitted = min(fitted, 0.0)      # B24.35 (WGM edits 2-3): a ground that does not back this act with him counts none of its fit in his favour; a misfit still counts
+    f = fitted + D["rel_gain"] * (rl - 1.0) \
         - D["repeat_step"] * _d(st.used).get((mover.side, it.id if it else ground), 0)
     sig = _lv(D["fit_level"]) * _weight(inp, st, ground) * f + D["esteem_step"] * esteem(inp, st, voice) * 2.0 * (1.0 - v) \
         + (rl * _lv(D["answer_level"]) if relation == "answers" else 0.0)

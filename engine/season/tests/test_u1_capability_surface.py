@@ -935,10 +935,13 @@ def test_a_rank_at_least_the_loader_cannot_read_is_refused():
     no `when`: A-11) each refuse naming the row; the control rows load."""
     from engine.season.data import rosters
     ceiling = descriptors.capability("inquiry").ceiling
-    assert rosters.roster("capability_when_keys") == frozenset({"rank_at_least"})
+    assert rosters.roster("capability_when_keys") == frozenset({"rank_at_least", "cites", "consequence_held", "creed_committed", "regard_at_least"})
     assert _refused(_rank_rows(rank_at_least=ceiling)) is None and _refused(_rank_rows(rank_at_least=1)) is None
     msg = _refused(_rank_rows(sunset=3))
     assert msg is not None and "sunset" in msg and "when" in msg, msg
+    for act_key in ("cites", "consequence_held", "creed_committed", "regard_at_least"):      # B24.35: a condition of the ACT, evaluated at the proceeding's host, no row's
+        msg = _refused(_rank_rows(**{act_key: 3}))
+        assert msg is not None and act_key in msg and "when" in msg, (act_key, msg)
     for bad in (True, 2.5, "3", None, 0, ceiling + 1):
         msg = _refused(_rank_rows(rank_at_least=bad))
         assert msg is not None and "rank_at_least" in msg, (bad, msg)

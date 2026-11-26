@@ -247,7 +247,10 @@ class Present:
       * `believes`     -- what he KNOWS of the matter, -1..1 toward `for` (his own ledger);
       * `bias`         -- his stable misjudgement of what his options are worth: -1 pessimist .. +1 optimist;
       * `power`, `precedence` -- his circumstances: seat, office, wealth, influence, faction (host);
-      * `items`        -- the `Item`s he holds;  `strain` -- what he carries in from earlier rattles."""
+      * `items`        -- the `Item`s he holds;  `strain` -- what he carries in from earlier rattles;
+      * `backed`       -- B24.35 (WGM edits 2-3): the grounds that move HIM for this act, `None` for every ground (the default: he is moved by any, as he was), else the tuple of
+        those whose `backed_by` condition holds for the act (`seam/wrappers/sigma.py::_backed`). A ground outside it counts none of its positive fit with him
+        (`proceeding.speech`): a misfit still counts. (`None` and not the roster's tuple, because this leaf imports nothing of the host's rosters.)"""
     id: str
     weight: int = 1
     side: Optional[str] = None
@@ -270,6 +273,7 @@ class Present:
     precedence: int = 0
     items: tuple = ()
     strain: float = 0.0
+    backed: Optional[tuple] = None
 
 
 @dataclass(frozen=True, kw_only=True)

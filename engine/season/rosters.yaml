@@ -1769,8 +1769,14 @@ rosters:
   # B04.10 (DEF Edit 2): the keys a row's `when` may carry. `rank_at_least: <n>` holds when the holder's SKILL rank (the held rank
   # on the row's `scale`, never a seat rank) in the row's `key` is at least `n`: it selects which of two rows on one key apply
   # (`data/rosters.py::when_holds`), and is never a condition of attempting an act (A-11: a `gate` row takes no `when`).
+  # B24.35 (WGM edit 2, `02_CHAR_which_ground_moves_whom`): FOUR MORE MEMBERS, the conditions under which a ground backs an act. They are read at the PROCEEDING's host
+  # (`seam/wrappers/sigma.py::WHEN_BACKING`, one function each, bound to this roster both ways at import) and by NO uses row's reader: `rank_at_least` is the one key a
+  # row's `when` may carry (`data/rosters.py::ROW_WHEN_KEYS`), and the loader refuses a row naming any other. The condition a ground needs is the ground's own `backed_by` cell
+  # (`grounds`, below): `cites: <matters member>` -- the act cites a held item of that kind; `consequence_held: true` -- the ARGUER's own ledger holds a deed claim about the
+  # matter's subject that the HEARER's own pursuits score against; `creed_committed: true` -- the matter is a faction's creed Proposition and the hearer holds a live `commit` to it;
+  # `regard_at_least: n` -- the hearer's stance toward the arguer, clamped at `STANCE_MAX`, is at least `n` stance steps. None reads the hearer's ledger (`04` §B.2 F8).
   capability_when_keys:
-    values: [rank_at_least]
+    values: [rank_at_least, cites, consequence_held, creed_committed, regard_at_least]
 
   # A-11 (U1 §3 item 5): a `gate` row is closed to its one held value, at the two sites that gate on it.
   capability_gate_keys:
@@ -3828,6 +3834,11 @@ rosters:
   # through `data/rosters.py`'s loaders (`GROUNDS`, `PROCEEDING_MOVES`, `PROCEEDING_ENDS`, `ISSUE_RUNGS`, `AUTHORITIES`,
   # `AUTHORITY_BY_FACTION`, `MATTERS`), which refuse a malformed row at import naming it. A row is `{id, <cells>}` in a list, so the
   # order is the roster's and a repeated id is refused.
+  # B24.35 (WGM edit 3's rows' `verb: argue`): THE VERBS WHOSE SPEECH A HEARER'S SUSCEPTIBILITY GATES. `seam/wrappers/sigma.py::_backed` narrows a hearer's grounds only for an act of
+  # these verbs; every other act that proceeds (a `tell`, a `lie`, a `speak` at a sitting) hears him as it always did.
+  backed_verbs:
+    values: [argue]
+
   ground_reads:
     source: "V2 p2 §A.2 -- what a ground's fit reads: a channel of the bearing reading, or the item's `credit` for `evidence`."
     cite: "B24p.01"
@@ -3857,11 +3868,17 @@ rosters:
       `reads` names what the ground's fit reads (`ground_reads`). B24p.01 left every `reason` at the control, 1.0 (the dice Reason alone);
       B24p.23 wrote the shipped column of V2's model (`sc2/host.py::GROUNDS`: evidence 0.8, consequence 0.7, authority 0.4, solidarity 0.2).
       [ASSUMPTION; Jordan to correct: every `reason` below is V2's shipped value -- basis: `sc2/host.py::GROUNDS` as the running model reads it, cited not copied; revert: 1.0 on every ground, the control.]
+      B24.35 (WGM edits 2-3): `backed_by` (optional) is what has to hold for the ground to BACK an act with a hearer who is moved by it -- a `when` key of
+      `capability_when_keys` (not `rank_at_least`) and its argument. The hearer's own `Person.traits` say which grounds move him (`descriptors.TRAITS[*].seated_by` is a ground id);
+      one who holds none is moved by every ground as before, and one who holds some is moved by those grounds whose `backed_by` holds for this act and by none other
+      (`seam/wrappers/sigma.py::_backed`, `Present.backed`). A ground with no `backed_by` is backed wherever it is a susceptibility.
+      [ASSUMPTION; medium; Jordan to correct: each `backed_by` below is the entry's own, `record` for the cited kind and a regard floor of 3 -- basis: WGM edit 3's four rows' `when`;
+      revert: delete the cell and the ground backs wherever it is a susceptibility.]
     rows:
-      - {id: evidence,    reason: 0.8, reads: item}
-      - {id: consequence, reason: 0.7, reads: want}
-      - {id: authority,   reason: 0.4, reads: hold}
-      - {id: solidarity,  reason: 0.2, reads: bond}
+      - {id: evidence,    reason: 0.8, reads: item, backed_by: {cites: record}}
+      - {id: consequence, reason: 0.7, reads: want, backed_by: {consequence_held: true}}
+      - {id: authority,   reason: 0.4, reads: hold, backed_by: {creed_committed: true}}
+      - {id: solidarity,  reason: 0.2, reads: bond, backed_by: {regard_at_least: 3}}
 
   proceeding_moves:
     source: "V2 p2 §B (a move is read by its `effect`), §A.1 (`rank`, his rank in the proceeding's skill); V2 p4 §F 1 (the ploy is carried by `insincerity` on `argue` and `press`; `deceive` and `divert` are not built)."
