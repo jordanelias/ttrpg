@@ -482,9 +482,28 @@ rows:
         text: >-
           social contests and debates: `headless --world hearing` prints the same content hash
           twice (`05_SC_playable_hearing_B`). Last recorded `no` ("seam unbuilt"); carried by B24
-        argv: ["python", "-m", "engine.season.harness.headless", "--world", "hearing"]
+        argv: ["python", "-m", "engine.season.harness.headless", "--world", "hearing", "--seed", "0", "--auto"]
         expects: "the same content hash twice"
-        holds: "unread"
+        holds: "yes"
+        reading:    # written by B24.99 (IS-A-12); A-114: no `status:` edited
+          tree: "e21b5f9a30d55148503bc570adb5811d2911543a plus the edits of B24.99's own commit (the commit is the orchestrator's; the hearing's code is that tree's, B24.99 edits no engine file)"
+          date: "2026-11-26"
+          seed: 0
+          seasons: "1 (the run stops at the first season holding a sitting of the matter; B24.38)"
+          line: |-
+            hearing · 1 season(s) · seed 0 · tick 2 · ending dismissed · kind lost · exchanges 0 · writes 173
+            CONTENT HASH: 42f8133de427703131534b4d2777d725
+          control: >-
+            `PYTHONHASHSEED=0 python -m engine.season.harness.headless --world hearing --seed 0 --auto`
+            run twice in separate processes: both runs print the line above, hash `42f8133de427703131534b4d2777d725`
+            (the two outputs are byte-identical, `diff` reads nothing). The realm the hearing is built on reads
+            `94daa1b10e2a5827a7a399245c5a8a12` at seed 0, one season, on the same tree (a different world: this hash is the hearing's)
+          does_not_show: >-
+            one seed (0), one command line: the same hash twice is determinism, not that the hearing is reached by
+            computed play (R1's after-arm reads 0: no `matter.determined` in the realm lists an exchange, B24.39); the
+            batch gate's second half (the log holds a `matter.determined` whose `ending` lists exchanges) is NOT met at
+            this seed (`exchanges 0`; seed 1 reads 3 in its own `--auto` run, B24.38), and the conjunct as worded asks for
+            the hash alone
       - id: R-04.c4
         text: >-
           mass battles and strategy warfare: `field.won + field.lost` above 0 in computed play at
