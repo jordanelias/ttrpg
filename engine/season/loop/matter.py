@@ -43,7 +43,10 @@ from ..trace_log import TRACE
 #: v9 IN-07 E3 adds the yield and credit, `settlements.produce`, called after `SUBSIST` (#353 §25).
 SUBSIST = "settlements.subsist"
 PRODUCE = "settlements.produce"
-STEP_CALLS = ((SUBSIST, "step_call"), (PRODUCE, "step_call"))
+#: v12 B12b.08 (`16_PESSIMIST_WR_A` edit 3): the road's draw, `settlements.exposure`, a `step_call` MATTER's travel pass calls from B12b.11 (behind `road_hazard`).
+#: Declared here from B12b.08 so `require_entries` refuses its missing row at construction; nothing calls it while the arm is off.
+EXPOSURE = "settlements.exposure"
+STEP_CALLS = ((SUBSIST, "step_call"), (PRODUCE, "step_call"), (EXPOSURE, "step_call"))
 
 
 def _step_call(role: str):

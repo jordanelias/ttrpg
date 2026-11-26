@@ -1071,6 +1071,25 @@ class Findings:
     found: tuple
 
 
+# B12b.08 (`16_PESSIMIST_WR_A_the_road_is_drawn` edit 2, A-25, A-29): the road's typed pair. Read by `modules/settlements/exposure.py`, built by
+# `queries/world_q.py::road_input` (B12b.09). No `World` crosses.
+
+@dataclass(frozen=True)
+class RoadInput:
+    """What `settlements.exposure` reads, and nothing else:
+      * `travellers` -- `((pid, pool, obstacle, draw_key), ...)`, one per traveller whose last leg crossed a border, in the host's order. `pool` an int (the one
+                        pool rule's, `seam/wrappers/pool.py::faculty`), `obstacle` a declared float (A-29: the obstacle is fractional, never rounded), `draw_key`
+                        the 16-hex key of the keyed draw `(world_seed, tick, pid, "road:<leg index>")` (A-30, `state.ids.draw_factory`) -- a key, not a `Draw`, so
+                        the record stays a value."""
+    travellers: tuple
+
+
+@dataclass(frozen=True)
+class RoadOutcome:
+    """What `settlements.exposure` returns: `rows`, `((pid, degree), ...)` in the input's order, `degree` a `dice_engine.Degree`, one per traveller."""
+    rows: tuple
+
+
 # ---------------------------------------------------------------------------
 # THE SETTLEMENTS MODULE'S LARDER RECORDS (v9 IN-07 E1; `proposals/2026-10-07-settlements-computation-
 # modules.md` §3 E1, intent only). Read by `modules/settlements/larder.py`'s two `query` entries; built

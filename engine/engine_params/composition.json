@@ -80,6 +80,13 @@
       "verb": null,
       "needed_by": "engine/season/queries/world_q.py \u2014 `demanded` and `delivered` (v9 IN-07 E1, A-25) build the typed input record (`under_input` -> `queries/inputs.py::Under`: the subtree, the draw and the column) and call this entry by role string through `engine.substrate.composition.require`, keeping their own `TRACE.query` lines. Since v9 IN-07 E2 MATTER's drained-rung gap is computed inside the module by `settlements.subsist`, over this same function. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
     },
+    "settlements.exposure": {
+      "target": "modules.settlements.exposure:exposure",
+      "kind": "callable",
+      "entry": "step_call",
+      "verb": null,
+      "needed_by": "engine/season/loop/matter.py \u2014 MATTER's travel pass (v12 B12b.11, `16_PESSIMIST_WR_A` edit 5; CP-T10-02, A-25) builds the typed input record (`queries/world_q.py::road_input` (B12b.09) -> `queries/inputs.py::RoadInput`: each traveller whose last leg crossed a border, with his pool, his declared obstacle and the key of his keyed draw `(world_seed, tick, pid, \"road:<leg index>\")`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`), and makes every write from the `RoadOutcome` (`(pid, degree)` per traveller: the body step, the spent traveller, the delay). The entry draws (`roll_net_continuous` on `seeded(draw_key)`) and writes nothing. Shipped OFF: with `Fixtures road_hazard` `off` nothing calls it (B12b.08 registers it; B12b.11 calls it). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
+    },
     "settlements.fabric": {
       "target": "modules.settlements.fabric:fabric",
       "kind": "callable",
@@ -181,6 +188,7 @@
     "modules/mass_battle/massbattle.py",
     "modules/mass_battle/terrain.py",
     "modules/mass_battle/troop_types/presets.py",
+    "modules/settlements/exposure.py",
     "modules/settlements/fabric.py",
     "modules/settlements/fortification.py",
     "modules/settlements/housing.py",

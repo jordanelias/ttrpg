@@ -116,6 +116,11 @@ composition_roles:
     entry: step_call
     needed_by: "engine/season/loop/matter.py — MATTER (v9 IN-07 E3, A-25) builds the typed input record (`queries/world_q.py::produce_input` -> `queries/inputs.py::ProduceInput`: the `SITE_YIELD` table, every Site, every rung's stores before the debit, `condition_scale`, this season's factor and `settlements.subsist`'s `larder_after`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`), AFTER `settlements.subsist` (#353 §25: draw before produce), and makes the `yield` and `stores` credit writes, with their `last_emission_of` causes, from the `ProduceOutcome`. Site wear stays host. No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
 
+  settlements.exposure:
+    target: "modules.settlements.exposure:exposure"
+    entry: step_call
+    needed_by: "engine/season/loop/matter.py — MATTER's travel pass (v12 B12b.11, `16_PESSIMIST_WR_A` edit 5; CP-T10-02, A-25) builds the typed input record (`queries/world_q.py::road_input` (B12b.09) -> `queries/inputs.py::RoadInput`: each traveller whose last leg crossed a border, with his pool, his declared obstacle and the key of his keyed draw `(world_seed, tick, pid, \"road:<leg index>\")`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`), and makes every write from the `RoadOutcome` (`(pid, degree)` per traveller: the body step, the spent traveller, the delay). The entry draws (`roll_net_continuous` on `seeded(draw_key)`) and writes nothing. Shipped OFF: with `Fixtures road_hazard` `off` nothing calls it (B12b.08 registers it; B12b.11 calls it). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
+
   settlements.housing:
     target: "modules.settlements.housing:housing"
     entry: query

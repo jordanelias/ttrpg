@@ -1918,6 +1918,27 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `off`]
     # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- the card ships route pricing off and rules no flip, so both arms are declared and swept off (the control, SHIPPED) / on]
     route_pricing="off",              # B12b.02, swept off (control, SHIPPED) / on
+    # B12b.08 (`16_PESSIMIST_WR_A_the_road_is_drawn` edit 1). WHETHER A JOURNEY THAT CROSSES A BORDER TAKES ONE DRAW ON HOW THE TRAVELLER ARRIVES: `off` (SHIPPED, the control)
+    # draws nothing and every hash is what it was; `on` is the arm B12b.09 to .11 build behind (`world_q.road_input`, `_relocate`'s legs, the travel pass); B12b.12 calibrates the three
+    # numbers below and flips it. A value but `off` and `on` is refused where shipped and where swept (`CLOSED_ARMS`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `off`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-541 -- `site: Fixtures road_hazard`, graded `assumption`; the source ships the arm off and swept off / on]
+    road_hazard="off",                # `H-541`, swept off (control, SHIPPED) / on
+    # THE DIFFICULTY OF A ROAD BEFORE ITS HOSTILE TERMS: a level of `rosters.yaml: difficulty_levels`, sized by `difficulty_ob` (A-5/A-6/A-7's joint calibration, not 2). Read by `road_input` only with
+    # `road_hazard` on. `routine` is a placeholder until B12b.12 calibrates it.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`] [CALIBRATE: the road's level, joint with `road_step_ob` and the pool, B12b.12]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-542 -- `site: Fixtures road_base`, graded `assumption`; the source names a level and no document sizes it]
+    road_base="routine",              # `H-542`, swept routine (placeholder, SHIPPED) / plain / demanding
+    # THE OBSTACLE ONE HOSTILE TERM ADDS TO THE ROAD (a crossed border, a crossed territory whose season draw landed Failure, a crossed territory where a field was fought this tick or the last): a
+    # declared float (A-29). Read by `road_input` only with `road_hazard` on; 1 is a placeholder until B12b.12 calibrates it.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`] [CALIBRATE: the step, joint with `road_base` and the pool, B12b.12]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-543 -- `site: Fixtures road_step_ob`, graded `assumption`; the source names the term and no document sizes it]
+    road_step_ob=1,                   # `H-543`, swept 0.5 / 1 (placeholder, SHIPPED) / 2
+    # THE BODY A ROAD TAKES OFF A TRAVELLER THE DRAW LANDS ON: one body band is 300 wide at `band_floors.body`, so 100 is a third of a band, as `body_step` is a tenth of the scale.
+    # Read by the travel pass (B12b.11) only with `road_hazard` on.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-544 -- `site: Fixtures road_step`, graded `assumption`; the source gives 100, a third of one body band]
+    road_step=100,                    # `H-544`, swept 50 / 100 (the source's, SHIPPED) / 150
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
@@ -1927,7 +1948,10 @@ LEDGER_ARM, CASE_FILE_ARM = EVIDENCE_ARMS      # the two arms by name, so a read
 #: B12b.02: `route_pricing`'s two arms, the control first (`off` prices no journey; `on` reads `world_q.route`).
 ROUTE_PRICING_ARMS = ("off", "on")
 ROUTE_PRICING_OFF, ROUTE_PRICING_ON = ROUTE_PRICING_ARMS
-CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS}
+#: B12b.08: `road_hazard`'s two arms, the control first (`off` draws no journey; `on` is the road's draw, B12b.09 to .12).
+ROAD_HAZARD_ARMS = ("off", "on")
+ROAD_HAZARD_OFF, ROAD_HAZARD_ON = ROAD_HAZARD_ARMS
+CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS, "road_hazard": ROAD_HAZARD_ARMS}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
@@ -1991,6 +2015,12 @@ def load() -> None:
         raise Forbidden(f"`Fixtures notice_ob` is {DEFAULT_FIXTURES.get('notice_ob')!r}", "data/fixtures.py",
                         needs=f"a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
                         law="B11.66 (H-496) -- the notice obstacle is a level the ladder names, sized by `difficulty_ob`, never a number made up here")
+    road_ob, road_fall = DEFAULT_FIXTURES.get("road_step_ob"), DEFAULT_FIXTURES.get("road_step")
+    if (DEFAULT_FIXTURES.get("road_base") not in DIFFICULTY_LEVELS or isinstance(road_ob, bool) or not isinstance(road_ob, (int, float)) or road_ob < 0
+            or isinstance(road_fall, bool) or not isinstance(road_fall, int) or road_fall <= 0):
+        raise Forbidden(f"`Fixtures road_base` is {DEFAULT_FIXTURES.get('road_base')!r}, `road_step_ob` {road_ob!r}, `road_step` {road_fall!r}", "data/fixtures.py",
+                        needs=f"a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}, a number of obstacle that is not negative, and a body fall that is a positive whole number",
+                        law="B12b.08 (`16_PESSIMIST_WR_A` edit 1) -- the road's difficulty is a level the ladder names (A-29: the step a declared float), never a number made up here")
     kinds, stakes = set(roster("tenure_kinds")), set(DEFAULT_FIXTURES.get("stakes_ob"))
     if stakes != kinds:
         raise Forbidden(f"`Fixtures stakes_ob` sizes {sorted(stakes)}, and `rosters.yaml: tenure_kinds` names {sorted(kinds)}", "data/fixtures.py",

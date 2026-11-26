@@ -8752,6 +8752,58 @@ rows:
     cite:      "MEASURED at B24.25's FI (d) reading: a failed impeachment cost the impeacher nothing in 60 of 60 runs. B24.44 took the consequence out of `standing`'s faults, the answering act's Event being what the room witnesses (B24.24, B24.25). RULED by Jordan: the cost falls on the impeacher, in the room, through those who witnessed it."
     source:    "workplan v12 B24.44 (step 3; B24 block slot 12); needs_jordan false (ruled)"
 
+  - id:        H-541
+    tier:      1
+    hole:      "WHETHER A JOURNEY THAT CROSSES A BORDER TAKES ONE DRAW ON HOW THE TRAVELLER ARRIVES. `16_PESSIMIST_WR_A_the_road_is_drawn` edit 1 (A-5, A-6, A-7, A-25, A-29, A-30, A-54): a thing that could go either way goes by a draw, and a journey could always have gone wrong; the road took no draw. `off` is the control and ships; `on` is the arm B12b.09 (`world_q.road_input`), B12b.10 (`_relocate`'s legs) and B12b.11 (the travel pass) build behind, and B12b.12 calibrates and flips."
+    kind:      "MODE"
+    owner:     "Jordan, who corrects the assumption; B12b.12 flips it with the calibration. `engine/season/data/fixtures.py` the one home of the row"
+    grade:     "assumption"
+    default:   "off -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: `off`]: at B12b.08 nothing reads it, and the module entry `settlements.exposure` is registered and called by nothing"
+    site:      "Fixtures road_hazard, read by nothing at B12b.08; B12b.11's travel pass (`engine/season/loop/matter.py`) reads it. Closed to its two arms where shipped and where swept (`data/fixtures.py::CLOSED_ARMS`)"
+    sweep:     ["off (SHIPPED, the control)", "on (the shipped sizes)", "on with `road_step_ob` 2 (a harder road)"]
+    unblocks:  "CP-T10-02 (a journey costs the traveller) and F-PES-WR-06: the road's draw, B12b.09 to B12b.12"
+    cite:      "CONTROL: `build_realm(0)`'s content hash at seed 0, one season, equals B12b.05's after-reading (f316d39f826d77961fc3a97aa63355d8): no code reads the row. FALSIFIER: `engine/season/tests/test_travel.py::test_road_hazard_off_hash_equal` (the three calibration rows swept to other values leave the season's hash unmoved while the arm is off)."
+    source:    "workplan v12 B12b.08 (`16_PESSIMIST_WR_A` edit 1; B12b block slot 1)"
+
+  - id:        H-542
+    tier:      1
+    hole:      "HOW HARD A ROAD IS BEFORE ITS HOSTILE TERMS. `16_PESSIMIST_WR_A` edit 1: the road's obstacle is composed as every task obstacle is (U1 architecture §4), with `road_base` the difficulty, a member of `rosters.yaml: difficulty_levels` sized by `Fixtures difficulty_ob`; its size is set by the joint calibration of A-5, A-6 and A-7, not by a number made up here."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B12b.12 calibrates it. `engine/season/data/fixtures.py` the one home of the row; refused at load unless a level of the roster"
+    grade:     "assumption"
+    default:   "routine -- SHIPPED, a PLACEHOLDER [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard: off`, which reads no row]: read only by `road_input` (B12b.09), which an `off` arm never calls; B12b.12 replaces it"
+    site:      "Fixtures road_base, read by nothing at B12b.08; B12b.09's `engine/season/queries/world_q.py::road_input` reads it, only with `road_hazard` on"
+    sweep:     ["plain", "routine (SHIPPED, placeholder)", "demanding"]
+    unblocks:  "B12b.12's calibration (how often a three-border journey arrives hurt or spent)"
+    cite:      "CONTROL: as H-541's. No measurement at B12b.08: the level is read by nothing. [CALIBRATE: B12b.12, joint with H-543 and the traveller's pool.]"
+    source:    "workplan v12 B12b.08 (`16_PESSIMIST_WR_A` edit 1; B12b block slot 2)"
+
+  - id:        H-543
+    tier:      1
+    hole:      "HOW MUCH OBSTACLE ONE HOSTILE TERM OF THE ROAD ADDS. `16_PESSIMIST_WR_A` edit 4 (A-25): three named terms, each one step of `road_step_ob` -- a border the leg crosses, a crossed territory whose season draw this tick landed Failure, a crossed territory in which a field was fought this tick or the last. The step is a declared float on the typed input (A-29)."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; B12b.12 calibrates it with `road_base`. `engine/season/data/fixtures.py` the one home of the row"
+    grade:     "assumption"
+    default:   "1 -- SHIPPED, a PLACEHOLDER [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard: off`, which reads no row]: read only by `road_input` (B12b.09); B12b.12 replaces it"
+    site:      "Fixtures road_step_ob, read by nothing at B12b.08; B12b.09's `engine/season/queries/world_q.py::road_input` reads it, only with `road_hazard` on"
+    sweep:     ["0.5", "1 (SHIPPED, placeholder)", "2"]
+    unblocks:  "B12b.12's calibration; `test_four_borders_fail_more_than_one` (state sets the odds)"
+    cite:      "CONTROL: as H-541's. No measurement at B12b.08. [CALIBRATE: B12b.12, joint with H-542.]"
+    source:    "workplan v12 B12b.08 (`16_PESSIMIST_WR_A` edit 1; B12b block slot 3)"
+
+  - id:        H-544
+    tier:      1
+    hole:      "HOW MUCH BODY A ROAD TAKES FROM A TRAVELLER THE DRAW LANDS ON. `16_PESSIMIST_WR_A` edit 1: one body band is 300 wide at `band_floors.body`, so 100 is a third of a band; the fall is a step on `Person.body`, as `body_step` is for hunger (H-125)."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption. `engine/season/data/fixtures.py` the one home of the row"
+    grade:     "assumption"
+    default:   "100 -- SHIPPED, the source's [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard: off`, which reads no row]: read only by the travel pass (B12b.11), under `road_hazard` on"
+    site:      "Fixtures road_step, read by nothing at B12b.08; B12b.11's travel pass (`engine/season/loop/matter.py`) reads it, only with `road_hazard` on"
+    sweep:     ["50", "100 (SHIPPED: a third of one body band)", "150"]
+    unblocks:  "B12b.11's travel pass; `test_hurt_traveller_is_tended_in_some_seed` (an outcome recoverable in play)"
+    cite:      "CONTROL: as H-541's. No measurement at B12b.08."
+    source:    "workplan v12 B12b.08 (`16_PESSIMIST_WR_A` edit 1; B12b block slot 4)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
