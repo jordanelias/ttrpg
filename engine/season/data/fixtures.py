@@ -1889,13 +1889,28 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `0`. ADM proposes 1 and no document derives it, so the proposed value is the sweep's middle point and (B24.37) the shipped one.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-668 -- `site: Fixtures first_heard_ob`, graded `assumption`; ADM proposes 1 and no document derives it, so it is injected at 1 and swept 0 / 1 / 2]
     first_heard_ob=1,                 # `H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2
+    # v12 B12b.02 (CP-T10-01). THE SCENE POINTS A JOURNEY COSTS, PER UNIT OF ROUTE COST: `world_q.route` returns the cost of the cheapest path over the
+    # settlement graph (each edge the matrix's price for the ground of the settlement it enters), and a journey's leg points are
+    # `max(1, ceil(cost / leg_unit))` (`world_q.leg_points`). Nothing in the loop prices a journey yet (B12b.04 reads it); a positive number.
+    # [ASSUMPTION; medium; Jordan to correct; revert: none needed while nothing reads it -- it sizes S-001 -> S-013 at 4 points at 2.0]
+    # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- no document gives how much route cost is one scene point, so it is injected and swept 1 / 2 (SHIPPED) / 4; the card proposes 2.0]
+    leg_unit=2.0,                     # B12b.02, swept 1.0 / 2.0 (the card's, SHIPPED) / 4.0
+    # v12 B12b.02 (CP-T10-01). WHETHER A JOURNEY IS PRICED BY ITS ROUTE: `off` (SHIPPED, the control) prices nothing -- no caller reads `route` and every
+    # hash is what it was; `on` is the arm B12b.04 and B12b.10 build behind. The same-place rule ships on both arms. The on-arm default does not flip here: B98 sets it.
+    # A value but `off` and `on` is refused where shipped and where swept (`CLOSED_ARMS`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `off`]
+    # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- the card ships route pricing off and rules no flip, so both arms are declared and swept off (the control, SHIPPED) / on]
+    route_pricing="off",              # B12b.02, swept off (control, SHIPPED) / on
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")
 LEDGER_ARM, CASE_FILE_ARM = EVIDENCE_ARMS      # the two arms by name, so a reader spells neither (the unpacking refuses a third)
 #: The fixtures whose value is a closed arm set, refused where it is shipped (`load`) and where it is swept (`Fixtures.sweep`). The readers name the arm by this tuple's member (`sigma.py::_filed_case`, `_exhibits_of`), never by a literal.
-CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS}
+#: B12b.02: `route_pricing`'s two arms, the control first (`off` prices no journey; `on` reads `world_q.route`).
+ROUTE_PRICING_ARMS = ("off", "on")
+ROUTE_PRICING_OFF, ROUTE_PRICING_ON = ROUTE_PRICING_ARMS
+CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
@@ -1917,6 +1932,10 @@ def load() -> None:
         raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
                         needs=f"roles of the composition registry {sorted(composition.ROLES)}",
                         law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
+    unit = DEFAULT_FIXTURES.get("leg_unit")
+    if isinstance(unit, bool) or not isinstance(unit, (int, float)) or not unit > 0:
+        raise Forbidden(f"`Fixtures leg_unit` is {unit!r}", "data/fixtures.py", needs="a positive number of route cost per scene point",
+                        law="B12b.02 (CP-T10-01) -- leg points are `ceil(cost / leg_unit)`; a unit of zero or less prices every journey at nothing or refuses it mid-season")
     for name, arms in CLOSED_ARMS.items():
         if DEFAULT_FIXTURES.get(name) not in arms:
             raise Forbidden(f"`Fixtures {name}` is {DEFAULT_FIXTURES.get(name)!r}", "data/fixtures.py", needs=f"one of {list(arms)}",

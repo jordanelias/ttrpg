@@ -66,6 +66,13 @@
       "verb": "march",
       "needed_by": "engine/season/seam/wrappers/mass_battle.py \u2014 the host adapter `@provider(\"contest\", \"mass_battle\")` builds the typed input record (`field_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31c`, A-25; the `a field` prize's provider since ED-IN-0279, M3). The prize row `a field` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. The target moved from `systems/mass_battle/sim/` with the import closure of `massbattle.py` at `31c` (a package: its imports are dotted, so no `PATH_SEAM_ALLOWED` entry)."
     },
+    "mass_battle.terrain_type_at": {
+      "target": "modules.mass_battle.terrain:terrain_type_at",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/queries/world_q.py \u2014 `route` (B12b.02, CP-T10-01) reads the terrain `type:` at each settlement's `coords` by role string through `engine.substrate.composition.require`, to price the leg it enters from `terrain_cost_matrix`; `(point, *, geography) -> type or None`, the one owner of terrain at a point, which `terrain_row_for_territory` also calls. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `mass_battle.army` is."
+    },
     "settlements.drawn_under": {
       "target": "modules.settlements.larder:drawn_under",
       "kind": "callable",
@@ -172,6 +179,7 @@
     "modules/fieldwork/find.py",
     "modules/mass_battle/armyrecord.py",
     "modules/mass_battle/massbattle.py",
+    "modules/mass_battle/terrain.py",
     "modules/mass_battle/troop_types/presets.py",
     "modules/settlements/fabric.py",
     "modules/settlements/fortification.py",

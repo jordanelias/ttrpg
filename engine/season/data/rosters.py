@@ -578,6 +578,22 @@ def territory_id_of(rung_id: "str | None") -> "str | None":
     return s.removeprefix(_TERRITORY_RUNG_PREFIX) or None
 
 
+def slug(text: str) -> str:
+    """An id fragment: lowercase, alphanumerics and underscores only. `boot/realm.py` builds every minted id from it (`_slug` there is this)."""
+    return "".join(c if c.isalnum() else "_" for c in str(text).lower()).strip("_")
+
+
+_SETTLEMENT_RUNG_PREFIX = "set_"  # [JUSTIFIED: an id SPELLING, not a game value -- the settlement-rung half of `territory_rung_id`'s shape above]
+
+
+def settlement_rung_id(sid: str) -> str:
+    """`'S-001'` -> `'set_s_001'`. THE ONE OWNER OF THE SETTLEMENT-RUNG-ID RELATION, `territory_rung_id`'s shape one row down: `boot/realm.py`
+    mints a `settlement` Rung per geography row (`valoria_geography_v30.yaml: settlements`) and `queries/world_q.py::route` has to get
+    from a Rung back to the geography row the settlement graph is keyed on. The inverse is read off the geography (`world_q.route`'s
+    `{settlement_rung_id(s): s}`), never off the spelling, since the slug is lossy."""
+    return _SETTLEMENT_RUNG_PREFIX + slug(sid)
+
+
 def _load_territory_weight(raw) -> dict:
     """B21.68 (`U5d_FA_owed_edits` §4): `rosters.yaml: tables.territory_weight`, `{territory id: weight}`, REFUSED at import for a key that is no
     territory of the geography file's `provinces:` (its rows are the territories) and for a value that is not a positive number (a `bool` is not

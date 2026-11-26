@@ -106,6 +106,25 @@ def _polygon_area(polygon):
     return abs(total) / 2.0
 
 
+def terrain_type_at(point, *, geography):
+    """The geography file's terrain `type:` AT `point` (an `[x, y]` pair), or `None` where no terrain polygon holds it. THE ONE OWNER OF
+    *terrain at a point* (CP-T10-01): `terrain_row_for_territory` maps what this returns to an A.9 row, and the season's `route`
+    reaches it by the composition role `mass_battle.terrain_type_at` to price a settlement's ground (`terrain_cost_matrix` is keyed on
+    this type), never by import.
+
+    SMALLEST-AREA MATCH WINS among overlapping terrain polygons (the file nests a pass inside the mountain it crosses), so a point
+    inside both `terrain-mountain-north` and `terrain-pass-lowenskyst` reads `mountain_pass`. `geography`: the parsed file, REQUIRED,
+    read and never written, as `terrain_row_for_territory` takes it."""
+    best_type, best_area = None, None
+    for entry in geography.get('terrain', []):
+        if not _point_in_polygon(point, entry['polygon']):
+            continue
+        area = _polygon_area(entry['polygon'])
+        if best_area is None or area < best_area:
+            best_type, best_area = entry['type'], area
+    return best_type
+
+
 def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, *, geography):
     """The A.9 row (one of this module's six constants) for a battle fought over province `tid`.
 
@@ -175,13 +194,7 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, *, geogra
     anchor = province.get('anchor')
     if anchor is None:
         return OPEN_FLAT
-    best_type, best_area = None, None
-    for entry in geography.get('terrain', []):
-        if not _point_in_polygon(anchor, entry['polygon']):
-            continue
-        area = _polygon_area(entry['polygon'])
-        if best_area is None or area < best_area:
-            best_type, best_area = entry['type'], area
+    best_type = terrain_type_at(anchor, geography=geography)
     if best_type is None:
         return OPEN_FLAT
     return _TYPE_TO_ROW.get(best_type, OPEN_FLAT)

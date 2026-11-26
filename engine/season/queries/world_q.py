@@ -31,6 +31,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, d
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
+from ..data import geography as geo_data                    # B12b.02: `route`'s settlement graph and its pure shortest path
 from ..data.arrangements import ARRANGEMENTS, in_form      # B24p.16: `proceeding_row`
 from ..data.requires import (
     KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, Observation, binding_from_act, binding_of, evaluate,
@@ -41,7 +42,7 @@ from ..data.rosters import (
     DECLARED, INVESTED, SEASONS_OF_YEAR, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
-    faction_prop_id, factions_compatible,
+    faction_prop_id, factions_compatible, settlement_rung_id,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
@@ -1695,9 +1696,11 @@ ARMY_ORDER = "mass_battle.army_order"
 ARMY_OPTIONS = "mass_battle.army_options"
 #: ED-IN-0306 phase 5c: the commands that raise and organise an army for a faction nobody plays.
 ARMY_PRESET = "mass_battle.army_preset"
+#: B12b.02 (CP-T10-01): terrain at a point, the one owner (`modules/mass_battle/terrain.py::terrain_type_at`), called by `route`.
+TERRAIN_TYPE_AT = "mass_battle.terrain_type_at"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
                  (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"),
-                 (ARMY_ORDER, "query"), (ARMY_OPTIONS, "query"), (ARMY_PRESET, "query"))
+                 (ARMY_ORDER, "query"), (ARMY_OPTIONS, "query"), (ARMY_PRESET, "query"), (TERRAIN_TYPE_AT, "query"))
 
 
 def _entry(role: str):
@@ -2827,6 +2830,52 @@ def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
         if rung is not None and rung.kind == "territory":
             return r
     return None
+
+
+def route(w: World, a: str, b: str) -> Optional[tuple]:
+    """B12b.02 (CP-T10-01): THE ROUTE FROM RUNG `a` TO RUNG `b`, `(path, cost)`, or `None` where the journey is blocked. THE ONE OWNER of a
+    journey's path and price; nothing in the loop calls it while `route_pricing` is `off` (B12b.04 reads it).
+
+    A rung's NODE is the settlement at or above it (`ancestry`, the one walk: the rung itself if it is a settlement, a hearth or Site
+    below one reads that settlement). `path` is the tuple of settlement RUNG ids from `a`'s node to `b`'s, both included. Each step
+    over a `settlement_adjacency` edge costs `terrain_cost_matrix[t]`, `t` the terrain at the coords of the settlement ENTERED
+    (`mass_battle.terrain_type_at`, the one owner of terrain at a point, reached by its `query` role; `plains` where no polygon holds
+    the point), summed by `data/geography.py::shortest_path` (ties by sorted ids, so the path is deterministic). A settlement
+    whose ground costs the matrix's `mountain` entry may not be entered: where `b` cannot be reached without entering one the answer is
+    `None` and the journey is `travel.blocked`, as a border is. A rung with no settlement at or above it (a territory, a duchy, the
+    realm) and a journey inside one settlement cost the FLOOR, `((), 0.0)`, which `leg_points` prices at its minimum of 1.
+    `None` too where a node has no edge in the graph. Read-only; traces nothing."""
+    geo = geo_data.geography()
+    by_rung = {settlement_rung_id(s): s for s in geo.get("settlements") or ()}
+
+    def node(rung_id: str) -> Optional[str]:
+        return next((by_rung[r] for r in ancestry(w, rung_id) if r in by_rung), None)
+
+    na, nb = node(a), node(b)
+    if na is None or nb is None or na == nb:
+        return ((), 0.0)
+    matrix, locate = geo["terrain_cost_matrix"], _entry(TERRAIN_TYPE_AT)
+    impassable = matrix["mountain"]
+
+    def price(sid: str) -> Optional[float]:
+        cost = matrix[locate(geo["settlements"][sid]["coords"], geography=geo) or "plains"]
+        return None if cost >= impassable else cost
+
+    found = geo_data.shortest_path(na, nb, price)
+    if found is None:
+        return None
+    path, cost = found
+    return tuple(settlement_rung_id(s) for s in path), cost
+
+
+def leg_points(w: World, a: str, b: str) -> Optional[int]:
+    """B12b.02: THE SCENE POINTS A JOURNEY FROM `a` TO `b` COSTS, `max(1, ceil(cost / leg_unit))` over `route`'s cost, or `None` where
+    `route` is blocked. `leg_unit` is the fixture. The floor is 1 point: a journey inside one settlement, or at a rung above settlement kind,
+    still costs a leg."""
+    found = route(w, a, b)
+    if found is None:
+        return None
+    return max(1, math.ceil(found[1] / w.fixtures.get("leg_unit")))
 
 
 def closed_uses(w: World, rung_id: str) -> dict:

@@ -144,6 +144,10 @@ composition_roles:
     target: "modules.mass_battle.troop_types.presets:plan"
     entry: query
     needed_by: "engine/season/harness/army_presets.py — the preset orders of battle for factions nobody plays (ED-IN-0306 phase 5c, shipped off: nothing in the season loop calls it) build the typed input record (`ArmyPresetQuery`, `queries/inputs.py`: the faction, the cohorts it may raise with their weights and training Sites, `condition_scale`, and the other armies' records) and call this entry by role string through `engine.substrate.composition.require`, turning the returned commands into acts for the faction's leader. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `mass_battle.army` is."
+  mass_battle.terrain_type_at:
+    target: "modules.mass_battle.terrain:terrain_type_at"
+    entry: query
+    needed_by: "engine/season/queries/world_q.py — `route` (B12b.02, CP-T10-01) reads the terrain `type:` at each settlement's `coords` by role string through `engine.substrate.composition.require`, to price the leg it enters from `terrain_cost_matrix`; `(point, *, geography) -> type or None`, the one owner of terrain at a point, which `terrain_row_for_territory` also calls. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `mass_battle.army` is."
   settlements.fortification:
     target: "modules.settlements.fortification:fortification"
     entry: query

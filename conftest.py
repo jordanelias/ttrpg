@@ -70,7 +70,7 @@ SEASON_SUITES = {
                             r"refusal_memory|one_reader|storybar|pairs)"),
     "se_season": re.compile(r"^test_(settlements|works_founding|territorial|hunger|migrate|in45|home_presence|term_upkeep|demand_delivery|"
                             r"in22|in35|rem32|scale_of_rung|cr86)"),
-    "wr_season": re.compile(r"^test_(thread_operations|k3_thread|season_weather|calendar)"),
+    "wr_season": re.compile(r"^test_(thread_operations|k3_thread|season_weather|calendar|route_leg)"),
 }
 IN_SEASON = "in_season"   # every `engine/season/tests` file no suite above names: the loop's own cross-cutting tests (the IN lane)
 

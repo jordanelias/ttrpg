@@ -15,6 +15,7 @@ into it (the module only reads it). A test that needs the file re-read sets `_CA
 """
 from __future__ import annotations
 
+import heapq
 from typing import Optional
 
 from .files import GEOGRAPHY_YAML
@@ -35,6 +36,46 @@ def geography() -> dict:
 def load() -> dict:
     """`data.load_all`'s handle on this loader: read the file now. The same cache `geography()` fills."""
     return geography()
+
+
+def settlement_neighbours() -> dict:
+    """B12b.02 (CP-T10-01): `{settlement geography id: tuple of the ids it borders, sorted}`, read off the file's `settlement_adjacency:`
+    edges (`from`/`to`) and made UNDIRECTED, as `adjacent_territories` does for the territories. The edge `type:` is not read: what an
+    edge costs is the ground of the settlement it enters (`world_q.route`). Read each call, so a test that swaps `geography()`'s
+    cache sees its own graph; 55 edges."""
+    out: dict = {}
+    for e in geography().get("settlement_adjacency") or ():
+        out.setdefault(e["from"], set()).add(e["to"])
+        out.setdefault(e["to"], set()).add(e["from"])
+    return {s: tuple(sorted(n)) for s, n in sorted(out.items())}
+
+
+def shortest_path(a: str, b: str, price) -> Optional[tuple]:
+    """B12b.02: THE CHEAPEST PATH from settlement `a` to settlement `b` over `settlement_neighbours()`, as `(path, cost)` -- `path` the
+    ids from `a` to `b` inclusive, `cost` the sum of `price(s)` over every settlement ENTERED (`a` itself is not entered). `price(s)` is
+    a number, or `None` for a settlement that may not be entered; `None` is returned where `b` cannot be reached without one. A path
+    from `a` to itself is `((a,), 0.0)`. DETERMINISTIC: among equal costs the path that sorts first by its ids wins (Dijkstra over
+    `(cost, path)` pairs), so no tie breaks on dict order or on a hash. Pure: it reads the graph and `price`, nothing else.
+    An id the graph does not hold is no node, and `None` comes back for it."""
+    graph = settlement_neighbours()
+    if a not in graph or b not in graph:
+        return None
+    heap, done = [(0.0, (a,))], set()
+    while heap:
+        cost, path = heapq.heappop(heap)
+        here = path[-1]
+        if here in done:
+            continue
+        if here == b:
+            return path, cost
+        done.add(here)
+        for n in graph[here]:
+            if n in done:
+                continue
+            p = price(n)
+            if p is not None:
+                heapq.heappush(heap, (cost + p, path + (n,)))
+    return None
 
 
 _ADJACENT: Optional[dict] = None
