@@ -39,7 +39,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    DECLARED, INVESTED, SEASONS_OF_YEAR, SEASON_TERMS,
+    DECLARED, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible, settlement_rung_id,
@@ -117,7 +117,7 @@ from ..trace_log import TRACE
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
                      ProduceInput, Sitting, SubsistInput, Under, is_adjourned, is_filed, is_first, written)
-from ..data.fixtures import SITE_YIELD
+from ..data.fixtures import SITE_YIELD, check_season_weather
 from engine.substrate import combat_kit as _combat_kit, composition
 
 
@@ -1499,40 +1499,50 @@ def season_term(w: World, term: str):
     return SEASON_TERMS[SEASONS_OF_YEAR[season_of_year(w)]][term]
 
 
+def season_spell(w: World, territory: Optional[str] = None) -> float:
+    """B12b.03 (R-27): the SPELL TERM over `territory` this year, the obstacle term `season_factor_of` adds to the season's `hardship`: one keyed draw
+    on `(world_seed, year, region)` picking from `season_spell_draw` (0 when that is `()`, nothing drawn). `year = tick // len(SEASONS_OF_YEAR)` (the
+    year's one owner) and `region` is the territory's parent rung (`"world"` where it has none), so every territory under one region reads one
+    spell for the whole year, the next year may read another, and no state is stored."""
+    spells = w.fixtures.get("season_spell_draw")
+    if not spells:
+        return 0
+    year = w.tick // len(SEASONS_OF_YEAR)
+    region = (parent_of(w, territory) if territory else None) or "world"
+    return draw_factory(w.world_seed, lambda: year)(region, "season_spell").pick(spells)
+
+
 def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     """v9 IN-21 / `H-26`: the multiplier on this season's `yield` in `territory`. THE ONE OWNER of the
     term MATTER's yield step scales by.
 
-    `season_factor` is the constant (swept 0.5 / 1 / 2). When `season_factor_draw` declares a table
-    the factor is that constant times ONE outcome drawn from the current season of the year's entry,
-    the outcomes equally likely. The draw is KEYED, not random: `ids.draw_factory`, seeded from
-    `(world_seed, tick, territory rung id)`, is the same mint every id uses, so the same seed twice gives
-    one hash, two seeds differ, and two territories at one tick draw independently (v10 CL-EVENTS (1),
-    M16 (b): weather is per territory). `territory` is a `territory` rung's id (`enclosing_territory`'s
-    answer); `None` is a place that lies in none (a Site at the realm or a duchy) and keys the draw on
-    `"world"`. An EMPTY table is the
-    control arm and returns the bare constant for every territory, drawing nothing, so the default
-    world's arithmetic is untouched (`test_season_weather.py` holds the three-hash equality)."""
+    `season_factor` is the constant (swept 0.5 / 1 / 2). An EMPTY `season_factor_draw` is the control arm and
+    returns the bare constant for every territory, drawing nothing (`test_season_weather.py` holds the
+    three-hash equality). NON-EMPTY, it is the switch of the DRAWN FORM (B12b.03, A-54: one draw on the
+    one ladder, `degree_from_net`, never a table of multipliers):
+
+      * the SPELL: one keyed draw on `(world_seed, year, region)` picks a term of `season_spell_draw`
+        (0 when that is `()`); `year = tick // len(SEASONS_OF_YEAR)` and `region` is the territory's PARENT
+        rung (`"world"` for a place in none), so every territory under one region reads one spell for a
+        whole year and nothing is stored: the spell is a function of its key;
+      * the POOL is the place's endurance (`season_endurance`) and the steward's levels (0: no row names the
+        site `settlement_effect` yet), made a pool by the one rule `pool_of`; the OBSTACLE is the season's
+        `hardship` (`season_terms`) plus the spell; the roll is keyed `(world_seed, tick, territory, "season_factor")`;
+      * the band the net clears the obstacle by chooses `season_band_factors[band]`, and the return is
+        `season_factor` times it times the season's `yield` term.
+
+    Their season draws are independent (the key holds the territory); their spell term is shared when they
+    share a parent rung. `territory` is a `territory` rung's id (`enclosing_territory`'s answer); `None` is a
+    place that lies in none (a Site at the realm or a duchy) and keys the draw on `"world"`."""
     base = w.fixtures.get("season_factor")
     table = w.fixtures.get("season_factor_draw")
+    check_season_weather(table, w.fixtures.get("season_spell_draw"))      # a swept arm is refused where it is read (the load reads the shipped one)
     if not table:
         return base
-    if len(table) != len(SEASONS_OF_YEAR):
-        raise Unspecified(f"`season_factor_draw` declares {len(table)} seasons but the year "
-                          f"(`rosters.yaml: seasons_of_year`) is {len(SEASONS_OF_YEAR)}", "H-26",
-                          needs="one entry per season of the year, in order, or `()` for the control",
-                          law="IN-21 / ED-IN-0332: the year is the roster's length, and the table is read at `tick % len(year)`")
-    s = season_of_year(w)
-    outcomes = table[s]
-    if not outcomes:
-        # An empty season entry has nothing to draw from; without this `choose` below dies with a
-        # bare IndexError naming neither the fixture nor the season.
-        raise Unspecified(f"`season_factor_draw` season {s} declares no outcomes", "H-26",
-                          needs="at least one multiplier per season, or `()` for the control",
-                          law="IN-21: each season of the year holds the equally likely multipliers it draws from")
-    draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory,
-                                                      "season_factor")
-    return base * draw.pick(outcomes) * season_term(w, "yield")
+    pool = _sigma_leverage.pool_of(w.fixtures.get("season_endurance"), 0, w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
+    draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory, "season_factor")
+    band = DEGREE_LABEL[degree_from_net(_sigma_leverage.roll_net_continuous(pool, rng=draw), season_term(w, "hardship") + season_spell(w, territory))]
+    return base * SEASON_BAND_FACTORS[band] * season_term(w, "yield")
 
 
 def _site_rungs(w: World) -> list:

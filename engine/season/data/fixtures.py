@@ -20,7 +20,7 @@ from typing import Any
 
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
-from ..gaps import Forbidden, Ungraded
+from ..gaps import Forbidden, Ungraded, Unspecified
 from .geography import geography
 from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_list, roster_map, table
 
@@ -545,12 +545,24 @@ DEFAULT_FIXTURES = Fixtures(
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
     # a constant has; a real distribution is a different hole and is not invented here.
     season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
-    # v9 IN-21 / `H-26`'s DISTRIBUTION: one tuple per season of the year (so the year's length is the
-    # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
-    # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
-    # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
-    # `world_q.season_factor_of`, keyed on (world_seed, tick, territory rung id).
-    season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
+    # v9 IN-21 / `H-26`'s DRAWN FORM (B12b.03, A-54): `()` is the CONTROL: no year, no draw, the bare constant above. NON-EMPTY, the table is the
+    # SWITCH of one keyed draw on the one four-band ladder (`world_q.season_factor_of`: pool the place's endurance, obstacle the season's
+    # `hardship` plus the year's spell, the band choosing a factor of `rosters.yaml: season_band_factors`), keyed on (world_seed, tick,
+    # territory rung id); its ENTRIES are read by nothing, and it is refused unless it holds one entry per season of the year (`seasons_of_year`).
+    season_factor_draw=(),            # `H-26`, swept () (control, SHIPPED) / a table of one entry per season (the drawn form on)
+    # B12b.03 (R-27): THE YEAR'S SPELL, a run of weather over a region (a territory's parent rung) for a year: the equally likely OBSTACLE TERMS one draw
+    # keyed on (world_seed, year, region) picks from, shared by every territory under the region for the whole year and added to the season's
+    # `hardship` in `world_q.season_factor_of`. `()` is the control: no spell (a term of 0), nothing drawn. A spell with no `season_factor_draw` is
+    # refused (a spell needs a year to last, and the year is read by that draw alone).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `()`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures season_spell_draw`, graded `assumption`; the source draws a regional term and states no size, so it is injected and swept () (control, SHIPPED) / (-1, 0, +1)]
+    season_spell_draw=(),             # `H-26`, swept () (control, SHIPPED) / (-1, 0, 1)
+    # B12b.03: THE PLACE'S ENDURANCE, the score the season's draw's pool is made of (`pool_of(endurance + steward levels, 0, pool_add, pool_floor)`), the
+    # one pool rule. No place holds an endurance and no row names the steward's site `settlement_effect`, so one number stands for every place and the
+    # steward's levels read 0; read only under `season_factor_draw` non-empty.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `season_factor_draw: ()`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures season_endurance`, graded `assumption`; the source's pool is the place's endurance and no document gives a place one, so it is injected at 0 (the pool is `pool_add`) and swept 0 (SHIPPED) / 2 / 4]
+    season_endurance=0,               # `H-26`, swept 0 (SHIPPED) / 2 / 4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,
@@ -1916,6 +1928,25 @@ CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_AR
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
 
 
+def check_season_weather(draw_table, spells) -> None:
+    """B12b.03 (D-U1-10, R-27): a NON-EMPTY `season_factor_draw` holds one entry per season of the year (`rosters.yaml: seasons_of_year`, the year's one
+    owner), and a non-empty `season_spell_draw` needs that table (a spell needs a year to last) and holds numbers (a `bool` is none). Called at load for
+    the shipped fixtures and by `world_q.season_factor_of` for a swept one, so a planted arm is refused where it is read."""
+    from .rosters import SEASONS_OF_YEAR
+    if draw_table and len(draw_table) != len(SEASONS_OF_YEAR):
+        raise Unspecified(f"`season_factor_draw` declares {len(draw_table)} seasons but the year "
+                          f"(`rosters.yaml: seasons_of_year`) is {len(SEASONS_OF_YEAR)}", "H-26",
+                          needs="one entry per season of the year, in order, or `()` for the control",
+                          law="IN-21 / ED-IN-0332: the year is the roster's length, and the table is read at `tick % len(year)`")
+    if spells and not draw_table:
+        raise Unspecified("`season_spell_draw` is declared and `season_factor_draw` is `()`", "H-26 / R-27",
+                          needs="a season table to hold the spell, or `()` for the spell",
+                          law="09_WR_B_weather edit 1 -- a spell needs a year to last, and only the season's draw reads one")
+    if any(isinstance(t, bool) or not isinstance(t, (int, float)) for t in spells or ()):
+        raise Unspecified(f"`season_spell_draw` is {tuple(spells)!r}", "H-26 / R-27",
+                          needs="numbers, the obstacle terms the spell draw picks from", law="R-27 -- the spell is an obstacle term added to the season's hardship")
+    
+
 def load() -> None:
     """`data.load_all()`'s hook: refuse a `tables.capability_uses` row naming a Fixture this registry does not register.
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
@@ -1932,6 +1963,7 @@ def load() -> None:
         raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
                         needs=f"roles of the composition registry {sorted(composition.ROLES)}",
                         law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
+    check_season_weather(DEFAULT_FIXTURES.get("season_factor_draw"), DEFAULT_FIXTURES.get("season_spell_draw"))
     unit = DEFAULT_FIXTURES.get("leg_unit")
     if isinstance(unit, bool) or not isinstance(unit, (int, float)) or not unit > 0:
         raise Forbidden(f"`Fixtures leg_unit` is {unit!r}", "data/fixtures.py", needs="a positive number of route cost per scene point",

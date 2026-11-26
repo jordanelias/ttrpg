@@ -1,18 +1,18 @@
 """v9 IN-21 -- FORCE-WEATHER: a keyed seasonal draw on MATTER's yield term (`H-26`).
 
-The draw is `world_q.season_factor_of`, read at the yield step in `loop/matter.py`; its distribution is
-the `season_factor_draw` fixture (one tuple of equally likely multipliers per season of the year,
-`()` = off). Each test asks the real MATTER barrier, never a re-derivation of the arithmetic.
+The draw is `world_q.season_factor_of`, read at the yield step in `loop/matter.py`; B12b.03 made it ONE keyed draw on the four-band ladder (pool
+the place's endurance, obstacle the season's `hardship` plus the year's spell, the band choosing a factor of `rosters.yaml: season_band_factors`),
+and a non-empty `season_factor_draw` (one entry per season of the year, `()` = off) is its switch. Each test asks the real MATTER barrier, never a
+re-derivation of the arithmetic; the band factors and hardship are PLANTED here (the shipped factors are all 1.0, the control).
 
 THE FALSIFIERS, each with the failure it would show:
   * CONTROL: on the one-town world, a declared all-1.0 table (the draw ON but degenerate) reads the same as
     no table over two seasons -- a draw that perturbed the arithmetic when it multiplies by 1.0 would move it
     (the realm's own hashes are `_realm_goldens.py`'s);
-  * DROUGHT: a drought-only table leaves the larder below the control arm's after the same barriers,
+  * DROUGHT: every band at 0.5 leaves the larder below the control arm's after the same barriers,
     and the control arm emits no `shortfall:` observation where the drought arm does;
-  * KEYED: the same seed twice gives one hash; a different seed reads a different factor sequence; the
-    factor at a tick is the table's entry at `tick % len(table)` (the season of the year, read off the
-    clock and stored nowhere).
+  * KEYED: the same seed twice gives one hash; a different seed reads a different factor sequence; the season's hardship at a tick is the
+    year's entry at `tick % len(year)` (the season of the year, read off the clock and stored nowhere).
 """
 
 from __future__ import annotations
@@ -39,11 +39,21 @@ def _digest(w) -> tuple:
     seq = [f"{e.kind}|{e.id}" for e in w.log]
     return len(seq), hashlib.sha256("\n".join(seq).encode()).hexdigest()
 
-# H-26's declared sweep, as tables: a year of four seasons each time.
+# H-26's switch, as tables: a year of four seasons each time. The entries are read by nothing; the draw's size is `season_band_factors`.
 YEAR = 4
-DROUGHT = ((0.5,),) * YEAR                    # every season draws the 0.5 point
-UNIT = ((1.0,),) * YEAR                        # the draw on, degenerate at the control value
-SPREAD = ((0.5, 1.0, 2.0),) * YEAR            # the swept points, equally likely
+UNIT = ((1.0,),) * YEAR                        # the draw on (the shipped band factors are all 1.0: degenerate at the control value)
+#: Planted band factors (the shipped ones are 1.0): a drought is every band at 0.5; the spread reads three values over the four bands.
+DROUGHT_BANDS = {"Overwhelming": 0.5, "Success": 0.5, "Partial": 0.5, "Failure": 0.5}
+SPREAD_BANDS = {"Overwhelming": 2.0, "Success": 1.0, "Partial": 0.5, "Failure": 0.5}
+#: Planted hardship by season, so every band has support (pool 6 at the shipped `pool_add`, hardship 0 clears the obstacle in most draws).
+HARDSHIP = (0, 2, 4, 6)
+
+
+def _plant(monkeypatch, bands, hardship=None):
+    """Plant the band factors (and, where given, the season's hardship) the shipped control sets to 1.0 and 0."""
+    monkeypatch.setattr(world_q, "SEASON_BAND_FACTORS", bands)
+    if hardship is not None:
+        monkeypatch.setattr(world_q, "SEASON_TERMS", {s: {**t, "hardship": h} for (s, t), h in zip(world_q.SEASON_TERMS.items(), hardship)})
 
 
 def _matter(w):
@@ -110,9 +120,10 @@ def test_in21_a_table_of_ones_reads_the_same_as_no_table():
     assert off.content_hash() == unit.content_hash(), "a table of 1.0 moved the hash"
 
 
-def test_in21_drought_leaves_stores_below_control_and_a_drained_larder_reports_shortfall():
+def test_in21_drought_leaves_stores_below_control_and_a_drained_larder_reports_shortfall(monkeypatch):
     control, c_short = _seasons(_town(()), 2)
-    drought, d_short = _seasons(_town(DROUGHT), 2)
+    _plant(monkeypatch, DROUGHT_BANDS)
+    drought, d_short = _seasons(_town(UNIT), 2)
     # Non-vacuity: the control world actually produced and fed (stores moved, nothing short), so a
     # "below control" reading is a difference and not two empty larders.
     assert control[0] == {"grain": 40, "salt": 30}, f"control world is not the one sized: {control[0]}"
@@ -131,8 +142,9 @@ def test_in21_drought_leaves_stores_below_control_and_a_drained_larder_reports_s
     assert d_short[1] == [(TOWN, f"{SHORTFALL_PREDICATE}:grain", 10)], d_short[1]
 
 
-def test_in21_same_seed_twice_one_hash_and_the_draw_moves_it_off_control():
-    a, b = _town(SPREAD, seed=7), _town(SPREAD, seed=7)
+def test_in21_same_seed_twice_one_hash_and_the_draw_moves_it_off_control(monkeypatch):
+    _plant(monkeypatch, SPREAD_BANDS, HARDSHIP)
+    a, b = _town(UNIT, seed=7), _town(UNIT, seed=7)
     _seasons(a, 6)
     _seasons(b, 6)
     assert a.content_hash() == b.content_hash(), "the same seed twice gave two hashes"
@@ -141,9 +153,11 @@ def test_in21_same_seed_twice_one_hash_and_the_draw_moves_it_off_control():
     assert a.content_hash() != off.content_hash(), "the draw on moved nothing; it is not wired"
 
 
-def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read_off_tick():
+def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read_off_tick(monkeypatch):
+    _plant(monkeypatch, SPREAD_BANDS, HARDSHIP)
+
     def factors(seed):
-        w = _town(SPREAD, seed=seed)
+        w = _town(UNIT, seed=seed)
         out = []
         for t in range(24):
             w.tick = t
@@ -152,21 +166,18 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
 
     seq = {s: factors(s) for s in range(4)}
     assert all(set(f) <= {0.5, 1.0, 2.0} for f in seq.values())
-    # FULL SUPPORT, not only a subset: a modulus that never reaches the last outcome (`% (n - 1)`)
-    # draws only members of the set and would pass the line above.
+    # FULL SUPPORT, not only a subset: a band the ladder can reach but the draw never does would pass the line above.
     assert set().union(*(set(f) for f in seq.values())) == {0.5, 1.0, 2.0}
     assert len({tuple(f) for f in seq.values()}) > 1, "four seeds drew one sequence; the key ignores the seed"
     assert len(set(seq[0])) > 1, "one seed drew one value for 24 seasons; the key ignores the tick"
     assert factors(0) == seq[0], "the same seed read a different sequence the second time"
-    # The season of the year IS tick % len(table): with a distinct single outcome per season the
-    # factor is the table's entry at that index, for every tick, and the year wraps.
-    year = ((0.5,), (1.0,), (2.0,), (1.5,))
-    w = _town(year)
+    # The season of the year IS tick % len(year): the hardship the draw reads at a tick is the planted year's entry at that index, and the year wraps.
+    w = _town(UNIT)
     seen = 0
-    for t in range(2 * len(year) + 1):
+    for t in range(2 * YEAR + 1):
         w.tick = t
-        assert world_q.season_of_year(w) == t % len(year)
-        assert world_q.season_factor_of(w) == year[t % len(year)][0]
+        assert world_q.season_of_year(w) == t % YEAR
+        assert world_q.season_term(w, "hardship") == HARDSHIP[t % YEAR]
         seen += 1
     assert seen == 9
     # And no table: the control returns the bare constant, and the year is the roster's, not the table's.

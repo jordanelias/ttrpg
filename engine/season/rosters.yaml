@@ -2335,6 +2335,18 @@ rosters:
       summer: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
       autumn: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
       winter: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+  season_band_factors:
+    source: "`09_WR_B_weather_with_memory_and_the_year` edit 1 (B12b.03), A-54: the season's harvest is one keyed draw on the one four-band ladder, the band choosing the factor"
+    open: false
+    note: >-
+      THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names
+      (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a
+      value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty
+      (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so
+      a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest
+      under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2).
+      `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.
+    values: {Overwhelming: 1.0, Success: 1.0, Partial: 1.0, Failure: 1.0}
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99

@@ -1,9 +1,10 @@
 """v10 CL-EVENTS (1) -- FORCE-WEATHER IS PER TERRITORY: `world_q.season_factor_of` is keyed on
 `(world_seed, tick, territory rung id)` and `ProduceInput.factor` carries the factor per rung (M16 (b)).
 
-This file holds the KEY and the INTERFACE; the arm stays `season_factor_draw = ()` (commit (2), B10-18, is the
+This file holds the KEY and the INTERFACE; the arm stays `season_factor_draw = ()` (commit (2), B12b.43, is the
 live arm), so every test that needs a draw sweeps it on a world of its own, the way `test_season_weather.py`
-does. The control is that file's `BASE_HASHES` / `BASE_EVENTS` (the realm, arm off, reads the pre-change hash),
+does, with the band factors planted (the shipped ones are all 1.0). B12b.03 adds the SPELL's key: the year and the
+parent rung. The control is that file's `BASE_HASHES` / `BASE_EVENTS` (the realm, arm off, reads the pre-change hash),
 which this change leaves unedited.
 
 THE FALSIFIERS, each with the failure it would show:
@@ -13,15 +14,28 @@ THE FALSIFIERS, each with the failure it would show:
     one factor, a rung in no territory reads the territory-less key, and the yield each rung is credited with is
     its own territory's draw -- a module that read one factor for every rung would credit one yield everywhere;
   * CONTROL: with the arm at its shipped `()` every rung reads the bare constant and NO DRAW IS MADE (the mint
-    is replaced by one that raises), and the yield is the constant's.
+    is replaced by one that raises), and the yield is the constant's;
+  * SPELL: the obstacle term of one region for one year is a function of `(seed, year, region)`: two territories under one
+    parent read one term in every season of a year, the next year may differ, two parents may differ in one season; a spell with
+    no season table, and a table that is not one entry a season, are refused.
 """
 
 from __future__ import annotations
 
+import pytest
+
+from ..data.fixtures import check_season_weather
+from ..gaps import Unspecified
 from ..queries import world_q
 from ..state.carriers import Rung, Site, Tenure
 from ..state.world import World
-from .test_season_weather import DEFAULT, SPREAD, _matter
+from .test_season_weather import DEFAULT, HARDSHIP, SPREAD_BANDS, UNIT as SPREAD, _matter, _plant
+
+
+@pytest.fixture(autouse=True)
+def _bands(monkeypatch):
+    _plant(monkeypatch, SPREAD_BANDS, HARDSHIP)
+
 
 # Test data, not a claim about Valoria's economy: one harbour at full condition yields 40 grain and 30 salt a season
 # at factor 1 (`test_season_weather.py`'s own reading), so a factor of 0.5 / 1 / 2 yields half / the same / double.
@@ -146,3 +160,77 @@ def test_cl_events_1_the_control_arm_reads_the_bare_constant_at_every_rung_and_d
     _matter(w)
     for rid in RUNGS:
         assert _yield_of(w, rid) == {k: int(v * base) for k, v in CONTROL_YIELD.items()}
+
+
+# --- the spell (B12b.03, R-27) ---------------------------------------------------------------------------------------------------------
+SPELLS = (-1, 0, 1)
+#: parent rung -> its territories: `terr_a` and `terr_a2` share `duchy_x`; `terr_b` stands under `duchy_y`.
+PARENTS = {"duchy_x": ("terr_a", "terr_a2"), "duchy_y": ("terr_b",)}
+
+
+def _spell_world(seed: int) -> World:
+    w = World(seed, DEFAULT.sweep("season_factor_draw", SPREAD).sweep("season_spell_draw", SPELLS))
+    w.rungs["r_realm"] = Rung("r_realm", "realm", stores=None)
+    n = 0
+    for parent, territories in PARENTS.items():
+        w.rungs[parent] = Rung(parent, "duchy", stores=None)
+        w.add_tenure(Tenure(f"t_in_{n}", parent, "r_realm", "contain", 0)); n += 1
+        for terr in territories:
+            w.rungs[terr] = Rung(terr, "territory", stores=None)
+            w.add_tenure(Tenure(f"t_in_{n}", terr, parent, "contain", 0)); n += 1
+    return w
+
+
+def _spells_over(w, ticks, territories=("terr_a", "terr_a2", "terr_b")) -> dict:
+    out = {}
+    for t in ticks:
+        w.tick = t
+        out[t] = tuple(world_q.season_spell(w, terr) for terr in territories)
+    return out
+
+
+def test_spell_shared_under_one_parent_for_a_year():
+    """Two territories under one parent rung read one spell in every season of a year, at every seed (the parent, not the territory, is the key)."""
+    checked = 0
+    for seed in range(6):
+        read = _spells_over(_spell_world(seed), range(8))
+        for t, (a, a2, _b) in read.items():
+            assert a == a2, f"seed {seed} tick {t}: two territories under one parent read {a} and {a2}"
+            checked += 1
+        assert read[0] == read[1] == read[2] == read[3] and read[4] == read[5] == read[6] == read[7], f"seed {seed}: the spell moved inside a year"
+    assert checked == 48
+
+
+def test_spell_differs_across_parents_or_years_at_some_seed():
+    """Non-vacuity of the key: the spell is not one value everywhere. Two parents differ in one season at some seed, and the next year differs from this one at some seed."""
+    across_parents = across_years = 0
+    for seed in range(12):
+        read = _spells_over(_spell_world(seed), (0, 4))
+        across_parents += read[0][0] != read[0][2]
+        across_years += read[0][0] != read[4][0]
+    assert across_parents > 0, "no seed of 12 read two parents apart in one season: the key dropped the region"
+    assert across_years > 0, "no seed of 12 read a year apart from the next: the year is not in the key"
+
+
+def test_spell_is_a_function_of_seed_year_region():
+    """The same inputs read the same spell from a world built afresh, at a tick other than the first of the year, with the draw's other inputs (a different territory under the same parent) changed."""
+    w1, w2 = _spell_world(5), _spell_world(5)
+    w1.tick, w2.tick = 5, 6                       # the year's second and third seasons
+    assert world_q.season_spell(w1, "terr_a") == world_q.season_spell(w2, "terr_a2")
+    assert world_q.season_spell(_spell_world(5), "terr_a") in SPELLS
+
+
+def test_spell_table_without_season_table_refused():
+    with pytest.raises(Unspecified) as e:
+        check_season_weather((), SPELLS)
+    assert "season_spell_draw" in str(e.value)
+    w = World(0, DEFAULT.sweep("season_spell_draw", SPELLS))      # a swept arm is refused where it is read
+    with pytest.raises(Unspecified):
+        world_q.season_factor_of(w)
+    check_season_weather(SPREAD, SPELLS)           # non-vacuity: the table beside it is not refused
+
+
+def test_season_table_length_must_equal_the_year():
+    with pytest.raises(Unspecified) as e:
+        check_season_weather(SPREAD[:-1], ())
+    assert "season_factor_draw" in str(e.value)

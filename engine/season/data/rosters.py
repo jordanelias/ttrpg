@@ -979,6 +979,27 @@ def check_season_terms(mapping: dict, seasons) -> dict:
 SEASON_TERMS = check_season_terms(roster_map("season_terms", "values"), SEASONS_OF_YEAR)
 
 
+def check_season_band_factors(mapping: dict) -> dict:
+    """B12b.03: `rosters.yaml: season_band_factors` is keyed by EXACTLY the ladder's four band names (`dice_engine.DEGREE_LABEL`'s values; a band with
+    no key would index a missing factor, a key the ladder lacks is read by nothing) and each factor is a non-negative number (a `bool` is none).
+    A function, so a test can plant a drifted mapping and watch the load refuse."""
+    from engine.dice_engine.dice_engine import DEGREE_LABEL
+    bands = set(DEGREE_LABEL.values())
+    if set(mapping) != bands:
+        raise Unspecified(
+            f"`season_band_factors` is keyed {sorted(mapping)}, and the ladder's bands are {sorted(bands)}", "rosters.yaml -- season_band_factors",
+            needs="one factor per band of `dice_engine.DEGREE_LABEL` and no other key",
+            law="A-54 -- the season's draw is graded on the one ladder; a band it can reach must have a factor")
+    bad = [b for b, f in mapping.items() if isinstance(f, bool) or not isinstance(f, (int, float)) or f < 0]
+    if bad:
+        raise Unspecified(f"`season_band_factors` has no non-negative number for {sorted(bad)}", "rosters.yaml -- season_band_factors",
+                          needs="a factor of at least 0 for each band", law="A-54 -- a band's factor multiplies a yield; a negative one would mint a debt")
+    return dict(mapping)
+
+
+SEASON_BAND_FACTORS = check_season_band_factors(roster_map("season_band_factors", "values"))
+
+
 def _check_scale_of_rung(mapping: dict, kinds) -> None:
     """`SCALE_OF_RUNG`'s domain must be EXACTLY `RUNG_KINDS` -- a function and not an inline `if`,
     so the test can plant a drifted mapping and watch it refuse (`CLAUDE.md` §0.1 pt 3: a load
