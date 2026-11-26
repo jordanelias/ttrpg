@@ -447,14 +447,17 @@ jobs:
       # tests out in collection order, so the 100-second tests that sit late leave the other workers idle
       # behind them. Measured on 4 cores, same 2,295 tests: 489-505 s -> 398 s (the same flag on
       # `tests/valoria` gained nothing, 189 s against 187-216 s, so that job keeps `-n auto`).
+      # `-m "not shipped_pin"` (Jordan, 2026-11-26, `proposals/2026-11-26-defer-pins.md`): the stored shipped-output goldens are a POST-WORKPLAN
+      # gate, run once at B99 (`pytest -m shipped_pin`). The ONE coverage cut `pytest.ini`'s ONE RULE reserves to Jordan, made by him for this
+      # marker only (conftest.py `_reads_pin` derives its members from what a test reads). Every other test still runs here.
       - run: |
           HEAVY="engine/season/tests/test_season_shape.py engine/season/tests/test_interactions_log.py engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_storybar.py engine/season/tests/test_told_by_channel.py"
           if [ "${{ matrix.shard }}" = heavy ]; then
-            python -m pytest $HEAVY -q -n auto --dist worksteal --durations=15 --junitxml=leg.xml
+            python -m pytest $HEAVY -q -n auto --dist worksteal -m "not shipped_pin" --durations=15 --junitxml=leg.xml
           else
             K=${{ matrix.shard }}; K=${K#rest}
             FILES=$(ls engine/season/tests/test_*.py | grep -vxF -f <(printf '%s\n' $HEAVY) | awk -v k="$K" 'NR%3==k')
-            python -m pytest $FILES -q -n auto --dist worksteal --durations=15 --junitxml=leg.xml
+            python -m pytest $FILES -q -n auto --dist worksteal -m "not shipped_pin" --durations=15 --junitxml=leg.xml
           fi
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.

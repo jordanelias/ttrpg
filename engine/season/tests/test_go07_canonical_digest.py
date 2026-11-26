@@ -353,3 +353,21 @@ def test_decode_refuses_a_foreign_fixtures_digest():
     assert isinstance(refused, SnapshotRefused) and refused.reason == "fixtures_digest", repr(refused)
     assert refused.found != refused.expected
     assert isinstance(decode(encode(World(0, DEFAULT_FIXTURES))), World), "the running build's own snapshot was refused"
+
+
+def test_go07_the_realm_hash_is_the_same_in_two_fresh_processes_under_two_hash_seeds():
+    """The replacement for the stored realm pins while they wait for B99 (Jordan, 2026-11-26, `proposals/2026-11-26-defer-pins.md`): the one
+    thing a literal in a file told that two runs in ONE process cannot, namely that the seed-0 realm after one season hashes the same in
+    separate interpreters under different `PYTHONHASHSEED`s (CI sets none). It stores nothing, so no batch re-records it; it fails only if the
+    season depends on set or dict order or on a process-level source. Two cold subprocesses, one season each."""
+    probe = ("from engine.season.boot.realm import build_realm\n"
+             "import engine.season.harness.populated as P\n"
+             "print(P.run(1, 0, w=build_realm(0))['hash'])\n")
+    root = ROOT
+    got = []
+    for hash_seed in ("0", "1"):
+        proc = subprocess.run([sys.executable, "-c", probe], capture_output=True, text=True, timeout=600, cwd=str(root),
+                              env=dict(os.environ, PYTHONHASHSEED=hash_seed))
+        assert proc.returncode == 0, proc.stderr[-2000:]
+        got.append(proc.stdout.strip().splitlines()[-1])
+    assert len(got[0]) == 32 and got[0] == got[1], f"PYTHONHASHSEED 0 gave {got[0]}, 1 gave {got[1]}"

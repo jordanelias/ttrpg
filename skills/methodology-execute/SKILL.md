@@ -239,8 +239,9 @@ working-tree diff. A batch has one close unless the live plan names a **range cl
      2026-11-26: *"i do not want there to be a batch being performed that tests something irrelevant to it"*, which
      replaces the 2026-11-22 rule that every batch ran `tests/valoria`; 2026-11-23: *"every batch concerns a lane ...
      identify them based on our lanes"*). A lane's `-m` expression runs over the three trees (`pytest tests/valoria
-     engine/season/tests engine/tests -m "<expr>"`), so a subsystem lane still takes its `tests/valoria` files; the
-     rest of `tests/valoria` is CI's. The batch's lanes are the SUBSYSTEM SUITE the live plan maps its `lane` column to
+     engine/season/tests engine/tests -m "(<expr>) and not shipped_pin"`), so a subsystem lane still takes its `tests/valoria`
+     files; the rest of `tests/valoria` is CI's. `shipped_pin` tests (the stored realm goldens, `conftest.py` `_reads_pin`) are deselected until
+     B99 re-records them (P15; Jordan, 2026-11-26); no batch re-records a golden or runs one. The batch's lanes are the SUBSYSTEM SUITE the live plan maps its `lane` column to
      (v12: part 2 §1's table, mapped by the head's rule P18; every `engine/season/tests` file carries exactly one suite
      marker, placed in `references/season_test_suites.yaml`, so a batch runs its own lane's suite and never `-m season_loop` whole; Jordan, 2026-11-26)
      and any lane an item's `TESTS:` or `GATE:` line names. This skill chooses no lane and does not use `tools/tests_for_diff.py`. It runs at most once per
