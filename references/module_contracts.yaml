@@ -492,7 +492,7 @@ modules:
       godot: python-oracle
       port_rank: 1
       parity: seam-io
-      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. `roll` runs only when a contest over one of those prizes forms (gated); `obstacle` is entered every season, so the row reads live."
+      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. `roll` runs only when a contest over one of those prizes forms (gated); `obstacle` is entered every season, so the row reads live. `social_contest.evidence` is not a composition role: it is called by `roll` and `proceed` inside the module, never by the host or the loop; the host reaches the roll's evidence levels through the query row `social_contest.proof_levels` (target `roll:proof_levels`), which is why `evidence` stays no role."
 
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
