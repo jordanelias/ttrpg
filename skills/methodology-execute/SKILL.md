@@ -40,7 +40,7 @@ review roles and never name a producer. **This skill's BATCH-CLOSE *is* `methodo
 1–3, unmodified**, plus the accretion pass; a change to that sequence is made once, in that file.
 
 **Cadence.** The expensive pass — the agonist/antagonist fan, `/code-review`→`/simplify`→
-`layer-conformance`, the batch's suites (`tests/valoria` and its lane's subsystem suite), the terminal critique — runs once per batch, never per item
+`layer-conformance`, the batch's lane suite, the terminal critique — runs once per batch, never per item
 (CLAUDE.md §0.4; RULED, Jordan 2026-10-06: *"code review and simplify to be at batch close"*). Every
 item still gets its own commit. Deferred is not skipped: a batch whose items were built and which
 never reached BATCH-CLOSE has closed nothing, and reporting it "closed" is the false claim
@@ -235,10 +235,12 @@ working-tree diff. A batch has one close unless the live plan names a **range cl
    and reconciliation (§1.2–1.5) apply as written there. **The roster is the one the assignment plan
    provisionally fixed (§THE ASSIGNMENT PLAN), confirmed now against the real range diff**: dispatch it
    as planned, or change it with the reason stated.
-   - **The one suite run is `tests/valoria` plus the batch's lanes, and nothing else** (Jordan, 2026-11-22:
-     *"methodology execute should only run tests/valoria. All other test calls to be specified by workplan
-     according to subsystem test suite or season test"*; 2026-11-23: *"every batch concerns a lane ... identify
-     them based on our lanes"*). The batch's lanes are the SUBSYSTEM SUITE the live plan maps its `lane` column to
+   - **The one suite run is the batch's lane suites, and nothing else; `tests/valoria` is not run whole** (Jordan,
+     2026-11-26: *"i do not want there to be a batch being performed that tests something irrelevant to it"*, which
+     replaces the 2026-11-22 rule that every batch ran `tests/valoria`; 2026-11-23: *"every batch concerns a lane ...
+     identify them based on our lanes"*). A lane's `-m` expression runs over the three trees (`pytest tests/valoria
+     engine/season/tests engine/tests -m "<expr>"`), so a subsystem lane still takes its `tests/valoria` files; the
+     rest of `tests/valoria` is CI's. The batch's lanes are the SUBSYSTEM SUITE the live plan maps its `lane` column to
      (v12: part 2 §1's table, mapped by the head's rule P18; every `engine/season/tests` file carries exactly one suite
      marker, `conftest.py`'s `SEASON_SUITES`, so a batch runs its own lane's suite and never `-m season_loop` whole; Jordan, 2026-11-26)
      and any lane an item's `TESTS:` or `GATE:` line names. This skill chooses no lane and does not use `tools/tests_for_diff.py`. It runs at most once per
@@ -246,7 +248,7 @@ working-tree diff. A batch has one close unless the live plan names a **range cl
    - **It starts as Phase 1 opens, in the background**, on a snapshot of `HEAD` (`git worktree add --detach
      <scratchpad>/suite-<sha> HEAD`), launched as *Running a slow instrument* step 2 says: Phase 1's critics
      are read-only and need no CPU it holds, and the snapshot is the tree CI's first run reads.
-   - **Each lane is a separate verdict.** Run `tests/valoria`, then each lane, one command after another; as
+   - **Each lane is a separate verdict.** Run each lane, one command after another; as
      each finishes, record its verdict and the snapshot SHA in a `suite verdict:` commit (§CHECKPOINTS), so a
      restart loses one run, not all.
    - **Flags.** Each command carries `--durations=30` (the accretion pass reads it) and `--timeout=<budget>`:
@@ -709,7 +711,7 @@ not "one realm, one season", and it is superlinear in them).
 | "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count beyond what the plan's own rule for finished positions prescribes |
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, re-ran a BATCH-CLOSE phase at or before `close`, overwrote `open`, or trusted the row over the commits where they disagreed |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch (outside a range close the plan names), or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally; its one run starts in the background as Phase 1 opens, on a snapshot of the last `Item:` commit, and Phase 2's covering-file re-runs are not a second run); or after a red, the whole suite ran again over trees the fix diff could not reach; or a tree's verdict was not recorded in a `suite verdict:` commit as it finished |
-| "the close ran only what the plan names" | the close ran engine/season/tests, engine/tests or a `-m` lane that neither the batch's lane (the plan's P18 mapping) nor an item's `TESTS:` or `GATE:` line names, or chose a lane by `tools/tests_for_diff.py`, or left `tests/valoria` out |
+| "the close ran only what the plan names" | the close ran engine/season/tests, engine/tests or a `-m` lane that neither the batch's lane (the plan's P18 mapping) nor an item's `TESTS:` or `GATE:` line names, or chose a lane by `tools/tests_for_diff.py`, or ran `tests/valoria` whole |
 | "the red was carried, not blocking" | its file, run at `<open sha>`, passed, or failed another way or under another test id; or it is not named in the close commit body; or it was skipped, xfailed or quarantined, or deleted while game-state or asserting live design, or deleted with no successor, retired subject or build-verification class cited |
 | "the timeout was a budget" | a `--timeout` value no `--durations` reading names a multiple of; or a timed-out test was reported as red or green rather than as a measurement failure; or the close run carried `--maxfail` |
 | "CI ran twice per batch" | a CI run started on a commit other than the batch's last `Item:` commit or the confirming head (a pushed head commit without `[skip ci]`), no PR existed when the first run was due, or a full CI run was used to find what a covering test file or a one- or two-season probe could show |
