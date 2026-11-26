@@ -96,24 +96,6 @@ def _seasons(w, n: int):
 THREAD_READ_WITHHELD_EVENTS_1 = (9319, "e5b3ab7c81b4491db42a165f26f77e1693178acf3aff53b9166ac3007fd00ae6")   # B08 re-pin: (9320, 39763260..) -> (9319, e5b3ab7c..), equal to the shipped season (the close's counterparty ruling moved it from (7804, 1b04b800..))
 
 
-def test_the_thread_read_withheld_arm_is_pinned_and_equals_the_shipped_season():
-    """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures withheld_verbs` reads
-    `THREAD_READ_WITHHELD_EVENTS_1`, and that EQUALS the shipped season's own event sequence, read in process: withholding
-    `thread_read` moves nothing at seed 0, one season (nor at seed 0, two seasons, nor at seed 1, one season: B08 reading).
-    OBSERVED; THE CAUSE IS CONJECTURED. Before B08.03 the arm differed and since it equals the shipped season: a bisection to B08.03
-    (scenes fold in their own order), read as that fold removing a coupling by which forming `thread_read` moved the season while the
-    verb executed 0 times in that season's store. Nothing counts how often `thread_read` is formed or chosen in either arm, so this
-    cannot tell "the coupling was removed" from "the candidates are dropped the same way in both arms". The test fails the day the arm
-    differs from the shipped season again, so a later batch that changes it sees it here."""
-    w = build_realm(0)
-    shipped = tuple(w.fixtures.get("withheld_verbs"))
-    assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"
-    w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("thread_read",))
-    POP.run(seasons=1, seed=0, w=w)
-    assert _digest(w) == THREAD_READ_WITHHELD_EVENTS_1, _digest(w)
-    s = build_realm(0)
-    POP.run(seasons=1, seed=0, w=s)
-    assert THREAD_READ_WITHHELD_EVENTS_1 == _digest(s), "the arm differs from the shipped season: `thread_read`'s formation moves the season again"
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():

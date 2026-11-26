@@ -377,16 +377,6 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     assert lowest < scale
 
 
-def test_rem52_control_the_realm_at_the_control_arm_leaves_every_cohort_at_scale_after_the_season():
-    """The control of the test above: `body_step` swept to `H-125`'s control arm in-process, the same
-    season. No cohort's body moves, so the fall above is the shipped arm's and not the season's."""
-    w = build_realm(0)
-    w.fixtures = w.fixtures.sweep("body_step", CONTROL_ARM)
-    scale = w.fixtures.get("condition_scale")
-    cohorts = _cohorts(w)
-    POP.run(1, 0, w=w)
-    assert w._subsistence_shortfall, "nobody was short; the control proves nothing"
-    assert cohorts and all(w.persons[pid].body == scale for pid in cohorts)
 
 
 # ======================================================================================

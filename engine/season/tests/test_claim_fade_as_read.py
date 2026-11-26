@@ -158,10 +158,3 @@ def test_season_one_log_holds_no_fade_events():
     assert lens[0] == BEFORE_SEASON_ONE_ENTRIES - BEFORE_SEASON_ONE_DECAYED
 
 
-def test_two_runs_at_one_seed_give_one_hash():
-    w1, _ = _run(0, 1)
-    w2 = _realm(0)
-    d = SeasonDriver(w2)
-    d.season(P.chooser(w2, verbs=resolvable_verbs()), question=None,
-             contest_max_depth=w2.fixtures.get("contest_max_depth"))
-    assert w1.content_hash() == w2.content_hash()

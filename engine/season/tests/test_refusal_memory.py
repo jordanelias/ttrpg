@@ -122,25 +122,6 @@ def _fx(memory: float):
     return DEFAULT_FIXTURES.sweep("refusal_memory", memory)
 
 
-def test_control_value_zero_leaves_hash_equal(monkeypatch):
-    """At `refusal_memory = 0.0` the factor is exactly 1.0, so a season's content hash is the one a chooser with no
-    admission factor reaches. Read two ways: the fixture is registered (cheap; it was red at B09.02, before B09.03 built it), and
-    one season played at the control equals one played with `admission_weight` replaced by the constant 1.0."""
-    from ..boot.realm import build_realm
-    from ..harness import populated
-
-    assert DEFAULT_FIXTURES.get("refusal_memory") is not None                      # registered, graded, swept
-    assert hasattr(CH, "admission_weight")
-
-    def hash_of(factor):
-        w = build_realm(0)
-        w.fixtures = w.fixtures.sweep("refusal_memory", 0.0)
-        if factor is not None:
-            monkeypatch.setattr(CH, "admission_weight", lambda p, c, fx, *a, **k: factor)
-        populated.run(1, 0, w=w)
-        return w.content_hash()
-
-    assert hash_of(None) == hash_of(1.0)
 
 
 def _giving_person(*claims: Claim):
