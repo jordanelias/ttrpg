@@ -5993,7 +5993,7 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
 
 
 def _k1_combatants(w, monkeypatch):
-    """The two `Combatant`s the module entry builds for `p_low` / `p_mid`, observed at `wrapper.fight`'s door."""
+    """The two `Combatant`s the module entry builds for `p_low` / `p_mid`, observed at `wrapper.engagement`'s door (B16.01: the host loop runs `engagement` itself, no longer `wrapper.fight`)."""
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
     if C.engine() is None:
@@ -6002,12 +6002,12 @@ def _k1_combatants(w, monkeypatch):
     entry, _ = entry_for(C._PRIZE, C._PROVIDER)
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
     wrapper = importlib.import_module("modules.combat.wrapper")
-    seen, real = {}, wrapper.fight
+    seen, real = {}, wrapper.engagement
 
-    def spy(A, B, **kw):
-        seen[A.label], seen[B.label] = A, B
-        return real(A, B, **kw)
-    monkeypatch.setattr(wrapper, "fight", spy)
+    def spy(A, B, *a, **kw):
+        seen.setdefault(A.label, A); seen.setdefault(B.label, B)   # the first round's pair: a round builds its own, the figures are the record's
+        return real(A, B, *a, **kw)
+    monkeypatch.setattr(wrapper, "engagement", spy)
     inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
     entry.fn(inp, keyed_draw.seeded(keyed_draw.H2("test_season_shape", 0)))
     return inp, seen

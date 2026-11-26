@@ -26,8 +26,8 @@ def _emit(kind, **data):
 
 @contextlib.contextmanager
 def traced(trace):
-    """Bind `_TRACE` to the callable `trace` for the `with` block and restore it after, on every exit: `fight`'s own binding, offered to the
-    caller that runs `engagement` itself (`fight.py::fight_round`), so no caller assigns the module attribute (B14.11)."""
+    """Bind `_TRACE` to the callable `trace` for the `with` block and restore it after, on every exit: the one owner of the bind (`fight` and
+    `fight.py::fight_round` both use it), so no caller assigns the module attribute (B14.11)."""
     global _TRACE
     prev = _TRACE
     _TRACE = trace
@@ -660,6 +660,25 @@ def round_draw(fight_key, rnd):
     (`fight.py::fight`) both draw their rounds here, so the two loops are one fight."""
     return KD.seeded(KD.H2(fight_key.key, f"round:{rnd}"))
 
+def check_terms(terms):
+    """The engine's refusal of a term outside `DUEL_TERMS`, raised before the first draw of a fight or of a round: the one owner (`_fight` and `fight.py` call it)."""
+    if terms not in DUEL_TERMS:
+        raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
+
+def keyed_first(A, B, rd):
+    """WHO OPENS A KEYED ROUND: the coin is the sub-draw `H2(rd.key, "first")` of the round's own `Draw` (B16.03), `A` below one half."""
+    return A if KD.seeded(KD.H2(rd.key, "first")).random() < 0.5 else B
+
+def play_round(A, B, first, cfg, rd, prev_closed, stop, rnd, scene=0):
+    """THE ROUND'S BRACKET, the one body both loops run (`_fight` and `fight.py::fight_round`): `round_start`, the round's opening wounds, one `engagement`,
+    `round_end`. `stop` is `engagement`'s `terms` (None under lethal ones), `rnd` the round's 1-based index. Returns `(loser, closed, ended_by, wounds0)`;
+    `wounds0` is the opening wounds, the yield roll's licence (a gate crossed since, B15.10)."""
+    _emit('round_start', round=rnd, first=first.label)
+    wounds0 = {A: A.wt.wounds, B: B.wt.wounds}
+    loser, closed, ended_by = engagement(A, B, first, cfg, rd, prev_closed, terms=stop, turn=rnd, scene=scene)
+    _emit('round_end', round=rnd, felled=(loser.label if loser is not None else None), ended_by=ended_by)
+    return loser, closed, ended_by, wounds0
+
 def settle_round(A, B, wounds0, terms, cfg, rng, scene, turn, decisiveness):
     """THE END OF A ROUND THAT DID NOT FELL (A-101; the one site `_fight` and `fight.py::fight_round` both call): the yield roll of each party who took a
     wound gate since `wounds0` (B15.10, A-24), once, on the party's own keyed sub-draw (a function of the fight's key, the round and the party, never of
@@ -701,18 +720,11 @@ def fight(A, B, cfg, rng, max_rounds=DEFAULT_ROUNDS, yield_decl=None, terms=LETH
     restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone).
     `decisiveness` is the host's σ for each party's yield roll, `(A's, B's)` (B15.10; `PersonalCombatInput.decisiveness`). `keyed_rounds` draws each round from its
     own key (`round_draw`), the law the host's `fight.py::fight` runs on (B16.03); the default is the workbench's one sequential stream."""
-    global _TRACE
-    prev = _TRACE
-    if trace is not None:
-        _TRACE = trace
-    try:
+    with traced(trace) if trace is not None else contextlib.nullcontext():   # `None` leaves `_TRACE` as it stands
         return _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness, keyed_rounds)
-    finally:
-        _TRACE = prev
 
 def _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness=(0.0, 0.0), keyed_rounds=False):
-    if terms not in DUEL_TERMS:
-        raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
+    check_terms(terms)
     stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight never cuts a round (`engagement` takes no terms); the yield roll below reads `terms`
     if yield_decl is not None:
         if not (yield_decl.by is A or yield_decl.by is B):
@@ -729,7 +741,7 @@ def _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness=(
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
           armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
-    scene=rng.n   # the stream's ordinal where this fight begins: it keys the fight's per-blow coverage-gap draws (`engagement._strike`), its riposte and its yield rolls, so a caller that reuses one `Draw` for many fights (a workbench loop) gets a fresh gap sequence per fight; a host's per-fight key begins at 0 (unused under `keyed_rounds`, where the round's own key already is per fight)
+    scene = 0 if keyed_rounds else rng.n   # (0 under `keyed_rounds`: the round's own key already is per fight) the stream's ordinal where this fight begins: it keys the fight's per-blow coverage-gap draws (`engagement._strike`), its riposte and its yield rolls, so a caller that reuses one `Draw` for many fights (a workbench loop) gets a fresh gap sequence per fight; a host's per-fight key begins at 0 (unused under `keyed_rounds`, where the round's own key already is per fight)
     fkey = fight_draw(rng) if keyed_rounds else None
     prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
     for turn in range(max_rounds):   # each iteration = ONE round (A-101); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
@@ -750,15 +762,12 @@ def _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness=(
                 _emit('withdraw', round=turn+1)
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no riposte draw
         rd = round_draw(fkey, turn+1) if keyed_rounds else rng   # `keyed_rounds` (B16.03): the HOST's law, the round on its own key (`round_draw`, A-30) with the coin a sub-draw of it; the round's other draws are positional on that `Draw` (hole_register H-581); the workbench's default stays one sequential stream
-        first = A if (KD.seeded(KD.H2(rd.key, "first")) if keyed_rounds else rd).random()<0.5 else B
-        _emit('round_start', round=turn+1, first=first.label)
-        wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)
-        loser, prev_closed, ended_by = engagement(A,B,first,cfg,rd,prev_closed,terms=stop,turn=turn+1,scene=0 if keyed_rounds else scene)
-        _emit('round_end', round=turn+1, felled=(loser.label if loser is not None else None), ended_by=ended_by)
+        first = keyed_first(A, B, rd) if keyed_rounds else (A if rd.random()<0.5 else B)
+        loser, prev_closed, ended_by, wounds0 = play_round(A, B, first, cfg, rd, prev_closed, stop, turn+1, scene)
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break
-        over, yielder = settle_round(A, B, wounds0, terms, cfg, rd, 0 if keyed_rounds else scene, turn+1, decisiveness)
+        over, yielder = settle_round(A, B, wounds0, terms, cfg, rd, scene, turn+1, decisiveness)
         if over:
             if yielder is None:
                 _emit('fight_result', result=0, winner=None)

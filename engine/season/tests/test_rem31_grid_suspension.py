@@ -33,6 +33,7 @@ import functools
 import random
 
 from engine.dice_engine import draw
+from .test_combat_module import _round_from_key
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.decision import make_chooser
 from engine.season.harness.play_surface import dispatching_chooser
@@ -244,13 +245,6 @@ def test_the_decider_must_answer_from_the_closed_set():
         return lambda view: "flee"
     with pytest.raises(ValueError, match="not one of"):
         _round(played=_played(), decider=bad)
-
-
-def _round_from_key(key, r):
-    """ROUND `r`'S DRAW, the law spelled out of the engine's own primitives and NOT through the module's `round_draw` (B16.03, PB 2, A-30): the fight's key is
-    `H2(<the Draw's key>, "fight:0")` (a fresh `Draw` sits at position 0 when the fight takes its one uniform), the round's `H2(<fight key>, "round:<r>")`. A test
-    that called the module's own functions would agree with any `round_draw` that ignored `r`; this one does not."""
-    return draw.seeded(draw.H2(draw.H2(key, "fight:0"), f"round:{r}"))
 
 
 def test_twelve_round_calls_equal_one_fight():

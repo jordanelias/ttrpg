@@ -206,12 +206,13 @@ def _combatants(inp: PersonalCombatInput, cfg: dict, states: tuple = (DuelState(
     # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.
     A.carried, B.carried = inp.carried or (0.0, 0.0)
     for c, st in zip((A, B), states):
-        c.rederive(cfg)
+        wrapper._init_live(c, cfg)   # `rederive`, full Stamina and Concentration, initiative 0, poise 1: the one derivation, then the state laid over it
         c.wt.cumulative_damage = st.cumulative_damage
-        c.stamina = float(c.stamina_max) if st.stamina is None else st.stamina
-        c.conc = c.conc_max if st.conc is None else st.conc
+        if st.stamina is not None:
+            c.stamina = st.stamina
+        if st.conc is not None:
+            c.conc = st.conc
         c.poise = st.poise
-        c.initiative = 0.0
         if st.form is not None:
             c.weapon = st.form
     return A, B
@@ -229,12 +230,6 @@ def _lift(inp: PersonalCombatInput, c) -> Optional[dict]:
         if v is not _MISSING:
             out[q] = v
     return out
-
-
-def _check_terms(terms) -> None:
-    """The engine's own refusal of a term outside `wrapper.DUEL_TERMS`, raised before the first draw of a fight or a round."""
-    if terms not in wrapper.DUEL_TERMS:
-        raise ValueError(f"terms {terms!r} is not one of {wrapper.DUEL_TERMS}")
 
 
 def _attempts(trace: tuple, claimants: tuple) -> dict:
@@ -268,17 +263,13 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
     fi = inp.fighters
     cfg = _fight_cfg(fi, cfg) or CFG
     terms = fi.terms
-    _check_terms(terms)
+    wrapper.check_terms(terms)
     a_id, b_id = fi.claimants
     A, B = _combatants(fi, cfg, inp.states)
     trace: list = []
     with wrapper.traced(trace.append):
-        first = A if seeded(H2(rng.key, "first")).random() < 0.5 else B
-        trace.append(dict(kind="round_start", round=inp.round, first=first.label))
-        wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)
-        loser, closed, ended_by = wrapper.engagement(A, B, first, cfg, rng, inp.prev_closed,
-                                                     terms=None if terms == wrapper.LETHAL_TERMS else terms, turn=inp.round)
-        trace.append(dict(kind="round_end", round=inp.round, felled=(loser.label if loser is not None else None), ended_by=ended_by))
+        loser, closed, ended_by, wounds0 = wrapper.play_round(A, B, wrapper.keyed_first(A, B, rng), cfg, rng, inp.prev_closed,
+                                                              None if terms == wrapper.LETHAL_TERMS else terms, inp.round)
         yielder = None
         if loser is None:
             over, yielder = wrapper.settle_round(A, B, wounds0, terms, cfg, rng, 0, inp.round, fi.decisiveness or (0.0, 0.0))   # `0`: the workbench loop's `scene` ordinal, which a round's own key has no use for
@@ -323,7 +314,7 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     `cfg` (a config overlay) and `max_rounds` (a round cap) are the WORKBENCH's (B14.11); the host
     never passes them, and `None` is the engine's own `CFG` and round cap."""
     a_id, b_id = inp.claimants
-    _check_terms(inp.terms)
+    wrapper.check_terms(inp.terms)
     cfg_ = _fight_cfg(inp, cfg) or CFG
     A, B = _combatants(inp, cfg_)
     trace: list = [dict(kind="fight_start", A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
@@ -354,7 +345,8 @@ def fight(inp: PersonalCombatInput, rng: Draw,
             break
     if not tie:
         trace.append(dict(kind="fight_result", result=result, winner=(a_id if result == 1 else b_id if result == -1 else None)))
-    A, B = _combatants(inp, cfg_, states)   # the two parties as the last round left them: their trackers lift to `PartyWounds`
+    for c, st in zip((A, B), states):   # the two parties as the last round left them: the maxima are cfg-free, so the up-front pair takes the damage and lifts
+        c.wt.cumulative_damage = st.cumulative_damage
 
     wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
     shape = scene_shape(trace, (a_id, b_id), {pid: pw.health_full for pid, pw in wounds.items()})
