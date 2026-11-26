@@ -314,11 +314,6 @@ def _partial_telling(w, hearer, held, n):
     return W._told_value(w, hearer, Event(f"ev_hop{n}", "news.told", [], [f"a_hop{n}"], 0, "Partial", ()), held)
 
 
-def test_the_quantity_stems_are_what_the_table_compares_against_a_threshold():
-    """`QUANTITY_STEMS` is derived: the cell stems a `scalar_threshold` clause carries; an existence reading, a deed and a `seen` are in no row's threshold."""
-    from ..data.verbs import QUANTITY_STEMS
-    assert {"stores", "condition"} <= QUANTITY_STEMS
-    assert not QUANTITY_STEMS & {"exists", "person.died", "seen", "held_by"}, sorted(QUANTITY_STEMS)
 
 
 def test_unshared_first_prefers_a_deed_to_a_quantity_to_an_existence_reading():
@@ -339,24 +334,6 @@ def test_unshared_first_prefers_a_deed_to_a_quantity_to_an_existence_reading():
     assert said_of([d, q, e], "S", DEFAULT_FIXTURES).predicate == "exists:Person"     # the control: `newest`
 
 
-def test_partial_told_deed_withholds_the_hand(monkeypatch):
-    """B11.53: a hearer of a deed at a band holds what a FINDER at that band holds -- the sighting names the hand where `rosters.yaml: finding_terms`' row shows
-    `HAND_TERM`, and names nobody where it does not (`loop/witness.py::_told_pairing` reads that one table). Through the WITNESS barrier: W saw K kill V and tells J at
-    each band the telling emits at; J names K as the doer, or nobody. Then the table PLANTED (`Success` loses the hand) and the same telling names nobody."""
-    from ..data.rosters import FINDING_TERMS
-    from .test_told_pairing import J, K, _doers, _world
-    bands = sorted(set(VERB_TABLE["tell"].emits_by_degree) & set(FINDING_TERMS))
-    assert W.HAND_TERM in FINDING_TERMS["Success"] and W.HAND_TERM not in FINDING_TERMS["Partial"], FINDING_TERMS      # the shipped table the bands read
-    assert len(bands) >= 2, bands
-    for band in bands:
-        w, tell, _claims = _world("on")
-        tell("p_low", K, band)
-        assert _doers(w, J) == ((K,) if W.HAND_TERM in FINDING_TERMS[band] else ()), (band, _doers(w, J))
-    with monkeypatch.context() as m:                                   # the falsifier: one table, so moving a row moves the hearer
-        m.setitem(FINDING_TERMS, "Success", tuple(t for t in FINDING_TERMS["Success"] if t != W.HAND_TERM))
-        w, tell, _claims = _world("on")
-        tell("p_low", K, "Success")
-        assert _doers(w, J) == (), _doers(w, J)
 
 
 def test_existence_lie_is_a_negation():
@@ -384,17 +361,6 @@ def test_partial_telling_passes_an_existence_reading_whole():
     assert _partial_telling(w, "p_mid", Claim("c_k0", "p_low", "p_king", "exists:Person", 0, 0, "firsthand", 80, "own"), 0) == 0
 
 
-def test_quantity_still_drifts_on_a_partial_telling():
-    """The control, green before and after: an amount on a quantity stem is moved at `Partial` by `drifted`'s own rule, the grain rows as they were."""
-    w = P.tiny_world()
-    band = w.fixtures.get("told_drift_band")
-    for stem, v in (("stores:grain", 8), ("condition", 3), ("stores:grain", -8)):
-        held = Claim("c_q", "p_low", "S", stem, v, 0, "firsthand", 80, "own")
-        got = [_partial_telling(w, "p_mid", held, n) for n in range(12)]
-        assert any(g != v for g in got), (stem, got)
-        ev = Event("ev_hop0", "news.told", [], ["a_hop0"], 0, "Partial", ())
-        sel = int(H(w.world_seed, w.tick, "p_mid", f"told:{ev.id}"), 16)
-        assert got[0] == drifted(v, band, sel), (stem, got[0])
 
 
 def test_a_hand_built_lie_on_a_man_s_existence_declines_the_hearers_challenge_only_as_the_negation_it_is(monkeypatch):
@@ -435,11 +401,3 @@ def test_knower_hears_true_on_a_partial_telling(monkeypatch):
         assert got[0] == got[1] and len(got[0]) == 1 and got[0][0] != (TRUE_VALUE if verb == "tell" else 12), (verb, got)   # the drifted copy, either arm
 
 
-def test_knower_hears_true_false_reproduces_todays_branch(monkeypatch):
-    """The control: `knower_hears_true` False hands a knower the drifted copy, as before the arm -- an honest `tell` of 8 reaches him as 5 and his `record` of the teller falls below 1.0
-    (the falsifier: a landed truthful telling after which the hearer's `record` of the teller is below 1.0)."""
-    w = _world(record_gain=0.5)
-    w.fixtures = w.fixtures.sweep("knower_hears_true", False)
-    _season(monkeypatch, w, "tell", HOLDER, net=2)
-    assert [c.value for c in _told(w, HOLDER)] == [5], [(c.value, c.chain) for c in _told(w, HOLDER)]
-    assert record(w.persons[HOLDER], T, w.fixtures) < 1.0

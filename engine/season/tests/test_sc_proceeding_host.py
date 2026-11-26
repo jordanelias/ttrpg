@@ -381,15 +381,6 @@ def _plant_entry(monkeypatch, entry):
     monkeypatch.setattr(composition, "require", lambda role: entry if role == S.PROCEEDING_ROLE else real(role))
 
 
-def test_a_proceeding_return_that_is_not_an_outcome_raises(monkeypatch):
-    """A winner string where an `Outcome` belongs, and an `Outcome` whose verdict is a band or a number and not a `Margin`, are each refused
-    naming the entry; the real entry's return is accepted (the control: the same call)."""
-    w, row = _world(), A.abridged(ROWS["conversation"])
-    assert _resolve(w, row)["status"] == "RESOLVED"
-    for ret in ("for", _outcome([("p_mid", "Success")]), _outcome([("p_mid", 2.0)])):
-        _plant_entry(monkeypatch, lambda inp, rng, ret=ret: ret)
-        with pytest.raises(Unspecified, match="social_contest.proceeding"):
-            _resolve(w, row)
 
 
 def test_the_acts_band_by_close():

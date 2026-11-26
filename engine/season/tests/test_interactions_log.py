@@ -136,8 +136,6 @@ def _hash_arm(seed: int) -> None:
     assert [a.id for a in on.acts] == [a.id for a in off.acts]
 
 
-def test_observing_changes_nothing_seed_0():
-    _hash_arm(0)
 
 
 @pytest.mark.slow

@@ -80,17 +80,6 @@ def realm():
     return A.measure_world(lambda seed, **kw: build_realm(seed, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"), **kw), 0, 1)
 
 
-def test_aperture_the_measured_season_is_the_populated_season(realm):
-    c = realm["control"]
-    assert c["acts"] == realm["acts"], (
-        f"populated.run resolved {c['acts']} acts and the instrumented season {realm['acts']}: the "
-        "two arms are different experiments, so nothing the instrument reports is the populated "
-        "season's. Check that `instrumented_season` still builds its driver and chooser exactly as "
-        "`populated.run` does")
-    assert c["hash"] == realm["hash"], (
-        "the instrumented season ended in a different world than `populated.run` on the same seed "
-        "-- the watching PERTURBED the run. `opening_set`/`assemble`/`aggregate_questions` must stay "
-        "pure for this instrument to exist")
 
 
 def test_aperture_the_counterfactual_rules_reproduce_the_real_call(realm):

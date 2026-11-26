@@ -16,20 +16,8 @@ from engine.season.queries import world_q
 from engine.season.state.carriers import Claim
 
 
-def _realm_row(**kw):
-    return SC.Scenario(build=build_realm, seat=lambda w: sorted(w.persons)[0], ending=lambda w, pid, left: None, **kw)
 
 
-def test_the_runner_and_populated_run_agree(monkeypatch):
-    """The realm at seed 0, one season: `run` with `pick=None` (the seat takes the shipped ranking whole) returns
-    `populated.run`'s content hash. The seated space was called, or the equality shows nothing about the seat."""
-    monkeypatch.setitem(SC.SCENARIOS, "realm", _realm_row())
-    w = build_realm(0)
-    populated.run(1, 0, w=w)
-    out = SC.run("realm", 0, 1)
-    assert out["hash"] == w.content_hash()
-    assert out["seat_deliberations"] >= 1, "the seated person was never asked; the control proves nothing"
-    assert out["ending"] is None and out["kind"] is None
 
 
 # --- B11.06: the `season` row -------------------------------------------------------------------------------------

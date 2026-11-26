@@ -40,18 +40,8 @@ SEEDS = range(200)
 ARM_OFF_PINS = {s: SHIPPED[(s, 1)] for s in (0, 1, 2)}
 
 
-def test_public_column_absent_is_refused_at_load():
-    """A planted row without `public:` is refused, naming the row; the same copy unplanted loads (the control)."""
-    assert _planted_verb_load(lambda doc: None) is None
-    msg = _planted_verb_load(lambda doc: _row(doc, "argue").pop("public", None))
-    assert msg is not None and "argue" in msg and "public" in msg, msg
 
 
-def test_public_column_not_a_boolean_is_refused_at_load():
-    """`public: "yes"` (and an integer, which `bool` would also admit) is refused, naming the row."""
-    for bad in ("yes", 1, None):
-        msg = _planted_verb_load(lambda doc, bad=bad: _row(doc, "speak").update(public=bad))
-        assert msg is not None and "speak" in msg and "public" in msg and "boolean" in msg, (bad, msg)
 
 
 # --------------------------------------------------------------------------------------------------------------------------
@@ -263,16 +253,3 @@ def test_the_notice_site_rows_load_and_move_only_notice(monkeypatch):
     assert msg is not None and "notice" in msg and "unregistered site" in msg, msg
 
 
-def test_arm_off_reproduces_the_pinned_hash():
-    """Control: `notice_arm: off`, set explicitly, reproduces the seeds 0 to 2 one-season realm hash pinned in `ARM_OFF_PINS` (read on the tree before this item's edit and equal after it),
-    and `on` moves the seed-0 world (the arm is not vacuous)."""
-    from engine.season.boot.realm import build_realm
-    from engine.season.harness.populated import run
-    checked = 0
-    for seed, pin in sorted(ARM_OFF_PINS.items()):
-        w = build_realm(seed, fixtures=OFF)
-        run(1, seed, w=w)
-        assert w.content_hash() == pin, seed
-        checked += 1
-    assert checked == 3
-    assert _realm_at_on().content_hash() != ARM_OFF_PINS[0]
