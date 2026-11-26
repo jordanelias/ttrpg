@@ -69,14 +69,12 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 42 | `world_q.writs_held` → `world_q.writs_addressed` | B21.66 | — |
 | 43 | `harness/populated.py::mint_planned_works` → `boot/realm.py::mint_planned_works` | B12a.03 | — |
 | 44 | `levy` → `requisition` | B12a.03 | — |
-| 45 | `round(...)` → `fight_round` | B16.01 | B16.09 |
 | 46 | `import core` → `from modules.combat import …` | B16.01 | — |
 | 47 | `turn_start` → `round_start` | B16.02 | — |
 | 48 | `engagement_end` → `round_end` | B16.02 | B19a.02 |
-| 49 | `CombatTurnView` → `CombatRoundView` | B16.02 | B16.09, B16.11, B34.15 |
+| 49 | `CombatTurnView` → `CombatRoundView` | B16.02 | B34.15 |
 | 50 | `Yield.turn` → `Yield.round` | B16.02 | — |
 | 51 | `bouts` → `rounds` | B16.02 | — |
-| 52 | `turn=` → `round=` | B16.09 | — |
 | 54 | `oughts_named` → `world_q.propositions_heard` | B21b.08 | — |
 | 55 | `oughts_named` → `propositions_heard` | B21b.12 | — |
 | 56 | `proof_step` → `proof_level` | B24.02 | — |
@@ -268,10 +266,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 191 | `engine/season/tests/test_arrival_report.py` | test file | B12a.16 | — |
 | 192 | `engine/season/tests/test_endowment.py` | test file | B12a.51 | — |
 | 193 | `proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md` | design file | B12a.57 | — |
-| 195 | `test_approach_responses.py` | test file | B16.09 | — |
-| 196 | `tests/test_approach_responses.py` | test file | B16.09 | — |
-| 197 | `engine/season/harness/duel_scene.py` | harness module | B16.11 | — |
-| 198 | `engine/season/tests/test_duel_scene.py` | test file | B16.11 | — |
 | 200 | `engine/season/tests/test_in30_faction_props.py` | test file | B21b.05 | — |
 | 201 | `engine/season/tests/test_cp_t09_allegiance.py` | test file | B21b.08 | — |
 | 202 | `engine/season/tests/test_cp_t09_declare.py` | test file | B21b.11 | — |

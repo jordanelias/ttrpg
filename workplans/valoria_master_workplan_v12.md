@@ -252,7 +252,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
-| S13 | B16 (PC), B21b (FA) |
+| S13 | B21b (FA) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
@@ -367,7 +367,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
-| B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) |
 | B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) |
 | B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
@@ -438,7 +437,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 |---|---|
 
 | B21b-fa-war | `valoria_master_workplan_v12_part21.md`, `_part21_cont.md` |
-| B16-pc-round | `valoria_master_workplan_v12_part23.md` |
 | B12b-weather-arcs-population | `valoria_master_workplan_v12_part24.md`, `_part24_cont.md` |
 | B19a-mb-contact-instrument, B29-pc-custody | `valoria_master_workplan_v12_part24_cont.md` |
 | B21c-fa-seats | `valoria_master_workplan_v12_part25.md` |
