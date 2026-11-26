@@ -808,7 +808,7 @@ def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> Worl
 # B24.32 -- THE RUN'S SHAPE (KERN_B "What is carried": `narrative.py`'s four arcs, read in the harness over the sitting's own beats). Computed, stored nowhere.
 RUN_SHAPES = ("rout", "reversal", "collapse", "split")
 PLAIN = "plain"                      # a run that is none of the four (the kernel's clear win, nail-biter and deadlock are not carried)
-# [canonical: systems/social_contest/sim/contest/narrative.py ROUT_MARGIN -- a [SEED] there as here, Jordan-calibratable; the lean it reads is `Beat.mood`, the room's lean toward `for` in -1..1]
+# [canonical: ROUT_MARGIN of the retired SC05 kernel's `narrative.py` (B24.33; its four rules are in 1a19cf74e's body) -- a [SEED] there as here, Jordan-calibratable; the lean it reads is `Beat.mood`, the room's lean toward `for` in -1..1]
 ROUT_MARGIN = 0.30
 
 

@@ -110,8 +110,8 @@ OB_MIN = 1              # the floor a favourable modifier may not push an obstac
 # — the contest's de-saturation extension reads them from here (ED-SC-0032).
 MU_PER_DIE = dice_engine.MU_PER_DIE        # alias of the owner (engine/dice_engine/dice_engine.py)
 SD_PER_DIE = dice_engine.SIGMA_PER_DIE     # alias of the owner; the owner's name is SIGMA_PER_DIE
-# OVERWHELM_SIGMA lives in systems/social_contest/sim/contest/degree_extension.py (ED-SC-0032): it
-# is a contest constant and belongs with the extension that reads it.
+# OVERWHELM_SIGMA was a contest constant (ED-SC-0032) and left this module with the contest's
+# degree extension; that extension went with the SC05 kernel (B24.33) and no live code reads it.
 
 
 # ---------------------------------------------------------------------------
@@ -412,13 +412,13 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, *, rng: Draw) -> flo
 # ---------------------------------------------------------------------------
 # Contest-surface degree — NOT IN THIS MODULE (ED-SC-0032)
 # ---------------------------------------------------------------------------
-# `degree(net, ob, pool)`, `overwhelm_bar`, `crossover_pool` and `OVERWHELM_SIGMA` are at
-# `systems/social_contest/sim/contest/degree_extension.py`: the pool-aware de-saturation is ONE
-# SUBSYSTEM'S rule, injected through the seam `dice_engine.BandExtension`.
+# `degree(net, ob, pool)`, `overwhelm_bar`, `crossover_pool` and `OVERWHELM_SIGMA` were ONE
+# SUBSYSTEM'S rule (the SC05 kernel's `degree_extension.py`), injected through the seam
+# `dice_engine.BandExtension`; the kernel is retired (B24.33) and a test-local double carries the
+# rule in `engine/tests/test_sigma_leverage_parity.py`.
 #
 # WHAT TO CALL INSTEAD: `dice_engine.degree_from_net(net, ob, extension=..., **context)` for the
-# ladder, and the contest package's own `degree()` adapter if you want the ordinal with the
-# contest's extension applied. Nothing in `engine/` should reach for the second.
+# ladder.
 #
 # The MU/SD per-die constants stay here: those ARE general, and the extension reads them from
 # this module.

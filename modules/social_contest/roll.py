@@ -12,11 +12,11 @@ types and `.evidence` (B24.20: the filed exhibits' `proofs` levels, `proof_level
 any other return. S27.4's refusal stays with the host adapter, which applies it to the pair this entry
 returns (since step 14 the obstacle is composed here, so the host has no pair until the entry has run).
 
-SC-05 (2026-10-16, step 15): THIS ROLL IS KEPT; THE KERNEL (`systems/social_contest/sim/contest/`) IS NOT ADOPTED
-(the timing of its retirement is Jordan's, `SM-15`). The kernel draws on the GLOBAL stream rather than a seeded
+SC-05 (2026-10-16, step 15): THIS ROLL IS KEPT; THE KERNEL (`systems/social_contest/sim/contest/`) WAS NOT ADOPTED
+and is RETIRED (B24.33, `ED-SC-0033` clause 2; its files are `FORK:` rows in `references/restructure_ledger.md`). The kernel drew on the GLOBAL stream rather than a seeded
 `rng` (`04 §C.12`'s rejection 4 and `04 PART D row 35`'s per-act generator cannot be honoured without editing it),
-returns a winner (side labels, no `net`/`ob` pair to hand `degree_from_net`) where the seam wants *a MARGIN, never a
-winner* (`08_SEAM.md`; a degree adapter would be the second resolver S27.2 refuses), and reads a faculty, not the
+returned a winner (side labels, no `net`/`ob` pair to hand `degree_from_net`) where the seam wants *a MARGIN, never a
+winner* (`08_SEAM.md`; a degree adapter would be the second resolver S27.2 refuses), and read a faculty, not the
 host's record. The proceedings design's nested run (`21_RECONCILIATION.md` step 15) is not this entry either.
 
 RULED, ED-SC-0037 (Jordan, 2026-09-09): *"we have the sigma leverage d10 resolver in engine to use."*
