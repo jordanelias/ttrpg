@@ -155,6 +155,8 @@ rites:
     # [ASSUMPTION; Jordan to correct; revert: the three cells' old values -- basis: IS-B2-SC-03's `questioned` rite, read as this one: the only rite
     # whose rows are an inquisition by the polity (`examination`, `inquisition_hearing`); `questioning` is not a determination (B24.12)].
     moves:            {for: [argue, press, rest, present, answer], against: [argue, rest, concede, present, answer], bench: [rule, adjourn]}
+    # B24.32 (KERN_B check 5): the rite lists the faults that apply, and the module records only those (`proceeding.py::exchange`'s `fault`); the hearing-capable rite lists all four.
+    faults:           [self_contradiction, silence, forgery_found, irrelevance]
   - id:               trial
     genre:            judicial
     live:             charge

@@ -19,7 +19,7 @@ from engine.dice_engine.sigma_leverage import M_MAX, governing_mean, pool_of, we
 
 from ..data.arrangements import GROUNDS, PROCEEDING_MOVES, RITES
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.rosters import roster
+from ..data.rosters import PROCEEDING_FAULTS, roster
 from ..queries.inputs import Choice, Cond, Input, Point, Present, Rite, SocialContestInput, Sitting
 from ..seam.wrappers.sigma import proceeding_dials
 
@@ -63,7 +63,8 @@ def _p(pid, side=None, decides=False, **kw) -> Present:
 def _rite(close="bench", turns=2, moves=None, **kw) -> Rite:
     base = dict(id="t", live="claim", bears="for", reply=(("for", "may"), ("against", "must")), silence="refusal", issues=(), weighs=(),
                 concede="accepts", close=close, turns=turns, standard=4.0, reason_lean=0.0, admits=(), difficulty=0.5, gravity=0.0,
-                quorum=None, unrest=0.0, moves=moves or (("for", tuple(PROCEEDING_MOVES)), ("against", tuple(PROCEEDING_MOVES))))
+                quorum=None, unrest=0.0, moves=moves or (("for", tuple(PROCEEDING_MOVES)), ("against", tuple(PROCEEDING_MOVES))),
+                faults=tuple(PROCEEDING_FAULTS))   # B24.32: the module records only what the rite lists, so the double lists the four (`faults=()` is the rite that lists none)
     base.update(kw)
     return Rite(**base)
 

@@ -217,7 +217,7 @@ def _voice(inp, mover, it):
 
 # ------------------------------------------------------------------ the board (B24.06; HEAR_B "The six moves", "Faults")
 #: What a fault costs the side at fault on the closing draw, in `fault_step` levels: a contradiction one, silence two; `forgery_found` and `irrelevance` cost
-#: what they strike or turn away, not a level. The faults are read by id, as `rosters.yaml: proceeding_faults` says; none names a winner or a side.
+#: what they strike or turn away, not a level. The faults are read by id, as `rosters.yaml: proceeding_faults` says, and only the ones the rite lists (`Rite.faults`) are recorded; none names a winner or a side.
 FAULT_LEVELS = {"self_contradiction": 1, "silence": 2}   # [canonical: HEAR_B "Faults" -- one level against the side at fault, and two for silence]
 STANDS, ANSWERED, STRUCK, WITHDRAWN = "stands", "answered", "struck", "withdrawn"
 #: an `Item`'s status on `Sitting.board`: an answered item stands (its answer failed or halved it); `struck` is what `evidence.standing` struck; `withdrawn` is
@@ -887,6 +887,8 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
         tracks[h.id] += d
 
     def fault(name, who):                                 # a condition on the board, and a cost on the closing draw (`FAULT_LEVELS`), never a verdict
+        if name not in inp.rite.faults:                   # B24.32: a rite lists the faults that apply (`Rite.faults`); one it does not list is not recorded and costs no level
+            return
         faults.append((name, who))
         flagged.append(name)
         if name in FAULT_LEVELS:

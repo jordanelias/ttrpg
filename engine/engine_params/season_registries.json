@@ -170,7 +170,13 @@
               "rule",
               "adjourn"
             ]
-          }
+          },
+          "faults": [
+            "self_contradiction",
+            "silence",
+            "forgery_found",
+            "irrelevance"
+          ]
         },
         {
           "id": "trial",

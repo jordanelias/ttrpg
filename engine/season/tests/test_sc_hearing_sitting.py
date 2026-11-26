@@ -169,7 +169,7 @@ def test_a_computed_case_is_heard_under_the_default_rite():
     """`IS-B2-SC-03` step 3 (falsifier): `proceeding_input` reads the rite of the docket item's arrangement row, and `default` where the item names none (every
     computed `open_case`, `world_q.proceeding_row`'s second entry for a `determine`): the built `Rite` carries the default's own cells (the bench's moves beside
     the sides', the faults, `disclosed`, who bears each rung). CONTROL, one change: a case filed under `examination` is heard under ITS rite (`inquisition`:
-    no faults, nothing disclosed), so the reading is the row's and not a constant. And the switch: at `sitting_exchanges` 0 (shipped) a bench's sitting
+    nothing disclosed; B24.32 gave it the four faults), so the reading is the row's and not a constant. And the switch: at `sitting_exchanges` 0 (shipped) a bench's sitting
     has no turns, at 1 it has the row's own."""
     from ..data.arrangements import RITES
     from ..data.rosters import PROCEEDING_FAULTS
@@ -192,7 +192,7 @@ def test_a_computed_case_is_heard_under_the_default_rite():
     named, nd = _world()
     assert _kinds(_fold(named, nd, _open("oc", arrangement="examination", petition=_petition(named)))) == ["case.opened"]
     other = _heard(named, _determine("dt"), [DUKE, PARTY])[2].rite
-    assert (other.id, other.faults, other.disclosed) == ("inquisition", (), False) and other.id != rite.id
+    assert (other.id, other.faults, other.disclosed) == ("inquisition", tuple(PROCEEDING_FAULTS), False) and other.id != rite.id
 
 
 def test_a_sitting_of_no_exchanges_is_todays_roll_through_the_host():
@@ -449,6 +449,82 @@ def test_swapping_bears_moves_p_carried_over_200_seeds():
     assert all(0 < sum(s) < 200 for s in shares.values()), {b: sum(s) for b, s in shares.items()}      # no single result is fixed
     assert sum(shares["for"]) < sum(shares["against"]) and odds["for"] < odds["against"], (sum(shares["for"]), sum(shares["against"]), odds)
     assert free["for"] == free["against"]
+
+
+def test_silence_adds_levels_only_where_the_row_lists_it():
+    """KERN_B check 5 (silence is a fault where the row lists it): one sitting, the other side (`against`) presenting its item, the bearer (`for`) holding one in the
+    room and resting both rounds, so the bearer rests twice with nothing of his standing on the rung. The rite's `faults` is the row's list (`sigma._rite_of` stores
+    it) and the module records only what it lists: with `faults=()` nothing is recorded and no level is owed; with `("silence",)` the bearer's side owes two levels
+    for each silence; with all four the sitting is the same as with silence alone (no other fault's condition holds here). At the shipped dials `fault_step` is nil
+    and a level costs nothing on the draw, so the closing draw is read with `fault_step` set: the net falls under silence by the levels owed and not at all under
+    `faults=()`, on the same key. FALSIFIER: a module that records a fault its rite does not list gives `faults=()` the silence levels. CONTROL: the arms differ in
+    one cell, the rite's list; the room, the decider, the keys and the dials are the same."""
+    from dataclasses import replace
+
+    from ..data.rosters import PROCEEDING_FAULTS
+    from ..queries.inputs import Choice, Item
+    from .test_sc_proceeding_module import P, _bench, _dials, _key, _pick
+
+    rest = _pick("none")
+
+    def decide(view, me):                                               # `against` presents; everyone else rests
+        o = next((o for o in view.options if o.move == "present"), None)
+        return Choice(o.move, o.ground, o.item, o.relation) if me.side == "against" and o else rest(view, me)
+
+    arms = {"none": (), "silence": ("silence",), "all": tuple(PROCEEDING_FAULTS)}
+    ran = {}
+    for name, listed in arms.items():
+        inp = _bench("bench", 1, turns=2, faults=listed, admits=("record",))
+        room = tuple(replace(p, items=(Item(f"i_{p.id}", "record", 1.0),)) if p.side else p for p in inp.room)
+        assert inp.rite.bears == "for" and inp.rite.faults == listed and inp.dials["fault_step"] is None
+        priced = replace(inp, room=room, dials=_dials(fault_step="minor"))
+        ran[name] = [(P.proceed(replace(inp, room=room), _key("silence", i), decide=decide), P.proceed(priced, _key("silence", i), decide=decide)) for i in range(20)]
+    checked = 0
+    for (n0, p0), (n1, p1), (n4, p4) in zip(ran["none"], ran["silence"], ran["all"]):
+        assert (n0.faults, n0.state.levels) == ((), ()) == (p0.faults, p0.state.levels)
+        assert (n1.faults, n1.state.levels) == (("silence",) * 2, (("for", 2),) * 2) == (n4.faults, n4.state.levels)
+        (_, m0), (_, m1), (_, m4) = p0.verdicts[0], p1.verdicts[0], p4.verdicts[0]
+        assert m0.ob == m1.ob == m4.ob and m1.net < m0.net and m1.net == m4.net, (m0, m1, m4)      # levels owed are leverage taken from `for`, never an obstacle term
+        assert n0.verdicts[0][1] == n1.verdicts[0][1]                       # the control: at the shipped nil `fault_step` the levels owed cost the draw nothing
+        checked += 1
+    assert checked >= 20
+
+
+def test_an_attendees_turns_grow_with_effort_within_the_rows_bounds():
+    """KERN_B check 9, in the form the tree has. The entry's 'an attendee at effort zero makes no move' is NOT the carried form: effort is no per-attendee budget here,
+    it is one term of the rite's turns (`sigma._rite_of`: `max(lo, min(hi, effort + 1 + strife))`) and every shipped bench row has a floor `lo` of at least 1, so an
+    attendee at effort 0 speaks exactly the row's floor. Through `sigma.resolve` on the `arbitration` row at `sitting_exchanges` 1: at effort 0 each speaker speaks
+    the floor and no more, no effort ever gives a speaker more than the ceiling, and a speaker's beats are non-decreasing in effort over 0..5 and do grow somewhere
+    (so effort is read). THE SWITCH: at the shipped `sitting_exchanges` 0 nobody speaks at any effort. FALSIFIER (run once, not kept): turns taken as the floor whatever the
+    effort leaves every speaker's beats flat and reddens the growth arm."""
+    from collections import Counter
+
+    from ..data.arrangements import ARRANGEMENTS
+    from ..seam.wrappers import sigma
+    from .test_sc_proceeding_module import _key
+    from .test_u7_remit import DUKE, PARTY, _fold, _open, _world
+
+    row, (lo, hi) = ARRANGEMENTS["arbitration"], ARRANGEMENTS["arbitration"]["turns"]
+    assert row["close"] == "bench" and 1 <= lo < hi
+
+    def spoken(sx, effort):
+        w, d = _world(sitting_exchanges=sx)
+        _fold(w, d, _open("oc", arrangement="arbitration"))
+        out = sigma.resolve(w, [DUKE, PARTY], ["dt"], "a verdict", verb="determine", subject=PARTY, rng=_key("turns", 0),
+                            proceeds=(row, "full", None, None), topic=PARTY, effort=effort)
+        assert out["status"] == "RESOLVED"
+        return Counter(b.mover for b in out["proceeding"].beats)
+
+    efforts, checked = range(6), 0
+    ran = {e: spoken(1, e) for e in (*efforts, 9)}
+    assert len(ran[0]) >= 2 and set(ran[0].values()) == {lo}                    # effort 0: each speaker the floor, exactly
+    for e, got in ran.items():
+        assert set(got) == set(ran[0]) and max(got.values()) <= hi, (e, got)    # no effort gives a speaker more than the ceiling
+        checked += 1
+    per = [max(ran[e].values()) for e in efforts]
+    assert per == sorted(per) and per[-1] > per[0] and ran[9] == ran[5] == Counter({s: hi for s in ran[0]}), per    # non-decreasing, growing, and capped at the ceiling
+    assert all(not spoken(0, e) for e in efforts)                               # the switch: shipped, nobody speaks at any effort
+    assert checked == 7
 
 
 @pytest.mark.slow
