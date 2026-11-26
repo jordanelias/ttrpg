@@ -143,7 +143,7 @@ def test_hunger_draw_on_bodies_diverge_and_first_deaths_differ():
 
 
 def test_hunger_draw_off_is_the_base_hash():
-    """The control: at `False` (the shipped arm) no `hunger_severity` draw is taken, every cohort falls by exactly `body_step x units short` and so all
+    """The control: at `False` (the control arm; the shipped arm is True since B12a.62) no `hunger_severity` draw is taken, every cohort falls by exactly `body_step x units short` and so all
     bodies are equal, and the world's hash is the one the same season gives with the projection's severity stripped (`()`, what the base `subsist`
     reads); the drawn arm's hash differs from it, so the equality can fail."""
     drawn, real = [], world_q.draw_factory

@@ -637,7 +637,7 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
     realm): its two execution counts -- `faction.surveyed >= 1` and `checked >= 4` -- were DELETED,
     not skipped. What stays is an invariant over whatever sheets the season makes; that a survey
     executes and its sheet is held is asserted on hand-built worlds (sections 1-5 above)."""
-    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` leaves nothing short and holds no seam in S-001, where the survey sheets this test reads form
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` reads this test RED (B12a.99 bisection of the shipped arms; the cause is not traced further), where the survey sheets this test reads form
     w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")

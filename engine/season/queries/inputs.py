@@ -921,7 +921,7 @@ class LarderInput:
       * `stores`  -- `((rung, ((kind, units), ...)), ...)` for every rung on a cohort ladder, each in its
                      own `Rung.stores` order. An eater whose home has no ladder here draws from nothing,
                      so the cohort exemption (`larder_draw`'s) and this projection must agree;
-      * `walk`    -- `Fixtures.larder_walk` (B12a.53, `H-528`): `"first"` (shipped; the draw is the first
+      * `walk`    -- `Fixtures.larder_walk` (B12a.53, `H-528`): `"first"` (the control; `through` ships; the draw is the first
                      stocked rung's alone) or `"through"` (the remainder goes on up the ladder). Last, with a
                      default, so the positional empty `LarderInput((), (), (), ())` of `_larder_parts`' head builds."""
     weights: tuple

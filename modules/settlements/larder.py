@@ -26,7 +26,7 @@ THE RULE (`ED-IN-0246` item 3a, `ED-IN-0255`):
     of the kind in the RUNNING view -- what this draw has left, else the rung's own stores. The running
     view is why two eaters cannot spend the same unit, and how scarcity binds. `LarderInput.walk` says
     how far it goes (`Fixtures.larder_walk`, `H-528`):
-      - `"first"` (shipped): the first such rung gives `min(want, held)` and the remainder is NOT walked
+      - `"first"` (the control; `through` ships since B12a.62's close): the first such rung gives `min(want, held)` and the remainder is NOT walked
         further up.
       - `"through"`: each such rung gives `min(want - taken so far, held)` and the walk goes on up the
         ladder until `want` is met or the ladder ends, so a town with a few units at home reaches the

@@ -76,7 +76,7 @@ from .test_u7_remit import _fold, _world
 
 @pytest.fixture(scope="module")
 def realm():
-    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` leaves nothing short and holds no seam in S-001, whose pooled rolls `test_cr18` reads
+    # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` reads this test RED (B12a.99 bisection of the shipped arms; the cause is not traced further), whose pooled rolls `test_cr18` reads
     return A.measure_world(lambda seed, **kw: build_realm(seed, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"), **kw), 0, 1)
 
 
