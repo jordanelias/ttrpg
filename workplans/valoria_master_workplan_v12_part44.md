@@ -30,7 +30,7 @@ GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
-GATE: Batch B08-scene-order
+GATE: Batch B08-scene-order @3cf56673c
 GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
 GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
 GATE: Batch BA1-cast-content @ce61cbf3055cd6326cb2f9ea6330af4ce5d4fc45

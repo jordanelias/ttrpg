@@ -46,7 +46,7 @@ from engine.season.state.carriers import Claim
 # `PYTHONHASHSEED=0`, on the B10.99 closing tree (after B10.72's release fix); still no `claim.decayed`.
 # BA1.99 RE-PIN, 12998 -> 13348 (read at 12933 with BA1.02's `manner:` rows in; they are held back): the BA1 movers (BA1.01, BA1.08, BA1.12; `_realm_goldens.py`'s
 # BA1.99 paragraph) move the season's log once more; same reading, seed 0, `PYTHONHASHSEED=0`, on the BA1.99 closing tree; still no `claim.decayed`.
-BEFORE_SEASON_ONE_ENTRIES = 10187      # B21b partial re-record: 9318 -> 10187 (the guards ship on, B21b.02; no `claim.decayed`); B11 merge with main re-record: 9142 -> 9318 (this chooser's log, where `populated.run`'s CENSUS[(0, 1)] reads 9320); B24p merge with B21 re-record: 14307 -> 9142 (B21.99: 13522 -> 9288; B24p merge with B15.99: 13522 -> 14307)
+BEFORE_SEASON_ONE_ENTRIES = 10187      # B21b partial re-record on the merge with B08: 9317 -> 10187 (the guards ship on, B21b.02; no `claim.decayed`); B08.99 second re-record (the close's counterparty ruling): 7802 -> 9317 (this chooser's log, where `populated.run`'s CENSUS[(0, 1)] reads 9319); B08.99 re-record: 9318 -> 7802 (this chooser's log, where `populated.run`'s CENSUS[(0, 1)] reads 7804); B11 merge with main re-record: 9142 -> 9318 (this chooser's log, where `populated.run`'s CENSUS[(0, 1)] reads 9320); B24p merge with B21 re-record: 14307 -> 9142 (B21.99: 13522 -> 9288; B24p merge with B15.99: 13522 -> 14307)
 BEFORE_SEASON_ONE_DECAYED = 0
 
 

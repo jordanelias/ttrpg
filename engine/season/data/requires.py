@@ -900,9 +900,13 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # fold refuses it (`issue.refused` on `authority`; `issue.unauthorized` until B21.56). One stem; no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
 WITH_STEM = "with"      # where another person is NOW; named once here for its two readers (`data/verbs.py::VerbRow.with_operands`, `loop/witness.py`'s absence deposit, B11.83)
+# B08.05 (`RIVAL` 4): `precedence` is the net a rival's precedence draw came to (`loop/resolve.py::rival_key`, `_canonical_order`), carried on the
+# act's Events as the reason it folded where it did. WORLD-ONLY, and in no `requires` cell (it is not in `REQUIRES_STEMS`): it is a read of the
+# fold's own order, never a belief a witness could hold, so WITNESS must not deposit it as a claim into a ledger (`loop/witness.py` skips this set).
+PRECEDENCE_STEM = "precedence"
 WORLD_ONLY_STEMS = frozenset({WITH_STEM, "audience", "individual", "names", "dispute",
                               "declared.votes", "declared.quorum", "stage_open", "command", "admitted",
-                              "march.nth", "march.cap"}) | SENSITIVITY_STEMS
+                              "march.nth", "march.cap", PRECEDENCE_STEM}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`queries/person_q.py::record`).

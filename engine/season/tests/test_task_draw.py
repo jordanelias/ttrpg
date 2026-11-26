@@ -74,9 +74,11 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: re-recorded it with the arm on, and B09.99 re-read these): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
 #: RE-READ AT BA1.99, a second time with BA1.02's `manner:` rows held back (the BA1.01, BA1.08 and BA1.12 movers move the arm-off world too; `PYTHONHASHSEED=0`; the earlier values are in `git log`).
-ARM_OFF_PINS = {(0, 1): "d37dc4e1c429c800fbc8a5572b4cf563", (1, 1): "eb386cab03e8333fe51468373829d0aa", (2, 1): "3ccfc3c134177137e47528adc1c377d7",
-                (0, 2): "453bc918f49ba8679810e018e1cc2d05", (1, 2): "758c08093f8deb1ba75d6b8a7f4e860e", (2, 2): "d34295a23d04773889ee9c4cc8685fbf"}
-# B21b partial re-record (the guards ship on, B21b.02): the arm-off world on the B21b tree, read once at `PYTHONHASHSEED=0`.
+ARM_OFF_PINS = {(0, 1): "7b87ceacec1b66082268dc19b1a4d57b", (1, 1): "ad497ac8fbaa3af9a023924d36ec1bf3", (2, 1): "051de8beaf3d7fa8ad6b6aba9fcecae9",
+                (0, 2): "32147b6ae1b5eb2536a7e267f140db46", (1, 2): "0fbac1cdc67f20db4d41e283415cdc47", (2, 2): "1b9e4c4e3b3b73e04b72bb996e666564"}
+# B21b partial re-record on the merge with B08 (the guards ship on, B21b.02): the arm-off world read once at `PYTHONHASHSEED=0` on the merged tree.
+# B08.99 re-record: the arm-off world read at `PYTHONHASHSEED=0` on `ce09a54` (the B08 movers move it too); the S13 base `8142371` read the previous six values.
+# B08.99 second re-record: the close's ruling (`hangs_on` also requires the same counterparty, 44cdf60) moves the arm-off world again; read at `PYTHONHASHSEED=0` on 000d177 plus this edit; the `ce09a54` values are in `git log`.
 # B11 merge with main re-record: the arm-off world read twice equal at `PYTHONHASHSEED=0` on the merged tree; each earlier value is in `git log`.
 
 

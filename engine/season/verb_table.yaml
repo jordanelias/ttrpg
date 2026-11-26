@@ -93,6 +93,7 @@ verbs:
       held:        ["carry.refused"]
       write:       ["carry.refused"]
       draw:        ["carry.failed"]
+      sequence:    ["carry.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "ruled"
     writes_note: "v9 IN-45 (`loop/effects_information.py::_eff_carry`), built on `open_case`'s body (#453: *build on `open_case`'s body, writing the petition's `Record.stages`*): `Record.stages` is the FIRST pair -- the act re-winds the petition's clock (`_declared_stages`, `H-80`'s default for a computed act), so the petition RECORD moves, the gate's `entity` shape observes it, and its receipt names the petition, which the appended docket item names under `DOCKET_PETITION` (v9 SC-03a). The append rides on that receipt, as `open_case`'s rides on its case file, and every decline comes before the write because the gate does not restore a docket. The MATTER (`H-63`'s value for this row) is the petition's `terms`, `open_case`'s precedent. [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id; the stages appended rather than replaced.] The later pairs, `(DocketItem, matter)` and the item's `arrangement` (`None`) and `petition` keys, are check-only (each admits RES in the ACTS class), as on `open_case`."
@@ -184,6 +185,7 @@ verbs:
       party:        ["arrest.refused"]
       write:        ["arrest.refused"]
       counterparty: ["arrest.refused"]
+      sequence:     ["arrest.refused"]
     refusal_note: "#453 §9.1: *'eligibility -> `arrest.unauthorized`; party, write, counterparty -> `arrest.refused`'*. TWO KINDS ON A CONTESTED KEYED ROW ARE LAWFUL SINCE v9 IN-12 step 5's PARTY-GAP FOLD EDIT (K-02): the seam's party gap and S27.4's under-1D refusal emit `row.refusal_for(COUNTERPARTY_CLAUSE)` (`loop/resolve.py::_refuse_party_gap`), and the loader's contested-row rule narrows to rows that key no `counterparty` (`data/verbs.py`). ⚠ S27.4's refusal is labelled with the counterparty kind (`arrest.refused`) though it is the actor's pool, not the counterparty, that failed [ASSUMPTION; medium; Jordan to correct; revert: one kind under every key]."
     grade:       "assumption"
     grade_note:  "an argued addition (#453 §10.4 step 5): the matrix row `(Tenure, since)` is the tree's; the row, the issuing-seat reading and the warrant formation are v9 IN-12's, on #453 §9.1 `:1570-1611`, K-17, K-52, K-53."
@@ -273,6 +275,7 @@ verbs:
       individual:  ["conceal.refused"]
       write:       ["conceal.refused"]
       draw:        ["conceal.failed"]
+      sequence:    ["conceal.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "#453 §9.3: no precondition (B10.60 adds the actor's `individual` conjunct, refused with this kind too); a mint that moves nothing (a hand-built act naming the id of an identical Record) is the `write` clause's `conceal.refused` (B07.01; it was the fold's flat `act.refused`)."
     grade:       "assumption"
@@ -322,6 +325,7 @@ verbs:
       displacement:       ["confer.displacement_unauthorized"]
       write:              ["confer.refused"]
       counterparty:       ["confer.refused"]
+      sequence:           ["confer.refused"]
     refusal_note: "B21.80 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_confer` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the eight names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `confer` says WHICH clause refused and a person who holds a seat can read it. The predicate's kinds, in branch order: `office` (the act names no office the world holds) `confer.no_office`; `basis` (the office has no conferral basis) `confer.no_basis`; `term` (the declared term is no positive whole number) `confer.bad_term`; `conferee` (no living person, or a cohort) `confer.bad_conferee`; `purview` (the seat exercised does not reach the office conferred) `confer.unauthorized`, the SEAT's kind as `seize.unauthorized` is; `self_across_chains` (the conferrer seats himself on a seat of another chain) `confer.across_chains`; `held` (1-per-object: the seat is held, and the conferral is to its holder or displaces one who carries a live `commit`) `confer.held`; `displacement` (the seat exercised has no revocation authority over the incumbent) `confer.displacement_unauthorized`. The fold's own three clauses keep the kind the flat row emitted: `eligibility`, `write` and `counterparty` (which is also the seam's party gap, `loop/resolve.py::_refuse_party_gap`, so a contested row keying two or more kinds is lawful) are `confer.refused`. [ASSUMPTION: the spelling follows an existing keyed typed row, `seize`'s and `arrest`'s `<verb>.<word>` kinds, `<verb>.unauthorized` for the seat's refusal -- basis: CLAUDE.md §0 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"confer.refused\"]`.]"
     grade:       "ruled"
     eligibility_note: "§E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:confer + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster."
@@ -487,6 +491,7 @@ verbs:
       vote:        ["determine.refused"]
       write:       ["determine.refused"]
       counterparty: ["determine.refused"]
+      sequence:    ["determine.refused"]
     refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, F7; `data/verbs.py` checks the keys are exactly this row's failable clauses), BUT ONE KIND: `determine.refused` under every key (v9 SC-03b). The row is contested, and the loader refuses a contested row keying more than one refusal kind unless it keys `counterparty` (`data/verbs.py`, invariant 4's contested half: the seam's party-gap refusal, `loop/resolve.py::_refuse_party_gap`, no clause names, and it emits the UNION, so two kinds would publish a kind for a clause that did not fail; v9 IN-12 step 5 narrowed this for a row that keys the counterparty clause, as `arrest` does). The keys stay -- they are the failable clauses, and the fold reads `row.refusal_for(clause)` -- and they all answer alike. What is lost: the SEAT's `determine.unauthorized` (none exercised grants `determine`, or the one exercised does not sit in judgment over the party) is not split from the WORLD's `determine.refused` (the matter is no person, is on no docket, the bench is below quorum, the vote falls short of a declared row's `quorum:`, or the effect found nothing to open); the reason survives on the Event's `observed` for the `bench` conjunct only, and an eligibility refusal carries none (`loop/resolve.py`'s ineligibility return is `Verdict(UNKNOWN, ())`). [ASSUMPTION; medium; Jordan to correct; revert: the two-kind keys, and the row uncontested.] ⚠ `determine.unseated`, the proceedings design's second kind (`04_VERBS.md` §B.2), is NOT taken: read cold it names an Event in which somebody was UNSEATED -- `revoke`'s outcome -- which is the opposite of a refusal (`CLAUDE.md` §4). The design's struck `determine.unheard` (P-23) stays struck. The S27.4 refusal (`Ob > 2 x Pool`, a judge whose pool is under 1D) takes this kind too, as `speak`'s does. THE ROW NAMES `counterparty: subject`, AND THAT CLAUSE (`loop/resolve.py::_admits`, asked only AFTER the precondition passes) CAN NEVER FIRE FOR THIS ROW: a self-determination is refused by the `bench` conjunct (`may_determine`, `state/gate.py` conjunct 2, *a judge does not bind himself*) and an act naming no subject dies at `party`, both as `determine.refused`. The `counterparty:` key under `emits_on_refusal` is in `data/verbs.py`'s expected set BY DERIVATION from the row's `counterparty:` column, so the loader refuses a keyed row without it: THE LOADER CANNOT JUDGE REACHABILITY, only that a key names a clause the row derives."
     grade:       "assumption"
     grade_note:  "`assumption`, not `ruled`: `judging_set` is built (`H-32`, graded `assumption`) and the quorum is a swept fixture (`H-161`)."
@@ -549,6 +554,7 @@ verbs:
       "may fill":                 ["establish.unauthorized"]
       "reduction is revocation":  ["establish.reduces_grant"]
       write:                      ["establish.refused"]
+      sequence:                   ["establish.refused"]
     refusal_note: "B21.81 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_establish` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the seven names, spelled there with their spaces; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `establish` says WHICH clause refused. The predicate's kinds, in branch order: `office resolves` (the constructor refused it, an overlay act the seat does not found over, or an operand missing) `establish.no_office`; `rung held` (no rung the world holds) `establish.no_rung`; `conferral basis` (the office declares none) `establish.no_basis`; `filler` (a seat only the heir's claim opens, no title passing it) `establish.no_filler`; `re-founding` (an id some other class holds, or a different belonging for an existing office) `establish.refounding`; `may fill` (an existing office the seat exercised does not reach) `establish.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `reduction is revocation` (a re-stamp that drops from a sitting holder's grant an act, which is `revoke`'s) `establish.reduces_grant`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `establish.refused`; the row names no `counterparty:`, so the seam's party gap (S27.4's pool under 1D, a contest that reached its depth cap) takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81, on the `task` row's precedent). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal, itself on `seize`'s and `arrest`'s) -- basis: CLAUDE.md §0 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"establish.refused\"]`.]"
     grade:       "assumption"
     source:      "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
@@ -636,6 +642,7 @@ verbs:
     emits_on_refusal:
       write:       ["forge.refused"]
       draw:        ["forge.failed"]
+      sequence:    ["forge.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "FLAT: one kind for every failable clause (`data/verbs.py`, invariant 4). Refusal conditions, `survey`'s: the forger holds no claim on the subject (the cell); the subject coheres under no single faction (the effect's decline, the `write` clause)."
     grade:       "assumption"
@@ -688,6 +695,7 @@ verbs:
       holds:  ["tell.refused"]
       hearer: ["tell.refused"]
       counterparty: ["tell.refused"]
+      sequence: ["tell.refused"]
     grade:       "assumption"
     grade_note:  "an argued addition (CR-27, M9 taken (a)): the row is `tell`'s with the false-value rule in `lie_said_of`. [ASSUMPTION; medium; Jordan to correct; revert: `lie_offered` False, or delete this row, its alignment cells and its `lie_verbs` line.]"
     writes_note: "— (deposits at WITNESS, not here)"
@@ -762,6 +770,7 @@ verbs:
       held:        ["found.refused"]
       write:       ["found.refused"]
       draw:        ["found.failed"]
+      sequence:    ["found.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "assumption"
     grade_note:  "the matrix row `(Rung, exists)` is the tree's (`W2/H-41`); the VERB is plan position `24e`'s, on r2 `04` §A.7.1's reading, and its preconditions are the plan's corrected list -- an argued addition, graded as `succeed`, `utter` and `forge` are."
@@ -801,6 +810,7 @@ verbs:
       held:        ["build.refused"]
       write:       ["build.refused"]
       draw:        ["build.failed"]
+      sequence:    ["build.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "assumption"
     grade_note:  "`found`'s grade and reason: the matrix row is the tree's, the verb is plan position `24e`'s."
@@ -886,6 +896,7 @@ verbs:
       terms:       ["issue.refused"]
       write:       ["issue.refused"]
       counterparty: ["issue.refused"]
+      sequence:    ["issue.refused"]
     refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half), BUT ONE KIND: `issue.refused` under every key since B21.56 (edit 8). The row is contested, and the loader refuses a contested row keying more than one refusal kind unless it keys `counterparty` (`data/verbs.py`; `determine`'s v9 SC-03b precedent). `issue.unauthorized` (the SEAT: none exercised grants `issue`, or it does not command the executor, B21.20) is retired into it; the refusal's `observed` reads still say which clause failed -- `eligibility` or `authority` for the seat, `executors` for an addressee who is no person, `terms` for an issuer holding no claim on the terms (plan position IN-10), `write` for a mint that moved nothing. ⚠ PLAN POSITION `14`: `counterparty` -- the writ names no executor or names its issuer -- is the fold's own clause (`loop/resolve.py::_admits`)."
     grade:       "ruled"
     writes_note: "B21.56 (edit 8; A-81, C3-C11, THE DURABLE WRITE OF THE FAILURE BAND): THE WRIT EXISTS AT EVERY BAND. The band is not whether a dispensation is made but how strongly it binds: `loop/effects_information.py::_eff_issue` writes it into the Record's content as `force` (`rosters.yaml: record_kinds.dispensation`), and the writ is proclaimed at every band (`rosters.yaml: proclaimed`, A-21), so whoever learns of the issue holds a claim of it and of its `force` -- a dead letter (Failure) is itself a remembered deed against the issuing seat. What answers a writ reading its `force` (the answer rows' obstacles, the source's edit 10) is cross-lane and not edited here.  ||  — (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one.  ||  ⚠ PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load)."
@@ -1223,6 +1234,7 @@ verbs:
       stores:      ["requisition.refused"]
       write:       ["requisition.refused"]
       draw:        ["requisition.failed"]
+      sequence:    ["requisition.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `requisition.refused` is §27.1's SCARCITY channel -- *the second claimant on an emptied granary gets a DIFFERENT Event* -- and it is now the `stores` conjunct's alone: two requisitions on one larder in one fold, and the second finds it short (`tests/test_u7_remit.py`). `requisition.unauthorized` is the SEAT refusing: none exercised grants `issue`, or its purview does not reach the rung. A witness can tell a seat that could not reach the larder from a larder that could not cover the requisition."
     grade:       "assumption"
@@ -1306,6 +1318,7 @@ verbs:
       authority:   ["marshal.unauthorized"]
       write:       ["marshal.refused"]
       draw:        ["marshal.failed"]
+      sequence:    ["marshal.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "KEYED PER CLAUSE, `seize`'s shape. `marshal.unauthorized` -- the SEAT, at `authority`: none exercised grants `dispatch`, or its purview does not reach the subject's place. `marshal.refused` -- the WORLD, at `write`: the effect declined (a hand-built act naming a `role` outside `order_roles` or a `retreat_at` outside `order_retreat_at` is refused before anything is written, a caller defect) or the mint moved nothing."
     grade:       "assumption"
@@ -1342,6 +1355,7 @@ verbs:
       eligibility: ["surrender.unauthorized"]
       authority:   ["surrender.unauthorized"]
       write:       ["surrender.refused"]
+      sequence:    ["surrender.refused"]
     refusal_note: "KEYED PER CLAUSE, `seize`'s shape. `surrender.unauthorized` -- the SEAT, at `authority`: none exercised grants `dispatch`, or its purview does not reach the place. `surrender.refused` -- the WORLD, at `write`: the subject is no settlement or nobody holds it, no `siege.pressed` names it this season, the person who pressed it is not a living person of another faction, the seat's faction is not the place's holder faction, or the yielding hold is one the seat may not close."
     grade:       "assumption"
     grade_note:  "an argued addition (v11 CP-T04-07, AM-C-12): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the verb, its `remit:dispatch` eligibility, the `cession` basis and the threat reading are this item's."
@@ -1392,6 +1406,7 @@ verbs:
       room:     ["migrate.refused"]
       write:    ["migrate.refused"]
       draw:        ["travel.failed"]
+      sequence: ["migrate.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, plan position `19`'s shape). `path` is the journey failing, and it emits `move`'s own `travel.blocked` because it IS the same fact -- *there is no road from here to there* -- so a witness of either verb learns the same thing. `room` (v10 REM-29) is the destination refusing the settler for RR-2's throttle -- AT CAPACITY, a newcomer whose weight would take `world_q.population` past `world_q.capacity` (`world_q.has_room`) -- and emits `migrate.refused`, the kind the effect's capacity decline emitted, so what a witness learns is unchanged; the read rides the Event. `write` is the destination refusing him in the effect: the ladder will not seat him there, he already lives there, he is in custody (a live `detain`, v9 SC-03a: `_decline_custody`), or (a caller running the effect without the fold's admission) no room. `audience` (v9 IN-59 (b)) is the mover's standing at a guarded destination, and emits `travel.blocked` too: it is the same fact as `move`'s refusal of an unadmitted entrant. ELIGIBILITY is `own`, which cannot decline, so it keys nothing."
     grade:       "assumption"
@@ -1427,6 +1442,7 @@ verbs:
       audience:    ["travel.blocked"]
       write:       ["travel.blocked"]
       draw:        ["travel.failed"]
+      sequence:    ["travel.blocked"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "assumption"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
@@ -1459,6 +1475,7 @@ verbs:
       banned:       ["duty.banned"]
       write:        ["duty.refused"]
       counterparty: ["duty.refused"]
+      sequence:     ["duty.refused"]
     grade:       "ruled"
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel (W3's rule; plan position `17a`). Refusal condition: the subject is no seat, or the seat's `binds` is off `binds_bases`, or the actor holds the seat, or he is already obliged to it. B21.83 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_oblige` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the five names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `oblige` says WHICH clause refused. The kinds take the row's own `duty` stem (`duty.taken`, `duty.refused`), in branch order: `seat` (the subject is no seat) `duty.no_seat`; `binds` (the seat's `binds` is off the roster) `duty.bad_binds`; `own_seat` (the actor holds the seat) `duty.own_seat`; `one_edge` (a live `oblige` from the actor to it already) `duty.already`; `banned` (the actor holds a live `ban` at the seat's rung) `duty.banned`. The fold's own two clauses keep the kind the flat row emitted: `write` and `counterparty` are `duty.refused` (the row's eligibility is `own`, which cannot decline, so it keys no `eligibility`). [ASSUMPTION: the spelling follows B21.80's `confer` (`<stem>.<word>`), on the row's existing `duty` stem rather than the verb's name -- basis: CLAUDE.md §0 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"duty.refused\"]`.]"
     formation_decline_note: "A typed `existence` of `subject` kind `Office` is not authored: of the referents `questions_for` stamps none was a seat and no ledger held a claim about an office (plan position `14`, U7-own; `populated.build_realm(0)`), so the cell would form on every referent and refuse on every one, growing the always-refused set. `T4`'s bags supply known PERSONS, not seats, and a known-seat source is a second binding mechanism; formation is the `Office` class's (`referent_class` above). The fold's `counterparty` clause covers the hand-built act."
@@ -1489,6 +1506,7 @@ verbs:
       eligibility: ["case.unauthorized"]
       authority:   ["case.unauthorized"]
       write:       ["case.refused"]
+      sequence:    ["case.refused"]
     refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `case.unauthorized` -- the SEAT: none exercised grants `determine` (this row's eligibility, `H-52`), or its purview does not reach the matter. `case.refused` -- the matter is already on a docket, or the mint moved nothing. The family is `case.*`, the row's own `case.opened`."
     grade:       "assumption"
     eligibility_note: "W3: graded `assumption`, NOT `ruled`. #353's five remit acts are CLOSED -- issue, determine, confer, revoke, dispatch -- and opening a case is not among them, so V2 invented this eligibility. `own` is a different game (anyone may open a case), which is why it is swept rather than chosen. The roster is `rosters.yaml: remit_acts`."
@@ -1638,6 +1656,7 @@ verbs:
       present:     ["restore.refused"]
       write:       ["restore.refused"]
       draw:        ["restore.failed"]
+      sequence:    ["restore.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "ruled"
     effect_formula_note: "Δ = +(1 − condition) × f(degree) × share (§54 it. 7's mirror). ⚠ BUILT AT PLAN POSITION `24e` as `loop/effects.py::_rise`, the one owner `work` also reads when it advances a works: `(1 − condition)` is the headroom to the works' ceiling (`queries/world_q.py::ceiling`, the full scale where no works names the site), `share` is `queries/world_q.py::share` (one over those standing at the fabric), and `f(degree)` is `task_fraction`'s share of the band (B07.02, `_rise`; the whole headroom with no band: the arm `off`, or Success) -- it was the identity while `_fold` handed it no degree (`H-164`). Staged on `(Site, condition)` and clamped once under the ceiling, `work`'s G4 shape."
@@ -1681,6 +1700,7 @@ verbs:
       keeps:       ["revoke.bad_keeps"]
       held:        ["revoke.no_holder"]
       write:       ["revoke.refused"]
+      sequence:    ["revoke.refused"]
     refusal_note: "B21.82 (`proposals/2026-11-12-subsystem-audit-suite/proposals/01_CORE_predicates_name_their_clause.md` step two, edit 4; B09.19's channel; B21.80's shape): KEYED PER CLAUSE, ONE KIND FOR EACH CLAUSE `_req_revoke` DECLARES (`loop/predicates.py`'s `requires_predicate(clauses=)` is the owner of the five names; `data/verbs.py::VerbRow.precondition_evaluable` admits the row only while its keys are exactly those plus the fold's own), so a refused `revoke` says WHICH clause refused. The predicate's kinds, in branch order: `office` (the act names no office the world holds) `revoke.no_office`; `disposal` (the seat's conferral basis has no revocation disposal) `revoke.no_disposal`; `authority` (the seat exercised has no revocation authority over the seat) `revoke.unauthorized`, the SEAT's kind as `seize.unauthorized` and `confer.unauthorized` are; `keeps` (the `keeps` operand is no list of acts, B21.69) `revoke.bad_keeps`; `held` (a seat nobody holds) `revoke.no_holder`. The fold's own two clauses keep the kind the flat row emitted: `eligibility` and `write` are `revoke.refused`; the row names no `counterparty:`, so the seam's party gap takes the `write` key's kind (`loop/resolve.py::_refuse_party_gap`, B21.81). [ASSUMPTION: the spelling follows B21.80's `confer` (`<verb>.<word>`, `.unauthorized` for the seat's refusal) -- basis: CLAUDE.md §0 ladder step 4; the source names no kind. The kind names are the FA lane's to correct; each reverts alone by editing its value here, and the flat row is `emits_on_refusal: [\"revoke.refused\"]`.]"
     grade:       "ruled"
     disposal_note: "v9 IN-31 (H-100): WHAT A REVOCATION COSTS THE MAN REVOKED, read off the SEAT'S conferral basis (`Office.conferral`, ED-IN-0256 (2)). The one owner is `state/gate.py::REVOCATION_DISPOSAL` (JORDAN, 2026-10-21, answering the IN-31 design's A1: `appointed` -> a PERMANENT `ban : him -> Act.via`, SC-03a's restraint, which `confer`, `oblige` and the fold's readers already refuse; `elected`, `annex`, `None` -> nothing). `Tenure.since` is the ban's opening (`determine`'s precedent). `emits` STAYS `tenure.closed`: the ban earns no event of its own (`determine`'s disposal earns only `matter.determined`), and `tenure.opened` here would make it a second emitter of a kind `data/verbs.py::KIND_VERB` maps to `confer`, unpricing every `confer` deed. The ban carries no term and no effect closes one, so only death ends it. NOT REVOCATIONS, and so costing nothing: a termed hold maturing at MATTER (`T-n`), a `release` or a self-revocation of one's own seat (`T-m`; no self-ban), a `confer` displacing an incumbent (A1), a death (`cascade`). ⚠ It is the seat's basis, not the route by which the man came to sit: `confer` fills all three bases. A computed `revoke` executes 0 times on `build_realm(0)` (H-207 ruling (A)), so the outcome is observed by hand-built acts (`tests/test_in31_revocation_cost.py`)."
@@ -1726,6 +1746,7 @@ verbs:
       individual:  ["sabotage.refused"]
       write:       ["sabotage.refused"]
       draw:        ["sabotage.failed"]
+      sequence:    ["sabotage.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "v9 IN-12 step 9, #453 §9.3: *'refusal `sabotage.refused`'* -- one flat kind, `restore`'s shape: the site is not a Site, the saboteur is not at it, or the write moved nothing."
     grade:       "assumption"
@@ -1760,6 +1781,7 @@ verbs:
       exists:      ["raze.refused"]
       write:       ["raze.refused"]
       draw:        ["raze.failed"]
+      sequence:    ["raze.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "#453 §9.2: *'refusal `raze.refused` (flat)'*, `march`'s shape on a typed row: the subject is no Rung (the `existence` conjunct), or the effect declined -- not a settlement, the seat has no faction, nobody or the seat's own faction holds the place, or the seat's faction is not mustered there (no army)."
     grade:       "assumption"
@@ -1789,6 +1811,7 @@ verbs:
       eligibility: ["seize.unauthorized"]
       authority:   ["seize.unauthorized"]
       write:       ["seize.refused"]
+      sequence:    ["seize.refused"]
     refusal_note: "⚠ v9 IN-13: the `object` key went with its conjunct (`requires_typed_note`). KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half), `requisition`'s shape. `seize.unauthorized` -- the SEAT, at `authority`: none exercised grants `issue`, or its purview does not reach the subject's place; a SEAT named as the subject refuses here (an Office has no place, so no purview). `seize.refused` -- the WORLD, at `write`: the subject is neither a held Record nor an occupied settlement, or the effect declined (Record half: no held warrant names the Record, the actor already holds it, or nobody else does; Rung half: the actor is not committed to the seat's faction, that faction is not mustered there, nobody holds the town or the seat's own faction does, or the actor already holds it). No counterparty clause: the row names no second party (K-04)."
     grade:       "assumption"
     grade_note:  "an argued addition (#453 §10.4 step 6): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the row, its `remit:issue` eligibility, the `seizure` basis and the warrant reading are v9 IN-12's, on #453 `:1412` and `:1662`."
@@ -1902,6 +1925,7 @@ verbs:
     emits_on_refusal:
       write:       ["survey.refused"]
       draw:        ["survey.failed"]
+      sequence:    ["survey.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "FLAT: one kind for every failable clause (`data/verbs.py`, invariant 4). Refusal conditions: the surveyor holds no claim on the subject (the cell); the subject coheres under no single faction -- a person committed to none or to two, a rung nobody up its chain holds or whose holder coheres under none (v9 IN-12), a site, an office, a document, an unrostered Proposition (the effect's decline, the `write` clause)."
     grade:       "assumption"
@@ -1941,6 +1965,7 @@ verbs:
       with:        ["tend.refused"]
       write:       ["tend.refused"]
       draw:        ["tend.failed"]
+      sequence:    ["tend.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "v9 IN-12 step 9, #453 §9.4: *'refusal `tend.refused`'* -- one flat kind: the subject is no person, is not with the tender, or is already whole (the write moved nothing)."
     grade:       "assumption"
@@ -2011,6 +2036,7 @@ verbs:
       holds:  ["tell.refused"]
       hearer: ["tell.refused"]
       counterparty: ["tell.refused"]
+      sequence: ["tell.refused"]
     grade:       "ruled"
     writes_note: "— (deposits at WITNESS, not here)"
     refusal_note: "§E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject. ⚠ KEYED AT `T4` (`issue`'s precedent, `data/verbs.py` invariant 4's per-conjunct half): `holds` -- nothing held about the subject; `hearer` -- the person told is not with the teller. ONE KIND FOR BOTH (`tell.refused` since CP-T05-03, which split it from the lost telling's `news.untold`: a refusal is not a realised act and re-forms next round, a loss is and does not), so the seam's party-gap refusal, which emits the row's union, still emits exactly the kind each conjunct does; that single-kind union is what the loader requires of a CONTESTED keyed row. ⚠ PLAN POSITION `14`: `counterparty` -- a telling to nobody, or to the teller -- is the fold's own clause (`loop/resolve.py::_admits`), keyed to the row's one kind."
@@ -2266,6 +2292,7 @@ verbs:
       eligibility: ["inquiry.refused"]
       sensitivity: ["inquiry.refused"]
       draw:        ["thread_read.failed"]
+      sequence:    ["inquiry.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:297 (§4.2), :321 (§4.3), §4.5 :341-347. ⚠ P-01 CO-MOVEMENT AND THE COHERENCE COST (§4.5 :344-346) ARE NOT EXPRESSED HERE and are not silently dropped: they are threadwork effects with no carrier in this loop, carried on ED-FI-0009 with the Exposure gap"
@@ -2348,6 +2375,7 @@ verbs:
       individual:  ["train.refused"]
       write:       ["train.refused"]
       draw:        ["train.failed"]
+      sequence:    ["train.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     refusal_note: "v9 IN-12 step 9, #453 §9.4: *'refusal `train.refused`'* -- one flat kind: the subject is no person, is not with the actor, or holds no capability in the vocation the act carries (the effect's decline, J-13 (iii)'s write clause)."
     grade:       "assumption"
@@ -2387,6 +2415,7 @@ verbs:
       held:        ["recruit.refused"]
       write:       ["recruit.refused"]
       draw:        ["recruit.failed"]
+      sequence:    ["recruit.refused"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "assumption"
     grade_note:  "ED-IN-0306 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell."
@@ -2600,6 +2629,7 @@ verbs:
       floor:       ["work.unavailable"]
       write:       ["work.unavailable"]
       draw:        ["work.failed"]
+      sequence:    ["work.unavailable"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"

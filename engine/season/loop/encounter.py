@@ -32,7 +32,7 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from .resolve import _canonical_order, _contests_of
+from .resolve import _canonical_order, _contests_of, _sequence_refusal
 from ..data.matrix import Step
 from ..data.rosters import DECLARED
 from ..data.verbs import VERB_TABLE
@@ -70,7 +70,9 @@ def encounter(self, token: Token, events: list,
         return []
     out: list = []
     for a in _canonical_order(w, list(declared.values())):
-        gone = self._survives(w, a)
+        # B08.02: a step hung on a deferred prize was deferred with it; its `after` is read here, against the band the
+        # fight just produced (`_sequence_refusal`, the one reader, with RESOLVE's Events and this step's own).
+        gone = self._survives(w, a) or _sequence_refusal(self, w, a, events, out)
         if gone:
             out.extend(gone)
             continue

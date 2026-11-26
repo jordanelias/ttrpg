@@ -133,6 +133,18 @@ def test_the_realm_two_season_hash_is_the_shipped_pin_and_the_run_stores_scenes(
     assert not hasattr(d, "scenes")
     assert len(w.acts.scenes()) > 100, "the realm run stored too few Scenes for this to mean anything"
     assert w.content_hash() == REALM_PIN_SEED_0_TWO_SEASONS
+    # B08, R-03.c on the realm (`test_scene_sequence.py`'s planted worlds hold the rest of the claim): EVERY scene whose interactions were folded two or
+    # more at a time (the act store's order is the fold's) was folded in the chooser's own order (`Scene.acts`) with nothing of another scene between them.
+    folded_at = {a.id: i for i, a in enumerate(w.acts)}
+    checked = 0
+    for sc in w.acts.scenes():
+        at = [folded_at[a.id] for a in sc.acts if a.id in folded_at]
+        if len(at) < 2:
+            continue
+        checked += 1
+        assert at == sorted(at), (sc.id, "folded out of the chooser's order", at)
+        assert at[-1] - at[0] == len(at) - 1, (sc.id, "another scene's act sits between this scene's interactions", at)
+    assert checked >= 1, "the realm formed no scene of two interactions in two seasons: the order was not observed"
 
 
 def test_scene_decided_counts_equal_decision_spread():
