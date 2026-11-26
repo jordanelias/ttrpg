@@ -37,7 +37,7 @@ GATE: Batch BA1-cast-content @ce61cbf3055cd6326cb2f9ea6330af4ce5d4fc45
 GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B11F1-flow-se
 GATE: Batch B11F2-flow-in
-GATE: Batch B12a-world-motion-and-ground
+GATE: Batch B12a-world-motion-and-ground @ee641cbdd
 GATE: Batch B12b-weather-arcs-population
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa

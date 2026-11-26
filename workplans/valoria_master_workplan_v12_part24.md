@@ -15,7 +15,7 @@
 ## Batch B12b-weather-arcs-population · lane SE+WR · wave W14 · step S14 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B12b-weather-arcs-population
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SE.md, Open table; `registers/handoffs/HANDOFF_WR.md` carries one pointer row `Batch B12b-weather-arcs-population — IN FLIGHT (row in HANDOFF_SE.md)`, deleted at the same expunge (D-21)
-GATE: Batch B12a-world-motion-and-ground
+GATE: Batch B12a-world-motion-and-ground @ee641cbdd
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none moved — B12b's cell in `V12_STRUCTURE.md` §2.2 reads "re-read only": the close reads the nine lines on the closing tree and names no conjunct, so no `reading:` record is written and `status:` is not edited (`IS-A-12`). What the batch serves: rulings A-47, A-51, A-54, A-55, A-56, A-81, A-15, A-30, D-69, D-U1-10 (the weather as a drawn spell, a journey that takes time and can go wrong, a private tally that becomes a question, a population that thins and regrows, a shared granary whose dearth is reported once)
 UNDECIDED:
