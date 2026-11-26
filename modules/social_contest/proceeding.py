@@ -998,8 +998,11 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
         entered.append(it.id)
         clash = [o for o in _standing(inp, board, side) if o.id != it.id and pair_of(it, o) == CONTRADICTS]
         if clash:                                       # two standing items of one side disagree: the lighter is withdrawn (the newcomer on a tie)
-            o = max(clash, key=lambda i: (i.weight, i.id))
-            put(o.id if o.weight < w else it.id, WITHDRAWN)
+            if max(i.weight for i in clash) < w:        # the newcomer outweighs every item it clashes with: all of them are withdrawn, not only the heaviest
+                for o in clash:
+                    put(o.id, WITHDRAWN)
+            else:
+                put(it.id, WITHDRAWN)
             fault("self_contradiction", side)
     elif effect in ("answer", "impugn"):                # B24.06: a rolled move on the board; each listener's margin is read as a speech's is
         tg, ans, over = next(((t, a, o) for t, a, o in _answerable(inp, replace(st, board=tuple(board)), mover, effect) if t.id == ch.item), (None, None, None))

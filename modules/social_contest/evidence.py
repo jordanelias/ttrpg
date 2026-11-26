@@ -119,7 +119,12 @@ def standing(presented: tuple, findings: tuple = (), cap: Optional[float] = None
             miss *= 1.0 - min(it.weight, 1.0)
         merged = max(top.weight, (1.0 - miss) if cap is None else min(cap, 1.0 - miss))
         kept[top.id] = replace(top, weight=merged) if len(once) > 1 else top
-    out = tuple(kept[it.id] for it in live if it.id in kept)
+    out, seen = [], set()                                                        # one row an id, in the order shown (two shown items may carry one id: a filed exhibit shown again)
+    for it in live:
+        if it.id in kept and it.id not in seen:
+            seen.add(it.id)
+            out.append(kept[it.id])
+    out = tuple(out)
     return out, tuple(sorted(struck, key=lambda i: [p.id for p in presented].index(i))), tuple(faults)
 
 
