@@ -132,6 +132,9 @@ def test_cl_events_1_the_control_arm_reads_the_bare_constant_at_every_rung_and_d
     `season_factor`, and every harbour yields the control's 40 and 30."""
     w = _world(0, ())
     assert w.fixtures.get("season_factor_draw") == (), "fixture: the shipped arm is not `()`"
+    # B12a.99: `hunger_severity_draw` (shipped True since B12a.62) builds its own `draw_factory` in every MATTER (`world_q._hunger_severity`), which the patch below would read as a
+    # weather draw; it is another arm's draw, so it is set at its control here and this test sees only the weather's.
+    w.fixtures = w.fixtures.sweep("hunger_severity_draw", False)
 
     def no_draw(*args, **kwargs):
         raise AssertionError("a draw was made with `season_factor_draw` at `()`")
