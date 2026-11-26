@@ -8456,7 +8456,7 @@ rows:
     tier:      1
     hole:      "THE APPROACH MENU DOES NOT PAY AT THE PB'S STARTING COEFFICIENTS (B16.08's gate, PB 03 §7 row '--': 'else the menu is not shipped'). With the leans built (commit depth and counter selection, the fighting withdrawal in a bind, the standing initiative bonus retired) the state-reading policy ('press the wounded; guard when hurt') never beats never-lean on replication: n = 2,000 per arm read the dagger against an arming sword at +1.8 (+0.0 to +3.6) and two replicates at n = 4,000 on fresh seeds read -0.5 (-1.8 to +0.8) and -0.1 (-1.4 to +1.2); the arming mirror reads -3.1 (-6.2 to -0.0), -2.5 (-4.7 to -0.3), -1.6; the mace mirror -3.4 (-6.5 to -0.3), -0.2, -4.4 (-6.6 to -2.2); the low-Endurance row -1.8 and +2.0, inside. The first reading's one 'beyond' in the dagger row rests on a never-lean arm that read 7.9 where eight other seeds read 8.3 to 10.0 (B16.04's control). The leans themselves move results (the mace mirror: defensive +6.1, aggressive -8.3 against normal; the arming sword against a dagger: disengage events per fight 0.456, 0.278, 0.149 under defensive, normal, aggressive), so the term is built and reads; the POLICY has no edge. B16.05 to B16.07 were reverted, B16.08 not built (its transfer ships at 0, which reads as B16.07's tree)."
     kind:      "MECHANISM"
-    owner:     "`modules/combat/combat_systems.py::commit_depth`, `::counter_select`, `::disengage_attempt_p`; the coefficients `APPROACH_COMMIT_K`, `APPROACH_COUNTER_K`, `APPROACH_BREAK_K` (B16.05/B16.06, `[SIM-CALIBRATE]`); the probe `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py` at `c11b2a91f` (default mode, `leans`)"
+    owner:     "`modules/combat/combat_systems.py::commit_depth`, `::counter_select`, `::disengage_attempt_p` and the coefficients `APPROACH_COMMIT_K`, `APPROACH_COUNTER_K`, `APPROACH_BREAK_K`: ALL IN GIT HISTORY ONLY (B16.05 and B16.06, `[SIM-CALIBRATE]`, reverted), as is the probe `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py` (at `c11b2a91f`, its default mode and `leans`; deleted at the close). Nothing of them is in the tree: the numbers above are re-runnable by checking those commits out"
     grade:     "measured"
     default:   "none"
     site:      ""
@@ -8464,6 +8464,18 @@ rows:
     unblocks:  "B16.09 (a decider per party, the widened view, the NPC's chooser) and B16.11 (the duel scenario's `press` and `guard` policies), both of which need the approach; a ruling on whether the menu is shipped, re-read at another coefficient set, or dropped; PB step 3's gate"
     cite:      "`Falsified: B16.05 B16.06 B16.07 B16.08` in the revert commit of this row; the reverted Item commits `711837621` (B16.05), `e6ad9df56` (B16.06), `773e8650d` (B16.07); the WIP checkpoints `43f8d11e2` and `786d870a7`. The first reading and the gate's readings in B16.05's and B16.06's commit bodies."
     source:    "workplan v12 B16 (batch B16-pc-round), B16.08's STOPS IF, 2026-11-25"
+  - id:        H-581
+    tier:      1
+    hole:      "A ROUND'S IN-ROUND DRAWS ARE POSITIONAL ON THE ROUND'S OWN DRAW, NOT KEYED (r, phase, purpose) AS B16.03's INSTRUCTION AND PB 03 §2 READ. `wrapper.round_draw(fight_key, r)` keys each ROUND (A-30: a round is a function of `(fight_key, r)` and the states it is handed, and no draw depends on another round's count, which holds and is observed); inside the round only `first`, `gap:`, `upset:` and `yield:` are keyed sub-draws, and `engagement`'s other draws (`rng.random()` at the longer/shorter coin, the closed latch, the `ready` rolls, `core.resolve(..., rng, ...)` for strike, defence, riposte, pursuit) advance the round's own `Draw` in a fixed order. B16.03's WHERE named `engagement`'s draw sites as keyed; it was not built, because keying each of about twenty sites moves every fight again for no property A-30 asks of the round. It matters when a later item adds or removes a draw INSIDE a round (a lean that rolls, an approach consult that draws), which shifts every later in-round draw of that round: B16.05's leans were designed not to draw."
+    kind:      "MECHANISM"
+    owner:     "`modules/combat/wrapper.py::engagement` (the positional `rng.random()` and `core.resolve` sites) and `::round_draw`; `modules/combat/fight.py::fight_round`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a ruling on whether the in-round draws are keyed per site before any item adds a draw inside a round (B19a, B30); A-30's cross-round law needs nothing more"
+    cite:      "B16-pc-round's close, Phase 1 (the accuracy and fidelity lenses, upheld by the antagonist): `modules/combat/fight.py::fight_round`'s docstring states the narrowing; `modules/combat/wrapper.py` `engagement` `rng.random()` sites; plan `workplans/valoria_master_workplan_v12_part23.md` B16.03."
+    source:    "workplan v12 B16 (batch B16-pc-round), close Phase 1, 2026-11-26"
 
 discharges:
   D1:   "row:H-01"

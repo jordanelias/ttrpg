@@ -139,7 +139,7 @@ def test_winrate_is_the_same_fights_through_the_entry(wb_balance, monkeypatch):
                       weapon=(specA if swap else specB).get("weapon", "arming"),
                       armor=(specA if swap else specB).get("armor", "light"),
                       tradition=(specA if swap else specB).get("tradition", "none"))
-        r = wrapper.fight(X, Y, CFG, rng)
+        r = wrapper.fight(X, Y, CFG, rng, keyed_rounds=True)   # the entry's law: the sweep reaches `entry.fight`, whose rounds are keyed (B16.03)
         r = -r if swap else r
         if r == 1:
             aw += 1; dec += 1

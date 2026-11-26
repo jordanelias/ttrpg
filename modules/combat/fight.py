@@ -2,20 +2,20 @@
 
 `modules/combat/` is the personal-combat engine: the import closure of `wrapper` and `combatant`, moved
 from `systems/combat/combat_engine_v1/` at `31b`; it is a package (CI-09), its files import each other by
-dotted name, and the host reaches it by the composition rows `combat.fight` and `combat.duel_terms`, never by a
-path. This file is the one module entry: the composition row whose target is `fight` below (`entry: verb_call`, `verb: fight`),
+dotted name, and the host reaches it by the composition rows `combat.fight`, `combat.round` and `combat.duel_terms`, never by a
+path. This file is the module entry: the composition row whose target is `fight` below (`entry: verb_call`, `verb: fight`),
 registered in `manifest.MODULE_ENTRIES` by the registrar at driver construction, and called by the host
 adapter `seam/wrappers/combat.py::resolve` -- the `@provider("contest", "personal_combat")` the prize row
 `the body` names, for every verb contesting that prize.
 
 It takes the host's typed input record and a seeded `rng`, and imports the record type,
 nothing else of the host. It never reads or writes `World`, holds no token and keeps no state between
-calls (A-25): the engine's `wrapper._TRACE` hook is bound for the call and restored after it by `wrapper.fight`'s own `trace`
-argument; this file never assigns it.
+calls (A-25): the engine's `wrapper._TRACE` hook is bound for the call and restored after it by `wrapper.traced` (one round, `fight_round`);
+this file never assigns it.
 
 It reads the scene, it does not grade it. It returns a `CombatOutcome` (`queries/inputs.py`): what the engine computed
-before `wrapper.fight` collapses it to an int -- each party's lifted `WoundTracker` (`PartyWounds`), the yield, the
-felling wound, the rounds fought, the scene's shape (`scene_shape`, B14.15) and the trace. The integer `wrapper.fight` returns is not lifted, and no winner crosses
+as the rounds of `fight_round` leave it -- each party's lifted `WoundTracker` (`PartyWounds`), the yield, the
+felling wound, the rounds fought, the scene's shape (`scene_shape`, B14.15) and the trace. No integer result is lifted and no winner crosses
 the boundary: the host interprets the record, the wound-state refusal is `seam/wrappers/combat.py`'s, and the degree is
 `seam/ladder.py::combat_degree`'s.
 """
@@ -257,9 +257,11 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
     felled, `yielded` the party whose yield roll failed; a round neither felled nor yielded in which the two yield rolls tied ends the fight with
     nobody yielded -- the trace then carries the engine's `fight_result` event, the one marker a loop reads.
 
-    `rng` is THE ROUND'S OWN `Draw` (`wrapper.round_draw(fight_key, inp.round)`, B16.03): every draw of the round is a keyed sub-draw of it -- `first` (the coin)
-    `H2(rng.key, "first")`, and `engagement`'s coverage-gap, riposte and yield draws `gap:`, `upset:`, `yield:` on the round's index and the blow or party -- so
-    nothing takes a position of a stream and no draw depends on another round (A-30). `cfg` is the workbench's overlay (`fight`'s). `deciders` is the
+    `rng` is THE ROUND'S OWN `Draw` (`wrapper.round_draw(fight_key, inp.round)`, B16.03), and THE CALLER'S DUTY IS TO HAND EACH ROUND ITS OWN (a `Draw` reused across
+    calls repeats `first` and the `gap:`, `upset:`, `yield:` keys, which name the round's key and not a position). Round `r` is a function of `(fight_key, r)` and of
+    the states it is handed, and no draw depends on another round's count (A-30). WITHIN the round the draws are `first` (the coin, `H2(rng.key, "first")`), the keyed
+    `gap:`, `upset:` and `yield:` draws, and the positional `rng.random()` and `core.resolve` draws of `engagement`, which advance the round's own `Draw` in a fixed
+    order: the plan's finer `(r, beat, site)` keying of those is not built (`engine/season/hole_register.yaml` H-581). `cfg` is the workbench's overlay (`fight`'s). `deciders` is the
     per-party approach decider, consulted by no round yet; `inp.plans` is read by no round yet (a missing phase is `normal`)."""
     fi = inp.fighters
     cfg = _fight_cfg(fi, cfg) or CFG
@@ -279,7 +281,7 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
         if loser is None:
             over, yielder = wrapper.settle_round(A, B, wounds0, terms, cfg, rng, 0, inp.round, fi.decisiveness or (0.0, 0.0))   # `0`: the workbench loop's `scene` ordinal, which a round's own key has no use for
             if not over:
-                wrapper.recover(A, B, cfg)   # a felling, or a yield, is not a pause to recover in
+                wrapper.recover(A, B, cfg)   # a felling, or a yield, is not a pause to recover in; a `terms` round whose yield rolls pass is (the old loop's law, hash EQUAL; PCR-2 (3)'s 'not after terms' is not followed)
             elif yielder is None:
                 trace.append(dict(kind="fight_result", result=0, winner=None))   # both yield rolls failed at one Health: honour is even, nobody yields
     trace = tuple(trace)

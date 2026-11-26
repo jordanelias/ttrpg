@@ -313,6 +313,24 @@ def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
     return wrapper.fight(A, B, _ALWAYS, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=terms), trace, A, B
 
 
+def test_an_exact_tie_through_the_host_entry_ends_the_fight_with_nobody_yielded(monkeypatch):
+    """The same tie through the HOST's loop (`modules.combat.fight.fight`, B16.01), not the workbench's: the stub engagement wounds both parties to the same
+    Health on the first beat, both fail their yield roll (`_ALWAYS`), and the round's trace carries the engine's `fight_result` (result 0, no winner) that
+    `fight` reads to stop. FALSIFIER: a host loop that ignores the marker runs on to the next round (`rounds` above 1) or names a yielder."""
+    from engine.season.queries.inputs import PersonalCombatInput
+    from modules.combat import fight as host
+
+    def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, **kw):
+        A_.apply_wound(A_.wt.wi); B_.apply_wound(B_.wt.wi)
+        return None, False, 'terms'
+    monkeypatch.setattr(wrapper, 'engagement', _both_cross)
+    inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=(4, 4), terms="blood", wound_quantities=("felled", "wounds"))
+    out = host.fight(inp, draw.seeded(draw.H2("test_combat_duel_terms", 1)), cfg=_ALWAYS)
+    assert out.surrender is None and out.rounds == 1, (out.surrender, out.rounds)
+    assert [e for e in out.trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None)]
+    assert not any(e['kind'] == 'yield' for e in out.trace)
+
+
 def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
     """Both fighters cross `blood` on the same beat with the same Health left: nobody yields, the fight ends
     UNRESOLVED (result 0, no winner) on the first beat. The control (the same stub, unequal

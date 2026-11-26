@@ -603,13 +603,13 @@ class PersonalCombatInput:
 class DuelState:
     """WHAT ONE PARTY CARRIES FROM ROUND TO ROUND, in the FRAME of the loop that calls `modules/combat/fight.py::fight_round`
     (the duel's `fight`, a skirmish's or a field's own loop), for one provider call: no adapter, module attribute or `World` field
-    holds it, and it is outside `World.content_hash()`. The carried set is what a round does not reset or re-derive: damage,
-    stamina, concentration, poise and the weapon in hand (initiative, grip, lunge, facing and the selected mode are re-taken at
-    the round's open measure).
+    holds it, and it is outside `World.content_hash()`. The carried set is damage,
+    stamina, concentration and poise; `form` is carried too but READ BY NO ROUND yet: `engagement` re-takes the weapon's base form at its start (B14.13), so
+    `form` is the carrier a later weapon switch will read (initiative, grip, lunge, facing and the selected mode are re-taken at the round's open measure).
       * `cumulative_damage` -- the party's damage so far this fight;
       * `stamina`, `conc`   -- live Stamina and Concentration; `None` is the start of a fight (the module derives the maximum);
       * `poise`             -- balance, `1.0` whole;
-      * `form`              -- the weapon record in hand when the last round ended; `None` is the kit's own."""
+      * `form`              -- the weapon record in hand when the last round ended; `None` is the kit's own (inert until a weapon switch reads it)."""
     cumulative_damage: int = 0
     stamina: Optional[float] = None
     conc: Optional[float] = None

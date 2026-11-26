@@ -85,7 +85,7 @@ SHIPPED = {(0, 1): "9dc970e96316e8ad4f3bdf9bb7cc7dfb",
            (1, 1): "0264011cf04432fe89a5c42599d9c26f",
            (1, 2): "888f365efa0ea61f94bc4a747d1fcbb8",
            (2, 1): "74c7ec7ba200370718938eb380135d9a",
-           (2, 2): "d25e425406764bf40c259c8afc7eeaab"}    # B08.99 re-record (the docstring); the earlier values are in `git log`
+           (2, 2): "d25e425406764bf40c259c8afc7eeaab"}    # B16.99 re-record (the docstring) for seeds 0 and 2; the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted

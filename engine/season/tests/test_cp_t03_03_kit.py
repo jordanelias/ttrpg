@@ -242,7 +242,7 @@ def test_a_plated_subject_fells_the_actor_at_the_homes_rate_and_the_unplated_pai
     # B16.99: 0.35 -> 0.2. Read at the keyed-round stream (B16.03), n = 400, seeds 1-10: armed 0.62-0.68, control 0.32-0.37, the gap 0.27-0.35
     # (mean 0.315, sd 0.03 -- the binomial sd of a difference of two n = 400 shares is 0.034). The old 0.35 sat AT the expected gap
     # (0.65 - 0.34 = 0.31 at the home's rate and the bare pair's), so it passed or failed on the seed's luck. A seam that drops the plate has a
-    # gap of 0 (the pair is then the control): 0.2 is six sd under the expected gap and six over a dropped plate.
+    # gap of 0 (the pair is then the control): 0.2 is about 3.5 sd under the expected gap (0.115 against an sd of 0.03-0.034) and about six over a dropped plate.
     assert armed_share - control > 0.2, (armed_share, control)
 
 

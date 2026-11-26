@@ -749,7 +749,7 @@ def _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness=(
             if choice == WITHDRAW:
                 _emit('withdraw', round=turn+1)
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no riposte draw
-        rd = round_draw(fkey, turn+1) if keyed_rounds else rng   # `keyed_rounds` (B16.03): the HOST's law, every draw of the round, the coin included, a sub-draw of the round's own key (A-30); the workbench's default stays one sequential stream
+        rd = round_draw(fkey, turn+1) if keyed_rounds else rng   # `keyed_rounds` (B16.03): the HOST's law, the round on its own key (`round_draw`, A-30) with the coin a sub-draw of it; the round's other draws are positional on that `Draw` (hole_register H-581); the workbench's default stays one sequential stream
         first = A if (KD.seeded(KD.H2(rd.key, "first")) if keyed_rounds else rd).random()<0.5 else B
         _emit('round_start', round=turn+1, first=first.label)
         wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)

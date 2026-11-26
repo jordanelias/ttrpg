@@ -255,9 +255,9 @@ def _round_from_key(key, r):
 
 def test_twelve_round_calls_equal_one_fight():
     """B16.01 (PB step 1, PCR-2): `fight` is the loop over `fight_round`. Three hand-built records (the second a longsword against
-    plate, the case in which a weapon form is in hand at a round's end; the third unequal ends): the rounds called BY HAND, each handed the
-    `DuelState`s and the measure the last one returned, on the one stream, are the fight in one call -- the same events round for round, the same
-    wounds at the end, and the same number of draws taken from the stream. FALSIFIER: a state the round does not carry (the hand loop then
+    plate; the third unequal ends): the rounds called BY HAND, each handed the
+    `DuelState`s and the measure the last one returned, each on its own key, are the fight in one call -- the same events round for round, the same
+    wounds at the end, and the one uniform the fight takes of its own stream. FALSIFIER: a state the round does not carry (the hand loop then
     fights another fight), a draw the loop takes that the rounds do not, or a recovery applied where the fight ended."""
     from engine.dice_engine import draw
     from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
@@ -279,7 +279,7 @@ def test_twelve_round_calls_equal_one_fight():
             if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
                 break
         engine_events = [e for e in whole.trace if e["kind"] not in ("fight_start", "fight_result")]
-        assert hand == engine_events, (seed, "the rounds called by hand are not the fight in one call")
+        assert [e for e in hand if e["kind"] != "fight_result"] == engine_events, (seed, "the rounds called by hand are not the fight in one call")
         assert whole_rng.n == 1, (seed, "the fight took more than its one uniform of its own stream: a round draws from its own key (B16.03)", whole_rng.n)
         for pid in inp.claimants:
             assert {q: getattr(whole.wounds[pid], q) for q in qs} == out.wounds[pid], (seed, pid)
@@ -293,7 +293,7 @@ def test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_
     `(fight_key, r)` and the `DuelState`s it is handed. Sixteen fights (three kit sets and three end pairs, as `test_twelve_round_calls_equal_one_fight`'s): the fight in one call
     is read round by round (each round's input states and trace); then every round is called AGAIN, last round first, on a fresh keyed `Draw` and no
     other round having been called in that process step, and must return exactly its slice of the fight's trace. FALSIFIER: a round whose draws
-    depend on another round's count (the sequential stream: the reverse-order recompute then differs), or a fight that takes a position of its own
+    depend on another round's count (the sequential stream: the fight in one call then differs from the recompute), or a fight that takes a position of its own
     `Draw` beyond its one uniform (`rng.n` past 1)."""
     from engine.dice_engine import draw
     from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
@@ -302,7 +302,7 @@ def test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_
     qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
     kit_sets = ((), (("longsword", "heavy"), ("arming", "light")), (("spear", "light"), ("mace", "medium")))
     cases = [(seed, ((4, 4), (3, 5), (5, 5))[seed % 3], kit_sets[seed % 3]) for seed in range(16)]
-    recomputed = 0
+    recomputed = later = 0
     for seed, ends, kits in cases:
         inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs, kits=kits)
         key = draw.H2("test_a_round_from_its_key", seed)
@@ -326,4 +326,6 @@ def test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_
             expected = [e for e in rounds[r - 1] if e["kind"] != "fight_result"]
             assert [e for e in out.trace if e["kind"] != "fight_result"] == expected, (seed, r, "a round called alone is not that round of the fight")
             recomputed += 1
+            later += r > 1
     assert recomputed >= 12, f"only {recomputed} rounds were recomputed: the test is not observing a keyed round"
+    assert later >= 8, f"only {later} recomputed rounds were a LATER round: a fight that always ends in its first never shows a round independent of the one before"
