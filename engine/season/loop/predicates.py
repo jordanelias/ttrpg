@@ -23,6 +23,9 @@ from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, WAR_MOOD, commands, docketed, founded_office_id,
                                founded_post, founds_over, members, opened_by_acts, restrained)
+# B21b.13 (CR-91 (1)): a claim to a territory's mood, the faction test, and the ground reader `_req_utter` asks.
+from ..queries.world_q import CLAIM_MOOD, casus_ground, faction_props
+from ..data.rosters import CASUS_GROUNDS     # the trace's list of the grounds asked; which holds is `casus_ground`'s
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
@@ -704,7 +707,7 @@ def _req_dispatch(w: "World", a: "Act") -> bool:
     return True
 
 
-@requires_predicate("utter", clauses=("subject", "same_party", "parties", "declarer", "seat"))
+@requires_predicate("utter", clauses=("subject", "same_party", "parties", "declarer", "seat", "claimant", "rung", "ground"))
 def _req_utter(w: "World", a: "Act") -> Answer:
     """B21.62 (`16_PESSIMIST_FA_B` edit 4, G4, A-20): A WAR HAS TWO PARTIES AND A DECLARER WHO CAN WAGE IT. Every other mood is admitted
     as it was (`utter` admits a Proposition's creation and nothing else, §14); only a `WAR` utterance is asked, and only of its payload and
@@ -718,11 +721,27 @@ def _req_utter(w: "World", a: "Act") -> Answer:
         each commit): a member's `WAR` utterance without such a seat of HIS OWN party is refused here (`seat`), never admitted as an ordinary utterance.
     The source types these as `requires_typed` clauses; that grammar binds closed operands and cannot read a payload's `mood` or `value`, and
     a cell asked of every utterance would refuse each other mood, so the conditions are this predicate's [ASSUMPTION; medium; Jordan to
-    correct; revert: delete this predicate, the row's `requires:` and `emits_on_refusal:`]."""
+    correct; revert: delete this predicate, the row's `requires:` and `emits_on_refusal:`].
+    B21b.13 (CR-91 (1), A-103): AND A CLAIM TO A TERRITORY (`CLAIM_MOOD`, `claim:<faction>:<rung>`, `subject` the claimant faction, `value` the rung) IS UTTERED
+    ONLY ON A GROUND. Its three clauses, each `utter.refused` on the flat row, the clause and the ground(s) asked named in the trace:
+      * `claimant` -- the subject is a faction (`faction_props`) the utterer belongs to (`world_q.members`): a man claims for his own faction;
+      * `rung` -- the value is a Rung the world holds;
+      * `ground` -- a member of the closed roster `rosters.yaml: casus_grounds` holds for him or his faction (`world_q.casus_ground`, the first in roster order).
+    A claim is an occasion and context, never a gate on `march`: no row's `requires_typed` names one [ASSUMPTION; medium; Jordan to correct; revert: drop the
+    `CLAIM_MOOD` branch and the three clauses]."""
     d = a.payload if isinstance(a.payload, dict) else {}
     subject, value = d.get("subject"), d.get("value")
     if subject is not None and not isinstance(subject, str):
         return _refuse_at("subject", f"{a.actor} names {subject!r}", "an utterance names a subject that is no id")
+    if d.get("mood") == CLAIM_MOOD:
+        if not isinstance(subject, str) or subject not in faction_props(w) or a.actor not in members(w, subject):
+            return _refuse_at("claimant", f"{a.actor} for {subject!r}", "a claim to a territory uttered for a faction the utterer is not of")
+        if not isinstance(value, str) or value not in w.rungs:
+            return _refuse_at("rung", f"{a.actor} to {value!r}", "a claim to a territory that names no rung the world holds")
+        if casus_ground(w, a.actor, subject, value) is None:
+            return _refuse_at("ground", f"{a.actor} for {subject!r} to {value!r}",
+                              f"a claim to a territory on no ground (asked: {', '.join(CASUS_GROUNDS) or 'none rostered'})")
+        return ADMITTED
     if d.get("mood") != WAR_MOOD:
         return ADMITTED
     if not isinstance(subject, str) or not isinstance(value, str):

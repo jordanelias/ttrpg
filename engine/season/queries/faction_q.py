@@ -60,6 +60,9 @@ from .world_q import head  # noqa: F401 -- B21.65: MOVED to `world_q` (`opinion_
 from ..data.rosters import RECORD_KIND_KEYS, territory_id_of, territory_weight_of
 from ..gaps import Unspecified
 from ..state.containment import descendants
+# B21b.13 (CR-91 (4)): `civil_war` reads the sovereign's seats (the realm's rung kind) and the vassal oaths sworn to them.
+from .world_q import REALM_KIND
+from ..state.gate import is_sworn_to, seat_faction
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -179,6 +182,25 @@ def subordinates(w: World, seat: str) -> list:
     returns sorted ids."""
     TRACE.query("subordinates", "resolver")
     return sorted(establishment_of(w, seat))
+
+
+def civil_war(w: World, a: str, b: str) -> bool:
+    """IS THE WAR BETWEEN `a` AND `b` A CIVIL WAR? (B21b.13, CR-91 (4); [ASSUMPTION; medium; Jordan to correct; revert: delete this function, nothing reads it
+    before B21d].) `world_q.at_war(w, a, b)`, AND both factions' heads (`head`) hold a live, sworn `oblige` (`gate.is_sworn_to`: an imposed one is no oath) to a seat
+    of the SOVEREIGN'S faction -- the faction (`gate.seat_faction`) of a seat sitting at the realm's rung (`world_q.REALM_KIND`) -- one sovereign for both (CR-86's
+    vassal edges: the Duchess of Hafenmark and the Duke of Varfell are sworn to `off_king`). A war between two parties of one realm, read and never stored. A war
+    the sovereign's own faction wages against a vassal is no civil war by this reading (the sovereign's head is sworn to no seat of his own): the source's sentence
+    is 'both heads under the sovereign's purview'. `False` for a faction with no head, and for `a == b`. Its consumer, the breakdown clause, is CR-89 commit (3) (B21d)."""
+    TRACE.query("civil_war", "resolver")
+    if a == b or not at_war(w, a, b):
+        return False
+    heads = (head(w, a), head(w, b))
+    if None in heads:
+        return False
+    realm = {r for r, g in w.rungs.items() if g.kind == REALM_KIND}
+    sovereigns = {seat_faction(w, o.id) for o in w.offices.values() if o.rung in realm} - {None}
+    return any(all(any(is_sworn_to(w, h, o.id) for o in w.offices.values() if seat_faction(w, o.id) == s) for h in heads)
+               for s in sorted(sovereigns))
 
 
 # THE `record_kinds` MEMBER A SURVEY MINTS -- `world_q.WORKS_KIND`'s shape: named once, beside the

@@ -2989,6 +2989,17 @@
             "territory"
           ]
         },
+        "casus_grounds": {
+          "source": "v12 B21b.13 (CR-91 (1), A-103, ED-IN-0317). The GROUNDS on which a person may utter a claim to a territory: a `utter` of mood `CLAIM` (`queries/world_q.py::CLAIM_MOOD`), `claim:<faction>:<rung>`.",
+          "row": "CR-91",
+          "note": "A CLOSED, ORDERED ROSTER: a claim to a territory is admitted (`loop/predicates.py::_req_utter`) only when one of these grounds holds for the utterer or his faction, asked in this order, and refused `utter.refused` on the clause `ground` when none does (the trace names each ground asked). What each member MEANS is code, one reader per member in `queries/world_q.py::CASUS_GROUND_READERS`, which refuses at import any member here that names no reader: `seized_from_faction` -- a `rung.seized` in the log took the rung from the claimant's faction; `seat_once_held` -- the utterer once held it (an ended `hold` of his own on the rung); `succession_refused` -- a `succeed` of his on a seat at the rung was refused (`succession.refused` in the log); `church_under_theocratic_war` -- the Church's ground, a Church seat in the rung's subtree under a held theocratic declaration, which needs a theocratic WAR Proposition nothing mints before B21d (CR-89), so it holds nowhere until then. A CLAIM TO A TERRITORY IS AN OCCASION AND CONTEXT, NEVER A GATE ON `march` (A-103): `declare` takes a held claim as its occasion and a war declared on one has the claimed rungs for its target set (`world_q.claim_creeds`, `world_q.war_fields`); no `requires_typed` conjunct of any row names a claim. [ASSUMPTION: the member names; CR-91 gives (i) to (iv) in prose. Jordan to correct; revert: delete this roster, `CLAIM_MOOD`'s branch of `_req_utter`, and the claim terms in `questions_for`.]",
+          "values": [
+            "seized_from_faction",
+            "seat_once_held",
+            "succession_refused",
+            "church_under_theocratic_war"
+          ]
+        },
         "raze_target_kinds": {
           "source": "ED-IN-0306 phase 4. What `raze` may end.",
           "note": "`raze` deletes the rung and closes every edge naming it. It stays a settlement's act: `march_target_kinds` gained the territory (a territory is marched on, occupied and seized), and razing the land a duchy stands on is not a thing any act in the game does.",
@@ -10883,9 +10894,9 @@
           "brute": "own",
           "brute_note": "it makes a Proposition exist; belief in it is a later `tell` or `argue`",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "a WAR utterance names two distinct factions with members, and its declarer is a member of one who sits in a seat that wages for it (B21.62); every other mood is unconditioned",
+          "requires": "a WAR utterance names two distinct factions with members, and its declarer is a member of one who sits in a seat that wages for it (B21.62); a CLAIM utterance (a claim to a territory) names a faction the utterer belongs to and a rung the world holds, on a ground of `rosters.yaml: casus_grounds` (B21b.13); every other mood is unconditioned",
           "requires_typed": "none",
-          "requires_typed_note": "B21.62 (`16_PESSIMIST_FA_B` edit 4, G4; A-20): `none` FOR THE GRAMMAR'S REASON -- the conditions bind only a `WAR` utterance and read the payload's `mood` and `value`, which are no `requires_operands` member, and a typed cell asked of every utterance would refuse every other mood. They are `loop/predicates.py::_req_utter`'s (`world_q.members` of each party, `gate.may_wage` of the declarer; `subject != value` beside them). [ASSUMPTION; medium; Jordan to correct; revert: delete the predicate, the `requires:` and `emits_on_refusal:`.]",
+          "requires_typed_note": "B21.62 (`16_PESSIMIST_FA_B` edit 4, G4; A-20): `none` FOR THE GRAMMAR'S REASON -- the conditions bind only a `WAR` utterance and read the payload's `mood` and `value`, which are no `requires_operands` member, and a typed cell asked of every utterance would refuse every other mood. They are `loop/predicates.py::_req_utter`'s (`world_q.members` of each party, `gate.may_wage` of the declarer; `subject != value` beside them). [ASSUMPTION; medium; Jordan to correct; revert: delete the predicate, the `requires:` and `emits_on_refusal:`.] B21b.13 (CR-91 (1), A-103): THE CLAIM TO A TERRITORY'S MINT IS ASKED IN THE SAME PREDICATE, FOR THE SAME REASON -- a `CLAIM` utterance (`world_q.CLAIM_MOOD`, minted `claim:<faction>:<rung>` by `_eff_utter`) is refused `utter.refused` on its clause (`claimant`: the subject is a faction the utterer belongs to; `rung`: the value is a Rung; `ground`: no member of the closed roster `rosters.yaml: casus_grounds` holds, `world_q.casus_ground`). A claim is an occasion and context, NEVER A GATE ON `march`: no `requires_typed` names one. [ASSUMPTION; medium; Jordan to correct; revert: drop the predicate's `CLAIM_MOOD` branch and this sentence.]",
           "writes": [
             "Proposition.exists"
           ],

@@ -1277,6 +1277,23 @@ rosters:
       `march` is the only act that writes presence there (`_eff_march`'s relocation).
     values: [territory]
 
+  casus_grounds:
+    source: "v12 B21b.13 (CR-91 (1), A-103, ED-IN-0317). The GROUNDS on which a person may utter a claim to a territory: a `utter` of mood `CLAIM` (`queries/world_q.py::CLAIM_MOOD`), `claim:<faction>:<rung>`."
+    row: CR-91
+    note: >-
+      A CLOSED, ORDERED ROSTER: a claim to a territory is admitted (`loop/predicates.py::_req_utter`) only when one of these grounds holds
+      for the utterer or his faction, asked in this order, and refused `utter.refused` on the clause `ground` when none does (the trace names
+      each ground asked). What each member MEANS is code, one reader per member in `queries/world_q.py::CASUS_GROUND_READERS`, which refuses
+      at import any member here that names no reader: `seized_from_faction` -- a `rung.seized` in the log took the rung from the claimant's
+      faction; `seat_once_held` -- the utterer once held it (an ended `hold` of his own on the rung); `succession_refused` -- a `succeed` of his
+      on a seat at the rung was refused (`succession.refused` in the log); `church_under_theocratic_war` -- the Church's ground, a Church seat
+      in the rung's subtree under a held theocratic declaration, which needs a theocratic WAR Proposition nothing mints before B21d (CR-89),
+      so it holds nowhere until then. A CLAIM TO A TERRITORY IS AN OCCASION AND CONTEXT, NEVER A GATE ON `march` (A-103): `declare` takes a held
+      claim as its occasion and a war declared on one has the claimed rungs for its target set (`world_q.claim_creeds`, `world_q.war_fields`);
+      no `requires_typed` conjunct of any row names a claim. [ASSUMPTION: the member names; CR-91 gives (i) to (iv) in prose. Jordan to
+      correct; revert: delete this roster, `CLAIM_MOOD`'s branch of `_req_utter`, and the claim terms in `questions_for`.]
+    values: [seized_from_faction, seat_once_held, succession_refused, church_under_theocratic_war]
+
   raze_target_kinds:
     source: "ED-IN-0306 phase 4. What `raze` may end."
     note: >-
