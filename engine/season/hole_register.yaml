@@ -8817,6 +8817,19 @@ rows:
     cite:      "CONTROL: road_hazard off reproduces B12b.11's hash (f316d39f826d77961fc3a97aa63355d8 at seed 0, one season, @5e21eba). FALSIFIER: the 36-cell sweep; reading @5e21eba."
     source:    "workplan v12 B12b.12 (block slot 5); `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md` \"The falsifier\""
 
+  - id:        H-546
+    tier:      1
+    hole:      "THE CORPUS OVERLAY CANNOT BIND A RESTATED NEED TO A TALLY, A CLOCK OR AN ENDING. B12b.15 (`09_WR_provided_arcs` edit 4) found three `wrongly stated` rows in `proposals/2026-11-12-subsystem-audit-suite/audits/09_WR_audit.md` section 13: ARC-47 and NSC-08 (a counter that never decreases: a tally), ARC-46 (purely from the passage of time: CR-89's institutional clock, B21d), ARC-52 (a ceiling eliminates a faction with nobody declaring it: an `endings` row, Jordan's content). `rosters.yaml: tally_axes.members` ships empty (B12b.13), `harness/exercises.py::classify` has no axis token class (only probe, `H-NN`, kind and verb), and a trial binding of `tally_axes` for NSC-08 graded INSTRUMENT-ERROR (`bound=False`, on no verb-table row): the refusal works as designed. The item's gate (the ARC lane's RUNS-UNDECLARED falling) is unobservable besides: `corpus_run --seasons 2` reads 57 ARC, 46 NPC, 103 total before and after (log diff identical, about 1200 s), because the overlay is read by `run_cases.grade`, not by `corpus_run`."
+    kind:      "MEASURED-GAP"
+    owner:     "a batch that authors one `tally_axes` member and adds a token class for it to `harness/exercises.py` (B21d for ARC-46 once CR-89 lands; the `endings` row of ARC-52 is Jordan's content)"
+    grade:     "measured"
+    default:   "unbound -- the four cases grade NOT-ASSESSED (3, 3, 4 and 3 unmapped core rows); no overlay row edited; B12b.15 built nothing"
+    site:      "`engine/season/cases/exercises/*.yaml`; `engine/season/harness/exercises.py` (classify, resolve); `engine/season/rosters.yaml` tally_axes"
+    sweep:     ["unbound (SHIPPED)", "one authored tally axis plus a token class"]
+    unblocks:  "B12b.15's binding of ARC-47 and NSC-08; a gate read off `run_cases` verdicts rather than RUNS-UNDECLARED"
+    cite:      "CONTROL: seed-0 one-season realm hash f316d39f826d77961fc3a97aa63355d8 @6708bca, unchanged. FALSIFIER: the trial binding, INSTRUMENT-ERROR."
+    source:    "workplan v12 B12b.15 (block slot 6)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
