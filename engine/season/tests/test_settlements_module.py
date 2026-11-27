@@ -28,14 +28,15 @@ print(repr(loaded))
 def test_the_settlements_entries_import_only_the_record_types_in_a_fresh_process():
     """Every composition row whose target is under `modules.settlements.` is imported as the registrar
     reaches it. The repository files that loaded are the package `__init__`s on the way, the record leaf
-    `engine/season/queries/inputs.py` and the module's own directory: nothing of the host."""
+    `engine/season/queries/inputs.py` and the module's own directory: nothing of the host (the one roller, `engine/dice_engine/`, is substrate)."""
     targets = sorted(row["target"] for row in composition.ROLES.values()
                      if row["target"].startswith("modules.settlements."))
     assert len(targets) >= 8, f"the settlements module's entry rows are gone from the composition: {targets}"
     loaded = probe(_IMPORT_PROBE, ",".join(targets), 300)
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
                "engine/season/queries/inputs.py", "modules/__init__.py"}
-    stray = [f for f in loaded if f not in allowed and not f.startswith("modules/settlements/")]
+    # B12b.08: `exposure` (the road's draw) rolls a keyed draw, so it reaches the one roller; `engine/dice_engine/` is substrate, not host.
+    stray = [f for f in loaded if f not in allowed and not f.startswith(("modules/settlements/", "engine/dice_engine/"))]
     assert not stray, f"a settlements entry loaded host code: {stray}"
     assert "engine/season/queries/inputs.py" in loaded and any(
         f.startswith("modules/settlements/") for f in loaded), loaded
