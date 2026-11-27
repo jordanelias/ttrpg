@@ -8,13 +8,20 @@
 lanes:
   season_loop:
     base: 3219
-    warrants: []
+    warrants:
+      - {batch: B18-pc-content, added: 2, behaviour: "a person with no stocked weapon fights unarmed once the arms roster is non-empty, and a person who stocks one is the kit he was; with the roster emptied kit_of is the default for everyone"}
+      - {batch: B18-pc-content, added: 2, behaviour: "the loader refuses a shipped arms kind outside rung_kinds and a weapon or armour key outside the weapons export, which no other test observes"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the six martial lifepaths hold arms at pool_default, no other lifepath names it, and a person built on one can train it"}
+      - {batch: B18-pc-content, added: 1, behaviour: "kit_of returns the two highest-ranked distinct weapon kinds a person's rungs stock as primary and secondary, and the carry of the secondary rides the input's short pair"}
   engine:
     base: 1043
     warrants: []
   combat:
     base: 497
-    warrants: []
+    warrants:
+      - {batch: B18-pc-content, added: 1, behaviour: "a fight with every input slot absent, None or at its declared default is the same fight, event for event, and a raised axis is a different one"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the harness term the fight charges as stamina is the one the host computes from the carry rule at every armour tier and Strength, and a shortfall slows the close once CARRY_CLOSE_K is above 0"}
+      - {batch: B18-pc-content, added: 1, behaviour: "a switch costs one ACT_THRESHOLD in the closed phase and is void in a round that never closes, the default rule fires on a closed measure only, and a decider answering engage plays the same fight as none"}
   mass_battle:
     base: 324
     warrants: []

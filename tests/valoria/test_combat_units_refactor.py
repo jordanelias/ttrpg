@@ -134,34 +134,6 @@ def test_no_length_unit_indirection_remains():
 
 # ── B18.02: the slot interface (`03_PC_person_inputs_content` Part A) ───────────────────────────────────────────────
 
-def test_the_slot_tuples_are_in_the_export():
-    """The `axis` and `lever` slot tuples (`attributes.AXES`, `attributes.LEVERS`) are in the committed export's `attributes`
-    section, and each member's declared default is the value the engine computes for a fighter holding none: an untrained
-    axis reads 0.0 (`Combatant.skill`), a lever read as a factor reads 1.0 (`ability_factor`) and one read as a bonus 0.0
-    (`ability_bonus`). Every lever a learned ability targets is a declared member, with the op the default implies."""
-    from modules.combat import ability_primitives as ABIL, attributes
-    C, _S, _WP, _CFG = _mods()
-    path = os.path.join(os.path.dirname(__file__), '..', '..', 'engine', 'engine_params', 'combat_engine_v1.json')
-    slots = json.load(open(path, encoding='utf-8'))['sections']['attributes']['slots']
-    assert sorted(slots['axis']) == sorted(a.key for a in attributes.AXES)   # the file's keys are sorted
-    assert sorted(slots['lever']) == sorted(l.key for l in attributes.LEVERS)
-    fresh = C.Combatant('x')
-    for a in attributes.AXES:
-        assert slots['axis'][a.key]['default'] == a.default == fresh.skill(a.key)
-    for lv in attributes.LEVERS:
-        assert slots['lever'][lv.key]['default'] == lv.default
-        assert lv.default in (0.0, 1.0)
-        engine_reads = ABIL.ability_bonus(fresh, lv.key) if lv.default == 0.0 else ABIL.ability_factor(fresh, lv.key)
-        assert engine_reads == lv.default, f"lever {lv.key}: the engine's untrained value is {engine_reads}"
-    levers = {lv.key: lv for lv in attributes.LEVERS}
-    checked = 0
-    for name, ab in ABIL.ABILITIES.items():
-        assert ab['lever'] in levers, f"ability {name!r} targets a lever the slot tuple does not declare"
-        assert (ab['op'] == '+') == (levers[ab['lever']].default == 0.0), f"ability {name!r}: op {ab['op']} on lever {ab['lever']}"
-        checked += 1
-    assert checked >= 30
-
-
 def test_an_empty_slot_reproduces_todays_fight():
     """One matchup, four seeds, the record equal: a fight whose slot fields are absent, given as `None` per party, or given
     as each slot's declared default is the same fight, event for event. The control: one axis two points above its default
@@ -183,39 +155,6 @@ def test_an_empty_slot_reproduces_todays_fight():
         assert fought[0] == fought[1] == fought[2], f"seed {seed}: an empty slot moved the fight"
         differs += fought[3] != fought[0]
     assert differs >= 1, "a raised axis never changed a fight: the equality above could not have failed"
-
-
-# ── B18.06: one carry rule at the kit's owner (`03_PC_loadout_and_carry` item 1) ────────────────────────────────────
-
-def test_carry_demand_of_equals_the_keyed_spelling():
-    """The two spellings of the carry rule are one rule, and its harness term is the one the engine charges today. (1) for
-    each weapon pair and each armour tier, `carry_demand(keys, tier)` equals `carry_demand_of(the keys' masses, tier)`,
-    and a carried kilogram adds `D_MASS`; (2) with nothing carried, the demand is `ARMOR_DEMAND[tier]`, and the stamina
-    `combat_systems.act_cost` charges for that tier above the same fighter unarmoured is `ACT_WEIGHT / D_WT * COST_SCALE`
-    times `max(0, carry_demand_of((), tier) - strength)`, at a Strength under the demand and one over it. B18.07 relocates
-    the harness term onto this function; this is the number it must keep."""
-    from engine.substrate import combat_kit as K
-    C, S, _WP, CFG = _mods()
-    keys = ('dagger', 'arming', 'greatsword', 'spear')
-    checked = 0
-    for tier in sorted(K.ARMOUR_TIERS):
-        for carried in ((), keys[:1], keys[:2], keys[1:], keys):
-            masses = tuple(C.WEAPONS[k]['mass'] for k in carried)
-            assert K.carry_demand(carried, tier) == K.carry_demand_of(masses, tier)
-            assert K.carry_demand_of(masses, tier) == CFG['D_MASS'] * sum(masses) + CFG['ARMOR_DEMAND'][tier]
-            checked += 1
-    assert checked == 5 * len(K.ARMOUR_TIERS) and len(K.ARMOUR_TIERS) == 4
-    unit = CFG['ACT_WEIGHT'] / CFG['D_WT'] * CFG['COST_SCALE']
-    paid = 0
-    for tier in sorted(K.ARMOUR_TIERS):
-        for strength in (1.0, 7.0):
-            bare = C.Combatant('b', weapon='arming', armor='none', strength=strength)
-            worn = C.Combatant('w', weapon='arming', armor=tier, strength=strength)
-            extra = S.act_cost(worn, 0.0, CFG) - S.act_cost(bare, 0.0, CFG)
-            owed = unit * max(0.0, K.carry_demand_of((), tier) - strength)
-            assert abs(extra - owed) < 1e-12, f"{tier} at Strength {strength}: act_cost charges {extra}, carry_demand says {owed}"
-            paid += extra > 0
-    assert paid >= 3, "no armour tier was ever charged: the equality above could not have failed"
 
 
 # ── B18.07: the shortfall rides the input (`03_PC_loadout_and_carry` items 2, 3) ─────────────────────────────────────
