@@ -2,7 +2,7 @@
 so every test here PLANTS a one-member list (`dispatch`, a verb row) by rebinding the name the reader holds: `decision.choose.MANAGEMENT_ORDERS`
 for the packer and `loop.deliberate.MANAGEMENT_ORDERS` for the release. The control each time is the shipped empty list, where nothing changes.
 
-The refusal of a member that is no verb row (`data/verbs.py::_check_management_orders`) and the realm hash at the empty list were each RUN ONCE
+The refusal of a member that is no verb row (`data/verbs.py::_check_resolution_classes`) and the realm hash at the empty list were each RUN ONCE
 at B34.10's build and are not kept (receipt)."""
 
 from __future__ import annotations

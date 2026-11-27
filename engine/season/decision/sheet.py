@@ -161,6 +161,12 @@ class DevelopmentSheet:
     asked_index: int = 0         # B34.16: the place in `View.questions` of the question the sheet is ranked for (`question` is that question; 0 is the shipped ranking)
 
 
+def holdings_pairs(tenures: Sequence[Any]) -> tuple:
+    """`((tenure kind, object id), ...)` of the LIVE Tenures in `tenures`, in the order given: the one spelling of what a person holds that `DevelopmentSheet.tenures`,
+    `Situation.holdings` and `CreationRow.holdings` (`play_surface.holdings_of`) all show, so the three are equal."""
+    return tuple((t.kind, t.object) for t in tenures if t.live)
+
+
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
@@ -203,7 +209,7 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
                                  frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
-                                 tuple((t.kind, t.object) for t in p.tenures if t.live),
+                                 holdings_pairs(p.tenures),
                                  decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")), at)
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
@@ -274,7 +280,7 @@ def situation(p: PersonInterior, v: View, ask_budget: Callable[[], int]) -> Situ
     """The `Situation` of `p` at the deliberation `v` was built for; `ask_budget()` is the season remainder, as the chooser asks it. Writes nothing."""
     mine = {c.id: c for c in p.ledger}
     return Situation(p.id, ask_budget(), p.body, frozen(p.capability), frozen(recognised(p, p.pursuits)), tuple(p.stance),
-                     frozen(p.conviction), frozen(p.scar), tuple((t.kind, t.object) for t in p.tenures if t.live),
+                     frozen(p.conviction), frozen(p.scar), holdings_pairs(p.tenures),
                      tuple(AskedRow(q, mine.get(q.about)) for q in v.questions))
 
 

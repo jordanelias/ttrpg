@@ -54,13 +54,13 @@ from ..data import files
 from ..data.matrix import Step, WriteClass, matrix_row
 from ..data.rosters import FACTION_BY_PROP, RESTRAINT_KINDS, SUCCESSIONS, load_yaml, remit_or_default
 from ..data.verbs import REFUSAL_KINDS, VERB_TABLE
-from ..decision.sheet import development_space, offer
+from ..decision.sheet import development_space
 from ..gaps import Forbidden
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import faction_q, world_q
 from ..queries.person_q import COMPLIANCE_WITHHELD, addressed_to
 from ..state.attribution import causing_act
-from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes, interior_of, is_clock_stage
+from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes, is_clock_stage
 from ..state.containment import parent_of
 from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, draw_factory
@@ -705,9 +705,9 @@ def _run(w: World, seasons: int, verbs, overrides: Optional[dict], out: Callable
     return {"world": w, "ended": ended, "seasons": ran, "acts": [], "loop": loop}
 
 
-def _grouped_by_remit(lines: list, rows: tuple) -> list:
+def _grouped_by_remit(lines: list, cands: tuple) -> list:
     """`deliberation_lines`' offer-row lines (`   [i] ...`) regrouped under the remit act whose gate opens each row: the act is read off the row's verb row,
-    `VERB_TABLE[c.verb].eligibility`'s `remit:<act>` cells, on `OfferRow.candidate` (a row two acts gate stands under both; a verb no seat's remit gates, `succeed`'s
+    `VERB_TABLE[c.verb].eligibility`'s `remit:<act>` cells, on `sheet.candidates[i]` (the sheet's own order, which `deliberation_lines` prints as `[i]`; a row two acts gate stands under both; a verb no seat's remit gates, `succeed`'s
     own claim, stands under the heading that says so). A PRINT: the lines are `play_surface`'s own, only their order and a heading are added; every other line
     (the situation, the asked rows, the withheld verbs) keeps its place."""
     at = lambda ln: re.match(r"   \[(\d+)\] ", ln)
@@ -715,7 +715,7 @@ def _grouped_by_remit(lines: list, rows: tuple) -> list:
     mine = [(int(at(ln).group(1)), ln) for ln in lines if at(ln)]
     groups: dict = {}
     for i, ln in mine:
-        row = VERB_TABLE.get(rows[i].candidate.verb)
+        row = VERB_TABLE.get(cands[i].verb)
         for act in [e.partition(":")[2] for e in (row.eligibility if row is not None else ()) if e.startswith("remit:")] or [None]:
             groups.setdefault(act, []).append("  " + ln)
     out = lines[:first]
@@ -738,8 +738,7 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
         if spent:
             return range(len(sheet.candidates))
         spent.append(True)
-        rows = offer(interior_of(w.persons[sheet.person_id], w.tick, w.fixtures.claim_decay()), sheet.view, w.fixtures, verbs, draw, sheet.asked_index).rows
-        for line in _grouped_by_remit(deliberation_lines(w, sheet, verbs), rows):
+        for line in _grouped_by_remit(deliberation_lines(w, sheet, verbs), sheet.candidates):
             out(line)
         return chosen
     return development_space(w.fixtures, mint, pick_of, verbs, draw, geo=geography())

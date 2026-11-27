@@ -65,7 +65,7 @@ from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a worl
 from . import probes as P
 from .carin import build_world
 from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
-from .play_surface import board, carry_on, deliberation_lines, dispatching_chooser, has_continuation, holdings_of
+from .play_surface import board, carry_on, creation_lines, deliberation_lines, dispatching_chooser, has_continuation, holdings_of
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -116,7 +116,7 @@ def realm_ending(w: World, pid: Optional[str]) -> Optional[str]:
         return "realm_ended"
     held = {t.id: t for t in w.tenures if t.kind == "hold"}
     holders = {world_q.faction_holding(w, held[h].subject) for e in victories for h in e.holds if h in held}
-    return "realm_held" if any(k == "commit" and o in holders for k, o in holdings_of(w)(pid)) else "realm_fallen"
+    return "realm_held" if any(t.kind == "commit" and t.live and t.subject == pid and t.object in holders for t in w.tenures) else "realm_fallen"
 
 
 def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
@@ -587,7 +587,7 @@ def played_host(person: str, read: Callable[[str], str] = input, out: Callable[[
             raise SystemExit(f"{at} is not in the options 0..{len(view.options) - 1}")
         o = view.options[at]
         return Choice(o.move, o.ground, o.item, o.relation)
-    return PlayHost(frozenset({person}), None, deciders={PROCEEDING_ROLE: decide})
+    return PlayHost(frozenset({person}), deciders={PROCEEDING_ROLE: decide})
 
 
 def board_lines(w: World, pid: str) -> list:
@@ -677,8 +677,8 @@ def main(argv=None) -> int:
     if row.seat is None and a.person is None:                  # a row with no default seat: the creation sheet is the pick list, and the run does not start
         print(f"{a.name} has no default seat; pass --person with one of:")
         w = row.build(a.seed)
-        for c in creation_sheet(w.persons.values(), holdings_of(w)):
-            print(f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}")
+        for line in creation_lines(w):
+            print(line)
         return 2
     built: list = []
     pick = _picker(a, lambda: built[0])

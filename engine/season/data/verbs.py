@@ -727,13 +727,14 @@ def _check_resolution_classes(rows: dict) -> None:
     row has `contests:`), `task` (a `graded_tasks` route), `bookkeeping` (a `bookkeeping_verbs` member), and the fourth,
     `contest` owed to the lane named (`contest_owed`). A row that writes or emits a finding (a kind `rosters.yaml:
     inquiry_modules.findings` keys) and is in none, or any row in two, is refused naming it; so is a `contest_owed` member
-    that declares `contests:` (its verb leaves the roster in that commit), a roster member that is no verb row, a
+    that declares `contests:` (its verb leaves the roster in that commit), a roster member (including a `management_orders` member, B34.10) that is no verb row, a
     `bookkeeping` row with no `why:`, and a `bookkeeping` row whose `writes:` touch another's body, holding or stores
     (`_bookkeeping_cells_touched`) unless it declares `brute:` (UNDECIDED (10): the loader's column for a write with no roll),
     or that emits a finding. The loader's refusal per data family (CLAUDE.md §0.05), not a tree-wide guard."""
     findings = frozenset(roster_map("inquiry_modules", "findings"))
     bad = [f"`{name}` names {v!r}, which is no verb row"
-           for name, members in (("bookkeeping_verbs", BOOKKEEPING_VERBS), ("contest_owed", CONTEST_OWED))
+           for name, members in (("bookkeeping_verbs", BOOKKEEPING_VERBS), ("contest_owed", CONTEST_OWED),
+                             ("management_orders", MANAGEMENT_ORDERS))     # B34.10 (A-104): a management order is a verb row
            for v in members if v not in rows]
     bad += [f"`bookkeeping_verbs` {v!r} has no `why:` line" for v, r in BOOKKEEPING_VERBS.items()
             if not (isinstance(r, dict) and str(r.get("why") or "").strip())]
@@ -758,16 +759,6 @@ def _check_resolution_classes(rows: dict) -> None:
         raise SystemExit(
             "verb_table.yaml / rosters.yaml: " + "; ".join(bad) + ". 18-A item 1 (B07.01) -- every writing row is "
             "`contest`, `task` or `bookkeeping` (or owed a contest by its lane), derived from its row and the rosters.")
-
-
-def _check_management_orders(rows: dict, orders=None) -> None:
-    """B34.10 (`IS-B3-GO-07`, A-104): A MANAGEMENT ORDER IS A VERB ROW, OR THE LOAD REFUSES, NAMING EACH MEMBER THAT IS NOT. `orders` defaults to
-    `rosters.yaml: management_orders` (`MANAGEMENT_ORDERS`; it ships empty, so nothing is refused at control) and is a parameter only so a
-    test can plant a bad member and watch it refuse. The loader's refusal for this data family, not a tree-wide guard."""
-    bad = sorted(v for v in (MANAGEMENT_ORDERS if orders is None else orders) if v not in rows)
-    if bad:
-        raise SystemExit(f"rosters.yaml: `management_orders` names {bad}, which are no `verb_table.yaml` row. A-104 / B34.10 -- "
-                         "an order that costs no scene is a verb a person can do.")
 
 
 def _check_governing_attributes(rows: dict, prizes: dict) -> None:
@@ -1552,7 +1543,6 @@ def _load_verb_table() -> dict:
                          "a verb row's `{provider, module_entry, form[, armed_by]}` and nothing else; a skipped "
                          "kind is one some row emits.")
     _check_resolution_classes(out)
-    _check_management_orders(out)
     # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
     # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
     # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the

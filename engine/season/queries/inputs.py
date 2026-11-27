@@ -47,7 +47,7 @@ optional argument) and `CombatRoundView` (what its per-round decider reads, hand
 """
 from __future__ import annotations
 
-from dataclasses import InitVar, dataclass, field, fields
+from dataclasses import dataclass, field, fields
 from typing import Callable, Mapping, NamedTuple, Optional
 
 # THE MATTER'S TWO SIDES, signed toward `for` (the sign every `stake` and `believes` is read in), and the flip to the other: the one owner
@@ -948,7 +948,7 @@ class CombatRoundView:
     wound_state: Mapping
 
 
-#: THE ROLE `PlayHost`'s constructor argument `decide=` maps to: the per-round decider of a PLAYABLE fight (`combat.fight`, a `composition.json` row).
+#: THE ROLE a host's decider for a PLAYABLE fight is stored under in `PlayHost.deciders`: the per-round decider of a PLAYABLE fight (`combat.fight`, a `composition.json` row).
 DECIDE_ROLE = "combat.fight"
 
 
@@ -965,26 +965,14 @@ class PlayHost:
                       checks the shipped deciders): it is called inside the provider's frame, with the driver below it on the stack (a call-out, not a
                       return), and its return is the only resume. The wrapper resolves a role's decider (`decider_for`) and passes it as `decide=`; a role
                       with none is AUTOMATED for this host. Empty by default, so a host built with none is the host that is not there (a season's hash is the
-                      same with it and without);
-      * `decide`   -- a CONSTRUCTOR ARGUMENT ONLY (an `InitVar`, kept for the callers that built `PlayHost(persons, decide)`): it is folded into
-                      `deciders[DECIDE_ROLE]` and is not a field, so there is one store. `PlayHost(p, f)` and `PlayHost(p, deciders={DECIDE_ROLE: f})` are
-                      one host. `host.decide` is NOT the decider: read `decider_for`.
+                      same with it and without). A fight's decider is `deciders[DECIDE_ROLE]`; there is no other store.
     A scene with no decider is decided by the person's own policy (`11_GO_fidelity_and_campaign_modes` §2): the one a person's chooser supplies, never a
     module constant, so a player who lets a scene resolve gets what an NPC with his sheet would get. THE PRESENT INTERIM is the module default: `decide=None`
     reaches `modules/combat/fight.py` as the engine's own engage-every-turn loop, a constant, the same for an NPC and for a player who declines, so nothing
     is forked today and the clause binds the decider that replaces it.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
     persons: frozenset
-    decide: InitVar[Optional[Callable]] = None
     deciders: Mapping[str, Callable] = field(default_factory=dict)
-
-    def __post_init__(self, decide: Optional[Callable]) -> None:
-        deciders = dict(self.deciders)
-        if decide is not None:
-            if deciders.get(DECIDE_ROLE, decide) is not decide:
-                raise ValueError(f"PlayHost: `decide=` and `deciders[{DECIDE_ROLE!r}]` name two deciders for one role")
-            deciders[DECIDE_ROLE] = decide
-        object.__setattr__(self, "deciders", deciders)
 
     def decider_for(self, role: str) -> Optional[Callable]:
         """The host's decider for `role`, or `None` (the role is AUTOMATED for this host)."""

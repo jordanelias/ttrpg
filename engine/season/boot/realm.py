@@ -1012,7 +1012,7 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
                 needs="a seat `build_realm` seated, held by a person who is present at a rung",
                 law="v9 IN-36 (IN-60's content) -- a guard stands where the principal is; none is guessed")
         post = where[holder]
-        town = next((r for r in ancestry(w, post) if w.rungs[r].kind == "settlement"), post)
+        town = _settlement_of(w, post) or post
         wt = row["weight"]
         room = capacity(w, town)
         if wt > room:

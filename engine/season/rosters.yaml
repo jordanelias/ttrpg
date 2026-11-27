@@ -1595,7 +1595,7 @@ rosters:
       interview: "14_VERBS_SOCIAL2_C_case_question_confession"
 
   # B34.10 (`IS-B3-GO-07`, A-104): THE ORDERS A SEAT GIVES FROM ITS DESK, WHICH COST NO SCENE. A closed set of verb names, each a
-  # `verb_table.yaml` row (refused at load by `data/verbs.py::_check_management_orders`). `Scene.cost` prices a scene whose every act is
+  # `verb_table.yaml` row (refused at load by `data/verbs.py::_check_resolution_classes`). `Scene.cost` prices a scene whose every act is
   # a member at 0, and `decision/choose.py::pack_scenes` puts each in a scene of its own, so an order is never a priced scene's rider.
   # SHIPS EMPTY (the control: today's prices, the realm hash equal). The members are CL-MGMT's list, which is HELD -- A-104 names
   # examples, not a list; read as `roster_list` because `roster()` refuses an empty `values:`.

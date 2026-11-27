@@ -1297,8 +1297,11 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
         for chunk in chunks:
             # B34.10: a management order is released at a spent budget too (it costs none), so a spent one skips past the priced
             # chunks and still reaches the orders ranked after them; with `orders` empty every chunk is priced and this is the `break` it was.
-            if left <= 0 and not all(c.verb in orders for c in chunk):
-                continue
+            if left <= 0:
+                if not orders:
+                    break
+                if not all(c.verb in orders for c in chunk):
+                    continue
             # THE PRICE IS `Scene.cost`'s, ASKED OF THE BUILT SCENE: the slots it fills, not the number of acts.
             # An extension the person cannot afford is taken as a PLAIN scene rather than
             # skipped: they still pursue the opportunity, with less in it. Skipping would be the

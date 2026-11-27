@@ -34,7 +34,6 @@ import json
 import sys
 from typing import Any, Callable, Optional
 
-from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.fmath import ltr_sum
 from engine.dice_engine.sigma_leverage import record_odds
 
@@ -49,6 +48,7 @@ from ..state.carriers import EFFORT, Act, Event, Office, Record, Tenure, effort_
 from ..state.ids import draw_factory
 from . import storybar
 from .carin import BAILIFF, CARIN, WARDEN, build_world as carin_world
+from .pairs import BANDS
 from .probes import about
 
 #: THE FIXTURES, by name. `fight_headless` is the headless world (`carin.build_world`, Carin's three people) with an authored `fight` between its first two
@@ -91,8 +91,8 @@ FIXTURES: dict[str, dict] = {
                  act=dict(id="scene_0", actor=CARIN, verb=ROLL_VERB, via=ROLL_SEAT, payload={"subject": BAILIFF})),
 }
 
-#: THE FOUR BANDS' NAMES, in the one ladder's order (`DEGREE_ORDINAL`): the keys of a printed odds table.
-BAND_ORDER = tuple(DEGREE_LABEL[d] for d, _ in sorted(DEGREE_ORDINAL.items(), key=lambda kv: kv[1]))
+#: THE FOUR BANDS' NAMES, in the one ladder's order (`pairs.BANDS`, its one owner): the keys of a printed odds table.
+BAND_ORDER = BANDS
 
 #: What an `apply=False` record says it did not ask (A-63; `28_CORE_scene_access_A` §2, §3): both are the fold's, so a standalone call without the fold omits them.
 NOT_ASKED = ("the counterparty's received-scene debit", "the `engaged` clause (A-63)")

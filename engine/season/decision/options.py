@@ -469,11 +469,11 @@ def _opening_set(p: Person, v: View, q: Question, fx: "Fixtures", declined: Opti
                 # graded by his regard for the teller), so the two readers differ for him alone and by design: he does not deliberately read a Thread he does not know he
                 # reads, and a hand-built act still folds.
                 if own_read:
-                    own_verdict = evaluate(row.requires_typed, OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops)).value
+                    reader, bound = OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops)
+                    own_verdict = evaluate(row.requires_typed, reader, bound).value
                     if own_verdict is False or (own_only and own_verdict is not True):
                         if declined is not None:
-                            declined.append((verb, subject, own_state_unmet(
-                                row, OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops), own_only)))
+                            declined.append((verb, subject, own_state_unmet(row, reader, bound, own_only)))
                         continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both

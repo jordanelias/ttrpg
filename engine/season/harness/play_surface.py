@@ -57,7 +57,7 @@ from typing import Any, Callable, MutableMapping, Mapping, Optional, Sequence
 from ..data import goals as goals_data
 from ..decision.choose import TERM_NAMES
 from ..decision.options import seat_of
-from ..decision.sheet import account, chronicle, creation_sheet, offer, situation
+from ..decision.sheet import account, chronicle, creation_sheet, holdings_pairs, offer, situation, take_ranked
 from ..gaps import Forbidden
 from ..loop.driver import resolvable_verbs
 from ..queries import faction_q, world_q
@@ -137,9 +137,14 @@ def holdings_of(w: Any) -> Callable[[str], tuple]:
     `military_menu.py` reads an army host-side). The pairs are the ones `Situation.holdings` shows, in the order held. Reads `w`, writes nothing."""
     held: dict = {}
     for t in w.tenures:
-        if t.live:
-            held.setdefault(t.subject, []).append((t.kind, t.object))
-    return lambda pid: tuple(held.get(pid, ()))
+        held.setdefault(t.subject, []).append(t)
+    return lambda pid: holdings_pairs(held.get(pid, ()))
+
+
+def creation_lines(w: Any) -> list:
+    """THE CREATION SHEET AS PRINTED LINES, one per person (`decision/sheet.py::creation_sheet` over `holdings_of(w)`): the pick list `main` prints, here and in
+    `scenarios.main`, for a scenario with no default seat. Reads `w`, writes nothing."""
+    return [f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}" for c in creation_sheet(w.persons.values(), holdings_of(w))]
 
 
 def board(p: Any, fixtures: Any) -> list:
@@ -234,7 +239,6 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
     (`has_continuation`; with one the ending is recorded, printed as `realm ending reached`, and the run plays on); a dead seat with no continuation stops it (`line_extinct`),
     with one the line says `re-seated`; and `seasons` stops it. No reveal is printed (B38). Returns `scenarios.run`'s dict, with `recorded`, the realm endings reached. Nothing here writes the world: the readers are `decision/sheet.py`'s."""
     from . import scenarios as SC                      # lazy: scenarios imports this module
-    from ..decision.sheet import take_ranked
     row = SC.SCENARIOS[name]
     built: list = []
     last: dict = {}                                    # person id -> the ids of the claims he held at his last deliberation
@@ -324,8 +328,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if row.seat is None and a.person is None:          # no default seat: the creation sheet is the pick list, and the run does not start
         print(f"{a.scenario} has no default seat; pass --person with one of:")
         w = row.build(a.seed)
-        for c in creation_sheet(w.persons.values(), holdings_of(w)):
-            print(f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}")
+        for line in creation_lines(w):
+            print(line)
         return 2
     transcript(a.scenario, a.seed, a.seasons, a.person, ask=None if a.question == 0 else (lambda s: min(a.question, len(s.asked) - 1)))
     return 0
