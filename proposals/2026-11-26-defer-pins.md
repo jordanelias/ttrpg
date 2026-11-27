@@ -1,6 +1,6 @@
 # Defer the stored goldens to the end of the workplan; keep the readings
 
-## Status: PROPOSED, amended after an Opus audit (2026-11-26). Rulings below were delegated to that audit by Jordan; nothing is applied.
+## Status: RATIFIED by the merge of #643 (Jordan, 2026-11-27: "commit push merge"), after an Opus audit (2026-11-26) to which he delegated the three rulings. Applied except the perturbation check for missed pins (§6 step 1), which is open.
 ## Lane: IN (cross-cutting).
 
 Jordan, 2026-11-26: *"I am okay with reusing pins or literally just ignoring them until the workplan itself is built out entirely"*; *"we are currently wasting so much time trying to keep same balance bottom-up when we haven't even built all the slices"*; *"P10 has exceptions if testing specifically for narrative/stories/arcs"*; the goal is the least time per batch **without losing the ability to tell whether a batch worked**, with a targeted post-workplan run (B99) once everything is built. Figures marked `[MEASURE]` are not measured.
