@@ -120,10 +120,11 @@ def census(n, cfg=None, tiers=None):
                 sx, sy = {'weapon': x, 'armor': tier}, {'weapon': y, 'armor': tier}
                 seed = _seed((x, y, tier))
                 a, b = _felled_shares(sx, sy, cfg, n, seed)   # `a`: x felled, so y fells x at that share
+                control = None   # the cell's control, run once and only for a cell with a direction beyond 95%
                 for fells, felled, share in ((y, x, a), (x, y, b)):
                     if share > 0.95:
-                        ctl = _felled_shares(sx, sy, cfg, n, seed + CONTROL_FIRST)[0 if felled == x else 1]
-                        beyond.append((tier, fells, felled, share, ctl))
+                        control = control or _felled_shares(sx, sy, cfg, n, seed + CONTROL_FIRST)
+                        beyond.append((tier, fells, felled, share, control[0 if felled == x else 1]))
     seconds = time.perf_counter() - t0
     ups = {(w, t): [0, 0] for w in weapons for t in tiers}   # [cells it fells the other in beyond 95%, cells it is felled in]
     for tier, fells, felled, _, _ in beyond:

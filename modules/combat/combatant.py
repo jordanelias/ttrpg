@@ -129,7 +129,6 @@ class Combatant:
         self.weapon=weapon; self.armor=armor
         self.secondary=secondary             # the weapon he carries and does not hold (`PersonalCombatInput.kits`' second entry, B18.08); `None` = none. A switch (B18.09, `wrapper.switch_weapon`) swaps it with `weapon`, the weapon in hand
         self.short_other=short_other         # the shortfall with the OTHER weapon in hand (`PersonalCombatInput.short`'s second entry): what `short` becomes when a switch puts the secondary in hand (B18.09); `None` = none
-        self.switch_owed=False               # a switch's one ACT_THRESHOLD is owed and not yet paid this round (B18.09, `wrapper._engagement` sets and clears it; `engagement` voids a switch still owed when the round ends): per-round, never carried
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
         self.grip_position=0.0               # CONTINUOUS grip-position in [0,1]: 0=as-issued (full reach), 1=gathered to the working balance (close control). Retires the choke/normal/lunge strings; derived per-beat by the wrapper from grip_target.
         self.lunge_depth=0.0                  # CONTINUOUS body-extension in [0,1] of an in-progress lunge (set at the attack; 0 = no lunge). Reads into recoverability_factor / weapon_tempo / legibility.

@@ -96,7 +96,7 @@ def _pool_dice(c, cfg, addends=None):
     return core.resolution_pool(c.score, getattr(c, "pool_addends", 0) if addends is None else addends, **kw)
 
 
-def _engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
+def _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed):
     """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
     object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
     Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
@@ -106,8 +106,9 @@ def _engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sc
     ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop.
     `turn` is this round's index in the fight (1-based, the `round_start` count) and `scene` 0 under keyed rounds (B16.03) and else the fight's `rng.n` where it began:
     with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`), on `rng`, the round's own `Draw` under keyed rounds.
-    `switching` (B18.09) is the Combatants who change weapon at this round's entry (`round_switchers`): each puts his secondary in hand (`switch_weapon`) before the
-    round's geometry is read, and owes one `ACT_THRESHOLD` of readiness, paid when the round first reaches the closed phase (below)."""
+    `owed` (B18.09) is the list of Combatants who change weapon at this round's entry (`engagement` builds it from `switching`, `round_switchers`' answer): each puts his
+    secondary in hand (`switch_weapon`) before the round's geometry is read, and owes one `ACT_THRESHOLD` of readiness, paid when the round first reaches the closed
+    phase (below), where it is cleared; what is still in it when the round ends is voided by `engagement`."""
     blow = 0
     def _strike(attacker, defender, deg, **kw):
         """`core.strike` with the blow's keyed coverage-gap draw (PC_D, A-30). Returns (damage, bare) for the caller to carry to
@@ -152,11 +153,9 @@ def _engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sc
     for c in (A, B):
         c.grip_position = 0.0; c.lunge_depth = 0.0
         c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
-    for c in switching:
+    for c in owed:
         switch_weapon(c)   # B18.09: after the re-take, so the weapon swapped out is a base record; before `reach_base`, so the round's reach is the weapon now in hand's
-        c.switch_owed = True
         _emit('switch', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
-    owed = tuple(switching)   # each owes one ACT_THRESHOLD, taken at the closed phase: at the entry it would be forgiven by `_carry`'s clamp at the first close
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
@@ -332,9 +331,8 @@ def _engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sc
         # ----- CLOSED: tempo-gated exchange -----
         for c in owed:   # B18.09: the switch's tempo, the next action's readiness (ACT_THRESHOLD, the unit the exchange below debits per action), paid once, when the round first reaches the closed phase
             was = ready[c]; ready[c] -= cfg['ACT_THRESHOLD']
-            c.switch_owed = False
             _emit('switch_paid', round=turn, by=c.label, was=was, ready=ready[c])
-        owed = ()
+        owed.clear()   # paid once; a switch still owed when the round ends is voided by `engagement`
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
         if not actors: continue
         if len(actors)==2:
@@ -564,14 +562,13 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     (B18.09): a round that ends before it ever reaches that phase (the approach never closes, a collapse, a terms stop) has taken no tempo from the switcher,
     so his switch is VOID: the weapon swapped in at the entry goes back out (`switch_weapon`, which also puts the shortfall pair back) and a `switch_void`
     event says so; the weapon in hand at the round's end is the weapon he began it with, and no round changes weapon for free."""
+    owed = list(switching)   # each owes one ACT_THRESHOLD, taken at the closed phase (at the entry `_carry`'s clamp at the first close would forgive it): `_engagement` clears it once paid
     try:
-        return _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, switching)
+        return _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed)
     finally:
-        for c in switching:
-            if c.switch_owed:
-                c.switch_owed = False
-                switch_weapon(c)
-                _emit('switch_void', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
+        for c in owed:
+            switch_weapon(c)
+            _emit('switch_void', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
 
 
 class Yield:
@@ -691,9 +688,7 @@ def round_switchers(choice, A, B, prev_closed, cfg):
     AUTOMATED and PLAYABLE replay equal), and only `switch` overrides it. A pure read: the caller hands the tuple to `engagement`."""
     if choice == SWITCH:
         return tuple(c for c in (A, B) if c.secondary is not None)
-    if choice is None or choice == ENGAGE:
-        return tuple(c for c in (A, B) if S.switch_wanted(c, prev_closed, cfg))
-    return ()
+    return tuple(c for c in (A, B) if S.switch_wanted(c, prev_closed, cfg))   # `None` and `engage`; `check_choice` has refused the rest and `withdraw` ends the fight before this is asked
 
 def switch_weapon(c):
     """THE SWITCH'S ONE WRITE (B18.09): the weapon in hand and the weapon carried change places, and the shortfall with them (`short` is what he is short
