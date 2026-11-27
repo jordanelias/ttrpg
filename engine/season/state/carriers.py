@@ -1319,7 +1319,7 @@ class Rung:
     # undeclared-fields refusal in `__init__`.
     #
     # ⚠ `sites`, `records` AND `dates` STAY, THOUGH r2's LIST DELETES THEM. `04 §B.3`'s RATIFIED
-    # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], envelope, exists )` declares
+    # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], exists )` declares
     # all three (and `01_AXIOMS.md` §D.2 has a Rung OWN "its Sites, its Records ... dates"). Jordan's
     # `RR-B` ruling amended `04` limb by limb and none of its eight limbs is this line, so deleting
     # them would overwrite ratified text no ruling amends -- the ground on which `Office.upkeep` was
@@ -1334,7 +1334,7 @@ class Rung:
     # `(record_kind, fieldname)` key the write gate, the write class and the emission all share
     # (§8) — the key is the same string Part D uses, and Part D says `yield`. A matrix row naming a
     # field the class lacks is reported by `matrix_rows_without_a_field`, which reads `_DECLARED`.
-    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "envelope", "yield"}
+    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "yield"}
 
     def __init__(self, id: str, kind: str, **kw: Any):
         if kind not in RUNG_KINDS:
@@ -1344,7 +1344,7 @@ class Rung:
         # `yield` is #353 §25's *"only here"* row: what this rung PRODUCED this season, per
         # matter kind. Empty for a rung that produces nothing, which is most of them.
         for f_, d in (("stores", dict), ("sites", list), ("records", list),
-                      ("dates", list), ("envelope", list), ("yield", dict)):
+                      ("dates", list), ("yield", dict)):
             object.__setattr__(self, f_, kw.pop(f_, None) or d())
         if kw:
             raise Forbidden(f"Rung given undeclared fields {sorted(kw)}", "S10.1",

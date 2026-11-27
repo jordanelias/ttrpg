@@ -402,13 +402,6 @@ rows:
     emits:   "`date.scheduled`"
     unproduced: "no hole row -- orphan since at least 2026-09-03 (this file's #358 rev.2 invariant-2 measurement lists it; git blame stops at the shallow-clone boundary f41f20a, 2026-09-07)"
   - kind:    "Rung"
-    field:   "envelope"
-    steps:   [MAT, CEN]
-    class:   "MATTER"
-    social:  "false"
-    by:      "DR-1"
-    emits:   "`envelope.changed`"
-  - kind:    "Rung"
     field:   "exists"
     steps:   [RES]
     class:   "ACTS"

@@ -1491,7 +1491,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
         ("Date", "fired"), ("DocketItem", "matter"),
         ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
-        ("Record", "stages"), ("Rung", "envelope"),
+        ("Record", "stages"),
         ("Rung", "stores"), ("Rung", "yield"), ("Site", "condition"),
         ("Tenure", "since"), ("Tenure", "until"),
     }
@@ -3401,7 +3401,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits():
     ⚠ THE GATE FOUND SIX SILENT MATTER WRITES THE MOMENT IT WAS TURNED ON — `(Record, matured)`,
     `(Person, exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)`, every one
     on a row whose `emits:` Part D declares. Five were fixed; the sixth, `(Record, ttl)`, was
-    deleted with its field."""
+    deleted with its field; `(Rung, envelope)` was deleted with its field later (A-115)."""
     from ..harness import headless as HL
     w = HL.build_world(0)
     w.step = Step.MATTER

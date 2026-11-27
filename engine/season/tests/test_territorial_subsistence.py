@@ -611,22 +611,16 @@ def test_se01_control_a_person_who_died_is_not_a_clerk_to_individuate_again():
 
 
 # --------------------------------------------------------------------------------------
-# THE CARRIED FALSIFIER: `Person.weight` / the envelope written by anything but CENSUS/MATTER
-# fails; a stored aggregate where a Query is required fails.
+# THE CARRIED FALSIFIER: `Person.weight` written by anything but CENSUS fails; a stored
+# aggregate where a Query is required fails.
 # --------------------------------------------------------------------------------------
 
 _SEASON = Path(__file__).resolve().parents[1]
-_OWNED = {"weight": {"loop/census.py"},               # write_matrix.yaml: `weight` steps [CEN] only
-          "envelope": {"loop/census.py", "loop/matter.py",
-                       # WORLD-GEN, NOT A STEP: probe `W9` seeds its `tiny_world`'s envelope before
-                       # any season runs, and then moves it through the gate at MATTER. Seeding a
-                       # fixture world is the builder's (as `seat_cohorts` passes `weight=`).
-                       # Shrink-only.
-                       "harness/probes.py"}}
+_OWNED = {"weight": {"loop/census.py"}}               # write_matrix.yaml: `weight` steps [CEN] only
 
 
 def _bare_writes(src: str, rel: str) -> list:
-    """Every assignment to `.weight`/`.envelope`, and every `setattr`/`__setattr__` naming one, in
+    """Every assignment to `.weight`, and every `setattr`/`__setattr__` naming one, in
     `src` -- the read/write asymmetry's WRITE side (`CLAUDE.md` §0.1 pt 1): a writer outside the
     owners would move the carrier the Queries read without passing the step that owns it."""
     out = []
@@ -646,11 +640,10 @@ def _bare_writes(src: str, rel: str) -> list:
     return [x for x in out if x[0] not in _OWNED[x[2]]]
 
 
-def test_se01_falsifier_no_module_but_census_or_matter_writes_weight_or_the_envelope():
+def test_se01_falsifier_no_module_but_census_writes_weight():
     """THE SWEEP, AND ITS PLANTED FAILURE. Over every non-test module under `engine/season`, no
-    bare write to `Person.weight` or `Rung.envelope` stands outside `loop/census.py` and
-    `loop/matter.py`. A write planted in a THIRD module (`loop/resolve.py`) must be found, in both
-    spellings -- otherwise the clean sweep would be the sweep that cannot see."""
+    bare write to `Person.weight` stands outside `loop/census.py`. A write planted in a THIRD
+    module (`loop/resolve.py`) must be found, in both spellings -- otherwise the clean sweep would be the sweep that cannot see."""
     scanned = 0
     found = []
     for path in sorted(_SEASON.rglob("*.py")):
@@ -660,24 +653,23 @@ def test_se01_falsifier_no_module_but_census_or_matter_writes_weight_or_the_enve
         scanned += 1
         found += _bare_writes(path.read_text(), rel)
     assert scanned >= 50, f"the sweep read {scanned} modules; it is not reading the tree"
-    assert not found, f"a bare write outside CENSUS/MATTER: {found}"
+    assert not found, f"a bare write outside CENSUS: {found}"
     planted = ("def _eff(w, p, r):\n    p.weight = 40\n"
-               "    setattr(r, 'envelope', [1])\n")
+               "    setattr(p, 'weight', 1)\n")
     assert _bare_writes(planted, "loop/resolve.py") == [
-        ("loop/resolve.py", 2, "weight"), ("loop/resolve.py", 3, "envelope")]
+        ("loop/resolve.py", 2, "weight"), ("loop/resolve.py", 3, "weight")]
     assert _bare_writes(planted, "loop/census.py") == [], "an owner's write was flagged"
 
 
-@pytest.mark.parametrize("kind, field, value", [("Person", "weight", 40),
-                                                ("Rung", "envelope", [1])])
-def test_se01_falsifier_the_gate_refuses_weight_and_the_envelope_at_resolve(kind, field, value):
-    """THE GATE HALF: a write of `(Person, weight)` or `(Rung, envelope)` at RESOLVE is FORBIDDEN by
-    the write matrix (`weight` is `[CEN]`, `envelope` `[MAT, CEN]`), and the carrier is untouched.
+def test_se01_falsifier_the_gate_refuses_weight_at_resolve():
+    """THE GATE HALF: a write of `(Person, weight)` at RESOLVE is FORBIDDEN by the write matrix
+    (`weight` is `[CEN]`), and the carrier is untouched.
     ⚠ THE TWO ARMS DIFFER IN THE STEP ALONE: the same MATTER token, driver, emission and subject, so
     only the matrix's step check can have refused the first (an ACTS token at RESOLVE would also be
     refused by the class check, and deleting the step check would leave that test green)."""
     w = P.tiny_world()
-    rec = w.persons["p_mid"] if kind == "Person" else w.rungs["S"]
+    kind, field, value = "Person", "weight", 40
+    rec = w.persons["p_mid"]
     was = getattr(rec, field)
 
     def write():
@@ -692,6 +684,14 @@ def test_se01_falsifier_the_gate_refuses_weight_and_the_envelope_at_resolve(kind
     w.step = Step.CENSUS
     write()
     assert getattr(rec, field) == value
+
+
+def test_a_rung_given_an_envelope_is_refused():
+    """A-115: `Rung.envelope` is deleted, not left unwritten. A caller passing it meets `Rung`'s
+    undeclared-fields refusal, and the name is not among the declared fields."""
+    with pytest.raises(Forbidden):
+        Rung("r_x", "settlement", envelope=[1])
+    assert "envelope" not in Rung._DECLARED
 
 
 def test_se01_falsifier_a_stored_aggregate_on_a_rung_is_refused(realm):

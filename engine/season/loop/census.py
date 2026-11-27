@@ -1,4 +1,4 @@
-"""`loop/census.py` -- CENSUS -- shares WITNESS's join. `04 §A.2`: owns `(Person, exists)` on individuation, `weight`, `envelope`; emits `person.individuated`; token MATTER.
+"""`loop/census.py` -- CENSUS -- shares WITNESS's join. `04 §A.2`: owns `(Person, exists)` on individuation, `weight`; emits `person.individuated`; token MATTER.
 
 ⚠ **THE BODY IS THE DRIVER'S OWN, BOUND BACK ONTO THE CLASS -- NOT A DELEGATING STUB.**
 `loop/driver.py` ends with `SeasonDriver.census = census`, so `SeasonDriver.census` IS this
@@ -79,8 +79,6 @@ def census(self, token: Token) -> None:
         # only, under the declared `(Person, exists)` pair, which is all the gate checks; F.30 requires it.
         # Picked: F.30 governs; the edge is admitted by the gate's `founding` basis (its subject is
         # born in this same write).
-        # ⚠ NO ENVELOPE IS DRAWN: P3 mints *out of the envelope*, and P2's grown band is not built,
-        # so this individuates from no residual (`H-51`'s row says so).
         # THE LADDER RULE, ASKED BEFORE THE WRITE (`effects_founding` does the same): `add_tenure` raises
         # inside the closure, and a raise there leaves a Person with no `contain` edge, which is F.30's
         # "nowhere". A `person` rung is the lowest rank, so this only fails under another person's rung.

@@ -9717,7 +9717,7 @@
    "section": "S36.1",
    "title": "a place produces a demand with nobody petitioning",
    "needs": "a named person who wants it, and a named person who carries it",
-   "law": "S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `envelope`, `stake` -- arrangements, not wants",
+   "law": "S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `stake` --arrangements, not wants",
    "by": "no-signature",
    "tests": "a settlement's needs must be able to surface as demands without a named petitioner"
   },
@@ -9807,16 +9807,6 @@
    "by": "probe-model",
    "tests": "a legal or institutional process must be able to advance against a character who is passive"
   },
-  "W9": {
-   "id": "W9",
-   "verdict": "PASS",
-   "detail": "PASS: BIRTH IS ENVELOPE WEIGHT, NOT A `create`. The envelope has no ledger, no stance and no act -- conflating them PRODUCES A DESIGN IN WHICH DEMOGRAPHY CAN CHOOSE",
-   "kind": null,
-   "section": "S10.3",
-   "title": "births and deaths move a population",
-   "by": "construction",
-   "tests": "a place's population must be able to grow and shrink"
-  },
   "W10": {
    "id": "W10",
    "verdict": "GAP",
@@ -9898,7 +9888,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 895 == 895 and the LOG CONTENT HASH matches (2f1ae630f7cf...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 895 == 895 and the LOG CONTENT HASH matches (046717f403dc...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10025,7 +10015,7 @@
    "section": "S40.3",
    "title": "a container runs its own clock",
    "needs": "nothing -- the parallelism it would buy is ALREADY AVAILABLE: DELIBERATE is a pure map at Godot 4.0",
-   "law": "S40.3 -- a per-container clock is A NESTING FORM WITHOUT A CAP ARGUMENT: it has no `depth`, no `max_depth`, and no caller to supply one. It voids (1) the frozen world, (2) the canonical act order, (3) the non-decreasing season index. Rung's declared fields are ['dates', 'envelope', 'id', 'kind', 'records', 'sites', 'stores', 'yield'] -- there is no tick, by construction. THE CLOCK BUYS NOTHING AND COSTS THREE INVARIANTS",
+   "law": "S40.3 -- a per-container clock is A NESTING FORM WITHOUT A CAP ARGUMENT: it has no `depth`, no `max_depth`, and no caller to supply one. It voids (1) the frozen world, (2) the canonical act order, (3) the non-decreasing season index. Rung's declared fields are ['dates', 'id', 'kind', 'records', 'sites', 'stores', 'yield'] -- there is no tick, by construction. THE CLOCK BUYS NOTHING AND COSTS THREE INVARIANTS",
    "by": "no-signature",
    "tests": "a region must be able to advance on its own schedule while others wait"
   },
@@ -10856,7 +10846,7 @@
    "what": "a demand originating from a place rather than a person",
    "where": "S36.1",
    "needs": "a named person who wants it, and a named person who carries it",
-   "law": "S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `envelope`, `stake` -- arrangements, not wants",
+   "law": "S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `stake` --arrangements, not wants",
    "case": "probe:F19",
    "expected": false
   },
@@ -11009,7 +10999,7 @@
    "what": "a per-container clock",
    "where": "S40.3",
    "needs": "nothing -- the parallelism it would buy is ALREADY AVAILABLE: DELIBERATE is a pure map at Godot 4.0",
-   "law": "S40.3 -- a per-container clock is A NESTING FORM WITHOUT A CAP ARGUMENT: it has no `depth`, no `max_depth`, and no caller to supply one. It voids (1) the frozen world, (2) the canonical act order, (3) the non-decreasing season index. Rung's declared fields are ['dates', 'envelope', 'id', 'kind', 'records', 'sites', 'stores', 'yield'] -- there is no tick, by construction. THE CLOCK BUYS NOTHING AND COSTS THREE INVARIANTS",
+   "law": "S40.3 -- a per-container clock is A NESTING FORM WITHOUT A CAP ARGUMENT: it has no `depth`, no `max_depth`, and no caller to supply one. It voids (1) the frozen world, (2) the canonical act order, (3) the non-decreasing season index. Rung's declared fields are ['dates', 'id', 'kind', 'records', 'sites', 'stores', 'yield'] -- there is no tick, by construction. THE CLOCK BUYS NOTHING AND COSTS THREE INVARIANTS",
    "case": "probe:A16",
    "expected": false
   },
@@ -11208,8 +11198,8 @@
   "BARRIER": 1892,
   "DECISION": 1945,
   "QUERY": 30033,
-  "WRITE": 2305,
-  "EVENT": 2335,
+  "WRITE": 2304,
+  "EVENT": 2334,
   "ACT": 95,
   "CLAIM": 1624,
   "GAP": 89,

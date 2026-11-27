@@ -2255,12 +2255,8 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
 
     ⚠ AN R-1 AGGREGATE AND §22.4 DOES NOT BAR IT, on `density`'s and `demanded`'s ground: a weighted
     headcount over live `reside` edges, not a per-person tally summed across holders (clause 2), and
-    no ended edge is read (clause 3). ⚠ `Rung.envelope` -- the population not individuated as persons
-    -- is NOT counted: it has no producer anywhere (`loop/census.py` writes no envelope), so a term for
-    it would be a read of a dead carrier (`ID-13`). The territorial
-    population is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
-    it is counted above through `weight`, and `envelope` stays the ratified-but-unwritten field
-    `04 §B.3` declares (`H-171`).
+    no ended edge is read (clause 3). Population is counted through `weight`, the one owner (A-115);
+    the territorial population is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class).
 
     `residence` -- a precomputed `residence_of(w)`, for a caller (`_eff_migrate`) that already built
     one this same act and would otherwise pay the full-Tenure scan twice. `None` computes it here.

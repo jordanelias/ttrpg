@@ -25,8 +25,8 @@
 # ⚠ AUTHORED AT WORLD-GEN, NEVER MINTED BY A CLOCK OR A FORMULA. `ED-WR-0011` (OI-05, Jordan
 # 2026-09-13) took Option A, *"A CLOSED AUTHORED CAST. World-gen seeds N persons from an authored
 # roster; there is no season-tick generation at all."* A producer that computed a population and
-# minted a `Person` from it would be Option B, which he did not take. CENSUS, which owns `weight`
-# and `envelope`, still generates nothing (`loop/census.py`). This file is read ONCE, by
+# minted a `Person` from it would be Option B, which he did not take. CENSUS, which owns `weight`, still
+# generates nothing (`loop/census.py`). This file is read ONCE, by
 # `build_realm`, after the case-derived cast is complete -- a second seed beside it, never an edit
 # to it. The cast's ties, memberships and offices are therefore decided before a cohort exists, and
 # `tools/export_npc_roster.py --check` cannot see one.

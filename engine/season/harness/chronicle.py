@@ -404,7 +404,7 @@ def _projection(w) -> dict:
         "seat holds": {(t.subject, t.object): True for t in w.tenures
                        if t.kind == "hold" and t.live and t.object in w.offices},
         "site conditions": {sid: s.condition for sid, s in w.sites.items()},
-        "rungs": {rid: (r.kind, tuple(sorted(map(str, r.envelope)))) for rid, r in w.rungs.items()},
+        "rungs": {rid: r.kind for rid, r in w.rungs.items()},
         "stores": {(rid, matter): n for rid, r in w.rungs.items() for matter, n in r.stores.items()},
         "stance rows": dict(stance),
         "pursuits": pursuits,
