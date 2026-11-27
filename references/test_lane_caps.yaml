@@ -7,13 +7,13 @@
 # Lanes are assigned in conftest.py; `process` is the leftover lane and is meant to reach zero.
 lanes:
   season_loop:
-    base: 3223
+    base: 3219
     warrants: []
   engine:
     base: 1043
     warrants: []
   combat:
-    base: 498
+    base: 497
     warrants: []
   mass_battle:
     base: 324
