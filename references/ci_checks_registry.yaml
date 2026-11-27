@@ -342,6 +342,15 @@ ci_checks:
     notes: 'an instrument, run by hand at a calibration pass; not a CI check'
     blocking: false
 
+  - path: tools/export_mb_contact.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Measured table -> typed-JSON: engine/engine_params/mb_contact.json (and its Python literal modules/mass_battle/core/contact_table_data.py) must match references/mb_contact/duel_grid.json and references/troops.yaml (--check mode), and refuses a stale calibration: the duel engine's fingerprint (calibrate_mb_contact.engine_fingerprint(), the one owner) must equal the table's, every duel weapon the troop file names and every pair of fighter types it can field must have a cell. It is the writer for modules/mass_battle/core/contact_table.py, the sole runtime reader."
+    ci_job: ""
+    blocking: true
+    notes: "WIRED locally only (valoria_local.py --staged, blocking) and by tests/valoria/test_export_mb_contact.py; NO CI step runs it; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by B19a.03 -- PROPOSED, to add: `python3 tools/export_mb_contact.py --check` beside export_battle_orders.py (the season job). Falsifier: test_a_hand_edit_fails_check (either artifact), test_a_changed_duel_engine_fails_check (one planted byte in a copy of the fingerprinted sources, exit 1 and the remedy `python tools/calibrate_mb_contact.py run references/mb_contact/duel_grid.json --workers 4`), test_a_troop_arm_without_a_cell_is_refused; each has the untouched copy as its control."
+
   - path: tools/export_npc_roster.py
     level: 5
     subject: game

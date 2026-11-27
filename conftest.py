@@ -94,7 +94,7 @@ SUBSYSTEM_FILES = {
         r"^test_(axis_roster|balance_oracle|conviction_roster|export_season_registries|import_cycle|m1_acceptance|"
         r"module_registrar|modules_reachable|season_)"),
     "engine": re.compile(
-        r"^test_(degree_|descriptor|engine_does_not_import|engine_params|export_(game_constants|sim_params|troops)|"
+        r"^test_(degree_|descriptor|engine_does_not_import|engine_params|export_(game_constants|mb_contact|sim_params|troops)|"
         r"field_golden|fmath_|names_chain|per_die|wiring)"),
     "process": re.compile(
         r"^test_(claim_provenance|design_prose|module_shape|references_yaml|names$|no_polling|pathres|stubwire)"),

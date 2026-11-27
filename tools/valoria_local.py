@@ -86,6 +86,7 @@ def main(argv):
         ('export_season_registries.py', ['--check'], True),   # the season's registries -> the artifact the port reads (blocking; GO-09)
         ('export_battle_orders.py',     ['--check'], True),   # the mass-battle module's standing-order vocabulary -> the artifact engine/substrate/battle_orders.py reads (blocking; CP-T04-02)
         ('export_troops.py',            ['--check'], True),   # the troop file -> the artifact modules/mass_battle/troop_types/table.py reads (blocking; B17.10)
+        ('export_mb_contact.py',        ['--check'], True),   # the measured duel table + troop file -> the artifacts modules/mass_battle/core/contact_table.py reads; refuses a stale calibration (blocking; B19a.03)
         ('export_npc_roster.py',        ['--check'], True),   # authored cases -> engine/season/npcs.yaml, the cast populated.py reads (blocking; wired 2026-09-16, previously run by nothing)
         # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
