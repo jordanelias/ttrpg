@@ -356,3 +356,23 @@ def test_never_stocked_ladder_reports_once_at_its_first_rung():
     still = _shared_world({})
     still.fixtures = still.fixtures.sweep("body_step", 0)
     assert _reported(still, 2) == [[], []]
+
+
+# B12b.41 (`16_PESSIMIST_SE_A` edit 3, R3): HUNGER IS A CAUSE. A hunger fall cites the last `stores.changed` at the rung its cohort was short at; the death cites the fall.
+def test_hunger_death_cites_the_fall_and_the_store():
+    """Row 4: two cohorts (want grain 8, salt 4 between them) and a territory rung holding exactly one season's stock. Season 1 feeds them and writes the
+    debit (`stores.changed` at T); seasons 2 and 3 are the dearth (the body falls 60 a season from 100, so each dies in season 3). Every death Event's
+    `causes[0]` is a `body.changed` whose `causes[0]` is a `stores.changed` at the granary rung T (not ROOT, not an earlier death); the first fall's too."""
+    w = _shared_world({})
+    w.rungs["T"].stores = {"grain": 8, "salt": 4}
+    _seasons(w, 3)
+    by_id = {e.id: e for e in w.log}
+    deaths = [e for e in w.log if e.kind == "person.died"]
+    assert sorted(anchor_of(w, e) for e in deaths) == ["c0", "c1"], "both cohorts should have starved by season 3: the plant cannot see the death"
+    for death in deaths:
+        fall = by_id[death.causes[0]]
+        assert fall.kind == "body.changed" and anchor_of(w, fall) == anchor_of(w, death), "the death does not cite its own person's fall"
+        store = by_id[fall.causes[0]]
+        assert store.kind == "stores.changed" and anchor_of(w, store) == "T", f"the fall cites {store.kind} at {anchor_of(w, store)}, not the granary"
+    first = [e for e in w.log if e.kind == "body.changed" and anchor_of(w, e) == "c0"][0]
+    assert by_id[first.causes[0]].kind == "stores.changed"

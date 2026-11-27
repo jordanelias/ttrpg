@@ -159,12 +159,16 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     return out
 
 
-def _write_body(w: "World", token, pid: str, person, after: int, observed: tuple = ()):
+def _write_body(w: "World", token, pid: str, person, after: int, observed: tuple = (), short_at: Optional[str] = None):
     """THE HUNGER PASS'S ONE BODY WRITE (a fall, and since B12b.14 a mend): `Person.body` set to `after` through the gate, emitting `body.changed`
     chained to the Event that last WROTE `pid`'s body; returns that Event or `None`. `written=True` (H-129, REM-52): the anchor read chains a
     combat-caused write on the wrong person -- the fold's `body.changed` anchors on the combatant, not on `pid`. The Event that WROTE `pid`'s
-    body is the one to chain to, as `_die`'s and `travel.ended`'s reads are."""
-    prior_b = w.last_emission_of("body.changed", pid, written=True)
+    body is the one to chain to, as `_die`'s and `travel.ended`'s reads are.
+    B12b.41 (`16_PESSIMIST_SE_A` R3): A FALL BY HUNGER CITES THE STORE. `short_at` is the rung its cohort was short at (`SubsistOutcome.short_at`); where that
+    rung has a `stores.changed` the fall's cause is the last one, else (and for a mend, which passes none) the prior body write as before. No reader in the
+    loop branches on a cause, so nothing a person does moves; a chronicle can now read *died of hunger at X*."""
+    prior_b = ((w.last_emission_of("stores.changed", short_at) if short_at else None)
+               or w.last_emission_of("body.changed", pid, written=True))
     _m = len(w._emitted_by_write)
     w.write("body", token,
             lambda: setattr(person, "body", after),
@@ -400,11 +404,13 @@ def _standing_crossings(w: "World") -> list:
     return out
 
 
-def _die(w: "World", token: Token, pid: str) -> None:
+def _die(w: "World", token: Token, pid: str, cause: Optional[str] = None) -> None:
     """DEATH THROUGH THE ONE OWNER, written once for both MATTER callers (hunger, the bodies pass).
     `World.remove_person` is `_eff_kill`'s cascade, factored. Chained to the death WRITTEN about
     `pid` (`written=True`, H-129): a RESOLVE `person.died` anchors on the killer, so the anchor read
-    would hand a killer who later dies here his victim's death as his cause."""
+    would hand a killer who later dies here his victim's death as his cause.
+    B12b.41: `cause` is the Event that brought the death where the caller has one (the hunger pass passes the fall that took the body to 0); the bodies clock
+    passes none and is unchanged (the prior death written about `pid`, else the seed)."""
     prior_d = w.last_emission_of(PERSON_DIED, pid, written=True)
     # CP-T02-01: THE PER-SUBJECT FORM, `_eff_kill`'s. The write is handed a `Change` naming the person
     # and every seat his death empties (`death_subjects`), so the gate emits `person.died` as before
@@ -413,7 +419,7 @@ def _die(w: "World", token: Token, pid: str) -> None:
     w.write("exists", token, None,
             record_kind="Person", fieldname="exists", driver="Event",
             emits=PERSON_DIED, subject=pid,
-            causes=[prior_d] if prior_d else [ROOT],
+            causes=[cause] if cause else ([prior_d] if prior_d else [ROOT]),
             change=Change(death_subjects(w, pid, ()), lambda pid=pid: w.remove_person(pid)))
 
 
@@ -670,6 +676,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     sub_in = world_q.subsist_input(w)
     sub = _step_call(SUBSIST)(sub_in)
     short_by_person = {pid: dict(kinds) for pid, kinds in sub.short_by_person}
+    short_at = dict(sub.short_at)         # B12b.41: the rung each short cohort was short at, where its fall's cause is read
     larder_after = {rid: dict(kinds) for rid, kinds in sub.larder_after}
     # -- THE SHORTFALL RIDES ON THE DRAINED LARDER'S OWN WRITE (plan position `19d`) -------------
     #
@@ -768,7 +775,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # B12b.40: the crossings no larder write carried (`unridden`) ride the first fall of a cohort homed under the rung, sorted by rung, each once.
         under = [rid for rid in sorted(unridden) if rid in chain_of.get(home_of_row.get(pid), ())]
         carried = tuple(o for rid in under for o in unridden.pop(rid))
-        fell = _write_body(w, token, pid, person, fall.body_after, carried)
+        fell = _write_body(w, token, pid, person, fall.body_after, carried, short_at.get(pid))
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
         # B12b.36 (`07_SE_population_census` (b), (c)): A STARVING COHORT THINS BEFORE IT DIES. `famine_loss` is the per-mille of its weight a cohort whose body stands
@@ -786,8 +793,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                         emits="weight.changed", subject=pid, causes=[fell.id] if fell else [ROOT])
         # (c): at body 0 a cohort dies only at weight 1 (S9: a cohort is a person at weight > 1, so one head left is the person); with `famine_loss` 0 the test is today's.
         if fall.body_after <= 0 and (person.weight <= 1 or not loss):
-            # death through the one owner: see _die
-            _die(w, token, pid)
+            # death through the one owner: see _die; B12b.41: it cites the fall that brought it
+            _die(w, token, pid, cause=fell.id if fell else None)
 
     # -- A FED BODY MENDS (B12b.14, `09_WR_provided_arcs` edit 2, `H-211`'s rising half) ----------
     # `body_mend` False is THE CONTROL: this block is skipped, no write, no crossing, the season is today's. True is the arm: a cohort whose

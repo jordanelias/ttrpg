@@ -1213,12 +1213,16 @@ class SubsistOutcome:
                              subtree's positive gap per kind it ran out of (sorted), `want - take` summed;
       * `falls`           -- `BodyFall`s, pid order, only where the loss is `> 0`;
       * `larder_after`    -- `((rung, ((kind, units), ...)), ...)`, sorted rung, changed rungs only; kinds
-                             in the order the draw first debited them (it reaches `Rung.stores`' order)."""
+                             in the order the draw first debited them (it reaches `Rung.stores`' order);
+      * `short_at`        -- B12b.41: `((pid, rung), ...)`, pid order, the rung each short eater was short at (the rung that gave out for its
+                             first short kind, else R2's: the first ladder rung that ever carried a key for the kind, else the ladder's first).
+                             It is where a hunger fall's cause is read (`loop/matter.py`), NOT the report's rung: a chronic dearth has one here and reports none."""
     draw: DrawRecord
     short_by_person: tuple
     shortfalls: tuple
     falls: tuple
     larder_after: tuple
+    short_at: tuple = ()
 
 
 # v9 IN-07 E3: the `settlements.produce` step_call's records -- one season's yield and credit. Built by

@@ -27,6 +27,8 @@ THE RULE (items 3a/3b and plan position `19d`):
   * A FIRST DEARTH IS REPORTED ONCE (B12b.40, D-69): a short cell with no source (`src None`) is a crossing if the eater was not short of that kind in
     the last barrier (`SubsistInput.short_before`); its rung is the first of its ladder that ever carried a key for the kind (`once_held`), else the
     ladder's first rung, and it joins the drained set below. A person short of the kind again next season is no crossing: silent while the dearth lasts.
+  * WHERE EACH SHORT EATER WAS SHORT (B12b.41, `SubsistOutcome.short_at`): the rung that gave out for its first short kind, else R2's rung above. The host reads
+    it to cite the store on the fall; unlike the report it is not once-only, so a chronic dearth has a rung here and reports none.
   * THE DRAINED RUNG'S GAP: per drained kind, `demanded - delivered` over the rung's subtree -- the
     eaters whose home's chain passes through it, summed by `drawn_under` -- kept only where positive.
     It NESTS (a hearth and its settlement can both report one hungry household): the Query's meaning.
@@ -69,14 +71,23 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
     before = {pid: frozenset(kinds) for pid, kinds in inp.short_before}
     held_once = {rung: frozenset(kinds) for rung, kinds in inp.once_held}
     ladders = dict(inp.larder.ladders)
+
+    def dearth_rung(home, kind):
+        """R2's rung for a short `kind` no source gave out for: the first ladder rung that ever carried a key for it, else (D-69) the ladder's first."""
+        ladder = ladders.get(home, ())
+        at = next((r for r in ladder if kind in held_once.get(r, ())), None)
+        return ladder[0] if at is None and ladder else at
+
+    short_at: dict = {}       # pid -> the rung its first short kind was short at (B12b.41: where the fall's cause is read; a chronic dearth has one, reports none)
     for row in draw.rows:
         for kind, want, take, src, _parts in row.cells:
-            if take >= want or src is not None or kind in before.get(row.pid, ()):
-                continue                      # fed; or already counted as drained; or not a crossing
-            ladder = ladders.get(row.home, ())
-            at = next((r for r in ladder if kind in held_once.get(r, ())), None)
-            if at is None and ladder:
-                at = ladder[0]                # D-69: a never-stocked ladder reports once, at its first rung
+            if take >= want:
+                continue
+            at = src if src is not None else dearth_rung(row.home, kind)
+            if at is not None:
+                short_at.setdefault(row.pid, at)
+            if src is not None or kind in before.get(row.pid, ()):
+                continue                      # already counted as drained; or not a crossing
             if at is not None:
                 drained.setdefault(at, set()).add(kind)
 
@@ -115,4 +126,4 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
             larder_after.append((src, left))
 
     return SubsistOutcome(draw, tuple((pid, tuple(kinds.items())) for pid, kinds in short.items()),
-                          tuple(shortfalls), tuple(falls), tuple(larder_after))
+                          tuple(shortfalls), tuple(falls), tuple(larder_after), tuple(sorted(short_at.items())))

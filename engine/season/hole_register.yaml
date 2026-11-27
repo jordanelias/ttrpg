@@ -8843,6 +8843,19 @@ rows:
     cite:      "CONTROL: seed-0 one-season realm hash 38cea821e06849b9b039b94fde1eea18 @32b471d, unchanged. FALSIFIER: the build raised Forbidden at the cohort line."
     source:    "workplan v12 B12b.21 (block slot 7)"
 
+  - id:        H-548
+    tier:      1
+    hole:      "A COHORT THINNED TO WEIGHT 1 NEVER DIES OF HUNGER. B12b.36 (`famine_loss`) thins a starving cohort and removes it only at weight 1 with body 0; `Person.is_cohort` is `weight > 1` and `world_q.subsistence_draw` feeds cohorts and exempts the individual, so a cohort thinned to weight 1 with body above 0 is not drawn again, never falls, and is never removed by hunger. Read at B12b.36 and B12b.41 (neither entry settles it; B12b.41 changed nothing). It is either an intended refuge (the last head is an individual and individuals do not draw from the larder) or a gap in `famine_loss`; the two readings give materially different famines. Dormant at the shipped arm: `famine_loss` ships 0."
+    kind:      "MEASURED-GAP"
+    owner:     "Jordan (a design call between a refuge and a gap); B98 sets `famine_loss`"
+    grade:     "measured"
+    default:   "unchanged: a weight-1 survivor is exempt from the larder draw"
+    site:      "`engine/season/queries/world_q.py` subsistence_draw (the cohort/individual exemption); `engine/season/loop/matter.py` hunger fall loop (the guard `fall.body_after <= 0 and (person.weight <= 1 or not loss)`)"
+    sweep:     ["weight-1 survivor exempt (SHIPPED)", "weight-1 survivor stays in the draw"]
+    unblocks:  "any reading of `famine_loss` above 0 at campaign length"
+    cite:      "CONTROL: B12b.36's probes (a weight-2 cohort at body 50 thins to 1 and lives on; a weight-3 cohort at body 5 reaches weight 2 at body 0, then dies at weight 1 and body 0)."
+    source:    "workplan v12 B12b.36, B12b.41 (block slot 8)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
