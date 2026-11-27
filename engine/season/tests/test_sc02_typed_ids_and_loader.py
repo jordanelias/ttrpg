@@ -88,6 +88,7 @@ def test_the_via_of_an_act_is_typed_as_a_seat():
 # 2 -- THE BYTE-IDENTITY CONTROL: THE WRAPPER FOLDS IDENTICAL STRINGS
 # ======================================================================================
 
+@pytest.mark.shipped_pin   # B18.04 moved the build hash this compares to `_realm_goldens.BUILD`/`SHIPPED`; P15 defers the re-record to B99, and `_reads_pin` does not see this one
 def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
     """`build_realm(0)` seats the whole governance ladder, so its offices are `SeatId`s; its
     `content_hash()` is `BUILD[0]` (`_realm_goldens.py`, the build's one owner). The string-level control beside it: the mint folds a `SeatId` exactly

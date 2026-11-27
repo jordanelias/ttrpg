@@ -124,6 +124,7 @@ def test_hash_equal_with_the_scene_store_unfolded():
     assert w.content_hash() == before, "the content hash folds the Scene store (edit 3 says it is left out)"
 
 
+@pytest.mark.shipped_pin   # B18.04 moved the build hash this compares to `_realm_goldens.BUILD`/`SHIPPED`; P15 defers the re-record to B99, and `_reads_pin` does not see this one
 def test_the_realm_two_season_hash_is_the_shipped_pin_and_the_run_stores_scenes():
     """What this observes at HEAD: the seed-0 two-season realm hash equals the realm pin, and that run stores Scenes
     (so the store is populated while the pin holds). It does NOT show the store is unfolded -- the planted
