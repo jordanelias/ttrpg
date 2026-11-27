@@ -1815,10 +1815,12 @@ def subsist_input(w: World) -> SubsistInput:
     traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's, less those rows (the
     `demanded`, `delivered` and `descendants` rows `subsistence_draw`'s A4 note names). MATTER calls the
     entry with it once a season and makes every write from the outcome. `severity` is `_hunger_severity`'s (B12a.61): `()` at the control
-    `hunger_severity_draw: False` (the shipped arm is True since B12a.62), else one keyed multiple per eater short."""
+    `hunger_severity_draw: False` (the shipped arm is True since B12a.62), else one keyed multiple per eater short.
+    `per_head` is the fixture `hunger_loss` (B12b.35): `"per_head"` divides the loss by the eater's weight, `"per_cohort"` (shipped) does not."""
     larder, chains = _larder_parts(w)
     bodies = tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters)
-    return SubsistInput(larder, chains, w.fixtures.get("body_step"), bodies, _hunger_severity(w, larder, bodies))
+    return SubsistInput(larder, chains, w.fixtures.get("body_step"), bodies, _hunger_severity(w, larder, bodies),
+                        w.fixtures.get("hunger_loss") == "per_head")
 
 
 def _hunger_rows(w: World) -> tuple:

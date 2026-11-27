@@ -28,7 +28,9 @@ THE RULE (items 3a/3b and plan position `19d`):
     eaters whose home's chain passes through it, summed by `drawn_under` -- kept only where positive.
     It NESTS (a hearth and its settlement can both report one hungry household): the Query's meaning.
   * THE BODY: `lost = body_step x (units short, summed in kind order) x the eater's severity multiplier
-    (1 when none is given)`, truncated to an int; the multiplier is the host's draw (`SubsistInput.severity`),
+    (1 when none is given)`, truncated to an int; under `per_head` (fixture `hunger_loss`, B12b.35) the
+    `body_step x units` magnitude is first divided by the eater's `Person.weight` (floor division: one
+    ladder for the body, per head), so a weight-20 cohort short the same per head loses what a weight-2 one does; the multiplier is the host's draw (`SubsistInput.severity`),
     this module draws nothing. Nothing falls at `lost <= 0` (the `body_step = 0` control arm, or a severity
     of 0); the body falls to `max(0, body - lost)`, and dies at `<= 0`.
   The ORDER RULE (#353 §25: draw before produce) is the host's: MATTER calls this before the yield.
@@ -72,9 +74,12 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
 
     bodies = dict(inp.bodies)
     sev = dict(inp.severity)
+    weight_of = {e.pid: e.weight for e in inp.larder.eaters}
     falls = []
     for pid in sorted(short):
-        lost = int(inp.body_step * sum(short[pid].values()) * sev.get(pid, 1))
+        units = sum(short[pid].values())
+        step = inp.body_step * units // weight_of[pid] if inp.per_head else inp.body_step * units   # B12b.35: the Partial band's magnitude, per head under `per_head`
+        lost = int(step * sev.get(pid, 1))
         if lost <= 0:
             continue
         after = max(0, bodies[pid] - lost)

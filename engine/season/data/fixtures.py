@@ -704,6 +704,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `body_mend: False`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-211 -- `site: Fixtures body_mend`; the source ships the arm `False` and the signed step's form, so the arm is injected at the control and swept False / True]
     body_mend=False,                   # `H-211`, swept False (control, SHIPPED) / True
+    # B12b.35 (`07_SE_population_census` §4 (a), closes H-305): THE BODY LOSS IS PER HEAD. `"per_cohort"` is THE CONTROL, SHIPPED: `subsist`'s loss is today's
+    # `body_step x units short` (the Partial band's magnitude), however heavy the cohort. `"per_head"` is the arm: that magnitude is divided by the eater's
+    # weight (`body_step x units // weight`), so a weight-20 cohort short the same per head loses what a weight-2 one does. At the shipped weight 2 the arm
+    # halves every loss, so `body_step` is re-read at CR-22 under it (B12b.44). The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_loss: "per_cohort"`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: ` none (the row is `(Person, weight)`, absent); the source ships the arm `per_cohort` and the divisor's form, so the arm is injected at the control and swept per_cohort / per_head]
+    hunger_loss="per_cohort",          # `H-49`, swept per_cohort (control, SHIPPED) / per_head
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.

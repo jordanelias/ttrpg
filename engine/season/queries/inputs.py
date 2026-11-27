@@ -1174,12 +1174,16 @@ class SubsistInput:
       * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid;
       * `severity`  -- `((pid, multiplier), ...)` (B12a.59): the hunger draw's per-eater multiplier on the body
                        lost per unit short; empty means 1 for every eater. Last, with a default, so the
-                       four-argument build of `world_q.subsist_input` stays valid."""
+                       four-argument build of `world_q.subsist_input` stays valid;
+      * `per_head`  -- B12b.35: the `hunger_loss` fixture read as `"per_head"`: the body lost per unit short is
+                       divided by the eater's weight (`body_step x units // weight`); False (`"per_cohort"`) is
+                       today's loss, undivided. Last, with a default, as `severity` was."""
     larder: LarderInput
     chains: tuple
     body_step: int
     bodies: tuple
     severity: tuple = ()
+    per_head: bool = False
 
 
 @dataclass(frozen=True)
