@@ -143,3 +143,31 @@ def test_on_arm_prices_a_far_move_above_a_near_one(realm):
     assert near_scene.cost(ext) == 1
     assert far_scene.cost(ext) == by_points[far] > near_scene.cost(ext)
     assert _journey_scenes(realm, on, far, budget=by_points[far] - 1) == []
+
+
+# --- B12b.10: the journey appends one leg per point of its price -------------------------------------------------------------------------------
+
+def _journey(on: bool):
+    """A fresh realm and the person who stands in S-001, after `_relocate` takes him to S-013 (the card's four-point journey): `(world, person, budget before, budget after)`."""
+    from ..decision.budget import budget
+    from ..decision.options import containing_rung_of
+    from ..loop.effects_migration import _relocate
+    from ..state.carriers import View
+    w = build_realm(0)
+    if on:
+        w.fixtures = w.fixtures.sweep("route_pricing", "on")
+    p = next(p for p in (w.persons[i] for i in sorted(w.persons)) if containing_rung_of(p) == S("S-001"))
+    scene_budget = lambda: budget(p, View(p.id, [], w.fixtures.get("view_k")), w.fixtures.get("scene_budget"), w.fixtures)
+    before = scene_budget()
+    _relocate(w, Act("a_far", p.id, "move", payload={"to": S("S-013")}), S("S-013"))
+    return w, p, before, scene_budget()
+
+
+def test_far_journey_spends_the_lap_budget():
+    """`route_pricing` `on`: after a lap-0 journey of four points a hold-less person's `budget()` is 1 (the base 5 less the four legs); `off`, the journey is
+    the one entry it was and the budget is one less than it began."""
+    w, p, before, after = _journey(True)
+    assert world_q.leg_points(w, S("S-001"), S("S-013")) == 4 and len(p.travel_leg) == 4
+    assert before == 5 and after == 1
+    _, q, before, after = _journey(False)
+    assert q.travel_leg == [S("S-013")] and after == before - 1

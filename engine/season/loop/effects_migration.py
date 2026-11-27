@@ -10,9 +10,10 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 
 from __future__ import annotations
 
+from ..data.fixtures import ROUTE_PRICING_ON
 from ..data.rosters import ARRIVAL_ONLY_KINDS
 from ..queries.person_q import addressed_to
-from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, home_of, order_destination, place_of, residence_of, restrained
+from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, home_of, leg_points, order_destination, place_of, residence_of, restrained
 from ..state.carriers import Tenure, subject_of
 from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE, Change, Subject
@@ -157,6 +158,8 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
     moved by one act get two legs, and a `move`/`migrate` (mover == actor) mints the id it always did.
     Whose edges a seat may re-home is the gate's `muster` basis, not this function's."""
     who = a.actor if mover is None else mover
+    # B12b.10 (`16_PESSIMIST_WR_A` edit 6; CP-T10-01): WHERE HE SET OUT FROM is read BEFORE his legs close (`place_of`, the one owner).
+    origin = place_of(w, who)
     for t in w.tenures:
         if t.subject == who and t.kind == "contain" and t.until is None:
             t.until = w.tick
@@ -168,7 +171,20 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
     # that HAPPEN.
     traveller = w.persons.get(who)
     if traveller is not None:
-        traveller.travel_leg = list(traveller.travel_leg) + [dest]
+        traveller.travel_leg = list(traveller.travel_leg) + _legs(w, origin, dest)
+
+
+def _legs(w: "World", origin: "str | None", dest: str) -> list:
+    """B12b.10 (`16_PESSIMIST_WR_A` edit 6; CP-T10-01): THE ENTRIES A JOURNEY APPENDS TO `Person.travel_leg`, ONE PER SCENE POINT OF ITS PRICE. `route_pricing` `off`
+    (shipped): `[dest]`, today's one entry. `on`: `world_q.leg_points(origin, dest)` entries, each `dest` (the id is what the digest folds and the entry's
+    length is all the budget reads: `len(travel_leg) * budget_leg_penalty`); a journey with no known start (`origin` None) or one `route` blocks reads the
+    floor, one entry, as `geography.leg_price` does. ⚠ THE PRICE IS THE WORLD-SIDE `leg_points`, NOT `leg_price`: this body has the World, so a traveller who set
+    out from a hearth is priced from the settlement he lives in (`ancestry`); `leg_price` is the floor 1 for him because `decision/` cannot walk it. Equal
+    wherever both resolve a settlement rung (`test_leg_price_is_pure_and_equals_route_points`)."""
+    if w.fixtures.get("route_pricing") != ROUTE_PRICING_ON or origin is None:
+        return [dest]
+    points = leg_points(w, origin, dest)
+    return [dest] * (1 if points is None else points)
 
 
 @effect_for("migrate")

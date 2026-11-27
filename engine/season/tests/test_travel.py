@@ -122,3 +122,28 @@ def test_road_input_obstacle_counts_borders_bad_weather_and_war(monkeypatch):
     w.fixtures = w.fixtures.sweep("season_factor_draw", ((1.0,),) * len(SEASONS_OF_YEAR))
     monkeypatch.setattr(world_q, "SEASON_TERMS", {s: {**t, "hardship": 100} for s, t in world_q.SEASON_TERMS.items()})
     assert world_q.road_input(w).travellers[0][2] == base + (4 + 2 + 1) * step
+
+
+# -- B12b.10: what a journey appends to `travel_leg` -----------------------------------------------------------------------------------------------
+
+def test_legs_appended_equal_leg_price():
+    """`route_pricing` `on`: a journey appends as many entries as the points of its price (`geography.leg_price`, equal to the world-side `leg_points` from a
+    settlement), and one entry where the price is one; `off`, `[dest]` whatever the distance. Read over every settlement from S-001."""
+    import copy
+    from ..loop.effects_migration import _relocate
+    from ..state.carriers import Act
+    here, checked, realm = settlement_rung_id("S-001"), 0, build_realm(0)
+    for on in (False, True):
+        for sid in sorted(geo_data.geography()["settlements"]):
+            dest = settlement_rung_id(sid)
+            if dest == here:
+                continue
+            w = copy.deepcopy(realm)
+            if on:
+                w.fixtures = w.fixtures.sweep("route_pricing", "on")
+            pid = next(i for i in sorted(w.persons) if world_q.home_of(w)[i] == here)
+            _relocate(w, Act("a_t", pid, "move", payload={"to": dest}), dest)
+            price = geo_data.leg_price(here, dest, geo_data.geography(), leg_unit=w.fixtures.get("leg_unit"))
+            assert w.persons[pid].travel_leg == [dest] * (price if on else 1), (on, sid)
+            checked += 1
+    assert checked >= 60
