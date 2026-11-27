@@ -32,7 +32,7 @@ def test_round_trip(tmp_path, monkeypatch):
     art = _artifact()
     intact = tmp_path / 'intact.json'
     intact.write_text(json.dumps(art, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    art['troops']['pike']['power'] += 1
+    art['troops']['pike']['skill'] += 1
     edited = tmp_path / 'edited.json'
     edited.write_text(json.dumps(art, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     monkeypatch.setattr(et, 'OUT', str(edited))
@@ -47,7 +47,7 @@ def test_the_module_reads_the_document_the_port_reads(tmp_path, monkeypatch):
     from modules.mass_battle.troop_types import troops_data
     assert troops_data.DATA == _artifact() == table._data()
     stale = tmp_path / 'troops_data.py'
-    stale.write_text(Path(et.OUT_PY).read_text(encoding='utf-8').replace("'power': 4,", "'power': 9,", 1), encoding='utf-8')
+    stale.write_text(Path(et.OUT_PY).read_text(encoding='utf-8').replace("'skill': 4,", "'skill': 9,", 1), encoding='utf-8')
     monkeypatch.setattr(et, 'OUT_PY', str(stale))
     assert et.main(['--check']) == 1
     stale.write_text(Path(table.__file__).with_name('troops_data.py').read_text(encoding='utf-8'), encoding='utf-8')
@@ -103,6 +103,83 @@ def test_the_other_refusals_are_named():
     assert checked == len(cases)
 
 
+def test_every_arm_has_a_duel_key_or_a_sidearm():
+    """B19a.01: an arm is read in the duel through its `duel_key` (a key of personal combat's weapon export) or, a missile arm
+    having none, through its `sidearm`. Control: every real arm carries one (counted, so the loop is not vacuous) and the file
+    checks clean; each refusal is then one mutation of the real file, named by its row."""
+    data = _artifact()
+    table.check(data)
+    weapons = table.combat_weapon_keys()
+    assert len(data['arms']) >= 11
+    for name, arm in data['arms'].items():
+        assert (arm['duel_key'] or arm.get('sidearm')) in weapons, name
+        assert arm['duel_key_status'] in ('exact', 'proxy', 'none'), name
+    assert data['arms']['pike']['duel_key'] == 'spear' and data['arms']['bow']['sidearm'] == 'dagger'
+    cases = [
+        ('neither a duel key nor a sidearm', lambda d: d['arms']['bow'].pop('sidearm'), 'arms.bow'),
+        ('a status outside its closed set', lambda d: d['arms']['spear'].update(duel_key_status='roughly'), 'roughly'),
+        ('a duel key personal combat has no weapon for', lambda d: d['arms']['spear'].update(duel_key='warhammer'), 'warhammer'),
+        ('a sidearm personal combat has no weapon for', lambda d: d['arms']['bow'].update(sidearm='warhammer'), 'warhammer'),
+    ]
+    checked = 0
+    for what, mutate, needle in cases:
+        bad = copy.deepcopy(data)
+        mutate(bad)
+        with pytest.raises(table.TroopFileError) as e:
+            table.check(bad)
+        assert needle in str(e.value), what
+        checked += 1
+    assert checked == len(cases)
+
+
+def test_an_unstatused_contact_value_is_refused():
+    """B19a.01: every value of `contact` (exposure, levels, K, missile) carries a `status`; only `exposure.base` may be null.
+    Control: the real file has no value without a status and has a null `base` (so the null rule is observed, not assumed)."""
+    data = _artifact()
+    table.check(data)
+    assert data['contact']['exposure']['base'] == {'value': None, 'status': 'seed'}
+    cases = [
+        ('a value with no status', lambda d: d['contact']['exposure']['posture_k'].pop('status'), 'contact.exposure.posture_k'),
+        ('a bare number', lambda d: d['contact']['levels'].update(intent_offense=0.5), 'contact.levels.intent_offense'),
+        ('a nested missile value with no status', lambda d: d['contact']['missile']['hit']['bow']['close'].pop('status'),
+         'contact.missile.hit.bow.close'),
+        ('a status outside its closed set', lambda d: d['contact']['K'].update(status='guess'), 'guess'),
+        ('a null that is not `exposure.base`', lambda d: d['contact']['levels']['intent_defense'].update(value=None),
+         'contact.levels.intent_defense'),
+    ]
+    checked = 0
+    for what, mutate, needle in cases:
+        bad = copy.deepcopy(data)
+        mutate(bad)
+        with pytest.raises(table.TroopFileError) as e:
+            table.check(bad)
+        assert needle in str(e.value), what
+        checked += 1
+    assert checked == len(cases)
+
+
+def test_a_matchup_row_outside_the_closed_sets_is_refused():
+    """B19a.01: a matchup row names a class and a situation of the closed sets, a `closes` of its four, a `status` of its
+    three. The file ships `matchups: []`, so the control plants one valid row (accepted) and each refusal is that row with one
+    key moved out of its set, named by the row."""
+    data = _artifact()
+    assert data['matchups'] == []
+    row = {'a': 'horse_shock', 'd': 'foot_pike', 'situation': 'charge_front_braced', 'closes': 'draw', 'close_ob': 2,
+           'first_tick': {'exposure_a': 2.0, 'exposure_d': 1.0, 'levels_a': 0, 'levels_d': 0}, 'stand': 0.05, 'status': 'seed'}
+    ok = copy.deepcopy(data)
+    ok['matchups'] = [copy.deepcopy(row)]
+    table.check(ok)
+    checked = 0
+    for key, wrong in (('a', 'chariot'), ('d', 'chariot'), ('situation', 'at_dawn'), ('closes', 'maybe'), ('status', 'hunch')):
+        bad = copy.deepcopy(ok)
+        bad['matchups'][0][key] = wrong
+        with pytest.raises(table.TroopFileError) as e:
+            table.check(bad)
+        assert 'matchups[0]' in str(e.value) and repr(wrong) in str(e.value), key
+        checked += 1
+    assert checked == 5
+
+
 def test_a_site_kind_the_season_does_not_have_is_refused(tmp_path, monkeypatch):
     src = Path(et.SRC).read_text(encoding='utf-8').replace('site_kinds: [barracks, archery_range, stable, siege_workshop]',
                                                           'site_kinds: [barracks, archery_range, stable, siege_workshop, forge]')
@@ -148,7 +225,8 @@ def test_the_transcribed_rows_read_as_the_old_tables_did():
     assert recruitment.training_site_for('levy') is None
     assert recruitment.training_site_for('knights_templar') == ('stable', 0.5) == recruitment.TRAINING_SITE['knights_templar']
     assert registry.roles_for('levy') == ['Support', 'Reserve'] == registry.roles_for('no_such_type')
-    assert table.row_of('infantry')['power'] == 4 and table.row_of('infantry')['discipline'] == 5
+    assert table.row_of('infantry')['skill'] == table.row_of('infantry')['power'] == 4      # `power` is the alias of `skill` (B19a.01)
+    assert table.row_of('infantry')['discipline'] == 5
     assert all(r['secondary'] is None for r in _artifact()['troops'].values())
 
 

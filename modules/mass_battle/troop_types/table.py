@@ -19,7 +19,10 @@ for a reader that iterates a table; none is a second copy.
 
 IT REFUSES, by name (`TroopFileError`): an unknown or missing column; a troop row naming an arm, armour tier, role or
 site kind that is not a member of its closed set; an arm whose mass is stated both here (`mass_kg`) and in personal
-combat's export; a `secondary` equal to the `primary`; a column (or section) name that is also a field of `config.EngineConfig`
+combat's export; a `secondary` equal to the `primary`; (B19a.01) an arm with neither a `duel_key` nor a `sidearm`, a `duel_key` or
+`sidearm` that is not a key of personal combat's weapon export, a `duel_key_status` outside its closed set, a `contact` value with
+no `status` (a null value is admitted only for `exposure.base`), a `matchups` row naming a class, a situation, a `closes` or a
+`status` outside its closed set; a column (or section) name that is also a field of `config.EngineConfig`
 (B17.12: a NAME is the troop file's or the config's, never both; a value copied under another name is not seen). The mass check reads
 `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as DATA, never an import of `modules/combat/`.
 `check` is the one validator. It opens that export, so it runs where a file may be opened -- the exporter, on what it
@@ -41,13 +44,30 @@ COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engi
 
 #: The keys the exporter adds to the file's own; the loader accepts and ignores them.
 META_KEYS = ('_generated', 'schema_version', 'source')
-HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'troops')
+HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'contact', 'matchups', 'troops')
 ROLE_COLUMNS = ('shape', 'instructions')
-ARM_COLUMNS = ('class', 'mass_kg')
+ARM_COLUMNS = ('class', 'mass_kg', 'duel_key', 'duel_key_status', 'sidearm')
 CLASS_COLUMNS = ('reach', 'support_ranks')
-TROOP_COLUMNS = ('power', 'discipline', 'morale', 'strength', 'mounted', 'charge', 'wheel', 'default_role', 'cell_cap',
+#: What a `contact` value, a `matchups` row and its first tick may be named (MBA §1.3, §1.4, §3.1, §3.2).
+CONTACT_COLUMNS = ('exposure', 'levels', 'K', 'missile')
+EXPOSURE_COLUMNS = ('base', 'posture_k', 'cover')
+LEVEL_COLUMNS = ('intent_offense', 'intent_defense', 'terrain_die', 'charge_cap', 'morale_near_rout')
+MISSILE_COLUMNS = ('bands', 'hit', 'shots_per_tick', 'felling_per_hit', 'profile')
+MATCHUP_COLUMNS = ('a', 'd', 'situation', 'closes', 'close_ob', 'first_tick', 'stand', 'status')
+FIRST_TICK_COLUMNS = ('exposure_a', 'exposure_d', 'levels_a', 'levels_d')
+#: The closed sets (a single Python owner, not prose). `STATUSES` says how a value is known; `DUEL_KEY_STATUSES` how near an arm's
+#: duel weapon is; `MATCHUP_CLASSES` and `SITUATIONS` are §3.2's eight classes and seven situations; `MISSILE_BANDS` the range bands.
+STATUSES = ('seed', 'calibrated', 'derived')
+DUEL_KEY_STATUSES = ('exact', 'proxy', 'none')
+MATCHUP_CLASSES = ('foot_short', 'foot_pole', 'foot_pike', 'foot_missile', 'crew', 'horse_shock', 'horse_light', 'horse_missile')
+SITUATIONS = ('charge_front_braced', 'charge_front_unbraced', 'charge_flank_or_rear', 'marching', 'in_cover', 'pursuit', 'skirmish')
+CLOSES = ('closes', 'draw', 'evades', 'refused')
+MISSILE_BANDS = ('close', 'effective', 'long')
+#: The one value that may be null: the exposure's absolute level, set in B19 (uncalibrated).
+NULLABLE_VALUE = 'contact.exposure.base'
+TROOP_COLUMNS = ('skill', 'discipline', 'morale', 'strength', 'mounted', 'charge', 'wheel', 'default_role', 'cell_cap',
                  'ranks', 'primary', 'secondary', 'armour', 'roles', 'training_site', 'min_site_condition', 'upkeep')
-STAT_COLUMNS = ('power', 'discipline', 'morale')
+STAT_COLUMNS = ('skill', 'discipline', 'morale')
 
 
 class TroopFileError(ValueError):
@@ -76,13 +96,60 @@ def combat_weapon_keys(path: str = COMBAT_EXPORT_PATH) -> frozenset:
         return frozenset(json.load(fh)['sections']['weapons'])
 
 
+def _value(where, node) -> None:
+    """Every value of `contact` is `{value, status}`: walk to the leaves and refuse a bare value, a leaf with no `status`, a status outside
+    `STATUSES`, and a null that is not `NULLABLE_VALUE`."""
+    if not isinstance(node, dict):
+        raise TroopFileError(f"{where}: a value with no `status` (a contact value is {{value, status}}); got {node!r}")
+    if 'value' in node or 'status' in node:
+        _columns(where, node, ('value', 'status'), ('value', 'status'))
+        _member(where, node['status'], STATUSES, 'status', nullable=False)
+        if node['value'] is None and where != NULLABLE_VALUE:
+            raise TroopFileError(f"{where}: a null value; only {NULLABLE_VALUE} may be null (uncalibrated)")
+        return
+    for key, child in node.items():
+        _value(f"{where}.{key}", child)
+
+
+def _check_contact(contact: dict, arms: dict, tiers: set) -> None:
+    """The shape of `contact`: its closed keys, the arms and bands and tiers its tables range over, then every leaf's `status`."""
+    _columns('contact', contact, CONTACT_COLUMNS, CONTACT_COLUMNS)
+    _columns('contact.exposure', contact['exposure'], EXPOSURE_COLUMNS, EXPOSURE_COLUMNS)
+    _columns('contact.exposure.cover', contact['exposure']['cover'], ('walls',), ('walls',))
+    _columns('contact.levels', contact['levels'], LEVEL_COLUMNS, LEVEL_COLUMNS)
+    missile = contact['missile']
+    _columns('contact.missile', missile, MISSILE_COLUMNS, MISSILE_COLUMNS)
+    for table_name, inner in (('hit', MISSILE_BANDS), ('felling_per_hit', tuple(tiers))):
+        for arm, cells in missile[table_name].items():
+            _member(f"contact.missile.{table_name}", arm, arms, 'arm', nullable=False)
+            _columns(f"contact.missile.{table_name}.{arm}", cells, inner, inner)
+    for arm in missile['shots_per_tick']:
+        _member('contact.missile.shots_per_tick', arm, arms, 'arm', nullable=False)
+    _columns('contact.missile.profile', missile['profile'], ('foot', 'mounted'), ('foot', 'mounted'))
+    _value('contact', contact)
+
+
+def _check_matchups(rows: list) -> None:
+    """Each matchup row names a class, a situation, a `closes` and a `status` of its closed set, and its first tick's four keys."""
+    for i, row in enumerate(rows):
+        where = f"matchups[{i}]"
+        _columns(where, row, MATCHUP_COLUMNS, MATCHUP_COLUMNS)
+        _member(where, row['a'], MATCHUP_CLASSES, 'class (a)', nullable=False)
+        _member(where, row['d'], MATCHUP_CLASSES, 'class (d)', nullable=False)
+        _member(where, row['situation'], SITUATIONS, 'situation', nullable=False)
+        _member(where, row['closes'], CLOSES, 'closes', nullable=False)
+        _member(where, row['status'], STATUSES, 'status', nullable=False)
+        _columns(f"{where}.first_tick", row['first_tick'], FIRST_TICK_COLUMNS, FIRST_TICK_COLUMNS)
+
+
 def check(data: dict, combat_weapons=None, config_names=()) -> None:
     """Refuse a troop file that breaks a rule above. `combat_weapons` is the roster's key set (read from the export by
     default); `config_names` is the `EngineConfig` field names, which the caller supplies (`tools/export_troops.py` reads them:
     this module cannot import `config.py`, which imports it, without making the two an import cycle). Raises `TroopFileError`."""
     if combat_weapons is None:
         combat_weapons = combat_weapon_keys()
-    for column in HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + TROOP_COLUMNS:
+    for column in (HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + CONTACT_COLUMNS + EXPOSURE_COLUMNS + LEVEL_COLUMNS
+                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + TROOP_COLUMNS):
         if column.upper() in config_names:
             raise TroopFileError(f"troop file: the name {column!r} is a column here and a field of `EngineConfig` "
                                  f"(`config.py`); a value has one owner, never both")
@@ -102,11 +169,18 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
         _columns(f"classes.{name}", c, CLASS_COLUMNS, CLASS_COLUMNS)
     for name, arm in arms.items():
         where = f"arms.{name}"
-        _columns(where, arm, ARM_COLUMNS, ('class',))
+        _columns(where, arm, ARM_COLUMNS, ('class', 'duel_key', 'duel_key_status'))
         _member(where, arm['class'], classes, 'class', nullable=False)
+        _member(where, arm['duel_key_status'], DUEL_KEY_STATUSES, 'duel_key_status', nullable=False)
+        _member(where, arm['duel_key'], combat_weapons, "duel_key (a key of personal combat's weapon export)")
+        _member(where, arm.get('sidearm'), combat_weapons, "sidearm (a key of personal combat's weapon export)")
+        if arm['duel_key'] is None and arm.get('sidearm') is None:
+            raise TroopFileError(f"{where}: neither a `duel_key` nor a `sidearm`; the duel has no weapon to read for it")
         if 'mass_kg' in arm and name in combat_weapons:
             raise TroopFileError(f"{where}: mass stated twice -- `mass_kg` here and the key {name!r} in personal "
                                  f"combat's export; keep it in one place")
+    _check_contact(data['contact'], arms, tiers)
+    _check_matchups(data['matchups'])
     for name, row in data['troops'].items():
         where = f"troops.{name}"
         _columns(where, row, TROOP_COLUMNS, TROOP_COLUMNS)
@@ -138,10 +212,18 @@ def troop_types() -> tuple:
     return tuple(_rows())
 
 
+def _with_power(row: dict) -> dict:
+    """A copy of a stat-carrying dict that also reads `power`, the alias of `skill` kept until MBA-04 deletes the last pool reader."""
+    out = dict(row)
+    if 'skill' in out:
+        out['power'] = out['skill']
+    return out
+
+
 def row_of(troop_type) -> Optional[dict]:
-    """A copy of the troop's row, or None; the name matched exactly."""
+    """A copy of the troop's row (with `power`, the alias of `skill`), or None; the name matched exactly."""
     row = _rows().get(troop_type) if isinstance(troop_type, str) else None
-    return dict(row) if row is not None else None
+    return _with_power(row) if row is not None else None
 
 
 def _lower(troop_type) -> str:
@@ -169,8 +251,9 @@ def _sites() -> dict:
 
 
 def stats_table() -> dict:
-    """`{troop type: {power, discipline, morale}}` for each row with a full stat line (today's `TROOP_TYPE_STATS`)."""
-    return {t: {k: r[k] for k in STAT_COLUMNS} for t, r in _rows().items() if all(r[k] is not None for k in STAT_COLUMNS)}
+    """`{troop type: {skill, power, discipline, morale}}` for each row with a full stat line (today's `TROOP_TYPE_STATS`);
+    `power` is the alias of `skill` (one number, two names) until the last pool reader goes (MBA-04)."""
+    return {t: _with_power({k: r[k] for k in STAT_COLUMNS}) for t, r in _rows().items() if all(r[k] is not None for k in STAT_COLUMNS)}
 
 
 def stats_for(troop_type) -> Optional[dict]:

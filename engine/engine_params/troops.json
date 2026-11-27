@@ -104,45 +104,72 @@
   "arms": {
     "light_cut": {
       "class": "non_pole",
-      "mass_kg": 1.2
+      "mass_kg": 1.2,
+      "duel_key": "arming",
+      "duel_key_status": "exact"
     },
     "heavy_cut": {
       "class": "pole",
-      "mass_kg": 2.0
+      "mass_kg": 2.0,
+      "duel_key": "falchion",
+      "duel_key_status": "proxy"
     },
     "heavy_blunt": {
       "class": "pole",
-      "mass_kg": 1.5
+      "mass_kg": 1.5,
+      "duel_key": "mace",
+      "duel_key_status": "exact"
     },
     "spear": {
-      "class": "pole"
+      "class": "pole",
+      "duel_key": "spear",
+      "duel_key_status": "exact"
     },
     "arming": {
-      "class": "non_pole"
+      "class": "non_pole",
+      "duel_key": "arming",
+      "duel_key_status": "exact"
     },
     "pike": {
       "class": "pike",
-      "mass_kg": 3.5
+      "mass_kg": 3.5,
+      "duel_key": "spear",
+      "duel_key_status": "proxy"
     },
     "bow": {
       "class": "missile",
-      "mass_kg": 2.0
+      "mass_kg": 2.0,
+      "duel_key": null,
+      "duel_key_status": "none",
+      "sidearm": "dagger"
     },
     "crossbow": {
       "class": "missile",
-      "mass_kg": 4.0
+      "mass_kg": 4.0,
+      "duel_key": null,
+      "duel_key_status": "none",
+      "sidearm": "dagger"
     },
     "sling": {
       "class": "missile",
-      "mass_kg": 0.8
+      "mass_kg": 0.8,
+      "duel_key": null,
+      "duel_key_status": "none",
+      "sidearm": "dagger"
     },
     "javelin": {
       "class": "missile",
-      "mass_kg": 2.5
+      "mass_kg": 2.5,
+      "duel_key": null,
+      "duel_key_status": "none",
+      "sidearm": "dagger"
     },
     "siege": {
       "class": "missile",
-      "mass_kg": 0.0
+      "mass_kg": 0.0,
+      "duel_key": null,
+      "duel_key_status": "none",
+      "sidearm": "dagger"
     }
   },
   "classes": {
@@ -163,9 +190,151 @@
       "support_ranks": 1
     }
   },
+  "contact": {
+    "exposure": {
+      "base": {
+        "value": null,
+        "status": "seed"
+      },
+      "posture_k": {
+        "value": 0.5,
+        "status": "seed"
+      },
+      "cover": {
+        "walls": {
+          "value": 0.5,
+          "status": "seed"
+        }
+      }
+    },
+    "levels": {
+      "intent_offense": {
+        "value": 0.5,
+        "status": "seed"
+      },
+      "intent_defense": {
+        "value": 1.0,
+        "status": "seed"
+      },
+      "terrain_die": {
+        "value": 1,
+        "status": "seed"
+      },
+      "charge_cap": {
+        "value": 2.75,
+        "status": "seed"
+      },
+      "morale_near_rout": {
+        "value": 4,
+        "status": "seed"
+      }
+    },
+    "K": {
+      "value": 6,
+      "status": "seed"
+    },
+    "missile": {
+      "bands": {
+        "value": [
+          0.25,
+          0.5
+        ],
+        "status": "seed"
+      },
+      "hit": {
+        "bow": {
+          "close": {
+            "value": 0.3,
+            "status": "seed"
+          },
+          "effective": {
+            "value": 0.2,
+            "status": "seed"
+          },
+          "long": {
+            "value": 0.1,
+            "status": "seed"
+          }
+        },
+        "crossbow": {
+          "close": {
+            "value": 0.35,
+            "status": "seed"
+          },
+          "effective": {
+            "value": 0.25,
+            "status": "seed"
+          },
+          "long": {
+            "value": 0.15,
+            "status": "seed"
+          }
+        }
+      },
+      "shots_per_tick": {
+        "bow": {
+          "value": 0.67,
+          "status": "seed"
+        },
+        "crossbow": {
+          "value": 0.13,
+          "status": "seed"
+        }
+      },
+      "felling_per_hit": {
+        "bow": {
+          "none": {
+            "value": 0.3,
+            "status": "seed"
+          },
+          "light": {
+            "value": 0.2,
+            "status": "seed"
+          },
+          "medium": {
+            "value": 0.1,
+            "status": "seed"
+          },
+          "heavy": {
+            "value": 0.05,
+            "status": "seed"
+          }
+        },
+        "crossbow": {
+          "none": {
+            "value": 0.3,
+            "status": "seed"
+          },
+          "light": {
+            "value": 0.2,
+            "status": "seed"
+          },
+          "medium": {
+            "value": 0.15,
+            "status": "seed"
+          },
+          "heavy": {
+            "value": 0.1,
+            "status": "seed"
+          }
+        }
+      },
+      "profile": {
+        "foot": {
+          "value": 1.0,
+          "status": "seed"
+        },
+        "mounted": {
+          "value": 1.6,
+          "status": "seed"
+        }
+      }
+    }
+  },
+  "matchups": [],
   "troops": {
     "levy": {
-      "power": 1,
+      "skill": 1,
       "discipline": 1,
       "morale": 2,
       "strength": 0,
@@ -184,7 +353,7 @@
       "upkeep": 0
     },
     "light_infantry": {
-      "power": 3,
+      "skill": 3,
       "discipline": 3,
       "morale": 4,
       "strength": 2,
@@ -205,7 +374,7 @@
       "upkeep": 0
     },
     "heavy_infantry": {
-      "power": 4,
+      "skill": 4,
       "discipline": 4,
       "morale": 5,
       "strength": 4,
@@ -229,7 +398,7 @@
       "upkeep": 0
     },
     "cavalry": {
-      "power": 5,
+      "skill": 5,
       "discipline": 5,
       "morale": 5,
       "strength": 5,
@@ -251,7 +420,7 @@
       "upkeep": 0
     },
     "archers": {
-      "power": 3,
+      "skill": 3,
       "discipline": 3,
       "morale": 3,
       "strength": 2,
@@ -272,7 +441,7 @@
       "upkeep": 0
     },
     "crossbow": {
-      "power": 3,
+      "skill": 3,
       "discipline": 3,
       "morale": 3,
       "strength": 2,
@@ -291,7 +460,7 @@
       "upkeep": 0
     },
     "sling": {
-      "power": 2,
+      "skill": 2,
       "discipline": 2,
       "morale": 3,
       "strength": 2,
@@ -310,7 +479,7 @@
       "upkeep": 0
     },
     "artillery": {
-      "power": 2,
+      "skill": 2,
       "discipline": 2,
       "morale": 3,
       "strength": 0,
@@ -329,7 +498,7 @@
       "upkeep": 0
     },
     "knights_templar": {
-      "power": 5,
+      "skill": 5,
       "discipline": 6,
       "morale": 6,
       "strength": 5,
@@ -348,7 +517,7 @@
       "upkeep": 0
     },
     "pike": {
-      "power": 4,
+      "skill": 4,
       "discipline": 4,
       "morale": 5,
       "strength": 4,
@@ -371,7 +540,7 @@
       "upkeep": 0
     },
     "spearmen": {
-      "power": 3,
+      "skill": 3,
       "discipline": 3,
       "morale": 4,
       "strength": 2,
@@ -394,7 +563,7 @@
       "upkeep": 0
     },
     "skirmishers": {
-      "power": 2,
+      "skill": 2,
       "discipline": 2,
       "morale": 3,
       "strength": 2,
@@ -415,7 +584,7 @@
       "upkeep": 0
     },
     "mounted_archers": {
-      "power": 3,
+      "skill": 3,
       "discipline": 3,
       "morale": 3,
       "strength": 2,
@@ -436,7 +605,7 @@
       "upkeep": 0
     },
     "light_cavalry": {
-      "power": 3,
+      "skill": 3,
       "discipline": 3,
       "morale": 4,
       "strength": 2,
@@ -457,7 +626,7 @@
       "upkeep": 0
     },
     "infantry": {
-      "power": 4,
+      "skill": 4,
       "discipline": 5,
       "morale": null,
       "strength": 0,

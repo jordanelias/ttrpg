@@ -4,7 +4,10 @@
 # `--check` round trip); a hand edit of the JSON fails the check. READER: `modules/mass_battle/troop_types/table.py`,
 # loaded once; it refuses an unknown column, a row naming an arm, armour tier, role or site kind outside its closed set
 # (the header keys below), an arm whose mass is stated here AND in personal combat's export
-# (`engine/engine_params/combat_engine_v1.json`, `sections.weapons`), and a `secondary` equal to the `primary`.
+# (`engine/engine_params/combat_engine_v1.json`, `sections.weapons`), and a `secondary` equal to the `primary`; and (B19a.01) an
+# arm with neither a `duel_key` nor a `sidearm`, a `duel_key` or `sidearm` that is not a key of that export, a `duel_key_status`
+# outside its set, a `contact` value with no `status`, and a `matchups` row naming a class, situation, `closes` or `status`
+# outside its closed set.
 #
 # WHAT THIS FILE IS AT LANDING (B17.10): a TRANSCRIPTION of the tables it replaced -- `TROOP_TYPE_STATS`,
 # `MOUNTED_TYPES`, `TROOP_TYPE_DENSITY_CAP`, `TROOP_TYPE_ROLES`, `ROLE_SPEC`, `TROOP_LOADOUT`, `TRAINING_SITE` -- row for
@@ -52,18 +55,23 @@ role_specs:
   Reserve:    {shape: Line,       instructions: [reserve]}
 
 # What a soldier fights with. `mass_kg` is stated here only for an arm personal combat's export does not carry.
+# `duel_key` is the arm's key in personal combat's weapon export (`combat_engine_v1.json`, `sections.weapons`), or null; its
+# `duel_key_status` says how near: `exact` (the same weapon), `proxy` (the nearest duel weapon by kind, until personal combat
+# carries the kit) or `none` (no duel weapon). A missile arm has no duel key and fights hand to hand with its `sidearm`
+# (a weapon key too). An arm carries a `duel_key` or a `sidearm`, one at least (B19a.01, MBA §2.1).
+# [ASSUMPTION: the five seeds below, nearest duel weapon by kind (`04_MB_unit_loadout_and_weapon_in_hand_B.md`); content for Jordan]
 arms:
-  light_cut:   {class: non_pole, mass_kg: 1.2}
-  heavy_cut:   {class: pole,     mass_kg: 2.0}
-  heavy_blunt: {class: pole,     mass_kg: 1.5}
-  spear:       {class: pole}                          # mass from personal combat's export (its key `spear`)
-  arming:      {class: non_pole}                      # mass from personal combat's export (its key `arming`)
-  pike:        {class: pike,     mass_kg: 3.5}
-  bow:         {class: missile,  mass_kg: 2.0}
-  crossbow:    {class: missile,  mass_kg: 4.0}
-  sling:       {class: missile,  mass_kg: 0.8}
-  javelin:     {class: missile,  mass_kg: 2.5}
-  siege:       {class: missile,  mass_kg: 0.0}   # crew-served: not carried
+  light_cut:   {class: non_pole, mass_kg: 1.2, duel_key: arming,  duel_key_status: exact}
+  heavy_cut:   {class: pole,     mass_kg: 2.0, duel_key: falchion, duel_key_status: proxy}
+  heavy_blunt: {class: pole,     mass_kg: 1.5, duel_key: mace,    duel_key_status: exact}
+  spear:       {class: pole,                   duel_key: spear,   duel_key_status: exact}   # mass from personal combat's export (its key `spear`)
+  arming:      {class: non_pole,               duel_key: arming,  duel_key_status: exact}   # mass from personal combat's export (its key `arming`)
+  pike:        {class: pike,     mass_kg: 3.5, duel_key: spear,   duel_key_status: proxy}
+  bow:         {class: missile,  mass_kg: 2.0, duel_key: null, duel_key_status: none, sidearm: dagger}
+  crossbow:    {class: missile,  mass_kg: 4.0, duel_key: null, duel_key_status: none, sidearm: dagger}
+  sling:       {class: missile,  mass_kg: 0.8, duel_key: null, duel_key_status: none, sidearm: dagger}
+  javelin:     {class: missile,  mass_kg: 2.5, duel_key: null, duel_key_status: none, sidearm: dagger}
+  siege:       {class: missile,  mass_kg: 0.0, duel_key: null, duel_key_status: none, sidearm: dagger}   # crew-served: not carried
 
 # The ruled P-DEC-1 map (ED-MB-0014), authored once.
 classes:
@@ -72,8 +80,51 @@ classes:
   pike:     {reach: 0.3, support_ranks: 3}
   missile:  {reach: 0.1, support_ranks: 1}      # a missile weapon used hand to hand: REACH_MELEE_DEFAULT
 
+# What a contact reads (A-100; B19a.01). READ BY NOTHING YET: the contact draw (B19) and the missile regime read it; no field
+# does today. Every value is `{value, status}`, `status` in seed | calibrated | derived (`table.STATUSES`); the loader refuses a
+# value with no status, and a null value anywhere but `exposure.base`. Every status below is `seed`: transcribed from today's
+# constants by the tree's own conversion (`SIGMA_PER_D` 0.2 sigma units per die, one die per point of skill), swept in B19.
+contact:
+  exposure:                       # duel rounds a front-rank man fights in one field tick: `base x posture x arc x crowding x cover`
+    base: {value: null, status: seed}      # UNCALIBRATED in absolute level: set in B19 by T-1 and T-2 and Sabin's bound read as a ceiling [ASSUMPTION: null rather than a number -- basis: MBA §1.4 gives no seed; the loader admits null only for `base`]
+    posture_k: {value: 0.5, status: seed}  # the factor `1 + 0.5 x (cA + cB)`, floored at 0.25, c from STANCE_COMMITMENT
+    cover:
+      walls: {value: 0.5, status: seed}    # WALLS_DEFENDER_DR (3) as the defender's cover behind walls
+  levels:                         # in skill steps, on the one ladder
+    intent_offense: {value: 0.5, status: seed}    # INTENT_OFFENSE_D
+    intent_defense: {value: 1.0, status: seed}    # INTENT_DEFENSE_D
+    terrain_die: {value: 1, status: seed}         # one step a die (terrain dice)
+    charge_cap: {value: 2.75, status: seed}       # MB_CHARGE_SIGMA 0.55 at its cap, over SIGMA_PER_D
+    morale_near_rout: {value: 4, status: seed}    # MORALE_SIGMA_SCALE 0.8, over SIGMA_PER_D
+  K: {value: 6, status: seed}     # the duel round index the felling chance is read to (the hazard is flat from round 4)
+  # The missile regime by range band (MBA §3.1). `hit` and `felling_per_hit` are [ASSUMPTION; content for Jordan]: the ORDER is
+  # the design's (hit falls close > effective > long; felling falls with the armour tier none > light > medium > heavy, the
+  # crossbow's `armour_piercing` raising medium and heavy over the bow's), the magnitudes are small seeds, uncalibrated.
+  # Only `bow` and `crossbow` carry seeds: the sling, javelin and siege have none yet.
+  missile:
+    bands: {value: [0.25, 0.5], status: seed}     # close up to a quarter of the arm's range, effective up to a half, long the rest
+    hit:
+      bow:      {close: {value: 0.30, status: seed}, effective: {value: 0.20, status: seed}, long: {value: 0.10, status: seed}}
+      crossbow: {close: {value: 0.35, status: seed}, effective: {value: 0.25, status: seed}, long: {value: 0.15, status: seed}}
+    shots_per_tick:               # "up to ten arrows a minute" and "about twice a minute" over the 4 s field tick
+      bow: {value: 0.67, status: seed}
+      crossbow: {value: 0.13, status: seed}
+    felling_per_hit:
+      bow:      {none: {value: 0.30, status: seed}, light: {value: 0.20, status: seed}, medium: {value: 0.10, status: seed}, heavy: {value: 0.05, status: seed}}
+      crossbow: {none: {value: 0.30, status: seed}, light: {value: 0.20, status: seed}, medium: {value: 0.15, status: seed}, heavy: {value: 0.10, status: seed}}
+    profile:                      # the target's size class: a horse is a larger mark
+      foot: {value: 1.0, status: seed}
+      mounted: {value: 1.6, status: seed}
+
+# How one class of troops meets another in one situation (MBA §3.2). SHIPPED EMPTY: B19 writes the first rows and B31 the rest.
+# A row is {a, d, situation, closes, close_ob, first_tick: {exposure_a, exposure_d, levels_a, levels_d}, stand, status}: `a` and
+# `d` range over `table.MATCHUP_CLASSES`, `situation` over `table.SITUATIONS`, `closes` over `table.CLOSES`, `status` over `table.STATUSES`.
+matchups: []
+
 # One row per troop type, in `TROOP_TYPE_STATS`' order, then the unmustered body.
-#   power, discipline, morale   today's stat line (§B.2); a row with a null among the three has no preset (`stats_for` None)
+#   skill, discipline, morale   today's stat line (§B.2); a row with a null among the three has no preset (`stats_for` None).
+#                               `skill` was `power`, values unchanged: the men's martial skill on the duel's `faculty` scale (B19a.01).
+#                               The loader returns `power` as an alias of `skill` until the last pool reader goes (MBA-04)
 #   strength                    the score the carry demand is charged against (seed rule above)
 #   mounted                     speed, deployment on the flanks (today's `MOUNTED_TYPES`)
 #   charge                      charge penetration: 3 for today's `cavalry`, 0 otherwise
@@ -89,59 +140,59 @@ classes:
 #   upkeep                      a column for the party economy; nothing reads it
 troops:
   levy:
-    {power: 1, discipline: 1, morale: 2, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 1, discipline: 1, morale: 2, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: light_cut, secondary: null, armour: none, roles: null,
      training_site: null, min_site_condition: 0.0, upkeep: 0}
   light_infantry:
-    {power: 3, discipline: 3, morale: 4, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 3, discipline: 3, morale: 4, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: light_cut, secondary: null, armour: light, roles: [Skirmish],
      training_site: barracks, min_site_condition: 0.0, upkeep: 0}
   heavy_infantry:
-    {power: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: heavy_cut, secondary: null, armour: medium, roles: [ShieldWall, Hold, Anvil, Push],
      training_site: barracks, min_site_condition: 0.0, upkeep: 0}
   cavalry:
-    {power: 5, discipline: 5, morale: 5, strength: 5, mounted: true, charge: 3, wheel: true, default_role: null,
+    {skill: 5, discipline: 5, morale: 5, strength: 5, mounted: true, charge: 3, wheel: true, default_role: null,
      cell_cap: 75, ranks: 1, primary: heavy_cut, secondary: null, armour: heavy, roles: [Shock, Flanker],
      training_site: stable, min_site_condition: 0.0, upkeep: 0}
   archers:
-    {power: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: bow, secondary: null, armour: light, roles: [VolleyLine],
      training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
   crossbow:
-    {power: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: crossbow, secondary: null, armour: light, roles: null,
      training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
   sling:
-    {power: 2, discipline: 2, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 2, discipline: 2, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: sling, secondary: null, armour: light, roles: null,
      training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
   artillery:
-    {power: 2, discipline: 2, morale: 3, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 2, discipline: 2, morale: 3, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: siege, secondary: null, armour: none, roles: null,
      training_site: siege_workshop, min_site_condition: 0.5, upkeep: 0}
   knights_templar:
-    {power: 5, discipline: 6, morale: 6, strength: 5, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 5, discipline: 6, morale: 6, strength: 5, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 75, ranks: 1, primary: heavy_blunt, secondary: null, armour: heavy, roles: null,
      training_site: stable, min_site_condition: 0.5, upkeep: 0}
   pike:
-    {power: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: pike, secondary: null, armour: medium, roles: [ShieldWall, Hold, Anvil],
      training_site: barracks, min_site_condition: 0.0, upkeep: 0}
   spearmen:
-    {power: 3, discipline: 3, morale: 4, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 3, discipline: 3, morale: 4, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: spear, secondary: null, armour: light, roles: [ShieldWall, Hold, Anvil],
      training_site: barracks, min_site_condition: 0.0, upkeep: 0}
   skirmishers:
-    {power: 2, discipline: 2, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 2, discipline: 2, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: javelin, secondary: null, armour: light, roles: [Skirmish],
      training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
   mounted_archers:
-    {power: 3, discipline: 3, morale: 3, strength: 2, mounted: true, charge: 0, wheel: false, default_role: Kite,
+    {skill: 3, discipline: 3, morale: 3, strength: 2, mounted: true, charge: 0, wheel: false, default_role: Kite,
      cell_cap: 75, ranks: 1, primary: bow, secondary: null, armour: light, roles: [Kite],
      training_site: stable, min_site_condition: 0.0, upkeep: 0}
   light_cavalry:
-    {power: 3, discipline: 3, morale: 4, strength: 2, mounted: true, charge: 0, wheel: true, default_role: null,
+    {skill: 3, discipline: 3, morale: 4, strength: 2, mounted: true, charge: 0, wheel: true, default_role: null,
      cell_cap: 75, ranks: 1, primary: light_cut, secondary: null, armour: light, roles: [Flanker],
      training_site: stable, min_site_condition: 0.0, upkeep: 0}
   # The unmustered body of a side with no army Record, carrying the literals that side lends it today
@@ -149,6 +200,6 @@ troops:
   # it from the season) and so no stat preset: `stats_for('infantry')` stays None, as today. No weapon, no armour:
   # `loadout_for('infantry')` stays `(None, None)`.
   infantry:
-    {power: 4, discipline: 5, morale: null, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
+    {skill: 4, discipline: 5, morale: null, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
      cell_cap: 100, ranks: 1, primary: null, secondary: null, armour: null, roles: [Hold, Push, ShieldWall],
      training_site: null, min_site_condition: 0.0, upkeep: 0}
