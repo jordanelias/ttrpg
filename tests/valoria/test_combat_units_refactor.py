@@ -247,9 +247,9 @@ def test_a_switch_debits_one_act_threshold():
         for seed in range(24):
             with_ = one_round(mirror, seed, ("A",), cfg)
             without = one_round(mirror, seed, (), cfg)
-            assert [e["by"] for e in with_.trace if e["kind"] == "switch"] == ["A"]
             assert not [e for e in without.trace if e["kind"] in ("switch", "switch_paid")]
             paid = [e for e in with_.trace if e["kind"] == "switch_paid"]   # none where the round ended before it reached the closed phase
+            assert [e["by"] for e in with_.trace if e["kind"] == "switch"] == (["A"] if paid else []), "the swap and its payment are one act"
             if paid:
                 assert len(paid) == 1 and paid[0]["by"] == "A"
                 debits.append(paid[0]["was"] - paid[0]["ready"])
@@ -260,8 +260,11 @@ def test_a_switch_debits_one_act_threshold():
 
     # (2) the hand
     rec = record(("spear", "dagger", "heavy"), short=((0.0, 2.5), (0.0, None)))
-    out = one_round(rec, 3, ("A",))
-    assert opened_with(out) == "dagger" and [e for e in out.trace if e["kind"] == "engagement_start"][0]["weapon_B"] == "arming"
+    closing = lambda states, rnd: next((sd for sd in range(40) if any(e["kind"] == "switch" for e in one_round(rec, sd, ("A",), states=states, rnd=rnd).trace)), None)
+    seed_in = closing((DuelState(), DuelState()), 1)
+    assert seed_in is not None, "no seed's round closed, so no switch was ever paid"
+    out = one_round(rec, seed_in, ("A",))
+    assert [e["weapon"] for e in out.trace if e["kind"] == "switch"] == ["dagger"] and opened_with(out) == "spear"   # swapped at the first closed beat, the entry is the spear's
     assert C.HALFSWORD_BASE.get(out.states[0].form, out.states[0].form) == "dagger" and out.states[1].form == "arming"
     held, _ = entry._combatants(rec, CFG, out.states)
     assert (held.weapon, held.secondary, S.carry_short(held, CFG)) == ("dagger", "spear", 2.5)
@@ -269,7 +272,10 @@ def test_a_switch_debits_one_act_threshold():
     assert (first.weapon, first.secondary, S.carry_short(first, CFG)) == ("spear", "dagger", 0.0)
     again = one_round(rec, 4, (), states=out.states, rnd=2)
     assert opened_with(again) == "dagger" and not [e for e in again.trace if e["kind"] == "switch"]
-    assert opened_with(one_round(rec, 5, ("A",), states=again.states, rnd=3)) == "spear"
+    seed_back = closing(again.states, 3)
+    assert seed_back is not None, "the round that switches back never closed"
+    back = one_round(rec, seed_back, ("A",), states=again.states, rnd=3)
+    assert opened_with(back) == "dagger" and C.HALFSWORD_BASE.get(back.states[0].form, back.states[0].form) == "spear"
 
     # (3) the closed set
     alone = record(("spear", None, "light"))
@@ -278,8 +284,9 @@ def test_a_switch_debits_one_act_threshold():
         assert not any(S.switch_wanted(c, closed, CFG) for closed in (True, False)), key
     with pytest.raises(ValueError):
         entry.fight(alone, draw.seeded(draw.H2("switch_set", 0)), decide=lambda view: "switch")
-    taken = entry.fight(rec, draw.seeded(draw.H2("switch_set", 1)), decide=lambda view: "switch" if view.round == 1 else "withdraw")
-    assert [e["by"] for e in taken.trace if e["kind"] == "switch"] == ["A"]
+    answered = lambda sd: entry.fight(rec, draw.seeded(draw.H2("switch_set", sd)), decide=lambda view: "switch" if view.round == 1 else "withdraw")
+    taken = next((t for t in map(answered, range(40)) if any(e["kind"] == "switch" for e in t.trace)), None)   # the answer is taken where the round closes
+    assert taken is not None and [e["by"] for e in taken.trace if e["kind"] == "switch"] == ["A"]
 
     # (4) THE DEFAULT RULE SEES ITSELF FIRE: a spear in hand with a dagger carried switches on a closed measure and on none else; the dagger in hand
     # with the spear carried never does; a fighter at the collapse line does not
@@ -289,8 +296,8 @@ def test_a_switch_debits_one_act_threshold():
     spent = C.Combatant("X", weapon="spear", secondary="dagger"); spent.stamina = CFG['STAMINA_COLLAPSE']
     assert not S.switch_wanted(spent, True, CFG)
 
-    # (5) A SWITCH IS PAID IN THE CLOSED PHASE, SO A ROUND THAT NEVER CLOSES VOIDS IT: against a longer weapon at light armour the round may end in the
-    # approach; there the swap goes back, no tempo was taken and the weapon in hand is the one he began with
+    # (5) THE SWAP AND ITS PAYMENT ARE ONE ACT, AT THE FIRST CLOSED BEAT: against a longer weapon at light armour the round may end in the approach; there
+    # nothing was swapped or paid and the weapon in hand, and every blow of that round, is the one he began with
     long_rec = record(("spear", "arming", "light"), kit_b=("yari", None, "light"))
     close_rec = record(("spear", "arming", "heavy"), kit_b=("dagger", None, "heavy"))   # in heavy armour against a dagger the fight runs rounds and they close
     paid_n = void_n = 0
@@ -299,12 +306,12 @@ def test_a_switch_debits_one_act_threshold():
             out = one_round(rec_5, seed, ("A",))
             kinds = [e["kind"] for e in out.trace]
             in_hand = C.HALFSWORD_BASE.get(out.states[0].form, out.states[0].form)
-            if "switch_void" in kinds:
-                void_n += 1
-                assert "switch_paid" not in kinds and in_hand == "spear", (seed, in_hand)
-            elif "switch_paid" in kinds:
+            if "switch_paid" in kinds:
                 paid_n += 1
-                assert in_hand == "arming", (seed, in_hand)
+                assert "switch" in kinds and in_hand == "arming", (seed, in_hand)
+            else:
+                void_n += 1
+                assert "switch" not in kinds and in_hand == "spear", (seed, in_hand)
     assert void_n >= 1 and paid_n >= 1, (void_n, paid_n)   # both outcomes were seen, so neither branch went unchecked
 
     # (6) `engage` IS THE ENGINE'S DEFAULT, NOT 'NO ONE SWITCHES': a decider that answers it every round plays the identical fight to no decider (REM-31's

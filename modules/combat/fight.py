@@ -114,7 +114,7 @@ def _beat(trace: list) -> Optional[DecisiveBeat]:
             weapons = {e["A"]: e["weapon_A"], e["B"]: e["weapon_B"]}
         elif kind == "round_start":
             rnd += 1
-        elif kind in ("switch", "switch_void"):   # B18.09: the weapon in hand changed at the round's entry (the blows after it are the new weapon's), or went back out when the round never paid for it (`switch_void` carries the weapon now in hand)
+        elif kind == "switch":   # B18.09: the weapon in hand changed at the round's first closed beat; the blows after it are the new weapon's
             weapons[e["by"]] = e["weapon"]
         elif kind == "wound" and e.get("felled"):
             found = DecisiveBeat(by=e["by"], victim=e["victim"], source=e["source"],

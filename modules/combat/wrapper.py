@@ -96,7 +96,7 @@ def _pool_dice(c, cfg, addends=None):
     return core.resolution_pool(c.score, getattr(c, "pool_addends", 0) if addends is None else addends, **kw)
 
 
-def _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed):
+def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
     """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
     object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
     Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
@@ -106,9 +106,9 @@ def _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed):
     ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop.
     `turn` is this round's index in the fight (1-based, the `round_start` count) and `scene` 0 under keyed rounds (B16.03) and else the fight's `rng.n` where it began:
     with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`), on `rng`, the round's own `Draw` under keyed rounds.
-    `owed` (B18.09) is the list of Combatants who change weapon at this round's entry (`engagement` builds it from `switching`, `round_switchers`' answer): each puts his
-    secondary in hand (`switch_weapon`) before the round's geometry is read, and owes one `ACT_THRESHOLD` of readiness, paid when the round first reaches the closed
-    phase (below), where it is cleared; what is still in it when the round ends is voided by `engagement`."""
+    `switching` (B18.09) is the Combatants who change weapon this round (`round_switchers`): each owes the switch's tempo, one `ACT_THRESHOLD` of readiness, and puts his
+    secondary in hand (`switch_weapon`) when he pays it, at the round's first closed beat (below); a round that ends before it closes changes no one's weapon and
+    costs no one tempo, since the swap and the payment are one act."""
     blow = 0
     def _strike(attacker, defender, deg, **kw):
         """`core.strike` with the blow's keyed coverage-gap draw (PC_D, A-30). Returns (damage, bare) for the caller to carry to
@@ -153,9 +153,7 @@ def _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed):
     for c in (A, B):
         c.grip_position = 0.0; c.lunge_depth = 0.0
         c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
-    for c in owed:
-        switch_weapon(c)   # B18.09: after the re-take, so the weapon swapped out is a base record; before `reach_base`, so the round's reach is the weapon now in hand's
-        _emit('switch', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
+    owed = list(switching)   # each owes one ACT_THRESHOLD, paid with the swap at the first closed beat: at the entry `_carry`'s clamp at the first close would forgive it
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
@@ -329,10 +327,12 @@ def _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed):
                 if A.stamina<=cfg['STAMINA_COLLAPSE'] or B.stamina<=cfg['STAMINA_COLLAPSE']: _emit('separation', reason='collapse'); return None, closed, 'collapse'
                 continue
         # ----- CLOSED: tempo-gated exchange -----
-        for c in owed:   # B18.09: the switch's tempo, the next action's readiness (ACT_THRESHOLD, the unit the exchange below debits per action), paid once, when the round first reaches the closed phase
+        for c in owed:   # B18.09: the switch, paid once, when the round first reaches the close: the weapon swap and the tempo it costs, the next action's readiness (ACT_THRESHOLD, the unit the exchange below debits per action). The half-sword re-take, the use-mode and `er` refreshes below read the weapon now in hand
+            switch_weapon(c)
+            _emit('switch', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
             was = ready[c]; ready[c] -= cfg['ACT_THRESHOLD']
             _emit('switch_paid', round=turn, by=c.label, was=was, ready=ready[c])
-        owed.clear()   # paid once; a switch still owed when the round ends is voided by `engagement`
+        owed.clear()
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
         if not actors: continue
         if len(actors)==2:
@@ -557,20 +557,6 @@ def _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed):
         if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None, closed, 'clean_defence'
     _emit('separation', reason='beat_exhaustion'); return None, closed, 'beat_exhaustion'
 
-def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
-    """One round (A-101): `_engagement`, which carries the round and its contract (its docstring), and one rule over it. A SWITCH IS PAID IN THE CLOSED PHASE
-    (B18.09): a round that ends before it ever reaches that phase (the approach never closes, a collapse, a terms stop) has taken no tempo from the switcher,
-    so his switch is VOID: the weapon swapped in at the entry goes back out (`switch_weapon`, which also puts the shortfall pair back) and a `switch_void`
-    event says so; the weapon in hand at the round's end is the weapon he began it with, and no round changes weapon for free."""
-    owed = list(switching)   # each owes one ACT_THRESHOLD, taken at the closed phase (at the entry `_carry`'s clamp at the first close would forgive it): `_engagement` clears it once paid
-    try:
-        return _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, owed)
-    finally:
-        for c in owed:
-            switch_weapon(c)
-            _emit('switch_void', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
-
-
 class Yield:
     """§11.4 YIELD (PC-01, `ED-PC-0056`), a Phase-1 DECLARATION, not a fourth resolver and not a fourth band.
 
@@ -663,7 +649,7 @@ def _yield_roll(c, terms, sigma, cfg, draw):
 #                  exactly 'engage' every turn.
 #   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no riposte draw (the fight is
 #                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the round.
-#   - 'switch'   : (B18.09) the fighters who carry a secondary change the weapon in hand at the round's entry and pay one `ACT_THRESHOLD` of
+#   - 'switch'   : (B18.09) the fighters who carry a secondary change the weapon in hand, and pay one `ACT_THRESHOLD` of
 #                  readiness for it, in the closed phase (`engagement`'s `switching`); the round is otherwise fought. Open only to a fight in which
 #                  one of the parties carries a secondary (`check_choice`). `engage`, as a decider that answers none (`decide=None`), leaves each party to
 #                  the engine's own default, `S.switch_wanted` (`round_switchers`): only `switch` overrides it.
@@ -816,7 +802,7 @@ def _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness=(
             if choice == WITHDRAW:
                 _emit('withdraw', round=turn+1)
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no riposte draw
-        switching = round_switchers(choice, A, B, prev_closed, cfg)   # B18.09: who changes weapon at this round's entry (a decider's `switch`, else the engine's default); `()` for every fighter with no secondary, whatever the answer
+        switching = round_switchers(choice, A, B, prev_closed, cfg)   # B18.09: who changes weapon in this round (a decider's `switch`, else the engine's default); `()` for every fighter with no secondary, whatever the answer
         rd = round_draw(fkey, turn+1) if keyed_rounds else rng   # `keyed_rounds` (B16.03): the HOST's law, the round on its own key (`round_draw`, A-30) with the coin a sub-draw of it; the round's other draws are positional on that `Draw` (hole_register H-581); the workbench's default stays one sequential stream
         first = keyed_first(A, B, rd) if keyed_rounds else (A if rd.random()<0.5 else B)
         loser, prev_closed, ended_by, wounds0 = play_round(A, B, first, cfg, rd, prev_closed, stop, turn+1, scene, switching)

@@ -814,7 +814,7 @@ class DuelRoundInput:
       * `plans`       -- per party `{phase: approach}`; a missing phase is `normal`;
       * `round`       -- 1-based;
       * `prev_closed` -- the measure the last round ended in;
-      * `switch`      -- who changes weapon at the round's entry (B18.09): the ids of the parties who put their secondary in hand, each of whom must carry one;
+      * `switch`      -- who changes weapon in the round, at its first closed beat (B18.09): the ids of the parties who put their secondary in hand, each of whom must carry one;
                          `()` is none, and `None` is the engine's own default for each party (`wrapper.round_switchers`: the weapon in hand serves the measure
                          `prev_closed` names strictly worse than the one carried). A switch costs one `ACT_THRESHOLD` of the switcher's readiness."""
     fighters: PersonalCombatInput

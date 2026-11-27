@@ -279,7 +279,7 @@ def close_unwieldiness(c, cfg, grip=None):
     return max(0.0, forward_extent(c, cfg, grip) - cfg['CLOSE_ENGAGE_M'])
 def switch_wanted(c, closed, cfg):
     """THE ENGINE'S OWN DEFAULT FOR `switch` (B18.09; the one owner of the trigger: `wrapper.round_switchers` calls it where no decider answers). A fighter
-    who carries a secondary changes weapon at a round's entry when the measure is CLOSED (`closed`, the measure the last round ended in), the weapon in
+    who carries a secondary changes weapon in a round (paid at its first closed beat) when the measure is CLOSED (`closed`, the measure the last round ended in), the weapon in
     hand serves it strictly worse than the one he carries (`close_unwieldiness`, each at the grip-free read `grip_target` takes as its own drive input:
     the weapon's overhang before he gathers it in), and the change is AFFORDABLE: he is above `STAMINA_COLLAPSE`, the floor under which a fighter
     can spend no action at all (the switch spends one action's readiness, `wrapper.engagement`). At open measure the weapon's reach is its virtue and
