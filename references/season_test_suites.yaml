@@ -135,6 +135,7 @@ suites:
     - in23_legitimacy_stability
     - information_cluster
     - notice_draw
+    - play_surface_own_outcome
     - playable_inquiry
     - rival_teller
     - rumour
@@ -201,6 +202,7 @@ suites:
     - interactions_log
     - manner_offsets
     - offer
+    - play_surface
     - refusal_memory
     - regard_unit
     - relations
