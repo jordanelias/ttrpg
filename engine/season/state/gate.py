@@ -430,14 +430,42 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
         return False
     if _ground_reaches(w, seat, rung):
         return True
-    # The swearers are collected first so `w.tenures` is walked once for their seats, not once per
-    # sworn edge (this is asked on every purview precondition).
+    return any(_ground_reaches(w, s, rung) for s in sworn_seats(w, seat))
+
+
+def purview_of(w: "World", seat: Office) -> set:
+    """THE SET FORM OF `purview_reaches` (B21b.21, CR-09 with `H-101`): every rung the predicate admits for `seat`, read by the SAME
+    two disjuncts -- the seat's own ground (`_ground`) UNION the ground of each seat a sworn holder brings (`sworn_seats`, the oblige
+    clause's walk, one edge deep, an imposed `oblige` skipped). So `rung in purview_of(w, seat) == purview_reaches(w, seat, rung)` for
+    every rung, and the predicate and the set read one rule (`test_in40_oblige_purview.py` pins the equality over every rung of a
+    hand-built world). `queries/world_q.py::own_purview` (`reach`'s limb 4, `attention_key` tier 1) reads this; `faction_q.purview`
+    has no game caller and keeps its own-ground walk (the plan's call). Includes the CLAUSE'S OVER-REACH exactly as the predicate does
+    (`H-101` cite: a high seat's holder sworn to a low seat hands it his whole subtree)."""
+    out = _ground(w, seat)
+    for s in sworn_seats(w, seat):
+        out |= _ground(w, s)
+    return out
+
+
+def sworn_seats(w: "World", seat: Office) -> list:
+    """THE OBLIGE CLAUSE'S WALK, ONCE (B21b.21): the Offices held -- a live `hold` on an Office -- by every holder of a live,
+    NON-IMPOSED `oblige` to `seat` (`sworn_to`; `Tenure.imposed` is a sentence, no oath), in `w.tenures` order. Its two readers are
+    `purview_reaches` (the predicate) and `purview_of` (the set form). The swearers are collected first so `w.tenures` is walked once for
+    their seats, not once per sworn edge. Not recursive: a sworn seat's own swearers are not reached through it ("the vassal of my vassal
+    is not my vassal", `purview_reaches`' ONE EDGE DEEP)."""
     swearers = {t.subject for t in sworn_to(w, seat.id) if not t.imposed}
     if not swearers:
-        return False
-    return any(_ground_reaches(w, w.offices[h.object], rung)
-               for h in w.tenures
-               if h.kind == "hold" and h.live and h.subject in swearers and h.object in w.offices)
+        return []
+    return [w.offices[h.object] for h in w.tenures
+            if h.kind == "hold" and h.live and h.subject in swearers and h.object in w.offices]
+
+
+def _ground(w: "World", seat: Office) -> set:
+    """THE CONTAINMENT DISJUNCT AS A SET: `seat`'s own rung and its `descendants`; empty for a rungless seat. `_ground_reaches` is
+    membership in it, asked without building the set."""
+    if seat.rung is None:
+        return set()
+    return {seat.rung, *descendants(w, seat.rung)}
 
 
 def _ground_reaches(w: "World", seat: Office, rung: str) -> bool:

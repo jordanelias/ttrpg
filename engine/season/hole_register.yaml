@@ -2060,12 +2060,21 @@ rows:
       T9. The clause reaches may_fill and the purview Basis, not revocation (REVOCATION_RULES reads
       no purview). A determination-imposed oblige carries payload determined_by and is not an oath
       (SC-03a x IN-40 close). The grade is left as filed: no fixture sweeps the chain depth, so
-      R2's three points are not available. Over-reach, literal to the entry and unbounded: the clause gives the sworn-to seat the whole ground of every seat its swearer holds, so a holder of a high-rung seat who swears to a low-rung seat hands that seat purview over the high one's subtree (the swearer's own act; `_req_oblige` has no reach clause). Still open: `world_q.reach` limb 4 and
-      `faction_q.purview` re-derive the containment walk and do not see the clause; + governors_of
-      -> loop/witness.py:425 deposits, epistemic._ch_post_remit (a vassal standing on his own ground
-      counts as at his lord's seat), and the WorldReader purview Basis (world_q.py: open_case, levy,
-      issue) all read the clause; faction_q.purview's claimed equivalence holds only with no sworn
-      seat-holder.
+      R2's three points are not available. Over-reach, literal to the entry and unbounded: the clause gives the sworn-to seat the whole ground of every seat its swearer holds, so a holder of a high-rung seat who swears to a low-rung seat hands that seat purview over the high one's subtree (the swearer's own act; `_req_oblige` has no reach clause).
+      ⚠ v12 B21b.21 (CR-09 with this row) CLOSED THE SET FORM: `world_q.own_purview` (`reach`'s limb 4,
+      `attention_key` tier 1) reads `state/gate.py::purview_of`, the predicate's set form over the one clause
+      walk (`gate.sworn_seats`, shared with `purview_reaches`), so a liege is asked about his sworn holder's
+      ground and `governors_of`'s deposit to him is admitted (it imports the over-reach above). The faction
+      scale is read over the same `oblige` relation by `faction_q.subordinates`, no stored parent; there is no
+      `faction_q.superiors` in the tree. FALSIFIER engine/season/tests/test_in40_oblige_purview.py (a sworn
+      holder's ground outside the liege seat enters own_purview and reach; own_purview equals purview_reaches
+      over every rung of a world with a sworn and an imposed edge; the Ehrenwall Split and the Jarnstal Drift,
+      hand-built, each a driven `release`, drop the ground at both scales); CONTROL the pre-routing tree, all
+      three red. Readers of the clause besides: governors_of -> loop/witness.py's purview deposit,
+      epistemic._ch_post_remit (a vassal standing on his own ground counts as at his lord's seat), and the
+      WorldReader purview Basis (world_q.py: open_case, levy, issue). Still open: `faction_q.purview` (no game caller, left by the plan) re-derives the containment
+      walk and its claimed equivalence holds only with no sworn seat-holder; neither canon detachment is
+      expressible in build_realm(0) (above).
     source: Jordan 2026-09-02 -- "the ability to be under", extended to offices
 
 

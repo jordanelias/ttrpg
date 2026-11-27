@@ -100,7 +100,7 @@ from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-
 from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_of, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
 from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
@@ -1387,12 +1387,15 @@ def reach(w: World, p: Person) -> set[str]:
                                  (`state/containment.py`), so the seat's own rung must be unioned
                                  in explicitly, or a Duke seated at his own duchy would never be
                                  reached by a claim about the duchy itself -- LB-2e, the
-                                 inclusive-walk falsifier.
+                                 inclusive-walk falsifier. Since B21b.21 the limb is the
+                                 seat's whole purview (`gate.purview_of`): that ground UNION
+                                 the ground a sworn holder brings (the oblige clause).
 
     ⚠ MAY NOT READ A LEDGER, NOT EVEN `p`'S OWN (`AX-2`): a reach computed from beliefs would make
     "what I may be asked about" a function of what I believe, and a false belief would silently
-    widen the world I can act on (`01` §A.4.3). MAY NOT read another person's tenures -- it answers
-    for `p` alone."""
+    widen the world I can act on (`01` §A.4.3). It answers for `p` alone: another person's tenures
+    are read only as limb 4's oblige clause reads them -- the live oaths sworn to a seat `p` holds
+    and the swearers' held seats (B21b.21; `own_purview`)."""
     TRACE.query("reach", "resolver")
     R = {p.id}
     R |= own_purview(w, p)                                       # limbs 2 and 4
@@ -1404,23 +1407,31 @@ def reach(w: World, p: Person) -> set[str]:
 
 def own_purview(w: World, p: Person) -> set[str]:
     """`reach`'s limbs 2 and 4, extracted ONCE (v9 IN-57, `CLAUDE.md` §8) so `reach` and
-    `attention_key`'s tier 1 read one rule: every live Tenure's object (`mine`), and
-    `{seat.rung} | descendants(seat.rung)` over every live `hold` on an Office with a rung (the
-    inclusive walk, LB-2e). Reads `p`'s own tenures and the office/rung stores only; no ledger
-    (`reach`'s AX-2 note). Writes no TRACE row of its own, but `descendants`, which it calls,
-    writes a `TRACE.query` (`state/containment.py`), and `reach` and `attention_key` each compute
-    it, so one `questions_for` walks a seat's subtree twice. Handing one computation to both moves
-    `runs/TRACE.txt` and `results.json`'s QUERY count (no game state
-    moves), which is why the two calls stand."""
+    `attention_key`'s tier 1 read one rule: every live Tenure's object (`mine`), and, over every
+    live `hold` on an Office, the rungs that seat's purview reaches -- `state/gate.py::purview_of`,
+    the SET FORM of `purview_reaches` (B21b.21, CR-09 with `H-101`): the seat's own ground
+    `{seat.rung} | descendants(seat.rung)` (the inclusive walk, LB-2e) UNION the ground of each seat
+    a non-imposed swearer to it holds (the oblige clause, `gate.sworn_seats`). So for a holder of
+    one seat, `rung in own_purview(w, p) == purview_reaches(w, seat, rung)` over every rung his
+    other edges do not name, and the predicate and the set read one rule
+    (`test_in40_oblige_purview.py`). Before B21b.21 this re-derived the own-ground walk and missed
+    the clause, so a superior was deposited his vassal's ground (`governors_of`) and no question of
+    his admitted it. It imports the clause's recorded unbounded over-reach (`H-101` cite).
+
+    ⚠ IT READS ANOTHER PERSON'S TENURES, AND ONLY THESE: the live `oblige` edges whose object is a
+    seat `p` holds, and the swearers' live `hold`s -- the world's relations INTO `p`'s own seat, never
+    a ledger (`reach`'s AX-2 note stands: what `p` believes widens nothing). Writes no TRACE row of
+    its own, but `descendants`, which it calls, writes a `TRACE.query` (`state/containment.py`), and
+    `reach` and `attention_key` each compute it, so one `questions_for` walks a seat's subtree
+    twice. Handing one computation to both moves `runs/TRACE.txt` and `results.json`'s QUERY count
+    (no game state moves), which is why the two calls stand."""
     P = set()
     for t in p.tenures:
         if not t.live:
             continue
         P.add(t.object)
         if t.kind == "hold" and t.object in w.offices:
-            rg = w.offices[t.object].rung
-            if rg is not None:
-                P |= _subtree(w, rg)
+            P |= purview_of(w, w.offices[t.object])
     return P
 
 
@@ -1430,18 +1441,13 @@ def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
     True, by its holder, sorted. `[]` for a rung no seat reaches and for `None`; a rungless seat's
     holder is listed only through `purview_reaches`' oblige clause (v9 IN-40), never by its own ground.
 
-    ⚠ v9 IN-40: WHERE THE OBLIGE CLAUSE FIRES, THIS IS WIDER THAN `reach`'s LIMB 4, which may not read
-    another person's tenures and so cannot see a sworn holder's seats. A superior listed here for his
-    vassal's ground is deposited a claim no question of his admits. Inert in the built realm
-    (its one live `oblige`'s swearer holds no seat); named, not repaired, at IN-40.
-
     ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
-    `{seat.rung} | descendants(seat.rung)` over the person's own holds, and `purview_reaches` is
-    `rung == seat.rung or rung in descendants(seat.rung)` (plus, v9 IN-40, the oblige clause above) --
-    one walk (`descendants`), so a person this lists by his OWN ground has `rung_id` in `reach(w, p)`,
-    and a claim about `rung_id` deposited into his ledger is admitted by `questions_for`'s clause 1.
-    A person listed ONLY through the oblige clause does not (paragraph above): there the deposit is
-    not admitted by any question. Where it is his own ground, that is what makes the WITNESS route that calls this
+    `gate.purview_of` over the person's own holds, the set form of `purview_reaches` (B21b.21: the
+    seat's own ground and the oblige clause's, one rule), so a person this lists -- by his own ground
+    or, since B21b.21, through a sworn holder's -- has `rung_id` in `reach(w, p)`, and a claim about
+    `rung_id` deposited into his ledger is admitted by `questions_for`'s clause 1. (Before B21b.21 a
+    superior listed only through the oblige clause was deposited a claim no question of his admitted;
+    IN-40 named that and B21b.21 closed it.) That is what makes the WITNESS route that calls this
     (`loop/witness.py`, the purview deposit) end in a question rather than in a silent ledger slot.
 
     ⚠ A WORLD READ, AND NOT A FAN BY ITSELF. It reads `w.tenures`/`w.offices`/the containment tree
