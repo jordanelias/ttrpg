@@ -40,15 +40,20 @@ from ..harness import populated as POP
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.person_q import CAPABILITY_CLAIM
+from ..state.ids import draw_factory
 from ..state.carriers import Act, Claim, Person, View
 
 SEATED = "p_npc_001"
 
 
+_CHOOSER = {}       # the fixtures and the draw `_deliberations`' chooser was built with: what `offer` is handed (it cannot reach them through `(p, v)`)
+
+
 def _offer(p, v):
-    """The one call of `decision/sheet.py::offer` this file makes (the source's `offer(p, v)`)."""
+    """The one call of `decision/sheet.py::offer` this file makes: `offer(p, v)` plus the `fx`, `verbs` and `draw` `make_ranker` needs, which are the
+    chooser's own (`offer`'s docstring says why the source's two-argument form cannot carry them)."""
     from ..decision.sheet import offer
-    return offer(p, v)
+    return offer(p, v, _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"])
 
 
 def _deliberations(seed: int, per_person=None, limit: int = 10 ** 9):
@@ -58,7 +63,14 @@ def _deliberations(seed: int, per_person=None, limit: int = 10 ** 9):
     w = build_realm(seed)
     d = SeasonDriver(w)
     seen: list = []
-    real = P.chooser(w, verbs=resolvable_verbs(), watch=lambda p, q, ranked, terms, sampled: seen.append((list(ranked), list(terms))))
+    _CHOOSER.update(fx=w.fixtures, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
+
+    def hook(p, q, ranked, terms, sampled):
+        # `make_ranker` RETURNS the sampled order (`rank`'s value, the order the chooser packs and the player's sheet shows), so a row is read in
+        # that order, each with the `terms` the hook reported for the same candidate (`terms` is parallel to `ranked`, which is not the sampled order).
+        by = {id(c): t for c, t in zip(ranked, terms)}
+        seen.append((list(sampled), [by[id(c)] for c in sampled]))
+    real = P.chooser(w, verbs=_CHOOSER["verbs"], watch=hook)
     n = 0
 
     def choose(p, v, s, ask_budget):

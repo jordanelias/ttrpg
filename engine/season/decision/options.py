@@ -68,7 +68,38 @@ def _hears_by_presence(row: "VerbRow") -> bool:
     return "to" in row.with_operands()
 
 
+def own_state_unmet(row: "VerbRow", reader: Any, binding: dict, own_only: bool) -> str:
+    """THE OWN-STATE CONJUNCT OF `row`'s CELL THAT DECLINED A CANDIDATE, as text: its name (`conjunct:`, where it carries one) and its own-state
+    stems, the first clause whose stems are `OWN_STATE_STEMS` and that read False (`own_only`: or not True, the sensitivity cell's rule above).
+    `decision/sheet.py::offer`'s `WithheldRow.unmet`. Asked of the same reader, on the same binding, the decline asked: it reads, it writes nothing."""
+    req = row.requires_typed
+    clauses = req.requirement.clauses if hasattr(req.requirement, "clauses") else (req.requirement,)
+    for i, clause in enumerate(clauses):
+        own = sorted(set(clause.stems()) & OWN_STATE_STEMS)
+        if not own:
+            continue
+        said = clause.check(reader, {k: x for k, x in binding.items() if x is not None}, [])
+        if said is False or (own_only and said is not True):
+            name = req.names[i] if i < len(req.names) else None
+            return f"{name}: {', '.join(own)}" if name else ", ".join(own)
+    return ", ".join(sorted(set(req.stems()) & OWN_STATE_STEMS))
+
+
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
+    """§F1 -- computed from the verb table: the candidates `p` forms on `q`. `_opening_set`'s docstring is the account of every clause; the parameter
+    list is `W-C`'s four and stays exact (`test_season_shape.py::test_w5_opening_set_has_no_roster_and_is_computed_from_the_table`)."""
+    return _opening_set(p, v, q, fx, None)
+
+
+def own_state_declines(p: Person, v: View, q: Question, fx: "Fixtures") -> list:
+    """B34.02 (`decision/sheet.py::offer`): the candidates `opening_set` DECLINED on his own state, as `(verb, subject, unmet)` -- the decline shown, not a
+    second one made: the same walk (`_opening_set`), its formed set discarded. See `own_state_unmet`."""
+    declined: list = []
+    _opening_set(p, v, q, fx, declined)
+    return declined
+
+
+def _opening_set(p: Person, v: View, q: Question, fx: "Fixtures", declined: Optional[list]) -> list[Candidate]:
     """§F1 -- COMPUTED FROM THE VERB TABLE. No `roster` parameter: that is `D2` entire.
 
     `questions_for()` produces `q`, so the set is computed from it:
@@ -108,7 +139,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     "unproven". Absence of a belief is not a belief in the negative.
 
     `remit:` is evaluated person-side off the `hold` Tenure's granted acts, and `presence:` is
-    the only eligibility kind that still declines unconditionally (`person_side_eligible`)."""
+    the only eligibility kind that still declines unconditionally (`person_side_eligible`).
+
+    B34.02 (`decision/sheet.py::offer`): `declined`, when a list is passed (`own_state_declines`), is APPENDED `(verb, subject, unmet)` for each candidate the
+    OWN-STATE decline below drops (`own_state_unmet`: the conjunct of the row's cell his own state answered). It is a display of the decline
+    the person already makes: nothing is formed, dropped or ordered differently for it, and `None` (`opening_set`'s call) is the walk as it was."""
     TRACE.query("opening_set", "person")
     out: list[Candidate] = []
     tick, decay = fade_of(p)     # B09.01: his claims are read at his tick, faded (`state/ledgers.py::present_confidence`)
@@ -436,6 +471,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 if own_read:
                     own_verdict = evaluate(row.requires_typed, OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops)).value
                     if own_verdict is False or (own_only and own_verdict is not True):
+                        if declined is not None:
+                            declined.append((verb, subject, own_state_unmet(
+                                row, OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops), own_only)))
                         continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both

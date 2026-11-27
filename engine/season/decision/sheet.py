@@ -58,9 +58,9 @@ from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader, decisiveness, recognised
-from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
-from .choose import Ranked, make_ranker, release
-from .options import ledger_weigh
+from ..state.carriers import Act, Candidate, Claim, Person, PersonInterior, Question, Scene, View, fade_of, frozen
+from .choose import Ranked, _believed_chance, _payload_of, make_ranker, release
+from .options import ledger_weigh, own_state_declines
 
 def describe(key: str) -> str:
     """The gloss of a skill or an attribute: the leaf's text, no `World` (B04.02, DEF Edit 1). A skill is read by
@@ -197,6 +197,101 @@ def take_ranked(sheet: DevelopmentSheet) -> range:
     """The pick that takes the shipped ranking whole -- the development space's CONTROL: seated with it,
     the player's person decides exactly as `make_chooser` would (same scenes, same `content_hash`)."""
     return range(len(sheet.candidates))
+
+
+# ---------------------------------------------------------------------------------------------------
+# SITUATION AND OFFER (B34.02) -- what is in front of him and what he may do. Readers: no act, no write, no draw of their own.
+# ---------------------------------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class AskedRow:
+    """One question that demands his attention, as `View.questions` carries it (`questions_for`'s, in `attention_key` order), and the claim of HIS
+    that its `about` names where that is one of his own (`None` otherwise: a seat, a record, a place)."""
+    question: Question
+    claim: Optional[Claim]
+
+
+@dataclass(frozen=True)
+class Situation:
+    """WHAT IS IN FRONT OF HIM NOW: his budget, his own fields (copies, as `DevelopmentSheet`'s), what he holds, and the questions asked of him.
+    `holdings` is `((tenure kind, object id), ...)` of his own live Tenures -- the same read `DevelopmentSheet.tenures` makes (`OwnStateReader` answers
+    `held_by` of one object and enumerates nothing, so the person's own `tenures` are read here as they are there). `asked` is `View.questions`,
+    which `questions_for` sorted by `attention_key`: no second generator. Lane 28's readings (who occupies him, which petitions wait) join in B28."""
+    person_id: str
+    budget: int
+    body: int
+    capability: Mapping
+    pursuits: Mapping
+    stance: tuple
+    conviction: Mapping
+    scar: Mapping
+    holdings: tuple
+    asked: tuple
+
+
+def situation(p: Person, v: View, ask_budget: Callable[[], int]) -> Situation:
+    """The `Situation` of `p` at the deliberation `v` was built for; `ask_budget()` is the season remainder, as the chooser asks it. Writes nothing."""
+    mine = {c.id: c for c in p.ledger}
+    return Situation(p.id, ask_budget(), p.body, frozen(p.capability), frozen(recognised(p, p.pursuits)), tuple(p.stance),
+                     frozen(p.conviction), frozen(p.scar), tuple((t.kind, t.object) for t in p.tenures if t.live),
+                     tuple(AskedRow(q, mine.get(q.about)) for q in v.questions))
+
+
+@dataclass(frozen=True)
+class OfferRow:
+    """One candidate he may take, in `make_ranker`'s order. `candidate` is a deep copy; `occasion` the id of the first `asked` question that names
+    `candidate.subject` among its referents (plain or classed), `None` for a standing candidate; `terms` the `score_terms` tuple the chooser summed
+    (`make_ranker`'s `watch` hook is its one source); `odds` what he BELIEVES of the bands the verb writes in (`choose._believed_chance`, the one ask:
+    a chance, or `None` where nothing prices the candidate), which may be wrong; `cost` in `Scene.cost`'s unit."""
+    candidate: Candidate
+    occasion: Optional[str]
+    terms: tuple
+    odds: Optional[float]
+    cost: int
+
+
+@dataclass(frozen=True)
+class WithheldRow:
+    """A verb his OWN state declined (`opening_set`'s own-state decline, shown): `unmet` names the own-state conjunct of its cell that read False."""
+    verb: str
+    subject: Optional[str]
+    unmet: str
+
+
+@dataclass(frozen=True)
+class Offer:
+    rows: tuple          # make_ranker's order
+    withheld: tuple      # own-state declines only
+
+
+def offer(p: Person, v: View, fx: Any, verbs: Optional[frozenset] = None,
+          draw: Optional[Callable[[str, str], Any]] = None) -> Offer:
+    """WHAT HE MAY DO: the rows `make_ranker(fx, verbs, draw)` orders for him, each with the terms its `watch` hook reported, his believed odds and its
+    cost, and the verbs his own state withheld. `fx`, `verbs` and `draw` are the ones the chooser was built with (`rank` needs `fx`; a different `verbs`
+    or `draw` is a different offer, as `development_space` says); the source's `offer(p, v)` has no way to reach them. Forms nothing, ranks nothing of its
+    own, and writes nothing. A View with no question offers nothing."""
+    q = getattr(v, "question", None)
+    if q is None:
+        return Offer((), ())
+    watched: list = []
+    order = make_ranker(fx, verbs, draw, lambda _p, _q, ranked, terms, sampled: watched.append((ranked, terms)))(p, v)
+    terms_of = {id(c): t for c, t in zip(*watched[-1])} if watched else {}
+    odds = getattr(v, "odds", None)
+    extended = fx.get("extended_scene_cost")
+    asked = tuple(v.questions)
+
+    def occasion(subject: Optional[str]) -> Optional[str]:
+        if subject is None:
+            return None
+        return next((a.id for a in asked if subject in a.referents or subject in {r for r, _ in a.classes}), None)
+
+    def cost(c: Candidate) -> int:
+        return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended)
+
+    rows = tuple(OfferRow(copy.deepcopy(c), occasion(c.subject), tuple(terms_of[id(c)]),
+                          None if odds is None else _believed_chance(p, c, odds), cost(c)) for c in order)
+    withheld = tuple(WithheldRow(*d) for d in dict.fromkeys(own_state_declines(p, v, q, fx)) if verbs is None or d[0] in verbs)
+    return Offer(rows, withheld)
 
 
 # ---------------------------------------------------------------------------------------------------
