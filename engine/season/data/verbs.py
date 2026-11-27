@@ -39,7 +39,7 @@ from .requires import (
 )
 from .rosters import (
     CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
+    RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS, TALLY_AXES,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -2093,7 +2093,24 @@ def _check_standing_occasion_opened_by(by_class, event_kinds) -> dict:
     return by_class
 
 
+def _check_tally_axes(axes, event_kinds) -> dict:
+    """B12b.13 (`rosters.yaml: tally_axes`): every kind an axis `counts` is an Event kind the loop declares (`EVENT_KINDS`), by
+    `_check_standing_occasion_opened_by`'s test, or import refuses naming the axes -- a claim of a kind no one emits is never in a
+    ledger, and the axis would read as built and be reached by nobody. The shape is `data/rosters.py::_load_tally_axes`'s.
+    A function, so a test can plant a bad kind. Returns it."""
+    unknown = {a: sorted(k for k in m["counts"] if k not in event_kinds) for a, m in axes.items()}
+    unknown = {a: ks for a, ks in unknown.items() if ks}
+    if unknown:
+        raise Unspecified(
+            f"`tally_axes` counts {unknown}, which are not Event kinds the loop declares", "rosters.yaml -- tally_axes",
+            needs="name kinds in `data/verbs.py::EVENT_KINDS`",
+            law="04 §B.13 invariant 7 -- the Event-kind roster is derived from every emission column; a claim of a kind outside it is "
+                "deposited from no one, and the tally would never be reached")
+    return axes
+
+
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
+_check_tally_axes(TALLY_AXES, EVENT_KINDS)
 _check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
 _check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)

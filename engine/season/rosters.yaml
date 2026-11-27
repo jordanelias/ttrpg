@@ -4549,6 +4549,23 @@ rosters:
       Site:        [condition.band_crossed, site.ruptured]       # B12a.64: a rupture is a Site's standing occasion too (`world_q.CROSSING_KINDS`)
       Proposition: [proposition.uttered]
 
+  # ── B12b.13 (`09_WR_provided_arcs` edit 1; A-47, A-48, L3 clause 1, L5): THE CLOSED REGISTRY OF A PERSON'S PRIVATE TALLIES ──
+  tally_axes:
+    source: "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)"
+    note: >-
+      THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is
+      byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is
+      reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent
+      one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per
+      (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the
+      referent as a classed referent on the question he answers and marks that question `mandatory` (A-47), and the rows declaring
+      the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no
+      kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS`
+      (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial.
+      `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).
+    about_classes: [Person, Office, Rung]
+    members: {}
+
 tables:
 
   # B04.05 (MAP §C, U1 §3): the uses table -- today's rules restated, one row per place a skill changes an outcome. Read by

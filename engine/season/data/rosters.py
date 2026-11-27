@@ -1549,6 +1549,49 @@ def _load_standing_occasion_opened_by(by_class: dict) -> dict:
 #: B09.12: `{referent class: Event kinds that OPEN a standing occasion of it, most specific first}`, read by
 #: `loop/resolve.py::_occasion_ids`; held to `EVENT_KINDS` at import (`data/verbs.py::_check_standing_occasion_opened_by`).
 STANDING_OCCASION_OPENED_BY = _load_standing_occasion_opened_by(roster_map("standing_occasion_opened_by", "values"))
+
+
+def _load_tally_axes(members: dict, about_classes) -> dict:
+    """`rosters.yaml: tally_axes.members` (B12b.13, L3 clause 1's closed registry), SHAPE-CHECKED: each key a non-empty string, each
+    value exactly `{counts, about, at}` -- `counts` a non-empty list of distinct strings, `about` a lower-case spelling of one of
+    `about_classes` (which are `referent_classes` members), `at` a whole number above 0 (a bool is none). That each `counts` kind
+    is an Event kind the loop declares is `data/verbs.py::_check_tally_axes`, run where `EVENT_KINDS` is built. Returns
+    `{axis: {"counts": tuple, "about": <class name>, "at": int}}`. `{}` is the shipped control and is NOT refused: no axis is
+    authored, so no person is reached (unlike a roster whose empty set would make a membership test silently false). A function,
+    so a test can plant a bad member."""
+    where = "rosters.yaml -- tally_axes"
+    classes = {c.lower(): c for c in about_classes}
+    out = {}
+    for axis, m in members.items():
+        if not isinstance(axis, str) or not axis:
+            raise Unspecified(f"`tally_axes` has a member keyed {axis!r}", where, needs="a non-empty string axis id",
+                              law="L3 clause 1 -- the closed registry names its axes")
+        if not isinstance(m, dict) or set(m) != {"counts", "about", "at"}:
+            raise Unspecified(f"`tally_axes` member {axis!r} is not exactly {{counts, about, at}}: {m!r}", where,
+                              needs="`{counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}`",
+                              law="04 §B.13 invariant 10 -- an unknown or absent cell is refused at load, never read by no one")
+        counts, about, at = m["counts"], m["about"], m["at"]
+        if (not isinstance(counts, list) or not counts or not all(isinstance(k, str) and k for k in counts)
+                or len(set(counts)) != len(counts)):
+            raise Unspecified(f"`tally_axes` member {axis!r} has `counts` {counts!r}", where,
+                              needs="a non-empty list of distinct Event kind names",
+                              law="an axis that counts nothing is reached by nothing, and reads as built")
+        if about not in classes:
+            raise Unspecified(f"`tally_axes` member {axis!r} has `about` {about!r}", where, needs=f"one of {sorted(classes)}",
+                              law="a tally is about a person, an office or a rung -- the three a question's referent may be")
+        if isinstance(at, bool) or not isinstance(at, int) or at < 1:
+            raise Unspecified(f"`tally_axes` member {axis!r} has `at` {at!r}", where, needs="a whole number above 0",
+                              law="a count of 0 is reached by every referent and by none, and a bool is no count")
+        out[axis] = {"counts": tuple(counts), "about": classes[about], "at": at}
+    return out
+
+
+#: B12b.13: `{axis: {counts, about, at}}`, the closed registry L3 clause 1 asks for; `{}` as shipped. Read by `queries/world_q.py::tally_reached`.
+TALLY_AXES = _load_tally_axes(roster_map("tally_axes", "members"), roster_list("tally_axes", "about_classes"))
+for _c in roster_list("tally_axes", "about_classes"):
+    require_member(_c, REFERENT_CLASSES, f"`tally_axes.about_classes` names {_c!r}, which is no referent class",
+                   "rosters.yaml -- tally_axes", law="B12b.13 -- a tally's referent is stamped as its class; a misspelt class stamps nothing")
+del _c
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

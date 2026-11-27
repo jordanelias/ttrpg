@@ -41,7 +41,7 @@ from ..data.rosters import (
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ALL_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     DECLARED, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TALLY_AXES, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible, settlement_rung_id,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
@@ -153,14 +153,19 @@ def aggregate_guard(w: World, name: str, *, per_person_tally: bool = False,
             f"Query '{name}' composes over ENDED edges and is monotone", "S22.4",
             law="L3 clause 3 -- any Query monotone in the ENDED-edge set is a ratchet and is REFUSED. `count{commit}` over live AND ended rows is monotone; `count{hold: until != null}` is revocations-ever; each is built only from 'structural' edges and each EVADES clause 2")
 
-def single_holder_counter(w: World, person: str, axis: str, registry: set[str]) -> int:
+def single_holder_counter(w: World, person: str, axis: str, registry: set[str], *,
+                          kinds: Optional[frozenset] = None, about: Optional[str] = None) -> int:
     """L3 CLAUSE 1 -- a monotone counter per `(Person, axis)`, which the clause EXPLICITLY PERMITS.
 
     The head, verbatim: *"a monotone counter exists ONLY per `(Person, axis)` where `axis`
     is on a closed registry"*, and its own note calls such a counter **"legal, since every
     increment is in the holder's own ledger"**. Clause 2 bars only the CROSS-HOLDER SUM.
 
-    What this raises when it is missing is THE CLOSED REGISTRY."""
+    What this raises when it is missing is THE CLOSED REGISTRY.
+
+    B12b.13: THE BODY `tally_reached` COMPOSES ON. With `kinds` (an axis of `rosters.yaml: tally_axes`) it counts the claims in the
+    person's OWN ledger whose predicate is one of the kinds and, with `about`, whose subject is that one referent; with neither it
+    counts the claims whose predicate is `axis`, as the probes read it."""
     TRACE.query("single_holder_counter", "resolver")
     if not registry:
         raise Unspecified(
@@ -172,7 +177,31 @@ def single_holder_counter(w: World, person: str, axis: str, registry: set[str]) 
     if axis not in registry:
         raise Forbidden(f"axis '{axis}' is not on the closed registry", "S22.4",
                         law="L3 clause 1 -- ONLY where `axis` is on a closed registry")
-    return sum(1 for c in w.persons[person].ledger if c.predicate == axis)
+    if kinds is None:
+        return sum(1 for c in w.persons[person].ledger if c.predicate == axis)
+    return sum(1 for c in w.persons[person].ledger if c.predicate in kinds and (about is None or c.subject == about))
+
+
+def tally_reached(w: World, p: Person) -> tuple:
+    """THE TALLIES `p` HAS FILLED (B12b.13, `09_WR_provided_arcs` edit 1; rulings A-47, A-48, L3 clause 1, L5), `vacancies`' shape: for
+    each axis of `rosters.yaml: tally_axes`, in the file's order, each referent of the axis's `about` class about which `p`'s OWN ledger
+    holds at least `at` claims of the axis's `counts` kinds (`single_holder_counter`, the body: one counter per (person, axis), never
+    summed across holders), sorted by id, never twice. `()` while the registry is empty, as shipped, and for a person whose ledger
+    holds no full tally. A referent's class is asked of the World (`class_of`, as `stage_referents` asks it); no claim and no count is.
+
+    ⚠ IT OPENS A QUESTION AND DECIDES NOTHING (L5, A-47): nothing fires at the count. `questions_for` stamps the referent and marks the
+    question `mandatory`; what he does with it is the chooser's draw. Resolver-side and read-only."""
+    if not TALLY_AXES:
+        return ()
+    registry = set(TALLY_AXES)
+    out: list = []
+    for axis, m in TALLY_AXES.items():
+        kinds = frozenset(m["counts"])
+        for ref in sorted({c.subject for c in p.ledger if c.predicate in kinds and w.class_of(c.subject) == m["about"]}):
+            if ref not in out and single_holder_counter(w, p.id, axis, registry, kinds=kinds, about=ref) >= m["at"]:
+                out.append(ref)
+    return tuple(out)
+
 
 def commit_count_guard(w: World, edges: list[Tenure], name: str) -> int:
     """The DETECTING half of clause 3: it looks at the rows, not at a flag."""
@@ -5468,6 +5497,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # B21.23 (`06_FA_decree_binds` edit 4; A-24, A-47 [ASSUMPTION; medium; Jordan to correct; revert: `recall_suspicion` `None`,
     # the occasion off]): AND, BESIDE THE VACANCIES, THE PERSONS WHOSE DEFIANCE OF HIS WRITS HAS REACHED THE THRESHOLD AND THE SEATS HE
     # MAY STRIP FROM THEM (`recalls`), as `Person` and `Office`. The occasion only; the recall is `revoke`'s draw.
+    # B12b.13 (`09_WR_provided_arcs` edit 1; A-47, A-48, L5; [ASSUMPTION; medium; Jordan to correct; revert: drop `reached` from the splice and
+    # the `mandatory` replace below]): AND, LAST, THE REFERENTS HE HAS FILLED A TALLY OF (`tally_reached`: at least `at` claims of an authored
+    # axis's kinds about one referent in his OWN ledger), as the class `World.class_of` gives each -- the rows declaring that class form on
+    # them -- AND THE QUESTION HE ANSWERS IS MARKED `mandatory`: it is already first on his slate (it is `out[0]`), and the mark says it may
+    # not be passed over for another. It opens a scene and DECIDES NOTHING (L5). `()` while `tally_axes` is empty, as shipped, so the output is byte-identical.
+    reached = tally_reached(w, p)
     told = ledger_names(p.ledger)
     founding = holdings_to_found(w, p)
     added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
@@ -5477,7 +5512,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + crossed_sites(w, p, since) + propositions_heard(w, p) + inherited_terms(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p) + conclusions_held(w, p)
-             + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
+             + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()) + reached)
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
@@ -5501,7 +5536,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     if added or held:
         first = added[0] if added else held[0][0]
         head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
-        out[:1] = [_stamped(head, added, w, held)]
+        stamped = _stamped(head, added, w, held)
+        out[:1] = [replace(stamped, mandatory=True) if reached else stamped]
     return out
 
 
