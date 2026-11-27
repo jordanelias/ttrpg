@@ -3837,7 +3837,7 @@ def war_fields(w: World, p: Person) -> tuple:
     `war_fields`: a seat's targets are the towns its own ledger names]): for each live `hold` of `p` on a seat granting `MUSTER_ACT` or `SEIZURE_ACT` (`dispatch`
     or `issue`), when the seat's own faction (`seat_faction`) is one of the two parties of a war that is LIVE (`at_war`: a declaration and a seated committer), the
     settlements the OTHER party holds (`holder_faction_of`) that the seat's purview reaches (`gate.purview_reaches`), sorted by id. The seat decides the side, as
-    `sides_of` and `occupying_faction` do; `side_in`, an ally's side (CP-T09-03), is B21b.14's. `march` and the seat's warrant (`issue`) form on them as `Rung`,
+    `sides_of` and `occupying_faction` do; for a seat of a THIRD faction whose holder accepted a covenant on the war (his own live `commit` to it) the side is `side_in`'s (B21b.14, CP-T09-03). `march` and the seat's warrant (`issue`) form on them as `Rung`,
     and `seize` through `warrant_sourced`, whatever the marcher's ledger names: war widens a seat's targets from the towns it was told of to every enemy town it
     reaches. When every committer has released the war `at_war` reads False and the term withdraws. Nothing is refused (a march needs no war). Computed when asked,
     stored nowhere; `()` for a man in no such seat, which is nearly everyone, and in every world with no declared war.
@@ -3857,13 +3857,20 @@ def war_fields(w: World, p: Person) -> tuple:
         own = seat_faction(w, s.id)
         foes: set = set()
         for x in wars:
-            if own not in (x.subject, x.value) or not at_war(w, x.subject, x.value):
+            if not at_war(w, x.subject, x.value):
                 continue
-            claimed = claimed_rungs(w, x) if x.subject == own else ()
+            side = own
+            if own not in (x.subject, x.value):
+                # B21b.14 (CP-T09-03 (a), (b); [ASSUMPTION; medium; Jordan to correct; revert: drop this branch]): AN ALLY FIGHTS ON THE SIDE THAT INVITED HIM -- a seat of a third
+                # faction whose holder ACCEPTED a covenant on the war (his own live `commit` to it) takes `side_in`'s party for his side.
+                side = side_in(w, p, x.id) if any(t.kind == "commit" and t.object == x.id and t.live for t in p.tenures) else None
+                if side is None:
+                    continue
+            claimed = claimed_rungs(w, x) if x.subject == side else ()
             if claimed:
                 out.update(r for r in claimed if purview_reaches(w, s, r))
             else:
-                foes.add(x.value if x.subject == own else x.subject)
+                foes.add(x.value if x.subject == side else x.subject)
         if foes:
             out.update(r.id for r in w.rungs.values()
                        if r.kind == "settlement" and holder_faction_of(w, r.id) in foes and purview_reaches(w, s, r.id))
@@ -4758,6 +4765,35 @@ def at_war(w: World, a: str, b: str) -> bool:
                for t in w.tenures):
             return True
     return False
+
+
+def side_in(w: World, p: Person, W: str) -> Optional[str]:
+    """WHICH PARTY OF THE WAR `W` (a `WAR_MOOD` Proposition's id) `p` FIGHTS FOR (B21b.14, CP-T09-03 (a), AM-F-12; [ASSUMPTION; medium; Jordan to correct; revert:
+    drop `side_in` and the ally branch of `war_fields`]): `p`'s own faction where it is `W`'s `subject` or `value` (his own `commit`, `own_factions`); else the faction of
+    the seat that ISSUED a dispensation he holds, is addressed by and whose `terms` is `W` (`writs_addressed(held=True)`; the issuing seat through `issuing_seat`, the
+    one reader `arrest` and the writ limb ask) -- an ally fights on the side that invited him -- where that faction is one of `W`'s two parties (a covenant from a
+    third faction's seat names no side); else `None`. A pure read of what he holds: it does not ask that he accepted (`war_fields` asks his `commit`) nor that the war is
+    live (`at_war`). The same instrument held by an enemy committer is a peace offer, not a side: his own faction answers first, and his `release` is his own act.
+    A-20 (B21's `may_wage`): the war ends when no seated muster-holder of either party is committed, so a peace accepted by an unseated committer releases his de
+    facto commit and ends nothing -- `at_war` counts only the seats that wage. Computed when asked, stored nowhere; `None` for nearly everyone."""
+    war = w.propositions.get(W)
+    if war is None or war.mood != WAR_MOOD:
+        return None
+    parties = (war.subject, war.value)
+    mine = own_factions(w, p)
+    own = next((f for f in parties if f in mine), None)
+    if own is not None:
+        return own
+    for rid in writs_addressed(w, p, held=True):
+        rec = w.records[rid]
+        content = rec.subject_matter
+        if rec.kind != "dispensation" or not isinstance(content, dict) or content.get("terms") != W:
+            continue
+        seat = issuing_seat(w, rid)
+        side = seat_faction(w, seat) if seat is not None else None
+        if side in parties:
+            return side
+    return None
 
 
 def head(w: World, prop: str) -> "str | None":
