@@ -707,10 +707,12 @@ class PersonalCombatInput:
                        a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
                        duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
                        `accept` is about (`world_q.stakes_of`), into this same field through the same function;
-      * `kits`      -- each party's kit, `(weapon, armor)`, in `claimants` order, `ends`' shape (CP-T03-03,
-                       `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
-                       passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
-                       without kits is fought by two Combatants at the engine's own default kit;
+      * `kits`      -- each party's kit, `(primary, secondary, armor)`, in `claimants` order, `ends`' shape (CP-T03-03, B18.08,
+                       `world_q.kit_of`: what the rungs the person holds store, read not consumed; `secondary` is the weapon he
+                       carries and does not hold, `None` where he stocks one kind). The module passes each to
+                       `Combatant(..., weapon=, secondary=, armor=)`. A two-entry `(weapon, armor)` is read as a kit with no
+                       secondary (the length tells them apart): a record built by hand, or by the workbench, before there was one.
+                       The default is `()`: a record built without kits is fought by two Combatants at the engine's own default kit;
       * `scores`    -- each party's SKILL SCORE for the fight's verb, in `claimants` order, `ends`' shape (CR-85, ED-IN-0330,
                        B05.57; `seam/wrappers/pool.py::score`: no attribute, no addend; 0 where the skill gives him none). Passed
                        to `Combatant(..., score=)`, where it is the number the opponent's Ob is taken from
@@ -757,7 +759,7 @@ class PersonalCombatInput:
                        0.0 for both parties (`fight.py` passes `inp.decisiveness or (0.0, 0.0)`);
       * `short`     -- each party's SHORTFALL, `max(0, carry_demand - strength)` in Strength points, in `claimants` order (B18.07,
                        `03_PC_loadout_and_carry`): one entry per party, a pair `(with the primary in hand, with the secondary in hand)`,
-                       the second `None` while no kit carries a secondary (B18.08). The host evaluates `combat_kit.carry_demand` against
+                       the second `None` while the kit carries no secondary (B18.08: `combat_kit.short_pair`). The host evaluates `combat_kit.carry_demand` against
                        the party's Strength and hands the figure raw (`combat.py::combat_input`; the workbench's `fight_record.py` the
                        same way); the module reads it, off the `Combatant`, in `combat_systems.act_cost` (fatigue, `ACT_WEIGHT / D_WT`
                        a point) and `close_rate` (`1 / (1 + CARRY_CLOSE_K * short)`), and imports nothing of the carry rule. The default

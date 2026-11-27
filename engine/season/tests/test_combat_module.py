@@ -579,8 +579,8 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
     from ..queries import person_q
     from ..seam.wrappers import combat as C, sigma
     from ..state.carriers import Act, Claim
-    default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
-    true_kit, claimed, own = ("longsword", "heavy"), ("dagger", "none"), ("poleaxe", "medium")
+    default = (combat_kit.DEFAULTS["weapon"], None, combat_kit.DEFAULTS["armor"])      # B18.08: `kit_of`'s `(primary, secondary, armor)`
+    true_kit, claimed, own = ("longsword", None, "heavy"), ("dagger", None, "none"), ("poleaxe", None, "medium")
     assert len({default, true_kit, claimed, own}) == 4
     monkeypatch.setattr(C, "kit_of", lambda w, pid: own if pid == _A else true_kit)
     real, built = C.combat_input, []
@@ -615,7 +615,7 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
     seen_it = read(sighting)[0]
     assert seen_it.kits == (own, true_kit) and wound_of(seen_it) == true_wound, (seen_it.kits, wound_of(seen_it), true_wound)   # where he has seen him: the world's
     said = read(Claim("c_w", _A, _B, person_q.KIT_CLAIM + "weapon", claimed[0], 0, "told", 5, "own"),
-                Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[1], 0, "told", 5, "own"))[0]
+                Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[2], 0, "told", 5, "own"))[0]
     assert said.kits == (own, claimed), said.kits                              # a claim of his: the claim's, over the default
     wounded = read(Claim("c_b", _A, _B, person_q.BODY_CLAIM, 400, 0, "told", 5, "own"))[0]
     assert wound_of(wounded) == true_wound and wounded.kits == (own, default), (wound_of(wounded), wounded.kits)   # a claim of his wound: the wound, the kit still the default
