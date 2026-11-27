@@ -8,7 +8,9 @@
 lanes:
   season_loop:
     base: 3219
-    warrants: []
+    warrants:
+      - {batch: B29-pc-custody, added: 1, behaviour: "an officer a warrant is addressed to, who has only heard of it, forms arrest on the man it names (on a question with no plain referent too) and on no other, the arrest folds to arrest.made and opens a detain, and a warrant addressed to a third man forms none for him"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "capture forms on a person under war or crime and on no stranger, and its custody goes to the issuing seat of the warrant whose court could close it, not to the seat the act is exercised through"}
   engine:
     base: 1043
     warrants: []
