@@ -301,6 +301,25 @@ def test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse():
     assert _hold(w, "off_reeve").subject == "p_low"
 
 
+def test_req_confer_and_eff_confer_read_the_same_holders():
+    """H-133 (B21b.23): `_req_confer` tests EVERY live holder of the seat, the set `_eff_confer` closes. A seat planted with two live
+    `hold`s (no built world has one) whose SECOND holder carries a live `commit` is refused at the precondition, naming that holder, where
+    the first-holder read admitted it and the effect then closed both edges."""
+    w, d = _gov_world()
+    run = lambda aid, actor, via, to: [e.kind for e in d.resolve(
+        mint_token(w, WriteClass.ACTS),
+        [Act(id=aid, actor=actor, verb="confer", payload={"office": "off_reeve", "to": to}, via=via)],
+        contest_max_depth=w.fixtures.get("contest_max_depth"))]
+    assert "tenure.opened" in run("c1", "p_high", "off_duke", "p_mid")
+    first = _hold(w, "off_reeve")
+    assert first.subject == "p_mid"
+    w.add_tenure(Tenure("t_second_reeve", "p_other", "off_reeve", "hold", w.tick))
+    w.add_tenure(Tenure("t_second_commit", "p_other", "prop_x", "commit", w.tick))
+    live = [t.subject for t in w.tenures if t.kind == "hold" and t.object == "off_reeve" and t.live]
+    assert sorted(live) == ["p_mid", "p_other"], live
+    assert run("c2", "p_high", "off_duke", "p_low") == ["confer.held"], "the second holder carries a live commit"
+
+
 # ======================================================================================
 # 4 -- A `revoke` WITH NO SEAT IS REFUSED AT THE GATE
 # ======================================================================================

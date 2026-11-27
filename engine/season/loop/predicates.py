@@ -186,20 +186,23 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     # (`test_g3_not_yours.py::test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse`
     # arm `c3` reddens, measured); F2's *"zero commits to the cause he held it for"* needs a
     # seat -> cause map nothing declares. Neither is this position's to invent; left as it is.
-    holder = next((t.subject for t in tenures
-                   if t.kind == "hold" and t.object == obj and t.live), None)
-    if holder is None or holder == conferee:
+    # H-133 (B21b.23): EVERY live holder of the seat, the set `_eff_confer` closes (a seat has one live `hold` in every built world, so for one holder this reads
+    # as before; the refusal names the holder it refused on).
+    holders = [t.subject for t in tenures if t.kind == "hold" and t.object == obj and t.live]
+    if not holders or conferee in holders:
         # B-I close, Phase 3 F1: conferring a seat on its own holder changes nothing but closes and
         # reopens his edge
         return _refuse_at("held", f"{a.actor} to {conferee!r} on {obj!r}", "a confer of a seat on its own holder")
-    if any(t.kind == "commit" and t.subject == holder and t.live for t in tenures):
-        return _refuse_at("held", f"{a.actor} displacing {holder!r} on {obj!r}",
-                          "a confer displacing a holder who carries a live commit")
+    for holder in holders:
+        if any(t.kind == "commit" and t.subject == holder and t.live for t in tenures):
+            return _refuse_at("held", f"{a.actor} displacing {holder!r} on {obj!r}",
+                              "a confer displacing a holder who carries a live commit")
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
-    if holder == a.actor or may_revoke(w, a.actor, a.via, off):
-        return ADMITTED
-    return _refuse_at("displacement", f"{a.actor} via {a.via!r} displacing {holder!r} on {obj!r}",
-                      "a confer displacing a holder the seat exercised has no revocation authority over")
+    for holder in holders:
+        if not (holder == a.actor or may_revoke(w, a.actor, a.via, off)):
+            return _refuse_at("displacement", f"{a.actor} via {a.via!r} displacing {holder!r} on {obj!r}",
+                              "a confer displacing a holder the seat exercised has no revocation authority over")
+    return ADMITTED
 
 
 @requires_predicate("succeed", clauses=("operand", "banned", "claim"))
