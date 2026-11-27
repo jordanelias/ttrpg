@@ -33,7 +33,7 @@ that could only return the answer it returned:
 ⚠ AND `scale` IS NOT THE CORPUS'S ONLY STRUCTURED FIELD, WHICH IS WHAT MADE REV 1's CEILING
 ARGUMENT WRONG IN THE REVERSE DIRECTION. `temporal` is a mapping with declared sub-keys and **57 of
 143 cases carry an integer `temporal.span_seasons`** (1..16), which rev 1 ignored while hardcoding
-2. And `cases/ENDINGS_CLASSIFIED.yaml` already classifies endings into DECIDER/ROLL/THRESHOLD/
+2. And `engine/season/ENDINGS_CLASSIFIED.yaml` already classifies endings into DECIDER/ROLL/THRESHOLD/
 NEVER/UNCLEAR with a boolean `forced_by_threshold`. Both are read here. So the number of distinct
 worlds is a property of what the BUILDER reads, never a ceiling the corpus imposes.
 
@@ -80,7 +80,7 @@ _ENDINGS = files.ENDINGS_CLASSIFIED_YAML
 
 
 def endings() -> dict:
-    """`cases/ENDINGS_CLASSIFIED.yaml`, keyed by case id. Its own header calls the 19 of 50 rows
+    """`engine/season/ENDINGS_CLASSIFIED.yaml`, keyed by case id. Its own header calls the 19 of 50 rows
     carrying `forced_by_threshold` *"load-bearing on the whole proposal"*, and rev 1 did not read
     it — so a deadline that the corpus says forces the ending reached no world."""
     if not _ENDINGS.exists():
@@ -561,19 +561,6 @@ def build_at(case: dict, seed: int = 0) -> World:
         prop = Proposition(f"prop_{pid}", "OUGHT", about, predicate, True, 0)
         w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
-    # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an
-    # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
-    # breaks no surface.
-    # Derived, not re-typed: `"prop_p_a"` was a hand-written copy of the `f"prop_{pid}"` rule
-    # three lines above, so the id format had to stay in sync by eye and a change to `pids`'
-    # order or contents would have silently pointed this at the wrong person.
-    prop = w.propositions[f"prop_{pids[0]}"]
-    if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
-        # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
-        # ending is forced by a threshold; a world with no deadline cannot represent that at all.
-        w.dates["d_forced"] = {"id": "d_forced", "venue": ids[chain[0]], "due_at": 1,
-                               "holder": None, "fired": False}
-        w.docket.append({"date": "d_forced", "matter": prop.id})
     return w
 
 

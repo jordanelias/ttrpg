@@ -5258,8 +5258,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     as a question, not in what produces it. `date_due`'s half needs CALENDAR to emit `date.fired`
     (`loop/calendar.py`'s write carries `emits="date.fired"`) AND that emission to reach WITNESS:
     `calendar()` returns its own Events and `season()` hands them to `witness()` in lap 0 beside
-    MATTER's, so a fired date deposits a claim (`test_calendar_a_forced_corpus_date_*` pins
-    `claimed_any`). `band_crossed`'s half needs nothing further, because `_crossings`
+    MATTER's, so a fired date deposits a claim. `band_crossed`'s half needs nothing further, because `_crossings`
     (`loop/matter.py`) already emits a witnessable Event whose claim's subject is the site
     (`epistemic.claim_subjects`'s anchor fallback) -- `reach`/`place_of`, below, are what let a claim
     about a place reach someone who was never at that place: a seat's own purview, the ladder above
