@@ -83,10 +83,9 @@ def test_the_three_body_verbs_draw_on_arms_and_arms_is_a_vocation_with_an_attrib
     assert '"arms"' not in src and "'arms'" not in src
 
 
-def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_a_lifepath():
-    """BA1.99 re-point (was: nobody holds `arms` at landing). BA1.01 authors `arms` through the cast row's `capabilities:` on 11 persons, so
-    at landing exactly those hold it, each at the authored score, at every seed; the `cast:` overlay still names no `arms` value, no lifepath
-    template names it, and no practice record can form in it (`practice` counts Success-or-better; a fight's bands are none of the ladder's)."""
+def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay():
+    """BA1.99 re-point (was: nobody holds `arms` at landing; B18.05 puts `arms` on six martial lifepaths, none of which a cast row uses, so a lifepath still grants nobody `arms` at landing: `test_a_martial_lifepath_holds_arms_at_pool_default` owns the templates). BA1.01 authors `arms` through the cast row's `capabilities:` on 11 persons, so
+    at landing exactly those hold it, each at the authored score, at every seed; the `cast:` overlay still names no `arms` value, and no practice record can form in it (`practice` counts Success-or-better; a fight's bands are none of the ladder's)."""
     from ..data import cast
     from ..harness.corpus_run import cast_overlay
     authored = {f"p_{cid.lower().replace('-', '_')}": cast.capabilities_of(r)[KEY]
@@ -104,7 +103,6 @@ def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_
     overlay = [e for entries in cast_overlay().values() for e in entries]
     assert overlay, "setup: the overlay is empty"
     assert [e for e in overlay if KEY in (e.get("capability") or {})] == []
-    assert [lp for lp, keys in R.LIFEPATH_TEMPLATES.items() if KEY in keys] == []
     assert all(R.DEGREE_STEP.get(b, 0) == 0 for b in (FELLED, WOUNDED, UNTOUCHED))
 
 

@@ -47,6 +47,13 @@ def _score_kw(score) -> dict:
     return {} if score is None else dict(score=score)
 
 
+def _short_kw(short) -> dict:
+    """`Combatant`'s keyword for one party's shortfall (B18.07; the record's `short` entry, `(with the primary in hand, with the
+    secondary in hand)`): the figure for the kit he fights with, the primary's (the secondary's is read once a kit carries one, B18.08).
+    `None` (no entry, or none for that kit) is none, so the Combatant is short of the harness alone, as `act_cost` always charged."""
+    return {} if short is None or short[0] is None else dict(short=short[0])
+
+
 def _fight_cfg(inp: PersonalCombatInput, cfg: Optional[dict] = None) -> Optional[dict]:
     """The engine's `cfg` carrying the record's operands: `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them) and
     `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`), laid over `cfg`
@@ -199,8 +206,10 @@ def _combatants(inp: PersonalCombatInput, cfg: dict, states: tuple = (DuelState(
     # THE WORKBENCH'S FOUR FIELDS (B14.11): each party's tradition, techniques, axes and disposition, passed as the kits are.
     a_ext = _extras_kw(*(p[0] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
     b_ext = _extras_kw(*(p[1] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
-    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_score_kw(a_score), **a_ext)
-    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_score_kw(b_score), **b_ext)
+    # THE SHORTFALL (B18.07): each party's `short` entry, the host's `max(0, carry_demand - strength)`, read by `act_cost` and `close_rate`.
+    a_short, b_short = inp.short or (None, None)
+    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_score_kw(a_score), **_short_kw(a_short), **a_ext)
+    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_score_kw(b_score), **_short_kw(b_short), **b_ext)
     A.pool_addends, B.pool_addends = a_add, b_add
     # THE CARRIED WOUND (B05.61, `UPR` §3 edit 4; A-8): each party's signed level from before the fight, read by `assemble_net_sigma` alone.
     # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.

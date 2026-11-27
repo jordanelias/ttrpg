@@ -147,13 +147,19 @@ def close_tempo(c, cfg, fatigue=0.0):
 
 # ---------- stamina ----------
 # Read c.stamina_max directly — the combatant hosts its own derived figures (ED-PC-0035).
+def carry_short(c, cfg):
+    """Strength points the fighter is short of what he carries (B18.07): the host's figure, `PersonalCombatInput.short`, as the
+    Combatant holds it (`c.short`); a Combatant built without one (`None`) is short of the harness alone, `max(0, ARMOR_DEMAND[tier] -
+    strength)`, which is what `act_cost` charged before the figure rode the input. A fighter at or over the demand is short of nothing."""
+    return c.short if c.short is not None else max(0.0, cfg['ARMOR_DEMAND'][c.armor]-c.strength)
+
 def act_cost(c, commit, cfg):
-    # PC-20 (3), AR-10: the harness is a Strength job. Strength short of the tier's demand (ARMOR_DEMAND, 'none' 0)
-    # costs stamina by handling_penalty's form, max(0, demand - strength), priced at the stamina a unit of weapon heft
-    # costs (ACT_WEIGHT per D_WT, one Strength demand point): one ladder for a Strength demand, whether weapon or harness.
-    # A fighter at or over the demand pays nothing.
+    # PC-20 (3), AR-10, B18.07: the carry is a Strength job. Strength short of what he carries (the harness's ARMOR_DEMAND and, once
+    # a secondary rides, its D_MASS; `carry_short`) costs stamina by handling_penalty's form, max(0, demand - strength), priced at the
+    # stamina a unit of weapon heft costs (ACT_WEIGHT per D_WT, one Strength demand point): one ladder for a Strength demand,
+    # whether weapon, harness or carried. A fighter at or over the demand pays nothing.
     return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit
-            +cfg['ACT_WEIGHT']/cfg['D_WT']*max(0.0, cfg['ARMOR_DEMAND'][c.armor]-c.strength))*cfg['COST_SCALE']   # DERIVED g-aware heft
+            +cfg['ACT_WEIGHT']/cfg['D_WT']*carry_short(c,cfg))*cfg['COST_SCALE']   # DERIVED g-aware heft
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 # Call c.rederive(cfg) and read c.conc_max — the combatant hosts it, 3F+2S (ED-902, ED-PC-0035).
@@ -1244,6 +1250,7 @@ def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     facing (0.0). Pure."""
     cr = cfg['CLOSE_RATE_K']*balance_eff(shorter,ffat_shorter,cfg)/3 * weapon_tempo(shorter,cfg,ffat_shorter)/2
     cr *= (1.0 + cfg['FACING_VOID_GAIN']*getattr(shorter,'facing',0.0))
+    cr *= 1.0 / (1.0 + cfg['CARRY_CLOSE_K']*carry_short(shorter,cfg))   # B18.07: a man short of what he carries walks in slower; exactly 1.0 at CARRY_CLOSE_K 0
     return cr*(1+displ)*(2.0-rt)
 
 #   ARREST_POB_REF (cfg): PoB_frac at/above which a weapon is too FRONT-HEAVY to brace as a pole-jab (the

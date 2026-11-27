@@ -3,7 +3,7 @@
 Status: [live, CP-T03-03; `FORMS` B14.12]. The single runtime reader of the `kit` section and of `attributes.end.default` of
 `engine/engine_params/combat_engine_v1.json` (written by `tools/export_engine_params.py` from
 `modules/combat/weapons.py`, `vocabulary.py` and `combatant.py`, behind its blocking `--check`). Same shape as
-`names.py`, `descriptors.py` and `composition.py`. It also owns the carry rule (`carry_demand_of`, `carry_demand`, B18.06),
+`names.py`, `descriptors.py` and `composition.py`. It also owns the carry rule (`carry_demand_of`, `carry_demand`, B18.06; `shortfall`, B18.07),
 which reads `D_MASS` and `ARMOR_DEMAND` from the export's `cfg` and a weapon's `mass` from its `weapons` section.
 
 IT IS A LEAF: stdlib only (`json`, `os`). The season's `rosters.yaml: arms_kinds` is validated against these sets
@@ -26,6 +26,10 @@ _KIT = _SECTIONS['kit']
 #: The combat module's default for the `end` attribute (`attributes.end.default`): what a fight reads for a person who
 #: authors no Endurance (`seam/wrappers/combat.py::party_end`). Not the sheet scale's floor in `descriptor_registry.yaml`.
 END_DEFAULT = _SECTIONS['attributes']['end']['default']
+
+#: The same for `strength` (`attributes.strength.default`): the Strength a fight reads for a person who authors none, which
+#: `seam/wrappers/combat.py` needs to evaluate `shortfall` for the party the module will build at that default.
+STRENGTH_DEFAULT = _SECTIONS['attributes']['strength']['default']
 
 #: Every key of `modules/combat/weapons.py::WEAPONS` WITHOUT a `base` (`UNARMED` included): a Combatant's `weapon` is one of these.
 #: A half-sword form is a grip the engine switches into, never a person's kit, so it is not here (B14.12).
@@ -69,3 +73,11 @@ def carry_demand(weapons: tuple, armour: str) -> float:
     A person's kit uses this; a troop row, whose arm may have no key here, uses the mass form. One rule, two
     spellings of its argument. `weapons` are the record keys carried and not in hand."""
     return carry_demand_of(tuple(_WEAPON_RECORDS[w]['mass'] for w in weapons), armour)
+
+
+def shortfall(weapons: tuple, armour: str, strength: float) -> float:
+    """The Strength points a fighter is short of what he carries (B18.07): `max(0, carry_demand(weapons, armour) - strength)`,
+    the figure the host hands a fight raw on `PersonalCombatInput.short` and `combat_systems.act_cost` and `close_rate` read.
+    `weapons` are the keys carried and not in hand (empty: the harness alone, today's charge). A fighter at or over the
+    demand is short of nothing: 0.0."""
+    return max(0.0, carry_demand(weapons, armour) - strength)

@@ -81,7 +81,7 @@ THREADWORK_SCHEMA_VERSION = 1  # v1 (B03.68): the `params` section (params.py's 
 MASS_BATTLE_OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'mass_battle_v1.json')
 MASS_BATTLE_SCHEMA_VERSION = 1  # v1 (B17.12): the `engine_config` section (EngineConfig's fields and their shipped values).
 
-SCHEMA_VERSION = 10  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
+SCHEMA_VERSION = 11  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
                     # v3 (B-D1 PC-07): core.COVERAGE_GAP dict -> scalar (a type change); DECISIVE_OB removed (PC-03).
                     # v4 (PC-14): added the `attributes` section (attributes.py's spec; its entries carry null).
                     # v5 (CP-T03-03): added the `kit` section (the weapon keys, the armour tiers and the Combatant's
@@ -99,6 +99,7 @@ SCHEMA_VERSION = 10  # v2 (OPT-AV-17): added the `core` section (core.py canonic
                     # (the `axis` and `lever` slot tuples of attributes.py, each member in the attribute entry's form).
                     # v10 (B18.03, `03_PC_person_inputs_content` Part C): added `kit.unarmed`, the startable record a
                     # person holds when he holds none (`weapons.UNARMED`); `kit.weapons` lists it, so 51.
+                    # v11 (B18.07, `03_PC_loadout_and_carry` item 3): the `cfg` section gained `CARRY_CLOSE_K` (0.0, the control).
 
 
 def _typed(value, defined=False):

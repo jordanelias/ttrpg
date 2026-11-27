@@ -216,3 +216,52 @@ def test_carry_demand_of_equals_the_keyed_spelling():
             assert abs(extra - owed) < 1e-12, f"{tier} at Strength {strength}: act_cost charges {extra}, carry_demand says {owed}"
             paid += extra > 0
     assert paid >= 3, "no armour tier was ever charged: the equality above could not have failed"
+
+
+# ── B18.07: the shortfall rides the input (`03_PC_loadout_and_carry` items 2, 3) ─────────────────────────────────────
+
+def test_the_relocated_harness_term_charges_the_same_stamina(monkeypatch):
+    """One mirror fight per armour tier, the fighter of Strength 1 paying the harness at every worn tier and the one of
+    Strength 4 at heavy only. AFTER: the record carries each party's `short` (`combat_kit.shortfall`, the host's fill) and
+    `act_cost` reads it. BEFORE: the record carries none and `act_cost` is the oracle's old line, recomputed here from
+    `ACT_WEIGHT`, `D_WT`, `ARMOR_DEMAND` and the Combatant's Strength (not a stored golden). The fight's events and the
+    round's stamina are equal. Control: a record whose `short` is raised a point spends more stamina, so the equality
+    could have failed."""
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from engine.substrate import combat_kit as K
+    from modules.combat import fight as entry
+    _C, S, _WP, CFG = _mods()
+
+    def old_act_cost(c, commit, cfg):
+        return (cfg['ACT_BASE'] + cfg['ACT_WEIGHT'] * S.wield_heft(c, cfg) + cfg['ACT_COMMIT'] * commit
+                + cfg['ACT_WEIGHT'] / cfg['D_WT'] * max(0.0, cfg['ARMOR_DEMAND'][c.armor] - c.strength)) * cfg['COST_SCALE']
+
+    strengths = (1, 4)
+    key = 'attr.body.strength'
+
+    def record(tier, shorts=None):
+        return PersonalCombatInput(claimants=("A", "B"), ends=(4, 4), wound_quantities=("felled", "wounds", "max_wounds", "health_remaining", "health_full"),
+                                   kits=(("arming", tier), ("arming", tier)), attributes=({key: strengths[0]}, {key: strengths[1]}),
+                                   **({} if shorts is None else dict(short=shorts)))
+
+    def round_one(rec, seed):
+        out = entry.fight_round(DuelRoundInput(fighters=rec, states=(DuelState(), DuelState()), plans=({}, {}), round=1, prev_closed=False),
+                                draw.seeded(draw.H2("harness_term", seed)))
+        return tuple(s.stamina for s in out.states), out.trace
+
+    checked = paid = 0
+    for tier in sorted(K.ARMOUR_TIERS):
+        shorts = tuple((K.shortfall((), tier, s), None) for s in strengths)
+        paid += any(p > 0 for p, _ in shorts)
+        for seed in range(3):
+            after = (entry.fight(record(tier, shorts), draw.seeded(draw.H2("harness_fight", seed))), round_one(record(tier, shorts), seed))
+            with monkeypatch.context() as m:
+                m.setattr(S, 'act_cost', old_act_cost)
+                before = (entry.fight(record(tier), draw.seeded(draw.H2("harness_fight", seed))), round_one(record(tier), seed))
+            assert after == before, f"{tier}, seed {seed}: relocating the harness term moved the fight"
+            checked += 1
+    assert checked == 3 * len(K.ARMOUR_TIERS) and paid == 3
+    heavy = tuple((K.shortfall((), 'heavy', s), None) for s in strengths)
+    raised = tuple((p + 1.0, None) for p, _ in heavy)
+    assert round_one(record('heavy', raised), 0)[0][0] < round_one(record('heavy', heavy), 0)[0][0], "a raised `short` spent no more stamina"
