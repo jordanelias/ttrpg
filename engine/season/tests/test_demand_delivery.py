@@ -543,3 +543,25 @@ def test_a_refused_requisition_leaves_a_claim_of_the_refusal():
         if kinds == ["requisition.taken"]:
             break
     assert kinds == ["requisition.taken"] and claims == []
+
+
+def test_build_leaves_no_zero_key_in_the_payer_stores():
+    """B12b.28 (U5d_SE §9 d): a `build`'s debit drops a kind it brings to 0 from the payer's stores, as `provision.py`
+    leaves a zero out. The payer's stock is planted at exactly the price (every priced kind emptied) and at the price plus
+    one (CONTROL: the kind stays, at one). The rest of the stores are read as before."""
+    from .test_works_founding import HEARTH, _build, _declare, _fold, _kinds, _stock, _world
+    price = DEFAULT_FIXTURES.get("works_cost")["dwelling"]
+    after = {}
+    for extra in (0, 1):
+        w, d = _world()
+        _declare(w, d, "wb", "dwelling", HEARTH)
+        _stock(w, HEARTH, "dwelling")
+        for kind in price:
+            w.rungs[HEARTH].stores[kind] += extra
+        rest = {k: v for k, v in w.rungs[HEARTH].stores.items() if k not in price}
+        assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
+        stores = w.rungs[HEARTH].stores
+        assert {k: v for k, v in stores.items() if k not in price} == rest
+        after[extra] = {k: stores.get(k) for k in price}
+    assert all(v is None for v in after[0].values()), after[0]
+    assert after[1] == {k: 1 for k in price}, after[1]

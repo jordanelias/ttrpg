@@ -159,7 +159,7 @@ def test_the_masters_found_and_build_execute_on_the_planned_works_and_a_stranger
     assert _kinds(out) == ["site.built"], _kinds(out)
     built = w.sites[f"dwelling:{DWELLING_WORKS}"]
     assert (built.rung, built.kind, built.condition) == ("b_s_001_court", "dwelling", 0)
-    assert w.rungs["set_s_001"].stores["timber"] == timber - 10
+    assert w.rungs["set_s_001"].stores.get("timber", 0) == timber - 10      # B12b.28: an emptied kind is dropped, read as 0
 
 
 def test_matter_ripens_a_planned_works_terms_with_root_as_their_cause():

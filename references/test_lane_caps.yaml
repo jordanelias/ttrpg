@@ -34,6 +34,7 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a settlement's walls are the complement of the product of each garrison's shortfall: a ruined second garrison never lowers the first, two half-strength garrisons read three quarters, and no garrison reads nothing"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a realm whose field is provisioned from treasuries is refused at construction naming H-241 when no seat rung or held rung holds one ration, constructs where the granary stocks one, and the unprovisioned field reads no treasury"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a season's yield write carries on its receipt what the rung produced as sorted pairs and the band its territory's weather draw landed in, with no band at the control arm"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a build that pays a works' whole price from the payer's stores leaves no zero key of a paid kind in them, and a build that leaves one unit of a paid kind leaves that kind at one"}
   engine:
     base: 1043
     warrants: []

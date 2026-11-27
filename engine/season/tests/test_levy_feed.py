@@ -216,7 +216,7 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
         # B17.01: a field is told because the ration it ate is a durable write (`Drawn` debits as `Won` and `Lost` do)
         assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 1, "troops_b": 0}, seen
-        assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
+        assert w.rungs[TREASURY_A].stores == {"grain": 2}, w.rungs[TREASURY_A].stores
     else:
         # B17.16: at 1,000 troops a weight the realm's two against six are fought and told whatever the arm (at 30 a weight they were
         # under the rout floor and the march was refused); what OFF changes is what is eaten, asserted below
@@ -244,7 +244,7 @@ def test_on_the_defenders_treasury_is_debited_by_its_own_fielded_troops(monkeypa
     _fold(w, _march_act())
     assert len(seen) == 1, seen
     assert seen[0][1]["troops_b"] == 3, seen
-    assert w.rungs[TREASURY_B].stores == {"grain": 0, "salt": 0}, w.rungs[TREASURY_B].stores
+    assert w.rungs[TREASURY_B].stores == {}, w.rungs[TREASURY_B].stores
 
 
 def _patch_won_recording(monkeypatch):
@@ -269,7 +269,7 @@ def test_on_a_won_march_with_movers_publishes_the_arrival_beside_a_debited_treas
     kinds = {e.kind for e in _fold(w, _march_act())}
     assert {"field.won", "army.arrived"} <= kinds, sorted(kinds)
     assert seen == [{"troops_a": 1, "troops_b": 0}], seen
-    assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
+    assert w.rungs[TREASURY_A].stores == {"grain": 2}, w.rungs[TREASURY_A].stores
 
 
 def test_on_one_treasury_for_both_sides_is_never_eaten_twice(monkeypatch):
@@ -292,7 +292,7 @@ def test_on_one_treasury_for_both_sides_is_never_eaten_twice(monkeypatch):
     assert all(units >= 0 for units in after.values()), after
     eaten = {k: dict(consumed_a).get(k, 0) + dict(consumed_b).get(k, 0) for k in ("grain", "salt")}
     assert eaten == {"grain": 6, "salt": 3}, (consumed_a, consumed_b)
-    assert after == {k: {"grain": 7, "salt": 3}[k] - eaten[k] for k in eaten}, after
+    assert after == {k: {"grain": 7, "salt": 3}[k] - eaten[k] for k in eaten if {"grain": 7, "salt": 3}[k] - eaten[k]}, after   # B12b.28: an emptied kind is dropped
 
 
 # ======================================================================================
@@ -315,9 +315,9 @@ def test_a_second_levy_into_the_same_treasury_raises_the_next_fields_troops(monk
     assert [e.kind for e in _fold(w, _requisition("rq1", 2))] == ["requisition.taken"]
     assert w.rungs[TREASURY_A].stores == {"salt": 10, "grain": 2}
     _fold(w, _march_act("m1"))
-    assert w.rungs[TREASURY_A].stores == {"salt": 9, "grain": 0}, w.rungs[TREASURY_A].stores
+    assert w.rungs[TREASURY_A].stores == {"salt": 9}, w.rungs[TREASURY_A].stores
     assert [e.kind for e in _fold(w, _requisition("rq2", 4))] == ["requisition.taken"]
     _fold(w, _march_act("m2"))
     first, second = (kw["troops_a"] for _w, kw in seen)
     assert (first, second) == (1, 2), seen
-    assert w.rungs[TREASURY_A].stores == {"salt": 7, "grain": 0}, w.rungs[TREASURY_A].stores
+    assert w.rungs[TREASURY_A].stores == {"salt": 7}, w.rungs[TREASURY_A].stores
