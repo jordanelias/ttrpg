@@ -41,6 +41,7 @@ from ..data.rosters import (
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     FACTION_CREED, faction_prop_id, factions_compatible,
+    CASUS_GROUNDS,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
@@ -3839,7 +3840,10 @@ def war_fields(w: World, p: Person) -> tuple:
     `sides_of` and `occupying_faction` do; `side_in`, an ally's side (CP-T09-03), is B21b.14's. `march` and the seat's warrant (`issue`) form on them as `Rung`,
     and `seize` through `warrant_sourced`, whatever the marcher's ledger names: war widens a seat's targets from the towns it was told of to every enemy town it
     reaches. When every committer has released the war `at_war` reads False and the term withdraws. Nothing is refused (a march needs no war). Computed when asked,
-    stored nowhere; `()` for a man in no such seat, which is nearly everyone, and in every world with no declared war."""
+    stored nowhere; `()` for a man in no such seat, which is nearly everyone, and in every world with no declared war.
+    B21b.13 (CR-91 (2), A-103; [ASSUMPTION; medium; Jordan to correct; revert: drop the `claimed` branch]): A WAR DECLARED ON A CLAIM TO A TERRITORY HAS THE CLAIMED RUNGS
+    FOR ITS TARGET SET -- for the declaring side's seats (the war's `subject`), where `claimed_rungs` names any, the target set from that war is those rungs (of any kind
+    the claim names) that the seat's purview reaches, in place of every enemy town. The claim is the war's occasion and context, never a gate on `march`."""
     seats = [w.offices[o] for o in dict.fromkeys(
         t.object for t in p.tenures
         if t.kind == "hold" and t.live and t.object in w.offices and not {MUSTER_ACT, SEIZURE_ACT}.isdisjoint(t.granted_acts))]
@@ -3851,11 +3855,136 @@ def war_fields(w: World, p: Person) -> tuple:
     out: set = set()
     for s in seats:
         own = seat_faction(w, s.id)
-        foes = {x.value if x.subject == own else x.subject for x in wars if own in (x.subject, x.value) and at_war(w, x.subject, x.value)}
+        foes: set = set()
+        for x in wars:
+            if own not in (x.subject, x.value) or not at_war(w, x.subject, x.value):
+                continue
+            claimed = claimed_rungs(w, x) if x.subject == own else ()
+            if claimed:
+                out.update(r for r in claimed if purview_reaches(w, s, r))
+            else:
+                foes.add(x.value if x.subject == own else x.subject)
         if foes:
             out.update(r.id for r in w.rungs.values()
                        if r.kind == "settlement" and holder_faction_of(w, r.id) in foes and purview_reaches(w, s, r.id))
     return tuple(sorted(out))
+
+
+# --- B21b.13 (CR-91 (1), (2), (4); A-103): A CLAIM TO A TERRITORY, AS AN OCCASION AND AS CONTEXT ---------------------------------------------------------------
+# A claim to a territory is a Proposition on the war/creed shape: mood `CLAIM_MOOD`, `subject` the claimant faction's Proposition, `value` the rung claimed, id
+# `claim_id(faction, rung)`, `claim:<faction>:<rung>`. It is minted by `utter` (`loop/effects_information.py::_eff_utter`) and admitted only on a ground of the closed
+# roster `rosters.yaml: casus_grounds` (`loop/predicates.py::_req_utter`, through `casus_ground` below). It is NEVER A GATE ON `march` (A-103; `IS-B3-FA-04` (4)):
+# `declare` takes a held one as its occasion (`claim_creeds`) and a war declared on one has the claimed rungs for its target set (`war_fields`, `claimed_rungs`).
+
+CLAIM_MOOD = "CLAIM"            # the mood a claim to a territory is uttered in (B21b.13, CR-91 (1)) [ASSUMPTION: the name; the source gives the shape `claim:<faction>:<rung>`]
+_SEIZED_RUNG_KIND = VERB_TABLE["seize"].emits[1]                    # `rung.seized`, the Rung half's kind (ground (i))
+_SUCCESSION_REFUSED_KIND = VERB_TABLE["succeed"].emits_on_refusal[0]     # `succession.refused`, the flat row's one refusal (ground (iii))
+
+
+def claim_id(faction: str, rung: str) -> str:
+    """THE ID OF A CLAIM TO A TERRITORY, `claim:<faction>:<rung>` (CR-91 (1)): one Proposition per claimant faction and rung, so a second utterance of it is
+    refused as any id already uttered is (`_eff_utter`) and a second claimant `commit`s to the first."""
+    return f"claim:{faction}:{rung}"
+
+
+def _seized_from_faction(w: World, actor: str, faction: str, rung: str) -> bool:
+    """GROUND (i): A `rung.seized` IN THE LOG TOOK `rung` FROM `faction`. The Event names the edges it moved (`Subject.edge`, by Tenure id): the hold it CLOSED is
+    the dispossessed's, and he was the faction's (`faction_holding`); a seizure that closed no hold on the rung itself (a town held through its territory, `holder_faction_of`'s
+    walk) took it from the faction the rung is still held through, `holder_faction_of` of its parent [ASSUMPTION; medium; Jordan to correct]."""
+    holds = {t.id: t for t in w.tenures if t.kind == "hold" and t.object == rung}
+    if not holds:
+        return False
+    for e in w.log:
+        if e.kind != _SEIZED_RUNG_KIND:
+            continue
+        moved = [holds[c.subject] for c in e.changes if c.subject in holds]
+        if not moved:
+            continue
+        taker = getattr(causing_act(w, e), "actor", None)
+        lost = [t for t in moved if t.subject != taker]
+        if lost:
+            if faction_holding(w, lost[0].subject) == faction:
+                return True
+        else:
+            above = ancestry(w, rung)[1:]
+            if above and holder_faction_of(w, above[0]) == faction:
+                return True
+    return False
+
+
+def _seat_once_held(w: World, actor: str, faction: str, rung: str) -> bool:
+    """GROUND (ii): THE UTTERER ONCE HELD `rung` -- an ENDED `hold` of his own on it (his holding, the seat of his house) [ASSUMPTION; medium; Jordan to correct: CR-91
+    says 'his seat once held it'; a seat (an Office) holds no rung in this tree, a person does]."""
+    p = w.persons.get(actor)
+    return p is not None and any(t.kind == "hold" and t.object == rung and not t.live for t in p.tenures)
+
+
+def _succession_refused(w: World, actor: str, faction: str, rung: str) -> bool:
+    """GROUND (iii): A SUCCESSION OF HIS TO `rung` WAS REFUSED -- a `succession.refused` in the log whose causing act is the utterer's `succeed` on a seat sitting at the
+    rung (`Office.rung`)."""
+    for e in w.log:
+        if e.kind != _SUCCESSION_REFUSED_KIND:
+            continue
+        a = causing_act(w, e)
+        seat = a.payload.get("subject") if a is not None and isinstance(a.payload, dict) else None
+        if a is not None and a.actor == actor and seat in w.offices and w.offices[seat].rung == rung:
+            return True
+    return False
+
+
+def _church_under_theocratic_war(w: World, actor: str, faction: str, rung: str) -> bool:
+    """GROUND (iv): THE CHURCH'S GROUND, a Church seat in the rung's subtree, ONLY UNDER A HELD THEOCRATIC DECLARATION. That declaration is a theocratic WAR
+    Proposition nothing mints before B21d (CR-89 commit (3)), so the ground holds nowhere until then; `False` here is that fact, not a stub that hides one."""
+    return False
+
+
+#: `casus_grounds` member -> its reader `(w, actor, faction, rung) -> bool`. THE ONE OWNER OF WHAT EACH MEMBER MEANS; the roster names the members and their order.
+CASUS_GROUND_READERS = {
+    "seized_from_faction": _seized_from_faction,
+    "seat_once_held": _seat_once_held,
+    "succession_refused": _succession_refused,
+    "church_under_theocratic_war": _church_under_theocratic_war,
+}
+if set(CASUS_GROUNDS) - set(CASUS_GROUND_READERS):
+    raise Unspecified(
+        f"rosters.yaml `casus_grounds` names {sorted(set(CASUS_GROUNDS) - set(CASUS_GROUND_READERS))!r}, which no reader means", "rosters.yaml -- casus_grounds",
+        needs="a reader in `queries/world_q.py::CASUS_GROUND_READERS` for the member, or drop the member",
+        law="B21b.13 (CR-91 (1)) -- a closed roster of grounds; a member no code reads would admit or refuse nothing")
+
+
+def casus_ground(w: World, actor: str, faction: str, rung: str) -> Optional[str]:
+    """THE GROUND ON WHICH `actor` MAY UTTER A CLAIM OF `faction` TO `rung` (B21b.13, CR-91 (1)): the first member of `rosters.yaml: casus_grounds` (in its order) whose
+    reader holds, or `None` -- and `None` for every claim while the roster is empty (`CASUS_GROUNDS`), so no claim to a territory is admitted. Read at RESOLVE by
+    `loop/predicates.py::_req_utter`; read-only."""
+    TRACE.query("casus_ground", "resolver")
+    return next((g for g in CASUS_GROUNDS if CASUS_GROUND_READERS[g](w, actor, faction, rung)), None)
+
+
+def claimed_rungs(w: World, war) -> tuple:
+    """THE RUNGS A WAR WAS DECLARED ON A CLAIM TO (B21b.13, CR-91 (2); [ASSUMPTION; medium; Jordan to correct]): the `value`s of the claims to a territory
+    (`CLAIM_MOOD`) of the war's declaring faction (its `subject`) uttered no later than the war (`Proposition.when`) whose rung the other party (`value`) holds
+    (`holder_faction_of`), sorted. A war is 'declared on a claim' when this is non-empty; a claimed rung retaken leaves it, and with every one retaken the war's
+    target set is `war_fields`' ordinary one again. Computed when asked, stored nowhere."""
+    return tuple(sorted(c.value for c in w.propositions.values()
+                        if c.mood == CLAIM_MOOD and c.subject == war.subject and c.when <= war.when and isinstance(c.value, str)
+                        and holder_faction_of(w, c.value) == war.value))
+
+
+def claim_creeds(w: World, p: Person) -> tuple:
+    """THE CREEDS A HELD CLAIM TO A TERRITORY TURNS A SEATED MUSTER-HOLDER TOWARD (B21b.13, CR-91 (2), CP-T09-02 (b)'s occasion; [ASSUMPTION; medium; Jordan to
+    correct; revert: `questions_for` appends no `claim_creeds`]): for each claim to a territory he HOLDS (a live `hold` -- the utterer's own -- or `commit` on it) of a
+    faction he belongs to, the faction holding the claimed rung (`holder_faction_of`) where it is not his, in his tenures' order, none twice; for a person who belongs to
+    a faction in whose seat he wages (`gate.may_wage`), as `grievance_creeds`. Stamped as `Proposition`, so `declare` forms on the holder's creed. The claim is the
+    occasion; no opinion is asked of it. Computed when asked, stored nowhere; `()` for a man holding no claim."""
+    claims = [w.propositions[t.object] for t in p.tenures
+              if t.live and t.kind in ("hold", "commit") and t.object in w.propositions and w.propositions[t.object].mood == CLAIM_MOOD]
+    if not claims:
+        return ()
+    mine = own_factions(w, p)
+    if not any(may_wage(w, p.id, f) for f in mine):
+        return ()
+    return tuple(dict.fromkeys(f for f in (holder_faction_of(w, c.value) for c in claims if c.subject in mine and isinstance(c.value, str))
+                               if f is not None and f not in mine))
 
 
 def leave_referents(w: World, p: Person, refs: tuple, memo: Optional[dict] = None) -> tuple:
@@ -5493,7 +5622,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              # (b) THE CREEDS A WOUND HE JUDGES TURNS A SEATED MUSTER-HOLDER AGAINST (`grievance_creeds`), as `Proposition` -- `declare` forms on them. REVERT: drop the term.
              + grievance_creeds(w, p, tuple(wound_doers))
              # (c) THE ENEMY TOWNS HIS SEAT REACHES IN A LIVE WAR (`war_fields`), as `Rung` -- `march` and the seat's warrant form on them, `seize` through `warrant_sourced`. REVERT: drop the term.
-             + war_fields(w, p))
+             + war_fields(w, p)
+             # B21b.13 (CR-91 (2); [ASSUMPTION; medium; Jordan to correct]): AND THE CREEDS OF THE FACTIONS HOLDING THE RUNGS HE HOLDS A CLAIM TO (`claim_creeds`), as
+             # `Proposition` -- a held claim to a territory is `declare`'s occasion. (c)'s branch for a war declared on a claim is inside `war_fields`. REVERT: drop the term.
+             + claim_creeds(w, p))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then

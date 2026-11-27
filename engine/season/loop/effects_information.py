@@ -36,6 +36,7 @@ from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target, WAR_MOOD,
+    CLAIM_MOOD, claim_id,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
@@ -1419,9 +1420,14 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     budget, `decision/budget.py`) -- registered, not decided here.
 
     v12 B11.74 (R-19-03) -- THE PROPOSITION CARRIES ITS SUPPORT: the act's `cites` (`data/verbs.py::CITES_KEY`), stored as `Proposition.support` and fixed
-    with it, each held by the utterer at the act (`_held_cites`), else the act is declined whole (`NO_CHANGE`, nothing written, no hold opened)."""
+    with it, each held by the utterer at the act (`_held_cites`), else the act is declined whole (`NO_CHANGE`, nothing written, no hold opened).
+
+    B21b.13 (CR-91 (1)): A CLAIM TO A TERRITORY (`CLAIM_MOOD`) IS MINTED UNDER ITS OWN ID, `claim:<faction>:<rung>` (`world_q.claim_id` of its subject and value),
+    whatever the act names, so one claimant faction has one claim to a rung and a second utterance of it is declined as any id already uttered is. Its ground is
+    `loop/predicates.py::_req_utter`'s, asked before this effect runs. [ASSUMPTION; medium; Jordan to correct; revert: drop the `CLAIM_MOOD` branch.]"""
     d = a.payload if isinstance(a.payload, dict) else {}
-    pid = d.get("proposition") or f"prop:{a.id}"
+    pid = (claim_id(d.get("subject"), d.get("value")) if d.get("mood") == CLAIM_MOOD
+           else d.get("proposition") or f"prop:{a.id}")
     if pid in w.propositions:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
     support = _held_cites(w, a.actor, d.get(CITES_KEY))
