@@ -1225,13 +1225,16 @@ class ProduceInput:
       * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung a Site stands on, sorted,
                           each in its own `Rung.stores` order, read BEFORE this season's debit is written;
       * `larder_after` -- `SubsistOutcome.larder_after` (E2): the debited rungs and kinds only. The module
-                          overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
+                          overlays it on `stores`, because MATTER credits a rung after that rung's debit;
+      * `grown`        -- `frozenset` of the matter kinds the season's factor multiplies
+                          (`rosters.yaml: grown_kinds`); a kind outside it yields at factor 1 (B12b.22)."""
     table: tuple
     scale: object
     factor: tuple
     sites: tuple
     stores: tuple
     larder_after: tuple
+    grown: frozenset
 
 
 @dataclass(frozen=True)

@@ -127,15 +127,14 @@ def test_in21_drought_leaves_stores_below_control_and_a_drained_larder_reports_s
     # Non-vacuity: the control world actually produced and fed (stores moved, nothing short), so a
     # "below control" reading is a difference and not two empty larders.
     assert control[0] == {"grain": 40, "salt": 30}, f"control world is not the one sized: {control[0]}"
-    assert drought[0] == {"grain": 20, "salt": 15}, f"drought did not halve the yield: {drought[0]}"
+    assert drought[0] == {"grain": 20, "salt": 30}, f"drought did not halve the grown yield and leave salt: {drought[0]}"   # B12b.22: grain is grown, salt is not
     checked = 0
-    for kind in ("grain", "salt"):
-        for season in (0, 1):
-            assert drought[season][kind] < control[season][kind], (
-                f"season {season}: drought {kind} {drought[season][kind]} is not below control "
-                f"{control[season][kind]}")
-            checked += 1
-    assert checked == 4
+    for season in (0, 1):
+        assert drought[season]["grain"] < control[season]["grain"], (
+            f"season {season}: drought grain {drought[season]['grain']} is not below control {control[season]['grain']}")
+        assert drought[season]["salt"] == control[season]["salt"], f"season {season}: the weather moved salt, which is not grown"
+        checked += 1
+    assert checked == 2
     assert c_short == [[], []], f"the control arm reported a shortfall: {c_short}"
     # The second draw wants 30 grain of the 20 the drought left: the larder drains, one unit kind short.
     assert d_short[0] == []

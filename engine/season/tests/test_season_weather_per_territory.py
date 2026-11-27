@@ -133,7 +133,7 @@ def test_cl_events_1_matter_hands_produce_a_factor_per_rung_and_each_rung_is_cre
     assert factors == {"set_a1": fa, "set_a2": fa, "set_b": fb, "set_free": ff}, factors
     checked = 0
     for rid, f in factors.items():
-        want = {k: int(v * f) for k, v in CONTROL_YIELD.items()}
+        want = {k: int(v * (f if k in world_q.GROWN_KINDS else 1)) for k, v in CONTROL_YIELD.items()}   # B12b.22: the factor bears on grown kinds only
         assert _yield_of(w, rid) == want, f"{rid}: yielded {_yield_of(w, rid)}, its territory's factor {f} gives {want}"
         assert dict(w.rungs[rid].stores) == want, f"{rid}: credited {dict(w.rungs[rid].stores)}, not its yield {want}"
         checked += 1
@@ -234,3 +234,32 @@ def test_season_table_length_must_equal_the_year():
     with pytest.raises(Unspecified) as e:
         check_season_weather(SPREAD[:-1], ())
     assert "season_factor_draw" in str(e.value)
+
+
+def test_ore_and_timber_ignore_the_weather():
+    """B12b.22 (`16_PESSIMIST_SE_B` edit 1): the season's factor multiplies the GROWN kinds only. The realm at seed 0, MATTER's yield
+    step alone for two seasons, the weather arm on (bands planted, the shipped ones are 1.0) against the arm off: ore and timber
+    yield equal the arm-off yield rung for rung and season for season; grain differs. FALSIFIER: ore following the weather
+    (`f = factor[rung]` for every kind) reads a differing ore and reddens the second assertion."""
+    import copy
+    from ..boot.realm import build_realm
+
+    base = build_realm(0)
+    on = copy.deepcopy(base)
+    on.fixtures = on.fixtures.sweep("season_factor_draw", SPREAD)
+    seen = {k: 0 for k in ("ore", "timber", "grain")}
+    differs = {k: 0 for k in seen}
+    for _ in range(2):
+        for w in (base, on):
+            _matter(w)
+        for rid, rung in base.rungs.items():
+            a, b = dict(getattr(rung, "yield", None) or ()), dict(getattr(on.rungs[rid], "yield", None) or ())
+            for k in seen:
+                if a.get(k) or b.get(k):
+                    seen[k] += 1
+                    differs[k] += a.get(k, 0) != b.get(k, 0)
+        base.tick += 1
+        on.tick += 1
+    assert all(seen.values()), f"a kind yielded nowhere, so the comparison observed nothing: {seen}"
+    assert differs["ore"] == 0 and differs["timber"] == 0, f"a non-grown kind followed the weather: {differs}"
+    assert differs["grain"] > 0, "the weather moved no grain; the arm is not on"

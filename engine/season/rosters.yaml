@@ -2106,6 +2106,11 @@ rosters:
       available — but it is still a choice, which is what `H-11` grades.
     values: [grain, salt, timber, ore, coin]
 
+  grown_kinds:
+    source: "audits/16_PESSIMIST_SE.md F-PES-SE-07: the season factor is weather, and weather bears on what is grown."
+    note: "The matter kinds a season's factor multiplies. A kind outside the set yields at factor 1."
+    values: [grain]
+
   arms_kinds:
     source: "v11 CP-T03-03 (`-08` AM-C-04; T03 home §2): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store."
     note: >-

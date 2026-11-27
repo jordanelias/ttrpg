@@ -16,8 +16,10 @@ causes. Site WEAR stays host too (design A10).
 THE RULE:
   * THE YIELD: per rung in id order, per Site in id order whose own `rung` is that rung (the maintained
     side, never a back-reference), per `(kind, base)` in the Site kind's table order, add
-    `int(base * (max(0, condition) / scale) * factor)` -- the float expression operand for operand, since
-    a reordering can move a truncation. A kind the table does not list yields nothing.
+    `int(base * (max(0, condition) / scale) * f)` -- the float expression operand for operand, since
+    a reordering can move a truncation. `f` is the rung's factor for a kind in `ProduceInput.grown` (the
+    stores that come from fields, B12b.22) and 1 for any other: the weather bears on what is grown. A kind
+    the table does not list yields nothing.
   * Zero entries are dropped; a rung whose yield is empty has no row (MATTER writes nothing there).
   * THE CREDIT: `held + produced` per produced kind, where `held` is the rung's stores AFTER the same
     season's debit (`larder_after` overlaid on `stores`), because MATTER writes a rung's debit, then its
@@ -42,8 +44,8 @@ def produce(inp: ProduceInput) -> ProduceOutcome:
         produced: dict = {}
         for site_kind, condition in by_rung.get(rung, ()):
             for k, base in table.get(site_kind) or ():
-                produced[k] = produced.get(k, 0) + int(
-                    base * (max(0, condition) / inp.scale) * factor[rung])
+                f = factor[rung] if k in inp.grown else 1
+                produced[k] = produced.get(k, 0) + int(base * (max(0, condition) / inp.scale) * f)
         produced = {k: v for k, v in produced.items() if v}
         if not produced:
             continue

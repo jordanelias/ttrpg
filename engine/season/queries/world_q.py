@@ -39,7 +39,7 @@ from ..data.requires import (
 from ..data.rosters import (
     ABSENT_PREDICATE, CONTINUATION_TIES, EFFECT_ADJOURN, PROCEEDING_MOVES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ALL_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
-    DECLARED, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
+    DECLARED, GROWN_KINDS, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TALLY_AXES, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id, factions_compatible, settlement_rung_id,
@@ -1875,7 +1875,7 @@ def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
         scale, factor,
         tuple((s.id, s.kind, s.rung, s.condition) for s in sorted(w.sites.values(), key=lambda x: x.id)),
         tuple((rid, tuple((w.rungs[rid].stores or {}).items())) for rid in _site_rungs(w)),
-        larder_after)
+        larder_after, GROWN_KINDS)
 
 
 def _draw_dict(record: DrawRecord) -> dict:

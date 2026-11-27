@@ -1084,6 +1084,18 @@ def _check_arms_at_build(mapping: dict, rung_kinds, arms_kinds) -> dict:
 
 
 from engine.substrate import combat_kit as _combat_kit  # noqa: E402
+def _check_grown_kinds(grown, matter_kinds) -> frozenset:
+    """B12b.22: `rosters.yaml: grown_kinds` is a subset of `matter_kinds` (a name no store holds would scale nothing and read as a grown kind)."""
+    stray = sorted(set(grown) - set(matter_kinds))
+    if stray:
+        raise Unspecified(
+            f"`rosters.yaml: grown_kinds` names {stray}, which `matter_kinds` does not", "rosters.yaml -- grown_kinds",
+            needs="register the kind in `matter_kinds`, or drop it from `grown_kinds`",
+            law="B12b.22 -- the stores a season's factor multiplies are matter kinds; a name outside them scales nothing")
+    return frozenset(grown)
+
+
+GROWN_KINDS = _check_grown_kinds(roster("grown_kinds"), roster("matter_kinds"))   # the kinds `settlements.produce` scales by the season's factor
 ARMS_KINDS = _check_arms_kinds(roster_map("arms_kinds", "kinds"), roster("matter_kinds"), _combat_kit.FIELDS)
 ARMS_AT_BUILD = _check_arms_at_build(roster_map("arms_at_build", "kinds"), RUNG_KINDS, ARMS_KINDS)
 REMIT_ACTS = roster("remit_acts")
