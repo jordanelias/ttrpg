@@ -891,13 +891,21 @@ def refused_before(p: Person, kinds: tuple, subject: str, tick: int = 0, decay: 
     ⚠ IT TAKES THE PERSON, NOT A LEDGER AND A HOLDER: the holder cannot differ from the asker (AX-2; `04` §B.2's own-ledger carve-out), and no
     World is read. Confidence is read through `state/ledgers.py::present_confidence` at the `tick` and `decay` given -- the one owner of fading
     -- never the stored deposit value; with neither given (a hand-built ledger) the stored value is read, as `LedgerReader` does."""
+    newest = refusal_memory_claim(p, kinds, subject, tick, decay)
+    return 0 if newest is None else present_confidence(newest.confidence, newest.when, tick, decay)
+
+
+def refusal_memory_claim(p: Person, kinds: tuple, subject: str, tick: int = 0, decay: int = 0) -> Optional[Claim]:
+    """THE CLAIM `refused_before` READS: the newest firsthand, untold claim of `p`'s own ledger (`doer == p.id`) whose predicate is in `kinds` and whose subject is
+    `subject`, by `(when, lap, present confidence)`; `None` when there is none or when `p` holds any claim about `subject` newer than it by `(when, lap)`. The one
+    owner of the selection, so `explain` names the claim a score's refusal factor was read from and cannot name another."""
     refused = [c for c in p.ledger if c.subject == subject and c.predicate in kinds and c.doer == p.id and c.firsthand]
     if not refused:
-        return 0
+        return None
     newest = max(refused, key=lambda c: (c.when, c.lap, present_confidence(c.confidence, c.when, tick, decay)))
     if any(c.subject == subject and (c.when, c.lap) > (newest.when, newest.lap) for c in p.ledger):
-        return 0
-    return present_confidence(newest.confidence, newest.when, tick, decay)
+        return None
+    return newest
 
 
 def conviction_stand(p: Person, affiliation: str) -> float:
@@ -3234,3 +3242,90 @@ def strain_carried(rattles, fx) -> float:
     fades = sorted((max(0.0, 1.0 - fx.get("strain_fade") * s) for s in rattles), reverse=True)
     # The sum is under 1.0 for any count, but a float sum of more than 53 halvings rounds up to 2 x 0.5: clamp to the largest float below it.
     return min(0.5 * float(ltr_sum(f / 2 ** k for k, f in enumerate(fades))), math.nextafter(1.0, 0.0))
+
+
+# ---------------------------------------------------------------------------------------------------
+# EXPLAIN (B34.05) -- why a value is what it is, from what the person holds. `04` §C.11: no World, no walk of `causes[]` to `Act.actor`.
+# ---------------------------------------------------------------------------------------------------
+
+BODY_KIND = "body.changed"          # the claims a person holds of a body moving: `loop/matter.py`'s emission, deposited as any event is
+STORES_KIND = "stores.changed"      # the claims he holds of a rung's stores moving
+VALUE_KINDS = ("pursuit", "stance", "belief", "body", "stores")     # the first values a player meets, in the order he meets them
+_OFFER_TERMS = {"pursuit": 0, "stance": 1}                           # an `OfferRow.terms` index: `decision/choose.py::TERM_NAMES`' first two (a test reads the pair)
+
+
+@dataclass(frozen=True)
+class Value:
+    """WHICH VALUE A PLAYER ASKS ABOUT. `kind` is one of `VALUE_KINDS`; `subject` the referent it is about (the candidate's subject for a `pursuit` or `stance`, the
+    person or rung a `belief`, `body` or `stores` reading is of; `body` with none reads his own); `predicate` narrows a `belief` to one cell and names the verb of a
+    `pursuit`; `amount` is the figure the player met, carried so a surface can print it beside its derivation (`explain` never recomputes it)."""
+    kind: str
+    subject: Optional[str] = None
+    predicate: Optional[str] = None
+    amount: Optional[float] = None
+
+    @classmethod
+    def of_offer(cls, row, which: str) -> "Value":
+        """The `pursuit` or `stance` term of an offered row (`decision/sheet.py::OfferRow`: `candidate` and `terms`), as the player met it."""
+        return cls(which, row.candidate.subject, row.candidate.verb, float(row.terms[_OFFER_TERMS[which]]))
+
+
+@dataclass(frozen=True)
+class Derivation:
+    """HOW A VALUE CAME TO BE, TERM BY TERM, FROM WHAT HE HOLDS. `terms` is one `(claim_id, source, confidence, when, contribution)` per claim of his OWN ledger that fed
+    the value, in the order he holds them; `confidence` is read at his tick (`present_confidence`). `unattributed` is True where the value moved and no claim of his
+    names an author."""
+    value: Value
+    terms: tuple
+    unattributed: bool
+
+
+def names_a_doer(c: Claim, seen: tuple) -> bool:
+    """DOES ANY CLAIM OF HIS NAME WHO DID `c`: its own `doer`, a `who` its value carries, a `who` on the sighting it landed with (his own, or the one its telling carried),
+    or `deed_doer`'s pairing. `seen` is `_seen_index` over the same ledger."""
+    sighted = seen[4].get((c.subject, c.when, c.lap, c.chain), ()) if c.chain else seen[0].get((c.subject, c.when, c.lap), ())
+    return (c.doer is not None or getattr(c.value, "who", None) is not None
+            or any(getattr(s.value, "who", None) is not None for s in sighted) or deed_doer(c, seen) is not None)
+
+
+def explain(p: PersonInterior, v: Value) -> Derivation:
+    """THE DERIVATION OF A VALUE THE PERSON ALREADY HAS, from his own ledger and nothing else (no World parameter: a resolver-side fact cannot reach it, and no
+    `causes[]` is walked to an `Act.actor`). Writes nothing.
+
+      * `stance` -- the deed claims he holds of `v.subject` (`attributed_deeds`: firsthand and told), each worth what `deed_term` says at his own projected
+        pursuits, the control scar shift and sworn bond. The score's gains (`judged_gain`, `told_valence_gain`) are fixtures this signature cannot see, so
+        `contribution` is the claim's raw worth and the caller scales it; his own stance rows are not claims and are no term. A deed is attributed by
+        `attributed_deeds`, so a stance is never `unattributed`.
+      * `pursuit` -- the one claim a remembered refusal of verb `v.predicate` on `v.subject` was read from (`refusal_memory_claim`), `contribution` its present
+        confidence; none where he holds none. The believed-odds factor is read from the View's query, a closure over the world: not his ledger, so no term.
+      * `belief`, `body`, `stores` -- every claim he holds of `v.subject` (and `v.predicate`, for a `belief`; `BODY_KIND` of himself where `body` names no subject;
+        `STORES_KIND` of the rung), `contribution` its present confidence. `unattributed` is True where one of them moved the value (an earlier claim on its cell
+        differs, or it is a deed, or its kind is a change deposit) and no claim of his names a doer (`names_a_doer`): *"the larder fell from a cause you cannot name"*."""
+    if v.kind not in VALUE_KINDS:
+        raise ValueError(f"{v.kind!r} is not a value `explain` derives: {VALUE_KINDS}")
+    if v.subject is None and v.kind not in ("body", "pursuit"):
+        raise ValueError(f"a {v.kind} value names the subject it is about")
+    tick, decay = fade_of(p)
+    ledger = tuple(p.ledger)
+
+    def held(c: Claim) -> int:
+        return present_confidence(c.confidence, c.when, tick, decay)
+    moved = []                         # the claims whose arrival changed what he holds, for the three kinds that read a cell
+    if v.kind == "stance":
+        axis_w = projected_axes(p)
+        seen_of = functools.cache(lambda: _seen_index(ledger))
+        fed = [(c, deed_term(p, axis_w, c, seen_of=seen_of)) for c in attributed_deeds(ledger, v.subject)]
+    elif v.kind == "pursuit":
+        row = VERB_TABLE.get(v.predicate)
+        c = refusal_memory_claim(p, row.emits_on_refusal, v.subject, tick, decay) if row is not None and row.emits_on_refusal and v.subject else None
+        fed = [] if c is None else [(c, held(c))]
+    else:
+        subject = p.id if v.kind == "body" and v.subject is None else v.subject
+        predicate = {"body": BODY_KIND, "stores": STORES_KIND}.get(v.kind, v.predicate)
+        fed = [(c, held(c)) for c in ledger if c.subject == subject and (predicate is None or c.predicate == predicate)]
+        moved = [c for c, _ in fed
+                 if v.kind != "belief" or is_deed(c)
+                 or any((o.when, o.lap) < (c.when, c.lap) and o.predicate == c.predicate and o.value != c.value for o, _ in fed)]
+    seen = _seen_index(ledger) if moved else None
+    unattributed = any(not names_a_doer(c, seen) for c in moved)
+    return Derivation(v, tuple((c.id, c.source, held(c), c.when, w) for c, w in fed), unattributed)

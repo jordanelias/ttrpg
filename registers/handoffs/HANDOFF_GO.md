@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Batch B34-go-surface — IN FLIGHT | `workplans/valoria_master_workplan_v12_part25_cont.md` (the batch block); open 70b3b617bdaa715b267a4b99c8d5b6fdfe26aa7f | built B34.01, B34.02, B34.03, B34.04 · close none · B34.05, B34.06, B34.07 next (a set) |
+| Batch B34-go-surface — IN FLIGHT | `workplans/valoria_master_workplan_v12_part25_cont.md` (the batch block); open 70b3b617bdaa715b267a4b99c8d5b6fdfe26aa7f | built B34.01, B34.02, B34.03, B34.04, B34.05 · close none · B34.06, B34.07 next (the set, integrating in order) |
 | port gate (`B41-go-port-gate`) | `workplans/valoria_master_workplan_v12_part2.md` (its batch row), `valoria_master_workplan_v12_part29.md` | per the batch card; v11's B10-20 card (`FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1) is superseded |
 
 ## Standing orders — do not re-raise, do not do

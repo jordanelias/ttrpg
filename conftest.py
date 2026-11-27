@@ -91,7 +91,7 @@ SUBSYSTEM_FILES = {
         r"^test_(sc0\d_|social_contest|stress_proceedings|settle_margin|contest_kernel)"),
     "threadwork": re.compile(r"^test_threadwork_"),
     "season_loop": re.compile(
-        r"^test_(axis_roster|balance_oracle|conviction_roster|export_season_registries|import_cycle|m1_acceptance|"
+        r"^test_(axis_roster|balance_oracle|conviction_roster|explain$|export_season_registries|import_cycle|m1_acceptance|"
         r"module_registrar|modules_reachable|season_)"),
     "engine": re.compile(
         r"^test_(degree_|descriptor|engine_does_not_import|engine_params|export_(game_constants|sim_params|troops)|"
