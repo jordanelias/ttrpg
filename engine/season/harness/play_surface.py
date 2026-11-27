@@ -166,19 +166,15 @@ def board(p: Any, fixtures: Any) -> list:
 # THE TRANSCRIPT (B34.04) -- printers of what `decision/sheet.py` reads, and the command that runs a scenario through `scenarios.run`.
 # ---------------------------------------------------------------------------------------------------
 
-def _short(x: Any, n: int = 48) -> str:
-    return str(x)[:n]
-
-
 def account_lines(p: Any, since: tuple) -> list:
     """The `account` of `p` since `since`, one line a row: the claim as he holds it, whether it echoes his own deed, who told him, and what changed. Reads `p`'s own ledger only."""
     out = []
     for r in account(p, since):
         c = r.claim
         via = f" told by {c.teller} ({c.hops} hops)" if getattr(c, "teller", None) else ""
-        out.append(f"   learned {c.subject} · {c.predicate} = {_short(c.value)} · {c.source} · when {c.when}.{c.lap}{via}"
+        out.append(f"   learned {c.subject} · {c.predicate} = {str(c.value)} · {c.source} · when {c.when}.{c.lap}{via}"
                    + (" · his own deed" if r.own else "")
-                   + (f" · before: {_short(r.prior.value)}" if r.prior is not None else "")
+                   + (f" · before: {str(r.prior.value)}" if r.prior is not None else "")
                    + (" · nobody is named as the doer" if r.unattributed else ""))
     return out
 
@@ -195,7 +191,7 @@ def deliberation_lines(w: Any, sheet: Any, verbs: Optional[frozenset] = None) ->
     lines = [f"   situation · body {s.body} · budget {s.budget} · holds {list(s.holdings)} · pursuits {dict(s.pursuits)} · stance {list(s.stance)}"]
     for a in s.asked:
         lines.append(f"   asked {a.question.id} · {a.question.source} · about {a.question.about}"
-                     + (f" · his claim: {a.claim.predicate} = {_short(a.claim.value)}" if a.claim is not None else "")
+                     + (f" · his claim: {a.claim.predicate} = {str(a.claim.value)}" if a.claim is not None else "")
                      + (" · asked for" if a is s.asked[sheet.asked_index] and sheet.asked_index > 0 else ""))
     for i, r in enumerate(off.rows):
         c = r.candidate
