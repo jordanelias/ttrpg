@@ -26,9 +26,13 @@ _KIT = _SECTIONS['kit']
 #: authors no Endurance (`seam/wrappers/combat.py::party_end`). Not the sheet scale's floor in `descriptor_registry.yaml`.
 END_DEFAULT = _SECTIONS['attributes']['end']['default']
 
-#: Every key of `modules/combat/weapons.py::WEAPONS` WITHOUT a `base` (the 50): a Combatant's `weapon` is one of these.
+#: Every key of `modules/combat/weapons.py::WEAPONS` WITHOUT a `base` (`UNARMED` included): a Combatant's `weapon` is one of these.
 #: A half-sword form is a grip the engine switches into, never a person's kit, so it is not here (B14.12).
 WEAPONS = frozenset(_KIT['weapons'])
+
+#: The weapon a person holds when he holds none (`modules/combat/weapons.py::UNARMED`, B18.03): one of `WEAPONS`, a
+#: physical record like the rest. `queries/world_q.py::kit_of` returns it for the weapon field once an arms roster exists.
+UNARMED = _KIT['unarmed']
 
 #: `{form: its base weapon}` for each record carrying a `base` (the half-sword grips), for a reader that needs the
 #: mapping. Disjoint from `WEAPONS`.

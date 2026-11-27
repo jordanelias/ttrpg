@@ -80,7 +80,7 @@ THREADWORK_SCHEMA_VERSION = 1  # v1 (B03.68): the `params` section (params.py's 
 MASS_BATTLE_OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'mass_battle_v1.json')
 MASS_BATTLE_SCHEMA_VERSION = 1  # v1 (B17.12): the `engine_config` section (EngineConfig's fields and their shipped values).
 
-SCHEMA_VERSION = 8  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
+SCHEMA_VERSION = 9  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
                     # v3 (B-D1 PC-07): core.COVERAGE_GAP dict -> scalar (a type change); DECISIVE_OB removed (PC-03).
                     # v4 (PC-14): added the `attributes` section (attributes.py's spec; its entries carry null).
                     # v5 (CP-T03-03): added the `kit` section (the weapon keys, the armour tiers and the Combatant's
@@ -94,6 +94,8 @@ SCHEMA_VERSION = 8  # v2 (OPT-AV-17): added the `core` section (core.py canonica
                     # `weapon_physics`, `combat_systems`, `combatant`, `ability_primitives`, `traditions` (the
                     # constants DEFINED in each module); `kit.weapons` now lists the 50 records without a `base`
                     # (it listed all 54) and `kit.forms` (form -> base) is new.
+                    # v9 (B18.03, `03_PC_person_inputs_content` Part C): added `kit.unarmed`, the startable record a
+                    # person holds when he holds none (`weapons.UNARMED`); `kit.weapons` lists it, so 51.
 
 
 def _typed(value, defined=False):
@@ -156,8 +158,13 @@ def _kit_section(weapons, vocabulary, combatant):
     if forms != dict(sorted(weapons.HALFSWORD_BASE.items())):
         raise ValueError(f"the records' `base` fields {forms} disagree with weapons.HALFSWORD_BASE "
                          f"{weapons.HALFSWORD_BASE}: one mapping of form to base, or none")
+    startable = sorted(set(weapons.WEAPONS) - set(forms))
+    if weapons.UNARMED not in startable:
+        raise ValueError(f"weapons.UNARMED {weapons.UNARMED!r} is not a startable record: it is what a person holds "
+                         f"when he holds none, so it must be a weapon he can fight with")
     return {
-        "weapons": sorted(set(weapons.WEAPONS) - set(forms)),
+        "weapons": startable,
+        "unarmed": weapons.UNARMED,
         "forms": forms,
         "armour_tiers": sorted(vocabulary.ARMOUR_TIERS),
         "defaults": {"weapon": params["weapon"].default, "armor": params["armor"].default},
