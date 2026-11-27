@@ -1247,7 +1247,7 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
         level is not a lack: a larder at 30 is plenty for three mouths and a famine for thirty, and
         a person cannot know the mouths (`demanded` is a world read).
       * THE PER-PERSON SHORTFALL, as witnessed through item 3b's `body.changed`.
-        (`World._subsistence_shortfall` is census-only and is no claim at all.) That claim is about
+        (`World._subsistence_shortfall` is no claim at all; the loop reads it only as `short_before`, B12b.40.) That claim is about
         a PERSON, so its referent is no rung and a transfer to it refuses (`_eff_transfer`: no
         rung, no transfer). It carries no kind or amount either (`value` is `True`). It is also the
         per-person scale `ED-IN-0255` ruled away from: *"i don't think having lords and guild

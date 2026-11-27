@@ -2039,7 +2039,7 @@ def load() -> None:
     for name, arms in CLOSED_ARMS.items():
         if DEFAULT_FIXTURES.get(name) not in arms:
             raise Forbidden(f"`Fixtures {name}` is {DEFAULT_FIXTURES.get(name)!r}", "data/fixtures.py", needs=f"one of {list(arms)}",
-                            law="B24.21 -- the arm names where a docketed matter's proofs levels are read from; an unknown name would read the ledger silently")
+                            law="a closed arm: an unknown name would read the control silently (B24.21 for the ledger arms; B12b.04, .08, .35 for route_pricing, road_hazard, hunger_loss)")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",

@@ -742,7 +742,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             f"{'first 5 of them' if len(short_by_person) > 5 else 'all of them'}: {sample}"
             f" -- recorded, not acted on (L5: a crossing produces no outcome). The FULL set is "
             f"`World._subsistence_shortfall`, which `harness/populated.py` reads")
-    # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets. It is
+    # Reported by `census`, and read by the loop since B12b.40 (`world_q.subsist_input`'s `short_before`). It is
     # what makes the shortfall MEASURABLE rather than only traceable, and it is item 3b's input.
     w._subsistence_shortfall = short_by_person
 

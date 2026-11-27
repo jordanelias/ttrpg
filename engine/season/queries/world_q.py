@@ -2011,8 +2011,8 @@ def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
         the larder, and the larder feeds the people: r2 `04` §A.3, *"MATTER STAYS WHERE IT IS
         PRODUCED. IT MOVES ONLY BY `transfer`. EATERS DRAW UP THE CONTAINMENT LADDER, AND THE WALK
         IS THE WHOLE MECHANISM."*
-      * `World._subsistence_shortfall` subtracted from `demanded`. That field is census-only. Its
-        own site says *"never read by the loop"*. It is also a snapshot of the last MATTER, so
+      * `World._subsistence_shortfall` subtracted from `demanded`. That field was census-only until B12b.40, which
+        reads it as `short_before` (the loop's input). It is also a snapshot of the last MATTER, so
         subtracting it from a LIVE demand mixes two instants. A person who moved since would count
         in one term and not the other."""
     TRACE.query("delivered", "resolver")
