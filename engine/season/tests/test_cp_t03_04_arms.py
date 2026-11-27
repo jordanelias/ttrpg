@@ -322,14 +322,15 @@ def test_capture_and_accept_grow_by_the_same_rule():
 
 
 def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter_step(_engine):
-    """Every person in `build_realm(1)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 0.8):
+    """Every person in the seeded realm (`build_realm(2)`, see the re-trace notes below) planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 0.8):
     after one season at least one survivor holds 3 -- the write admitted at ENCOUNTER, where the season fights --
     and every value is 2 or more (nothing lowered, nothing minted)."""
     # B21.03 RE-TRACED, seed 1 -> 5 (`off_spymaster` and `off_cardinal_prudence` no longer march: a season at most seeds fights nobody, and at seed 1 no one grows).
     # THE SWEEP, this test's own body at `build_realm(s)` / `run(1, s)`, seeds 0 and 2..8, run once and not kept: it holds at seed 5 alone (seed 0: the one
     # growth is a `train`, no body verb; the rest every value stays 2); the first is taken. [ASSUMPTION; medium; Jordan to correct; revert: seed 1.]
     # B29.02 RE-TRACED, seed 5 -> 2 (`capture` no longer forms on a stranger, so seed 5's season fights nobody). THE SWEEP, this body at seeds 0-4 and 6-8, run once
-    # and not kept: it holds at 0, 2 and 8; at 0 and 8 the growth is an `argue` rank (a `train`, no body verb); at 2 it is an `arms` 2 -> 3 at a `Felled` fight. [ASSUMPTION; medium; Jordan to correct; revert: seed 5.]
+    # and not kept, over the two VALUE assertions only: they hold at 0, 2 and 8; at 0 and 8 the growth is an `argue` rank (a `train`, no body verb), so the attribution
+    # assertion below would fail there; at 2 it is an `arms` 2 -> 3 at a `Felled` fight, a body verb: all three assertions pass at 2 alone. [ASSUMPTION; medium; Jordan to correct; revert: seed 5.]
     w = build_realm(2)
     for p in w.persons.values():
         p.capability = {**(p.capability or {}), KEY: 2}
@@ -338,7 +339,7 @@ def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter
     assert sum(vals.values()) >= 50
     assert min(vals) >= 2 and max(vals) >= 3, dict(vals)
     # `train` also raises a held key, so the growth is attributed: at least one `capability.raised` caused by a
-    # body verb (measured at the build: one, by a `capture`; one more by a `train`).
+    # body verb (seed 2, B29.02: a `Felled` fight; at seed 5 before it, a `capture`, which B29.02 stopped forming on a stranger).
     from ..queries.world_q import causing_act
     by = Counter(getattr(causing_act(w, e), "verb", None) for e in w.log if e.kind == "capability.raised")
     assert sum(by[v] for v in BODY_VERBS) >= 1, dict(by)
