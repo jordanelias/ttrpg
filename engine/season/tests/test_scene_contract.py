@@ -8,6 +8,8 @@ fixture is HELD (`hole_register.yaml` H-580, its builder retired unbuilt), so no
 """
 from __future__ import annotations
 
+import functools
+
 from engine.season.harness import scene
 from engine.season.harness.carin import BAILIFF, CARIN, WARDEN, build_world
 from engine.season.loop import resolve as resolve_mod
@@ -84,3 +86,92 @@ def test_apply_false_goes_through_seam_contest():
     finally:
         resolve_mod.contest = real
     assert "engaged" in " ".join(alone["not_asked"])      # the record says what a standalone call does not ask (A-63)
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# B34.17 -- ONE ROLL, PLAYED (`IS-DICE-01`): `scene.play('social_contest.roll', FIXTURES['roll'])` prints the dice's own record. Lane: the season loop (`in` suite).
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ROLL_SEEDS = 2000
+EFFORT_SEEDS = 200
+
+
+def _roll_fixture() -> dict:
+    return scene.FIXTURES["roll"]
+
+
+@functools.lru_cache(maxsize=None)
+def _dealt() -> tuple:
+    """`(degree, printed exact odds, printed obstacle sum, obstacle)` of the roll fixture's `scene.play` at seeds 0..1,999, `apply=False`: the one run the odds test and the
+    reach test share."""
+    out = []
+    for seed in range(ROLL_SEEDS):
+        record = scene.play(_roll_fixture()["role"], _roll_fixture(), seed=seed)
+        roll = record["roll"]
+        out.append((record["degree"], tuple(roll["exact"][band] for band in scene.BAND_ORDER), roll["obstacle"]))
+    return tuple(out)
+
+
+def test_the_roll_fixture_prints_terms_that_sum_to_the_obstacle():
+    """The record the fixture prints names every term of the obstacle and the terms sum to the obstacle the roll was thrown at (`roll.py::obstacle`: *the values in
+    `terms` sum to `ob`*), at every seed; the pool's parts sum to the pool; the dealt band is one of the four. FALSIFIER: a term left out of the print, or a printed `ob`
+    that is not the roll's own, leaves a gap of at least a tenth (the smallest term, `difficulty`, is 0.8)."""
+    checked = 0
+    for seed in SEEDS:
+        record = scene.play(_roll_fixture()["role"], _roll_fixture(), seed=seed)
+        roll = record["roll"]
+        terms = roll["obstacle"]["terms"]
+        assert {"even", "difficulty", "opposition"} <= {name for name, _ in terms}, terms
+        assert abs(sum(value for _, value in terms) - roll["obstacle"]["sum"]) <= 1e-9, (seed, terms)
+        assert abs(roll["obstacle"]["sum"] - record["result"]["ob"]) <= 1e-9 and roll["obstacle"]["ob"] == record["result"]["ob"], seed
+        parts = roll["pool"]["parts"]
+        assert abs(max(parts["floor"], parts["skill"] + parts["governing"] + parts["addends"] + parts["base"]) - roll["pool"]["pool"]) <= 1e-9, (seed, parts)
+        assert roll["pool"]["pool"] == record["result"]["pool"] and parts["skill"] > 0, seed          # the authored skill score is in the pool
+        assert record["degree"] in scene.BAND_ORDER and roll["draw"]["key"], seed
+        assert abs(sum(roll["exact"].values()) - 1.0) <= 1e-9, seed
+        checked += 1
+    assert checked == len(SEEDS), checked
+
+
+def test_printed_odds_match_realised_bands():
+    """The exact odds the record prints (`sigma_leverage.band_odds` over the roll's own pool, obstacle and leverage) are the odds of the bands the same call deals, over
+    2,000 seeds: each band's realised count is within four standard deviations of the sum of the odds printed for it (a Poisson-binomial: each seed is its own world and
+    prints its own odds). FALSIFIER: odds printed from another pool or another boost misses a band's count by far more than that."""
+    dealt = _dealt()
+    assert len(dealt) == ROLL_SEEDS
+    for place, band in enumerate(scene.BAND_ORDER):
+        expected = sum(odds[place] for _, odds, _ in dealt)
+        spread = sum(odds[place] * (1.0 - odds[place]) for _, odds, _ in dealt) ** 0.5
+        realised = sum(1 for degree, _, _ in dealt if degree == band)
+        assert abs(realised - expected) <= 4.0 * spread, (band, realised, expected, spread)
+
+
+def test_effort_changes_the_printed_odds_and_some_dealt_band():
+    """An act at effort 2 brings two levels FOR the roller (CP-T01-05): at every one of seeds 0..199 the printed exact odds move toward the better bands, and at some seed
+    the one dealt draw lands in another band (the draw's key is the same, so the band moves only by the shifted odds). FALSIFIER: an effort the print or the roll ignores."""
+    role, checked, moved = _roll_fixture()["role"], 0, 0
+    for seed in range(EFFORT_SEEDS):
+        plain = scene.play(role, scene.staged(_roll_fixture(), effort=0), seed=seed)
+        pushed = scene.play(role, scene.staged(_roll_fixture(), effort=2), seed=seed)
+        assert plain["roll"]["draw"]["key"] == pushed["roll"]["draw"]["key"], seed
+        assert pushed["roll"]["exact"][scene.BAND_ORDER[-1]] > plain["roll"]["exact"][scene.BAND_ORDER[-1]], seed
+        assert pushed["roll"]["exact"][scene.BAND_ORDER[0]] < plain["roll"]["exact"][scene.BAND_ORDER[0]], seed
+        moved += pushed["degree"] != plain["degree"]
+        checked += 1
+    assert checked >= EFFORT_SEEDS and moved > 0, (checked, moved)
+
+
+def test_each_band_is_reached_and_each_writes():
+    """All four bands are dealt within seeds 0..1,999, and at the first seed of each the one-act season (`apply=True`) folds the SAME band and the world carries a write
+    of that act beyond the scene's budget (which is the driver's, not the world's): the verb's declared write where its row declares one at the band (`Tenure.since`: a
+    `detain` edge), and at every band the claims its witnesses deposited. FALSIFIER: a band whose act leaves the world as it was."""
+    role, row = _roll_fixture()["role"], scene.VERB_TABLE[_roll_fixture()["act"]["verb"]]
+    first = {}
+    for seed, (degree, _, _) in enumerate(_dealt()):
+        first.setdefault(degree, seed)
+    assert set(first) == set(scene.BAND_ORDER), sorted(first)
+    for band, seed in first.items():
+        folded = scene.play(role, _roll_fixture(), seed=seed, apply=True)
+        assert folded["degree"] == band and folded["status"] == "FOLDED", (band, seed, folded["status"], folded["degree"])
+        wrote = folded["wrote"]
+        assert wrote["durable"] and wrote["deposited"] > 0, (band, wrote)
+        assert bool(wrote["changes"]) == bool(row.writes_by_degree[band]), (band, wrote["changes"], row.writes_by_degree[band])
