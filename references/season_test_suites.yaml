@@ -250,6 +250,7 @@ suites:
     - sc02_typed_ids_and_loader
     - scale_of_rung
     - scenarios_runner
+    - scene_contract
     - scene_sequence
     - scene_store
     - season_shape

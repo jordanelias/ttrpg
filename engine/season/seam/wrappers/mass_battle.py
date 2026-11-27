@@ -84,11 +84,12 @@ from ...queries import world_q
 from engine.substrate import composition
 from ...state.carriers import Act
 from ...state.gate import seat_faction
-from ._entry import entry_for
+from ._entry import entry_for, played_by
 from ._estimate import rng_of, samples_of
 from ..ladder import FIELD_FLAGS, field_degree, field_flags
 
 _PROVIDER = "mass_battle"
+_FIELD_ROLE = "mass_battle.resolve_field"        # the composition row whose entry `resolve` calls: the role a host names a decider for (`PlayHost.deciders`)
 _PRIZE = "a field"      # the prize row this provider deals (`rosters.yaml`), `march`'s
 # CP-T04-08: the bands `field_estimate` shares out, in `sigma.odds_of`'s order -- the four `field_degree` grades a
 # fought or unopposed field into (`Declared` is the band RESOLVE writes before anything is fought, not an ending; `Invested`
@@ -349,8 +350,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     call is uniform.
 
     `effort` (CP-T01-05) is accepted and NOT USED HERE: the seam's call is uniform, and a field battle has no
-    scene slots to spend. `host` (v10 REM-31) is accepted
-    and NOT USED HERE either: mass battle's PLAYABLE mode would read this same keyword, not a second shape.
+    scene slots to spend. `host` (v10 REM-31) is read by `_entry.py::played_by` alone, the party test every provider shares (B34.15); no shipped host has a
+    decider for the field's role, so the call is today's.
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called
     `contest()`: `loop/sides.py::sides_of` builds them for a `march`.
@@ -433,7 +434,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # v9 IN-52, THE LEVY-TO-FIELD FEED: `_fed` (above), the one place a side's fielded troops are read.
     treasuries = (_seat_treasury(w, act.via if act is not None else None), _defender_treasury(w, rung))
     fed = _fed(w, inp, treasuries)
-    result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
+    # B34.15: THE PARTY TEST, ONCE (`_entry.py::played_by`): a host playing a person on either side, with a decider for this entry's role, hands it down as
+    # `decide=`; otherwise nothing is passed and the call is the call before a host existed. `resolve_field` takes the keyword and reads it nowhere yet (B20).
+    decide = played_by(host, _FIELD_ROLE, [*claimants, *other])
+    result = (entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops) if decide is None
+              else entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops, decide=decide))
     if isinstance(result, dict):
         # B17.04: the module's typed refusal (`SCALE-GAP`, or `PARTY-GAP` for two sides of nobody), on `PARTY-GAP`'s shape: handed on
         # whole with this provider named, so `seam/contest.py` folds it as the verb's refusal and no fight was run.

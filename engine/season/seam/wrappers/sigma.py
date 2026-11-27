@@ -107,7 +107,7 @@ from ...state.carriers import EFFORT, Said, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ...state.ids import draw_factory
 from ...state.ledgers import present_confidence
-from ._entry import entry_for
+from ._entry import entry_for, played_by
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
 from .pool import attribute_midpoint
@@ -2067,12 +2067,11 @@ def _played_by(w: Any, host: Any, inp: Input) -> dict:
     `{"deciders": {person: callback}}`, else `{}` (the sitting is automatic, as it was). A person the host plays takes the host's decider for the role
     (`decide(view) -> choice`; the entry's callback is `(view, person)`, so it is the host's closed over), and none where the host has none for it; any other
     speaker takes the NPC decider (`_npc_decider`) where `Fixtures npc_decider_roles` names this role (`decider.decides_for`), else the automatic policy."""
-    decide = getattr(host, "deciders", {}).get(PROCEEDING_ROLE)
-    plays = getattr(host, "persons", frozenset())
     npc = None
     mine = {}
     for p in inp.room:
-        if p.id in plays:
+        if p.id in getattr(host, "persons", frozenset()):
+            decide = played_by(host, PROCEEDING_ROLE, (p.id,))          # B34.15: the party test, once (`_entry.py`); a person the host plays with no decider here is the sitting's own policy
             if decide is not None:
                 mine[p.id] = lambda view, me, d=decide: d(view)
         elif inp.rite.close != "exchange" and p.side and p.id in w.persons and decides_for(w.fixtures, PROCEEDING_ROLE, False):   # an abridged close asks no callback

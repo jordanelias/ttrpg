@@ -86,13 +86,13 @@ from ...gaps import Forbidden, Unspecified
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
 from ...queries import person_q
-from ...queries.inputs import CombatOutcome, MortalResult, PartyWounds, PersonalCombatInput, PlayHost
+from ...queries.inputs import DECIDE_ROLE, CombatOutcome, MortalResult, PartyWounds, PersonalCombatInput, PlayHost
 from ...queries.world_q import home_of, kit_of, mortal_terms, stakes_of
 from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
 from ...state.ids import draw_factory
 from ..ladder import COMBAT_BANDS, party_degree
-from ._entry import entry_for
+from ._entry import entry_for, played_by
 from ._estimate import rng_of, samples_of
 from .pool import FIGHT_DICE_SITE, addends_of, pool_pair, score
 from .sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE, WOUNDS, _held_at
@@ -542,9 +542,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     a decider), named here as that row's departure (B4, third disposition) and picked for the reason A-25 gives.
     IT IS WHERE THE DRIVER SUSPENDS, AND THE ONLY PLACE. `None` -- every RESOLVE
     call, and every season run without a host -- is AUTOMATED, today's call exactly. With a host, the mode
-    is a PARTY TEST (A-25): a fight either of whose claimants the host plays (`PlayHost.persons`) hands the
-    host's decider to the module entry, which forwards it to the engine's own turn loop; every other fight
-    stays AUTOMATED. The suspension is a CALL-OUT, not a return: the scene runs inside this frame with the
+    is a PARTY TEST (A-25, `_entry.py::played_by`, the one place it is made): a fight either of whose claimants the host plays (`PlayHost.persons`)
+    and for which it has a decider for the entry's role (`PlayHost.decider_for`) hands that decider to the module entry, which forwards it to the
+    engine's own turn loop; every other fight stays AUTOMATED. The suspension is a CALL-OUT, not a return: the scene runs inside this frame with the
     ENCOUNTER token held below it in the driver's argument expression (minted once), the typed record `inp`
     and the `seed` built by the same lines in both modes, and nothing serialized. The decider is handed
     no `World` and no token, and is written not to reach `World.write` or `World.new_draw` -- a CONVENTION
@@ -597,10 +597,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return refusal
     # THE PARTY TEST (REM-31). The AUTOMATED call is byte-identical: the keyword is passed only when a played
     # person is a claimant, so the two other entries' shared `(inp, rng)` shape is untouched.
-    if host is not None and any(c in host.persons for c in (a_id, b_id)):
-        got = entry.fn(inp, rng, decide=host.decide)
-    else:
-        got = entry.fn(inp, rng)
+    decide = played_by(host, DECIDE_ROLE, (a_id, b_id))
+    got = entry.fn(inp, rng) if decide is None else entry.fn(inp, rng, decide=decide)
     # B15.07: a felled party's `felled` and `wounds` are the module's mortal-wound draw's (`got.mortal`), mapped, never computed here
     _wounds = {pid: _wound_state(got.wounds.get(pid), got.mortal.get(pid)) for pid in (a_id, b_id)}
 

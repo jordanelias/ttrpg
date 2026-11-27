@@ -47,7 +47,7 @@ optional argument) and `CombatRoundView` (what its per-round decider reads, hand
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field, fields
+from dataclasses import InitVar, dataclass, field, fields
 from typing import Callable, Mapping, NamedTuple, Optional
 
 # THE MATTER'S TWO SIDES, signed toward `for` (the sign every `stake` and `believes` is read in), and the flip to the other: the one owner
@@ -948,30 +948,47 @@ class CombatRoundView:
     wound_state: Mapping
 
 
+#: THE ROLE `PlayHost`'s constructor argument `decide=` maps to: the per-round decider of a PLAYABLE fight (`combat.fight`, a `composition.json` row).
+DECIDE_ROLE = "combat.fight"
+
+
 @dataclass(frozen=True)
 class PlayHost:
     """THE HOST'S ONE OPTIONAL ARGUMENT for PLAYABLE (v10 REM-31, IN-46; A-25's *"a `game/` scene for which
     the driver suspends"*). `SeasonDriver.season(..., host=)` threads it to ENCOUNTER alone, through
     `_contest` and `seam/contest.py::contest` to the provider, the path `contest_max_depth` already takes.
-      * `persons` -- the ids the host plays. The mode is a PARTY TEST at the provider
-                     (`seam/wrappers/combat.py::resolve`): a fight either of whose claimants is in this
-                     set is PLAYABLE; every other fight, and every fight with no host, is AUTOMATED;
-      * `decide`  -- `(CombatRoundView) -> str`, one member of the engine's closed per-round set
-                     (`modules/combat/wrapper.py::ROUND_CHOICES`). It is written to draw nothing, write nothing and
-                     hold no token (CONVENTION; `test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended` checks the shipped deciders): it is called inside the provider's frame, with the driver below it on
-                     the stack (a call-out, not a return), and its return is the only resume.
-      * `deciders` -- B24.05, `module role -> decide(view) -> choice` (`social_contest.proceeding`, ...): the role-keyed form `decide` is
-                     the first of. `decide` stays for `combat.fight` until B34 folds it into `deciders["combat.fight"]`. The wrapper
-                     resolves a role's decider here and passes it as `decide=`; a role with none is automated for this host. Empty by
-                     default, so a host built as before is the host it was.
+      * `persons`  -- the ids the host plays. The mode is a PARTY TEST (`seam/wrappers/_entry.py::played_by`, the one place it is made): a
+                      scene either of whose parties is in this set is PLAYABLE for a role the host has a decider for; every other
+                      scene, and every scene with no host, is AUTOMATED;
+      * `deciders` -- B24.05, B34.15: `module role -> decide(view) -> choice` (`combat.fight`, `social_contest.proceeding`, ...). A decider is written
+                      to draw nothing, write nothing and hold no token (CONVENTION; `test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended`
+                      checks the shipped deciders): it is called inside the provider's frame, with the driver below it on the stack (a call-out, not a
+                      return), and its return is the only resume. The wrapper resolves a role's decider (`decider_for`) and passes it as `decide=`; a role
+                      with none is AUTOMATED for this host. Empty by default, so a host built with none is the host that is not there (a season's hash is the
+                      same with it and without);
+      * `decide`   -- a CONSTRUCTOR ARGUMENT ONLY (an `InitVar`, kept for the callers that built `PlayHost(persons, decide)`): it is folded into
+                      `deciders[DECIDE_ROLE]` and is not a field, so there is one store. `PlayHost(p, f)` and `PlayHost(p, deciders={DECIDE_ROLE: f})` are
+                      one host. `host.decide` is NOT the decider: read `decider_for`.
     A scene with no decider is decided by the person's own policy (`11_GO_fidelity_and_campaign_modes` §2): the one a person's chooser supplies, never a
     module constant, so a player who lets a scene resolve gets what an NPC with his sheet would get. THE PRESENT INTERIM is the module default: `decide=None`
     reaches `modules/combat/fight.py` as the engine's own engage-every-turn loop, a constant, the same for an NPC and for a player who declines, so nothing
     is forked today and the clause binds the decider that replaces it.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
     persons: frozenset
-    decide: Callable
+    decide: InitVar[Optional[Callable]] = None
     deciders: Mapping[str, Callable] = field(default_factory=dict)
+
+    def __post_init__(self, decide: Optional[Callable]) -> None:
+        deciders = dict(self.deciders)
+        if decide is not None:
+            if deciders.get(DECIDE_ROLE, decide) is not decide:
+                raise ValueError(f"PlayHost: `decide=` and `deciders[{DECIDE_ROLE!r}]` name two deciders for one role")
+            deciders[DECIDE_ROLE] = decide
+        object.__setattr__(self, "deciders", deciders)
+
+    def decider_for(self, role: str) -> Optional[Callable]:
+        """The host's decider for `role`, or `None` (the role is AUTOMATED for this host)."""
+        return self.deciders.get(role)
 
 
 @dataclass(frozen=True)
