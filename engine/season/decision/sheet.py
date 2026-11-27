@@ -57,7 +57,7 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, decisiveness, recognised
+from ..queries.person_q import LedgerReader, _seen_index, decisiveness, deed_doer, is_deed, recognised
 from ..state.carriers import Act, Candidate, Claim, Person, PersonInterior, Question, Scene, View, fade_of, frozen
 from .choose import Ranked, _believed_chance, _payload_of, make_ranker, release
 from .options import ledger_weigh, own_state_declines
@@ -292,6 +292,53 @@ def offer(p: Person, v: View, fx: Any, verbs: Optional[frozenset] = None,
                           None if odds is None else _believed_chance(p, c, odds), cost(c)) for c in order)
     withheld = tuple(WithheldRow(*d) for d in dict.fromkeys(own_state_declines(p, v, q, fx)) if verbs is None or d[0] in verbs)
     return Offer(rows, withheld)
+
+
+# ---------------------------------------------------------------------------------------------------
+# ACCOUNT (B34.03) -- what he has learned since a point, from his own ledger and nothing else. No act, no write.
+# ---------------------------------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class AccountRow:
+    """One claim he holds that landed at or after `since`, as he holds it. `own` is `claim.doer == holder`, the echo of his own deed (WITNESS stamps `doer` only
+    where the witness is the actor, so it leaks nothing a channel withholds). `prior` is the claim he holds on the same `(subject, predicate)` cell that landed
+    latest before this one (a later `(when, lap)` than any other, a later place in his ledger on a tie), `None` where he holds none -- a quantity is trackable only for
+    a person who holds claims about it. `unattributed` is a change he can see (`prior` differs in value, or the claim is an event-kind deposit, `person_q.is_deed`)
+    for which no claim of his names a doer: no `doer` on it, no `Seen.who` on the sighting it landed with (his own, or the one its telling carried), no `deed_doer`
+    answer. `claim.teller`, `claim.hops` and `claim.chain` say who told him, at how many removes."""
+    claim: Claim
+    own: bool
+    prior: Optional[Claim]
+    unattributed: bool
+
+
+def account(p: Person, since: tuple) -> tuple:
+    """THE PERSON'S OWN RECORD OF WHAT HE LEARNED SINCE `since` -- `(tick, lap)`, `world_q.landing_floor`'s own key: one `AccountRow` per claim of his ledger with
+    `(when, lap) >= since`, in the order he holds them. Reads `p.ledger` and nothing else; writes nothing. ANOTHER PERSON'S REASONS ARE SHOWN EXACTLY HERE: as the claims
+    he holds about that person's deeds, tellings and commitments, with their sources. A value no claim of his holds is in no row."""
+    ledger = tuple(p.ledger)
+    cells: dict = {}
+    for i, c in enumerate(ledger):
+        cells.setdefault((c.subject, c.predicate), []).append((c.when, c.lap, i, c))
+    seen = _seen_index(ledger)
+
+    def prior_of(c: Claim) -> Optional[Claim]:
+        earlier = [(w, l, j, o) for w, l, j, o in cells[(c.subject, c.predicate)] if (w, l) < (c.when, c.lap)]
+        return max(earlier, key=lambda t: t[:3])[3] if earlier else None
+
+    def names_a_doer(c: Claim) -> bool:
+        sighted = seen[4].get((c.subject, c.when, c.lap, c.chain), ()) if c.chain else seen[0].get((c.subject, c.when, c.lap), ())
+        return (c.doer is not None or getattr(c.value, "who", None) is not None
+                or any(getattr(s.value, "who", None) is not None for s in sighted) or deed_doer(c, seen) is not None)
+
+    rows = []
+    for c in ledger:
+        if (c.when, c.lap) < tuple(since):
+            continue
+        prior = prior_of(c)
+        changed = (prior is not None and prior.value != c.value) or is_deed(c)
+        rows.append(AccountRow(c, c.doer == p.id, prior, changed and not names_a_doer(c)))
+    return tuple(rows)
 
 
 # ---------------------------------------------------------------------------------------------------

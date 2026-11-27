@@ -38,3 +38,31 @@ def test_the_doer_holds_his_own_acts_outcome():
     mine = [c for c in w.persons[DOER].ledger if c.id in deposited and c.doer == DOER]
     assert mine, ("the doer holds no claim of his own on the act's Event; the deposits it made went to "
                   f"{sorted({x.holder for p in w.persons.values() for x in p.ledger if x.id in deposited})}")
+
+
+OTHER = "p_npc_005"     # at another place than DOER (asserted below), so his act is not one DOER stood at
+
+
+def test_every_resolved_act_has_an_own_account_row():
+    """GATE 3 (B34.03): every act the seated person resolved has an `own=True` `AccountRow` -- a claim `account` reads from his own ledger with
+    `doer == him` that WITNESS deposited on the act's Event -- and a planted act of another person yields none for him. Two acts of his (a record
+    each) and one of `OTHER`'s are resolved in one world; the control is `OTHER`'s own account, which does hold the own row of the act planted
+    (so the plant resolved)."""
+    from ..decision.sheet import account
+    w = build_realm(0)
+    assert place_of(w, DOER) != place_of(w, OTHER)
+    d = SeasonDriver(w)
+    mine, theirs = [], []
+    for rid, who, into in ((REC, DOER, mine), (REC + "_2", DOER, mine), (REC + "_other", OTHER, theirs)):
+        w.records[rid] = Record(rid, place_of(w, who), "text")
+        (e,) = step(w, d, Act(id=f"a_acct_{rid}", actor=who, verb="research", payload={"subject": rid}))
+        into.append({c.subject for x in w.log if x.kind == "claim.deposited" and e.id in x.causes for c in x.changes})
+
+    def held(pid, ids):
+        return [r for r in account(w.persons[pid], (0, 0)) if r.own and r.claim.id in ids]
+    assert all(ids and held(DOER, ids) for ids in mine), "an act he resolved has no own=True row"
+    assert theirs[0] and held(OTHER, theirs[0]), "control: the planted act of OTHER has no own row for its doer"
+    assert not held(DOER, theirs[0]), "another person's act gave him an own=True row"
+    # his ledger holds claims that are not the echo of his deed (the build's, landed at tick -2), so a reader that marked every row `own` reads red here
+    assert {r.claim.id for r in account(w.persons[DOER], (-2, 0)) if r.own} == {c.id for c in w.persons[DOER].ledger if c.doer == DOER}
+    assert any(c.doer != DOER for c in w.persons[DOER].ledger), "his ledger holds nothing that is not his own deed: the equality above observed nothing"
