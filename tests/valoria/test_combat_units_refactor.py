@@ -353,6 +353,7 @@ def test_a_switch_debits_one_act_threshold():
     # (5) A SWITCH IS PAID IN THE CLOSED PHASE, SO A ROUND THAT NEVER CLOSES VOIDS IT: against a longer weapon at light armour the round may end in the
     # approach; there the swap goes back, no tempo was taken and the weapon in hand is the one he began with
     long_rec = record(("spear", "arming", "light"), kit_b=("yari", None, "light"))
+    close_rec = record(("spear", "arming", "heavy"), kit_b=("dagger", None, "heavy"))   # in heavy armour against a dagger the fight runs rounds and they close
     paid_n = void_n = 0
     for rec_5 in (long_rec, record(("spear", "arming", "light"))):   # against a yari the rounds end in the approach; against the arming sword they close
         for seed in range(24):
@@ -368,10 +369,14 @@ def test_a_switch_debits_one_act_threshold():
     assert void_n >= 1 and paid_n >= 1, (void_n, paid_n)   # both outcomes were seen, so neither branch went unchecked
 
     # (6) `engage` IS THE ENGINE'S DEFAULT, NOT 'NO ONE SWITCHES': a decider that answers it every round plays the identical fight to no decider (REM-31's
-    # AUTOMATED and PLAYABLE replay equal), a party with a secondary included
-    for seed in range(4):
-        auto = entry.fight(long_rec, draw.seeded(draw.H2("switch_engage", seed)))
-        played = entry.fight(long_rec, draw.seeded(draw.H2("switch_engage", seed)), decide=lambda view: "engage")
+    # AUTOMATED and PLAYABLE replay equal), a party with a secondary included, and including a round that follows a paid switch: the rule is read off the
+    # round's own Combatants in both (a decider's up-front pair holds the weapon the fight began with and would switch him back)
+    after_a_switch = 0
+    for seed in range(12):
+        auto = entry.fight(close_rec, draw.seeded(draw.H2("switch_engage", seed)))
+        played = entry.fight(close_rec, draw.seeded(draw.H2("switch_engage", seed)), decide=lambda view: "engage")
         assert auto == played, seed
-    assert any(e["kind"] == "switch" for e in auto.trace), "no switch under the default: the equality above could not have failed"
+        paid_in = [e["round"] for e in auto.trace if e["kind"] == "switch_paid"]
+        after_a_switch += bool(paid_in) and auto.rounds > paid_in[0]
+    assert after_a_switch >= 1, "no fight had a round after a paid switch: the equality above could not have failed"
 

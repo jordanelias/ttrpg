@@ -359,7 +359,9 @@ def fight(inp: PersonalCombatInput, rng: Draw,
             if choice == wrapper.WITHDRAW:
                 trace.append(dict(kind="withdraw", round=rnd))
                 break            # UNRESOLVED, no further round, no riposte draw
-            switch = tuple(c.label for c in wrapper.round_switchers(choice, A, B, prev_closed, cfg_))   # a decider's answer: `switch` is every party who carries a secondary; `engage`, as no decider, leaves each to the engine's own default
+            # a decider's `switch` is every party who carries a secondary; its `engage` leaves each party to the engine's own default, which `fight_round` reads off the
+            # round's own fresh Combatants (`None`), exactly as no decider does: `A` and `B` above were built once, before round 1, and are not the round's parties
+            switch = tuple(c.label for c in (A, B) if c.secondary is not None) if choice == wrapper.SWITCH else None
         out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed, switch=switch),
                           wrapper.round_draw(fkey, rnd), cfg=cfg)
         trace.extend(out.trace)

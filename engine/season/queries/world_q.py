@@ -4288,8 +4288,8 @@ def kit_of(w: World, pid: str) -> tuple:
     """WHAT A PERSON FIGHTS WITH, `(weapon, secondary, armor)` (v11 CP-T03-03; `-08` AM-C-04; B18.08; [ASSUMPTION; medium; Jordan to
     correct; revert: drop `PersonalCombatInput.kits` and the `kits` fill in `seam/wrappers/combat.py::combat_input`]).
     B18.08, A LOADOUT IS A KIT WITH A SECONDARY: `secondary` is the weapon he carries and does not hold, the next-ranked DISTINCT weapon
-    kind his rungs stock after the primary (his holdings' kinds best first, then his residence's: the order is by SOURCE, so a secondary the
-    residence stocks can outrank a primary his holdings stock; the plan's "the two highest-ranked" read across both is a decision for Jordan), `None` where he stocks one kind or none
+    kind his rungs stock after the primary (his holdings' kinds best first, then his residence's: the order is by SOURCE, as the primary's fallback already is field by field, so a secondary the
+    residence stocks can outrank a primary his holdings stock; ranking across both sources would change the primary, which "instead of one" rules out), `None` where he stocks one kind or none
     (and for the unarmed, and for the default kit): `weapon` is the kind it was before the secondary, so a person stocking one weapon kind
     is the kit he was. B18.09's switch reads `secondary` (`wrapper.round_switchers`; only a fight whose party carries one), and the carry of it rides `PersonalCombatInput.short`.
     PER COMBATANT FIELD, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores

@@ -4696,7 +4696,7 @@ tables:
       and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to
       3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5.
       B18.05: `arms` is named when a starting skill is combat, defence or battle movement (3-CR2, 3-CH2, 3-HA3, 3-HA4,
-      3-LO1, 3-CF1; the near misses 3-GU2's Back-Alley Fighter and 3-VA2's Sea Legs sit on rows that hold another key
+      3-LO1, 3-CF1; the near misses 3-GU2's Back-Alley Fighter, 3-VA2's Sea Legs and 3-HA2's Tunnel Fighter sit on rows that hold another key
       and are not added) [ASSUMPTION; low; Jordan to correct].
       CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters:
       lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row.
