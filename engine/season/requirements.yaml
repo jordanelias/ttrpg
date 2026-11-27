@@ -647,15 +647,17 @@ rows:
             --seeds 0 1 2`, read on the batch's tree and on its base `70b3b617b`; these three lines and the `accept`, `arrest`, `capture` and
             `covenant` rows are the same on both. `accept` is BUILT OUT at seeds 0 and 2 (clean 1 and 3; kinds yes, wrote yes, one yes) and
             attempted 0 at seed 1; its 2 refusals at seed 2 read `individual=True`, none read `exists:challenge`. `arrest` is NOT built out at
-            any seed: formed 1, 1, 3, attempted 0, 0, 0, clean 0, kinds no, wrote no. The missing link is B29.03's finding (`b7d1f0314`): no
-            computed act mints a dispensation whose terms names a Person (`issue`'s referent_class is Proposition; `_eff_dispatch` writes
-            terms = to = the man, which `warrants_heard` excludes), so the arrest has nothing to read in the realm. `capture`, the batch's
+            any seed: formed 1, 1, 3, attempted 0, 0, 0, clean 0, kinds no, wrote no. The first missing link is B29.03's finding (`b7d1f0314`): no
+            computed act in the realm minted a dispensation whose terms names a Person (`issue`'s referent_class is Proposition, B21.54;
+            `_eff_dispatch` would mint one, terms = to = the man, but `dispatch` was never attempted), so the arrest has nothing to read
+            there. Whether the `arrest` Candidate, once formed on a Person warrant, is drawn is NOT measured: the formations above are on
+            faction-named Proposition ids; the planted world's chooser formed and did not draw it (a single world, no seed loop). `capture`, the batch's
             third verb, is not built out at any seed on either tree (clean 0): formed 13, 13, 13 and attempted 0, 0, 4 on the base, formed 0,
             0, 0 and attempted 0, 0, 0 after B29.02. `covenant` reads 3 of 3 seeds on the same block. The realm's `built out` line reads
             `23 of 67`, `19 of 67`, `21 of 67` at seeds 0, 1, 2 on both trees; this conjunct is the whole table, so it stays unread
           does_not_show: >-
-            that `arrest` is built out (it is not, at any seed: B29.03's STOPS IF, the link is owned by B21.54's ruling or CR-63's
-            custody-to-warrant duty); that `accept` is built out at seed 1; that the other verbs of the table are (43 of 67 are not built
+            that `arrest` is built out (it is not, at any seed: B29.03's STOPS IF, the link is owned by B21.54's class, an
+            [ASSUMPTION] on rulings A-21 and A-22, or by CR-63's custody-to-warrant duty, B24a); that `accept` is built out at seed 1; that the other verbs of the table are (43 of 67 are not built
             out in any seed); `holds` stays `unread` (A-114: the batch writes the reading, not the verdict), and `status:` is not edited;
             two seasons, one build per seed
       - id: R-05.c

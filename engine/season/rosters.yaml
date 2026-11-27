@@ -2822,8 +2822,8 @@ rosters:
       `loop/effects_information.py::_held_warrant_names`),
       and `seize` forms on any referent, refused in the fold.]
       v9 IN-12 step 5 ADDS `arrest`, the line this note foresaw (*"a warrant naming a PERSON"*): it forms
-      person-side only on a person a held dispensation's `terms` names, and its effect
-      (`_eff_arrest`) reads the same held warrant world-side (`world_q.warrants_for`, `seize`'s reading
+      person-side only on a person a dispensation he holds, or one addressed to him that he has heard of (B29.01), names, and its effect
+      (`_eff_arrest`) reads the same warrant world-side (`world_q.warrants_for`, `seize`'s reading
       shared) and opens the `detain` on the seat that ISSUED it. H-94's "a Person (warrant) term has
       no route" is answered for `arrest` by this line.
     values:
@@ -3224,7 +3224,7 @@ rosters:
       OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the
       subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a
       faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime`
-      -- the subject is named by a warrant he holds that is ADDRESSED TO HIM (a held Record of a `warrant_sourced`
+      -- the subject is named by a warrant that is ADDRESSED TO HIM, held or only heard of (B29.02: one reader, so it admits `fight` as well as `capture`; a held Record of a `warrant_sourced`
       kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person
       is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped
       `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s

@@ -28,7 +28,7 @@ from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers import combat as CW
-from ..state.carriers import Claim, subject_of
+from ..state.carriers import Claim, Question, subject_of
 
 A, B = "p_mid", "p_low"           # `tiny_world`: both stand at the hearth; A holds the grievance, B is its object
 SEEDS = range(14, 26)             # measured on `tiny_world`; see LIMITS above. Was range(21) before B24 (seed 6 then issues no challenge), range(6) before it: under the keyed stream (B06) the chain completes at none of 0-5
@@ -306,9 +306,10 @@ def test_arrest_on_an_addressed_and_heard_warrant(monkeypatch):
     holds `arrest` on that man and on no other. (2) The Candidate so formed, folded at Success (the draw pinned so a refusal is the
     write clause's and never a lost roll), is `arrest.made` and opens a `detain` on the prisoner. PLANTED FAILURE: `_eff_arrest` reading
     the held half alone (the pre-B29.01 reading) forms the act and the `write` clause refuses it, `arrest.refused`: this fails on that kind.
-    (3) The custody is read downstream: the issuing seat's holder forms `interrogate` on the prisoner (`Detainee`). (4) One season through
-    `SeasonDriver.season` and the shipped chooser, no hand-built act: any `arrest` the officer attempts ends `arrest.made` or
-    `arrest.resisted`, never refused. (At the measured seeds 0-6 the chooser draws none, so this arm observes nothing there.)
+    (3) The custody is read downstream: the issuing seat's holder forms `interrogate` on the prisoner (`Detainee`). (4) An officer whose only
+    question is the synthetic `need` head (no plain referent: `world_q.questions_for`'s head for a man with no other question) still forms
+    `arrest` on the man the heard warrant names. The plan's fourth arm, a season through the shipped chooser, observed nothing (the chooser
+    forms the Candidate and draws none) and is not kept: arm (2) is the one that sees a refusal.
     CONTROL: the same world with the warrant addressed to a third man forms no `arrest` for the officer, and does for that man."""
     from ..data.matrix import WriteClass
     from ..data.rosters import DETAIN_KIND
@@ -324,10 +325,11 @@ def test_arrest_on_an_addressed_and_heard_warrant(monkeypatch):
     assert [e.kind for e in out] == ["arrest.made"], [e.kind for e in out]
     assert world_q.restrained(w, PRISONER, DETAIN_KIND)
     assert PRISONER in {c.subject for c in _formed(w, ISSUER, "interrogate")}
-    w2, d2 = _warrant_world(OFFICER, monkeypatch)
-    d2.season(P.chooser(w2, verbs=resolvable_verbs()), None, contest_max_depth=w2.fixtures.get("contest_max_depth"))
-    assert set(e.kind for e in w2.log if e.id in d2.act_of and d2.act_of[e.id].verb == "arrest"
-               and d2.act_of[e.id].actor == OFFICER) <= {"arrest.made", "arrest.resisted"}
+    officer = w.persons[OFFICER]
+    need = world_q._stamped(Question(f"q:need:{PRISONER}", "need", (), PRISONER), world_q.warrants_heard(w, officer), w, ())
+    assert need.referents == () and PRISONER in need.referents_for("Person"), need
+    assert PRISONER in {c.subject for c in O.opening_set(officer, assemble(officer, need, w.fixtures.get("view_k")), need, w.fixtures)
+                        if c.verb == "arrest"}
     w3, _ = _warrant_world(THIRD, monkeypatch)
     assert _formed(w3, OFFICER, "arrest") == []
     assert {c.subject for c in _formed(w3, THIRD, "arrest")} == {PRISONER}

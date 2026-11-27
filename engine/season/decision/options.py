@@ -285,8 +285,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 refs = tuple(r for r in refs if r not in read or read[r] & kinds_asked)
             else:
                 refs = tuple(r for r in refs if read.get(r, frozenset()) & kinds_asked)
-        if not refs:
-            continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one
         # Candidate per vocation in the RANGE -- `verb_capability`'s values (`data/verbs.py::VOCATIONS`,
         # #453 K-20) -- the key riding on the roster's operand. ⚠ NEVER THE ACTOR'S OWN `capability`:
@@ -303,7 +301,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # forms only on a referent a HELD record of the warrant kind names -- IN-10's held-Record
         # channel (`held_record_claims`, answered through `record_sourced_operands`' `subject` key),
         # the person's own Tenures and own ledger and no World. It NARROWS the referents the question
-        # carries and widens nothing (§F1 clause 3 stands), so `seize` is never formed for a seat that
+        # carries and narrows (§F1 clause 3 stands; B29.01 adds, below, the persons a warrant addressed to him names, for `arrest` only), so `seize` is never formed for a seat that
         # holds no warrant naming what it was asked about.
         warrant_kind = WARRANT_SOURCED.get(verb)
         warranted = None
@@ -324,6 +322,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 heard = tuple(t for t in dict.fromkeys(addressed_terms(p, warrant_kind, tick, decay)) if t in carried)
                 warranted.update(heard)
                 refs = tuple(refs) + tuple(t for t in heard if t not in refs)
+        if not refs:        # B29.01: after the heard persons are added, so a question with no plain referent (the synthetic `need` head) still forms `arrest`
+            continue
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
@@ -630,7 +630,8 @@ def _war_context(p: Person, q: Question, r: str, records: list, memo: dict) -> b
 def _crime_context(p: Person, q: Question, r: str, records: list, memo: dict) -> bool:
     """CRIME: a warrant he holds, ADDRESSED TO HIM, names `r` (a held Record of a `warrant_sourced` kind, answered
     through `record_sourced_operands`' `subject` key -- the reading `arrest` forms on -- whose addressee is he,
-    `person_q.addressed_to`, IN-12 step 5a's one owner), or `r` is stamped `Detainee` on his question (a live `detain`
+    `person_q.addressed_to`, IN-12 step 5a's one owner), or one addressed to him that he has only heard of, its Record left in its
+    maker's hand (B29.02; `addressed_terms`), or `r` is stamped `Detainee` on his question (a live `detain`
     on a seat he holds: `arrest`'s and `capture`'s custody, `world_q.detainees_held`).
     THE ADDRESSEE TEST NARROWS "A WARRANT HIS SEAT ISSUED OR HOLDS" [ASSUMPTION; medium; Jordan to correct; revert:
     drop the `addressed_to` test]: a dispensation whose `terms` is a person is a warrant to the tree

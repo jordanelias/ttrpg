@@ -1141,7 +1141,7 @@ def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     replaced by a warrant and a seat.
 
     WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the Record exists and
-    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS A
+    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS, OR HAS HEARD OF AS ADDRESSED TO HIM, A
     WARRANT NAMING IT (`_held_warrant_names`) -- the effect's, because it is a Record's content;
     (3) the exercised seat may seize from that holder (`may_seize`, the gate's own predicate, so an act
     the precondition admitted is never killed at the gate by a disagreement about the holder's home).
@@ -1271,6 +1271,14 @@ def _eff_surrender(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     return _take_hold(w, a, rid, held, _SURRENDERED, to=receiver)
 
 
+def _warrant_custody_seat(w: "World", actor: str, prisoner: str, verb: str = "arrest") -> Optional[str]:
+    """THE SEAT A CUSTODY OF `prisoner` GOES TO: the issuing seat (`issuing_seat`) of the first warrant `world_q.warrants_for` reads for `actor`
+    (held in tenure order, then addressed and heard of by id) whose seat's holder could close it (`_may_close_custody`); `None` where none
+    does. The one owner of `arrest`'s rule, which `capture`'s custody reads too (`14_VERBS_PHYSICAL_A` A1, A2)."""
+    return next((s for s in (issuing_seat(w, rid) for rid in warrants_for(w, actor, prisoner, verb))
+                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+
+
 def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
     """Could the seat's LIVE HOLDER close a `detain` the prisoner owns on it -- `may_determine`, the
     predicate `state/gate.py`'s `determination` clause closes a restraint under (`pardon`'s basis)? An
@@ -1282,7 +1290,7 @@ def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
 @effect_for("arrest")
 def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 5 (#453 §9.1, the `arrest` row): A `detain` EDGE OPENS, the prisoner (the act's
-    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`issuing_seat`, K-17/K-52):
+    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds, or has heard of as addressed to him, naming him (`issuing_seat`, K-17/K-52):
     the enforcement seat (`Act.via`) acts but does not own the custody, so the issuing seat's bench is
     who may `pardon` it (`state/gate.py`'s `determination` closes a restraint only through the seat that
     is its object). The row is contested (`a standing`); the fold calls this body on `Overwhelming`,
@@ -1300,8 +1308,8 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     [ASSUMPTION; medium; Jordan to correct; revert: arrest opens a custody on any issuing seat and a
     custody nothing can close is a recorded limit]; (4) the exercised seat may take him (`may_warrant`,
     the gate's own predicate, so an act the precondition admitted is never killed at the gate). Anything
-    else declines (`NO_CHANGE` -> `arrest.refused`, the `write` clause). Several warrants: the first in
-    tenure order whose issuing seat is readable and could close it.
+    else declines (`NO_CHANGE` -> `arrest.refused`, the `write` clause). Several warrants: the first (those he holds in
+    tenure order, then those addressed to him by id) whose issuing seat is readable and could close it.
 
     THE GATE: `warrant` (`state/gate.py`: an opened `detain` whose object is a seat, owned by another
     person, by a seat granted `WARRANT_ACT` whose purview reaches his home). The kind is a LITERAL so
@@ -1310,9 +1318,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner = _operand(a, "subject")
     if prisoner not in w.persons or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND):
         return NO_CHANGE
-    seat = next((s for s in (issuing_seat(w, rid)
-                             for rid in warrants_for(w, a.actor, prisoner, a.verb))
-                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+    seat = _warrant_custody_seat(w, a.actor, prisoner, a.verb)
     if seat is None or not may_warrant(w, a.actor, a.via, prisoner):
         return NO_CHANGE
     nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{seat}:{a.id}"), prisoner, seat, "detain",

@@ -5289,7 +5289,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     # B29.01 (`14_VERBS_PHYSICAL_A` A1 [ASSUMPTION; medium; Jordan to correct; revert: drop `warrants_heard` from the splice]): AND THE
-    # PERSONS A WARRANT ADDRESSED TO HIM AND HEARD OF NAMES (`warrants_heard`), as `Person` -- `arrest` forms on them
+    # PERSONS A WARRANT ADDRESSED TO HIM AND HEARD OF NAMES (`warrants_heard`), as `Person` (a class-wide stamp: `capture`, `dispatch`, `open_case`, `petition` and `tend` form on it too) -- `arrest` forms on them
     # (`decision/options.py::opening_set`, which reads his own ledger for which of the question's `Person`s are those). The occasion, once per
     # season on the head question; the arrest is the officer's draw.
     # B21.66 (`IS-B3-FA-06`; A-21, `04` §C.2 reading (i); [ASSUMPTION; medium; Jordan to correct; revert: drop `inherited_terms` from the splice]):

@@ -29,7 +29,7 @@ from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATION
 from ..gaps import Unspecified
 from ..queries.person_q import HAND_PREDICATE, held_against
 from ..queries.world_q import (
-    BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, issuing_seat, restrained, warrants_for,
+    BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained,
 )
 from ..seam.ladder import party_degree
 from ..seam.wrappers.pool import pool_pair, untrained
@@ -41,7 +41,7 @@ from ..state.gate import (
 from ..state.ids import H, draw_factory
 
 from .effects_economy import _fall
-from .effects_information import _may_close_custody
+from .effects_information import _may_close_custody, _warrant_custody_seat
 from .effects_migration import _relocate
 from .effects_shared import _debit, _operand, _scaled, effect_for
 
@@ -459,8 +459,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # B29.02 (`14_VERBS_PHYSICAL_A` A2 [ASSUMPTION; medium; Jordan to correct; revert: `seat = a.via`]): CUSTODY GOES TO THE COURT WHOSE WARRANT IT IS --
     # `_eff_arrest`'s rule (the issuing seat of the first warrant `warrants_for` reads whose holder could close the custody), read here and not
     # re-decided; with no such warrant it is the seat the act is exercised through, as before.
-    seat = next((s for s in (issuing_seat(w, rid) for rid in warrants_for(w, a.actor, prisoner))
-                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+    seat = _warrant_custody_seat(w, a.actor, prisoner)
     if seat is None:
         seat = a.via
         if not _may_close_custody(w, seat, prisoner):
