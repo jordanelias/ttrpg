@@ -211,6 +211,7 @@ suites:
     - risk_term
     - scar_stock
     - scruple
+    - seat_holders_from_ledger
     - staged_goals
     - temper
     - u1_capability_surface

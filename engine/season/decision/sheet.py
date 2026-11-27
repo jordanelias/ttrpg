@@ -91,6 +91,7 @@ class CreationRow:
     reads it and picks an `id`."""
     id: str
     name: str
+    cohort: bool             # `Person.is_cohort`, the carrier's own predicate, copied: a population row, not a single person
     capability: Mapping
     pursuits: Mapping
     conviction: Mapping
@@ -105,7 +106,7 @@ def creation_sheet(persons: Iterable[Person], holdings_of: Callable[[str], tuple
     the world is the first thing a player weighs): the caller passes it so this file names no `World`
     (`harness/play_surface.py::holdings_of` builds it host-side; `OwnStateReader` answers one object's holder and
     enumerates nothing, so it is not the reader yet). Writes nothing."""
-    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(recognised(p, p.pursuits)),
+    return tuple(CreationRow(p.id, p.name, p.is_cohort, frozen(p.capability), frozen(recognised(p, p.pursuits)),
                              frozen(p.conviction), frozen(p.attributes), tuple(holdings_of(p.id)))
                  for p in sorted(persons, key=lambda q: q.id))
 
