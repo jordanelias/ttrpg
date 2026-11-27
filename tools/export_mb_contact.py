@@ -200,6 +200,9 @@ def main(argv):
     except Refused as exc:                                        # a refusal is named and exits non-zero, never a traceback
         print(f'[mb_contact] REFUSED -- {exc}')
         return 1
+    except (KeyError, TypeError) as exc:                          # a troop file missing a key the exporter reads
+        print(f'[mb_contact] REFUSED -- the troop file lacks or mistypes {exc!s}; `python tools/export_troops.py --check` names the row')
+        return 1
     want = {OUT: render(data), OUT_PY: literal(data)}
     if '--check' in argv:
         for path, text in want.items():

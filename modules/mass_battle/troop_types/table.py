@@ -119,10 +119,14 @@ def _check_contact(contact: dict, arms: dict, tiers: set) -> None:
     _columns('contact.levels', contact['levels'], LEVEL_COLUMNS, LEVEL_COLUMNS)
     missile = contact['missile']
     _columns('contact.missile', missile, MISSILE_COLUMNS, MISSILE_COLUMNS)
-    for table_name, inner in (('hit', MISSILE_BANDS), ('felling_per_hit', tuple(tiers))):
+    for table_name, inner in (('hit', MISSILE_BANDS), ('felling_per_hit', tuple(sorted(tiers)))):
+        if not isinstance(missile[table_name], dict):
+            raise TroopFileError(f"contact.missile.{table_name}: expected a table keyed by arm; got {missile[table_name]!r}")
         for arm, cells in missile[table_name].items():
             _member(f"contact.missile.{table_name}", arm, arms, 'arm', nullable=False)
             _columns(f"contact.missile.{table_name}.{arm}", cells, inner, inner)
+    if not isinstance(missile['shots_per_tick'], dict):
+        raise TroopFileError(f"contact.missile.shots_per_tick: expected a table keyed by arm; got {missile['shots_per_tick']!r}")
     for arm in missile['shots_per_tick']:
         _member('contact.missile.shots_per_tick', arm, arms, 'arm', nullable=False)
     _columns('contact.missile.profile', missile['profile'], ('foot', 'mounted'), ('foot', 'mounted'))
@@ -174,6 +178,9 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
         _member(where, arm['duel_key_status'], DUEL_KEY_STATUSES, 'duel_key_status', nullable=False)
         _member(where, arm['duel_key'], combat_weapons, "duel_key (a key of personal combat's weapon export)")
         _member(where, arm.get('sidearm'), combat_weapons, "sidearm (a key of personal combat's weapon export)")
+        if (arm['duel_key'] is None) != (arm['duel_key_status'] == 'none'):
+            raise TroopFileError(f"{where}: duel_key_status {arm['duel_key_status']!r} with duel_key {arm['duel_key']!r}; "
+                                 f"`none` goes with a null `duel_key` and only with it")
         if arm['duel_key'] is None and arm.get('sidearm') is None:
             raise TroopFileError(f"{where}: neither a `duel_key` nor a `sidearm`; the duel has no weapon to read for it")
         if 'mass_kg' in arm and name in combat_weapons:
