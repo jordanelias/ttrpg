@@ -2100,6 +2100,19 @@ for _f, _place in FOREIGN_CAST.items():
             f"settlement, each {{code}}", "rosters.yaml -- foreign_cast",
             needs="a faction named in `names_index.yaml` (`token_class: faction`) and both places",
             law="v9 IN-36 -- a foreign faction is a faction first; its places are what `foreign=True` mints")
+    # B12b.20 (`07_SE_arc_needs` (c)): the settlement entry's one optional key, `stores:` -- what the foreign settlement is built holding
+    # (`{matter kind: positive whole number}`). Checked at load: a misspelt key or kind would seed nothing and read as an empty larder.
+    _settlement = _place["settlement"]
+    _kinds = roster("matter_kinds")
+    if set(_settlement) - {"code", "stores"} or ("stores" in _settlement and (
+            not isinstance(_settlement["stores"], dict) or not _settlement["stores"] or any(
+                k not in _kinds or isinstance(n, bool) or not isinstance(n, int) or n < 1
+                for k, n in _settlement["stores"].items()))):
+        raise Unspecified(
+            f"rosters.yaml `foreign_cast` row {_f!r}'s settlement holds a key other than `code` and `stores`, or a `stores` that is not a "
+            f"non-empty mapping of `matter_kinds` members to positive whole numbers", "rosters.yaml -- foreign_cast",
+            needs="`settlement: {code, stores?}`, `stores` naming registered matter kinds and amounts of at least 1",
+            law="B12b.20 -- a foreign settlement may hold stores; a seed names only kinds that are registered")
 del _f, _place
 # A foreign seat for a faction `foreign_cast` does not name is dropped by `build_realm` without a sound, and its
 # goal rows would be seeded with no committer: the quiet empire, one key over.

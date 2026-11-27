@@ -1477,6 +1477,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.rungs[srid] = Rung(srid, "settlement")
         _index_anchor(w, anchors, place["settlement"]["code"], srid)
         w.add_tenure(Tenure(f"t_{srid}_in", srid, trid, "contain", 0))
+        # B12b.20: the settlement entry's optional `stores:` is the foreign rung's builder seed (shipped absent: no write, no hash move).
+        if place["settlement"].get("stores"):
+            w.rungs[srid].stores = dict(place["settlement"]["stores"])
         foreign_home[fac_name] = (trid, srid)
     # A faction named in `foreign_cast` that this world did not build does not exist in it: no Proposition, no
     # member, no seat, no goal. `absent` is that set, and every site below that reads `FACTIONS` filters by it.

@@ -2518,6 +2518,9 @@ rosters:
       T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier
       territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at.
       Revert: Jordan names the homeland places.
+      OPTIONAL KEY (B12b.20): a `settlement:` entry may carry `stores: {matter kind: whole number >= 1}`, which the builder seeds as that
+      rung's `Rung.stores` (a counterparty stock for `exchange` once CR-49 names another rung). Shipped absent, so no hash moves; a
+      misspelt key or an unregistered kind refuses at load (`data/rosters.py`).
     by_faction:
       "Altonia":
         territory:  {code: "ALT"}
