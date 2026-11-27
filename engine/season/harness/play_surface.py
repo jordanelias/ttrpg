@@ -178,15 +178,17 @@ def account_lines(p: Any, since: tuple) -> list:
 def deliberation_lines(w: Any, sheet: Any, verbs: Optional[frozenset] = None) -> list:
     """The `Situation` and the `Offer` of the seated person at one deliberation, as printed lines. `sheet` is the `DevelopmentSheet` `development_space` hands `pick`
     (its `view` and `budget` are the deliberation's own); `w` is read only to find the person's own record (`w.persons[...]`) and the `fx` and `draw` the chooser was
-    built with. The offer rows are `make_ranker`'s order, so `[i]` is the index a pick names."""
+    built with. The offer rows are the sheet's own order (`make_ranker`'s, the picked question's occasions first when he picked a later one, B34.16), so `[i]` is the
+    index a pick names."""
     p = w.persons[sheet.person_id]
     v = sheet.view
     s = situation(p, v, lambda: sheet.budget)
-    off = offer(p, v, w.fixtures, resolvable_verbs() if verbs is None else verbs, draw_factory(w.world_seed, lambda: w.tick))
+    off = offer(p, v, w.fixtures, resolvable_verbs() if verbs is None else verbs, draw_factory(w.world_seed, lambda: w.tick), sheet.asked_index)
     lines = [f"   situation · body {s.body} · budget {s.budget} · holds {list(s.holdings)} · pursuits {dict(s.pursuits)} · stance {list(s.stance)}"]
     for a in s.asked:
         lines.append(f"   asked {a.question.id} · {a.question.source} · about {a.question.about}"
-                     + (f" · his claim: {a.claim.predicate} = {_short(a.claim.value)}" if a.claim is not None else ""))
+                     + (f" · his claim: {a.claim.predicate} = {_short(a.claim.value)}" if a.claim is not None else "")
+                     + (" · asked for" if a is s.asked[sheet.asked_index] and sheet.asked_index > 0 else ""))
     for i, r in enumerate(off.rows):
         c = r.candidate
         terms = " ".join(f"{n} {t:+.2f}" for n, t in zip(TERM_NAMES, r.terms))
@@ -213,9 +215,11 @@ def faction_line(w: Any, pid: Optional[str]) -> Optional[str]:
             f"largest holder's share {s.sovereign_share:.2f}, {len(s.provinces)} provinces")
 
 
-def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None, out: Callable[[str], None] = print) -> dict:
+def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None, out: Callable[[str], None] = print,
+               ask: Optional[Callable[[Any], int]] = None) -> dict:
     """Play `scenarios.SCENARIOS[name]` through `scenarios.run` with `person` seated on `take_ranked`, printing each deliberation (`deliberation_lines`), the pick, the
-    `account` since his last deliberation, and once a season the host's faction line. Prints `content_hash` and, last, `ENDING <name> <kind>` where the run ended on one.
+    `account` since his last deliberation, and once a season the host's faction line. `ask(situation) -> int` is his pick of one of the questions asked of him
+    (`development_space`'s), the first where `None`. Prints `content_hash` and, last, `ENDING <name> <kind>` where the run ended on one.
     Returns `scenarios.run`'s dict. Nothing here writes the world: the readers are `decision/sheet.py`'s."""
     from . import scenarios as SC                      # lazy: scenarios imports this module
     from ..decision.sheet import take_ranked
@@ -257,7 +261,7 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
         state["seat"] = pid
         return chosen
 
-    r = SC.run(name, seed, seasons, pick=pick, person=person, on_build=built.append)
+    r = SC.run(name, seed, seasons, pick=pick, person=person, on_build=built.append, ask=ask)
     w = built[0]
     if r["seat"] is not None and r["seat"] == state["seat"]:
         out("-- the run ended")
@@ -275,6 +279,7 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--person", help="the seated person's id (default: the scenario's own seat; the realm has none, so it prints its creation sheet)")
     ap.add_argument("--seasons", type=int, default=1)
+    ap.add_argument("--question", type=int, default=0, help="which of the questions asked of him he answers (an index in attention order; 0, the default, is the shipped ranking)")
     ap.add_argument("--scenario", default="life", help="a name in `scenarios.SCENARIOS` (default `life`: the realm as built)")
     return ap.parse_args(argv)
 
@@ -291,7 +296,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         for c in creation_sheet(w.persons.values(), holdings_of(w)):
             print(f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}")
         return 2
-    transcript(a.scenario, a.seed, a.seasons, a.person)
+    transcript(a.scenario, a.seed, a.seasons, a.person, ask=None if a.question == 0 else (lambda s: min(a.question, len(s.asked) - 1)))
     return 0
 
 

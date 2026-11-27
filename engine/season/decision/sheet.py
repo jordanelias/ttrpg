@@ -158,12 +158,14 @@ class DevelopmentSheet:
     heritage: Optional[str]
     tenures: tuple
     decisiveness: float          # derived, B10.27: `person_q.decisiveness(p, fx.get("scar_weight_shift"))`
+    asked_index: int = 0         # B34.16: the place in `View.questions` of the question the sheet is ranked for (`question` is that question; 0 is the shipped ranking)
 
 
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
-                      draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
+                      draw: Optional[Callable[[str, str], Any]] = None,
+                      ask: Optional[Callable[["Situation"], int]] = None) -> Callable[..., list]:
     """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person; `p` is the
     `PersonInterior` DELIBERATE hands `choose` (B03.58), the same type, so the space cannot assign to the person.
 
@@ -172,7 +174,12 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     candidates through `release` -- the same step, the same `fx`/`mint`/`draw` the automated chooser
     uses -- so a player's act has the automated act's shape. `auto` (the delegate) is not called: the
     sheet already carries what it would rank. Build it with the arguments the caller gave
-    `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control."""
+    `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control.
+
+    `ask(situation) -> int` (B34.16) is his pick of one of the questions asked of him, an index into `situation.asked` (`View.questions`, in attention order).
+    The candidate set is the same; the candidates whose `occasion` is the picked question come first, the rest after in the ranker's order (`_first_for`), the sheet's
+    `question` is the one picked and the Scenes his pick packs are occasioned by it. `None`, or a pick of the first question, is the shipped ranking: the automated
+    chooser is untouched, and a space built with no `ask` is `make_chooser`'s control as before. An index outside `asked` is refused (`Forbidden`)."""
     rank = make_ranker(fx, verbs, draw)
 
     def space(p: PersonInterior, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
@@ -181,11 +188,20 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
             return []
         cands = rank(p, v)
         n = ask_budget()
+        at = 0
+        if ask is not None:
+            at = int(ask(situation(p, v, lambda: n)))
+            if not 0 <= at < max(len(v.questions), 1):
+                raise Forbidden(f"{p.id}'s pick of question {at} is not one of the {len(v.questions)} asked of him", "IN-47 rule 1", law=_LAW)
+        if at > 0:
+            forgone, q = getattr(cands, "forgone_of", None), v.questions[at]
+            cands = _first_for(cands, v.questions, at)
+            cands.forgone_of = forgone
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
                                  frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
                                  tuple((t.kind, t.object) for t in p.tenures if t.live),
-                                 decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")))
+                                 decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")), at)
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "
@@ -207,6 +223,23 @@ def take_ranked(sheet: DevelopmentSheet) -> range:
 # ---------------------------------------------------------------------------------------------------
 # SITUATION AND OFFER (B34.02) -- what is in front of him and what he may do. Readers: no act, no write, no draw of their own.
 # ---------------------------------------------------------------------------------------------------
+
+def _occasion_of(asked: Sequence[Question], subject: Optional[str]) -> Optional[str]:
+    """The id of the first of `asked` that names `subject` among its referents (plain or classed): a candidate's occasion, `OfferRow.occasion`'s and
+    `_first_for`'s one owner. `None` for no subject, or a subject no question names (a standing candidate)."""
+    if subject is None:
+        return None
+    return next((a.id for a in asked if subject in a.referents or subject in {r for r, _ in a.classes}), None)
+
+
+def _first_for(cands: Sequence[Candidate], asked: Sequence[Question], at: int) -> Ranked:
+    """`cands` with those whose occasion (`_occasion_of`) is `asked[at]` first, the rest after, each group in the order given (stable). Forms and drops
+    nothing; `at` 0 is the question the shipped ranking is already for, so it is `cands` as given."""
+    if at <= 0:
+        return Ranked(cands)
+    want = asked[at].id
+    return Ranked([c for c in cands if _occasion_of(asked, c.subject) == want] + [c for c in cands if _occasion_of(asked, c.subject) != want])
+
 
 @dataclass(frozen=True)
 class AskedRow:
@@ -274,30 +307,26 @@ class Offer:
 
 
 def offer(p: Person, v: View, fx: Any, verbs: Optional[frozenset] = None,
-          draw: Optional[Callable[[str, str], Any]] = None) -> Offer:
+          draw: Optional[Callable[[str, str], Any]] = None, asked_index: int = 0) -> Offer:
     """WHAT HE MAY DO: the rows `make_ranker(fx, verbs, draw)` orders for him, each with the terms its `watch` hook reported, his believed odds and its
     cost, and the verbs his own state withheld. `fx`, `verbs` and `draw` are the ones the chooser was built with (`rank` needs `fx`; a different `verbs`
     or `draw` is a different offer, as `development_space` says); the source's `offer(p, v)` has no way to reach them. Forms nothing, ranks nothing of its
-    own, and writes nothing. A View with no question offers nothing."""
+    own, and writes nothing. A View with no question offers nothing. `asked_index` is `DevelopmentSheet.asked_index`: the rows in the order `development_space`
+    gave that pick (`_first_for`), so `[i]` is the index a pick names."""
     q = getattr(v, "question", None)
     if q is None:
         return Offer((), ())
     watched: list = []
-    order = make_ranker(fx, verbs, draw, lambda _p, _q, ranked, terms, sampled: watched.append((ranked, terms)))(p, v)
+    order = _first_for(make_ranker(fx, verbs, draw, lambda _p, _q, ranked, terms, sampled: watched.append((ranked, terms)))(p, v), v.questions, asked_index)
     terms_of = {id(c): t for c, t in zip(*watched[-1])} if watched else {}
     odds = getattr(v, "odds", None)
     extended = fx.get("extended_scene_cost")
     asked = tuple(v.questions)
 
-    def occasion(subject: Optional[str]) -> Optional[str]:
-        if subject is None:
-            return None
-        return next((a.id for a in asked if subject in a.referents or subject in {r for r, _ in a.classes}), None)
-
     def cost(c: Candidate) -> int:
         return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended)
 
-    rows = tuple(OfferRow(copy.deepcopy(c), occasion(c.subject), tuple(terms_of[id(c)]),
+    rows = tuple(OfferRow(copy.deepcopy(c), _occasion_of(asked, c.subject), tuple(terms_of[id(c)]),
                           None if odds is None else _believed_chance(p, c, odds), cost(c)) for c in order)
     withheld = tuple(WithheldRow(*d) for d in dict.fromkeys(own_state_declines(p, v, q, fx)) if verbs is None or d[0] in verbs)
     return Offer(rows, withheld)

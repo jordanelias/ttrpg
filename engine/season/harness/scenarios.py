@@ -118,10 +118,11 @@ SCENARIOS: dict[str, Scenario] = {
 
 def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None,
         host=None, person: Optional[str] = None, on_build: Optional[Callable[[World], None]] = None,
-        tie: Optional[Callable[[tuple], object]] = None) -> dict:
+        tie: Optional[Callable[[tuple], object]] = None, ask: Optional[Callable[[object], int]] = None) -> dict:
     """Play `SCENARIOS[name]` at `seed` for at most `seasons` seasons and stop at the first season whose end `ending`
     names one. `pick(sheet) -> indices` decides for the seated person (`person`, else the row's `seat`); `None` takes the
-    shipped ranking whole. `tie(offer) -> Continuation` decides, between seasons, whom the seat passes to when he is dead and
+    shipped ranking whole. `ask(situation) -> int` is his pick of one of the questions asked of him (`development_space`'s, B34.16); `None` is the first.
+    `tie(offer) -> Continuation` decides, between seasons, whom the seat passes to when he is dead and
     `play_surface.carry_on` offers his living ties (B11.79, `IS-B2-CHAR-01` (3)); `None` takes the first, `carry_on`'s own
     recorded revert. `host` is `SeasonDriver.season`'s own (`queries/inputs.py::PlayHost`). `on_build(w)` is called once with
     the built world before any season: a client that prints beside `pick` (the command line's board) keeps it; it is handed the
@@ -152,7 +153,7 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     def counted(sheet):
         asked["n"] += 1
         return (take_ranked if pick is None else pick)(sheet)
-    space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw)
+    space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw, ask=ask)
     overrides = bind_seat(creation_sheet(w.persons.values(), holdings_of(w)), pid, space)
     choose = dispatching_chooser(chooser(w, verbs=verbs), overrides)
     d = SeasonDriver(w)

@@ -56,11 +56,14 @@ def _offer(p, v):
     return offer(p, v, _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"])
 
 
-def _deliberations(seed: int, per_person=None, limit: int = 10 ** 9):
+def _deliberations(seed: int, per_person=None, limit: int = 10 ** 9, overlay=None):
     """One season of the plain realm run (`populated.run`'s composition), the chooser built with CHAR's `watch` hook. For each deliberation that
     formed a candidate set, `per_person(p, v, ranked, terms)` is called inside the chooser call, so `v.odds` still closes over the
-    barrier's world. Writes nothing the plain run does not. Returns how many deliberations it was called for."""
+    barrier's world. Writes nothing the plain run does not. Returns how many deliberations it was called for. `overlay(w)` is called once on the
+    built world before the first season (a `Fixtures` sweep, as `scenarios.run`'s `on_build`)."""
     w = build_realm(seed)
+    if overlay is not None:
+        overlay(w)
     d = SeasonDriver(w)
     seen: list = []
     _CHOOSER.update(fx=w.fixtures, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
@@ -188,6 +191,52 @@ def test_withheld_rows_are_own_state_only():
             checked[0] += 1
     _deliberations(0, per_person)
     assert checked[0] >= 1, "no row was withheld at the realm's first season: the gate observed nothing"
+
+
+# -- B34.16: the player is shown all his questions ----------------------------------------------------------------
+
+def test_development_space_ranks_for_the_picked_question():
+    """B34.16 (`01_CORE` edit 5). The sheet is shown the player's questions (`Situation.asked`) and `development_space(..., ask=)` takes his pick of one. Read at the
+    realm's first season under `question_aggregation_rule` `all`, the one arm whose candidate set holds a row for a later question (under the shipped `first` the
+    set forms on the head question alone, so a later question has no row to rank first and the arm would read nothing). At each of the first 40 deliberations that ask two or more
+    questions: (a) CONTROL, a pick of the first question, and no `ask` at all, give today's order; (b) a pick of the second gives the same candidates (none formed, none
+    dropped), those whose `occasion` is that question first and the rest after in today's order, and the sheet carries the question picked. `moved` is asserted, so a
+    season in which the pick reordered nothing is a red test and not a vacuous one."""
+    from ..decision.sheet import development_space, situation
+    checked, moved = [0], [0]
+
+    def per_person(p, v, ranked, terms):
+        if len(v.questions) < 2 or checked[0] >= 40:
+            return
+        fx, verbs, draw = _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"]
+        mint = lambda who, verb, subj: f"{who}:{verb}:{subj}"
+
+        def sheet_under(ask):
+            got: list = []
+            development_space(fx, mint, lambda sheet: (got.append(sheet), [])[1], verbs, draw, ask=ask)(p, v, None, lambda: 5)
+            return got[0]
+
+        def order(sheet):
+            return [(c.verb, c.subject) for c in sheet.candidates]
+        plain, first, second = sheet_under(None), sheet_under(lambda s: 0), sheet_under(lambda s: 1)
+        assert order(first) == order(plain) == [(c.verb, c.subject) for c in ranked], p.id
+        assert first.question is plain.question and plain.question is v.question
+        rows = _offer(p, v).rows
+        want = v.questions[1].id
+        expected = [(r.candidate.verb, r.candidate.subject) for r in rows if r.occasion == want] \
+            + [(r.candidate.verb, r.candidate.subject) for r in rows if r.occasion != want]
+        assert order(second) == expected, (p.id, want)
+        assert second.question.id == want
+        shown = situation(p, v, lambda: 5).asked
+        assert [a.question.id for a in shown] == [q.id for q in v.questions]
+        checked[0] += 1
+        moved[0] += order(second) != order(plain)
+
+    def aggregate_all(w):
+        w.fixtures = w.fixtures.sweep("question_aggregation_rule", "all")
+    _deliberations(0, per_person, overlay=aggregate_all)
+    assert checked[0] == 40, f"only {checked[0]} deliberations asked two questions: the arm did not run"
+    assert moved[0] >= 1, "a pick of the second question reordered no deliberation: the arm observed nothing"
 
 
 # -- gate 3 of `11_GO_fidelity_and_campaign_modes` (B34.08) ------------------------------------------------------
