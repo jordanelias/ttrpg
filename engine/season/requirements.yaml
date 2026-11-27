@@ -634,7 +634,7 @@ rows:
         expects: "the `BUILT OUT` block reads `built out <n> of <n>`, n = `len(VERB_TABLE)` at measurement time"
         holds: "unread"
         reading:    # written by B29.99 (IS-A-12); A-114: no `status:` edited; replaces B11.99's `covenant` record (`0160d6ff1`, in the history)
-          tree: "b557cb241 (B29.02, the batch's last code commit; B29.03's `b7d1f0314` changes only the handoff row, so the tree the batch closes on reads the same)"
+          tree: "b557cb241 (B29.02, the batch's last code commit when the aperture was read; the close's `b206dd335` then moved the empty-refs guard in `opening_set` and extracted `_warrant_custody_seat`: seed 0's one-season hash read the same after it, the aperture was not re-read)"
           date: "2026-11-27"
           seed: "0, 1, 2"
           seasons: 2
