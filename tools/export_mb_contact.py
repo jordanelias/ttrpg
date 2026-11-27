@@ -139,13 +139,11 @@ def build(table_path: str | None = None, troops_path: str | None = None) -> dict
                       f'{str(table.get("engine_fingerprint"))[:12]} (a change to engine/engine_params/combat_engine_v1.json, '
                       f'modules/combat/*.py or engine/dice_engine/*.py can move a felling chance). Re-measure: {REMEDY}   '
                       f'(to run it in chunks and merge them, see the instrument\'s docstring, "CHUNKING THE GRID")')
-    import yaml
-    with open(troops_path, encoding='utf-8') as fh:
-        troops = yaml.safe_load(fh)
     try:
         grid = cmc.Grid(troops_path)
     except ValueError as e:      # a duel key, armour tier or skill the instrument's grid does not hold
         raise Refused(f'the troop file does not fit the instrument\'s grid: {e}. Re-measure: {REMEDY}')
+    troops = grid.doc
     if table.get('K') != grid.K:
         raise Refused(f'the table holds K = {table.get("K")!r} rounds and the troop file\'s contact.K is {grid.K}. Re-measure: {REMEDY}')
     rows = _rows(table)

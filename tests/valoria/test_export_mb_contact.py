@@ -98,4 +98,4 @@ def test_interpolation_hits_the_check_cells():
                 outside.append((c['a'], c['b'], side, h, row['h_lo'][0], row['h_hi'][0]))
                 break
     assert check == 12, f'{check} check cells read'
-    assert len({(json.dumps(o[0]), json.dumps(o[1])) for o in outside}) <= 1, outside
+    assert len(outside) <= 1, outside

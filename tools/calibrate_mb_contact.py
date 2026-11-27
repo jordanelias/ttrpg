@@ -72,6 +72,8 @@ from collections import Counter
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TROOPS = os.path.join(REPO, "references", "troops.yaml")
+if REPO not in sys.path:      # `Grid` reads the troop file through the engine's duplicate-key-refusing loader
+    sys.path.insert(0, REPO)
 PARAMS = os.path.join(REPO, "engine", "engine_params", "combat_engine_v1.json")
 COMBAT_DIR = os.path.join(REPO, "modules", "combat")
 DICE_DIR = os.path.join(REPO, "engine", "dice_engine")
@@ -87,7 +89,6 @@ SEED_RULE = "crc32(repr(cell_key)) % 100000"
 ROUND_SOURCE = "modules.combat.fight.fight_round"
 TERMS = "death"
 SCHEMA = 1
-Skill = int
 
 
 # ---------------------------------------------------------------------------------------------------- the fingerprint
@@ -115,9 +116,9 @@ class Grid:
     (`duel_key`, else `sidearm`), `armours` its `armour_tiers`, `K` its `contact.K.value`."""
 
     def __init__(self, troops_path: str = TROOPS):
-        import yaml
+        from engine.season.data.rosters import load_yaml   # refuses a duplicate key: two troop rows of one name are an error
         with open(troops_path, encoding="utf-8") as f:
-            doc = yaml.safe_load(f)
+            doc = self.doc = load_yaml(f.read())
         eff = {name: (a.get("duel_key") or a.get("sidearm")) for name, a in doc["arms"].items()}
         for name, k in eff.items():
             if not k:

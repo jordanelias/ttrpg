@@ -222,8 +222,7 @@ def troop_types() -> tuple:
 def _with_power(row: dict) -> dict:
     """A copy of a stat-carrying dict that also reads `power`, the alias of `skill` kept until MBA-04 deletes the last pool reader."""
     out = dict(row)
-    if 'skill' in out:
-        out['power'] = out['skill']
+    out['power'] = out['skill']
     return out
 
 
