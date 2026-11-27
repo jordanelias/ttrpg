@@ -203,8 +203,10 @@ def test_a_terms_sourced_line_naming_no_held_writ_kind_is_refused_at_load():
     shipped line `[dispensation]`, `petition` planted as the dead kind; NEW: `[dispensation, petition]`, and
     the dead kind planted is `faction_sheet` (`record_sourced_operands` maps its `subject`, and no Record
     row asks for it, so neither term stamps it)."""
-    assert VERBS._load_terms_sourced({"commit": ["dispensation", "petition"]}) == VERBS.TERMS_SOURCED
-    assert VERBS.TERMS_SOURCED == {"commit": ("dispensation", "petition")}
+    # B21b.14 (CP-T09-03 (c)): `release: [dispensation]` joined the shipped roster -- the peace a covenant on a war offers its counterparty.
+    shipped = {"commit": ["dispensation", "petition"], "release": ["dispensation"]}
+    assert VERBS._load_terms_sourced(shipped) == VERBS.TERMS_SOURCED
+    assert VERBS.TERMS_SOURCED == {"commit": ("dispensation", "petition"), "release": ("dispensation",)}
     for planted in ({"commit": ["faction_sheet"]}, {"commit": []}, {"no_such_verb": ["dispensation"]}):
         with pytest.raises(Forbidden, match="terms_sourced"):
             VERBS._load_terms_sourced(planted)

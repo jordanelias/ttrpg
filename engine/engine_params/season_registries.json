@@ -4173,6 +4173,9 @@
             "commit": [
               "dispensation",
               "petition"
+            ],
+            "release": [
+              "dispensation"
             ]
           }
         },

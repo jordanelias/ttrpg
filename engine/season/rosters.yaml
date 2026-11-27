@@ -2897,6 +2897,10 @@ rosters:
       # witness ADDRESSED by a petition he holds forms `commit` on the charge its `terms` names; the
       # loader admits the kind by derivation (`data/verbs.py::_load_terms_sourced`).
       commit: [dispensation, petition]
+      # B21b.14 (CP-T09-03 (c), AM-F-12; [ASSUMPTION; medium; Jordan to correct; revert: drop this line]): PEACE IS THE COUNTERPARTY'S OWN `release`, formed on the terms of
+      # the same instrument -- a covenant on a war, held by a man who holds a `commit` to it, offers him the release of that edge (`own_edge_declines` keeps the referent
+      # only where he holds the edge). The offerer's own release is his own act; `commit` stays the alliance (above).
+      release: [dispensation]
 
   # v11 CP-T04-02: THE TWO CLOSED SETS OF A STANDING ORDER. NO `values:` -- the members ARE the mass-battle
   # module's (`modules/mass_battle/massbattle.py::ORDER_ROLES`, `config.ROLE_SPEC`'s names, and `ORDER_RETREAT_AT`), cooked
