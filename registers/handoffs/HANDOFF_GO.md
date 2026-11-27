@@ -5,7 +5,6 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Batch B34-go-surface — IN FLIGHT | `workplans/valoria_master_workplan_v12_part25_cont.md` (the batch block); open 70b3b617bdaa715b267a4b99c8d5b6fdfe26aa7f | built B34.01 to B34.10, B34.12, B34.15, B34.16, B34.17, B34.19, B34.20, B34.21, B34.23, B34.24, B34.99 · close 1 (Phase 1 reconciled, fixes at 692d21571 and 3e965deb1; accretion pass run early at 2dd0b23c0, to be re-run after Phase 2) · FIRST `git merge origin/main` (B12b, #649, merged after the open sha: conflicts in `engine/season/decision/sheet.py`, `harness/governance_spine.py`, `harness/scenarios.py`, `state/carriers.py`, `data/verbs.py`, `references/test_lane_caps.yaml`, and the derived `engine_params/sim_params.json` (re-derive with `export_sim_params.py --build`, never hand-merge); B12b is a hash mover, so re-read the realm hash at seeds 0-2 and the six B34.24 pins on the merged tree) · then Phase 2 (`/code-review --fix`, `/simplify`, `layer-conformance`), then the accretion counts again, Phase 3, the expunge and the confirming push (B34.22 a reading, B34.18 a pointer) |
 | port gate (`B41-go-port-gate`) | `workplans/valoria_master_workplan_v12_part2.md` (its batch row), `valoria_master_workplan_v12_part29.md` | per the batch card; v11's B10-20 card (`FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1) is superseded |
 
 ## Standing orders — do not re-raise, do not do

@@ -22,7 +22,7 @@ GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B27-sc-proceedings
-GATE: Batch B34-go-surface
+GATE: Batch B34-go-surface @3d9f96ec3581dd042899b1f9d9586481608a970a
 GATE: Batch B35-wr-thread
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c1 (the chronicle) → `python -m engine.season.harness.chronicle --seed 0 --seasons 2` tells: every line whose act has a subject names it (IS-A §2's R-04.c1, "`chronicle --seed 0` tells"); R-04.a, R-04.b, R-04.c2 to R-04.c7 re-read on this close's tree → each holds (M4 closes here, `V12_STRUCTURE.md` §3; IS-A `_part2` §12.2's B36 row "the chronicle tells; nine of nine", read as readings: no `status:` edited, A-114)

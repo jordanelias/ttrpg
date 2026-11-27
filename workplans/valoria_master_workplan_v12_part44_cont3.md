@@ -61,7 +61,7 @@ GATE: Batch B30-mb-nested
 GATE: Batch B31-mb-loadout-economy
 GATE: Batch B32-inst-kit
 GATE: Batch B33-inst-economy-hands
-GATE: Batch B34-go-surface
+GATE: Batch B34-go-surface @3d9f96ec3581dd042899b1f9d9586481608a970a
 GATE: Batch B35-wr-thread
 GATE: Batch B36-wr-story-instruments
 GATE: Batch B37-happenings
