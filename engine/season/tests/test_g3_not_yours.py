@@ -301,6 +301,25 @@ def test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse():
     assert _hold(w, "off_reeve").subject == "p_low"
 
 
+def test_req_confer_and_eff_confer_read_the_same_holders():
+    """H-133 (B21b.23): `_req_confer` tests EVERY live holder of the seat, the set `_eff_confer` closes. A seat planted with two live
+    `hold`s (no built world has one) whose SECOND holder carries a live `commit` is refused at the precondition, naming that holder, where
+    the first-holder read admitted it and the effect then closed both edges."""
+    w, d = _gov_world()
+    run = lambda aid, actor, via, to: [e.kind for e in d.resolve(
+        mint_token(w, WriteClass.ACTS),
+        [Act(id=aid, actor=actor, verb="confer", payload={"office": "off_reeve", "to": to}, via=via)],
+        contest_max_depth=w.fixtures.get("contest_max_depth"))]
+    assert "tenure.opened" in run("c1", "p_high", "off_duke", "p_mid")
+    first = _hold(w, "off_reeve")
+    assert first.subject == "p_mid"
+    w.add_tenure(Tenure("t_second_reeve", "p_other", "off_reeve", "hold", w.tick))
+    w.add_tenure(Tenure("t_second_commit", "p_other", "prop_x", "commit", w.tick))
+    live = [t.subject for t in w.tenures if t.kind == "hold" and t.object == "off_reeve" and t.live]
+    assert sorted(live) == ["p_mid", "p_other"], live
+    assert run("c2", "p_high", "off_duke", "p_low") == ["confer.held"], "the second holder carries a live commit"
+
+
 # ======================================================================================
 # 4 -- A `revoke` WITH NO SEAT IS REFUSED AT THE GATE
 # ======================================================================================
@@ -550,6 +569,39 @@ def test_g3_purview_is_ruling_four_asked_of_the_seat():
         checked += 1
     assert not purview_reaches(w, w.offices["off_crown"], None)
     assert checked >= 25, checked
+
+
+def test_a_rungless_appointed_office_is_filled_by_no_seat():
+    """H-142, decided (a) by ladder step 4: a rungless (cluster, S6.2) seat has no ground, so no
+    seat's purview reaches it and no `confer` fills it -- a DECLARED conferral basis notwithstanding.
+    A hand-built `Office(rung=None, conferral="appointed")`, unheld and heard empty by every person:
+    `may_fill` refuses it through every seat anyone sits in (the King's realm seat included), and
+    `world_q.vacancies` offers it to nobody. CONTROL, so neither sweep passes on a world that admits
+    nothing: the SAME office given the rung `S` is fillable through the duke's and the King's seats
+    and offered to both. Reading (b) -- purview vacuously satisfied on a rungless target -- reddens
+    the first half."""
+    from engine.season.queries import world_q
+    from .test_fi_referents import hears_of
+
+    w, _ = _gov_world()
+    w.offices["off_cluster"] = Office("off_cluster", "Cluster", None, ["issue"], faction="Crown",
+                                      conferral="appointed", revocation=_RUNG_ABOVE)
+    for p in w.persons.values():
+        hears_of(p, "off_cluster", "p_gone", kind="tenure.closed", when=-2)
+    cluster = w.offices["off_cluster"]
+    seated = [(t.subject, t.object) for t in w.tenures
+              if t.kind == "hold" and t.live and t.object in w.offices]
+    assert ("p_king", "off_crown") in seated and len(seated) >= 4, seated
+    for actor, via in seated:
+        assert not may_fill(w, actor, via, cluster), f"{actor} through {via} fills a rungless seat"
+    offered = {pid for pid, p in w.persons.items() if "off_cluster" in world_q.vacancies(w, p)}
+    assert offered == set(), f"a rungless seat offered to {sorted(offered)}"
+
+    cluster.rung = cluster.scope_rung = "S"
+    fillers = {(a, v) for a, v in seated if may_fill(w, a, v, cluster)}
+    assert {("p_high", "off_duke"), ("p_king", "off_crown")} <= fillers, sorted(fillers)
+    offered = {pid for pid, p in w.persons.items() if "off_cluster" in world_q.vacancies(w, p)}
+    assert {"p_high", "p_king"} <= offered, sorted(offered)
 
 
 def test_g3_the_chooser_mints_via_from_the_grant_eligibility_admitted_on():

@@ -707,10 +707,12 @@ class PersonalCombatInput:
                        a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
                        duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
                        `accept` is about (`world_q.stakes_of`), into this same field through the same function;
-      * `kits`      -- each party's kit, `(weapon, armor)`, in `claimants` order, `ends`' shape (CP-T03-03,
-                       `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
-                       passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
-                       without kits is fought by two Combatants at the engine's own default kit;
+      * `kits`      -- each party's kit, `(primary, secondary, armor)`, in `claimants` order, `ends`' shape (CP-T03-03, B18.08,
+                       `world_q.kit_of`: what the rungs the person holds store, read not consumed; `secondary` is the weapon he
+                       carries and does not hold, `None` where he stocks one kind). The module passes each to
+                       `Combatant(..., weapon=, secondary=, armor=)`. A two-entry `(weapon, armor)` is read as a kit with no
+                       secondary (the length tells them apart): a record built by hand, or by the workbench, before there was one.
+                       The default is `()`: a record built without kits is fought by two Combatants at the engine's own default kit;
       * `scores`    -- each party's SKILL SCORE for the fight's verb, in `claimants` order, `ends`' shape (CR-85, ED-IN-0330,
                        B05.57; `seam/wrappers/pool.py::score`: no attribute, no addend; 0 where the skill gives him none). Passed
                        to `Combatant(..., score=)`, where it is the number the opponent's Ob is taken from
@@ -754,7 +756,15 @@ class PersonalCombatInput:
       * `decisiveness` -- each party's σ for the YIELD ROLL (B15.10, `PC_A`, A-24), in `claimants` order: what the host knows that the module does
                        not (what he is fighting for). It enters the roll as `net_sigma`, under the owner's soft cap, beside his Spirit and wounds
                        (`wrapper._yield_roll`). The host reads it from `person_q.decisiveness` (`combat.py::combat_input`). The default `()` is
-                       0.0 for both parties (`fight.py` passes `inp.decisiveness or (0.0, 0.0)`)."""
+                       0.0 for both parties (`fight.py` passes `inp.decisiveness or (0.0, 0.0)`);
+      * `short`     -- each party's SHORTFALL, `max(0, carry_demand - strength)` in Strength points, in `claimants` order (B18.07,
+                       `03_PC_loadout_and_carry`): one entry per party, a pair `(with the primary in hand, with the secondary in hand)`,
+                       the second `None` while the kit carries no secondary (B18.08: `combat_kit.short_pair`). The host evaluates `combat_kit.carry_demand` against
+                       the party's Strength and hands the figure raw (`combat.py::combat_input`; the workbench's `fight_record.py` the
+                       same way); the module reads it, off the `Combatant`, in `combat_systems.act_cost` (fatigue, `ACT_WEIGHT / D_WT`
+                       a point) and `close_rate` (`1 / (1 + CARRY_CLOSE_K * short)`), and imports nothing of the carry rule. The default
+                       `()` hands none: the Combatant is then short of the harness alone, `max(0, ARMOR_DEMAND[tier] - strength)`, the
+                       charge `act_cost` always made (`combat_systems.carry_short`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -773,6 +783,7 @@ class PersonalCombatInput:
     dispositions: tuple = ()
     mortal: tuple = ()
     decisiveness: tuple = ()
+    short: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -780,12 +791,13 @@ class DuelState:
     """WHAT ONE PARTY CARRIES FROM ROUND TO ROUND, in the FRAME of the loop that calls `modules/combat/fight.py::fight_round`
     (the duel's `fight`, a skirmish's or a field's own loop), for one provider call: no adapter, module attribute or `World` field
     holds it, and it is outside `World.content_hash()`. The carried set is damage,
-    stamina, concentration and poise; `form` is carried too but READ BY NO ROUND yet: `engagement` re-takes the weapon's base form at its start (B14.13), so
-    `form` is the carrier a later weapon switch will read (initiative, grip, lunge, facing and the selected mode are re-taken at the round's open measure).
+    stamina, concentration and poise; `form` is the WEAPON IN HAND (B18.09): `engagement` re-takes the weapon's base form at its start (B14.13), so what
+    a round reads of it is WHICH RECORD of the kit is in hand, the primary or the secondary (a half-sword form of either names its base); a switch changes it
+    (`fight.py::_combatants` lays it on; initiative, grip, lunge, facing and the selected mode are re-taken at the round's open measure).
       * `cumulative_damage` -- the party's damage so far this fight;
       * `stamina`, `conc`   -- live Stamina and Concentration; `None` is the start of a fight (the module derives the maximum);
       * `poise`             -- balance, `1.0` whole;
-      * `form`              -- the weapon record in hand when the last round ended; `None` is the kit's own (inert until a weapon switch reads it)."""
+      * `form`              -- the weapon record in hand when the last round ended; `None` is the kit's own (the primary)."""
     cumulative_damage: int = 0
     stamina: Optional[float] = None
     conc: Optional[float] = None
@@ -801,12 +813,16 @@ class DuelRoundInput:
       * `states`      -- `(DuelState, DuelState)`, in `fighters.claimants` order;
       * `plans`       -- per party `{phase: approach}`; a missing phase is `normal`;
       * `round`       -- 1-based;
-      * `prev_closed` -- the measure the last round ended in."""
+      * `prev_closed` -- the measure the last round ended in;
+      * `switch`      -- who changes weapon in the round, at its first closed beat (B18.09): the ids of the parties who put their secondary in hand, each of whom must carry one;
+                         `()` is none, and `None` is the engine's own default for each party (`wrapper.round_switchers`: the weapon in hand serves the measure
+                         `prev_closed` names strictly worse than the one carried). A switch costs one `ACT_THRESHOLD` of the switcher's readiness."""
     fighters: PersonalCombatInput
     states: tuple
     plans: tuple
     round: int
     prev_closed: bool = False
+    switch: Optional[tuple] = None
 
 
 @dataclass(frozen=True)

@@ -284,6 +284,36 @@ CESSION = "cession"
 # cession, the row's own eligibility (`remit:dispatch`, the entry) and the act `may_warrant` and `may_muster` read. One owner
 # of the string: it IS `WARRANT_ACT`'s value, re-named for a third reader.
 CESSION_ACT = WARRANT_ACT
+# `retention` (B21b.16, CP-T09-07 (a), AM-F-15) -- an OPENING of an `oblige` whose OBJECT is the seat exercised and whose owner is ANOTHER
+# person (the man who swears), by a seated holder whose grant carries `RETAIN_ACT` (`may_retain`). Named in the ordinary word for what it licenses
+# (to keep a man in one's service). AUTHORITY-BOUND ON `via` like `determination`, its nearest sibling: the same edge, the same object, the owner
+# another's -- but there the licence is a bench's judgment over a person on its ground, and an IMPOSED edge; here it is the seat's offer, and the oath
+# is a SWORN one (`Tenure.imposed` false, which the clause asks, so neither basis admits the other's edge). Why a basis at all, against this
+# function's body: the sworn man's opening is not `T-m` (the actor is not the owner), `renewal` pushes a term and opens nothing, and
+# `determination` reads the bench. WHAT THE GATE DOES NOT DECIDE is the contest (the offer WON, at a band that writes) and the person's own
+# standing (a seat he holds, a live oath to it already, a ban): the fold's draw and `_eff_retain`'s, as `determination` leaves the docket.
+RETENTION = "retention"
+# [ASSUMPTION; medium; Jordan to correct; revert: name another remit act here]: `confer` is the act whose grant licenses a retainer -- FA §3.3 S3's
+# own reading (*"a seat-holder `via` a seat granting `confer`"*), and the row's eligibility (`remit:confer`). One owner of the string, read by
+# `may_retain` and named by the row.
+RETAIN_ACT = "confer"
+# `recruitment` (B21b.18, CP-T09-09, AM-F-17) -- an OPENING of a `commit` whose OBJECT is a PLOT, owned by ANOTHER person (the man invited), by a plotter who
+# is himself committed to that plot (`may_recruit`). Named in the ordinary word for what it licenses (to enlist a man in a plot). NOT AUTHORITY-BOUND on `via`
+# (`conspire` is an `own` act: a plot is a person's, and a plotter sits in no seat for it): the authority is the plot he holds and has committed to. Why a
+# basis at all, against this function's body: the invited man's opening is not `T-m` (the actor is not the owner) and no seat basis reads a Proposition. WHAT THE
+# GATE DOES NOT DECIDE is that the invitation was won (the fold's draw: a Failure writes nothing, so this is never asked of it) and the invited man's own
+# standing (a cohort, the target himself): the fold's cell and `_eff_conspire`'s declines.
+RECRUITMENT = "recruitment"
+# A PLOT, as a Proposition: mood OUGHT (so `commit` to it is an ambition, `world_q.ambitions`), `subject` the target seat's holder, `predicate` `plot:<seat>`.
+# One owner of the spelling, read by `may_recruit` and by `queries/world_q.py` (`plot_held`, `plot_targets`) and `_eff_conspire`.
+PLOT_PREDICATE = "plot"
+PLOT_MOOD = "OUGHT"
+
+
+def is_plot(prop: Any) -> bool:
+    """Is `prop` a plot (B21b.18): an OUGHT whose predicate is `plot:<seat>`, the shape `_eff_conspire` mints."""
+    return (prop is not None and str(prop.mood).upper() == PLOT_MOOD
+            and str(prop.predicate).partition(":")[0] == PLOT_PREDICATE and bool(str(prop.predicate).partition(":")[2]))
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -295,12 +325,14 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
     being a string anyone may write. `None` for a missing actor, a missing `via`, a `via` that is
     not an office, and an actor with no live `hold` on it.
 
-    ⚠ A `hold` AND NOTHING ELSE SEATS A PERSON TODAY. `04:332` says *"a regent has the seat's
-    purview"*, and no relation in the tree makes a person a seat's regent (`oblige`, `04 §B.7`
-    call 2's council membership, seats nobody; ⚠ SINCE v9 IN-40 a live, non-imposed `oblige` to a
-    seat IS read, by `purview_reaches`' oblige clause, as vassalage -- a delegation carrier built
-    on it would also extend the delegated seat's purview over the delegate's own ground). So a regent is expressible only
-    as a holder; delegation without a `hold` is `H-108`'s, still open, and this does not close it.
+    ⚠ A `hold` AND NOTHING ELSE SEATS A PERSON. `04:353` says *"a regent has the seat's purview"*, and
+    a regent is the HOLDER OF A SECOND SEAT (B21b.25, IN-48): delegation is `04:354`'s `establish` ->
+    `confer` -> `revoke`, a seat over the domain conferred while the principal keeps his own, ended by its
+    term (T-n), the regent's `release` (T-m) or a `revoke` under `revocation: same_rung_same_faction`
+    (`seated_on_the_same_rung`). No relation other than a `hold` makes a person a seat's regent (`oblige`,
+    `04 §B.7` call 2's council membership, seats nobody; ⚠ SINCE v9 IN-40 a live, non-imposed `oblige` to a
+    seat IS read, by `purview_reaches`' oblige clause, as vassalage, not as a seat). The "puppet ruler"
+    (a title seat whose remit was conferred elsewhere) is NOT met on this route: `H-108`'s cite names it.
     Returned as the Tenure, not the Office, because `_eligible`'s remit branch reads the GRANT the
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
     if not actor or not via or via not in w.offices:
@@ -365,7 +397,10 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
     nothing. The cluster seat (`Office.rung is None`, S6.2) has no ground, so by rung containment it
     has purview nowhere -- a CONTENT fact about such a seat, not a permission failure. (The oblige
     clause below is the one way such a seat reaches anything: by a sworn holder's ground, not its
-    own.) ⚠ AND IT DOES NOT ASK DIRECTION UPWARD: a Duke has no purview over the realm above him.
+    own.) The `if rung is None: return False` branch is the TARGET half: a rungless (cluster) seat
+    has no ground, so no seat's purview reaches it and no `confer` fills it; it is filled only when
+    its owner gives it a rung (H-142, decided (a), ladder step 4).
+    ⚠ AND IT DOES NOT ASK DIRECTION UPWARD: a Duke has no purview over the realm above him.
     Upward reach is petition, never purview.
 
     ⚠ THE OBLIGE CLAUSE (v9 IN-40, `H-101` -- vassalage across factions, #453 §7.2). A seat ALSO
@@ -400,14 +435,42 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
         return False
     if _ground_reaches(w, seat, rung):
         return True
-    # The swearers are collected first so `w.tenures` is walked once for their seats, not once per
-    # sworn edge (this is asked on every purview precondition).
+    return any(_ground_reaches(w, s, rung) for s in sworn_seats(w, seat))
+
+
+def purview_of(w: "World", seat: Office) -> set:
+    """THE SET FORM OF `purview_reaches` (B21b.21, CR-09 with `H-101`): every rung the predicate admits for `seat`, read by the SAME
+    two disjuncts -- the seat's own ground (`_ground`) UNION the ground of each seat a sworn holder brings (`sworn_seats`, the oblige
+    clause's walk, one edge deep, an imposed `oblige` skipped). So `rung in purview_of(w, seat) == purview_reaches(w, seat, rung)` for
+    every rung, and the predicate and the set read one rule (`test_in40_oblige_purview.py` pins the equality over every rung of a
+    hand-built world). `queries/world_q.py::own_purview` (`reach`'s limb 4, `attention_key` tier 1) reads this; `faction_q.purview`
+    has no game caller and keeps its own-ground walk (the plan's call). Includes the CLAUSE'S OVER-REACH exactly as the predicate does
+    (`H-101` cite: a high seat's holder sworn to a low seat hands it his whole subtree)."""
+    out = _ground(w, seat)
+    for s in sworn_seats(w, seat):
+        out |= _ground(w, s)
+    return out
+
+
+def sworn_seats(w: "World", seat: Office) -> list:
+    """THE OBLIGE CLAUSE'S WALK, ONCE (B21b.21): the Offices held -- a live `hold` on an Office -- by every holder of a live,
+    NON-IMPOSED `oblige` to `seat` (`sworn_to`; `Tenure.imposed` is a sentence, no oath), in `w.tenures` order. Its two readers are
+    `purview_reaches` (the predicate) and `purview_of` (the set form). The swearers are collected first so `w.tenures` is walked once for
+    their seats, not once per sworn edge. Not recursive: a sworn seat's own swearers are not reached through it ("the vassal of my vassal
+    is not my vassal", `purview_reaches`' ONE EDGE DEEP)."""
     swearers = {t.subject for t in sworn_to(w, seat.id) if not t.imposed}
     if not swearers:
-        return False
-    return any(_ground_reaches(w, w.offices[h.object], rung)
-               for h in w.tenures
-               if h.kind == "hold" and h.live and h.subject in swearers and h.object in w.offices)
+        return []
+    return [w.offices[h.object] for h in w.tenures
+            if h.kind == "hold" and h.live and h.subject in swearers and h.object in w.offices]
+
+
+def _ground(w: "World", seat: Office) -> set:
+    """THE CONTAINMENT DISJUNCT AS A SET: `seat`'s own rung and its `descendants`; empty for a rungless seat. `_ground_reaches` is
+    membership in it, asked without building the set."""
+    if seat.rung is None:
+        return set()
+    return {seat.rung, *descendants(w, seat.rung)}
 
 
 def _ground_reaches(w: "World", seat: Office, rung: str) -> bool:
@@ -540,8 +603,24 @@ def seated_on_the_rung_above_in_holdings(w: "World", actor: Optional[str], seat:
     return in_holdings(w, actor, off.rung)
 
 
+def seated_on_the_same_rung(w: "World", seat: Office, off: Office) -> bool:
+    """THE `same_rung_same_faction` BASIS (B21b.25, IN-48's early dismissal of a regent): is `seat` ANOTHER seat on `off`'s OWN rung, of its faction?
+    Asked of the seat exercised, as `seated_on_the_rung_above` is, and `may_revoke` has already asked that the actor SITS in it.
+
+    A regency is a seat conferred over a domain on the SAME rung as the title seat (`01_AXIOMS.md` §E.2.2), so neither shipped rule can end it
+    early: both read the PARENT rung, and the top rung has none. STRUCTURAL, as ruling (3) is: no purview walk, no holdings, no rank. The faction
+    clause is kept. `seat.id != off.id` makes it exclusive on the seat, as `may_fill` is: a holder stripping his own seat is `release` (T-m), not this.
+
+    ⚠ WHO IT LICENSES IS EVERY OTHER SEAT ON THE RUNG, of the faction, whose grant carries `revoke` (that is `revoke`'s eligibility, not this rule's) --
+    the principal's seat is one, not the only one, and no lighter rule can name the CONFERRING seat (`Tenure.conferrer` is not a field). It is
+    SYMMETRIC: a principal's seat declaring this value is as strippable by its regent as the regent's by him. Only a seat that DECLARES it reaches it;
+    no shipped row does."""
+    return (seat.rung is not None and seat.rung == off.rung and seat.faction == off.faction and seat.id != off.id)
+
+
 REVOCATION_RULES = {"rung_above_same_faction": lambda w, actor, seat, off: seated_on_the_rung_above(w, seat, off),
-                    "rung_above_in_holdings": seated_on_the_rung_above_in_holdings}
+                    "rung_above_in_holdings": seated_on_the_rung_above_in_holdings,
+                    "same_rung_same_faction": lambda w, actor, seat, off: seated_on_the_same_rung(w, seat, off)}
 # ⚠ REFUSED AT IMPORT, NOT IN THE FOLD. A member with no rule, or a rule for no member, is drift
 # between data and code; raised from inside `_req_revoke` it would escape the fold (the `13f`
 # lesson), and dispatched by fall-through it would run a new basis as some other one.
@@ -564,7 +643,8 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
 # The value is the restraint kind `revoke` opens on him, owned by him and objected on the revoking
 # seat (`Act.via`), or `None` for nothing. JORDAN, 2026-10-21 (B-Q, answering the IN-31 design's A1
 # box, *"Design's answer"*): an `appointed` seat revoked -> a PERMANENT `ban` (SC-03a's restraint; it
-# carries no term and no effect closes one, so only his death ends it); `elected`, `annex` and `None`
+# carries no term; the code admits a pardon, `_eff_pardon` closing it through the dismissing seat, and otherwise his death ends it: "PERMANENT" is
+# Jordan's word, left as his); `elected`, `annex` and `None`
 # -> nothing; and a `confer` that displaces an incumbent costs nothing (`_eff_confer` reads no row
 # here). Python and not a YAML column, `REVOCATION_RULES`' precedent: the roster names the basis, the
 # rule is behaviour. READERS ASK IT IN PLACE (`revocation_disposal`, `has_revocation_disposal`, or
@@ -818,7 +898,11 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
     ⚠ WHICH conferral basis this basis may fill IS `FILLED_BY`'s (v10 IN-61): the preconditions inherit it
     by asking this. `appointed`, `elected`
     and `annex` pass; `inheritance` is refused -- a throne is claimed by its title's holder
-    (`may_claim`), never conferred by any seat."""
+    (`may_claim`), never conferred by any seat.
+
+    ⚠ A DECLARED BASIS IS NOT ENOUGH ON A SEAT WITH NO RUNG: a rungless (cluster) seat has no
+    ground, so no seat's purview reaches it and no `confer` fills it; it is filled only when its
+    owner gives it a rung (H-142, decided (a), ladder step 4)."""
     if seat_hold(w, actor, via) is None or via == off.id:
         return False
     if not has_conferral_basis(off) or CONFERRAL not in filled_by(off):
@@ -1131,6 +1215,41 @@ def may_cede(w: "World", actor: Optional[str], via: Optional[str], place: Option
     return yielder != actor and _committed_to(w, yielder, fac)
 
 
+def may_retain(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str]) -> bool:
+    """THE RETENTION BASIS, AS ONE PREDICATE (B21b.16, CP-T09-07 (a), AM-F-15): may `actor`, exercising `via`, open the `oblige` `party` will own to
+    that seat -- offer `party` service and have it taken?
+
+    `may_determine`'s shape, three conjuncts, each the ONE owner of its rule:
+      1. `via` is a seat the actor SITS in and its GRANT carries `RETAIN_ACT` (`_seat_grants`: the `13e` snapshot, never the office's live field,
+         and not a holder in custody);
+      2. `party` is a PERSON other than the actor (only a person owns an `oblige`, and a man does not retain himself);
+      3. `party` does not HOLD `via` (the occupant is not his own seat's obligee, `_req_oblige` clause 3's rule).
+    ⚠ WHAT IT DOES NOT DECIDE, AND WHERE THAT LIVES: that the offer was won, which is the fold's draw (a Failure writes nothing, so this is never asked of
+    it); that `party` has no oath to `via` already or no ban -- `_eff_retain`'s declines, as `_req_oblige`'s clauses 4 and 5 are for `oblige`."""
+    if not _seat_grants(w, actor, via, RETAIN_ACT):
+        return False
+    if party is None or party == actor or party not in w.persons:
+        return False
+    return seat_hold(w, party, via) is None
+
+
+def may_recruit(w: "World", actor: Optional[str], plot: Optional[str], party: Optional[str]) -> bool:
+    """THE RECRUITMENT BASIS, AS ONE PREDICATE (B21b.18, CP-T09-09, AM-F-17): may `actor` open the `commit` `party` will own to the plot `plot` -- invite `party`
+    into a plot and have it taken?
+
+    Three conjuncts, each the ONE owner of its rule:
+      1. `plot` is a plot (`is_plot`) the actor HOLDS (his live `hold`, the maker's, `_mint_utterance`) AND is himself committed to (his live `commit`): a
+         man recruits only to a plot that is his own, and a plot he has left (`release`) recruits nobody;
+      2. `party` is a PERSON other than the actor (only a person owns a `commit`);
+      3. `party` is not the plot's target, the holder it names as its `subject` (a man is not invited to a plot against himself).
+    ⚠ WHAT IT DOES NOT DECIDE, AND WHERE THAT LIVES: that the invitation was won (the fold's draw), that `party` is no cohort and holds no commit to it already
+    (`_eff_conspire`'s declines)."""
+    prop = w.propositions.get(plot) if plot is not None else None
+    if not is_plot(prop) or actor not in w.persons or party is None or party == actor or party not in w.persons or party == prop.subject:
+        return False
+    return any(t.kind == "hold" and t.object == plot and t.live for t in w.persons[actor].tenures) and _committed_to(w, actor, plot)
+
+
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
     """Which of an existing edge's five non-end fields the write changed; `None` for an edge the
     write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
@@ -1432,6 +1551,15 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                  or (closed and t.kind in RESTRAINT_KINDS))
             and may_determine(w, actor, via, t.subject)):
         return DETERMINATION
+    # B21b.16 (CP-T09-07 (a), AM-F-15): THE RETENTION. An OPENED `oblige` on the seat exercised, owned by another person, that is an OATH (not a bench's
+    # imposed edge: `determination`'s) -- by a seated holder granted `RETAIN_ACT` (`may_retain`). Opening only: the man's own way out is `release`, `T-m`.
+    if (opened and t.kind == "oblige" and via is not None and t.object == via and not t.imposed
+            and may_retain(w, actor, via, owner)):
+        return RETENTION
+    # B21b.18 (CP-T09-09, AM-F-17): THE RECRUITMENT. An OPENED `commit` to a plot, owned by another person -- by a plotter who holds and is committed to that
+    # plot (`may_recruit`). Opening only: the man's own way out is `release`, `T-m`. No `via`: a plot is a person's, not a seat's.
+    if opened and t.kind == "commit" and t.object in w.propositions and may_recruit(w, actor, t.object, owner):
+        return RECRUITMENT
     # v9 SC-03a, K-52: THE WARRANT. An OPENED `detain` whose object is a SEAT and whose owner the
     # exercised seat may take into custody (`may_warrant`). Not `via`-objected as `determination`
     # is: the custody edge's object is the ISSUING seat (K-17/K-52), which the enforcement seat acts
@@ -1610,7 +1738,10 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"term has matured), {RENEWAL} (a live `oblige` edge's term pushed later, by "
               f"its seat's own seated holder exercising it), {DETERMINATION} (an edge of a "
               f"kind some arrangement disposes opened -- or a `detain`/`ban` closed -- on the "
-              f"judging seat exercised, for a person its bench's ground holds), {WARRANT} (a "
+              f"judging seat exercised, for a person its bench's ground holds), {RETENTION} (a "
+              f"sworn `oblige` to the seat exercised opened for another person, by a holder "
+              f"granted `{RETAIN_ACT}`), {RECRUITMENT} (a `commit` to a plot opened for "
+              f"another person, by a plotter who holds and is committed to that plot), {WARRANT} (a "
               f"`detain` opened on a seat, for a person the exercised seat's purview reaches, by "
               f"a holder granted `{WARRANT_ACT}`), {SEIZURE} (another person's `hold` on a "
               f"Record or a Rung closed, by a holder granted `{SEIZURE_ACT}` whose exercised "

@@ -27,7 +27,7 @@ from ..data.rosters import (
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
-from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
+from ..data.verbs import CITES_KEY, VERB_TABLE
 from ..queries import faction_q
 from ..queries.inputs import ADJOURNED_STAGE, ANSWERED_STAGE, EXCLUDED_STAGE, FILED_STAGE, ArmyCommand, Outcome, exchanges
 from ..seam.ladder import degree_of
@@ -35,13 +35,14 @@ from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
-    siege_pressed_by, slot_for, works_for, works_target,
+     siege_pressed_by, slot_for, warrants_for, works_for, works_target, WAR_MOOD,
+    CLAIM_MOOD, claim_id, plot_held, plot_id, target_seat,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
-    may_warrant, may_wage,
+    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
+    may_warrant, may_wage, seat_faction,
 )
 from ..state.ids import H
 
@@ -1097,33 +1098,14 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     return Change((Subject.edge(nt, earns), Subject.edge(held, earns)), perform)
 
 
-# WHICH RECORD KIND IS A WARRANT FOR A VERB, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES: the
-# kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the person
-# side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
-# never spelt here. v9 IN-12 step 5: `arrest` reads the same map, so the reading is one function for both.
-def _held_warrants(w: "World", actor: str, verb: str, named: str) -> tuple:
-    """THE WARRANTS THE ACTOR HOLDS NAMING `named`, for `verb` -- the ids of the Records on his own live
-    `hold` edges whose kind is `verb`'s warrant kind (`rosters.yaml: warrant_sourced`) and whose
-    about-key content says `named`, in tenure order. World-side: the effect owns the licence because the
-    gate never reads a Record's content (K-52); the person-side twin is `decision/options.py::
-    opening_set`'s formation on the same reading, off his own ledger."""
-    kind = WARRANT_SOURCED[verb]
-    key = ABOUT_KEYS[kind]
-    out = []
-    for t in w.tenures:
-        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
-            continue
-        rec = w.records[t.object]
-        sm = rec.subject_matter
-        if rec.kind == kind and isinstance(sm, dict) and sm.get(key) == named:
-            out.append(t.object)
-    return tuple(dict.fromkeys(out))
-
-
+# WHICH RECORD KIND IS A WARRANT FOR A VERB, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES: the kind is `data/verbs.py::WARRANT_SOURCED`'s
+# (`rosters.yaml: warrant_sourced`, the one loader both the person side and `world_q.warrants_for` import), the key `person_q.ABOUT_KEYS`' (the one
+# owner of "what a document is about"), never spelt here. v9 IN-12 step 5: `arrest` reads the same map as `seize`; B29.01: the one reading is
+# `world_q.warrants_for`, the Records the actor HOLDS naming it or that are ADDRESSED TO HIM and heard of (`14_VERBS_PHYSICAL_A_custody_and_force` A1).
 def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
-    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- `seize`'s licence (IN-12 step 6), read
-    through `_held_warrants`, the one reading `arrest` shares."""
-    return bool(_held_warrants(w, actor, "seize", rid))
+    """DOES A WARRANT THE ACTOR HOLDS, OR ONE ADDRESSED TO HIM THAT HE HAS HEARD OF, NAME RECORD `rid`? -- `seize`'s licence (IN-12 step 6),
+    read through `warrants_for`, the one reading `arrest` shares (`14_VERBS_PHYSICAL_A_custody_and_force` A1)."""
+    return bool(warrants_for(w, actor, rid, "seize"))
 
 
 # The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
@@ -1160,7 +1142,7 @@ def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     replaced by a warrant and a seat.
 
     WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the Record exists and
-    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS A
+    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS, OR HAS HEARD OF AS ADDRESSED TO HIM, A
     WARRANT NAMING IT (`_held_warrant_names`) -- the effect's, because it is a Record's content;
     (3) the exercised seat may seize from that holder (`may_seize`, the gate's own predicate, so an act
     the precondition admitted is never killed at the gate by a disagreement about the holder's home).
@@ -1290,6 +1272,14 @@ def _eff_surrender(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     return _take_hold(w, a, rid, held, _SURRENDERED, to=receiver)
 
 
+def _warrant_custody_seat(w: "World", actor: str, prisoner: str, verb: str = "arrest") -> Optional[str]:
+    """THE SEAT A CUSTODY OF `prisoner` GOES TO: the issuing seat (`issuing_seat`) of the first warrant `world_q.warrants_for` reads for `actor`
+    (held in tenure order, then addressed and heard of by id) whose seat's holder could close it (`_may_close_custody`); `None` where none
+    does. The one owner of `arrest`'s rule, which `capture`'s custody reads too (`14_VERBS_PHYSICAL_A` A1, A2)."""
+    return next((s for s in (issuing_seat(w, rid) for rid in warrants_for(w, actor, prisoner, verb))
+                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+
+
 def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
     """Could the seat's LIVE HOLDER close a `detain` the prisoner owns on it -- `may_determine`, the
     predicate `state/gate.py`'s `determination` clause closes a restraint under (`pardon`'s basis)? An
@@ -1301,7 +1291,7 @@ def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
 @effect_for("arrest")
 def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 5 (#453 §9.1, the `arrest` row): A `detain` EDGE OPENS, the prisoner (the act's
-    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`issuing_seat`, K-17/K-52):
+    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds, or has heard of as addressed to him, naming him (`issuing_seat`, K-17/K-52):
     the enforcement seat (`Act.via`) acts but does not own the custody, so the issuing seat's bench is
     who may `pardon` it (`state/gate.py`'s `determination` closes a restraint only through the seat that
     is its object). The row is contested (`a standing`); the fold calls this body on `Overwhelming`,
@@ -1311,7 +1301,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     and not already in custody (`world_q.restrained`, the restraint's one read -- one live `detain` per
     prisoner, #453 §8.1 Custody [ASSUMPTION; medium; Jordan to correct; revert: a second bench's
     warrant opens a second custody, "relaxation to the secular arm"]); (2) the actor HOLDS A WARRANT
-    NAMING HIM (`_held_warrants`, `seize`'s reading); (3) the warrant's issuing seat is readable
+    NAMING HIM, held or addressed to him and heard of (`world_q.warrants_for`, `seize`'s reading; `14_VERBS_PHYSICAL_A_custody_and_force` A1); (3) the warrant's issuing seat is readable
     (`issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
     the gate's own predicate for `determination`, which `pardon` closes under): a custody is opened only
     on a seat whose bench could `pardon` it, so a warrant from an issue-only seat, or from a seat whose
@@ -1319,8 +1309,8 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     [ASSUMPTION; medium; Jordan to correct; revert: arrest opens a custody on any issuing seat and a
     custody nothing can close is a recorded limit]; (4) the exercised seat may take him (`may_warrant`,
     the gate's own predicate, so an act the precondition admitted is never killed at the gate). Anything
-    else declines (`NO_CHANGE` -> `arrest.refused`, the `write` clause). Several warrants: the first in
-    tenure order whose issuing seat is readable and could close it.
+    else declines (`NO_CHANGE` -> `arrest.refused`, the `write` clause). Several warrants: the first (those he holds in
+    tenure order, then those addressed to him by id) whose issuing seat is readable and could close it.
 
     THE GATE: `warrant` (`state/gate.py`: an opened `detain` whose object is a seat, owned by another
     person, by a seat granted `WARRANT_ACT` whose purview reaches his home). The kind is a LITERAL so
@@ -1329,9 +1319,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner = _operand(a, "subject")
     if prisoner not in w.persons or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND):
         return NO_CHANGE
-    seat = next((s for s in (issuing_seat(w, rid)
-                             for rid in _held_warrants(w, a.actor, a.verb, prisoner))
-                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+    seat = _warrant_custody_seat(w, a.actor, prisoner, a.verb)
     if seat is None or not may_warrant(w, a.actor, a.via, prisoner):
         return NO_CHANGE
     nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{seat}:{a.id}"), prisoner, seat, "detain",
@@ -1419,22 +1407,121 @@ def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     budget, `decision/budget.py`) -- registered, not decided here.
 
     v12 B11.74 (R-19-03) -- THE PROPOSITION CARRIES ITS SUPPORT: the act's `cites` (`data/verbs.py::CITES_KEY`), stored as `Proposition.support` and fixed
-    with it, each held by the utterer at the act (`_held_cites`), else the act is declined whole (`NO_CHANGE`, nothing written, no hold opened)."""
+    with it, each held by the utterer at the act (`_held_cites`), else the act is declined whole (`NO_CHANGE`, nothing written, no hold opened).
+
+    B21b.13 (CR-91 (1)): A CLAIM TO A TERRITORY (`CLAIM_MOOD`) IS MINTED UNDER ITS OWN ID, `claim:<faction>:<rung>` (`world_q.claim_id` of its subject and value),
+    whatever the act names, so one claimant faction has one claim to a rung and a second utterance of it is declined as any id already uttered is. Its ground is
+    `loop/predicates.py::_req_utter`'s, asked before this effect runs. [ASSUMPTION; medium; Jordan to correct; revert: drop the `CLAIM_MOOD` branch.]"""
     d = a.payload if isinstance(a.payload, dict) else {}
-    pid = d.get("proposition") or f"prop:{a.id}"
+    pid = (claim_id(d.get("subject"), d.get("value")) if d.get("mood") == CLAIM_MOOD
+           else d.get("proposition") or f"prop:{a.id}")
     if pid in w.propositions:
         return NO_CHANGE                  # immutable: an utterance never overwrites one
     support = _held_cites(w, a.actor, d.get(CITES_KEY))
     if support is None:
         return NO_CHANGE                  # a cite he does not hold: refused whole, before any write
-    prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
-                       d.get("predicate") or "", d.get("value"), w.tick, support=support)
-    held = _makers_hold(w, a.actor, pid)
+    prop, held = _mint_utterance(w, a.actor, pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
+                                 d.get("predicate") or "", d.get("value"), support)
 
     def perform() -> None:
         w.propositions[pid] = prop
         w.add_tenure(held)
     return Change((Subject.entity("propositions", pid),), perform)
+
+
+def _mint_utterance(w: "World", actor: str, pid: str, mood: str, subject: str, predicate: str, value, support=()) -> tuple:
+    """THE ONE MINT OF A UTTERED PROPOSITION (B21b.11): the immutable `Proposition` and the maker's `hold` on it, as `(prop, held)`, nothing written. `_eff_utter`
+    mints every mood through it and `_eff_declare` the WAR one, so a Proposition and its maker's hold are built in one place. The caller decides whether `pid` is
+    free and writes both in its own `perform`. `"hold"` stays a literal in `_makers_hold`, which the opener walk reads through this call."""
+    return Proposition(pid, mood, subject, predicate, value, w.tick, support=support), _makers_hold(w, actor, pid)
+
+
+def _commit_edge(w: "World", actor: str, prop_id: str, act_id: str) -> Tenure:
+    """THE `commit` EDGE an act opens, salted on the object and the act (`_eff_commit`'s docstring says why): the one construction `_eff_commit` and
+    `_eff_declare` (the declarer's own commit, so a war is never 'of one') share. ⚠ `"commit"` IS A LITERAL HERE: the opener walk
+    (`data/verbs.py::_derive_openers_from_effects`) reads the kind off it through every helper a registered effect calls."""
+    return Tenure(H(w.world_seed, w.tick, actor, f"commit:{prop_id}:{act_id}"), actor, prop_id, "commit", since=w.tick)
+
+
+@effect_for("declare")
+def _eff_declare(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21b.11 (CP-T09-02 (a), AM-F-10, `06_FA_war_lives_in_seats_B` edit 1; A-20): A WAR IS OPENED BY A DECLARATION. A seated muster-holder, through the seat
+    he exercises (`Act.via`, a seat granting `dispatch`), declares war on another faction: the WAR Proposition (`WAR_MOOD`; `subject` the seat's faction,
+    `value` the target, unordered as `at_war` reads it) is minted through `_mint_utterance`, `_eff_utter`'s one mint, and the declarer's own `commit` to it opens
+    in the SAME write (`_commit_edge`, `_eff_commit`'s construction), so a war is never of one man's utterance and no other party (FA-G03). `at_war` asks
+    that this very act made the Proposition (`causing_act` of its creating Event is a `declare`): a hand-built WAR `utter` plus a `commit` is no war.
+    DECLINES (`NO_CHANGE` -> `declare.refused`, nothing minted and no edge opened): the seat has no faction; the target is the seat's own faction or no
+    rostered faction's Proposition (`FACTION_BY_PROP`) or one nobody belongs to; the declarer belongs to no part of his seat's faction or sits in no seat of it
+    that wages (`may_wage`: a war he opens must be one `at_war` can read live); the two are already at war (`faction_q.at_war`: a second declare would mint a second WAR
+    Proposition and a second `war.declared` for the one war, B21b.99's close); the id was already uttered.
+    G4 -- WHAT IT NAMES: THE PROPOSITION, whole, and the edge. Both always move (absent -> present), and each earns the row's one kind, `war.declared`.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the row and this effect, `at_war` back to B21's `may_wage` conjunct alone.]"""
+    target = _operand(a, "subject")
+    own = seat_faction(w, a.via)
+    pid = f"prop:{a.id}"
+    if (own is None or target == own or target not in FACTION_BY_PROP or target not in w.propositions or pid in w.propositions
+            or faction_q.at_war(w, own, target)
+            or a.actor not in faction_q.members(w, own) or not faction_q.members(w, target) or not may_wage(w, a.actor, own)):
+        return NO_CHANGE
+    prop, held = _mint_utterance(w, a.actor, pid, WAR_MOOD, own, "", target)
+    edge = _commit_edge(w, a.actor, pid, a.id)
+
+    def perform() -> None:
+        w.propositions[pid] = prop
+        w.add_tenure(held)
+        w.add_tenure(edge)
+    return Change((Subject.entity("propositions", pid), Subject.edge(edge)), perform)
+
+
+#: The two kinds `conspire` earns, each by the subject that makes it (`Subject(earns=)`): the plot laid (the first act) and a man joined to it. The row declares both on every
+#: band that writes; spelt here once and refused at import if the row stops declaring either (the row's `Failure` kind, `plot.refused`, is no effect's).
+PLOT_LAID, PLOT_JOINED = "plot.laid", "plot.joined"
+if not any({PLOT_LAID, PLOT_JOINED} <= set(kinds) for kinds in VERB_TABLE["conspire"].emits_by_degree.values()):
+    raise Forbidden(f"no band of `conspire` declares both {PLOT_LAID!r} and {PLOT_JOINED!r}", "verb_table.yaml",
+                    needs="the row's Won-band `emits:` to name the two kinds `_eff_conspire` earns", law="B21b.18 -- an effect earns only kinds its row declares")
+
+
+@effect_for("conspire")
+def _eff_conspire(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21b.18 (CP-T09-09, AM-F-17; `FA §3.3` S7): A PLOT WITH BACKERS. The plotter (`own`: any person) invites the man named on `to` to a plot against the holder of the seat
+    the act is about (`subject`, a `Target`-classed holder, `world_q.plot_targets`). The invitation was a draw on the invitee (`contests: "a standing"`, the obstacle the social
+    roll's, `invitee_tie_to_target` and `regard_of_target` among its terms); this body runs only on a band that writes, so a lost invitation opens nothing and the row emits
+    `plot.refused`.
+
+    A PLOTTER WHO HOLDS NO PLOT (`world_q.plot_held`: no live `hold` and `commit` of a plot of his own) LAYS ONE: the plot Proposition (mood OUGHT, `subject` the target's
+    holder, `predicate` `plot:<seat>` for the seat he holds that stands highest, `world_q.target_seat`) is minted through `_mint_utterance`, `_eff_utter`'s one mint, and
+    the plotter's own `commit` to it opens in the SAME write (`_commit_edge`, as `_eff_declare`'s declarer's does), so a plot is never of no man's ambition. The invitee is
+    not yet a backer: there was no plot when he was invited (`plot.laid`). A PLOTTER WHO HOLDS ONE RECRUITS: the invitee's own `commit` to it opens, under
+    `state/gate.py::RECRUITMENT` (`may_recruit`: the plotter holds and is committed to the plot; the edge is the invitee's, so `T-m` cannot admit it) (`plot.joined`). Because a
+    `commit` to an OUGHT is an ambition (`world_q.ambitions`) and an ambition's referent is tier 0, the plotter and every backer then attend to the target first, and the hostile acts
+    already on the table form on him: nothing here reads or writes the reader.
+
+    DECLINES (`NO_CHANGE` -> `plot.refused`, nothing minted and no edge opened): an operand that is no person, a cohort on either side, the plotter, the invitee and the
+    target not three men; the target holds no seat; the plot's id was already uttered; on a held plot, an invitation about another man than the plot's target, or to a man
+    already committed to it. G4 -- WHAT IT NAMES: the first act names the Proposition and the plotter's edge, the recruit the invitee's edge; each earns the one kind
+    it made. [ASSUMPTION; medium; Jordan to correct; revert: delete the row and this effect.]"""
+    target, invitee = _operand(a, "subject"), _operand(a, "to")
+    plotter, man, mark = w.persons.get(a.actor), w.persons.get(invitee), w.persons.get(target)
+    if (plotter is None or man is None or mark is None or plotter.is_cohort or man.is_cohort or len({a.actor, invitee, target}) < 3):
+        return NO_CHANGE
+    held = plot_held(w, plotter)
+    if held is None:
+        seat = target_seat(w, target)
+        pid = plot_id(a.actor, seat) if seat is not None else None
+        if seat is None or pid in w.propositions:
+            return NO_CHANGE
+        prop, hold = _mint_utterance(w, a.actor, pid, PLOT_MOOD, target, f"{PLOT_PREDICATE}:{seat}", None)
+        edge = _commit_edge(w, a.actor, pid, a.id)
+
+        def perform() -> None:
+            w.propositions[pid] = prop
+            w.add_tenure(hold)
+            w.add_tenure(edge)
+        return Change((Subject.entity("propositions", pid, earns=PLOT_LAID), Subject.edge(edge, earns=PLOT_LAID)), perform)
+    if held.subject != target or any(t.kind == "commit" and t.object == held.id and t.live for t in man.tenures):
+        return NO_CHANGE
+    joined = _commit_edge(w, invitee, held.id, a.id)
+    return Change((Subject.edge(joined, earns=PLOT_JOINED),), lambda: w.add_tenure(joined))
 
 
 @effect_for("commit")
@@ -1477,8 +1564,9 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     The duplication is real and the fix is not -- this is `create_record`/`issue`/`petition`'s
     `_mint_document` in reverse: that helper is safe to share because all three name the SAME
     literal kind (`hold`) inside it; `commit` and `oblige` do not, so nothing here can be factored
-    without either losing the literal or hand-editing the derived roster back into a second copy."""
+    without either losing the literal or hand-editing the derived roster back into a second copy.
+    B21b.11: `_commit_edge` is the one construction of THIS row's edge, `"commit"` a literal inside it, so `_eff_declare` shares it and the walk still reads
+    `commit`'s openers (`declare` joins them)."""
     prop_id = _operand(a, "subject")
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}:{a.id}"), a.actor, prop_id,
-                "commit", since=w.tick)
+    nt = _commit_edge(w, a.actor, prop_id, a.id)
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))

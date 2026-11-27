@@ -253,8 +253,8 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B21c (FA), B29 (PC), B34 (GO) |
-| S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
+| S14 | B12b (SE+WR), B21c (FA), B34 (GO) |
+| S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
 | S18 | B21s (IN), B23 (FA), B30 (MB), B35 (WR), B41 (GO) (moved from S15 by the edge B20 → B41, part 2 §1.2; repair lane V1) |
@@ -367,7 +367,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
-| B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) |
 | B21b-fa-war | FA | ED-FA-0042..0043 (0+2) | H-620..H-627 (3+5) |
@@ -381,7 +380,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B26-fi-inquiry | FI | ED-FI-0014..0015 (0+2) | H-687..H-693 (2+5) |
 | B27-sc-proceedings | SC | ED-SC-0050..0051 (0+2) | H-694..H-701 (3+5) |
 | B28-social-verbs | SC | ED-SC-0052..0053 (0+2) | H-702..H-723 (17+5) |
-| B29-pc-custody | PC | ED-PC-0070..0071 (0+2) | H-724..H-728 (0+5) |
 | B30-mb-nested | MB | ED-MB-0097..0098 (0+2) | H-729..H-733 (0+5) |
 | B31-mb-loadout-economy | MB | ED-MB-0099..0100 (0+2) | H-734..H-738 (0+5) |
 | B32-inst-kit | FA | ED-FA-0050..0051 (0+2) | H-739..H-745 (2+5) |
@@ -437,13 +435,11 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | B21b-fa-war | `valoria_master_workplan_v12_part21.md`, `_part21_cont.md` |
 | B12b-weather-arcs-population | `valoria_master_workplan_v12_part24.md`, `_part24_cont.md` |
-| B29-pc-custody | `valoria_master_workplan_v12_part24_cont.md` |
 | B21c-fa-seats | `valoria_master_workplan_v12_part25.md` |
 | B34-go-surface | `valoria_master_workplan_v12_part25_cont.md` |
 | B19-mb-field-calibration | `valoria_master_workplan_v12_part26.md`, `_part26_cont.md`, `_part27.md`, `_part27_cont.md` |
 | B12c-material-verbs-and-valley | `valoria_master_workplan_v12_part28.md`, `_part28_cont.md` |
 | B24a-sc-outside-the-room | `valoria_master_workplan_v12_part28_cont.md` |
-| B18-pc-content | `valoria_master_workplan_v12_part28_cont2.md` |
 | B21d-fa-arc | `valoria_master_workplan_v12_part29.md` |
 | B41-go-port-gate | `valoria_master_workplan_v12_part29.md`, `_part29_cont.md` |
 | B11F1-flow-se | `valoria_master_workplan_v12_part29_cont.md` |
@@ -469,4 +465,4 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 | B40-inst-scenarios | `valoria_master_workplan_v12_part43.md`, `_part43_cont.md` |
 | B98-dials, B99-nine-retake | `valoria_master_workplan_v12_part44.md`, `_part44_cont.md`, `_part44_cont2.md` (B98); `_part44_cont3.md` (B99) |
 
-The file order is reading order, which is execution order only up to the schedule: where a file holds batches of different steps (part 24's continuation: B19a and B29 at S14), the step table of §8 governs when each opens.
+The file order is reading order, which is execution order only up to the schedule: where a file holds batches of different steps, the step table of §8 governs when each opens.

@@ -474,7 +474,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) | ED shifted |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) | same |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
-| B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) | H shifted |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) | H shifted |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) | H shifted |
 | B21b-fa-war | FA | ED-FA-0042..0043 (0+2) | H-620..H-627 (3+5) | H shifted |
@@ -489,7 +488,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B26-fi-inquiry | FI | ED-FI-0014..0015 (0+2) | H-687..H-693 (2+5) | H shifted |
 | B27-sc-proceedings | SC | ED-SC-0050..0051 (0+2) | H-694..H-701 (3+5) | H shifted |
 | B28-social-verbs | SC | ED-SC-0052..0053 (0+2) | H-702..H-723 (17+5) | H shifted |
-| B29-pc-custody | PC | ED-PC-0070..0071 (0+2) | H-724..H-728 (0+5) | H shifted |
 | B30-mb-nested | MB | ED-MB-0097..0098 (0+2) | H-729..H-733 (0+5) | H shifted |
 | B31-mb-loadout-economy | MB | ED-MB-0099..0100 (0+2) | H-734..H-738 (0+5) | H shifted |
 | B32-inst-kit | FA | ED-FA-0050..0051 (0+2) | H-739..H-745 (2+5) | H shifted |

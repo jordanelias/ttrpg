@@ -102,6 +102,8 @@ assert _END_KEY, "descriptors names no Endurance attribute: party_end would read
 # The fight's default for `end` is the combat module's, read once from its typed export through `substrate/combat_kit.py`
 # (the artifact's one reader; section `attributes`); the registry's `default: 1` is the sheet scale's floor, a different fact.
 _END_DEFAULT = combat_kit.END_DEFAULT
+_STRENGTH_KEY = attribute_key("Strength")  # the registry key of `strength` (B18.07): the figure `short` is taken against, the one the module maps to `Combatant.strength`
+assert _STRENGTH_KEY, "descriptors names no Strength attribute: party_short would read the default for every person"
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
@@ -165,7 +167,18 @@ def party_end(person: Any, fx: Any) -> int:
     return max(1, base_end - bands)
 
 
-_MORTAL_SITE = require_use_site("mortal")     # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
+def party_short(person: Any, kit: tuple) -> tuple:
+    """A party's `PersonalCombatInput.short` entry (B18.07): `(short with the primary in hand, short with the secondary in hand)`, each the
+    Strength points under `combat_kit.carry_demand` he is, `combat_kit.shortfall`, the one rule, evaluated here because the module imports
+    nothing of the carry rule. His Strength is the one the module will build him at: the authored `attr.body.strength` he HOLDS, else the combat
+    export's default (`STRENGTH_DEFAULT`, as `party_end` reads Endurance); `kit` is `kit_of`'s `(primary, secondary, armor)` (B18.08), and the
+    pairing is `combat_kit.short_pair`'s: with the primary in hand he carries the secondary, and the reverse. A kit with no secondary
+    carries nothing, so the first is the harness's alone, the charge `act_cost` always made, and the second is `None`."""
+    primary, secondary, armour = kit
+    return combat_kit.short_pair(primary, secondary, armour, person.attributes.get(_STRENGTH_KEY, combat_kit.STRENGTH_DEFAULT))
+
+
+_MORTAL_SITE = require_use_site("mortal")    # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
 _MORTAL_PURPOSE = "fight.mortal"              # the mortal draw's purpose in its key (PHY_A A3, A-30): one draw per felled party per tick
 
 
@@ -289,7 +302,7 @@ def _fight_score(w: Any, p: Any, verb: str) -> int:
 
 
 def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
-    """THE BELIEVER'S OWN PICTURE OF ANOTHER PERSON FOR A FIGHT (B14.24; `U5b_PC_residue` §8 item 1): `((weapon, armor), person)`, `person` standing in
+    """THE BELIEVER'S OWN PICTURE OF ANOTHER PERSON FOR A FIGHT (B14.24; `U5b_PC_residue` §8 item 1): `((weapon, secondary, armor), person)`, `person` standing in
     for him where the fight reads his body (`party_end`, `_carried_of`: `body`, `body_ceiling`, `attributes`). What the believer's ledger gives:
       * HIS KIT -- per field, his latest claim at `person_q.KIT_CLAIM + field`, else the world's where he has SEEN him (`person_q.has_seen`), else the
         Combatant's own default (`combat_kit.DEFAULTS`): a person who knows nothing of the opponent's kit gets the default kit, never the true one;
@@ -299,9 +312,12 @@ def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
     revert: none needed, read-only]: the B14.24 item is the kit and the wounds. Reads `believer`'s ledger and the world only where the ledger says he has seen him."""
     other = w.persons[pid]
     seen = person_q.has_seen(believer, pid)
-    held = dict(zip(("weapon", "armor"), kit_of(w, pid))) if seen else dict(combat_kit.DEFAULTS)
+    held = dict(zip(("weapon", "secondary", "armor"), kit_of(w, pid))) if seen else {**combat_kit.DEFAULTS, "secondary": None}
     at = (w.tick, w.fixtures.claim_decay())          # B09.01: his claims are read faded at this tick, never as stored
-    kit = tuple(held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    weapon, armor = (held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    # B18.08: no claim names a secondary, so he has the world's where he has SEEN him (never the default's: none); a claim of a weapon that is the very one he
+    # carries leaves nothing carried.
+    kit = (weapon, None if held["secondary"] == weapon else held["secondary"], armor)
     wound = person_q.believed_body(believer, pid, *at)
     scale = w.fixtures.get("condition_scale")
     if wound is not None:
@@ -320,8 +336,8 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
 
     Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
     and, for each party's `kits` entry, what his rungs store (`world_q.kit_of`, CP-T03-03: his holdings, else his
-    residence; the Combatant default for a person who holds no arms, which is everyone while `rosters.yaml:
-    arms_kinds` is empty), and each party's authored `Person.attributes` (PC-06 K-1), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    residence; the Combatant default for a person who holds no arms while `rosters.yaml:
+    arms_kinds` is empty, else `combat_kit.UNARMED`, B18.03), and each party's authored `Person.attributes` (PC-06 K-1), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
@@ -370,6 +386,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         ends=(party_end(ba, w.fixtures), party_end(bb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(ka, kb),
+        short=(party_short(pa, ka), party_short(pb, kb)),   # B18.07: each party's shortfall against what he carries, the DEALT person's Strength (the module builds him from `pa`/`pb`'s attributes) at the kit fought with
         scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
         pool_add=pool_add, pool_floor=pool_floor,

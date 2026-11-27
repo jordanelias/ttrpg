@@ -9,6 +9,10 @@ lanes:
   season_loop:
     base: 3219
     warrants:
+      - {batch: B18-pc-content, added: 2, behaviour: "a person with no stocked weapon fights unarmed once the arms roster is non-empty, and a person who stocks one is the kit he was; with the roster emptied kit_of is the default for everyone"}
+      - {batch: B18-pc-content, added: 2, behaviour: "the loader refuses a shipped arms kind outside rung_kinds and a weapon or armour key outside the weapons export, which no other test observes"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the six martial lifepaths hold arms at pool_default, no other lifepath names it, and a person built on one can train it"}
+      - {batch: B18-pc-content, added: 1, behaviour: "kit_of returns the two highest-ranked distinct weapon kinds a person's rungs stock as primary and secondary, and the carry of the secondary rides the input's short pair"}
       - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a season's want term scales each per-head weight where the draw is projected, so a cohort's demand, REM-50's cover and MATTER's drain agree at a winter tick and a salt weight of 1 under 1.5 is 2; the yield term scales the drawn season factor only with the draw on; at the shipped terms the projection is the bare weights every tick"}
       - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a journey between two settlements is priced by the cheapest path over the settlement graph, each step the ground of the settlement entered, at the leg unit's scene points with a floor of one; a settlement inside a pass nested in a mountain costs the pass's price and one in the mountain's interior may not be entered; a journey into a foreign territory is still blocked"}
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a journey the chooser prices under route pricing costs its leg's points from the scene budget, far above near and equal to the world-side leg points, one point at the shipped off arm, and a journey over the person's remainder is left undone"}
@@ -36,6 +40,9 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort that starves after one exact season's stock was drawn falls citing the last stores write at the rung it was short at, and its death cites that fall, not the seed or an earlier death"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort the larder cannot feed in full is refused a tend at the fed clause and its body stays, the same cohort fully fed is tended to the scale, and a weight-1 person who is no eater is tended"}
       - {batch: B12b-weather-arcs-population, added: 2, behaviour: "with the supply arm on, a treasury holding grain and no salt fields troops at the grain ration and the fold debits the grain it ate where the larder's whole ration fields nobody from it, and a side with an empty treasury fields fewer troops than one with a full treasury"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "an officer a warrant is addressed to, who has only heard of it, forms arrest on the man it names (on a question with no plain referent too) and on no other, the arrest folds to arrest.made and opens a detain, and a warrant addressed to a third man forms none for him"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "capture forms on a person under war or crime and on no stranger, and its custody goes to the issuing seat of the warrant whose court could close it, not to the seat the act is exercised through"}
+      - {batch: B21b-fa-war, added: 43, behaviour: "a faction's identity is read by one owner (`faction_props`); a person is offered a creed to join only for one he reads above his own and above indifference; a seated muster-holder declares a war on a rival he reads below indifference or one a wound or a held claim to a territory turns him toward, an own-faction or already-at-war declare is refused, and only a declare's own commit makes a war; a claim to a territory is a Proposition whose grounds the roster names; a sworn man's seat grants and refuses by the oath (`retain` and `conspire` each weigh the new obstacle terms and a plot is laid, joined or refused by what the gate admits); an oblige purview and a regent's seat on the same rung read the one `purview_of`; a seat is conferred only by what every live holder grants; a march is capped and seized by what it reaches"}
       - batch: B34-go-surface
         added: 15
         behaviour: "the player surface in test_play_surface.py: the transcript's hash equals the plain run's (seeds 0-2), the offer rows follow make_ranker and the printed order and terms are the chooser's, withheld rows are own-state only, the prior teller is unattributed, a swept scene_budget gives the seat its scenes, a picked question ranks first, the stop rules (no-continuation stops, a continuation plays on, a killed seat continues under the heir) and the ending's kind (victory rows only)"
@@ -77,7 +84,10 @@ lanes:
 
   combat:
     base: 497
-    warrants: []
+    warrants:
+      - {batch: B18-pc-content, added: 1, behaviour: "a fight with every input slot absent, None or at its declared default is the same fight, event for event, and a raised axis is a different one"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the harness term the fight charges as stamina is the one the host computes from the carry rule at every armour tier and Strength, and a shortfall slows the close once CARRY_CLOSE_K is above 0"}
+      - {batch: B18-pc-content, added: 1, behaviour: "a switch swaps the weapon and costs one ACT_THRESHOLD together at the round's first closed beat and a round that never closes changes nothing, the default rule fires on a closed measure only, and a decider answering engage plays the same fight as none"}
   mass_battle:
     base: 324
     warrants: []

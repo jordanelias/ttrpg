@@ -4,9 +4,11 @@ Part B). `fight_trace.py`, `balance.py` and `server.py` read it; none of them to
 calls `wrapper.fight` on a Combatant, for a declared Yield the record cannot carry.
 
 A PARTY is a plain dict, one fighter's share of the record:
-  label, end, attributes ({registry key: value}), kit ((weapon, armor)), score (`Combatant.score`), disp,
-  tradition, techniques ({name: level}, or a list), axes ({axis: bonus}).
-It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus score, weapon, armor, tradition, equipped, skills, label)
+  label, end, attributes ({registry key: value}), kit ((weapon, secondary, armor); a two-entry (weapon, armor) is a kit with no secondary, B18.08), score (`Combatant.score`), disp,
+  tradition, techniques ({name: level}, or a list), axes ({axis: bonus}), short ((short with the primary in hand, short with the
+  secondary in hand), B18.07: `combat_kit.shortfall`, the same one rule the season's `combat_input` evaluates).
+It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus score, weapon, armor, tradition, equipped, skills, label,
+and `secondary`, the one weapon he may carry and put in hand, B18.08/B18.09)
 or from a built Combatant (`party_of_combatant`). `record_of` zips two parties into the record, `claimants` order.
 
 NOT CARRIED, and said so: state a Combatant holds that the record has no field for (`known_traditions`, a hand-set
@@ -18,27 +20,34 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 from engine.season.queries.inputs import PersonalCombatInput
+from engine.substrate import combat_kit   # the carry rule (B18.06), through which a party's `short` is filled (B18.07)
 from modules.combat import attributes   # the combat attribute spec (PC-14): the one owner of which attributes exist
 from modules.combat import fight as entry   # `entry.fight` is read at call time, so a spy on the entry sees every call
 
 
 def party_of_spec(spec, default_label):
     given = {k: spec[k] for k in attributes.KEYS if k in spec}   # an absent attribute takes the spec's default in the Combatant
+    armor = spec.get('armor', 'light')
+    weapon = spec.get('weapon', 'arming')
+    secondary = spec.get('secondary')   # B18.09: the weapon he carries and does not hold; his `short` pair is `combat_kit.short_pair`'s, as the season's
+    strength = given.get('strength', attributes.DEFAULT['strength'])
     return dict(label=spec.get('label', default_label),
                 end=given.get('end', attributes.DEFAULT['end']),
                 attributes={s.registry_key: given[s.key] for s in attributes.SPEC
                             if s.key in given and s.key != 'end' and s.registry_key is not None},
-                kit=(spec.get('weapon', 'arming'), spec.get('armor', 'light')),
+                kit=(weapon, secondary, armor),
                 score=spec.get('score'), disp=given.get('disp'),
-                tradition=spec.get('tradition', 'none'), techniques=spec.get('equipped'), axes=spec.get('skills'))
+                tradition=spec.get('tradition', 'none'), techniques=spec.get('equipped'), axes=spec.get('skills'),
+                short=combat_kit.short_pair(weapon, secondary, armor, strength))
 
 
 def party_of_combatant(c):
     return dict(label=c.label, end=c.attrs['end'],
                 attributes={s.registry_key: c.attrs[s.key] for s in attributes.SPEC
                             if s.key != 'end' and s.registry_key is not None},
-                kit=(c.weapon, c.armor), score=c.score, disp=c.attrs['disp'],
-                tradition=c.tradition, techniques=c.equipped, axes=c.skills)
+                kit=(c.weapon, c.secondary, c.armor), score=c.score, disp=c.attrs['disp'],
+                tradition=c.tradition, techniques=c.equipped, axes=c.skills,
+                short=combat_kit.short_pair(c.weapon, c.secondary, c.armor, c.strength))   # what a Combatant carries and does not hold is his secondary (B18.08), or nothing
 
 
 def record_of(pa, pb, terms='death'):
@@ -48,7 +57,7 @@ def record_of(pa, pb, terms='death'):
     return PersonalCombatInput(
         claimants=both('label'), ends=both('end'), wound_quantities=(), terms=terms, kits=both('kit'),
         scores=both('score'), attributes=both('attributes'), traditions=both('tradition'),
-        techniques=both('techniques'), axes=both('axes'), dispositions=both('disp'))
+        techniques=both('techniques'), axes=both('axes'), dispositions=both('disp'), short=both('short'))
 
 
 def result_of(outcome):

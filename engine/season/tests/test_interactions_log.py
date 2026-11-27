@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import pytest
 
-from ..data.verbs import VERB_TABLE
 from ..harness import interactions as I
 from ..queries import person_q, world_q
 
@@ -54,15 +53,16 @@ def season_one():
 
 
 def _selected(rows):
-    """The first audited row of the season whose candidate was chosen and whose verb declares `contests:`."""
-    return next((r for r in I.audit(rows)
-                 if r["candidate"] and r["candidate"]["chosen"] and VERB_TABLE[r["verb"]].contests), None)
+    """The first audited row of the season whose candidate was chosen. B21b.99 re-record: the row used to be one whose verb declares `contests:` (two `speak`
+    rows at seed 0, one season, on the batch's opening tree 42e35ac05); after B21b the shipped season (seeds 0 and 1 at one season, seed 0 at two) holds one
+    audited row, a `challenge`, and no `speak` between same-faction friends, so the `contests:` filter selected nothing. The six fields are the same for any hostile act."""
+    return next((r for r in I.audit(rows) if r["candidate"] and r["candidate"]["chosen"]), None)
 
 
 def _assert_finding(rows, at_act) -> None:
     """The selected row's six fields against the world AT ITS ACT (`season_one`'s `at_act`, keyed by the row's own relation dict)."""
     r = _selected(rows)
-    assert r is not None, "no audited row of the season is a chosen act of a verb that declares `contests:`"
+    assert r is not None, "no audited row of the season is a chosen act"
     world = at_act.get(id(r["relation"]))
     assert world is not None, "the selected row's relation was not read at its act: the comparison observed nothing"
     fa, ft = world["factions"]

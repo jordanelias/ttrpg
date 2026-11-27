@@ -805,7 +805,32 @@ WEAPONS = {
      dict(head='curved_cut', element_ref=0, geometry=dict(curvature=0.22, point_concentration=0.55, cross_section=0.65, edge_keenness=0.60, strike_concentration=0.00)),  # blade_with_hooked_tip
      dict(head='blunt', element_ref=1, geometry=dict(curvature=0.60, point_concentration=0.05, cross_section=0.70, edge_keenness=0.05, strike_concentration=0.40)),  # crescent_hand_guard_striking_element
     ]),
+ # B18.03 (`03_PC_person_inputs_content` Part C): the record a person holds when he holds no weapon — a closed fist on
+ # a forearm, a physical record like the rest (nothing in the engine branches on its name; the kit seam reads it as
+ # UNARMED below). Every number is [ASSUMPTION; low; Jordan to correct], taken from body-segment anthropometry
+ # (Winter / Dempster: hand 0.6 % and forearm 1.6 % of body mass; forearm 0.146 H and hand 0.108 H long, COM of the
+ # forearm 0.43 of its length from the elbow and of the hand 0.506 of its length from the wrist) for an adult of
+ # 75 kg and H = 1.75 m. The WORKING HAND (x=0) is the WRIST: the fist is the striking element out in front of it and
+ # the forearm is the haft behind it (x = 0 toward the elbow is negative), so the lever is the forearm's, not the arm's.
+ #   fist   0.45 kg (0.006 x 75), COM 0.096 m from the wrist (0.506 x 0.108 x 1.75), ~0.09 m across (knuckle breadth)
+ #   forearm 1.2 kg (0.016 x 75), 0.26 m long (0.146 x 1.75), COM 0.148 m behind the wrist (0.57 x 0.26)
+ #   head_len 0.145 m = palm (about 0.104 m) + a proximal phalanx (about 0.04 m): the striking face, a fist's whole reach
+ #   beyond the wrist, which is below GRAB_SHORT_REACH_M (0.375) so contact.py's open-contact exemption applies by its own
+ #   physical test. Geometry: a broad knuckle face, no point, no edge (the mace/staff blunt rows' end of the scale).
+ 'unarmed': dict(
+   mass=1.65, head_len=0.145, grip_len=0.26, hands=1, head='blunt',
+   wclass='hafted_block', hilt='none',
+   elements=[
+     dict(x_m=0.096, mass_kg=0.45, extent_m=0.09, orient_deg=0, material='bone/flesh'),  # closed fist (hand mass, knuckle face)
+    ],
+   haft=dict(x_m=-0.148, mass_kg=1.2, extent_m=0.26),  # forearm, wrist to elbow
+   geometry=dict(curvature=0.0, point_concentration=0.05, cross_section=0.5, edge_keenness=0.0, strike_concentration=0.1)),
 }
+
+# The record a person fights with when he holds no weapon (B18.03). One name, read by `tools/export_engine_params.py`
+# into the export's `kit.unarmed` and from there by `engine/substrate/combat_kit.py`; nothing in the engine compares a
+# weapon to it.
+UNARMED = 'unarmed'
 
 # Bake the geometry coefficient surface ONCE at import (zero runtime cost): geometry derives `gap` (and
 # thrust/cut/perc_conc/halfsword for downstream wiring) from each weapon's nested geometry.
@@ -842,7 +867,7 @@ _EDGES = {
   # edgeless (sides=0) — armoured thrusters / stiletto-class needles
   'estoc':[_E(0)], 'rondel':[_E(0)], 'stiletto':[_E(0)], 'misericorde':[_E(0)],
   # blunt striking tip — no cutting edge at all (omit)
-  'staff':[None], 'mace':[None],
+  'staff':[None], 'mace':[None], 'unarmed':[None],
   # composites (order matches elements=[...]; blunt/edgeless spikes contribute 0 to the readers' MAX):
   'poleaxe':[None,_E(0),_E(0)], 'bec_de_corbin':[None,_E(0),_E(0)], 'lucerne_hammer':[None,_E(0),_E(0)],
   'goedendag':[None,_E(0)],

@@ -42,7 +42,10 @@ from ..loop.witness import content_value
 from ..queries import person_q, world_q
 from ..queries.person_q import SEEN_PREDICATE
 from ..seam.wrappers import combat
-from ..state.carriers import Claim, Proposition, Question, Tenure, View
+from ..data.matrix import WriteClass
+from ..loop.driver import SeasonDriver, mint_token
+from ..state import gate
+from ..state.carriers import Act, Claim, Proposition, Question, Tenure, View
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
 CARDINALS = {"off_cardinal_fortitude", "off_cardinal_justice", "off_cardinal_prudence", "off_cardinal_temperance"}
@@ -170,11 +173,16 @@ def test_enemies_heard_stamps_the_other_faction_only_once_he_knows_of_a_live_war
     mine = world_q.faction_holding(w, me)
     other = next(f for f in sorted({world_q.faction_holding(w, x) for x in w.persons} - {None, mine}))
     assert world_q.enemies_heard(w, w.persons[me]) == ()
-    w.propositions["prop:war:test"] = Proposition("prop:war:test", world_q.WAR_MOOD, mine, "", other, 0)
-    assert world_q.enemies_heard(w, w.persons[me]) == (), "no live commit: no war"
-    w.add_tenure(Tenure("t_war_commit", "p_npc_020", "prop:war:test", "commit", since=0))
+    # B21b.11: the war is minted through `declare` (a hand-planted WAR Proposition is no war: `at_war` asks that a `declare` made it) by a seated muster-holder of `mine`.
+    declarer, seat = next((p, t.object) for p in sorted(world_q.members(w, mine)) for t in w.persons[p].tenures
+                          if t.kind == "hold" and t.live and t.object in w.offices and gate.MUSTER_ACT in t.granted_acts
+                          and gate.seat_faction(w, t.object) == mine)
+    out = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [Act(id="c_war_declare", actor=declarer, verb="declare", via=seat, payload={"subject": other})],
+                                  contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["war.declared"], [e.kind for e in out]
+    w.log.extend(out)
     assert world_q.enemies_heard(w, w.persons[me]) == (), "a live war he has not heard of is no context"
-    w.persons[me].ledger.append(Claim("c_war_heard", me, "prop:war:test", "proposition.uttered", True, 0,
+    w.persons[me].ledger.append(Claim("c_war_heard", me, "prop:c_war_declare", "proposition.uttered", True, 0,
                                       "firsthand", 100, "own"))
     foes = world_q.enemies_heard(w, w.persons[me])
     assert foes and all(world_q.faction_holding(w, f) == other for f in foes)

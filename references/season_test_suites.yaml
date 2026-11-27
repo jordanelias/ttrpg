@@ -111,6 +111,14 @@ suites:
     - vb_a_formation
     - vb_c_turnover
     - vb_d_orders
+    - cp_t09_allegiance
+    - cp_t09_conspire
+    - cp_t09_declare
+    - cp_t09_retain
+    - cr91_claim_to_territory
+    - in30_faction_props
+    - in40_oblige_purview
+    - in48_delegation
   fi:
     - arcs_possession_found
     - arrival_report

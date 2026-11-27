@@ -32,12 +32,10 @@ What each block proves, and the control that stops it passing vacuously:
          wins, `head`'s own documented tie-break (`state/containment.py::home_of`'s precedent).
      (d) closing the later edge (`until` set) drops it out of consideration -- `head` falls back
          to the earlier one, proving the filter is `t.live`, not merely `t.degree is not None`.
-  9. `at_war` -- THROUGH THE REAL FOLD, NOT A HAND-PLANTED TENURE. A `utter` Act with
-     `payload={"mood": "WAR", "subject": A, "value": B}` followed by a `commit` from the same
-     actor to the Proposition it mints are BOTH SHIPPED, UNCONTESTED, `own`-eligible verbs
-     (`loop/effects.py::_eff_utter`/`_eff_commit`) -- so this drives `SeasonDriver.resolve` twice,
-     the same mechanism `test_governance_build.py`'s LB-1 tests use, rather than constructing a
-     `Tenure`/`Proposition` by hand. FOUR observables: the control before the commit is `False`;
+  9. `at_war` -- THROUGH THE REAL FOLD, NOT A HAND-PLANTED TENURE. A `declare` Act (B21b.11: it mints the WAR
+     Proposition and the declarer's own `commit` in one write, `loop/effects_information.py::_eff_declare`)
+     drives `SeasonDriver.resolve`, the same mechanism `test_governance_build.py`'s LB-1 tests use, rather
+     than constructing a `Tenure`/`Proposition` by hand. FOUR observables: the control before the commit is `False`;
      after it, both `at_war(w, A, B)` and the symmetric `at_war(w, B, A)` are `True`; after
      `release`-ing the commit (peace, `T-m`'s own discretion) it is `False` again. B21.58 (A-20) adds the seat: a
      commit wages only from a seat granted `dispatch` (`gate.may_wage`), so the declarer's own `release` of his seat's
@@ -219,6 +217,7 @@ def test_head_a_closed_graded_edge_does_not_count():
 def _resolve_one(w, d, act):
     out = d.resolve(mint_token(w, WriteClass.ACTS), [act],
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)      # B21b.11: `at_war` reads the Proposition's creating Event (`first_event_naming`), so the fold's Events are logged as `SeasonDriver.season` logs them
     return [e.kind for e in out]
 
 
@@ -251,19 +250,13 @@ def test_at_war_through_the_real_fold_utter_then_commit_then_release():
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "control failed -- fac_valorsmark/fac_guilds already read at_war before anything was uttered")
 
-    kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_utter", actor=declarer, verb="utter",
-                                   payload={"mood": "WAR", "subject": "fac_valorsmark",
-                                            "value": "fac_guilds"}))
-    assert kinds == ["proposition.uttered"], f"the WAR utterance did not mint cleanly: {kinds}"
+    # B21b.11 (CP-T09-02 (a)): the war is minted through `declare` -- ONE act writes the Proposition and the declarer's own `commit`. The hand-built
+    # `utter` + `commit` chain this test used to mint is no war (`test_cp_t09_declare.py`'s S2 control).
+    kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_utter", actor=declarer, verb="declare", via=seat,
+                                   payload={"subject": "fac_guilds"}))
+    assert kinds == ["war.declared"], f"the declaration did not mint cleanly: {kinds}"
     prop_id = "prop:c_20ii_atwar_utter"
     assert w.propositions[prop_id].mood == "WAR"
-
-    # Not yet at war: the Proposition exists but nobody has committed to it.
-    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False
-
-    kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_commit", actor=declarer, verb="commit",
-                                   payload={"subject": prop_id}))
-    assert kinds == ["commitment.made"], f"the declaring commit did not mint cleanly: {kinds}"
 
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is True
     assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is True, (

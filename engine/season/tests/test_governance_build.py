@@ -1702,7 +1702,7 @@ def test_13d_i_the_revocation_basis_is_a_rostered_value_and_gates_the_rule():
         seen.append(_may_revoke(w, "c_king", "off_duke"))
         assert seen[-1] is expected, (basis, seen[-1])
     assert seen == [False, False, True], seen
-    assert set(REVOCATION_BASES) == {_RUNG_ABOVE, "rung_above_in_holdings"}, sorted(REVOCATION_BASES)
+    assert set(REVOCATION_BASES) == {_RUNG_ABOVE, "rung_above_in_holdings", "same_rung_same_faction"}, sorted(REVOCATION_BASES)   # B21b.25 added the third
     with pytest.raises(Unspecified):
         Office("off_x", "Reeve", "S", [], faction="Crown", revocation="purview")
     assert Office("off_y", "Reeve", "S", [], faction="Crown", revocation=_RUNG_ABOVE).revocation
@@ -3104,7 +3104,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
     # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
     # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (419, 418), (      # B34.24, the seat-news draw (H-758): (416, 415) -> (419, 418); B16.99 re-record on the tree after B24's merge (B16.03, the per-round fight key; read at the `uniform` arm this test sweeps, `PYTHONHASHSEED=0`, seed 0, one season): (414, 413) -> (416, 415); B21b partial re-record on the merge with B08 and B12a: (392, 391) -> (414, 413) (the guards ship on, B21b.02); B12a.99: at the `uniform` arm the merged tree (B08 and this batch) reads (392, 391), as B08.99 did, so the pin stands; the shipped `ground` arm reads (408, 408) and parts nothing; B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
+    assert (out["acts"], cout["acts"]) == (434, 430), (      # B34.24's seat-news draw (H-758), merged with B21b/B29/B18: (422, 421) -> (434, 430); B21b.99 re-record: (414, 413) -> (422, 421) (the remainder of B21b, B21b.05 to B21b.25, and the close fixes; seed 0, one season, `PYTHONHASHSEED=0`); earlier: B21b partial re-record on the merge with B08 and B12a: (392, 391) -> (414, 413) (the guards ship on, B21b.02); B12a.99: at the `uniform` arm the merged tree (B08 and this batch) reads (392, 391), as B08.99 did, so the pin stands; the shipped `ground` arm reads (408, 408) and parts nothing; B11 merge with main re-record: (432, 431) -> (392, 391) (`_realm_goldens.CENSUS[(0, 1)]` records the 392); B24p merge with B21 re-record: (584, 583) -> (432, 431), the B21 movers and the proceeding's five verbs together (B24p merge with B15.99: (583, 582) -> (584, 583); B15.99: (570, 568) -> (583, 582), the fight calibration)
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what
