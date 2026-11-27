@@ -3898,6 +3898,48 @@
             "winter"
           ]
         },
+        "season_terms": {
+          "source": "CP-T10-03 (B12b.01), keyed by `seasons_of_year` (ED-IN-0332, D-U1-10: the year has one owner and this row states no length)",
+          "open": false,
+          "note": "WHAT EACH SEASON OF THE YEAR DOES, one entry per member of `seasons_of_year` (`data/rosters.py::SEASON_TERMS`; the load refuses a row whose keys are not exactly those members, or an entry lacking a number for `yield`, `want`, `illness` or `hardship`). `yield` multiplies `world_q.season_factor_of`'s drawn return (its one owner); `want` scales each `subsistence_weight` entry in `world_q._larder_parts`, rounded to a whole number half up, so REM-50's `hunger`, `demanded` and MATTER's draw read one projection; `illness` is read by CP-T10-05; `hardship` is the weather's obstacle term (read by the spell's draw, B12b.03). SHIPPED AT THE CONTROL: every multiplier 1.0 and `hardship` 0, so the calendar runs and moves nothing. THE SWEPT ARM, not shipped, `[ASSUMPTION; medium; Jordan to correct]` (CP-T10-03): winter `yield` 0.25, `want` 1.5, `illness` 2.0, every other season 1.0; the `hardship` values are unstated and set by B98 if at all.",
+          "values": {
+            "spring": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            },
+            "summer": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            },
+            "autumn": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            },
+            "winter": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            }
+          }
+        },
+        "season_band_factors": {
+          "source": "`09_WR_B_weather_with_memory_and_the_year` edit 1 (B12b.03), A-54: the season's harvest is one keyed draw on the one four-band ladder, the band choosing the factor",
+          "open": false,
+          "note": "THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2). `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.",
+          "values": {
+            "Overwhelming": 1.0,
+            "Success": 1.0,
+            "Partial": 1.0,
+            "Failure": 1.0
+          }
+        },
         "factions": {
           "source": "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` \u00a73, \u00a74, \u00a75, \u00a78, \u00a710.",
           "row": "H-99",
@@ -4513,6 +4555,14 @@
           "values": [
             "off",
             "on"
+          ]
+        },
+        "journey_verbs": {
+          "source": "v12 B12b.04 (CP-T10-01; `09_WR_B_weather` edit 3: \"`decision/` prices a `move`/`travel` candidate\"): the verbs whose act is a journey over the road. [ASSUMPTION; medium; Jordan to correct; revert: `[move]` -- `migrate` is `move`'s journey and a settling, `verb_table.yaml`: both write through `_relocate`.]",
+          "note": "THE VERBS `decision/choose.py::pack_scenes` prices by `data/geography.py::leg_price` when `Fixtures.route_pricing` is `on`: a Candidate of one of them is stamped with its leg (`carriers.LEG`) and its scene costs the leg's points. `march` is not here: an army's march is not a person's journey and `march_postures` own it. At `off` nothing reads the roster's members.",
+          "values": [
+            "move",
+            "migrate"
           ]
         },
         "said_slants": {
@@ -5442,7 +5492,7 @@
         "endings": {
           "source": "v9 IN-27 (END-VICTORY), on #457 D6's adopted answer (`workplans/valoria_master_workplan_v9_part5.md` RS-21 row 3): *\"the ending vocabulary is a Query over holds and seats that the season reports -- never an actor\"*. Read by `queries/world_q.py::endings_reached`, reported by `loop/driver.py::SeasonDriver.season` as `endings`.",
           "cite": "H-176; GD-1; #457 D6; T-b",
-          "note": "WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the loader reads them (`CLAUDE.md` \u00a74): an ENDING is a row here; it is REACHED when every hold its `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is not credited). \u26a0 THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) completes the condition, and no pure read can locate the crossing, because the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. Revert: every edge the condition reads opened by an act -- which makes `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:` selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id, and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm` RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is outside the realm and not selected), which may carry `settled: true` beside it and nothing else (only the rungs with a `settlement` rung among their descendants). `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction, whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and writes nothing (`SeasonDriver.season` reports it). \u26a0 NOT CARRIED, BY THE CUTS: no stored stability or legitimacy value, no threshold counter, no clock (#457 \u00a75; `T-a`, `T-b`, `T-c`).",
+          "note": "WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the loader reads them (`CLAUDE.md` \u00a74): an ENDING is a row here; it is REACHED when every hold its `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is not credited). \u26a0 THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) completes the condition, and no pure read can locate the crossing, because the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. Revert: every edge the condition reads opened by an act -- which makes `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:` selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id, and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm` RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is outside the realm and not selected), which may carry `settled: true` beside it and nothing else (only the rungs with a `settlement` rung among their descendants), or `{site_band: <a band of band_floors>, of: <a site_kinds member with floors, or all>}` (B12b.05: the Sites under the realm of those kinds, each compared with the band's floor; ELIGIBLE when one is at or below it, and then ONE KEYED DRAW decides, `(seed, tick, row)`: the pool the Sites still above the band times the fixture `site_band_pool_scale`, the obstacle those at or below plus one per band below the named one, so a Failure REACHES the ending and a Partial reports it `near`; such a row carries `victory: false` and no `under:`, and needs no act). `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction, whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and writes nothing (`SeasonDriver.season` reports it). \u26a0 NOT CARRIED, BY THE CUTS: no stored stability or legitimacy value, no threshold counter, no clock (#457 \u00a75; `T-a`, `T-b`, `T-c`).",
           "members": {
             "peninsular_sovereignty": {
               "victory": true,
@@ -11194,7 +11244,7 @@
           "class": "MATTER/ACTS",
           "social": "false",
           "by": "DR-1, D10 \u2014 see \u00a7D4. \u26a0 THE `MAT` STEP GAINED ITS WRITER AT PLAN POSITION `19c` (2026-09-30): `loop/matter.py`'s travel pass ends every leg at the next MATTER, so `decision/budget.py`'s distance penalty is a cost of the season travelled in and not, as it was, of every season after. `travel.ended` is that write's emission (`H-12`: MATTER emits per write, and `travel.moved` would report a move that did not happen)",
-          "emits": "`travel.moved` \u00b7 `travel.ended`"
+          "emits": "`travel.moved` \u00b7 `travel.ended` \u00b7 `travel.delayed`"
         },
         {
           "kind": "Person",

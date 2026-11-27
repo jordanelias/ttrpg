@@ -20,6 +20,7 @@ from typing import NamedTuple, Optional
 from engine.dice_engine.dice_engine import Degree, degree_from_net
 from engine.dice_engine.sigma_leverage import roll_net_continuous
 from .. import manifest
+from ..data.fixtures import ROAD_HAZARD_ON
 from ..data.geography import adjacent_territories
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
@@ -867,6 +868,21 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     arrival_mode = w.fixtures.get("arrival_report")
     require_member(arrival_mode, ARRIVAL_REPORTS, f"arrival report {arrival_mode!r} is not in the roster", "H-525",
                    law="`stock_report`'s precedent: an unknown arm silently reading `off` would make a sweep of the arm report the control twice")
+    # B12b.11 (`16_PESSIMIST_WR_A` edits 5 and 7, CP-T10-02): THE ROAD'S DRAW, BEHIND `road_hazard`. `off` (the control, shipped) is today's loop, byte for byte: `degrees` is `{}`, every leg list is cleared, no draw is taken. `on`: `settlements.exposure` is called ONCE, on the
+    # host's projection (`world_q.road_input`, read before any write of this pass), and each traveller it names ends this barrier by his degree --
+    #   Overwhelming  on time, with news: `travel.ended` carries the stock of the place he stands in (`stores:<kind>`, `_stock_report`'s predicate) if the
+    #                 arrival report has not already given it;
+    #   Success       on time: `travel.ended`, today's write;
+    #   Partial       SPENT: the leg is not ended, the budget penalty stands another season, and one `travel.delayed` Event (cause: his `travel.moved`) says so;
+    #   Failure       HURT: `body.changed` by `road_step` (cause: his `travel.moved`; `_crossings` as a hunger fall), then `travel.ended`. Death is not an outcome
+    #                 of the table: a body that reaches zero dies through `_die`, the one owner, as for hunger, and nothing more is written about him.
+    # THE LEG LIST LOSES ITS FIRST ENTRY, NOT ALL OF IT (`_relocate` appends one per point of the price when `route_pricing` is on, one otherwise): ONE LEG
+    # A BARRIER. READING TAKEN where the source is silent [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`]: a traveller with legs left
+    # draws AGAIN at each later barrier, a fresh draw each time because the key's leg index (`road:<len(travel_leg) - 1>`) and the tick both move, on the whole
+    # journey's obstacle (`road_input` prices the journey, not the remainder); a traveller whose journey crossed no border draws nothing and still loses a leg.
+    on_road = w.fixtures.get("road_hazard") == ROAD_HAZARD_ON
+    degrees = dict(_step_call(EXPOSURE)(world_q.road_input(w)).rows) if on_road else {}
+    road_step = w.fixtures.get("road_step")
     for pid in sorted(w.persons):
         traveller = w.persons[pid]
         if not traveller.travel_leg:
@@ -875,12 +891,38 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # mover (v9 IN-12 step 10), the cover's id -- and the lookup by anchor missed it; the Event's
         # own receipt names the mover either way.
         prior_leg = w.last_emission_of("travel.moved", pid, written=True)
+        degree = degrees.get(pid)
+        observed = _arrival_report(w, pid, arrival_mode)
+        if degree == Degree.PARTIAL:
+            late = Event(id=H(w.world_seed, w.tick, pid, "travel.delayed"), kind="travel.delayed", changes=[],
+                         causes=[prior_leg] if prior_leg else [ROOT], emitted_at=w.tick)
+            w.log.append(late)
+            emitted.append(late)
+            TRACE.event(late.id, late.kind, late.causes)
+            continue
+        if degree == Degree.FAILURE:
+            was = traveller.body
+            _m = len(w._emitted_by_write)
+            w.write("body", token,
+                    lambda traveller=traveller, after=max(0, was - road_step): setattr(traveller, "body", after),
+                    record_kind="Person", fieldname="body", driver="Event",
+                    emits="body.changed", subject=pid,
+                    causes=[prior_leg] if prior_leg else [ROOT])
+            fell = w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
+            emitted.extend(_crossings(w, pid, floors_body, was, traveller.body, fell.id if fell else None))
+            if traveller.body <= 0:
+                _die(w, token, pid)
+                continue
+        elif degree == Degree.OVERWHELMING and not observed:
+            rid = world_q.place_of(w, pid)
+            observed = _stock_report(w, rid, {}, "season", {}) if rid is not None and rid in w.rungs else ()
+        rest = traveller.travel_leg[1:] if on_road else []
         w.write("travel_leg", token,
-                lambda traveller=traveller: setattr(traveller, "travel_leg", []),
+                lambda traveller=traveller, rest=rest: setattr(traveller, "travel_leg", rest),
                 record_kind="Person", fieldname="travel_leg", driver="Event",
                 emits="travel.ended", subject=pid,
                 causes=[prior_leg] if prior_leg else [ROOT],
-                observed=_arrival_report(w, pid, arrival_mode))
+                observed=observed)
 
     # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
     scale = w.fixtures.get("condition_scale")

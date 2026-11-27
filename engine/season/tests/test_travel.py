@@ -147,3 +147,71 @@ def test_legs_appended_equal_leg_price():
             assert w.persons[pid].travel_leg == [dest] * (price if on else 1), (on, sid)
             checked += 1
     assert checked >= 60
+
+
+# -- B12b.11: the travel pass takes the road's draw, behind `road_hazard` ------------------------------------------------------------------------
+
+def _pass(w, d, forced=None):
+    """One MATTER barrier of `d`, a tick on; `forced` `{pid: Degree}` stands in for the module's draw, so each degree's writes are read apart from its odds."""
+    from ..data.matrix import WriteClass
+    from ..loop import matter as matter_module
+    from ..loop.driver import mint_token
+    from ..queries.inputs import RoadOutcome
+    w.tick += 1
+    if forced is None:
+        return d.matter(mint_token(w, WriteClass.MATTER), [])
+    real = matter_module._step_call
+    matter_module._step_call = lambda role: (lambda inp: RoadOutcome(tuple(forced.items()))) if role == matter_module.EXPOSURE else real(role)
+    try:
+        return d.matter(mint_token(w, WriteClass.MATTER), [])
+    finally:
+        matter_module._step_call = real
+
+
+def _tiny(hazard="on"):
+    """`tiny_world` with the road at `hazard`, `p_low` having moved to `S` at RESOLVE (a real `travel.moved`), and the tick-0 barrier run."""
+    from ..data.matrix import WriteClass
+    from ..harness.probes import tiny_world
+    from ..loop.driver import SeasonDriver, mint_token
+    from ..state.carriers import Act
+    w = tiny_world(DEFAULT_FIXTURES.sweep("road_hazard", hazard))
+    d = SeasonDriver(w)
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="m1", actor="p_low", verb="move", payload={"to": "S"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    assert [e.kind for e in out] == ["travel.moved"]
+    return w, d, out[0]
+
+
+def test_one_leg_ends_per_barrier():
+    """With the road on a leg list loses its FIRST entry a barrier (`_relocate` laid one per point of the price) and emits one `travel.ended` each; a traveller whose
+    journey no border crossed draws nothing. With it off the whole list goes at the first barrier, as before."""
+    for hazard, left in (("on", [2, 1, 0]), ("off", [0, 0, 0])):
+        w, d, _moved = _tiny(hazard)
+        w.persons["p_high"].travel_leg = ["S", "S", "S"]
+        seen = []
+        for _ in left:
+            out = _pass(w, d)
+            seen.append((len(w.persons["p_high"].travel_leg), sum(1 for e in out if e.kind == "travel.ended" and e.causes == [ROOT])))
+        assert [n for n, _ in seen] == left, (hazard, seen)
+        assert [e for _, e in seen] == ([1, 1, 1] if hazard == "on" else [1, 0, 0]), (hazard, seen)
+
+
+def test_each_degree_of_the_road_writes_its_own_row():
+    """Failure: the body falls by `road_step`, caused by his `travel.moved`, then `travel.ended`. Partial: no `travel.ended`, the leg kept, one `travel.delayed`.
+    Overwhelming: `travel.ended` carries the stock of where he stands. A Failure on a body under `road_step` dies through `person.died`, and nothing more is written."""
+    w, d, moved = _tiny()
+    step = w.fixtures.get("road_step")
+    w.persons["p_high"].travel_leg, w.persons["p_mid"].travel_leg = ["S"], ["Hh"]
+    w.persons["p_other"].travel_leg, w.persons["p_other"].body = ["S"], step // 2
+    body = w.persons["p_low"].body
+    out = _pass(w, d, {"p_low": Degree.FAILURE, "p_high": Degree.PARTIAL, "p_mid": Degree.OVERWHELMING, "p_other": Degree.FAILURE})
+    kinds = [e.kind for e in out]
+    assert [e.kind for e in out if e.kind == "body.changed" and e.causes == [moved.id]] == ["body.changed"]
+    assert w.persons["p_low"].body == body - step and w.persons["p_low"].travel_leg == []
+    assert w.persons["p_high"].travel_leg == ["S"] and kinds.count("travel.delayed") == 1
+    (news,) = [e for e in out if e.kind == "travel.ended" and e.observed]
+    assert [(o.subject, o.predicate, o.value) for o in news.observed] == [("Hh", "stores:grain", 8)]
+    assert "p_other" not in w.persons and kinds.count("person.died") == 1
+    assert kinds.count("travel.ended") == 2, "p_low's and p_mid's: neither the spent nor the dead traveller ended a leg"
