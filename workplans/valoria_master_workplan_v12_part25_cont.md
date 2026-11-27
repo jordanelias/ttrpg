@@ -258,6 +258,7 @@ Order notes. U3 §1 item 34 orders GO-B → SURF → fidelity → `16_PESSIMIST_
 - GLOSSARY: none.
 - NAMES: `TURN_CHOICES` → `ROUND_CHOICES` (B16, PCR-3).
 - COST and TIER: edit and content; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16); the texts drafted by `opus`.
+- NOT DONE (narrowed at B34's close, B12b/B19a merged first): the FIGHT's round choices (`ROUND_CHOICES`: `engage`, `withdraw`) are not exported with text. `combat_engine_v1.json` and `modules/combat/*.py` are hashed into B19a's measured duel table (`calibrate_mb_contact.engine_fingerprint()`), so a text line added there stales that table, whose re-measure took 8.9 h (B19a's commit): the text needs an owner and an artifact OUTSIDE that fingerprint (`export_mb_contact.py --check` is the falsifier). The standing order's roles and `retreat_at` (`battle_orders.json`) shipped.
 - LANDS IT: B34's producer; `Item: B34.07`, `[skip ci]`.
 
 ### B34.08 — fork C closed; the difficulty overlay test · fidelity edit 4, gate 3 · BUILD · HASH EQUAL
