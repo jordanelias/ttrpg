@@ -30,8 +30,10 @@ mortal-wound band.
 casualty"; `h_yield` in each side's row is the yield part of `h`, so the split stays readable; reversible: read `h - h_yield`.]
 [ASSUMPTION: a cell whose side-count of wins is 0 for either side is not stopped by the stop rule before the cap, so that a rare
 win is given 20,000 duels before the cell is called certain -- basis: MBA §5.2 check 5 calls a cell certain, and a 2,000-duel
-zero is not that; at the cap a still-certain cell is left out of the table and printed `CERTAIN <key> ...` to stderr (to be reported to
-the PC lane), the run finishes every other cell, and `run` exits 3.]
+zero is not that; at the cap a still-certain cell is stored with the cell-level key `certain: true`, printed `CERTAIN <key> ...` to stderr (to be
+reported to the PC lane), and `run` exits 3. DEVIATION from §5.2 check 5 ("stops the run and is reported, not stored"): the exporter
+refuses a table with a grid cell missing, and the side with no removal is already stored as its Wilson upper bound, never 0
+(§2.4's cap rule); `--trust` check 5 fails on a 0-or-1 cell that is not flagged and prints the flagged ones as the finding.]
 [ASSUMPTION: the two interpolation mirrors are `arming` light, skill 2 against 2 and 4 against 4 -- basis: MBA §2.1 says "plus two
 mirrors" without naming them.]
 
@@ -333,7 +335,10 @@ def run_cell(key: tuple, K: int, n: int | None = None, orient: str = "half") -> 
     cell = dict(a=dict(arm=key[0][0], armour=key[0][1], skill=key[0][2]), b=dict(arm=key[1][0], armour=key[1][1], skill=key[1][2]),
                 duels=i, outcome=dict(a=_r(wins[0] / i), b=_r(wins[1] / i), unresolved=_r(unresolved / i)),
                 sides=dict(a=rows[0], b=rows[1]))
-    return cell, dict(rounds_total=rounds_total, certain=wins[0] == 0 or wins[1] == 0)
+    certain = wins[0] == 0 or wins[1] == 0
+    if certain:
+        cell["certain"] = True     # the key is present only on a cell that is, so every other cell's bytes are as they were
+    return cell, dict(rounds_total=rounds_total, certain=certain)
 
 
 def _worker(args):
@@ -398,12 +403,11 @@ def cmd_run(grid: Grid, out: str | None, workers: int, cells_re: str | None, dry
         return 2
     t0, done, results, certain = time.time(), 0, {}, []
     for key, (cell, extra) in _pool_map([(k, grid.K) for k in keys], workers):
-        if extra["certain"]:   # not stored, and it does not cost the rest of the run
+        if extra["certain"]:   # stored, flagged; it does not cost the rest of the run
             certain.append(key)
-            print(f"CERTAIN {grid.key_text(key)}: outcome {cell['outcome']} in {cell['duels']} duels -- not stored; report to the PC lane",
+            print(f"CERTAIN {grid.key_text(key)}: outcome {cell['outcome']} in {cell['duels']} duels -- stored with `certain`; report to the PC lane",
                   file=sys.stderr, flush=True)
-        else:
-            results[key] = cell
+        results[key] = cell
         done += 1
         if done % 25 == 0 or done == len(keys):
             print(f"  {done}/{len(keys)} cells, {time.time() - t0:.0f} s", file=sys.stderr, flush=True)
@@ -411,7 +415,7 @@ def cmd_run(grid: Grid, out: str | None, workers: int, cells_re: str | None, dry
     with open(out, "w", encoding="utf-8", newline="\n") as f:
         f.write(table_text([results[k] for k in sorted(results, key=_keyorder(grid))], grid.K))
     print(f"wrote {len(results)} cells to {out} in {time.time() - t0:.0f} s on {workers} worker(s)"
-          + (f"; {len(certain)} certain cell(s) left out" if certain else ""))
+          + (f"; {len(certain)} certain cell(s) stored flagged" if certain else ""))
     return 3 if certain else 0
 
 
@@ -581,10 +585,14 @@ def cmd_trust(grid: Grid, table: str) -> int:
 
     # 5. no certainty: the cells run above, and every cell of the table
     seen = [c for (k, n, o), (c, _) in cache.items()] + [c1, c2] + (t["cells"] if t else [])
+    flagged = []
     for c in seen:
         if c["outcome"]["a"] in (0.0, 1.0) or c["outcome"]["b"] in (0.0, 1.0):
-            return fail(5, "no certainty", f"{grid.key_text(_cell_key(c))}: outcome {c['outcome']} in {c['duels']} duels; report to the PC lane")
-    print(f"ok 5 no certainty: no outcome share is 0 or 1 in {len(seen)} cells read")
+            if not c.get("certain"):
+                return fail(5, "no certainty", f"{grid.key_text(_cell_key(c))}: outcome {c['outcome']} in {c['duels']} duels, not flagged `certain`")
+            flagged.append(grid.key_text(_cell_key(c)))
+    print(f"ok 5 no certainty: no unflagged outcome share is 0 or 1 in {len(seen)} cells read"
+          + (f"; FINDING for the PC lane, {len(set(flagged))} cell(s) certain at the cap: {sorted(set(flagged))}" if flagged else ""))
 
     # 6. rounds run: the arming mirror (the pilot's mirror)
     mk = ((grid.arms[0], "light", 3),) * 2
