@@ -21,7 +21,8 @@ from ..harness import scarce as S
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..queries.inputs import Eater, LarderInput, SubsistInput
-from ..state.carriers import Rung, Tenure
+from ..state.attribution import anchor_of
+from ..state.carriers import Rung, Site, Tenure
 from ..state.world import World
 from engine.substrate import composition
 
@@ -190,3 +191,62 @@ def test_the_arm_refuses_a_row_that_is_not_the_ladders(row, bad):
         _seasons(w, 1)
     assert all(p.body == PLANTED_BODY for p in w.persons.values()), "the refused arm wrote a body"
     assert len(_seasons(_planted(_arm(False, **{row: bad})), 1)) == COHORTS
+
+
+# B12b.14 (`09_WR_provided_arcs` edit 2, `H-211`): A FED BODY MENDS, BEHIND `body_mend`. One cohort at weight 2 (want 6: grain 4, salt 2) in one settlement.
+def _mend_world(mend: bool, body: int = 495, stores=(("grain", 1000), ("salt", 1000)), ceiling: int | None = None, site_condition: int | None = None) -> World:
+    w = World(world_seed=0, fixtures=DEFAULT_FIXTURES.sweep("body_mend", mend))
+    w.rungs["R"], w.rungs["T"], w.rungs["S"] = Rung("R", "realm"), Rung("T", "territory"), Rung("S", "settlement")
+    w.add_tenure(Tenure("t_T", "T", "R", "contain", since=0))
+    w.add_tenure(Tenure("t_S", "S", "T", "contain", since=0))
+    w.rungs["S"].stores = dict(stores)
+    place_person(w, "c", "cohort", "S", weight=2, body=body)
+    if ceiling is not None:
+        w.persons["c"].body_ceiling = ceiling
+    if site_condition is not None:
+        w.sites["s_harbour"] = Site("s_harbour", "S", "harbour", condition=site_condition)
+    w.manifest = {"contest": "seam.contest_resolver", "order": "core.canonical_order"}
+    return w
+
+
+def _matter(w: World, seasons: int = 1) -> list:
+    """Run MATTER `seasons` times; per season, the `condition.band_crossed` Events it emitted, as `[(anchor, id), ...]`."""
+    d, per = SeasonDriver(w), []
+    for _ in range(seasons):
+        w.tick += 1
+        n = len(w.log)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        per.append([(anchor_of(w, e), e.id) for e in w.log[n:] if e.kind == "condition.band_crossed"])
+    return per
+
+
+def test_fed_cohort_mends_and_crosses_upward():
+    """Fed in full (ration 1) from 495, below the `limited` floor (500): at `body_mend` True the body steps up by `body_step` (10) to 505, the upward
+    crossing is emitted and anchored on the cohort. It never passes its ceiling (ceiling 500: it stops at 500, which still reaches the floor). A ration of
+    one half or less writes no rise (a larder that gives 3 of the 6 units wanted)."""
+    w = _mend_world(True)
+    (crossed,) = _matter(w)
+    assert w.persons["c"].body == 505 and [a for a, _ in crossed] == ["c"], (w.persons["c"].body, crossed)
+    capped = _mend_world(True, ceiling=500)
+    (crossed,) = _matter(capped)
+    assert capped.persons["c"].body == 500 and [a for a, _ in crossed] == ["c"]
+    held = _mend_world(True, stores=(("grain", 3),))     # wants grain 4 and salt 2, holds grain 3: takes 3 of 6, a ration of exactly one half
+    _matter(held)
+    assert held.persons["c"].body <= 495, "a half ration mended a body"
+
+
+def test_body_mend_off_no_rise():
+    """The control, the same plant at `body_mend` False (the shipped arm): the body stays 495 and no crossing is emitted; the fed body below the
+    floor is what the True arm moves (`test_fed_cohort_mends_and_crosses_upward`), so the plant is not one that mends nothing."""
+    w = _mend_world(False)
+    assert _matter(w) == [[]] and w.persons["c"].body == 495
+
+
+def test_downward_site_crossings_unchanged_by_the_upward_predicate():
+    """MW-11's own control: the per-season count of crossings anchored on a SITE (a harbour at 810 wears across `bulk_shipping`'s 800) is the same with
+    `body_mend` True and False, and nonzero (the control reads a crossing); the cohort's own upward crossing is what `True` adds."""
+    def sites(per):
+        return [sum(1 for a, _ in season if a != "c") for season in per]
+    off, on = _matter(_mend_world(False, site_condition=810), 3), _matter(_mend_world(True, site_condition=810), 3)
+    assert sum(sites(off)) >= 1, "the control reads no site crossing: the assertion cannot see a moved count"
+    assert sites(on) == sites(off)

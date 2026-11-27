@@ -697,6 +697,13 @@ DEFAULT_FIXTURES = Fixtures(
     # one-line revert. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the
     # register and runs every non-control arm on the built realm.
     body_step=10,                      # `H-125`, swept 0 (control) / 10 (SHIPPED, REM-52) / 67
+    # B12b.14 (`09_WR_provided_arcs` edit 2, CP-T10-04's ground; closes `H-211`'s rising half): A FED COHORT'S BODY STEPS BACK UP. `False` is THE CONTROL, SHIPPED:
+    # MATTER's body pass writes no rise and emits no upward crossing, so the season is today's. `True` is the arm: a cohort whose ration this season exceeds one
+    # half gains `body_step x (2 x ration - 1)` up to its ceiling (`max(body, Person.body_ceiling)`), and a rise across a `band_floors.body` floor emits the
+    # upward `condition.band_crossed`. The fall stays B12a's drawn loss (UNDECIDED (6) reading (a)). The flip is B37p's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `body_mend: False`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-211 -- `site: Fixtures body_mend`; the source ships the arm `False` and the signed step's form, so the arm is injected at the control and swept False / True]
+    body_mend=False,                   # `H-211`, swept False (control, SHIPPED) / True
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.

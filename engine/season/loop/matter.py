@@ -110,7 +110,7 @@ def _arrival_report(w: "World", pid: str, mode: str) -> tuple:
 
 # -- MATTER -- barrier 2 -- THE WORLD FREEZES AT ITS END (S25) -----------
 def _crossings(w: "World", subject_id: str, floors: dict, before, after,
-               cause: "str | None") -> list:
+               cause: "str | None", rising: bool = False) -> list:
     """S12.1 / L5: A BAND EDGE CROSSING IS AN EMISSION, NOT A WRITE. One rule, two carriers.
 
     ⚠⚠ ONE BODY FOR SITES AND PERSONS (ITEM 3b). `04
@@ -132,17 +132,21 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     ⚠ THE EVENT IS THE ONLY CARRIER (position `11a`). A second one, a `w.crossings` tuple, is what
     `01_ATTENTION_AND_REACH.md` §A.1.3 pt 3 names a violation of `AX-4`'s protected property in the
     thing it protects: *"two readers of one fact, and they disagree about what the fact is"*.
-    `anchor_of(w, ev)` (tier 3, via `ev.causes[0]`) answers the crossing's subject, with one owner."""
+    `anchor_of(w, ev)` (tier 3, via `ev.causes[0]`) answers the crossing's subject, with one owner.
+
+    ⚠ `rising` IS THE UPWARD PREDICATE (B12b.14, `H-211` cause 2: `before < floor <= after`), passed ONLY by the body pass's mend write
+    (`body_mend`), so a mended body's recovery is audible. Every other caller leaves it `False` and the downward predicate is byte for byte what it was.
+    A rising crossing's Event id carries `up:` so it cannot collide with a falling one of the same verb, subject and tick."""
     out: list = []
     for verb, floor in sorted(floors.items()):
-        if before >= floor > after:
+        if (before < floor <= after) if rising else (before >= floor > after):
             # G1b: NO `subject=` -- the field is deleted. The crossing is ABOUT whatever the
             # write that crossed the floor was about, and `anchor_of` reads that through
             # `causes[0]` (tier 3). Both callers pass the gate emission they just made, so the
             # `[ROOT]` arm is unreachable today; were it reached, the crossing would anchor on
             # nothing and nobody would witness it -- which `test_g1b_attribution.py`'s planted
             # anchorless Event pins as the observable consequence.
-            ev = Event(id=H(w.world_seed, w.tick, subject_id, f"crossing:{verb}"),
+            ev = Event(id=H(w.world_seed, w.tick, subject_id, f"crossing:{'up:' if rising else ''}{verb}"),
                        kind="condition.band_crossed", changes=[],
                        causes=[cause] if cause else [ROOT], emitted_at=w.tick)
             w.log.append(ev)
@@ -153,6 +157,21 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
                            alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
                                          "silently drop the verb from the set (then nobody can witness it)"])
     return out
+
+
+def _write_body(w: "World", token, pid: str, person, after: int):
+    """THE HUNGER PASS'S ONE BODY WRITE (a fall, and since B12b.14 a mend): `Person.body` set to `after` through the gate, emitting `body.changed`
+    chained to the Event that last WROTE `pid`'s body; returns that Event or `None`. `written=True` (H-129, REM-52): the anchor read chains a
+    combat-caused write on the wrong person -- the fold's `body.changed` anchors on the combatant, not on `pid`. The Event that WROTE `pid`'s
+    body is the one to chain to, as `_die`'s and `travel.ended`'s reads are."""
+    prior_b = w.last_emission_of("body.changed", pid, written=True)
+    _m = len(w._emitted_by_write)
+    w.write("body", token,
+            lambda: setattr(person, "body", after),
+            record_kind="Person", fieldname="body", driver="Event",
+            emits="body.changed", subject=pid,
+            causes=[prior_b] if prior_b else [ROOT])
+    return w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
 
 
 def _broken_near(w: "World") -> tuple:
@@ -735,22 +754,35 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         if person is None:
             continue
         was = person.body
-        # `written=True` (H-129, REM-52): the anchor read chains a combat-caused write on the wrong
-        # person -- the fold's `body.changed` anchors on the combatant, not on `pid`. The Event that
-        # WROTE `pid`'s body is the one to chain to, as `_die`'s and `travel.ended`'s reads are.
-        prior_b = w.last_emission_of("body.changed", pid, written=True)
-        _m = len(w._emitted_by_write)
-        w.write("body", token,
-                lambda person=person, after=fall.body_after: setattr(person, "body", after),
-                record_kind="Person", fieldname="body", driver="Event",
-                emits="body.changed", subject=pid,
-                causes=[prior_b] if prior_b else [ROOT])
-        fell = w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
+        fell = _write_body(w, token, pid, person, fall.body_after)
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
         if fall.body_after <= 0:
             # death through the one owner: see _die
             _die(w, token, pid)
+
+    # -- A FED BODY MENDS (B12b.14, `09_WR_provided_arcs` edit 2, `H-211`'s rising half) ----------
+    # `body_mend` False is THE CONTROL: this block is skipped, no write, no crossing, the season is today's. True is the arm: a cohort whose
+    # RATION this season (units taken over units wanted, over its draw cells -- the outcome's own `draw.rows`, so the ration and the fall read one draw)
+    # exceeds one half steps UP by `body_step x (2 x ration - 1)`, to its ceiling `max(body, body_ceiling)` and no further (the `tend` heal's ceiling,
+    # `loop/effects_combat.py`). UNDECIDED (6) reading (a): the fall above stays B12a's DRAWN loss and is not replaced by a signed step, so at a ration
+    # of one half or less nothing is written here. The rise is written AFTER the falls on the body as the falls left it (a cohort that fell this season
+    # and died is gone and is skipped), and its crossing is the UPWARD one (`_crossings(..., rising=True)`), so a mend across a floor is audible.
+    # The arithmetic is integer (`body_step x (2 x taken - wanted) // wanted`, a positive floor, as `subsist`'s own `int(...)` truncation).
+    if w.fixtures.get("body_mend"):
+        step = int(w.fixtures.get("body_step"))
+        for row in sub.draw.rows:
+            want, take = (sum(c[i] for c in row.cells) for i in (1, 2))
+            person = w.persons.get(row.pid)
+            if person is None or want <= 0 or 2 * take <= want:
+                continue
+            after = min(max(person.body, person.body_ceiling), person.body + step * (2 * take - want) // want)
+            if after <= person.body:
+                continue
+            was = person.body
+            mended = _write_body(w, token, row.pid, person, after)
+            emitted.extend(_crossings(w, row.pid, floors_body, was, person.body,
+                                      mended.id if mended else None, rising=True))
 
     # -- THE BODIES CLOCK: AGEING AND ILLNESS (v9 IN-34, FORCE-BODIES) ------------
     #
