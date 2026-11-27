@@ -154,7 +154,9 @@ def purview(w: World, seat: str) -> list:
     """Every rung `seat`'s purview reaches: its own rung plus every descendant. The SET form of
     `state/gate.py::purview_reaches(w, off, rung) -> bool` -- `rung in purview(w, seat)` is that
     predicate (⚠ SINCE v9 IN-40 ONLY WHERE NO SEAT-HOLDER HAS SWORN AN `oblige` TO `seat`: the
-    predicate's oblige clause adds the swearer's ground, and this set form does not see it), and both
+    predicate's oblige clause adds the swearer's ground, and this set form does not see it; the set
+    form that does is `state/gate.py::purview_of`, B21b.21, which `world_q.own_purview` reads -- this
+    one has no game caller and is left, the plan's call), and both
     compose on the identical `containment.descendants` walk
     (`state/gate.py::purview_reaches`'s own docstring, and `world_q.own_purview`,
     which unions the same two terms for the identical reason: `descendants` EXCLUDES
