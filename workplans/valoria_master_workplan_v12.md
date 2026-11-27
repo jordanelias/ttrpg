@@ -253,7 +253,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B19a (MB), B21c (FA), B34 (GO) |
+| S14 | B12b (SE+WR), B21c (FA), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
@@ -269,7 +269,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | **M1 · every outcome is drawn** | B08 | B05 (B08 landed at `3cf56673c`) | R-03 (with R-03.c); R-09.a, .c, .d, .e | R-09 short of R-09.b only |
 | **M2 · persons** | BA1 | — (BA1 landed at `ce61cbf30`) | R-06, R-08, R-09; R-07 if R-07.c reads with its receipt | R-06, R-08, R-09 hold; R-07 holds or is one conjunct short |
 | **M3 · every verb** | B35 | B12a (landed at `ee641cbdd`), B12b, B12c, B21b, B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
-| **M4 · every scale** | B36 | B16, B19a, B19, B20, B24 (landed at `d04348d6e`), B30, B34, B36 | R-04 | every R-04 conjunct holds |
+| **M4 · every scale** | B36 | B16, B19, B20, B24 (landed at `d04348d6e`), B30, B34, B36 | R-04 | every R-04 conjunct holds |
 | **M5 · the rulings beyond the nine, and the carried positions** | B40 | B18, B31, B33, B37, B38, B39, B40, B41, B11F1, B11F2, B21d, B21s, B37p | none new; R-05 re-read at B38, R-06.e and R-09.b at B39, all nine at B40 | all nine hold |
 | **the settings, then the re-take** | B99 | B98, B99 | all nine, on B98's closing tree (the settings as set) | `m1_acceptance --summary` row 3 reads what the readings say |
 
@@ -368,7 +368,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
 | B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) |
-| B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) |
 | B21b-fa-war | FA | ED-FA-0042..0043 (0+2) | H-620..H-627 (3+5) |
@@ -437,7 +436,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | B21b-fa-war | `valoria_master_workplan_v12_part21.md`, `_part21_cont.md` |
 | B12b-weather-arcs-population | `valoria_master_workplan_v12_part24.md`, `_part24_cont.md` |
-| B19a-mb-contact-instrument | `valoria_master_workplan_v12_part24_cont.md` |
 | B21c-fa-seats | `valoria_master_workplan_v12_part25.md` |
 | B34-go-surface | `valoria_master_workplan_v12_part25_cont.md` |
 | B19-mb-field-calibration | `valoria_master_workplan_v12_part26.md`, `_part26_cont.md`, `_part27.md`, `_part27_cont.md` |
@@ -469,4 +467,4 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 | B40-inst-scenarios | `valoria_master_workplan_v12_part43.md`, `_part43_cont.md` |
 | B98-dials, B99-nine-retake | `valoria_master_workplan_v12_part44.md`, `_part44_cont.md`, `_part44_cont2.md` (B98); `_part44_cont3.md` (B99) |
 
-The file order is reading order, which is execution order only up to the schedule: where a file holds batches of different steps (part 24's continuation: B12b's tail and B19a at S14), the step table of §8 governs when each opens.
+The file order is reading order, which is execution order only up to the schedule: where a file holds batches of different steps, the step table of §8 governs when each opens.

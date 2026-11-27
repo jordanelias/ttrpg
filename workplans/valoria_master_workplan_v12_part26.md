@@ -25,7 +25,7 @@ GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B16-pc-round @96f90bbc8
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
-GATE: Batch B19a-mb-contact-instrument
+GATE: Batch B19a-mb-contact-instrument @32b6dd0ea
 GATE: Batch B29-pc-custody @474a84dc9d12e20dafa0d9edbca341d2e5f7a649   (added by H2: `H2_DECISIONS.md` HD-09, B19.60's named captives go into custody; no wave moves; `valoria_master_workplan_v12_part2.md` §1)
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c4; R-04.c5 (ii), (iii); R-07.c → with B20: `field.won + field.lost` above 0 at seeds 0–2 (`aperture 1`) quoted with `_eff_march`'s `Person.stance` receipt on the losing side and `field.unopposed` beside it; R-04.c5 (ii) a fought field resolves on the cell battlefield; (iii) the commanded field equals the automatic one with no decider (B20's half; read here only as "not yet": the decider is B20's) (`IS_A_NINE_part2.md:383`; `IS_A_NINE.md:193-194`, `:329`). No `status:` is edited (A-114).
@@ -63,7 +63,7 @@ EST: this half 13.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula o
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B19.01 | the "results" block: the T-rows of the calibration targets in the gauge | `26_MASS_BATTLE_calibration_targets` §1–§2 | BUILD (probe) | EQUAL | Batch B17, Batch B19a |
+| B19.01 | the "results" block: the T-rows of the calibration targets in the gauge | `26_MASS_BATTLE_calibration_targets` §1–§2 | BUILD (probe) | EQUAL | Batch B17, Batch B19a @32b6dd0ea |
 | B19.02 | the commander's and officer's typed record on the field's input | 27_MB_A 27A-1 | BUILD | EQUAL | Batch B17 |
 | B19.03 | the default command, the order-draw block and the span table, exported | 27_MB_A 27A-2 | BUILD | EQUAL | B19.02 |
 | B19.04 | the army and its units carry the commander, his post and each officer's record | 27_MB_A 27A-3 | BUILD | EQUAL | B19.03; Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e, Batch B17 (B16M before it) |
@@ -73,7 +73,7 @@ EST: this half 13.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula o
 | B19.08 | the ledger that is used is the one reported | same, step 2 | BUILD | EQUAL | B19.07 |
 | B19.28 | a field may be entered tired: `entry_stamina` on the input, and the lull's recovery as a row (Patched: P-10) | `16_PESSIMIST_MB_one_stamina_ledger` step 3; `26_MASS_BATTLE_movement_and_fatigue_as_data` §3 (`lull_recover` row only) | BUILD | EQUAL | B19.08; Batch B17 (`troops.yaml`, its exporter) |
 | B19.09 | the law instrument repaired: a volley standoff and a linear control row | `04_MB_cr12_linear_law` step 1 | BUILD (probe) | EQUAL | B19.08 |
-| B19.10 | the melee pair, the pursuit and the volley moved to `core/`, unchanged | MBA-04 step 0 (ED-1043) | BUILD | EQUAL | B19.09; Batch B19a |
+| B19.10 | the melee pair, the pursuit and the volley moved to `core/`, unchanged | MBA-04 step 0 (ED-1043) | BUILD | EQUAL | B19.09; Batch B19a @32b6dd0ea |
 | B19.11 | the contact draw as a pure function | MBA-04 step 1 | BUILD | EQUAL | B19.10; Batch B06 |
 | B19.12 | the contact draw replaces the pool in the melee pair; a contact cell's share `1/m` | MBA-04 steps 2–4; `16_PESSIMIST_MB_partition_and_the_pair_rule` edit 4 and gate rows 1–5 | BUILD | MOVER(behaviour) | B19.11, B19.08 |
 | B19.13 | the column's drain scaled by exposure | MBA-04 step 6 | BUILD | MOVER(behaviour) | B19.12 |
@@ -333,7 +333,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - FALSIFIER and CONTROL: any digest or golden that moves (then the move was not unchanged). Control: `tools/ci_golden_modes_check.py` and `engine/tests/` before and after.
 - GATE: `python tools/ci_golden_modes_check.py` → three digests equal to B19.09's; `python -m pytest engine/tests tests/valoria/test_field_golden_pins.py tests/valoria/test_mass_battle_ammo.py -q` → pass, no pin re-recorded; `python tools/tests_for_diff.py` → the suites it names pass (the intake's gate for ED-1043).
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `orchestration.py::resolve_engagements` (`:710`), `::pursuit_damage` (`:2057`, left in `orchestration.py` by B17, the orchestrator's note), `::volley_phase` (`:1574`); V12 B19.09; V12 Batch B19a (`core/contact_table.py` beside the new files).
+- DEPENDS ON: EXISTS-IN-TREE `orchestration.py::resolve_engagements` (`:710`), `::pursuit_damage` (`:2057`, left in `orchestration.py` by B17, the orchestrator's note), `::volley_phase` (`:1574`); V12 B19.09; V12 Batch B19a @32b6dd0ea (`systems/mass_battle/sim/contact_table.py` and `contact_table_data.py`: B19.10 `git mv`s both beside the new files in `modules/mass_battle/core/`, since a module nothing reaches may not sit in `modules/` (A-25), and swaps `math.log`/`math.exp` for `engine.dice_engine.fmath`).
 - GLOSSARY: none.
 - COST and TIER: edit (a behaviour-neutral move); `sonnet`, `high` (MBA-04: "`sonnet` for steps 0, 3–8"; the intake: tier sonnet).
 - LANDS IT: B19's producer; `Item: B19.10`, `[skip ci]`.
@@ -349,7 +349,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - FALSIFIER and CONTROL: MBA-04 FALSIFIER (a), (b), (c) as the tests state. Control: golden digests equal (nothing calls the function).
 - GATE: `python -m pytest tests/valoria/test_mass_battle_contact_draw.py -q -k "mean_equals_mu or clip_bias or only_input or depth_enters"` → four pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.10's.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 Batch B19a (`core/contact_table.py`, `engine/engine_params/mb_contact.json`, `references/troops.yaml: contact`); V12 B19.10 (`core/contact_draw.py` exists); EXISTS-IN-TREE `troop_types/registry.py::support_weight` (`:151`).
+- DEPENDS ON: V12 Batch B19a @32b6dd0ea (`contact_table.py`, `engine/engine_params/mb_contact.json`, `references/troops.yaml: contact`); V12 B19.10 (`core/contact_draw.py` exists); EXISTS-IN-TREE `troop_types/registry.py::support_weight` (`:151`).
 - GLOSSARY: row *contact draw*: owner column → `core/contact_draw.py::contact_casualties` (MBA §8.3); its rejected words ("exchange", "melee roll") kept.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B19's producer; `Item: B19.11`, `[skip ci]`.
@@ -367,7 +367,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - FALSIFIER and CONTROL: MBA-04 (a)–(e) (the five tests); the pair rule's: "any gate row failing after the edits; in particular row 1 on the block footprint ... If edit 4 does not move it either, the cause is not the one named here ... the row stays as the test and the search continues from the trace." A melee exponent above 1.4 (numbers leaked into the draw). Controls: "the same seed twice is one hash; the mirror field is side-fair (`systems/mass_battle/sim/mirror_probe.py`, below 1.5 standard deviations, UMR §1)".
 - GATE: `python -m pytest tests/valoria/test_mass_battle_contact_draw.py tests/valoria/test_mass_battle_partition.py -q -m mass_battle` → all pass; `PYTHONHASHSEED=0 PER_CELL=0` and `PER_CELL=1 python -m systems.mass_battle.sim.lanchester_signature` → melee exponent at or below 1.4 with an identifiable fit, the frontage control linear, NO-ANNIHILATION passing, PARTITION passing, the planted `EXPOSURE_BASE = 0` failing LINEAR (the LINEAR row's band is read as it stands until 27C-3 (h), the second half); `grep -rn "DAMAGE_BY_DEGREE\|K_LINEAR\|POOL_QUALITY_SCALE\|subunit_combat_pool" modules/ engine/` prints only `config.py`'s definitions (deleted at B19.14, where the empty reading is taken); `python systems/mass_battle/sim/mirror_probe.py` → side-fair; the seed-0 field hash moved (`V12_STRUCTURE_part4.md` E-2), recorded.
 - HASH MOVERS: "every fought field; every `engine/tests/` golden with a field; `tools/ci_golden_modes_check.py`'s three digests. Declared; co-batched with `27_MB_C` 27C-3 and the other B19 movers; one re-pin" at `B19.99`. EXPECTED RED UNTIL B19.99: the field goldens under `engine/tests/` and `tests/valoria/test_field_golden_pins.py` (`[skip ci]` on every commit before it).
-- DEPENDS ON: V12 B19.11; V12 B19.08 (the column share as `rounds_d`); V12 Batch B19a (`contact.exposure`, `contact.levels`, `mb_contact.json`); V12 Batch B06 (`engine/dice_engine/draw.py`); V12 Batch B05 (`systems/mass_battle/sim/mirror_probe.py`, UMR §1); EXISTS-IN-TREE `orchestration.py::_octagon_cell_mods` (`:1012`), `::_convergence_scale` (`:467`), `::resolve_engagements_cascading` (`:1383`), `::_compute_atom_sides` (`:561`), `MB_CELL_DAMAGE`, `config.STANCE_COMMITMENT` (`:286`), `MULTI_SIDE_SHOCK`, `core/exchange.py::_pair_engaged_troops` (`:188`), `core/attrition.py::_lanchester_strength` (`:12`).
+- DEPENDS ON: V12 B19.11; V12 B19.08 (the column share as `rounds_d`); V12 Batch B19a @32b6dd0ea (`contact.exposure`, `contact.levels`, `mb_contact.json`); V12 Batch B06 (`engine/dice_engine/draw.py`); V12 Batch B05 (`systems/mass_battle/sim/mirror_probe.py`, UMR §1); EXISTS-IN-TREE `orchestration.py::_octagon_cell_mods` (`:1012`), `::_convergence_scale` (`:467`), `::resolve_engagements_cascading` (`:1383`), `::_compute_atom_sides` (`:561`), `MB_CELL_DAMAGE`, `config.STANCE_COMMITMENT` (`:286`), `MULTI_SIDE_SHOCK`, `core/exchange.py::_pair_engaged_troops` (`:188`), `core/attrition.py::_lanchester_strength` (`:12`).
 - GLOSSARY: row *frontage / front*: owner column → `core/attrition.py::engaged_files` ("the men of the two fronts facing each other in this contact, each contact cell shared among the pairs it is in"); `_lanchester_strength` named as the retired identifier.
 - NAMES: `Subunit` → `Unit`, `Unit` → `Army`, `.broken` → `.disordered` (B16M; the "routed/broken/disordered tests" read `.disordered`); the pair rule's `ranks`/`files` in its footprints → depth/width (S-7).
 - COST and TIER: build with re-calibration; `opus` producer for step 2 (MBA-04: "the vector's builder has judgment in it: which state is which field"), `sonnet` for steps 3–4, `high`.
@@ -410,7 +410,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - FALSIFIER and CONTROL: a troop row read by `power` after the edit. Control: the hash equal to B19.14's.
 - GATE: `python -m pytest tests/valoria/test_export_troops.py -q` → pass; `python tools/export_troops.py --check` → exit 0; the seed-0 field hash equal to B19.14's.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 Batch B19a (MBA-01's alias); V12 B19.12 (the last pool reader gone); EXISTS-IN-TREE `troop_types/registry.py::stats_for` (`:78`).
+- DEPENDS ON: V12 Batch B19a @32b6dd0ea (MBA-01's alias); V12 B19.12 (the last pool reader gone); EXISTS-IN-TREE `troop_types/registry.py::stats_for` (`:78`).
 - GLOSSARY: row *power* (`MB_LEXICON.md:185`): "retired as a troop stat; 'skill' (the men's martial skill) replaces it", owner `troops.yaml: troops.<type>.skill` (MBA §8.3), in this commit.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B19's producer; `Item: B19.15`, `[skip ci]`.

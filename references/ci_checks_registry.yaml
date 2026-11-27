@@ -333,6 +333,22 @@ ci_checks:
     ci_job: ""
     notes: "WIRED locally (valoria_local.py --staged, blocking) and by tests/valoria/test_export_troops.py::test_round_trip, NOT by a workflow line; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by B17.10 -- add `python3 tools/export_troops.py --check` beside export_game_constants there. Falsifier: test_round_trip reds a hand-edited artifact and passes the untouched copy; test_unknown_arm_key_refused_by_name and test_mass_stated_twice_refused show each refusal against a one-key mutation of the real file."
 
+  - path: tools/calibrate_mb_contact.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Runs the duel engine over a grid of matchups and writes the measured felling chances the mass-battle contact draw reads."
+    ci_job: ""
+    notes: 'an instrument, run by hand at a calibration pass; not a CI check'
+
+  - path: tools/export_mb_contact.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Measured table -> typed-JSON: engine/engine_params/mb_contact.json (and its Python literal systems/mass_battle/sim/contact_table_data.py) must match references/mb_contact/duel_grid.json and references/troops.yaml (--check mode), and refuses a stale calibration: the duel engine's fingerprint (calibrate_mb_contact.engine_fingerprint(), the one owner) must equal the table's, every duel weapon the troop file names and every pair of fighter types it can field must have a cell. It is the writer for systems/mass_battle/sim/contact_table.py, the sole runtime reader."
+    ci_job: ""
+    notes: "WIRED locally only (valoria_local.py --staged, blocking) and by tests/valoria/test_export_mb_contact.py; NO CI step runs it; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by B19a.03 -- PROPOSED, to add: `python3 tools/export_mb_contact.py --check` beside export_battle_orders.py (the season job). Falsifier: test_a_hand_edit_fails_check (either artifact), test_a_changed_duel_engine_fails_check (one planted byte in a copy of the fingerprinted sources, exit 1 and the remedy `python tools/calibrate_mb_contact.py run references/mb_contact/duel_grid.json --workers 4`); arm (c), a missing cell or duel weapon, is refused at every --check and has no test; each has the untouched copy as its control."
+
   - path: tools/export_npc_roster.py
     level: 5
     subject: game
