@@ -28,9 +28,7 @@ from ..data.requires import Observation
 from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import HAND_PREDICATE, held_against
-from ..queries.world_q import (
-    BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained,
-)
+from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
 from ..seam.wrappers.pool import pool_pair, untrained
 from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, WOUNDS
