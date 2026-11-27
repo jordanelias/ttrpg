@@ -8830,6 +8830,19 @@ rows:
     cite:      "CONTROL: seed-0 one-season realm hash f316d39f826d77961fc3a97aa63355d8 @6708bca, unchanged. FALSIFIER: the trial binding, INSTRUMENT-ERROR."
     source:    "workplan v12 B12b.15 (block slot 6)"
 
+  - id:        H-547
+    tier:      1
+    hole:      "A CASE WORLD CANNOT SEAT A COHORT, SO `07_SE_arc_needs` (a) CANNOT BE AUTHORED. B12b.21 asked a case file's `world:` block to seat a cohort, stock a larder and mint Sites for NPC-083, NPC-013 and NPC-037. Three premises are absent in the tree: (1) `boot/realm.py::seat_cohorts` refuses a cohort heavier than its rung's capacity (`max(1, dwelling Sites in the subtree)`, ED-SE-0051), and `corpus_run.build_at` mints one Site per kind (`s_<kind>`, no repeats), so capacity is 1 in every case world while the entry requires a weight above 1: `cohort: {weight: 6}` raises Forbidden; (2) NPC-013 is rescaled to `realm` and `build_at` gives it the chain `[realm]` alone, so there is no settlement rung to seat the cohort at; (3) NPC-037 is `scale: person` and has no `exercises/NPC-037.yaml`, and the entry's own loader rule refuses a `world:` block on a person-scale case. A probe with a weight-6 cohort forced in past the ceiling reads a `shortfall:` claim in season 1 (the item's falsifier holds once a cohort is seated); with `stores` and `sites` only and no cohort it reads none (three anonymous people eat less than 8 grain)."
+    kind:      "MEASURED-GAP"
+    owner:     "the batch that settles how a case world seats a cohort: either `sites:` mints repeated `dwelling` Sites (a count; the producer's recommendation, one owner of what a cohort is) or the case is cut; NPC-013 and NPC-037 need a settlement-scale rescale of their own, or drop out"
+    grade:     "measured"
+    default:   "no `world:` block authored; the three cases keep their B12b.16 readings (two-season hashes at seed 0 on 32b471d: NPC-083 050c3c89ba61bade13eea883c2dbf9fb, NPC-013 b55748d57d7cd6fbf24a79e3dcbfd937, NPC-037 111871b4a2dd0eb3a8073c770e9ae28a)"
+    site:      "`engine/season/harness/corpus_run.py` build_at; `engine/season/boot/realm.py` seat_cohorts; `engine/season/cases/exercises/`"
+    sweep:     ["no block (SHIPPED)", "sites: with a count, NPC-083 only"]
+    unblocks:  "B12b.21's three tests; the gate line 'the three authored `world:` cases move as declared'"
+    cite:      "CONTROL: seed-0 one-season realm hash 38cea821e06849b9b039b94fde1eea18 @32b471d, unchanged. FALSIFIER: the build raised Forbidden at the cohort line."
+    source:    "workplan v12 B12b.21 (block slot 7)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
