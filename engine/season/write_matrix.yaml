@@ -333,7 +333,10 @@ rows:
     emits:   "`travel.moved` · `travel.ended` · `travel.delayed`"
   - kind:    "Person"
     field:   "weight"
-    steps:   [CEN]
+    steps:   [MAT, CEN]
+    # B12b.36 (`famine_loss`): MATTER writes the thinning of a starving cohort (`loop/matter.py`, the hunger fall loop, caused by the `body.changed` just written),
+    # CENSUS keeps individuation. `04` §A.2 lists `weight` under `loop/census` while `holonic` §25 and §29 put deaths at MATTER and bar a clock at CENSUS: the
+    # ambiguity is named at the writer and picked there (layer-conformance B4); `04` is not edited.
     class:   "MATTER"
     social:  "false"
     by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"

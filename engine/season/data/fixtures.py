@@ -711,6 +711,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_loss: "per_cohort"`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: ` none (the row is `(Person, weight)`, absent); the source ships the arm `per_cohort` and the divisor's form, so the arm is injected at the control and swept per_cohort / per_head]
     hunger_loss="per_cohort",          # `H-49`, swept per_cohort (control, SHIPPED) / per_head
+    # B12b.36 (`07_SE_population_census` §4 (b), (c); closes CR-08's falling half): A STARVING COHORT THINS BEFORE IT DIES. `famine_loss` is the share of a cohort's
+    # weight, in thousandths, that it loses each season its body stands under `band_floors.body.withdrawal_only` (at least one head, never below weight 1), written
+    # at MATTER as `weight.changed` caused by the body write; 0 is THE CONTROL, SHIPPED: no read of the floor, no write, and a cohort dies at body 0 as before.
+    # Under it a cohort dies at body 0 only at weight 1. The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `famine_loss: 0`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: Fixtures famine_loss`; the source ships the arm 0 and the form of the write, so the arm is injected at the control and swept 0 / 250 / 500]
+    famine_loss=0,                     # `H-49`, swept 0 (control, SHIPPED) / 250 / 500
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.

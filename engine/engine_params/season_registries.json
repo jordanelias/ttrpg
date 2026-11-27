@@ -2965,6 +2965,15 @@
             "storm"
           ]
         },
+        "amount_shares": {
+          "source": "proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_arc_needs.md (B12b.19; A-56)",
+          "open": false,
+          "ordered": true,
+          "note": "The share of the giving rung's stock a store move takes, per-mille, spelt as a string (a closed roster's members are names). `requisition` and `transfer` carry it as the choice `amount_share` (`choice_sourced`; `data/verbs.py::CHOICE_RANGES`), and `decision/options.py::_amount_of_share` turns a chosen share into the act's `amount`, `max(1, stock_known x share // 1000)`, off the newest `stores:<kind>` claim he holds about the giving rung (falling back to the amount the bag already carries where he holds none). One member is the control: `_fanned_choices` does not fan a one-member range, so no act is renamed and no hash moves. Authoring `[\"250\", \"500\", \"1000\"]` is the flip and a declared mover (B98, after B38: `07_SE_arc_needs` \u00a76). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster, the two `choice_sourced` lines and `_amount_of_share`.]",
+          "values": [
+            "1000"
+          ]
+        },
         "march_target_kinds": {
           "source": "M4, `ED-IN-0279` clause (a). What a `march` may target.",
           "row": "H-149",
@@ -3705,6 +3714,13 @@
             "coin"
           ]
         },
+        "grown_kinds": {
+          "source": "audits/16_PESSIMIST_SE.md F-PES-SE-07: the season factor is weather, and weather bears on what is grown.",
+          "note": "The matter kinds a season's factor multiplies. A kind outside the set yields at factor 1.",
+          "values": [
+            "grain"
+          ]
+        },
         "arms_kinds": {
           "source": "v11 CP-T03-03 (`-08` AM-C-04; T03 home \u00a72): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store.",
           "note": "`kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there: `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key` a member of THAT FIELD'S closed set in the same module (the typed `kit` section of `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole number, unique among the kinds of one field; refused whole at import otherwise (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here. `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the stores of the rungs the person holds, else of his residence, else the Combatant's own default. \u26a0 EMPTY ON PURPOSE: which arms exist, which key each sets and how they rank is Jordan's content and is not invented here (`-08` AM-C-04). While `kinds:` is empty `kit_of` returns the Combatant default for everyone and every fight is dealt exactly as before the mechanism existed.",
@@ -3762,7 +3778,7 @@
             "halved",
             "doubled"
           ],
-          "note": "WHAT A WORKS' PLAN COSTS: `{plan kind: {matter kind: amount}}`, paid out of the WORKS' RUNG (`Record.rung`, where the works is kept and where `transfer` delivers to it) when the place rises. `loop/effects_founding.py` is the one reader. `found` moves its stake TWO-SIDED into the Rung it founds, so the grain stays in the world and provisions the new hearth (`_shift`, the one body of a conserved store move). `build` CONSUMES its cost into the fabric, one-sided, a lawful sink. 04_EVALUATION \u00a76 S passes the pair in exactly that shape: *\"`build` debits one side as a lawful consumption sink; `found` is two-sided\"*. \u26a0 A PLAN KIND WITH NO ROW HAS NO PRICE, SO NOBODY CAN PAY FOR IT, AND `found`/`build` REFUSE IT. That is a refusal that emits, never a free place: a missing row is not a cost of zero. The loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell non-empty, every matter kind a `matter_kinds` member, every amount a positive int (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as `wear_per_season` is, because three groups of members get no row by design:\n  * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the\n    roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`\n    stays in `site_kinds` for `band_floors`).\n  * `person` is CENSUS's to mint (F.30), never a works'.\n  * `settlement` and above are unpriced: founding a settlement collides with SE-9(a)'s held\n    question (*\"never adding nodes\"* to the fixed settlement registry), and 02_PROPOSALS P4\n    restricts founding to `hearth` and `community` for that reason.\n[ASSUMPTION; medium; Jordan to correct; revert: delete this roster and its reader, and `found`/`build` cost nothing again (`H-166` limit 1 reopens)]. THE KINDS are 04_EVALUATION's (grain for the stake, timber for a fabric). THE AMOUNT IS INVENTED and it is ONE number, 10, for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's timber, and the stake reuses the same magnitude so the two verbs share one scale rather than two. `H-166` sweeps it; `halved` and `doubled` scale every cell.",
+          "note": "WHAT A WORKS' PLAN COSTS: `{plan kind: {matter kind: amount}}`, paid out of the WORKS' RUNG (`Record.rung`, where the works is kept and where `transfer` delivers to it) when the place rises. `loop/effects_founding.py` is the one reader. `found` moves its stake TWO-SIDED into the Rung it founds, so the grain stays in the world and provisions the new hearth (`_shift`, the one body of a conserved store move). `build` CONSUMES its cost into the fabric, one-sided, a lawful sink. 04_EVALUATION \u00a76 S passes the pair in exactly that shape: *\"`build` debits one side as a lawful consumption sink; `found` is two-sided\"*. \u26a0 A PLAN KIND WITH NO ROW HAS NO PRICE, SO NOBODY CAN PAY FOR IT, AND `found`/`build` REFUSE IT. That is a refusal that emits, never a free place: a missing row is not a cost of zero. The loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell non-empty, every matter kind a `matter_kinds` member, every amount a positive int (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as `wear_per_season` is, because three groups of members get no row by design:\n  * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the\n    roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`\n    stays in `site_kinds` for `band_floors`).\n  * `person` is CENSUS's to mint (F.30), never a works'.\n  * `settlement` and above are unpriced: founding a settlement collides with SE-9(a)'s held\n    question (*\"never adding nodes\"* to the fixed settlement registry), and 02_PROPOSALS P4\n    restricts founding to `hearth` and `community` for that reason.\n[ASSUMPTION; medium; Jordan to correct; revert: delete this roster and its reader, and `found`/`build` cost nothing again (`H-166` limit 1 reopens)]. THE KINDS are 04_EVALUATION's (grain for the stake, timber for a fabric). THE AMOUNT IS INVENTED and it is ONE number, 10, for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's timber, and the stake reuses the same magnitude so the two verbs share one scale rather than two. `H-166` sweeps it; `halved` and `doubled` scale every cell. B12b.33: the five military works (`garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop`) also cost `ore: 10`, so `ore` (a `matter_kinds` member nothing priced) has a reader. [ASSUMPTION; medium; Jordan to correct.]",
           "costs": {
             "hearth": {
               "grain": 10
@@ -3780,19 +3796,24 @@
               "timber": 10
             },
             "garrison": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "barracks": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "archery_range": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "stable": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "siege_workshop": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "field": {
               "timber": 10
@@ -3993,7 +4014,7 @@
         "foreign_cast": {
           "source": "v9 IN-36 (#457 D4, answered RS-21 item 4 [medium; Jordan to correct]: one foreign faction, two seats, in `references/npc_registry.yaml`), read by `harness/populated.py::build_realm(foreign=)` through `data/rosters.py::FOREIGN_CAST`.",
           "row": "IN-36",
-          "note": "WHAT THIS IS. The factions whose persons and places `build_realm(foreign=True)` seats and `foreign=False` (the control arm; the shipped default is `True` since ED-IN-0310) leaves out of the world: a faction named here has no Proposition, no member, no seat, no goal and no rung in the control arm, so that arm is byte-identical to the realm before the empire existed. A foreign faction is still a `factions` member in BOTH arms (`names_index.yaml: token_class: faction` is its owner), which is what puts it in `data/rosters.py::FACTION_BY_PROP` and lets `cast.faction_of` resolve its cast rows with no edit. \u26a0 `Schoenland` IS NOT HERE AND IS FOREIGN ALL THE SAME: its persons and its T16 root are already in the realm as built (`build_realm` keeps T16 out of the realm by giving it no parent), so a switch on it would move a world that does not need to move. This block is the factions whose WHOLE existence is new, and it is not a roster of every foreign faction. WHAT A ROW SAYS. `territory` is the foreign ROOT RUNG, a `territory` with no `contain` edge into `r_valoria` -- never a `realm`, so `endings_reached`'s victory selector (every territory under a `realm` rung) and `populated.census`'s `uncontrolled_in_realm` do not count it; the BORDER is that absence. `settlement` is the one place its persons live, under the root. Crossing the border is a `march`'s arrival leg (`loop/effects_migration.py::_relocate`), so nothing here is a path. \u26a0 NOT BUILT, AND NOT THIS ROW'S: a scheduled arrival (#457 `:145-155`), perception channels at the border, the Schoenland trade demand (FA-01, which needs IN-33's `exchange`). [ASSUMPTION; medium; Jordan to correct] The codes are the author's, and a place has a code and no name because a `Rung` carries no name (`state/carriers.py`): canon names Altonia's chokepoint only as T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at. Revert: Jordan names the homeland places.",
+          "note": "WHAT THIS IS. The factions whose persons and places `build_realm(foreign=True)` seats and `foreign=False` (the control arm; the shipped default is `True` since ED-IN-0310) leaves out of the world: a faction named here has no Proposition, no member, no seat, no goal and no rung in the control arm, so that arm is byte-identical to the realm before the empire existed. A foreign faction is still a `factions` member in BOTH arms (`names_index.yaml: token_class: faction` is its owner), which is what puts it in `data/rosters.py::FACTION_BY_PROP` and lets `cast.faction_of` resolve its cast rows with no edit. \u26a0 `Schoenland` IS NOT HERE AND IS FOREIGN ALL THE SAME: its persons and its T16 root are already in the realm as built (`build_realm` keeps T16 out of the realm by giving it no parent), so a switch on it would move a world that does not need to move. This block is the factions whose WHOLE existence is new, and it is not a roster of every foreign faction. WHAT A ROW SAYS. `territory` is the foreign ROOT RUNG, a `territory` with no `contain` edge into `r_valoria` -- never a `realm`, so `endings_reached`'s victory selector (every territory under a `realm` rung) and `populated.census`'s `uncontrolled_in_realm` do not count it; the BORDER is that absence. `settlement` is the one place its persons live, under the root. Crossing the border is a `march`'s arrival leg (`loop/effects_migration.py::_relocate`), so nothing here is a path. \u26a0 NOT BUILT, AND NOT THIS ROW'S: a scheduled arrival (#457 `:145-155`), perception channels at the border, the Schoenland trade demand (FA-01, which needs IN-33's `exchange`). [ASSUMPTION; medium; Jordan to correct] The codes are the author's, and a place has a code and no name because a `Rung` carries no name (`state/carriers.py`): canon names Altonia's chokepoint only as T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at. Revert: Jordan names the homeland places. OPTIONAL KEY (B12b.20): a `settlement:` entry may carry `stores: {matter kind: whole number >= 1}`, which the builder seeds as that rung's `Rung.stores` (a counterparty stock for `exchange` once CR-49 names another rung). Shipped absent, so no hash moves; a misspelt key or an unregistered kind refuses at load (`data/rosters.py`).",
           "by_faction": {
             "Altonia": {
               "territory": {
@@ -4259,6 +4280,12 @@
             ],
             "speak": [
               "cites"
+            ],
+            "requisition": [
+              "amount_share"
+            ],
+            "transfer": [
+              "amount_share"
             ]
           },
           "ledger_ranges": {
@@ -5578,6 +5605,16 @@
               "proposition.uttered"
             ]
           }
+        },
+        "tally_axes": {
+          "source": "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)",
+          "note": "THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the referent as a classed referent on the question he answers and marks that question `mandatory` (A-47), and the rows declaring the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS` (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial. `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).",
+          "about_classes": [
+            "Person",
+            "Office",
+            "Rung"
+          ],
+          "members": {}
         }
       },
       "tables": {
@@ -11250,6 +11287,7 @@
           "kind": "Person",
           "field": "weight",
           "steps": [
+            "MAT",
             "CEN"
           ],
           "class": "MATTER",
@@ -11345,18 +11383,6 @@
           "by": "DR-3",
           "emits": "`date.scheduled`",
           "unproduced": "no hole row -- orphan since at least 2026-09-03 (this file's #358 rev.2 invariant-2 measurement lists it; git blame stops at the shallow-clone boundary f41f20a, 2026-09-07)"
-        },
-        {
-          "kind": "Rung",
-          "field": "envelope",
-          "steps": [
-            "MAT",
-            "CEN"
-          ],
-          "class": "MATTER",
-          "social": "false",
-          "by": "DR-1",
-          "emits": "`envelope.changed`"
         },
         {
           "kind": "Rung",

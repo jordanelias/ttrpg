@@ -757,7 +757,21 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         fell = _write_body(w, token, pid, person, fall.body_after)
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
-        if fall.body_after <= 0:
+        # B12b.36 (`07_SE_population_census` (b), (c)): A STARVING COHORT THINS BEFORE IT DIES. `famine_loss` is the per-mille of its weight a cohort whose body stands
+        # under the lowest body band's floor loses this season; 0 is THE CONTROL (no read of the floor, no write, death at body 0 as before). The cause is the
+        # `body.changed` just written (`fell`), not a log search. `Person.weight` has THIS ONE runtime writer. ⚠ THE LAYER AMBIGUITY, NAMED AND PICKED (layer-conformance B4):
+        # `04` §A.2 lists `weight` under `loop/census`; `holonic` §25 and §29 put deaths at MATTER and bar a clock at CENSUS. The cell is `[MAT, CEN]` (the write matrix),
+        # the thinning is written here beside the death it defers, and CENSUS keeps individuation; `04` is not edited.
+        loss = w.fixtures.get("famine_loss")
+        floor = (w.fixtures.get("band_floors") or {}).get("body", {}).get("withdrawal_only")
+        if loss and floor is not None and person.is_cohort and person.body < floor:
+            after = max(1, person.weight - max(1, person.weight * loss // 1000))
+            if after != person.weight:
+                w.write("weight", token, lambda person=person, after=after: setattr(person, "weight", after),
+                        record_kind="Person", fieldname="weight", driver="Event",
+                        emits="weight.changed", subject=pid, causes=[fell.id] if fell else [ROOT])
+        # (c): at body 0 a cohort dies only at weight 1 (S9: a cohort is a person at weight > 1, so one head left is the person); with `famine_loss` 0 the test is today's.
+        if fall.body_after <= 0 and (person.weight <= 1 or not loss):
             # death through the one owner: see _die
             _die(w, token, pid)
 

@@ -563,10 +563,10 @@ rows:
     owner:     "Person"
     grade:     "absent"
     default:   "none"
-    site:      ""
-    sweep:     []
+    site:      "Fixtures famine_loss (B12b.36), read by `loop/matter.py`'s hunger fall loop: a cohort whose body stands under `band_floors.body.withdrawal_only` loses `max(1, weight x famine_loss // 1000)` heads, written as `weight.changed` caused by the body write, and dies at body 0 only at weight 1. `hunger_loss` and `regrow_seasons` are B12b.38's to add here"
+    sweep:     [0, 250, 500]
     unblocks:  "unmeasured"
-    cite:      "DECLINED FOR CLOSURE BY IN-43 (batch B-C, 2026-10-08): the plan table closed this as `(Person, weight)` having a write-matrix row, a writer and readers. The row (`write_matrix.yaml:231-237`) and the readers (`loop/matter.py:290`, `loop/effects_migration.py:171`) exist, but nothing emits the row's `weight.changed`: `weight` is set only when a Person is constructed (`harness/populated.py`, `harness/scarce.py`, `harness/probes.py`). There is no runtime writer, so the row stays `absent`."
+    cite:      "DECLINED FOR CLOSURE BY IN-43 (batch B-C, 2026-10-08): the plan table closed this as `(Person, weight)` having a write-matrix row, a writer and readers. The row (`write_matrix.yaml:231-237`) and the readers (`loop/matter.py:290`, `loop/effects_migration.py:171`) exist, but nothing emits the row's `weight.changed`: `weight` is set only when a Person is constructed (`harness/populated.py`, `harness/scarce.py`, `harness/probes.py`). There is no runtime writer, so the row stays `absent`. B12b.36 BUILT THE FALLING WRITER behind `famine_loss` (0 the control, SHIPPED); the rising writer is B12b.38's, and the grade is left for it."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-50
     tier:      1

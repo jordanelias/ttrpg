@@ -616,7 +616,7 @@ def test_se01_control_a_person_who_died_is_not_a_clerk_to_individuate_again():
 # --------------------------------------------------------------------------------------
 
 _SEASON = Path(__file__).resolve().parents[1]
-_OWNED = {"weight": {"loop/census.py"}}               # write_matrix.yaml: `weight` steps [CEN] only
+_OWNED = {"weight": {"loop/census.py", "loop/matter.py"}}   # write_matrix.yaml: `weight` steps [MAT, CEN] (B12b.36: MATTER thins a starving cohort, behind `famine_loss`)
 
 
 def _bare_writes(src: str, rel: str) -> list:
