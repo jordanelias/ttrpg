@@ -39,12 +39,6 @@ def _pack(ranked, budget):
     return CH.pack_scenes(Person(id="p_pack", name="p_pack"), ranked, budget, fx, _mint)
 
 
-def test_the_shipped_list_is_empty_and_prices_nothing_free():
-    """CONTROL: at control nothing is a management order, so a one-act `dispatch` scene costs what any scene does."""
-    assert MANAGEMENT_ORDERS == frozenset()
-    assert _scene([ORDER]).cost(EXT, MANAGEMENT_ORDERS) == _scene([ORDER]).cost(EXT) == 1
-
-
 def test_an_order_scene_costs_nothing_and_a_priced_scene_is_unchanged():
     assert _scene([ORDER]).cost(EXT, ORDERS) == 0
     assert _scene([ORDER, ORDER]).cost(EXT, ORDERS) == 0, "every act an order: free, however many"

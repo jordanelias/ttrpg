@@ -8,10 +8,37 @@
 lanes:
   season_loop:
     base: 3219
-    warrants: []
+    warrants:
+      - batch: B34-go-surface
+        added: 15
+        behaviour: "the player surface in test_play_surface.py: the transcript's hash equals the plain run's (seeds 0-2), the offer rows follow make_ranker and the printed order and terms are the chooser's, withheld rows are own-state only, the prior teller is unattributed, a swept scene_budget gives the seat its scenes, a picked question ranks first, the stop rules (no-continuation stops, a continuation plays on, a killed seat continues under the heir) and the ending's kind (victory rows only)"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "test_play_surface_own_outcome.py: the doer holds his own act's outcome, and every act he resolved has an own account row"
+      - batch: B34-go-surface
+        added: 3
+        behaviour: "test_explain.py: a fact no claim of his holds is in no derivation, the five first values derive from his own claims, and unattributed is a change no claim of his names a doer"
+      - batch: B34-go-surface
+        added: 3
+        behaviour: "test_seat_holders_from_ledger.py: a creation row marks cohorts and holdings; all chances at 1.0 reproduce today's referents; the shipped holder_known_chance leaves some goal-named seats unheard (H-758)"
+      - batch: B34-go-surface
+        added: 4
+        behaviour: "test_management_orders.py: an order scene costs nothing and a priced scene is unchanged, an order never shares a scene with a priced act, a spent budget may still order, an order opens a scene next lap"
+      - batch: B34-go-surface
+        added: 8
+        behaviour: "test_scene_contract.py: an echo decider equals none, empty deciders hash-equal no host, a deviating decider moves a played module, apply=False goes through seam.contest; the roll fixture's terms sum to the obstacle, printed odds match the realised bands, effort moves odds, every band is reached and writes"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "test_go07_canonical_digest.py: a snapshot names its scenario and resume refuses an unknown one; a resumed run reaches the ending the unbroken run reaches"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "the governance spine prints the Offer and holds no second menu (test_governance_spine_play.py); the creation sheet shows holdings for a seat holder (test_season_shape.py)"
   engine:
     base: 1043
-    warrants: []
+    warrants:
+      - batch: B34-go-surface
+        added: 1
+        behaviour: "every closed choice set is exported with a name and a line of text, and both exporters refuse a member with none (test_engine_params_bridge.py)"
   combat:
     base: 497
     warrants: []

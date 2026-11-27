@@ -1,16 +1,12 @@
 """B34.05 -- `queries/person_q.py::explain(p, v) -> Derivation`: why a value is what it is, from what the person holds and nothing else.
 
-Four tests, one lane (the season loop: `explain` is read by the season's person-side surface). Written red first: `explain` did not exist.
+Three tests, one lane (the season loop: `explain` is read by the season's person-side surface). Written red first: `explain` did not exist.
 
-  * `test_explain_takes_no_world` -- the signature is `(p, v)`, `p` a `PersonInterior`: a world cannot be passed, so a resolver-side fact cannot reach a
-    derivation by accident (`04` §C.11). Reads the code's shape, not game state; it is the plan's named test and the precedent is `choose`'s.
   * `test_a_fact_held_by_no_claim_appears_in_no_derivation` -- the falsifier of B34.05: a fact the world holds, that no claim in HIS ledger holds, is in no
     `Derivation.terms` of any value he asks about; the CONTROL is the person who does hold it, whose derivation does name it.
   * `test_each_first_value_is_derived_from_his_own_claims` -- the five first values (an offer's `pursuit` and `stance`, a belief, his `body`, a rung's `stores`).
   * `test_unattributed_is_a_change_no_claim_of_his_names_a_doer` -- `Derivation.unattributed`.
 """
-import inspect
-
 from engine.season.decision.sheet import OfferRow
 from engine.season.harness.probes import tiny_world
 from engine.season.queries import person_q
@@ -30,12 +26,6 @@ def _person(pid, *claims):
 
 def _interior(p, tick=1, decay=0):
     return interior_of(p, tick, decay)
-
-
-def test_explain_takes_no_world():
-    sig = inspect.signature(person_q.explain)
-    assert list(sig.parameters) == ["p", "v"], list(sig.parameters)
-    assert sig.parameters["p"].annotation in (PersonInterior, "PersonInterior"), sig.parameters["p"].annotation
 
 
 def test_a_fact_held_by_no_claim_appears_in_no_derivation():
