@@ -2251,17 +2251,19 @@ rosters:
       for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's
       timber, and the stake reuses the same magnitude so the two verbs share one scale rather than
       two. `H-166` sweeps it; `halved` and `doubled` scale every cell.
+      B12b.33: the five military works (`garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop`) also
+      cost `ore: 10`, so `ore` (a `matter_kinds` member nothing priced) has a reader. [ASSUMPTION; medium; Jordan to correct.]
     costs:
       hearth:    {grain: 10}
       community: {grain: 10}
       harbour:   {timber: 10}
       seam:      {timber: 10}
       dwelling:  {timber: 10}
-      garrison:  {timber: 10}
-      barracks:       {timber: 10}
-      archery_range:  {timber: 10}
-      stable:         {timber: 10}
-      siege_workshop: {timber: 10}
+      garrison:  {timber: 10, ore: 10}  # [ASSUMPTION; medium; Jordan to correct] B12b.33: `ore` has a reader
+      barracks:       {timber: 10, ore: 10}
+      archery_range:  {timber: 10, ore: 10}
+      stable:         {timber: 10, ore: 10}
+      siege_workshop: {timber: 10, ore: 10}
       field:     {timber: 10}      # [ASSUMPTION; JQ-6] B12a.51: the one number every fabric row holds
 
   site_endowment:
