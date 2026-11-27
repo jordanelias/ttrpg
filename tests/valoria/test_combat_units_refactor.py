@@ -265,3 +265,74 @@ def test_the_relocated_harness_term_charges_the_same_stamina(monkeypatch):
     heavy = tuple((K.shortfall((), 'heavy', s), None) for s in strengths)
     raised = tuple((p + 1.0, None) for p, _ in heavy)
     assert round_one(record('heavy', raised), 0)[0][0] < round_one(record('heavy', heavy), 0)[0][0], "a raised `short` spent no more stamina"
+
+
+# ── B18.09: the weapon in hand is round state; a switch costs tempo (`03_PC_loadout_and_carry` item 5) ──────────────
+
+def test_a_switch_debits_one_act_threshold():
+    """A `switch` spends one `ACT_THRESHOLD` of the switcher's readiness and puts the other weapon in hand. (1) THE DEBIT: a mirror
+    in which A carries the very weapon he holds (so the swap changes nothing but the tempo), the same seeds with and without
+    the switch: the `switch_paid` event's readiness is `ACT_THRESHOLD` below what it was, at the shipped threshold and at an overlaid one,
+    and A takes fewer actions over the seeds. (2) THE HAND: a spear-and-dagger fighter who switches opens the round with the dagger,
+    the round's `DuelState.form` records it, the next round (no switch) still holds it, and the carry follows: the figure
+    `carry_short` reads is the secondary's entry of `short`, the spear now the carried weapon. (3) THE CLOSED SET: a fighter with no secondary
+    never forms `switch` by the default rule (every weapon, both measures) and a decider that answers it raises as any answer outside
+    the set does; with a secondary the same answer is taken."""
+    import pytest
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from modules.combat import fight as entry
+    C, S, _WP, CFG = _mods()
+    quantities = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+
+    def record(kit_a, kit_b=("arming", None, "light"), short=()):
+        return PersonalCombatInput(claimants=("A", "B"), ends=(4, 4), wound_quantities=quantities, kits=(kit_a, kit_b), short=short)
+
+    def one_round(rec, seed, switch, cfg=None, states=(DuelState(), DuelState()), prev_closed=True, rnd=1):
+        return entry.fight_round(DuelRoundInput(fighters=rec, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed, switch=switch),
+                                 draw.seeded(draw.H2("switch_round", seed)), cfg=cfg)
+
+    def opened_with(out):
+        return [e for e in out.trace if e["kind"] == "engagement_start"][0]["weapon_A"]
+
+    # (1) the debit
+    mirror = record(("arming", "arming", "light"))
+    for threshold in (CFG['ACT_THRESHOLD'], CFG['ACT_THRESHOLD'] + 1.0):
+        cfg = {**CFG, 'ACT_THRESHOLD': threshold}
+        debits, acts_with, acts_without = [], 0, 0
+        for seed in range(24):
+            with_ = one_round(mirror, seed, ("A",), cfg)
+            without = one_round(mirror, seed, (), cfg)
+            assert [e["by"] for e in with_.trace if e["kind"] == "switch"] == ["A"]
+            assert not [e for e in without.trace if e["kind"] in ("switch", "switch_paid")]
+            paid = [e for e in with_.trace if e["kind"] == "switch_paid"]   # none where the round ended before it reached the closed phase
+            if paid:
+                assert len(paid) == 1 and paid[0]["by"] == "A"
+                debits.append(paid[0]["was"] - paid[0]["ready"])
+            acts_with += sum(e["kind"] == "commit" and e["aggressor"] == "A" for e in with_.trace)
+            acts_without += sum(e["kind"] == "commit" and e["aggressor"] == "A" for e in without.trace)
+        assert len(debits) >= 12 and all(abs(d - threshold) < 1e-9 for d in debits), f"the debit is not one ACT_THRESHOLD ({threshold}): {debits}"
+        assert acts_with < acts_without, "a switch that takes no tempo: A acted as often with it as without"
+
+    # (2) the hand
+    rec = record(("spear", "dagger", "heavy"), short=((0.0, 2.5), (0.0, None)))
+    out = one_round(rec, 3, ("A",))
+    assert opened_with(out) == "dagger" and [e for e in out.trace if e["kind"] == "engagement_start"][0]["weapon_B"] == "arming"
+    assert C.HALFSWORD_BASE.get(out.states[0].form, out.states[0].form) == "dagger" and out.states[1].form == "arming"
+    held, _ = entry._combatants(rec, CFG, out.states)
+    assert (held.weapon, held.secondary, S.carry_short(held, CFG)) == ("dagger", "spear", 2.5)
+    first, _ = entry._combatants(rec, CFG)
+    assert (first.weapon, first.secondary, S.carry_short(first, CFG)) == ("spear", "dagger", 0.0)
+    again = one_round(rec, 4, (), states=out.states, rnd=2)
+    assert opened_with(again) == "dagger" and not [e for e in again.trace if e["kind"] == "switch"]
+    assert opened_with(one_round(rec, 5, ("A",), states=again.states, rnd=3)) == "spear"
+
+    # (3) the closed set
+    alone = record(("spear", None, "light"))
+    for key in C.WEAPONS:
+        c = C.Combatant("X", weapon=key)
+        assert not any(S.switch_wanted(c, closed, CFG) for closed in (True, False)), key
+    with pytest.raises(ValueError):
+        entry.fight(alone, draw.seeded(draw.H2("switch_set", 0)), decide=lambda view: "switch")
+    taken = entry.fight(rec, draw.seeded(draw.H2("switch_set", 1)), decide=lambda view: "switch" if view.round == 1 else "withdraw")
+    assert [e["by"] for e in taken.trace if e["kind"] == "switch"] == ["A"]

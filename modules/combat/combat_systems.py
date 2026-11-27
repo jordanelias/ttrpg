@@ -3,6 +3,7 @@ NO subsystem touches raw A/B — they receive Combatant objects in role. This is
 unit-testing and makes the coupling explicit."""
 from collections import namedtuple   # ED-PC-0042 (I3): the sel_* bundle's two record shapes — HeadOption / ModeSelection, defined below
 from math import sqrt
+from types import SimpleNamespace   # `switch_wanted`'s weapon at rest
 from engine.dice_engine.fmath import tanh, exp, log, powf   # one owner per transcendental (B06.02); logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade; log by lever_log_edge (ED-PC-0045)
 from . import core
 from . import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's tables are keyed by it
@@ -276,6 +277,18 @@ def close_unwieldiness(c, cfg, grip=None):
     `grip` forwards to forward_extent (I3, D3, JD-9); grip_target passes an explicit
     0.0 for its OWN drive input. Pure."""
     return max(0.0, forward_extent(c, cfg, grip) - cfg['CLOSE_ENGAGE_M'])
+def switch_wanted(c, closed, cfg):
+    """THE ENGINE'S OWN DEFAULT FOR `switch` (B18.09; the one owner of the trigger: `wrapper.round_switchers` calls it where no decider answers). A fighter
+    who carries a secondary changes weapon at a round's entry when the measure is CLOSED (`closed`, the measure the last round ended in), the weapon in
+    hand serves it strictly worse than the one he carries (`close_unwieldiness`, each at the grip-free read `grip_target` takes as its own drive input:
+    the weapon's overhang before he gathers it in), and the change is AFFORDABLE: he is above `STAMINA_COLLAPSE`, the floor under which a fighter
+    can spend no action at all (the switch spends one action's readiness, `wrapper.engagement`). At open measure the weapon's reach is its virtue and
+    nothing here reads it, so no one switches there. A fighter with no secondary never does. Pure: no draw, no write."""
+    if c.secondary is None or not closed or c.stamina <= cfg['STAMINA_COLLAPSE']:
+        return False
+    def overhang(key):
+        return close_unwieldiness(SimpleNamespace(w=WEAPONS[HALFSWORD_BASE.get(key, key)]), cfg, grip=0.0)   # a record at rest: `forward_extent` reads only `.w` at an explicit grip
+    return overhang(c.secondary) < overhang(base_form(c))
 def grip_target(c, closed, cfg):
     """The CONTINUOUS grip-position g* in [0,1] the fighter adopts (The Approach — footwork & stance), fully DERIVED
     from morphology. Once the measure is

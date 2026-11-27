@@ -51,10 +51,11 @@ def _score_kw(score) -> dict:
 
 
 def _short_kw(short) -> dict:
-    """`Combatant`'s keyword for one party's shortfall (B18.07; the record's `short` entry, `(with the primary in hand, with the
-    secondary in hand)`): the figure for the kit he fights with, the primary's (the secondary's is read when a switch puts it in hand, B18.09).
-    `None` (no entry, or none for that kit) is none, so the Combatant is short of the harness alone, as `act_cost` always charged."""
-    return {} if short is None or short[0] is None else dict(short=short[0])
+    """`Combatant`'s keywords for one party's shortfall (B18.07; the record's `short` entry, `(with the primary in hand, with the
+    secondary in hand)`): `short` the figure for the kit he fights with, the primary's, and `short_other` the secondary's, which `wrapper.switch_weapon`
+    makes `short` when a switch puts the secondary in hand (B18.09). `None` (no entry, or none for that kit) is none, so the Combatant is short of the
+    harness alone, as `act_cost` always charged."""
+    return {} if short is None or short[0] is None else dict(short=short[0], short_other=short[1])
 
 
 def _fight_cfg(inp: PersonalCombatInput, cfg: Optional[dict] = None) -> Optional[dict]:
@@ -113,6 +114,8 @@ def _beat(trace: list) -> Optional[DecisiveBeat]:
             weapons = {e["A"]: e["weapon_A"], e["B"]: e["weapon_B"]}
         elif kind == "round_start":
             rnd += 1
+        elif kind == "switch":   # B18.09: the weapon in hand changed at the round's entry; the blows after it are the new weapon's
+            weapons[e["by"]] = e["weapon"]
         elif kind == "wound" and e.get("felled"):
             found = DecisiveBeat(by=e["by"], victim=e["victim"], source=e["source"],
                                  weapon=weapons.get(e["by"], ""), round=rnd)
@@ -189,7 +192,8 @@ def _mortal_draw(rng: Draw, pid: str, key) -> Draw:
 def _combatants(inp: PersonalCombatInput, cfg: dict, states: tuple = (DuelState(), DuelState())):
     """The record's two Combatants, each carrying its `DuelState`: built from the typed input, re-derived on `cfg` (`Combatant.rederive`, the one
     derivation path), then the state laid on -- damage, Stamina and Concentration (`None` is the derived maximum, a fight's start), poise and the
-    weapon in hand (`None` is the kit's own); initiative is the round's to take. A fresh pair each call: nothing of an earlier pair survives."""
+    weapon in hand (`None` is the kit's own; the secondary's, or a half-sword form of it, puts it in hand and the primary into the carry,
+    `wrapper.switch_weapon`, B18.09); initiative is the round's to take. A fresh pair each call: nothing of an earlier pair survives."""
     if len(states) != 2:
         raise ValueError(f"a round takes one DuelState per party, in claimants order: got {len(states)}")
     a_id, b_id = inp.claimants
@@ -226,6 +230,8 @@ def _combatants(inp: PersonalCombatInput, cfg: dict, states: tuple = (DuelState(
             c.conc = st.conc
         c.poise = st.poise
         if st.form is not None:
+            if combatant.HALFSWORD_BASE.get(st.form, st.form) == c.secondary:   # the record in hand is the secondary's (B18.09): the kit's two weapons change places, with their shortfalls
+                wrapper.switch_weapon(c)
             c.weapon = st.form
     return A, B
 
@@ -278,10 +284,16 @@ def fight_round(inp: DuelRoundInput, rng: Draw, deciders=None, *, cfg: Optional[
     wrapper.check_terms(terms)
     a_id, b_id = fi.claimants
     A, B = _combatants(fi, cfg, inp.states)
+    # WHO SWITCHES AT THIS ROUND'S ENTRY (B18.09): the ids `inp.switch` names, each of whom must carry a secondary; `None` is no one's call, so the engine's own
+    # default decides for each party (`wrapper.round_switchers`)
+    switching = (wrapper.round_switchers(None, A, B, inp.prev_closed, cfg) if inp.switch is None
+                 else tuple(c for c in (A, B) if c.label in inp.switch))
+    if inp.switch is not None and (set(inp.switch) - {a_id, b_id} or any(c.secondary is None for c in switching)):
+        raise ValueError(f"`switch` names {inp.switch!r}: each must be one of {fi.claimants!r} and carry a secondary")
     trace: list = []
     with wrapper.traced(trace.append):
         loser, closed, ended_by, wounds0 = wrapper.play_round(A, B, wrapper.keyed_first(A, B, rng), cfg, rng, inp.prev_closed,
-                                                              None if terms == wrapper.LETHAL_TERMS else terms, inp.round)
+                                                              None if terms == wrapper.LETHAL_TERMS else terms, inp.round, switching=switching)
         yielder = None
         if loser is None:
             over, yielder = wrapper.settle_round(A, B, wounds0, terms, cfg, rng, 0, inp.round, fi.decisiveness or (0.0, 0.0))   # `0`: the workbench loop's `scene` ordinal, which a round's own key has no use for
@@ -338,15 +350,16 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     prev_closed, result, tie = False, 0, False
     fkey = wrapper.fight_draw(rng)
     for rnd in range(1, (wrapper.DEFAULT_ROUNDS if max_rounds is None else max_rounds) + 1):
+        switch = None   # no decider: each party's own default decides (`fight_round`)
         if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the round; draws nothing
             choice = decide(CombatRoundView(round=rnd, claimants=inp.claimants,
                                            wound_state={pid: None if q is None else dict(q) for pid, q in wound_state.items()}))
-            if choice not in wrapper.ROUND_CHOICES:
-                raise ValueError(f"the decider returned {choice!r}, which is not one of {wrapper.ROUND_CHOICES}")
+            wrapper.check_choice(choice, A, B)   # the closed set, checked against the kit: `switch` where neither party carries a secondary is refused (B18.09)
             if choice == wrapper.WITHDRAW:
                 trace.append(dict(kind="withdraw", round=rnd))
                 break            # UNRESOLVED, no further round, no riposte draw
-        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed),
+            switch = tuple(c.label for c in wrapper.round_switchers(choice, A, B, prev_closed, cfg_))   # a decider's answer: `switch` is every party who carries a secondary, `engage` none
+        out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed, switch=switch),
                           wrapper.round_draw(fkey, rnd), cfg=cfg)
         trace.extend(out.trace)
         states, wound_state, prev_closed = out.states, out.wounds, out.closed
