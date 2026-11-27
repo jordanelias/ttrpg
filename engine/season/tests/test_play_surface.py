@@ -188,3 +188,40 @@ def test_withheld_rows_are_own_state_only():
             checked[0] += 1
     _deliberations(0, per_person)
     assert checked[0] >= 1, "no row was withheld at the realm's first season: the gate observed nothing"
+
+
+# -- gate 3 of `11_GO_fidelity_and_campaign_modes` (B34.08) ------------------------------------------------------
+
+@pytest.mark.slow
+def test_scene_budget_overlay_gives_three_scenes():
+    """FIDELITY GATE 3 (B34.08): difficulty is a `Fixtures` overlay chosen at world build, and nothing else in the engine reads one. A realm built with `scene_budget`
+    swept to 3 (`on_build`, before the seat is bound) is played one season with `p_npc_001` seated on the shipped ranking. (a) The overlay differs from the shipped
+    `Fixtures` in that one key. (b) His own `budget` at his first deliberation is 3, the shipped 5's replacement, and he spends no more than three scene actions in
+    the season (the sum of `Scene.cost` over the scenes the fold stored with him as actor), at least one. (c) The season's `content_hash` is not the plain run's,
+    which is the control: the same seed and the same chooser, with the shipped fixtures, are `test_transcript_hash_equals_plain_run`'s hash."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..decision.sheet import take_ranked
+    from ..harness import scenarios as SC
+    shipped = DEFAULT_FIXTURES.get("scene_budget")
+    assert shipped == 5
+    budgets: list = []
+    built: list = []
+
+    def pick(sheet):
+        budgets.append(sheet.budget)
+        return take_ranked(sheet)
+
+    def overlay(w):
+        built.append(w.fixtures)
+        w.fixtures = w.fixtures.sweep("scene_budget", 3)
+    r = SC.run("life", 0, 1, pick=pick, person=SEATED, on_build=overlay)
+    w = r["world"]
+    changed = {k for k in built[0]._v if built[0]._v[k] != w.fixtures._v[k]}
+    assert changed == {"scene_budget"}, changed
+    assert budgets and budgets[0] == 3, budgets
+    ext = w.fixtures.get("extended_scene_cost")
+    spent = sum(sc.cost(ext) for sc in w.acts.scenes() if sc.actor == SEATED)
+    assert 1 <= spent <= 3, spent
+    plain = build_realm(0)
+    POP.run(1, 0, w=plain)
+    assert r["hash"] != plain.content_hash(), "scene_budget swept to 3 left the season's hash where the shipped fixtures put it"
