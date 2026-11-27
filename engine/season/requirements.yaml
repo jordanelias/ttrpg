@@ -490,6 +490,12 @@ rows:
         argv: ["python", "-m", "engine.season.harness.chronicle", "--seed", "0"]
         expects: "the three halves above read"
         holds: "unread"
+        reading:
+          tree: "8bdf59f44c5f59df0bd3304b893cedf29b07deb5"
+          date: "2026-11-27"
+          seed: 0
+          seasons: "1"
+          line: "THE SHEET HALF ONLY (B34.99; the `train` and `chronicle` halves are B22's and B36's, so `holds` stays `unread`): `test_creation_sheet_marks_cohorts_and_holdings` and `test_creation_sheet_shows_holdings_for_a_seat_holder` pass (2 passed) on the tree of d7a913be5; the transcript's content_hash equals the plain run's at seeds 0, 1, 2 (f4222b71, 8891d16b, 0d5c97dd)"
       - id: R-04.c2
         text: >-
           grand strategy politics: `governance_spine play 0 8 --world realm` exits `closed True` at
