@@ -120,7 +120,7 @@ def _first_wound_not_decisive(trace) -> bool:
     k = next((i for i, e in enumerate(trace) if e.get("kind") == "wound"), None)
     if k is None or trace[k].get("felled"):
         return False
-    return any(e.get("kind") == "turn_start" for e in trace[k + 1:])
+    return any(e.get("kind") == "round_start" for e in trace[k + 1:])
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -320,23 +320,32 @@ def test_under_death_felled_stays_reachable_and_a_duel_yield_is_unaccepted():
 
 def test_a_blood_duel_whose_first_wound_is_not_decisive_emits_duel_yielded_and_no_death():
     """Seeds picked on the LETHAL CONTROL of the same act (`stakes: death`, the same scene seed): its first wound fells
-    nobody and the fight goes on. Under `blood` the same act then yields -- no universal is asserted for the rest."""
+    nobody and the fight goes on. Under `blood` the yield is ONE keyed roll per wounded party per round
+    (`wrapper.settle_round`), so a given seed need not yield (it may pass the roll and fight on, and end in a felling that
+    `blood` does not make a death). The law is therefore two-sided: under `blood` nobody dies, and the seam carries
+    `duel.yielded` exactly where the module's own trace carries a failed `yield` -- and most picked seeds do yield."""
     lethal = {i: got for i, _, got, _, _ in _scan("death")}
     picked = [i for i, got in lethal.items() if _first_wound_not_decisive(got.trace)]
     assert picked, "no scene with a non-decisive first wound in the scan: the falsifier observed nothing"
-    checked = 0
+    checked = yielded = 0
     for i, inp, got, evs, w in _scan("blood"):
         if i not in picked:
             continue
         ks = _kinds(evs)
-        assert "duel.yielded" in ks and "person.died" not in ks, (i, ks)
+        assert "person.died" not in ks, (i, ks)
         assert ACC in w.persons and CHAL in w.persons
-        yielder = got.surrender.by
-        ev = next(e for e in evs if e.kind == "duel.yielded")
-        assert ev.degree == "Wounded", ev.degree                                  # a band, not a fourth one
-        assert {c.subject for c in ev.changes} == {yielder}, "the yield was earned by someone who did not yield"
+        drawn = [e for e in got.trace if e.get("kind") == "yield"]               # the module's own yield, if its roll failed
+        assert ("duel.yielded" in ks) == bool(drawn) == (got.surrender is not None), (i, ks, drawn, got.surrender)
+        if drawn:
+            yielder = got.surrender.by
+            assert [e["by"] for e in drawn] == [yielder] and drawn[0]["degree"] == "fail", drawn
+            ev = next(e for e in evs if e.kind == "duel.yielded")
+            assert ev.degree == "Wounded", ev.degree                              # a band, not a fourth one
+            assert {c.subject for c in ev.changes} == {yielder}, "the yield was earned by someone who did not yield"
+            yielded += 1
         checked += 1
     assert checked == len(picked) >= 1
+    assert yielded * 2 > checked, f"{yielded} of {checked} non-decisive-first-wound blood duels yielded: the yield roll is not firing"
 
 
 def test_control_stakes_death_builds_todays_duel_exactly():

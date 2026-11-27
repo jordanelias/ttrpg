@@ -1150,6 +1150,7 @@ def _w15_exclusive():
             fcntl.flock(fh, fcntl.LOCK_UN)
 
 
+@pytest.mark.shipped_pin     # a byte-check of derived artifacts (`runs/results.json`): a post-workplan gate with the goldens (conftest.py `_reads_pin`)
 def test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte():
     """**THE GUARD.** Executes the sole emitter and asserts the one committed artifact,
     `results.json`, comes back byte-identical (the name keeps "every committed artifact" so the
@@ -5928,7 +5929,7 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
 
 
 def _k1_combatants(w, monkeypatch):
-    """The two `Combatant`s the module entry builds for `p_low` / `p_mid`, observed at `wrapper.fight`'s door."""
+    """The two `Combatant`s the module entry builds for `p_low` / `p_mid`, observed at `wrapper.engagement`'s door (B16.01: the host loop runs `engagement` itself, no longer `wrapper.fight`)."""
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
     if C.engine() is None:
@@ -5937,12 +5938,12 @@ def _k1_combatants(w, monkeypatch):
     entry, _ = entry_for(C._PRIZE, C._PROVIDER)
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
     wrapper = importlib.import_module("modules.combat.wrapper")
-    seen, real = {}, wrapper.fight
+    seen, real = {}, wrapper.engagement
 
-    def spy(A, B, **kw):
-        seen[A.label], seen[B.label] = A, B
-        return real(A, B, **kw)
-    monkeypatch.setattr(wrapper, "fight", spy)
+    def spy(A, B, *a, **kw):
+        seen.setdefault(A.label, A); seen.setdefault(B.label, B)   # the first round's pair: a round builds its own, the figures are the record's
+        return real(A, B, *a, **kw)
+    monkeypatch.setattr(wrapper, "engagement", spy)
     inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
     entry.fn(inp, keyed_draw.seeded(keyed_draw.H2("test_season_shape", 0)))
     return inp, seen
@@ -8229,7 +8230,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
 # ASSIGNED. Each hid the next, so a partial success and an overwhelming one were the same event.
 # ===========================================================================
 
-def _we_bands(model="scene_fraction", ids=range(24)):
+def _we_bands(model="scene_fraction", ids=range(3, 27)):   # B16.03: the per-round key moved every fight; the window starts at 3 so the first Wounded party of the `total` control is a subject who is written (`body.changed` then `person.died`), not an actor whose death alone is published (ids 1, 2 and 11 read that, at the old base too)
     """Fold `fight` through the REAL road -- `SeasonDriver.resolve` -> `contest()` ->
     `combat_seam` -> `wrapper.fight` -- once per act id, and report what each band did.
 
@@ -8858,7 +8859,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     TARGET -- who is standing, unhurt or merely bled. The band is read off the person the writes
     land on, and the cell now says so.
 
-    THE CASE IS REAL AND IS NAMED: act `we0` in `tiny_world` is a fight `p_low` starts and LOSES.
+    THE CASE IS REAL AND IS NAMED: act `we3` in `tiny_world` is a fight `p_low` starts and LOSES.
     `wound_state[p_low].felled` is True, `wound_state[p_mid].felled` is False, and `p_mid` carries
     one wound -- so the subject reading gives `Wounded` and the loser reading gives `Felled`.
 
@@ -8874,7 +8875,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
-    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])   # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we3, B06.99; we0)
+    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we3"])   # seed re-picked at B16.03: the per-round key moved the stream (was we0, B15.10; we9, B15.07; we3, B06.99)
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
@@ -8888,7 +8889,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     d = SeasonDriver(w2)
     # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER (`_we_bands`' note); the fight's Events are ENCOUNTER's.
     evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
-                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",   # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we3, B06.99; we0)
+                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we3", actor="p_low", verb="fight",   # seed re-picked at B16.03: the per-round key moved the stream (was we0, B15.10; we9, B15.07; we3, B06.99)
                                 payload={"subject": "p_mid"})], 2), 2)
     assert {e.kind for e in evs} >= {"person.died", "body.changed"}, [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (

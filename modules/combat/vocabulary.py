@@ -86,7 +86,7 @@ ADEF_MODE_CUT = 'cut'
 
 # ── ROUND ENDINGS — how a round came to an end (A-101) ──────────────────────────────────────────────
 # A round is one `wrapper.engagement` call. This closed set names how the fighters came apart, or that one fell: it is
-# the `reason` of every `separation` event and the `ended_by` of every `engagement_end` event. Reporting vocabulary
+# the `reason` of every `separation` event and the `ended_by` of every `round_end` event. Reporting vocabulary
 # only: no rule keys on it and it draws nothing.
 ROUND_ENDS = ('clean_defence', 'burst_ceiling', 'collapse', 'disengage', 'reopen', 'terms', 'felled', 'beat_exhaustion')
 

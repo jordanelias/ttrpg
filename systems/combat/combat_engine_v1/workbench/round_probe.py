@@ -42,7 +42,7 @@ def _name(pair):
 
 
 def play(pair, seed, cfg=None):
-    """One lethal fight of `pair` on `seed`. Returns (result, trace); the `engagement_start` and `engagement_end` events
+    """One lethal fight of `pair` on `seed`. Returns (result, trace); the `engagement_start` and `round_end` events
     carry `beats`, the running count of loop beats, so a round's beats are the difference between its two."""
     (wa, aa), (wb, ab) = pair
     A = combatant.Combatant('A', weapon=wa, armor=aa)
@@ -55,7 +55,7 @@ def play(pair, seed, cfg=None):
         return real(*a, **k)
 
     def sink(e):
-        if e['kind'] in ('engagement_start', 'engagement_end'):
+        if e['kind'] in ('engagement_start', 'round_end'):
             e = dict(e, beats=calls[0] // 2)   # two tempo_pressure calls per loop iteration
         trace.append(e)
 
@@ -69,7 +69,7 @@ def play(pair, seed, cfg=None):
 
 def rounds_of(trace):
     """The rounds of one fight's trace, each a dict: exchanges, attempts, beats, attackers (the labels that attacked),
-    reopened (an `approach` after a beat at closed measure), ended_by (the `engagement_end` event's `ended_by` when the
+    reopened (an `approach` after a beat at closed measure), ended_by (the `round_end` event's `ended_by` when the
     engine says it, else the last `separation` reason of the round, else 'felled' when a fighter fell)."""
     out, cur, closed = [], None, False
     for e in trace:
@@ -95,7 +95,7 @@ def rounds_of(trace):
                 cur['attempts'] += 1; cur['attackers'].add(e['shorter'])
         elif k == 'separation':
             cur['sep'] = e['reason']
-        elif k == 'engagement_end':
+        elif k == 'round_end':
             cur['beats'] += e['beats']
             cur['ended_by'] = e.get('ended_by') or cur['sep'] or ('felled' if e['felled'] else None)
             out.append(cur); cur = None

@@ -42,7 +42,7 @@ GATE: Batch B12b-weather-arcs-population
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
-GATE: Batch B16-pc-round
+GATE: Batch B16-pc-round @96f90bbc8
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B18-pc-content
 GATE: Batch B19a-mb-contact-instrument
@@ -148,7 +148,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.23 | wear is drawn: the pool is the base, the obstacle's step is swept to the control's mean | row 29; B12a.10; `09_WR_B_draws_not_thresholds` edit 1, gate (2) | BUILD (flip) | MOVER(behaviour) | Batch B12a; Batch B05 |
 | B98.24 | endings are reached by a draw: its two rows swept on the planted world | row 30; B12a.12; `09_WR_B_draws_not_thresholds` edit 3, gate (3) | BUILD (flip) | EQUAL | Batch B12a; Batch B05 |
 | B98.25 | arriving teaches the traveller the place | row 31; B12a.16; `07_SE_kernel_repairs` D | BUILD (flip) | MOVER(behaviour) | Batch B12a |
-| B98.26 | `APPROACH_SIGMA_K` stays 0: a ruling on the coefficient is owed | row 32; B16.08; PB §7 step 3c, §11 | BLOCKED (design: Jordan's ruling, D2-1) | EQUAL | Batch B16 |
+| B98.26 | `APPROACH_SIGMA_K` stays 0: a ruling on the coefficient is owed | row 32; B16.08; PB §7 step 3c, §11 | RETIRED (B16.08 was not built, the menu was ruled not shipped: no coefficient exists, `engine/season/hole_register.yaml` H-580) | EQUAL | Batch B16 |
 | B98.27 | a journey is priced by its route | row 33; B12b.02, B12b.04; CP-T10-01 | BUILD (flip) | MOVER(behaviour) | Batch B12b |
 | B98.28 | a world is made with one tension drawn | row 34; B12b.45, B12b.46; CL-EVENTS (3), (4) | BUILD (flip) | MOVER(behaviour, the build) | Batch B12b |
 | B98.29 | the year's spell is drawn | row 35; B12b.03; `09_WR_B_weather_with_memory_and_the_year` edit 1, gate (4), edit 2 | BUILD (flip) | MOVER(behaviour) | Batch B12b |

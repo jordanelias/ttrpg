@@ -7,10 +7,10 @@ which imports `play`, `read` and `Tally` so the reading of a fight lives once (t
 
 A fight is played at module scale: `wrapper.fight` with the trace seam, arming sword and light armour, lethal terms, the
 skill score the only thing the two sides differ in. The reading of one fight (`read`) is taken off the trace alone:
-  turns            `turn_start` events (a round, A-101; the engine's name for it until PCR-3)
+  turns            `round_start` events (a round, A-101)
   wounds           `wound` events (a blow that took Health)
   rolls / fails    `roll` events / those banded `fail`
-  bloodless        rounds (`turn_start` to `engagement_end`) holding no `wound` event
+  bloodless        rounds (`round_start` to `round_end`) holding no `wound` event
   winner_behind    the LEAD CHANGE: in a decided fight, the fighter the result gives the fight to dealt less cumulative damage than his
                    opponent at some wound (the result is the fight's as it ends, a turned felling and its riposte included: a fight the
                    riposte hands to the one who trailed counts). Chosen as the reading
@@ -102,7 +102,7 @@ def read(result, trace):
     wounds, rolls, fails = [], [], 0
     for e in trace:
         k = e['kind']
-        if k == 'turn_start':
+        if k == 'round_start':
             turns += 1; in_round = True; bloody = False
         elif k == 'wound':
             wounds.append(e); bloody = True
@@ -112,7 +112,7 @@ def read(result, trace):
             first_down = first_down or e['by']   # the blow that would have felled him, turned: the deciding felling all the same
         elif k == 'roll':
             rolls.append(e['aggressor']); fails += e['degree'] == 'fail'
-        elif k == 'engagement_end' and in_round:
+        elif k == 'round_end' and in_round:
             rounds_blooded += bloody; in_round = False
     winner = 'A' if result == 1 else 'B' if result == -1 else None
     behind = first = None

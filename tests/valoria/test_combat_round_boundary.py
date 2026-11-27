@@ -5,7 +5,7 @@ the clean fighting withdrawal) `continue`d into a second approach inside the sam
 closed again with no round boundary. Now each returns, and the reason a round ended is one of `vocabulary.ROUND_ENDS`.
 
   (1) a reach-mismatched fight never re-closes inside a round (red before the returns);
-  (2) every `separation` reason and every `engagement_end`'s `ended_by` is a member of the closed set (red before it existed);
+  (2) every `separation` reason and every `round_end`'s `ended_by` is a member of the closed set (red before it existed);
   (3) at equal reach neither re-opening branch draws, so neither new ending appears (the control).
 
 The reading of a round is `workbench/round_probe.py::rounds_of`, the one owner of it; the same probe prints the table.
@@ -49,7 +49,7 @@ def test_separation_reasons_are_closed():
             for e in P.play(pair, s)[1]:
                 if e['kind'] == 'separation':
                     seen_sep.add(e['reason'])
-                elif e['kind'] == 'engagement_end':
+                elif e['kind'] == 'round_end':
                     seen_end.add(e['ended_by']); rounds += 1
     assert rounds >= 800
     assert seen_sep <= set(V.ROUND_ENDS) and seen_end <= set(V.ROUND_ENDS), (seen_sep, seen_end)
@@ -63,5 +63,5 @@ def test_equal_reach_is_untouched():
         _, tr = P.play(_MIRROR, s)
         assert not any(e['kind'] == 'disengage' for e in tr)
         assert not any(e['kind'] == 'separation' and e['reason'] in ('reopen', 'disengage') for e in tr)
-        checked += sum(e['kind'] == 'engagement_end' for e in tr)
+        checked += sum(e['kind'] == 'round_end' for e in tr)
     assert checked >= 200

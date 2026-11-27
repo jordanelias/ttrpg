@@ -7,8 +7,7 @@ the module entry the prize row names (`module_entry:`, registered in `manifest.M
 composition row) and interprets the `CombatOutcome` that comes back (`queries/inputs.py`) -- the wound state with its
 refusal, the surrender, the decisive beat and the rounds fought -- and returns the scene's trace beside them (PC-06
 M-1). No winner crosses: the integer `wrapper.fight` returns is not lifted (B14.01). The fight itself is
-`modules/combat/fight.py`, reached by string; it, not this module, constructs the `Combatant`s and calls
-`wrapper.fight`.
+`modules/combat/fight.py`, reached by string; it, not this module, constructs the `Combatant`s and runs their rounds (`fight_round` over `wrapper.engagement`).
 
 ⚠ JORDAN, 2026-09-02: *"kill / wound points towards a seam that should be calling in the personal
 combat system."* The seam calls the engine; it does not resolve the subsystem by name and refuse.

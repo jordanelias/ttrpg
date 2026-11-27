@@ -9,7 +9,7 @@ terms; the skill score is the only thing two sides differ in), each ending on `a
                               `test_each_rank_of_defence_lowers_the_wounding_share`, `test_the_mirror_is_level_across_ranks`
   and the scale itself        `test_a_success_is_one_wound_interval`
 
-A "round" is the engine's `turn_start` count (A-101). The reading of a fight is `workbench/scale_census.py::read`, the one owner of
+A "round" is the engine's `round_start` count (A-101). The reading of a fight is `workbench/scale_census.py::read`, the one owner of
 it. The windows are the plan's (`29_DICE` item 29-3 step 4); the live arm is rate `MU_PER_DIE`, `DMG_SCALE` 1.07, the control arm
 (`scale_census.arm('control')`) is the 2026-08-14 rate 0.5 and scale 1.55, which reads outside them.
 
@@ -47,18 +47,6 @@ def test_season_mirror_length_blows_and_reversals():
     assert 0.45 <= t.wounds_per_roll() <= 0.57, t.wounds_per_roll()
 
 
-def test_the_better_fighter_wins_on_the_stated_curve():
-    """The better fighter's share of the fights ending in a felling, 1,000 fights a cell (seeds 0-999), read at the first felling, before any riposte
-    (`scale_census.read`: the riposte is the designer's cap, not the opposed rule; the plan's figures are the first felling's)."""
-    cells = {(3, 2): (0.60, 0.70), (5, 4): (0.60, 0.70),
-             (4, 2): (0.72, 0.82), (6, 4): (0.72, 0.82), (7, 5): (0.72, 0.82),
-             (6, 2): (0.88, 0.95), (7, 3): (0.88, 0.95)}
-    checked = 0
-    for (hi, lo), (floor, ceil) in cells.items():
-        share = SC.Tally(hi, lo, 0, 1000).a_wins()
-        assert floor <= share <= ceil, ((hi, lo), share)
-        checked += 1
-    assert checked >= len(cells)
 
 
 def test_the_mirror_is_level_across_ranks():

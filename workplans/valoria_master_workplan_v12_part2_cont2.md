@@ -122,8 +122,6 @@
 | `S/tests/test_wear_draw.py` | B12a.10 | S13 |
 | `S/tests/test_arrival_report.py` | B12a.16 | S13 |
 | `S/tests/test_endowment.py` | B12a.51 | S13 |
-| `S/tests/test_approach_responses.py` | B16.09 | S13 |
-| `S/tests/test_duel_scene.py` | B16.11 | S13 |
 | `S/tests/test_in30_faction_props.py` | B21b.05 | S13 |
 | `S/tests/test_cp_t09_allegiance.py` | B21b.08 | S13 |
 | `S/tests/test_cp_t09_declare.py` | B21b.11 | S13 |
@@ -301,7 +299,6 @@
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
 | `engine/season/harness/scenarios.py` | B11.05 | a gate command |
-| `engine/season/harness/duel_scene.py` | B16.11 | a gate command |
 | `modules/social_contest/proceeding.py` | B24.06 | a composition row |
 | `modules/social_contest/evidence.py` | B24.19 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `modules/settlements/exposure.py` | B12b.08 | a composition row |
@@ -482,7 +479,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) | ED shifted |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) | same |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
-| B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) | H shifted |
 | B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) | H shifted |
 | B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) | H shifted |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) | H shifted |
@@ -633,7 +629,6 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 |---|---|---|---|---|
 | 1 | B10 | B10.51 | `grep -c '^## Status: PROPOSED' <file>` → 1 | `test -f` + `git diff --stat` (above); the Status arm dropped (R2b noted it, out of its scope) |
 | 2 | B10 | B10.52 | `grep -c '^## Status: PROPOSED' <file>` → 1 | the same |
-| 4 | B16 | B16.10 | `grep -c "SUPERSEDED IN PART" <proposal>` → 1 or more (a POINTER, no commit of its own) | E-6's form, `GATE: none (record only)`: a POINTER executes nothing, so a document count is no gate; or `git log -1 --format=%H -- <proposal>` naming the commit that wrote the banner |
 | 5 | B21c | BATCH GATE | `ls <design file>` → "exists and states (1) to (6) of B21c.06" | keep `ls`; the "states" half to B21c.06's critic (it already carries `git diff --stat`) |
 | 6 | B23 | B23.01 | "the file exists and states (1) to (5)" | `test -f` + `git diff --stat` |
 | 7 | B24 | B24.12 | "the file exists and states (1) to (4), each with a falsifier and a control" | the same |

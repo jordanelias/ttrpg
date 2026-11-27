@@ -23,7 +23,7 @@ GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
-GATE: Batch B16-pc-round
+GATE: Batch B16-pc-round @96f90bbc8
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19a-mb-contact-instrument
 GATE: Batch B29-pc-custody   (added by H2: `H2_DECISIONS.md` HD-09, B19.60's named captives go into custody; no wave moves; `valoria_master_workplan_v12_part2.md` §1)

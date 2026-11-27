@@ -32,6 +32,8 @@ from __future__ import annotations
 import functools
 import random
 
+from engine.dice_engine import draw
+from .test_combat_module import _round_from_key
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.decision import make_chooser
 from engine.season.harness.play_surface import dispatching_chooser
@@ -59,7 +61,7 @@ def _scripted(p, v, s, ask_budget, auto):
 
 def _season(played=None, decider=None, callback=_scripted, shuffle=False):
     """One season on `build_realm(SEED)`. `played` None is AUTOMATED (no host, the plain chooser). `decider` is a
-    factory `(w, record) -> (CombatTurnView) -> str`, so a mutation can close over the world. Returns
+    factory `(w, record) -> (CombatRoundView) -> str`, so a mutation can close over the world. Returns
     `(hash, scene set, mint count, record)`; `record` collects what the decider saw."""
     w = build_realm(SEED)
     d = SeasonDriver(w)
@@ -125,15 +127,15 @@ def _round(played=None, decider=None):
 
 def _engage(w, record):
     def decide(view):
-        record["calls"].append((view.claimants, view.turn, w.draw, record["mints"]))
+        record["calls"].append((view.claimants, view.round, w.draw, record["mints"]))
         return "engage"
     return decide
 
 
 def _withdraw_after_first(w, record):
     def decide(view):
-        record["calls"].append((view.claimants, view.turn, w.draw, record["mints"]))
-        return "engage" if view.turn == 1 else "withdraw"
+        record["calls"].append((view.claimants, view.round, w.draw, record["mints"]))
+        return "engage" if view.round == 1 else "withdraw"
     return decide
 
 
@@ -240,3 +242,81 @@ def test_the_decider_must_answer_from_the_closed_set():
         return lambda view: "flee"
     with pytest.raises(ValueError, match="not one of"):
         _round(played=_played(), decider=bad)
+
+
+def test_twelve_round_calls_equal_one_fight():
+    """B16.01 (PB step 1, PCR-2): `fight` is the loop over `fight_round`. Three hand-built records (the second a longsword against
+    plate; the third unequal ends): the rounds called BY HAND, each handed the
+    `DuelState`s and the measure the last one returned, each on its own key, are the fight in one call -- the same events round for round, the same
+    wounds at the end, and the one uniform the fight takes of its own stream. FALSIFIER: a state the round does not carry (the hand loop then
+    fights another fight), a draw the loop takes that the rounds do not, or a recovery applied where the fight ended."""
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from engine.substrate import composition
+    fight, fight_round = composition.require("combat.fight"), composition.require("combat.round")
+    qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+    cases = ((7, (4, 4), ()), (11, (4, 4), (("longsword", "heavy"), ("arming", "light"))), (3, (3, 5), (("spear", "light"), ("mace", "medium"))))
+    rounds_seen = 0
+    for seed, ends, kits in cases:
+        inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs, kits=kits)
+        key = draw.H2("test_twelve_round_calls", seed)
+        whole_rng = draw.seeded(key)
+        whole = fight(inp, whole_rng)
+        states, prev_closed, hand, out = (DuelState(), DuelState()), False, [], None
+        for r in range(1, 13):
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), _round_from_key(key, r))
+            hand.extend(out.trace)
+            states, prev_closed = out.states, out.closed
+            if out.felled or out.yielded or any(e["kind"] == "fight_result" for e in out.trace):
+                break
+        engine_events = [e for e in whole.trace if e["kind"] not in ("fight_start", "fight_result")]
+        assert [e for e in hand if e["kind"] != "fight_result"] == engine_events, (seed, "the rounds called by hand are not the fight in one call")
+        assert whole_rng.n == 1, (seed, "the fight took more than its one uniform of its own stream: a round draws from its own key (B16.03)", whole_rng.n)
+        for pid in inp.claimants:
+            assert {q: getattr(whole.wounds[pid], q) for q in qs} == out.wounds[pid], (seed, pid)
+        assert whole.rounds == sum(1 for e in hand if e["kind"] == "round_start"), seed
+        rounds_seen += whole.rounds
+    assert rounds_seen >= 6, f"the three fights ran {rounds_seen} rounds between them: the hand loop is not observing a carried state"
+
+
+def test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_the_key():
+    """B16.03 (PB §2, §7 step 2, A-30): round `r` draws from the key `H2(fight_key, "round:<r>")` and nothing else, so it is recomputable from
+    `(fight_key, r)` and the `DuelState`s it is handed. Sixteen fights (three kit sets and three end pairs, as `test_twelve_round_calls_equal_one_fight`'s): the fight in one call
+    is read round by round (each round's input states and trace); then every round is called AGAIN, last round first, on a fresh keyed `Draw` and no
+    other round having been called in that process step, and must return exactly its slice of the fight's trace. FALSIFIER: a round whose draws
+    depend on another round's count (the sequential stream: the fight in one call then differs from the recompute), or a fight that takes a position of its own
+    `Draw` beyond its one uniform (`rng.n` past 1)."""
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import DuelRoundInput, DuelState, PersonalCombatInput
+    from engine.substrate import composition
+    fight, fight_round = composition.require("combat.fight"), composition.require("combat.round")
+    qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+    kit_sets = ((), (("longsword", "heavy"), ("arming", "light")), (("spear", "light"), ("mace", "medium")))
+    cases = [(seed, ((4, 4), (3, 5), (5, 5))[seed % 3], kit_sets[seed % 3]) for seed in range(16)]
+    recomputed = later = 0
+    for seed, ends, kits in cases:
+        inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs, kits=kits)
+        key = draw.H2("test_a_round_from_its_key", seed)
+        whole_rng = draw.seeded(key)
+        whole = fight(inp, whole_rng)
+        assert whole_rng.n == 1, (seed, "the fight took more than its one uniform of its own Draw", whole_rng.n)
+        rounds, trace = [], [e for e in whole.trace if e["kind"] not in ("fight_start", "fight_result")]
+        for e in trace:   # the fight's own trace cut into its rounds
+            if e["kind"] == "round_start":
+                rounds.append([])
+            rounds[-1].append(e)
+        assert len(rounds) == whole.rounds, seed
+        carried, states, prev_closed = [], (DuelState(), DuelState()), False
+        for r in range(1, len(rounds) + 1):   # the states each round was handed: threaded through the rounds' own outcomes
+            carried.append((states, prev_closed))
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), _round_from_key(key, r))
+            states, prev_closed = out.states, out.closed
+        for r in range(len(rounds), 0, -1):   # last round first: no earlier round has been drawn in this pass
+            states, prev_closed = carried[r - 1]
+            out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=r, prev_closed=prev_closed), _round_from_key(key, r))
+            expected = [e for e in rounds[r - 1] if e["kind"] != "fight_result"]
+            assert [e for e in out.trace if e["kind"] != "fight_result"] == expected, (seed, r, "a round called alone is not that round of the fight")
+            recomputed += 1
+            later += r > 1
+    assert recomputed >= 12, f"only {recomputed} rounds were recomputed: the test is not observing a keyed round"
+    assert later >= 8, f"only {later} recomputed rounds were a LATER round: a fight that always ends in its first never shows a round independent of the one before"

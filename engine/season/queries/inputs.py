@@ -43,7 +43,7 @@ v9 IN-07 E4..E6 add `HousingInput`/`Housing`, `FabricInput`/`Fabric` and `FortIn
 `float`), for `settlements.housing`, `settlements.fabric` and `settlements.fortification`.
 v9 IN-52 adds `ProvisionInput` in, `Provision` out, for `settlements.provision` (the levy-to-field feed).
 v10 REM-31 (IN-46) adds, beside `PersonalCombatInput`, the PLAYABLE fight's pair: `PlayHost` (the host's one
-optional argument) and `CombatTurnView` (what its per-turn decider reads, handed outward by the module entry).
+optional argument) and `CombatRoundView` (what its per-round decider reads, handed outward by the module entry).
 """
 from __future__ import annotations
 
@@ -776,6 +776,63 @@ class PersonalCombatInput:
 
 
 @dataclass(frozen=True)
+class DuelState:
+    """WHAT ONE PARTY CARRIES FROM ROUND TO ROUND, in the FRAME of the loop that calls `modules/combat/fight.py::fight_round`
+    (the duel's `fight`, a skirmish's or a field's own loop), for one provider call: no adapter, module attribute or `World` field
+    holds it, and it is outside `World.content_hash()`. The carried set is damage,
+    stamina, concentration and poise; `form` is carried too but READ BY NO ROUND yet: `engagement` re-takes the weapon's base form at its start (B14.13), so
+    `form` is the carrier a later weapon switch will read (initiative, grip, lunge, facing and the selected mode are re-taken at the round's open measure).
+      * `cumulative_damage` -- the party's damage so far this fight;
+      * `stamina`, `conc`   -- live Stamina and Concentration; `None` is the start of a fight (the module derives the maximum);
+      * `poise`             -- balance, `1.0` whole;
+      * `form`              -- the weapon record in hand when the last round ended; `None` is the kit's own (inert until a weapon switch reads it)."""
+    cumulative_damage: int = 0
+    stamina: Optional[float] = None
+    conc: Optional[float] = None
+    poise: float = 1.0
+    form: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class DuelRoundInput:
+    """WHAT ONE ROUND READS (`fight_round`). Every number the roll takes is carried once, on `fighters`.
+      * `fighters`    -- who they are: a `PersonalCombatInput` (ends, attributes, kits, terms, and the roll's numbers raw:
+                         `scores`, `addends`, `pool_add`, `pool_floor`, `opposition_rate`);
+      * `states`      -- `(DuelState, DuelState)`, in `fighters.claimants` order;
+      * `plans`       -- per party `{phase: approach}`; a missing phase is `normal`;
+      * `round`       -- 1-based;
+      * `prev_closed` -- the measure the last round ended in."""
+    fighters: PersonalCombatInput
+    states: tuple
+    plans: tuple
+    round: int
+    prev_closed: bool = False
+
+
+@dataclass(frozen=True)
+class DuelRoundOutcome:
+    """WHAT ONE ROUND RETURNS: how it ended, never who won (A-3: an ending, not a winner; the host reads the rest).
+      * `states`   -- each party's `DuelState` as the round left it (the between-round recovery applied where the fight goes on);
+      * `wounds`   -- `{id: {quantity: value}}` over `fighters.wound_quantities`, a fresh copy per party;
+      * `felled`   -- the id of the party the round felled, or `None`;
+      * `yielded`  -- the id of the party whose yield roll failed, or `None`;
+      * `closed`   -- the measure the round ended in (the next round's `prev_closed`);
+      * `trace`    -- this round's events;
+      * `ended_by` -- a member of `modules/combat/vocabulary.py::ROUND_ENDS`: `engagement`'s own third element;
+      * `exchanges`-- the round's `outcome` events;
+      * `attempts` -- `{claimant id: attack attempts}`: the round's `roll`, `stophit` and pursued `disengage` events by striker."""
+    states: tuple
+    wounds: Mapping
+    felled: Optional[str]
+    yielded: Optional[str]
+    closed: bool
+    trace: tuple
+    ended_by: str
+    exchanges: int
+    attempts: Mapping
+
+
+@dataclass(frozen=True)
 class MortalResult:
     """ONE FELLED PARTY'S MORTAL-WOUND DRAW (B15.07, PHY_A A3), returned on `CombatOutcome.mortal` by the module
     (`modules/combat/fight.py::mortal_wound`) and MAPPED by the host onto that party's `felled` and `wounds`
@@ -803,7 +860,7 @@ class PartyWounds:
 @dataclass(frozen=True)
 class Surrender:
     """The scene's `yield` event, lifted off its trace by the module entry (B14.01). `round` is the round at whose
-    start or end the yield came (A-101; the engine's trace event still names it `turn`)."""
+    start or end the yield came (A-101; the engine's `yield` trace event names it `round`)."""
     by: str
     round: int
     accepted: Optional[bool]   # `None`: the scene ended with the yielder standing under `death` terms, the victor's choice the host's (B15.10)
@@ -816,7 +873,7 @@ class DecisiveBeat:
       * `victim` -- the felled party's id;
       * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze | finalblow_riposte (a counter that fells, B15.09);
       * `weapon` -- the striker's weapon key as the fight opened (the `fight_start` event; the `wound` event carries none);
-      * `round`  -- the round it landed in (A-101; the count of `turn_start` events up to it)."""
+      * `round`  -- the round it landed in (A-101; the count of `round_start` events up to it)."""
     by: str
     victim: str
     source: str
@@ -827,9 +884,9 @@ class DecisiveBeat:
 @dataclass(frozen=True)
 class SceneShape:
     """WHAT THE SCENE'S TRACE SAYS OF ITS COURSE, folded by the module entry from the trace it already holds (B14.15; a pure
-    fold over `wound`, `turn_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
+    fold over `wound`, `round_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
     act's Events (`loop/effects_combat.py::_eff_kill`); nothing is kept between scenes.
-      * `rounds`      -- rounds fought: the `turn_start` count (A-101; `CombatOutcome.rounds`);
+      * `rounds`      -- rounds fought: the `round_start` count (A-101; `CombatOutcome.rounds`);
       * `blows`       -- wounding blows LANDED, by claimant id (a `wound` event is emitted only for a blow that took Health);
       * `first_blood` -- who landed the first wounding blow, `None` where none landed;
       * `lead_changes`-- times the party ahead on Health fraction changed (a tie is no lead and no change);
@@ -858,7 +915,7 @@ class CombatOutcome:
                        refuses it by name);
       * `surrender` -- the scene's `yield` event the engine did not refuse, or `None` (a refused declaration is not a surrender);
       * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
-      * `rounds`    -- rounds fought (A-101; the `turn_start` count);
+      * `rounds`    -- rounds fought (A-101; the `round_start` count);
       * `shape`     -- the scene's course, folded from its trace (B14.15);
       * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it;
       * `mortal`    -- `{party id: MortalResult}` for each party the scene felled, where the record carried the draw's operands
@@ -875,18 +932,18 @@ class CombatOutcome:
 
 
 @dataclass(frozen=True)
-class CombatTurnView:
-    """What a PLAYABLE fight's per-turn decider reads, and nothing else (v10 REM-31, IN-46).
+class CombatRoundView:
+    """What a PLAYABLE fight's per-round decider reads, and nothing else (v10 REM-31, IN-46).
 
-    Built by the `combat` module entry (`modules/combat/fight.py::fight`) at the top of each turn, before
-    any draw of that turn, and handed OUTWARD to the host's decider -- the one record that crosses the
+    Built by the `combat` module entry (`modules/combat/fight.py::fight`) at the top of each round, before
+    any draw of that round, and handed OUTWARD to the host's decider -- the one record that crosses the
     module boundary in that direction. It names the quantities the input record already names and the
-    turn index, never a `Combatant` (the design's `## Re-read at B-L`, [ASSUMPTION]):
-      * `turn`        -- the 1-based turn about to be fought;
+    round index, never a `Combatant` (the design's `## Re-read at B-L`, [ASSUMPTION]):
+      * `round`       -- the 1-based round about to be fought;
       * `claimants`   -- `PersonalCombatInput.claimants`, `(A, B)`;
       * `wound_state` -- `{id: {quantity: value}}` over `PersonalCombatInput.wound_quantities`, a fresh copy
                          per call, so a decider that mutates it moves nothing in the engine."""
-    turn: int
+    round: int
     claimants: tuple
     wound_state: Mapping
 
@@ -899,8 +956,8 @@ class PlayHost:
       * `persons` -- the ids the host plays. The mode is a PARTY TEST at the provider
                      (`seam/wrappers/combat.py::resolve`): a fight either of whose claimants is in this
                      set is PLAYABLE; every other fight, and every fight with no host, is AUTOMATED;
-      * `decide`  -- `(CombatTurnView) -> str`, one member of the engine's closed per-turn set
-                     (`modules/combat/wrapper.py::TURN_CHOICES`). It is written to draw nothing, write nothing and
+      * `decide`  -- `(CombatRoundView) -> str`, one member of the engine's closed per-round set
+                     (`modules/combat/wrapper.py::ROUND_CHOICES`). It is written to draw nothing, write nothing and
                      hold no token (CONVENTION; `test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended` checks the shipped deciders): it is called inside the provider's frame, with the driver below it on
                      the stack (a call-out, not a return), and its return is the only resume.
       * `deciders` -- B24.05, `module role -> decide(view) -> choice` (`social_contest.proceeding`, ...): the role-keyed form `decide` is
