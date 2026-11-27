@@ -1487,8 +1487,8 @@ def _eff_declare(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 #: The two kinds `conspire` earns, each by the subject that makes it (`Subject(earns=)`): the plot laid (the first act) and a man joined to it. The row declares both on every
 #: band that writes; spelt here once and refused at import if the row stops declaring either (the row's `Failure` kind, `plot.refused`, is no effect's).
 PLOT_LAID, PLOT_JOINED = "plot.laid", "plot.joined"
-if not {PLOT_LAID, PLOT_JOINED} <= set(VERB_TABLE["conspire"].emits_at("Success")):
-    raise Forbidden(f"`conspire`'s Won band does not declare {PLOT_LAID!r} and {PLOT_JOINED!r}", "verb_table.yaml",
+if not any({PLOT_LAID, PLOT_JOINED} <= set(kinds) for kinds in VERB_TABLE["conspire"].emits_by_degree.values()):
+    raise Forbidden(f"no band of `conspire` declares both {PLOT_LAID!r} and {PLOT_JOINED!r}", "verb_table.yaml",
                     needs="the row's Won-band `emits:` to name the two kinds `_eff_conspire` earns", law="B21b.18 -- an effect earns only kinds its row declares")
 
 
