@@ -1,6 +1,6 @@
 # IN-48: the delegation carrier (a seat exercised by someone who does not hold it)
 
-## Status: PROPOSED (2026-10-14) · HELD: built at `40926a95` and REVERTED because it contradicts ratified Layer 1 (§9) · reference under `CLAUDE.md` §0.05
+## Status: PROPOSED (2026-10-14) · §1 to §8 stay HELD: built at `40926a95` and REVERTED because they contradict ratified Layer 1 (§9) · §10 (B21b.24, 2026-11-27) is the design on Layer 1's route that B21b.25 builds · all of it reference under `CLAUDE.md` §0.05
 ## Position: IN-48 (H-108's delegation half), `workplans/valoria_master_workplan_v9_part5.md` `### IN-48` · Lane: IN (FA SE) · IDs: none allocated
 ## Measured at HEAD `46c08d9c` (B-J boundary 1; IN-40 landed `3f320093`). A path with no top-level directory is under `engine/season/`.
 ## Revised 2026-10-14 for an independent critic's findings. The orchestrator took the decisions marked ORCH (ladder step 5), each [ASSUMPTION; medium; Jordan to correct], with its revert named where it is applied.
@@ -534,3 +534,345 @@ put to Jordan, as one `needs_jordan` row with both options, and `architecture/` 
    (`11989dcf5e1c25afab556bf3f234a200`, `0f8e0144220a3665d3286a9a54c39f3e`).
 9. H-108 would have been graded `assumption`, not `measured` (four medium residues), and its "puppet rulers"
    unblock was not met (no outside seat installs a regent).
+
+---
+
+## 10. The design on Layer 1's route (B21b.24, 2026-11-27)
+
+**Reference, not mechanism (`CLAUDE.md` §0.05).** This section resolves nothing at runtime. The mechanism is B21b.25's code
+and its tests (`engine/season/tests/test_in48_delegation.py`); where this text and that code disagree, the code is read and
+this text is wrong. It replaces nothing in §1 to §8, which stay held. Read at `43af80cdb` (B21b.23 on top). Line numbers
+are this tree's, not v11's. A path with no top-level directory is under `engine/season/`.
+
+**The design in one sentence.** A delegation is a second SEAT, held by an ordinary `hold`. It is founded or authored and
+conferred, with IN-10's term where the conferring act or the seat's row declares one. It ends by that term, by the regent's
+own `release`, or by a `revoke` under one new `revocation_bases` value. That value licenses ANY other seat on the regent seat's
+rung, of its faction, whose grant carries `revoke`: the principal's seat is one of these and need not be the only one ((3)).
+No tenure kind is added, no carrier field is added and no gate basis is added. "Puppet rulers" is NOT met on this route:
+it is a named limit ((3), (8)).
+
+(1) **The route.** IN-48's entry, copied: *"the design, on Layer 1's route (`establish` a second seat over the domain, `confer` it, IN-10's `Tenure.term`) — MEASURE whether a principal can revoke a same-rung seat early. READ, not yet run: creating a regent works on today's code (`may_fill`, `gate.py` ~575-579; `_eff_confer` closes holds only on the seat conferred) but ending one early does not — both `REVOCATION_RULES` need the revoking seat on the PARENT rung (`gate.py` ~422-428, ~512-513), the top rung's seat is strippable by nobody, so a realm regency ends by `Tenure.term` or the regent's own `release`; an early dismissal would be a new `revocation` basis (data in Layer 1's shape); a revoked `appointed` regent would carry IN-31's ban (`d16bd895`). That design may rewrite this entry's EXIT (whose premise, a person holding no `hold`, is non-Layer-1). A new `tenure_kinds` member is NOT licensed (Jordan's)."*
+
+- **At this tree.**
+  - `may_fill` is `state/gate.py:867-891`. Its `via == off.id` refusal is `:887`.
+  - `REVOCATION_RULES` is `:604-605`. Both rules share `seated_on_the_rung_above_structure` (`:523-536`).
+  - `may_revoke` is `:852-864`.
+  - `_eff_confer` closes only the holds on the office it names (`loop/effects_governance.py:127`).
+  - `architecture/meta/04_CODE_ARCHITECTURE.md:354` reads *"delegation = `establish` → `confer` → `revoke`"*, and
+    `01_AXIOMS.md` §E.2.5 gives the three shapes of delegation.
+- **The route has two shapes, and the measurement (2) separates them.**
+  - **(a) A governor over a holding** (§E.2.5: *"assign others of lesser rank to govern any of their holdings"*). This seat
+    is on a rung BELOW the principal's seat.
+    - `establish`'s computed founding admits it: `queries/world_q.py::founds_over`, `:4612`, with four conjuncts (holding,
+      purview, lower kind, the seat on the parent).
+    - The founded seat declares `revocation: rung_above_in_holdings` (`offices.yaml: founding:`, `:169-174`).
+    - So the principal, who sits on the parent rung and holds the rung, may revoke it at any time. **This shape runs
+      today, end to end** (measured, (2)). B21b.25 adds nothing to it except a test.
+  - **(b) A regency over the principal's own rung** (§E.2.2: *"a seat conferred over the domain while the title stays
+    put"*). This seat is on the SAME rung as the principal's seat.
+    - `establish` cannot found it. `founds_over`'s conjuncts (iii) and (iv) refuse the principal's own rung (measured
+      False). So this seat is an AUTHORED row, as `off_widow_regent` (`offices.yaml:235-247`, realm rung, `appointed`) already is.
+    - `confer` fills it: `may_fill` admits it, because purview is reflexive on the rung and `via` is not the office.
+    - IN-10's term (`_declared_term`, `loop/effects_governance.py:63-83`) bounds it ONLY where something declares one: a
+      HAND-BUILT `confer`'s `term` payload key, or the seat's own `offices.yaml` row `term:` (`:72-76`). A computed
+      `confer` carries no term (`loop/predicates.py:232-236`), and a seat placed in a test has no row. **So in computed play,
+      a regency on a seat with no authored `term:` is for life**, ended only by `release`, a death, or (3). This limit
+      goes into H-108's cite (E5).
+    - Ending it early needs (3).
+- **What is not used.** No `delegate` kind, no `office == via` branch, no dormancy rule and no `SEAT_KINDS`: none of §2's
+  apparatus is used.
+
+- **Falsifier.** A regent's act admitted through a seat on which he holds no live `hold` (B21b.25,
+  `test_a_seat_is_exercised_only_by_its_holder`).
+- **Control.** The principal's act through his own seat is admitted, both while the regency stands and after it ends.
+
+(2) **The measurement.** A throwaway script was run once and not kept.
+
+- **Setup.**
+  - The world is `tests/test_g3_not_yours.py::_gov_world`: R ⊃ D ⊃ S ⊃ Hh. `p_king` holds `off_crown` at R, on the top
+    rung, with revocation `rung_above_same_faction`.
+  - One seat was added: `off_regent` at R, of `off_crown`'s faction, `appointed`, remit `[issue, dispatch, revoke]`.
+  - `p_king` conferred `off_regent` on `p_mid` with `term: 4`, through the shipped `_fold` at Success. Its revocation was
+    read three ways.
+- **Readings.** Command: `PYTHONHASHSEED=0 python <script>`.
+
+| reading | result |
+|---|---|
+| `may_fill(p_king, off_crown, off_regent)` (control: the confer is lawful) | **True** |
+| the fold's `confer` | `['tenure.opened']`; the regent's hold carries `Term(matures_at=4)`; the principal's hold is the same object and still live |
+| **`may_revoke(p_king, off_crown, off_regent)`**, with revocation `rung_above_same_faction` / `rung_above_in_holdings` / `None` | **False / False / False** |
+| the same, `rung_above_in_holdings`, with `p_king` also HOLDING R (`in_holdings` True) | **False**: R has no parent |
+| the fold's `revoke` through `off_crown` | `['revoke.unauthorized']`; the regent's hold is still live |
+| `may_revoke(p_mid, off_regent, off_crown)`: can the regent strip the principal? | False |
+| CONTROL, the governor shape: `off_gov` at D, conferred on `p_mid`; `may_revoke(p_king, off_crown, off_gov)` under `rung_above_in_holdings` (the king holding D) / `rung_above_same_faction` | **True / True**; the fold's revoke gives `['tenure.closed']`, the hold is closed, and IN-31's `ban : p_mid → off_crown` is opened |
+| `founds_over(p_king, off_crown, R)` / `(…, D)` with the king holding D | False / True |
+| the term: confer with `term: 1`, then MATTER at tick 1 | the regent's hold is closed (T-n); `_seat_grants(p_mid, off_regent, issue)` is False; the principal's hold is live |
+
+- **Verdict.** The principal cannot revoke a same-rung seat today, as the READ said. Neither rostered rule can admit it,
+  because both read the parent rung. A realm regency therefore ends only by its term or by the regent's `release`.
+  Shape (a) needs nothing. Shape (b) needs (3).
+- **Falsifier.** Any of the three same-rung readings coming back True would have shown (3) unneeded.
+- **Control.** The governor seat in the same world reads True through the same `may_revoke`. So the instrument can observe
+  an admission.
+- **Kept as a test.** B21b.25 keeps this reading as `test_a_principal_cannot_revoke_a_same_rung_seat_on_the_shipped_bases`,
+  green before its roster edit, with the governor arm as its control.
+
+(3) **The early dismissal: one `revocation_bases` value and its rule.**
+
+- **The value.** `rosters.yaml: revocation_bases.values` gains `same_rung_same_faction`. It is named as the sibling of
+  `rung_above_same_faction`.
+- **The rule.** `state/gate.py` gains `seated_on_the_same_rung(w, seat, off)` beside `seated_on_the_rung_above`. It is true
+  when `seat.rung` is not `None`, `seat.rung == off.rung`, `seat.faction == off.faction`, and `seat.id != off.id`.
+  `REVOCATION_RULES` maps the new value to it.
+  - It is structural, as ruling (3) is: no purview walk (the reading `seated_on_the_rung_above` rejects, `:516-517`), no
+    holdings and no rank.
+  - The faction clause is kept.
+  - `seat.id != off.id` makes it exclusive on the seat, as `may_fill` is (`:887`). A holder stripping his own seat is
+    `release` (T-m), not this.
+  - The import check at `:609-616` refuses the roster value without its rule, and the rule without its value.
+- **Who may strip a seat declaring it: its RUNG-SIBLINGS, not "the principal".** The holder of ANY other seat on the same
+  rung, of the same faction (`may_revoke` asks that he sits in it), whose grant carries `revoke` (`revoke`'s `remit:revoke`
+  eligibility, `loop/resolve.py:326`, not the rule's business). The principal's seat is one such sibling.
+  - On the realm rung the siblings are `off_king`, `off_widow_regent`, `off_heir` and `off_princess` (`offices.yaml:182-273`).
+    Only `off_king` grants `revoke` today. `off_widow_regent`'s own revert note (`:240`) would restore a grant carrying it,
+    which would make the consort a second dismisser.
+  - Two regent seats on one rung, both declaring the value and both granting `revoke`, can each strip the other's holder,
+    and an `appointed` one bans the man it strips.
+  - **This is fragile as a content rule.** Who may dismiss a regent is decided by what the OTHER seats on that rung grant,
+    not by who conferred him. `Tenure.conferrer` was deleted as an ID-2 second home (§1), so no lighter rule can name the
+    conferring seat. B21b.25's tests pin the sibling reach (a second same-rung seat granting `revoke` also admits), so it
+    is visible, not hidden.
+- **Necessity, stated narrowly.** Without the rule, a principal cannot unseat and refill an AUTHORED same-rung seat before
+  its term ends. That is true only in authored content, and no such content exists today: no `offices.yaml` row declares
+  the value, `founds_over` refuses the principal's own rung, and a computed founding writes `rung_above_in_holdings`.
+  What survives without the rule:
+  - "revoke at majority" (01_AXIOMS §E.2.2) is IN-10's term, where one is declared ((1));
+  - "stop a bad regent now" partly survives: `arrest` (eligible on `remit:dispatch`, `verb_table.yaml:153`, through a
+    seat whose warrant reaches him) opens a `detain`, and custody suspends every act through every seat he holds
+    (`state/gate.py:344-358`). It does not vacate the seat or let it be refilled.
+- **Basis.**
+  - `04_CODE_ARCHITECTURE.md` §B.7 call 1: *"the revocation rule is data … two values of `revocation.conjuncts`"*.
+  - **The shipped precedent is Jordan's own second value**, `rung_above_in_holdings` (2026-10-12). `REVOCATION_RULES` holds
+    exactly those two entries (`state/gate.py:604-605`), and `revocation_bases` is `open: false` (`rosters.yaml:3851`): a
+    third value arrives with its rule, as the import check requires.
+  - `holder_of_rung` (`U5d_FA_land_and_seats_pass_on_a_won_march.md` edit 1, C3-L7) is UNBUILT. It is scheduled in B23
+    (`workplans/valoria_master_workplan_v12_part37.md:121`). It is the same shape, data plus one rule, but not yet a
+    precedent in code.
+  - **Overlap to read across batches.** B21b.25 and B23 would add two new revocation values, for one question (who may
+    strip a seat), in consecutive batches. Each batch's author reads the other's value before landing: the two rules must
+    not admit the same seat for different reasons, and the roster note must list both.
+- **Reach: only a seat that declares the value.**
+  - No shipped row is edited. `off_king` stays `null`. `off_widow_regent` stays `null`: it is the consort's royal-house
+    title, and giving it this value would let the king (and any sibling granted `revoke`) strip the queen and ban her, an
+    outcome outside this position.
+  - [ASSUMPTION; medium; Jordan to correct; revert: author a regent row in `offices.yaml` declaring the value — a content
+    and build-hash mover, (7).]
+  - **Symmetric, measured.** The rule applied by hand admits the regent's seat over the principal's seat just as it admits
+    the reverse. The principal is safe only because his seat declares `null`. A principal's seat that declared this value
+    would be strippable by his regent.
+- **What the one rule unlocks, with no further code.**
+  - Early dismissal (`revoke`).
+  - Replacing a regent: `_req_confer`'s displacement asks `may_revoke` (`loop/predicates.py:201-204`).
+  - Reducing a regent's grant: `revoke` with `keeps`, which is T-o (`state/gate.py:1612-1614`).
+  - A-22's class (ii): the principal's seat then commands its regent, which it does not today (measured, (4)).
+- **What dismissal costs.**
+  - IN-31: an early dismissal of an `appointed` regent opens `ban : him → Act.via`, objected on the dismissing seat
+    (`REVOCATION_DISPOSAL`, `state/gate.py:640`, Jordan B-Q). The ban is keyed on the seat's conferral basis, not on the
+    revocation value. It is ruled and applied, not designed around.
+  - **It lasts until pardoned through the dismissing seat. It is not permanent.** `_eff_pardon` closes every live
+    restraint of the subject whose object is `Act.via` (`loop/effects_governance.py:427-454`), by a holder that seat's
+    bench admits (`may_determine`; the `pardon` row's note names *"a revocation's `ban` (object: the revoking seat,
+    IN-31)"*, `verb_table.yaml:1556`).
+  - **Its reach is realm-wide from a realm seat.** `restrained(..., at=)` bars every seat whose rung the banning seat's
+    purview reaches (`queries/world_q.py:2163-2177`).
+  - **Three ways avoid it.** A term's end is T-n and no revocation, so it bans nobody. A displacing `confer` bans nobody,
+    because `_eff_confer` reads no disposal (`state/gate.py:629-630`). A Partial-band revoke unseats him without the ban
+    (`_eff_revoke`, `loop/effects_governance.py:395-398`, B21.14).
+  - **Stale text inherited.** "no effect closes one, so only his death ends it" (`state/gate.py:627-628`;
+    `loop/effects_governance.py:364`; `revoke`'s `disposal_note`, `verb_table.yaml:1841`) is false at the code: `_eff_pardon`
+    closes it. B21b.25 corrects that factual clause (E3). It leaves Jordan's quoted word "PERMANENT" standing as his text
+    and records that the code admits a pardon.
+- **The puppet ruler is NOT met (a LIMIT).** Layer 1 defines the puppet as the title-holder whose seat's remit *"has been
+  conferred elsewhere"* (`01_AXIOMS.md:1467`). On this route the title seat never loses its remit:
+  - narrowing a sitting holder's grant is T-o and asks `may_revoke` (`state/gate.py:1612-1614`);
+  - `off_king` declares `revocation: null` (`offices.yaml:190`), and `may_revoke` refuses a seat whose basis is off the
+    roster (`state/gate.py:862-863`);
+  - `_req_establish` refuses a re-stamp that reduces a sitting holder's grant (`loop/predicates.py:466-469`).
+  So a regent seat declaring `null` beside a king who keeps his full grant gives two rulers, not a puppet. No path in the
+  tree empties the title seat's grant without the holder's own consent (`release`, which vacates rather than hollows).
+  "Puppet rulers" therefore stays OPEN in H-108's cite (E5), and is not claimed met here.
+- **Falsifier.** With the value declared, the principal's `revoke` is admitted and closes only the regent's hold.
+  - The rule refuses a seat on another rung (a child seat read from R; measured False by hand).
+  - It refuses a same-rung seat of another faction.
+  - It refuses the seat itself.
+  - The regent cannot strip a principal's seat that declares `null`.
+  - A second same-rung, same-faction seat whose grant carries `revoke` ALSO strips the regent (the sibling reach, pinned
+    so it is visible); the same seat without `revoke` in its grant is refused at eligibility.
+- **Control.** The same world with the regent seat declaring `null` is refused, which is (2)'s reading.
+
+(4) **Whom the regent commands (A-22), and custody (A-23).**
+
+- **A-22.** `world_q.commands` (`queries/world_q.py:3326`) composes on `state/gate.py::commands_a_seated` (`:1127`). All of
+  it is asked of the SEAT `via` names, so the regent commands what his seat commands.
+- **Measured** in the (2) world (regent seat `rung_above_same_faction`), principal's seat against regent's seat:
+
+| person | through `off_crown` | through `off_regent` | why |
+|---|---|---|---|
+| `p_high` (holds `off_duke` at D, `rung_above_same_faction`) | True | True | class (ii): structural, the same for two seats on one rung of one faction |
+| `p_other` (holds `off_duke2` at D2) | True | True | class (ii) |
+| `p_low` (unseated, lives at Hh) | True | True | class (iii): the same ground |
+| `p_far` (unseated, lives in a second realm), sworn to `off_crown` | True | **False** | class (i): each seat's establishment is its own |
+| `p_far`, also sworn to `off_regent` | | True | class (i) |
+| holder of a `rung_above_in_holdings` seat at D, the KING holding D: `may_revoke` | True | **False** | holdings are the person's (§E.2.3: *"Holdings GATE the act; they are not the authority"*) |
+| the regent himself, from `off_crown` | **False** (today) | | class (ii) needs (3) |
+
+- **Consequences, accepted as the ruled meaning, with no edit.**
+  - Men sworn to the principal (the vassals, CR-86) serve the principal's seat, not the regency, until they swear to it.
+  - A regent cannot strip a seat that declares `rung_above_in_holdings`, because the holdings stay with the principal.
+- **A-23.**
+  - A detained regent acts through no seat. Measured: `_seat_grants(p_mid, off_regent, issue)` is False, and the hold stays
+    live (custody suspends, it does not vacate).
+  - The person side agrees: `decision/options.py::seat_of`, `:884`.
+  - A detained principal is the same, so the regency governs on while the principal is held, and the principal cannot
+    dismiss the regent from custody, because `revoke`'s eligibility goes through `_seat_grants`.
+  - No edit.
+- **Falsifier.** The regent's seat commanding a man sworn only to the principal's seat.
+  - The detained regent's act through his seat admitted.
+- **Control.** The same man commanded once he is sworn to the regent's seat. The regent's act admitted once the `detain`
+  is closed.
+
+(5) **§9's Phase 1 findings on this route.**
+
+| # | does it apply? | what the design does |
+|---|---|---|
+| 1 | **Changes shape.** The regent exercises HIS OWN seat, so `rung_above_in_holdings` reads his holdings, which are none. `founds_over` (i) does the same, so a regent founds no seat over the principal's holdings. | No fix. The measured refusal is the ruled reading ((4)); it is a residue in H-108's cite. |
+| 2 | **Dissolved.** No delegate edge exists. A superior's displacing `confer` on the principal's seat leaves the regent's seat untouched. The successor may dismiss the regent through his seat under (3), because the rule is about seats, not persons. | None. |
+| 3 | **Applies.** A seat granting `confer` but not `revoke` can fill a regent seat and cannot dismiss it. Every shipped seat that grants `confer` also grants `revoke` (`offices.yaml`: `off_king`, the three duchy heads, `off_confessor`). | A residue, unchanged. |
+| 4 | **Dissolved.** The regent's grant is his `hold`'s, stamped at `confer` by `World._grant_remit`. `establish` re-stamps every live `hold` on the seat (`_eff_establish`, `:274-282`). Narrowing the grant is `revoke` with `keeps` under (3). | None. |
+| 5 | **Dissolved.** No dormancy rule. `reach`, `governors_of` and every other `hold` reader see the regent as a holder. | None. |
+| 6 | **Re-scoped.** The "hold preferred" and `delegate != actor` gaps die with the kind. Still owed: the EXIT judged by `harness/corpus_run.py::attribute` (refusal kinds include `<verb>.unauthorized`, read in (2)) with a same-world control. | B21b.25's tests, (6). |
+| 7 | **Partly applies.** `state/gate.py::seat_hold`'s docstring (`:328-333`: *"A `hold` AND NOTHING ELSE SEATS A PERSON TODAY … delegation without a `hold` is `H-108`'s"*) is stale on this route, and cites `04:332` for what is now `04:353`. The other stale texts §9 lists belong to the reverted build. | B21b.25 rewrites that docstring: a regent is the holder of a second seat. |
+| 8 | **Dissolved.** No `office == via` branch, so no DECLINE and no entry instrument are needed. | Covered by (7)'s hash control. |
+| 9 | **Still applies for the puppet; changes answer for the outside installer.** "Puppet rulers" is NOT met: the title seat keeps its full grant ((3), the LIMIT). What IS measured: an OUTSIDE seat can fill a governor seat in a sworn duke's ground through `may_fill`. In the (2) world, `may_fill(p_other, off_duke2, off_dgov at D)` is False, then True once the Duke of D swears to `off_duke2` (the oblige clause); the fold's `confer` gives `['tenure.opened']` and the Duke keeps his seat. That is a governor installed from outside, not a puppet: the installer has no lever over the man installed (the seat declares `null`), and the Duke keeps his grant. | B21b.25 keeps the installer reading as a test. The puppet is named open in H-108's cite (E5). |
+
+- **Falsifier.** A dissolved row reappearing in B21b.25: a dormancy read, an `office == via` branch, or a `SEAT_KINDS` set.
+- **Control.** The rows that apply (1, 3, 6, 7, 9) are each named by a test or by H-108's cite.
+
+(6) **The EXIT and FALSIFIER, rewritten.**
+
+IN-48's EXIT is *"in a seeded season a person holding no `hold` on a seat exercises it `via` that seat through the delegation
+carrier while the principal keeps the hold, and when the carrier ends the same act refuses"*. It becomes the following.
+
+- **EXIT.** In a seeded season, a regent exercises the conferred seat `via` that seat while the principal keeps his own:
+  - The season is `build_realm(0)`, one season, plus a same-rung regent seat declaring `same_rung_same_faction`, placed at
+    build in the TEST, and the principal's HAND-BUILT `confer` of it with a `term` payload. The term is the hand-built
+    act's: a computed `confer` carries none, and the test-placed seat has no row, so the term arm observes IN-10 only for
+    a hand-built act ((1)). A computed regency on a seat with no authored `term:` is for life, and the EXIT does not claim
+    otherwise.
+  - "Exercises" means his act executes, judged by `harness/corpus_run.py::attribute` against a same-world control in which
+    nobody holds the regent seat.
+  - "Keeps" means the principal's hold is live and is the same object.
+  - When the regency ends, the same act through it refuses. Three arms: the term at MATTER (T-n), the principal's `revoke`
+    (T-o under (3)), and the regent's `release` (T-m).
+- **FALSIFIER, kept from H-108.** *"delegate's act admitted after delegation ended, or a seat exercised by a person with
+  neither hold nor carrier → fail; principal's hold closed by a delegation → regency by term (IN-10), not this."* On this
+  route the carrier IS the second seat's `hold`, so "neither hold nor carrier" reads "no live `hold` on the seat exercised".
+- **B21b.25's named tests**, each red before its edit where an edit exists:
+  - `test_a_principal_cannot_revoke_a_same_rung_seat_on_the_shipped_bases` ((2); green before).
+  - `test_a_principal_dismisses_his_regent_early` ((3)).
+  - `test_the_regent_acts_via_his_seat_and_refuses_after_term_dismissal_and_release`.
+  - `test_a_seat_is_exercised_only_by_its_holder`.
+  - `test_conferring_a_regency_leaves_the_principals_hold`.
+  - `test_the_regent_cannot_strip_a_principal_seat_declaring_null`.
+  - `test_a_regent_seat_declaring_null_is_dismissed_by_nobody`.
+  - `test_a_rung_sibling_granting_revoke_also_dismisses_the_regent` ((3), the sibling reach).
+  - `test_an_outside_seat_installs_a_governor_through_a_sworn_holder`.
+  - `test_the_regent_commands_what_his_seat_commands` ((4)).
+  - `test_a_governor_over_a_holding_is_founded_conferred_and_revoked` (shape (a)).
+  - `test_in48_exit_seeded_season`.
+  - [ASSUMPTION: the names.]
+- **Falsifier.** The EXIT test passes with the regent seat removed, which would mean the act was admitted on another
+  ground.
+- **Control.** That same-world run, which `attribute` must read as not executed `via` the seat.
+
+(7) **Hash.**
+
+- **No carrier field.** `state/carriers.py` is not edited (no `Tenure` or `Office` field), so there is no encoding mover
+  under D-04.
+- **The change is data and a rule:** one roster value and one `REVOCATION_RULES` entry.
+  - No shipped seat declares the value ((3)), so no seeded run reaches it. The build hash and the one-season hash at seeds
+    0 to 2 equal B21b.23's. That is B21b.25's control.
+  - `engine/engine_params/season_registries.json` exports the roster: today it carries `rung_above_in_holdings` 6 times.
+    So it is re-derived with `tools/export_season_registries.py` and checked with `--check`. That is a params export, not
+    the content hash.
+- **B21b.25's HASH MOVERS: none.** This holds unless the orchestrator takes (3)'s revert, a shipped regent row, which is a
+  behaviour mover and a build-hash mover (`w.offices` is hashed).
+- **Falsifier.** Any realm hash at seeds 0 to 2 moving at B21b.25. That would mean a shipped path reaches the new value,
+  contrary to this design.
+- **Control.** The same readings on B21b.23's tree.
+
+(8) **What the route does not settle (D-18).**
+
+- **The route holds. STOPPED: no.**
+  - Nothing here needs a Layer 1 change. §B.7 call 1 makes the revocation rule data. `01_AXIOMS.md` §E.2.4 (*"`tenure_kinds`
+    does not move; no new carrier"*) and `04:354` are the route itself, not obstacles to it.
+  - No `tenure_kinds` member is added.
+  - (2)'s measurement fails only the shipped bases, and (3) answers it in Layer 1's shape. So the `delegate` kind of §1 to
+    §8 is NOT put to Jordan, and no `needs_jordan` row is written.
+- **The necessity of (3) is narrow.** Without it, a principal cannot unseat and refill an AUTHORED same-rung seat before
+  its term ends. That is true only in authored content, and none exists today ((3), "Necessity"). "Revoke at majority"
+  survives as IN-10's term, and "stop a bad regent now" partly survives as `arrest` and custody. So (3) is a rule built
+  ahead of the content that reaches it. It is kept because it is the lightest shape (data plus one rule), because B21b.25's
+  own EXIT reaches it, and because without it a principal's seat does not even command its regent (A-22 (ii), (4)).
+- **Four limits are named and not designed around.**
+  - **"Puppet rulers" is not met.** The title seat keeps its full grant; nothing hollows it ((3)). It stays open in H-108's
+    cite. Meeting it would need a path that empties a sitting title-holder's grant without his consent: a reduction under
+    `revoke` with `keeps` through a basis the title seat declares. That is content plus (3)'s kind of value on the title
+    seat, which no shipped row has, and it is not this position's to author.
+  - **A computed regency has no term** unless the seat's row authors one ((1)).
+  - **A same-rung seat is not founded at runtime.** `founds_over` (iii) and (iv) refuse the principal's own rung. Its
+    founded post would also be the rung's title post (`founded_post`): a second "King". So a regency over a principal's own
+    rung exists only as an authored row.
+    - Widening `founds_over` is v11 CR-25's code (marked [ASSUMPTION]), not Layer 1, and not this position.
+    - It is carried as a residue in H-108's cite.
+    - Shape (a) is founded at runtime today.
+  - **Ruling (3) is the one verbatim ruling on who may strip a seat** (ED-IN-0256, *"rung above of same faction"*). The new
+    value answers the same question differently for a seat that declares it.
+    - It is answered by the ladder, without a row: step 4 (the shipped precedent is Jordan's own second value,
+      `rung_above_in_holdings`, 2026-10-12; `holder_of_rung` is the same shape but unbuilt, B23) and step 5 (§B.7 call 1).
+    - The new value licenses the seat's RUNG-SIBLINGS that grant `revoke`, not the principal by name ((3)). That is
+      fragile as a content rule, and it is stated, not hidden.
+    - No shipped seat declares it, so no ruled seat changes answer.
+    - If Jordan reads it otherwise, the two options are: (i) this value; or (ii) no value, in which case a realm regency
+      ends only by its term or by the regent's `release`, as today, and a dismissed regent is replaced only at term.
+    - The orchestrator may raise it. This design does not need it raised.
+- **B21b.23, re-read.** A delegation on this route opens a SECOND SEAT, not a second hold. Every seat it touches keeps one
+  live `hold`, as measured in (2): the confer emits `tenure.opened` alone, and the principal's hold is unchanged.
+  `_req_confer`'s every-holder read (`loop/predicates.py:191`) is unaffected and needs no re-read edit.
+- **Falsifier.** B21b.25's diff touching `architecture/`, `tenure_kinds`, `state/carriers.py` or the gate's basis list
+  (`tenure_write_basis`).
+- **Control.** `git show --stat` of B21b.25 lists only the edits below.
+
+**B21b.25's edits, in order** (the owners named; nothing else):
+
+- **E1.** `engine/season/tests/test_in48_delegation.py`, written first. It holds (6)'s tests, on `_gov_world` plus
+  hand-placed seats, and the seeded EXIT.
+- **E2.** `rosters.yaml: revocation_bases`: add the value `same_rung_same_faction`, plus one note sentence that names this
+  section's rule and its reach (only a seat that declares it).
+- **E3.** `state/gate.py`:
+  - add `seated_on_the_same_rung`;
+  - add its `REVOCATION_RULES` entry;
+  - rewrite `seat_hold`'s stale docstring paragraph ((5) row 7);
+  - correct the false clause "no effect closes one, so only his death ends it" at `:627-628`, the same clause in
+    `_eff_revoke`'s docstring (`loop/effects_governance.py:364`), and `revoke`'s `disposal_note` (`verb_table.yaml:1841`):
+    `_eff_pardon` closes the ban through the dismissing seat ((3)). Jordan's quoted word is left as his text.
+- **E4.** Run `python tools/export_season_registries.py`, then its `--check`.
+- **E5.** `hole_register.yaml` H-108: closed for regency and governors, grade `measured`. Its cite names the residues:
+  - **"puppet rulers" NOT met** (the title seat keeps its grant, (3));
+  - a computed regency on a seat with no authored `term:` is for life ((1));
+  - no runtime founding of a same-rung seat;
+  - the dismissal rule licenses rung-siblings granting `revoke`, not the conferrer ((3));
+  - `rung_above_in_holdings` seats are outside a regent's reach;
+  - a seat granting `confer` without `revoke`.
+  Whether the open puppet residue keeps the row open instead is the orchestrator's call, not this design's.
+- **E6.** The glossary row *regent* (`unified/U1_GLOSSARY.md`), with the plan's text.
