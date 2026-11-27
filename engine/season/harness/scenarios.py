@@ -169,11 +169,13 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
 
 
 def resume(snapshot: bytes, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None, host=None,
-           person: Optional[str] = None) -> "dict | SnapshotRefused":
+           person: Optional[str] = None, tie: Optional[Callable[[tuple], object]] = None,
+           ask: Optional[Callable[[object], int]] = None) -> "dict | SnapshotRefused":
     """Continue a saved run for at most `seasons` more (`IS-B3-GO-03`): `state.world.decode` the `snapshot`, look the name it holds up in `SCENARIOS`, and play `run`'s loop
     (`_play`) from the decoded world, with no `build`. A snapshot `decode` refuses comes back as `decode`'s own `SnapshotRefused`; a snapshot whose name is not a key of
     `SCENARIOS` (a world no scenario built holds `None`) comes back as `SnapshotRefused("scenario", ...)`: by value, as `decode`'s refusals are, since the port loads saves.
     The seat is not saved: it is the row's `seat` of the decoded world, or `person`, the client's own choice (`run`'s; a row with no `seat` refuses a call with no `person`).
+    `tie` and `ask` are `run`'s, forwarded to `_play` as `run` forwards them (`None` for each, the default, is the first continuation and the first question).
     The returned dict is `run`'s; its `premise` is the acts the snapshot held, so the run's own are the others, and `seasons` counts those played since the resume."""
     got = decode(snapshot)
     if isinstance(got, SnapshotRefused):
@@ -185,7 +187,7 @@ def resume(snapshot: bytes, seasons: int, pick: Optional[Callable[[DevelopmentSh
     if person is None and row.seat is None:
         raise Forbidden(f"scenario {name!r} has no default seat and no person was given", "harness/scenarios.py::resume",
                         needs="`person`: a `CreationRow.id` of the saved world", law="IS-B3-GO-03 -- the seat is not saved")
-    return _play(name, row, w, seasons, pick, host, person, None, None)
+    return _play(name, row, w, seasons, pick, host, person, tie, ask)
 
 
 def _play(name: str, row: Scenario, w: World, seasons: int, pick, host, person: Optional[str], tie, ask) -> dict:

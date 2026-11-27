@@ -231,47 +231,57 @@ def test_withheld_rows_are_own_state_only():
 # -- B34.16: the player is shown all his questions ----------------------------------------------------------------
 
 def test_development_space_ranks_for_the_picked_question():
-    """B34.16 (`01_CORE` edit 5). The sheet is shown the player's questions (`Situation.asked`) and `development_space(..., ask=)` takes his pick of one. Read at the
-    realm's first season under `question_aggregation_rule` `all`, the one arm whose candidate set holds a row for a later question (under the shipped `first` the
-    set forms on the head question alone, so a later question has no row to rank first and the arm would read nothing). At each of the first 40 deliberations that ask two or more
-    questions: (a) CONTROL, a pick of the first question, and no `ask` at all, give today's order; (b) a pick of the second gives the same candidates (none formed, none
-    dropped), those whose `occasion` is that question first and the rest after in today's order, and the sheet carries the question picked. `moved` is asserted, so a
-    season in which the pick reordered nothing is a red test and not a vacuous one."""
-    from ..decision.sheet import development_space, situation
-    checked, moved = [0], [0]
+    """B34.16 (`01_CORE` edit 5). The sheet is shown the player's questions (`Situation.asked`) and `development_space(..., ask=)` takes his pick of one, ranking FOR it.
+    Read at the realm's first season under the SHIPPED `question_aggregation_rule` (`first`: `v.question` is the head question alone), at each of the first 40
+    deliberations that ask two or more questions: (a) CONTROL, a pick of the first question and no `ask` at all give today's ranking and the head question;
+    (b) a pick of the second forms the set the second question forms: the sheet carries that question, some candidate is on a referent of it, no candidate is on a
+    referent only the head question names (its classed referents are the standing set `release` forms on from his own ledger under any question), and the set differs from the head question's; (c) the Scenes the pick packs
+    carry the picked question as their `occasion` (and the first question's under no `ask`), so the acts that answer one question are never stamped as caused by
+    another. `moved` is asserted, so a season whose picks changed no set is a red test and not a vacuous one."""
+    from ..decision.sheet import development_space, situation, take_ranked
+    seen = {}
 
-    def per_person(p, v, ranked, terms):
-        if len(v.questions) < 2 or checked[0] >= 40:
-            return
-        fx, verbs, draw = _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"]
-        mint = lambda who, verb, subj: f"{who}:{verb}:{subj}"
+    def arm(rule):
+        checked, moved, formed = [0], [0], [0]
 
-        def sheet_under(ask):
-            got: list = []
-            development_space(fx, mint, lambda sheet: (got.append(sheet), [])[1], verbs, draw, ask=ask)(p, v, None, lambda: 5)
-            return got[0]
+        def per_person(p, v, ranked, terms):
+            if len(v.questions) < 2 or checked[0] >= 40:
+                return
+            fx, verbs, draw = _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"]
+            mint = lambda who, verb, subj: f"{who}:{verb}:{subj}"
 
-        def order(sheet):
-            return [(c.verb, c.subject) for c in sheet.candidates]
-        plain, first, second = sheet_under(None), sheet_under(lambda s: 0), sheet_under(lambda s: 1)
-        assert order(first) == order(plain) == [(c.verb, c.subject) for c in ranked], p.id
-        assert first.question is plain.question and plain.question is v.question
-        rows = _offer(p, v).rows
-        want = v.questions[1].id
-        expected = [(r.candidate.verb, r.candidate.subject) for r in rows if r.occasion == want] \
-            + [(r.candidate.verb, r.candidate.subject) for r in rows if r.occasion != want]
-        assert order(second) == expected, (p.id, want)
-        assert second.question.id == want
-        shown = situation(p, v, lambda: 5).asked
-        assert [a.question.id for a in shown] == [q.id for q in v.questions]
-        checked[0] += 1
-        moved[0] += order(second) != order(plain)
+            def under(ask, pick=lambda sheet: []):
+                got: list = []
+                out = development_space(fx, mint, lambda sheet: (got.append(sheet), pick(sheet))[1], verbs, draw, ask=ask)(p, v, None, lambda: 5)
+                return got[0], out
 
-    def aggregate_all(w):
-        w.fixtures = w.fixtures.sweep("question_aggregation_rule", "all")
-    _deliberations(0, per_person, overlay=aggregate_all)
-    assert checked[0] == 40, f"only {checked[0]} deliberations asked two questions: the arm did not run"
-    assert moved[0] >= 1, "a pick of the second question reordered no deliberation: the arm observed nothing"
+            def order(sheet):
+                return [(c.verb, c.subject) for c in sheet.candidates]
+            (plain, _), (first, _), (second, _) = under(None), under(lambda s: 0), under(lambda s: 1)
+            assert order(first) == order(plain) == [(c.verb, c.subject) for c in ranked], p.id
+            assert first.question is plain.question and plain.question is v.question
+            want = v.questions[1]
+            assert second.question.id == want.id and second.asked_index == 1
+            head, mine = set(v.question.referents), set(want.referents)
+            assert all(c.subject not in head or c.subject in mine for c in second.candidates), (p.id, rule, want.id)
+            formed[0] += any(c.subject in mine for c in second.candidates)
+            assert [a.question.id for a in situation(p, v, lambda: 5).asked] == [q.id for q in v.questions]
+            assert [r.candidate.subject for r in _offer_at(p, v, 1).rows] == [c.subject for c in second.candidates]
+            for ask, q in ((None, v.question), (lambda s: 0, v.question), (lambda s: 1, want)):
+                scenes = under(ask, take_ranked)[1]
+                assert all(sc.occasion is q for sc in scenes), (p.id, rule, [sc.occasion.id for sc in scenes], q.id)
+            checked[0] += 1
+            moved[0] += order(second) != order(plain)
+        _deliberations(0, per_person, overlay=lambda w: setattr(w, "fixtures", w.fixtures.sweep("question_aggregation_rule", rule)))
+        seen[rule] = (checked[0], moved[0], formed[0])
+    arm("first")
+    assert seen["first"][0] == 40, f"only {seen['first'][0]} deliberations asked two questions at the shipped rule: the arm did not run"
+    assert seen["first"][1] >= 1 and seen["first"][2] >= 1, "a pick of the second question formed no candidate on it at the shipped rule: the arm observed nothing"
+
+
+def _offer_at(p, v, asked_index):
+    from ..decision.sheet import offer
+    return offer(p, v, _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"], asked_index)
 
 
 # -- gate 3 of `11_GO_fidelity_and_campaign_modes` (B34.08) ------------------------------------------------------

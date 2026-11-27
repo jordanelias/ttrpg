@@ -183,8 +183,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control.
 
     `ask(situation) -> int` (B34.16) is his pick of one of the questions asked of him, an index into `situation.asked` (`View.questions`, in attention order).
-    The candidate set is the same; the candidates whose `occasion` is the picked question come first, the rest after in the ranker's order (`_first_for`), the sheet's
-    `question` is the one picked and the Scenes his pick packs are occasioned by it (at `ask` 0 under the `all` / `one_per_source` aggregation rules `sheet.question` is the
+    A pick past the first RANKS ON THAT QUESTION (`rank` over the View `_asked_on` rebuilds on it, as `opening_set` reads its referents from `View.question`): the
+    candidates are the ones the picked question forms, the sheet's `question` is the one picked and the Scenes his pick packs are occasioned by it (at `ask` 0 under the `all` / `one_per_source` aggregation rules `sheet.question` is the
     synthetic aggregate `questions.py` builds, `q:agg:...`, not `situation.asked[0]`). `None`, or a pick of the first question, is the shipped ranking: the automated
     chooser is untouched, and a space built with no `ask` is `make_chooser`'s control as before. An index outside `asked` is refused (`Forbidden`). B12b.04: `geo` is the loaded geography (`data/geography.py::geography`) handed to `release` as `make_chooser` hands it, read only while `route_pricing` is `on`: without it the player's
     journeys go unpriced while the world still bills their legs."""
@@ -194,7 +194,6 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         q = getattr(v, "question", None)
         if q is None:
             return []
-        cands = rank(p, v)
         n = ask_budget()
         at = 0
         if ask is not None:
@@ -202,9 +201,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
             if not 0 <= at < max(len(v.questions), 1):
                 raise Forbidden(f"{p.id}'s pick of question {at} is not one of the {len(v.questions)} asked of him", "IN-47 rule 1", law=_LAW)
         if at > 0:
-            forgone, q = getattr(cands, "forgone_of", None), v.questions[at]
-            cands = _first_for(cands, v.questions, at)
-            cands.forgone_of = forgone
+            q = v.questions[at]
+        cands = rank(p, _asked_on(v, q) if at > 0 else v)
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
                                  frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
@@ -233,20 +231,16 @@ def take_ranked(sheet: DevelopmentSheet) -> range:
 # ---------------------------------------------------------------------------------------------------
 
 def _occasion_of(asked: Sequence[Question], subject: Optional[str]) -> Optional[str]:
-    """The id of the first of `asked` that names `subject` among its referents (plain or classed): a candidate's occasion, `OfferRow.occasion`'s and
-    `_first_for`'s one owner. `None` for no subject, or a subject no question names (a standing candidate)."""
+    """The id of the first of `asked` that names `subject` among its referents (plain or classed): a candidate's occasion, `OfferRow.occasion`'s one owner. `None` for no subject, or a subject no question names (a standing candidate)."""
     if subject is None:
         return None
     return next((a.id for a in asked if subject in a.referents or subject in {r for r, _ in a.classes}), None)
 
 
-def _first_for(cands: Sequence[Candidate], asked: Sequence[Question], at: int) -> Ranked:
-    """`cands` with those whose occasion (`_occasion_of`) is `asked[at]` first, the rest after, each group in the order given (stable). Forms and drops
-    nothing; `at` 0 is the question the shipped ranking is already for, so it is `cands` as given."""
-    if at <= 0:
-        return Ranked(cands)
-    want = asked[at].id
-    return Ranked([c for c in cands if _occasion_of(asked, c.subject) == want] + [c for c in cands if _occasion_of(asked, c.subject) != want])
+def _asked_on(v: View, q: Question) -> View:
+    """`v` rebuilt on the question `q` (one of `v.questions`): `View` is a slotted class, not a dataclass, and `opening_set` reads the referents from `View.question`,
+    so a pick of a later question ranks on this View. Same holder, ids, questions and odds query; `k` is the ids it already holds."""
+    return View(v.holder, list(v.claim_ids), max(len(v.claim_ids), 1), q, v.questions, v.odds)
 
 
 @dataclass(frozen=True)
@@ -320,12 +314,15 @@ def offer(p: PersonInterior, v: View, fx: Any, verbs: Optional[frozenset] = None
     cost, and the verbs his own state withheld. `fx`, `verbs` and `draw` are the ones the chooser was built with (`rank` needs `fx`; a different `verbs`
     or `draw` is a different offer, as `development_space` says); the source's `offer(p, v)` has no way to reach them. Forms nothing, ranks nothing of its
     own, and writes nothing. A View with no question offers nothing. `asked_index` is `DevelopmentSheet.asked_index`: the rows in the order `development_space`
-    gave that pick (`_first_for`), so `[i]` is the index a pick names."""
+    gave that pick (ranked on `v.questions[asked_index]`, as `development_space` does), so `[i]` is the index a pick names."""
     q = getattr(v, "question", None)
     if q is None:
         return Offer((), ())
+    if asked_index > 0:
+        q = v.questions[asked_index]
+        v = _asked_on(v, q)
     watched: list = []
-    order = _first_for(make_ranker(fx, verbs, draw, lambda _p, _q, ranked, terms, sampled: watched.append((ranked, terms)))(p, v), v.questions, asked_index)
+    order = make_ranker(fx, verbs, draw, lambda _p, _q, ranked, terms, sampled: watched.append((ranked, terms)))(p, v)
     terms_of = {id(c): t for c, t in zip(*watched[-1])} if watched else {}
     odds = getattr(v, "odds", None)
     extended = fx.get("extended_scene_cost")
