@@ -1,5 +1,5 @@
 """`14_VERBS_PHYSICAL_A` (custody and force) -- the gates of the audit's §1.7, §2.7, §3.7 and §4.7, one function each.
-This file holds A4's (B14.27); A3's (B15) and A1/A2's (B29) are added by their items.
+This file holds A4's (B14.27), A3's (B15), A1's (B29.01) and A2's (B29.02).
 
 A4, THE REAL CHOOSER. `test_b11a_duel_reach.py` drives the chain through formed Candidates and hand-built acts and
 reverts the whole of lane A at once; this test plants ONE grievance between two co-located persons and plays a season
@@ -28,7 +28,7 @@ from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers import combat as CW
-from ..state.carriers import Claim, subject_of
+from ..state.carriers import Claim, Question, subject_of
 
 A, B = "p_mid", "p_low"           # `tiny_world`: both stand at the hearth; A holds the grievance, B is its object
 SEEDS = range(14, 26)             # measured on `tiny_world`; see LIMITS above. Was range(21) before B24 (seed 6 then issues no challenge), range(6) before it: under the keyed stream (B06) the chain completes at none of 0-5
@@ -75,13 +75,17 @@ def _made(w, d, kind, verb, actor=None):
             and (actor is None or d.act_of[e.id].actor == actor)]
 
 
-def _accepts_formed(w, pid):
-    """`accept` Candidates in `pid`'s own opening set, on every question the world puts to him (the view is the
+def _formed(w, pid, verb):
+    """`verb` Candidates in `pid`'s own opening set, on every question the world puts to him (the view is the
     size the real deliberation reads, `w.fixtures["view_k"]`)."""
     p = w.persons[pid]
     k_view = w.fixtures.get("view_k")
     return [c for q in world_q.questions_for(w, p)
-            for c in O.opening_set(p, assemble(p, q, k_view), q, w.fixtures) if c.verb == "accept"]
+            for c in O.opening_set(p, assemble(p, q, k_view), q, w.fixtures) if c.verb == verb]
+
+
+def _accepts_formed(w, pid):
+    return _formed(w, pid, "accept")
 
 
 def test_accept_forms_on_a_heard_challenge(monkeypatch):
@@ -228,3 +232,153 @@ def test_a3_fight_terms_follow_the_context(monkeypatch):
     with pytest.raises(Forbidden):
         V._load_context_terms({"crime": ""})
     assert V.CONTEXT_TERMS == {"war": "death", "crime": "yield", "defence": "yield"}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# A1 (B29.01): `arrest` FORMS ON A WARRANT ADDRESSED TO THE OFFICER AND HEARD OF (the audit's §1.7 gate).
+# ---------------------------------------------------------------------------------------------------------------------
+ISSUER, COURT = "p_npc_020", "off_duke_valorsmark"     # `build_realm(0)`: a holder of `issue` and `determine`; its seat commands the two officers below
+OFFICER, THIRD = "p_npc_036", "p_npc_035"              # holders of `dispatch` (`off_royal_marshal`, `off_guard_captain`) that `COURT` commands
+PRISONER = "p_npc_075"                                 # an unseated man the court reaches (`may_determine`) and the marshal's seat reaches (`may_warrant`)
+
+
+def _at_degree(degree, *verbs):
+    """`SeasonDriver._contest` with the named verbs folded at `degree` (a `Degree`) through the real `_fold` (the shape of `_seat_at_success.writ_at_success`):
+    a test whose question is the act's fold and not its draw. Every other verb is drawn as shipped."""
+    from engine.dice_engine.dice_engine import DEGREE_LABEL
+    from ..seam import Resolution
+    drawn = SeasonDriver._contest
+
+    def at_degree(self, w, token, a, contests, contest_max_depth, host=None):
+        if a.verb in verbs:
+            return self._fold(w, token, a, Resolution(DEGREE_LABEL[degree], {}))
+        return drawn(self, w, token, a, contests, contest_max_depth, host)
+    return at_degree
+
+
+def _at_success(*verbs):
+    from engine.dice_engine.dice_engine import Degree
+    return _at_degree(Degree.SUCCESS, *verbs)
+
+
+def _act_of(w, who, cand):
+    """The one Act the real packer makes of the Candidate `cand` of `who` (no hand-built act: `pack_scenes`, the chooser's own packer), run now (`after` cleared)."""
+    from ..decision.choose import pack_scenes
+    from ..state.ids import H
+    mint = lambda p, verb, subj: H(w.world_seed, w.tick, p, f"act:{verb}:{subj}")
+    (act,) = [a for sc in pack_scenes(w.persons[who], [cand], 99, w.fixtures, mint) for a in sc.acts]
+    act.after = None
+    return act
+
+
+def _warrant_world(to, monkeypatch):
+    """`build_realm(0)` with the court's holder having ISSUED, through the real fold (`SeasonDriver.resolve`, then `witness`), a
+    dispensation naming `PRISONER` and addressed `to`. PLANTED, and only these: the issuer knows the prisoner (the `terms` conjunct of
+    `issue`), the officer and the third man stand where the issuer stands (the realm seats nobody beside the seat that commands him: the
+    audit's "co-located with the issuer"), and `issue`'s own draw is folded at Success. Everything after this is the shipped game."""
+    from ..boot.realm import build_realm
+    from ..data.matrix import WriteClass
+    from ..loop.driver import mint_token
+    from ..state.carriers import Act, Tenure
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    here = world_q.place_of(w, ISSUER)
+    for who in (OFFICER, THIRD):
+        for t in w.tenures:
+            if t.subject == who and t.kind == "contain" and t.until is None:
+                t.until = w.tick
+        w.add_tenure(Tenure(f"t_plant_at_court_{who}", who, here, "contain", since=w.tick))
+    w.persons[ISSUER].ledger.append(Claim("c_vm_phy_a_knows", ISSUER, PRISONER, "exists:Person", 1, w.tick, "firsthand", 100, "own"))
+    with monkeypatch.context() as m:
+        m.setattr(SeasonDriver, "_contest", _at_success("issue"))
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="a_vm_phy_a_w", actor=ISSUER, verb="issue", via=COURT,
+                                                            payload={"subject": PRISONER, "to": to})],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["dispensation.issued"], [e.kind for e in out]
+    w.log.extend(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    return w, d
+
+
+def test_arrest_on_an_addressed_and_heard_warrant(monkeypatch):
+    """The audit's §1.7 gate, A1. A court seat issues a dispensation naming a man, addressed to an officer who stood by; the officer holds
+    no copy (the Record stays in the issuer's hand) and has only heard it. (1) His opening set, on the questions the world puts to him,
+    holds `arrest` on that man and on no other. (2) The Candidate so formed, folded at Success (the draw pinned so a refusal is the
+    write clause's and never a lost roll), is `arrest.made` and opens a `detain` on the prisoner. PLANTED FAILURE: `_eff_arrest` reading
+    the held half alone (the pre-B29.01 reading) forms the act and the `write` clause refuses it, `arrest.refused`: this fails on that kind.
+    (3) The custody is read downstream: the issuing seat's holder forms `interrogate` on the prisoner (`Detainee`). (4) An officer whose only
+    question is the synthetic `need` head (no plain referent: `world_q.questions_for`'s head for a man with no other question) still forms
+    `arrest` on the man the heard warrant names. The plan's fourth arm, a season through the shipped chooser, observed nothing (the chooser
+    forms the Candidate and draws none) and is not kept: arm (2) is the one that sees a refusal.
+    CONTROL: the same world with the warrant addressed to a third man forms no `arrest` for the officer, and does for that man."""
+    from ..data.matrix import WriteClass
+    from ..data.rosters import DETAIN_KIND
+    from ..loop.driver import mint_token
+    w, d = _warrant_world(OFFICER, monkeypatch)
+    formed = _formed(w, OFFICER, "arrest")
+    assert formed and {c.subject for c in formed} == {PRISONER}, formed
+    act = _act_of(w, OFFICER, formed[0])
+    with monkeypatch.context() as m:
+        m.setattr(SeasonDriver, "_contest", _at_success("arrest"))
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    assert [e.kind for e in out] == ["arrest.made"], [e.kind for e in out]
+    assert world_q.restrained(w, PRISONER, DETAIN_KIND)
+    assert PRISONER in {c.subject for c in _formed(w, ISSUER, "interrogate")}
+    officer = w.persons[OFFICER]
+    need = world_q._stamped(Question(f"q:need:{PRISONER}", "need", (), PRISONER), world_q.warrants_heard(w, officer), w, ())
+    assert need.referents == () and PRISONER in need.referents_for("Person"), need
+    assert PRISONER in {c.subject for c in O.opening_set(officer, assemble(officer, need, w.fixtures.get("view_k")), need, w.fixtures)
+                        if c.verb == "arrest"}
+    w3, _ = _warrant_world(THIRD, monkeypatch)
+    assert _formed(w3, OFFICER, "arrest") == []
+    assert {c.subject for c in _formed(w3, THIRD, "arrest")} == {PRISONER}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# A2 (B29.02): `capture` FORMS ONLY ON A PERSON UNDER `war` OR `crime`, AND ITS CUSTODY GOES TO THE WARRANT'S COURT (the audit's §2.7 gate).
+# ---------------------------------------------------------------------------------------------------------------------
+def test_capture_after_a_resisted_arrest_goes_to_the_warrant_court(monkeypatch):
+    """The audit's §2.7 gate, A2. §1.7's world, the officer's `arrest` folded at Failure through the real fold (the draw pinned, as the
+    A1 test pins Success: a fixture pool of 0 dice leaves the roll to chance, and the question here is the fold's). (1) `arrest.resisted`
+    opens no custody. (2) The same officer's next opening set holds `capture` on the man the warrant names and on no stranger (`rosters.yaml:
+    violence_contexts`' `capture` line: the `crime` context). (3) A `capture` the real packer makes of that Candidate, its scene pinned to a
+    yield by the man (`Untouched`, `surrender.by` = him), opens ONE `detain` to the seat that ISSUED the warrant (`COURT`), not to the seat the
+    act is exercised through (`Act.via`, the officer's own). CONTROL: the same world with the warrant addressed to a third man forms no `capture`
+    on the prisoner for the officer. PLANTED FAILURE: the `capture` line deleted from `violence_contexts` forms `capture` on strangers
+    again (this test then fails on the stranger assertion); `_eff_capture` reading `a.via` alone (as before B29.02) fails (3)."""
+    from ..data.matrix import Step, WriteClass
+    from ..data.rosters import DETAIN_KIND
+    from ..loop import resolve as R
+    from ..loop.driver import mint_token
+    from ..seam import Resolution
+    from ..state.carriers import Tenure
+    from engine.dice_engine.dice_engine import Degree
+    w, d = _warrant_world(OFFICER, monkeypatch)
+    (arrest,) = [c for c in _formed(w, OFFICER, "arrest") if c.subject == PRISONER][:1]
+    with monkeypatch.context() as m:
+        m.setattr(SeasonDriver, "_contest", _at_degree(Degree.FAILURE, "arrest"))
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [_act_of(w, OFFICER, arrest)], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    assert [e.kind for e in out] == ["arrest.resisted"], [e.kind for e in out]
+    assert not world_q.restrained(w, PRISONER, DETAIN_KIND)
+    formed = _formed(w, OFFICER, "capture")
+    assert formed and {c.subject for c in formed} == {PRISONER}, [(c.subject, c.operands) for c in formed]
+    act = _act_of(w, OFFICER, formed[0])
+    assert act.via is not None and act.via != COURT, (act.via, COURT)
+    here = world_q.place_of(w, OFFICER)                      # PLANTED: a fight needs the man where the officer stands (`capture`'s `with` cell; `arrest` asks no presence)
+    for t in w.tenures:
+        if t.subject == PRISONER and t.kind == "contain" and t.until is None:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_plant_at_officer_prisoner", PRISONER, here, "contain", since=w.tick))
+    w.step, w.frozen = Step.RESOLVE, False
+    scene = {"status": "RESOLVED", "surrender": {"by": PRISONER, "turn": 1, "accepted": True},
+             "wound_state": {p: {"available": True, "felled": False, "wounds": 0, "max_wounds": 4, "health_remaining": 10, "health_full": 10}
+                             for p in (OFFICER, PRISONER)}}
+    out = R._fold(d, w, mint_token(w, WriteClass.ACTS), act, Resolution("Untouched", scene))
+    w.log.extend(out)
+    assert [e.kind for e in out] == ["person.captured"], [e.kind for e in out]
+    (detain,) = [t for t in w.tenures if t.kind == DETAIN_KIND and t.subject == PRISONER and t.live]
+    assert detain.object == COURT, (detain.object, act.via)
+    w3, _ = _warrant_world(THIRD, monkeypatch)
+    assert _formed(w3, OFFICER, "capture") == [], "CONTROL: no warrant to the officer, no `capture` on the man"

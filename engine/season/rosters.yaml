@@ -2921,8 +2921,8 @@ rosters:
       `loop/effects_information.py::_held_warrant_names`),
       and `seize` forms on any referent, refused in the fold.]
       v9 IN-12 step 5 ADDS `arrest`, the line this note foresaw (*"a warrant naming a PERSON"*): it forms
-      person-side only on a person a held dispensation's `terms` names, and its effect
-      (`_eff_arrest`) reads the same held warrant world-side (`_held_warrants`, `seize`'s reading
+      person-side only on a person a dispensation he holds, or one addressed to him that he has heard of (B29.01), names, and its effect
+      (`_eff_arrest`) reads the same warrant world-side (`world_q.warrants_for`, `seize`'s reading
       shared) and opens the `detain` on the seat that ISSUED it. H-94's "a Person (warrant) term has
       no route" is answered for `arrest` by this line.
     values:
@@ -3326,7 +3326,7 @@ rosters:
       OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the
       subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a
       faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime`
-      -- the subject is named by a warrant he holds that is ADDRESSED TO HIM (a held Record of a `warrant_sourced`
+      -- the subject is named by a warrant that is ADDRESSED TO HIM, held or only heard of (B29.02: one reader, so it admits `fight` as well as `capture`; a held Record of a `warrant_sourced`
       kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person
       is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped
       `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s
@@ -3346,11 +3346,15 @@ rosters:
       `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's
       terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct;
       revert: restore `duel`.]
+      `capture` (14_VERBS_PHYSICAL_A A2, B29.02): ED-IN-0337 applied to the second violent row; no `duel` (a duel is `accept`'s), no `defence`
+      (a man defending himself does not take prisoners). [ASSUMPTION; medium; Jordan to correct; revert: drop the `capture` line, and `capture`
+      forms on every person a question names, as before.]
       B10.61 READING, KEPT: it reads the world's contexts (a war, a warrant, a deed done to him), none of them his own
       state, so `OwnStateReader` cannot answer it. Without it `fight` forms on 4170, 4049 and 4344 more
       (person, question) pairs at seeds 0-2, 252 of them at lap 0.
     values:
       fight: [war, crime, defence]
+      capture: [war, crime]
 
   opposed_without_prize:
     source: >-

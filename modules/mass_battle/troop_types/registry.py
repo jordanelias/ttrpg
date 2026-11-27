@@ -49,7 +49,7 @@ MOUNTED_TYPES = _table.mounted_types()
 
 def stats_for(troop_type):
     """Canonical per-subunit combat stats for a troop type (mass_battle_v30 §B.2), as a
-    fresh dict {power, discipline, morale}, or None if the type has no preset. None lets
+    fresh dict {skill, power, discipline, morale} (`power` the alias of `skill`), or None if the type has no preset. None lets
     the caller fall back to Army inheritance. Lookup is case-insensitive."""
     return _table.stats_for(troop_type)
 

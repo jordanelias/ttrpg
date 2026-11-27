@@ -36,10 +36,19 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort that starves after one exact season's stock was drawn falls citing the last stores write at the rung it was short at, and its death cites that fall, not the seed or an earlier death"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort the larder cannot feed in full is refused a tend at the fed clause and its body stays, the same cohort fully fed is tended to the scale, and a weight-1 person who is no eater is tended"}
       - {batch: B12b-weather-arcs-population, added: 2, behaviour: "with the supply arm on, a treasury holding grain and no salt fields troops at the grain ration and the fold debits the grain it ate where the larder's whole ration fields nobody from it, and a side with an empty treasury fields fewer troops than one with a full treasury"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "an officer a warrant is addressed to, who has only heard of it, forms arrest on the man it names (on a question with no plain referent too) and on no other, the arrest folds to arrest.made and opens a detain, and a warrant addressed to a third man forms none for him"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "capture forms on a person under war or crime and on no stranger, and its custody goes to the issuing seat of the warrant whose court could close it, not to the seat the act is exercised through"}
       - {batch: B21b-fa-war, added: 43, behaviour: "a faction's identity is read by one owner (`faction_props`); a person is offered a creed to join only for one he reads above his own and above indifference; a seated muster-holder declares a war on a rival he reads below indifference or one a wound or a held claim to a territory turns him toward, an own-faction or already-at-war declare is refused, and only a declare's own commit makes a war; a claim to a territory is a Proposition whose grounds the roster names; a sworn man's seat grants and refuses by the oath (`retain` and `conspire` each weigh the new obstacle terms and a plot is laid, joined or refused by what the gate admits); an oblige purview and a regent's seat on the same rung read the one `purview_of`; a seat is conferred only by what every live holder grants; a march is capped and seized by what it reaches"}
   engine:
     base: 1043
-    warrants: []
+    warrants:
+      - batch: B19a-mb-contact-instrument
+        added: 4
+        behaviour: >-
+          tests/valoria/test_export_mb_contact.py. The measured duel table read at the twelve check cells (`test_interpolation_hits_the_check_cells`:
+          the module's log-odds interpolation lands inside the measured interval, game state). The exporter's blocking `--check` for the table
+          the contact draw reads: `test_round_trip_is_clean`, `test_a_hand_edit_fails_check`, `test_a_changed_duel_engine_fails_check` (a stale
+          calibration cannot ship); `export_mb_contact.py` is not yet a CI step, so these are its only CI exerciser until the workflow line lands.
   combat:
     base: 497
     warrants: []
@@ -58,4 +67,9 @@ lanes:
 tools:
   files:
     base: 55
-    warrants: []
+    warrants:
+      - batch: B19a-mb-contact-instrument
+        added: 2
+        behaviour: >-
+          tools/export_mb_contact.py (blocking in tools/valoria_local.py; registered in ci_checks_registry.yaml) and
+          tools/calibrate_mb_contact.py (run by hand at a calibration pass; imported by the exporter for the grid and the engine fingerprint).

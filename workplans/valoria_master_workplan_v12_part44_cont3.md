@@ -39,7 +39,7 @@ GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B16-pc-round @96f90bbc8
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B18-pc-content
-GATE: Batch B19a-mb-contact-instrument
+GATE: Batch B19a-mb-contact-instrument @32b6dd0ea
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
@@ -56,7 +56,7 @@ GATE: Batch B25-fi-questioning
 GATE: Batch B26-fi-inquiry
 GATE: Batch B27-sc-proceedings
 GATE: Batch B28-social-verbs
-GATE: Batch B29-pc-custody
+GATE: Batch B29-pc-custody @474a84dc9d12e20dafa0d9edbca341d2e5f7a649
 GATE: Batch B30-mb-nested
 GATE: Batch B31-mb-loadout-economy
 GATE: Batch B32-inst-kit

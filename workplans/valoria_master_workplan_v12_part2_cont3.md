@@ -80,7 +80,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 56 | `proof_step` → `proof_level` | B24.02 | — |
 | 57 | `harness/populated.run` → `boot/realm.py` | B24.02 | — |
 | 58 | `harness/populated.py::seat_cohorts` → `boot/realm.py::seat_cohorts` | B12b.21 | B38.56 |
-| 59 | `pc_engine.load()` → `from modules.combat import wrapper, combatant` | B19a.02 | — |
 | 60 | `(tick, round)` → `(tick, lap)` | B34.03 | — |
 | 61 | `harness/populated.py::mint_planned_works` → `boot/realm.py` | B12c.19 | — |
 | 62 | `populated.mint_planned_works` → `boot/realm.py` | B12c.28 | — |
@@ -298,12 +297,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 229 | `engine/season/data/tensions.py` | module | B12b.45 | — |
 | 230 | `engine/season/tensions.yaml` | data file | B12b.45 | — |
 | 231 | `engine/season/tests/test_tensions.py` | test file | B12b.45 | — |
-| 232 | `references/mb_contact/duel_grid.json` | data file | B19a.02 | — |
-| 233 | `tools/calibrate_mb_contact.py` | tool | B19a.02 | — |
-| 234 | `engine/engine_params/mb_contact.json` | data file | B19a.03 | — |
-| 235 | `modules/mass_battle/core/contact_table.py` | module | B19a.03 | — |
-| 236 | `tests/valoria/test_export_mb_contact.py` | test file | B19a.03 | — |
-| 237 | `tools/export_mb_contact.py` | tool | B19a.03 | — |
 | 238 | `engine/season/tests/test_cr32_ladders.py` | test file | B21c.01 | — |
 | 239 | `tests/test_cr32_ladders.py` | test file | B21c.01 | — |
 | 240 | `engine/season/tests/test_cr35_election.py` | test file | B21c.02 | — |
