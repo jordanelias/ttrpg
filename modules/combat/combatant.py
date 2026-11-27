@@ -112,7 +112,7 @@ class Combatant:
     `DEFAULT_SCORE`). It is a plain field, not a spec key: nothing derives from it, so a plain assignment re-values it. Read in two
     places, the pool (`core.resolution_pool`) and the Ob his opponent rolls against (`core.ob_from_defender`)."""
     def __init__(self, label, attrs=None, weapon='arming', armor='light', skills=None, equipped=None, tradition='none',
-                 score=DEFAULT_SCORE, **kw):
+                 score=DEFAULT_SCORE, short=None, **kw):
         given = dict(attrs or {})
         twice = sorted(set(given) & set(kw))
         if twice:
@@ -124,6 +124,7 @@ class Combatant:
                             f"(modules/combat/attributes.py)")
         self.label=label
         self.score=score
+        self.short=short                     # Strength points short of the carry demand, the host's (`PersonalCombatInput.short`, B18.07); `None` = not given: `combat_systems.carry_short` reads the harness alone off `ARMOR_DEMAND` and `strength`
         self.attrs = {k: given.get(k, _A.DEFAULT[k]) for k in _A.KEYS}
         self.weapon=weapon; self.armor=armor
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)

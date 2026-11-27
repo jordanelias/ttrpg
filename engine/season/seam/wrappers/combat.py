@@ -102,6 +102,8 @@ assert _END_KEY, "descriptors names no Endurance attribute: party_end would read
 # The fight's default for `end` is the combat module's, read once from its typed export through `substrate/combat_kit.py`
 # (the artifact's one reader; section `attributes`); the registry's `default: 1` is the sheet scale's floor, a different fact.
 _END_DEFAULT = combat_kit.END_DEFAULT
+_STRENGTH_KEY = attribute_key("Strength")  # the registry key of `strength` (B18.07): the figure `short` is taken against, the one the module maps to `Combatant.strength`
+assert _STRENGTH_KEY, "descriptors names no Strength attribute: party_short would read the default for every person"
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
@@ -165,7 +167,16 @@ def party_end(person: Any, fx: Any) -> int:
     return max(1, base_end - bands)
 
 
-_MORTAL_SITE = require_use_site("mortal")     # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
+def party_short(person: Any, kit: tuple) -> tuple:
+    """A party's `PersonalCombatInput.short` entry (B18.07): `(short with the primary in hand, short with the secondary in hand)`, each the
+    Strength points under `combat_kit.carry_demand` he is, `combat_kit.shortfall`, the one rule, evaluated here because the module imports
+    nothing of the carry rule. His Strength is the one the module will build him at: the authored `attr.body.strength` he HOLDS, else the combat
+    export's default (`STRENGTH_DEFAULT`, as `party_end` reads Endurance); his armour is `kit`'s. Nothing is carried and not in hand until
+    a kit has a secondary (B18.08), so the first is the harness's alone, the charge `act_cost` always made, and the second is `None`."""
+    return (combat_kit.shortfall((), kit[1], person.attributes.get(_STRENGTH_KEY, combat_kit.STRENGTH_DEFAULT)), None)
+
+
+_MORTAL_SITE = require_use_site("mortal")    # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
 _MORTAL_PURPOSE = "fight.mortal"              # the mortal draw's purpose in its key (PHY_A A3, A-30): one draw per felled party per tick
 
 
@@ -370,6 +381,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         ends=(party_end(ba, w.fixtures), party_end(bb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(ka, kb),
+        short=(party_short(pa, ka), party_short(pb, kb)),   # B18.07: each party's shortfall against what he carries, the DEALT person's Strength (the module builds him from `pa`/`pb`'s attributes) at the kit fought with
         scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
         pool_add=pool_add, pool_floor=pool_floor,

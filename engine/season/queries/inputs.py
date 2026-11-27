@@ -754,7 +754,15 @@ class PersonalCombatInput:
       * `decisiveness` -- each party's σ for the YIELD ROLL (B15.10, `PC_A`, A-24), in `claimants` order: what the host knows that the module does
                        not (what he is fighting for). It enters the roll as `net_sigma`, under the owner's soft cap, beside his Spirit and wounds
                        (`wrapper._yield_roll`). The host reads it from `person_q.decisiveness` (`combat.py::combat_input`). The default `()` is
-                       0.0 for both parties (`fight.py` passes `inp.decisiveness or (0.0, 0.0)`)."""
+                       0.0 for both parties (`fight.py` passes `inp.decisiveness or (0.0, 0.0)`);
+      * `short`     -- each party's SHORTFALL, `max(0, carry_demand - strength)` in Strength points, in `claimants` order (B18.07,
+                       `03_PC_loadout_and_carry`): one entry per party, a pair `(with the primary in hand, with the secondary in hand)`,
+                       the second `None` while no kit carries a secondary (B18.08). The host evaluates `combat_kit.carry_demand` against
+                       the party's Strength and hands the figure raw (`combat.py::combat_input`; the workbench's `fight_record.py` the
+                       same way); the module reads it, off the `Combatant`, in `combat_systems.act_cost` (fatigue, `ACT_WEIGHT / D_WT`
+                       a point) and `close_rate` (`1 / (1 + CARRY_CLOSE_K * short)`), and imports nothing of the carry rule. The default
+                       `()` hands none: the Combatant is then short of the harness alone, `max(0, ARMOR_DEMAND[tier] - strength)`, the
+                       charge `act_cost` always made (`combat_systems.carry_short`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -773,6 +781,7 @@ class PersonalCombatInput:
     dispositions: tuple = ()
     mortal: tuple = ()
     decisiveness: tuple = ()
+    short: tuple = ()
 
 
 @dataclass(frozen=True)
