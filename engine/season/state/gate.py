@@ -325,12 +325,14 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
     being a string anyone may write. `None` for a missing actor, a missing `via`, a `via` that is
     not an office, and an actor with no live `hold` on it.
 
-    ⚠ A `hold` AND NOTHING ELSE SEATS A PERSON TODAY. `04:332` says *"a regent has the seat's
-    purview"*, and no relation in the tree makes a person a seat's regent (`oblige`, `04 §B.7`
-    call 2's council membership, seats nobody; ⚠ SINCE v9 IN-40 a live, non-imposed `oblige` to a
-    seat IS read, by `purview_reaches`' oblige clause, as vassalage -- a delegation carrier built
-    on it would also extend the delegated seat's purview over the delegate's own ground). So a regent is expressible only
-    as a holder; delegation without a `hold` is `H-108`'s, still open, and this does not close it.
+    ⚠ A `hold` AND NOTHING ELSE SEATS A PERSON. `04:353` says *"a regent has the seat's purview"*, and
+    a regent is the HOLDER OF A SECOND SEAT (B21b.25, IN-48): delegation is `04:354`'s `establish` ->
+    `confer` -> `revoke`, a seat over the domain conferred while the principal keeps his own, ended by its
+    term (T-n), the regent's `release` (T-m) or a `revoke` under `revocation: same_rung_same_faction`
+    (`seated_on_the_same_rung`). No relation other than a `hold` makes a person a seat's regent (`oblige`,
+    `04 §B.7` call 2's council membership, seats nobody; ⚠ SINCE v9 IN-40 a live, non-imposed `oblige` to a
+    seat IS read, by `purview_reaches`' oblige clause, as vassalage, not as a seat). The "puppet ruler"
+    (a title seat whose remit was conferred elsewhere) is NOT met on this route: `H-108`'s cite names it.
     Returned as the Tenure, not the Office, because `_eligible`'s remit branch reads the GRANT the
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
     if not actor or not via or via not in w.offices:
@@ -601,8 +603,24 @@ def seated_on_the_rung_above_in_holdings(w: "World", actor: Optional[str], seat:
     return in_holdings(w, actor, off.rung)
 
 
+def seated_on_the_same_rung(w: "World", seat: Office, off: Office) -> bool:
+    """THE `same_rung_same_faction` BASIS (B21b.25, IN-48's early dismissal of a regent): is `seat` ANOTHER seat on `off`'s OWN rung, of its faction?
+    Asked of the seat exercised, as `seated_on_the_rung_above` is, and `may_revoke` has already asked that the actor SITS in it.
+
+    A regency is a seat conferred over a domain on the SAME rung as the title seat (`01_AXIOMS.md` §E.2.2), so neither shipped rule can end it
+    early: both read the PARENT rung, and the top rung has none. STRUCTURAL, as ruling (3) is: no purview walk, no holdings, no rank. The faction
+    clause is kept. `seat.id != off.id` makes it exclusive on the seat, as `may_fill` is: a holder stripping his own seat is `release` (T-m), not this.
+
+    ⚠ WHO IT LICENSES IS EVERY OTHER SEAT ON THE RUNG, of the faction, whose grant carries `revoke` (that is `revoke`'s eligibility, not this rule's) --
+    the principal's seat is one, not the only one, and no lighter rule can name the CONFERRING seat (`Tenure.conferrer` is not a field). It is
+    SYMMETRIC: a principal's seat declaring this value is as strippable by its regent as the regent's by him. Only a seat that DECLARES it reaches it;
+    no shipped row does."""
+    return (seat.rung is not None and seat.rung == off.rung and seat.faction == off.faction and seat.id != off.id)
+
+
 REVOCATION_RULES = {"rung_above_same_faction": lambda w, actor, seat, off: seated_on_the_rung_above(w, seat, off),
-                    "rung_above_in_holdings": seated_on_the_rung_above_in_holdings}
+                    "rung_above_in_holdings": seated_on_the_rung_above_in_holdings,
+                    "same_rung_same_faction": lambda w, actor, seat, off: seated_on_the_same_rung(w, seat, off)}
 # ⚠ REFUSED AT IMPORT, NOT IN THE FOLD. A member with no rule, or a rule for no member, is drift
 # between data and code; raised from inside `_req_revoke` it would escape the fold (the `13f`
 # lesson), and dispatched by fall-through it would run a new basis as some other one.
@@ -625,7 +643,8 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
 # The value is the restraint kind `revoke` opens on him, owned by him and objected on the revoking
 # seat (`Act.via`), or `None` for nothing. JORDAN, 2026-10-21 (B-Q, answering the IN-31 design's A1
 # box, *"Design's answer"*): an `appointed` seat revoked -> a PERMANENT `ban` (SC-03a's restraint; it
-# carries no term and no effect closes one, so only his death ends it); `elected`, `annex` and `None`
+# carries no term; the code admits a pardon, `_eff_pardon` closing it through the dismissing seat, and otherwise his death ends it: "PERMANENT" is
+# Jordan's word, left as his); `elected`, `annex` and `None`
 # -> nothing; and a `confer` that displaces an incumbent costs nothing (`_eff_confer` reads no row
 # here). Python and not a YAML column, `REVOCATION_RULES`' precedent: the roster names the basis, the
 # rule is behaviour. READERS ASK IT IN PLACE (`revocation_disposal`, `has_revocation_disposal`, or
