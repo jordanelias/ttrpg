@@ -1144,6 +1144,25 @@ class Findings:
     found: tuple
 
 
+# B12b.08 (`16_PESSIMIST_WR_A_the_road_is_drawn` edit 2, A-25, A-29): the road's typed pair. Read by `modules/settlements/exposure.py`, built by
+# `queries/world_q.py::road_input` (B12b.09). No `World` crosses.
+
+@dataclass(frozen=True)
+class RoadInput:
+    """What `settlements.exposure` reads, and nothing else:
+      * `travellers` -- `((pid, pool, obstacle, draw_key), ...)`, one per traveller whose last leg crossed a border, in the host's order. `pool` the one pool
+                        rule's number (`seam/wrappers/pool.py::faculty`, fractional where a score is, A-5), `obstacle` a declared float (A-29: the obstacle is fractional, never rounded), `draw_key`
+                        the 16-hex key of the keyed draw `(world_seed, tick, pid, "road:<leg index>")` (A-30, `state.ids.draw_factory`) -- a key, not a `Draw`, so
+                        the record stays a value."""
+    travellers: tuple
+
+
+@dataclass(frozen=True)
+class RoadOutcome:
+    """What `settlements.exposure` returns: `rows`, `((pid, degree), ...)` in the input's order, `degree` a `dice_engine.Degree`, one per traveller."""
+    rows: tuple
+
+
 # ---------------------------------------------------------------------------
 # THE SETTLEMENTS MODULE'S LARDER RECORDS (v9 IN-07 E1; `proposals/2026-10-07-settlements-computation-
 # modules.md` §3 E1, intent only). Read by `modules/settlements/larder.py`'s two `query` entries; built
@@ -1177,19 +1196,22 @@ class LarderInput:
                      so the cohort exemption (`larder_draw`'s) and this projection must agree;
       * `walk`    -- `Fixtures.larder_walk` (B12a.53, `H-528`): `"first"` (the control; `through` ships; the draw is the first
                      stocked rung's alone) or `"through"` (the remainder goes on up the ladder). Last, with a
-                     default, so the positional empty `LarderInput((), (), (), ())` of `_larder_parts`' head builds."""
+                     default, so the positional empty `LarderInput((), (), (), ())` of `_larder_parts`' head builds;
+      * `order`   -- B12b.39: the cohort pids in the season's DRAWN order (`world_q._larder_order`), the order the units a short rung's
+                     proportional shares leave over go out in, one each. `()` (the default, the control) is host order."""
     weights: tuple
     eaters: tuple
     ladders: tuple
     stores: tuple
     walk: str = "first"
+    order: tuple = ()
 
 
 @dataclass(frozen=True)
 class DrawRow:
     """One eater's draw: `cells` is `((kind, want, take, source or None, parts), ...)` in kind order. `source` is
-    the first rung the walk drew from; `parts` is `((rung, units), ...)`, every rung it drew from in walk order
-    (`sum(units) == take`): `((source, take),)` under `first` when `source` is not `None`, else `()`. The debit reads `parts`."""
+    the first rung the walk drew from (the first it pointed at when a short rung's share gave it nothing); `parts` is
+    `((rung, units), ...)`, every rung it drew from in walk order (`sum(units) == take`; `()` where nothing was drawn). The debit reads `parts`."""
     pid: str
     home: str
     cells: tuple
@@ -1228,12 +1250,23 @@ class SubsistInput:
       * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid;
       * `severity`  -- `((pid, multiplier), ...)` (B12a.59): the hunger draw's per-eater multiplier on the body
                        lost per unit short; empty means 1 for every eater. Last, with a default, so the
-                       four-argument build of `world_q.subsist_input` stays valid."""
+                       four-argument build of `world_q.subsist_input` stays valid;
+      * `per_head`  -- B12b.35: the `hunger_loss` fixture read as `"per_head"`: the body lost per unit short is
+                       divided by the eater's weight (`body_step x units // weight`); False (`"per_cohort"`) is
+                       today's loss, undivided. Last, with a default, as `severity` was;
+      * `short_before` -- B12b.40: `((pid, (kind, ...)), ...)` sorted, the kinds each person was short of in the LAST
+                       barrier (`World._subsistence_shortfall`, read before MATTER overwrites it); `()` is a first season,
+                       where nobody is yet known to be short (a loaded world holds the snapshot's record). A kind in it is no crossing this season;
+      * `once_held` -- B12b.40: `((rung, (kind, ...)), ...)` sorted, the kinds each ladder rung's `stores` carries a KEY
+                       for (a held-and-emptied kind keeps its key at 0): where a dearth with no drained source is reported."""
     larder: LarderInput
     chains: tuple
     body_step: int
     bodies: tuple
     severity: tuple = ()
+    per_head: bool = False
+    short_before: tuple = ()
+    once_held: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -1253,12 +1286,16 @@ class SubsistOutcome:
                              subtree's positive gap per kind it ran out of (sorted), `want - take` summed;
       * `falls`           -- `BodyFall`s, pid order, only where the loss is `> 0`;
       * `larder_after`    -- `((rung, ((kind, units), ...)), ...)`, sorted rung, changed rungs only; kinds
-                             in the order the draw first debited them (it reaches `Rung.stores`' order)."""
+                             in the order the draw first debited them (it reaches `Rung.stores`' order);
+      * `short_at`        -- B12b.41: `((pid, rung), ...)`, pid order, the rung each short eater was short at (the rung that gave out for its
+                             first short kind, else R2's: the first ladder rung that ever carried a key for the kind, else the ladder's first).
+                             It is where a hunger fall's cause is read (`loop/matter.py`), NOT the report's rung: a chronic dearth has one here and reports none."""
     draw: DrawRecord
     short_by_person: tuple
     shortfalls: tuple
     falls: tuple
     larder_after: tuple
+    short_at: tuple = ()
 
 
 # v9 IN-07 E3: the `settlements.produce` step_call's records -- one season's yield and credit. Built by
@@ -1279,13 +1316,16 @@ class ProduceInput:
       * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung a Site stands on, sorted,
                           each in its own `Rung.stores` order, read BEFORE this season's debit is written;
       * `larder_after` -- `SubsistOutcome.larder_after` (E2): the debited rungs and kinds only. The module
-                          overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
+                          overlays it on `stores`, because MATTER credits a rung after that rung's debit;
+      * `grown`        -- `frozenset` of the matter kinds the season's factor multiplies
+                          (`rosters.yaml: grown_kinds`); a kind outside it yields at factor 1 (B12b.22)."""
     table: tuple
     scale: object
     factor: tuple
     sites: tuple
     stores: tuple
     larder_after: tuple
+    grown: frozenset
 
 
 @dataclass(frozen=True)
@@ -1435,8 +1475,8 @@ class ProvisionInput:
       * `weight` -- the side's Σ `Person.weight` (what the field fields today);
       * `stores` -- `((kind, units), ...)`: the side's treasury, in its own `Rung.stores` order, `()`
                     for a side with no treasury rung;
-      * `ration` -- `((kind, units per weight), ...)`: the `subsistence_weight` fixture, sorted by kind --
-                    the larder's own ladder, so a field eats as the people it is made of eat;
+      * `ration` -- `((kind, units per weight), ...)`: `world_q.field_ration` (the `subsistence_weight` fixture cut to
+                    `field_ration_kinds`), sorted by kind -- the larder's own ladder, so a field eats as the people it is made of eat;
       * `on`     -- the `field_provisioning` fixture. `False` is the control arm, today's field."""
     weight: int
     stores: tuple

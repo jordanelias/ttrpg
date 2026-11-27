@@ -25,7 +25,7 @@ GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B16-pc-round @96f90bbc8
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B29-pc-custody
+GATE: Batch B29-pc-custody @474a84dc9d12e20dafa0d9edbca341d2e5f7a649
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — rulings A-15 (natural death on, behind the 46 authored ages and a rate), A-16 (a person may try to kill another of his own motive, rarely), A-96 (an access-draw Failure always forms the guard's `capture`), D-41 after A-16 (the opener's edge); `IS-PC-03`'s reading at this close (B37.18). The close reads the nine lines on the closing tree and names no conjunct, so no `reading:` record is written and `status:` is not edited (`IS-A-12`).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):

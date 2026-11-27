@@ -663,11 +663,32 @@ class Scene:
     def cost(self, extended_cost: int) -> int:
         """Scene actions this scene spends: `extended_cost` when it fills more than one slot, else
         `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a caller sets: a scene's price is
-        what it carries, so a play-surface callback returning one effort-2 act pays for three slots."""
-        return extended_cost if self.slots > 1 else self.PLAIN_COST
+        what it carries, so a play-surface callback returning one effort-2 act pays for three slots. B12b.04: PLUS each act's `leg` points beyond
+        the first (`leg_of`), so a journey the chooser priced (`route_pricing` `on`) costs its leg from the scene budget."""
+        base = extended_cost if self.slots > 1 else self.PLAIN_COST
+        return base + sum(leg_of(a) - 1 for a in self.acts)       # B12b.04: a journey's legs beyond the first point; no act carries one while `route_pricing` is `off`
 
 
 EFFORT = "effort"       # the payload key (`Candidate.operands` -> `Act.payload`) `effort_of` reads and `decision/choose.py` forms
+
+
+LEG = "leg"             # the payload key (`Candidate.operands` -> `Act.payload`) `leg_of` reads and `decision/choose.py::pack_scenes` forms (B12b.04)
+
+
+def leg_of(act: "Act") -> int:
+    """B12b.04 (CP-T10-01): the SCENE POINTS a journey act costs, `1` when it carries no `leg` (today's price: one point). `decision/choose.py::pack_scenes`
+    stamps it, from `data/geography.py::leg_price`, on a `move` or `migrate` it priced under `route_pricing` `on`; `Scene.cost` adds its points beyond
+    the first. A `leg` that is not a whole number of at least 1 is REFUSED, as `effort_of` refuses a negative effort: a price below a point would
+    pay the person back budget he did not spend."""
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    n = payload.get(LEG)
+    if n is None:
+        return 1
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        raise Forbidden(f"act {act.id!r} carries leg {n!r}", "B12b.04",
+                        needs="`leg` a whole number of scene points, at least 1",
+                        law="a journey costs `max(1, ceil(cost / leg_unit))` scene points (`geography.leg_price`); a fraction or a price under one point would refund budget")
+    return n
 
 
 def effort_of(act: "Act") -> int:
@@ -1298,7 +1319,7 @@ class Rung:
     # undeclared-fields refusal in `__init__`.
     #
     # ⚠ `sites`, `records` AND `dates` STAY, THOUGH r2's LIST DELETES THEM. `04 §B.3`'s RATIFIED
-    # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], envelope, exists )` declares
+    # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], exists )` declares
     # all three (and `01_AXIOMS.md` §D.2 has a Rung OWN "its Sites, its Records ... dates"). Jordan's
     # `RR-B` ruling amended `04` limb by limb and none of its eight limbs is this line, so deleting
     # them would overwrite ratified text no ruling amends -- the ground on which `Office.upkeep` was
@@ -1313,7 +1334,7 @@ class Rung:
     # `(record_kind, fieldname)` key the write gate, the write class and the emission all share
     # (§8) — the key is the same string Part D uses, and Part D says `yield`. A matrix row naming a
     # field the class lacks is reported by `matrix_rows_without_a_field`, which reads `_DECLARED`.
-    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "envelope", "yield"}
+    _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "yield"}
 
     def __init__(self, id: str, kind: str, **kw: Any):
         if kind not in RUNG_KINDS:
@@ -1323,7 +1344,7 @@ class Rung:
         # `yield` is #353 §25's *"only here"* row: what this rung PRODUCED this season, per
         # matter kind. Empty for a rung that produces nothing, which is most of them.
         for f_, d in (("stores", dict), ("sites", list), ("records", list),
-                      ("dates", list), ("envelope", list), ("yield", dict)):
+                      ("dates", list), ("yield", dict)):
             object.__setattr__(self, f_, kw.pop(f_, None) or d())
         if kw:
             raise Forbidden(f"Rung given undeclared fields {sorted(kw)}", "S10.1",

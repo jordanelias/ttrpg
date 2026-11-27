@@ -158,7 +158,8 @@ class DevelopmentSheet:
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
-                      draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
+                      draw: Optional[Callable[[str, str], Any]] = None,
+                      geo: Optional[dict] = None) -> Callable[..., list]:
     """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person; `p` is the
     `PersonInterior` DELIBERATE hands `choose` (B03.58), the same type, so the space cannot assign to the person.
 
@@ -167,7 +168,9 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     candidates through `release` -- the same step, the same `fx`/`mint`/`draw` the automated chooser
     uses -- so a player's act has the automated act's shape. `auto` (the delegate) is not called: the
     sheet already carries what it would rank. Build it with the arguments the caller gave
-    `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control."""
+    `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control. B12b.04: `geo` is the loaded geography
+    (`data/geography.py::geography`) handed to `release` as `make_chooser` hands it, read only while `route_pricing` is `on`: without it the player's
+    journeys go unpriced while the world still bills their legs."""
     rank = make_ranker(fx, verbs, draw)
 
     def space(p: PersonInterior, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
@@ -189,7 +192,7 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         # automated chooser's does; `decide` stays off (a pick is no sampled order, `Ranked`'s note).
         picked = Ranked(cands[i] for i in chosen)
         picked.forgone_of = getattr(cands, "forgone_of", None)
-        return release(p, picked, n, fx, mint, q, draw)
+        return release(p, picked, n, fx, mint, q, draw, geo)
     return space
 
 

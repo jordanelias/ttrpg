@@ -70,6 +70,7 @@ import sys
 import tempfile
 from collections import Counter
 
+from ..data.geography import geography
 from ..data.rosters import FACTION_BY_PROP, faction_prop_id
 from ..data.verbs import VERB_TABLE, act_key
 from ..decision import choose as CH, make_chooser
@@ -240,7 +241,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
     def watch(p, q, ranked, terms, sampled):
         heard.append((ranked, terms, sampled))
 
-    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw, watch=watch if observe else None)
+    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw, watch=watch if observe else None, geo=geography())
     acq = set(getattr(w, "_acquaintances", ()) or ())
     authored = {pid: {row[0] for row in p.stance if person_q.held_against(p, row[0])}
                 for pid, p in w.persons.items()}

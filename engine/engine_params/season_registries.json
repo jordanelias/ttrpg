@@ -2965,6 +2965,15 @@
             "storm"
           ]
         },
+        "amount_shares": {
+          "source": "proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_arc_needs.md (B12b.19; A-56)",
+          "open": false,
+          "ordered": true,
+          "note": "The share of the giving rung's stock a store move takes, per-mille, spelt as a string (a closed roster's members are names). `requisition` and `transfer` carry it as the choice `amount_share` (`choice_sourced`; `data/verbs.py::CHOICE_RANGES`), and `decision/options.py::_amount_of_share` turns a chosen share into the act's `amount`, `max(1, stock_known x share // 1000)`, off the newest `stores:<kind>` claim he holds about the giving rung (falling back to the amount the bag already carries where he holds none). One member is the control: `_fanned_choices` does not fan a one-member range, so no act is renamed and no hash moves. Authoring `[\"250\", \"500\", \"1000\"]` is the flip and a declared mover (B98, after B38: `07_SE_arc_needs` \u00a76). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster, the two `choice_sourced` lines and `_amount_of_share`.]",
+          "values": [
+            "1000"
+          ]
+        },
         "march_target_kinds": {
           "source": "M4, `ED-IN-0279` clause (a). What a `march` may target.",
           "row": "H-149",
@@ -3712,6 +3721,13 @@
             "harness_plate"
           ]
         },
+        "grown_kinds": {
+          "source": "audits/16_PESSIMIST_SE.md F-PES-SE-07: the season factor is weather, and weather bears on what is grown.",
+          "note": "The matter kinds a season's factor multiplies. A kind outside the set yields at factor 1.",
+          "values": [
+            "grain"
+          ]
+        },
         "arms_kinds": {
           "source": "v11 CP-T03-03 (`-08` AM-C-04; T03 home \u00a72): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store.",
           "note": "`kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there: `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key` a member of THAT FIELD'S closed set in the same module (the typed `kit` section of `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole number, unique among the kinds of one field; refused whole at import otherwise (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here. `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the stores of the rungs the person holds, else of his residence, else the Combatant's own default. \u26a0 B18.04 LANDS SEVEN KINDS, every value `[ASSUMPTION; low; Jordan to correct]`: which arms exist, which key each sets and how they rank is Jordan's content (`-08` AM-C-04). A kind is admitted only with its row of the roster census (`balance.census`) in the commit that admits it: no cell beyond 95% against the kinds already admitted, or its answering kind admitted with it (`arms_spear` stands with `harness_mail` and `harness_plate`, which answer it at the medium and heavy tiers). With `kinds:` emptied `kit_of` returns the Combatant default for everyone and every fight is dealt exactly as before the mechanism existed (the Gate-4 control).",
@@ -3825,7 +3841,7 @@
             "halved",
             "doubled"
           ],
-          "note": "WHAT A WORKS' PLAN COSTS: `{plan kind: {matter kind: amount}}`, paid out of the WORKS' RUNG (`Record.rung`, where the works is kept and where `transfer` delivers to it) when the place rises. `loop/effects_founding.py` is the one reader. `found` moves its stake TWO-SIDED into the Rung it founds, so the grain stays in the world and provisions the new hearth (`_shift`, the one body of a conserved store move). `build` CONSUMES its cost into the fabric, one-sided, a lawful sink. 04_EVALUATION \u00a76 S passes the pair in exactly that shape: *\"`build` debits one side as a lawful consumption sink; `found` is two-sided\"*. \u26a0 A PLAN KIND WITH NO ROW HAS NO PRICE, SO NOBODY CAN PAY FOR IT, AND `found`/`build` REFUSE IT. That is a refusal that emits, never a free place: a missing row is not a cost of zero. The loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell non-empty, every matter kind a `matter_kinds` member, every amount a positive int (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as `wear_per_season` is, because three groups of members get no row by design:\n  * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the\n    roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`\n    stays in `site_kinds` for `band_floors`).\n  * `person` is CENSUS's to mint (F.30), never a works'.\n  * `settlement` and above are unpriced: founding a settlement collides with SE-9(a)'s held\n    question (*\"never adding nodes\"* to the fixed settlement registry), and 02_PROPOSALS P4\n    restricts founding to `hearth` and `community` for that reason.\n[ASSUMPTION; medium; Jordan to correct; revert: delete this roster and its reader, and `found`/`build` cost nothing again (`H-166` limit 1 reopens)]. THE KINDS are 04_EVALUATION's (grain for the stake, timber for a fabric). THE AMOUNT IS INVENTED and it is ONE number, 10, for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's timber, and the stake reuses the same magnitude so the two verbs share one scale rather than two. `H-166` sweeps it; `halved` and `doubled` scale every cell.",
+          "note": "WHAT A WORKS' PLAN COSTS: `{plan kind: {matter kind: amount}}`, paid out of the WORKS' RUNG (`Record.rung`, where the works is kept and where `transfer` delivers to it) when the place rises. `loop/effects_founding.py` is the one reader. `found` moves its stake TWO-SIDED into the Rung it founds, so the grain stays in the world and provisions the new hearth (`_shift`, the one body of a conserved store move). `build` CONSUMES its cost into the fabric, one-sided, a lawful sink. 04_EVALUATION \u00a76 S passes the pair in exactly that shape: *\"`build` debits one side as a lawful consumption sink; `found` is two-sided\"*. \u26a0 A PLAN KIND WITH NO ROW HAS NO PRICE, SO NOBODY CAN PAY FOR IT, AND `found`/`build` REFUSE IT. That is a refusal that emits, never a free place: a missing row is not a cost of zero. The loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell non-empty, every matter kind a `matter_kinds` member, every amount a positive int (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as `wear_per_season` is, because three groups of members get no row by design:\n  * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the\n    roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`\n    stays in `site_kinds` for `band_floors`).\n  * `person` is CENSUS's to mint (F.30), never a works'.\n  * `settlement` and above are unpriced: founding a settlement collides with SE-9(a)'s held\n    question (*\"never adding nodes\"* to the fixed settlement registry), and 02_PROPOSALS P4\n    restricts founding to `hearth` and `community` for that reason.\n[ASSUMPTION; medium; Jordan to correct; revert: delete this roster and its reader, and `found`/`build` cost nothing again (`H-166` limit 1 reopens)]. THE KINDS are 04_EVALUATION's (grain for the stake, timber for a fabric). THE AMOUNT IS INVENTED and it is ONE number, 10, for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's timber, and the stake reuses the same magnitude so the two verbs share one scale rather than two. `H-166` sweeps it; `halved` and `doubled` scale every cell. B12b.33: the five military works (`garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop`) also cost `ore: 10`, so `ore` (a `matter_kinds` member nothing priced) has a reader. [ASSUMPTION; medium; Jordan to correct.]",
           "costs": {
             "hearth": {
               "grain": 10
@@ -3843,19 +3859,24 @@
               "timber": 10
             },
             "garrison": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "barracks": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "archery_range": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "stable": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "siege_workshop": {
-              "timber": 10
+              "timber": 10,
+              "ore": 10
             },
             "field": {
               "timber": 10
@@ -3941,12 +3962,13 @@
           "source": "REM-50, as repaired by AM-A-04 (`workplans/valoria_master_workplan_v10_part13.md`, REM-50): a settlement's hunger, read by `world_q.hunger`",
           "open": false,
           "ordered": true,
-          "note": "The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the next draw leaves a mouth unfed) and the last, `fed`, is \"under no floor\"; neither is a floor. The members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their floors (`world_q.HUNGER_FLOOR_BANDS`). A roster of fewer than two members cannot name `starving` and `fed` and raises at import (`world_q`'s unpack).",
+          "note": "The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the next draw leaves a mouth unfed); `fed` is \"under no floor\"; neither is a floor. The members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their floors (`world_q.HUNGER_FLOOR_BANDS`). The last, `empty`, is no one living there to be fed: `D == 0` and no cohort resides under the rung. `fed` and `empty` are read BY NAME (`world_q.HUNGER_FED`, `HUNGER_EMPTY`), not by position; a roster missing either raises at import (`world_q`'s `require_member`). `starving` is read as the roster's FIRST member (`world_q.HUNGER_STARVING`) and nothing refuses a roster that puts another band first.",
           "values": [
             "starving",
             "hungry",
             "lean",
-            "fed"
+            "fed",
+            "empty"
           ]
         },
         "seasons_of_year": {
@@ -3960,6 +3982,48 @@
             "autumn",
             "winter"
           ]
+        },
+        "season_terms": {
+          "source": "CP-T10-03 (B12b.01), keyed by `seasons_of_year` (ED-IN-0332, D-U1-10: the year has one owner and this row states no length)",
+          "open": false,
+          "note": "WHAT EACH SEASON OF THE YEAR DOES, one entry per member of `seasons_of_year` (`data/rosters.py::SEASON_TERMS`; the load refuses a row whose keys are not exactly those members, or an entry lacking a number for `yield`, `want`, `illness` or `hardship`). `yield` multiplies `world_q.season_factor_of`'s drawn return (its one owner); `want` scales each `subsistence_weight` entry in `world_q._larder_parts`, rounded to a whole number half up, so REM-50's `hunger`, `demanded` and MATTER's draw read one projection; `illness` is read by CP-T10-05; `hardship` is the weather's obstacle term (read by the spell's draw, B12b.03). SHIPPED AT THE CONTROL: every multiplier 1.0 and `hardship` 0, so the calendar runs and moves nothing. THE SWEPT ARM, not shipped, `[ASSUMPTION; medium; Jordan to correct]` (CP-T10-03): winter `yield` 0.25, `want` 1.5, `illness` 2.0, every other season 1.0; the `hardship` values are unstated and set by B98 if at all.",
+          "values": {
+            "spring": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            },
+            "summer": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            },
+            "autumn": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            },
+            "winter": {
+              "yield": 1.0,
+              "want": 1.0,
+              "illness": 1.0,
+              "hardship": 0
+            }
+          }
+        },
+        "season_band_factors": {
+          "source": "`09_WR_B_weather_with_memory_and_the_year` edit 1 (B12b.03), A-54: the season's harvest is one keyed draw on the one four-band ladder, the band choosing the factor",
+          "open": false,
+          "note": "THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2). `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.",
+          "values": {
+            "Overwhelming": 1.0,
+            "Success": 1.0,
+            "Partial": 1.0,
+            "Failure": 1.0
+          }
         },
         "factions": {
           "source": "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` \u00a73, \u00a74, \u00a75, \u00a78, \u00a710.",
@@ -4014,7 +4078,7 @@
         "foreign_cast": {
           "source": "v9 IN-36 (#457 D4, answered RS-21 item 4 [medium; Jordan to correct]: one foreign faction, two seats, in `references/npc_registry.yaml`), read by `harness/populated.py::build_realm(foreign=)` through `data/rosters.py::FOREIGN_CAST`.",
           "row": "IN-36",
-          "note": "WHAT THIS IS. The factions whose persons and places `build_realm(foreign=True)` seats and `foreign=False` (the control arm; the shipped default is `True` since ED-IN-0310) leaves out of the world: a faction named here has no Proposition, no member, no seat, no goal and no rung in the control arm, so that arm is byte-identical to the realm before the empire existed. A foreign faction is still a `factions` member in BOTH arms (`names_index.yaml: token_class: faction` is its owner), which is what puts it in `data/rosters.py::FACTION_BY_PROP` and lets `cast.faction_of` resolve its cast rows with no edit. \u26a0 `Schoenland` IS NOT HERE AND IS FOREIGN ALL THE SAME: its persons and its T16 root are already in the realm as built (`build_realm` keeps T16 out of the realm by giving it no parent), so a switch on it would move a world that does not need to move. This block is the factions whose WHOLE existence is new, and it is not a roster of every foreign faction. WHAT A ROW SAYS. `territory` is the foreign ROOT RUNG, a `territory` with no `contain` edge into `r_valoria` -- never a `realm`, so `endings_reached`'s victory selector (every territory under a `realm` rung) and `populated.census`'s `uncontrolled_in_realm` do not count it; the BORDER is that absence. `settlement` is the one place its persons live, under the root. Crossing the border is a `march`'s arrival leg (`loop/effects_migration.py::_relocate`), so nothing here is a path. \u26a0 NOT BUILT, AND NOT THIS ROW'S: a scheduled arrival (#457 `:145-155`), perception channels at the border, the Schoenland trade demand (FA-01, which needs IN-33's `exchange`). [ASSUMPTION; medium; Jordan to correct] The codes are the author's, and a place has a code and no name because a `Rung` carries no name (`state/carriers.py`): canon names Altonia's chokepoint only as T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at. Revert: Jordan names the homeland places.",
+          "note": "WHAT THIS IS. The factions whose persons and places `build_realm(foreign=True)` seats and `foreign=False` (the control arm; the shipped default is `True` since ED-IN-0310) leaves out of the world: a faction named here has no Proposition, no member, no seat, no goal and no rung in the control arm, so that arm is byte-identical to the realm before the empire existed. A foreign faction is still a `factions` member in BOTH arms (`names_index.yaml: token_class: faction` is its owner), which is what puts it in `data/rosters.py::FACTION_BY_PROP` and lets `cast.faction_of` resolve its cast rows with no edit. \u26a0 `Schoenland` IS NOT HERE AND IS FOREIGN ALL THE SAME: its persons and its T16 root are already in the realm as built (`build_realm` keeps T16 out of the realm by giving it no parent), so a switch on it would move a world that does not need to move. This block is the factions whose WHOLE existence is new, and it is not a roster of every foreign faction. WHAT A ROW SAYS. `territory` is the foreign ROOT RUNG, a `territory` with no `contain` edge into `r_valoria` -- never a `realm`, so `endings_reached`'s victory selector (every territory under a `realm` rung) and `populated.census`'s `uncontrolled_in_realm` do not count it; the BORDER is that absence. `settlement` is the one place its persons live, under the root. Crossing the border is a `march`'s arrival leg (`loop/effects_migration.py::_relocate`), so nothing here is a path. \u26a0 NOT BUILT, AND NOT THIS ROW'S: a scheduled arrival (#457 `:145-155`), perception channels at the border, the Schoenland trade demand (FA-01, which needs IN-33's `exchange`). [ASSUMPTION; medium; Jordan to correct] The codes are the author's, and a place has a code and no name because a `Rung` carries no name (`state/carriers.py`): canon names Altonia's chokepoint only as T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at. Revert: Jordan names the homeland places. OPTIONAL KEY (B12b.20): a `settlement:` entry may carry `stores: {matter kind: whole number >= 1}`, which the builder seeds as that rung's `Rung.stores` (a counterparty stock for `exchange` once CR-49 names another rung). Shipped absent, so no hash moves; a misspelt key or an unregistered kind refuses at load (`data/rosters.py`).",
           "by_faction": {
             "Altonia": {
               "territory": {
@@ -4204,7 +4268,7 @@
         },
         "warrant_sourced": {
           "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.1, the `seize` row: *\"the warrant is the Candidate's source (a held dispensation whose `terms` names the Record)\"*, and the Warrant row of its documents table (*\"`dispensation` whose `terms` is a Person or a Record\"*); plan position IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`).",
-          "note": "WHICH VERBS TAKE THEIR `subject` FROM A HELD WARRANT, AND WHICH RECORD KIND IS THE WARRANT -- `verb: record kind`. ONE LOADER, `data/verbs.py::WARRANT_SOURCED`, read once beside the verb table and refused at import when a line names a verb the table lacks or a kind `record_sourced_operands` gives no `subject` key; both readers below import it from there. A verb named here is formed person-side ONLY on a `subject` that a held Record of that kind names (`decision/options.py::opening_set`: `held_record_claims`, answered through `record_sourced_operands`' `subject` key, the one map of what a Record's content says), and the effect's RECORD half licenses the act on the same reading read WORLD-side (`loop/effects_information.py::_held_warrant_names`, called by `_eff_seize`). \u26a0 WHY A ROSTER AND NOT A FAN: IN-10's held-Record fan (`operand_bags`) is bound to a known-person operand (`known_person_operands`), and `seize` names no second party (#453 K-04), so the fan never reaches it; this is the one place that says a verb's referent comes from a warrant instead of from the question. Without the line a `remit:issue` seat forms `seize` on every Record any question names and the fold refuses it each time -- `requisition`'s scene tax (H-163) for a licence nobody holds. A warrant naming a PERSON (`arrest`, step 5) adds its own line here; a Person `subject` is declined by `seize`'s effect (since v9 IN-13 the row's `existence` conjunct is gone: its object widened to a Rung, and the effect, `_eff_seize`, declines anything that is neither a held Record nor an occupied settlement). The Rung half forms person-side wherever a held dispensation's `terms` names the rung (`test_season_shape.py` plants one on a hearth); at the effect it licenses on OCCUPATION, not on the warrant, so the formation and execution licences differ for the Rung half; no computed source of such a warrant has been measured. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster, its loader (`data/verbs.py::WARRANT_SOURCED`) and its readers (`decision/options.py::opening_set` and `loop/effects_information.py::_held_warrant_names`), and `seize` forms on any referent, refused in the fold.] v9 IN-12 step 5 ADDS `arrest`, the line this note foresaw (*\"a warrant naming a PERSON\"*): it forms person-side only on a person a held dispensation's `terms` names, and its effect (`_eff_arrest`) reads the same held warrant world-side (`_held_warrants`, `seize`'s reading shared) and opens the `detain` on the seat that ISSUED it. H-94's \"a Person (warrant) term has no route\" is answered for `arrest` by this line.",
+          "note": "WHICH VERBS TAKE THEIR `subject` FROM A HELD WARRANT, AND WHICH RECORD KIND IS THE WARRANT -- `verb: record kind`. ONE LOADER, `data/verbs.py::WARRANT_SOURCED`, read once beside the verb table and refused at import when a line names a verb the table lacks or a kind `record_sourced_operands` gives no `subject` key; both readers below import it from there. A verb named here is formed person-side ONLY on a `subject` that a held Record of that kind names (`decision/options.py::opening_set`: `held_record_claims`, answered through `record_sourced_operands`' `subject` key, the one map of what a Record's content says), and the effect's RECORD half licenses the act on the same reading read WORLD-side (`loop/effects_information.py::_held_warrant_names`, called by `_eff_seize`). \u26a0 WHY A ROSTER AND NOT A FAN: IN-10's held-Record fan (`operand_bags`) is bound to a known-person operand (`known_person_operands`), and `seize` names no second party (#453 K-04), so the fan never reaches it; this is the one place that says a verb's referent comes from a warrant instead of from the question. Without the line a `remit:issue` seat forms `seize` on every Record any question names and the fold refuses it each time -- `requisition`'s scene tax (H-163) for a licence nobody holds. A warrant naming a PERSON (`arrest`, step 5) adds its own line here; a Person `subject` is declined by `seize`'s effect (since v9 IN-13 the row's `existence` conjunct is gone: its object widened to a Rung, and the effect, `_eff_seize`, declines anything that is neither a held Record nor an occupied settlement). The Rung half forms person-side wherever a held dispensation's `terms` names the rung (`test_season_shape.py` plants one on a hearth); at the effect it licenses on OCCUPATION, not on the warrant, so the formation and execution licences differ for the Rung half; no computed source of such a warrant has been measured. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster, its loader (`data/verbs.py::WARRANT_SOURCED`) and its readers (`decision/options.py::opening_set` and `loop/effects_information.py::_held_warrant_names`), and `seize` forms on any referent, refused in the fold.] v9 IN-12 step 5 ADDS `arrest`, the line this note foresaw (*\"a warrant naming a PERSON\"*): it forms person-side only on a person a dispensation he holds, or one addressed to him that he has heard of (B29.01), names, and its effect (`_eff_arrest`) reads the same warrant world-side (`world_q.warrants_for`, `seize`'s reading shared) and opens the `detain` on the seat that ISSUED it. H-94's \"a Person (warrant) term has no route\" is answered for `arrest` by this line.",
           "values": {
             "seize": "dispensation",
             "arrest": "dispensation"
@@ -4280,6 +4344,12 @@
             ],
             "speak": [
               "cites"
+            ],
+            "requisition": [
+              "amount_share"
+            ],
+            "transfer": [
+              "amount_share"
             ]
           },
           "ledger_ranges": {
@@ -4394,12 +4464,16 @@
         },
         "violence_contexts": {
           "source": "v11 CR-87 (commit `c7145842` (1); ED-IN-0337, RULED, Jordan 2026-11-05: fighting is exceptional -- it belongs to civil war, criminal contexts and duels, is rare in civil society and is not simply chosen); `held_edge_declines`' shape (above), `verb: [context, ...]`.",
-          "note": "WHICH VERBS A PERSON FORMS ONLY ON A SUBJECT HE HOLDS A CONTEXT OF VIOLENCE AGAINST, AND WHICH CONTEXTS COUNT -- `verb: [context, ...]`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2), after every widening: a referent no listed context names forms no Candidate. A CONTEXT IS A NAME OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime` -- the subject is named by a warrant he holds that is ADDRESSED TO HIM (a held Record of a `warrant_sourced` kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s custody); `duel` -- he holds a `challenge` Record naming himself and the subject as its two parties (PC-10b's Record, read through `record_sourced_operands`); `defence` -- the subject's own act against him, of a kind a VIOLENT opponent-rule row emits (`options.subject_is_opponent` and `violent_prizes`, below: an attack, not a hard word), that he saw done to him in the newest season his ledger holds (`person_q.attackers_of`: `suffered_deeds`' pairing, `recent_claims`' window) [ASSUMPTION; medium; Jordan to correct; revert: drop `defence`]. ED-IN-0336's \"duels only\" is the line `fight: [duel]`. It NARROWS and widens nothing; the hand-built fold, which never forms, is untouched, and the coercion rows (`arrest`, `detain`, `capture`, `interrogate`, `seize`, `raze`, `march`) keep their own gates. ONE LOADER, `data/verbs.py::VIOLENCE_CONTEXTS`, refused at import when a line names a verb the table lacks or one whose `subject` is not its opponent; `options.py` refuses a context it has no reader for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.] B11 lane A (carrying `14_VERBS_PHYSICAL_A` A3's first line): `duel` DROPPED from `fight`. The challenger holds every challenge he issues, so the context licensed him to attack the man he had called out, under `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct; revert: restore `duel`.] B10.61 READING, KEPT: it reads the world's contexts (a war, a warrant, a deed done to him), none of them his own state, so `OwnStateReader` cannot answer it. Without it `fight` forms on 4170, 4049 and 4344 more (person, question) pairs at seeds 0-2, 252 of them at lap 0.",
+          "note": "WHICH VERBS A PERSON FORMS ONLY ON A SUBJECT HE HOLDS A CONTEXT OF VIOLENCE AGAINST, AND WHICH CONTEXTS COUNT -- `verb: [context, ...]`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2), after every widening: a referent no listed context names forms no Candidate. A CONTEXT IS A NAME OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime` -- the subject is named by a warrant that is ADDRESSED TO HIM, held or only heard of (B29.02: one reader, so it admits `fight` as well as `capture`; a held Record of a `warrant_sourced` kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s custody); `duel` -- he holds a `challenge` Record naming himself and the subject as its two parties (PC-10b's Record, read through `record_sourced_operands`); `defence` -- the subject's own act against him, of a kind a VIOLENT opponent-rule row emits (`options.subject_is_opponent` and `violent_prizes`, below: an attack, not a hard word), that he saw done to him in the newest season his ledger holds (`person_q.attackers_of`: `suffered_deeds`' pairing, `recent_claims`' window) [ASSUMPTION; medium; Jordan to correct; revert: drop `defence`]. ED-IN-0336's \"duels only\" is the line `fight: [duel]`. It NARROWS and widens nothing; the hand-built fold, which never forms, is untouched, and the coercion rows (`arrest`, `detain`, `capture`, `interrogate`, `seize`, `raze`, `march`) keep their own gates. ONE LOADER, `data/verbs.py::VIOLENCE_CONTEXTS`, refused at import when a line names a verb the table lacks or one whose `subject` is not its opponent; `options.py` refuses a context it has no reader for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.] B11 lane A (carrying `14_VERBS_PHYSICAL_A` A3's first line): `duel` DROPPED from `fight`. The challenger holds every challenge he issues, so the context licensed him to attack the man he had called out, under `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct; revert: restore `duel`.] `capture` (14_VERBS_PHYSICAL_A A2, B29.02): ED-IN-0337 applied to the second violent row; no `duel` (a duel is `accept`'s), no `defence` (a man defending himself does not take prisoners). [ASSUMPTION; medium; Jordan to correct; revert: drop the `capture` line, and `capture` forms on every person a question names, as before.] B10.61 READING, KEPT: it reads the world's contexts (a war, a warrant, a deed done to him), none of them his own state, so `OwnStateReader` cannot answer it. Without it `fight` forms on 4170, 4049 and 4344 more (person, question) pairs at seeds 0-2, 252 of them at lap 0.",
           "values": {
             "fight": [
               "war",
               "crime",
               "defence"
+            ],
+            "capture": [
+              "war",
+              "crime"
             ]
           }
         },
@@ -4576,6 +4650,14 @@
           "values": [
             "off",
             "on"
+          ]
+        },
+        "journey_verbs": {
+          "source": "v12 B12b.04 (CP-T10-01; `09_WR_B_weather` edit 3: \"`decision/` prices a `move`/`travel` candidate\"): the verbs whose act is a journey over the road. [ASSUMPTION; medium; Jordan to correct; revert: `[move]` -- `migrate` is `move`'s journey and a settling, `verb_table.yaml`: both write through `_relocate`.]",
+          "note": "THE VERBS `decision/choose.py::pack_scenes` prices by `data/geography.py::leg_price` when `Fixtures.route_pricing` is `on`: a Candidate of one of them is stamped with its leg (`carriers.LEG`) and its scene costs the leg's points. `march` is not here: an army's march is not a person's journey and `march_postures` own it. At `off` nothing reads the roster's members.",
+          "values": [
+            "move",
+            "migrate"
           ]
         },
         "said_slants": {
@@ -5505,7 +5587,7 @@
         "endings": {
           "source": "v9 IN-27 (END-VICTORY), on #457 D6's adopted answer (`workplans/valoria_master_workplan_v9_part5.md` RS-21 row 3): *\"the ending vocabulary is a Query over holds and seats that the season reports -- never an actor\"*. Read by `queries/world_q.py::endings_reached`, reported by `loop/driver.py::SeasonDriver.season` as `endings`.",
           "cite": "H-176; GD-1; #457 D6; T-b",
-          "note": "WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the loader reads them (`CLAUDE.md` \u00a74): an ENDING is a row here; it is REACHED when every hold its `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is not credited). \u26a0 THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) completes the condition, and no pure read can locate the crossing, because the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. Revert: every edge the condition reads opened by an act -- which makes `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:` selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id, and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm` RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is outside the realm and not selected), which may carry `settled: true` beside it and nothing else (only the rungs with a `settlement` rung among their descendants). `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction, whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and writes nothing (`SeasonDriver.season` reports it). \u26a0 NOT CARRIED, BY THE CUTS: no stored stability or legitimacy value, no threshold counter, no clock (#457 \u00a75; `T-a`, `T-b`, `T-c`).",
+          "note": "WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the loader reads them (`CLAUDE.md` \u00a74): an ENDING is a row here; it is REACHED when every hold its `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is not credited). \u26a0 THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) completes the condition, and no pure read can locate the crossing, because the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. Revert: every edge the condition reads opened by an act -- which makes `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:` selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id, and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm` RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is outside the realm and not selected), which may carry `settled: true` beside it and nothing else (only the rungs with a `settlement` rung among their descendants), or `{site_band: <a band of band_floors>, of: <a site_kinds member with floors, or all>}` (B12b.05: the Sites under the realm of those kinds, each compared with the band's floor; ELIGIBLE when one is at or below it, and then ONE KEYED DRAW decides, `(seed, tick, row)`: the pool the Sites still above the band times the fixture `site_band_pool_scale`, the obstacle those at or below plus one per band below the named one, so a Failure REACHES the ending and a Partial reports it `near`; such a row carries `victory: false` and no `under:`, and needs no act). `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction, whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and writes nothing (`SeasonDriver.season` reports it). \u26a0 NOT CARRIED, BY THE CUTS: no stored stability or legitimacy value, no threshold counter, no clock (#457 \u00a75; `T-a`, `T-b`, `T-c`).",
           "members": {
             "peninsular_sovereignty": {
               "victory": true,
@@ -5591,6 +5673,16 @@
               "proposition.uttered"
             ]
           }
+        },
+        "tally_axes": {
+          "source": "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)",
+          "note": "THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the referent as a classed referent on the question he answers and marks that question `mandatory` (A-47), and the rows declaring the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS` (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial. `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).",
+          "about_classes": [
+            "Person",
+            "Office",
+            "Rung"
+          ],
+          "members": {}
         }
       },
       "tables": {
@@ -7043,7 +7135,7 @@
             "kind": "Person",
             "conjunct": "party"
           },
-          "requires_typed_note": "v9 IN-12 step 5 -- #453 \u00a79.1's cell, one conjunct: *'`existence` of `subject` kind Person (conjunct `party`)'*. \u26a0 THE WARRANT IS NOT A CONJUNCT, AND THAT IS THE ROW'S OWN TEXT (*'The warrant is not a stem'*): a Record's content, which no form of the grammar reads and no gate basis may (K-52). Person-side it is `rosters.yaml: warrant_sourced` (`arrest: dispensation`, `seize`'s line beside it) -- `arrest` forms only on a `subject` a HELD dispensation's `terms` names (`decision/options.py::opening_set`); world-side the effect (`loop/effects_information.py::_eff_arrest`) reads the same held warrant and declines an act whose actor holds none (`arrest.refused`, the `write` clause). The seat's authority is the gate's `warrant` basis (`state/gate.py::may_warrant`), asked by the effect before it builds the edge, so an admitted act is never killed at the gate.",
+          "requires_typed_note": "v9 IN-12 step 5 -- #453 \u00a79.1's cell, one conjunct: *'`existence` of `subject` kind Person (conjunct `party`)'*. \u26a0 THE WARRANT IS NOT A CONJUNCT, AND THAT IS THE ROW'S OWN TEXT (*'The warrant is not a stem'*): a Record's content, which no form of the grammar reads and no gate basis may (K-52). Person-side it is `rosters.yaml: warrant_sourced` (`arrest: dispensation`, `seize`'s line beside it) -- `arrest` forms only on a `subject` a dispensation he holds, or one addressed to him that he has heard of (`world_q.warrants_for`, `14_VERBS_PHYSICAL_A`), names (`decision/options.py::opening_set`); world-side the effect (`loop/effects_information.py::_eff_arrest`) reads the same warrant through `warrants_for` and declines an act whose actor holds or has heard none (`arrest.refused`, the `write` clause). The seat's authority is the gate's `warrant` basis (`state/gate.py::may_warrant`), asked by the effect before it builds the edge, so an admitted act is never killed at the gate.",
           "counterparty": "subject",
           "counterparty_note": "#453 \u00a79.1: *'counterparty `subject`'* -- THE PRISONER IS THE SECOND SIDE: the contest's opponent (`loop/resolve.py::_contest` reads `row.counterparty`), the man who resists. A self-arrest is declined person-side and refused by the fold's `counterparty` clause (`may_warrant` refuses it at the gate too).",
           "contests": "a standing",
@@ -7060,7 +7152,7 @@
             ],
             "Failure": []
           },
-          "writes_note": "v9 IN-12 step 5 (#453 \u00a79.1): `loop/effects_information.py::_eff_arrest` OPENS ONE `detain` EDGE, prisoner -> THE SEAT THAT ISSUED THE WARRANT, read through `state/attribution.py::causing_act` on the warrant Record's creating Event -- that Act's `via` (K-17/K-52): the enforcement seat acts `via` but does not own the edge, so the issuing seat's bench is who may `pardon` it. Admitted at the gate under the `warrant` basis (`state/gate.py::may_warrant`: the exercised seat sits, grants `WARRANT_ACT`, and its purview reaches the prisoner's home). `Partial` opens the edge as `Success` does (#453: *'[ASSUMPTION: no degraded magnitude exists for an edge]'*); no `Tenure.degree` is written (the row does not declare it). `Failure` writes nothing: the man resisted. DECLINES (`NO_CHANGE` -> `arrest.refused`, the `write` clause): no held warrant names the subject; its issuing seat is unreadable or no seat; the subject is already in custody (one live `detain` per prisoner, #453 \u00a78.1 Custody [ASSUMPTION]); or the gate's `warrant` basis would refuse.",
+          "writes_note": "v9 IN-12 step 5 (#453 \u00a79.1): `loop/effects_information.py::_eff_arrest` OPENS ONE `detain` EDGE, prisoner -> THE SEAT THAT ISSUED THE WARRANT, read through `state/attribution.py::causing_act` on the warrant Record's creating Event -- that Act's `via` (K-17/K-52): the enforcement seat acts `via` but does not own the edge, so the issuing seat's bench is who may `pardon` it. Admitted at the gate under the `warrant` basis (`state/gate.py::may_warrant`: the exercised seat sits, grants `WARRANT_ACT`, and its purview reaches the prisoner's home). `Partial` opens the edge as `Success` does (#453: *'[ASSUMPTION: no degraded magnitude exists for an edge]'*); no `Tenure.degree` is written (the row does not declare it). `Failure` writes nothing: the man resisted. DECLINES (`NO_CHANGE` -> `arrest.refused`, the `write` clause): no warrant he holds or has heard of names the subject; its issuing seat is unreadable or no seat; the subject is already in custody (one live `detain` per prisoner, #453 \u00a78.1 Custody [ASSUMPTION]); or the gate's `warrant` basis would refuse.",
           "emits": {
             "Overwhelming": [
               "arrest.made"
@@ -8418,7 +8510,7 @@
           ],
           "eligibility_note": "`arrest`'s, for `arrest`'s reason (v9 IN-12 step 5): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis (which admits the `detain` this row opens) read one grant. J-8 (whether `dispatch` is a remit act at all) is ANSWERED by B21.03: a seat grants `dispatch` only where its row names it, and `offices.yaml`'s `meta: remit_unruled` is gone; this row moves with `WARRANT_ACT` and the ruling. A person holding no seat that grants it forms no `capture`.",
           "beneficiary": "none",
-          "beneficiary_note": "`arrest`'s column and reason: custody is taken AGAINST the captive and FOR the seat the act is exercised through, an Office no Candidate carries. (The writes land on the SUBJECT, as `fight`'s do, and a harm is not a benefit to the person harmed.)",
+          "beneficiary_note": "`arrest`'s column and reason: custody is taken AGAINST the captive and FOR the seat that issued the warrant where one stands (B29.02), else the seat the act is exercised through, an Office no Candidate carries. (The writes land on the SUBJECT, as `fight`'s do, and a harm is not a benefit to the person harmed.)",
           "referent_class": "Person",
           "referent_class_note": "B11 lane A (the duel chain's reach, `challenge`'s repair and reason): FORMED ONLY ON A `Person`-CLASSED REFERENT, so the row no longer forms on a referent that is no person. The `existence` conjunct stays for a hand-built act. [ASSUMPTION; medium; Jordan to correct; revert: delete this column.]",
           "requires": "the subject is a living individual, present where the actor is",
@@ -8470,7 +8562,7 @@
               "Tenure.since"
             ]
           },
-          "writes_note": "CP-T03-09: `loop/effects_combat.py::_eff_capture` -- `_eff_kill`'s wounds for each party by his own band, and, when the scene's `surrender` names the SUBJECT as the one who yielded, ONE `detain` EDGE, captive -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`), opened where `may_warrant` and `_may_close_custody` both hold (`arrest`'s pair of tests, so an admitted act is never killed at the gate and a custody nothing could close is never opened). The captive stays in `w.persons`; a yield by the ACTOR opens nothing. The gate's `warrant` basis is unchanged.",
+          "writes_note": "CP-T03-09: `loop/effects_combat.py::_eff_capture` -- `_eff_kill`'s wounds for each party by his own band, and, when the scene's `surrender` names the SUBJECT as the one who yielded, ONE `detain` EDGE, captive -> THE SEAT THAT ISSUED THE WARRANT the actor holds or has heard of where its seat could close the custody (`world_q.warrants_for`; B29.02), else THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`), opened where `may_warrant` and `_may_close_custody` both hold (`arrest`'s pair of tests, so an admitted act is never killed at the gate and a custody nothing could close is never opened). The captive stays in `w.persons`; a yield by the ACTOR opens nothing. The gate's `warrant` basis is unchanged.",
           "emits": {
             "Declared": [
               "capture.declared"
@@ -9699,7 +9791,7 @@
             "basis": "purview",
             "conjunct": "authority"
           },
-          "requires_typed_note": "\u26a0 v9 IN-13 (#453 \u00a710.4 step 8) WIDENED THE OBJECT TO A RUNG AND DROPPED THE `object` CONJUNCT: `existence` of `subject` kind `Record` refused every Rung, and 'Record or Rung' is a disjunction the typed grammar lacks (#453 \u00a79.1, the `seize` row), so the grammar cannot write it. #453 sends the row to `pardon`'s route, untyped and flat; this keeps it TYPED AND KEYED on the one conjunct it can still spell -- `authority`, `requisition`'s `purview` conjunct (the exercised seat's purview over the subject's place: a Record's holder's home, a Rung's own place) -- and the OBJECT'S KIND moves to the effect, which splits on Record vs Rung (`loop/effects_information.py`: `_eff_seize`, then `_seize_rung`) and declines anything that is neither a held Record nor an occupied settlement (`seize.refused`, the `write` clause). [ASSUMPTION; medium; Jordan to correct; revert: `requires_typed: none` + a registered predicate and a flat `seize.refused`, #453's own text -- a flat revert must move the seat-purview check into `_seize_rung` unconditionally (with no hold on the town, the `authority` conjunct is the only purview check the Rung half has).] A SEAT is never seized: it refuses at `authority`, since an Office has no place (`world_q.place_of`) and so no seat's purview reaches it (`seize.unauthorized`); planted past the precondition, the effect declines it and the gate's `seizure` clause admits only a Record or a Rung. THE RECORD HALF AS BUILT AT v9 IN-12 step 6 (#453 \u00a79.1): `authority` is the seat half of the gate's `seizure` basis asked of the precondition, so a seat refusing is `seize.unauthorized` and not a refusal for the world. [ASSUMPTION; medium; Jordan to correct; revert: drop the `authority` conjunct and the key -- the effect then declines the same act as `seize.refused` through `may_seize`.] \u26a0 THE WARRANT IS NOT A CONJUNCT, AND THAT IS THE ROW'S OWN TEXT (*'the licence is the effect's: a held warrant naming the Record'*): it is a Record's content, which no form of the grammar reads and no gate basis may (K-52). Person-side it is `rosters.yaml: warrant_sourced` -- `seize` forms only on a `subject` a held dispensation's `terms` names (`decision/options.py::opening_set`) -- and world-side the Record half of the effect (`_eff_seize`) reads the same held dispensation; the Rung half licenses on OCCUPATION instead (`_seize_rung`). A seat may license itself with one `issue`: a held warrant is any live hold on a dispensation whose terms name the Record (C3, recorded, not changed).",
+          "requires_typed_note": "\u26a0 v9 IN-13 (#453 \u00a710.4 step 8) WIDENED THE OBJECT TO A RUNG AND DROPPED THE `object` CONJUNCT: `existence` of `subject` kind `Record` refused every Rung, and 'Record or Rung' is a disjunction the typed grammar lacks (#453 \u00a79.1, the `seize` row), so the grammar cannot write it. #453 sends the row to `pardon`'s route, untyped and flat; this keeps it TYPED AND KEYED on the one conjunct it can still spell -- `authority`, `requisition`'s `purview` conjunct (the exercised seat's purview over the subject's place: a Record's holder's home, a Rung's own place) -- and the OBJECT'S KIND moves to the effect, which splits on Record vs Rung (`loop/effects_information.py`: `_eff_seize`, then `_seize_rung`) and declines anything that is neither a held Record nor an occupied settlement (`seize.refused`, the `write` clause). [ASSUMPTION; medium; Jordan to correct; revert: `requires_typed: none` + a registered predicate and a flat `seize.refused`, #453's own text -- a flat revert must move the seat-purview check into `_seize_rung` unconditionally (with no hold on the town, the `authority` conjunct is the only purview check the Rung half has).] A SEAT is never seized: it refuses at `authority`, since an Office has no place (`world_q.place_of`) and so no seat's purview reaches it (`seize.unauthorized`); planted past the precondition, the effect declines it and the gate's `seizure` clause admits only a Record or a Rung. THE RECORD HALF AS BUILT AT v9 IN-12 step 6 (#453 \u00a79.1): `authority` is the seat half of the gate's `seizure` basis asked of the precondition, so a seat refusing is `seize.unauthorized` and not a refusal for the world. [ASSUMPTION; medium; Jordan to correct; revert: drop the `authority` conjunct and the key -- the effect then declines the same act as `seize.refused` through `may_seize`.] \u26a0 THE WARRANT IS NOT A CONJUNCT, AND THAT IS THE ROW'S OWN TEXT (*'the licence is the effect's: a held warrant naming the Record'*): it is a Record's content, which no form of the grammar reads and no gate basis may (K-52). Person-side it is `rosters.yaml: warrant_sourced` -- `seize` forms only on a `subject` a held dispensation's `terms` names (`decision/options.py::opening_set`) -- and world-side the Record half of the effect (`_eff_seize`) reads a dispensation he holds, or one addressed to him that he has heard of (`world_q.warrants_for`, B29.01); the Rung half licenses on OCCUPATION instead (`_seize_rung`). A seat may license itself with one `issue`: a held warrant is any live hold on a dispensation whose terms name the Record (C3, recorded, not changed).",
           "writes": [
             "Tenure.until",
             "Tenure.since"
@@ -9724,7 +9816,7 @@
               "seize.refused"
             ]
           },
-          "refusal_note": "\u26a0 v9 IN-13: the `object` key went with its conjunct (`requires_typed_note`). KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half), `requisition`'s shape. `seize.unauthorized` -- the SEAT, at `authority`: none exercised grants `issue`, or its purview does not reach the subject's place; a SEAT named as the subject refuses here (an Office has no place, so no purview). `seize.refused` -- the WORLD, at `write`: the subject is neither a held Record nor an occupied settlement, or the effect declined (Record half: no held warrant names the Record, the actor already holds it, or nobody else does; Rung half: the actor is not committed to the seat's faction, that faction is not mustered there, nobody holds the town or the seat's own faction does, or the actor already holds it). No counterparty clause: the row names no second party (K-04).",
+          "refusal_note": "\u26a0 v9 IN-13: the `object` key went with its conjunct (`requires_typed_note`). KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half), `requisition`'s shape. `seize.unauthorized` -- the SEAT, at `authority`: none exercised grants `issue`, or its purview does not reach the subject's place; a SEAT named as the subject refuses here (an Office has no place, so no purview). `seize.refused` -- the WORLD, at `write`: the subject is neither a held Record nor an occupied settlement, or the effect declined (Record half: no warrant he holds or has heard of names the Record, the actor already holds it, or nobody else does; Rung half: the actor is not committed to the seat's faction, that faction is not mustered there, nobody holds the town or the seat's own faction does, or the actor already holds it). No counterparty clause: the row names no second party (K-04).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 6): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the row, its `remit:issue` eligibility, the `seizure` basis and the warrant reading are v9 IN-12's, on #453 `:1412` and `:1662`.",
           "source": "v9 IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.1 `:1662-1698`"
@@ -9948,10 +10040,18 @@
                 "of": "subject",
                 "relation": "with",
                 "conjunct": "with"
+              },
+              {
+                "form": "scalar_threshold",
+                "of": "subject",
+                "scalar": "ration.taken",
+                "comparator": ">=",
+                "threshold_predicate": "ration.asked",
+                "conjunct": "fed"
               }
             ]
           },
-          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.4's cell, verbatim in shape: *`existence` of `subject` kind Person \u2227 `relation` of `subject`, `with`*. Two existing forms on existing stems; `with` is world-only (`ED-IN-0282`), so the tender forms the Candidate on whom he is asked about and the fold refuses an absent patient (`tend.refused`). A person stands with himself, so tending oneself (rest) is admitted by the same cell.",
+          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.4's cell, verbatim in shape: *`existence` of `subject` kind Person \u2227 `relation` of `subject`, `with`*. Two existing forms on existing stems; `with` is world-only (`ED-IN-0282`), so the tender forms the Candidate on whom he is asked about and the fold refuses an absent patient (`tend.refused`). A person stands with himself, so tending oneself (rest) is admitted by the same cell. B12b.42 (`16_PESSIMIST_SE_A` edit 4, primary form; [ASSUMPTION; medium; Jordan to correct; revert: drop the third conjunct, `fed`, and its refusal key, which restores the two-conjunct cell): a THIRD conjunct, `scalar_threshold` of `subject`, `ration.taken >= ration.asked` -- the cohort's UNFED GAP (`world_q.cohort_ration`: the sum of `want - take` over `subsistence_draw`'s cells for it) is 0. Food, not nursing, mends hunger (H-304), so a cohort the larder cannot feed is not tended to full body; the refusal is a keyed clause (`tend.refused` at `fed`), not an effect-body decline. A weight-1 person is no eater (`subsistence_draw`'s exemption), so his gap is none and he is tended as before. It sits in front of the graded draw and does not touch it (`14_VERBS_MATERIAL_A_mending.md` \u00a76).",
           "writes": [
             "Person.body"
           ],
@@ -9966,6 +10066,9 @@
             "with": [
               "tend.refused"
             ],
+            "fed": [
+              "tend.refused"
+            ],
             "write": [
               "tend.refused"
             ],
@@ -9977,7 +10080,7 @@
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
-          "refusal_note": "v9 IN-12 step 9, #453 \u00a79.4: *'refusal `tend.refused`'* -- one flat kind: the subject is no person, is not with the tender, or is already whole (the write moved nothing).",
+          "refusal_note": "v9 IN-12 step 9, #453 \u00a79.4: *'refusal `tend.refused`'* -- one flat kind: the subject is no person, is not with the tender, is a cohort the larder cannot feed in full (B12b.42), or is already whole (the write moved nothing).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 9): the row and its magnitude are v9 IN-12's, on #453 \u00a79.4 `:1925-1941`.",
           "source": "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.4 `:1925-1941`"
@@ -11269,17 +11372,18 @@
           "class": "MATTER/ACTS",
           "social": "false",
           "by": "DR-1, D10 \u2014 see \u00a7D4. \u26a0 THE `MAT` STEP GAINED ITS WRITER AT PLAN POSITION `19c` (2026-09-30): `loop/matter.py`'s travel pass ends every leg at the next MATTER, so `decision/budget.py`'s distance penalty is a cost of the season travelled in and not, as it was, of every season after. `travel.ended` is that write's emission (`H-12`: MATTER emits per write, and `travel.moved` would report a move that did not happen)",
-          "emits": "`travel.moved` \u00b7 `travel.ended`"
+          "emits": "`travel.moved` \u00b7 `travel.ended` \u00b7 `travel.delayed`"
         },
         {
           "kind": "Person",
           "field": "weight",
           "steps": [
+            "MAT",
             "CEN"
           ],
           "class": "MATTER",
           "social": "false",
-          "by": "W2/H-49. \u26a0 PROVENANCE CORRECTED by the adversarial pass: this said \"a \u00a754 fold-in\" and #353 \u00a754's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it",
+          "by": "W2/H-49; B12b.38 (`regrow_seasons`): Layer 1 \u00a725 ('envelope weight -- births and deaths' at MATTER; bodies a licensed clock) and \u00a729 (no clock at CENSUS) ground MATTER's rise of a fed, housed, quiet cohort beside B12b.36's fall. \u26a0 PROVENANCE CORRECTED by the adversarial pass: this said \"a \u00a754 fold-in\" and #353 \u00a754's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it",
           "emits": "`weight.changed`"
         },
         {
@@ -11370,18 +11474,6 @@
           "by": "DR-3",
           "emits": "`date.scheduled`",
           "unproduced": "no hole row -- orphan since at least 2026-09-03 (this file's #358 rev.2 invariant-2 measurement lists it; git blame stops at the shallow-clone boundary f41f20a, 2026-09-07)"
-        },
-        {
-          "kind": "Rung",
-          "field": "envelope",
-          "steps": [
-            "MAT",
-            "CEN"
-          ],
-          "class": "MATTER",
-          "social": "false",
-          "by": "DR-1",
-          "emits": "`envelope.changed`"
         },
         {
           "kind": "Rung",

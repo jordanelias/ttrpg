@@ -280,7 +280,7 @@ def test_19_two_requisitions_on_one_larder_in_one_fold_the_second_refuses():
     refused = [e for e in out if e.kind == "requisition.refused"][0]
     assert list(VERB_TABLE["requisition"].refusal_for("stores")) == ["requisition.refused"]
     assert ("stores:grain", 0) in [(o.predicate, o.value) for o in refused.observed], refused.observed
-    assert w.rungs["Hh"].stores["grain"] == 0 and w.rungs[TREASURY].stores["grain"] == 5
+    assert w.rungs["Hh"].stores.get("grain", 0) == 0 and "grain" not in w.rungs["Hh"].stores and w.rungs[TREASURY].stores["grain"] == 5
 
 
 def test_19_a_requisition_outside_the_seats_purview_is_unauthorized_and_says_whose():

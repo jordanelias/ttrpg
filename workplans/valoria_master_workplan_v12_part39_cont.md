@@ -333,7 +333,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - FALSIFIER and CONTROL: "A function returning one number for an army's strength." Control: no resolution caller (`git grep -n "readout(" modules/mass_battle` → the definition and tests only).
 - GATE: `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; digests equal.
 - HASH MOVERS: none ("no caller in resolution").
-- DEPENDS ON: V12 B31.14, B31.03 (carry factors), B31.04 (pace); V12 Batch B19a (`core/contact_table.py::felling_chance`, `mb_contact.json`); V12 Batch B17 (`table.py`).
+- DEPENDS ON: V12 B31.14, B31.03 (carry factors), B31.04 (pace); V12 Batch B19a @32b6dd0ea (`contact_table.py::felling_chance`, `mb_contact.json`; at `systems/mass_battle/sim/` until B19.10 moves it to `modules/mass_battle/core/`); V12 Batch B17 (`table.py`).
 - GLOSSARY: *felling chance* (row exists, MBA §8.3): unchanged.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.15`, `[skip ci]`.
