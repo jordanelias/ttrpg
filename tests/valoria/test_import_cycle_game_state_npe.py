@@ -106,9 +106,9 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     result this repository usually only claims in prose.
     """
     cycles = _real_cycles()
-    assert len(cycles) == 3, (
-        f"expected exactly 3 remaining cycles (the canon MB family + the declared "
-        f"battle_loop one + the one declared engine.season one), got {len(cycles)}: {cycles}"
+    assert len(cycles) == 4, (
+        f"expected exactly 4 remaining cycles (the canon MB family + the declared "
+        f"battle_loop one + the two declared engine.season ones), got {len(cycles)}: {cycles}"
     )
 
     def _matches(cyc, prefix):
@@ -132,6 +132,15 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     harness_main = [c for c in cycles
                     if set(c) == {'engine.season.harness.exercises',
                                   'engine.season.harness.run_cases'}]
+    # B34.04's runner (`play_surface.main`, the one command that plays every scenario) calls `scenarios.run` and
+    # `governance_spine._top_rung` by function-local import, while `scenarios` and `governance_spine` import the
+    # printers `play_surface` owns (`deliberation_lines`, `holdings_of`, `dispatching_chooser`): the same kind of
+    # `__main__` edge as `exercises <-> run_cases`, matched by its EXACT member set and SHRINK-ONLY on the same
+    # discipline. It goes when the runner moves to a module no printer-importer imports (its entry is deleted in
+    # that commit); the plan fixes the runner's home at `play_surface.py`, so it is declared, not hidden.
+    harness_runner = [c for c in cycles
+                      if set(c) == {'engine.season.harness.aperture', 'engine.season.harness.governance_spine',
+                                    'engine.season.harness.play_surface', 'engine.season.harness.scenarios'}]
     # The massbattle<->units family is DELETED, not merely absent — asserted so a future edit that
     # reintroduces it fails here rather than quietly restoring a cycle the port removed.
     reintroduced = [c for c in cycles
@@ -146,14 +155,15 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
         ('modules.mass_battle', mb_canon),
         ('modules.mass_battle battle_loop <-> orchestration', battle_loop),
         ('engine.season harness __main__ edge', harness_main),
+        ('engine.season harness runner edge (B34.04)', harness_runner),
     ):
         checked += 1
         assert len(family) == 1, f"{family_name}: expected exactly one cycle, found {family}"
     # assert-that-asserted (CLAUDE.md §0.1 point 2): confirm every named family was actually
     # looked up, not skipped by an early return.
-    assert checked == 3
+    assert checked == 4
 
     # No family is a partial/renamed match of another — the union covers every cycle found, so a
     # fourth cycle cannot hide behind a family that matched two.
-    accounted = mb_canon + battle_loop + harness_main
-    assert len(accounted) == len(cycles) == 3
+    accounted = mb_canon + battle_loop + harness_main + harness_runner
+    assert len(accounted) == len(cycles) == 4
