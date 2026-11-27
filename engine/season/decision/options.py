@@ -23,10 +23,10 @@ from __future__ import annotations
 
 import itertools
 from typing import Any, Callable, Optional
-from ..data.rosters import RIG_KEY, RIG_LEVELS, STANCE_MAX
+from ..data.rosters import AMOUNT_SHARE_KEY, RIG_KEY, RIG_LEVELS, STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
-    SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
+    SHORTFALL_SOURCED_OPERANDS, VIA, ScalarThreshold, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHALLENGE_KIND, COVERT_KINDS, PURSUIT_AXES, SUCCESSIONS,
@@ -1528,7 +1528,31 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     if ordered is not None and bags:
         commanded = commanded_read(p)
         bags = [b for b in bags if b.get(ordered, subject if ordered == "subject" else None) in commanded]
-    return _fanned_choices(row, bags)
+    return _amount_of_share(p, row, _fanned_choices(row, bags), fx, tick)
+
+
+def _amount_of_share(p: Person, row: "VerbRow", bags: list, fx: "Fixtures", tick: int = 0) -> list:
+    """B12b.19 (`07_SE_arc_needs` (b); A-56): A CHOSEN SHARE BECOMES THE BAG'S `amount`. A bag the choice fan gave an `amount_share` (`rosters.yaml: amount_shares`,
+    ranged by `choice_sourced` on `requisition` and `transfer`; a one-member range is never fanned, so a shipped bag carries none and is returned as it was) takes
+    `amount = max(1, stock_known x share // 1000)`, where `stock_known` is the newest `stores:<kind>` claim in HIS OWN ledger about the giving rung (CR-23's stock report,
+    read through `LedgerReader`, the one comparator) -- the rung the row's `stores >= amount` conjunct reads (`of:`: `requisition`'s `subject`, `transfer`'s `from`), never
+    named by verb. Where he holds no such claim, or the bag names no kind or rung, the amount stays the one the bag already carries (`_derive_operand`: the claim the
+    question is about, else the fixtures'). The share is applied after the fan because the fan is where it is chosen; `_operands` has no share until then.
+    PERSON-SIDE AND WORLD-FREE: a claim he holds is the only stock he can know, and a refusal at `stores` is what a stale or absent one costs him."""
+    if not any(AMOUNT_SHARE_KEY in b for b in bags):
+        return bags
+    req = row.requires_typed.requirement
+    giver = next((c.of for c in getattr(req, "clauses", (req,))
+                  if isinstance(c, ScalarThreshold) and c.scalar == "stores" and c.threshold == "amount"), None)
+    reader = LedgerReader(p.ledger, tick=tick, decay=fx.claim_decay())
+    out = []
+    for b in bags:
+        share = b.get(AMOUNT_SHARE_KEY)
+        stock = reader.read(b.get(giver), f"stores:{b.get('kind')}") if share is not None and giver and b.get("kind") else None
+        if isinstance(stock, int) and not isinstance(stock, bool):
+            b = {**b, "amount": max(1, stock * int(share) // 1000)}
+        out.append(b)
+    return out
 
 
 def _fanned_choices(row: "VerbRow", bags: list) -> list:

@@ -476,3 +476,70 @@ def test_h303_first_takes_one_through_takes_six_and_splits_the_debit():
         assert w.rungs["terr_march"].stores["grain"] == above_left, walk
         # the two debits sum to the take: no matter made or lost by the split
         assert 1001 - w.rungs[S.HUNGRY].stores.get("grain", 0) - w.rungs["terr_march"].stores["grain"] == take, walk
+
+
+# ======================================================================================
+# THE SHARE A STORE MOVE TAKES (B12b.19; `07_SE_arc_needs` (b); A-56, A-81)
+# ======================================================================================
+
+def _requisitions_of(w, claim_stock=None):
+    """The Duke's computed `requisition` candidates on the larder world, through the real `opening_set`. `claim_stock` plants the `stores:grain` claim the
+    share reads (CR-23's report of the giving rung's level, held in his own ledger); `None` plants none."""
+    from .test_u7_remit import DUKE
+    p = w.persons[DUKE]
+    if claim_stock is not None:
+        p.ledger.append(Claim("c_stock_s", DUKE, "S", "stores:grain", claim_stock, w.tick, "firsthand", 100, "own"))
+    out = []
+    for q in world_q.questions_for(w, p, since=(w.tick, 0)):
+        out += [c for c in opening_set(p, View(p.id, [], 12, q), q, w.fixtures) if c.verb == "requisition"]
+    return out
+
+
+def test_amount_shares_one_member_is_not_fanned():
+    """THE CONTROL: the shipped roster has one member, so no `requisition` candidate carries an `amount_share`, the amount is the fixtures' and the act's id is
+    what it was -- even with the giving rung's stock claim held (the share is read only where it was chosen)."""
+    from ..data.verbs import CHOICE_RANGES
+    from .test_u7_remit import _larder_world
+    assert len(CHOICE_RANGES["amount_share"]) == 1
+    w, _d = _larder_world()
+    cands = _requisitions_of(w, claim_stock=40)
+    assert cands and all("amount_share" not in c.operands for c in cands), [c.operands for c in cands]
+    assert {c.operands["amount"] for c in cands} == {w.fixtures.get("default_transfer_amount")}
+
+
+def test_two_members_fan_two_candidates_differing_only_in_amount(monkeypatch):
+    """TWO MEMBERS (`250`, `1000`): the one requisition becomes two, each carrying its share, differing only in `amount` (and the key that names the share): a quarter and
+    the whole of the stock he holds a claim of, `max(1, stock x share // 1000)`. With no stock claim held the amount falls back to the fixtures' on both."""
+    from ..data.verbs import CHOICE_RANGES, act_key
+    from .test_u7_remit import STOCK, _larder_world
+    monkeypatch.setitem(CHOICE_RANGES, "amount_share", ("250", "1000"))
+    w, _d = _larder_world()
+    cands = _requisitions_of(w, claim_stock=STOCK)
+    by_share = {c.operands["amount_share"]: c for c in cands}
+    assert sorted(by_share) == ["1000", "250"] and len(cands) == 2, [c.operands for c in cands]
+    assert by_share["250"].operands["amount"] == STOCK // 4 and by_share["1000"].operands["amount"] == STOCK
+    rest = [{k: v for k, v in c.operands.items() if k not in ("amount", "amount_share")} for c in cands]
+    assert rest[0] == rest[1] and len({act_key("requisition", c.operands["subject"], c.operands) for c in cands}) == 2     # two acts, two ids
+    w2, _d2 = _larder_world()
+    bare = _requisitions_of(w2)
+    assert len(bare) == 2 and {c.operands["amount"] for c in bare} == {w2.fixtures.get("default_transfer_amount")}
+
+
+def test_a_refused_requisition_leaves_a_claim_of_the_refusal():
+    """A-81: a requisition asking more than the larder holds is refused at `stores`, and WITNESS leaves the requisitioner a firsthand claim `(larder, requisition.refused,
+    doer = himself)`: the carrier `a_refusal_is_remembered` reads. CONTROL: a requisition within the stock is taken and leaves no such claim."""
+    from .test_u7_remit import DUKE, STOCK, _fold, _kinds, _larder_world, _requisition
+
+    def after(amount, key="rq"):
+        w, d = _larder_world()
+        out = _fold(w, d, _requisition(key, subject="S", amount=amount))
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+        return _kinds(out), [c for c in w.persons[DUKE].ledger if c.subject == "S" and c.predicate == "requisition.refused"]
+
+    kinds, claims = after(STOCK + 1)
+    assert kinds == ["requisition.refused"] and len(claims) == 1 and claims[0].doer == DUKE and claims[0].source == "firsthand", (kinds, claims)
+    for n in range(40):     # the task draw (`task_draw_arm`) may lose a requisition that is within the stock; sweep the act's key to one it wins
+        kinds, claims = after(5, f"rq{n}")
+        if kinds == ["requisition.taken"]:
+            break
+    assert kinds == ["requisition.taken"] and claims == []

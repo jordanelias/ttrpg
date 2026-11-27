@@ -1235,6 +1235,19 @@ rosters:
       roster, the `choice_sourced` line and the `Invested` band, and a march is a storm.]
     values: [storm]
 
+  amount_shares:
+    source: "proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_arc_needs.md (B12b.19; A-56)"
+    open: false
+    ordered: true
+    note: >-
+      The share of the giving rung's stock a store move takes, per-mille, spelt as a string (a closed roster's members are names). `requisition` and `transfer` carry it
+      as the choice `amount_share` (`choice_sourced`; `data/verbs.py::CHOICE_RANGES`), and `decision/options.py::_amount_of_share` turns a chosen share into the act's
+      `amount`, `max(1, stock_known x share // 1000)`, off the newest `stores:<kind>` claim he holds about the giving rung (falling back to the amount the bag already
+      carries where he holds none). One member is the control: `_fanned_choices` does not fan a one-member range, so no act is renamed and no hash moves. Authoring
+      `["250", "500", "1000"]` is the flip and a declared mover (B98, after B38: `07_SE_arc_needs` §6). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster,
+      the two `choice_sourced` lines and `_amount_of_share`.]
+    values: ["1000"]
+
   march_target_kinds:
     source: "M4, `ED-IN-0279` clause (a). What a `march` may target."
     row: H-149
@@ -2998,6 +3011,8 @@ rosters:
       utter: [cites]
       reconstruct: [concluded]
       speak: [cites]
+      requisition: [amount_share]
+      transfer: [amount_share]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
     # `condition.band_crossed` and `site.ruptured` (B12a.64) the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).

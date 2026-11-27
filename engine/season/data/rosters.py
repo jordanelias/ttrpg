@@ -1985,6 +1985,17 @@ MARCH_TARGET_KINDS = roster("march_target_kinds")
 # posture is read under.
 MARCH_POSTURES = roster("march_postures", ordered=True)
 MARCH_POSTURE_KEY = "posture"
+# B12b.19 (`07_SE_arc_needs` (b); A-56): THE SHARE OF THE GIVING RUNG'S STOCK A STORE MOVE TAKES, per-mille, a payload key (`AMOUNT_SHARE_KEY`) `requisition` and `transfer`
+# carry as a choice. Ordered, because `choice_sourced` fans the Candidates in this order; shipped `["1000"]`, one member, so nothing is fanned. Spelt as strings (a closed
+# roster's members are names); `decision/options.py::_amount_of_share` reads each as an integer per-mille. Refused at import for a member that is no whole number of
+# per-mille in 1..1000 (a share of nothing, or of more than the stock, is no choice of a share).
+AMOUNT_SHARES = roster("amount_shares", ordered=True)
+AMOUNT_SHARE_KEY = "amount_share"
+if not AMOUNT_SHARES or any(not (isinstance(s, str) and s.isdigit() and 1 <= int(s) <= 1000) for s in AMOUNT_SHARES):
+    raise Unspecified(
+        f"`amount_shares` is {list(AMOUNT_SHARES)!r}", "rosters.yaml -- amount_shares",
+        needs="a non-empty roster of strings, each a whole number of per-mille from 1 to 1000",
+        law="B12b.19 -- a share is a part of a stock handed over (A-56); a member no arithmetic can apply would be a choice nothing performs")
 # B15.08 (PHY_A A3): THE PAYLOAD KEY A VIOLENCE DECLINE SETS -- the context of violence that admitted a `fight`'s subject
 # (`decision/options.py::opening_set`), read by `seam/wrappers/combat.py::combat_input` for the terms (`rosters.yaml:
 # context_terms`). Its range is the names of `options.py::VIOLENCE_CONTEXT_READERS` (`data/` imports no `decision/`, so
