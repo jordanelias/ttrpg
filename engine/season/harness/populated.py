@@ -163,7 +163,7 @@ def census(w: World) -> dict:
                 r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
                 if (n := len(closed_uses(w, r)))},
             # REM-50: `world_q.hunger`'s only caller until CP-T10-05 -- `uncontrolled`'s precedent above: a
-            # report, not a rule. Each settlement's band, from the NEXT draw; D = 0 counts as `fed`.
+            # report, not a rule. Each settlement's band, from the NEXT draw; a settlement no cohort resides under reads `empty`.
             "hunger_by_settlement": dict(sorted(hunger_bands.items())),
             # IS-B3-SE-03 (B12a.01): the settlement scale's motion, one block, a reader like the rows above.
             "settlement_motion": settlement_motion(w, next_draw, hunger_bands)}

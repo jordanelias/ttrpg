@@ -109,7 +109,8 @@ def test_a_settlement_override_comes_before_its_territory_row(monkeypatch):
 
 
 def _bands(w) -> dict:
-    return POP.census(w)["hunger_by_settlement"]
+    """The populated settlements' bands: `empty` (no cohort resides there, B12b.37) is no hunger reading and is left out."""
+    return {b: n for b, n in POP.census(w)["hunger_by_settlement"].items() if b != "empty"}
 
 
 def test_ground_reaches_produce_the_settlements_do_not_share_one_band():

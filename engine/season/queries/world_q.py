@@ -2356,15 +2356,26 @@ def has_room(w: World, person: str, dest: str, residence: Optional[dict] = None)
 # THE RUNG KIND `hunger` IS DEFINED FOR, and its bands: `rosters.yaml: hunger_bands` is the one owner, most
 # severe first. `starving` is `unmet > 0` and `fed` is "under no floor"; the members between them are the FLOOR
 # bands, in the order `Fixtures.hunger_band_floors` lists their floors (the first floor is the first floor
-# band's). Refused at import if the roster stops carrying the kind (`witness.SEAT_CHANNEL`'s shape).
+# band's). `fed` and `empty` are read BY NAME, not by position (B12b.37): the floor bands are the members between the first and `fed`.
+# Refused at import if the roster stops carrying the kind (`witness.SEAT_CHANNEL`'s shape).
 HUNGER_KIND = "settlement"
-HUNGER_STARVING, *HUNGER_FLOOR_BANDS, HUNGER_FED = HUNGER_BANDS
-HUNGER_FLOOR_BANDS = tuple(HUNGER_FLOOR_BANDS)
+HUNGER_FED, HUNGER_EMPTY = "fed", "empty"
+for _band in (HUNGER_FED, HUNGER_EMPTY):
+    require_member(_band, HUNGER_BANDS, f"hunger band {_band!r} is not a `HUNGER_BANDS` member", "rosters.yaml -- hunger_bands",
+                   law="`hunger` names `fed` and `empty` by name; a roster without either cannot read a settlement's band")
+HUNGER_STARVING = HUNGER_BANDS[0]
+HUNGER_FLOOR_BANDS = tuple(HUNGER_BANDS[1:HUNGER_BANDS.index(HUNGER_FED)])
 require_member(HUNGER_KIND, RUNG_KINDS,
                f"rung kind {HUNGER_KIND!r} is not a `RUNG_KINDS` member",
                "rosters.yaml -- rung_kinds",
                law="`hunger` is defined for the settlement rung only; a kind the roster does not carry is a "
                    "dead reader wearing a query's clothes (ID-13)")
+
+
+def _cohort_resides_under(w: World, rung_id: str) -> bool:
+    """Does any cohort have a live `reside` at `rung_id` or a rung beneath it? `hunger`'s `empty` test (B12b.37)."""
+    here = _subtree(w, rung_id)
+    return any(w.persons[pid].is_cohort and home in here for pid, home in residence_of(w).items())
 
 
 def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
@@ -2387,7 +2398,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
         `(A, D)` pair, because the pair cannot say "0" for D = 0; no float.
       * `band`: `"starving"` if `unmet > 0`; else the first of `HUNGER_FLOOR_BANDS` whose floor in
         `Fixtures.hunger_band_floors` the stores fall under, `A < floor * D` in whole numbers; else `"fed"`
-        (also when D = 0). `()` is THE CONTROL: no floor band exists, so only `"starving"` or `"fed"`. A
+        (also when D = 0 and a cohort resides under S); `"empty"` when D = 0 and NO cohort resides under S
+        (`residence_of`: no one lives there to be fed). `()` is THE CONTROL: no floor band exists, so only
+        `"starving"`, `"fed"` or `"empty"`. A
         floor list that is not whole, non-negative and ascending, or longer than `HUNGER_FLOOR_BANDS`,
         RAISES `Forbidden` (the sweep arm would otherwise mislabel a band).
 
@@ -2410,11 +2423,13 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
       * A and D sum UNLIKE kinds, as the plan's `Σ_k` does, while the draw substitutes none
         (`settlements.larder_draw` walks kind by kind). A surplus of one eaten kind can lift `cover` over a
         floor another kind sits under: grain 20 and salt 1000 against a want of grain 20 and salt 10 read
-        `fed` at cover 34 (`test_hunger.py::test_g`). `unmet` is per kind, so the mask hides `hungry` or
+        `fed` at cover 34. `unmet` is per kind, so the mask hides `hungry` or
         `lean`, never `starving`.
       * Read with no draw at a first floor of 1 (the shipped arm), `hungry` is reachable only through a take
         from ABOVE S: every unit the draw takes at S or beneath is in A, so `unmet == 0` gives `A >= D`. A
-        settlement with no cohort under it (D = 0) reads `fed`."""
+        settlement with no cohort residing under it reads `empty`, not `fed` (B12b.37); D = 0 with a
+        cohort residing there still reads `fed`. (`demanded` walks `contain`, the band's `empty` test walks
+        `reside`: a cohort standing in a town it does not live in feeds there and does not populate it.)"""
     TRACE.query("hunger", "resolver")
     rung = w.rungs.get(rung_id)
     if rung is None or rung.kind != HUNGER_KIND:
@@ -2440,6 +2455,8 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
     unmet = D - G
     if unmet > 0:
         band = HUNGER_STARVING
+    elif D == 0 and not _cohort_resides_under(w, rung_id):
+        band = HUNGER_EMPTY
     else:
         band = next((name for name, floor in zip(HUNGER_FLOOR_BANDS, floors) if A < floor * D), HUNGER_FED)
     return band, (Fraction(A, D) if D else Fraction(0)), unmet

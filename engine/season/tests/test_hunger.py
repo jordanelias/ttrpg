@@ -34,8 +34,18 @@ def test_h_it_reads_and_writes_nothing_and_the_census_reports_it():
         world_q.hunger(w, rid)
     assert w.content_hash() == h0 and len(w.log) == log0
     assert {r: dict(x.stores or {}) for r, x in w.rungs.items()} == stores0
-    assert POP.census(w)["hunger_by_settlement"] == {"fed": 1, "starving": 1}
+    assert POP.census(w)["hunger_by_settlement"] == {"empty": 1, "starving": 1}      # the granary holds a steward and no cohort: nobody there to be fed (B12b.37)
     assert w.content_hash() == h0
+
+
+def test_settlement_with_no_cohort_reads_empty():
+    """B12b.37: a settlement no cohort resides under reads `empty`; one a cohort resides under at D == 0 (no `subsistence_weight`, so nothing is
+    wanted) still reads `fed`, the control that only the cohort's absence moves the band."""
+    w = S.build()
+    assert world_q.hunger(w, S.GRANARY)[0] == "empty" and world_q.hunger(w, S.HUNGRY)[0] == "starving"
+    bare = S.build(fixtures=DEFAULT_FIXTURES.sweep("subsistence_weight", {}))
+    assert sum(world_q.demanded(bare, S.HUNGRY).values()) == 0 and any(p.is_cohort for p in bare.persons.values())
+    assert world_q.hunger(bare, S.HUNGRY) == ("fed", 0, 0) and world_q.hunger(bare, S.GRANARY)[0] == "empty"
 
 
 UNIFORM = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")

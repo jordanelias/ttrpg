@@ -2320,11 +2320,13 @@ rosters:
     ordered: true
     note: >-
       The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the
-      next draw leaves a mouth unfed) and the last, `fed`, is "under no floor"; neither is a floor. The
-      members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their
-      floors (`world_q.HUNGER_FLOOR_BANDS`). A roster of fewer than two members cannot name `starving`
-      and `fed` and raises at import (`world_q`'s unpack).
-    values: [starving, hungry, lean, fed]
+      next draw leaves a mouth unfed); `fed` is "under no floor"; neither is a floor. The members between
+      them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their floors
+      (`world_q.HUNGER_FLOOR_BANDS`). The last, `empty`, is no one living there to be fed: `D == 0` and no
+      cohort resides under the rung. `fed` and `empty` are read BY NAME (`world_q.HUNGER_FED`,
+      `HUNGER_EMPTY`), not by position; a roster missing either, or with `starving` not first, raises at
+      import (`world_q`'s unpack).
+    values: [starving, hungry, lean, fed, empty]
   seasons_of_year:
     source: "ED-IN-0332 (RULED, D-U1-10): the year is a roster; `data/fixtures.py` already speaks of \"two years at four seasons\""
     open: false

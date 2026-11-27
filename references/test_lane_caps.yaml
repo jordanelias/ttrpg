@@ -37,6 +37,7 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a build that pays a works' whole price from the payer's stores leaves no zero key of a paid kind in them, and a build that leaves one unit of a paid kind leaves that kind at one"}
       - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a hungry cohort's body falls by the body step times its units short divided by its weight where the loss is per head, so a weight-20 cohort short the same per head loses what a weight-2 one does and the weight-2 loss halves; at the shipped per-cohort arm the weight-20 cohort loses ten times the weight-2 one's"}
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "under famine_loss a cohort whose body stands under the lowest body floor thins by that share of its weight each season, each thinning caused by the body write and its demanded falling with it, one over the floor thins not at all, a cohort at body 0 dies only at weight 1, and at famine_loss 0 it dies at body 0 as before"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a settlement no cohort resides under reads the hunger band empty, a settlement a cohort resides under whose cohort wants nothing still reads fed, and the one with cohort and need reads starving"}
   engine:
     base: 1043
     warrants: []
