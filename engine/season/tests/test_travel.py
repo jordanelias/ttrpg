@@ -15,13 +15,21 @@ from engine.dice_engine.dice_engine import Degree
 from engine.substrate import composition
 
 from ..boot.realm import build_realm
+from ..data import geography as geo_data
 from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import SEASONS_OF_YEAR, settlement_rung_id
+from ..data.verbs import EVENT_KINDS
 from ..harness.populated import run
+from ..harness.probes import about
+from ..queries import world_q
 from ..queries.inputs import RoadInput
-from ..state.ids import draw_factory
+from ..seam.wrappers.pool import faculty
+from ..state.carriers import Event, Person, Rung, Tenure
+from ..state.ids import ROOT, draw_factory
+from ..state.world import World
 
 JOURNEYS = 40     # the source's forty
-POOL = 6          # one person kind (PROXY): a traveller's pool, a test constant until B12b.09 reads the person's `move` faculty
+POOL = faculty(World(0), Person("p_road", "a traveller"), "move")      # one person kind (PROXY): his pool as `road_input` reads it, the `move` faculty
 
 
 def _road(seed: int, borders: int, n: int = JOURNEYS) -> Counter:
@@ -58,3 +66,59 @@ def test_road_hazard_off_hash_equal():
     run(1, 0, w=base)
     run(1, 0, w=swept)
     assert base.content_hash() == swept.content_hash()
+
+
+# -- B12b.09: who is on the road, and their odds -- a hand-built road of three territories, S-001 to S-013 (the card's four-point journey) --------------------------
+
+START, STOP = settlement_rung_id("S-001"), settlement_rung_id("S-013")
+
+
+def _road_world() -> World:
+    """The six settlements the journey passes, two to a territory under one realm (the settlements are the geography's own ids; the territories are planted),
+    with three people: `p_far` who set out from S-001 at tick 2 and stands in S-013, `p_near` who moved inside the first territory, and `p_home` who holds no
+    leg. `w.tick` is 3. The weather draw is at its control."""
+    w = World(0, DEFAULT_FIXTURES.sweep("road_hazard", "on"), event_kinds=EVENT_KINDS)
+    path = [settlement_rung_id(s) for s in geo_data.route_over("S-001", "S-013")[0]]
+    assert len(path) == 6 and path[0] == START and path[-1] == STOP
+    w.rungs["r_realm"] = Rung("r_realm", "realm", stores=None)
+    n = 0
+    for i, territory in enumerate(("terr_a", "terr_b", "terr_c")):
+        w.rungs[territory] = Rung(territory, "territory", stores=None)
+        w.add_tenure(Tenure(f"t_in_{n}", territory, "r_realm", "contain", 0))
+        for rid in path[2 * i: 2 * i + 2]:
+            n += 1
+            w.rungs[rid] = Rung(rid, "settlement", stores={})
+            w.add_tenure(Tenure(f"t_in_{n}", rid, territory, "contain", 0))
+        n += 1
+    for pid in ("p_far", "p_near", "p_home", "p_soldier"):
+        w.persons[pid] = Person(pid, pid)
+    w.tick = 3
+    w.add_tenure(Tenure("t_far0", "p_far", START, "contain", 0, until=2))
+    w.add_tenure(Tenure("t_far1", "p_far", STOP, "contain", 2))
+    w.add_tenure(Tenure("t_near0", "p_near", path[0], "contain", 0, until=2))
+    w.add_tenure(Tenure("t_near1", "p_near", path[1], "contain", 2))
+    w.add_tenure(Tenure("t_home", "p_home", STOP, "contain", 0))
+    w.add_tenure(Tenure("t_soldier", "p_soldier", path[2], "contain", 0))
+    w.persons["p_far"].travel_leg = [STOP]
+    w.persons["p_near"].travel_leg = [path[1]]
+    return w
+
+
+def test_road_input_obstacle_counts_borders_bad_weather_and_war(monkeypatch):
+    """Only a traveller whose last journey crossed a border is in the input; his obstacle is `road_base`'s level plus `road_step_ob` for the journey's four points,
+    for each crossed territory whose season landed Failure and for each a field was fought in this tick or the last, and his pool is his `move` faculty."""
+    fx = DEFAULT_FIXTURES
+    base, step = fx.get("difficulty_ob")[fx.get("road_base")], fx.get("road_step_ob")
+    w = _road_world()
+    (pid, pool, obstacle, key), = world_q.road_input(w).travellers          # p_near crossed no territory, p_home holds no leg: only p_far
+    assert pid == "p_far" and pool == faculty(w, w.persons["p_far"], "move")
+    assert obstacle == base + 4 * step, "the control: four points of distance, no weather draw, no war"
+    assert key == draw_factory(0, lambda: 3)("p_far", "road:0").key
+    w.log.append(Event("ev_old", "field.lost", [about(w, "p_far")], [ROOT], 0))          # a field three ticks old, in terr_c where the journey ended
+    assert world_q.road_input(w).travellers[0][2] == base + 4 * step, "a field three ticks old is not on the road"
+    w.log.append(Event("ev_war", "field.won", [about(w, "p_soldier")], [ROOT], 2))       # a field fought last tick in terr_b, a territory the journey entered
+    assert world_q.road_input(w).travellers[0][2] == base + 5 * step
+    # the weather arm on, every season so hard that the draw lands Failure in each territory (pool 6 against an obstacle of 100): the two territories entered
+    w.fixtures = w.fixtures.sweep("season_factor_draw", ((1.0,),) * len(SEASONS_OF_YEAR))
+    monkeypatch.setattr(world_q, "SEASON_TERMS", {s: {**t, "hardship": 100} for s, t in world_q.SEASON_TERMS.items()})
+    assert world_q.road_input(w).travellers[0][2] == base + (4 + 2 + 1) * step

@@ -1077,8 +1077,8 @@ class Findings:
 @dataclass(frozen=True)
 class RoadInput:
     """What `settlements.exposure` reads, and nothing else:
-      * `travellers` -- `((pid, pool, obstacle, draw_key), ...)`, one per traveller whose last leg crossed a border, in the host's order. `pool` an int (the one
-                        pool rule's, `seam/wrappers/pool.py::faculty`), `obstacle` a declared float (A-29: the obstacle is fractional, never rounded), `draw_key`
+      * `travellers` -- `((pid, pool, obstacle, draw_key), ...)`, one per traveller whose last leg crossed a border, in the host's order. `pool` the one pool
+                        rule's number (`seam/wrappers/pool.py::faculty`, fractional where a score is, A-5), `obstacle` a declared float (A-29: the obstacle is fractional, never rounded), `draw_key`
                         the 16-hex key of the keyed draw `(world_seed, tick, pid, "road:<leg index>")` (A-30, `state.ids.draw_factory`) -- a key, not a `Draw`, so
                         the record stays a value."""
     travellers: tuple

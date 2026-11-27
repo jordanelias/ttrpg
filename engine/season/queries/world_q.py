@@ -116,7 +116,7 @@ from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
 from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
-                     ProduceInput, Sitting, SubsistInput, Under, is_adjourned, is_filed, is_first, written)
+                     ProduceInput, RoadInput, Sitting, SubsistInput, Under, is_adjourned, is_filed, is_first, written)
 from ..data.fixtures import SITE_YIELD, check_season_weather
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -1512,6 +1512,20 @@ def season_spell(w: World, territory: Optional[str] = None) -> float:
     return draw_factory(w.world_seed, lambda: year)(region, "season_spell").pick(spells)
 
 
+def season_band_of(w: World, territory: Optional[str] = None) -> Optional[str]:
+    """B12b.09 (`16_PESSIMIST_WR_A` edit 4): THE BAND THIS TICK'S SEASON DRAW LANDED IN OVER `territory` -- `"Overwhelming"`, `"Success"`, `"Partial"` or
+    `"Failure"`, the key of `season_band_factors` -- or `None` with `season_factor_draw` at `()` (the control: nothing is drawn). THE ONE OWNER of the
+    draw `season_factor_of` reads its band factor by, and the one `road_input` asks "did this territory's season land Failure". The draw is keyed
+    `(world_seed, tick, territory, "season_factor")`, so asking twice agrees and no ordinal moves. Refuses a swept arm that is no year, as `season_factor_of` did."""
+    table = w.fixtures.get("season_factor_draw")
+    check_season_weather(table, w.fixtures.get("season_spell_draw"))      # a swept arm is refused where it is read (the load reads the shipped one)
+    if not table:
+        return None
+    pool = _sigma_leverage.pool_of(w.fixtures.get("season_endurance"), 0, w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
+    draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory, "season_factor")
+    return DEGREE_LABEL[degree_from_net(_sigma_leverage.roll_net_continuous(pool, rng=draw), season_term(w, "hardship") + season_spell(w, territory))]
+
+
 def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     """v9 IN-21 / `H-26`: the multiplier on this season's `yield` in `territory`. THE ONE OWNER of the
     term MATTER's yield step scales by.
@@ -1535,13 +1549,9 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     share a parent rung. `territory` is a `territory` rung's id (`enclosing_territory`'s answer); `None` is a
     place that lies in none (a Site at the realm or a duchy) and keys the draw on `"world"`."""
     base = w.fixtures.get("season_factor")
-    table = w.fixtures.get("season_factor_draw")
-    check_season_weather(table, w.fixtures.get("season_spell_draw"))      # a swept arm is refused where it is read (the load reads the shipped one)
-    if not table:
+    band = season_band_of(w, territory)       # `None` at the control: nothing drawn, the bare constant
+    if band is None:
         return base
-    pool = _sigma_leverage.pool_of(w.fixtures.get("season_endurance"), 0, w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
-    draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory, "season_factor")
-    band = DEGREE_LABEL[degree_from_net(_sigma_leverage.roll_net_continuous(pool, rng=draw), season_term(w, "hardship") + season_spell(w, territory))]
     return base * SEASON_BAND_FACTORS[band] * season_term(w, "yield")
 
 
@@ -2879,6 +2889,78 @@ def leg_points(w: World, a: str, b: str) -> Optional[int]:
     if found is None:
         return None
     return geo_data.leg_points_of(found[1], w.fixtures.get("leg_unit"))
+
+
+#: The Events a fought field leaves that put war on a road (`16_PESSIMIST_WR_A`: "`field.lost` / `field.won` placed there"); a `field.drawn` is no war on it.
+ROAD_WAR_KINDS = ("field.won", "field.lost")
+
+
+def _last_journey(w: World, pid: str) -> Optional[tuple]:
+    """`(origin, dest)` OF `pid`'S LAST JOURNEY, off his `contain` edges: the live edge's object is where he arrived (`_relocate` re-homes him at the act) and the
+    latest edge closed at or before it is where he set out from. `None` where he has no live edge or none before it (a leg a probe laid by hand): a journey with
+    no known start crossed no border anyone can name."""
+    edges = edges_of(w, "contain", pid)
+    live = [t for t in edges if t.until is None]
+    if not live:
+        return None
+    arrived = live[-1]
+    left = [t for t in edges if t.until is not None and t.until <= arrived.since]
+    return (left[-1].object, arrived.object) if left else None
+
+
+def _war_territories(w: World) -> frozenset:
+    """THE TERRITORIES A FIELD WAS FOUGHT IN THIS TICK OR THE LAST: the territory enclosing where each `ROAD_WAR_KINDS` Event was placed (`event_place`).
+    `w.log` is monotone in `emitted_at`, so the walk stops at the first Event older than the tick before this one."""
+    out = set()
+    for e in reversed(w.log):
+        if e.emitted_at < w.tick - 1:
+            break
+        if e.kind in ROAD_WAR_KINDS:
+            territory = enclosing_territory(w, event_place(w, e))
+            if territory is not None:
+                out.add(territory)
+    return frozenset(out)
+
+
+def road_input(w: World) -> RoadInput:
+    """B12b.09 (`16_PESSIMIST_WR_A` edit 4, CP-T10-02): WHO IS ON THE ROAD AND THEIR ODDS -- one `(pid, pool, obstacle, draw_key)` for each person holding a `travel_leg`
+    whose last journey crossed a border, in `pid` order. Nothing in the loop calls it while `road_hazard` is `off`; a read, storing nothing.
+
+    THE JOURNEY is `_last_journey`'s, read through `route`: the settlements it passes, each under its `enclosing_territory`; the territories it ENTERED
+    (every one but the origin's own) are the ones it CROSSED. A journey that crossed none (inside one settlement, inside one territory, blocked, or with no known
+    start) draws nothing and is in the input of nobody: a journey of no border has no hazard.
+    POOL: `seam/wrappers/pool.py::faculty(w, person, "move")`, the one owner of a person's pool for a verb, so a skill a designer attaches to `move` is read here
+    with no edit. OBSTACLE, a declared float (A-29): the difficulty `road_base` names (`difficulty_ob`, the even line against nobody opposite) plus `road_step_ob`
+    for each of three hostile terms -- the journey's distance (`leg_points_of`, the one price `leg_price` shows the chooser), each crossed territory whose
+    season draw this tick landed Failure (`season_band_of`; none at the weather arm's control), and each crossed territory a field was fought in this tick or the
+    last (`_war_territories`). DRAW KEY: `(world_seed, tick, pid, "road:<leg index>")`, the index of his last leg, through the one keyed-draw owner (A-30)."""
+    from ..seam.wrappers.pool import faculty       # at the call: `seam/` imports this module
+    fx = w.fixtures
+    base, step, unit = float(fx.get("difficulty_ob")[fx.get("road_base")]), fx.get("road_step_ob"), fx.get("leg_unit")
+    failure = DEGREE_LABEL[Degree.FAILURE]
+    keyed = draw_factory(w.world_seed, lambda: w.tick)
+    war = None                                      # read once, and only for a person who has a journey to price
+    rows = []
+    for pid in sorted(w.persons):
+        person = w.persons[pid]
+        journey = _last_journey(w, pid) if person.travel_leg else None
+        found = route(w, *journey) if journey is not None else None
+        if not found or not found[0]:
+            continue
+        own = enclosing_territory(w, journey[0])
+        crossed = []
+        for rung_id in found[0]:
+            territory = enclosing_territory(w, rung_id)
+            if territory is not None and territory != own and territory not in crossed:
+                crossed.append(territory)
+        if not crossed:
+            continue
+        war = _war_territories(w) if war is None else war
+        steps = (geo_data.leg_points_of(found[1], unit)
+                 + sum(1 for t in crossed if season_band_of(w, t) == failure)
+                 + sum(1 for t in crossed if t in war))
+        rows.append((pid, faculty(w, person, "move"), base + steps * step, keyed(pid, f"road:{len(person.travel_leg) - 1}").key))
+    return RoadInput(tuple(rows))
 
 
 def closed_uses(w: World, rung_id: str) -> dict:
