@@ -1990,6 +1990,9 @@ DECLARED, WON, LOST, UNOPPOSED, INVESTED, DRAWN = FIELD_BANDS     # CP-T04-06 ap
 FIELD_CASUALTY_MODELS = roster("field_casualty_models")
 FIELD_WINNER_CASUALTY_ARMS = roster("field_winner_casualty_arms")     # CR-24 (`H-360`)
 MARCH_TARGET_KINDS = roster("march_target_kinds")
+#: v12 B21b.13 (CR-91 (1), A-103): the grounds a claim to a territory may be uttered on, in the order they are asked. ORDERED: the first that
+#: holds is the claim's ground. What each member means is `queries/world_q.py::CASUS_GROUND_READERS`, which refuses an unknown member at import.
+CASUS_GROUNDS = roster("casus_grounds", ordered=True)
 # CP-T04-06 (`besiege`): HOW A `march` MEETS AN OPPOSING SIDE, a payload key (`MARCH_POSTURE_KEY`) the act declares and the
 # mass-battle provider reads. Ordered, because `choice_sourced` fans the Candidates in this order; shipped `[storm]`. The two
 # NAMES are the posture's semantics (a storm fights, a besiege wears the walls and fights nothing) and are what the roster
@@ -2083,6 +2086,16 @@ for _name in {n for _cf, _others in COMPATIBLE_WITH.items() for n in (_cf, *(_ot
     require_member(_name, FACTIONS, f"`factions.compatible_with` names {_name!r}, which is not a faction",
                    "rosters.yaml -- factions", law="B21.63 -- a compatibility exception pairs two factions the roster names",
                    needs="a `token_class: faction` name, as key and in each list")
+
+
+#: `{mood, predicate}` -- B21b.05 (IN-30): the shape of a creed Proposition (`rosters.yaml: factions.creed`). The realm builder mints
+#: each rostered faction's creed in it; `queries/world_q.py::faction_props` reads every Proposition of this shape as a faction.
+FACTION_CREED = roster_map("factions", "creed")
+if set(FACTION_CREED) != {"mood", "predicate"} or not all(isinstance(v, str) and v for v in FACTION_CREED.values()):
+    raise Unspecified(
+        f"rosters.yaml `factions.creed` is {FACTION_CREED!r}, not exactly a non-empty `mood` and `predicate`", "rosters.yaml -- factions",
+        needs="`creed: {mood: <a Proposition mood>, predicate: <the creed predicate>}` and no other key",
+        law="B21b.05 (IN-30) -- a creed Proposition is identified by its mood and predicate alone; any other key would be read by nothing")
 
 
 def factions_compatible(a: str, b: str) -> bool:

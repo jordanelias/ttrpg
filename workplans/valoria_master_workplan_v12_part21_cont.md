@@ -174,7 +174,7 @@ Short names, paths, words and the `UNDECIDED` numbers are part 21's head.
 - FALSIFIER and CONTROL: a pin re-recorded that no item declared (`git diff` of the pin files names a slice no item's HASH MOVERS line names): stop and find the undeclared mover. Control: the hash-EQUAL items' readings (B21b.05 at build, B21b.07, B21b.17, B21b.22, B21b.23) are the previous item's.
 - GATE: the BATCH GATE, whole (the head of part 21).
 - HASH MOVERS: the re-pin.
-- DEPENDS ON: V12 B21b.05 to B21b.27; B21b.01 to B21b.04 @ae98b73ef (re-pinned at that partial close).
+- DEPENDS ON: V12 B21b.05 to B21b.27; B21b.01 to B21b.04 @ac899f123 (re-pinned at that partial close).
 - GLOSSARY: none (the rows each item edited are read at the close).
 - COST and TIER: re-pin and readings; `sonnet`, `high`; the readings against each conjunct read by `opus`.
 - LANDS IT: B21b's producer; `Item: B21b.99`, the batch's last `Item:` commit (no `[skip ci]`: CI's first run of the batch).

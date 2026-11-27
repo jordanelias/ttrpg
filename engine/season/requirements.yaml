@@ -470,12 +470,12 @@ rows:
         expects: "`engine/mc_v18.py` absent; `test_faction_q.py` green"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99, with the close's fixes in the working tree)"
+          date: "2026-11-27"
           seed: "per test"
           seasons: "per test"
-          line: "14 passed in 5.64s"
-          control: "`ls engine/mc_v18.py` -> No such file or directory (the file-state half)"
+          line: "16 passed (`test_faction_q.py` alone; 26 passed with `test_in12_interrogate.py`, 7.58s) on the closing tree"
+          control: "`ls engine/mc_v18.py` -> No such file or directory (the file-state half); B21b.11 re-recorded the file's WAR chain (`0944cdc85`), the 16 tests unchanged in number against main @8c4741c59"
           does_not_show: >-
             that no other driver exists under another name; a green test file reads the faction
             view's queries, not that a faction acts through a seat in computed play; run with
@@ -549,6 +549,20 @@ rows:
         argv: ["python", "-m", "engine.season.harness.aperture", "1", "--seeds", "0", "1", "2"]
         expects: "`field.won + field.lost` above 0 at seeds 0-2, `field.unopposed` printed beside; `test_field_scene.py` green"
         holds: "unread"
+        reading:
+          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99, with B21b.99's pin edits and the close's fixes in the working tree); the before-reading on 42e35ac05 (the in-flight row's `open`, the remainder's opening; a detached worktree)"
+          date: "2026-11-27"
+          seed: "0, 1, 2"
+          seasons: 1
+          line: |-
+            FOUGHT FIELDS  won+lost+drawn 0  unopposed 0  stance receipts on the losing side 0   (realm seeds 0, 1, 2, both trees; the spine worlds the same)
+            `march` at the realm, seeds 0 / 1 / 2: formed 4 / 4 / 3, offered 4 / 4 / 3, attempted 0 / 0 / 0, executed 0, refused 0 (both trees equal)
+          control: >-
+            the same command on the opening tree `42e35ac05` read the same lines: the batch's remainder moved neither the field line nor `march`'s funnel at one season;
+            the earlier record (this conjunct's `in_loop:`, @c32198f) read `march` attempted 6, 4, 5 and `mass_battle.resolve_field` entered 0, 0, 2 times, so the chooser attempted `march` then and does not at either tree read here
+          does_not_show: >-
+            why `march` forms and is offered and is never attempted at one season (not traced here; the plan expected no value, the war's target set and the cap moving it both ways); a season-two reading;
+            that `test_field_scene.py` is green (not run for this record); `holds` stays `unread`
       - id: R-04.c5
         text: >-
           personal combat and grid combat with units: (i) a duel resolves in computed play at seeds
@@ -655,6 +669,12 @@ rows:
             third verb, is not built out at any seed on either tree (clean 0): formed 13, 13, 13 and attempted 0, 0, 4 on the base, formed 0,
             0, 0 and attempted 0, 0, 0 after B29.02. `covenant` reads 3 of 3 seeds on the same block. The realm's `built out` line reads
             `23 of 67`, `19 of 67`, `21 of 67` at seeds 0, 1, 2 on both trees; this conjunct is the whole table, so it stays unread
+            ALSO READ BY B21b-fa-war (the batch that adds `march`, `declare`, `covenant`, `retain`, `conspire`; B21b.99 and its close, `PYTHONHASHSEED=0 aperture 2 --seeds 0 1 2`, realm seeds 0, 1, 2, on
+            tree 59af76a70 (B21b.26) plus B21b.99's pin edits and the close's fixes, before the merge with main's B12b and B29; the control line reads `seed 0 EQUAL · seed 1 EQUAL · seed 2 EQUAL`):
+            `covenant` 3 of 3 seeds (clean 53, 107, 97); `march` 0 of 3 (formed 4, 4, 4, attempted 0, 0, 0); `declare` 0 of 3 (formed 11, 13, 12, attempted 0, 0, 0; before the close's
+            `held_edge_declines: declare: commit` it read formed 13, 13, 13 and attempted 13, 10, 11, every one refused on the declarer's own faction); `retain` 0 of 3 (formed 4, 4, 4, attempted 0, 0, 0);
+            `conspire` 0 of 3 (formed 40, 37, 37; attempted 5, 0, 4; clean 2, 0, 2, each `kinds no`: each act earns one of `plot.laid` and `plot.joined` and the Won band declares both, so no one act holds the band
+            the aperture asks of a clean execution). The realm's `built out` read 21, 19, 20 of 70 and 23 of 70 in at least one seed. The gate (`IS-A-08`, part21 UNDECIDED 6) FAILS B21b on the four.
           does_not_show: >-
             that `arrest` is built out (it is not, at any seed: B29.03's STOPS IF, the link is owned by B21.54's class, an
             [ASSUMPTION] on rulings A-21 and A-22, or by CR-63's custody-to-warrant duty, B24a); that `accept` is built out at seed 1; that the other verbs of the table are (43 of 67 are not built

@@ -2794,6 +2794,21 @@ if ENEMY_CLASS not in REFERENT_CLASSES:
                     needs="the war-context class in the closed roster",
                     law="v11 CR-87 -- a class stamped by name must be one the roster declares")
 
+# B21b.08 (IN-30's occasion, CP-T09-01; [ASSUMPTION; medium; Jordan to correct; revert: drop the value, the stamp and `opening_set`'s `founding` lines]):
+# A PERSON WHO HAS LEFT A FACTION AND HOLDS A SEAT OR LAND, as a referent of his own question -- `Enemy`'s shape (no collection, stamped by name by
+# `queries/world_q.py::creed_occasion`, refused at import off `rosters.yaml: referent_classes`). No row declares it. `FOUNDING_VERB` (the verb a creed
+# is founded by, B21b.05: no new verb) is offered on it, carrying `FACTION_CREED`: the creed's mood and predicate (`rosters.yaml: factions.creed`),
+# so the Proposition it makes is a faction (`world_q.faction_props`).
+FOUNDER_CLASS = "Founder"
+if FOUNDER_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{FOUNDER_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the founding-occasion class in the closed roster",
+                    law="B21b.08 -- a class stamped by name must be one the roster declares")
+FOUNDING_VERB = "utter"
+if FOUNDING_VERB not in VERB_TABLE:
+    raise Forbidden(f"the founding verb {FOUNDING_VERB!r} is no verb-table row", "verb_table.yaml",
+                    needs="the row a creed is founded by (B21b.05)", law="B21b.08 -- the occasion offers a verb the table has")
+
 # v11 CR-56 (reasons-to-convene RL1 [ASSUMPTION; medium; Jordan to correct; revert: drop with
 # `queries/world_q.py::matters_awaiting`]): THE REMIT ACTS A SEAT CONVENES A SITTING THROUGH -- the `remit:`
 # alternatives of every row that writes a Date's `due_at` (`convene`'s, today `convene`), read off the rows'
@@ -2817,6 +2832,15 @@ if DISPUTANT_CLASS not in REFERENT_CLASSES:
                     needs="the dispute-context class in the closed roster",
                     law="B11 lane A -- a class stamped by name must be one the roster declares")
 
+# B21b.18 (CP-T09-09, AM-F-17 [ASSUMPTION; medium; Jordan to correct; revert: drop the value and the stamp, `conspire` declares `Person`]): A SEAT-HOLDER A PLOT
+# MAY BE AGAINST, `Disputant`'s shape -- no collection (the id is a `Person`), stamped by name by the standing occasion `queries/world_q.py::plot_targets`, refused at
+# import off `rosters.yaml: referent_classes`. `conspire` declares it, because stamped as `Person` it would form on every man a question names.
+TARGET_CLASS = "Target"
+if TARGET_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{TARGET_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the plot-target class in the closed roster",
+                    law="B21b.18 -- a class stamped by name must be one the roster declares")
+
 # B21.08 (VB-A commit A2 [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s `referent_class: Rung`, drop the
 # value and the `Holding` term in `queries/world_q.py::questions_for`]): THE UNFOUNDED HOLDING, `Detainee`'s shape -- no
 # collection, stamped by name by the standing occasion `queries/world_q.py::holdings_to_found` (through `questions_for`), and
@@ -2834,6 +2858,11 @@ if HOLDING_CLASS not in REFERENT_CLASSES:
 # union over the `Rung` rows) is NOT this set: it carries `issue` and `convene`, through which no `establish` is
 # eligible.
 FOUNDING_REMIT_ACTS = _remit_acts_of(VERB_TABLE["establish"])
+# B21b.06 (CP-T09-04 (d)): THE ACTS A SEAT TAKES LAND THROUGH -- `seize`'s own `remit:` alternatives (`issue` today), read off the row, so
+# `queries/world_q.py::uncontrolled_in_purview` offers an unheld territory only to a holder of a seat the fold's eligibility would admit.
+SEIZE_REMIT_ACTS = _remit_acts_of(VERB_TABLE["seize"])
+# B21b.99 close (altitude): THE ACTS A SEAT WAGES A WAR THROUGH -- `march`'s remit (the muster act) and `seize`'s, read off the two rows; `war_fields` offers a field only to a holder of such a seat.
+WAR_REMIT_ACTS = _remit_acts_of(VERB_TABLE["march"]) | SEIZE_REMIT_ACTS
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
