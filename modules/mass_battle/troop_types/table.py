@@ -101,6 +101,8 @@ def _value(where, node) -> None:
     `STATUSES`, and a null that is not `NULLABLE_VALUE`."""
     if not isinstance(node, dict):
         raise TroopFileError(f"{where}: a value with no `status` (a contact value is {{value, status}}); got {node!r}")
+    if not node:
+        raise TroopFileError(f"{where}: an empty mapping where a {{value, status}} leaf or its parent is required")
     if 'value' in node or 'status' in node:
         _columns(where, node, ('value', 'status'), ('value', 'status'))
         _member(where, node['status'], STATUSES, 'status', nullable=False)

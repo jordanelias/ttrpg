@@ -159,8 +159,11 @@ def build(table_path: str | None = None, troops_path: str | None = None) -> dict
             arm, armour, skill = ta
             lo, hi = [s for s in cmc.GRID_SKILLS if s < skill][-1:], [s for s in cmc.GRID_SKILLS if s > skill][:1]
             a0, a1 = (lo[0] if lo else skill), (hi[0] if hi else skill)
-            beta = (_logit(row((arm, armour, a1), td)[0][0]) - _logit(row((arm, armour, a0), td)[0][0])) / (a1 - a0)
-            pairs[f'{_key(ta)}>{_key(td)}'] = {'h': [_sig(x) for x in h], 'beta': _sig(beta), 'flags': sorted(flags)}
+            (h1_hi, f_hi), (h1_lo, f_lo) = row((arm, armour, a1), td), row((arm, armour, a0), td)
+            beta = (_logit(h1_hi[0]) - _logit(h1_lo[0])) / (a1 - a0)
+            # a `beta` built from a neighbour's bound or certain cell says so, in the pair's own flags
+            bflags = {f'beta:{f}' for f in f_hi | f_lo if f in ('certain', 'precision:absolute', 'below_resolution:1')}
+            pairs[f'{_key(ta)}>{_key(td)}'] = {'h': [_sig(x) for x in h], 'beta': _sig(beta), 'flags': sorted(flags | bflags)}
     contact = {k: v for k, v in troops['contact'].items() if k != 'missile'}
     return {
         '_generated': 'tools/export_mb_contact.py -- do not hand-edit; edit references/troops.yaml, or re-measure with tools/calibrate_mb_contact.py',

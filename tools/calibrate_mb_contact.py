@@ -42,7 +42,7 @@ Usage:
   python tools/calibrate_mb_contact.py run --cells REGEX --dry                 # count the cells REGEX selects; run no duel
   python tools/calibrate_mb_contact.py merge OUT IN1 IN2 ... [--complete]      # chunk tables -> one table, the bytes `run` writes
   python tools/calibrate_mb_contact.py --cell KEY N [--table PATH]             # re-derive one cell at N duels, print it
-  python tools/calibrate_mb_contact.py --spot M [--table PATH] [--workers W]   # re-run M stored cells, each h_1 inside its interval
+  python tools/calibrate_mb_contact.py --spot M [--table PATH] [--workers W]   # re-run M stored cells on another seed; each h_1 interval overlaps the stored one
   python tools/calibrate_mb_contact.py --trust [--table PATH]                  # the seven checks of MBA §5.2, stop on the first failure
 CHUNKING THE GRID. `--cells` is a regex searched in a cell's key text, `arm/armour/skill,arm/armour/skill`, whose first side is the
 lower in grid order (arms as `troops.yaml` first names them, then armour tier, then skill), so `^<arm>/<armour>/` selects every cell
@@ -290,12 +290,12 @@ def _side_row(x: list, y: list, nk: list, dmg: Counter, nd: int, K: int, n: int)
     return row, ok
 
 
-def run_cell(key: tuple, K: int, n: int | None = None, orient: str = "half") -> tuple:
+def run_cell(key: tuple, K: int, n: int | None = None, orient: str = "half", salt: str = "") -> tuple:
     """Run one cell. `n=None` runs the stop rule (checked at 2,000 and every 500 after, to the 20,000 cap); an `n` runs exactly `n`
     duels. `orient` is 'half' (alternating, the position swap) or 'a_first' / 'b_first' (every duel one way: check 3).
     Returns `(cell, extra)`; `extra` is `{rounds_total, certain}` (not stored)."""
     insp = _inputs(key)
-    rng = random.Random(zlib.crc32(repr(key).encode()) % 100000)
+    rng = random.Random(zlib.crc32((repr(key) + salt).encode()) % 100000)    # `salt` "" is the table's seed rule; `--spot` replicates with another
     x = [[0] * K, [0] * K]       # per side (0 = a, 1 = b): removals at round index k
     y = [[0] * K, [0] * K]       # ... of which by a failed yield roll
     dmg = [Counter(), Counter()]
@@ -489,29 +489,26 @@ def cmd_spot(grid: Grid, m: int, table: str, workers: int) -> int:
     if m < 1:
         print("--spot needs M >= 1", file=sys.stderr)
         return 2
-    chosen = [cells[i * len(cells) // m] for i in range(min(m, len(cells)))]   # evenly over the whole key order, last decile included
-    fingerprint_ok = t.get("engine_fingerprint") == engine_fingerprint()
-    if not fingerprint_ok:
+    m = min(m, len(cells))
+    chosen = [cells[i * len(cells) // m] for i in range(m)]   # evenly over the whole key order, last decile included
+    if t.get("engine_fingerprint") != engine_fingerprint():
         print("# WARNING: the table's engine fingerprint is not the tree's; a re-run is expected to differ", file=sys.stderr)
     bad = 0
-    # each cell is re-run at its own stored duel count (the stop rule's checkpoint), so an unchanged engine reproduces the row
+    # each cell is re-run at its own stored duel count on ANOTHER seed (`salt`): the same seed would reproduce the stored row byte for
+    # byte and so could not fail on precision, which is what this checks; byte identity is `--cell`'s and `--trust` check 4's
     for c, (key, (cell, _)) in zip(chosen, _pool_fixed(chosen, grid.K, workers)):
-        verdicts = []
-        for s in ("a", "b"):
-            h1 = cell["sides"][s]["h"][0]
-            lo, hi = c["sides"][s]["h_lo"][0], c["sides"][s]["h_hi"][0]
-            verdicts.append(lo <= h1 <= hi)
-        same = cell_json(cell) == cell_json(c)
-        bad += not all(verdicts) or (not same and fingerprint_ok)    # an unchanged engine reproduces the stored row byte for byte
-        print(f"{'inside' if all(verdicts) else 'OUTSIDE'}  {grid.key_text(key)}  duels {c['duels']}  h_1 "
-              f"{cell['sides']['a']['h'][0]:.4f}/{cell['sides']['b']['h'][0]:.4f} in [{c['sides']['a']['h_lo'][0]:.4f},{c['sides']['a']['h_hi'][0]:.4f}]"
-              f"/[{c['sides']['b']['h_lo'][0]:.4f},{c['sides']['b']['h_hi'][0]:.4f}]  {'identical' if same else 'differs'}")
+        ok = all(_agree(c["sides"][s], cell["sides"][s]) for s in ("a", "b"))
+        bad += not ok
+        print(f"{'agrees' if ok else 'DISAGREES'}  {grid.key_text(key)}  duels {c['duels']}  h_1 stored "
+              f"{c['sides']['a']['h'][0]:.4f}/{c['sides']['b']['h'][0]:.4f} [{c['sides']['a']['h_lo'][0]:.4f},{c['sides']['a']['h_hi'][0]:.4f}]"
+              f"/[{c['sides']['b']['h_lo'][0]:.4f},{c['sides']['b']['h_hi'][0]:.4f}], replicate "
+              f"{cell['sides']['a']['h'][0]:.4f}/{cell['sides']['b']['h'][0]:.4f}")
     return 1 if bad else 0
 
 
 def _fixed_worker(args):
     key, K, n = args
-    return key, run_cell(key, K, n=n)
+    return key, run_cell(key, K, n=n, salt="replicate")
 
 
 def _pool_fixed(chosen: list, K: int, workers: int):
