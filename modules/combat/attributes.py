@@ -51,10 +51,11 @@ SPEC = (
 # and where each is owned:
 #   attr   -- `SPEC` above.                       temper -- `SPEC`'s `disp` row (so no tuple of its own).
 #   pool   -- `PersonalCombatInput.scores` and `addends` (`core.resolution_pool`, `core.ob_from_defender`).
-#   kit    -- `PersonalCombatInput.kits` (`Combatant`'s `weapon` and `armor`).
+#   kit    -- `PersonalCombatInput.kits` (`Combatant`'s `weapon`, `secondary` and `armor`, B18.08).
 #   axis   -- `AXES`, below. Fed by `PersonalCombatInput.axes` ({axis: bonus}, `Combatant.skills`).
 #   lever  -- `LEVERS`, below. Fed by `PersonalCombatInput.techniques` ({ability: level}, `Combatant.equipped`), which
 #             `ability_primitives` turns into a lever's factor or bonus; no second field carries a lever value.
+# (`axis` and `lever` are declared here and fed by those fields; no carrier fills them for a realm person yet, PC-21, so they are empty in the season.)
 # `default` is the value the engine reads for a fighter who holds none, so an empty slot is today's fight. `neutral` is None
 # (no centring literal) and `registry_key` None (no registry row names an axis or a lever yet; the row that does sets it in
 # the same change, as `disp`'s will).

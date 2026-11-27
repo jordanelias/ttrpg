@@ -393,9 +393,10 @@ def test_seeding_with_no_arms_changes_nothing_and_seeding_arms_moves_the_hash(mo
     assert shipped.content_hash() != unseeded.content_hash(), "B18.04: the shipped `arms_at_build` is a mover"
     monkeypatch.setattr(rosters, "ARMS_AT_BUILD", {})
     assert build_realm(0).content_hash() == unseeded.content_hash(), "the empty `arms_at_build` is the build without the step"
-    base = unseeded
+    base = build_realm(0)
+    before = base.content_hash()
     assert seed_arms(base, {}) == 0
-    assert base.content_hash() == unseeded.content_hash()
+    assert base.content_hash() == before, "seeding nothing changes nothing"
     n = seed_arms(base, {"settlement": {"t_plate": 2}})
     assert n > 0 and base.content_hash() != build_realm(0).content_hash(), "a party that holds arms is a hash mover"
     seeded = [r for r in base.rungs.values() if (r.stores or {}).get("t_plate")]

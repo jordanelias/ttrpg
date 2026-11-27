@@ -4288,9 +4288,10 @@ def kit_of(w: World, pid: str) -> tuple:
     """WHAT A PERSON FIGHTS WITH, `(weapon, secondary, armor)` (v11 CP-T03-03; `-08` AM-C-04; B18.08; [ASSUMPTION; medium; Jordan to
     correct; revert: drop `PersonalCombatInput.kits` and the `kits` fill in `seam/wrappers/combat.py::combat_input`]).
     B18.08, A LOADOUT IS A KIT WITH A SECONDARY: `secondary` is the weapon he carries and does not hold, the next-ranked DISTINCT weapon
-    kind his rungs stock after the primary (his holdings' kinds best first, then his residence's), `None` where he stocks one kind or none
+    kind his rungs stock after the primary (his holdings' kinds best first, then his residence's: the order is by SOURCE, so a secondary the
+    residence stocks can outrank a primary his holdings stock; the plan's "the two highest-ranked" read across both is a decision for Jordan), `None` where he stocks one kind or none
     (and for the unarmed, and for the default kit): `weapon` is the kind it was before the secondary, so a person stocking one weapon kind
-    is the kit he was. Nothing reads `secondary` in a fight until a switch exists; the carry of it rides `PersonalCombatInput.short`.
+    is the kit he was. B18.09's switch reads `secondary` (`wrapper.round_switchers`; only a fight whose party carries one), and the carry of it rides `PersonalCombatInput.short`.
     PER COMBATANT FIELD, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores
     of the rungs the person `hold`s (his HOLDINGS, `state/gate.py::holdings_of`: a live `hold` whose object is a rung),
     ELSE of the rung he `reside`s in (`lives_in`), else the Combatant's own default
@@ -4298,11 +4299,12 @@ def kit_of(w: World, pid: str) -> tuple:
     and, ONCE `arms_kinds` is non-empty, `combat_kit.UNARMED` for the weapon (B18.03: a person who holds no weapon fights
     with none). The
     fallback is per field, as the home states it: a holder whose holdings stock armour and no weapon takes the
-    holdings' armour and his residence's weapon; the residence is read only for a field his holdings leave unfilled.
+    holdings' armour and his residence's weapon; the residence is read for a field his holdings leave unfilled and, for the secondary, whenever
+    he stocks fewer than two weapon kinds in them (so `lives_in` is asked of every person with a roster, and a second `reside` edge raises).
     The field is the kind's, its key the kind's `key`, and the kit is READ, NEVER CONSUMED: nothing here or at the
     fight writes a store.
     ⚠ ONE KIT PER PERSON, NOT PER SIDE OF A FIGHT: the caller asks it of each party by his own id, so a party's kit
-    never depends on who he fights or who acts. With `arms_kinds` EMPTY (as shipped: the inventory is Jordan's) it
+    never depends on who he fights or who acts. With `arms_kinds` EMPTY (the control; B18.04 ships seven kinds) it
     returns the default for everyone and reads nothing else. A person the world does not hold is asked about the same
     way (his default): a kit is a fact about stores, not a gate on being a person."""
     kit = dict(_combat_kit.DEFAULTS)

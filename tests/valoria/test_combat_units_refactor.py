@@ -265,6 +265,11 @@ def test_the_relocated_harness_term_charges_the_same_stamina(monkeypatch):
     heavy = tuple((K.shortfall((), 'heavy', s), None) for s in strengths)
     raised = tuple((p + 1.0, None) for p, _ in heavy)
     assert round_one(record('heavy', raised), 0)[0][0] < round_one(record('heavy', heavy), 0)[0][0], "a raised `short` spent no more stamina"
+    # the close is slowed by a shortfall once CARRY_CLOSE_K is above 0, and by nothing at the shipped 0 (the control, bit for bit)
+    slow = {**CFG, 'CARRY_CLOSE_K': 0.5}
+    short_of, fit = _C.Combatant("S", weapon="spear", armor="heavy", short=2.0), _C.Combatant("F", weapon="spear", armor="heavy", short=0.0)
+    assert S.close_rate(short_of, 1.0, 0.0, 1.0, slow) < S.close_rate(fit, 1.0, 0.0, 1.0, slow), "a shortfall slowed no one's close"
+    assert S.close_rate(short_of, 1.0, 0.0, 1.0, CFG) == S.close_rate(fit, 1.0, 0.0, 1.0, CFG), "the shipped CARRY_CLOSE_K 0 is not the control"
 
 
 # ── B18.09: the weapon in hand is round state; a switch costs tempo (`03_PC_loadout_and_carry` item 5) ──────────────
@@ -336,3 +341,37 @@ def test_a_switch_debits_one_act_threshold():
         entry.fight(alone, draw.seeded(draw.H2("switch_set", 0)), decide=lambda view: "switch")
     taken = entry.fight(rec, draw.seeded(draw.H2("switch_set", 1)), decide=lambda view: "switch" if view.round == 1 else "withdraw")
     assert [e["by"] for e in taken.trace if e["kind"] == "switch"] == ["A"]
+
+    # (4) THE DEFAULT RULE SEES ITSELF FIRE: a spear in hand with a dagger carried switches on a closed measure and on none else; the dagger in hand
+    # with the spear carried never does; a fighter at the collapse line does not
+    spear_dagger = C.Combatant("X", weapon="spear", secondary="dagger")
+    assert S.switch_wanted(spear_dagger, True, CFG) and not S.switch_wanted(spear_dagger, False, CFG)
+    assert not S.switch_wanted(C.Combatant("X", weapon="dagger", secondary="spear"), True, CFG)
+    spent = C.Combatant("X", weapon="spear", secondary="dagger"); spent.stamina = CFG['STAMINA_COLLAPSE']
+    assert not S.switch_wanted(spent, True, CFG)
+
+    # (5) A SWITCH IS PAID IN THE CLOSED PHASE, SO A ROUND THAT NEVER CLOSES VOIDS IT: against a longer weapon at light armour the round may end in the
+    # approach; there the swap goes back, no tempo was taken and the weapon in hand is the one he began with
+    long_rec = record(("spear", "arming", "light"), kit_b=("yari", None, "light"))
+    paid_n = void_n = 0
+    for rec_5 in (long_rec, record(("spear", "arming", "light"))):   # against a yari the rounds end in the approach; against the arming sword they close
+        for seed in range(24):
+            out = one_round(rec_5, seed, ("A",))
+            kinds = [e["kind"] for e in out.trace]
+            in_hand = C.HALFSWORD_BASE.get(out.states[0].form, out.states[0].form)
+            if "switch_void" in kinds:
+                void_n += 1
+                assert "switch_paid" not in kinds and in_hand == "spear", (seed, in_hand)
+            elif "switch_paid" in kinds:
+                paid_n += 1
+                assert in_hand == "arming", (seed, in_hand)
+    assert void_n >= 1 and paid_n >= 1, (void_n, paid_n)   # both outcomes were seen, so neither branch went unchecked
+
+    # (6) `engage` IS THE ENGINE'S DEFAULT, NOT 'NO ONE SWITCHES': a decider that answers it every round plays the identical fight to no decider (REM-31's
+    # AUTOMATED and PLAYABLE replay equal), a party with a secondary included
+    for seed in range(4):
+        auto = entry.fight(long_rec, draw.seeded(draw.H2("switch_engage", seed)))
+        played = entry.fight(long_rec, draw.seeded(draw.H2("switch_engage", seed)), decide=lambda view: "engage")
+        assert auto == played, seed
+    assert any(e["kind"] == "switch" for e in auto.trace), "no switch under the default: the equality above could not have failed"
+

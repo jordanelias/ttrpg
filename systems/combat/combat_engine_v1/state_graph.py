@@ -33,6 +33,7 @@ TRACE_KINDS = {
     'withdraw',    # REM-31: the decider's early UNRESOLVED exit, taken at the head of a turn
     'switch',      # B18.09: a fighter put his secondary in hand at the round's entry (no state of its own: it is a write on the round's opening geometry)
     'switch_paid', # B18.09: the one ACT_THRESHOLD of readiness the switch cost, taken when the round first reached the closed phase
+    'switch_void', # B18.09: a switch the round ended without paying (it never reached the closed phase): the weapon goes back, nothing was spent
 }
 # B15.10: the yield roll's Partial and Overwhelming bands (`shaken`, `rallied`); no state of their own (they fall between rounds). Read from the owner.
 TRACE_KINDS |= set(vocabulary.YIELD_ROLL_EVENTS)

@@ -8,7 +8,7 @@ which reads `D_MASS` and `ARMOR_DEMAND` from the export's `cfg` and a weapon's `
 
 IT IS A LEAF: stdlib only (`json`, `os`). The season's `rosters.yaml: arms_kinds` is validated against these sets
 AT LOAD (`engine/season/data/rosters.py`), and `queries/world_q.py::kit_of` answers a person who holds no arms with
-`DEFAULTS`, so neither the key lists nor the default kit are copied anywhere in the season.
+`DEFAULTS` (`UNARMED` for the weapon once the roster is non-empty), so neither the key lists nor the default kit are copied anywhere in the season.
 """
 from __future__ import annotations
 
@@ -52,7 +52,11 @@ DEFAULTS = dict(_KIT['defaults'])
 #: `{Combatant field: the closed set of keys it takes}`; the fields an `arms_kinds` row may name.
 FIELDS = {'weapon': WEAPONS, 'armor': ARMOUR_TIERS}
 
-# The carry rule's two coefficients, read from the export's `cfg` (`modules/combat/config.py`: D_MASS and ARMOR_DEMAND).
+# The carry rule's two coefficients, read from the export's `cfg` (`modules/combat/config.py`: D_MASS and ARMOR_DEMAND). They are FROZEN here at
+# import: a `cfg` overlay of either (B14.11's `fight(..., cfg=...)`) moves the module's own reads of them but not a `short` this leaf has already
+# computed, so on a record built through `combat_input` or the workbench's `fight_record` an overlaid ARMOR_DEMAND or D_MASS does not move the
+# harness or carry stamina term (it still does for a Combatant built bare: `combat_systems.carry_short`'s fallback reads the live cfg). The plan
+# prescribes this shape (the leaf reads the export and nothing else); no sweep overlays either today.
 _D_MASS = _SECTIONS['cfg']['D_MASS']
 _ARMOR_DEMAND = _SECTIONS['cfg']['ARMOR_DEMAND']
 _WEAPON_RECORDS = _SECTIONS['weapons']

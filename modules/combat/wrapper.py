@@ -96,7 +96,7 @@ def _pool_dice(c, cfg, addends=None):
     return core.resolution_pool(c.score, getattr(c, "pool_addends", 0) if addends is None else addends, **kw)
 
 
-def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
+def _engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
     """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
     object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
     Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
@@ -154,6 +154,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
     for c in switching:
         switch_weapon(c)   # B18.09: after the re-take, so the weapon swapped out is a base record; before `reach_base`, so the round's reach is the weapon now in hand's
+        c.switch_owed = True
         _emit('switch', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
     owed = tuple(switching)   # each owes one ACT_THRESHOLD, taken at the closed phase: at the entry it would be forgiven by `_carry`'s clamp at the first close
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
@@ -331,6 +332,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         # ----- CLOSED: tempo-gated exchange -----
         for c in owed:   # B18.09: the switch's tempo, the next action's readiness (ACT_THRESHOLD, the unit the exchange below debits per action), paid once, when the round first reaches the closed phase
             was = ready[c]; ready[c] -= cfg['ACT_THRESHOLD']
+            c.switch_owed = False
             _emit('switch_paid', round=turn, by=c.label, was=was, ready=ready[c])
         owed = ()
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
@@ -557,6 +559,21 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None, closed, 'clean_defence'
     _emit('separation', reason='beat_exhaustion'); return None, closed, 'beat_exhaustion'
 
+def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
+    """One round (A-101): `_engagement`, which carries the round and its contract (its docstring), and one rule over it. A SWITCH IS PAID IN THE CLOSED PHASE
+    (B18.09): a round that ends before it ever reaches that phase (the approach never closes, a collapse, a terms stop) has taken no tempo from the switcher,
+    so his switch is VOID: the weapon swapped in at the entry goes back out (`switch_weapon`, which also puts the shortfall pair back) and a `switch_void`
+    event says so; the weapon in hand at the round's end is the weapon he began it with, and no round changes weapon for free."""
+    try:
+        return _engagement(A, B, first, cfg, rng, prev_closed, terms, turn, scene, switching)
+    finally:
+        for c in switching:
+            if c.switch_owed:
+                c.switch_owed = False
+                switch_weapon(c)
+                _emit('switch_void', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
+
+
 class Yield:
     """§11.4 YIELD (PC-01, `ED-PC-0056`), a Phase-1 DECLARATION, not a fourth resolver and not a fourth band.
 
@@ -651,8 +668,8 @@ def _yield_roll(c, terms, sigma, cfg, draw):
 #                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the round.
 #   - 'switch'   : (B18.09) the fighters who carry a secondary change the weapon in hand at the round's entry and pay one `ACT_THRESHOLD` of
 #                  readiness for it, in the closed phase (`engagement`'s `switching`); the round is otherwise fought. Open only to a fight in which
-#                  one of the parties carries a secondary (`check_choice`). A decider that answers none (`decide=None`) leaves each party to the
-#                  engine's own default, `S.switch_wanted` (`round_switchers`).
+#                  one of the parties carries a secondary (`check_choice`). `engage`, as a decider that answers none (`decide=None`), leaves each party to
+#                  the engine's own default, `S.switch_wanted` (`round_switchers`): only `switch` overrides it.
 # [ASSUMPTION; the set is {engage, withdraw, switch}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
 # widen it, and whether `yield` joins it is #445 `05` §4.1 (J-15), not decided here.] The decider draws nothing from
 # `rng` and mutates nothing, so equal choices produce the identical draw sequence: AUTOMATED and PLAYABLE replay equal.
@@ -669,11 +686,12 @@ def check_choice(choice, A, B):
 
 def round_switchers(choice, A, B, prev_closed, cfg):
     """WHO CHANGES WEAPON AT THIS ROUND'S ENTRY (B18.09), a tuple of Combatants in `(A, B)` order: on a decider's `switch`, each party who carries a secondary; on
-    its `engage`, none; where no decider answers (`choice` is `None`), each party `S.switch_wanted` says (the measure being `prev_closed`, the one the last
-    round ended in). A pure read: the caller hands the tuple to `engagement`."""
+    its `engage` and where no decider answers (`choice` is `None`) alike, each party `S.switch_wanted` says (the measure being `prev_closed`, the one the last
+    round ended in): `engage` is the engine's own default, so a decider that always answers it plays the identical fight to no decider (REM-31's
+    AUTOMATED and PLAYABLE replay equal), and only `switch` overrides it. A pure read: the caller hands the tuple to `engagement`."""
     if choice == SWITCH:
         return tuple(c for c in (A, B) if c.secondary is not None)
-    if choice is None:
+    if choice is None or choice == ENGAGE:
         return tuple(c for c in (A, B) if S.switch_wanted(c, prev_closed, cfg))
     return ()
 

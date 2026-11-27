@@ -333,7 +333,8 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-round decider, called at the top of each round, before every draw of it. It crosses the
     module boundary OUTWARD, so it is handed a typed view, never a `Combatant`: `CombatRoundView` -- the round index, the
     claimants and a fresh copy of each party's `inp.wound_quantities` (`_lift`, above). `None` (AUTOMATED,
-    the default) is the engine's own engage-every-round loop exactly.
+    the default) is the engine's own engage-every-round loop exactly, and a decider answering `engage` every round plays the identical fight (a party with a
+    secondary still follows the engine's own switch default, `wrapper.round_switchers`; only a `switch` answer overrides it).
 
     `cfg` (a config overlay) and `max_rounds` (a round cap) are the WORKBENCH's (B14.11); the host
     never passes them, and `None` is the engine's own `CFG` and round cap."""
@@ -358,7 +359,7 @@ def fight(inp: PersonalCombatInput, rng: Draw,
             if choice == wrapper.WITHDRAW:
                 trace.append(dict(kind="withdraw", round=rnd))
                 break            # UNRESOLVED, no further round, no riposte draw
-            switch = tuple(c.label for c in wrapper.round_switchers(choice, A, B, prev_closed, cfg_))   # a decider's answer: `switch` is every party who carries a secondary, `engage` none
+            switch = tuple(c.label for c in wrapper.round_switchers(choice, A, B, prev_closed, cfg_))   # a decider's answer: `switch` is every party who carries a secondary; `engage`, as no decider, leaves each to the engine's own default
         out = fight_round(DuelRoundInput(fighters=inp, states=states, plans=({}, {}), round=rnd, prev_closed=prev_closed, switch=switch),
                           wrapper.round_draw(fkey, rnd), cfg=cfg)
         trace.extend(out.trace)

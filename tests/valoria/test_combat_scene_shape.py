@@ -115,6 +115,7 @@ def _fought(aid, seed=1003, host=None, world=None, fan=None, witness=False, obs=
         return SimpleNamespace(fn=fn), refusal
     w = world or P.tiny_world()
     if world is None:
+        w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; both live at `Hh` and keep the arming sword these readings were made with
         w.world_seed = seed
         if fan is not None:
             w.fixtures = w.fixtures.sweep("fan_out_mode", fan)
