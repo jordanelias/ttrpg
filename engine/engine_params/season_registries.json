@@ -3696,24 +3696,87 @@
         "matter_kinds": {
           "source": "#353 \u00a710.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*",
           "row": "H-11",
-          "note": "\u26a0 OPEN MEANS ADDABLE, NOT UNCHECKED \u2014 and this file is the registry \u00a710.4 asks for. #353 forbids *a closed set in a source file*; it does not license a lookup that answers for a kind nobody registered. Both halves hold here: add a kind by adding a row, and a draw against an unregistered kind raises. \u26a0 THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what a row looks like, so starting the registry with exactly them is the least-invented content available \u2014 but it is still a choice, which is what `H-11` grades.",
+          "note": "\u26a0 OPEN MEANS ADDABLE, NOT UNCHECKED \u2014 and this file is the registry \u00a710.4 asks for. #353 forbids *a closed set in a source file*; it does not license a lookup that answers for a kind nobody registered. Both halves hold here: add a kind by adding a row, and a draw against an unregistered kind raises. \u26a0 THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what a row looks like, so starting the registry with exactly them is the least-invented content available \u2014 but it is still a choice, which is what `H-11` grades. B18.04 adds the seven ARMS KINDS (second line of `values`, their own members; `arms_kinds` maps each). [ASSUMPTION; low; Jordan to correct.]",
           "values": [
             "grain",
             "salt",
             "timber",
             "ore",
-            "coin"
+            "coin",
+            "arms_dagger",
+            "arms_spear",
+            "arms_sword",
+            "arms_longsword",
+            "harness_light",
+            "harness_mail",
+            "harness_plate"
           ]
         },
         "arms_kinds": {
           "source": "v11 CP-T03-03 (`-08` AM-C-04; T03 home \u00a72): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store.",
-          "note": "`kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there: `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key` a member of THAT FIELD'S closed set in the same module (the typed `kit` section of `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole number, unique among the kinds of one field; refused whole at import otherwise (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here. `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the stores of the rungs the person holds, else of his residence, else the Combatant's own default. \u26a0 EMPTY ON PURPOSE: which arms exist, which key each sets and how they rank is Jordan's content and is not invented here (`-08` AM-C-04). While `kinds:` is empty `kit_of` returns the Combatant default for everyone and every fight is dealt exactly as before the mechanism existed.",
-          "kinds": {}
+          "note": "`kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there: `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key` a member of THAT FIELD'S closed set in the same module (the typed `kit` section of `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole number, unique among the kinds of one field; refused whole at import otherwise (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here. `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the stores of the rungs the person holds, else of his residence, else the Combatant's own default. \u26a0 B18.04 LANDS SEVEN KINDS, every value `[ASSUMPTION; low; Jordan to correct]`: which arms exist, which key each sets and how they rank is Jordan's content (`-08` AM-C-04). A kind is admitted only with its row of the roster census (`balance.census`) in the commit that admits it: no cell beyond 95% against the kinds already admitted, or its answering kind admitted with it (`arms_spear` stands with `harness_mail` and `harness_plate`, which answer it at the medium and heavy tiers). With `kinds:` emptied `kit_of` returns the Combatant default for everyone and every fight is dealt exactly as before the mechanism existed (the Gate-4 control).",
+          "kinds": {
+            "arms_dagger": {
+              "field": "weapon",
+              "key": "dagger",
+              "rank": 1
+            },
+            "arms_spear": {
+              "field": "weapon",
+              "key": "spear",
+              "rank": 2
+            },
+            "arms_sword": {
+              "field": "weapon",
+              "key": "arming",
+              "rank": 3
+            },
+            "arms_longsword": {
+              "field": "weapon",
+              "key": "longsword",
+              "rank": 4
+            },
+            "harness_light": {
+              "field": "armor",
+              "key": "light",
+              "rank": 1
+            },
+            "harness_mail": {
+              "field": "armor",
+              "key": "medium",
+              "rank": 2
+            },
+            "harness_plate": {
+              "field": "armor",
+              "key": "heavy",
+              "rank": 3
+            }
+          }
         },
         "arms_at_build": {
           "source": "v11 CP-T03-03 (`-08` AM-C-04): the arms a rung is built holding, by the rung's kind [ASSUMPTION; medium; Jordan to correct].",
-          "note": "`kinds:` maps a RUNG KIND to the stores that kind of rung is seeded with when a realm is built: `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number; refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm` is the one seeder (`seed_arms`). \u26a0 EMPTY ON PURPOSE, as `arms_kinds` is: the inventory is Jordan's content, so no rung is built holding arms and `build_realm`'s world is unchanged.",
-          "kinds": {}
+          "note": "`kinds:` maps a RUNG KIND to the stores that kind of rung is seeded with when a realm is built: `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number; refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm` is the one seeder (`seed_arms`). \u26a0 B18.04 SEEDS FOUR RUNG KINDS, every count `[ASSUMPTION; low; Jordan to correct]` (the inventory is Jordan's content): a household's own knife (`hearth`), a settlement's armoury (`settlement`), a seat-holder's own holding (`territory`), and the arms of a duchy's or the realm's seat (`duchy`, `realm`). Two kinds of one field are never stocked on one rung kind unless the higher rank is also the stronger arm, so `arms_kinds`' rank never overrules the engine's measured order. With `kinds:` emptied no rung is built holding arms and `build_realm`'s world is unchanged.",
+          "kinds": {
+            "hearth": {
+              "arms_dagger": 1
+            },
+            "settlement": {
+              "arms_spear": 2,
+              "harness_light": 2
+            },
+            "territory": {
+              "arms_sword": 2,
+              "harness_mail": 1
+            },
+            "duchy": {
+              "arms_longsword": 1,
+              "harness_plate": 1
+            },
+            "realm": {
+              "arms_longsword": 1,
+              "harness_plate": 1
+            }
+          }
         },
         "wear_per_season": {
           "source": "#353 \u00a722 assigns `wear per site kind` to params; no in-chain table exists. `H-07`.",

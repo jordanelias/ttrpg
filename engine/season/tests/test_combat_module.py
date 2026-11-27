@@ -511,6 +511,7 @@ def _believing_world(seed: int, body: int = 1000):
     w.world_seed = seed
     w.fixtures = w.fixtures.sweep("odds_weighting", "believed").sweep("choice_temperature", 0)
     w.persons[_A].body = body
+    w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; both live at `Hh` and keep the arming sword this reading was made with
     return w
 
 
@@ -746,6 +747,7 @@ def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
     from ..harness import probes as P
     _mod, entry = _module_of_entry()
     w = P.tiny_world()
+    w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: both parties keep the arming sword the 150-death floor was read with (with a roster and no stocked weapon they would fight unarmed)
     w.fixtures = w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
     deaths = checked = 0
     for seed in range(300):     # was 200: a failed yield roll (B15.10) ends about a third of lethal scenes with both alive, so fewer parties are felled

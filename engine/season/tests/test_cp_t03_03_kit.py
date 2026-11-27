@@ -7,9 +7,10 @@ the Combatant's own default. `combat_input` fills `PersonalCombatInput.kits` for
 `kit` section of `engine/engine_params/combat_engine_v1.json` (`tools/export_engine_params.py --check`), read by
 `engine/substrate/combat_kit.py`, so no key list is copied into `rosters.yaml`.
 
-⚠ THE SHIPPED ROSTERS ARE EMPTY (the inventory is Jordan's content: `-08` AM-C-04). Every test below that needs an arms
-kind PLANTS one (`monkeypatch` on `world_q.ARMS_KINDS`, a hand-built world per P9), and the shipped state is its own
-control: with no kind `kit_of` is the default for everyone and `build_realm`'s world is the world without the seeding step.
+⚠ THE SHIPPED ROSTERS HOLD B18.04's SEVEN KINDS (the inventory is Jordan's content: `-08` AM-C-04). Every test below that
+needs an arms kind PLANTS its own (`monkeypatch` on `world_q.ARMS_KINDS`, a hand-built world per P9), and the control is
+the roster emptied in process: with no kind `kit_of` is the default for everyone and `build_realm`'s world is the world
+without the seeding step.
 
   FALSIFIER: `kit_of` on a holder of a stocked rung returns the roster's top-ranked kind per field; at stock 0 the
   default; a seeded `fight` (real seam, n = 400) with the SUBJECT's holding stocked with the top armour fells the actor at
@@ -31,6 +32,7 @@ import pytest
 
 from engine.substrate import combat_kit
 
+from ..data import rosters
 from ..data.rosters import ARMS_AT_BUILD, ARMS_KINDS, _check_arms_at_build, _check_arms_kinds
 from ..gaps import Unspecified
 from ..harness import probes as P
@@ -327,9 +329,13 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
 # 4 -- THE CONTROL: EMPTY ROSTERS ARE TODAY'S WORLD
 # ---------------------------------------------------------------------------------------------------------------
 
-def test_the_shipped_rosters_are_empty_so_every_person_fights_at_the_default():
-    assert ARMS_KINDS == {} and ARMS_AT_BUILD == {}, "the inventory is Jordan's: nothing is authored here"
+def test_with_arms_kinds_emptied_every_person_fights_at_the_default(monkeypatch):
+    """B18.04: the roster ships seven kinds seeded on the build, so the control is the roster emptied in process (`kit_of`
+    reads `world_q.ARMS_KINDS`), on a realm whose rungs ARE stocked: a stock nobody reads moves no kit."""
+    assert len(ARMS_KINDS) == 7 and ARMS_AT_BUILD, "setup: the shipped inventory is empty"
     w = build_realm(0)
+    assert any((r.stores or {}).get(k) for r in w.rungs.values() for k in ARMS_KINDS), "setup: the realm's rungs are not stocked"
+    monkeypatch.setattr(world_q, "ARMS_KINDS", {})
     default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
     checked = 0
     for pid in w.persons:
@@ -339,13 +345,16 @@ def test_the_shipped_rosters_are_empty_so_every_person_fights_at_the_default():
 
 
 def test_seeding_with_no_arms_changes_nothing_and_seeding_arms_moves_the_hash(monkeypatch):
-    base = build_realm(0)
+    shipped = build_realm(0)
     with mock.patch.object(boot_realm, "seed_arms", lambda w, seeds=None: 0):
         unseeded = build_realm(0)
-    assert base.content_hash() == unseeded.content_hash(), "the empty `arms_at_build` is the build without the step"
+    assert shipped.content_hash() != unseeded.content_hash(), "B18.04: the shipped `arms_at_build` is a mover"
+    monkeypatch.setattr(rosters, "ARMS_AT_BUILD", {})
+    assert build_realm(0).content_hash() == unseeded.content_hash(), "the empty `arms_at_build` is the build without the step"
+    base = unseeded
     assert seed_arms(base, {}) == 0
     assert base.content_hash() == unseeded.content_hash()
     n = seed_arms(base, {"settlement": {"t_plate": 2}})
-    assert n > 0 and base.content_hash() != unseeded.content_hash(), "a party that holds arms is a hash mover"
+    assert n > 0 and base.content_hash() != build_realm(0).content_hash(), "a party that holds arms is a hash mover"
     seeded = [r for r in base.rungs.values() if (r.stores or {}).get("t_plate")]
     assert len(seeded) == n and all(r.kind == "settlement" and r.stores["t_plate"] == 2 for r in seeded)
