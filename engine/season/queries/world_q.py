@@ -2731,15 +2731,16 @@ def fortification_of(w: World, rung_id: str) -> float:
     a garrison Site is a legitimate world state (`boot/realm.py`'s M4 build step 11 seeds
     one per settlement, but nothing enforces that it must).
 
-    ⚠ MULTIPLE GARRISONS AVERAGE RATHER THAN SUM: one per settlement is what step 11 ships, and an
-    average keeps the return in `[0.0, 1.0]` regardless, which summing would not.
+    ⚠ MULTIPLE GARRISONS COMPOUND, THEY DO NOT SUM OR AVERAGE: one per settlement is what step 11 ships; the module
+    returns the complement of the product of each garrison's shortfall, so the return stays in `[0.0, 1.0]` and a
+    second wall never lowers the first (B12b.23).
 
     ⚠ ITS CALLER IS THE BATTLE PATH (plan position `20-iv`, `H-150`).
     `seam/wrappers/mass_battle.py::resolve()` reads it at the march target and passes it to
     `massbattle.resolve_field` as `fort_level`, where any positive value makes the field A.9's
     WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that.
 
-    ⚠ THE MEAN IS THE `settlements` MODULE'S (v9 IN-07 E6, A-25): `settlements.fortification`
+    ⚠ THE RULE IS THE `settlements` MODULE'S (v9 IN-07 E6, A-25): `settlements.fortification`
     (`modules/settlements/fortification.py`, `entry: query`); this stays the wrapper the adapter calls."""
     TRACE.query("fortification_of", "resolver")
     return _entry(FORTIFICATION)(fort_input(w, rung_id))
@@ -2754,7 +2755,7 @@ def fort_input(w: World, rung_id: str) -> FortInput:
 
 
 def garrison_sites(w: World, rung_id: str) -> list:
-    """EVERY `garrison` Site in `rung_id`'s subtree, in `World.sites` order -- the walls `fortification_of` averages
+    """EVERY `garrison` Site in `rung_id`'s subtree, in `World.sites` order -- the walls `fortification_of` compounds
     (`fort_input`) and the walls a `besiege` march wears (CP-T04-06, `loop/effects_combat.py::_eff_march`). One owner for
     which Sites are a settlement's garrison, so what a siege lowers is exactly what a storm then reads."""
     here = _subtree(w, rung_id)

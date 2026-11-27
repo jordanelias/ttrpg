@@ -250,7 +250,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         weights=(weights(claimants), weights(other)),
         territory=_territory_of(w, rung),
         # Walls are a settlement's: a field fought AT a territory is a field battle in the territory's own terrain
-        # (`fortification_of` averages every garrison in a subtree and any value above 0 is WALLS, which overrides
+        # (`fortification_of` compounds every garrison in a subtree and any value above 0 is WALLS, which overrides
         # terrain), ED-IN-0306 phase 5.
         fort_level=fort,
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
