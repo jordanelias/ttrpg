@@ -316,8 +316,11 @@ def _after_two_seasons(seed: int) -> World:
     return w
 
 
-def test_snapshot_round_trip_hash_equal():
-    """`decode(encode(w))` hashes as `w` does, at seeds 0, 1 and 2 after two seasons."""
+def test_snapshot_round_trip_hash_equal_and_the_decoded_world_runs_the_same_next_season():
+    """`decode(encode(w))` hashes as `w` does, at seeds 0, 1 and 2 after two seasons. At seed 0 it is also the control that the act store and
+    the tick came back: one more season on the decoded world equals the same season on the original (the third season is each copy's own
+    control run, compared with the other, not a reading of the game past the two-season cap). One test, so the seed-0 two-season world is
+    built once, not once per assertion (it was two tests that each built it)."""
     checked = 0
     for seed in (0, 1, 2):
         w = _after_two_seasons(seed)
@@ -325,22 +328,13 @@ def test_snapshot_round_trip_hash_equal():
         assert isinstance(back, World), f"seed {seed}: the snapshot did not decode: {back!r}"
         assert back.content_hash() == w.content_hash(), f"seed {seed}: a field of state did not round-trip"
         assert back.world_seed == w.world_seed and back.tick == w.tick and len(back.acts) == len(w.acts) > 0
+        if seed == 0:
+            out_w, out_back = POP.run(1, seed, w=w), POP.run(1, seed, w=back)
+            assert out_back["acts"] == out_w["acts"] > 0, "the control season did nothing: it observed nothing"
+            assert back.tick == w.tick and len(back.log) == len(w.log) and len(back.acts) == len(w.acts)
+            assert back.content_hash() == w.content_hash(), "the decoded world's next season diverged from the original's"
         checked += 1
     assert checked == 3
-
-
-def test_a_decoded_world_runs_the_same_next_season():
-    """The control that the act store and the tick came back: one more season on the decoded world equals
-    the same season on the original. The snapshot is taken after two seasons; the third is each copy's
-    own control run, compared with the other, and is not a reading of the game past the two-season cap."""
-    seed = 0
-    w = _after_two_seasons(seed)
-    back = decode(encode(w))
-    assert isinstance(back, World), repr(back)
-    out_w, out_back = POP.run(1, seed, w=w), POP.run(1, seed, w=back)
-    assert out_back["acts"] == out_w["acts"] > 0, "the control season did nothing: it observed nothing"
-    assert back.tick == w.tick and len(back.log) == len(w.log) and len(back.acts) == len(w.acts)
-    assert back.content_hash() == w.content_hash(), "the decoded world's next season diverged from the original's"
 
 
 def test_decode_refuses_a_foreign_fixtures_digest():
