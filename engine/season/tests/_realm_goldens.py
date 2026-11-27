@@ -79,9 +79,11 @@ RE-PINNED AT B12a.99 (every value below, BUILD too), ONCE for the batch B12a-wor
 
 RE-PINNED AT THE B21b PARTIAL CLOSE, on the merge with main's B08 and B12a (every value below, BUILD too; a partial batch, so B21b.99 re-pins the rest later): B21b.02's `guards` default flip (the three guard cohorts are seated at build: BUILD `ba0ecd0e..` (B12a.99) -> `bc0df867..`, seed 0 one season `56d183c1..` (B12a.99) -> `78be13f7..`), B21b.01's march cap (every march event now carries its `march.nth` and `march.cap` reads in `observed`, so a world with a march moves; no march formed at seed 0, one season, and the hash with the cap off is the hash with it on) and B21b.04's plurality licence. Read once on the merged tree (`PYTHONHASHSEED=0`). The control: `build_realm(0, guards=False)` at seed 0, one season reads `56d183c1..`, B12a.99's value, so the flip alone moved it; the other cells have no cap-off or guards-off control.
 
+RE-PINNED AT THE B12b PARTIAL CLOSE (`BUILD` only): B12b.18 (`Rung.envelope` deleted, an encoding mover: every world's build hash moves; seed 0 `bc0df867..` -> `5f180996..`, read on the open commit `fdfd350` and on the closing tree, `PYTHONHASHSEED=0`). `SHIPPED` and `CENSUS` are NOT re-recorded here: they read red on `fdfd350` itself (seed 0, one season: log 9478 and hash `f316d39f..` against the pins' 9447 and `78be13f7..`), a state the batch inherited and did not make; the closing tree reads, seed 0, one season, `4e5b062b..` (B12b.42's ration observations on `tend`; B12b.18's `38cea821..` before it), acts 419 and log 9478 as at `fdfd350`.
+
 """
 
-BUILD = {0: "bc0df8674b6fb849a759d92b3e4c59a8"}                      # build_realm(seed), unplayed
+BUILD = {0: "5f180996eb944a7ae4b3de3ad7927e12"}                      # build_realm(seed), unplayed; B12b.99 PARTIAL re-pin (the docstring's last paragraph)
 
 SHIPPED = {(0, 1): "78be13f78ef226c568ee2bc46a4b3707",
            (0, 2): "131f0afc555f4d49da661a5bf59e4548",
