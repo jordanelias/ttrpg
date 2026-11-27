@@ -1150,6 +1150,7 @@ def _w15_exclusive():
             fcntl.flock(fh, fcntl.LOCK_UN)
 
 
+@pytest.mark.shipped_pin     # a byte-check of derived artifacts (`runs/results.json`): a post-workplan gate with the goldens (conftest.py `_reads_pin`)
 def test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte():
     """**THE GUARD.** Executes the sole emitter and asserts the one committed artifact,
     `results.json`, comes back byte-identical (the name keeps "every committed artifact" so the

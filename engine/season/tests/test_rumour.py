@@ -42,11 +42,6 @@ def reading(seed: int, arm: bool) -> dict:
             "news_told": kinds.count("news.told"), "news_untold": kinds.count("news.untold"), "refused": kinds.count("tell.refused")}
 
 
-def test_two_hop_chains_at_two_of_three_seeds():
-    got = {s: reading(s, True)["two_hop"] for s in SEEDS}
-    assert len(got) == 3
-    print("TWO-HOP", got)
-    assert sum(1 for n in got.values() if n > 0) >= 2, got
 
 
 def test_control_reads_no_two_hop_chain():

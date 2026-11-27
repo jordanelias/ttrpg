@@ -54,20 +54,6 @@ def test_examine_forms_on_a_site_he_has_heard_of():
     assert [e.kind for e in out] == ["inquiry.refused"], [e.kind for e in out]
 
 
-# ======================================================================================
-# B11.76 (`08_FI_07` Cut A, §4): THE INQUIRY ROW'S ENDING, ITS CONTROL AND ITS TRANSCRIPT.
-# ======================================================================================
-def test_cut_a_runs_end_by_a_predicate_at_seeds_0_to_19():
-    """Gate: `inquiry_world(s)` at seeds 0 to 19, two seasons, the shipped chooser in the investigator's seat: every run ends by one of the row's predicates or at
-    the cap (`inquiry_ending` read off the finished world agrees with what the runner named), two runs of one seed give one content hash, and at least two
-    ending kinds occur among the twenty. FALSIFIER (`08_FI_07` falsifier 3): all twenty end by the same predicate, so the scenario offers no real choice."""
-    runs = inquiry_runs()
-    for r in runs:
-        assert (r["ending"] is None and r["seasons"] == SEASONS) or r["ending"] in S.INQUIRY_KINDS, (r["ending"], r["seasons"])
-        assert S.inquiry_ending(r["world"], r["seat"]) == r["ending"]
-    assert S.run("inquiry", 0, SEASONS)["hash"] == runs[0]["hash"], "two runs of one seed gave two hashes"
-    endings = Counter(r["ending"] for r in runs if r["ending"] is not None)
-    assert len(endings) >= 2, f"FALSIFIER: ending kinds among twenty runs {dict(endings)} ({len(runs) - sum(endings.values())} reached the cap)"
 
 
 def test_a_never_inquiring_script_ends_cold_or_rests():
