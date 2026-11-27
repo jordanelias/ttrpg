@@ -334,7 +334,11 @@ def test_in68_a_seat_holders_goal_reads_the_seat_a_loop_built_realm_built_it_as(
     The reader names the holder and FOLLOWS the hold -- AS THE ASKER HEARS IT (v12 B11.08, `08_FI_01` edit 2): the realm starts with
     the seat news (`seed_seat_news`), a hold closed on the World alone moves nobody's referent, and the closing the asker is told of does."""
     from ..queries import world_q
-    w = _realm(monkeypatch, tmp_path, _king())
+    # B34.24: `g_king` names the throne, so who has heard who holds it is a draw (`Fixtures holder_known_chance`, H-758); the premise that the
+    # onlooker starts with the news is the revert arm's, every class at 1.0 (the ungated seed exactly).
+    from ..data.fixtures import DEFAULT_FIXTURES
+    heard = DEFAULT_FIXTURES.sweep("holder_known_chance", {"same_settlement": 1.0, "same_faction_or_goal": 1.0, "elsewhere": 1.0})
+    w = _realm(monkeypatch, tmp_path, _king(), fixtures=heard)
     seat = w._office_census["authored"]["off_king"]
     assert seat == "off_king" and "off_king" in w.offices, "the premise: the authored id IS the Office (CP-T02-02)"
     prop = w.propositions["g_king"]

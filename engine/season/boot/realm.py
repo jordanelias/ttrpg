@@ -38,8 +38,8 @@ from ..data.requires import KNOWN_PERSON_CLAIM
 from ..epistemic import CHANNEL_PREDICATES, claim_subjects
 from ..state.carriers import (Act, Claim, Event, Office, Person, Proposition, Rung, Site, StateChange, Tenure,
                               generated_attributes)
-from ..state.gate import NO_CHANGE, may_revoke, sworn_to
-from ..state.ids import H, ROOT
+from ..state.gate import NO_CHANGE, may_revoke, seat_faction, sworn_to
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 
 GEOGRAPHY = files.GEOGRAPHY_YAML.relative_to(files.REPO_ROOT).as_posix()  # the path's one owner is `data/files.py`
@@ -800,6 +800,52 @@ def _realm_of(w: World, x) -> "str | None":
     return next((r for r in chain if getattr(w.rungs.get(r), "kind", None) == "realm"), chain[-1] if chain else None)
 
 
+def goal_named_seats(w: World) -> dict:
+    """`{seat id: the goal ids naming it}` for every seat a loaded goal of object kind `seat_holders` lists, read off the Proposition
+    `seed_goals` minted for it (`Proposition.scope`, the Office ids the listed seats built as). Empty when no goal was seeded (`goals=False`)."""
+    named: dict = {}
+    for g in goals_data.goals():
+        prop = w.propositions.get(g.id)
+        if g.object["kind"] == "seat_holders" and prop is not None:
+            for seat in prop.scope or ():
+                named.setdefault(seat, set()).add(g.id)
+    return {seat: frozenset(gids) for seat, gids in named.items()}
+
+
+def _settlement_of(w: World, rung) -> "str | None":
+    """The settlement rung at or above `rung` (`seat_guards`' walk), `None` for a place in no settlement."""
+    return next((r for r in ancestry(w, rung) if w.rungs[r].kind == "settlement"), None) if rung in w.rungs else None
+
+
+def holder_known_class(w: World, pid: str, seat: str, holder: str, goals, homes: dict) -> str:
+    """WHICH `Fixtures holder_known_chance` CLASS `pid` DRAWS IN FOR HAVING HEARD WHO HOLDS `seat` (v12 B34.24, `16_PESSIMIST_GO` §2), the first
+    that applies: `same_settlement` -- he lives (`homes`, `world_q.home_of`) in the settlement the seat's `holder` lives in; `same_faction_or_goal`
+    -- his own live `commit` Tenures include a goal naming the seat (`goals`, `goal_named_seats`' row) or the seat's faction (`state/gate.py::
+    seat_faction`); else `elsewhere`.
+    [ASSUMPTION; medium; Jordan to correct; revert: the seat's own rung's settlement] `same_settlement` reads the HOLDER'S settlement: every seat a
+    shipped goal names sits on a territory or the realm, so the seat's own rung stands in no settlement and the class would hold nobody.
+    [ASSUMPTION; medium; Jordan to correct] one class per person, in the order above (the order of the chances, highest first)."""
+    town = _settlement_of(w, homes.get(holder))
+    if town is not None and _settlement_of(w, homes.get(pid)) == town:
+        return "same_settlement"
+    faction = seat_faction(w, seat)
+    if any(t.kind == "commit" and t.live and t.subject == pid and (t.object in goals or (faction is not None and t.object == faction))
+           for t in w.persons[pid].tenures):
+        return "same_faction_or_goal"
+    return "elsewhere"
+
+
+def _holder_known_chances(w: World) -> dict:
+    """`Fixtures holder_known_chance`, refused unless it is exactly the three classes, each a chance in [0, 1] (`H-758`)."""
+    chances = dict(w.fixtures.get("holder_known_chance"))
+    if set(chances) != {"same_settlement", "same_faction_or_goal", "elsewhere"}:
+        raise ValueError(f"holder_known_chance names {sorted(chances)}, not the three classes (H-758)")
+    for cls, rate in chances.items():
+        if not 0 <= float(rate) <= 1:           # `not ... <=`, so a NaN is refused too
+            raise ValueError(f"holder_known_chance {cls} {rate} is not a chance in [0, 1] (H-758)")
+    return chances
+
+
 def seed_seat_news(w: World) -> list:
     """THE REALM DOES NOT START BLIND (v12 B11.08, `08_FI_01` edit 6; A-32): FOR EACH SEAT HELD AT BUILD, EVERY PERSON THE `reach`
     CHANNEL CARRIES ITS OPENING TO HOLDS THE CLAIMS A WITNESS OF IT WOULD. The Event is the one WITNESS would deposit -- `tenure.opened`
@@ -817,12 +863,20 @@ def seed_seat_news(w: World) -> list:
     seeded so, every seat and every holder of the realm would be the doer of `tenure.opened`, and `goal_inquisitors_find_heresy` and
     `goal_church_root_out_heresy` (`engaging: einhir_restoration`, which `tenure.opened` engages) would name all of them (60 referents, 31 of them
     Offices, measured; 0 before). Who holds a seat is no act of the seat's. `holders_named` reads the kind and not the value.
+    ⚠ A SEAT A LOADED GOAL NAMES (`goal_named_seats`) IS HEARD OF BY A DRAW (v12 B34.24, `16_PESSIMIST_GO` §2; `H-190`'s keyed-chance shape): each
+    person the channel reaches holds its claims only if `draw(pid, "knows_holder:<seat>")` falls under his class's `Fixtures holder_known_chance`
+    (`holder_known_class`), so a fugitive may not have heard who the new Cardinal Justice is, and learns it, if at all, through the channels in
+    play. Every other seat is deposited as before, and no draw is taken for it; at 1.0 in every class the deposit is the ungated one exactly.
     Returns the claim ids written, in seat then person order.
     [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] a seat is held, and so known, from the build."""
     conf = w.fixtures.get("confidence_default")
     when = landing_floor(w)[0] - 1
     local = w.fixtures.get("seat_news") == "local"
     source = CHANNEL_CLAIM_SOURCE["reach"]
+    named = goal_named_seats(w)
+    chances = _holder_known_chances(w)
+    draw = draw_factory(w.world_seed, lambda: w.tick)
+    homes = home_of_q(w)
     written = []
     held = sorted(((t.object, t) for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices), key=lambda x: x[0])
     for lap, (seat, t) in enumerate(held):
@@ -832,6 +886,9 @@ def seed_seat_news(w: World) -> list:
         for pid in sorted(w.persons):
             if (local and (rung is None or _realm_of(w, pid) != _realm_of(w, rung))) or (
                     not local and not CHANNEL_PREDICATES["reach"](w, e, pid)):
+                continue
+            if seat in named and draw(pid, f"knows_holder:{seat}").random() >= chances[
+                    holder_known_class(w, pid, seat, t.subject, named[seat], homes)]:
                 continue
             for n, subject in enumerate(subjects):
                 cid = f"c_seat_{pid}_{seat}_{n}"

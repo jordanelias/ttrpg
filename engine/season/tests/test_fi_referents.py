@@ -169,11 +169,14 @@ def test_a_witnessed_change_does_move_the_candidates():
 
 def test_the_realm_starts_with_seat_news():
     """`seed_seat_news`: every person the realm reaches holds who sits each seat that has a rung, as the seat's own claims name him, and
-    holds nobody for a seat in another realm; `seat_news: local` (A-32's arm B) seeds the same seats of his own realm."""
+    holds nobody for a seat in another realm; `seat_news: local` (A-32's arm B) seeds the same seats of his own realm. B34.24: a seat a loaded
+    goal names (`goal_named_seats`) is held only on a draw (H-758), so for it the reached are a superset of those who hold it, and some do not."""
+    from ..boot.realm import goal_named_seats
     local = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("seat_news", "local"))
     shipped = build_realm(0)
     homes = world_q.home_of(shipped)
-    checked = 0
+    named = goal_named_seats(shipped)
+    checked = drawn_out = 0
     for w in (shipped, local):
         assert len(w._seat_news) == len(shipped._seat_news) > 0
         for t in w.tenures:
@@ -183,9 +186,14 @@ def test_the_realm_starts_with_seat_news():
             for pid, p in w.persons.items():
                 top = world_q.ancestry(w, homes[pid])[-1] if pid in homes else None
                 same = rung is not None and top is not None and world_q.ancestry(w, rung)[-1] == top
-                assert (t.subject in holders_named(p.ledger, t.object)) == same, (pid, t.object)
+                heard = t.subject in holders_named(p.ledger, t.object)
+                if t.object in named:
+                    assert same or not heard, (pid, t.object)
+                    drawn_out += same and not heard
+                else:
+                    assert heard == same, (pid, t.object)
                 checked += 1
-    assert checked > 5000, checked
+    assert checked > 5000 and drawn_out > 0, (checked, drawn_out)
 
 
 def test_a_witnessed_release_of_another_commitment_does_not_end_the_seat_hold():

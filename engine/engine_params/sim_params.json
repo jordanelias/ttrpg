@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 522,
-    "uncited": 390,
+    "total": 523,
+    "uncited": 391,
     "of_which_assumption_grade": 9
   },
-  "count": 522,
+  "count": 523,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 45,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 242,
+    "engine.season.settings": 243,
     "engine.season.realm": 9
   },
   "params": [
@@ -4851,6 +4851,21 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "A-32, swept realm (SHIPPED) / local (arm B)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.holder_known_chance",
+      "name": "holder_known_chance",
+      "value": {
+        "same_settlement": 0.95,
+        "same_faction_or_goal": 0.9,
+        "elsewhere": 0.5
+      },
+      "kind": "table",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-758`, swept 1.0 everywhere (revert) / shipped / half the shipped",
       "citation": null,
       "citation_grade": null
     },

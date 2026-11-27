@@ -1154,6 +1154,12 @@ DEFAULT_FIXTURES = Fixtures(
     # `rosters.yaml: seat_news_arms`). A measurement arm, B of A-32, not a design.
     # [JUSTIFIED: A-32 -- ruled: one reach row for seat changes at `realm` ships, and `local` is kept as the tested alternative, so both are declared and swept realm / local]
     seat_news="realm",                 # A-32, swept realm (SHIPPED) / local (arm B)
+    # v12 B34.24 (`16_PESSIMIST_GO` §2). WHO HAS HEARD WHO HOLDS A SEAT A GOAL NAMES, AT BUILD: for each seat a loaded goal's `seat_holders`
+    # lists, each person the seat news reaches (`boot/realm.py::seed_seat_news`) holds its claims only on one keyed draw against his class's
+    # chance (`holder_known_class`): `same_settlement` (he lives in the settlement the seat's holder lives in), `same_faction_or_goal` (his own
+    # `commit`s include a goal naming the seat or the seat's faction), `elsewhere`. A seat no goal names is not drawn on. No chance is 1.0.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-758 -- the three chances are an assumption the source proposes without derivation; 1.0 everywhere is the revert and reproduces the ungated seed]
+    holder_known_chance={"same_settlement": 0.95, "same_faction_or_goal": 0.9, "elsewhere": 0.5},   # `H-758`, swept 1.0 everywhere (revert) / shipped / half the shipped
     # v12 B11.08 (`08_FI_02` edit 5). WHO A TELLER OFFERS A TELLING (or a gift, an argument: a row whose cell carries a `with`
     # conjunct on `to`) TO: `known` (SHIPPED, the control) is every person he has any claim of (`person_q.known_persons`);
     # `seen_since_move` only those he holds a firsthand sighting of since his own newest movement (`person_q.present_persons`).
