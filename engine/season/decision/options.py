@@ -231,7 +231,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if contexts and refs:
             if records is None:
                 records = held_record_claims(p, tick, decay)
-            memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
+            memo: dict = {"fade": (tick, decay)}   # what a reader derives from the actor alone, once per call, not once per referent (`fade`: his claims' reading, B29.02)
             # B15.08 (PHY_A A3): THE CONTEXT THAT ADMITTED A REFERENT RIDES ITS CANDIDATE (`CONTEXT_KEY`), the first of the line that holds
             # (`violence_context_of`, the one reader), for `combat_input` to read the fight's terms by (`rosters.yaml: context_terms`).
             context_of = {r: violence_context_of(p, q, r, contexts, records, memo) for r in refs}
@@ -285,8 +285,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 refs = tuple(r for r in refs if r not in read or read[r] & kinds_asked)
             else:
                 refs = tuple(r for r in refs if read.get(r, frozenset()) & kinds_asked)
-        if not refs:
-            continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one
         # Candidate per vocation in the RANGE -- `verb_capability`'s values (`data/verbs.py::VOCATIONS`,
         # #453 K-20) -- the key riding on the roster's operand. ⚠ NEVER THE ACTOR'S OWN `capability`:
@@ -303,7 +301,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # forms only on a referent a HELD record of the warrant kind names -- IN-10's held-Record
         # channel (`held_record_claims`, answered through `record_sourced_operands`' `subject` key),
         # the person's own Tenures and own ledger and no World. It NARROWS the referents the question
-        # carries and widens nothing (§F1 clause 3 stands), so `seize` is never formed for a seat that
+        # carries and narrows (§F1 clause 3 stands; B29.01 adds, below, the persons a warrant addressed to him names, for `arrest` only), so `seize` is never formed for a seat that
         # holds no warrant naming what it was asked about.
         warrant_kind = WARRANT_SOURCED.get(verb)
         warranted = None
@@ -312,6 +310,20 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 records = held_record_claims(p, tick, decay)
             warranted = {_content_answer(c, "subject") for c in records
                          if content_kind(c) == warrant_kind}
+            # B29.01 (`14_VERBS_PHYSICAL_A` A1 [ASSUMPTION; medium; Jordan to correct; revert: drop this block, and `warranted` is
+            # the held set alone]): AND THE PERSONS A WARRANT ADDRESSED TO HIM NAMES, which his own ledger reads (`addressed_terms`: a
+            # document he saw made or was told of, the maker's hand keeping it) AND the question carries as `Person`
+            # (`world_q.warrants_heard`, stamped once on his head question, the occasion). Both: the stamp alone is every person a question
+            # names, the ledger alone is every question he answers. They are ADDED to `refs`, since no question he answers is about the
+            # man an order named; and only for a row whose subject is the one it is done to (`subject_is_opponent`), so `seize` forms
+            # on no man. It widens only by what the ledger and the stamp both say.
+            carried = q.referents_for("Person")
+            if carried and subject_is_opponent(row):
+                heard = tuple(t for t in dict.fromkeys(addressed_terms(p, warrant_kind, tick, decay)) if t in carried)
+                warranted.update(heard)
+                refs = tuple(refs) + tuple(t for t in heard if t not in refs)
+        if not refs:        # B29.01: after the heard persons are added, so a question with no plain referent (the synthetic `need` head) still forms `arrest`
+            continue
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
@@ -618,12 +630,15 @@ def _war_context(p: Person, q: Question, r: str, records: list, memo: dict) -> b
 def _crime_context(p: Person, q: Question, r: str, records: list, memo: dict) -> bool:
     """CRIME: a warrant he holds, ADDRESSED TO HIM, names `r` (a held Record of a `warrant_sourced` kind, answered
     through `record_sourced_operands`' `subject` key -- the reading `arrest` forms on -- whose addressee is he,
-    `person_q.addressed_to`, IN-12 step 5a's one owner), or `r` is stamped `Detainee` on his question (a live `detain`
+    `person_q.addressed_to`, IN-12 step 5a's one owner), or one addressed to him that he has only heard of, its Record left in its
+    maker's hand (B29.02; `addressed_terms`), or `r` is stamped `Detainee` on his question (a live `detain`
     on a seat he holds: `arrest`'s and `capture`'s custody, `world_q.detainees_held`).
     THE ADDRESSEE TEST NARROWS "A WARRANT HIS SEAT ISSUED OR HOLDS" [ASSUMPTION; medium; Jordan to correct; revert:
     drop the `addressed_to` test]: a dispensation whose `terms` is a person is a warrant to the tree
     (`warrant_sourced`), so the maker of any writ about the King held a "warrant" against him. The man a warrant charges is its addressee, not its maker."""
-    return (r in q.referents_for(DETAINEE_CLASS)
+    if "heard" not in memo:            # B29.02 (`14_VERBS_PHYSICAL_A` A2): AND A WARRANT ADDRESSED TO HIM THAT HE HAS ONLY HEARD OF, its Record left in its maker's hand (`addressed_terms`, the reading `arrest` forms on)
+        memo["heard"] = {t for k in _WARRANT_KINDS for t in addressed_terms(p, k, *memo.get("fade", (0, 0)))}
+    return (r in q.referents_for(DETAINEE_CLASS) or r in memo["heard"]
             or any(content_kind(c) in _WARRANT_KINDS and _content_answer(c, "subject") == r
                    and addressed_to(content_said(c), p.id) for c in records))
 
@@ -1178,6 +1193,22 @@ def document_read(p: Person, rid, tick: int = 0, decay: int = 0) -> Optional["Cl
     where he holds no reading. Person-side and World-free (AX-2)."""
     return LedgerReader([c for c in p.ledger if c.subject == rid and content_said(c) is not None
                          and content_kind(c) in RECORD_SOURCED_OPERANDS], tick=tick, decay=decay).belief_among()
+
+
+def addressed_terms(p: Person, kind: str, tick: int = 0, decay: int = 0) -> tuple:
+    """THE `subject` (A DISPENSATION'S `terms`) OF EACH DOCUMENT OF `kind` THAT `p`'S OWN LEDGER READS AS ADDRESSED TO HIM -- B29.01
+    (`14_VERBS_PHYSICAL_A` A1), the person-side twin of `world_q.addressed_records`' reading: the newest `content:<kind>` claim on each
+    document (`document_read`, held or only heard), kept where its addressee list names him (`person_q.addressed_to`, the one owner of the
+    test), answered through `record_sourced_operands`' `subject` key. The document may stay in its maker's hand: `loop/witness.py` deposits
+    its content to an addressee who witnessed the making or was told. Person-side and World-free (AX-2); in the ledger's order, one per document."""
+    out = []
+    for rid in dict.fromkeys(c.subject for c in p.ledger if content_kind(c) == kind):
+        c = document_read(p, rid, tick, decay)
+        if c is not None and content_kind(c) == kind and addressed_to(content_said(c), p.id):
+            t = _content_answer(c, "subject")
+            if t is not None:
+                out.append(t)
+    return tuple(out)
 
 
 def documents_known_as(p: Person) -> dict:

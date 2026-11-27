@@ -62,7 +62,7 @@ GATE: Batch B25-fi-questioning
 GATE: Batch B26-fi-inquiry
 GATE: Batch B27-sc-proceedings
 GATE: Batch B28-social-verbs
-GATE: Batch B29-pc-custody
+GATE: Batch B29-pc-custody @474a84dc9d12e20dafa0d9edbca341d2e5f7a649
 GATE: Batch B30-mb-nested
 GATE: Batch B31-mb-loadout-economy
 GATE: Batch B32-inst-kit

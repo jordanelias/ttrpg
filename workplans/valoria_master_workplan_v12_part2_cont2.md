@@ -489,7 +489,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B26-fi-inquiry | FI | ED-FI-0014..0015 (0+2) | H-687..H-693 (2+5) | H shifted |
 | B27-sc-proceedings | SC | ED-SC-0050..0051 (0+2) | H-694..H-701 (3+5) | H shifted |
 | B28-social-verbs | SC | ED-SC-0052..0053 (0+2) | H-702..H-723 (17+5) | H shifted |
-| B29-pc-custody | PC | ED-PC-0070..0071 (0+2) | H-724..H-728 (0+5) | H shifted |
 | B30-mb-nested | MB | ED-MB-0097..0098 (0+2) | H-729..H-733 (0+5) | H shifted |
 | B31-mb-loadout-economy | MB | ED-MB-0099..0100 (0+2) | H-734..H-738 (0+5) | H shifted |
 | B32-inst-kit | FA | ED-FA-0050..0051 (0+2) | H-739..H-745 (2+5) | H shifted |
