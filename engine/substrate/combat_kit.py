@@ -3,7 +3,8 @@
 Status: [live, CP-T03-03; `FORMS` B14.12]. The single runtime reader of the `kit` section and of `attributes.end.default` of
 `engine/engine_params/combat_engine_v1.json` (written by `tools/export_engine_params.py` from
 `modules/combat/weapons.py`, `vocabulary.py` and `combatant.py`, behind its blocking `--check`). Same shape as
-`names.py`, `descriptors.py` and `composition.py`.
+`names.py`, `descriptors.py` and `composition.py`. It also owns the carry rule (`carry_demand_of`, `carry_demand`, B18.06),
+which reads `D_MASS` and `ARMOR_DEMAND` from the export's `cfg` and a weapon's `mass` from its `weapons` section.
 
 IT IS A LEAF: stdlib only (`json`, `os`). The season's `rosters.yaml: arms_kinds` is validated against these sets
 AT LOAD (`engine/season/data/rosters.py`), and `queries/world_q.py::kit_of` answers a person who holds no arms with
@@ -46,3 +47,25 @@ DEFAULTS = dict(_KIT['defaults'])
 
 #: `{Combatant field: the closed set of keys it takes}`; the fields an `arms_kinds` row may name.
 FIELDS = {'weapon': WEAPONS, 'armor': ARMOUR_TIERS}
+
+# The carry rule's two coefficients, read from the export's `cfg` (`modules/combat/config.py`: D_MASS and ARMOR_DEMAND).
+_D_MASS = _SECTIONS['cfg']['D_MASS']
+_ARMOR_DEMAND = _SECTIONS['cfg']['ARMOR_DEMAND']
+_WEAPON_RECORDS = _SECTIONS['weapons']
+
+
+def carry_demand_of(masses: tuple, armour: str) -> float:
+    """Strength points demanded by what is CARRIED: D_MASS per kilogram of every carried mass that is not in hand,
+    plus the harness's ARMOR_DEMAND. Reads the export's `cfg`.
+
+    `masses` is the kilograms of what is carried and NOT held (the weapon in hand is already charged by
+    `combat_systems.str_demand`'s own `D_MASS * mass`); empty, it is the harness term alone, which is what
+    `combat_systems.act_cost` charges today. An unknown `armour` tier raises KeyError (a closed set: `ARMOUR_TIERS`)."""
+    return _D_MASS * sum(masses) + _ARMOR_DEMAND[armour]
+
+
+def carry_demand(weapons: tuple, armour: str) -> float:
+    """The keyed spelling: looks each weapon's mass up in the export's `weapons` section and calls `carry_demand_of`.
+    A person's kit uses this; a troop row, whose arm may have no key here, uses the mass form. One rule, two
+    spellings of its argument. `weapons` are the record keys carried and not in hand."""
+    return carry_demand_of(tuple(_WEAPON_RECORDS[w]['mass'] for w in weapons), armour)

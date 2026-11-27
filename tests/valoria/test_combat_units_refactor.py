@@ -183,3 +183,36 @@ def test_an_empty_slot_reproduces_todays_fight():
         assert fought[0] == fought[1] == fought[2], f"seed {seed}: an empty slot moved the fight"
         differs += fought[3] != fought[0]
     assert differs >= 1, "a raised axis never changed a fight: the equality above could not have failed"
+
+
+# ── B18.06: one carry rule at the kit's owner (`03_PC_loadout_and_carry` item 1) ────────────────────────────────────
+
+def test_carry_demand_of_equals_the_keyed_spelling():
+    """The two spellings of the carry rule are one rule, and its harness term is the one the engine charges today. (1) for
+    each weapon pair and each armour tier, `carry_demand(keys, tier)` equals `carry_demand_of(the keys' masses, tier)`,
+    and a carried kilogram adds `D_MASS`; (2) with nothing carried, the demand is `ARMOR_DEMAND[tier]`, and the stamina
+    `combat_systems.act_cost` charges for that tier above the same fighter unarmoured is `ACT_WEIGHT / D_WT * COST_SCALE`
+    times `max(0, carry_demand_of((), tier) - strength)`, at a Strength under the demand and one over it. B18.07 relocates
+    the harness term onto this function; this is the number it must keep."""
+    from engine.substrate import combat_kit as K
+    C, S, _WP, CFG = _mods()
+    keys = ('dagger', 'arming', 'greatsword', 'spear')
+    checked = 0
+    for tier in sorted(K.ARMOUR_TIERS):
+        for carried in ((), keys[:1], keys[:2], keys[1:], keys):
+            masses = tuple(C.WEAPONS[k]['mass'] for k in carried)
+            assert K.carry_demand(carried, tier) == K.carry_demand_of(masses, tier)
+            assert K.carry_demand_of(masses, tier) == CFG['D_MASS'] * sum(masses) + CFG['ARMOR_DEMAND'][tier]
+            checked += 1
+    assert checked == 5 * len(K.ARMOUR_TIERS) and len(K.ARMOUR_TIERS) == 4
+    unit = CFG['ACT_WEIGHT'] / CFG['D_WT'] * CFG['COST_SCALE']
+    paid = 0
+    for tier in sorted(K.ARMOUR_TIERS):
+        for strength in (1.0, 7.0):
+            bare = C.Combatant('b', weapon='arming', armor='none', strength=strength)
+            worn = C.Combatant('w', weapon='arming', armor=tier, strength=strength)
+            extra = S.act_cost(worn, 0.0, CFG) - S.act_cost(bare, 0.0, CFG)
+            owed = unit * max(0.0, K.carry_demand_of((), tier) - strength)
+            assert abs(extra - owed) < 1e-12, f"{tier} at Strength {strength}: act_cost charges {extra}, carry_demand says {owed}"
+            paid += extra > 0
+    assert paid >= 3, "no armour tier was ever charged: the equality above could not have failed"
