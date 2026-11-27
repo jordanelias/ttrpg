@@ -87,7 +87,7 @@ from ...epistemic import NOTICE_ROLL, trail_concealment
 from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels  # (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, seat_named_by, sides_of
-from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, claim_origin, conflict, contradicts, false_items, held_cites, holds_dispute, proof_kind, stance_toward,
+from ...queries.person_q import (BEARING_PARTS, OPINION_MAX, believed_capability, believes, bearing, claim_origin, conflict, contradicts, false_items, held_cites, holds_dispute, proof_kind, stance_toward,
                                  strain_carried, takes_side, tie)
 from ...queries.person_q import care as person_care
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
@@ -617,6 +617,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     counts = dict(rank_gap=_rank_gap_of(w, via, subject),                       # the subject's rank above the exercised seat (B21.09)
                   cross_chain=int(across_chains(w, via, seat)),                 # the named seat is of another chain than the exercised one (B21.61)
                   faction_power=_faction_power_of(w, via, subject) if seat is not None else 0)     # the holder's faction against the host's, where the act names a seat (B21.69)
+    if _swears_to_exercised_seat(verb):                                         # B21b.16: an offer of service is priced by what ties the man elsewhere
+        counts.update(rival_tie=_rival_tie_of(w, via, subject), opinion_of_faction=_opinion_hostility_of(w, via, subject))
     # B11.68 (`IS-B2-FI-07` (3)): an INQUIRY about a trail meets its doers' covers -- the strongest, once, beside the examined Record's own quality (the larger of the two).
     concealed = max(doc.forgery_quality if doc is not None else 0.0,
                     trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
@@ -947,11 +949,64 @@ def _faction_power_term(fx: Any, facts: dict) -> dict:
     return _weighing("faction_power", float(max(0, facts.get("faction_power") or 0)), fx.get("faction_power_step"))
 
 
+def _swears_to_exercised_seat(verb: str) -> bool:
+    """DOES AN ACT OF `verb` BIND ITS COUNTERPARTY BY AN OATH TO THE SEAT IT IS EXERCISED THROUGH (B21b.16)? Read off the effects, never a verb's name, as
+    `_stakes_kind` is: the verb opens an `oblige` (`data/verbs.py::_OPENERS_FROM_EFFECTS`). Of the three that do, `oblige` is uncontested and `determine`
+    proceeds, so this is `retain`'s alone to reach the composer today; a later verb that swears a man to a seat reads the same two terms."""
+    return verb in _OPENERS_FROM_EFFECTS.get("oblige", ())
+
+
+def _rival_tie_of(w: Any, via: Optional[str], man: Optional[str]) -> int:
+    """`1` WHERE THE MAN AN OFFER OF SERVICE IS MADE TO IS TIED ELSEWHERE, `0` where he is not (B21b.16, CP-T09-07 (a); `FA §3.3` S3: *"his live `oblige` or
+    `commit` to a rival seat or faction"*). A tie is RIVAL where its object is not of the seat's own faction (`gate.seat_faction`, the one owner of seat -> faction
+    id): a live OATH (`oblige`, not a bench's imposed edge) to a seat of another faction or of none against a host that has one, or a live `commit` to a faction's
+    Proposition (`FACTION_BY_PROP`: membership) that is not the host's. An oath to `via` itself, a seat of the host's faction and a man tied to none read `0`.
+    A count, not a sum: one tie is the term and a second is no harder (`faction_power`'s `0/1` shape). `0` for no man, no seat or a counterparty that is no person."""
+    p = w.persons.get(man) if man else None
+    if p is None or via not in w.offices:
+        return 0
+    host = seat_faction(w, via)
+    for t in p.tenures:
+        if not t.live or t.object == via:
+            continue
+        if t.kind == "oblige" and not t.imposed and t.object in w.offices and seat_faction(w, t.object) != host:
+            return 1
+        if t.kind == "commit" and t.object in FACTION_BY_PROP and t.object != host:
+            return 1
+    return 0
+
+
+def _opinion_hostility_of(w: Any, via: Optional[str], man: Optional[str]) -> float:
+    """HOW FAR THE MAN DISLIKES THE FACTION OF THE SEAT THAT WOULD KEEP HIM, in `[0, 1]` (B21b.16, CP-T09-07 (a), IN-70): `clamp(-opinion_of / OPINION_MAX, 0, 1)`,
+    the hostile half of his opinion of the host's faction (`world_q.opinion_of`, `[-OPINION_MAX, +OPINION_MAX]`, computed from his own interior and what his ledger names);
+    its favourable half lowers nothing (nothing lowers an obstacle, `roll.py::obstacle`). `0` for no man, a seat with no faction, or a faction the roster does not name
+    (an emerged creed has an opinion too, but a seat of one is not built)."""
+    p = w.persons.get(man) if man else None
+    host = seat_faction(w, via)
+    if p is None or host is None or host not in FACTION_BY_PROP:
+        return 0.0
+    return max(0.0, min(1.0, -_world_q.opinion_of(w, p, host) / OPINION_MAX))
+
+
+def _rival_tie_term(fx: Any, facts: dict) -> dict:
+    """`rival_tie`: a man already sworn or committed to a rival is the harder to keep (OBS §2; B21b.16, CP-T09-07 (a); the member's name is the producer's
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the member from `rosters.yaml: obstacle_terms`]): `tie_step x` the count `_rival_tie_of` read
+    (`facts["rival_tie"]`; 0 where the record's builder read none). Not listed at `tie_step` 0 or for a man tied to no rival."""
+    return _weighing("rival_tie", float(facts.get("rival_tie") or 0), fx.get("tie_step"))
+
+
+def _opinion_of_faction_term(fx: Any, facts: dict) -> dict:
+    """`opinion_of_faction`: a man who dislikes the host's faction is the harder to keep (OBS §2; B21b.16, CP-T09-07 (a), IN-70): `tie_step x` the hostile half of his
+    opinion, `_opinion_hostility_of` (`facts["opinion_of_faction"]`). ONE STEP FOR BOTH TIES (`rival_tie`'s and this), so a man's two loyalties are priced on one ladder
+    (§0.06 S). His regard of the actor is the `regard` member, read by `_regard_term`: the plan's third name (`regard_of_actor`) is that member, not a second copy of it."""
+    return _weighing("opinion_of_faction", float(facts.get("opinion_of_faction") or 0.0), fx.get("tie_step"))
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
     _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _rank_gap_term, _regard_term, _reception_term,
-    _capability_term, _cross_chain_term, _faction_power_term)},
+    _capability_term, _cross_chain_term, _faction_power_term, _rival_tie_term, _opinion_of_faction_term)},
                            "obstacle_terms", members=obstacle_bound("host"))
 
 PROCEEDING_ROLE = "social_contest.proceeding"   # the composition row whose module supplies the `bound: module` members (registered at B24p.12)

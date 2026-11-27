@@ -1685,6 +1685,60 @@ verbs:
     effect_formula_note: "Δ = +(1 − condition) × f(degree) × share (§54 it. 7's mirror). ⚠ BUILT AT PLAN POSITION `24e` as `loop/effects.py::_rise`, the one owner `work` also reads when it advances a works: `(1 − condition)` is the headroom to the works' ceiling (`queries/world_q.py::ceiling`, the full scale where no works names the site), `share` is `queries/world_q.py::share` (one over those standing at the fabric), and `f(degree)` is `task_fraction`'s share of the band (B07.02, `_rise`; the whole headroom with no band: the arm `off`, or Success) -- it was the identity while `_fold` handed it no degree (`H-164`). Staged on `(Site, condition)` and clamped once under the ceiling, `work`'s G4 shape."
     effect_note: "An effect formula is not a precondition: a precondition is a question the fold asks of the world, an effect is what the write does, and conflating them is how a resolver grows a second body."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "retain"
+    public:      false
+    stratum:     "social"
+    eligibility: ["remit:confer"]
+    eligibility_note: "B21b.16 (CP-T09-07 (a), AM-F-15; `FA §3.3` S3): `remit:confer` -- *\"a seat-holder `via` a seat granting `confer`\"* [S3's ASSUMPTION; medium; Jordan to correct; revert: another remit act, named once at `state/gate.py::RETAIN_ACT`, which the write gate's `retention` basis reads too]: the seat that names a man to an office is the seat that takes a man into its service. It is `confer`'s grant and not `confer`'s act: the row seats nobody."
+    beneficiary: "actor"
+    beneficiary_note: "THE RETAINER'S SEAT: a man sworn to a seat strengthens its establishment (`world_q.establishment_of`) and its army (`gate.may_muster`'s `oblige` clause). The retained man's gain is his own upkeep (`_renewals`)."
+    governing:   [attr.social.charisma]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B21b.16 [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `retain`'s attributes; `issue`'s and `confer`'s cells, the sibling seat-authorised acts that put a standing to a person: Presence leads an offer the man may refuse, and he opposes on his Will. revert: `brute: seat` with its note, and no `contests:` or `difficulty:`]."
+    contests:    "a standing"
+    contests_note: "B21b.16 (CP-T09-07 (a)): the prize `a standing` (`rosters.yaml: contest_subsystems.prizes`, `tell`'s and `issue`'s; no new prize, no new provider), rolled by the social contest module, OPPOSED BY THE PERSON OFFERED SERVICE (`counterparty: to`). The obstacle is the one composer's (`roll.py::obstacle`): `difficulty` `routine` + `opposition` (his skill score plus his Will, `sigma.py::_opposing`) + `regard` (his hostility to the offerer, `regard_step`) + `rival_tie` and `opinion_of_faction` (`tie_step`, H-621: a live oath to a seat, or a commit to a faction, other than the host's, and his dislike of the host's faction; read for an act that swears a man to the seat exercised, `_swears_to_exercised_seat`). ⚠ AT THE SHIPPED CEILING THE TERMS ARE CLIPPED where the base obstacle already reaches the cap (CP-T09-07's own text), so the shipped arm prices a tie only below it; the uncapped arm (`obstacle_ceiling` None) reads every term. [ASSUMPTION; medium; Jordan to correct; revert: delete the row.]"
+    difficulty:  "routine"
+    capability:  "none"
+    capability_note: "B21b.16 [ASSUMPTION; medium; Jordan to correct -- basis: `issue`'s and `confer`'s cell: no skill of `descriptor_registry.yaml: capabilities` is named for an offer of service by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`) until one is; revert: the row with no `capability:`]."
+    referent_class: Person
+    referent_class_note: "B21b.16 [ASSUMPTION; medium; Jordan to correct; revert: delete this column and the row forms on the question's plain referent]: FORMED ONLY ON A `Person`-CLASSED REFERENT -- `petition`'s shape: the person the question he answers is about (`queries/world_q.py::own_referents_of_class`), carried on `to`, the operand the typed cell binds, in a cell that binds no `subject`. A man he has no notion of is offered nothing."
+    requires:    "the person offered service exists, and is one person and not a cohort"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        to
+          kind:      Person
+          conjunct:  party
+        - form:      relation
+          of:        to
+          relation:  individual
+          conjunct:  individual
+    requires_typed_note: "B21b.16: TWO CONJUNCTS, each on an existing form. `party` -- `petition`'s: the counterparty exists and is a person (only a person swears, AX-1). `individual` -- `challenge`'s and `conceal`'s stem, asked of `to`: ONE PERSON AND NOT A COHORT (`Person.is_cohort`). ⚠ A GUARD IS A RETAINER ALREADY AND THE OFFER MUST NOT REACH ONE: the default realm's three guard cohorts (`boot/realm.py::seat_guards`, weights 4, 2, 2) are populations sworn to their principal's seat as a post, so a rival seat retaining one would put the same men in two armies (`gate.may_muster`'s `oblige` clause) and double-count the weight the principal's seat stands on (`world_q.guard_weight`). The stem is WORLD-ONLY (a weight can fall), so the person-side reader answers UNKNOWN for a man other than himself and the row still forms on a guard's id; the fold refuses it BEFORE the draw. THE REST IS THE EFFECT'S (`loop/effects_governance.py::_eff_retain`): the seat's `binds` is a rostered basis, the man does not hold the seat, he has no live `oblige` to it already (one edge per pair) and holds no ban within its reach, `_req_oblige`'s clauses read of the retained man; the cell cannot say `not`. A refusal at any is `retain.refused`, nothing opened."
+    counterparty: to
+    counterparty_note: "THE PERSON OFFERED SERVICE IS THE SECOND SIDE: the contest's opponent (`loop/resolve.py::_contest` reads `row.counterparty`), the man who may refuse, and the man whose `oblige` a won offer opens. An offer to oneself is declined person-side and refused by the fold's `counterparty` clause (`petition`'s precedent)."
+    writes:
+      Overwhelming: ["Tenure.since", "Tenure.term"]
+      Success:      ["Tenure.since", "Tenure.term"]
+      Partial:      ["Tenure.since", "Tenure.term"]
+      Failure:      []
+    writes_note: "B21b.16: `loop/effects_governance.py::_eff_retain` OPENS ONE `oblige` EDGE, THE RETAINED MAN -> THE SEAT EXERCISED, with the declared term `_eff_oblige` gives (`oblige_term`; its upkeep and its lapse are built), an edge the COUNTERPARTY owns -- `determine`'s disposal is the precedent (C-1, RULED A), admitted at the gate under `state/gate.py::RETENTION` (`may_retain`: the actor sits in `via`, its grant carries `RETAIN_ACT`, the edge is an OATH and not an imposed one). `Partial` opens the edge as `Success` does (`arrest`'s reading: no degraded magnitude exists for an edge) [ASSUMPTION; medium; Jordan to correct; revert: a `Partial` that writes nothing]. `Failure` writes nothing: he declined. `Tenure.term` is the second pair, check-only (class, step, partition), as at `oblige`. A won offer of a SEAT-HOLDER also widens the exercised seat's purview over his ground (`purview_reaches`' `oblige` clause, IN-40): the reading the batch counts apart (CP-T09-04 (d)'s stopping rule)."
+    emits:
+      Overwhelming: ["retain.accepted"]
+      Success:      ["retain.accepted"]
+      Partial:      ["retain.accepted"]
+      Failure:      ["retain.declined"]
+    emits_note: "B21b.16 (AM-F-15: *'its Lost event `retain.declined`'*, with its Won kind `retain.accepted`, the producer's name [ASSUMPTION; medium; Jordan to correct; revert: `duty.taken`, `oblige`'s kind, which `align_kind` would then read as a shared kind]): two NEW kinds, each emitted by this row alone (`data/verbs.py::KIND_VERB`), so a witnessed offer is judged at this row's alignment cells. `social`, so neither reaches beyond the places the act is done (`event_reach` carries `binding_decision` kinds and the unrest kinds only): a declined offer is a witnessed refusal, a remembered deed against the man who refused, and one the offerer's own people may hold against him."
+    emits_on_refusal:
+      eligibility:  ["retain.refused"]
+      party:        ["retain.refused"]
+      individual:   ["retain.refused"]
+      write:        ["retain.refused"]
+      counterparty: ["retain.refused"]
+      sequence:     ["retain.refused"]
+    refusal_note: "B21b.16: one kind under every key (`issue`'s shape): a refused `retain` is an offer that never reached the draw -- the seat grants no `confer`, the man is no person or is a cohort (a guard), he is the offerer, he holds the seat or is sworn to it already, or a ban bars him; the loser of the draw emits `retain.declined`."
+    grade:       "assumption"
+    grade_note:  "an argued addition (CP-T09-07 (a), AM-F-15; `FA §3.3` S3): the matrix rows `(Tenure, since)` and `(Tenure, term)` and the `oblige` kind are the tree's; the row, its `remit:confer` eligibility, its `Person` class and the two kinds are B21b.16's. Its seven alignment cells are content: [ASSUMPTION; content, Jordan's to correct]."
+    source:      "v12 B21b.16 (`workplans/valoria_master_workplan_v12_part21.md`), on CP-T09-07 (a) (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md`), AM-F-15"
   - verb:        "revoke"
     public:      false
     stratum:     "binding_decision"

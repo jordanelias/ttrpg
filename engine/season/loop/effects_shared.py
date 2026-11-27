@@ -122,8 +122,8 @@ def _oblige_term(w: "World") -> Optional[int]:
 
 
 def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
-    """The `Term` an `oblige` edge OPENS with, for the two writers that mint one from scratch
-    (`_eff_oblige`, `_eff_determine`) -- one owner for the `None if n is None else Term(...)`
+    """The `Term` an `oblige` edge OPENS with, for the writers that mint one from scratch
+    (`_eff_oblige`, `_eff_determine`, and since B21b.16 `_eff_retain`) -- one owner for the `None if n is None else Term(...)`
     ternary rather than a second hand-copy of it. `_renewals`
     winds an EXISTING term rather than minting one and is not one of these two."""
     n = _oblige_term(w)

@@ -1079,6 +1079,9 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
     return (0.0 if cosine is None else cosine), aff, reg
 
 
+OPINION_MAX = 3  # [JUSTIFIED: `opinion`'s own range, the SUM of `opinion_terms`' three terms each on [-1, +1] (pursuit, affiliation, regard) -- the bound its docstring states, named once for the reader that scales it to a unit (`sigma.py::_opinion_hostility_of`)]
+
+
 def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None) -> float:
     """`p`'s OPINION OF A FACTION, on `[-3, +3]`: the sum of `opinion_terms` (v9 IN-70). `0` is
     indifference -- each term's own midpoint -- so the sign is the side. Computed when asked, never

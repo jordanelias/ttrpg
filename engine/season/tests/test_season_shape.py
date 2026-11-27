@@ -7216,7 +7216,8 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # v9 IN-12 step 11 ADDED `raze` BESIDE `march`, FOR `march`'s OWN LICENSED REASON: its one
     # `eligibility:` alternative is `remit:dispatch` and `p_low` holds no office (#453 §9.2).
     # v10 CP-T03-09 ADDED `capture` BESIDE THEM, FOR THE SAME REASON: `remit:dispatch` and `p_low` holds no office.
-    WALK_EXCLUDES: frozenset = (frozenset({"march", "raze", "capture"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
+    # B21b.11 and B21b.16 ADDED `declare` (`remit:dispatch`) AND `retain` (`remit:confer`) BESIDE THEM, FOR THE SAME REASON: each has one `remit:` alternative and `p_low` holds no office.
+    WALK_EXCLUDES: frozenset = (frozenset({"march", "raze", "capture", "declare", "retain"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
                                 | WALK_HELD)
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
@@ -8652,13 +8653,16 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # v12 B21.56 (`14_VERBS_BINDING_D` commit D3): `issue` IS contested (`a standing`, `tell`'s prize, against its executor `to`), the
     # sixteenth entry, with its own measurement: `engine/season/tests/test_vb_d_orders.py::test_d3_a_writ_is_minted_at_every_band_with_its_force`
     # folds it through the real seam over 40 seeds (all four bands; the writ minted at each, its `force` the band).
+    # v12 B21b.16 (CP-T09-07 (a), AM-F-15): `retain` IS contested (`a standing`, `tell`'s and `issue`'s prize, against the person offered service, `to`), the
+    # seventeenth entry, with its own measurement: `engine/season/tests/test_cp_t09_retain.py` folds it through the real seam (a won offer opens his `oblige`,
+    # a lost one is `retain.declined`, and over dice seeds 0-9 a man with a rival tie declines more of the same offers).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a verdict", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
                          "capture": "the body", "lie": "a standing", "establish": "a seat",
                          "confer": "a seat", "revoke": "a seat", "succeed": "a seat",
-                         "issue": "a standing"}, (
+                         "issue": "a standing", "retain": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -8686,7 +8690,7 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
     # 64 -> 65, `lie` (v11 CR-27, re-recorded at the B10-13 pin commit, P15), contested (`a standing`, `tell`'s prize; the contested
     # set above moves with it), a re-record.
-    assert len(VERB_TABLE) == 67, len(VERB_TABLE)    # B10-12 pin commit: 65 -> 67 (`marshal`, `surrender`, both WITHHELD); B10-13 pin commit: 64 -> 65 (`lie`); v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
+    assert len(VERB_TABLE) == 69, len(VERB_TABLE)    # B21b.11 -> B21b.16: 67 -> 68 (`declare`, uncontested), 68 -> 69 (`retain`, contested); B10-12 pin commit: 65 -> 67 (`marshal`, `surrender`, both WITHHELD); B10-13 pin commit: 64 -> 65 (`lie`); v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

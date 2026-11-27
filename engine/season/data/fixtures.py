@@ -1386,6 +1386,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-614 -- site: Fixtures faction_power_step, graded `assumption`; `IS-B3-FA-07` leaves the value to "Jordan or the B21 calibration" and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
     faction_power_step=0.0,            # `H-614`, swept 0 (control, SHIPPED) / 1 / 2
+    # `H-621` (B21b.16; CP-T09-07 (a), AM-F-15, `FA §3.3` S3). HOW MUCH A MAN'S TIE ELSEWHERE WEIGHS AGAINST AN OFFER OF SERVICE, in obstacle: the terms `rival_tie`
+    # (`tie_step x` 1 where he holds a live oath to a seat, or a commit to a faction, other than the host's) and `opinion_of_faction` (`tie_step x` the hostile half of
+    # his opinion of the host's faction, in `[0, 1]`), read for an act that swears a man to the seat it is exercised through (`sigma.py::_swears_to_exercised_seat`),
+    # `retain`'s. ONE STEP FOR BOTH, so one man's two loyalties are priced on one ladder; his regard of the recruiter is the existing `regard` term (`regard_step`).
+    # `0` is the CONTROL ("equal at control"): neither term reads anything and neither is listed.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-621 -- site: Fixtures tie_step, graded `assumption`; no document derives how hard a man's tie makes his retaining, so it is injected and swept 0 / 1 / 2, and ships at `regard_step`'s live 1.0]
+    tie_step=1.0,                      # `H-621`, swept 0 (control) / 1 (live, SHIPPED) / 2
     # `H-611` (B21.12; `14_VERBS_BINDING_C` commit C1, edit 1). THE LENGTH, IN SEASONS, OF THE TERM A PARTIAL `succeed`/`revoke` OPENS A HOLD FOR (the one
     # `provisional_term`; the BYZANTINE files cite it and ship no second value). Read at ONE place, `loop/effects_shared.py::_provisional_term`.
     # `2` SHIPS since B21.73 (BIND_C's flip; UNDECIDED u-1 reading (a)): a Partial `confer` or `succeed` opens its hold for two seasons, and MATTER
