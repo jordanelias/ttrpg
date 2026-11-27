@@ -59,7 +59,7 @@ from ..state.attribution import actor_of, anchor_of, causing_act, event_by_id, l
 from ..state.carriers import Act, Claim, Office, Proposition, Question, Rung, Tenure, generated_attributes
 from ..state.gate import DISPOSABLE_KINDS, UNDECLARED_DISPOSAL
 from ..state.ids import H, draw_factory
-from ..state.world import World
+from ..state.world import SnapshotRefused, World, decode
 from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .carin import build_world
@@ -154,7 +154,6 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     bound at the end (`None` once his line is extinct) and `passed` the persons the seat has been, in order (the first is the one he
     began as). An ending whose name the row's `kinds` does not hold is REFUSED, not labelled. A row with no `seat` and no `person`
     is REFUSED before it is built."""
-    from . import aperture                                     # lazy: aperture imports harness modules a row may import in turn
     row = SCENARIOS[name]
     if person is None and row.seat is None:
         raise Forbidden(f"scenario {name!r} has no default seat and no person was given", "harness/scenarios.py::run",
@@ -162,6 +161,32 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     w = row.build(seed)
     if on_build is not None:
         on_build(w)
+    return _play(name, row, w, seasons, pick, host, person, tie, ask)
+
+
+def resume(snapshot: bytes, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None, host=None,
+           person: Optional[str] = None) -> "dict | SnapshotRefused":
+    """Continue a saved run for at most `seasons` more (`IS-B3-GO-03`): `state.world.decode` the `snapshot`, look the name it holds up in `SCENARIOS`, and play `run`'s loop
+    (`_play`) from the decoded world, with no `build`. A snapshot `decode` refuses comes back as `decode`'s own `SnapshotRefused`; a snapshot whose name is not a key of
+    `SCENARIOS` (a world no scenario built holds `None`) comes back as `SnapshotRefused("scenario", ...)`: by value, as `decode`'s refusals are, since the port loads saves.
+    The seat is not saved: it is the row's `seat` of the decoded world, or `person`, the client's own choice (`run`'s; a row with no `seat` refuses a call with no `person`).
+    The returned dict is `run`'s; its `premise` is the acts the snapshot held, so the run's own are the others, and `seasons` counts those played since the resume."""
+    got = decode(snapshot)
+    if isinstance(got, SnapshotRefused):
+        return got
+    w, name = got
+    if name not in SCENARIOS:
+        return SnapshotRefused("scenario", ", ".join(sorted(SCENARIOS)), str(name))
+    row = SCENARIOS[name]
+    if person is None and row.seat is None:
+        raise Forbidden(f"scenario {name!r} has no default seat and no person was given", "harness/scenarios.py::resume",
+                        needs="`person`: a `CreationRow.id` of the saved world", law="IS-B3-GO-03 -- the seat is not saved")
+    return _play(name, row, w, seasons, pick, host, person, None, None)
+
+
+def _play(name: str, row: Scenario, w: World, seasons: int, pick, host, person: Optional[str], tie, ask) -> dict:
+    """`run`'s loop over a built or decoded world `w` (`run`'s body after `build`; `resume`'s too): the one place a scenario's seasons are played."""
+    from . import aperture                                     # lazy: aperture imports harness modules a row may import in turn
     premise = frozenset(a.id for a in w.acts)
     verbs = resolvable_verbs() if row.verbs is None else row.verbs
     pid = row.seat(w) if person is None else person

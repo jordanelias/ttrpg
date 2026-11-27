@@ -32,7 +32,7 @@ from dataclasses import dataclass as _dataclass, fields as _dc_fields
 from enum import Enum
 from itertools import compress as _compress, count as _count, repeat as _repeat
 from operator import attrgetter as _attrgetter, is_ as _is, is_not as _is_not, ne as _ne
-from typing import Any, Callable, Optional
+from typing import Any, Callable, NamedTuple, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
@@ -392,8 +392,11 @@ def _entity_moved(item: Any, was: dict) -> bool:
 # mapping's order and the game is not (a float sum runs in iteration order, so two worlds of one hash can differ in
 # the last bit of the next season; the round-trip control of `test_go07_canonical_digest.py` read exactly that).
 # WHAT A SNAPSHOT HOLDS, in frame order:
-#   the four named extras the digest omits   `world_seed`, `tick`, `acts` (the act store, in resolution
-#                                            order), `fixtures` (`fixtures_digest`, a hex string);
+#   the five named extras the digest omits   `world_seed`, `tick`, `acts` (the act store, in resolution
+#                                            order), `fixtures` (`fixtures_digest`, a hex string), `scenario` (B34.21: the
+#                                            name of the `SCENARIOS` row that built the world, or `None` for a world no
+#                                            scenario built; `encode` writes what it is given and `decode` returns it as
+#                                            written, looking nothing up: `state/` does not import the instrument package);
 #   the hashed frames                        each of `World._STATE_COLLECTIONS` (a mapping), each of
 #                                            `World._STATE_SEQUENCES` (a list);
 #   what `content_hash` folds outside them   `unowned` (the Tenures no person owns: the person-owned ones ride
@@ -425,7 +428,8 @@ class SnapshotRefused:
     """`decode`'s refusal, a VALUE and not a raise (the port loads saves, so `decode` is port-reached;
     `U5b_PC_residue.md` §4's application of `hol` §53). `reason` is `"fixtures_digest"` (the snapshot was written
     under other fixtures than the running build's: `expected` is the build's digest, `found` the snapshot's) or
-    `"malformed"` (`found` says why; `expected` is empty)."""
+    `"malformed"` (`found` says why; `expected` is empty); `harness.scenarios.resume` adds `"scenario"` (the snapshot names no
+    registered row: `expected` lists the registered names, `found` is the name the snapshot holds)."""
     reason: str
     expected: str
     found: str
@@ -437,10 +441,10 @@ def fixtures_digest(fixtures: Fixtures) -> str:
     return hashlib.blake2b(_canonical(fixtures._v), digest_size=16).hexdigest()
 
 
-def encode(w: "World") -> bytes:
-    """`w`'s snapshot: see the block above for what it holds."""
+def encode(w: "World", scenario: "str | None" = None) -> bytes:
+    """`w`'s snapshot: see the block above for what it holds. `scenario` is the name of the row that built `w`, which the world does not know."""
     frames = [("world_seed", w.world_seed), ("tick", w.tick), ("acts", list(w.acts)),
-              ("fixtures", fixtures_digest(w.fixtures)), ("unowned", list(w._unowned)),
+              ("fixtures", fixtures_digest(w.fixtures)), ("scenario", scenario), ("unowned", list(w._unowned)),
               ("log", list(w.log)), ("covers_logged", w._covers_logged),
               ("places_logged", w._places_logged)]
     frames += [(n, getattr(w, n)) for n in w._STATE_COLLECTIONS]
@@ -547,8 +551,14 @@ def _mode(s: "Subject", before: Any, after: Any) -> str:
     return "set"
 
 
-def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | SnapshotRefused":
-    """Rebuild a `World` from `encode`'s bytes under `fixtures`, the running build's. A snapshot written under
+class Decoded(NamedTuple):
+    """`decode`'s success: the rebuilt `world` and the `scenario` name the snapshot holds, as written (`None`: no scenario built the world)."""
+    world: "World"
+    scenario: "str | None"
+
+
+def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "Decoded | SnapshotRefused":
+    """Rebuild a `Decoded(world, scenario)` from `encode`'s bytes under `fixtures`, the running build's. The name is returned, never looked up. A snapshot written under
     other fixtures, or one this build cannot read, comes back as a `SnapshotRefused` VALUE: nothing is raised
     for it and no world is built. Reading is by class name: a class a snapshot holds outside `carriers`
     (`epistemic.Seen`) is known only once its module is imported, so a process decodes after loading the game."""
@@ -560,7 +570,10 @@ def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | Snaps
         want, found = fixtures_digest(fixtures), frames.get("fixtures")
         if found != want:
             return SnapshotRefused("fixtures_digest", want, str(found))
-        return _world_from(frames, fixtures)
+        name = frames["scenario"]
+        if name is not None and not isinstance(name, str):
+            raise _SnapshotError("the scenario is neither a name nor None")
+        return Decoded(_world_from(frames, fixtures), name)
     except (ShapeGap, ValueError, IndexError, KeyError, TypeError, AttributeError, struct.error, RecursionError) as exc:
         return SnapshotRefused("malformed", "", f"{type(exc).__name__}: {exc}")
 

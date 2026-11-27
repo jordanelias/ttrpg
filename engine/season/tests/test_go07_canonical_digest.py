@@ -324,8 +324,8 @@ def test_snapshot_round_trip_hash_equal_and_the_decoded_world_runs_the_same_next
     checked = 0
     for seed in (0, 1, 2):
         w = _after_two_seasons(seed)
-        back = decode(encode(w))
-        assert isinstance(back, World), f"seed {seed}: the snapshot did not decode: {back!r}"
+        back, named = decode(encode(w))
+        assert isinstance(back, World) and named is None, f"seed {seed}: the snapshot did not decode: {back!r}"
         assert back.content_hash() == w.content_hash(), f"seed {seed}: a field of state did not round-trip"
         assert back.world_seed == w.world_seed and back.tick == w.tick and len(back.acts) == len(w.acts) > 0
         if seed == 0:
@@ -346,7 +346,7 @@ def test_decode_refuses_a_foreign_fixtures_digest():
     refused = decode(encode(World(0, foreign)))
     assert isinstance(refused, SnapshotRefused) and refused.reason == "fixtures_digest", repr(refused)
     assert refused.found != refused.expected
-    assert isinstance(decode(encode(World(0, DEFAULT_FIXTURES))), World), "the running build's own snapshot was refused"
+    assert isinstance(decode(encode(World(0, DEFAULT_FIXTURES))).world, World), "the running build's own snapshot was refused"
 
 
 def test_go07_the_realm_hash_is_the_same_in_two_fresh_processes_under_two_hash_seeds():
@@ -367,3 +367,38 @@ def test_go07_the_realm_hash_is_the_same_in_two_fresh_processes_under_two_hash_s
         assert proc.returncode == 0, proc.stderr[-2000:]
         got.append(proc.stdout.strip().splitlines()[-1])
     assert len(got[0]) == 32 and got[0] == got[1], f"PYTHONHASHSEED 0 gave {got[0]}, 1 gave {got[1]}"
+
+
+# --- THE SNAPSHOT NAMES ITS SCENARIO (B34.21, `IS-B3-GO-03`) --------------------------------------------------
+# The cheapest registered row that reaches an ending is `season` (two seasons, 0.1 s; the `hearing` row ends at its first sitting, in one
+# season, and the `inquiry` row's reader does not name one inside two). `season` is a Carin-case world, so a resumed run is a real season.
+
+def test_a_snapshot_names_its_scenario_and_resume_refuses_an_unknown_one():
+    """`encode(w, name)` writes the fifth extra; `decode` hands the name back with the world and looks nothing up (a name no row holds
+    decodes as written); `scenarios.resume` refuses a name that is not a key of `SCENARIOS`, and a world no scenario built, BY VALUE.
+    Control: §1's own round trip with `scenario` `None` (`encode(w)`) names none and still decodes to the world's hash."""
+    from ..harness import scenarios as SC
+    w = SC.SCENARIOS["season"].build(0)
+    named, bare = decode(encode(w, "season")), decode(encode(w))
+    assert isinstance(named.world, World) and named.scenario == "season" and named.world.content_hash() == w.content_hash()
+    assert isinstance(bare.world, World) and bare.scenario is None and bare.world.content_hash() == w.content_hash()
+    assert decode(encode(w, "no_such_row")).scenario == "no_such_row", "`decode` must not look the name up"
+    for snap in (encode(w, "no_such_row"), encode(w)):
+        refused = SC.resume(snap, 1)
+        assert isinstance(refused, SnapshotRefused) and refused.reason == "scenario", repr(refused)
+    assert SC.resume(encode(w, "season"), 1)["ending"] == "time", "a registered name was refused"
+
+
+def test_a_resumed_run_reaches_the_ending_the_unbroken_run_reaches():
+    """`run('season', 0, 2)` against `run('season', 0, 1)`, its world saved under its name, then `resume(snapshot, 1)`: one hash, one ending
+    (`time`, reached at the second season's boundary on both routes), one tick, one season count past the save. The two routes must have played
+    something (`acts` grew over the resumed season), or the equality observes nothing."""
+    from ..harness import scenarios as SC
+    whole = SC.run("season", 0, 2)
+    half = SC.run("season", 0, 1)
+    acts_at_save = len(half["world"].acts)
+    got = SC.resume(encode(half["world"], "season"), 1)
+    assert isinstance(got, dict), repr(got)
+    assert len(got["world"].acts) > acts_at_save, "the resumed season played no act: the equality below observes nothing"
+    assert (got["hash"], got["ending"], got["kind"], got["tick"]) == (whole["hash"], whole["ending"], whole["kind"], whole["tick"])
+    assert whole["ending"] == "time" and got["seasons"] == 1
