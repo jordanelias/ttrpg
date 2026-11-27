@@ -1412,7 +1412,8 @@ class World:
               via: Optional[str] = None,
               change: Optional[Change] = None,
               matured_term: Optional[str] = None,
-              observed: tuple = ()) -> Any:
+              observed: tuple = (),
+              spec: Any = None) -> Any:
         """`G4`. A WRITE IS HANDED EITHER A CLOSURE (`apply`) OR A `Change` (`change`), NEVER BOTH.
 
         A `Change` is the fold's: the subjects an effect writes, named before it runs, and the
@@ -1472,7 +1473,11 @@ class World:
         own meaning (`W-B`). The fold fills that field from a Verdict. The one writer here is MATTER's
         larder pass, which records the shortfall a drained larder left (`loop/matter.py`).
         ⚠ IT RIDES ONLY ON AN EMISSION: observations passed with no `emits=` are refused rather than
-        dropped, since a read no Event carries reaches no witness and would be lost silently."""
+        dropped, since a read no Event carries reaches no witness and would be lost silently.
+
+        `spec=` (B12b.25, 25 G-06) IS WHAT THE WRITE WAS OF, carried on the receipt the gate mints at EVERY mint site below (`Receipt.spec`, which
+        `Gate.mint` already took): the `yield` write passes its produced map and the band of the season's draw. A RECEIPT FIELD A READER MAY
+        PRINT, NEVER BRANCH ON -- no reader in the loop reads it, and `content_hash` folds `(subject, mode, driver, field, delta)` of a change, not it."""
         # G2. NO TOKEN, NO WRITE -- and nothing else is consulted first, so the refusal is
         # attributable. `isinstance` rather than duck-typing: a bare `WriteClass` has a `.value`
         # and would otherwise pass straight through to the class check, which is the pre-G2 call
@@ -1686,7 +1691,7 @@ class World:
                 # no-op check, so a receipt for a write that did not happen is never issued at all.
                 # B09.10: the field is the pair's; the mode and the delta are what the gate read
                 # (`_mode`, `_delta`).
-                before = [(s, self.gate.mint(s.id, _mode(s, b, a), driver, fieldname, _delta(s, b, a)))
+                before = [(s, self.gate.mint(s.id, _mode(s, b, a), driver, fieldname, _delta(s, b, a), spec))
                           for s, b, a in moved]
             if emits is not None:
                 # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
@@ -1728,7 +1733,7 @@ class World:
                     # MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
                     # change is a receipt the gate minted. `Receipt` subclasses `StateChange` and adds
                     # no hashed field.
-                    changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None)],
+                    changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None, spec)],
                     # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
                     # un-caused emission the root is how every Event in the `W9` artifact came to
                     # carry `causes=[ROOT]` — #353 §19.4 calls that field "the substrate of the entire

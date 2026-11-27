@@ -853,7 +853,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 lambda r=r, produced=produced: object.__setattr__(r, "yield", dict(produced)),
                 record_kind="Rung", fieldname="yield", driver="Event",
                 emits="yield.taken", subject=rid,
-                causes=[prior_y] if prior_y else [ROOT])
+                causes=[prior_y] if prior_y else [ROOT],
+                # B12b.25 (A-54, C3-R7): THE YIELD IS A FACT WITH A SIZE -- the produced map, sorted, and the band this territory's season draw
+                # landed in (`None` at the control: nothing is drawn). A receipt field a chronicle may print; no reader in the loop branches on it.
+                spec=(tuple(sorted(produced.items())), world_q.season_band_of(w, world_q.enclosing_territory(w, rid))))
         prior_s = w.last_emission_of("stores.changed", rid)
         # v10 CR-23: the credit is this rung's LAST write in the barrier, so the stock report rides it.
         # `r.stores` already holds the debit above (the gate applies a write in the call).

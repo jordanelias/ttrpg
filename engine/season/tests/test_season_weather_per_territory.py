@@ -263,3 +263,22 @@ def test_ore_and_timber_ignore_the_weather():
     assert all(seen.values()), f"a kind yielded nowhere, so the comparison observed nothing: {seen}"
     assert differs["ore"] == 0 and differs["timber"] == 0, f"a non-grown kind followed the weather: {differs}"
     assert differs["grain"] > 0, "the weather moved no grain; the arm is not on"
+
+
+def test_yield_receipt_carries_the_produced_map():
+    """B12b.25 (A-54, C3-R7): a season's `yield.taken` receipt at a rung carries what the rung produced (sorted pairs) and the band its territory's draw
+    landed in; at the control arm the produced map rides with no band. FALSIFIER: a receipt with `spec` empty at a rung that produced. No reader branches on it."""
+    w = _world(0, SPREAD)
+    _matter(w)
+    got = {e.changes[0].subject: e.changes[0] for e in w.log if e.kind == "yield.taken"}
+    checked = 0
+    for rid in RUNGS:
+        pairs, band = got[rid].spec
+        assert pairs and pairs == tuple(sorted(_yield_of(w, rid).items())), f"{rid}: spec holds {pairs}, the rung yielded {_yield_of(w, rid)}"
+        assert band is not None and band == world_q.season_band_of(w, world_q.enclosing_territory(w, rid)), f"{rid}: band {band}"
+        checked += 1
+    assert checked == len(RUNGS) == 4
+    c = _world(0, ())
+    _matter(c)
+    ctl = {e.changes[0].subject: e.changes[0].spec for e in c.log if e.kind == "yield.taken"}
+    assert len(ctl) == len(RUNGS) and all(pairs and band is None for pairs, band in ctl.values()), ctl
