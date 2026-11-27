@@ -1402,8 +1402,8 @@ class ProvisionInput:
       * `weight` -- the side's Σ `Person.weight` (what the field fields today);
       * `stores` -- `((kind, units), ...)`: the side's treasury, in its own `Rung.stores` order, `()`
                     for a side with no treasury rung;
-      * `ration` -- `((kind, units per weight), ...)`: the `subsistence_weight` fixture, sorted by kind --
-                    the larder's own ladder, so a field eats as the people it is made of eat;
+      * `ration` -- `((kind, units per weight), ...)`: `world_q.field_ration` (the `subsistence_weight` fixture cut to
+                    `field_ration_kinds`), sorted by kind -- the larder's own ladder, so a field eats as the people it is made of eat;
       * `on`     -- the `field_provisioning` fixture. `False` is the control arm, today's field."""
     weight: int
     stores: tuple

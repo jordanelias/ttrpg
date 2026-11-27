@@ -1764,6 +1764,16 @@ FORTIFICATION = "settlements.fortification"
 #: (`seam/wrappers/mass_battle.py::resolve`, which reads the role from here), not a wrapper in this file;
 #: it is declared here so the one host need the driver checks stays one tuple.
 PROVISION = "settlements.provision"
+
+
+def field_ration(w: World) -> dict:
+    """B12b.47 (U5d_SE §4), THE RATION A FIELD EATS: `subsistence_weight` cut to the kinds the `field_ration_kinds` fixture lists, so a
+    kind bounds a field only if the fixture lists it AND `subsistence_weight` weights it. The one reader: `provision_input` (the bound
+    and the debit) and the driver's `field_provisioning` refusal read it, so neither can name a kind the other does not."""
+    listed = set(w.fixtures.get("field_ration_kinds"))
+    return {k: r for k, r in w.fixtures.get("subsistence_weight").items() if k in listed}
+
+
 #: ED-IN-0306 phase 2: the army record's command entry, called by the four army verbs (`loop/effects_army.py`).
 ARMY = "mass_battle.army"
 #: ED-IN-0306 phase 3: the army record -> the order of battle one field fights with, called by the field adapter.

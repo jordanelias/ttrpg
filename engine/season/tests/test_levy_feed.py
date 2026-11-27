@@ -103,12 +103,19 @@ def test_an_unprovisioned_side_fields_nobody_and_eats_nothing():
 # 2 -- THE ADAPTER, ON A HAND-BUILT WORLD
 # ======================================================================================
 
-def _world(on: bool, treasury_a=None, treasury_b=None):
+WHOLE_RATION = ("grain", "salt")
+
+
+def _world(on: bool, treasury_a=None, treasury_b=None, kinds=WHOLE_RATION):
     """`build_realm(0)` at the arm, with the two treasuries' stores PLANTED (hand-built: `requisition`
-    executes 0 times in computed play, `H-163` limit 3(a), and the realm seeds no treasury)."""
+    executes 0 times in computed play, `H-163` limit 3(a), and the realm seeds no treasury).
+    B12b.47: `kinds` is the `field_ration_kinds` arm. The default is the larder's WHOLE ration (grain AND salt, the control the numbers of
+    this file's first blocks are read against); `kinds=None` leaves the shipped `("grain",)`."""
     # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` seeds the treasuries under `granary_seasons` 4, which the PLANTED stores here are read against (reverting `granary_seasons` or `endowment_mode` alone turns these three green)
     w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     w.fixtures = w.fixtures.sweep("field_provisioning", on)
+    if kinds is not None:
+        w.fixtures = w.fixtures.sweep("field_ration_kinds", kinds)
     assert w.offices[SEAT].rung == TREASURY_A, "the march seat's treasury moved; re-pick the fixture"
     assert world_q.governing_hold(w, TARGET).object == TREASURY_B, "the target's held rung moved"
     if treasury_a is not None:
@@ -231,6 +238,34 @@ def test_the_shipped_arm_is_off():
     field, so this is the observer that the arm shipped is the control."""
     assert DEFAULT_FIXTURES.get("field_provisioning") is False, (
         "the shipped arm moved: the flip is its own declared commit; restate this test there")
+
+
+def test_grain_only_treasury_fields_troops(monkeypatch):
+    """B12b.47 (U5d_SE §4's gate), THE `field_ration_kinds` ARM (shipped `("grain",)`, read with the supply arm ON): a treasury holding grain and
+    no salt fields troops, and the fold debits the grain it ate (grain 2 at the ration 2 fields one of the attacker's two). The control,
+    `field_ration_kinds` the larder's whole ration, fields nobody from the same treasury -- the U5d falsifier -- so the grain-only list is what
+    fielded the troop."""
+    assert tuple(DEFAULT_FIXTURES.get("field_ration_kinds")) == ("grain",)
+    seen = _recording(monkeypatch)
+    r = _provider_field(_world(True, treasury_a={"grain": 2}, kinds=None), _march_act())
+    assert seen[-1][1] == {"troops_a": 1, "troops_b": 0}, seen
+    assert r["provision"] == ((TREASURY_A, (("grain", 2),)), (TREASURY_B, ())), r["provision"]
+    w = _world(True, treasury_a={"grain": 2}, kinds=None)
+    _fold(w, _march_act())
+    assert w.rungs[TREASURY_A].stores == {}, w.rungs[TREASURY_A].stores
+    _provider_field(_world(True, treasury_a={"grain": 2}), _march_act("m_whole"))
+    assert seen[-1][1] == {"troops_a": 0, "troops_b": 0}, ("a grain-only treasury fielded troops at the whole ration", seen)
+
+
+def test_empty_treasury_side_fields_fewer_than_a_full_one(monkeypatch):
+    """B12b.47 (IN-52's falsifier), THE SUPPLY ARM ON: the attacker's empty treasury fields 0 (the crash floor lifts it, A16) where a full one
+    fields the whole of its weight 2, and the empty defender 0 where a full one fields its 6 -- so the fielded troops are bounded by the
+    treasury and not by the weight alone."""
+    seen = _recording(monkeypatch)
+    _provider_field(_world(True, kinds=None), _march_act("m_empty"))
+    _provider_field(_world(True, treasury_a={"grain": 100}, treasury_b={"grain": 100}, kinds=None), _march_act("m_full"))
+    (_, empty), (_, full) = seen
+    assert empty == {"troops_a": 0, "troops_b": 0} and full == {"troops_a": 2, "troops_b": 6}, seen
 
 
 def test_on_the_defenders_treasury_is_debited_by_its_own_fielded_troops(monkeypatch):

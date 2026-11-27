@@ -941,11 +941,19 @@ DEFAULT_FIXTURES = Fixtures(
     # string (`rosters.yaml` `field_winner_casualty_arms`).
     field_winner_casualties="engine",  # `H-360`, swept off (control) / engine (SHIPPED)
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
-    # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
+    # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the field's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
-    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. The flip ON is its own declared
-    # hash-moving commit. Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
+    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
+    # MEASURED THE FLIP, and did not make it: ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and
+    # case worlds), 350 reds in 35 of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE at this
+    # fixture (DEF-7; Jordan's 2026-10-16 wording differs). Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
     field_provisioning=False,  # `H-241`, swept False (control, SHIPPED) / True / True on empty treasuries
+    # U5d_SE §4 (`H-241`). WHICH OF THE LARDER'S KINDS A FIELD EATS: the ration the field reads (`world_q.field_ration`) is
+    # `subsistence_weight` cut to the kinds listed here -- a kind bounds a field only if this lists it AND `subsistence_weight`
+    # weights it. SHIPPED `("grain",)`: a grain-only treasury fields troops; `("grain", "salt")` is the larder's whole ration
+    # (a treasury short of salt fields nobody) and is the control. Read only under `field_provisioning`, which ships OFF.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-241 -- `site: Fixtures field_ration_kinds`, graded `assumption`; U5d_SE §4 ships the list at `["grain"]` and the source gives no other value]
+    field_ration_kinds=("grain",),  # `H-241`, swept ("grain",) (SHIPPED) / ("grain", "salt") (the larder's whole ration, control)
     # IN-08 H3 (`ED-IN-0261`'s scar model). The scar is a COUNT per pursuit, one per observer per
     # violated pursuit (`loop/resolve.py::_scar_witnesses`), so it has no magnitude to sweep. What IS open is WHETHER THE ACTOR COUNTS AS AN OBSERVER OF
     # HIS OWN ACT, and that is this arm. Injection site: this line, read by `_scar_witnesses`.

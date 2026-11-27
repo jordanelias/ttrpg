@@ -189,7 +189,7 @@ class SeasonDriver:
         # of `Act.via`'s office, the defender's the nearest held rung); with none of those holding one `subsistence_weight` ration every field
         # floors at the crash floor, so the arm is refused rather than read as an army-size dial. OFF (shipped) reads nothing here.
         if w.fixtures.get("field_provisioning"):
-            ration = {k: r for k, r in w.fixtures.get("subsistence_weight").items() if r > 0}
+            ration = {k: r for k, r in world_q.field_ration(w).items() if r > 0}      # B12b.47: the ration the field reads, kinds cut
             rungs = {o.rung for o in w.offices.values() if o.rung in w.rungs}
             rungs |= {t.object for s in w.rungs
                       if w.rungs[s].kind == world_q.HUNGER_KIND and (t := world_q.governing_hold(w, s)) and t.object in w.rungs}

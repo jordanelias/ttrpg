@@ -43,6 +43,7 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a dearth is reported once, in the season the town first goes unfed: a granary emptied to its last unit reports at the granary rung (not the settlement) the first unfed season and not again while the dearth lasts, a ladder that never held the kind reports once at its first rung on the first short cohort's body write and then nothing, a cohort fed every season reports nothing, and with the body step at 0 there is no write to carry it"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort that starves after one exact season's stock was drawn falls citing the last stores write at the rung it was short at, and its death cites that fall, not the seed or an earlier death"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort the larder cannot feed in full is refused a tend at the fed clause and its body stays, the same cohort fully fed is tended to the scale, and a weight-1 person who is no eater is tended"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "with the supply arm on, a treasury holding grain and no salt fields troops at the grain ration and the fold debits the grain it ate where the larder's whole ration fields nobody from it, and a side with an empty treasury fields fewer troops than one with a full treasury"}
   engine:
     base: 1043
     warrants: []

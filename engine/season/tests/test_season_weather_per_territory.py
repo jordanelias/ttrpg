@@ -149,6 +149,9 @@ def test_cl_events_1_the_control_arm_reads_the_bare_constant_at_every_rung_and_d
     # B12a.99: `hunger_severity_draw` (shipped True since B12a.62) builds its own `draw_factory` in every MATTER (`world_q._hunger_severity`), which the patch below would read as a
     # weather draw; it is another arm's draw, so it is set at its control here and this test sees only the weather's.
     w.fixtures = w.fixtures.sweep("hunger_severity_draw", False)
+    # B12b.39: `_larder_order` builds its own `draw_factory` in every `_larder_parts` (the short rung's remainder order), likewise another arm's draw; the
+    # patch below would read it as a weather draw, so it is held at the host order here and this test sees only the weather's.
+    monkeypatch.setattr(world_q, "_larder_order", lambda w_, pids: tuple(sorted(pids)))
 
     def no_draw(*args, **kwargs):
         raise AssertionError("a draw was made with `season_factor_draw` at `()`")
