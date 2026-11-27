@@ -333,6 +333,15 @@ ci_checks:
     ci_job: ""
     notes: "WIRED locally (valoria_local.py --staged, blocking) and by tests/valoria/test_export_troops.py::test_round_trip, NOT by a workflow line; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by B17.10 -- add `python3 tools/export_troops.py --check` beside export_game_constants there. Falsifier: test_round_trip reds a hand-edited artifact and passes the untouched copy; test_unknown_arm_key_refused_by_name and test_mass_stated_twice_refused show each refusal against a one-key mutation of the real file."
 
+  - path: tools/calibrate_mb_contact.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Runs the duel engine over a grid of matchups and writes the measured felling chances the mass-battle contact draw reads."
+    ci_job: ""
+    notes: 'an instrument, run by hand at a calibration pass; not a CI check'
+    blocking: false
+
   - path: tools/export_npc_roster.py
     level: 5
     subject: game
