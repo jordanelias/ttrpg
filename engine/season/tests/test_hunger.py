@@ -22,7 +22,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..queries.inputs import Eater, LarderInput, SubsistInput
 from ..state.attribution import anchor_of
-from ..state.carriers import Rung, Site, Tenure
+from ..state.carriers import Act, Rung, Site, Tenure
 from ..state.world import World
 from engine.substrate import composition
 
@@ -376,3 +376,26 @@ def test_hunger_death_cites_the_fall_and_the_store():
         assert store.kind == "stores.changed" and anchor_of(w, store) == "T", f"the fall cites {store.kind} at {anchor_of(w, store)}, not the granary"
     first = [e for e in w.log if e.kind == "body.changed" and anchor_of(w, e) == "c0"][0]
     assert by_id[first.causes[0]].kind == "stores.changed"
+
+
+# B12b.42 (`16_PESSIMIST_SE_A` edit 4, R4): `tend` DECLINES A COHORT THE LARDER CANNOT FEED. The conjunct reads the draw's own cells for the cohort.
+def _tend(w: World, subject: str):
+    """A weight-1 tender at the settlement folds one `tend` on `subject` (the task draw off: a lost draw is `tend.failed`, a different thing from the refusal
+    under test): `(the Event kinds it emitted, the subject's body after)`."""
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")
+    act = Act(id=f"tend_{subject}", actor="tender", verb="tend", payload={"subject": subject})
+    out = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return [e.kind for e in out], w.persons[subject].body
+
+
+def test_tend_refused_on_an_unfed_cohort():
+    """Row 5: a cohort short in the draw (the settlement holds half what two cohorts want) is refused at the `fed` clause and its body stays; the same cohort
+    the larder feeds in full is tended to the scale (the control: the fed arm unchanged); a weight-1 person is no eater, his gap is none, and he is tended."""
+    scale = DEFAULT_FIXTURES.get("condition_scale")
+    short = _shared_world({"grain": 4, "salt": 2})
+    place_person(short, "tender", "tender", "S", body=PLANTED_BODY)
+    assert _tend(short, "c0") == (["tend.refused"], PLANTED_BODY), "an unfed cohort was tended"
+    fed = _shared_world({"grain": 8, "salt": 4})
+    place_person(fed, "tender", "tender", "S", body=PLANTED_BODY)
+    assert _tend(fed, "c0") == (["body.tended"], scale), "the fed control was not tended: the plant cannot see the refusal"
+    assert _tend(short, "tender") == (["body.tended"], scale), "a weight-1 person was refused for a hunger he does not have"

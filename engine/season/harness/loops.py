@@ -117,6 +117,9 @@ STEM_READS = {
     "command":      (("Office.exists", "?"),) + _TENURE,   # B21.20: `world_q.commands`, over oaths, seat holds and place
     "bench":        (("Office.exists", "?"),) + _TENURE,
     "bench.size":   _TENURE,
+    # B12b.42: `world_q.cohort_ration` -- the draw's walk over the larders and the eaters' weights, through the containment and residence edges
+    "ration.asked":  (("Rung.stores", "+"), ("Person.weight", "?")) + _TENURE,
+    "ration.taken":  (("Rung.stores", "+"), ("Person.weight", "?")) + _TENURE,
     "exists":       None,
 }
 

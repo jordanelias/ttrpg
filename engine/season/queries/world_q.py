@@ -1736,6 +1736,17 @@ def subsistence_draw(w: World) -> dict:
     return _draw_dict(_entry(LARDER_DRAW)(larder_input(w)))
 
 
+def cohort_ration(w: World, pid: str) -> tuple:
+    """`(asked, taken)`: THE UNITS THE COHORT `pid` WANTS OF THE LARDER AND THE UNITS THE LADDER GIVES IT, summed over the kinds of its row in
+    `subsistence_draw` (B12b.42, `16_PESSIMIST_SE_A` edit 4). The cohort's UNFED GAP is `asked - taken`, and `tend`'s `fed` conjunct admits it
+    where that is 0 (`taken >= asked`: `take <= want`, so the two say one thing). A person who is no eater (`weight == 1`, not in the draw's record) asks nothing
+    and takes nothing, so his gap is none: the cell never refuses an individual for a hunger he does not have. Read-only, from the present world; the
+    draw's own arithmetic, so the Query cannot disagree with what MATTER feeds (`subsistence_draw`'s one-owner reason)."""
+    row = subsistence_draw(w).get(pid)
+    cells = row[1].values() if row is not None else ()
+    return sum(want for want, _take, _src in cells), sum(take for _want, take, _src in cells)
+
+
 #: v9 IN-07 E1: the module entries this file calls, `(role, entry kind)`. THE HOST'S HALF OF *"two
 #: owners say which module is called"*: the composition row says WHICH module provides a role, and
 #: this says the host NEEDS it. `manifest/registrar.py::require_entries` refuses at driver
@@ -5867,6 +5878,13 @@ class WorldReader:
             if subject not in w.rungs:
                 return UNKNOWN
             return marches_into(w, subject)[0] if stem == "march.nth" else (w.fixtures.get("march_cap_per_territory") or 0)
+        if stem in ("ration.asked", "ration.taken"):
+            # v12 B12b.42 (`16_PESSIMIST_SE_A` edit 4): THE COHORT `subject`'S UNFED GAP, as `march.nth`/`march.cap`'s pair -- `cohort_ration`, the one owner, `(asked, taken)`
+            # from `subsistence_draw`; `tend`'s `fed` conjunct holds `taken >= asked`. UNKNOWN for a subject that is no person (`ID-5`). The person side never answers either
+            # (`WORLD_ONLY_STEMS`): what the larder gives NOW is the world's to decide, not a belief.
+            if subject not in w.persons:
+                return UNKNOWN
+            return cohort_ration(w, subject)[0 if stem == "ration.asked" else 1]
         if stem == "names":
             # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
             # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the
