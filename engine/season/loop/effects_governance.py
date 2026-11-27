@@ -361,8 +361,8 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     it), a man already banned (one restraint is enough; his hold still closes), and a man no longer
     in the world. The kind is spelled LITERALLY so `data/verbs.py::_derive_openers_from_effects` reads
     `revoke` as a `ban` opener (`_disposal`'s precedent); any other disposal kind has no site here and
-    opens nothing. The ban carries no term and nothing in `loop/` closes one, so it lasts until his
-    death (the cascade). Both edges earn `None` -- the row's one kind, `tenure.closed` -- so an
+    opens nothing. The ban carries no term. Only `_eff_pardon` closes one (every live restraint of the subject whose object is
+    `Act.via`, by a holder the dismissing seat's bench admits), so otherwise it lasts until his death (the cascade). Both edges earn `None` -- the row's one kind, `tenure.closed` -- so an
     appointed and an elected revocation emit the same Event, and the ban is no event of its own
     (`determine`'s precedent: its disposal edge earns only `matter.determined`). The write gate admits
     the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`).
