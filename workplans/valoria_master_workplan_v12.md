@@ -254,7 +254,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S13 | B21b (FA) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
-| S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
+| S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
 | S18 | B21s (IN), B23 (FA), B30 (MB), B35 (WR), B41 (GO) (moved from S15 by the edge B20 → B41, part 2 §1.2; repair lane V1) |
@@ -367,7 +367,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
-| B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) |
 | B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) |
@@ -444,7 +443,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 | B19-mb-field-calibration | `valoria_master_workplan_v12_part26.md`, `_part26_cont.md`, `_part27.md`, `_part27_cont.md` |
 | B12c-material-verbs-and-valley | `valoria_master_workplan_v12_part28.md`, `_part28_cont.md` |
 | B24a-sc-outside-the-room | `valoria_master_workplan_v12_part28_cont.md` |
-| B18-pc-content | `valoria_master_workplan_v12_part28_cont2.md` |
 | B21d-fa-arc | `valoria_master_workplan_v12_part29.md` |
 | B41-go-port-gate | `valoria_master_workplan_v12_part29.md`, `_part29_cont.md` |
 | B11F1-flow-se | `valoria_master_workplan_v12_part29_cont.md` |
