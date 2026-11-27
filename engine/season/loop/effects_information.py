@@ -27,7 +27,7 @@ from ..data.rosters import (
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
-from ..data.verbs import CITES_KEY, VERB_TABLE, WARRANT_SOURCED
+from ..data.verbs import CITES_KEY, VERB_TABLE
 from ..queries import faction_q
 from ..queries.inputs import ADJOURNED_STAGE, ANSWERED_STAGE, EXCLUDED_STAGE, FILED_STAGE, ArmyCommand, Outcome, exchanges
 from ..seam.ladder import degree_of
@@ -35,7 +35,7 @@ from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
-    siege_pressed_by, slot_for, works_for, works_target,
+    siege_pressed_by, slot_for, warrants_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
@@ -1097,33 +1097,14 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     return Change((Subject.edge(nt, earns), Subject.edge(held, earns)), perform)
 
 
-# WHICH RECORD KIND IS A WARRANT FOR A VERB, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES: the
-# kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the person
-# side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
-# never spelt here. v9 IN-12 step 5: `arrest` reads the same map, so the reading is one function for both.
-def _held_warrants(w: "World", actor: str, verb: str, named: str) -> tuple:
-    """THE WARRANTS THE ACTOR HOLDS NAMING `named`, for `verb` -- the ids of the Records on his own live
-    `hold` edges whose kind is `verb`'s warrant kind (`rosters.yaml: warrant_sourced`) and whose
-    about-key content says `named`, in tenure order. World-side: the effect owns the licence because the
-    gate never reads a Record's content (K-52); the person-side twin is `decision/options.py::
-    opening_set`'s formation on the same reading, off his own ledger."""
-    kind = WARRANT_SOURCED[verb]
-    key = ABOUT_KEYS[kind]
-    out = []
-    for t in w.tenures:
-        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
-            continue
-        rec = w.records[t.object]
-        sm = rec.subject_matter
-        if rec.kind == kind and isinstance(sm, dict) and sm.get(key) == named:
-            out.append(t.object)
-    return tuple(dict.fromkeys(out))
-
-
+# WHICH RECORD KIND IS A WARRANT FOR A VERB, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES: the kind is `data/verbs.py::WARRANT_SOURCED`'s
+# (`rosters.yaml: warrant_sourced`, the one loader both the person side and `world_q.warrants_for` import), the key `person_q.ABOUT_KEYS`' (the one
+# owner of "what a document is about"), never spelt here. v9 IN-12 step 5: `arrest` reads the same map as `seize`; B29.01: the one reading is
+# `world_q.warrants_for`, the Records the actor HOLDS naming it or that are ADDRESSED TO HIM and heard of (`14_VERBS_PHYSICAL_A_custody_and_force` A1).
 def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
-    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- `seize`'s licence (IN-12 step 6), read
-    through `_held_warrants`, the one reading `arrest` shares."""
-    return bool(_held_warrants(w, actor, "seize", rid))
+    """DOES A WARRANT THE ACTOR HOLDS, OR ONE ADDRESSED TO HIM THAT HE HAS HEARD OF, NAME RECORD `rid`? -- `seize`'s licence (IN-12 step 6),
+    read through `warrants_for`, the one reading `arrest` shares (`14_VERBS_PHYSICAL_A_custody_and_force` A1)."""
+    return bool(warrants_for(w, actor, rid, "seize"))
 
 
 # The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
@@ -1311,7 +1292,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     and not already in custody (`world_q.restrained`, the restraint's one read -- one live `detain` per
     prisoner, #453 §8.1 Custody [ASSUMPTION; medium; Jordan to correct; revert: a second bench's
     warrant opens a second custody, "relaxation to the secular arm"]); (2) the actor HOLDS A WARRANT
-    NAMING HIM (`_held_warrants`, `seize`'s reading); (3) the warrant's issuing seat is readable
+    NAMING HIM, held or addressed to him and heard of (`world_q.warrants_for`, `seize`'s reading; `14_VERBS_PHYSICAL_A_custody_and_force` A1); (3) the warrant's issuing seat is readable
     (`issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
     the gate's own predicate for `determination`, which `pardon` closes under): a custody is opened only
     on a seat whose bench could `pardon` it, so a warrant from an issue-only seat, or from a seat whose
@@ -1330,7 +1311,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     if prisoner not in w.persons or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND):
         return NO_CHANGE
     seat = next((s for s in (issuing_seat(w, rid)
-                             for rid in _held_warrants(w, a.actor, a.verb, prisoner))
+                             for rid in warrants_for(w, a.actor, prisoner, a.verb))
                  if s is not None and _may_close_custody(w, s, prisoner)), None)
     if seat is None or not may_warrant(w, a.actor, a.via, prisoner):
         return NO_CHANGE

@@ -2823,7 +2823,7 @@ rosters:
       and `seize` forms on any referent, refused in the fold.]
       v9 IN-12 step 5 ADDS `arrest`, the line this note foresaw (*"a warrant naming a PERSON"*): it forms
       person-side only on a person a held dispensation's `terms` names, and its effect
-      (`_eff_arrest`) reads the same held warrant world-side (`_held_warrants`, `seize`'s reading
+      (`_eff_arrest`) reads the same held warrant world-side (`world_q.warrants_for`, `seize`'s reading
       shared) and opens the `detain` on the seat that ISSUED it. H-94's "a Person (warrant) term has
       no route" is answered for `arrest` by this line.
     values:

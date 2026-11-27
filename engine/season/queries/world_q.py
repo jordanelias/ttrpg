@@ -52,7 +52,7 @@ from ..data.rosters import (
 from ..data.verbs import (
     ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
-    VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    VERB_TABLE, WARRANT_SOURCED, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -4023,6 +4023,42 @@ def challenges_heard(w: World, p: Person, named: Optional[frozenset] = None) -> 
     return addressed_records(w, p, CHALLENGE_KIND, named)
 
 
+def warrants_for(w: World, actor: str, named: str, verb: str = "arrest") -> tuple:
+    """THE WARRANTS `actor` MAY ACT ON, NAMING `named`, for `verb` (B29.01, `14_VERBS_PHYSICAL_A_custody_and_force` A1 [ASSUMPTION; medium;
+    Jordan to correct; revert: the held half alone]) -- the ids of the Records of `verb`'s warrant kind
+    (`rosters.yaml: warrant_sourced`, `data/verbs.py::WARRANT_SOURCED`) whose about-key content (`person_q.ABOUT_KEYS`) says `named` and that
+    are EITHER on his own live `hold` edges, in tenure order, OR ADDRESSED TO HIM AND HEARD OF (`addressed_records`), in id order: a warrant
+    reaches the man it orders by the paper in his hand or by the order he was told. Each id once. World-side, read-only: the effect owns the
+    licence because the gate never reads a Record's content (K-52); the person-side twin is `decision/options.py::opening_set`'s `warranted`,
+    on his own ledger. `arrest` and `seize` read it (`loop/effects_information.py`), each its own kind (today the same one)."""
+    kind = WARRANT_SOURCED[verb]
+    key = ABOUT_KEYS[kind]
+    out = []
+    for t in w.tenures:
+        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
+            continue
+        rec = w.records[t.object]
+        sm = rec.subject_matter
+        if rec.kind == kind and isinstance(sm, dict) and sm.get(key) == named:
+            out.append(t.object)
+    p = w.persons.get(actor)
+    if p is not None:
+        out.extend(rid for rid in addressed_records(w, p, kind) if w.records[rid].subject_matter.get(key) == named)
+    return tuple(dict.fromkeys(out))
+
+
+def warrants_heard(w: World, p: Person) -> tuple:
+    """THE PERSONS A WARRANT ADDRESSED TO `p` AND HEARD OF NAMES (B29.01, A1), sorted, each once: the about-key content
+    (`person_q.ABOUT_KEYS`) of each `addressed_records(w, p, <the `arrest` warrant kind>)` that is a person (`World.class_of`) and not `p`
+    himself. The occasion `arrest` forms on (`questions_for` stamps them as `Person`, the one pair per question `_stamped` keeps): a man named
+    by an order he was told of is not a referent of any question he answers. A named Record, Proposition or place is `seize`'s or `commit`'s
+    and stamps nothing here. `()` for nearly everyone."""
+    kind = WARRANT_SOURCED["arrest"]
+    key = ABOUT_KEYS[kind]
+    named = {w.records[rid].subject_matter.get(key) for rid in addressed_records(w, p, kind)}
+    return tuple(sorted(n for n in named if isinstance(n, str) and n != p.id and w.class_of(n) == "Person"))
+
+
 def records_held_for_holding_rows(w: World, p: Person) -> tuple:
     """THE RECORDS `p` HOLDS THAT A ROW ASKING HIM TO HOLD THEM ANSWERS (v10 REM-25, B10-05, AM-A-10; M19
     taken, [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Records on `p`'s own live `hold`
@@ -5252,6 +5288,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
+    # B29.01 (`14_VERBS_PHYSICAL_A` A1 [ASSUMPTION; medium; Jordan to correct; revert: drop `warrants_heard` from the splice]): AND THE
+    # PERSONS A WARRANT ADDRESSED TO HIM AND HEARD OF NAMES (`warrants_heard`), as `Person` -- `arrest` forms on them
+    # (`decision/options.py::opening_set`, which reads his own ledger for which of the question's `Person`s are those). The occasion, once per
+    # season on the head question; the arrest is the officer's draw.
     # B21.66 (`IS-B3-FA-06`; A-21, `04` §C.2 reading (i); [ASSUMPTION; medium; Jordan to correct; revert: drop `inherited_terms` from the splice]):
     # AND, BESIDE THE PROPOSITIONS HE HAS HEARD OF, THE ONES THE WRITS HIS PREDECESSOR ISSUED THROUGH HIS SEAT ORDER
     # (`writs_inherited`; `inherited_terms`), as `Proposition` -- `issue` forms on them, and the `issue` he draws is the confirmation.
@@ -5261,7 +5301,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # MAY STRIP FROM THEM (`recalls`), as `Person` and `Office`. The occasion only; the recall is `revoke`'s draw.
     told = ledger_names(p.ledger)
     founding = holdings_to_found(w, p)
-    added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
+    added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told) + warrants_heard(w, p)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding

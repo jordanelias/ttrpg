@@ -312,6 +312,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 records = held_record_claims(p, tick, decay)
             warranted = {_content_answer(c, "subject") for c in records
                          if content_kind(c) == warrant_kind}
+            # B29.01 (`14_VERBS_PHYSICAL_A` A1 [ASSUMPTION; medium; Jordan to correct; revert: drop this block, and `warranted` is
+            # the held set alone]): AND THE PERSONS A WARRANT ADDRESSED TO HIM NAMES, which his own ledger reads (`addressed_terms`: a
+            # document he saw made or was told of, the maker's hand keeping it) AND the question carries as `Person`
+            # (`world_q.warrants_heard`, stamped once on his head question, the occasion). Both: the stamp alone is every person a question
+            # names, the ledger alone is every question he answers. They are ADDED to `refs`, since no question he answers is about the
+            # man an order named; and only for a row whose subject is the one it is done to (`subject_is_opponent`), so `seize` forms
+            # on no man. It widens only by what the ledger and the stamp both say.
+            carried = q.referents_for("Person")
+            if carried and subject_is_opponent(row):
+                heard = tuple(t for t in dict.fromkeys(addressed_terms(p, warrant_kind, tick, decay)) if t in carried)
+                warranted.update(heard)
+                refs = tuple(refs) + tuple(t for t in heard if t not in refs)
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
@@ -1178,6 +1190,22 @@ def document_read(p: Person, rid, tick: int = 0, decay: int = 0) -> Optional["Cl
     where he holds no reading. Person-side and World-free (AX-2)."""
     return LedgerReader([c for c in p.ledger if c.subject == rid and content_said(c) is not None
                          and content_kind(c) in RECORD_SOURCED_OPERANDS], tick=tick, decay=decay).belief_among()
+
+
+def addressed_terms(p: Person, kind: str, tick: int = 0, decay: int = 0) -> tuple:
+    """THE `subject` (A DISPENSATION'S `terms`) OF EACH DOCUMENT OF `kind` THAT `p`'S OWN LEDGER READS AS ADDRESSED TO HIM -- B29.01
+    (`14_VERBS_PHYSICAL_A` A1), the person-side twin of `world_q.addressed_records`' reading: the newest `content:<kind>` claim on each
+    document (`document_read`, held or only heard), kept where its addressee list names him (`person_q.addressed_to`, the one owner of the
+    test), answered through `record_sourced_operands`' `subject` key. The document may stay in its maker's hand: `loop/witness.py` deposits
+    its content to an addressee who witnessed the making or was told. Person-side and World-free (AX-2); in the ledger's order, one per document."""
+    out = []
+    for rid in dict.fromkeys(c.subject for c in p.ledger if content_kind(c) == kind):
+        c = document_read(p, rid, tick, decay)
+        if c is not None and content_kind(c) == kind and addressed_to(content_said(c), p.id):
+            t = _content_answer(c, "subject")
+            if t is not None:
+                out.append(t)
+    return tuple(out)
 
 
 def documents_known_as(p: Person) -> dict:
