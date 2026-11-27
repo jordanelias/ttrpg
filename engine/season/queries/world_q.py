@@ -1846,8 +1846,12 @@ def subsist_input(w: World) -> SubsistInput:
     `per_head` is the fixture `hunger_loss` (B12b.35): `"per_head"` divides the loss by the eater's weight, `"per_cohort"` (shipped) does not."""
     larder, chains = _larder_parts(w)
     bodies = tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters)
+    # B12b.40: `short_before` is the LAST barrier's record (`World._subsistence_shortfall`, which MATTER overwrites AFTER this projection, not before); `once_held` is
+    # the kinds each rung's `stores` carries a key for. Together they let `subsist` report a first dearth once, at the crossing, never every season it lasts.
+    short_before = tuple(sorted((pid, tuple(sorted(kinds))) for pid, kinds in w._subsistence_shortfall.items()))
+    once_held = tuple(sorted((rid, tuple(sorted(k for k, _ in items))) for rid, items in larder.stores if items))
     return SubsistInput(larder, chains, w.fixtures.get("body_step"), bodies, _hunger_severity(w, larder, bodies),
-                        w.fixtures.get("hunger_loss") == "per_head")
+                        w.fixtures.get("hunger_loss") == "per_head", short_before, once_held)
 
 
 def _hunger_rows(w: World) -> tuple:

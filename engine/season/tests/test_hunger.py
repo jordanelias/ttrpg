@@ -315,3 +315,44 @@ def test_odd_unit_varies_over_season_keys():
         checked += 1
     assert checked == 200
     assert len(got) >= 2 and max(got.values()) < 200, f"one cohort received the odd unit at every key: {got}"
+
+
+# B12b.40 (`16_PESSIMIST_SE_A` edit 2, D-69): A FIRST DEARTH IS REPORTED ONCE, at the season the crossing is made, never again while the dearth lasts.
+def _reported(w: World, seasons: int) -> list:
+    """Run MATTER `seasons` times; per season, `[(carrier event kind, rung, predicate, value), ...]` for every `shortfall:` Observation it logged."""
+    d, per = SeasonDriver(w), []
+    for _ in range(seasons):
+        w.tick += 1
+        n = len(w.log)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        per.append([(e.kind, o.subject, o.predicate, o.value) for e in w.log[n:] for o in e.observed if str(o.predicate).startswith("shortfall:")])
+    return per
+
+
+def test_exact_multiple_granary_reports_once():
+    """Row 3: two cohorts (want grain 8, salt 4 between them) and a territory rung above their settlement holding exactly one season's stock. Season 1 feeds
+    them in full and empties it to zero keys; season 2 is the first they go unfed, and the dearth is reported ONCE, at the granary rung (the one that ever held the
+    kind: not the settlement, the ladder's first), on a cohort's `body.changed` (no larder write there: it was empty); season 3, the same dearth, reports nothing.
+    Control: a cohort fed every season (three seasons' stock) reports nothing."""
+    w = _shared_world({})
+    w.rungs["T"].stores = {"grain": 8, "salt": 4}
+    got = _reported(w, 3)
+    assert got[0] == [], "the season the stock met every mouth reported a dearth"
+    assert got[1] == [("body.changed", "T", "shortfall:grain", 8), ("body.changed", "T", "shortfall:salt", 4)], got[1]
+    assert got[2] == [], f"the dearth was reported again while it lasted: {got[2]}"
+    assert sum(len(season) for season in got) == 2
+    fed = _shared_world({})
+    fed.rungs["T"].stores = {"grain": 24, "salt": 12}
+    assert _reported(fed, 3) == [[], [], []], "a cohort fed every season reported a dearth: the plant cannot see the crossing"
+
+
+def test_never_stocked_ladder_reports_once_at_its_first_rung():
+    """D-69: a ladder that never held a key for the kind (every rung empty) reports once, at its FIRST rung (the settlement), the gap of both cohorts, in the
+    first season, then nothing. With `body_step` 0 no body is written, so the crossing has no write to ride and is unreported (the control arm's note)."""
+    w = _shared_world({})
+    got = _reported(w, 3)
+    assert got[0] == [("body.changed", "S", "shortfall:grain", 8), ("body.changed", "S", "shortfall:salt", 4)], got[0]
+    assert got[1] == [] and got[2] == [], f"a dearth with no source was reported again: {got[1:]}"
+    still = _shared_world({})
+    still.fixtures = still.fixtures.sweep("body_step", 0)
+    assert _reported(still, 2) == [[], []]

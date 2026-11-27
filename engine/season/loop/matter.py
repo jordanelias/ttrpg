@@ -159,7 +159,7 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     return out
 
 
-def _write_body(w: "World", token, pid: str, person, after: int):
+def _write_body(w: "World", token, pid: str, person, after: int, observed: tuple = ()):
     """THE HUNGER PASS'S ONE BODY WRITE (a fall, and since B12b.14 a mend): `Person.body` set to `after` through the gate, emitting `body.changed`
     chained to the Event that last WROTE `pid`'s body; returns that Event or `None`. `written=True` (H-129, REM-52): the anchor read chains a
     combat-caused write on the wrong person -- the fold's `body.changed` anchors on the combatant, not on `pid`. The Event that WROTE `pid`'s
@@ -170,7 +170,8 @@ def _write_body(w: "World", token, pid: str, person, after: int):
             lambda: setattr(person, "body", after),
             record_kind="Person", fieldname="body", driver="Event",
             emits="body.changed", subject=pid,
-            causes=[prior_b] if prior_b else [ROOT])
+            causes=[prior_b] if prior_b else [ROOT],
+            observed=observed)
     return w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
 
 
@@ -631,7 +632,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `band_floors["body"]` — the SAME table the site gate and `decision.budget` already read.
     # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
     # than minting a `band_floors.person` second scheme.
-    w._subsistence_shortfall = {}      # the instrument's read of THIS pass only (`harness/populated.py::census`)
+    # B12b.40: `World._subsistence_shortfall` is NOT cleared here. It holds the LAST barrier's record until `subsist_input` has read it (`short_before`, the crossing test)
+    # and is overwritten below with this pass's; nothing between reads it.
     floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
     # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE LIVES IN ONE OWNER, `settlements.larder_draw`, which
     # `settlements.subsist` runs (E2, below); this pass derives its writes from that outcome.
@@ -665,7 +667,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                        "make the sweep report the control twice")
     stocked_before = ({rid: world_q.requisitionable(w, rid) for rid in w.rungs}
                       if stock_mode == "crossing" else {})
-    sub = _step_call(SUBSIST)(world_q.subsist_input(w))
+    sub_in = world_q.subsist_input(w)
+    sub = _step_call(SUBSIST)(sub_in)
     short_by_person = {pid: dict(kinds) for pid, kinds in sub.short_by_person}
     larder_after = {rid: dict(kinds) for rid, kinds in sub.larder_after}
     # -- THE SHORTFALL RIDES ON THE DRAINED LARDER'S OWN WRITE (plan position `19d`) -------------
@@ -693,10 +696,11 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # choice (S36.1: *"every arrow is a person's act"*).
     #
     # ⚠ WHAT THIS DOES NOT REPORT, and it is registered, not hidden (`H-160`):
-    #   * A LARDER THAT WAS NEVER STOCKED. An eater whose walk finds nothing (`source None`) drains
-    #     no rung, so no write carries the gap. The emission is the CROSSING into dearth, not the
-    #     state: once a place has run dry and been reported, its next empty season is silent, like a
-    #     band that is crossed once.
+    #   * (CHANGED at B12b.40, D-69.) A LARDER THAT WAS NEVER STOCKED. An eater whose walk finds nothing (`source None`)
+    #     drains no rung, so no larder write carries the gap; `settlements.subsist` now reports the crossing at the
+    #     rung that ever held the kind, else the ladder's first (`SubsistInput.short_before`, `.once_held`), and it rides the
+    #     first short cohort's `body.changed` (`unridden`, below). The emission is the CROSSING into dearth, not the
+    #     state: once reported, the next short season is silent, like a band that is crossed once.
     #   * (LIFTED at v9 IN-22; `world_q.governors_of`, `witness.py::SEAT_CHANNEL`.) A GOVERNOR WHO
     #     NEITHER STANDS AT THE RUNG NOR HOLDS IT: WITNESS now deposits this record into every live seat whose purview contains it.
     # The value is the SUBTREE's gap (`demanded(w, S) - delivered(w, S)`), not only the part owed by
@@ -709,6 +713,13 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     short_seen: dict = {      # drained rung -> (Observation, ...), sorted by kind
         src: tuple(Observation(src, f"{SHORTFALL_PREDICATE}:{k}", n) for k, n in gaps)
         for src, gaps in sub.shortfalls}
+    # B12b.40 (D-69): A FIRST DEARTH IS REPORTED ONCE. `sub.shortfalls` now names a rung the dearth CROSSED at even where no source gave out (`subsist`); that rung has no
+    # debit write this barrier if it was already empty (or never stocked), so its Observation rides the `body.changed` write of the first short cohort homed under it
+    # (the falls loop below, `observed=`). `unridden` is those, rung -> Observations. With `body_step` 0 there is no fall and so no such write: the crossing is then
+    # unreported, which is the control arm's note. WITNESS routes it to the rung's governors by `Observation.subject` (`world_q.governors_of`), no edit there.
+    unridden = {rid: seen for rid, seen in short_seen.items() if not larder_after.get(rid)}
+    chain_of = dict(sub_in.chains)
+    home_of_row = {row.pid: row.home for row in sub.draw.rows}
     if short_by_person:
         # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold crossing
         # *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would be the outcome L5
@@ -754,7 +765,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         if person is None:
             continue
         was = person.body
-        fell = _write_body(w, token, pid, person, fall.body_after)
+        # B12b.40: the crossings no larder write carried (`unridden`) ride the first fall of a cohort homed under the rung, sorted by rung, each once.
+        under = [rid for rid in sorted(unridden) if rid in chain_of.get(home_of_row.get(pid), ())]
+        carried = tuple(o for rid in under for o in unridden.pop(rid))
+        fell = _write_body(w, token, pid, person, fall.body_after, carried)
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
         # B12b.36 (`07_SE_population_census` (b), (c)): A STARVING COHORT THINS BEFORE IT DIES. `famine_loss` is the per-mille of its weight a cohort whose body stands

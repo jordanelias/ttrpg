@@ -23,7 +23,10 @@ THE RULE (items 3a/3b and plan position `19d`):
     `larder_after` is the source's stores less that debit, kept only where a unit moved. The draw capped
     every take at what was held, so nothing goes below zero and no `max(0, ...)` hides an error.
   * SHORT: an eater is short a kind by `want - take` where `take < want`. A source that gave out with a
-    mouth still unfed is DRAINED for that kind (`source None` drains nothing: a ladder never stocked).
+    mouth still unfed is DRAINED for that kind (`source None` drains nothing HERE: a ladder with no unit of the kind is reported at its crossing, below).
+  * A FIRST DEARTH IS REPORTED ONCE (B12b.40, D-69): a short cell with no source (`src None`) is a crossing if the eater was not short of that kind in
+    the last barrier (`SubsistInput.short_before`); its rung is the first of its ladder that ever carried a key for the kind (`once_held`), else the
+    ladder's first rung, and it joins the drained set below. A person short of the kind again next season is no crossing: silent while the dearth lasts.
   * THE DRAINED RUNG'S GAP: per drained kind, `demanded - delivered` over the rung's subtree -- the
     eaters whose home's chain passes through it, summed by `drawn_under` -- kept only where positive.
     It NESTS (a hearth and its settlement can both report one hungry household): the Query's meaning.
@@ -58,6 +61,24 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
                 # a short cell gave out EVERY rung it drew from (under `through` a draw splits across rungs: each emptied)
                 for rung in (r for r, _ in parts) if parts else ((src,) if src is not None else ()):
                     drained.setdefault(rung, set()).add(kind)
+
+    # B12b.40 (D-69): A FIRST DEARTH IS REPORTED ONCE, AT THE CROSSING. A short cell no source gave out for (`src None`: its ladder holds nothing of the kind)
+    # drained no rung above, so nothing would carry it. It is a crossing if the person was not short of that kind last barrier (`short_before`), and is
+    # reported at the first ladder rung that ever carried a key for the kind (`once_held`: the granary an exact multiple emptied), else, a never-stocked
+    # ladder, at its first rung. `kind in short_before` makes either arm fire once per dearth, never per season.
+    before = {pid: frozenset(kinds) for pid, kinds in inp.short_before}
+    held_once = {rung: frozenset(kinds) for rung, kinds in inp.once_held}
+    ladders = dict(inp.larder.ladders)
+    for row in draw.rows:
+        for kind, want, take, src, _parts in row.cells:
+            if take >= want or src is not None or kind in before.get(row.pid, ()):
+                continue                      # fed; or already counted as drained; or not a crossing
+            ladder = ladders.get(row.home, ())
+            at = next((r for r in ladder if kind in held_once.get(r, ())), None)
+            if at is None and ladder:
+                at = ladder[0]                # D-69: a never-stocked ladder reports once, at its first rung
+            if at is not None:
+                drained.setdefault(at, set()).add(kind)
 
     shortfalls = []
     for src in sorted(drained):

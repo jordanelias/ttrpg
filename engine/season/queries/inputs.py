@@ -1180,13 +1180,20 @@ class SubsistInput:
                        four-argument build of `world_q.subsist_input` stays valid;
       * `per_head`  -- B12b.35: the `hunger_loss` fixture read as `"per_head"`: the body lost per unit short is
                        divided by the eater's weight (`body_step x units // weight`); False (`"per_cohort"`) is
-                       today's loss, undivided. Last, with a default, as `severity` was."""
+                       today's loss, undivided. Last, with a default, as `severity` was;
+      * `short_before` -- B12b.40: `((pid, (kind, ...)), ...)` sorted, the kinds each person was short of in the LAST
+                       barrier (`World._subsistence_shortfall`, read before MATTER overwrites it); `()` is a first season,
+                       or a loaded world, where nobody is yet known to be short. A kind in it is no crossing this season;
+      * `once_held` -- B12b.40: `((rung, (kind, ...)), ...)` sorted, the kinds each ladder rung's `stores` carries a KEY
+                       for (a held-and-emptied kind keeps its key at 0): where a dearth with no drained source is reported."""
     larder: LarderInput
     chains: tuple
     body_step: int
     bodies: tuple
     severity: tuple = ()
     per_head: bool = False
+    short_before: tuple = ()
+    once_held: tuple = ()
 
 
 @dataclass(frozen=True)

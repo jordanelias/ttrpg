@@ -167,16 +167,18 @@ def test_19d_a_drained_larder_carries_its_shortfall_on_its_own_write_and_nothing
     assert granary and not _shortfalls(granary)
 
 
-def test_19d_a_larder_that_was_never_stocked_reports_nothing_and_is_still_short():
-    """THE CROSSING, NOT THE STATE (`loop/matter.py`, `H-160`). An empty larder is not drawn, so no
-    write carries the gap. The person is still short, and `_subsistence_shortfall` still says so.
-    Pinned so that a later reading which reports the state instead is a deliberate edit, not a
-    drift."""
+def test_19d_a_larder_that_was_never_stocked_reports_its_first_dearth_once_and_is_still_short():
+    """THE CROSSING, NOT THE STATE (`loop/matter.py`, `H-160`, REWRITTEN BY D-69 at B12b.40). An empty larder is not drawn, so no larder write carries the gap;
+    the ladder's first rung reports it ONCE, in the season it is first short, on the first short cohort's body write. The next season the same person is
+    still short, `_subsistence_shortfall` still says so, and nothing is reported again."""
     w = S.build()
     w.rungs[S.HUNGRY].stores = {}
     _, emitted = _matter(w)
-    assert _shortfalls(emitted) == []
+    assert _shortfalls(emitted) == [(S.HUNGRY, f"{SHORTFALL_PREDICATE}:{k}", v) for k, v in sorted(_want(S.COHORT_WEIGHT).items())]
     assert w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT)
+    w.tick += 1
+    _, again = _matter(w)
+    assert _shortfalls(again) == [] and w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT)
 
 
 @pytest.mark.parametrize("build,seasons", [(P.tiny_world, 3), (lambda: HL.build_world(0), 3)])

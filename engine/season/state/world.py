@@ -702,8 +702,8 @@ class World:
         # Unhashed for that reason, not because it is derived (`test_h118`'s underscore exclusion).
         self._departed: dict[str, tuple] = {}
         # WHO WAS SHORT OF FOOD IN THE LAST MATTER, `{pid: {kind: units short}}`: set by `loop/matter.py`'s
-        # subsistence pass (cleared at its start), read by `harness/populated.py::census` and by tests.
-        # An instrument's read, not state: the content hash does not fold it and the loop never reads it.
+        # subsistence pass (overwritten at its end), read by `harness/populated.py::census`, by tests and (B12b.40) by the NEXT
+        # barrier's `world_q.subsist_input` as `short_before`, the crossing test. Not state: the content hash does not fold it, and a loaded world holds it empty.
         self._subsistence_shortfall: dict[str, dict] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
