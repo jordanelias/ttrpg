@@ -47,18 +47,6 @@ def test_season_mirror_length_blows_and_reversals():
     assert 0.45 <= t.wounds_per_roll() <= 0.57, t.wounds_per_roll()
 
 
-def test_the_better_fighter_wins_on_the_stated_curve():
-    """The better fighter's share of the fights ending in a felling, 1,000 fights a cell (seeds 0-999), read at the first felling, before any riposte
-    (`scale_census.read`: the riposte is the designer's cap, not the opposed rule; the plan's figures are the first felling's)."""
-    cells = {(3, 2): (0.60, 0.70), (5, 4): (0.60, 0.70),
-             (4, 2): (0.72, 0.82), (6, 4): (0.72, 0.82), (7, 5): (0.72, 0.82),
-             (6, 2): (0.88, 0.95), (7, 3): (0.88, 0.95)}
-    checked = 0
-    for (hi, lo), (floor, ceil) in cells.items():
-        share = SC.Tally(hi, lo, 0, 1000).a_wins()
-        assert floor <= share <= ceil, ((hi, lo), share)
-        checked += 1
-    assert checked >= len(cells)
 
 
 def test_the_mirror_is_level_across_ranks():

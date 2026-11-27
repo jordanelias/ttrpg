@@ -81,7 +81,7 @@ ARM_OFF_PINS = {(0, 1): "c1a3e633b2524643d05c33653cb69d17", (1, 1): "4c139dd407e
 # B12a.99 re-read, the arm-off world on the merged tree (B08 and this batch together; `PYTHONHASHSEED=0`, six readings): both move the arm-off world too (`_realm_goldens.py`'s B12a.99 paragraph); the earlier values are in `git log`.
 # B08.99 re-record: the arm-off world read at `PYTHONHASHSEED=0` on `ce09a54` (the B08 movers move it too); the S13 base `8142371` read the previous six values.
 # B08.99 second re-record: the close's ruling (`hangs_on` also requires the same counterparty, 44cdf60) moves the arm-off world again; read at `PYTHONHASHSEED=0` on 000d177 plus this edit; the `ce09a54` values are in `git log`.
-# B16.99 re-record: B16.03's per-round fight key moves the arm-off world; read at `PYTHONHASHSEED=0` on the merge with B21b's main; the previous values are in `git log`.
+# B16.99 re-record: B16.03's per-round fight key moves the arm-off world; read at `PYTHONHASHSEED=0` on the tree after B24's merge (re-read once more: #640's were taken on B21b's tree); the previous values are in `git log`.
 # B11 merge with main re-record: the arm-off world read twice equal at `PYTHONHASHSEED=0` on the merged tree; each earlier value is in `git log`.
 
 
