@@ -30,15 +30,39 @@ The control (no file of that name exists; the seam is covered by `test_g2_token.
 `test_rem31_grid_suspension.py`): a callback that returns `auto`'s own pick leaves
 `World.content_hash()` equal to the plain run on the same seed; a planted deviation for one person
 moves it.
+
+THE TRANSCRIPT (B34.04, `proposals/11_GO_player_surface_contract_B.md` §8) -- ONE RUNNER FOR EVERY PLAYABLE SCENARIO:
+
+    python -m engine.season.harness.play_surface --seed S --person P --seasons K [--scenario NAME]
+
+seats `P` with `take_ranked` and prints, per deliberation, the `Situation` (the asked rows), the `Offer` (each row with its terms and odds,
+then the withheld rows) and the pick; then, at his next deliberation and once more when the run ends, the `account` of what he has learned
+since. `--scenario NAME` resolves through `scenarios.SCENARIOS` and the run is `scenarios.run` -- the runner has no season loop of its own;
+with no `--scenario` the row is `life`, the realm as built. The last line is `content_hash <hash>`: the transcript reads and writes nothing, so
+it is the hash of the plain run on the same seed.
+
+⚠ **A PLAYER-FACING PRESENTATION IS TRIGGERED BY AN `AccountRow` OF THE SEATED PERSON, NEVER BY A LOG EVENT.** The log is the whole world; his
+ledger is what he is entitled to. A port that hangs a cutscene on `scar.taken` in the log shows the player a scar he has not heard of (GO-B §7).
+
+⚠ THE FACTION LINE IS THE HOST'S, NOT HIS. Once a season the transcript prints the seated person's faction's `faction_q.standing` at the
+realm rung, labelled resolver-side: the world's reading, never his belief (AX-2). It is not a row of the `Situation` or of the `account`
+and is never handed to `decision/`; it defines no footprint, density or provinces reading of its own.
 """
 from __future__ import annotations
 
-from typing import Any, Callable, MutableMapping, Mapping, Sequence
+import argparse
+import sys
+from typing import Any, Callable, MutableMapping, Mapping, Optional, Sequence
 
 from ..data import goals as goals_data
+from ..decision.choose import TERM_NAMES
+from ..decision.sheet import account, creation_sheet, offer, situation
 from ..gaps import Forbidden
+from ..loop.driver import resolvable_verbs
+from ..queries import faction_q, world_q
 from ..queries.person_q import content_kind, content_said, deed_doer_claims, deed_doers, dossier
 from ..queries.world_q import continuations
+from ..state.ids import draw_factory
 
 # `(p, v, s, ask_budget) -> list[Act | Scene]` — DELIBERATE's call, the delegate's shape.
 Chooser = Callable[..., list]
@@ -117,3 +141,147 @@ def board(p: Any, fixtures: Any) -> list:
     out += [{"kind": "document", "id": x["row"].record, "of": content_kind(x["row"].claim), "about": content_said(x["row"].claim)}
             for x in out if x["kind"] == "claim" and x["row"].record is not None]
     return out
+
+
+# ---------------------------------------------------------------------------------------------------
+# THE TRANSCRIPT (B34.04) -- printers of what `decision/sheet.py` reads, and the command that runs a scenario through `scenarios.run`.
+# ---------------------------------------------------------------------------------------------------
+
+def _short(x: Any, n: int = 48) -> str:
+    return str(x)[:n]
+
+
+def account_lines(p: Any, since: tuple) -> list:
+    """The `account` of `p` since `since`, one line a row: the claim as he holds it, whether it echoes his own deed, who told him, and what changed. Reads `p`'s own ledger only."""
+    out = []
+    for r in account(p, since):
+        c = r.claim
+        via = f" told by {c.teller} ({c.hops} hops)" if getattr(c, "teller", None) else ""
+        out.append(f"   learned {c.subject} · {c.predicate} = {_short(c.value)} · {c.source} · when {c.when}.{c.lap}{via}"
+                   + (" · his own deed" if r.own else "")
+                   + (f" · before: {_short(r.prior.value)}" if r.prior is not None else "")
+                   + (" · nobody is named as the doer" if r.unattributed else ""))
+    return out
+
+
+def deliberation_lines(w: Any, sheet: Any, verbs: Optional[frozenset] = None) -> list:
+    """The `Situation` and the `Offer` of the seated person at one deliberation, as printed lines. `sheet` is the `DevelopmentSheet` `development_space` hands `pick`
+    (its `view` and `budget` are the deliberation's own); `w` is read only to find the person's own record (`w.persons[...]`) and the `fx` and `draw` the chooser was
+    built with. The offer rows are `make_ranker`'s order, so `[i]` is the index a pick names."""
+    p = w.persons[sheet.person_id]
+    v = sheet.view
+    s = situation(p, v, lambda: sheet.budget)
+    off = offer(p, v, w.fixtures, resolvable_verbs() if verbs is None else verbs, draw_factory(w.world_seed, lambda: w.tick))
+    lines = [f"   situation · body {s.body} · budget {s.budget} · holds {list(s.holdings)} · pursuits {dict(s.pursuits)} · stance {list(s.stance)}"]
+    for a in s.asked:
+        lines.append(f"   asked {a.question.id} · {a.question.source} · about {a.question.about}"
+                     + (f" · his claim: {a.claim.predicate} = {_short(a.claim.value)}" if a.claim is not None else ""))
+    for i, r in enumerate(off.rows):
+        c = r.candidate
+        terms = " ".join(f"{n} {t:+.2f}" for n, t in zip(TERM_NAMES, r.terms))
+        lines.append(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip()
+                     + (f" · for {r.occasion}" if r.occasion else "") + f" · {terms}"
+                     + (f" · believes {r.odds:.2f}" if r.odds is not None else "") + f" · cost {r.cost}")
+    for x in off.withheld:
+        lines.append(f"   withheld {x.verb} {x.subject if x.subject is not None else ''}".rstrip() + f" · unmet {x.unmet}")
+    return lines
+
+
+def faction_line(w: Any, pid: Optional[str]) -> Optional[str]:
+    """THE HOST'S LINE (resolver-side, never his belief): where the faction `pid` coheres under stands at the realm rung, `faction_q.standing`'s record and no reading of
+    this file's own. `None` for a person the world no longer holds or a world with no realm rung."""
+    from .governance_spine import _top_rung            # lazy: governance_spine imports this module
+    top = _top_rung(w)
+    if top is None or pid not in w.persons:
+        return None
+    prop = world_q.faction_of(w, pid)
+    if prop is None:
+        return f"host (resolver-side, not his belief) · {pid} is committed to no faction"
+    s = faction_q.standing(w, prop, top)
+    return (f"host (resolver-side, not his belief) · faction {prop}: footprint {len(s.footprint)} rungs, {s.present} of {s.persons} present, "
+            f"largest holder's share {s.sovereign_share:.2f}, {len(s.provinces)} provinces")
+
+
+def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None, out: Callable[[str], None] = print) -> dict:
+    """Play `scenarios.SCENARIOS[name]` through `scenarios.run` with `person` seated on `take_ranked`, printing each deliberation (`deliberation_lines`), the pick, the
+    `account` since his last deliberation, and once a season the host's faction line. Prints `content_hash` and, last, `ENDING <name> <kind>` where the run ended on one.
+    Returns `scenarios.run`'s dict. Nothing here writes the world: the readers are `decision/sheet.py`'s."""
+    from . import scenarios as SC                      # lazy: scenarios imports this module
+    from ..decision.sheet import take_ranked
+    row = SC.SCENARIOS[name]
+    built: list = []
+    last: dict = {}                                    # person id -> the `(tick, lap)` of his last deliberation
+    state = {"n": 0, "tick": None, "seat": None}
+
+    def host_line(pid: Optional[str]) -> None:
+        text = faction_line(built[0], pid)
+        if text is not None:
+            out(f"   {text}")
+
+    def learned(pid: Optional[str]) -> None:
+        w = built[0]
+        if pid in last and pid in w.persons:
+            rows = account_lines(w.persons[pid], last[pid])
+            out(f"   he has learned {len(rows)} thing(s) since his last deliberation")
+            for line in rows:
+                out(line)
+
+    def pick(sheet):
+        w = built[0]
+        state["n"] += 1
+        pid = sheet.person_id
+        out(f"-- deliberation {state['n']} · tick {w.tick} · {pid}")
+        learned(pid)
+        if state["tick"] != w.tick:
+            host_line(pid)
+            state["tick"] = w.tick
+        for line in deliberation_lines(w, sheet, row.verbs):
+            out(line)
+        chosen = list(take_ranked(sheet))
+        out(f"   pick {chosen}")
+        # What lands after this deliberation lands after everything his ledger holds now (a lap's deposits carry that lap's stamp, and WITNESS runs after DELIBERATE),
+        # so the next `account` begins one lap past the latest `(when, lap)` he holds. The driver's own `(tick, lap)` stamp is a driver local the host cannot read (D-21).
+        when, lap = max(((c.when, c.lap) for c in w.persons[pid].ledger), default=(w.tick, -1))
+        last[pid] = (when, lap + 1)
+        state["seat"] = pid
+        return chosen
+
+    r = SC.run(name, seed, seasons, pick=pick, person=person, on_build=built.append)
+    w = built[0]
+    if r["seat"] is not None and r["seat"] == state["seat"]:
+        out("-- the run ended")
+        learned(r["seat"])
+        host_line(r["seat"])
+    out(f"{name} · seed {seed} · {r['seasons']} season(s) · tick {r['tick']} · seat {' > '.join(r['passed'])}")
+    out(f"content_hash {r['hash']}")
+    if r["ending"] is not None:                        # the last line, where the run ended on one (the batch gate reads it so)
+        out(f"ENDING {r['ending']} {r['kind']}")
+    return r
+
+
+def _parse(argv: Sequence[str]) -> argparse.Namespace:
+    ap = argparse.ArgumentParser(prog="python -m engine.season.harness.play_surface", description=__doc__.split("\n\n")[0])
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--person", help="the seated person's id (default: the scenario's own seat; the realm has none, so it prints its creation sheet)")
+    ap.add_argument("--seasons", type=int, default=1)
+    ap.add_argument("--scenario", default="life", help="a name in `scenarios.SCENARIOS` (default `life`: the realm as built)")
+    return ap.parse_args(argv)
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    a = _parse(sys.argv[1:] if argv is None else argv)
+    from . import scenarios as SC                      # lazy: scenarios imports this module
+    if a.scenario not in SC.SCENARIOS:
+        raise SystemExit(f"no scenario {a.scenario!r}; registered: {sorted(SC.SCENARIOS)}")
+    row = SC.SCENARIOS[a.scenario]
+    if row.seat is None and a.person is None:          # no default seat: the creation sheet is the pick list, and the run does not start
+        print(f"{a.scenario} has no default seat; pass --person with one of:")
+        for c in creation_sheet(row.build(a.seed).persons.values()):
+            print(f"   {c.id} · {c.name} · pursuits {dict(c.pursuits)}")
+        return 2
+    transcript(a.scenario, a.seed, a.seasons, a.person)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

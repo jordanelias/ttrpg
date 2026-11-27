@@ -64,7 +64,7 @@ from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a worl
 from . import probes as P
 from .carin import build_world
 from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
-from .play_surface import board, carry_on, dispatching_chooser
+from .play_surface import board, carry_on, deliberation_lines, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -605,8 +605,11 @@ def _picker(a: argparse.Namespace, world: Optional[Callable[[], World]] = None) 
         if world is not None:
             for line in board_lines(world(), sheet.person_id):
                 print(f"   {line}")
-        for i, c in enumerate(sheet.candidates):
-            print(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip())
+            for line in deliberation_lines(world(), sheet, SCENARIOS[a.name].verbs):    # B34.04: the one printer of the asked rows and the offer (`play_surface`'s)
+                print(line)
+        else:
+            for i, c in enumerate(sheet.candidates):
+                print(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip())
         text = next_line("pick (indices, blank = take the ranking): ")
         chosen = [int(t) for t in text.replace(",", " ").split()] if text.strip() else list(take_ranked(sheet))
         print(f"   pick {chosen}")
