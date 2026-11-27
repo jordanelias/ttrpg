@@ -957,7 +957,7 @@ class PlayHost:
     """THE HOST'S ONE OPTIONAL ARGUMENT for PLAYABLE (v10 REM-31, IN-46; A-25's *"a `game/` scene for which
     the driver suspends"*). `SeasonDriver.season(..., host=)` threads it to ENCOUNTER alone, through
     `_contest` and `seam/contest.py::contest` to the provider, the path `contest_max_depth` already takes.
-      * `persons`  -- the ids the host plays. The mode is a PARTY TEST (`seam/wrappers/_entry.py::played_by`, the one place it is made): a
+      * `persons`  -- the ids the host plays. The mode is a PARTY TEST (`seam/wrappers/_entry.py::played_by`, where a played party's decider is chosen; `seam/wrappers/sigma.py` pre-filters its own speakers by `host.persons` first): a
                       scene either of whose parties is in this set is PLAYABLE for a role the host has a decider for; every other
                       scene, and every scene with no host, is AUTOMATED;
       * `deciders` -- B24.05, B34.15: `module role -> decide(view) -> choice` (`combat.fight`, `social_contest.proceeding`, ...). A decider is written

@@ -3,8 +3,8 @@
     python -m engine.season.harness.scene combat.fight --fixture fight_headless --seed 0
     python -m engine.season.harness.scene social_contest.roll --fixture roll --seed 0 [--effort N] [--verb V] [--apply]    # B34.17, `IS-DICE-01`
 
-A *scene instance* is one module's playable form: one act's scene, staged from a small world, by the SAME entry the season's fold calls (the glossary's row
-*scene instance*; Layer 1's `Scene`, what the budget counts, keeps its own sense). `play(role, fixture, ...)` is an instrument: it adds no rule, reads no file a
+`play` stages ONE SCENE INSTANCE, ALONE (the glossary's row *scene instance*; ED-IN-0303): one act's scene, from a small world, by the SAME entry the season's fold
+calls, with no season around it. `play(role, fixture, ...)` is an instrument: it adds no rule, reads no file a
 module does not already receive, and holds no loop of its own.
 
   * `apply=False` -- calls `seam.contest` (`seam/contest.py::contest`), NOT the provider, with the arguments `loop/resolve.py::_contest` passes, so the depth cap
@@ -121,7 +121,7 @@ def _checked(role: str, fixture: dict) -> None:
 
 
 def play(role: str, fixture: dict, *, seed: int = 0, decide: Optional[Callable] = None, apply: bool = False) -> dict:
-    """One module's scene, alone. Returns a record: `role`, `seed`, `act`, `played` (a decider was handed in; True is where the role's entry accepts one, not `social_contest.roll`'s plain-roll path, which never
+    """One scene instance, staged alone. Returns a record: `role`, `seed`, `act`, `played` (a decider was handed in; True is where the role's entry accepts one, not `social_contest.roll`'s plain-roll path, which never
     calls it), `max_depth`, `status` (`RESOLVED`, a typed refusal's status, `DEPTH-CAPPED`, or at `apply=True` `FOLDED` / `UNGRADED`), `degree` (the one ladder's, `None` for a refusal), `result` (the provider's own return, `apply=False`) or `events` and `world`
     (`apply=True`), and `content_hash`. `apply=False` also carries `not_asked`."""
     _checked(role, fixture)

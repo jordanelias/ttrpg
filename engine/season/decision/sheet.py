@@ -10,7 +10,7 @@ cannot write"*. **No space here writes a `Person` field.** Every carrier change 
 an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witnesses` and
 `_conviction_crisis`, which move OTHER persons' `scar`/`conviction` too).
 
-  CREATION (arm C1)  `creation_sheet(persons, holdings_of)` reads the persons the world builder ALREADY SEATED;
+  CREATION (arm C1)  `creation_sheet(persons)` reads the persons the world builder ALREADY SEATED;
                      `seat(rows, person_id, space)` is the player's pick, returned as the `overrides`
                      mapping `harness/play_surface.py::dispatching_chooser` reads -- the playable
                      `choose` dispatches on `p.id`. **No act, no write.** There is no cast-entry arm:
@@ -55,7 +55,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
-from ..data.rosters import AFFILIATIONS, MANAGEMENT_ORDERS, SEEN_PREDICATE
+from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader, Value, _seen_index, decisiveness, is_deed, names_a_doer, recognised
 from ..state.carriers import Act, Candidate, Claim, Person, PersonInterior, Question, Scene, View, fade_of, frozen
@@ -96,18 +96,17 @@ class CreationRow:
     pursuits: Mapping
     conviction: Mapping
     attributes: Mapping
-    holdings: tuple          # ((tenure kind, object id), ...): his own live Tenures, the pairs `Situation.holdings` defines, from the caller's reader
+    holdings: tuple          # ((tenure kind, object id), ...): his own live Tenures, `holdings_pairs(p.tenures)`, the pairs `Situation.holdings` shows
 
 
-def creation_sheet(persons: Iterable[Person], holdings_of: Callable[[str], tuple]) -> tuple:
+def creation_sheet(persons: Iterable[Person]) -> tuple:
     """The creation sheet: one `CreationRow` per seated person, in id order (a pick list, not a ranking).
-    `persons` is what the caller already holds (`w.persons.values()` before the first season); `holdings_of` is
-    the caller's reader, person id -> `((tenure kind, object id), ...)` of his own live Tenures (a seat's place in
-    the world is the first thing a player weighs): the caller passes it so this file names no `World`
-    (`harness/play_surface.py::holdings_of` builds it host-side; `OwnStateReader` answers one object's holder and
-    enumerates nothing, so it is not the reader yet). Writes nothing."""
+    `persons` is what the caller already holds (`w.persons.values()` before the first season). A row's `holdings` are
+    `holdings_pairs(p.tenures)` (a seat's place in the world is the first thing a player weighs): every person Tenure is
+    appended to its subject's `Person.tenures` (`state/world.py::add_tenure`), the list `Situation` and `DevelopmentSheet`
+    read, so no World and no caller's reader is needed. Writes nothing."""
     return tuple(CreationRow(p.id, p.name, p.is_cohort, frozen(p.capability), frozen(recognised(p, p.pursuits)),
-                             frozen(p.conviction), frozen(p.attributes), tuple(holdings_of(p.id)))
+                             frozen(p.conviction), frozen(p.attributes), holdings_pairs(p.tenures))
                  for p in sorted(persons, key=lambda q: q.id))
 
 
@@ -163,7 +162,7 @@ class DevelopmentSheet:
 
 def holdings_pairs(tenures: Sequence[Any]) -> tuple:
     """`((tenure kind, object id), ...)` of the LIVE Tenures in `tenures`, in the order given: the one spelling of what a person holds that `DevelopmentSheet.tenures`,
-    `Situation.holdings` and `CreationRow.holdings` (`play_surface.holdings_of`) all show, so the three are equal."""
+    `Situation.holdings` and `CreationRow.holdings` all show, so the three are equal."""
     return tuple((t.kind, t.object) for t in tenures if t.live)
 
 
@@ -333,7 +332,7 @@ def offer(p: PersonInterior, v: View, fx: Any, verbs: Optional[frozenset] = None
     asked = tuple(v.questions)
 
     def cost(c: Candidate) -> int:
-        return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended, MANAGEMENT_ORDERS)
+        return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended)
 
     rows = tuple(OfferRow(copy.deepcopy(c), _occasion_of(asked, c.subject), tuple(terms_of[id(c)]),
                           None if odds is None else _believed_chance(p, c, odds), cost(c)) for c in order)

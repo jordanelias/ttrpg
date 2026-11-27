@@ -112,7 +112,7 @@ def _probe() -> tuple:
     `combat.fight` resolves; its RAISE is translated to a named reason. `composition.require` caches a success
     itself, and the resolution is lazy, so the tracer still imports where the engine tree is absent."""
     try:
-        return composition.require("combat.fight"), ""
+        return composition.require(DECIDE_ROLE), ""
     except Exception as e:                  # a real load failure is a NAMED gap
         return None, f"{type(e).__name__}: {e}"
 

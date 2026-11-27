@@ -126,18 +126,20 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
     battle_loop = [c for c in cycles
                    if set(c) == {'modules.mass_battle.battle_loop', 'modules.mass_battle.orchestration'}]
     mb_canon = [c for c in cycles if _matches(c, 'modules.mass_battle') and c not in battle_loop]
-    # The one remaining declared season cycle, matched by its EXACT member set rather than by a
-    # prefix. A prefix match would silently absorb a SECOND season cycle a later carving step
+    # The first of two declared season cycles (the runner's is below), matched by its EXACT member set rather than by a
+    # prefix. A prefix match would silently absorb a THIRD season cycle a later carving step
     # introduces, which is the one thing this count exists to catch.
     harness_main = [c for c in cycles
                     if set(c) == {'engine.season.harness.exercises',
                                   'engine.season.harness.run_cases'}]
     # B34.04's runner (`play_surface.transcript`, `faction_line` and `main`, the one command that plays every scenario) reaches `scenarios.run` and
     # `governance_spine._top_rung` by FUNCTION-LOCAL import, and `scenarios._play` reaches `aperture` by `from . import aperture`, while `scenarios` and
-    # `governance_spine` import the printers `play_surface` owns (`deliberation_lines`, `holdings_of`, `dispatching_chooser`): a cycle the
+    # `governance_spine` import the printers `play_surface` owns (`deliberation_lines`, `dispatching_chooser`, `board`, ...): a cycle the
     # instrument sees (`build_g_code` walks the whole AST) and no `__main__` edge, matched by its EXACT member set (`aperture`, `governance_spine`,
     # `play_surface`, `scenarios`) and SHRINK-ONLY on the same discipline. It goes when the runner moves to a module no printer-importer imports (its
     # entry is deleted in that commit); the plan fixes the runner's home at `play_surface.py`, so it is declared, not hidden.
+    # THE EXIT: move `board`, `carry_on`, `creation_lines`, `deliberation_lines`, `dispatching_chooser`, `has_continuation` out of play_surface.py into a leaf both
+    # `scenarios` and `governance_spine` import, deleting this entry in that commit.
     harness_runner = [c for c in cycles
                       if set(c) == {'engine.season.harness.aperture', 'engine.season.harness.governance_spine',
                                     'engine.season.harness.play_surface', 'engine.season.harness.scenarios'}]

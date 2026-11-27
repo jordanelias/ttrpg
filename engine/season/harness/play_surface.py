@@ -57,7 +57,7 @@ from typing import Any, Callable, MutableMapping, Mapping, Optional, Sequence
 from ..data import goals as goals_data
 from ..decision.choose import TERM_NAMES
 from ..decision.options import seat_of
-from ..decision.sheet import account, chronicle, creation_sheet, holdings_pairs, offer, situation, take_ranked
+from ..decision.sheet import account, chronicle, creation_sheet, offer, situation, take_ranked
 from ..gaps import Forbidden
 from ..loop.driver import resolvable_verbs
 from ..queries import faction_q, world_q
@@ -131,20 +131,10 @@ def has_continuation(w: Any, pid: Optional[str]) -> bool:
     return pid in w.persons and bool(continuations(w, w.persons[pid]))
 
 
-def holdings_of(w: Any) -> Callable[[str], tuple]:
-    """THE HOST'S READER for `decision/sheet.py::creation_sheet(persons, holdings_of)` (B34.06): person id -> `((tenure kind, object id), ...)` of his own live
-    Tenures, built here from `w.tenures` because `decision/` names no `World` and `OwnStateReader` answers one object's holder and enumerates nothing (as
-    `military_menu.py` reads an army host-side). The pairs are the ones `Situation.holdings` shows, in the order held. Reads `w`, writes nothing."""
-    held: dict = {}
-    for t in w.tenures:
-        held.setdefault(t.subject, []).append(t)
-    return lambda pid: holdings_pairs(held.get(pid, ()))
-
-
 def creation_lines(w: Any) -> list:
-    """THE CREATION SHEET AS PRINTED LINES, one per person (`decision/sheet.py::creation_sheet` over `holdings_of(w)`): the pick list `main` prints, here and in
+    """THE CREATION SHEET AS PRINTED LINES, one per person (`decision/sheet.py::creation_sheet`): the pick list `main` prints, here and in
     `scenarios.main`, for a scenario with no default seat. Reads `w`, writes nothing."""
-    return [f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}" for c in creation_sheet(w.persons.values(), holdings_of(w))]
+    return [f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}" for c in creation_sheet(w.persons.values())]
 
 
 def board(p: Any, fixtures: Any) -> list:

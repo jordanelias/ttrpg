@@ -65,7 +65,7 @@ from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a worl
 from . import probes as P
 from .carin import build_world
 from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
-from .play_surface import board, carry_on, creation_lines, deliberation_lines, dispatching_chooser, has_continuation, holdings_of
+from .play_surface import board, carry_on, creation_lines, deliberation_lines, dispatching_chooser, has_continuation
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -103,7 +103,7 @@ def realm_ending(w: World, pid: Optional[str]) -> Optional[str]:
     (`play_surface.has_continuation`; with one the run plays on, B34.19). Only a reached row with `EndingReached.victory` names a holding side: `realm_ended` where none
     does (a reached `theocracy` is `victory: false`, nobody's win) or with nobody seated (`pid` is `None` or no longer in the world). Else `realm_held` when one of his own live
     `commit`s is to the faction the reached victory rows'
-    holders cohere under (`world_q.faction_holding` of each hold's holder), his Tenures read as `Situation.holdings` reads them (`play_surface.holdings_of`);
+    holders cohere under (`world_q.faction_holding` of each hold's holder), his Tenures read as `Situation.holdings` reads them (`decision/sheet.py::holdings_pairs`);
     `realm_fallen` when none is. The names' kinds are each row's `kinds`.
     [ASSUMPTION: a seat of the faction that holds the peninsula has won -- basis: GD-1 as `rosters.yaml: endings` quotes it names the one victory, and the roster row's
     `under: one_faction` names the winner as a faction; the split is an amendment to `IS-B2-CORE-02`'s reader (B34.20); Jordan to correct; revert: return `realm_ended` here,
@@ -202,7 +202,7 @@ def _play(name: str, row: Scenario, w: World, seasons: int, pick, host, person: 
         asked["n"] += 1
         return (take_ranked if pick is None else pick)(sheet)
     space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw, ask=ask, geo=geography())
-    overrides = bind_seat(creation_sheet(w.persons.values(), holdings_of(w)), pid, space)
+    overrides = bind_seat(creation_sheet(w.persons.values()), pid, space)
     choose = dispatching_chooser(chooser(w, verbs=verbs), overrides)
     d = SeasonDriver(w)
     played = {"n": 0, "seat": pid}

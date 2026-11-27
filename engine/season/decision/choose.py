@@ -36,7 +36,8 @@ from engine.dice_engine.fmath import ltr_sum
 from ..data import goals as goals_data
 from ..data.rosters import JOURNEY_VERBS, STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
-from ..data.rosters import MANAGEMENT_ORDERS, SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
+from ..data import rosters
+from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
     BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
     counterparty_of, prize_step,
@@ -1273,7 +1274,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     # construction and every season using `make_chooser` would refuse itself. The row and the
     # packer are the same mechanism seen from two sides.
     ext = fx.get("extended_scene_cost")
-    orders = MANAGEMENT_ORDERS      # B34.10 (A-104): a scene of nothing but these costs 0 (`Scene.cost`); the list ships empty
+    orders = rosters.MANAGEMENT_ORDERS      # B34.10 (A-104): read once per call, the name `Scene.cost` reads: a scene of nothing but these costs 0; the list ships empty
 
     def fill(cands) -> list:
         """Consecutive runs of `cands`, each filling at most `width` interaction slots (a Candidate at effort `e`
@@ -1308,20 +1309,20 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
             # engine deciding what they leave undone, which is L1. The same for a single act at effort that
             # the budget cannot carry: it is done at effort 0.
             sc = scene(len(out), chunk)
-            if sc.cost(ext, orders) > left:
+            if sc.cost(ext) > left:
                 chunk = chunk[:1]
                 sc = scene(len(out), chunk)
-                if sc.cost(ext, orders) > left:
+                if sc.cost(ext) > left:
                     c0 = chunk[0]
                     sc = scene(len(out), [Candidate(c0.verb, c0.subject,
                                                     {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})], lead=c0)
-                    if sc.cost(ext, orders) > left:
+                    if sc.cost(ext) > left:
                         # B12b.04: a journey whose leg costs more than he has left is LEFT UNDONE -- his triage, not an engine's trim (S26.3: a scene
                         # over the remainder is the caller's defect, and `deliberate` refuses it). Only a priced journey can reach here: any other
                         # scene costs the plain point or the extended cost, which the strips above already brought under `left`.
                         continue
             out.append(sc)
-            left -= sc.cost(ext, orders)
+            left -= sc.cost(ext)
         return out
 
     if rule == "by_subject":

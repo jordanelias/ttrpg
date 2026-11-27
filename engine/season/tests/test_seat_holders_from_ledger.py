@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from ..boot.realm import build_realm
 from ..decision.sheet import creation_sheet
-from ..harness.play_surface import holdings_of
 from ..queries import person_q, world_q
 
 
@@ -13,7 +12,7 @@ def test_creation_sheet_marks_cohorts_and_holdings():
     with no seat showing no `hold`) is `test_season_shape.py::test_creation_sheet_shows_holdings_for_a_seat_holder`; here it is read again only
     to say the marked column and the held column are one row's, not two sheets."""
     w = build_realm(0)
-    rows = creation_sheet(w.persons.values(), holdings_of(w))
+    rows = creation_sheet(w.persons.values())
     marked = sum(r.cohort for r in rows)
     assert marked == sum(p.is_cohort for p in w.persons.values())
     assert 0 < marked < len(rows), f"setup: {marked} of {len(rows)} rows are cohorts, so the column cannot show a difference"

@@ -43,7 +43,7 @@ from ..state.ids import H
 from typing import Any, Callable
 from .. import decision
 from ..data.matrix import Step
-from ..data.rosters import MANAGEMENT_ORDERS
+from ..data import rosters
 from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
@@ -163,7 +163,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         scenes: list = []
         # B34.10 (A-104): a person with the season's budget spent is still asked while a management order exists, since an order costs
         # no scene (`Scene.cost`) and `pack_scenes` skips every priced chunk at a remainder of 0. The list ships empty: then this is `b > 0`.
-        if b > 0 or MANAGEMENT_ORDERS:
+        if b > 0 or rosters.MANAGEMENT_ORDERS:
             produced = choose(me, v, s, ask_budget)
             # `W17`. THE BUDGETED UNIT IS THE SCENE (Jordan, 2026-09-02), so the bound below
             # counts scenes and the interaction bound is a SEPARATE check. A bare `Act` is one
@@ -186,7 +186,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # rewrites `sc.acts` in place, so an interaction check after it would read two on a scene
             # that carried five, and the `Forbidden` message would misstate what the person returned.
             # The filter runs AFTER both, on a return already judged.
-            spent = sum(sc.cost(ext, MANAGEMENT_ORDERS) for sc in chosen)
+            spent = sum(sc.cost(ext) for sc in chosen)
             # S26.3: the engine does NOT truncate. Any cap applied here would be AN ENGINE
             # DECIDING A PERSON'S OPTIONS, which is L1. Over-budget is the CALLER'S defect.
             if spent > b:
@@ -238,7 +238,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         left = b
         released = 0
         while scenes and released < per_lap:
-            cost = scenes[0].cost(ext, MANAGEMENT_ORDERS)
+            cost = scenes[0].cost(ext)
             if cost > left:
                 break
             sc = scenes.pop(0)
