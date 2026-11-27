@@ -99,19 +99,22 @@ class Scenario:
 
 def realm_ending(w: World, pid: Optional[str]) -> Optional[str]:
     """THE REALM ENDING'S NAME, read from the seated person's side (`IS-B3-GO-02`): `None` while `world_q.endings_reached(w)` is empty or the seat has a continuation
-    (`play_surface.has_continuation`; with one the run plays on, B34.19). Else `realm_held` when one of his own live `commit`s is to the faction the reached row's
+    (`play_surface.has_continuation`; with one the run plays on, B34.19). Only a reached row with `EndingReached.victory` names a holding side: `realm_ended` where none
+    does (a reached `theocracy` is `victory: false`, nobody's win) or with nobody seated (`pid` is `None` or no longer in the world). Else `realm_held` when one of his own live
+    `commit`s is to the faction the reached victory rows'
     holders cohere under (`world_q.faction_holding` of each hold's holder), his Tenures read as `Situation.holdings` reads them (`play_surface.holdings_of`);
-    `realm_fallen` when none is; `realm_ended` with nobody seated (`pid` is `None` or no longer in the world). The names' kinds are each row's `kinds`.
+    `realm_fallen` when none is. The names' kinds are each row's `kinds`.
     [ASSUMPTION: a seat of the faction that holds the peninsula has won -- basis: GD-1 as `rosters.yaml: endings` quotes it names the one victory, and the roster row's
     `under: one_faction` names the winner as a faction; the split is an amendment to `IS-B2-CORE-02`'s reader (B34.20); Jordan to correct; revert: return `realm_ended` here,
     which every row's `kinds` holds as `drawn`.] Reads `w`, writes nothing."""
     reached = world_q.endings_reached(w)
     if not reached or has_continuation(w, pid):
         return None
-    if pid not in w.persons:
+    victories = [e for e in reached if e.victory]
+    if not victories or pid not in w.persons:
         return "realm_ended"
     held = {t.id: t for t in w.tenures if t.kind == "hold"}
-    holders = {world_q.faction_holding(w, held[h].subject) for e in reached for h in e.holds if h in held}
+    holders = {world_q.faction_holding(w, held[h].subject) for e in victories for h in e.holds if h in held}
     return "realm_held" if any(k == "commit" and o in holders for k, o in holdings_of(w)(pid)) else "realm_fallen"
 
 

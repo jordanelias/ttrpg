@@ -866,7 +866,7 @@ def seed_seat_news(w: World) -> list:
     ⚠ A SEAT A LOADED GOAL NAMES (`goal_named_seats`) IS HEARD OF BY A DRAW (v12 B34.24, `16_PESSIMIST_GO` §2; `H-190`'s keyed-chance shape): each
     person the channel reaches holds its claims only if `draw(pid, "knows_holder:<seat>")` falls under his class's `Fixtures holder_known_chance`
     (`holder_known_class`), so a fugitive may not have heard who the new Cardinal Justice is, and learns it, if at all, through the channels in
-    play. Every other seat is deposited as before, and no draw is taken for it; at 1.0 in every class the deposit is the ungated one exactly.
+    play. A seat's own holder is never subject to the draw (he knows who holds his seat). Every other seat is deposited as before, and no draw is taken for it; at 1.0 in every class the deposit is the ungated one exactly.
     Returns the claim ids written, in seat then person order.
     [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] a seat is held, and so known, from the build."""
     conf = w.fixtures.get("confidence_default")
@@ -887,7 +887,7 @@ def seed_seat_news(w: World) -> list:
             if (local and (rung is None or _realm_of(w, pid) != _realm_of(w, rung))) or (
                     not local and not CHANNEL_PREDICATES["reach"](w, e, pid)):
                 continue
-            if seat in named and draw(pid, f"knows_holder:{seat}").random() >= chances[
+            if seat in named and pid != t.subject and draw(pid, f"knows_holder:{seat}").random() >= chances[
                     holder_known_class(w, pid, seat, t.subject, named[seat], homes)]:
                 continue
             for n, subject in enumerate(subjects):

@@ -44,7 +44,7 @@ def test_creation_sheet_marks_cohorts_and_holdings():
 
 def test_goal_referent_reads_own_ledger(realm):
     """B34.23 (`16_PESSIMIST_GO` §1, gate 1): a `seat_holders` goal's referents are the persons the ASKER'S OWN ledger names as holding a listed seat, not the
-    live `hold`s. At build the two agree (`seed_seat_news` tells every person every seat); then the world moves one holder out of his seat and the referents
+    live `hold`s. At build the two agree at seed 0 (the asker drew both seats: `seed_seat_news` gates a goal-named seat by a draw, B34.24); then the world moves one holder out of his seat and the referents
     do not follow it, and the ledger loses a seat and they do."""
     w, p, prop = realm, realm.persons[_ASKER], realm.propositions[_GOAL]
     seats = tuple(prop.scope)

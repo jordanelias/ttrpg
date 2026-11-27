@@ -178,7 +178,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
 
     `ask(situation) -> int` (B34.16) is his pick of one of the questions asked of him, an index into `situation.asked` (`View.questions`, in attention order).
     The candidate set is the same; the candidates whose `occasion` is the picked question come first, the rest after in the ranker's order (`_first_for`), the sheet's
-    `question` is the one picked and the Scenes his pick packs are occasioned by it. `None`, or a pick of the first question, is the shipped ranking: the automated
+    `question` is the one picked and the Scenes his pick packs are occasioned by it (at `ask` 0 under the `all` / `one_per_source` aggregation rules `sheet.question` is the
+    synthetic aggregate `questions.py` builds, `q:agg:...`, not `situation.asked[0]`). `None`, or a pick of the first question, is the shipped ranking: the automated
     chooser is untouched, and a space built with no `ask` is `make_chooser`'s control as before. An index outside `asked` is refused (`Forbidden`)."""
     rank = make_ranker(fx, verbs, draw)
 
@@ -267,7 +268,7 @@ class Situation:
     asked: tuple
 
 
-def situation(p: Person, v: View, ask_budget: Callable[[], int]) -> Situation:
+def situation(p: PersonInterior, v: View, ask_budget: Callable[[], int]) -> Situation:
     """The `Situation` of `p` at the deliberation `v` was built for; `ask_budget()` is the season remainder, as the chooser asks it. Writes nothing."""
     mine = {c.id: c for c in p.ledger}
     return Situation(p.id, ask_budget(), p.body, frozen(p.capability), frozen(recognised(p, p.pursuits)), tuple(p.stance),
@@ -306,7 +307,7 @@ class Offer:
     withheld: tuple      # own-state declines only
 
 
-def offer(p: Person, v: View, fx: Any, verbs: Optional[frozenset] = None,
+def offer(p: PersonInterior, v: View, fx: Any, verbs: Optional[frozenset] = None,
           draw: Optional[Callable[[str, str], Any]] = None, asked_index: int = 0) -> Offer:
     """WHAT HE MAY DO: the rows `make_ranker(fx, verbs, draw)` orders for him, each with the terms its `watch` hook reported, his believed odds and its
     cost, and the verbs his own state withheld. `fx`, `verbs` and `draw` are the ones the chooser was built with (`rank` needs `fx`; a different `verbs`
@@ -350,7 +351,7 @@ class AccountRow:
     unattributed: bool
 
 
-def account(p: Person, since: tuple) -> tuple:
+def account(p: PersonInterior, since: tuple) -> tuple:
     """THE PERSON'S OWN RECORD OF WHAT HE LEARNED SINCE `since` -- `(tick, lap)`, `world_q.landing_floor`'s own key: one `AccountRow` per claim of his ledger with
     `(when, lap) >= since`, in the order he holds them. Reads `p.ledger` and nothing else; writes nothing. ANOTHER PERSON'S REASONS ARE SHOWN EXACTLY HERE: as the claims
     he holds about that person's deeds, tellings and commitments, with their sources. A value no claim of his holds is in no row."""

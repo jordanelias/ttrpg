@@ -25,7 +25,7 @@ believed odds, the draw's key and the dealt band; with `apply=True` the record a
 
 A FIXTURE is a dict: `role` (a `composition.json` role), `build` (`seed -> World`), `act` (`id`, `actor`, `verb`, `payload`) and, optionally, `max_depth` (absent:
 the world's own `contest_max_depth`, which a season passes, S39.3). `FIXTURES` holds the ones whose builders exist. Its caller: the gate command above and the
-module lanes' standalone instructions (B20's field, B30's nesting); no other file imports it.
+module lanes' standalone instructions (B20's field, B30's nesting); `tests/test_scene_contract.py` imports it, and so does its own command line.
 """
 from __future__ import annotations
 
@@ -121,8 +121,8 @@ def _checked(role: str, fixture: dict) -> None:
 
 
 def play(role: str, fixture: dict, *, seed: int = 0, decide: Optional[Callable] = None, apply: bool = False) -> dict:
-    """One module's scene, alone. Returns a record: `role`, `seed`, `act`, `played` (a decider was handed in), `max_depth`, `status` (`RESOLVED`, a typed refusal's
-    status, or `DEPTH-CAPPED`), `degree` (the one ladder's, `None` for a refusal), `result` (the provider's own return, `apply=False`) or `events` and `world`
+    """One module's scene, alone. Returns a record: `role`, `seed`, `act`, `played` (a decider was handed in; True is where the role's entry accepts one, not `social_contest.roll`'s plain-roll path, which never
+    calls it), `max_depth`, `status` (`RESOLVED`, a typed refusal's status, `DEPTH-CAPPED`, or at `apply=True` `FOLDED` / `UNGRADED`), `degree` (the one ladder's, `None` for a refusal), `result` (the provider's own return, `apply=False`) or `events` and `world`
     (`apply=True`), and `content_hash`. `apply=False` also carries `not_asked`."""
     _checked(role, fixture)
     w = fixture["build"](seed)
@@ -162,7 +162,7 @@ def play(role: str, fixture: dict, *, seed: int = 0, decide: Optional[Callable] 
         return dict(record, status="DEPTH-CAPPED", degree=None, refusal=got.reason, result=None)
     if isinstance(got, ContestRefused):
         return dict(record, status=got.status, degree=None, refusal=got.why, result=None)
-    degree = degree_of(got, subject, w.fixtures)
+    degree = degree_of(got, target, w.fixtures)          # the season's own `_target` (`loop/resolve.py`): the act's opponent operand
     printed = {"roll": PRINTERS[role](w, act, drawn_from, got, degree)} if role in PRINTERS and "terms" in got else {}      # a party gap has no terms to print
     return dict(record, **printed, status=got["status"], degree=degree, result=got)
 

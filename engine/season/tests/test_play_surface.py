@@ -1,5 +1,5 @@
-"""B34.01 -- THE FOUR GATE TESTS OF THE PLAYER SURFACE, written before the readers they test (`proposals/11_GO_player_surface_contract_B.md`
-"Build order and tests" 1; one file, `IS-B3` part 2 §6.1). The §3 own-outcome test is `test_play_surface_own_outcome.py`.
+"""B34.01 -- THE GATE TESTS OF THE PLAYER SURFACE (`proposals/11_GO_player_surface_contract_B.md` "Build order and tests" 1; one file, `IS-B3` part 2 §6.1), and the later
+B34 items' tests below them. The §3 own-outcome test is `test_play_surface_own_outcome.py`.
 
   * `test_transcript_hash_equals_plain_run` (gate 1) -- the transcript `harness/play_surface.py` prints for the seated person ends at the
     `content_hash` of the plain run on the same seed (seeds 0-2, one season): the surface reads and writes nothing. Lands green at B34.04.
@@ -12,10 +12,8 @@
   * `test_withheld_rows_are_own_state_only` (gate 5) -- a withheld row names only an own-state conjunct (`OWN_STATE_STEMS`), of a verb whose
     cell asks one; no verb whose requirement is the world's appears. Lands green at B34.02.
 
-EXPECTED RED UNTIL B34.04 (the readers `situation`, `offer`, `account` and the runner's `--seed/--person/--seasons` command do not exist at
-this commit): nothing is skipped or marked xfail, so each reddens with an ImportError / a nonzero exit, and the item that builds the
-reader turns it green. THE SIGNATURES ARE THE SOURCE'S, VERBATIM: `offer(p, v)` takes no fixtures (its source names none, and
-`make_ranker` needs `fx`), so B34.02 reconciles that one call (`_offer`, below) and nothing else.
+THE READERS EXIST (`situation`, `offer`, `account`, and the runner's `--seed/--person/--seasons` command). `offer` takes the `fx`, `verbs` and `draw` `make_ranker`
+needs beside `(p, v)` (its source's two-argument form had no way to reach them), so this file's one call of it is `_offer`, below.
 
 The planted-claim arm of gate 2 stands a believer's odds in for `View.odds` (a closure over the planted ledger): the claim-to-odds law is
 `seam/wrappers/sigma.py::believed_chance`'s and `test_odds_of.py`'s; this arm asks only that `offer` routes the View's answer to the row
@@ -150,6 +148,43 @@ def test_offer_rows_follow_make_ranker_and_watch_terms():
     _deliberations(0, per_person)
     assert checked[0] >= 20, f"only {checked[0]} deliberations were read: the hook or the reader did not run"
     assert planted, "no deliberation priced an act on one subject beside an act on another"
+
+
+def test_printed_offer_is_the_order_and_terms_the_chooser_ranked():
+    """`deliberation_lines`' `[i]` rows are what the chooser ranks: the order and the terms of the `PersonInterior` DELIBERATE builds (his claims read at the tick), not of
+    the stored `Person` (whose claims read unfaded). The seed-0 realm is opened at tick 3 and, at the first deliberation, a refusal of one of the verbs it remembers one for
+    (`emits_on_refusal`, on the row with the largest pursuit term, so the change survives the print's two decimals) is planted in his ledger at tick 2, so the claim reads faded (one season) in the interior and unfaded in the person.
+    The printed rows are then read against the ranker's own over that interior. CONTROL: the planted row's pursuit term is not what it was before the plant."""
+    from ..decision.choose import make_ranker
+    from ..decision.sheet import development_space
+    from ..harness import play_surface as PS
+    from ..state.carriers import interior_of
+    built, checked = [], [0]
+
+    def per_person(p, v, ranked, terms):
+        w, fx, verbs, draw = built[0], _CHOOSER["fx"], _CHOOSER["verbs"], _CHOOSER["draw"]
+        c, before = max(((c, t) for c, t in zip(ranked, terms) if VERB_TABLE[c.verb].emits_on_refusal and c.subject), key=lambda ct: abs(ct[1][0]))
+        w.persons[p.id].ledger.append(Claim("c_refused", p.id, c.subject, VERB_TABLE[c.verb].emits_on_refusal[0], True, 2, "firsthand",
+                                            fx.get("confidence_default"), "own", 0, doer=p.id))
+        me = interior_of(w.persons[p.id], w.tick, fx.claim_decay())
+        seen: list = []
+        order = make_ranker(fx, verbs, draw, lambda _p, _q, r, t, s: seen.append(({id(x): y for x, y in zip(r, t)}, s)))(me, v)
+        by, sampled = seen[-1]
+        got: list = []
+        development_space(fx, lambda who, verb, subj: f"{who}:{verb}:{subj}", lambda sheet: (got.append(sheet), [])[1], verbs, draw)(me, v, None, lambda: 5)
+        rows = [ln for ln in PS.deliberation_lines(w, got[0], verbs) if re.match(r"   \[\d+\] ", ln)]
+        assert len(rows) == len(sampled), p.id
+        for i, (ln, x) in enumerate(zip(rows, sampled)):
+            assert ln.startswith(f"   [{i}] {x.verb} {x.subject or ''}".rstrip()) and " ".join(f"{n} {t:+.2f}" for n, t in zip(PS.TERM_NAMES, by[id(x)])) in ln, (p.id, ln)
+            if (x.verb, x.subject) == (c.verb, c.subject):
+                assert by[id(x)][0] != before[0], "the planted refusal did not move the pursuit term: the arm observed nothing"
+                checked[0] += 1
+
+    def at_tick_three(w):
+        w.tick = 3
+        built.append(w)
+    _deliberations(0, per_person, limit=1, overlay=at_tick_three)
+    assert checked[0] == 1
 
 
 # -- gate 4 ----------------------------------------------------------------------------------------------------
@@ -359,6 +394,9 @@ def test_the_transcript_stops_on_an_ending_and_prints_its_kind(monkeypatch):
     monkeypatch.setitem(SC.SCENARIOS, "planted", SC.Scenario(build=build_realm, seat=None, kinds={"planted_won": "won"},
                                                              ending=lambda w, pid, left: "planted_won" if w.tick > 0 else None))
     lines: list = []
+    held_sizes: list = []                                  # his ledger's size at each deliberation, read where the printer is called
+    real = PS.deliberation_lines
+    monkeypatch.setattr(PS, "deliberation_lines", lambda w, sheet, verbs=None: (held_sizes.append(len(w.persons[sheet.person_id].ledger)), real(w, sheet, verbs))[1])
     r = PS.transcript("planted", 0, 3, SEATED, out=lines.append)
     assert (r["seasons"], r["ending"], r["kind"]) == (1, "planted_won", "won"), (r["seasons"], r["ending"], r["kind"])
     assert [x for x in lines if x.startswith("ENDING")] == ["ENDING planted_won won"] and lines[-1] == "ENDING planted_won won", lines[-4:]
@@ -368,17 +406,20 @@ def test_the_transcript_stops_on_an_ending_and_prints_its_kind(monkeypatch):
     whole = [x for x in lines[start:] if x.startswith("   learned ")]
     assert len(whole) == len(account(held, ())) == len(held.ledger) >= 1, (len(whole), len(held.ledger))
     assert SEATED in lines[start] and f"{len(held.ledger)} claim" in lines[start], lines[start]
+    # what he learned between his first and second deliberations at tick 0 is not dropped for sharing the stamp of the lap just played (his ledger gained claims there)
+    learned = [int(x.split()[3]) for x in lines if x.startswith("   he has learned ")]
+    assert learned and learned[0] >= 1 and learned[:len(held_sizes) - 1] == [b - a for a, b in zip(held_sizes, held_sizes[1:])], (learned, held_sizes)
 
 
 def _reeve_world(monkeypatch):
-    """The governance world with `crowned_reeve` planted (`test_in27_endings.REEVE_ROW`): `p_king` confers `off_reeve` on `p_mid`, a Crown man, and the row is reached.
+    """The governance world with `crowned_reeve` planted (`test_in27_endings.REEVE_ROW`, here a VICTORY row: only one names a holding side): `p_king` confers `off_reeve` on `p_mid`, a Crown man, and the row is reached.
     Returns `(w, reached)`; three more persons stand for the three seats: `p_other` committed to the Crown, `p_high` to the Church, `p_low` to nobody."""
     from ..queries import world_q as Q
     from ..state.carriers import Tenure
     from .test_g3_not_yours import _gov_world
     from .test_in27_endings import CHURCH, CROWN, REEVE_ROW, _fold
     w, d = _gov_world()
-    monkeypatch.setattr(Q, "ENDINGS", REEVE_ROW)
+    monkeypatch.setattr(Q, "ENDINGS", {"crowned_reeve": dataclasses.replace(REEVE_ROW["crowned_reeve"], victory=True)})
     w.add_tenure(Tenure("t_mid_crown", "p_mid", CROWN, "commit", 0))
     w.add_tenure(Tenure("t_other_crown", "p_other", CROWN, "commit", 0))
     w.add_tenure(Tenure("t_high_church", "p_high", CHURCH, "commit", 0))
@@ -388,13 +429,13 @@ def _reeve_world(monkeypatch):
 
 
 def test_a_realm_ending_is_held_for_a_seat_of_the_holding_faction_and_fallen_for_another(monkeypatch):
-    """`crowned_reeve` is reached with a Crown man on the Reeve's seat. A seat with a live `commit` to the Crown reads `realm_held` (`won`); a seat committed to the
+    """`crowned_reeve` (a victory row here) is reached with a Crown man on the Reeve's seat. A seat with a live `commit` to the Crown reads `realm_held` (`won`); a seat committed to the
     Church reads `realm_fallen`, and so does one committed to nobody (`lost`); nobody seated stays `realm_ended` (`drawn`; the life row reads `line_extinct` first). Each seat has no continuation (the
     transcript's own stop test), so the reader names an ending at all; CONTROL: nothing reached names none, whoever sits."""
     from ..harness import play_surface as PS, scenarios as SC
     from ..queries import world_q as Q
     w, reached = _reeve_world(monkeypatch)
-    assert [e.ending for e in reached] == ["crowned_reeve"] and len(reached[0].holds) == 1, reached
+    assert [(e.ending, e.victory) for e in reached] == [("crowned_reeve", True)] and len(reached[0].holds) == 1, reached
     monkeypatch.setattr(Q, "endings_reached", lambda world: reached)
     seats = {"p_other": ("realm_held", "won"), "p_high": ("realm_fallen", "lost"), "p_low": ("realm_fallen", "lost"), None: ("realm_ended", "drawn")}
     for pid, (name, kind) in seats.items():
@@ -404,6 +445,12 @@ def test_a_realm_ending_is_held_for_a_seat_of_the_holding_faction_and_fallen_for
             if row == "life" and pid is None:       # the life row reads his line first (`life_ending`'s own order)
                 name, kind = "line_extinct", "lost"
             assert got == name and SC.SCENARIOS[row].kinds[got] == kind, (row, pid, got)
+    # A REACHED ROW THAT IS NOT A VICTORY names no holding side (the shipped `theocracy` is `victory: false`): every seat reads `realm_ended`, whichever faction it is committed to.
+    monkeypatch.setattr(Q, "endings_reached", lambda world: [dataclasses.replace(reached[0], victory=False)])
+    for pid in ("p_other", "p_high", "p_low"):
+        for row in ("season", "life"):
+            got = SC.SCENARIOS[row].ending(w, pid, 1)
+            assert got == "realm_ended" and SC.SCENARIOS[row].kinds[got] == "drawn", (row, pid, got)
     monkeypatch.setattr(Q, "endings_reached", lambda world: [])
     assert SC.season_ending(w, "p_other", 1) is None and SC.life_ending(w, "p_other", 1) is None
 

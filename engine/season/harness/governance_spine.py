@@ -59,7 +59,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import faction_q, world_q
 from ..queries.person_q import COMPLIANCE_WITHHELD, addressed_to
 from ..state.attribution import causing_act
-from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes, is_clock_stage
+from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes, interior_of, is_clock_stage
 from ..state.containment import parent_of
 from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, draw_factory
@@ -737,7 +737,7 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
         if spent:
             return range(len(sheet.candidates))
         spent.append(True)
-        rows = offer(w.persons[sheet.person_id], sheet.view, w.fixtures, verbs, draw).rows
+        rows = offer(interior_of(w.persons[sheet.person_id], w.tick, w.fixtures.claim_decay()), sheet.view, w.fixtures, verbs, draw, sheet.asked_index).rows
         for line in _grouped_by_remit(deliberation_lines(w, sheet, verbs), rows):
             out(line)
         return chosen

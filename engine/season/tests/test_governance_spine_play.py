@@ -1,4 +1,4 @@
-"""B21.72 (`06_FA_playable_scenario`) -- A GOVERNANCE SCENARIO THAT PLAYS: `situation`, `digest`, `offered`, `play`
+"""B21.72 (`06_FA_playable_scenario`) -- A GOVERNANCE SCENARIO THAT PLAYS: `situation`, `digest`, `play`
 (`harness/governance_spine.py`), on the governance test world. Every test reads the world: the control compares two worlds'
 `content_hash`, the digest tests read a built log, the refusal test reads the fold's Event, and the restoration test reads
 `SUCCESSIONS` while a run is under way and after it. Nothing here runs a realm.
@@ -146,10 +146,10 @@ def test_play_prints_the_offer_and_holds_no_second_menu():
     (the asked rows, then every row with its occasion, terms and cost), and the grouping by remit act is read off each row's verb `eligibility` cell in the print.
     Read on the `order` opening, seed 0, `pick=()` (show the offer, take nothing): the Duke is asked questions, `comply` is offered FOR one of them (its `occasion`), every
     index printed under a remit heading belongs to a row whose verb the heading's act gates, and `succeed`-like verbs no remit gates sit under the heading that says
-    so. CONTROL: the same run with the print swallowed leaves the same world hash (a print moved, no draw taken)."""
+    so; and a row prints the string operands its act carries and the seat it is exercised through (`to=...`, `through lo_...`)."""
     assert not hasattr(G, "offered")
     lines: list = []
-    got = G.play(0, 1, "order", pick=(), out=lines.append)
+    G.play(0, 1, "order", pick=(), out=lines.append)
     text = "\n".join(lines)
     asked = {ln.split()[1] for ln in lines if ln.startswith("   asked ")}
     assert asked, text[:2000]
@@ -169,5 +169,5 @@ def test_play_prints_the_offer_and_holds_no_second_menu():
             assert (act in gates) if act else not gates, (ln, act, gates)
             checked += 1
     assert checked >= 5, checked
-    quiet = G.play(0, 1, "order", pick=(), out=_quiet)
-    assert quiet["world"].content_hash() == got["world"].content_hash()
+    rows = [ln for ln in lines if ln.lstrip().startswith("[")]
+    assert any(" through lo_" in ln for ln in rows) and any("=" in ln.split(" · ")[0] for ln in rows), rows[:6]

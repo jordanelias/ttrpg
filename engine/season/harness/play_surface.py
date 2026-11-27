@@ -38,8 +38,8 @@ THE TRANSCRIPT (B34.04, `proposals/11_GO_player_surface_contract_B.md` §8) -- O
 seats `P` with `take_ranked` and prints, per deliberation, the `Situation` (the asked rows), the `Offer` (each row with its terms and odds,
 then the withheld rows) and the pick; then, at his next deliberation and once more when the run ends, the `account` of what he has learned
 since. `--scenario NAME` resolves through `scenarios.SCENARIOS` and the run is `scenarios.run` -- the runner has no season loop of its own;
-with no `--scenario` the row is `life`, the realm as built. The last line is `content_hash <hash>`: the transcript reads and writes nothing, so
-it is the hash of the plain run on the same seed.
+with no `--scenario` the row is `life`, the realm as built. The line `content_hash <hash>` is the hash of the plain run on the same seed (the transcript reads and writes nothing); where the run ended on a realm ending it is followed by
+`ENDING <name> <kind>`, the last line.
 
 ⚠ **A PLAYER-FACING PRESENTATION IS TRIGGERED BY AN `AccountRow` OF THE SEATED PERSON, NEVER BY A LOG EVENT.** The log is the whole world; his
 ledger is what he is entitled to. A port that hangs a cutscene on `scar.taken` in the log shows the player a scar he has not heard of (GO-B §7).
@@ -56,12 +56,14 @@ from typing import Any, Callable, MutableMapping, Mapping, Optional, Sequence
 
 from ..data import goals as goals_data
 from ..decision.choose import TERM_NAMES
+from ..decision.options import seat_of
 from ..decision.sheet import account, chronicle, creation_sheet, offer, situation
 from ..gaps import Forbidden
 from ..loop.driver import resolvable_verbs
 from ..queries import faction_q, world_q
 from ..queries.person_q import content_kind, content_said, deed_doer_claims, deed_doers, dossier
 from ..queries.world_q import continuations
+from ..state.carriers import interior_of
 from ..state.ids import draw_factory
 
 # `(p, v, s, ask_budget) -> list[Act | Scene]` — DELIBERATE's call, the delegate's shape.
@@ -166,10 +168,11 @@ def board(p: Any, fixtures: Any) -> list:
 # THE TRANSCRIPT (B34.04) -- printers of what `decision/sheet.py` reads, and the command that runs a scenario through `scenarios.run`.
 # ---------------------------------------------------------------------------------------------------
 
-def account_lines(p: Any, since: tuple) -> list:
-    """The `account` of `p` since `since`, one line a row: the claim as he holds it, whether it echoes his own deed, who told him, and what changed. Reads `p`'s own ledger only."""
+def account_lines(p: Any, since: tuple, known: frozenset = frozenset()) -> list:
+    """The `account` of `p` since `since` without the claims whose ids are in `known`, one line a row: the claim as he holds it, whether it echoes his own deed, who told him, and
+    what changed. Reads `p`'s own ledger only."""
     out = []
-    for r in account(p, since):
+    for r in (r for r in account(p, since) if r.claim.id not in known):
         c = r.claim
         via = f" told by {c.teller} ({c.hops} hops)" if getattr(c, "teller", None) else ""
         out.append(f"   learned {c.subject} · {c.predicate} = {str(c.value)} · {c.source} · when {c.when}.{c.lap}{via}"
@@ -184,7 +187,7 @@ def deliberation_lines(w: Any, sheet: Any, verbs: Optional[frozenset] = None) ->
     (its `view` and `budget` are the deliberation's own); `w` is read only to find the person's own record (`w.persons[...]`) and the `fx` and `draw` the chooser was
     built with. The offer rows are the sheet's own order (`make_ranker`'s, the picked question's occasions first when he picked a later one, B34.16), so `[i]` is the
     index a pick names."""
-    p = w.persons[sheet.person_id]
+    p = interior_of(w.persons[sheet.person_id], w.tick, w.fixtures.claim_decay())     # what the chooser ranked (`loop/deliberate.py`): a stored `Person` reads his claims unfaded
     v = sheet.view
     s = situation(p, v, lambda: sheet.budget)
     off = offer(p, v, w.fixtures, resolvable_verbs() if verbs is None else verbs, draw_factory(w.world_seed, lambda: w.tick), sheet.asked_index)
@@ -196,7 +199,9 @@ def deliberation_lines(w: Any, sheet: Any, verbs: Optional[frozenset] = None) ->
     for i, r in enumerate(off.rows):
         c = r.candidate
         terms = " ".join(f"{n} {t:+.2f}" for n, t in zip(TERM_NAMES, r.terms))
-        lines.append(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip()
+        said = " ".join(f"{k}={x}" for k, x in sorted(c.operands.items()) if isinstance(x, str) and k != "via")      # the string operands: `to=` tells two rows of one verb and subject apart
+        seat = seat_of(p, c)                                                                                          # and the seat the act is exercised through (`Act.via`)
+        lines.append(f"   [{i}] " + " ".join(x for x in (c.verb, c.subject or "", said, f"through {seat}" if seat else "") if x)
                      + (f" · for {r.occasion}" if r.occasion else "") + f" · {terms}"
                      + (f" · believes {r.odds:.2f}" if r.odds is not None else "") + f" · cost {r.cost}")
     for x in off.withheld:
@@ -213,7 +218,7 @@ def faction_line(w: Any, pid: Optional[str]) -> Optional[str]:
         return None
     prop = world_q.faction_of(w, pid)
     if prop is None:
-        return f"host (resolver-side, not his belief) · {pid} is committed to no faction"
+        return f"host (resolver-side, not his belief) · {pid} coheres under no single faction"
     s = faction_q.standing(w, prop, top)
     return (f"host (resolver-side, not his belief) · faction {prop}: footprint {len(s.footprint)} rungs, {s.present} of {s.persons} present, "
             f"largest holder's share {s.sovereign_share:.2f}, {len(s.provinces)} provinces")
@@ -232,7 +237,7 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
     from ..decision.sheet import take_ranked
     row = SC.SCENARIOS[name]
     built: list = []
-    last: dict = {}                                    # person id -> the `(tick, lap)` of his last deliberation
+    last: dict = {}                                    # person id -> the ids of the claims he held at his last deliberation
     state = {"n": 0, "tick": None, "seat": None}
     recorded: list = []                                # the realm endings reached while the run went on (`endings_reached`'s ids, in the order first seen)
 
@@ -250,7 +255,7 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
     def learned(pid: Optional[str]) -> None:
         w = built[0]
         if pid in last and pid in w.persons:
-            rows = account_lines(w.persons[pid], last[pid])
+            rows = account_lines(w.persons[pid], (), last[pid])
             out(f"   he has learned {len(rows)} thing(s) since his last deliberation")
             for line in rows:
                 out(line)
@@ -272,10 +277,9 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
             out(line)
         chosen = list(take_ranked(sheet))
         out(f"   pick {chosen}")
-        # What lands after this deliberation lands after everything his ledger holds now (a lap's deposits carry that lap's stamp, and WITNESS runs after DELIBERATE),
-        # so the next `account` begins one lap past the latest `(when, lap)` he holds. The driver's own `(tick, lap)` stamp is a driver local the host cannot read (D-21).
-        when, lap = max(((c.when, c.lap) for c in w.persons[pid].ledger), default=(w.tick, -1))
-        last[pid] = (when, lap + 1)
+        # What he holds now is what he knew when he chose; the next `account` is the claims he holds then that he did not hold now. (A claim carries the stamp of the lap it
+        # landed in, and WITNESS runs after DELIBERATE, so no `since` stamp read here can tell the lap just played from the ones before: the driver's `(tick, lap)` is a local, D-21.)
+        last[pid] = frozenset(c.id for c in w.persons[pid].ledger)
         state["seat"] = pid
         return chosen
 

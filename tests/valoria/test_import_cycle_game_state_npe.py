@@ -50,8 +50,8 @@ def _real_cycles():
     return sa._cycles(scc, g_code)
 
 
-def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
-    """THREE since the SC05 kernel retired (B24.33: the `systems.social_contest.sim.contest` cycle died with its files; the
+def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
+    """FOUR since B34.04 declared the play-surface runner's cycle (the last entry below); it was THREE since the SC05 kernel retired (B24.33: the `systems.social_contest.sim.contest` cycle died with its files; the
     count had been FOUR), and THREE before that since step 8 of the decomposition (ED-IN-0203; renamed from `..._four_...`), and the
     drop is a DISSOLUTION, not a fix reached for here. `engine.season.combat_seam` <->
     `engine.season.shape` is GONE: step 8 moved `body_band_penalty` (already in `decision.py`
@@ -74,7 +74,7 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     about the interpreter, one level down). Step 8 is the first of the two to close for real,
     by construction — not by the detector going blind again.
 
-    The one remaining season cycle is still SHRINK-ONLY, on the `PATH_SEAM_ALLOWED` discipline: it
+    The two season cycles (this one and the play-surface runner's, below) are SHRINK-ONLY, on the `PATH_SEAM_ALLOWED` discipline: each
     carries its reason and the point at which it goes, and removing it means deleting its entry in
     the same commit.
 
@@ -132,12 +132,12 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     harness_main = [c for c in cycles
                     if set(c) == {'engine.season.harness.exercises',
                                   'engine.season.harness.run_cases'}]
-    # B34.04's runner (`play_surface.main`, the one command that plays every scenario) calls `scenarios.run` and
-    # `governance_spine._top_rung` by function-local import, while `scenarios` and `governance_spine` import the
-    # printers `play_surface` owns (`deliberation_lines`, `holdings_of`, `dispatching_chooser`): the same kind of
-    # `__main__` edge as `exercises <-> run_cases`, matched by its EXACT member set and SHRINK-ONLY on the same
-    # discipline. It goes when the runner moves to a module no printer-importer imports (its entry is deleted in
-    # that commit); the plan fixes the runner's home at `play_surface.py`, so it is declared, not hidden.
+    # B34.04's runner (`play_surface.transcript`, `faction_line` and `main`, the one command that plays every scenario) reaches `scenarios.run` and
+    # `governance_spine._top_rung` by FUNCTION-LOCAL import, and `scenarios._play` reaches `aperture` by `from . import aperture`, while `scenarios` and
+    # `governance_spine` import the printers `play_surface` owns (`deliberation_lines`, `holdings_of`, `dispatching_chooser`): a cycle the
+    # instrument sees (`build_g_code` walks the whole AST) and no `__main__` edge, matched by its EXACT member set (`aperture`, `governance_spine`,
+    # `play_surface`, `scenarios`) and SHRINK-ONLY on the same discipline. It goes when the runner moves to a module no printer-importer imports (its
+    # entry is deleted in that commit); the plan fixes the runner's home at `play_surface.py`, so it is declared, not hidden.
     harness_runner = [c for c in cycles
                       if set(c) == {'engine.season.harness.aperture', 'engine.season.harness.governance_spine',
                                     'engine.season.harness.play_surface', 'engine.season.harness.scenarios'}]
