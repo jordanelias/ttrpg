@@ -1230,7 +1230,7 @@ def may_retain(w: "World", actor: Optional[str], via: Optional[str], party: Opti
         return False
     if party is None or party == actor or party not in w.persons:
         return False
-    return not any(t.kind == "hold" and t.object == via and t.live for t in w.persons[party].tenures)
+    return seat_hold(w, party, via) is None
 
 
 def may_recruit(w: "World", actor: Optional[str], plot: Optional[str], party: Optional[str]) -> bool:
@@ -1247,9 +1247,7 @@ def may_recruit(w: "World", actor: Optional[str], plot: Optional[str], party: Op
     prop = w.propositions.get(plot) if plot is not None else None
     if not is_plot(prop) or actor not in w.persons or party is None or party == actor or party not in w.persons or party == prop.subject:
         return False
-    mine = w.persons[actor].tenures
-    return (any(t.kind == "hold" and t.object == plot and t.live for t in mine)
-            and any(t.kind == "commit" and t.object == plot and t.live for t in mine))
+    return any(t.kind == "hold" and t.object == plot and t.live for t in w.persons[actor].tenures) and _committed_to(w, actor, plot)
 
 
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:

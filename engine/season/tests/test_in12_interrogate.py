@@ -227,7 +227,7 @@ def test_in12_a_held_edge_declines_line_naming_no_verb_or_no_tenure_kind_is_refu
     from ..data.rosters import roster_map
     from ..gaps import Forbidden
     shipped = dict(roster_map("held_edge_declines", "values"))
-    assert VERBS._load_held_edge_declines(dict(shipped)) == VERBS.HELD_EDGE_DECLINES == {"commit": "commit"}
+    assert VERBS._load_held_edge_declines(dict(shipped)) == VERBS.HELD_EDGE_DECLINES == {"commit": "commit", "declare": "commit"}
     for planted in ({**shipped, "no_such_verb": "commit"}, {**shipped, "commit": "no_such_kind"},
                     {**shipped, "commit": ""}):
         with pytest.raises(Forbidden, match="held_edge_declines"):

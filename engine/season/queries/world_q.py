@@ -52,7 +52,7 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, TARGET_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDER_CLASS, FOUNDING_REMIT_ACTS,
-    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS, SEIZE_REMIT_ACTS,
+    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS, SEIZE_REMIT_ACTS, WAR_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -112,8 +112,6 @@ from ..state.gate import sworn_to
 from ..state.gate import commands_a_seated, may_admit, may_wage
 # B21b.18 (CP-T09-09): a plot's shape and its one reader live in the gate (`may_recruit` asks it too); `plot_id`, `plot_held`, `plot_targets` below compose on them.
 from ..state.gate import PLOT_PREDICATE, is_plot
-# B21b.12 (CP-T09-02 (c)): the two remit acts a seat that wages or warrants carries, the war's target set reads them (`war_fields`).
-from ..state.gate import MUSTER_ACT, SEIZURE_ACT
 from ..state.ids import H, ROOT, draw_factory
 from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
@@ -3839,7 +3837,7 @@ def grievance_creeds(w: World, p: Person, doers: tuple) -> tuple:
     mine = own_factions(w, p)
     if not any(may_wage(w, p.id, f) for f in mine):
         return ()
-    return tuple(dict.fromkeys(f for f in (faction_holding(w, d) for d in doers) if f is not None and f not in mine))
+    return tuple(dict.fromkeys(f for f in (faction_holding(w, d) for d in doers) if f in FACTION_BY_PROP and f not in mine))
 
 
 def war_fields(w: World, p: Person) -> tuple:
@@ -3856,7 +3854,7 @@ def war_fields(w: World, p: Person) -> tuple:
     the claim names) that the seat's purview reaches, in place of every enemy town. The claim is the war's occasion and context, never a gate on `march`."""
     seats = [w.offices[o] for o in dict.fromkeys(
         t.object for t in p.tenures
-        if t.kind == "hold" and t.live and t.object in w.offices and not {MUSTER_ACT, SEIZURE_ACT}.isdisjoint(t.granted_acts))]
+        if t.kind == "hold" and t.live and t.object in w.offices and not WAR_REMIT_ACTS.isdisjoint(t.granted_acts))]
     if not seats:
         return ()
     wars = [x for x in w.propositions.values() if x.mood == WAR_MOOD and x.subject != x.value]
@@ -4001,7 +3999,7 @@ def claim_creeds(w: World, p: Person) -> tuple:
     if not any(may_wage(w, p.id, f) for f in mine):
         return ()
     return tuple(dict.fromkeys(f for f in (holder_faction_of(w, c.value) for c in claims if c.subject in mine and isinstance(c.value, str))
-                               if f is not None and f not in mine))
+                               if f in FACTION_BY_PROP and f not in mine))
 
 
 def leave_referents(w: World, p: Person, refs: tuple, memo: Optional[dict] = None) -> tuple:
@@ -5164,21 +5162,23 @@ def plot_targets(w: World, p: Person) -> tuple:
     """THE SEAT-HOLDERS A PLOT OF `p`'S MAY BE AGAINST, as the occasion of a `conspire` (B21b.18; CP-T09-09's *'a question about a seat-holder H for whom p's own
     `legitimacy(p, H)` is below 0'*; [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for` and `conspire`'s `referent_class`]), each once:
 
-      * a man who HOLDS A PLOT is offered the plot's own target while that man still holds a seat, whatever he now reads of him -- he has committed, and recruits;
-      * a man who holds none is offered each man his OWN ledger names (`ledger_names`, `known_persons`: the sources `disputes_held` reads) who holds a seat and whom
-        he reads below 0: `person_q.legitimacy(p, H, window, ...)`, his stance and the deeds of H he holds claims of, at the realm's own window and scar fixtures
+      * a man who HOLDS A PLOT is offered the plot's own target, whatever he now reads of him -- he has committed, and recruits (the fold refuses what no longer holds a
+        seat, as `seat_holders`' aim does: a silent change of the seat is no change of what he is asked, R-7);
+      * a man who holds none is offered each man his OWN ledger names (`ledger_names`, `known_persons`: the sources `disputes_held` reads) AS HOLDING A SEAT
+        (`holders_named`, his claims, never the live `hold`s: v12 B11.08, R-7) and whom he reads below 0: `person_q.legitimacy(p, H, window, ...)`, his stance and the deeds of H he holds claims of, at the realm's own window and scar fixtures
         (`storybar.estimates` reads the same five). A man he reads at or above 0 is no occasion.
     Resolver-side and read-only. `()` for a cohort (a population plots nothing: its guard sits in no choice)."""
     if p.is_cohort:
         return ()
     mine = plot_held(w, p)
     if mine is not None:
-        return (mine.subject,) if mine.subject in w.persons and mine.subject != p.id and w.seat_holds(mine.subject) else ()
+        return (mine.subject,) if mine.subject in w.persons and mine.subject != p.id else ()
     fx = w.fixtures
     window, shift, hold, mass = fx.get("estimate_window_seasons"), fx.get("scar_weight_shift"), fx.get("scar_hold"), fx.get("scar_primary_mass")
     named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
-    return tuple(h for h in sorted(named)
-                 if h in w.persons and not w.persons[h].is_cohort and w.seat_holds(h)
+    seated = {h for s in w.offices for h in holders_named(p.ledger, s)}
+    return tuple(h for h in sorted(named & seated)
+                 if h in w.persons and not w.persons[h].is_cohort
                  and legitimacy(p, h, window, shift, hold, mass) < 0)
 
 

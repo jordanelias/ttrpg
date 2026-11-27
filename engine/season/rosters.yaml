@@ -726,7 +726,7 @@ rosters:
       `Founder` (B21b.08, IN-30's occasion [ASSUMPTION; medium; Jordan to correct; revert: drop the value, the stamp and `opening_set`'s founding lines]):
       A PERSON WHO HAS LEFT A FACTION AND HOLDS A SEAT OR LAND, stamped by `queries/world_q.py::creed_occasion` onto his own question, `Enemy`'s shape
       (no collection; named by `data/verbs.py::FOUNDER_CLASS`). No row declares it: `opening_set` offers the creed `utter` on it
-      (`data/verbs.py::FOUNDING_VERB`, `FOUNDING_OPERANDS`).
+      (`data/verbs.py::FOUNDING_VERB`, carrying `FACTION_CREED`).
     values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding, Founder, Target]
 
   occasion_only_classes:
@@ -3234,6 +3234,7 @@ rosters:
       on a Proposition he already holds an edge on, in 24, 25 and 38 (person, question) pairs at seeds 0-2, all at lap 1 or later.
     values:
       commit: commit
+      declare: commit
 
   held_edge_sourced:
     source: >-

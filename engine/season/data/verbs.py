@@ -2780,7 +2780,7 @@ if ENEMY_CLASS not in REFERENT_CLASSES:
 # B21b.08 (IN-30's occasion, CP-T09-01; [ASSUMPTION; medium; Jordan to correct; revert: drop the value, the stamp and `opening_set`'s `founding` lines]):
 # A PERSON WHO HAS LEFT A FACTION AND HOLDS A SEAT OR LAND, as a referent of his own question -- `Enemy`'s shape (no collection, stamped by name by
 # `queries/world_q.py::creed_occasion`, refused at import off `rosters.yaml: referent_classes`). No row declares it. `FOUNDING_VERB` (the verb a creed
-# is founded by, B21b.05: no new verb) is offered on it, carrying `FOUNDING_OPERANDS`: the creed's mood and predicate (`rosters.yaml: factions.creed`),
+# is founded by, B21b.05: no new verb) is offered on it, carrying `FACTION_CREED`: the creed's mood and predicate (`rosters.yaml: factions.creed`),
 # so the Proposition it makes is a faction (`world_q.faction_props`).
 FOUNDER_CLASS = "Founder"
 if FOUNDER_CLASS not in REFERENT_CLASSES:
@@ -2791,7 +2791,6 @@ FOUNDING_VERB = "utter"
 if FOUNDING_VERB not in VERB_TABLE:
     raise Forbidden(f"the founding verb {FOUNDING_VERB!r} is no verb-table row", "verb_table.yaml",
                     needs="the row a creed is founded by (B21b.05)", law="B21b.08 -- the occasion offers a verb the table has")
-FOUNDING_OPERANDS = {"mood": _rosters.FACTION_CREED["mood"], "predicate": _rosters.FACTION_CREED["predicate"]}
 
 # v11 CR-56 (reasons-to-convene RL1 [ASSUMPTION; medium; Jordan to correct; revert: drop with
 # `queries/world_q.py::matters_awaiting`]): THE REMIT ACTS A SEAT CONVENES A SITTING THROUGH -- the `remit:`
@@ -2845,6 +2844,8 @@ FOUNDING_REMIT_ACTS = _remit_acts_of(VERB_TABLE["establish"])
 # B21b.06 (CP-T09-04 (d)): THE ACTS A SEAT TAKES LAND THROUGH -- `seize`'s own `remit:` alternatives (`issue` today), read off the row, so
 # `queries/world_q.py::uncontrolled_in_purview` offers an unheld territory only to a holder of a seat the fold's eligibility would admit.
 SEIZE_REMIT_ACTS = _remit_acts_of(VERB_TABLE["seize"])
+# B21b.99 close (altitude): THE ACTS A SEAT WAGES A WAR THROUGH -- `march`'s remit (the muster act) and `seize`'s, read off the two rows; `war_fields` offers a field only to a holder of such a seat.
+WAR_REMIT_ACTS = _remit_acts_of(VERB_TABLE["march"]) | SEIZE_REMIT_ACTS
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a

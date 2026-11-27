@@ -18,7 +18,7 @@ What each test observes that no other does:
   5. `test_a_seat_is_exercised_only_by_its_holder`: a person with no hold, and a detained holder, act through no seat.
   6. `test_the_regent_commands_what_his_seat_commands`: A-22's classes asked of the regent's seat, not the principal's.
   7. `test_an_outside_seat_installs_a_governor_through_a_sworn_holder`: the installer reading ((5) row 9), no lever over the man installed.
-  8. `test_a_governor_over_a_holding_is_founded_conferred_and_revoked`: shape (a), which runs today.
+  8. (retired at the batch close: shape (a), a founded governor over a holding, duplicated `test_cr25_computed_establish.py`; nothing in it read the new value.)
   9. `test_in48_exit_seeded_season`: the EXIT on `build_realm(0)`.
 """
 from __future__ import annotations
@@ -37,7 +37,6 @@ from engine.season.state.carriers import Act, Office, Rung, Tenure
 from engine.season.state.gate import may_fill, may_revoke
 
 from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
-from .test_cr25_computed_establish import _act as _founding_act, _world as _founding_world
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in31_revocation_cost import _edges, _fold, _revoke
 
@@ -238,21 +237,6 @@ def test_an_outside_seat_installs_a_governor_through_a_sworn_holder():
     assert kinds == ["tenure.opened"] and _hold(w, "off_dgov").subject == "p_mid"
     assert _hold(w, "off_duke") is duke_hold and duke_hold.live, "the Duke lost his seat"
     assert not may_revoke(w, "p_other", "off_duke2", w.offices["off_dgov"]), "the installer has a lever over the governor"
-
-
-def test_a_governor_over_a_holding_is_founded_conferred_and_revoked():
-    """§10 (1) shape (a), which runs today: the King founds `Lord` over a territory he holds (`establish`, computed founding; the founded seat declares
-    `rung_above_in_holdings`), confers it, and revokes it through the seat that holds `revoke`. Nothing here reads the new value."""
-    w, d = _founding_world()
-    out = _founding_act(w, d, "e_found_gov", "p_king", "off_king", {"subject": "T"})
-    lord = [e for e in out if e.kind == "office.established"]
-    assert lord, [e.kind for e in out]
-    seat = next(o for o in w.offices.values() if o.rung == "T")
-    assert seat.revocation == "rung_above_in_holdings" != VALUE
-    kinds, _ = _fold(w, d, Act(id="cf_gov", actor="p_king", verb="confer", payload={"subject": seat.id, "to": "p_mid"}, via="off_king"))
-    assert kinds == ["tenure.opened"] and _hold(w, seat.id).subject == "p_mid"
-    kinds, _ = _fold(w, d, _revoke("rv_gov", "p_king", seat.id, "off_king"))
-    assert kinds == ["tenure.closed"] and _hold(w, seat.id) is None, kinds
 
 
 # ======================================================================================

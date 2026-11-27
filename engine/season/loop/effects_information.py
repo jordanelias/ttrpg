@@ -1465,13 +1465,15 @@ def _eff_declare(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     that this very act made the Proposition (`causing_act` of its creating Event is a `declare`): a hand-built WAR `utter` plus a `commit` is no war.
     DECLINES (`NO_CHANGE` -> `declare.refused`, nothing minted and no edge opened): the seat has no faction; the target is the seat's own faction or no
     rostered faction's Proposition (`FACTION_BY_PROP`) or one nobody belongs to; the declarer belongs to no part of his seat's faction or sits in no seat of it
-    that wages (`may_wage`: a war he opens must be one `at_war` can read live); the id was already uttered.
+    that wages (`may_wage`: a war he opens must be one `at_war` can read live); the two are already at war (`faction_q.at_war`: a second declare would mint a second WAR
+    Proposition and a second `war.declared` for the one war, B21b.99's close); the id was already uttered.
     G4 -- WHAT IT NAMES: THE PROPOSITION, whole, and the edge. Both always move (absent -> present), and each earns the row's one kind, `war.declared`.
     [ASSUMPTION; medium; Jordan to correct; revert: delete the row and this effect, `at_war` back to B21's `may_wage` conjunct alone.]"""
     target = _operand(a, "subject")
     own = seat_faction(w, a.via)
     pid = f"prop:{a.id}"
     if (own is None or target == own or target not in FACTION_BY_PROP or target not in w.propositions or pid in w.propositions
+            or faction_q.at_war(w, own, target)
             or a.actor not in faction_q.members(w, own) or not faction_q.members(w, target) or not may_wage(w, a.actor, own)):
         return NO_CHANGE
     prop, held = _mint_utterance(w, a.actor, pid, WAR_MOOD, own, "", target)

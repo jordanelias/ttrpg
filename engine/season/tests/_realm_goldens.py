@@ -82,32 +82,32 @@ RE-PINNED AT THE B21b PARTIAL CLOSE, on the merge with main's B08 and B12a (ever
 
 RE-PINNED AT B16.99 (every `SHIPPED` and `CENSUS` value but seed 1 at both spans; `BUILD` unmoved, main's), ONCE for the batch B16-pc-round (a partial batch: B16.01 to B16.04), on the merge with main at B21b's merge (`ac899f123`, which holds the previous pins; B08's `842026ea3` and B12a's `602d737a2` were merged before it). The one mover is B16.03 (PB step 2, A-30): every fight's rounds draw from `H2(fight_key, "round:<r>")` and not from one sequential stream, a stream change and not a balance change; B16.01, B16.02 and B16.04 read equal (seed 2 one season on the S13 base `c30707ca..`, before B08 and B12a). Read once on the merged tree (`PYTHONHASHSEED=0`), one season: seed 0 `78be13f7..` -> `bd82f41c..`, seed 1 `891221f8..` (equal: no fight), seed 2 `249e63ee..` -> `4eb478f8..`; two seasons: seed 0 `131f0afc..` -> `709bcbbb..`, seed 1 `b9e5f6e5..` (equal), seed 2 `d1cdb411..` -> `3af84a38..`. The previous pin of each reads back on main (B21b's tree).
 
-RE-PINNED AT B21b.99 (every `SHIPPED` and `CENSUS` value; BUILD unmoved, `bc0df867..`), ONCE for the remainder of the batch B21b-fa-war (B21b.05 to B21b.25; its first part, B21b.01 to .04, re-pinned at its own close above). Seed 0, one season, each mover in order: `2bd6991c..` (the clean tree at the batch open; main's B16.99 record `bd82f41c..` did not match its own tree) -> `be52c3aa..` (B21b.08, the join filter, the leave body and the founder stamp) -> `51a7fe08..` (B21b.10, the sworn man's land as plain referents) -> `b8b82988..` (B21b.11, the `declare` row); B21b.05, .06, .12 to .14, .16, .18, .21, .22, .23 and .25 read equal there. The other cells were read once on the closing tree (`PYTHONHASHSEED=0`).
+RE-PINNED AT B21b.99 (every `SHIPPED` and `CENSUS` value; BUILD unmoved, `bc0df867..`), ONCE for the remainder of the batch B21b-fa-war (B21b.05 to B21b.25; its first part, B21b.01 to .04, re-pinned at its own close above). Seed 0, one season, each mover in order: `2bd6991c..` (the clean tree at the batch open; main's B16.99 record `bd82f41c..` did not match its own tree) -> `be52c3aa..` (B21b.08, the join filter, the leave body and the founder stamp) -> `51a7fe08..` (B21b.10, the sworn man's land as plain referents) -> `b8b82988..` (B21b.11, the `declare` row) -> `51a7fe08..` (the close's fixes: `declare` no longer forms on a creed its declarer holds a `commit` on (`held_edge_declines`), which removes the five own-faction `declare.refused` and so B21b.11's whole move at this cell: the value EQUALS B21b.10's; and `plot_targets` reads the claims `holders_named` names, not the live `hold`s, R-7); B21b.05, .06, .12 to .14, .16, .18, .21, .22, .23 and .25 read equal there. The other cells were read once on the closing tree (`PYTHONHASHSEED=0`), after the close's fixes.
 """
 
 BUILD = {0: "bc0df8674b6fb849a759d92b3e4c59a8"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "b8b82988e5669528cd39ab8d97a2a3bd",
-           (0, 2): "18991eb326f0b91da973a42b0eca4729",
-           (1, 1): "495eed560c24a47db1f858d49e390719",
-           (1, 2): "ad466ac0411e8e43114adca8bee1442b",
-           (2, 1): "0a9ff0c2ed5584bf631faa259ca13dfb",
-           (2, 2): "a15ef7bb2c9e2d8ccc89e7653a19c29c"}    # B21b.99 re-record (the docstring); the earlier values are in `git log`
+SHIPPED = {(0, 1): "51a7fe08101a0d90746b743235ab452d",
+           (0, 2): "fdfa89bc8a4581f96b3ae6364eb9178c",
+           (1, 1): "3a1707f4f7c9fbf8cc7afd3a34b4beaa",
+           (1, 2): "9fe518ee1a99ee4f2783071ef82ce21e",
+           (2, 1): "85ea54bc8a51baf1fc80d0c791b5090c",
+           (2, 2): "345971ac1648a8e97c594d65c7d01e35"}    # B21b.99 re-record (the docstring); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=416, log=9206,
-                 census="e54d1bf3f707a69e60beae0fc78b184cfb13199c83d0ec6c1cfb11b9b299c549"),
-    (0, 2): dict(acts=931, log=20775,
-                 census="5d4df33c04ec0c0192a19563b683b9ac3fd9c0a69da8fd967e1ac5e825faf376"),
-    (1, 1): dict(acts=465, log=10172,
-                 census="a953cb05960e36b603728cd4f28db790d278b81d4193f335925bee21707257af"),
-    (1, 2): dict(acts=938, log=25402,
-                 census="6acf317de5fe0df6fb54d9835f756279d5d8b44dc489161568b54cbf2ded6c98"),
-    (2, 1): dict(acts=454, log=10016,
-                 census="367e9ed54c80596363cbbf00d10ce854006c89e6d81980ccd4e5f96483b10031"),
-    (2, 2): dict(acts=989, log=22169,
-                 census="cb0cea34705354c2ade07ec524e6a1e7ecb2c0b70fc273c9af35ad7d0915a13f"),
+    (0, 1): dict(acts=412, log=9468,
+                 census="0424c4d9151a793d0a38fab90148e1d14659cba493eeab9b353d91eed5b3b675"),
+    (0, 2): dict(acts=921, log=21270,
+                 census="550b10ec0328ca485d15190ba5c077e3a48dce2ae03ecc3aabcda104cbbed905"),
+    (1, 1): dict(acts=460, log=10146,
+                 census="f2ecbc25e2f142b430b7adbd6dbf71a60d8f4471c14b7a60ce555f6c705bfda6"),
+    (1, 2): dict(acts=937, log=25393,
+                 census="dede1ba7d163ede79ced5ca5d8623199e9fcc149b1cc310f075e9ae9e9fe3f67"),
+    (2, 1): dict(acts=445, log=10004,
+                 census="6aa369f6397899b8af4cd257377dc805169c4803345dbae7ab843404a5b1723f"),
+    (2, 2): dict(acts=977, log=22156,
+                 census="b1f3b26b6c4f19d8302f2094b2e6075c871aa458bfbef90fa168b4294f67f875"),
 }

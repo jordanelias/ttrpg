@@ -198,10 +198,10 @@ def _req_confer(w: "World", a: "Act") -> Answer:
             return _refuse_at("held", f"{a.actor} displacing {holder!r} on {obj!r}",
                               "a confer displacing a holder who carries a live commit")
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
-    for holder in holders:
-        if not (holder == a.actor or may_revoke(w, a.actor, a.via, off)):
-            return _refuse_at("displacement", f"{a.actor} via {a.via!r} displacing {holder!r} on {obj!r}",
-                              "a confer displacing a holder the seat exercised has no revocation authority over")
+    others = [h for h in holders if h != a.actor]
+    if others and not may_revoke(w, a.actor, a.via, off):
+        return _refuse_at("displacement", f"{a.actor} via {a.via!r} displacing {others[0]!r} on {obj!r}",
+                          "a confer displacing a holder the seat exercised has no revocation authority over")
     return ADMITTED
 
 

@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import itertools
 from typing import Any, Callable, Optional
-from ..data.rosters import RIG_KEY, RIG_LEVELS, STANCE_MAX
+from ..data.rosters import FACTION_CREED, RIG_KEY, RIG_LEVELS, STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
@@ -35,7 +35,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, CITED_KEY, CITES_KEY, CONTEXT_KEY, CONTEXT_TERMS, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, FILING_VERBS, FOUNDER_CLASS, FOUNDING_OPERANDS, FOUNDING_VERB, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, CITED_KEY, CITES_KEY, CONTEXT_KEY, CONTEXT_TERMS, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, FILING_VERBS, FOUNDER_CLASS, FOUNDING_VERB, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_EDGE_DECLINES, OWN_STANCE_DECLINES, RIGGED_VERBS, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -204,7 +204,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                                        and t.object not in FACTION_BY_PROP))
             refs = tuple(refs) + tuple(o for o in mine if o not in refs)
         # B21b.08 (IN-30's occasion; `rosters.yaml: referent_classes` `Founder`): THE FOUNDING VERB ALSO FORMS ON HIMSELF WHERE HIS QUESTION STAMPS HIM A FOUNDER
-        # (`world_q.creed_occasion`: he has left a faction and holds a seat or land), carrying the creed's mood and predicate (`FOUNDING_OPERANDS`) -- the one
+        # (`world_q.creed_occasion`: he has left a faction and holds a seat or land), carrying the creed's mood and predicate (`FACTION_CREED`) -- the one
         # `utter` of himself he forms there is the creed's, not an empty one. His own id off the stamp; no World. REVERT: drop these lines.
         founding = verb == FOUNDING_VERB and p.id in q.referents_for(FOUNDER_CLASS)
         if founding and p.id not in refs:
@@ -506,7 +506,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     if len(seats) > 1:
                         cand_ops = {**cand_ops, VIA: st}
                     if founding and subject == p.id:        # B21b.08: the founder's own `utter` is the creed's (above)
-                        cand_ops = {**cand_ops, **FOUNDING_OPERANDS, "value": p.id}
+                        cand_ops = {**cand_ops, **FACTION_CREED, "value": p.id}
                     # B24p.24: AND HOW HARD HE WOULD RIG THE SITTING, where the act carries a rig and he has the power to work one.
                     if verb in RIGGED_VERBS:
                         cand_ops = rig_offer(p, v, verb, subject, cand_ops, fx)

@@ -1028,7 +1028,7 @@ def _tie_to_target_of(w: Any, plotter: Optional[str], man: Optional[str]) -> int
         return 0
     seat = str(plot.predicate).partition(":")[2]
     faction = seat_faction(w, seat)
-    return int(any(t.live and ((t.kind == "oblige" and t.object == seat) or (t.kind == "commit" and faction is not None and t.object == faction))
+    return int(any(t.live and ((t.kind == "oblige" and not t.imposed and t.object == seat) or (t.kind == "commit" and faction is not None and t.object == faction))
                    for t in p.tenures))
 
 

@@ -470,11 +470,11 @@ rows:
         expects: "`engine/mc_v18.py` absent; `test_faction_q.py` green"
         holds: "yes"
         reading:
-          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99; read with B21b.99's pin edits in the working tree)"
+          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99, with the close's fixes in the working tree)"
           date: "2026-11-27"
           seed: "per test"
           seasons: "per test"
-          line: "16 passed in 7.53s"
+          line: "16 passed (`test_faction_q.py` alone; 26 passed with `test_in12_interrogate.py`, 7.58s) on the closing tree"
           control: "`ls engine/mc_v18.py` -> No such file or directory (the file-state half); B21b.11 re-recorded the file's WAR chain (`0944cdc85`), the 16 tests unchanged in number against main @8c4741c59"
           does_not_show: >-
             that no other driver exists under another name; a green test file reads the faction
@@ -550,7 +550,7 @@ rows:
         expects: "`field.won + field.lost` above 0 at seeds 0-2, `field.unopposed` printed beside; `test_field_scene.py` green"
         holds: "unread"
         reading:
-          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99; read with B21b.99's pin edits in the working tree); the before-reading on 42e35ac05 (the in-flight row's `open`, the remainder's opening; a detached worktree)"
+          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99, with B21b.99's pin edits and the close's fixes in the working tree); the before-reading on 42e35ac05 (the in-flight row's `open`, the remainder's opening; a detached worktree)"
           date: "2026-11-27"
           seed: "0, 1, 2"
           seasons: 1
@@ -648,7 +648,7 @@ rows:
         expects: "the `BUILT OUT` block reads `built out <n> of <n>`, n = `len(VERB_TABLE)` at measurement time"
         holds: "unread"
         reading:
-          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99; read with B21b.99's pin edits in the working tree)"
+          tree: "59af76a709853d9bb1b3dbfbf4407b4edc31b710 (B21b.26, the last item commit before B21b.99, with B21b.99's pin edits and the close's fixes in the working tree)"
           date: "2026-11-27"
           seed: "0, 1, 2"
           seasons: 2
@@ -656,7 +656,7 @@ rows:
             BUILT OUT, POOLED (realm), the rows B21b adds or re-draws:
               covenant     3 of 3 seeds   (clean 53, 107, 97 at realm seeds 0, 1, 2; `via` equals clean)
               march        0 of 3 seeds   (formed 4, 4, 4; offered 4, 4, 4; attempted 0, 0, 0)
-              declare      0 of 3 seeds   (formed 13, 13, 13; attempted 13, 10, 11; executed 0, 0, 0; every attempt refused, `declare.refused` 13, 10, 11)
+              declare      0 of 3 seeds   (formed 11, 13, 12; offered 11, 13, 12; attempted 0, 0, 0; before the close's fix: formed 13, 13, 13, attempted 13, 10, 11, all refused as `declare.refused`, every one on the declarer's own faction)
               retain       0 of 3 seeds   (formed 4, 4, 4; offered 4, 4, 4; attempted 0, 0, 0)
               conspire     0 of 3 seeds   (formed 40, 37, 37; attempted 5, 0, 4; executed 5, 0, 4; clean 2, 0, 2, each `kinds no`; refused 3, 0, 2 as `plot.refused`)
               (`seize` and `raze`, not B21b's rows: 0 of 3 each)
@@ -664,10 +664,11 @@ rows:
           control: >-
             the aperture's own CONTROL line reads `seed 0 EQUAL · seed 1 EQUAL · seed 2 EQUAL`; the same instrument at the earlier reading @d07b68c1b (before B21b.14, .16, .18, .21 to .26) read
             `declare` 0 of 3, `march` 0 of 3 and `covenant` 3 of 3, so the later items moved none of the four to built out. `covenant` is the one row B21b adds that is built out;
+            the close's fix to `declare` (`held_edge_declines: declare: commit`, which stops the own-faction formation, and an `at_war` decline in `_eff_declare`) moved the five refused attempts to none: `declare` is formed and never attempted;
             the gate (`IS-A-08`, part21 UNDECIDED 6) fails the batch on the other four
           does_not_show: >-
-            why `declare` is refused at every attempt (its `last-read` check names `exists:Proposition=1`: not traced here), why the chooser forms `march` and `retain` and never attempts them, or why
-            `conspire` executes and does not emit every kind of its band; a longer span than two seasons; `holds` stays `unread` (A-114): this conjunct is the whole table
+            why the chooser forms `declare`, `march` and `retain` and never attempts them (not traced: `retain` forms for four persons at each seed), or why
+            `conspire` executes and does not emit every kind of its band (by reading: each act earns one of `plot.laid` and `plot.joined` and the row's Won band declares both, so no one act holds the band `aperture` asks of a clean execution: `conspire` is not built out under that definition at any seed); a longer span than two seasons; `holds` stays `unread` (A-114): this conjunct is the whole table
       - id: R-05.c
         text: >-
           no built-out verb has a band that writes nothing (A-81): the same run as R-05.b, two
