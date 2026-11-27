@@ -20,7 +20,7 @@ from typing import Any
 
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
-from ..gaps import Forbidden, Ungraded
+from ..gaps import Forbidden, Ungraded, Unspecified
 from .geography import geography
 from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_list, roster_map, table
 
@@ -545,12 +545,24 @@ DEFAULT_FIXTURES = Fixtures(
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
     # a constant has; a real distribution is a different hole and is not invented here.
     season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
-    # v9 IN-21 / `H-26`'s DISTRIBUTION: one tuple per season of the year (so the year's length is the
-    # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
-    # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
-    # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
-    # `world_q.season_factor_of`, keyed on (world_seed, tick, territory rung id).
-    season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
+    # v9 IN-21 / `H-26`'s DRAWN FORM (B12b.03, A-54): `()` is the CONTROL: no year, no draw, the bare constant above. NON-EMPTY, the table is the
+    # SWITCH of one keyed draw on the one four-band ladder (`world_q.season_factor_of`: pool the place's endurance, obstacle the season's
+    # `hardship` plus the year's spell, the band choosing a factor of `rosters.yaml: season_band_factors`), keyed on (world_seed, tick,
+    # territory rung id); its ENTRIES are read by nothing, and it is refused unless it holds one entry per season of the year (`seasons_of_year`).
+    season_factor_draw=(),            # `H-26`, swept () (control, SHIPPED) / a table of one entry per season (the drawn form on)
+    # B12b.03 (R-27): THE YEAR'S SPELL, a run of weather over a region (a territory's parent rung) for a year: the equally likely OBSTACLE TERMS one draw
+    # keyed on (world_seed, year, region) picks from, shared by every territory under the region for the whole year and added to the season's
+    # `hardship` in `world_q.season_factor_of`. `()` is the control: no spell (a term of 0), nothing drawn. A spell with no `season_factor_draw` is
+    # refused (a spell needs a year to last, and the year is read by that draw alone).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `()`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures season_spell_draw`, graded `assumption`; the source draws a regional term and states no size, so it is injected and swept () (control, SHIPPED) / (-1, 0, +1)]
+    season_spell_draw=(),             # `H-26`, swept () (control, SHIPPED) / (-1, 0, 1)
+    # B12b.03: THE PLACE'S ENDURANCE, the score the season's draw's pool is made of (`pool_of(endurance + steward levels, 0, pool_add, pool_floor)`), the
+    # one pool rule. No place holds an endurance and no row names the steward's site `settlement_effect`, so one number stands for every place and the
+    # steward's levels read 0; read only under `season_factor_draw` non-empty.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `season_factor_draw: ()`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures season_endurance`, graded `assumption`; the source's pool is the place's endurance and no document gives a place one, so it is injected at 0 (the pool is `pool_add`) and swept 0 (SHIPPED) / 2 / 4]
+    season_endurance=0,               # `H-26`, swept 0 (SHIPPED) / 2 / 4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,
@@ -685,6 +697,34 @@ DEFAULT_FIXTURES = Fixtures(
     # one-line revert. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the
     # register and runs every non-control arm on the built realm.
     body_step=10,                      # `H-125`, swept 0 (control) / 10 (SHIPPED, REM-52) / 67
+    # B12b.14 (`09_WR_provided_arcs` edit 2, CP-T10-04's ground; closes `H-211`'s rising half): A FED COHORT'S BODY STEPS BACK UP. `False` is THE CONTROL, SHIPPED:
+    # MATTER's body pass writes no rise and emits no upward crossing, so the season is today's. `True` is the arm: a cohort whose ration this season exceeds one
+    # half gains `body_step x (2 x ration - 1)` up to its ceiling (`max(body, Person.body_ceiling)`), and a rise across a `band_floors.body` floor emits the
+    # upward `condition.band_crossed`. The fall stays B12a's drawn loss (UNDECIDED (6) reading (a)). The flip is B37p's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `body_mend: False`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-211 -- `site: Fixtures body_mend`; the source ships the arm `False` and the signed step's form, so the arm is injected at the control and swept False / True]
+    body_mend=False,                   # `H-211`, swept False (control, SHIPPED) / True
+    # B12b.35 (`07_SE_population_census` §4 (a), closes H-305): THE BODY LOSS IS PER HEAD. `"per_cohort"` is THE CONTROL, SHIPPED: `subsist`'s loss is today's
+    # `body_step x units short` (the Partial band's magnitude), however heavy the cohort. `"per_head"` is the arm: that magnitude is divided by the eater's
+    # weight (`body_step x units // weight`), so a weight-20 cohort short the same per head loses what a weight-2 one does. At the shipped weight 2 the arm
+    # halves every loss, so `body_step` is re-read at CR-22 under it (B12b.44). The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_loss: "per_cohort"`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: ` none (the row is `(Person, weight)`, absent); the source ships the arm `per_cohort` and the divisor's form, so the arm is injected at the control and swept per_cohort / per_head]
+    hunger_loss="per_cohort",          # `H-49`, swept per_cohort (control, SHIPPED) / per_head
+    # B12b.36 (`07_SE_population_census` §4 (b), (c); closes CR-08's falling half): A STARVING COHORT THINS BEFORE IT DIES. `famine_loss` is the share of a cohort's
+    # weight, in thousandths, that it loses each season its body stands under `band_floors.body.withdrawal_only` (at least one head, never below weight 1), written
+    # at MATTER as `weight.changed` caused by the body write; 0 is THE CONTROL, SHIPPED: no read of the floor, no write, and a cohort dies at body 0 as before.
+    # Under it a cohort dies at body 0 only at weight 1. The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `famine_loss: 0`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: Fixtures famine_loss`; the source ships the arm 0 and the form of the write, so the arm is injected at the control and swept 0 / 250 / 500]
+    famine_loss=0,                     # `H-49`, swept 0 (control, SHIPPED) / 250 / 500
+    # B12b.38 (`07_SE_population_regrowth_B` (a)-(c); closes CR-08's rising half): A FED, HOUSED, QUIET COHORT REGROWS. `regrow_seasons` is how many quiet, fed seasons a
+    # housed cohort waits before it grows by one head: `loop/matter.py`'s bodies clock writes `weight.changed` (+1) for a cohort at full body, fed in full this season,
+    # with room in its home (`world_q.population` under `world_q.capacity`) and no `body.changed` or `weight.changed` on it for that many seasons
+    # (`world_q.quiet_since`). 0 is THE CONTROL, SHIPPED: no read, no write, the season is today's. The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `regrow_seasons: 0`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: Fixtures regrow_seasons`; the source ships the arm 0 and the form of the write, so the arm is injected at the control and swept 0 / 1 / 2]
+    regrow_seasons=0,                  # `H-49`, swept 0 (control, SHIPPED) / 1 / 2
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.
@@ -727,6 +767,11 @@ DEFAULT_FIXTURES = Fixtures(
     ending_draw=False,                 # `H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)
     ending_draw_pool_step=None,        # `H-524`, [CALIBRATE: the pool per season stood], read only under `ending_draw` True; `None` refuses
     ending_draw_ob=None,               # `H-524`, [CALIBRATE: the obstacle's base], read only under `ending_draw` True; `None` refuses
+    # B12b.05 (`09_WR_B_weather_with_memory_and_the_year` edit 4): THE POOL SCALE OF AN ENDING OVER THE CONDITION OF SITES (`rosters.yaml: endings`' `site_band`
+    # selector). The row's pool is the count of its selected Sites still above the band times this, through the one pool rule (`pool_of`, the shared `pool_add`
+    # and `pool_floor`), so a realm with every Site fallen still rolls. Read only by a `site_band` row, and none ships. 1.0 is the unscaled count.
+    # [ASSUMPTION; medium; Jordan to correct; revert: none, no roster row reads it] [CALIBRATE: pool scale and per-Site obstacle, joint calibration, OWED §B]
+    site_band_pool_scale=1.0,
     # B12a.16 (`07_SE_kernel_repairs` D, `H-327`): ARRIVING TEACHES THE TRAVELLER THE PLACE. `off` is THE CONTROL, SHIPPED: MATTER's `travel.ended` write carries nothing,
     # as before the item. `on`: it carries `loop/matter.py::_arrival_report` -- the stores of the rung he now stands in (`stores:<default_store_kind>`, as `_stock_report`
     # builds it) and its holder (`held_by`, through `world_q.governing_hold`) -- which WITNESS deposits to the write's witnesses, the traveller among them. An arm outside
@@ -896,11 +941,19 @@ DEFAULT_FIXTURES = Fixtures(
     # string (`rosters.yaml` `field_winner_casualty_arms`).
     field_winner_casualties="engine",  # `H-360`, swept off (control) / engine (SHIPPED)
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
-    # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
+    # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the field's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
-    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. The flip ON is its own declared
-    # hash-moving commit. Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
+    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
+    # MEASURED THE FLIP, and did not make it: ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and
+    # case worlds), 350 reds in 35 of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE at this
+    # fixture (DEF-7; Jordan's 2026-10-16 wording differs). Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
     field_provisioning=False,  # `H-241`, swept False (control, SHIPPED) / True / True on empty treasuries
+    # U5d_SE §4 (`H-241`). WHICH OF THE LARDER'S KINDS A FIELD EATS: the ration the field reads (`world_q.field_ration`) is
+    # `subsistence_weight` cut to the kinds listed here -- a kind bounds a field only if this lists it AND `subsistence_weight`
+    # weights it. SHIPPED `("grain",)`: a grain-only treasury fields troops; `("grain", "salt")` is the larder's whole ration
+    # (a treasury short of salt fields nobody) and is the control. Read only under `field_provisioning`, which ships OFF.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-241 -- `site: Fixtures field_ration_kinds`, graded `assumption`; U5d_SE §4 ships the list at `["grain"]` and the source gives no other value]
+    field_ration_kinds=("grain",),  # `H-241`, swept ("grain",) (SHIPPED) / ("grain", "salt") (the larder's whole ration, control)
     # IN-08 H3 (`ED-IN-0261`'s scar model). The scar is a COUNT per pursuit, one per observer per
     # violated pursuit (`loop/resolve.py::_scar_witnesses`), so it has no magnitude to sweep. What IS open is WHETHER THE ACTOR COUNTS AS AN OBSERVER OF
     # HIS OWN ACT, and that is this arm. Injection site: this line, read by `_scar_witnesses`.
@@ -1897,17 +1950,78 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `0`. ADM proposes 1 and no document derives it, so the proposed value is the sweep's middle point and (B24.37) the shipped one.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-668 -- `site: Fixtures first_heard_ob`, graded `assumption`; ADM proposes 1 and no document derives it, so it is injected at 1 and swept 0 / 1 / 2]
     first_heard_ob=1,                 # `H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2
+    # v12 B12b.02 (CP-T10-01). THE SCENE POINTS A JOURNEY COSTS, PER UNIT OF ROUTE COST: `world_q.route` returns the cost of the cheapest path over the
+    # settlement graph (each edge the matrix's price for the ground of the settlement it enters), and a journey's leg points are
+    # `max(1, ceil(cost / leg_unit))` (`world_q.leg_points`). `geography.leg_price` (B12b.04) reads it, handed to the chooser by `boot/chooser.py`, while `route_pricing` is `on`; a positive number.
+    # [ASSUMPTION; medium; Jordan to correct; revert: none needed while nothing reads it -- it sizes S-001 -> S-013 at 4 points at 2.0]
+    # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- no document gives how much route cost is one scene point, so it is injected and swept 1 / 2 (SHIPPED) / 4; the card proposes 2.0]
+    leg_unit=2.0,                     # B12b.02, swept 1.0 / 2.0 (the card's, SHIPPED) / 4.0
+    # v12 B12b.02 (CP-T10-01). WHETHER A JOURNEY IS PRICED BY ITS ROUTE: `off` (SHIPPED, the control) prices nothing -- the chooser charges a journey one point and every
+    # hash is what it was; `on` is the arm B12b.04 (the chooser's price: `Scene.cost` adds the leg's points) and B12b.10 build behind. The same-place rule ships on both arms. The on-arm default does not flip here: B98 sets it.
+    # A value but `off` and `on` is refused where shipped and where swept (`CLOSED_ARMS`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `off`]
+    # [JUSTIFIED: v12 B12b.02 (CP-T10-01) -- the card ships route pricing off and rules no flip, so both arms are declared and swept off (the control, SHIPPED) / on]
+    route_pricing="off",              # B12b.02, swept off (control, SHIPPED) / on
+    # B12b.08 (`16_PESSIMIST_WR_A_the_road_is_drawn` edit 1). WHETHER A JOURNEY THAT CROSSES A BORDER TAKES ONE DRAW ON HOW THE TRAVELLER ARRIVES: `off` (SHIPPED, the control)
+    # draws nothing and every hash is what it was; `on` is the arm B12b.09 to .11 build behind (`world_q.road_input`, `_relocate`'s legs, the travel pass); B12b.12 calibrates the three
+    # numbers below and flips it. A value but `off` and `on` is refused where shipped and where swept (`CLOSED_ARMS`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `off`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-541 -- `site: Fixtures road_hazard`, graded `assumption`; the source ships the arm off and swept off / on]
+    road_hazard="off",                # `H-541`, swept off (control, SHIPPED) / on
+    # THE DIFFICULTY OF A ROAD BEFORE ITS HOSTILE TERMS: a level of `rosters.yaml: difficulty_levels`, sized by `difficulty_ob` (A-5/A-6/A-7's joint calibration, not 2). Read by `road_input` only with
+    # `road_hazard` on. `routine` is a placeholder until B12b.12 calibrates it.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`] [CALIBRATE: the road's level, joint with `road_step_ob` and the pool, B12b.12]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-542 -- `site: Fixtures road_base`, graded `assumption`; the source names a level and no document sizes it]
+    road_base="routine",              # `H-542`, swept routine (placeholder, SHIPPED) / plain / demanding
+    # THE OBSTACLE ONE HOSTILE TERM ADDS TO THE ROAD (a crossed border, a crossed territory whose season draw landed Failure, a crossed territory where a field was fought this tick or the last): a
+    # declared float (A-29). Read by `road_input` only with `road_hazard` on; 1 is a placeholder until B12b.12 calibrates it.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`] [CALIBRATE: the step, joint with `road_base` and the pool, B12b.12]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-543 -- `site: Fixtures road_step_ob`, graded `assumption`; the source names the term and no document sizes it]
+    road_step_ob=1,                   # `H-543`, swept 0.5 / 1 (placeholder, SHIPPED) / 2
+    # THE BODY A ROAD TAKES OFF A TRAVELLER THE DRAW LANDS ON: one body band is 300 wide at `band_floors.body`, so 100 is a third of a band, as `body_step` is a tenth of the scale.
+    # Read by the travel pass (B12b.11) only with `road_hazard` on.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-544 -- `site: Fixtures road_step`, graded `assumption`; the source gives 100, a third of one body band]
+    road_step=100,                    # `H-544`, swept 50 / 100 (the source's, SHIPPED) / 150
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")
 LEDGER_ARM, CASE_FILE_ARM = EVIDENCE_ARMS      # the two arms by name, so a reader spells neither (the unpacking refuses a third)
 #: The fixtures whose value is a closed arm set, refused where it is shipped (`load`) and where it is swept (`Fixtures.sweep`). The readers name the arm by this tuple's member (`sigma.py::_filed_case`, `_exhibits_of`), never by a literal.
-CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS}
+#: B12b.02: `route_pricing`'s two arms, the control first (`off` prices no journey; `on` reads `world_q.route`).
+ROUTE_PRICING_ARMS = ("off", "on")
+ROUTE_PRICING_OFF, ROUTE_PRICING_ON = ROUTE_PRICING_ARMS
+#: B12b.08: `road_hazard`'s two arms, the control first (`off` draws no journey; `on` is the road's draw, B12b.09 to .12).
+ROAD_HAZARD_ARMS = ("off", "on")
+ROAD_HAZARD_OFF, ROAD_HAZARD_ON = ROAD_HAZARD_ARMS
+#: B12b.35: `hunger_loss`'s two arms, the control first (`per_cohort` is the body step times the units short, however heavy the cohort; `per_head` divides it by the eater's weight, `modules/settlements/subsist.py`).
+HUNGER_LOSS_ARMS = ("per_cohort", "per_head")
+HUNGER_LOSS_PER_COHORT, HUNGER_LOSS_PER_HEAD = HUNGER_LOSS_ARMS
+CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS, "road_hazard": ROAD_HAZARD_ARMS, "hunger_loss": HUNGER_LOSS_ARMS}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
 
+
+def check_season_weather(draw_table, spells) -> None:
+    """B12b.03 (D-U1-10, R-27): a NON-EMPTY `season_factor_draw` holds one entry per season of the year (`rosters.yaml: seasons_of_year`, the year's one
+    owner), and a non-empty `season_spell_draw` needs that table (a spell needs a year to last) and holds numbers (a `bool` is none). Called at load for
+    the shipped fixtures and by `world_q.season_factor_of` for a swept one, so a planted arm is refused where it is read."""
+    from .rosters import SEASONS_OF_YEAR
+    if draw_table and len(draw_table) != len(SEASONS_OF_YEAR):
+        raise Unspecified(f"`season_factor_draw` declares {len(draw_table)} seasons but the year "
+                          f"(`rosters.yaml: seasons_of_year`) is {len(SEASONS_OF_YEAR)}", "H-26",
+                          needs="one entry per season of the year, in order, or `()` for the control",
+                          law="IN-21 / ED-IN-0332: the year is the roster's length, and the table is read at `tick % len(year)`")
+    if spells and not draw_table:
+        raise Unspecified("`season_spell_draw` is declared and `season_factor_draw` is `()`", "H-26 / R-27",
+                          needs="a season table to hold the spell, or `()` for the spell",
+                          law="09_WR_B_weather edit 1 -- a spell needs a year to last, and only the season's draw reads one")
+    if any(isinstance(t, bool) or not isinstance(t, (int, float)) for t in spells or ()):
+        raise Unspecified(f"`season_spell_draw` is {tuple(spells)!r}", "H-26 / R-27",
+                          needs="numbers, the obstacle terms the spell draw picks from", law="R-27 -- the spell is an obstacle term added to the season's hardship")
+    
 
 def load() -> None:
     """`data.load_all()`'s hook: refuse a `tables.capability_uses` row naming a Fixture this registry does not register.
@@ -1925,10 +2039,15 @@ def load() -> None:
         raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
                         needs=f"roles of the composition registry {sorted(composition.ROLES)}",
                         law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
+    check_season_weather(DEFAULT_FIXTURES.get("season_factor_draw"), DEFAULT_FIXTURES.get("season_spell_draw"))
+    unit = DEFAULT_FIXTURES.get("leg_unit")
+    if isinstance(unit, bool) or not isinstance(unit, (int, float)) or not unit > 0:
+        raise Forbidden(f"`Fixtures leg_unit` is {unit!r}", "data/fixtures.py", needs="a positive number of route cost per scene point",
+                        law="B12b.02 (CP-T10-01) -- leg points are `ceil(cost / leg_unit)`; a unit of zero or less prices every journey at nothing or refuses it mid-season")
     for name, arms in CLOSED_ARMS.items():
         if DEFAULT_FIXTURES.get(name) not in arms:
             raise Forbidden(f"`Fixtures {name}` is {DEFAULT_FIXTURES.get(name)!r}", "data/fixtures.py", needs=f"one of {list(arms)}",
-                            law="B24.21 -- the arm names where a docketed matter's proofs levels are read from; an unknown name would read the ledger silently")
+                            law="a closed arm: an unknown name would read the control silently (B24.21 for the ledger arms; B12b.04, .08, .35 for route_pricing, road_hazard, hunger_loss)")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
@@ -1943,6 +2062,12 @@ def load() -> None:
         raise Forbidden(f"`Fixtures notice_ob` is {DEFAULT_FIXTURES.get('notice_ob')!r}", "data/fixtures.py",
                         needs=f"a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
                         law="B11.66 (H-496) -- the notice obstacle is a level the ladder names, sized by `difficulty_ob`, never a number made up here")
+    road_ob, road_fall = DEFAULT_FIXTURES.get("road_step_ob"), DEFAULT_FIXTURES.get("road_step")
+    if (DEFAULT_FIXTURES.get("road_base") not in DIFFICULTY_LEVELS or isinstance(road_ob, bool) or not isinstance(road_ob, (int, float)) or road_ob < 0
+            or isinstance(road_fall, bool) or not isinstance(road_fall, int) or road_fall <= 0):
+        raise Forbidden(f"`Fixtures road_base` is {DEFAULT_FIXTURES.get('road_base')!r}, `road_step_ob` {road_ob!r}, `road_step` {road_fall!r}", "data/fixtures.py",
+                        needs=f"a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}, a number of obstacle that is not negative, and a body fall that is a positive whole number",
+                        law="B12b.08 (`16_PESSIMIST_WR_A` edit 1) -- the road's difficulty is a level the ladder names (A-29: the step a declared float), never a number made up here")
     kinds, stakes = set(roster("tenure_kinds")), set(DEFAULT_FIXTURES.get("stakes_ob"))
     if stakes != kinds:
         raise Forbidden(f"`Fixtures stakes_ob` sizes {sorted(stakes)}, and `rosters.yaml: tenure_kinds` names {sorted(kinds)}", "data/fixtures.py",

@@ -36,14 +36,16 @@ import math
 import pytest
 
 from ..data.matrix import Step, WriteClass
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import populated as POP
+from ..harness import scarce
 from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop import census
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import causing_act
-from ..state.carriers import Act, Person, Rung, Tenure
+from ..state.carriers import Act, Person, Rung, Site, Tenure
 from ..state.ids import ROOT
 from ..state.world import World
 from ._scar_helpers import wounded
@@ -427,3 +429,79 @@ def test_mortal_terms_refuses_an_unknown_cause():
         world_q.mortal_terms(w, pid, "spell", 3)
     assert "until HAP_A edit 5 lands" in str(spell.value)
     assert "mortal_causes" not in str(spell.value)
+
+
+# -- B12b.38 (`07_SE_population_regrowth_B` (a)-(c)): A FED, HOUSED, QUIET COHORT REGROWS, behind `regrow_seasons` ------------
+
+FED = {"grain": 100000, "salt": 100000}          # [JUSTIFIED: a test-fixture stock -- more than any cohort here eats in the seasons run]
+
+
+def _regrowing(regrow, weight, dwellings, stores=None, **sweeps):
+    """`scarce.build` (one cohort at `set_hungry`) under `regrow_seasons` with the cohort's weight planted, `dwellings` dwelling Sites standing at its
+    town (capacity is their count) and the larder stocked to feed it in full unless `stores` says otherwise. Run by `_run`, no chooser."""
+    fx = DEFAULT_FIXTURES.sweep("regrow_seasons", regrow)
+    for name, value in sweeps.items():
+        fx = fx.sweep(name, value)
+    w = scarce.build(0, fx)
+    w.persons[scarce.POPULACE].weight = weight
+    w.rungs[scarce.HUNGRY].stores = dict(FED if stores is None else stores)
+    _dwell(w, dwellings)
+    return w
+
+
+def _dwell(w, n):
+    for i in range(sum(1 for s in w.sites.values() if s.kind == "dwelling"), n):
+        w.sites[f"s_dwelling_{i}"] = Site(f"s_dwelling_{i}", scarce.HUNGRY, "dwelling", condition=w.fixtures.get("condition_scale"))
+
+
+def _run(w, seasons):
+    """`[the cohort's weight after each season]`; the driver runs the real seasons."""
+    d, out = SeasonDriver(w), []
+    for _ in range(seasons):
+        d.season(P.NOCHOOSE, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+        out.append(w.persons[scarce.POPULACE].weight)
+    return out
+
+
+def _rises(w):
+    return [e for e in w.log if e.kind == "weight.changed"]
+
+
+def test_quiet_fed_housed_cohort_rises_once_in_two_seasons():
+    w = _regrowing(2, 3, 9)
+    heads = len(w.persons)
+    assert _run(w, 2) == [3, 4], "a fed, housed cohort quiet two seasons did not rise by one in the second"
+    (rise,) = _rises(w)
+    assert rise.emitted_at == 1 and [c.subject for c in rise.changes] == [scarce.POPULACE] and rise.causes == [ROOT]
+    assert len(w.persons) == heads, "a rise changed the count of persons"
+    control = _regrowing(0, 3, 9)
+    assert _run(control, 2) == [3, 3] and not _rises(control), "`regrow_seasons` 0 is the control: no rise, no weight.changed"
+    assert w.fixtures.get("regrow_seasons") == 2 and DEFAULT_FIXTURES.get("regrow_seasons") == 0
+
+
+def test_no_rise_at_capacity():
+    w = _regrowing(1, 4, 4)
+    heads = len(w.persons)
+    assert _run(w, 2) == [4, 4] and not _rises(w), "a cohort housed to the full rose past capacity"
+    _dwell(w, 5)
+    assert _run(w, 1) == [5] and len(_rises(w)) == 1, "one more dwelling did not make room for exactly one more head"
+    assert world_q.population(w, scarce.HUNGRY) == world_q.capacity(w, scarce.HUNGRY) == 5 and len(w.persons) == heads
+
+
+def test_no_rise_in_a_short_season():
+    """`body_step` 0 keeps the body at full, so the short season is the only reason the cohort does not rise."""
+    short = _regrowing(1, 3, 9, stores=dict(scarce.HUNGRY_STOCK), body_step=0)
+    assert _run(short, 2) == [3, 3] and not _rises(short) and short._subsistence_shortfall, "a cohort left short rose"
+    fed = _regrowing(1, 3, 9, body_step=0)
+    assert _run(fed, 1) == [4], "the control: the same cohort fed in full rose"
+
+
+def test_a_starved_cohort_thins_then_regrows_once_it_is_fed_and_whole():
+    w = _regrowing(1, 10, 20, stores={}, famine_loss=500, hunger_loss="per_head", hunger_severity_draw=False)
+    w.persons[scarce.POPULACE].body = 90                                  # under `withdrawal_only` (100): the famine thins it
+    assert _run(w, 1) == [5], "the starved cohort did not thin"
+    assert len(_rises(w)) == 1
+    w.rungs[scarce.HUNGRY].stores = dict(FED)                             # the larder is filled and the body made whole (the healer's work, not the clock's)
+    w.persons[scarce.POPULACE].body = w.fixtures.get("condition_scale")
+    assert _run(w, 1) == [6], "the cohort did not return one head once fed"
+    assert len(_rises(w)) == 2

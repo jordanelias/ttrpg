@@ -157,7 +157,9 @@ suites:
     - told_pairing
     - vm_s1_a_formation
   se:
+    - cr08_census_weight
     - demand_delivery
+    - fortification_adds
     - endowment
     - hunger
     - in12_raze
@@ -175,6 +177,9 @@ suites:
     - k3_thread_sensitivity
     - season_weather
     - season_weather_per_territory
+    - calendar
+    - route_leg
+    - travel
     - thread_operations
   ch:
     - attention_key

@@ -578,6 +578,22 @@ def territory_id_of(rung_id: "str | None") -> "str | None":
     return s.removeprefix(_TERRITORY_RUNG_PREFIX) or None
 
 
+def slug(text: str) -> str:
+    """An id fragment: lowercase, alphanumerics and underscores only. `boot/realm.py` builds every minted id from it (`_slug` there is this)."""
+    return "".join(c if c.isalnum() else "_" for c in str(text).lower()).strip("_")
+
+
+_SETTLEMENT_RUNG_PREFIX = "set_"  # [JUSTIFIED: an id SPELLING, not a game value -- the settlement-rung half of `territory_rung_id`'s shape above]
+
+
+def settlement_rung_id(sid: str) -> str:
+    """`'S-001'` -> `'set_s_001'`. THE ONE OWNER OF THE SETTLEMENT-RUNG-ID RELATION, `territory_rung_id`'s shape one row down: `boot/realm.py`
+    mints a `settlement` Rung per geography row (`valoria_geography_v30.yaml: settlements`) and `queries/world_q.py::route` has to get
+    from a Rung back to the geography row the settlement graph is keyed on. The inverse is read off the geography (`world_q.route`'s
+    `{settlement_rung_id(s): s}`), never off the spelling, since the slug is lossy."""
+    return _SETTLEMENT_RUNG_PREFIX + slug(sid)
+
+
 def _load_territory_weight(raw) -> dict:
     """B21.68 (`U5d_FA_owed_edits` §4): `rosters.yaml: tables.territory_weight`, `{territory id: weight}`, REFUSED at import for a key that is no
     territory of the geography file's `provinces:` (its rows are the territories) and for a value that is not a positive number (a `bool` is not
@@ -940,6 +956,50 @@ HUNGER_BANDS = roster("hunger_bands", ordered=True)
 SEASONS_OF_YEAR = roster("seasons_of_year", ordered=True)   # ED-IN-0332: its length IS the year
 
 
+def check_season_terms(mapping: dict, seasons) -> dict:
+    """B12b.01 / CP-T10-03: `rosters.yaml: season_terms` is keyed by EXACTLY the members of `seasons_of_year` (a key the year lacks is a term nothing
+    reads, a season with no key would index a missing entry) and each entry carries a number for every term the engine reads, `yield`, `want`,
+    `illness` and `hardship` (a `bool` is no number here). A function, so a test can plant a drifted mapping and watch the load refuse."""
+    keys = ("yield", "want", "illness", "hardship")
+    if set(mapping) != set(seasons):
+        raise Unspecified(
+            f"`season_terms` is keyed {sorted(mapping)}, and `seasons_of_year` is {list(seasons)}", "rosters.yaml -- season_terms",
+            needs="one entry per season of the year and no other key",
+            law="D-U1-10 -- the year is `seasons_of_year`; a table keyed off it carries a second year")
+    for season, entry in mapping.items():
+        bad = [k for k in keys if not isinstance(entry, dict) or isinstance(entry.get(k), bool) or not isinstance(entry.get(k), (int, float))]
+        if bad:
+            raise Unspecified(
+                f"`season_terms` entry {season!r} lacks a number for {bad}", "rosters.yaml -- season_terms",
+                needs=f"a number for each of {list(keys)}",
+                law="CP-T10-03 -- each season states every term, so no reader falls back to a default of its own")
+    return {season: dict(entry) for season, entry in mapping.items()}
+
+
+SEASON_TERMS = check_season_terms(roster_map("season_terms", "values"), SEASONS_OF_YEAR)
+
+
+def check_season_band_factors(mapping: dict) -> dict:
+    """B12b.03: `rosters.yaml: season_band_factors` is keyed by EXACTLY the ladder's four band names (`dice_engine.DEGREE_LABEL`'s values; a band with
+    no key would index a missing factor, a key the ladder lacks is read by nothing) and each factor is a non-negative number (a `bool` is none).
+    A function, so a test can plant a drifted mapping and watch the load refuse."""
+    from engine.dice_engine.dice_engine import DEGREE_LABEL
+    bands = set(DEGREE_LABEL.values())
+    if set(mapping) != bands:
+        raise Unspecified(
+            f"`season_band_factors` is keyed {sorted(mapping)}, and the ladder's bands are {sorted(bands)}", "rosters.yaml -- season_band_factors",
+            needs="one factor per band of `dice_engine.DEGREE_LABEL` and no other key",
+            law="A-54 -- the season's draw is graded on the one ladder; a band it can reach must have a factor")
+    bad = [b for b, f in mapping.items() if isinstance(f, bool) or not isinstance(f, (int, float)) or f < 0]
+    if bad:
+        raise Unspecified(f"`season_band_factors` has no non-negative number for {sorted(bad)}", "rosters.yaml -- season_band_factors",
+                          needs="a factor of at least 0 for each band", law="A-54 -- a band's factor multiplies a yield; a negative one would mint a debt")
+    return dict(mapping)
+
+
+SEASON_BAND_FACTORS = check_season_band_factors(roster_map("season_band_factors", "values"))
+
+
 def _check_scale_of_rung(mapping: dict, kinds) -> None:
     """`SCALE_OF_RUNG`'s domain must be EXACTLY `RUNG_KINDS` -- a function and not an inline `if`,
     so the test can plant a drifted mapping and watch it refuse (`CLAUDE.md` §0.1 pt 3: a load
@@ -1024,6 +1084,18 @@ def _check_arms_at_build(mapping: dict, rung_kinds, arms_kinds) -> dict:
 
 
 from engine.substrate import combat_kit as _combat_kit  # noqa: E402
+def _check_grown_kinds(grown, matter_kinds) -> frozenset:
+    """B12b.22: `rosters.yaml: grown_kinds` is a subset of `matter_kinds` (a name no store holds would scale nothing and read as a grown kind)."""
+    stray = sorted(set(grown) - set(matter_kinds))
+    if stray:
+        raise Unspecified(
+            f"`rosters.yaml: grown_kinds` names {stray}, which `matter_kinds` does not", "rosters.yaml -- grown_kinds",
+            needs="register the kind in `matter_kinds`, or drop it from `grown_kinds`",
+            law="B12b.22 -- the stores a season's factor multiplies are matter kinds; a name outside them scales nothing")
+    return frozenset(grown)
+
+
+GROWN_KINDS = _check_grown_kinds(roster("grown_kinds"), roster("matter_kinds"))   # the kinds `settlements.produce` scales by the season's factor
 ARMS_KINDS = _check_arms_kinds(roster_map("arms_kinds", "kinds"), roster("matter_kinds"), _combat_kit.FIELDS)
 ARMS_AT_BUILD = _check_arms_at_build(roster_map("arms_at_build", "kinds"), RUNG_KINDS, ARMS_KINDS)
 REMIT_ACTS = roster("remit_acts")
@@ -1489,6 +1561,49 @@ def _load_standing_occasion_opened_by(by_class: dict) -> dict:
 #: B09.12: `{referent class: Event kinds that OPEN a standing occasion of it, most specific first}`, read by
 #: `loop/resolve.py::_occasion_ids`; held to `EVENT_KINDS` at import (`data/verbs.py::_check_standing_occasion_opened_by`).
 STANDING_OCCASION_OPENED_BY = _load_standing_occasion_opened_by(roster_map("standing_occasion_opened_by", "values"))
+
+
+def _load_tally_axes(members: dict, about_classes) -> dict:
+    """`rosters.yaml: tally_axes.members` (B12b.13, L3 clause 1's closed registry), SHAPE-CHECKED: each key a non-empty string, each
+    value exactly `{counts, about, at}` -- `counts` a non-empty list of distinct strings, `about` a lower-case spelling of one of
+    `about_classes` (which are `referent_classes` members), `at` a whole number above 0 (a bool is none). That each `counts` kind
+    is an Event kind the loop declares is `data/verbs.py::_check_tally_axes`, run where `EVENT_KINDS` is built. Returns
+    `{axis: {"counts": tuple, "about": <class name>, "at": int}}`. `{}` is the shipped control and is NOT refused: no axis is
+    authored, so no person is reached (unlike a roster whose empty set would make a membership test silently false). A function,
+    so a test can plant a bad member."""
+    where = "rosters.yaml -- tally_axes"
+    classes = {c.lower(): c for c in about_classes}
+    out = {}
+    for axis, m in members.items():
+        if not isinstance(axis, str) or not axis:
+            raise Unspecified(f"`tally_axes` has a member keyed {axis!r}", where, needs="a non-empty string axis id",
+                              law="L3 clause 1 -- the closed registry names its axes")
+        if not isinstance(m, dict) or set(m) != {"counts", "about", "at"}:
+            raise Unspecified(f"`tally_axes` member {axis!r} is not exactly {{counts, about, at}}: {m!r}", where,
+                              needs="`{counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}`",
+                              law="04 §B.13 invariant 10 -- an unknown or absent cell is refused at load, never read by no one")
+        counts, about, at = m["counts"], m["about"], m["at"]
+        if (not isinstance(counts, list) or not counts or not all(isinstance(k, str) and k for k in counts)
+                or len(set(counts)) != len(counts)):
+            raise Unspecified(f"`tally_axes` member {axis!r} has `counts` {counts!r}", where,
+                              needs="a non-empty list of distinct Event kind names",
+                              law="an axis that counts nothing is reached by nothing, and reads as built")
+        if about not in classes:
+            raise Unspecified(f"`tally_axes` member {axis!r} has `about` {about!r}", where, needs=f"one of {sorted(classes)}",
+                              law="a tally is about a person, an office or a rung -- the three a question's referent may be")
+        if isinstance(at, bool) or not isinstance(at, int) or at < 1:
+            raise Unspecified(f"`tally_axes` member {axis!r} has `at` {at!r}", where, needs="a whole number above 0",
+                              law="a count of 0 is reached by every referent and by none, and a bool is no count")
+        out[axis] = {"counts": tuple(counts), "about": classes[about], "at": at}
+    return out
+
+
+#: B12b.13: `{axis: {counts, about, at}}`, the closed registry L3 clause 1 asks for; `{}` as shipped. Read by `queries/world_q.py::tally_reached`.
+TALLY_AXES = _load_tally_axes(roster_map("tally_axes", "members"), roster_list("tally_axes", "about_classes"))
+for _c in roster_list("tally_axes", "about_classes"):
+    require_member(_c, REFERENT_CLASSES, f"`tally_axes.about_classes` names {_c!r}, which is no referent class",
+                   "rosters.yaml -- tally_axes", law="B12b.13 -- a tally's referent is stamped as its class; a misspelt class stamps nothing")
+del _c
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
@@ -1885,6 +2000,17 @@ CASUS_GROUNDS = roster("casus_grounds", ordered=True)
 # posture is read under.
 MARCH_POSTURES = roster("march_postures", ordered=True)
 MARCH_POSTURE_KEY = "posture"
+# B12b.19 (`07_SE_arc_needs` (b); A-56): THE SHARE OF THE GIVING RUNG'S STOCK A STORE MOVE TAKES, per-mille, a payload key (`AMOUNT_SHARE_KEY`) `requisition` and `transfer`
+# carry as a choice. Ordered, because `choice_sourced` fans the Candidates in this order; shipped `["1000"]`, one member, so nothing is fanned. Spelt as strings (a closed
+# roster's members are names); `decision/options.py::_amount_of_share` reads each as an integer per-mille. Refused at import for a member that is no whole number of
+# per-mille in 1..1000 (a share of nothing, or of more than the stock, is no choice of a share).
+AMOUNT_SHARES = roster("amount_shares", ordered=True)
+AMOUNT_SHARE_KEY = "amount_share"
+if not AMOUNT_SHARES or any(not (isinstance(s, str) and s.isdigit() and 1 <= int(s) <= 1000) for s in AMOUNT_SHARES):
+    raise Unspecified(
+        f"`amount_shares` is {list(AMOUNT_SHARES)!r}", "rosters.yaml -- amount_shares",
+        needs="a non-empty roster of strings, each a whole number of per-mille from 1 to 1000",
+        law="B12b.19 -- a share is a part of a stock handed over (A-56); a member no arithmetic can apply would be a choice nothing performs")
 # B15.08 (PHY_A A3): THE PAYLOAD KEY A VIOLENCE DECLINE SETS -- the context of violence that admitted a `fight`'s subject
 # (`decision/options.py::opening_set`), read by `seam/wrappers/combat.py::combat_input` for the terms (`rosters.yaml:
 # context_terms`). Its range is the names of `options.py::VIOLENCE_CONTEXT_READERS` (`data/` imports no `decision/`, so
@@ -1910,6 +2036,9 @@ if RIG_LEVELS[0] != 0 or list(RIG_LEVELS) != sorted(RIG_LEVELS):
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
+#: B12b.04: the verbs whose act is a person's journey over the road, the ones route pricing bills by leg: `decision/choose.py::pack_scenes` prices a
+#: candidate of one, and `loop/effects_migration.py::_legs` appends the legs of one. `march` is not in it (`march_postures` own an army's march).
+JOURNEY_VERBS = roster("journey_verbs")
 #: B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS -- the closed set of the names of the workings a
 #: practitioner attempts on the thread (leap, weave, pull, past_pull, lock, dissolve, mend). A thread operation is
 #: one named working, as an operation is one task performed. `data/verbs.py`'s verb loader refuses a row whose
@@ -1999,6 +2128,19 @@ for _f, _place in FOREIGN_CAST.items():
             f"settlement, each {{code}}", "rosters.yaml -- foreign_cast",
             needs="a faction named in `names_index.yaml` (`token_class: faction`) and both places",
             law="v9 IN-36 -- a foreign faction is a faction first; its places are what `foreign=True` mints")
+    # B12b.20 (`07_SE_arc_needs` (c)): the settlement entry's one optional key, `stores:` -- what the foreign settlement is built holding
+    # (`{matter kind: positive whole number}`). Checked at load: a misspelt key or kind would seed nothing and read as an empty larder.
+    _settlement = _place["settlement"]
+    _kinds = roster("matter_kinds")
+    if set(_settlement) - {"code", "stores"} or ("stores" in _settlement and (
+            not isinstance(_settlement["stores"], dict) or not _settlement["stores"] or any(
+                k not in _kinds or isinstance(n, bool) or not isinstance(n, int) or n < 1
+                for k, n in _settlement["stores"].items()))):
+        raise Unspecified(
+            f"rosters.yaml `foreign_cast` row {_f!r}'s settlement holds a key other than `code` and `stores`, or a `stores` that is not a "
+            f"non-empty mapping of `matter_kinds` members to positive whole numbers", "rosters.yaml -- foreign_cast",
+            needs="`settlement: {code, stores?}`, `stores` naming registered matter kinds and amounts of at least 1",
+            law="B12b.20 -- a foreign settlement may hold stores; a seed names only kinds that are registered")
 del _f, _place
 # A foreign seat for a faction `foreign_cast` does not name is dropped by `build_realm` without a sound, and its
 # goal rows would be seeded with no committer: the quiet empire, one key over.
@@ -2408,28 +2550,39 @@ def load() -> tuple:
 class EndingRow:
     """One `endings` row as the Query reads it. ITS FIELDS ARE THE ROW GRAMMAR -- the keys a row may
     carry beside an annotation (`note`, `*_note`) -- so the schema is written once, here. `holds` is
-    `(selector, value)`; `settled` is `holds`' optional `settled: true` key (B12a.09), read from INSIDE
-    `holds`, so it is not a key a row carries beside it (`_load_endings` leaves it out of `keys`)."""
+    `(selector, value)`; `settled` is `holds`' optional `settled: true` key (B12a.09) and `of` its `of:` key
+    (B12b.05: required beside `site_band` and beside no other selector), both read from INSIDE `holds`, so
+    they are not keys a row carries beside it (`_load_endings` leaves them out of `keys`). A `site_band` row
+    carries no `under:`, so its `under` is `""`."""
     victory: bool
     holds: tuple
     under: str
     source: str
     settled: bool = False
+    of: str = ""
 
 
-#: This loader's own grammar (`_MODULE_FIELDS`' reason): the two world fields a `holds:` may select
-#: by, and the `under:` token that names no faction.
-ENDING_SELECTORS = ("post", "rung_kind")
+#: This loader's own grammar (`_MODULE_FIELDS`' reason): the three world fields a `holds:` may select
+#: by, and the `under:` token that names no faction. `site_band` (B12b.05) selects the Sites under the realm of
+#: the kinds `of:` names, by the band floor their condition stands at or below (`queries/world_q.py::_ending_edges`).
+ENDING_SELECTORS = ("post", "rung_kind", "site_band")
 #: The one optional key a `holds:` may carry beside its selector, and only beside `rung_kind` with the value
 #: `true`: the rung must have a `settlement` rung among its descendants (`queries/world_q.py::_ending_edges`).
 ENDING_SETTLED = "settled"
+#: The key a `holds:` carries beside `site_band` and beside nothing else: a `site_kinds` member with non-empty
+#: `band_floors`, or `ENDING_ALL_KINDS`, every kind whose floors name the band.
+ENDING_OF = "of"
+ENDING_ALL_KINDS = "all"
 ENDING_ANY_ONE = "one_faction"
 
 
-def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
+def _load_endings(members: dict, factions, rung_kinds, posts, site_kinds=None, band_floors=None) -> dict:
     """`{ending id: EndingRow}`, every row refused by name if it is malformed, and the roster refused
-    if it marks more than one row `victory` (GD-1)."""
-    keys = [f.name for f in _fields(EndingRow) if f.name != ENDING_SETTLED]
+    if it marks more than one row `victory` (GD-1). `site_kinds` and `band_floors` are what a `site_band`
+    row is checked against (default: the shipped roster and table)."""
+    site_kinds = SITE_KINDS if site_kinds is None else site_kinds
+    band_floors = table("band_floors") if band_floors is None else band_floors
+    keys = [f.name for f in _fields(EndingRow) if f.name not in (ENDING_SETTLED, ENDING_OF)]
 
     def bad(name, what, needs):
         raise Unspecified(f"`endings` row {name!r} {what}", "rosters.yaml -- endings", needs=needs,
@@ -2448,12 +2601,26 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
             bad(name, f"has victory {row.get('victory')!r}", "`victory: true` or `victory: false`")
         holds = row.get("holds")
         settled = isinstance(holds, dict) and ENDING_SETTLED in holds
-        picked = {k: v for k, v in holds.items() if k != ENDING_SETTLED} if isinstance(holds, dict) else {}
+        has_of = isinstance(holds, dict) and ENDING_OF in holds
+        picked = ({k: v for k, v in holds.items() if k not in (ENDING_SETTLED, ENDING_OF)}
+                  if isinstance(holds, dict) else {})
         if (not isinstance(holds, dict) or len(picked) != 1 or next(iter(picked)) not in ENDING_SELECTORS
-                or (settled and (holds[ENDING_SETTLED] is not True or "rung_kind" not in picked))):
+                or (settled and (holds[ENDING_SETTLED] is not True or "rung_kind" not in picked))
+                or (has_of and "site_band" not in picked)):
             bad(name, f"has holds {holds!r}",
-                f"exactly one of {list(ENDING_SELECTORS)}, plus `{ENDING_SETTLED}: true` beside `rung_kind` only")
+                f"exactly one of {list(ENDING_SELECTORS)}, plus `{ENDING_SETTLED}: true` beside `rung_kind` only "
+                f"and `{ENDING_OF}:` beside `site_band` only")
         (sel, val), = picked.items()
+        if sel == "site_band":
+            of_kind = _check_site_band(name, val, holds.get(ENDING_OF), site_kinds, band_floors, bad)
+            if row["victory"]:
+                bad(name, "is `victory: true` beside `site_band`", "`victory: false`: a fall of the realm's Sites is no win path")
+            if "under" in row:
+                bad(name, f"carries `under:` {row['under']!r} beside `site_band`", "no `under:`: the Sites' condition is no faction's")
+            if not isinstance(row.get("source"), str) or not row["source"].strip():
+                bad(name, "names no `source:`", "the clause or ruling the row rests on")
+            out[str(name)] = EndingRow(False, (sel, val), "", row["source"], False, of_kind)
+            continue
         # a list or mapping here is unhashable against `posts` and would raise a bare TypeError
         domain, why, wants = ((posts, "no offices.yaml seat carries", "a post of offices.yaml: seats")
                               if sel == "post" else
@@ -2473,6 +2640,23 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
             needs="one victory row; every other row is an ending, not a win path",
             law="GD-1 -- *Peninsular Sovereignty is the sole victory condition*; the alternates are STRUCK")
     return out
+
+
+def _check_site_band(name, band, of, site_kinds, band_floors, bad) -> str:
+    """A `site_band` row's `of:` and band, refused by name: `of:` is required, a `site_kinds` member whose `band_floors` cell is non-empty, or
+    `ENDING_ALL_KINDS`; the band is one of that kind's floors (of `all`: of at least one kind's). Returns `of:`."""
+    if not isinstance(of, str):
+        bad(name, f"selects site_band {band!r} with no `of:` ({of!r})", f"`of:` a site_kinds member with floors, or {ENDING_ALL_KINDS!r}")
+    if of != ENDING_ALL_KINDS:
+        if of not in site_kinds:
+            bad(name, f"has `of:` {of!r}, which is not a site_kinds member", f"a site_kinds member with floors, or {ENDING_ALL_KINDS!r}")
+        if not band_floors.get(of):
+            bad(name, f"has `of:` {of!r}, whose band_floors cell is empty", "a kind with floors: a kind with none has no band to fall below")
+    kinds = sorted(band_floors) if of == ENDING_ALL_KINDS else [of]
+    if not isinstance(band, str) or not any(band in (band_floors.get(k) or {}) for k in kinds):
+        bad(name, f"names band {band!r}, which is not in the floors of `of:` {of!r}",
+            f"a band of {of!r}'s `band_floors` cell: {sorted({b for k in kinds for b in (band_floors.get(k) or {})})}")
+    return of
 
 
 #: The `post`s an `offices.yaml` seat carries -- what an `endings` row's `post:` selector may name.

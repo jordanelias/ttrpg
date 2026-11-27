@@ -164,13 +164,20 @@ def _debit(rung, kind: str, amount) -> None:
     """`rung`'s stores down by `amount` of `kind`: copied before it is written, as `_eff_transfer`
     always did, so no other holder of the old dict sees it change. The one body of the debit side of
     `_shift` and of `build`'s one-sided consumption (the cost goes into the fabric). A non-whole amount
-    is an `InstrumentDefect` (`whole_amount`): the effect declines it before it gets here."""
+    is an `InstrumentDefect` (`whole_amount`): the effect declines it before it gets here.
+    A KIND THE DEBIT BRINGS TO 0 IS DROPPED, not left as `kind: 0` (B12b.28, `provision.py`'s rule: a zero key
+    is a key that moves the digest for nothing). This is the act's debit (RESOLVE); the larder's MATTER take
+    does not call it and keeps its own survival rule."""
     if not whole_amount(amount):
         raise InstrumentDefect(f"a store move of {amount!r} of {kind!r} reached `_debit`: an amount is a whole "
                                f"number of units, at least one, and the calling effect should have declined it "
                                f"(`whole_amount`)")
     rung.stores = dict(rung.stores or {})
-    rung.stores[kind] = rung.stores.get(kind, 0) - amount
+    left = rung.stores.get(kind, 0) - amount
+    if left == 0:
+        rung.stores.pop(kind, None)
+    else:
+        rung.stores[kind] = left
 
 
 def _shift(src, dst, kind: str, amount) -> None:

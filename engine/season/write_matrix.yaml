@@ -328,13 +328,18 @@ rows:
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1, D10 — see §D4. ⚠ THE `MAT` STEP GAINED ITS WRITER AT PLAN POSITION `19c` (2026-09-30): `loop/matter.py`'s travel pass ends every leg at the next MATTER, so `decision/budget.py`'s distance penalty is a cost of the season travelled in and not, as it was, of every season after. `travel.ended` is that write's emission (`H-12`: MATTER emits per write, and `travel.moved` would report a move that did not happen)"
-    emits:   "`travel.moved` · `travel.ended`"
+    # B12b.11 (`16_PESSIMIST_WR_A` edit 7): `travel.delayed` is the Partial of the road's draw (`road_hazard` on) -- a traveller SPENT, his leg not ended this barrier. It is an
+    # Event with no write (the list is left as it is), caused by the `travel.moved` that laid the leg; `(Person, body)`'s emission is unchanged.
+    emits:   "`travel.moved` · `travel.ended` · `travel.delayed`"
   - kind:    "Person"
     field:   "weight"
-    steps:   [CEN]
+    steps:   [MAT, CEN]
+    # B12b.36 (`famine_loss`): MATTER writes the thinning of a starving cohort (`loop/matter.py`, the hunger fall loop, caused by the `body.changed` just written),
+    # CENSUS keeps individuation. `04` §A.2 lists `weight` under `loop/census` while `holonic` §25 and §29 put deaths at MATTER and bar a clock at CENSUS: the
+    # ambiguity is named at the writer and picked there (layer-conformance B4); `04` is not edited.
     class:   "MATTER"
     social:  "false"
-    by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
+    by:      "W2/H-49; B12b.38 (`regrow_seasons`): Layer 1 §25 ('envelope weight -- births and deaths' at MATTER; bodies a licensed clock) and §29 (no clock at CENSUS) ground MATTER's rise of a fed, housed, quiet cohort beside B12b.36's fall. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
     emits:   "`weight.changed`"
   - kind:    "Proposition"
     field:   "*"
@@ -399,13 +404,6 @@ rows:
     by:      "DR-3"
     emits:   "`date.scheduled`"
     unproduced: "no hole row -- orphan since at least 2026-09-03 (this file's #358 rev.2 invariant-2 measurement lists it; git blame stops at the shallow-clone boundary f41f20a, 2026-09-07)"
-  - kind:    "Rung"
-    field:   "envelope"
-    steps:   [MAT, CEN]
-    class:   "MATTER"
-    social:  "false"
-    by:      "DR-1"
-    emits:   "`envelope.changed`"
   - kind:    "Rung"
     field:   "exists"
     steps:   [RES]

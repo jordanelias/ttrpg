@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 525,
-    "uncited": 393,
+    "total": 539,
+    "uncited": 407,
     "of_which_assumption_grade": 9
   },
-  "count": 525,
+  "count": 539,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 47,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 243,
+    "engine.season.settings": 257,
     "engine.season.realm": 9
   },
   "params": [
@@ -4042,7 +4042,29 @@
       "kind": "vector",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4",
+      "note": "`H-26`, swept () (control, SHIPPED) / a table of one entry per season (the drawn form on)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.season_spell_draw",
+      "name": "season_spell_draw",
+      "value": [],
+      "kind": "vector",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-26`, swept () (control, SHIPPED) / (-1, 0, 1)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.season_endurance",
+      "name": "season_endurance",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-26`, swept 0 (SHIPPED) / 2 / 4",
       "citation": null,
       "citation_grade": null
     },
@@ -4234,6 +4256,50 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.settings.body_mend",
+      "name": "body_mend",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-211`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.hunger_loss",
+      "name": "hunger_loss",
+      "value": "per_cohort",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-49`, swept per_cohort (control, SHIPPED) / per_head",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.famine_loss",
+      "name": "famine_loss",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-49`, swept 0 (control, SHIPPED) / 250 / 500",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.regrow_seasons",
+      "name": "regrow_seasons",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-49`, swept 0 (control, SHIPPED) / 1 / 2",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.settings.age_step",
       "name": "age_step",
       "value": 0.0,
@@ -4296,6 +4362,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-524`, swept False (control, SHIPPED) / True (pool step 6, ob 0) / True (pool step 3, ob 1)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.site_band_pool_scale",
+      "name": "site_band_pool_scale",
+      "value": 1.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "",
       "citation": null,
       "citation_grade": null
     },
@@ -4543,6 +4620,19 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-241`, swept False (control, SHIPPED) / True / True on empty treasuries",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.field_ration_kinds",
+      "name": "field_ration_kinds",
+      "value": [
+        "grain"
+      ],
+      "kind": "vector",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-241`, swept (\"grain\",) (SHIPPED) / (\"grain\", \"salt\") (the larder's whole ration, control)",
       "citation": null,
       "citation_grade": null
     },
@@ -6391,6 +6481,72 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-668`, swept 0 (control) / 1 (ADM's proposed value, SHIPPED) / 2",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.leg_unit",
+      "name": "leg_unit",
+      "value": 2.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "B12b.02, swept 1.0 / 2.0 (the card's, SHIPPED) / 4.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.route_pricing",
+      "name": "route_pricing",
+      "value": "off",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "B12b.02, swept off (control, SHIPPED) / on",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.road_hazard",
+      "name": "road_hazard",
+      "value": "off",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-541`, swept off (control, SHIPPED) / on",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.road_base",
+      "name": "road_base",
+      "value": "routine",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-542`, swept routine (placeholder, SHIPPED) / plain / demanding",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.road_step_ob",
+      "name": "road_step_ob",
+      "value": 1,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-543`, swept 0.5 / 1 (placeholder, SHIPPED) / 2",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.road_step",
+      "name": "road_step",
+      "value": 100,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-544`, swept 50 / 100 (the source's, SHIPPED) / 150",
       "citation": null,
       "citation_grade": null
     },
