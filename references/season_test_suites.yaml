@@ -200,6 +200,7 @@ suites:
     - in68_goal_seeding
     - in70_opinion_at_read
     - interactions_log
+    - management_orders
     - manner_offsets
     - offer
     - play_surface

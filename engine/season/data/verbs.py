@@ -38,7 +38,7 @@ from .requires import (
     ScalarThreshold, TypedRequires, WITH_STEM, build_typed_requires,
 )
 from .rosters import (
-    CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, MANAGEMENT_ORDERS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -758,6 +758,16 @@ def _check_resolution_classes(rows: dict) -> None:
         raise SystemExit(
             "verb_table.yaml / rosters.yaml: " + "; ".join(bad) + ". 18-A item 1 (B07.01) -- every writing row is "
             "`contest`, `task` or `bookkeeping` (or owed a contest by its lane), derived from its row and the rosters.")
+
+
+def _check_management_orders(rows: dict, orders=None) -> None:
+    """B34.10 (`IS-B3-GO-07`, A-104): A MANAGEMENT ORDER IS A VERB ROW, OR THE LOAD REFUSES, NAMING EACH MEMBER THAT IS NOT. `orders` defaults to
+    `rosters.yaml: management_orders` (`MANAGEMENT_ORDERS`; it ships empty, so nothing is refused at control) and is a parameter only so a
+    test can plant a bad member and watch it refuse. The loader's refusal for this data family, not a tree-wide guard."""
+    bad = sorted(v for v in (MANAGEMENT_ORDERS if orders is None else orders) if v not in rows)
+    if bad:
+        raise SystemExit(f"rosters.yaml: `management_orders` names {bad}, which are no `verb_table.yaml` row. A-104 / B34.10 -- "
+                         "an order that costs no scene is a verb a person can do.")
 
 
 def _check_governing_attributes(rows: dict, prizes: dict) -> None:
@@ -1542,6 +1552,7 @@ def _load_verb_table() -> dict:
                          "a verb row's `{provider, module_entry, form[, armed_by]}` and nothing else; a skipped "
                          "kind is one some row emits.")
     _check_resolution_classes(out)
+    _check_management_orders(out)
     # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
     # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
     # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the
