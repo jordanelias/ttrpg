@@ -64,7 +64,7 @@ from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a worl
 from . import probes as P
 from .carin import build_world
 from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
-from .play_surface import board, carry_on, deliberation_lines, dispatching_chooser, holdings_of
+from .play_surface import board, carry_on, deliberation_lines, dispatching_chooser, has_continuation, holdings_of
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -98,9 +98,10 @@ class Scenario:
 
 
 def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
-    """The `season` row's reader: `realm_ended` when `world_q.endings_reached(w)` is non-empty; `line_extinct` when the seat
+    """The `season` row's reader: `realm_ended` when `world_q.endings_reached(w)` is non-empty and the seat has no continuation (`play_surface.has_continuation`; with one the run
+    plays on, B34.19); `line_extinct` when the seat
     has no person (`carry_on` found no living tie); `time` when no season is left; else `None`. In that order."""
-    if world_q.endings_reached(w):
+    if world_q.endings_reached(w) and not has_continuation(w, pid):
         return "realm_ended"
     if pid is None:
         return "line_extinct"
@@ -467,13 +468,13 @@ def life_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str
     """THE LIFE'S ENDING, the first true of (`IS-B2-CHAR-01` (2); computed, stored nowhere, read by no chooser), or `None`:
       * `line_extinct` -- `pid` is `None`: `carry_on` found no living tie to carry the seat on (read first, since no ambition can be read of nobody);
       * `fulfilled`    -- one of his ambitions reads `met` (`met_ambitions`);
-      * `realm_ended`  -- `world_q.endings_reached(w)` is non-empty;
+      * `realm_ended`  -- `world_q.endings_reached(w)` is non-empty and he has no continuation (`play_surface.has_continuation`, B34.19);
       * `unfinished`   -- no season is left."""
     if pid is None:
         return "line_extinct"
     if met_ambitions(w, pid):
         return "fulfilled"
-    if world_q.endings_reached(w):
+    if world_q.endings_reached(w) and not has_continuation(w, pid):
         return "realm_ended"
     return "unfinished" if seasons_left <= 0 else None
 

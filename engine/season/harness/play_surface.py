@@ -121,6 +121,14 @@ def carry_on(w: Any, overrides: MutableMapping[str, Callback], pid: str, last: S
     return chosen.person, continuations(w, w.persons[chosen.person])
 
 
+def has_continuation(w: Any, pid: Optional[str]) -> bool:
+    """THE TRANSCRIPT'S STOP TEST (B34.19, `U5a_CORE_owed_edits` §F rules 1-2): does the seated person `pid` have a living continuation, `world_q.continuations`' answer and no
+    roster of this file's own? `False` for `None` (his line is extinct) and for a person the world no longer holds. The scenario rows that name a realm ending
+    (`scenarios.season_ending`, `life_ending`) end the run on it only where this is `False`; with a continuation the run plays on and the ending stays in `endings_reached`.
+    Reads `w`, writes nothing."""
+    return pid in w.persons and bool(continuations(w, w.persons[pid]))
+
+
 def holdings_of(w: Any) -> Callable[[str], tuple]:
     """THE HOST'S READER for `decision/sheet.py::creation_sheet(persons, holdings_of)` (B34.06): person id -> `((tenure kind, object id), ...)` of his own live
     Tenures, built here from `w.tenures` because `decision/` names no `World` and `OwnStateReader` answers one object's holder and enumerates nothing (as
@@ -220,13 +228,22 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
     """Play `scenarios.SCENARIOS[name]` through `scenarios.run` with `person` seated on `take_ranked`, printing each deliberation (`deliberation_lines`), the pick, the
     `account` since his last deliberation, and once a season the host's faction line. `ask(situation) -> int` is his pick of one of the questions asked of him
     (`development_space`'s), the first where `None`. Prints `content_hash` and, last, `ENDING <name> <kind>` where the run ended on one.
-    Returns `scenarios.run`'s dict. Nothing here writes the world: the readers are `decision/sheet.py`'s."""
+    THE STOPS (B34.19, `U5a_CORE_owed_edits` §F): the run's own, read through `scenarios.run`'s `ending`: a reached realm ending stops it only where the seat has no continuation
+    (`has_continuation`; with one the ending is recorded, printed as `realm ending reached`, and the run plays on); a dead seat with no continuation stops it (`line_extinct`),
+    with one the line says `re-seated`; and `seasons` stops it. No reveal is printed (B38). Returns `scenarios.run`'s dict, with `recorded`, the realm endings reached. Nothing here writes the world: the readers are `decision/sheet.py`'s."""
     from . import scenarios as SC                      # lazy: scenarios imports this module
     from ..decision.sheet import take_ranked
     row = SC.SCENARIOS[name]
     built: list = []
     last: dict = {}                                    # person id -> the `(tick, lap)` of his last deliberation
     state = {"n": 0, "tick": None, "seat": None}
+    recorded: list = []                                # the realm endings reached while the run went on (`endings_reached`'s ids, in the order first seen)
+
+    def note_endings(w: Any, pid: Optional[str]) -> None:
+        for e in world_q.endings_reached(w):
+            if e.ending not in recorded:
+                recorded.append(e.ending)
+                out(f"   realm ending reached: {e.ending}" + (" · he has a continuation" if has_continuation(w, pid) else " · he has none"))
 
     def host_line(pid: Optional[str]) -> None:
         text = faction_line(built[0], pid)
@@ -245,10 +262,14 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
         w = built[0]
         state["n"] += 1
         pid = sheet.person_id
+        was = state["seat"] or (person if person is not None else row.seat(w))   # the one he was, where he never deliberated before dying
+        if pid != was:
+            out(f"-- re-seated: {was} is dead, the line continues under {pid}")
         out(f"-- deliberation {state['n']} · tick {w.tick} · {pid}")
         learned(pid)
         if state["tick"] != w.tick:
             host_line(pid)
+            note_endings(w, pid)
             state["tick"] = w.tick
         for line in deliberation_lines(w, sheet, row.verbs):
             out(line)
@@ -263,6 +284,8 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
 
     r = SC.run(name, seed, seasons, pick=pick, person=person, on_build=built.append, ask=ask)
     w = built[0]
+    note_endings(w, r["seat"])                         # an ending reached after his last deliberation is the one the run stopped on
+    r["recorded"] = recorded
     if r["seat"] is not None and r["seat"] == state["seat"]:
         out("-- the run ended")
         learned(r["seat"])

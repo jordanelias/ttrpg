@@ -274,3 +274,74 @@ def test_scene_budget_overlay_gives_three_scenes():
     plain = build_realm(0)
     POP.run(1, 0, w=plain)
     assert r["hash"] != plain.content_hash(), "scene_budget swept to 3 left the season's hash where the shipped fixtures put it"
+
+
+# -- B34.19: the transcript stops (`U5a_CORE_owed_edits` §F) ----------------------------------------------------------------------------------------
+# GAME-STATE, lane season_loop. The ending is planted through `world_q.endings_reached` (a roster ending reached once a season has been played, an
+# `EndingReached` of its own id); the seats are persons of the built realm read by `world_q.continuations`, never named.
+
+def _planted_ending(monkeypatch):
+    from ..queries import world_q
+    monkeypatch.setattr(world_q, "endings_reached",
+                        lambda w: [world_q.EndingReached("planted_end", True, (), (), ())] if w.tick > 0 else [])
+
+
+def _seats():
+    """A person of the realm with no continuation and one with (the realm as `life` builds it), read by the Query."""
+    from ..queries import world_q
+    w = build_realm(0)
+    by = {p: len(world_q.continuations(w, w.persons[p])) for p in sorted(w.persons)}
+    return next(p for p, n in by.items() if n == 0), next(p for p, n in by.items() if n >= 1)
+
+
+def test_a_reached_ending_with_no_continuation_stops_the_transcript(monkeypatch):
+    """§F rule 1, no continuation: a roster ending reached in season 1 and a seat with no continuation ends the transcript at season 1, naming the ending's id,
+    though two seasons were asked. The control is the run with nothing planted, which plays both."""
+    from ..harness import play_surface as PS
+    alone, _ = _seats()
+    plain = PS.transcript("life", 0, 2, alone, out=lambda s: None)
+    assert (plain["seasons"], plain["ending"]) == (2, "unfinished"), plain["ending"]
+    _planted_ending(monkeypatch)
+    lines: list = []
+    r = PS.transcript("life", 0, 2, alone, out=lines.append)
+    assert (r["seasons"], r["ending"], r["kind"]) == (1, "realm_ended", "drawn")
+    assert any("planted_end" in line for line in lines), lines[-6:]
+    assert lines[-1].startswith("ENDING realm_ended"), lines[-1]
+
+
+def test_an_ending_with_a_continuation_plays_on(monkeypatch):
+    """§F rule 1, with a continuation: the same planted ending and a seat who has one. The transcript records the ending and plays both seasons."""
+    from ..harness import play_surface as PS
+    _, heir = _seats()
+    _planted_ending(monkeypatch)
+    lines: list = []
+    r = PS.transcript("life", 0, 2, heir, out=lines.append)
+    assert (r["seasons"], r["ending"]) == (2, "unfinished"), (r["seasons"], r["ending"])
+    assert r["recorded"] == ["planted_end"] and any("planted_end" in line for line in lines)
+
+
+def test_a_killed_seat_continues_under_the_heir(monkeypatch):
+    """§F rule 2: the seat dies (planted through the row's `ending`, as the matter step would kill him) and `carry_on` offers his living ties. The transcript says it
+    re-seated him and the second season is deliberated by the one he became."""
+    from ..data.matrix import Step, WriteClass
+    from ..harness import play_surface as PS, scenarios as SC
+    from ..loop.matter import _die
+    from ..loop.driver import mint_token
+    from ..queries import world_q
+    _, pid = _seats()
+    heir = world_q.continuations(build_realm(0), build_realm(0).persons[pid])[0].person
+    row, done = SC.SCENARIOS["life"], []
+
+    def ending(w, who, left):
+        if not done:
+            done.append(who)
+            w.step, w._emitted_by_write = Step.MATTER, []
+            _die(w, mint_token(w, WriteClass.MATTER), who)
+        return row.ending(w, who, left)
+    monkeypatch.setitem(SC.SCENARIOS, "life_dying", SC.Scenario(build=build_realm, seat=None, ending=ending, kinds=row.kinds))
+    lines: list = []
+    r = PS.transcript("life_dying", 0, 2, pid, out=lines.append)
+    assert done == [pid] and pid not in r["world"].persons
+    assert r["passed"] == (pid, heir) and r["seat"] == heir and r["seasons"] == 2, (r["passed"], r["seasons"])
+    assert any(line.startswith("-- re-seated") and pid in line and heir in line for line in lines), lines[-8:]
+    assert any(line.startswith("-- deliberation") and line.endswith(heir) for line in lines)
