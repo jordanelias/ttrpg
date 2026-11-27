@@ -15,7 +15,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 from engine.dice_engine import draw
+import time
 import zlib
+from engine.substrate import combat_kit   # the startable weapons and the armour tiers, read from the export
 from modules.combat import config
 import fight_record as FR   # a spec becomes a PersonalCombatInput, fought by the entry the loop calls (B14.11)
 
@@ -73,6 +75,72 @@ def winrate(specA, specB, cfg, n, seed=0):
             draws += 1
     p, lo, hi = _wilson(aw, dec)
     return p, lo, hi, dec, draws
+
+
+CONTROL_FIRST = 800000   # the disjoint-seed control's seed floor: `scale_census.py`'s `--control-first`; `_seed` is below 9999, so no main seed reaches it
+
+
+def _felled_shares(specA, specB, cfg, n, seed):
+    """`(share of n fights in which A's tracker reads felled, the same for B)`, position-swapped as `winrate` is, its parties and
+    records built by the same `FR` builders and fought through the same entry (`FR.entry.fight`). Read off the lifted
+    `PartyWounds.felled` of the outcome, the real tracker: `fight`'s integer (`FR.fight_result`) also counts a yield and cannot show a
+    fight in which both fall or neither does."""
+    rng = draw.seeded(draw.H2("balance", seed))
+    A, B = FR.party_of_spec(specA, 'A'), FR.party_of_spec(specB, 'B')
+    fwd, rev = FR.record_of(A, B), FR.record_of(B, A)
+    a = b = 0
+    for i in range(n):
+        w = FR.entry.fight(rev if i >= n // 2 else fwd, rng, cfg=cfg).wounds   # claimant labels stay 'A' and 'B' in both seats
+        a += w['A'].felled; b += w['B'].felled
+    return a / n, b / n
+
+
+def census(n, cfg=None):
+    """Every startable weapon against every other, at each armour tier, tracker-true: the share of the fight's `n` position-swapped
+    fights in which the one's tracker reads felled, printing each cell beyond 95% with its disjoint-seed control.
+    `U5b_PC_residue` §3 item 1: "every startable weapon against every other at each armour tier, tracker-true (never `fight`'s
+    integer), printing each cell beyond 95% with its disjoint-seed control."; its reading, §3's first line: "A spear against an arming
+    sword in light armour fells him 99.2 to 99.8%". So a CELL is one weapon against another with BOTH fighters at the same tier (the
+    matrix's shape), and it is BEYOND 95% when one side's felled-the-other share, over all `n` fights, is above 0.95 (strictly).
+
+    STARTABLE is `combat_kit.WEAPONS` (the export's `kit.weapons`: `weapons.WEAPONS` without a `base`, a half-sword form being a grip);
+    the TIERS are `combat_kit.ARMOUR_TIERS`, ordered by the armour demand. One cell is one unordered pair at one tier, its two
+    directions read off the same fights. The seed is `_seed((x, y, tier))`; the CONTROL is the same cell at that seed plus
+    `CONTROL_FIRST`, run only for a cell beyond 95%, and it is the same cell again, not a second reading of the first's fights.
+    Prints a per-weapon table (cells beyond 95% it wins / loses, per tier), the beyond-95% cells with controls, and seconds per cell.
+    Returns `{'n', 'cells', 'seconds', 'beyond': [(tier, fells, felled, share, control_share)]}`."""
+    cfg = cfg or config.CFG
+    weapons = sorted(combat_kit.WEAPONS)
+    tiers = sorted(combat_kit.ARMOUR_TIERS, key=cfg['ARMOR_DEMAND'].get)
+    beyond, cells, t0 = [], 0, time.perf_counter()
+    for tier in tiers:
+        for i, x in enumerate(weapons):
+            for y in weapons[i + 1:]:
+                cells += 1
+                sx, sy = {'weapon': x, 'armor': tier}, {'weapon': y, 'armor': tier}
+                seed = _seed((x, y, tier))
+                a, b = _felled_shares(sx, sy, cfg, n, seed)   # `a`: x felled, so y fells x at that share
+                for fells, felled, share in ((y, x, a), (x, y, b)):
+                    if share > 0.95:
+                        ctl = _felled_shares(sx, sy, cfg, n, seed + CONTROL_FIRST)[0 if felled == x else 1]
+                        beyond.append((tier, fells, felled, share, ctl))
+    seconds = time.perf_counter() - t0
+    ups = {(w, t): [0, 0] for w in weapons for t in tiers}   # [cells it fells the other in beyond 95%, cells it is felled in]
+    for tier, fells, felled, _, _ in beyond:
+        ups[(fells, tier)][0] += 1; ups[(felled, tier)][1] += 1
+    print(f"census n={n}: {len(weapons)} weapons, {cells} cells over tiers {', '.join(tiers)}; "
+          f"cell = pair at one tier (both fighters), share = fights in which the tracker reads felled; beyond = share > 95%")
+    print("| weapon | " + " | ".join(f"{t} fells/felled" for t in tiers) + " |")
+    print("|---|" + "---|" * len(tiers))
+    for w in weapons:
+        print(f"| {w} | " + " | ".join(f"{ups[(w, t)][0]}/{ups[(w, t)][1]}" for t in tiers) + " |")
+    print(f"beyond 95%: {len(beyond)} (control = the same cell at seed + {CONTROL_FIRST})")
+    print("| tier | fells | felled | share | control share |")
+    print("|---|---|---|---|---|")
+    for tier, fells, felled, share, ctl in beyond:
+        print(f"| {tier} | {fells} | {felled} | {100 * share:.1f}% | {100 * ctl:.1f}% |")
+    print(f"{seconds:.1f}s over {cells} cells = {seconds / cells:.3f}s per cell at n={n}")
+    return {'n': n, 'cells': cells, 'seconds': seconds, 'beyond': beyond}
 
 
 def weapon_matchup_table(cfg=None, n=600, baseline='arming'):
