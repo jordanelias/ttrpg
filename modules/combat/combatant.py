@@ -112,7 +112,7 @@ class Combatant:
     `DEFAULT_SCORE`). It is a plain field, not a spec key: nothing derives from it, so a plain assignment re-values it. Read in two
     places, the pool (`core.resolution_pool`) and the Ob his opponent rolls against (`core.ob_from_defender`)."""
     def __init__(self, label, attrs=None, weapon='arming', armor='light', skills=None, equipped=None, tradition='none',
-                 score=DEFAULT_SCORE, short=None, secondary=None, **kw):
+                 score=DEFAULT_SCORE, short=None, secondary=None, short_other=None, **kw):
         given = dict(attrs or {})
         twice = sorted(set(given) & set(kw))
         if twice:
@@ -127,7 +127,8 @@ class Combatant:
         self.short=short                     # Strength points short of the carry demand, the host's (`PersonalCombatInput.short`, B18.07); `None` = not given: `combat_systems.carry_short` reads the harness alone off `ARMOR_DEMAND` and `strength`
         self.attrs = {k: given.get(k, _A.DEFAULT[k]) for k in _A.KEYS}
         self.weapon=weapon; self.armor=armor
-        self.secondary=secondary             # the weapon he carries and does not hold (`PersonalCombatInput.kits`' second entry, B18.08); `None` = none. Read by nothing in a fight until a switch puts it in hand (B18.09)
+        self.secondary=secondary             # the weapon he carries and does not hold (`PersonalCombatInput.kits`' second entry, B18.08); `None` = none. A switch (B18.09, `wrapper.switch_weapon`) swaps it with `weapon`, the weapon in hand
+        self.short_other=short_other         # the shortfall with the OTHER weapon in hand (`PersonalCombatInput.short`'s second entry): what `short` becomes when a switch puts the secondary in hand (B18.09); `None` = none
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
         self.grip_position=0.0               # CONTINUOUS grip-position in [0,1]: 0=as-issued (full reach), 1=gathered to the working balance (close control). Retires the choke/normal/lunge strings; derived per-beat by the wrapper from grip_target.
         self.lunge_depth=0.0                  # CONTINUOUS body-extension in [0,1] of an in-progress lunge (set at the attack; 0 = no lunge). Reads into recoverability_factor / weapon_tempo / legibility.

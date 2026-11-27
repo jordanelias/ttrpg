@@ -8,7 +8,7 @@ A PARTY is a plain dict, one fighter's share of the record:
   tradition, techniques ({name: level}, or a list), axes ({axis: bonus}), short ((short with the primary in hand, short with the
   secondary in hand), B18.07: `combat_kit.shortfall`, the same one rule the season's `combat_input` evaluates).
 It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus score, weapon, armor, tradition, equipped, skills, label,
-and `carried`, the weapon keys he carries and does not hold: the loadout a reading puts weight on)
+`carried`, the weapon keys he carries and does not hold: the loadout a reading puts weight on, and `secondary`, the one weapon he may put in hand, B18.09)
 or from a built Combatant (`party_of_combatant`). `record_of` zips two parties into the record, `claimants` order.
 
 NOT CARRIED, and said so: state a Combatant holds that the record has no field for (`known_traditions`, a hand-set
@@ -28,14 +28,17 @@ from modules.combat import fight as entry   # `entry.fight` is read at call time
 def party_of_spec(spec, default_label):
     given = {k: spec[k] for k in attributes.KEYS if k in spec}   # an absent attribute takes the spec's default in the Combatant
     armor = spec.get('armor', 'light')
+    secondary = spec.get('secondary')   # B18.09: the weapon he carries and does not hold; his `short` pair is `combat_kit.short_pair`'s, as the season's
+    strength = given.get('strength', attributes.DEFAULT['strength'])
     return dict(label=spec.get('label', default_label),
                 end=given.get('end', attributes.DEFAULT['end']),
                 attributes={s.registry_key: given[s.key] for s in attributes.SPEC
                             if s.key in given and s.key != 'end' and s.registry_key is not None},
-                kit=(spec.get('weapon', 'arming'), None, armor),
+                kit=(spec.get('weapon', 'arming'), secondary, armor),
                 score=spec.get('score'), disp=given.get('disp'),
                 tradition=spec.get('tradition', 'none'), techniques=spec.get('equipped'), axes=spec.get('skills'),
-                short=(combat_kit.shortfall(tuple(spec.get('carried', ())), armor, given.get('strength', attributes.DEFAULT['strength'])), None))
+                short=(combat_kit.shortfall(tuple(spec.get('carried', ())), armor, strength), None) if secondary is None
+                else combat_kit.short_pair(spec.get('weapon', 'arming'), secondary, armor, strength))
 
 
 def party_of_combatant(c):
