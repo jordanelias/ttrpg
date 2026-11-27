@@ -57,7 +57,8 @@ OUT_PY = os.path.join(REPO, 'systems', 'mass_battle', 'sim', 'contact_table_data
 SCHEMA_VERSION = 1
 SIG_DIGITS = 4          # `h` and `beta` are kept to this many significant digits
 EPS = 1e-6              # logit's clamp: a felling chance of 0 or 1 is read as EPS or 1 - EPS
-REMEDY = 'python tools/calibrate_mb_contact.py run references/mb_contact/duel_grid.json --workers 4'
+REMEDY = ('python tools/calibrate_mb_contact.py run references/mb_contact/duel_grid.json --workers 4, then this exporter, then '
+          'python tools/export_sim_params.py --build (sim_params.json holds a copy of the literal)')
 
 
 class Refused(Exception):
@@ -136,7 +137,7 @@ def build(table_path: str | None = None, troops_path: str | None = None) -> dict
     if table.get('engine_fingerprint') != fp:
         raise Refused(f'STALE CALIBRATION: the duel engine\'s fingerprint {fp[:12]} is not the table\'s '
                       f'{str(table.get("engine_fingerprint"))[:12]} (a change to engine/engine_params/combat_engine_v1.json, '
-                      f'modules/combat/*.py, engine/dice_engine/*.py or engine/season/queries/inputs.py can move a felling chance). Re-measure: {REMEDY}   '
+                      f'modules/combat/*.py or engine/dice_engine/*.py can move a felling chance). Re-measure: {REMEDY}   '
                       f'(to run it in chunks and merge them, see the instrument\'s docstring, "CHUNKING THE GRID")')
     import yaml
     with open(troops_path, encoding='utf-8') as fh:

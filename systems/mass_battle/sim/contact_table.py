@@ -113,7 +113,7 @@ def beta(arm_a: str, armour_d: str, skill_a: float, skill_d: float, *, arm_d: st
 
 
 def flags(arm_a: str, armour_d: str, skill_a: float, skill_d: float, *, arm_d: str, armour_a: str) -> tuple:
-    """The measurement flags (`precision:absolute`, `below_resolution:<k>`, `carried:<k>`) of the grid pairs this read interpolates
+    """The measurement flags (`precision:absolute`, `below_resolution:<k>`, `carried:<k>`, `certain`) of the grid pairs this read interpolates
     between, united and sorted; empty for a clean read."""
     a0, a1, _ = _bracket(skill_a, 'skill_a')
     d0, d1, _ = _bracket(skill_d, 'skill_d')

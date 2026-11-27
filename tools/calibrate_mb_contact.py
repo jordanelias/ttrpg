@@ -75,7 +75,6 @@ TROOPS = os.path.join(REPO, "references", "troops.yaml")
 PARAMS = os.path.join(REPO, "engine", "engine_params", "combat_engine_v1.json")
 COMBAT_DIR = os.path.join(REPO, "modules", "combat")
 DICE_DIR = os.path.join(REPO, "engine", "dice_engine")
-INPUTS = os.path.join(REPO, "engine", "season", "queries", "inputs.py")
 TABLE = os.path.join(REPO, "references", "mb_contact", "duel_grid.json")
 
 GRID_SKILLS = (1, 3, 5)          # MBA §2.1: the troop table's span; 2 and 4 are interpolated and checked
@@ -94,13 +93,14 @@ Skill = int
 # ---------------------------------------------------------------------------------------------------- the fingerprint
 def engine_fingerprint() -> str:
     """THE ONE OWNER of the duel-engine fingerprint: sha256 over `engine/engine_params/combat_engine_v1.json`, then every
-    `modules/combat/*.py`, every `engine/dice_engine/*.py` (the degree ladder, the draw and `fmath` the duel rolls through) and
-    `engine/season/queries/inputs.py` (the duel round's typed input), each group in sorted filename order. Byte order: for each file,
+    `modules/combat/*.py` and every `engine/dice_engine/*.py` (the degree ladder, the draw and `fmath` the duel rolls through), each
+    group in sorted filename order. `engine/season/queries/inputs.py` is NOT hashed: it holds 59 records of which about four are the
+    duel's, and a hash over it would red this table whenever any lane edited any of them. Byte order: for each file,
     its repo-relative posix path, one NUL, its raw bytes, one NUL. A pure read; no import-time work. [ASSUMPTION: these are the files
     a duel's outcome can depend on -- basis: the imports of `modules/combat/{core,fight,wrapper,weapon_physics}.py`; MBA §2.3 named
-    only the first two groups, and a change under `engine/dice_engine/` moves every felling chance without moving them; reversible: this list.]"""
+    only the first group, and a change under `engine/dice_engine/` moves every felling chance without moving it; reversible: this list.]"""
     h = hashlib.sha256()
-    files = [PARAMS] + [os.path.join(d, f) for d in (COMBAT_DIR, DICE_DIR) for f in sorted(os.listdir(d)) if f.endswith(".py")] + [INPUTS]
+    files = [PARAMS] + [os.path.join(d, f) for d in (COMBAT_DIR, DICE_DIR) for f in sorted(os.listdir(d)) if f.endswith(".py")]
     for p in files:
         h.update(os.path.relpath(p, REPO).replace(os.sep, "/").encode() + b"\0")
         with open(p, "rb") as f:

@@ -1,5 +1,6 @@
 """The measured duel table is cooked into `engine/engine_params/mb_contact.json` and `systems/mass_battle/sim/contact_table_data.py`
-behind a blocking round trip, and a stale calibration, a missing cell and a hand edit each red it (B19a.03, MBA-03).
+behind a blocking round trip, and a stale calibration and a hand edit each red it (B19a.03, MBA-03). A missing cell or an unmeasured
+duel weapon is refused by the exporter's own arm (c) and is read by no test: the arm runs at every `--check`.
 
 Each test can observe the failure it excludes (CLAUDE.md §0.1 pt 3): the check is run on a copy of the heads and artifacts under
 `tmp_path` (the exporter's path constants are patched), the untouched copy is green, and the mutated copy is red for the named reason.
@@ -63,18 +64,14 @@ def test_a_changed_duel_engine_fails_check(heads, tmp_path, monkeypatch, capsys)
     """One byte in a copy of each fingerprinted source group: the control is the unplanted copy, whose fingerprint is the tree's."""
     tree = tmp_path / 'tree'
     (tree / 'engine' / 'engine_params').mkdir(parents=True)
-    (tree / 'engine' / 'season' / 'queries').mkdir(parents=True)
     shutil.copy(cmc.PARAMS, tree / 'engine' / 'engine_params' / 'combat_engine_v1.json')
-    shutil.copy(cmc.INPUTS, tree / 'engine' / 'season' / 'queries' / 'inputs.py')
     for name, src, dst in (('COMBAT_DIR', cmc.COMBAT_DIR, tree / 'modules' / 'combat'), ('DICE_DIR', cmc.DICE_DIR, tree / 'engine' / 'dice_engine')):
         shutil.copytree(src, dst, ignore=shutil.ignore_patterns('__pycache__'))
         monkeypatch.setattr(cmc, name, str(dst))
     monkeypatch.setattr(cmc, 'REPO', str(tree))
     monkeypatch.setattr(cmc, 'PARAMS', str(tree / 'engine' / 'engine_params' / 'combat_engine_v1.json'))
-    monkeypatch.setattr(cmc, 'INPUTS', str(tree / 'engine' / 'season' / 'queries' / 'inputs.py'))
     assert ex.main(['--check']) == 0, capsys.readouterr().out
-    for target in (sorted((tree / 'modules' / 'combat').glob('*.py'))[0], sorted((tree / 'engine' / 'dice_engine').glob('*.py'))[0],
-                   tree / 'engine' / 'season' / 'queries' / 'inputs.py'):
+    for target in (sorted((tree / 'modules' / 'combat').glob('*.py'))[0], sorted((tree / 'engine' / 'dice_engine').glob('*.py'))[0]):
         original = target.read_bytes()
         target.write_bytes(original + b'#')
         assert ex.main(['--check']) == 1, target

@@ -6,7 +6,7 @@ CONTACT_DATA = {'_generated': 'tools/export_mb_contact.py -- do not hand-edit; e
                'tools/calibrate_mb_contact.py',
  'schema_version': 1,
  'source': ['references/mb_contact/duel_grid.json', 'references/troops.yaml'],
- 'engine_fingerprint': 'd738f9cc12efbae105b4add79ff57862473dc07e663f6664768255b849a8f809',
+ 'engine_fingerprint': 'e3394cacb70cea1d935b01a9f848509ee0d055f86f0a1ec29c553ed484683f44',
  'K': 6,
  'precision': "h and beta to 4 significant digits; a pair is `attacker>defender`, its row the defender's man",
  'arms': {'light_cut': {'duel_key': 'arming', 'duel_key_status': 'exact'},
