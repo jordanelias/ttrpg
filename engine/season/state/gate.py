@@ -395,7 +395,10 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
     nothing. The cluster seat (`Office.rung is None`, S6.2) has no ground, so by rung containment it
     has purview nowhere -- a CONTENT fact about such a seat, not a permission failure. (The oblige
     clause below is the one way such a seat reaches anything: by a sworn holder's ground, not its
-    own.) ⚠ AND IT DOES NOT ASK DIRECTION UPWARD: a Duke has no purview over the realm above him.
+    own.) The `if rung is None: return False` branch is the TARGET half: a rungless (cluster) seat
+    has no ground, so no seat's purview reaches it and no `confer` fills it; it is filled only when
+    its owner gives it a rung (H-142, decided (a), ladder step 4).
+    ⚠ AND IT DOES NOT ASK DIRECTION UPWARD: a Duke has no purview over the realm above him.
     Upward reach is petition, never purview.
 
     ⚠ THE OBLIGE CLAUSE (v9 IN-40, `H-101` -- vassalage across factions, #453 §7.2). A seat ALSO
@@ -876,7 +879,11 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
     ⚠ WHICH conferral basis this basis may fill IS `FILLED_BY`'s (v10 IN-61): the preconditions inherit it
     by asking this. `appointed`, `elected`
     and `annex` pass; `inheritance` is refused -- a throne is claimed by its title's holder
-    (`may_claim`), never conferred by any seat."""
+    (`may_claim`), never conferred by any seat.
+
+    ⚠ A DECLARED BASIS IS NOT ENOUGH ON A SEAT WITH NO RUNG: a rungless (cluster) seat has no
+    ground, so no seat's purview reaches it and no `confer` fills it; it is filled only when its
+    owner gives it a rung (H-142, decided (a), ladder step 4)."""
     if seat_hold(w, actor, via) is None or via == off.id:
         return False
     if not has_conferral_basis(off) or CONFERRAL not in filled_by(off):
