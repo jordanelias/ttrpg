@@ -33,9 +33,7 @@ that could only return the answer it returned:
 ⚠ AND `scale` IS NOT THE CORPUS'S ONLY STRUCTURED FIELD, WHICH IS WHAT MADE REV 1's CEILING
 ARGUMENT WRONG IN THE REVERSE DIRECTION. `temporal` is a mapping with declared sub-keys and **57 of
 143 cases carry an integer `temporal.span_seasons`** (1..16), which rev 1 ignored while hardcoding
-2. And `cases/ENDINGS_CLASSIFIED.yaml` already classifies endings into DECIDER/ROLL/THRESHOLD/
-NEVER/UNCLEAR with a boolean `forced_by_threshold`. Both are read here. So the number of distinct
-worlds is a property of what the BUILDER reads, never a ceiling the corpus imposes.
+2, and which is read here. So the number of distinct worlds is a property of what the BUILDER reads, never a ceiling the corpus imposes.
 
 ⚠ AN UNREPRESENTABLE SCALE STILL REFUSES rather than being folded onto the nearest rung: §42.2's
 polarity rule sends zero evidence to the verdict AGAINST the thing measured, and mapping `faction`
@@ -53,8 +51,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_ENDOWMENT
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import (GRADED_TASKS, PURSUIT_AXES, RUNG_KINDS,
-                            load_yaml, refuse_a_titled_post_off_its_rung)
+from ..data.rosters import GRADED_TASKS, PURSUIT_AXES, RUNG_KINDS, refuse_a_titled_post_off_its_rung
 from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unspecified
@@ -65,7 +62,6 @@ from ..state.carriers import (Act, Event, Office, Person, Proposition, Rung, Sit
                               generated_attributes)
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
-from ..data import files
 from . import probes as P
 from . import run_cases as R
 from ..boot.realm import _check_office, _exercise_docs, _rescales_once, seed_pursuits, wants_of   # moved to `boot/` (B03c.01): the builder reads them too
@@ -75,22 +71,6 @@ RESCALES = _rescales_once()   # the one dict the builder reads, read here at imp
 # [JUSTIFIED: an INSTRUMENT BUDGET, not a rule of the game -- no design document names a season cap. `W6`'s flood is the measurement it is fitted to: the corpus's longest `span_seasons` is 16, and running those costs more than the grading they buy. Lowering it truncates long cases; raising it changes no verdict this instrument reports]
 MAX_SEASONS = 6          # the corpus asks for up to 16; the flood (`W6`) makes that unaffordable
 DEFAULT_SEASONS = 2      # for the 86 cases whose `span_seasons` is prose ("ongoing")
-
-_ENDINGS = files.ENDINGS_CLASSIFIED_YAML
-
-
-def endings() -> dict:
-    """`cases/ENDINGS_CLASSIFIED.yaml`, keyed by case id. Its own header calls the 19 of 50 rows
-    carrying `forced_by_threshold` *"load-bearing on the whole proposal"*, and rev 1 did not read
-    it — so a deadline that the corpus says forces the ending reached no world."""
-    if not _ENDINGS.exists():
-        return {}
-    d = load_yaml(_ENDINGS.read_text())
-    rows = d.get("cases") if isinstance(d, dict) else d
-    return {r["id"]: r for r in (rows or []) if isinstance(r, dict) and r.get("id")}
-
-
-ENDINGS = endings()
 
 
 def apply_rescale(case: dict) -> dict:
@@ -561,19 +541,6 @@ def build_at(case: dict, seed: int = 0) -> World:
         prop = Proposition(f"prop_{pid}", "OUGHT", about, predicate, True, 0)
         w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
-    # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an
-    # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
-    # breaks no surface.
-    # Derived, not re-typed: `"prop_p_a"` was a hand-written copy of the `f"prop_{pid}"` rule
-    # three lines above, so the id format had to stay in sync by eye and a change to `pids`'
-    # order or contents would have silently pointed this at the wrong person.
-    prop = w.propositions[f"prop_{pids[0]}"]
-    if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
-        # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
-        # ending is forced by a threshold; a world with no deadline cannot represent that at all.
-        w.dates["d_forced"] = {"id": "d_forced", "venue": ids[chain[0]], "due_at": 1,
-                               "holder": None, "fired": False}
-        w.docket.append({"date": "d_forced", "matter": prop.id})
     return w
 
 

@@ -21,8 +21,9 @@ from ..harness import scarce as S
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..queries.inputs import Eater, LarderInput, SubsistInput
-from ..state.carriers import Rung, Tenure
-from ..state.world import World
+from ..state.attribution import anchor_of
+from ..state.carriers import Act, Rung, Site, Tenure
+from ..state.world import World, decode, encode
 from engine.substrate import composition
 
 
@@ -33,8 +34,18 @@ def test_h_it_reads_and_writes_nothing_and_the_census_reports_it():
         world_q.hunger(w, rid)
     assert w.content_hash() == h0 and len(w.log) == log0
     assert {r: dict(x.stores or {}) for r, x in w.rungs.items()} == stores0
-    assert POP.census(w)["hunger_by_settlement"] == {"fed": 1, "starving": 1}
+    assert POP.census(w)["hunger_by_settlement"] == {"empty": 1, "starving": 1}      # the granary holds a steward and no cohort: nobody there to be fed (B12b.37)
     assert w.content_hash() == h0
+
+
+def test_settlement_with_no_cohort_reads_empty():
+    """B12b.37: a settlement no cohort resides under reads `empty`; one a cohort resides under at D == 0 (no `subsistence_weight`, so nothing is
+    wanted) still reads `fed`, the control that only the cohort's absence moves the band."""
+    w = S.build()
+    assert world_q.hunger(w, S.GRANARY)[0] == "empty" and world_q.hunger(w, S.HUNGRY)[0] == "starving"
+    bare = S.build(fixtures=DEFAULT_FIXTURES.sweep("subsistence_weight", {}))
+    assert sum(world_q.demanded(bare, S.HUNGRY).values()) == 0 and any(p.is_cohort for p in bare.persons.values())
+    assert world_q.hunger(bare, S.HUNGRY) == ("fed", 0, 0) and world_q.hunger(bare, S.GRANARY)[0] == "empty"
 
 
 UNIFORM = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
@@ -55,6 +66,19 @@ def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_firs
             checked += 1
     assert checked >= 30, "the loop asserted nothing: no settlement carried a cohort"
     assert hist.get("starving", 0) == checked
+
+
+def test_a_saved_world_holds_the_last_barriers_shortfall_that_the_next_barrier_reads():
+    """B12b.40's `short_before` is the LAST barrier's `World._subsistence_shortfall`, so a snapshot must carry it: under `uniform` the whole realm
+    starves in season 1, and `decode(encode(w))` holds that same record (it was empty before the frame). The control is the record itself:
+    non-empty, so an empty decode could not pass."""
+    realm = build_realm(0, fixtures=UNIFORM)
+    POP.run(1, 0, w=realm)
+    held = {pid: dict(kinds) for pid, kinds in realm._subsistence_shortfall.items()}
+    assert held and all(held.values()), "no cohort was short: the round trip observed nothing"
+    back = decode(encode(realm), UNIFORM)
+    assert isinstance(back, World), repr(back)
+    assert back._subsistence_shortfall == held
 
 
 def test_i_under_ground_no_cohort_is_short_at_season_0():
@@ -190,3 +214,201 @@ def test_the_arm_refuses_a_row_that_is_not_the_ladders(row, bad):
         _seasons(w, 1)
     assert all(p.body == PLANTED_BODY for p in w.persons.values()), "the refused arm wrote a body"
     assert len(_seasons(_planted(_arm(False, **{row: bad})), 1)) == COHORTS
+
+
+# B12b.14 (`09_WR_provided_arcs` edit 2, `H-211`): A FED BODY MENDS, BEHIND `body_mend`. One cohort at weight 2 (want 6: grain 4, salt 2) in one settlement.
+def _mend_world(mend: bool, body: int = 495, stores=(("grain", 1000), ("salt", 1000)), ceiling: int | None = None, site_condition: int | None = None) -> World:
+    w = World(world_seed=0, fixtures=DEFAULT_FIXTURES.sweep("body_mend", mend))
+    w.rungs["R"], w.rungs["T"], w.rungs["S"] = Rung("R", "realm"), Rung("T", "territory"), Rung("S", "settlement")
+    w.add_tenure(Tenure("t_T", "T", "R", "contain", since=0))
+    w.add_tenure(Tenure("t_S", "S", "T", "contain", since=0))
+    w.rungs["S"].stores = dict(stores)
+    place_person(w, "c", "cohort", "S", weight=2, body=body)
+    if ceiling is not None:
+        w.persons["c"].body_ceiling = ceiling
+    if site_condition is not None:
+        w.sites["s_harbour"] = Site("s_harbour", "S", "harbour", condition=site_condition)
+    w.manifest = {"contest": "seam.contest_resolver", "order": "core.canonical_order"}
+    return w
+
+
+def _matter(w: World, seasons: int = 1) -> list:
+    """Run MATTER `seasons` times; per season, the `condition.band_crossed` Events it emitted, as `[(anchor, id), ...]`."""
+    d, per = SeasonDriver(w), []
+    for _ in range(seasons):
+        w.tick += 1
+        n = len(w.log)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        per.append([(anchor_of(w, e), e.id) for e in w.log[n:] if e.kind == "condition.band_crossed"])
+    return per
+
+
+def test_fed_cohort_mends_and_crosses_upward():
+    """Fed in full (ration 1) from 495, below the `limited` floor (500): at `body_mend` True the body steps up by `body_step` (10) to 505, the upward
+    crossing is emitted and anchored on the cohort. It never passes its ceiling (ceiling 500: it stops at 500, which still reaches the floor). A ration of
+    one half or less writes no rise (a larder that gives 3 of the 6 units wanted)."""
+    w = _mend_world(True)
+    (crossed,) = _matter(w)
+    assert w.persons["c"].body == 505 and [a for a, _ in crossed] == ["c"], (w.persons["c"].body, crossed)
+    capped = _mend_world(True, ceiling=500)
+    (crossed,) = _matter(capped)
+    assert capped.persons["c"].body == 500 and [a for a, _ in crossed] == ["c"]
+    held = _mend_world(True, stores=(("grain", 3),))     # wants grain 4 and salt 2, holds grain 3: takes 3 of 6, a ration of exactly one half
+    _matter(held)
+    assert held.persons["c"].body <= 495, "a half ration mended a body"
+
+
+def test_body_mend_off_no_rise():
+    """The control, the same plant at `body_mend` False (the shipped arm): the body stays 495 and no crossing is emitted; the fed body below the
+    floor is what the True arm moves (`test_fed_cohort_mends_and_crosses_upward`), so the plant is not one that mends nothing."""
+    w = _mend_world(False)
+    assert _matter(w) == [[]] and w.persons["c"].body == 495
+
+
+def test_downward_site_crossings_unchanged_by_the_upward_predicate():
+    """MW-11's own control: the per-season count of crossings anchored on a SITE (a harbour at 810 wears across `bulk_shipping`'s 800) is the same with
+    `body_mend` True and False, and nonzero (the control reads a crossing); the cohort's own upward crossing is what `True` adds."""
+    def sites(per):
+        return [sum(1 for a, _ in season if a != "c") for season in per]
+    off, on = _matter(_mend_world(False, site_condition=810), 3), _matter(_mend_world(True, site_condition=810), 3)
+    assert sum(sites(off)) >= 1, "the control reads no site crossing: the assertion cannot see a moved count"
+    assert sites(on) == sites(off)
+
+
+def test_field_provisioning_refused_on_empty_treasuries():
+    """B12b.24 (`16_PESSIMIST_SE_B` R4, H-241's sweep arm 'True on empty treasuries'): the driver refuses `field_provisioning` True when no treasury the field
+    reads (a seat rung, a held rung) holds one `subsistence_weight` ration. At `granary_seasons` 0 `build_realm(0)` stocks none, so construction refuses naming H-241;
+    at the shipped 4 it constructs; at the shipped `field_provisioning` False nothing is read, so even the empty realm constructs."""
+    on = DEFAULT_FIXTURES.sweep("field_provisioning", True)
+    with expect_refusal(), pytest.raises(Unspecified, match="H-241"):
+        SeasonDriver(build_realm(0, fixtures=on.sweep("granary_seasons", 0)))
+    SeasonDriver(build_realm(0, fixtures=on))
+    SeasonDriver(build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("granary_seasons", 0)))
+
+
+# B12b.39 (`16_PESSIMIST_SE_A` edit 1, F-PES-SE-01): A SHORT RUNG IS SHARED IN PROPORTION TO WANT. N cohorts of weight 2 (want 6: grain 4, salt 2) in one settlement.
+def _shared_world(stores: dict, cohorts: int = 2, seed: int = 0) -> World:
+    w = World(world_seed=seed, fixtures=_arm(False))          # severity off: the fall is `body_step x units short`, not a drawn multiple
+    w.rungs["R"], w.rungs["T"], w.rungs["S"] = Rung("R", "realm"), Rung("T", "territory"), Rung("S", "settlement")
+    w.add_tenure(Tenure("t_T", "T", "R", "contain", since=0))
+    w.add_tenure(Tenure("t_S", "S", "T", "contain", since=0))
+    w.rungs["S"].stores = dict(stores)
+    for i in range(cohorts):
+        place_person(w, f"c{i}", f"cohort {i}", "S", weight=2, body=PLANTED_BODY)
+    w.manifest = {"contest": "seam.contest_resolver", "order": "core.canonical_order"}
+    return w
+
+
+def test_short_rung_is_shared_in_proportion_to_want():
+    """Row 1: two cohorts of weight 2 on one rung holding grain 4, salt 2 each take grain 2, salt 1 and each falls 30 (`body_step` 10 x 3 short);
+    `shortfalls` names the rung with the gap (grain 4, salt 2). The control, the rung holding grain 8, salt 4, feeds both and reports nothing."""
+    w = _shared_world({"grain": 4, "salt": 2})
+    out = composition.require("settlements.subsist")(world_q.subsist_input(w))
+    assert {row.pid: {k: take for k, _, take, _, _ in row.cells} for row in out.draw.rows} == {"c0": {"grain": 2, "salt": 1}, "c1": {"grain": 2, "salt": 1}}
+    assert out.shortfalls == (("S", (("grain", 4), ("salt", 2))),)
+    _matter(w)
+    assert [w.persons[p].body for p in ("c0", "c1")] == [PLANTED_BODY - 30] * 2, "the two cohorts did not fall alike: the rung was not shared"
+    fed = _shared_world({"grain": 8, "salt": 4})
+    assert composition.require("settlements.subsist")(world_q.subsist_input(fed)).shortfalls == (), "the control reports a gap: the plant cannot see the share"
+    _matter(fed)
+    assert [fed.persons[p].body for p in ("c0", "c1")] == [PLANTED_BODY] * 2
+
+
+def test_odd_unit_varies_over_season_keys():
+    """Row 2: three cohorts on a rung holding 4 grain (want 4 each): the takes sum to 4 and, over 200 season keys, the cohort that receives the odd unit
+    varies (the falsifier for 'drawn': one cohort receiving it at 200 of 200)."""
+    w, got, checked = _shared_world({"grain": 4}, cohorts=3), {}, 0
+    for tick in range(200):
+        w.tick = tick
+        rows = composition.require("settlements.larder_draw")(world_q.larder_input(w)).rows
+        takes = {row.pid: {k: t for k, _, t, _, _ in row.cells}["grain"] for row in rows}
+        assert sum(takes.values()) == 4 and sorted(takes.values()) == [1, 1, 2], takes
+        luck = max(takes, key=takes.get)
+        got[luck] = got.get(luck, 0) + 1
+        checked += 1
+    assert checked == 200
+    assert len(got) >= 2 and max(got.values()) < 200, f"one cohort received the odd unit at every key: {got}"
+
+
+# B12b.40 (`16_PESSIMIST_SE_A` edit 2, D-69): A FIRST DEARTH IS REPORTED ONCE, at the season the crossing is made, never again while the dearth lasts.
+def _reported(w: World, seasons: int) -> list:
+    """Run MATTER `seasons` times; per season, `[(carrier event kind, rung, predicate, value), ...]` for every `shortfall:` Observation it logged."""
+    d, per = SeasonDriver(w), []
+    for _ in range(seasons):
+        w.tick += 1
+        n = len(w.log)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        per.append([(e.kind, o.subject, o.predicate, o.value) for e in w.log[n:] for o in e.observed if str(o.predicate).startswith("shortfall:")])
+    return per
+
+
+def test_exact_multiple_granary_reports_once():
+    """Row 3: two cohorts (want grain 8, salt 4 between them) and a territory rung above their settlement holding exactly one season's stock. Season 1 feeds
+    them in full and empties it to zero keys; season 2 is the first they go unfed, and the dearth is reported ONCE, at the granary rung (the one that ever held the
+    kind: not the settlement, the ladder's first), on a cohort's `body.changed` (no larder write there: it was empty); season 3, the same dearth, reports nothing.
+    Control: a cohort fed every season (three seasons' stock) reports nothing."""
+    w = _shared_world({})
+    w.rungs["T"].stores = {"grain": 8, "salt": 4}
+    got = _reported(w, 3)
+    assert got[0] == [], "the season the stock met every mouth reported a dearth"
+    assert got[1] == [("body.changed", "T", "shortfall:grain", 8), ("body.changed", "T", "shortfall:salt", 4)], got[1]
+    assert got[2] == [], f"the dearth was reported again while it lasted: {got[2]}"
+    assert sum(len(season) for season in got) == 2
+    fed = _shared_world({})
+    fed.rungs["T"].stores = {"grain": 24, "salt": 12}
+    assert _reported(fed, 3) == [[], [], []], "a cohort fed every season reported a dearth: the plant cannot see the crossing"
+
+
+def test_never_stocked_ladder_reports_once_at_its_first_rung():
+    """D-69: a ladder that never held a key for the kind (every rung empty) reports once, at its FIRST rung (the settlement), the gap of both cohorts, in the
+    first season, then nothing. With `body_step` 0 no body is written, so the crossing has no write to ride and is unreported (the control arm's note)."""
+    w = _shared_world({})
+    got = _reported(w, 3)
+    assert got[0] == [("body.changed", "S", "shortfall:grain", 8), ("body.changed", "S", "shortfall:salt", 4)], got[0]
+    assert got[1] == [] and got[2] == [], f"a dearth with no source was reported again: {got[1:]}"
+    still = _shared_world({})
+    still.fixtures = still.fixtures.sweep("body_step", 0)
+    assert _reported(still, 2) == [[], []]
+
+
+# B12b.41 (`16_PESSIMIST_SE_A` edit 3, R3): HUNGER IS A CAUSE. A hunger fall cites the last `stores.changed` at the rung its cohort was short at; the death cites the fall.
+def test_hunger_death_cites_the_fall_and_the_store():
+    """Row 4: two cohorts (want grain 8, salt 4 between them) and a territory rung holding exactly one season's stock. Season 1 feeds them and writes the
+    debit (`stores.changed` at T); seasons 2 and 3 are the dearth (the body falls 60 a season from 100, so each dies in season 3). Every death Event's
+    `causes[0]` is a `body.changed` whose `causes[0]` is a `stores.changed` at the granary rung T (not ROOT, not an earlier death); the first fall's too."""
+    w = _shared_world({})
+    w.rungs["T"].stores = {"grain": 8, "salt": 4}
+    _seasons(w, 3)
+    by_id = {e.id: e for e in w.log}
+    deaths = [e for e in w.log if e.kind == "person.died"]
+    assert sorted(anchor_of(w, e) for e in deaths) == ["c0", "c1"], "both cohorts should have starved by season 3: the plant cannot see the death"
+    for death in deaths:
+        fall = by_id[death.causes[0]]
+        assert fall.kind == "body.changed" and anchor_of(w, fall) == anchor_of(w, death), "the death does not cite its own person's fall"
+        store = by_id[fall.causes[0]]
+        assert store.kind == "stores.changed" and anchor_of(w, store) == "T", f"the fall cites {store.kind} at {anchor_of(w, store)}, not the granary"
+    first = [e for e in w.log if e.kind == "body.changed" and anchor_of(w, e) == "c0"][0]
+    assert by_id[first.causes[0]].kind == "stores.changed"
+
+
+# B12b.42 (`16_PESSIMIST_SE_A` edit 4, R4): `tend` DECLINES A COHORT THE LARDER CANNOT FEED. The conjunct reads the draw's own cells for the cohort.
+def _tend(w: World, subject: str):
+    """A weight-1 tender at the settlement folds one `tend` on `subject` (the task draw off: a lost draw is `tend.failed`, a different thing from the refusal
+    under test): `(the Event kinds it emitted, the subject's body after)`."""
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")
+    act = Act(id=f"tend_{subject}", actor="tender", verb="tend", payload={"subject": subject})
+    out = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return [e.kind for e in out], w.persons[subject].body
+
+
+def test_tend_refused_on_an_unfed_cohort():
+    """Row 5: a cohort short in the draw (the settlement holds half what two cohorts want) is refused at the `fed` clause and its body stays; the same cohort
+    the larder feeds in full is tended to the scale (the control: the fed arm unchanged); a weight-1 person is no eater, his gap is none, and he is tended."""
+    scale = DEFAULT_FIXTURES.get("condition_scale")
+    short = _shared_world({"grain": 4, "salt": 2})
+    place_person(short, "tender", "tender", "S", body=PLANTED_BODY)
+    assert _tend(short, "c0") == (["tend.refused"], PLANTED_BODY), "an unfed cohort was tended"
+    fed = _shared_world({"grain": 8, "salt": 4})
+    place_person(fed, "tender", "tender", "S", body=PLANTED_BODY)
+    assert _tend(fed, "c0") == (["body.tended"], scale), "the fed control was not tended: the plant cannot see the refusal"
+    assert _tend(short, "tender") == (["body.tended"], scale), "a weight-1 person was refused for a hunger he does not have"

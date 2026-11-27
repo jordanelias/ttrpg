@@ -167,16 +167,18 @@ def test_19d_a_drained_larder_carries_its_shortfall_on_its_own_write_and_nothing
     assert granary and not _shortfalls(granary)
 
 
-def test_19d_a_larder_that_was_never_stocked_reports_nothing_and_is_still_short():
-    """THE CROSSING, NOT THE STATE (`loop/matter.py`, `H-160`). An empty larder is not drawn, so no
-    write carries the gap. The person is still short, and `_subsistence_shortfall` still says so.
-    Pinned so that a later reading which reports the state instead is a deliberate edit, not a
-    drift."""
+def test_19d_a_larder_that_was_never_stocked_reports_its_first_dearth_once_and_is_still_short():
+    """THE CROSSING, NOT THE STATE (`loop/matter.py`, `H-160`, REWRITTEN BY D-69 at B12b.40). An empty larder is not drawn, so no larder write carries the gap;
+    the ladder's first rung reports it ONCE, in the season it is first short, on the first short cohort's body write. The next season the same person is
+    still short, `_subsistence_shortfall` still says so, and nothing is reported again."""
     w = S.build()
     w.rungs[S.HUNGRY].stores = {}
     _, emitted = _matter(w)
-    assert _shortfalls(emitted) == []
+    assert _shortfalls(emitted) == [(S.HUNGRY, f"{SHORTFALL_PREDICATE}:{k}", v) for k, v in sorted(_want(S.COHORT_WEIGHT).items())]
     assert w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT)
+    w.tick += 1
+    _, again = _matter(w)
+    assert _shortfalls(again) == [] and w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT)
 
 
 @pytest.mark.parametrize("build,seasons", [(P.tiny_world, 3), (lambda: HL.build_world(0), 3)])
@@ -476,3 +478,109 @@ def test_h303_first_takes_one_through_takes_six_and_splits_the_debit():
         assert w.rungs["terr_march"].stores["grain"] == above_left, walk
         # the two debits sum to the take: no matter made or lost by the split
         assert 1001 - w.rungs[S.HUNGRY].stores.get("grain", 0) - w.rungs["terr_march"].stores["grain"] == take, walk
+
+
+def test_takes_sum_to_what_was_held():
+    """B12b.39: three cohorts of weight 6 want 6 grain each on a rung holding 7: the shares and the drawn remainder hand out exactly 7 and MATTER leaves the
+    rung at zero; on a rung holding 30 they take their 18 and 12 stays. Nothing is made or lost by the split."""
+    from ..boot.realm import place_person
+    for held, taken, left in ((7, 7, 0), (30, 18, 12)):
+        w = S.build(fixtures=DEFAULT_FIXTURES.sweep("subsistence_weight", {"grain": 1}))
+        w.persons[S.POPULACE].weight = 6
+        for pid in ("p_b", "p_c"):
+            place_person(w, pid, pid, S.HUNGRY, weight=6)
+        w.rungs[S.HUNGRY].stores = {"grain": held}
+        draw = world_q.subsistence_draw(w)
+        assert len(draw) == 3, "the plant holds fewer than three eating cohorts"
+        assert sum(cells["grain"][1] for _, cells in draw.values()) == taken, draw
+        _matter(w)
+        assert w.rungs[S.HUNGRY].stores.get("grain", 0) == left
+
+
+# ======================================================================================
+# THE SHARE A STORE MOVE TAKES (B12b.19; `07_SE_arc_needs` (b); A-56, A-81)
+# ======================================================================================
+
+def _requisitions_of(w, claim_stock=None):
+    """The Duke's computed `requisition` candidates on the larder world, through the real `opening_set`. `claim_stock` plants the `stores:grain` claim the
+    share reads (CR-23's report of the giving rung's level, held in his own ledger); `None` plants none."""
+    from .test_u7_remit import DUKE
+    p = w.persons[DUKE]
+    if claim_stock is not None:
+        p.ledger.append(Claim("c_stock_s", DUKE, "S", "stores:grain", claim_stock, w.tick, "firsthand", 100, "own"))
+    out = []
+    for q in world_q.questions_for(w, p, since=(w.tick, 0)):
+        out += [c for c in opening_set(p, View(p.id, [], 12, q), q, w.fixtures) if c.verb == "requisition"]
+    return out
+
+
+def test_amount_shares_one_member_is_not_fanned():
+    """THE CONTROL: the shipped roster has one member, so no `requisition` candidate carries an `amount_share`, the amount is the fixtures' and the act's id is
+    what it was -- even with the giving rung's stock claim held (the share is read only where it was chosen)."""
+    from ..data.verbs import CHOICE_RANGES
+    from .test_u7_remit import _larder_world
+    assert len(CHOICE_RANGES["amount_share"]) == 1
+    w, _d = _larder_world()
+    cands = _requisitions_of(w, claim_stock=40)
+    assert cands and all("amount_share" not in c.operands for c in cands), [c.operands for c in cands]
+    assert {c.operands["amount"] for c in cands} == {w.fixtures.get("default_transfer_amount")}
+
+
+def test_two_members_fan_two_candidates_differing_only_in_amount(monkeypatch):
+    """TWO MEMBERS (`250`, `1000`): the one requisition becomes two, each carrying its share, differing only in `amount` (and the key that names the share): a quarter and
+    the whole of the stock he holds a claim of, `max(1, stock x share // 1000)`. With no stock claim held the amount falls back to the fixtures' on both."""
+    from ..data.verbs import CHOICE_RANGES, act_key
+    from .test_u7_remit import STOCK, _larder_world
+    monkeypatch.setitem(CHOICE_RANGES, "amount_share", ("250", "1000"))
+    w, _d = _larder_world()
+    cands = _requisitions_of(w, claim_stock=STOCK)
+    by_share = {c.operands["amount_share"]: c for c in cands}
+    assert sorted(by_share) == ["1000", "250"] and len(cands) == 2, [c.operands for c in cands]
+    assert by_share["250"].operands["amount"] == STOCK // 4 and by_share["1000"].operands["amount"] == STOCK
+    rest = [{k: v for k, v in c.operands.items() if k not in ("amount", "amount_share")} for c in cands]
+    assert rest[0] == rest[1] and len({act_key("requisition", c.operands["subject"], c.operands) for c in cands}) == 2     # two acts, two ids
+    w2, _d2 = _larder_world()
+    bare = _requisitions_of(w2)
+    assert len(bare) == 2 and {c.operands["amount"] for c in bare} == {w2.fixtures.get("default_transfer_amount")}
+
+
+def test_a_refused_requisition_leaves_a_claim_of_the_refusal():
+    """A-81: a requisition asking more than the larder holds is refused at `stores`, and WITNESS leaves the requisitioner a firsthand claim `(larder, requisition.refused,
+    doer = himself)`: the carrier `a_refusal_is_remembered` reads. CONTROL: a requisition within the stock is taken and leaves no such claim."""
+    from .test_u7_remit import DUKE, STOCK, _fold, _kinds, _larder_world, _requisition
+
+    def after(amount, key="rq"):
+        w, d = _larder_world()
+        out = _fold(w, d, _requisition(key, subject="S", amount=amount))
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+        return _kinds(out), [c for c in w.persons[DUKE].ledger if c.subject == "S" and c.predicate == "requisition.refused"]
+
+    kinds, claims = after(STOCK + 1)
+    assert kinds == ["requisition.refused"] and len(claims) == 1 and claims[0].doer == DUKE and claims[0].source == "firsthand", (kinds, claims)
+    for n in range(40):     # the task draw (`task_draw_arm`) may lose a requisition that is within the stock; sweep the act's key to one it wins
+        kinds, claims = after(5, f"rq{n}")
+        if kinds == ["requisition.taken"]:
+            break
+    assert kinds == ["requisition.taken"] and claims == []
+
+
+def test_build_leaves_no_zero_key_in_the_payer_stores():
+    """B12b.28 (U5d_SE §9 d): a `build`'s debit drops a kind it brings to 0 from the payer's stores, as `provision.py`
+    leaves a zero out. The payer's stock is planted at exactly the price (every priced kind emptied) and at the price plus
+    one (CONTROL: the kind stays, at one). The rest of the stores are read as before."""
+    from .test_works_founding import HEARTH, _build, _declare, _fold, _kinds, _stock, _world
+    price = DEFAULT_FIXTURES.get("works_cost")["dwelling"]
+    after = {}
+    for extra in (0, 1):
+        w, d = _world()
+        _declare(w, d, "wb", "dwelling", HEARTH)
+        _stock(w, HEARTH, "dwelling")
+        for kind in price:
+            w.rungs[HEARTH].stores[kind] += extra
+        rest = {k: v for k, v in w.rungs[HEARTH].stores.items() if k not in price}
+        assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
+        stores = w.rungs[HEARTH].stores
+        assert {k: v for k, v in stores.items() if k not in price} == rest
+        after[extra] = {k: stores.get(k) for k in price}
+    assert all(v is None for v in after[0].values()), after[0]
+    assert after[1] == {k: 1 for k in price}, after[1]
