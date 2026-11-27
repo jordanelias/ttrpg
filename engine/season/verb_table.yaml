@@ -1739,6 +1739,64 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition (CP-T09-07 (a), AM-F-15; `FA §3.3` S3): the matrix rows `(Tenure, since)` and `(Tenure, term)` and the `oblige` kind are the tree's; the row, its `remit:confer` eligibility, its `Person` class and the two kinds are B21b.16's. Its seven alignment cells are content: [ASSUMPTION; content, Jordan's to correct]."
     source:      "v12 B21b.16 (`workplans/valoria_master_workplan_v12_part21.md`), on CP-T09-07 (a) (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md`), AM-F-15"
+  - verb:        "conspire"
+    public:      false
+    stratum:     "social"
+    eligibility: ["own"]
+    eligibility_note: "B21b.18 (CP-T09-09, AM-F-17; `FA §3.3` S7): `own` -- *\"any person\"*: a plot is a man's, and he sits in no seat for it. A guard cohort holds no pursuit and forms no choice, and the cell refuses a cohort on either side. [ASSUMPTION; medium; Jordan to correct; revert: delete the row.]"
+    beneficiary: "actor"
+    beneficiary_note: "THE PLOTTER: the plot is his ambition (`world_q.ambitions`). The invitee's gain is his own commit."
+    governing:   [attr.social.charisma]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B21b.18 [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `conspire`'s attributes; `retain`'s cell (B21b.16), the sibling act that puts an offer to a man who may refuse it: Presence leads, and he opposes on his Will. revert: `brute: own` with its note, and no `contests:` or `difficulty:`]."
+    contests:    "a standing"
+    contests_note: "B21b.18 (CP-T09-09): the prize `a standing` (`rosters.yaml: contest_subsystems.prizes`, `tell`'s, `issue`'s and `retain`'s; no new prize, no new provider), rolled by the social contest module, OPPOSED BY THE MAN INVITED (`counterparty: to`). The obstacle is the one composer's (`roll.py::obstacle`): `difficulty` `routine` + `opposition` (his skill score plus his Will, `sigma.py::_opposing`) + `regard` (his hostility to the plotter, `regard_step`) + `invitee_tie_to_target` (`tie_step`, H-621: a live oath to the target seat, or a commit to its faction, which the plotter's plot would break) + `regard_of_target` (`regard_step` x the favourable half of his stance toward the target; nothing lowers an obstacle, so his dislike of the target is never a lower term). Both new terms are read for an act whose effect opens a `commit` (`_opens_a_commit`: `_OPENERS_FROM_EFFECTS[\"commit\"]`), against the plot the plotter holds -- on the FIRST act, which lays the plot, there is none and both read 0. ⚠ AT THE SHIPPED CEILING THE TERMS ARE CLIPPED where the base obstacle already reaches the cap (AM-F-17's own text); the uncapped arm (`obstacle_ceiling` None) reads every term. THE FIRST CONSPIRE IS DRAWN LIKE THE REST (a contested row's draw precedes its effect, `loop/resolve.py::_contest`, and a row has no per-act switch): it lays the plot at a band that writes. [ASSUMPTION; medium; Jordan to correct; revert: delete the row.]"
+    difficulty:  "routine"
+    capability:  "none"
+    capability_note: "B21b.18 [ASSUMPTION; medium; Jordan to correct -- basis: `retain`'s and `issue`'s cell: no skill of `descriptor_registry.yaml: capabilities` is named for an invitation to a plot by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`) until one is; revert: the row with no `capability:`]."
+    referent_class: Target
+    referent_class_note: "B21b.18 (CP-T09-09, AM-F-17; [ASSUMPTION; medium; Jordan to correct; revert: `referent_class: Person`]): FORMED ONLY ON A `Target`-CLASSED REFERENT -- a seat-holder the plotter reads below 0 by his own `legitimacy`, or the target of the plot he holds (`queries/world_q.py::plot_targets`, stamped by `questions_for`; `Disputant`'s shape). The target rides the question as `subject`, the man invited is `to`, a known person the plotter ranges over (`operand_bags`: one Candidate per man he knows, `tell`'s and `give`'s fan)."
+    requires:    "the target and the man invited exist, each one person and not a cohort"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+          conjunct:  target
+        - form:      existence
+          of:        to
+          kind:      Person
+          conjunct:  party
+        - form:      relation
+          of:        to
+          relation:  individual
+          conjunct:  individual
+    requires_typed_note: "B21b.18: THREE CONJUNCTS, each on an existing form. `target` and `party` -- `petition`'s `existence` of a person, asked of the seat-holder and of the invitee. `individual` -- `challenge`'s and `retain`'s stem, asked of `to`: ONE PERSON AND NOT A COHORT (a guard is a population sworn to a post, and is no man to plot with). THE REST IS THE EFFECT'S (`loop/effects_information.py::_eff_conspire`): the target holds a seat, the plotter, the invitee and the target are three men, and on a held plot the act is about the plot's own target and the invitee is not committed to it already; the cell cannot say `not`. A refusal at any is `plot.refused`, nothing opened."
+    counterparty: to
+    counterparty_note: "THE MAN INVITED IS THE SECOND SIDE: the contest's opponent (`loop/resolve.py::_contest` reads `row.counterparty`), the man who may refuse, and the man whose `commit` a won invitation to a held plot opens. An invitation to oneself is declined person-side and refused by the fold's `counterparty` clause (`petition`'s precedent)."
+    writes:
+      Overwhelming: ["Tenure.since", "Proposition.exists"]
+      Success:      ["Tenure.since", "Proposition.exists"]
+      Partial:      ["Tenure.since", "Proposition.exists"]
+      Failure:      []
+    writes_note: "B21b.18: `loop/effects_information.py::_eff_conspire` runs ONCE on the first pair. A plotter holding no plot LAYS ONE: the plot Proposition through `_mint_utterance` (`_eff_utter`'s one mint, mood OUGHT, `subject` the target's holder, `predicate` `plot:<seat>`) and his own `commit` to it, in one write (`Proposition.exists` and `Tenure.since`, `plot.laid`; the maker's `hold` opens beside it and is not a declared pair, `utter`'s convention). A plotter holding one RECRUITS: the invitee's `commit` to it opens, admitted at the gate under `state/gate.py::RECRUITMENT` (`may_recruit`), `Tenure.since` alone (`plot.joined`); `Proposition.exists` is the second pair, check-only (class, step, partition), as `Tenure.term` is at `retain`. `Partial` writes as `Success` does (`retain`'s, `arrest`'s reading) [ASSUMPTION; medium; Jordan to correct; revert: a `Partial` that writes nothing]. `Failure` writes nothing: he declined, and leaves him a claim against the plotter (WITNESS deposits `plot.refused`; he may `petition`, or `arrest` from a seat)."
+    emits:
+      Overwhelming: ["plot.laid", "plot.joined"]
+      Success:      ["plot.laid", "plot.joined"]
+      Partial:      ["plot.laid", "plot.joined"]
+      Failure:      ["plot.refused"]
+    emits_note: "B21b.18 (AM-F-17: *'Lost emits `plot.refused`'*; the Won kinds `plot.laid` and `plot.joined` are the producer's [ASSUMPTION; medium; Jordan to correct; revert: one Won kind]): THREE NEW KINDS, each emitted by this row alone (`data/verbs.py::KIND_VERB`), so a witnessed plot is judged at this row's alignment cells. `_eff_conspire` earns the one its write made (`Subject(earns=)`), so the two Won kinds are never both on one act. `social`, so none reaches beyond the places the act is done (`event_reach` carries `binding_decision` kinds and the unrest kinds only): a plot is exposed by being witnessed (`conceal` does not hide `who` from those present), and a refused invitation is a remembered deed against the man who refused."
+    emits_on_refusal:
+      target:       ["plot.refused"]
+      party:        ["plot.refused"]
+      individual:   ["plot.refused"]
+      write:        ["plot.refused"]
+      counterparty: ["plot.refused"]
+      sequence:     ["plot.refused"]
+    refusal_note: "B21b.18: one kind under every key (`retain`'s shape): a refused `conspire` is an invitation that never reached the draw -- the target or the man invited is no person or is a cohort, he is the plotter, the target holds no seat, the act is about another man than the plot's target, or he is committed to the plot already; the loser of the draw emits `plot.refused` too, as its Failure band."
+    grade:       "assumption"
+    grade_note:  "an argued addition (CP-T09-09, AM-F-17; `FA §3.3` S7): the matrix rows `(Tenure, since)` and `(Proposition, exists)` are the tree's; the row, its `Target` class and the three kinds are B21b.18's. Its seven alignment cells are content: [ASSUMPTION; content, Jordan's to correct]."
+    source:      "v12 B21b.18 (`workplans/valoria_master_workplan_v12_part21_cont.md`), on CP-T09-09 (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md`), AM-F-17"
   - verb:        "revoke"
     public:      false
     stratum:     "binding_decision"

@@ -52,7 +52,7 @@ def _fold(terms):
 
 
 ROSTER = obstacle_bound("host")                  # B24p.05: the members the HOST reads (`bound: host`); the module-bound four are `proceeding.py`'s own
-CONDITIONAL = ("standard", "stakes", "rank_gap", "regard", "cross_chain", "faction_power", "rival_tie", "opinion_of_faction")      # B05.21 (B21.09: `rank_gap`; B21.61: `cross_chain`; B21.69: `faction_power`; B21b.16: `rival_tie`, `opinion_of_faction`): members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
+CONDITIONAL = ("standard", "stakes", "rank_gap", "regard", "cross_chain", "faction_power", "rival_tie", "opinion_of_faction", "invitee_tie_to_target", "regard_of_target")      # B21b.18: `invitee_tie_to_target`, `regard_of_target`. B05.21 (B21.09: `rank_gap`; B21.61: `cross_chain`; B21.69: `faction_power`; B21b.16: `rival_tie`, `opinion_of_faction`): members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
 STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
 LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
 BOUNDS = ("ceiling", "floor")
@@ -60,7 +60,8 @@ SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any t
 ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil", "establish",   # B21.09: `establish`
           "confer", "revoke", "succeed",                                                                                          # B21.14
           "issue",                                                                                                                # B21.56
-          "retain")                                                                                                               # B21b.16
+          "retain",                                                                                                               # B21b.16
+          "conspire")                                                                                                             # B21b.18
 #: The rolled rows still on the single roll: since B24p.19 (and B24.08, `determine`) the six that open a proceeding (`VerbRow.proceeds`) are pooled by no `governing:` and
 #: refuse `contest_input` (`Forbidden`), so the host's obstacle is read through these alone (B24p.99).
 SINGLE = tuple(v for v in ROLLED if not V.VERB_TABLE[v].proceeds)

@@ -297,6 +297,23 @@ RETENTION = "retention"
 # own reading (*"a seat-holder `via` a seat granting `confer`"*), and the row's eligibility (`remit:confer`). One owner of the string, read by
 # `may_retain` and named by the row.
 RETAIN_ACT = "confer"
+# `recruitment` (B21b.18, CP-T09-09, AM-F-17) -- an OPENING of a `commit` whose OBJECT is a PLOT, owned by ANOTHER person (the man invited), by a plotter who
+# is himself committed to that plot (`may_recruit`). Named in the ordinary word for what it licenses (to enlist a man in a plot). NOT AUTHORITY-BOUND on `via`
+# (`conspire` is an `own` act: a plot is a person's, and a plotter sits in no seat for it): the authority is the plot he holds and has committed to. Why a
+# basis at all, against this function's body: the invited man's opening is not `T-m` (the actor is not the owner) and no seat basis reads a Proposition. WHAT THE
+# GATE DOES NOT DECIDE is that the invitation was won (the fold's draw: a Failure writes nothing, so this is never asked of it) and the invited man's own
+# standing (a cohort, the target himself): the fold's cell and `_eff_conspire`'s declines.
+RECRUITMENT = "recruitment"
+# A PLOT, as a Proposition: mood OUGHT (so `commit` to it is an ambition, `world_q.ambitions`), `subject` the target seat's holder, `predicate` `plot:<seat>`.
+# One owner of the spelling, read by `may_recruit` and by `queries/world_q.py` (`plot_held`, `plot_targets`) and `_eff_conspire`.
+PLOT_PREDICATE = "plot"
+PLOT_MOOD = "OUGHT"
+
+
+def is_plot(prop: Any) -> bool:
+    """Is `prop` a plot (B21b.18): an OUGHT whose predicate is `plot:<seat>`, the shape `_eff_conspire` mints."""
+    return (prop is not None and str(prop.mood).upper() == PLOT_MOOD
+            and str(prop.predicate).partition(":")[0] == PLOT_PREDICATE and bool(str(prop.predicate).partition(":")[2]))
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -1162,6 +1179,25 @@ def may_retain(w: "World", actor: Optional[str], via: Optional[str], party: Opti
     return not any(t.kind == "hold" and t.object == via and t.live for t in w.persons[party].tenures)
 
 
+def may_recruit(w: "World", actor: Optional[str], plot: Optional[str], party: Optional[str]) -> bool:
+    """THE RECRUITMENT BASIS, AS ONE PREDICATE (B21b.18, CP-T09-09, AM-F-17): may `actor` open the `commit` `party` will own to the plot `plot` -- invite `party`
+    into a plot and have it taken?
+
+    Three conjuncts, each the ONE owner of its rule:
+      1. `plot` is a plot (`is_plot`) the actor HOLDS (his live `hold`, the maker's, `_mint_utterance`) AND is himself committed to (his live `commit`): a
+         man recruits only to a plot that is his own, and a plot he has left (`release`) recruits nobody;
+      2. `party` is a PERSON other than the actor (only a person owns a `commit`);
+      3. `party` is not the plot's target, the holder it names as its `subject` (a man is not invited to a plot against himself).
+    ⚠ WHAT IT DOES NOT DECIDE, AND WHERE THAT LIVES: that the invitation was won (the fold's draw), that `party` is no cohort and holds no commit to it already
+    (`_eff_conspire`'s declines)."""
+    prop = w.propositions.get(plot) if plot is not None else None
+    if not is_plot(prop) or actor not in w.persons or party is None or party == actor or party not in w.persons or party == prop.subject:
+        return False
+    mine = w.persons[actor].tenures
+    return (any(t.kind == "hold" and t.object == plot and t.live for t in mine)
+            and any(t.kind == "commit" and t.object == plot and t.live for t in mine))
+
+
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
     """Which of an existing edge's five non-end fields the write changed; `None` for an edge the
     write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
@@ -1468,6 +1504,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     if (opened and t.kind == "oblige" and via is not None and t.object == via and not t.imposed
             and may_retain(w, actor, via, owner)):
         return RETENTION
+    # B21b.18 (CP-T09-09, AM-F-17): THE RECRUITMENT. An OPENED `commit` to a plot, owned by another person -- by a plotter who holds and is committed to that
+    # plot (`may_recruit`). Opening only: the man's own way out is `release`, `T-m`. No `via`: a plot is a person's, not a seat's.
+    if opened and t.kind == "commit" and t.object in w.propositions and may_recruit(w, actor, t.object, owner):
+        return RECRUITMENT
     # v9 SC-03a, K-52: THE WARRANT. An OPENED `detain` whose object is a SEAT and whose owner the
     # exercised seat may take into custody (`may_warrant`). Not `via`-objected as `determination`
     # is: the custody edge's object is the ISSUING seat (K-17/K-52), which the enforcement seat acts
@@ -1648,7 +1688,8 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"kind some arrangement disposes opened -- or a `detain`/`ban` closed -- on the "
               f"judging seat exercised, for a person its bench's ground holds), {RETENTION} (a "
               f"sworn `oblige` to the seat exercised opened for another person, by a holder "
-              f"granted `{RETAIN_ACT}`), {WARRANT} (a "
+              f"granted `{RETAIN_ACT}`), {RECRUITMENT} (a `commit` to a plot opened for "
+              f"another person, by a plotter who holds and is committed to that plot), {WARRANT} (a "
               f"`detain` opened on a seat, for a person the exercised seat's purview reaches, by "
               f"a holder granted `{WARRANT_ACT}`), {SEIZURE} (another person's `hold` on a "
               f"Record or a Rung closed, by a holder granted `{SEIZURE_ACT}` whose exercised "

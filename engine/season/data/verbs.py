@@ -2816,6 +2816,15 @@ if DISPUTANT_CLASS not in REFERENT_CLASSES:
                     needs="the dispute-context class in the closed roster",
                     law="B11 lane A -- a class stamped by name must be one the roster declares")
 
+# B21b.18 (CP-T09-09, AM-F-17 [ASSUMPTION; medium; Jordan to correct; revert: drop the value and the stamp, `conspire` declares `Person`]): A SEAT-HOLDER A PLOT
+# MAY BE AGAINST, `Disputant`'s shape -- no collection (the id is a `Person`), stamped by name by the standing occasion `queries/world_q.py::plot_targets`, refused at
+# import off `rosters.yaml: referent_classes`. `conspire` declares it, because stamped as `Person` it would form on every man a question names.
+TARGET_CLASS = "Target"
+if TARGET_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{TARGET_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the plot-target class in the closed roster",
+                    law="B21b.18 -- a class stamped by name must be one the roster declares")
+
 # B21.08 (VB-A commit A2 [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s `referent_class: Rung`, drop the
 # value and the `Holding` term in `queries/world_q.py::questions_for`]): THE UNFOUNDED HOLDING, `Detainee`'s shape -- no
 # collection, stamped by name by the standing occasion `queries/world_q.py::holdings_to_found` (through `questions_for`), and

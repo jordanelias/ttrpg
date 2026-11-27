@@ -79,9 +79,9 @@ def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem()
             assert 1 <= len(row.governing) <= 3 and len(set(row.governing)) == len(row.governing), verb
             assert set(row.governing) <= set(descriptors.ATTRIBUTES), verb
         checked += 1
-    assert checked == len(VERB_TABLE) == 69, checked
+    assert checked == len(VERB_TABLE) == 70, checked
     kinds = [k for r in VERB_TABLE.values() for k in _kinds_of(r)]
-    assert (kinds.count("a"), kinds.count("b"), kinds.count("c"), kinds.count("d")) == (28, 31, 4, 6), kinds   # B21b.11: `declare` (a), B21b.16: `retain` (b), 27 -> 28 and 30 -> 31. B24.08: `determine` moved from (b) to (d). The five that proceed pool nothing; B21.09 moved `establish` from (a) to (b) (it is drawn), B21.14 `confer`, `revoke`, `succeed`, B21.56 `issue`
+    assert (kinds.count("a"), kinds.count("b"), kinds.count("c"), kinds.count("d")) == (28, 32, 4, 6), kinds   # B21b.18: `conspire` (b), 31 -> 32. B21b.11: `declare` (a), B21b.16: `retain` (b), 27 -> 28 and 30 -> 31. B24.08: `determine` moved from (b) to (d). The five that proceed pool nothing; B21.09 moved `establish` from (a) to (b) (it is drawn), B21.14 `confer`, `revoke`, `succeed`, B21.56 `issue`
     assert _check() is None                                                    # the shipped table passes the loader's own check
 
 
