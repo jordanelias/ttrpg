@@ -106,8 +106,8 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `loop/witness.py` | 45: B01 1, B09 2, B10 1, B24p 1, B11 15, B21 2, B24 3, B34 1, B12c 1, B25 1, B22 2, B26 4, B28 5, B32 1, B35 2, B38 3 | B01 → B09 → B10 → B24p → B11 → B21 → B24 → B34 → B12c → B25 → B22 → B26 → B28 → B32 → B35 → B38 | hot | listed |
 | `tests/_realm_goldens.py` | 37: B02 1, B03 1, B09 1, B10 1, B24p 1, BA1 1, B11 1, B15 1, B21 1, B08 1, B12a 1, B16 1, B21b 1, B24 1, B21c 1, B34 1, B12c 1, B19 1, B21d 1, B11F1 1, B20 1, B25 1, B27 1, B37 1, B22 1, B26 1, B28 1, B32 1, B37p 1, B23 1, B30 1, B35 1, B33 1, B36 1, B38 1, B39 1, B40 1 | B09 → B10 → B24p → BA1 → B11 → B15 → B21 → B08 → B12a → B16 → B21b → B24 → B21c → B34 → B12c → B19 → B21d → B11F1 → B20 → B25 → B27 → B37 → B22 → B26 → B28 → B32 → B37p → B23 → B30 → B35 → B33 → B36 → B38 → B39 → B40 | hot | **not listed** |
 | `offices.yaml` | 35: B21 8, B21b 1, B21c 3, B12c 1, B24a 1, B32 4, B23 1, B33 10, B40 6 | B21 → B21b → B21c → B12c → B24a → B32 → B23 → B33 → B40 | hot | listed |
-| `references/troops.yaml` | 36: B19a 1, B19 16, B20 3, B22 4, B30 1, B31 11 | B19a → B19 → B20 → B22 → B30 → B31 | hot | listed |
-| `engine/engine_params/troops.json` | 32: B19a 1, B19 15, B20 1, B22 3, B30 1, B31 11 | B19a → B19 → B20 → B22 → B30 → B31 | hot | **not listed** |
+| `references/troops.yaml` | 36: B19 16, B20 3, B22 4, B30 1, B31 11 | B19 → B20 → B22 → B30 → B31 | hot | listed |
+| `engine/engine_params/troops.json` | 32: B19 15, B20 1, B22 3, B30 1, B31 11 | B19 → B20 → B22 → B30 → B31 | hot | **not listed** |
 | `loop/predicates.py` | 31: B03 3, B09 2, B21 14, B21b 1, B21c 2, B25 3, B32 4, B37p 1, B41 1 | B09 → B21 → B21b → B21c → B25 → B32 → B37p → B41 | hot | listed |
 | `decision/choose.py` | 27: B03 1, B09 4, B10 11, B08 2, B16 1, B12b 1, B34 1, B21d 2, B11F2 1, B38 3 | B09 → B10 → B08 → B16 → B12b → B34 → B21d → B11F2 → B38 | hot | listed |
 | `loop/effects_combat.py` | 20: B07 1, B12a 1, B29 1, B12c 1, B19 1, B20 3, B37 1, B22 4, B28 2, B37p 1, B23 3, B31 1 | B07 → B12a → B29 → B12c → B19 → B20 → B37 → B22 → B28 → B37p → B23 → B31 | hot | listed |
@@ -119,7 +119,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `modules/mass_battle/massbattle.py` | 19: B19 7, B20 8, B22 1, B31 3 | B19 → B20 → B22 → B31 | hot | listed |
 | `write_matrix.yaml` | 23: B03 1, B09 1, B10 2, B11 1, B12a 1, B24 1, B12b 4, B24a 2, B27 2, B22 1, B35 2, B31 1, B33 1, B39 3 | B09 → B10 → B11 → B12a → B24 → B12b → B24a → B27 → B22 → B35 → B31 → B33 → B39 | hot | listed |
 | `references/module_contracts.yaml` | 23: B03 5, B03g 1, B24p 1, B11 1, B16 1, B24 3, B12b 2, B12c 1, B37 1, B22 1, B30 2, B35 3, B41 1 | B24p → B11 → B16 → B24 → B12b → B12c → B37 → B22 → B30 → B35 → B41 | hot | listed |
-| `tools/export_troops.py` | 22: B19a 1, B19 9, B20 2, B22 1, B30 1, B31 8 | B19a → B19 → B20 → B22 → B30 → B31 | hot | listed |
+| `tools/export_troops.py` | 22: B19 9, B20 2, B22 1, B30 1, B31 8 | B19 → B20 → B22 → B30 → B31 | hot | listed |
 | `harness/storybar.py` | 23: B02 3, B03 2, B36 8, B38 10 | B36 → B38 | hot | listed |
 | `seam/wrappers/combat.py` | 14: B01a 2, B15 4, B16 2, B34 1, B18 3, B37 1, B30 1 | B01a → B15 → B16 → B34 → B18 → B37 → B30 | hot | listed |
 | `modules/mass_battle/orchestration.py` | 18: B19 15, B20 1, B31 2 | B19 → B20 → B31 | hot | listed |
@@ -135,7 +135,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `engine/engine_params/sim_params.json` | B05.01, B05.03, B24.33, B19.14, B19.51, B19.55, B19.63, B19.64, B19.68, B35.05, B31.04, B31.06 | B24 → B19 → B35 → B31 |  | listed |
 | `harness/chronicle.py` | B05.18, B09.16, B10.05, B10.64, B28.27, B36.01, B36.03, B36.06, B36.07, B38.12, B38.15, B38.16, B38.68, B38.76, B38.81 | B09 → B10 → B28 → B36 → B38 |  | listed |
 | `modules/combat/fight.py` | B05.57, B05.58, B05.61, B15.02, B15.07, B15.10, B18.02, B18.07, B18.08, B37.15, B30.09 | B15 → B16 → B18 → B37 → B30 |  | listed |
-| `modules/mass_battle/troop_types/table.py` | B19a.01, B19.28, B19.15, B19.17, B19.54, B19.57, B19.60, B19.62, B20.10, B31.04, B31.05, B31.06, B31.08, B31.10, B31.15, B31.20 | B19a → B19 → B20 → B31 |  | listed |
+| `modules/mass_battle/troop_types/table.py` | B19.28, B19.15, B19.17, B19.54, B19.57, B19.60, B19.62, B20.10, B31.04, B31.05, B31.06, B31.08, B31.10, B31.15, B31.20 | B19 → B20 → B31 |  | listed |
 | `loop/driver.py` | B09.16, B10.06, B11.66, B12a.12, B12b.04, B12b.24, B11F2.07, B28.17, B28.18, B28.20, B35.10 | B09 → B10 → B11 → B12a → B12b → B11F2 → B28 → B35 |  | listed |
 | `modules/mass_battle/orderofbattle.py` | B19.03, B19.04, B19.17, B19.18, B19.19, B19.21, B20.01, B20.02, B20.20, B22.24, B31.03, B31.10, B31.14 | B19 → B20 → B22 → B31 |  | listed |
 | `engine/engine_params/combat_engine_v1.json` | B05.58, B15.02, B15.15, B15.99, B34.07, B18.02, B18.03, B18.06, B18.07 | B15 → B16 → B34 → B18 |  | listed |
@@ -192,7 +192,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `modules/combat/core.py` | B05.57, B05.58, B15.02, B15.03, B15.05 | B15 |  | listed |
 | `modules/mass_battle/armies.py` | B19.04, B19.07, B19.55, B20.20 | B19 → B20 |  | **not listed** |
 | `modules/settlements/subsist.py` | B12a.53, B12a.60, B12b.14, B12b.35, B12b.40, B39.19 | B12a → B12b → B39 |  | listed |
-| `references/ci_checks_registry.yaml` | B19a.02, B19a.03, B41.06, B40.02 | B19a → B41 → B40 |  | **not listed** |
+| `references/ci_checks_registry.yaml` | B41.06, B40.02 | B41 → B40 |  | **not listed** |
 | `architecture/meta/04_CODE_ARCHITECTURE.md` | B11.04, B41.03 | B11 → B41 |  | **not listed** |
 | `engine/engine_params/composition.json` | B30.05, B41.02 | B30 → B41 |  | **not listed** |
 | `harness/field_scene.py` | B20.11, B20.12, B22.11, B22.12, B30.06 | B20 → B22 → B30 |  | **not listed** |
@@ -237,7 +237,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `systems/threadwork/sim/operations.py` | B35.03 | B35 |  | **not listed** |
 | `systems/threadwork/sim/params.py` | B35.03, B35.04 | B35 |  | **not listed** |
 | `tools/export_sim_params.py` | B27.25 | B27 |  | **not listed** |
-| `tools/valoria_local.py` | B19a.03, B41.06 | B19a → B41 |  | **not listed** |
+| `tools/valoria_local.py` | B41.06 | B41 |  | **not listed** |
 | `tests/test_sc_calibration_targets.py` | B05.22, B05.51, B05.59, B24p.23 | B24p |  | **not listed** |
 | `decision/budget.py` | B12b.04, B35.16 | B12b → B35 |  | listed |
 | `harness/access.py` | B28.22, B28.27, B38.12 | B28 → B38 |  | **not listed** |
@@ -258,7 +258,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/test_vm_phy_a_custody.py` | B15.07, B15.08 | B15 |  | **not listed** |
 | `tests/test_vres_task_and_prize.py` | B07.04, B11.83, B11.84 | B07 → B11 |  | **not listed** |
 | `tests/valoria/test_combat_ob_from_defender_consumers.py` | B05.58, B15.03 | B15 |  | **not listed** |
-| `tests/valoria/test_export_troops.py` | B19a.01, B30.04 | B19a → B30 |  | **not listed** |
+| `tests/valoria/test_export_troops.py` | B30.04 | B30 |  | **not listed** |
 | `tests/valoria/test_mass_battle_ammo.py` | B19.21, B19.51, B31.02 | B19 → B31 |  | **not listed** |
 | `tests/valoria/test_mass_battle_matchups.py` | B19.62, B19.63, B31.20 | B19 → B31 |  | **not listed** |
 | `tests/valoria/test_mass_battle_role_instructions.py` | B31.08 | B31 |  | **not listed** |
@@ -276,7 +276,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `collective.py` | B35.05 | B35 |  | **not listed** |
 | `effects_information.py` | B07.02, B32.09 | B07 → B32 |  | listed |
 | `engine/engine_params/` | B21.51, B27.25 | B21 → B27 |  | **not listed** |
-| `engine/engine_params/mb_contact.json` | B19a.03, B31.20 | B19a → B31 |  | **not listed** |
+| `engine/engine_params/mb_contact.json` | B31.20 | B31 |  | **not listed** |
 | `data/__init__.py` | B32.01 | B32 |  | **not listed** |
 | `data/goals.py` | B10.71, B38.79 | B10 → B38 |  | listed |
 | `decision/questions.py` | B09.01, B38.74 | B09 → B38 |  | **not listed** |
@@ -318,12 +318,12 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `modules/settlements/produce.py` | B12b.22, B12c.02 | B12b → B12c |  | **not listed** |
 | `modules/social_contest/evidence.py` | B24.19, B27.12 | B24 → B27 |  | listed |
 | `opposing.py` | B35.05 | B35 |  | **not listed** |
-| `references/mb_contact/duel_grid.json` | B19a.02, B31.20 | B19a → B31 |  | **not listed** |
+| `references/mb_contact/duel_grid.json` | B31.20 | B31 |  | **not listed** |
 | `references/names_index.yaml` | B41.11, B33.40 | B41 → B33 |  | listed |
 | `systems/mass_battle/sim/multi.py` | B19.07 | B19 |  | **not listed** |
-| `tools/calibrate_mb_contact.py` | B19a.02, B31.20 | B19a → B31 |  | **not listed** |
+| `tools/calibrate_mb_contact.py` | B31.20 | B31 |  | **not listed** |
 | `tools/export_composition.py` | B41.02 | B41 |  | **not listed** |
-| `tools/export_mb_contact.py` | B19a.03, B31.20 | B19a → B31 |  | **not listed** |
+| `tools/export_mb_contact.py` | B31.20 | B31 |  | **not listed** |
 | `valoria_master_workplan_v12_part2_cont2.md` | B24.04, B23.04 | B24 → B23 |  | **not listed** |
 | `harness/pairs.py` | B01a.04, B24p.17 | B01a → B24p |  | **not listed** |
 | `tests/test_pairs.py` | B01a.04, B24p.17 | B01a → B24p |  | **not listed** |
