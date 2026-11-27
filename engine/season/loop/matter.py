@@ -30,6 +30,7 @@ from ..decision.budget import bands_below
 from ..gaps import Unspecified
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
+from ..seam.wrappers.pool import faculty
 from ..state.carriers import Event, is_clock_stage
 from ..state.gate import PERSON_DIED, Change, Token, death_subjects
 from ..state.ids import H, ROOT, draw_factory
@@ -977,7 +978,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # draws AGAIN at each later barrier, a fresh draw each time because the key's leg index (`road:<len(travel_leg) - 1>`) and the tick both move, on the whole
     # journey's obstacle (`road_input` prices the journey, not the remainder); a traveller whose journey crossed no border draws nothing and still loses a leg.
     on_road = w.fixtures.get("road_hazard") == ROAD_HAZARD_ON
-    degrees = dict(_step_call(EXPOSURE)(world_q.road_input(w)).rows) if on_road else {}
+    degrees = dict(_step_call(EXPOSURE)(world_q.road_input(w, faculty)).rows) if on_road else {}
     road_step = w.fixtures.get("road_step")
     for pid in sorted(w.persons):
         traveller = w.persons[pid]

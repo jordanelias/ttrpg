@@ -110,18 +110,18 @@ def test_road_input_obstacle_counts_borders_bad_weather_and_war(monkeypatch):
     fx = DEFAULT_FIXTURES
     base, step = fx.get("difficulty_ob")[fx.get("road_base")], fx.get("road_step_ob")
     w = _road_world()
-    (pid, pool, obstacle, key), = world_q.road_input(w).travellers          # p_near crossed no territory, p_home holds no leg: only p_far
+    (pid, pool, obstacle, key), = world_q.road_input(w, faculty).travellers          # p_near crossed no territory, p_home holds no leg: only p_far
     assert pid == "p_far" and pool == faculty(w, w.persons["p_far"], "move")
     assert obstacle == base + 4 * step, "the control: four points of distance, no weather draw, no war"
     assert key == draw_factory(0, lambda: 3)("p_far", "road:0").key
     w.log.append(Event("ev_old", "field.lost", [about(w, "p_far")], [ROOT], 0))          # a field three ticks old, in terr_c where the journey ended
-    assert world_q.road_input(w).travellers[0][2] == base + 4 * step, "a field three ticks old is not on the road"
+    assert world_q.road_input(w, faculty).travellers[0][2] == base + 4 * step, "a field three ticks old is not on the road"
     w.log.append(Event("ev_war", "field.won", [about(w, "p_soldier")], [ROOT], 2))       # a field fought last tick in terr_b, a territory the journey entered
-    assert world_q.road_input(w).travellers[0][2] == base + 5 * step
+    assert world_q.road_input(w, faculty).travellers[0][2] == base + 5 * step
     # the weather arm on, every season so hard that the draw lands Failure in each territory (pool 6 against an obstacle of 100): the two territories entered
     w.fixtures = w.fixtures.sweep("season_factor_draw", ((1.0,),) * len(SEASONS_OF_YEAR))
     monkeypatch.setattr(world_q, "SEASON_TERMS", {s: {**t, "hardship": 100} for s, t in world_q.SEASON_TERMS.items()})
-    assert world_q.road_input(w).travellers[0][2] == base + (4 + 2 + 1) * step
+    assert world_q.road_input(w, faculty).travellers[0][2] == base + (4 + 2 + 1) * step
 
 
 # -- B12b.10: what a journey appends to `travel_leg` -----------------------------------------------------------------------------------------------

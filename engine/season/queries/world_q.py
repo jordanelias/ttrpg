@@ -3019,19 +3019,18 @@ def _war_territories(w: World) -> frozenset:
     return frozenset(out)
 
 
-def road_input(w: World) -> RoadInput:
+def road_input(w: World, faculty) -> RoadInput:
     """B12b.09 (`16_PESSIMIST_WR_A` edit 4, CP-T10-02): WHO IS ON THE ROAD AND THEIR ODDS -- one `(pid, pool, obstacle, draw_key)` for each person holding a `travel_leg`
     whose last journey crossed a border, in `pid` order. Nothing in the loop calls it while `road_hazard` is `off`; a read, storing nothing.
 
     THE JOURNEY is `_last_journey`'s, read through `route`: the settlements it passes, each under its `enclosing_territory`; the territories it ENTERED
     (every one but the origin's own) are the ones it CROSSED. A journey that crossed none (inside one settlement, inside one territory, blocked, or with no known
     start) draws nothing and is in the input of nobody: a journey of no border has no hazard.
-    POOL: `seam/wrappers/pool.py::faculty(w, person, "move")`, the one owner of a person's pool for a verb, so a skill a designer attaches to `move` is read here
+    POOL: `faculty(w, person, "move")`, handed in by the caller (MATTER; `seam/wrappers/pool.py::faculty` imports this module, so it is not imported here), the one owner of a person's pool for a verb, so a skill a designer attaches to `move` is read here
     with no edit. OBSTACLE, a declared float (A-29): the difficulty `road_base` names (`difficulty_ob`, the even line against nobody opposite) plus `road_step_ob`
     for each of three hostile terms -- the journey's distance (`leg_points_of`, the one price `leg_price` shows the chooser), each crossed territory whose
     season draw this tick landed Failure (`season_band_of`; none at the weather arm's control), and each crossed territory a field was fought in this tick or the
     last (`_war_territories`). DRAW KEY: `(world_seed, tick, pid, "road:<leg index>")`, the index of his last leg, through the one keyed-draw owner (A-30)."""
-    from ..seam.wrappers.pool import faculty       # at the call: `seam/` imports this module
     fx = w.fixtures
     base, step, unit = float(fx.get("difficulty_ob")[fx.get("road_base")]), fx.get("road_step_ob"), fx.get("leg_unit")
     failure = DEGREE_LABEL[Degree.FAILURE]
