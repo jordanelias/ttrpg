@@ -68,7 +68,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
+| S14 | B12b (SE+WR), B19a (MB), B21c (FA), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
@@ -103,7 +103,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B26-fi-inquiry | FI | W17 | S17 | 1 | 33_cont | 18 (B17 DF1) | MOVER (behaviour 13) | 9.7 | B00, B01, B02, B10, B11, B12c, B24, B25 |
 | B27-sc-proceedings | SC | W16 | S16 | 0 | 31, 31_cont | 30 (B21 R1 H1 DF6; +B27.28 B, V2 fold; +B27.29 B) | MOVER (behaviour 12) | 14.5 | B00, B01, B01a (B01a.05), B02, B11, B24, B24a, B24p @ba108d1 |
 | B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 37 (B31 P1 R1 BL1 DF2; +B28.34 DF, +B28.35 B, 2026-11-13; +B28.36 B, B24 close) | MOVER (behaviour 18) | 17.3 | B00, B01, B01a (B01a.05), B02, B05, B07, B08, B11, B15, B21, B24a +R, B24p @ba108d1, B25, B27 +R |
-| B29-pc-custody | PC | W14 | S14 | 0 | 24_cont | 4 (B4) | MOVER (behaviour 2, conditional 1) | 4.1 | B00, B01, B02, B15, B16, B21 |
 | B30-mb-nested | MB | W17 → **W18** | S18 | 4 | 37_cont | 11 (B10 DF1) | MOVER (behaviour 4) | 6.9 | B00, B01, B02, B16L, B05, B15, B16, B20, B22 +R, B24 |
 | B31-mb-loadout-economy | MB | W16 → **W18** | S19 | 4 | 39_cont | 21 (B17 P2 C1 DF1) | MOVER (behaviour 5) | 10.9 | B00, B01, B02, B16L, B17, B18, B19, B20 +R, B22 +R |
 | B32-inst-kit | FA | W17 | S17 | 0 | 34, 34_cont | 33 (B31 P1 BL1) | MOVER (behaviour 16, encoding 1) | 15.7 | B00, B01, B02, B04, B05, B07, B20, B21, B21b, B21c, B24, B24a, B25, B27 |
@@ -152,7 +151,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B26-fi-inquiry | 33_cont:863 | yes | 8 | yes | none | — |
 | B27-sc-proceedings | 31_cont:198 | yes | 8 | yes | none | B01a (B01a.05); B24p (2026-11-14) |
 | B28-social-verbs | 35_cont:368 | yes | 14 | yes | none | B24a; B01a (B01a.05); B24p (2026-11-14) |
-| B29-pc-custody | 24_cont:679 | yes | 6 | yes | none | — |
 | B30-mb-nested | 37_cont:263 | yes | 10 | yes | none | — |
 | B31-mb-loadout-economy | 39_cont:419 | yes | 9 | yes | none | — |
 | B32-inst-kit | 34_cont:220 | yes | 14 | yes | none | — |
@@ -184,7 +182,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | S14 | B12b | 12, 16, 21, 25, 28, 33, 40, 41, 42, 43, 44, 47 | 18 | — | `B12b.99` | 1 of 4 movers |
 | S14 | B19a | — | — | — | `B19a.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |
-| S14 | B29 | 01, 02 | — | 03 | `B29.99` | 3 of 4 movers |
 | S14 | B34 | 01, 23, 24 | — | — | `B34.99` | 4 of 4 movers |
 | S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | 09 (R2c, K6 F14) | `B12c.99` | 1 of 5 movers |
 | S15 | B18 | 04, 05, 08, 09 | — | — | `B18.99` | 2 of 5 movers |
