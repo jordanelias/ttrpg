@@ -74,6 +74,8 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TROOPS = os.path.join(REPO, "references", "troops.yaml")
 PARAMS = os.path.join(REPO, "engine", "engine_params", "combat_engine_v1.json")
 COMBAT_DIR = os.path.join(REPO, "modules", "combat")
+DICE_DIR = os.path.join(REPO, "engine", "dice_engine")
+INPUTS = os.path.join(REPO, "engine", "season", "queries", "inputs.py")
 TABLE = os.path.join(REPO, "references", "mb_contact", "duel_grid.json")
 
 GRID_SKILLS = (1, 3, 5)          # MBA §2.1: the troop table's span; 2 and 4 are interpolated and checked
@@ -91,11 +93,14 @@ Skill = int
 
 # ---------------------------------------------------------------------------------------------------- the fingerprint
 def engine_fingerprint() -> str:
-    """THE ONE OWNER of the duel-engine fingerprint: sha256 over `engine/engine_params/combat_engine_v1.json` and then every
-    `modules/combat/*.py` in sorted filename order. Byte order: for each file, its repo-relative posix path, one NUL, its raw
-    bytes, one NUL. A pure read; no import-time work."""
+    """THE ONE OWNER of the duel-engine fingerprint: sha256 over `engine/engine_params/combat_engine_v1.json`, then every
+    `modules/combat/*.py`, every `engine/dice_engine/*.py` (the degree ladder, the draw and `fmath` the duel rolls through) and
+    `engine/season/queries/inputs.py` (the duel round's typed input), each group in sorted filename order. Byte order: for each file,
+    its repo-relative posix path, one NUL, its raw bytes, one NUL. A pure read; no import-time work. [ASSUMPTION: these are the files
+    a duel's outcome can depend on -- basis: the imports of `modules/combat/{core,fight,wrapper,weapon_physics}.py`; MBA §2.3 named
+    only the first two groups, and a change under `engine/dice_engine/` moves every felling chance without moving them; reversible: this list.]"""
     h = hashlib.sha256()
-    files = [PARAMS] + [os.path.join(COMBAT_DIR, f) for f in sorted(os.listdir(COMBAT_DIR)) if f.endswith(".py")]
+    files = [PARAMS] + [os.path.join(d, f) for d in (COMBAT_DIR, DICE_DIR) for f in sorted(os.listdir(d)) if f.endswith(".py")] + [INPUTS]
     for p in files:
         h.update(os.path.relpath(p, REPO).replace(os.sep, "/").encode() + b"\0")
         with open(p, "rb") as f:
@@ -470,7 +475,8 @@ def cmd_cell(grid: Grid, keytext: str, n: int, table: str) -> int:
     if stored is not None and stored["duels"] == n:
         print("# vs the stored row: " + ("reproduces it byte for byte" if cell_json(cell) == cell_json(stored) else "DIFFERS"), file=sys.stderr)
         return 0 if cell_json(cell) == cell_json(stored) else 1
-    return 0
+    print(f"# no comparison made: the table holds no row for this cell at {n} duels", file=sys.stderr)
+    return 2
 
 
 def cmd_spot(grid: Grid, m: int, table: str, workers: int) -> int:
@@ -479,9 +485,12 @@ def cmd_spot(grid: Grid, m: int, table: str, workers: int) -> int:
         print(f"no table at {table}", file=sys.stderr)
         return 2
     cells = t["cells"]
-    step = max(1, len(cells) // m)
-    chosen = [cells[i * step] for i in range(m) if i * step < len(cells)]
-    if t.get("engine_fingerprint") != engine_fingerprint():
+    if m < 1:
+        print("--spot needs M >= 1", file=sys.stderr)
+        return 2
+    chosen = [cells[i * len(cells) // m] for i in range(min(m, len(cells)))]   # evenly over the whole key order, last decile included
+    fingerprint_ok = t.get("engine_fingerprint") == engine_fingerprint()
+    if not fingerprint_ok:
         print("# WARNING: the table's engine fingerprint is not the tree's; a re-run is expected to differ", file=sys.stderr)
     bad = 0
     # each cell is re-run at its own stored duel count (the stop rule's checkpoint), so an unchanged engine reproduces the row
@@ -492,7 +501,7 @@ def cmd_spot(grid: Grid, m: int, table: str, workers: int) -> int:
             lo, hi = c["sides"][s]["h_lo"][0], c["sides"][s]["h_hi"][0]
             verdicts.append(lo <= h1 <= hi)
         same = cell_json(cell) == cell_json(c)
-        bad += not all(verdicts)
+        bad += not all(verdicts) or (not same and fingerprint_ok)    # an unchanged engine reproduces the stored row byte for byte
         print(f"{'inside' if all(verdicts) else 'OUTSIDE'}  {grid.key_text(key)}  duels {c['duels']}  h_1 "
               f"{cell['sides']['a']['h'][0]:.4f}/{cell['sides']['b']['h'][0]:.4f} in [{c['sides']['a']['h_lo'][0]:.4f},{c['sides']['a']['h_hi'][0]:.4f}]"
               f"/[{c['sides']['b']['h_lo'][0]:.4f},{c['sides']['b']['h_hi'][0]:.4f}]  {'identical' if same else 'differs'}")
@@ -605,8 +614,8 @@ def cmd_trust(grid: Grid, table: str) -> int:
 
     # 7. round boundary: the rounds the instrument reads against fight.fight()'s own count, 100 duels, one key each
     E = _engine()
-    insp = _inputs(pilot)
-    rng = random.Random(zlib.crc32(repr(pilot).encode()) % 100000)
+    insp = _inputs(mk)          # the mirror, not the pilot: a pilot duel ends in about one round and never meets the boundary
+    rng = random.Random(zlib.crc32(repr(mk).encode()) % 100000)
     for i in range(100):
         hexkey = f"{rng.getrandbits(64):016x}"
         o = i % 2
@@ -646,7 +655,7 @@ def main(argv=None) -> int:
     grid = Grid()
     if a.cell:
         return cmd_cell(grid, a.cell[0], int(a.cell[1]), a.table)
-    if a.spot:
+    if a.spot is not None:
         return cmd_spot(grid, a.spot, a.table, a.workers)
     return cmd_trust(grid, a.table)
 

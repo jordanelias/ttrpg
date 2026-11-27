@@ -1,10 +1,13 @@
-"""modules.mass_battle.core.contact_table -- the measured felling chances the contact draw reads, by log-odds interpolation.
+"""systems.mass_battle.sim.contact_table -- the measured felling chances the contact draw reads, by log-odds interpolation.
 
 The head is the measured duel table `references/mb_contact/duel_grid.json` (written by `tools/calibrate_mb_contact.py`, which runs the
 duel engine); `tools/export_mb_contact.py` cooks it, with the troop file, into `engine/engine_params/mb_contact.json` (the port's) and
 `contact_table_data.py` beside this module (the same document as a Python literal). This module reads the second, once, on first use.
-It imports no `engine` code and nothing from `modules.combat`: a registered module opens no file (A-25) and names no other
-subsystem, so the duel engine reaches the game only through the table. A stale table is refused where a file may be opened, by the
+It imports no `engine` code and nothing from `modules.combat`: it opens no file (A-25's shape) and names no other
+subsystem, so the duel engine reaches the game only through the table. IT LIVES IN `systems/` UNTIL B19's contact draw reads it:
+`modules/` holds the reachable closure of the entries only (A-25; `test_modules_reachable_closure`), and a composition row for a role
+no caller requires is not declared (`module_contracts.yaml`, ID-13). B19 moves both files to `modules/mass_battle/core/` with the
+first call (and swaps `math.log`/`math.exp` for `engine.dice_engine.fmath`, `test_fmath_one_owner`). A stale table is refused where a file may be opened, by the
 exporter's `--check` (its fingerprint arm), never here.
 
 A FELLING CHANCE `h` is the chance a defender's man is taken out of the fight (felled, or yielding) in one duel round, given that
@@ -21,7 +24,8 @@ either is undefined (it would need a distribution over what the other side carri
 argument is as the plan names it (MBA §2.2). A caller (B19's vector builder) carries all seven. Reversible: this signature.]
 
 [ASSUMPTION: `beta` is read per step of the ATTACKER's skill, at the pair, and interpolated linearly across skills -- basis: the
-exporter's docstring; the contact draw's levels (in skill steps) move `logit(h)` by `beta` each, one ladder.]
+exporter's docstring. Whether a step of the DEFENDER's skill moves the logit by `-beta` is not borne out by the table (the exporter's
+FINDING: 1.57 times at arming/light 3 against 3); this module applies no defender slope.]
 """
 from __future__ import annotations
 
@@ -37,8 +41,8 @@ _EPS = 1e-6        # [JUSTIFIED: logit's clamp, a chance of 0 or 1 reads as _EPS
 @functools.lru_cache(maxsize=None)
 def _data() -> dict:
     """The exported document, imported once, on first use. The exporter's `--check` pins it equal to the JSON."""
-    from modules.mass_battle.core.contact_table_data import DATA
-    return DATA
+    from systems.mass_battle.sim.contact_table_data import CONTACT_DATA
+    return CONTACT_DATA
 
 
 def rounds_k() -> int:

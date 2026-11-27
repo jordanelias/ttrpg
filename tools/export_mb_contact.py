@@ -4,9 +4,9 @@
 WHY THIS EXISTS (B19a.03, MBA-03). The mass-battle contact draw reads the felling chance of a man in a given duel (`h`), measured
 by `tools/calibrate_mb_contact.py` over the duel engine into `references/mb_contact/duel_grid.json`. A value the engine reads lives
 in a typed artifact behind an exporter with a blocking `--check` (CLAUDE.md §5): this tool writes
-`engine/engine_params/mb_contact.json` (the port's) and `modules/mass_battle/core/contact_table_data.py` (the same document as a Python
+`engine/engine_params/mb_contact.json` (the port's) and `systems/mass_battle/sim/contact_table_data.py` (the same document as a Python
 literal, because a registered module opens no file, A-25; the precedent is `export_troops.py`'s `troops_data.py`). The module that
-reads it is `modules/mass_battle/core/contact_table.py`. A hand edit of either artifact fails `--check`.
+reads it is `systems/mass_battle/sim/contact_table.py`. A hand edit of either artifact fails `--check`.
 
 WHAT IT HOLDS. `pairs`: for each ORDERED pair of grid fighter types `(arm, armour, skill)`, keyed `attacker>defender`, the row of
 the DEFENDER's man: `h` (K felling chances, rounds 1..K, rounded to 4 significant digits), `beta`, `flags`. A cell of the measured
@@ -14,9 +14,11 @@ table gives both orders (side `b`'s row is `a>b`, side `a`'s row is `b>a`); in a
 the pair holds their mean (flags united). `beta` is the slope of `logit(h_1)` per step of the ATTACKER's skill, holding the rest of
 the pair fixed, from the pair's two skill neighbours on the grid (1, 3, 5): at skill 3 it is `(L(5) - L(1)) / 4`, at skill 1
 `(L(3) - L(1)) / 2` and at skill 5 `(L(5) - L(3)) / 2` (one-sided at an edge), `L` = `logit(h_1)` of the same pair with only the
-attacker's skill changed. [ASSUMPTION: one step of the defender's skill moves the logit by `-beta` (the ladder is the skill
-difference, MBA §1.4) -- basis: the contact draw's named levels are in skill steps on one ladder; reversible: measure beta from the
-defender's neighbours too.] The twelve interpolation check cells (skill 2 and 4) are not exported: they test the interpolation
+attacker's skill changed. [FINDING, NOT RESOLVED HERE: MBA §1.4 reads one step of the DEFENDER's skill as `-beta` (one ladder, the skill
+difference). The table does not bear it out: at arming/light 3 against 3 `beta` is 0.1893 but the defender-side slope, from the same
+table's skill-1 and skill-5 defenders, is (logit h(3>5) - logit h(3>1)) / 4 = -0.2965, 1.57 times `beta`; and equal-difference pairs
+(1>1, 3>3, 5>5) read logit -2.21, -2.32, -2.58, not one value. B19, which applies `beta` x levels, decides whether to export a
+defender-side slope; nothing here reads it.] The twelve interpolation check cells (skill 2 and 4) are not exported: they test the interpolation
 (`tests/valoria/test_export_mb_contact.py`) and the module never reads them. Beside `pairs`: `contact` (the troop file's exposure,
 levels and K), `missile`, `matchups` with their status tags, `arms` (the arm-to-duel-key map) and the header (`engine_fingerprint`,
 `K`, `schema_version`, `_generated`).
@@ -51,7 +53,7 @@ if REPO not in sys.path:
 TABLE = cmc.TABLE
 TROOPS = cmc.TROOPS
 OUT = os.path.join(REPO, 'engine', 'engine_params', 'mb_contact.json')
-OUT_PY = os.path.join(REPO, 'modules', 'mass_battle', 'core', 'contact_table_data.py')
+OUT_PY = os.path.join(REPO, 'systems', 'mass_battle', 'sim', 'contact_table_data.py')
 SCHEMA_VERSION = 1
 SIG_DIGITS = 4          # `h` and `beta` are kept to this many significant digits
 EPS = 1e-6              # logit's clamp: a felling chance of 0 or 1 is read as EPS or 1 - EPS
@@ -89,9 +91,10 @@ def _rows(table: dict) -> dict:
         if ta == tb:                                       # a mirror: two measurements of one chance
             h = [(x + y) / 2 for x, y in zip(ra['h'], rb['h'])]
             out[(ta, ta)] = (h, set(ra['flags']) | set(rb['flags']))
-        else:
-            out[(tb, ta)] = (ra['h'], set(ra['flags']))
-            out[(ta, tb)] = (rb['h'], set(rb['flags']))
+        else:                                              # a `certain` cell (an outcome of 0 or 1 at the cap) flags both rows
+            extra = {'certain'} if c.get('certain') else set()
+            out[(tb, ta)] = (ra['h'], set(ra['flags']) | extra)
+            out[(ta, tb)] = (rb['h'], set(rb['flags']) | extra)
     return out
 
 
@@ -132,13 +135,16 @@ def build(table_path: str | None = None, troops_path: str | None = None) -> dict
     fp = cmc.engine_fingerprint()
     if table.get('engine_fingerprint') != fp:
         raise Refused(f'STALE CALIBRATION: the duel engine\'s fingerprint {fp[:12]} is not the table\'s '
-                      f'{str(table.get("engine_fingerprint"))[:12]} (a change to engine/engine_params/combat_engine_v1.json or '
-                      f'modules/combat/*.py can move a felling chance). Re-measure: {REMEDY}   '
+                      f'{str(table.get("engine_fingerprint"))[:12]} (a change to engine/engine_params/combat_engine_v1.json, '
+                      f'modules/combat/*.py, engine/dice_engine/*.py or engine/season/queries/inputs.py can move a felling chance). Re-measure: {REMEDY}   '
                       f'(to run it in chunks and merge them, see the instrument\'s docstring, "CHUNKING THE GRID")')
     import yaml
     with open(troops_path, encoding='utf-8') as fh:
         troops = yaml.safe_load(fh)
-    grid = cmc.Grid(troops_path)
+    try:
+        grid = cmc.Grid(troops_path)
+    except ValueError as e:      # a duel key, armour tier or skill the instrument's grid does not hold
+        raise Refused(f'the troop file does not fit the instrument\'s grid: {e}. Re-measure: {REMEDY}')
     if table.get('K') != grid.K:
         raise Refused(f'the table holds K = {table.get("K")!r} rounds and the troop file\'s contact.K is {grid.K}. Re-measure: {REMEDY}')
     rows = _rows(table)
@@ -180,11 +186,11 @@ def render(data: dict) -> str:
 
 
 def literal(data: dict) -> str:
-    """The module-side artifact: the document as a Python literal, `DATA`."""
+    """The module-side artifact: the document as a Python literal, `CONTACT_DATA`."""
     return ('"""GENERATED by tools/export_mb_contact.py from references/mb_contact/duel_grid.json and references/troops.yaml -- do not hand-edit.\n\n'
-            'The measured felling chances as a Python literal, read by `contact_table.py`: a registered module opens no file (A-25).\n'
+            'The measured felling chances as a Python literal, read by `contact_table.py` (A-25).\n'
             'engine/engine_params/mb_contact.json is the same document for the port; `export_mb_contact.py --check` pins them equal."""\n'
-            f'DATA = {pprint.pformat(data, width=140, sort_dicts=False, compact=True)}\n')
+            f'CONTACT_DATA = {pprint.pformat(data, width=140, sort_dicts=False, compact=True)}\n')
 
 
 def main(argv):

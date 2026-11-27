@@ -11,7 +11,14 @@ lanes:
     warrants: []
   engine:
     base: 1043
-    warrants: []
+    warrants:
+      - batch: B19a-mb-contact-instrument
+        added: 4
+        behaviour: >-
+          tests/valoria/test_export_mb_contact.py. The measured duel table read at the twelve check cells (`test_interpolation_hits_the_check_cells`:
+          the module's log-odds interpolation lands inside the measured interval, game state). The exporter's blocking `--check` for the table
+          the contact draw reads: `test_round_trip_is_clean`, `test_a_hand_edit_fails_check`, `test_a_changed_duel_engine_fails_check` (a stale
+          calibration cannot ship); `export_mb_contact.py` is not yet a CI step, so these are its only CI exerciser until the workflow line lands.
   combat:
     base: 497
     warrants: []
@@ -30,4 +37,9 @@ lanes:
 tools:
   files:
     base: 55
-    warrants: []
+    warrants:
+      - batch: B19a-mb-contact-instrument
+        added: 2
+        behaviour: >-
+          tools/export_mb_contact.py (blocking in tools/valoria_local.py; registered in ci_checks_registry.yaml) and
+          tools/calibrate_mb_contact.py (run by hand at a calibration pass; imported by the exporter for the grid and the engine fingerprint).
