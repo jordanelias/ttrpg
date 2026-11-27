@@ -9,6 +9,10 @@ lanes:
   season_loop:
     base: 3219
     warrants:
+      - {batch: B18-pc-content, added: 2, behaviour: "a person with no stocked weapon fights unarmed once the arms roster is non-empty, and a person who stocks one is the kit he was; with the roster emptied kit_of is the default for everyone"}
+      - {batch: B18-pc-content, added: 2, behaviour: "the loader refuses a shipped arms kind outside rung_kinds and a weapon or armour key outside the weapons export, which no other test observes"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the six martial lifepaths hold arms at pool_default, no other lifepath names it, and a person built on one can train it"}
+      - {batch: B18-pc-content, added: 1, behaviour: "kit_of returns the two highest-ranked distinct weapon kinds a person's rungs stock as primary and secondary, and the carry of the secondary rides the input's short pair"}
       - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a season's want term scales each per-head weight where the draw is projected, so a cohort's demand, REM-50's cover and MATTER's drain agree at a winter tick and a salt weight of 1 under 1.5 is 2; the yield term scales the drawn season factor only with the draw on; at the shipped terms the projection is the bare weights every tick"}
       - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a journey between two settlements is priced by the cheapest path over the settlement graph, each step the ground of the settlement entered, at the leg unit's scene points with a floor of one; a settlement inside a pass nested in a mountain costs the pass's price and one in the mountain's interior may not be entered; a journey into a foreign territory is still blocked"}
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a journey the chooser prices under route pricing costs its leg's points from the scene budget, far above near and equal to the world-side leg points, one point at the shipped off arm, and a journey over the person's remainder is left undone"}
@@ -51,7 +55,10 @@ lanes:
           calibration cannot ship); `export_mb_contact.py` is not yet a CI step, so these are its only CI exerciser until the workflow line lands.
   combat:
     base: 497
-    warrants: []
+    warrants:
+      - {batch: B18-pc-content, added: 1, behaviour: "a fight with every input slot absent, None or at its declared default is the same fight, event for event, and a raised axis is a different one"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the harness term the fight charges as stamina is the one the host computes from the carry rule at every armour tier and Strength, and a shortfall slows the close once CARRY_CLOSE_K is above 0"}
+      - {batch: B18-pc-content, added: 1, behaviour: "a switch swaps the weapon and costs one ACT_THRESHOLD together at the round's first closed beat and a round that never closes changes nothing, the default rule fires on a closed measure only, and a decider answering engage plays the same fight as none"}
   mass_battle:
     base: 324
     warrants: []

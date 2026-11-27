@@ -31,6 +31,8 @@ TRACE_KINDS = {
     'turned',   # PC_D (B15.05): a blow struck against a harness that dealt nothing (`wound` carries `bare`: the blow reached a bare zone)
     'disengage',   # the closed-phase withdrawal attempt (ED-PC-0030): ok=True re-opens to measure, ok=False is pursued
     'withdraw',    # REM-31: the decider's early UNRESOLVED exit, taken at the head of a turn
+    'switch',      # B18.09: a fighter put his secondary in hand at the round's first closed beat (no state of its own: the weapon in hand is `DuelState.form`)
+    'switch_paid', # B18.09: the one ACT_THRESHOLD of readiness the switch cost, taken with the swap, when the round first reached the closed phase
 }
 # B15.10: the yield roll's Partial and Overwhelming bands (`shaken`, `rallied`); no state of their own (they fall between rounds). Read from the owner.
 TRACE_KINDS |= set(vocabulary.YIELD_ROLL_EVENTS)

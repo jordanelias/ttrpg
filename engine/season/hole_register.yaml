@@ -8499,6 +8499,19 @@ rows:
     cite:      "B16-pc-round's close, Phase 1 (the accuracy and fidelity lenses, upheld by the antagonist): `modules/combat/fight.py::fight_round`'s docstring states the narrowing; `modules/combat/wrapper.py` `engagement` `rng.random()` sites; the plan's B16.03 at `FORK:f97dfff14:workplans/valoria_master_workplan_v12_part23.md`."
     source:    "workplan v12 B16 (batch B16-pc-round), close Phase 1, 2026-11-26"
 
+  - id:        H-590
+    tier:      1
+    hole:      "THE DEFAULT SWITCH RULE OVER-FIRES AGAINST LONG WEAPONS. `combat_systems.switch_wanted` weighs only `close_unwieldiness` (the item's own trigger) and ignores the reach given up, so a spear fighter carrying a sword and closed on by a longer weapon switches in about nine fights in ten and is felled far more often than the spear-only fighter: spear and arming-sword secondary at light armour, Strength 4, 400 fights per row, against a yari 0.333 felled spear-only against 0.900 with the default (365 switches in 365 fights), against a greatsword 0.530 against 0.792 (267 in 267). The rule is also a one-way ratchet (a strict less-than at a closed measure, blind at open measure), so a fighter who has gone to the dagger never goes back. It passes B18.09's Gate 3 (heavy armour against a dagger: felled 0.455 spear-only against 0.349 with the loadout, +0.106 +-0.043, control +0.065) and nothing in the season exercises it: no person who stocks two weapon kinds fought in a one-season probe at seeds 0 to 2, and a host's `switch` answer switches every party that carries a secondary."
+    kind:      "MECHANISM"
+    owner:     "`modules/combat/combat_systems.py::switch_wanted`; `modules/combat/wrapper.py::round_switchers`; `modules/combat/fight.py::fight` (the per-fight decider)"
+    grade:     "measured"
+    default:   "switch_wanted fires on the secondary's strictly lower close overhang at a closed measure, with stamina above STAMINA_COLLAPSE"
+    site:      ""
+    sweep:     []
+    unblocks:  "a ruling on whether the trigger reads reach as well as overhang and whether it can switch back at open measure, before a realm person who stocks two weapon kinds fights; and a per-party decider answer, since the decider is one answer per fight"
+    cite:      "B18-pc-content's close (the terminal critic and B18.09's receipt): the yari and greatsword rows were read on the workbench (`FR.party_of_spec` with a `secondary` key, default decider, `PYTHONHASHSEED=0`, position-swapped, the tracker's felled share as `census` reads it); the Gate 3 reading is in the commit body of the `Item: B18.09` commit and in the close's Phase 3 commit; the batch's record is `git log 70b3b617b..518528882` (`FORK:518528882:workplans/valoria_master_workplan_v12_part28_cont2.md`). Whether the rule is wanted as written is a design call (CLAUDE.md section 0's ladder: no document, ruling or precedent answers it)."
+    source:    "workplan v12 B18 (batch B18-pc-content), B18.09 and close Phase 3, 2026-11-27"
+
   - id:        H-523
     tier:      1
     hole:      "WEAR IS DRAWN, AND THE DRAW'S TWO [CALIBRATE] VALUES ARE UNSET. `09_WR_B_draws_not_thresholds` edit 1: per Site per season one keyed draw, the obstacle from the kind's wear row plus the lattice pull, the pool a fixture row, the bands Overwhelming 0 / Success half the rate / Partial the rate / Failure twice (the standing rule: we do not do deterministic). The source names the pool and the obstacle's per-point size as `[CALIBRATE: joint calibration, OWED §B]` and gives neither, so `wear_draw_pool` and `wear_draw_ob_step` ship `None` and the arm (`wear_draw: True`) REFUSES with `Unspecified` naming the row until B98 sets them; the shipped `wear_draw: False` is today's exact rate. The band multipliers are `[ASSUMPTION; medium; Jordan to correct]`."

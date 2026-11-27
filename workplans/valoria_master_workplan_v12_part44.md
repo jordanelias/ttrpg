@@ -44,7 +44,7 @@ GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 GATE: Batch B16-pc-round @96f90bbc8
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
-GATE: Batch B18-pc-content
+GATE: Batch B18-pc-content @518528882 (the closing commit before the squash of PR #650; the squash's own SHA is owed here at the merge)
 GATE: Batch B19a-mb-contact-instrument @32b6dd0ea
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders

@@ -83,10 +83,9 @@ def test_the_three_body_verbs_draw_on_arms_and_arms_is_a_vocation_with_an_attrib
     assert '"arms"' not in src and "'arms'" not in src
 
 
-def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_a_lifepath():
-    """BA1.99 re-point (was: nobody holds `arms` at landing). BA1.01 authors `arms` through the cast row's `capabilities:` on 11 persons, so
-    at landing exactly those hold it, each at the authored score, at every seed; the `cast:` overlay still names no `arms` value, no lifepath
-    template names it, and no practice record can form in it (`practice` counts Success-or-better; a fight's bands are none of the ladder's)."""
+def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay():
+    """BA1.99 re-point (was: nobody holds `arms` at landing; B18.05 puts `arms` on six martial lifepaths, none of which a cast row uses, so a lifepath still grants nobody `arms` at landing: `test_a_martial_lifepath_holds_arms_at_pool_default` owns the templates). BA1.01 authors `arms` through the cast row's `capabilities:` on 11 persons, so
+    at landing exactly those hold it, each at the authored score, at every seed; the `cast:` overlay still names no `arms` value, and no practice record can form in it (`practice` counts Success-or-better; a fight's bands are none of the ladder's)."""
     from ..data import cast
     from ..harness.corpus_run import cast_overlay
     authored = {f"p_{cid.lower().replace('-', '_')}": cast.capabilities_of(r)[KEY]
@@ -104,7 +103,6 @@ def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_
     overlay = [e for entries in cast_overlay().values() for e in entries]
     assert overlay, "setup: the overlay is empty"
     assert [e for e in overlay if KEY in (e.get("capability") or {})] == []
-    assert [lp for lp, keys in R.LIFEPATH_TEMPLATES.items() if KEY in keys] == []
     assert all(R.DEGREE_STEP.get(b, 0) == 0 for b in (FELLED, WOUNDED, UNTOUCHED))
 
 
@@ -343,3 +341,35 @@ def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter
     from ..queries.world_q import causing_act
     by = Counter(getattr(causing_act(w, e), "verb", None) for e in w.log if e.kind == "capability.raised")
     assert sum(by[v] for v in BODY_VERBS) >= 1, dict(by)
+
+
+# ---- B18.04: the shipped inventory, through the loader's own refusals ---------------------------------------------
+
+def test_an_arms_kind_outside_rung_kinds_is_refused_at_import():
+    """B18.04: the shipped `arms_at_build` seeds rungs, and the loader that admitted it refuses the same mapping with one
+    entry on a kind that is not a `rung_kinds` member, or naming an arm that has no `arms_kinds` row, or an amount below 1."""
+    from ..gaps import Unspecified
+    shipped = R.roster_map("arms_at_build", "kinds")
+    assert shipped and R.ARMS_KINDS, "setup: the shipped inventory is empty"
+    assert R._check_arms_at_build(shipped, R.RUNG_KINDS, R.ARMS_KINDS) == R.ARMS_AT_BUILD
+    arm = next(iter(R.ARMS_KINDS))
+    for bad in ({**shipped, "barn": {arm: 1}},                              # a kind the ladder does not have
+                {**shipped, "hearth": {"arms_halberd": 1}},                 # an arm with no kind
+                {**shipped, "hearth": {arm: 0}}):                           # not a positive amount
+        with pytest.raises(Unspecified):
+            R._check_arms_at_build(bad, R.RUNG_KINDS, R.ARMS_KINDS)
+
+
+def test_an_arms_kind_key_outside_the_weapons_export_is_refused_at_import():
+    """B18.04: every shipped arms kind names a key the engine's export carries on that field, and the loader refuses the
+    same rows with one key the export lacks (a weapon the engine has no record of) or a key on the wrong field."""
+    from engine.substrate import combat_kit
+    from ..gaps import Unspecified
+    shipped = R.roster_map("arms_kinds", "kinds")
+    assert len(shipped) == 7 and R._check_arms_kinds(shipped, R.roster("matter_kinds"), combat_kit.FIELDS) == R.ARMS_KINDS
+    assert {f for f, _k, _r in R.ARMS_KINDS.values()} == {"weapon", "armor"}
+    kind = next(k for k, (f, _key, _r) in R.ARMS_KINDS.items() if f == "weapon")
+    for bad_key, field in (("halberd_of_nothing", "weapon"), ("heavy", "weapon"), ("arming", "armor")):
+        bad = {**shipped, kind: {"field": field, "key": bad_key, "rank": R.ARMS_KINDS[kind][2]}}
+        with pytest.raises(Unspecified):
+            R._check_arms_kinds(bad, R.roster("matter_kinds"), combat_kit.FIELDS)

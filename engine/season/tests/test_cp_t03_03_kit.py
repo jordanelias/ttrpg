@@ -7,9 +7,10 @@ the Combatant's own default. `combat_input` fills `PersonalCombatInput.kits` for
 `kit` section of `engine/engine_params/combat_engine_v1.json` (`tools/export_engine_params.py --check`), read by
 `engine/substrate/combat_kit.py`, so no key list is copied into `rosters.yaml`.
 
-⚠ THE SHIPPED ROSTERS ARE EMPTY (the inventory is Jordan's content: `-08` AM-C-04). Every test below that needs an arms
-kind PLANTS one (`monkeypatch` on `world_q.ARMS_KINDS`, a hand-built world per P9), and the shipped state is its own
-control: with no kind `kit_of` is the default for everyone and `build_realm`'s world is the world without the seeding step.
+⚠ THE SHIPPED ROSTERS HOLD B18.04's SEVEN KINDS (the inventory is Jordan's content: `-08` AM-C-04). Every test below that
+needs an arms kind PLANTS its own (`monkeypatch` on `world_q.ARMS_KINDS`, a hand-built world per P9), and the control is
+the roster emptied in process: with no kind `kit_of` is the default for everyone and `build_realm`'s world is the world
+without the seeding step.
 
   FALSIFIER: `kit_of` on a holder of a stocked rung returns the roster's top-ranked kind per field; at stock 0 the
   default; a seeded `fight` (real seam, n = 400) with the SUBJECT's holding stocked with the top armour fells the actor at
@@ -31,6 +32,7 @@ import pytest
 
 from engine.substrate import combat_kit
 
+from ..data import rosters
 from ..data.rosters import ARMS_AT_BUILD, ARMS_KINDS, _check_arms_at_build, _check_arms_kinds
 from ..gaps import Unspecified
 from ..harness import probes as P
@@ -53,11 +55,12 @@ _REPO = Path(__file__).resolve().parents[3]
 
 def _kinds(armor_key="heavy", weapon_key=None):
     """A planted roster, validated by the shipped loader against the real export: two armour kinds (a top and a lower)
-    and one weapon kind. Returns `{kind: (field, key, rank)}`."""
+    and two weapon kinds (`t_sword` is the arming sword the fight tests arm both parties with). Returns `{kind: (field, key, rank)}`."""
     weapon_key = weapon_key or sorted(combat_kit.WEAPONS - {combat_kit.DEFAULTS["weapon"]})[0]
     raw = {"t_plate": dict(field="armor", key=armor_key, rank=3),
            "t_gambeson": dict(field="armor", key="medium", rank=1),
-           "t_blade": dict(field="weapon", key=weapon_key, rank=1)}
+           "t_blade": dict(field="weapon", key=weapon_key, rank=1),
+           "t_sword": dict(field="weapon", key="arming", rank=2)}
     return _check_arms_kinds(raw, set(raw), combat_kit.FIELDS)
 
 
@@ -70,6 +73,13 @@ def _module_entries():
 @pytest.fixture
 def armed(monkeypatch):
     monkeypatch.setattr(world_q, "ARMS_KINDS", _kinds())
+
+
+def _swordsmen(w):
+    """Both parties live at the hearth `Hh`: stock it with the arming sword, so each fights with it as before B18.03 (a roster
+    exists, and without a stocked weapon he would fight unarmed)."""
+    w.rungs["Hh"].stores = {"t_sword": 1}
+    return w
 
 
 def _world():
@@ -156,16 +166,21 @@ def test_the_loader_refuses_a_seed_that_names_no_arms_kind_or_no_rung_kind_or_no
 # 2 -- kit_of
 # ---------------------------------------------------------------------------------------------------------------
 
+def _kit(weapon, armor, secondary=None):
+    """`kit_of`'s shape, B18.08: `(primary, secondary, armor)`."""
+    return (weapon, secondary, armor)
+
+
 def test_kit_of_a_holder_of_a_stocked_rung_is_the_top_ranked_kind_per_field_and_the_default_at_stock_zero(armed):
     w = _world()
-    default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
+    default = _kit(combat_kit.UNARMED, combat_kit.DEFAULTS["armor"])   # B18.03: with a roster, "no stocked weapon" is the fist
     assert world_q.kit_of(w, ACTOR) == default, "the actor holds nothing and his hearth is empty"
-    assert world_q.kit_of(w, SUBJECT) == (default[0], "heavy"), "armour only: no weapon kind is stocked"
+    assert world_q.kit_of(w, SUBJECT) == _kit(default[0], "heavy"), "armour only: no weapon kind is stocked"
     w.rungs["Arsenal"].stores = {"t_plate": 1, "t_gambeson": 5, "t_blade": 1}
     blade = world_q.ARMS_KINDS["t_blade"][1]
-    assert world_q.kit_of(w, SUBJECT) == (blade, "heavy"), "t_plate (rank 3) outranks t_gambeson (rank 1) despite the count"
+    assert world_q.kit_of(w, SUBJECT) == _kit(blade, "heavy"), "t_plate (rank 3) outranks t_gambeson (rank 1) despite the count"
     w.rungs["Arsenal"].stores = {"t_plate": 0, "t_gambeson": 5, "t_blade": 0}
-    assert world_q.kit_of(w, SUBJECT) == (default[0], "medium"), "a zero count is not held; the lower kind is"
+    assert world_q.kit_of(w, SUBJECT) == _kit(default[0], "medium"), "a zero count is not held; the lower kind is"
     w.rungs["Arsenal"].stores = {"t_plate": 0, "t_gambeson": 0}
     assert world_q.kit_of(w, SUBJECT) == default, "stock 0 is the default"
     w.rungs["Arsenal"].stores = {}
@@ -174,15 +189,52 @@ def test_kit_of_a_holder_of_a_stocked_rung_is_the_top_ranked_kind_per_field_and_
 
 def test_kit_of_reads_his_holdings_and_then_his_residence_per_field(armed):
     w = P.tiny_world()
-    default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
+    default = _kit(combat_kit.UNARMED, combat_kit.DEFAULTS["armor"])   # B18.03: with a roster, "no stocked weapon" is the fist
     w.rungs["Hh"].stores = {"t_plate": 1}
-    assert world_q.kit_of(w, ACTOR) == (default[0], "heavy"), "no holdings: the rung he resides in"
+    assert world_q.kit_of(w, ACTOR) == _kit(default[0], "heavy"), "no holdings: the rung he resides in"
     w.rungs["Arsenal"] = Rung("Arsenal", "hearth", stores={})
     w.add_tenure(Tenure("t_hold_empty", ACTOR, "Arsenal", "hold", since=0))
-    assert world_q.kit_of(w, ACTOR) == (default[0], "heavy"), "an empty holding fills no field: the residence's armour"
+    assert world_q.kit_of(w, ACTOR) == _kit(default[0], "heavy"), "an empty holding fills no field: the residence's armour"
     w.rungs["Arsenal"].stores = {"t_gambeson": 1}
-    assert world_q.kit_of(w, ACTOR) == (default[0], "medium"), "the holdings' armour wins its field over the residence's"
-    assert world_q.kit_of(w, "no_such_person") == default
+    assert world_q.kit_of(w, ACTOR) == _kit(default[0], "medium"), "the holdings' armour wins its field over the residence's"
+    assert world_q.kit_of(w, "no_such_person") == _kit(combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
+
+
+def test_kit_of_returns_a_secondary_when_two_kinds_are_stocked(monkeypatch):
+    """B18.08, the falsifier: a person whose rungs stock two weapon kinds fights with one in his kit and carries the other. The primary is
+    the rule it was (holdings first, per field, the top-ranked kind), the secondary the next-ranked DISTINCT weapon kind, from the holdings and then
+    the residence; at most two are returned whatever is stocked; one kind (or none) reads `secondary` none; and the seam hands the fight the
+    triple and the carry of the weapon NOT in hand, so a weak man pays for the one he carries (the control: the same man with one kind stocked)."""
+    spear = sorted(combat_kit.WEAPONS - {combat_kit.DEFAULTS["weapon"], combat_kit.UNARMED})[0]
+    monkeypatch.setattr(world_q, "ARMS_KINDS", _check_arms_kinds(
+        {"t_plate": dict(field="armor", key="heavy", rank=3), "t_blade": dict(field="weapon", key=spear, rank=1),
+         "t_sword": dict(field="weapon", key="arming", rank=2), "t_top": dict(field="weapon", key="longsword", rank=3)},
+        {"t_plate", "t_blade", "t_sword", "t_top"}, combat_kit.FIELDS))
+    w = P.tiny_world()
+    w.rungs["Hh"].stores = {"t_blade": 1}                                           # his hearth: the lower kind
+    assert world_q.kit_of(w, ACTOR) == _kit(spear, combat_kit.DEFAULTS["armor"]), "one kind stocked: secondary none, as at B18.07"
+    w.rungs["Arsenal"] = Rung("Arsenal", "hearth", stores={"t_sword": 1, "t_plate": 1})
+    w.add_tenure(Tenure("t_hold_arsenal_a", ACTOR, "Arsenal", "hold", since=0))      # his holding: the higher kind
+    assert world_q.kit_of(w, ACTOR) == ("arming", spear, "heavy"), "two kinds across his rungs: the holdings' first, then the residence's"
+    w.rungs["Hh"].stores = {"t_blade": 1, "t_sword": 1}                              # the same kind in both rungs is one kind
+    w.rungs["Arsenal"].stores = {"t_sword": 1, "t_plate": 1}
+    assert world_q.kit_of(w, ACTOR) == ("arming", spear, "heavy"), "a kind stocked twice is one kind: the next distinct one"
+    w.rungs["Arsenal"].stores = {"t_sword": 1, "t_top": 1, "t_plate": 1}
+    assert world_q.kit_of(w, ACTOR) == ("longsword", "arming", "heavy"), "three kinds: the two highest-ranked, never a third"
+    w.rungs["Hh"].stores = {}
+    w.rungs["Arsenal"].stores = {"t_sword": 1, "t_blade": 1}
+    assert world_q.kit_of(w, ACTOR) == ("arming", spear, combat_kit.DEFAULTS["armor"]), "two kinds in one rung"
+    # the seam: the triple reaches the input, and the carry of the weapon not in hand reaches `short` (a man too weak to carry it pays; the control carries none)
+    weak = {combat.attribute_key("Strength"): 1}
+    w.persons[ACTOR].attributes = {**w.persons[ACTOR].attributes, **weak}
+    two = combat.combat_input(w, [ACTOR, SUBJECT], "fight")
+    assert two.kits[0] == ("arming", spear, combat_kit.DEFAULTS["armor"]) and two.kits[1][1] is None
+    assert two.short[0][0] == combat_kit.shortfall((spear,), combat_kit.DEFAULTS["armor"], 1) > 0, "with the primary in hand he carries the secondary"
+    assert two.short[0][1] == combat_kit.shortfall(("arming",), combat_kit.DEFAULTS["armor"], 1), "with the secondary in hand he carries the primary"
+    w.rungs["Arsenal"].stores = {"t_sword": 1}
+    one = combat.combat_input(w, [ACTOR, SUBJECT], "fight")
+    assert one.kits[0][1] is None and one.short[0][1] is None
+    assert one.short[0][0] == combat_kit.shortfall((), combat_kit.DEFAULTS["armor"], 1) < two.short[0][0], "one kind stocked: no carried weight, as at B18.07"
 
 
 def _armour_holder_at_an_armoury():
@@ -197,7 +249,38 @@ def _armour_holder_at_an_armoury():
 def test_kit_of_falls_back_per_field_the_holdings_armour_and_the_residences_weapon(armed):
     w = _armour_holder_at_an_armoury()
     blade = world_q.ARMS_KINDS["t_blade"][1]
-    assert world_q.kit_of(w, ACTOR) == (blade, "heavy")
+    assert world_q.kit_of(w, ACTOR) == _kit(blade, "heavy")
+
+
+def test_a_person_with_no_stocked_weapon_fights_unarmed_when_arms_kinds_is_nonempty(armed):
+    """B18.03: once an arms roster exists, the weapon a person holds when neither his holdings nor his residence stock one
+    is the `unarmed` record, never the Combatant's arming-sword default. FALSIFIER: a person with no stocked weapon who
+    still fights with an arming sword."""
+    w = _world()
+    assert combat_kit.UNARMED != combat_kit.DEFAULTS["weapon"] and combat_kit.UNARMED in combat_kit.WEAPONS
+    assert world_q.kit_of(w, ACTOR)[0] == combat_kit.UNARMED, "he holds nothing and his hearth is empty"
+    assert world_q.kit_of(w, SUBJECT) == _kit(combat_kit.UNARMED, "heavy"), "armour stocked, no weapon: the fist, in plate"
+    assert world_q.kit_of(w, "no_such_person")[0] == combat_kit.DEFAULTS["weapon"], "a person the world does not hold is the default"
+    blade = world_q.ARMS_KINDS["t_blade"][1]
+    w.rungs["Hh"].stores = {"t_blade": 1}                                              # his residence stocks a weapon
+    assert world_q.kit_of(w, ACTOR)[0] == blade, "a stocked weapon, in his residence, outranks the fist"
+    w.rungs["Hh"].stores = {}
+    w.rungs["Arsenal"].stores = {"t_plate": 1, "t_blade": 1}                           # his holdings stock one
+    assert world_q.kit_of(w, SUBJECT)[0] == blade
+    kits = combat.combat_input(_world(), [ACTOR, SUBJECT], "fight").kits
+    assert [k[0] for k in kits] == [combat_kit.UNARMED] * 2, "the seam hands the fight the same weapon"
+
+
+def test_kit_of_unchanged_while_arms_kinds_is_empty(monkeypatch):
+    """B18.03's control: with no arms roster the default stays the Combatant's own for everyone, stocked rungs or not."""
+    monkeypatch.setattr(world_q, "ARMS_KINDS", {})
+    w = _world()
+    default = _kit(combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
+    checked = 0
+    for pid in w.persons:
+        assert world_q.kit_of(w, pid) == default
+        checked += 1
+    assert checked > 1 and combat_kit.UNARMED != default[0]
 
 
 def test_kit_of_writes_no_store(armed):
@@ -229,8 +312,8 @@ def _actor_felled_share(w, n=N, seed=7):
 def _asymmetry_holds(w):
     """THE FALSIFIER'S PREDICATE, shared by the shipped seam and its mutant: the plated subject fells the actor at the
     home's rate, and the same pair without the plate does not."""
-    armed_share = _actor_felled_share(w)
-    bare = _world(); bare.rungs["Arsenal"].stores = {}
+    armed_share = _actor_felled_share(_swordsmen(w))
+    bare = _swordsmen(_world()); bare.rungs["Arsenal"].stores = {}
     control = _actor_felled_share(bare)
     assert abs(armed_share - HOME_RATE) <= TOL, f"actor felled {armed_share:.3f}, the home's rate is {HOME_RATE}"
     assert control < 0.6, f"the unarmed pair is a coin toss, not {control:.3f}"
@@ -250,8 +333,8 @@ def test_combat_input_carries_a_kit_per_party_in_claimants_order(armed):
     w = _world()
     inp = combat.combat_input(w, [ACTOR, SUBJECT], "fight")
     assert inp.claimants == (ACTOR, SUBJECT) and len(inp.kits) == 2
-    assert inp.kits[0] == (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
-    assert inp.kits[1] == (combat_kit.DEFAULTS["weapon"], "heavy")
+    assert inp.kits[0] == _kit(combat_kit.UNARMED, combat_kit.DEFAULTS["armor"])
+    assert inp.kits[1] == _kit(combat_kit.UNARMED, "heavy")
     swapped = combat.combat_input(w, [SUBJECT, ACTOR], "fight")
     assert swapped.kits == (inp.kits[1], inp.kits[0]), "the kit follows the person, not the side"
 
@@ -260,14 +343,14 @@ def test_the_sampler_fight_estimate_builds_the_same_input_so_kits_reach_it(armed
     # B15.07: the estimate's shares now include the mortal-wound draw (a felled man it stands up is no felling); the claim here is the KIT's, so
     # both worlds hold `mortal_wound_ob` at its unreachable control, where every felling is a death and the shares are the scene's
     unreachable = lambda w: w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
-    w = _world()
+    w = _swordsmen(_world())
     w.fixtures = unreachable(w)
     est = combat.fight_estimate(w, ACTOR, None, SUBJECT, "fight")
     assert est["status"] == "ESTIMATED" and est["samples"] == w.fixtures.get("estimate_samples")
     # B15.99 re-record: > 0.9 -> > 0.5 (the plated subject now fells the actor about 0.63-0.65, HOME_RATE, since B15.05's armour gap draw; the claim is that the
     # kit reaches the estimate, so the plated reading must stand clear of the bare one, which reads 0.26-0.36)
     assert est["actor_felled"] > 0.5, est
-    bare = _world(); bare.rungs["Arsenal"].stores = {}
+    bare = _swordsmen(_world()); bare.rungs["Arsenal"].stores = {}
     bare.fixtures = unreachable(bare)
     assert combat.fight_estimate(bare, ACTOR, None, SUBJECT, "fight")["actor_felled"] < 0.45   # B15.99 re-record: < 0.6 -> < 0.45
 
@@ -288,10 +371,14 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
 # 4 -- THE CONTROL: EMPTY ROSTERS ARE TODAY'S WORLD
 # ---------------------------------------------------------------------------------------------------------------
 
-def test_the_shipped_rosters_are_empty_so_every_person_fights_at_the_default():
-    assert ARMS_KINDS == {} and ARMS_AT_BUILD == {}, "the inventory is Jordan's: nothing is authored here"
+def test_with_arms_kinds_emptied_every_person_fights_at_the_default(monkeypatch):
+    """B18.04: the roster ships seven kinds seeded on the build, so the control is the roster emptied in process (`kit_of`
+    reads `world_q.ARMS_KINDS`), on a realm whose rungs ARE stocked: a stock nobody reads moves no kit."""
+    assert len(ARMS_KINDS) == 7 and ARMS_AT_BUILD, "setup: the shipped inventory is empty"
     w = build_realm(0)
-    default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
+    assert any((r.stores or {}).get(k) for r in w.rungs.values() for k in ARMS_KINDS), "setup: the realm's rungs are not stocked"
+    monkeypatch.setattr(world_q, "ARMS_KINDS", {})
+    default = _kit(combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
     checked = 0
     for pid in w.persons:
         assert world_q.kit_of(w, pid) == default
@@ -300,13 +387,17 @@ def test_the_shipped_rosters_are_empty_so_every_person_fights_at_the_default():
 
 
 def test_seeding_with_no_arms_changes_nothing_and_seeding_arms_moves_the_hash(monkeypatch):
-    base = build_realm(0)
+    shipped = build_realm(0)
     with mock.patch.object(boot_realm, "seed_arms", lambda w, seeds=None: 0):
         unseeded = build_realm(0)
-    assert base.content_hash() == unseeded.content_hash(), "the empty `arms_at_build` is the build without the step"
+    assert shipped.content_hash() != unseeded.content_hash(), "B18.04: the shipped `arms_at_build` is a mover"
+    monkeypatch.setattr(rosters, "ARMS_AT_BUILD", {})
+    assert build_realm(0).content_hash() == unseeded.content_hash(), "the empty `arms_at_build` is the build without the step"
+    base = build_realm(0)
+    before = base.content_hash()
     assert seed_arms(base, {}) == 0
-    assert base.content_hash() == unseeded.content_hash()
+    assert base.content_hash() == before, "seeding nothing changes nothing"
     n = seed_arms(base, {"settlement": {"t_plate": 2}})
-    assert n > 0 and base.content_hash() != unseeded.content_hash(), "a party that holds arms is a hash mover"
+    assert n > 0 and base.content_hash() != build_realm(0).content_hash(), "a party that holds arms is a hash mover"
     seeded = [r for r in base.rungs.values() if (r.stores or {}).get("t_plate")]
     assert len(seeded) == n and all(r.kind == "settlement" and r.stores["t_plate"] == 2 for r in seeded)

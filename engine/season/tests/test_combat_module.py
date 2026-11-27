@@ -511,6 +511,7 @@ def _believing_world(seed: int, body: int = 1000):
     w.world_seed = seed
     w.fixtures = w.fixtures.sweep("odds_weighting", "believed").sweep("choice_temperature", 0)
     w.persons[_A].body = body
+    w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; both live at `Hh` and keep the arming sword this reading was made with
     return w
 
 
@@ -578,8 +579,8 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
     from ..queries import person_q
     from ..seam.wrappers import combat as C, sigma
     from ..state.carriers import Act, Claim
-    default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
-    true_kit, claimed, own = ("longsword", "heavy"), ("dagger", "none"), ("poleaxe", "medium")
+    default = (combat_kit.DEFAULTS["weapon"], None, combat_kit.DEFAULTS["armor"])      # B18.08: `kit_of`'s `(primary, secondary, armor)`
+    true_kit, claimed, own = ("longsword", None, "heavy"), ("dagger", None, "none"), ("poleaxe", None, "medium")
     assert len({default, true_kit, claimed, own}) == 4
     monkeypatch.setattr(C, "kit_of", lambda w, pid: own if pid == _A else true_kit)
     real, built = C.combat_input, []
@@ -614,7 +615,7 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
     seen_it = read(sighting)[0]
     assert seen_it.kits == (own, true_kit) and wound_of(seen_it) == true_wound, (seen_it.kits, wound_of(seen_it), true_wound)   # where he has seen him: the world's
     said = read(Claim("c_w", _A, _B, person_q.KIT_CLAIM + "weapon", claimed[0], 0, "told", 5, "own"),
-                Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[1], 0, "told", 5, "own"))[0]
+                Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[2], 0, "told", 5, "own"))[0]
     assert said.kits == (own, claimed), said.kits                              # a claim of his: the claim's, over the default
     wounded = read(Claim("c_b", _A, _B, person_q.BODY_CLAIM, 400, 0, "told", 5, "own"))[0]
     assert wound_of(wounded) == true_wound and wounded.kits == (own, default), (wound_of(wounded), wounded.kits)   # a claim of his wound: the wound, the kit still the default
@@ -746,6 +747,7 @@ def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
     from ..harness import probes as P
     _mod, entry = _module_of_entry()
     w = P.tiny_world()
+    w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: both parties keep the arming sword the 150-death floor was read with (with a roster and no stocked weapon they would fight unarmed)
     w.fixtures = w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
     deaths = checked = 0
     for seed in range(300):     # was 200: a failed yield roll (B15.10) ends about a third of lethal scenes with both alive, so fewer parties are felled

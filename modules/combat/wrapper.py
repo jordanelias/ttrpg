@@ -96,7 +96,7 @@ def _pool_dice(c, cfg, addends=None):
     return core.resolution_pool(c.score, getattr(c, "pool_addends", 0) if addends is None else addends, **kw)
 
 
-def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0):
+def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, switching=()):
     """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
     object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
     Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
@@ -105,7 +105,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     objects throughout — never swapped. `terms` is `fight`'s non-lethal duel terms (RS-25), or None under lethal
     ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop.
     `turn` is this round's index in the fight (1-based, the `round_start` count) and `scene` 0 under keyed rounds (B16.03) and else the fight's `rng.n` where it began:
-    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`), on `rng`, the round's own `Draw` under keyed rounds."""
+    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`), on `rng`, the round's own `Draw` under keyed rounds.
+    `switching` (B18.09) is the Combatants who change weapon this round (`round_switchers`): each owes the switch's tempo, one `ACT_THRESHOLD` of readiness, and puts his
+    secondary in hand (`switch_weapon`) when he pays it, at the round's first closed beat (below); a round that ends before it closes changes no one's weapon and
+    costs no one tempo, since the swap and the payment are one act."""
     blow = 0
     def _strike(attacker, defender, deg, **kw):
         """`core.strike` with the blow's keyed coverage-gap draw (PC_D, A-30). Returns (damage, bare) for the caller to carry to
@@ -150,6 +153,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     for c in (A, B):
         c.grip_position = 0.0; c.lunge_depth = 0.0
         c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
+    owed = list(switching)   # each owes one ACT_THRESHOLD, paid with the swap at the first closed beat: at the entry `_carry`'s clamp at the first close would forgive it
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
@@ -323,6 +327,12 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
                 if A.stamina<=cfg['STAMINA_COLLAPSE'] or B.stamina<=cfg['STAMINA_COLLAPSE']: _emit('separation', reason='collapse'); return None, closed, 'collapse'
                 continue
         # ----- CLOSED: tempo-gated exchange -----
+        for c in owed:   # B18.09: the switch, paid once, when the round first reaches the close: the weapon swap and the tempo it costs, the next action's readiness (ACT_THRESHOLD, the unit the exchange below debits per action). The half-sword re-take, the use-mode and `er` refreshes below read the weapon now in hand
+            switch_weapon(c)
+            _emit('switch', round=turn, by=c.label, weapon=c.weapon, carried=c.secondary)
+            was = ready[c]; ready[c] -= cfg['ACT_THRESHOLD']
+            _emit('switch_paid', round=turn, by=c.label, was=was, ready=ready[c])
+        owed.clear()
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
         if not actors: continue
         if len(actors)==2:
@@ -639,11 +649,41 @@ def _yield_roll(c, terms, sigma, cfg, draw):
 #                  exactly 'engage' every turn.
 #   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no riposte draw (the fight is
 #                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the round.
-# [ASSUMPTION; the set is {engage, withdraw}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
+#   - 'switch'   : (B18.09) the fighters who carry a secondary change the weapon in hand, and pay one `ACT_THRESHOLD` of
+#                  readiness for it, in the closed phase (`engagement`'s `switching`); the round is otherwise fought. Open only to a fight in which
+#                  one of the parties carries a secondary (`check_choice`). `engage`, as a decider that answers none (`decide=None`), leaves each party to
+#                  the engine's own default, `S.switch_wanted` (`round_switchers`): only `switch` overrides it.
+# [ASSUMPTION; the set is {engage, withdraw, switch}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
 # widen it, and whether `yield` joins it is #445 `05` §4.1 (J-15), not decided here.] The decider draws nothing from
 # `rng` and mutates nothing, so equal choices produce the identical draw sequence: AUTOMATED and PLAYABLE replay equal.
-ENGAGE, WITHDRAW = 'engage', 'withdraw'
-ROUND_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
+ENGAGE, WITHDRAW, SWITCH = 'engage', 'withdraw', 'switch'
+ROUND_CHOICES = (ENGAGE, WITHDRAW, SWITCH)   # closed set, this module's: the host's decider is checked against this tuple
+
+def check_choice(choice, A, B):
+    """The engine's refusal of a decider's answer, the one owner (`_fight` and `fight.py::fight` call it): one outside `ROUND_CHOICES`, or `switch` where
+    neither party carries a secondary (the set is checked against the kit)."""
+    if choice not in ROUND_CHOICES:
+        raise ValueError(f"the decider returned {choice!r}, which is not one of {ROUND_CHOICES}")
+    if choice == SWITCH and A.secondary is None and B.secondary is None:
+        raise ValueError(f"the decider returned {choice!r}, and neither party carries a secondary to put in hand")
+
+def round_switchers(choice, A, B, prev_closed, cfg):
+    """WHO CHANGES WEAPON AT THIS ROUND'S ENTRY (B18.09), a tuple of Combatants in `(A, B)` order: on a decider's `switch`, each party who carries a secondary; on
+    its `engage` and where no decider answers (`choice` is `None`) alike, each party `S.switch_wanted` says (the measure being `prev_closed`, the one the last
+    round ended in): `engage` is the engine's own default, so a decider that always answers it plays the identical fight to no decider (REM-31's
+    AUTOMATED and PLAYABLE replay equal), and only `switch` overrides it. A pure read: the caller hands the tuple to `engagement`."""
+    if choice == SWITCH:
+        return tuple(c for c in (A, B) if c.secondary is not None)
+    return tuple(c for c in (A, B) if S.switch_wanted(c, prev_closed, cfg))   # `None` and `engage`; `check_choice` has refused the rest and `withdraw` ends the fight before this is asked
+
+def switch_weapon(c):
+    """THE SWITCH'S ONE WRITE (B18.09): the weapon in hand and the weapon carried change places, and the shortfall with them (`short` is what he is short
+    of with the weapon in hand, `short_other` with the other: `PersonalCombatInput.short`'s pair, B18.07), so `carry_short` reads the entry for the
+    weapon now in hand. The weapon in hand is taken at its base record: a half-sword form is a grip of the weapon, not the weapon (`engagement` re-takes it)."""
+    if c.secondary is None:
+        raise ValueError(f"{c.label!r} carries no secondary to put in hand")
+    c.weapon, c.secondary = c.secondary, S.base_form(c)
+    c.short, c.short_other = c.short_other, c.short
 
 def fight_draw(rng):
     """THE FIGHT'S OWN DRAW (B16.03): the keyed `Draw` `H2(rng.key, "fight:<rng.n>")`, taking ONE uniform of the stream it is handed so that a caller that
@@ -669,13 +709,14 @@ def keyed_first(A, B, rd):
     """WHO OPENS A KEYED ROUND: the coin is the sub-draw `H2(rd.key, "first")` of the round's own `Draw` (B16.03), `A` below one half."""
     return A if KD.seeded(KD.H2(rd.key, "first")).random() < 0.5 else B
 
-def play_round(A, B, first, cfg, rd, prev_closed, stop, rnd, scene=0):
+def play_round(A, B, first, cfg, rd, prev_closed, stop, rnd, scene=0, switching=()):
     """THE ROUND'S BRACKET, the one body both loops run (`_fight` and `fight.py::fight_round`): `round_start`, the round's opening wounds, one `engagement`,
-    `round_end`. `stop` is `engagement`'s `terms` (None under lethal ones), `rnd` the round's 1-based index. Returns `(loser, closed, ended_by, wounds0)`;
+    `round_end`. `stop` is `engagement`'s `terms` (None under lethal ones), `rnd` the round's 1-based index; `switching` the Combatants who change weapon at its
+    entry (`round_switchers`). Returns `(loser, closed, ended_by, wounds0)`;
     `wounds0` is the opening wounds, the yield roll's licence (a gate crossed since, B15.10)."""
     _emit('round_start', round=rnd, first=first.label)
     wounds0 = {A: A.wt.wounds, B: B.wt.wounds}
-    loser, closed, ended_by = engagement(A, B, first, cfg, rd, prev_closed, terms=stop, turn=rnd, scene=scene)
+    loser, closed, ended_by = engagement(A, B, first, cfg, rd, prev_closed, terms=stop, turn=rnd, scene=scene, switching=switching)
     _emit('round_end', round=rnd, felled=(loser.label if loser is not None else None), ended_by=ended_by)
     return loser, closed, ended_by, wounds0
 
@@ -754,16 +795,17 @@ def _fight(A, B, cfg, rng, max_rounds, yield_decl, terms, decide, decisiveness=(
                 result, winner = (-1, B) if yield_decl.by is A else (1, A)
                 _emit('fight_result', result=result, winner=winner.label)
                 return result
+        choice = None
         if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the turn; draws nothing
             choice = decide(turn+1)
-            if choice not in ROUND_CHOICES:
-                raise ValueError(f"the decider returned {choice!r}, which is not one of {ROUND_CHOICES}")
+            check_choice(choice, A, B)
             if choice == WITHDRAW:
                 _emit('withdraw', round=turn+1)
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no riposte draw
+        switching = round_switchers(choice, A, B, prev_closed, cfg)   # B18.09: who changes weapon in this round (a decider's `switch`, else the engine's default); `()` for every fighter with no secondary, whatever the answer
         rd = round_draw(fkey, turn+1) if keyed_rounds else rng   # `keyed_rounds` (B16.03): the HOST's law, the round on its own key (`round_draw`, A-30) with the coin a sub-draw of it; the round's other draws are positional on that `Draw` (hole_register H-581); the workbench's default stays one sequential stream
         first = keyed_first(A, B, rd) if keyed_rounds else (A if rd.random()<0.5 else B)
-        loser, prev_closed, ended_by, wounds0 = play_round(A, B, first, cfg, rd, prev_closed, stop, turn+1, scene)
+        loser, prev_closed, ended_by, wounds0 = play_round(A, B, first, cfg, rd, prev_closed, stop, turn+1, scene, switching)
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break

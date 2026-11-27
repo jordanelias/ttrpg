@@ -8881,6 +8881,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
+    w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; both live at `Hh` and keep the arming sword this seed was picked with
     raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we3"])   # seed re-picked at B16.03: the per-round key moved the stream (was we0, B15.10; we9, B15.07; we3, B06.99)
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
@@ -8892,6 +8893,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     assert combat_degree(raw, "p_mid") == FELLED
 
     w2 = _w(); w2.step = Step.RESOLVE
+    w2.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04, as above
     d = SeasonDriver(w2)
     # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER (`_we_bands`' note); the fight's Events are ENCOUNTER's.
     evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
