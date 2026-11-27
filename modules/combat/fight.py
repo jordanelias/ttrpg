@@ -36,9 +36,12 @@ _MISSING = object()   # `getattr`'s default for a tracker field the engine does 
 
 
 def _kit_kw(kit) -> dict:
-    """`Combatant`'s keyword arguments for one party's `(weapon, armor)` kit; `None` (no kit given) is none, so the
-    Combatant keeps its own defaults."""
-    return {} if kit is None else dict(weapon=kit[0], armor=kit[1])
+    """`Combatant`'s keyword arguments for one party's `(primary, secondary, armor)` kit (B18.08); `None` (no kit given) is none, so the
+    Combatant keeps its own defaults. A two-entry `(weapon, armor)` is a kit with no secondary (its length says so)."""
+    if kit is None:
+        return {}
+    weapon, secondary, armor = kit if len(kit) == 3 else (kit[0], None, kit[1])
+    return dict(weapon=weapon, secondary=secondary, armor=armor)
 
 
 def _score_kw(score) -> dict:
@@ -49,7 +52,7 @@ def _score_kw(score) -> dict:
 
 def _short_kw(short) -> dict:
     """`Combatant`'s keyword for one party's shortfall (B18.07; the record's `short` entry, `(with the primary in hand, with the
-    secondary in hand)`): the figure for the kit he fights with, the primary's (the secondary's is read once a kit carries one, B18.08).
+    secondary in hand)`): the figure for the kit he fights with, the primary's (the secondary's is read when a switch puts it in hand, B18.09).
     `None` (no entry, or none for that kit) is none, so the Combatant is short of the harness alone, as `act_cost` always charged."""
     return {} if short is None or short[0] is None else dict(short=short[0])
 

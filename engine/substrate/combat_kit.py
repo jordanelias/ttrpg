@@ -81,3 +81,13 @@ def shortfall(weapons: tuple, armour: str, strength: float) -> float:
     `weapons` are the keys carried and not in hand (empty: the harness alone, today's charge). A fighter at or over the
     demand is short of nothing: 0.0."""
     return max(0.0, carry_demand(weapons, armour) - strength)
+
+
+def short_pair(primary: str, secondary, armour: str, strength: float) -> tuple:
+    """A party's `PersonalCombatInput.short` entry (B18.08): `(short with the primary in hand, short with the secondary in hand)`.
+    With the primary in hand what is carried and not held is the secondary, and the reverse; a kit with no secondary (`None`)
+    carries nothing but the harness, so the first is `shortfall((), ...)`, the charge `act_cost` always made, and the second is `None`.
+    The one pairing: the season's `party_short` and the workbench's record builder both call it."""
+    if secondary is None:
+        return shortfall((), armour, strength), None
+    return shortfall((secondary,), armour, strength), shortfall((primary,), armour, strength)

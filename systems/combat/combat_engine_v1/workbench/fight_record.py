@@ -4,7 +4,7 @@ Part B). `fight_trace.py`, `balance.py` and `server.py` read it; none of them to
 calls `wrapper.fight` on a Combatant, for a declared Yield the record cannot carry.
 
 A PARTY is a plain dict, one fighter's share of the record:
-  label, end, attributes ({registry key: value}), kit ((weapon, armor)), score (`Combatant.score`), disp,
+  label, end, attributes ({registry key: value}), kit ((weapon, secondary, armor); a two-entry (weapon, armor) is a kit with no secondary, B18.08), score (`Combatant.score`), disp,
   tradition, techniques ({name: level}, or a list), axes ({axis: bonus}), short ((short with the primary in hand, short with the
   secondary in hand), B18.07: `combat_kit.shortfall`, the same one rule the season's `combat_input` evaluates).
 It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus score, weapon, armor, tradition, equipped, skills, label,
@@ -32,7 +32,7 @@ def party_of_spec(spec, default_label):
                 end=given.get('end', attributes.DEFAULT['end']),
                 attributes={s.registry_key: given[s.key] for s in attributes.SPEC
                             if s.key in given and s.key != 'end' and s.registry_key is not None},
-                kit=(spec.get('weapon', 'arming'), armor),
+                kit=(spec.get('weapon', 'arming'), None, armor),
                 score=spec.get('score'), disp=given.get('disp'),
                 tradition=spec.get('tradition', 'none'), techniques=spec.get('equipped'), axes=spec.get('skills'),
                 short=(combat_kit.shortfall(tuple(spec.get('carried', ())), armor, given.get('strength', attributes.DEFAULT['strength'])), None))
@@ -42,9 +42,9 @@ def party_of_combatant(c):
     return dict(label=c.label, end=c.attrs['end'],
                 attributes={s.registry_key: c.attrs[s.key] for s in attributes.SPEC
                             if s.key != 'end' and s.registry_key is not None},
-                kit=(c.weapon, c.armor), score=c.score, disp=c.attrs['disp'],
+                kit=(c.weapon, c.secondary, c.armor), score=c.score, disp=c.attrs['disp'],
                 tradition=c.tradition, techniques=c.equipped, axes=c.skills,
-                short=(combat_kit.shortfall((), c.armor, c.strength), None))   # a Combatant carries nothing it does not hold
+                short=combat_kit.short_pair(c.weapon, c.secondary, c.armor, c.strength))   # what a Combatant carries and does not hold is his secondary (B18.08), or nothing
 
 
 def record_of(pa, pb, terms='death'):

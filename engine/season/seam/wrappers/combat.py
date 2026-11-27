@@ -171,9 +171,11 @@ def party_short(person: Any, kit: tuple) -> tuple:
     """A party's `PersonalCombatInput.short` entry (B18.07): `(short with the primary in hand, short with the secondary in hand)`, each the
     Strength points under `combat_kit.carry_demand` he is, `combat_kit.shortfall`, the one rule, evaluated here because the module imports
     nothing of the carry rule. His Strength is the one the module will build him at: the authored `attr.body.strength` he HOLDS, else the combat
-    export's default (`STRENGTH_DEFAULT`, as `party_end` reads Endurance); his armour is `kit`'s. Nothing is carried and not in hand until
-    a kit has a secondary (B18.08), so the first is the harness's alone, the charge `act_cost` always made, and the second is `None`."""
-    return (combat_kit.shortfall((), kit[1], person.attributes.get(_STRENGTH_KEY, combat_kit.STRENGTH_DEFAULT)), None)
+    export's default (`STRENGTH_DEFAULT`, as `party_end` reads Endurance); `kit` is `kit_of`'s `(primary, secondary, armor)` (B18.08), and the
+    pairing is `combat_kit.short_pair`'s: with the primary in hand he carries the secondary, and the reverse. A kit with no secondary
+    carries nothing, so the first is the harness's alone, the charge `act_cost` always made, and the second is `None`."""
+    primary, secondary, armour = kit
+    return combat_kit.short_pair(primary, secondary, armour, person.attributes.get(_STRENGTH_KEY, combat_kit.STRENGTH_DEFAULT))
 
 
 _MORTAL_SITE = require_use_site("mortal")    # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
@@ -300,7 +302,7 @@ def _fight_score(w: Any, p: Any, verb: str) -> int:
 
 
 def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
-    """THE BELIEVER'S OWN PICTURE OF ANOTHER PERSON FOR A FIGHT (B14.24; `U5b_PC_residue` §8 item 1): `((weapon, armor), person)`, `person` standing in
+    """THE BELIEVER'S OWN PICTURE OF ANOTHER PERSON FOR A FIGHT (B14.24; `U5b_PC_residue` §8 item 1): `((weapon, secondary, armor), person)`, `person` standing in
     for him where the fight reads his body (`party_end`, `_carried_of`: `body`, `body_ceiling`, `attributes`). What the believer's ledger gives:
       * HIS KIT -- per field, his latest claim at `person_q.KIT_CLAIM + field`, else the world's where he has SEEN him (`person_q.has_seen`), else the
         Combatant's own default (`combat_kit.DEFAULTS`): a person who knows nothing of the opponent's kit gets the default kit, never the true one;
@@ -310,9 +312,12 @@ def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
     revert: none needed, read-only]: the B14.24 item is the kit and the wounds. Reads `believer`'s ledger and the world only where the ledger says he has seen him."""
     other = w.persons[pid]
     seen = person_q.has_seen(believer, pid)
-    held = dict(zip(("weapon", "armor"), kit_of(w, pid))) if seen else dict(combat_kit.DEFAULTS)
+    held = dict(zip(("weapon", "secondary", "armor"), kit_of(w, pid))) if seen else {**combat_kit.DEFAULTS, "secondary": None}
     at = (w.tick, w.fixtures.claim_decay())          # B09.01: his claims are read faded at this tick, never as stored
-    kit = tuple(held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    weapon, armor = (held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    # B18.08: no claim names a secondary, so he has the world's where he has SEEN him (never the default's: none); a claim of a weapon that is the very one he
+    # carries leaves nothing carried.
+    kit = (weapon, None if held["secondary"] == weapon else held["secondary"], armor)
     wound = person_q.believed_body(believer, pid, *at)
     scale = w.fixtures.get("condition_scale")
     if wound is not None:

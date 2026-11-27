@@ -4285,8 +4285,12 @@ def founds_over(w: World, actor: Optional[str], seat, rung: Optional[str]) -> bo
 
 
 def kit_of(w: World, pid: str) -> tuple:
-    """WHAT A PERSON FIGHTS WITH, `(weapon, armor)` (v11 CP-T03-03; `-08` AM-C-04; [ASSUMPTION; medium; Jordan to
+    """WHAT A PERSON FIGHTS WITH, `(weapon, secondary, armor)` (v11 CP-T03-03; `-08` AM-C-04; B18.08; [ASSUMPTION; medium; Jordan to
     correct; revert: drop `PersonalCombatInput.kits` and the `kits` fill in `seam/wrappers/combat.py::combat_input`]).
+    B18.08, A LOADOUT IS A KIT WITH A SECONDARY: `secondary` is the weapon he carries and does not hold, the next-ranked DISTINCT weapon
+    kind his rungs stock after the primary (his holdings' kinds best first, then his residence's), `None` where he stocks one kind or none
+    (and for the unarmed, and for the default kit): `weapon` is the kind it was before the secondary, so a person stocking one weapon kind
+    is the kit he was. Nothing reads `secondary` in a fight until a switch exists; the carry of it rides `PersonalCombatInput.short`.
     PER COMBATANT FIELD, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores
     of the rungs the person `hold`s (his HOLDINGS, `state/gate.py::holdings_of`: a live `hold` whose object is a rung),
     ELSE of the rung he `reside`s in (`lives_in`), else the Combatant's own default
@@ -4304,27 +4308,27 @@ def kit_of(w: World, pid: str) -> tuple:
     kit = dict(_combat_kit.DEFAULTS)
     p = w.persons.get(pid)
     if not ARMS_KINDS or p is None:
-        return kit["weapon"], kit["armor"]
-    best = _top_arms(w, holdings_of(w, pid))
-    if set(kit) - set(best):
-        home = lives_in(p)
-        if home in w.rungs:
-            best = {**_top_arms(w, (home,)), **best}
-    kit["weapon"] = _combat_kit.UNARMED       # B18.03: a roster exists, so a person with no stocked weapon holds none
-    kit.update(best)
-    return kit["weapon"], kit["armor"]
+        return kit["weapon"], None, kit["armor"]
+    held = _ranked_arms(w, holdings_of(w, pid))
+    home = lives_in(p)
+    there = _ranked_arms(w, (home,)) if home in w.rungs else {}
+    kit["armor"] = next(iter(held.get("armor") or there.get("armor") or ()), kit["armor"])
+    weapons = list(dict.fromkeys((*held.get("weapon", ()), *there.get("weapon", ()))))
+    # B18.08: the PRIMARY is the one weapon kit_of always named (holdings first, else the residence; B18.03: none stocked is the fist),
+    # the SECONDARY the next-ranked DISTINCT kind across the same two sources, in that order; none if one kind (or none) is stocked.
+    return (weapons[0] if weapons else _combat_kit.UNARMED), (weapons[1] if len(weapons) > 1 else None), kit["armor"]
 
 
-def _top_arms(w: World, rungs) -> dict:
-    """`{Combatant field: key}` -- per field, the key of the highest-ranked `arms_kinds` member with a positive count
-    in the stores of `rungs` (`kit_of`'s one ranking, asked of the holdings and then of the residence)."""
+def _ranked_arms(w: World, rungs) -> dict:
+    """`{Combatant field: [keys, highest-ranked first]}` -- per field, the key of every `arms_kinds` member with a positive count
+    in the stores of `rungs`, best first (`kit_of`'s one ranking, asked of the holdings and then of the residence). A rank is
+    unique within a field (the loader refuses a tie), so the order is the roster's, never the stores'."""
     held = {k for r in rungs for k, n in (w.rungs[r].stores or {}).items() if n > 0}
-    best: dict = {}
-    for kind in sorted(held & set(ARMS_KINDS)):
+    ranked: dict = {}
+    for kind in held & set(ARMS_KINDS):
         field, key, rank = ARMS_KINDS[kind]
-        if field not in best or rank > best[field][0]:
-            best[field] = (rank, key)
-    return {field: key for field, (_rank, key) in best.items()}
+        ranked.setdefault(field, []).append((rank, key))
+    return {field: [key for _rank, key in sorted(ks, reverse=True)] for field, ks in ranked.items()}
 
 
 def founded_office_id(rung: str, post: str) -> str:
