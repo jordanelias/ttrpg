@@ -174,6 +174,32 @@ def _refusal(army_a, army_b):
 ORDER_ROLES = tuple(ROLE_SPEC)
 ORDER_RETREAT_AT = ('none', '0.5', '0.25')
 
+#: One line of text per member of `ORDER_ROLES` and `ORDER_RETREAT_AT`, for the client to show a named order
+#: (`tools/export_battle_orders.py` refuses a member with none and a line for a non-member).
+#: [ASSUMPTION: drafted wording, listed for Jordan's correction (B34.07, D-19); the text sits beside the tuples it describes.]
+ORDER_ROLE_TEXT = {
+    'ShieldWall': "Close shields in a line, brace against shock and hold the ground.",
+    'Hold': "Stand the line and do not give ground.",
+    'Anvil': "Brace and take the blow so that another body can strike.",
+    'Push': "Press forward in an aggressive line.",
+    'Skirmish': "Fight in open order, with gaps in the line.",
+    'Screen': "Cover the front of the main body.",
+    'Pursue': "Run down a broken enemy.",
+    'Shock': "Strike in an arrowhead and charge.",
+    'Flanker': "Go around the enemy's flank and envelop it.",
+    'Feint': "Show weakness to lure the enemy forward.",
+    'VolleyLine': "Stand in a line and shoot volleys.",
+    'Harass': "Harry the enemy in loose order from a distance.",
+    'Kite': "Shoot, then keep out of the enemy's reach.",
+    'Support': "Stay behind the line, holding strength to commit where it is needed.",
+    'Reserve': "Hold back uncommitted until called.",
+}
+ORDER_RETREAT_AT_TEXT = {
+    'none': "Never fall back: stand to the end.",
+    '0.5': "Fall back once the side is down to half its starting strength.",
+    '0.25': "Fall back once the side is down to a quarter of its starting strength.",
+}
+
 
 def _role_fields(role):
     """CP-T04-02: the `Unit` fields a standing order's `role` sets, from `config.ROLE_SPEC` (shape and instruction

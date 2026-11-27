@@ -644,6 +644,12 @@ def _yield_roll(c, terms, sigma, cfg, draw):
 # `rng` and mutates nothing, so equal choices produce the identical draw sequence: AUTOMATED and PLAYABLE replay equal.
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 ROUND_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
+# One line of text per member, for the client to show a named move (the exporter, `tools/export_engine_params.py`, refuses a member with none and a line for a non-member).
+# [ASSUMPTION: drafted wording, listed for Jordan's correction (B34.07, D-19); the text sits beside the tuple it describes, as `battle_orders.json`'s source does.]
+ROUND_CHOICE_TEXT = {
+    ENGAGE: "Fight the turn: the blows are traded as the weapons and the fighters' state decide.",
+    WITHDRAW: "Break off now: the fight ends undecided and no further blow is struck.",
+}
 
 def fight_draw(rng):
     """THE FIGHT'S OWN DRAW (B16.03): the keyed `Draw` `H2(rng.key, "fight:<rng.n>")`, taking ONE uniform of the stream it is handed so that a caller that

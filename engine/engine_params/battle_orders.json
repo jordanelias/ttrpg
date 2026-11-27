@@ -1,27 +1,81 @@
 {
-  "_generated": "tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py (ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT)",
-  "schema_version": 1,
+  "_generated": "tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py (ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT, and their ORDER_*_TEXT lines)",
+  "schema_version": 2,
   "source": "modules/mass_battle/massbattle.py",
   "roles": [
-    "ShieldWall",
-    "Hold",
-    "Anvil",
-    "Push",
-    "Skirmish",
-    "Screen",
-    "Pursue",
-    "Shock",
-    "Flanker",
-    "Feint",
-    "VolleyLine",
-    "Harass",
-    "Kite",
-    "Support",
-    "Reserve"
+    {
+      "name": "ShieldWall",
+      "text": "Close shields in a line, brace against shock and hold the ground."
+    },
+    {
+      "name": "Hold",
+      "text": "Stand the line and do not give ground."
+    },
+    {
+      "name": "Anvil",
+      "text": "Brace and take the blow so that another body can strike."
+    },
+    {
+      "name": "Push",
+      "text": "Press forward in an aggressive line."
+    },
+    {
+      "name": "Skirmish",
+      "text": "Fight in open order, with gaps in the line."
+    },
+    {
+      "name": "Screen",
+      "text": "Cover the front of the main body."
+    },
+    {
+      "name": "Pursue",
+      "text": "Run down a broken enemy."
+    },
+    {
+      "name": "Shock",
+      "text": "Strike in an arrowhead and charge."
+    },
+    {
+      "name": "Flanker",
+      "text": "Go around the enemy's flank and envelop it."
+    },
+    {
+      "name": "Feint",
+      "text": "Show weakness to lure the enemy forward."
+    },
+    {
+      "name": "VolleyLine",
+      "text": "Stand in a line and shoot volleys."
+    },
+    {
+      "name": "Harass",
+      "text": "Harry the enemy in loose order from a distance."
+    },
+    {
+      "name": "Kite",
+      "text": "Shoot, then keep out of the enemy's reach."
+    },
+    {
+      "name": "Support",
+      "text": "Stay behind the line, holding strength to commit where it is needed."
+    },
+    {
+      "name": "Reserve",
+      "text": "Hold back uncommitted until called."
+    }
   ],
   "retreat_at": [
-    "none",
-    "0.5",
-    "0.25"
+    {
+      "name": "none",
+      "text": "Never fall back: stand to the end."
+    },
+    {
+      "name": "0.5",
+      "text": "Fall back once the side is down to half its starting strength."
+    },
+    {
+      "name": "0.25",
+      "text": "Fall back once the side is down to a quarter of its starting strength."
+    }
   ]
 }
