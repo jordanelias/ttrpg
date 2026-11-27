@@ -10,7 +10,7 @@ cannot write"*. **No space here writes a `Person` field.** Every carrier change 
 an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witnesses` and
 `_conviction_crisis`, which move OTHER persons' `scar`/`conviction` too).
 
-  CREATION (arm C1)  `creation_sheet(persons)` reads the persons the world builder ALREADY SEATED;
+  CREATION (arm C1)  `creation_sheet(persons, holdings_of)` reads the persons the world builder ALREADY SEATED;
                      `seat(rows, person_id, space)` is the player's pick, returned as the `overrides`
                      mapping `harness/play_surface.py::dispatching_chooser` reads -- the playable
                      `choose` dispatches on `p.id`. **No act, no write.** There is no cast-entry arm:
@@ -95,14 +95,18 @@ class CreationRow:
     pursuits: Mapping
     conviction: Mapping
     attributes: Mapping
+    holdings: tuple          # ((tenure kind, object id), ...): his own live Tenures, the pairs `Situation.holdings` defines, from the caller's reader
 
 
-def creation_sheet(persons: Iterable[Person]) -> tuple:
+def creation_sheet(persons: Iterable[Person], holdings_of: Callable[[str], tuple]) -> tuple:
     """The creation sheet: one `CreationRow` per seated person, in id order (a pick list, not a ranking).
-    `persons` is what the caller already holds (`w.persons.values()` before the first season); this
-    function takes no `World` and writes nothing."""
+    `persons` is what the caller already holds (`w.persons.values()` before the first season); `holdings_of` is
+    the caller's reader, person id -> `((tenure kind, object id), ...)` of his own live Tenures (a seat's place in
+    the world is the first thing a player weighs): the caller passes it so this file names no `World`
+    (`harness/play_surface.py::holdings_of` builds it host-side; `OwnStateReader` answers one object's holder and
+    enumerates nothing, so it is not the reader yet). Writes nothing."""
     return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(recognised(p, p.pursuits)),
-                             frozen(p.conviction), frozen(p.attributes))
+                             frozen(p.conviction), frozen(p.attributes), tuple(holdings_of(p.id)))
                  for p in sorted(persons, key=lambda q: q.id))
 
 

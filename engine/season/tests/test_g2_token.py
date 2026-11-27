@@ -382,7 +382,7 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
     # interior shares with the store (a Tenure) is what only this spy sees, and reddens it.
     from engine.season.decision.sheet import (
         chronicle, creation_sheet, development_space, seat, take_ranked)
-    from engine.season.harness.play_surface import dispatching_chooser
+    from engine.season.harness.play_surface import dispatching_chooser, holdings_of
 
     def seated(w, wrap=None):
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -397,7 +397,7 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
                 return space(p, v, s, ask_budget, auto)
             return wrap(space, p, v, s, ask_budget, auto)
         pid = sorted(w.persons)[0]
-        return dispatching_chooser(_chooser(w), seat(creation_sheet(w.persons.values()), pid, player)), used
+        return dispatching_chooser(_chooser(w), seat(creation_sheet(w.persons.values(), holdings_of(w)), pid, player)), used
 
     spaces_calls = checked["calls"]
     for w in (P.tiny_world(), HL.build_world(0)):

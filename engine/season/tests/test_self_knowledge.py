@@ -97,14 +97,14 @@ def test_an_unrecognised_pursuit_moves_no_score_and_leaves_the_sheet():
             assert any(x.kind == "pursuit" and x.owner == SP.UNRECOGNISED for x in now), c.verb
             checked += 1
     assert checked, "no candidate carried a voice for the pursuit: the attribution was not observed"
-    assert e not in creation_sheet([p])[0].pursuits and len(creation_sheet([p])[0].pursuits) == len(PURSUITS) - 1
+    assert e not in creation_sheet([p], lambda pid: ())[0].pursuits and len(creation_sheet([p], lambda pid: ())[0].pursuits) == len(PURSUITS) - 1
     seen = []
     space = development_space(fx, lambda who, verb, subj: f"{who}:{verb}:{subj}", lambda sheet: (seen.append(sheet), take_ranked(sheet))[1],
                               draw=draw_factory(w.world_seed, lambda: w.tick))
     space(interior_of(p, 0, 0), View("p_sk", [], fx.get("view_k"), question=Question("q:sk", "need", ("p_other",))), None, lambda: 1)
     assert seen and e not in seen[0].pursuits and len(seen[0].pursuits) == len(PURSUITS) - 1
     p.ledger.append(claim)
-    assert e in creation_sheet([p])[0].pursuits
+    assert e in creation_sheet([p], lambda pid: ())[0].pursuits
 
 
 def test_a_told_self_claim_is_weighed_by_regard_for_the_teller():

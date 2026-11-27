@@ -64,7 +64,7 @@ from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a worl
 from . import probes as P
 from .carin import build_world
 from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
-from .play_surface import board, carry_on, deliberation_lines, dispatching_chooser
+from .play_surface import board, carry_on, deliberation_lines, dispatching_chooser, holdings_of
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -153,7 +153,7 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
         asked["n"] += 1
         return (take_ranked if pick is None else pick)(sheet)
     space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw)
-    overrides = bind_seat(creation_sheet(w.persons.values()), pid, space)
+    overrides = bind_seat(creation_sheet(w.persons.values(), holdings_of(w)), pid, space)
     choose = dispatching_chooser(chooser(w, verbs=verbs), overrides)
     d = SeasonDriver(w)
     played = {"n": 0, "seat": pid}
@@ -626,8 +626,9 @@ def main(argv=None) -> int:
     row = SCENARIOS[a.name]
     if row.seat is None and a.person is None:                  # a row with no default seat: the creation sheet is the pick list, and the run does not start
         print(f"{a.name} has no default seat; pass --person with one of:")
-        for c in creation_sheet(row.build(a.seed).persons.values()):
-            print(f"   {c.id} · {c.name} · pursuits {dict(c.pursuits)}")
+        w = row.build(a.seed)
+        for c in creation_sheet(w.persons.values(), holdings_of(w)):
+            print(f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}")
         return 2
     built: list = []
     pick = _picker(a, lambda: built[0])

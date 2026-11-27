@@ -23,7 +23,7 @@ from engine.season.decision.sheet import (
 from engine.season.gaps import Forbidden
 from engine.season.harness import headless as HL
 from engine.season.boot.realm import build_realm
-from engine.season.harness.play_surface import dispatching_chooser
+from engine.season.harness.play_surface import dispatching_chooser, holdings_of
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.state.carriers import Claim, Person
 from engine.season.state.ids import H, draw_factory
@@ -40,7 +40,7 @@ def _run(w, seasons, person_id=None, pick=take_ranked, between=None):
     mint, draw = _wiring(w)
     auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw)
     space = development_space(w.fixtures, mint, pick, verbs=resolvable_verbs(), draw=draw)
-    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values()), person_id, space))
+    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values(), holdings_of(w)), person_id, space))
     d = SeasonDriver(w)
     for _ in range(seasons):
         d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -81,7 +81,7 @@ def test_rem30_a_pick_that_differs_from_the_ranking_moves_the_hash():
 
 def test_rem30_creation_seats_only_a_person_the_builder_seated():
     w = HL.build_world(0)
-    rows = creation_sheet(w.persons.values())
+    rows = creation_sheet(w.persons.values(), holdings_of(w))
     assert [r.id for r in rows] == sorted(w.persons)
     assert seat(rows, None, object()) == {}
     assert list(seat(rows, "p_carin", "space")) == ["p_carin"]

@@ -121,6 +121,17 @@ def carry_on(w: Any, overrides: MutableMapping[str, Callback], pid: str, last: S
     return chosen.person, continuations(w, w.persons[chosen.person])
 
 
+def holdings_of(w: Any) -> Callable[[str], tuple]:
+    """THE HOST'S READER for `decision/sheet.py::creation_sheet(persons, holdings_of)` (B34.06): person id -> `((tenure kind, object id), ...)` of his own live
+    Tenures, built here from `w.tenures` because `decision/` names no `World` and `OwnStateReader` answers one object's holder and enumerates nothing (as
+    `military_menu.py` reads an army host-side). The pairs are the ones `Situation.holdings` shows, in the order held. Reads `w`, writes nothing."""
+    held: dict = {}
+    for t in w.tenures:
+        if t.live:
+            held.setdefault(t.subject, []).append((t.kind, t.object))
+    return lambda pid: tuple(held.get(pid, ()))
+
+
 def board(p: Any, fixtures: Any) -> list:
     """THE CASE BOARD: what `p` holds, laid out for a player to read (B11.77, `IS-B2-FI-04`, `08_FI_07` §3). A PRINT, NOT A READER: `person_q.dossier` is the one owner of what a row is and
     how it is weighed (`fixtures` is the `fx` it weighs under, as clause 4 does), and this groups nothing itself. A list of dicts, in order:
@@ -276,8 +287,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     row = SC.SCENARIOS[a.scenario]
     if row.seat is None and a.person is None:          # no default seat: the creation sheet is the pick list, and the run does not start
         print(f"{a.scenario} has no default seat; pass --person with one of:")
-        for c in creation_sheet(row.build(a.seed).persons.values()):
-            print(f"   {c.id} · {c.name} · pursuits {dict(c.pursuits)}")
+        w = row.build(a.seed)
+        for c in creation_sheet(w.persons.values(), holdings_of(w)):
+            print(f"   {c.id} · {c.name} · holds {list(c.holdings)} · pursuits {dict(c.pursuits)}")
         return 2
     transcript(a.scenario, a.seed, a.seasons, a.person)
     return 0

@@ -24,7 +24,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..decision import choose as CH
 from ..decision.choose import _sample_order, temper
 from ..harness import decision_spread as DS
-from ..harness.play_surface import dispatching_chooser
+from ..harness.play_surface import dispatching_chooser, holdings_of
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import person_q as PQ
 from ..state.carriers import Candidate, Person
@@ -79,7 +79,7 @@ def test_the_development_sheet_shows_the_readers_decisiveness():
     draw = draw_factory(w.world_seed, lambda: w.tick)
     auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw)
     space = development_space(w.fixtures, mint, pick, verbs=resolvable_verbs(), draw=draw)
-    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values()), pid, space))
+    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values(), holdings_of(w)), pid, space))
     SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert seen, "the seated person was never deliberated for"
     assert seen[0][0] == seen[0][1] and seen[0][0] != seen[0][2]

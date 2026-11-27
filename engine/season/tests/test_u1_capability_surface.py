@@ -1085,7 +1085,7 @@ def _sheet_of(person_id: str, mutate=None):
     from engine.season.boot.realm import build_realm
     from engine.season.decision import make_chooser
     from engine.season.decision.sheet import creation_sheet, development_space, seat
-    from engine.season.harness.play_surface import dispatching_chooser
+    from engine.season.harness.play_surface import dispatching_chooser, holdings_of
     from engine.season.loop.driver import SeasonDriver, resolvable_verbs
     from engine.season.state.ids import H, draw_factory
     w = build_realm(0)
@@ -1105,7 +1105,7 @@ def _sheet_of(person_id: str, mutate=None):
         raise _Shown
     auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw)
     space = development_space(w.fixtures, mint, pick, verbs=resolvable_verbs(), draw=draw)
-    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values()), person_id, space))
+    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values(), holdings_of(w)), person_id, space))
     try:
         SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     except _Shown:

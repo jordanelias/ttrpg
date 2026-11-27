@@ -964,6 +964,10 @@ class PlayHost:
                      the first of. `decide` stays for `combat.fight` until B34 folds it into `deciders["combat.fight"]`. The wrapper
                      resolves a role's decider here and passes it as `decide=`; a role with none is automated for this host. Empty by
                      default, so a host built as before is the host it was.
+    A scene with no decider is decided by the person's own policy (`11_GO_fidelity_and_campaign_modes` §2): the one a person's chooser supplies, never a
+    module constant, so a player who lets a scene resolve gets what an NPC with his sheet would get. THE PRESENT INTERIM is the module default: `decide=None`
+    reaches `modules/combat/fight.py` as the engine's own engage-every-turn loop, a constant, the same for an NPC and for a player who declines, so nothing
+    is forked today and the clause binds the decider that replaces it.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
     persons: frozenset
     decide: Callable

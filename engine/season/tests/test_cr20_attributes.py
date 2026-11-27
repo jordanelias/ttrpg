@@ -26,6 +26,7 @@ import pytest
 
 from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.season.decision.sheet import creation_sheet
+from engine.season.harness.play_surface import holdings_of
 from engine.season.data import cast, files
 from engine.season.data.matrix import matrix_row
 from engine.season.data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATIONS, skills_without_a_verb
@@ -248,7 +249,7 @@ def test_the_carrier_has_no_matrix_row_and_the_gate_refuses_a_write():
 
 def test_the_creation_sheet_carries_the_attributes_as_a_read_only_copy():
     w = _w(**{HIGH: {ATTR: 6}})
-    rows = {r.id: r for r in creation_sheet(w.persons.values())}
+    rows = {r.id: r for r in creation_sheet(w.persons.values(), holdings_of(w))}
     assert dict(rows[HIGH].attributes) == {ATTR: 6} and dict(rows[LOW].attributes) == {}
     with pytest.raises(TypeError):
         rows[HIGH].attributes[ATTR] = 1
