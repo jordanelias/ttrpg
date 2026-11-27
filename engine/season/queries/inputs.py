@@ -1123,19 +1123,22 @@ class LarderInput:
                      so the cohort exemption (`larder_draw`'s) and this projection must agree;
       * `walk`    -- `Fixtures.larder_walk` (B12a.53, `H-528`): `"first"` (the control; `through` ships; the draw is the first
                      stocked rung's alone) or `"through"` (the remainder goes on up the ladder). Last, with a
-                     default, so the positional empty `LarderInput((), (), (), ())` of `_larder_parts`' head builds."""
+                     default, so the positional empty `LarderInput((), (), (), ())` of `_larder_parts`' head builds;
+      * `order`   -- B12b.39: the cohort pids in the season's DRAWN order (`world_q._larder_order`), the order the units a short rung's
+                     proportional shares leave over go out in, one each. `()` (the default, the control) is host order."""
     weights: tuple
     eaters: tuple
     ladders: tuple
     stores: tuple
     walk: str = "first"
+    order: tuple = ()
 
 
 @dataclass(frozen=True)
 class DrawRow:
     """One eater's draw: `cells` is `((kind, want, take, source or None, parts), ...)` in kind order. `source` is
-    the first rung the walk drew from; `parts` is `((rung, units), ...)`, every rung it drew from in walk order
-    (`sum(units) == take`): `((source, take),)` under `first` when `source` is not `None`, else `()`. The debit reads `parts`."""
+    the first rung the walk drew from (the first it pointed at when a short rung's share gave it nothing); `parts` is
+    `((rung, units), ...)`, every rung it drew from in walk order (`sum(units) == take`; `()` where nothing was drawn). The debit reads `parts`."""
     pid: str
     home: str
     cells: tuple

@@ -478,6 +478,23 @@ def test_h303_first_takes_one_through_takes_six_and_splits_the_debit():
         assert 1001 - w.rungs[S.HUNGRY].stores.get("grain", 0) - w.rungs["terr_march"].stores["grain"] == take, walk
 
 
+def test_takes_sum_to_what_was_held():
+    """B12b.39: three cohorts of weight 6 want 6 grain each on a rung holding 7: the shares and the drawn remainder hand out exactly 7 and MATTER leaves the
+    rung at zero; on a rung holding 30 they take their 18 and 12 stays. Nothing is made or lost by the split."""
+    from ..boot.realm import place_person
+    for held, taken, left in ((7, 7, 0), (30, 18, 12)):
+        w = S.build(fixtures=DEFAULT_FIXTURES.sweep("subsistence_weight", {"grain": 1}))
+        w.persons[S.POPULACE].weight = 6
+        for pid in ("p_b", "p_c"):
+            place_person(w, pid, pid, S.HUNGRY, weight=6)
+        w.rungs[S.HUNGRY].stores = {"grain": held}
+        draw = world_q.subsistence_draw(w)
+        assert len(draw) == 3, "the plant holds fewer than three eating cohorts"
+        assert sum(cells["grain"][1] for _, cells in draw.values()) == taken, draw
+        _matter(w)
+        assert w.rungs[S.HUNGRY].stores.get("grain", 0) == left
+
+
 # ======================================================================================
 # THE SHARE A STORE MOVE TAKES (B12b.19; `07_SE_arc_needs` (b); A-56, A-81)
 # ======================================================================================

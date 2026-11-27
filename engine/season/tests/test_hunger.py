@@ -271,3 +271,47 @@ def test_field_provisioning_refused_on_empty_treasuries():
         SeasonDriver(build_realm(0, fixtures=on.sweep("granary_seasons", 0)))
     SeasonDriver(build_realm(0, fixtures=on))
     SeasonDriver(build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("granary_seasons", 0)))
+
+
+# B12b.39 (`16_PESSIMIST_SE_A` edit 1, F-PES-SE-01): A SHORT RUNG IS SHARED IN PROPORTION TO WANT. N cohorts of weight 2 (want 6: grain 4, salt 2) in one settlement.
+def _shared_world(stores: dict, cohorts: int = 2, seed: int = 0) -> World:
+    w = World(world_seed=seed, fixtures=_arm(False))          # severity off: the fall is `body_step x units short`, not a drawn multiple
+    w.rungs["R"], w.rungs["T"], w.rungs["S"] = Rung("R", "realm"), Rung("T", "territory"), Rung("S", "settlement")
+    w.add_tenure(Tenure("t_T", "T", "R", "contain", since=0))
+    w.add_tenure(Tenure("t_S", "S", "T", "contain", since=0))
+    w.rungs["S"].stores = dict(stores)
+    for i in range(cohorts):
+        place_person(w, f"c{i}", f"cohort {i}", "S", weight=2, body=PLANTED_BODY)
+    w.manifest = {"contest": "seam.contest_resolver", "order": "core.canonical_order"}
+    return w
+
+
+def test_short_rung_is_shared_in_proportion_to_want():
+    """Row 1: two cohorts of weight 2 on one rung holding grain 4, salt 2 each take grain 2, salt 1 and each falls 30 (`body_step` 10 x 3 short);
+    `shortfalls` names the rung with the gap (grain 4, salt 2). The control, the rung holding grain 8, salt 4, feeds both and reports nothing."""
+    w = _shared_world({"grain": 4, "salt": 2})
+    out = composition.require("settlements.subsist")(world_q.subsist_input(w))
+    assert {row.pid: {k: take for k, _, take, _, _ in row.cells} for row in out.draw.rows} == {"c0": {"grain": 2, "salt": 1}, "c1": {"grain": 2, "salt": 1}}
+    assert out.shortfalls == (("S", (("grain", 4), ("salt", 2))),)
+    _matter(w)
+    assert [w.persons[p].body for p in ("c0", "c1")] == [PLANTED_BODY - 30] * 2, "the two cohorts did not fall alike: the rung was not shared"
+    fed = _shared_world({"grain": 8, "salt": 4})
+    assert composition.require("settlements.subsist")(world_q.subsist_input(fed)).shortfalls == (), "the control reports a gap: the plant cannot see the share"
+    _matter(fed)
+    assert [fed.persons[p].body for p in ("c0", "c1")] == [PLANTED_BODY] * 2
+
+
+def test_odd_unit_varies_over_season_keys():
+    """Row 2: three cohorts on a rung holding 4 grain (want 4 each): the takes sum to 4 and, over 200 season keys, the cohort that receives the odd unit
+    varies (the falsifier for 'drawn': one cohort receiving it at 200 of 200)."""
+    w, got, checked = _shared_world({"grain": 4}, cohorts=3), {}, 0
+    for tick in range(200):
+        w.tick = tick
+        rows = composition.require("settlements.larder_draw")(world_q.larder_input(w)).rows
+        takes = {row.pid: {k: t for k, _, t, _, _ in row.cells}["grain"] for row in rows}
+        assert sum(takes.values()) == 4 and sorted(takes.values()) == [1, 1, 2], takes
+        luck = max(takes, key=takes.get)
+        got[luck] = got.get(luck, 0) + 1
+        checked += 1
+    assert checked == 200
+    assert len(got) >= 2 and max(got.values()) < 200, f"one cohort received the odd unit at every key: {got}"

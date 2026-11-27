@@ -39,6 +39,7 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "under famine_loss a cohort whose body stands under the lowest body floor thins by that share of its weight each season, each thinning caused by the body write and its demanded falling with it, one over the floor thins not at all, a cohort at body 0 dies only at weight 1, and at famine_loss 0 it dies at body 0 as before"}
       - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a settlement no cohort resides under reads the hunger band empty, a settlement a cohort resides under whose cohort wants nothing still reads fed, and the one with cohort and need reads starving"}
       - {batch: B12b-weather-arcs-population, added: 4, behaviour: "with the regrowth arm on, a cohort at full body, housed, fed in full and quiet for the set seasons gains one head with one weight.changed and no person added or removed; it gains none at capacity until a dwelling is built and then exactly one, none in a short season, and a cohort thinned by famine returns a head once it is fed and whole; with the arm 0 nothing is written"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a rung too short for its claimants is shared in proportion to want so two cohorts of one size each take half and fall alike, the odd unit goes to a cohort that varies over season keys, and the takes always sum to what the rung held"}
   engine:
     base: 1043
     warrants: []

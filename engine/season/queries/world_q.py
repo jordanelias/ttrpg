@@ -1821,8 +1821,19 @@ def _larder_parts(w: World) -> tuple:
     want = season_term(w, "want")
     scaled = tuple(sorted((kind, math.floor(weight * want + 0.5)) for kind, weight in weights.items()))
     return (LarderInput(scaled, tuple(eaters), tuple(ladders), tuple(stores),
-                        w.fixtures.get("larder_walk")),
+                        w.fixtures.get("larder_walk"), _larder_order(w, [e.pid for e in eaters if e.is_cohort])),
             tuple(chains))
+
+
+def _larder_order(w: World, cohort_pids: list) -> tuple:
+    """B12b.39: `LarderInput.order`, the cohorts' pids in this season's DRAWN order, the order the units a short rung's shares leave over go out in.
+    One keyed stream `(world_seed, tick, "larder", "remainder")` through `draw_factory` (a Query's draw advances no ordinal), a Fisher-Yates over the
+    sorted pids with `Draw.below` (the one primitive: `Draw` has no `sample`), so asking twice in a season agrees and the next season may draw another."""
+    order, d = sorted(cohort_pids), draw_factory(w.world_seed, lambda: w.tick)("larder", "remainder")
+    for i in range(len(order) - 1, 0, -1):
+        j = d.below(i + 1)
+        order[i], order[j] = order[j], order[i]
+    return tuple(order)
 
 
 def subsist_input(w: World) -> SubsistInput:
