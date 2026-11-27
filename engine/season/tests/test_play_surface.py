@@ -304,9 +304,9 @@ def test_a_reached_ending_with_no_continuation_stops_the_transcript(monkeypatch)
     _planted_ending(monkeypatch)
     lines: list = []
     r = PS.transcript("life", 0, 2, alone, out=lines.append)
-    assert (r["seasons"], r["ending"], r["kind"]) == (1, "realm_ended", "drawn")
+    assert (r["seasons"], r["ending"], r["kind"]) == (1, "realm_fallen", "lost")     # the planted ending's holders are nobody's: no commit of his is to them
     assert any("planted_end" in line for line in lines), lines[-6:]
-    assert lines[-1].startswith("ENDING realm_ended"), lines[-1]
+    assert lines[-1] == "ENDING realm_fallen lost", lines[-1]
 
 
 def test_an_ending_with_a_continuation_plays_on(monkeypatch):
@@ -345,3 +345,79 @@ def test_a_killed_seat_continues_under_the_heir(monkeypatch):
     assert r["passed"] == (pid, heir) and r["seat"] == heir and r["seasons"] == 2, (r["passed"], r["seasons"])
     assert any(line.startswith("-- re-seated") and pid in line and heir in line for line in lines), lines[-8:]
     assert any(line.startswith("-- deliberation") and line.endswith(heir) for line in lines)
+
+
+# -- B34.20: a run's ending reaches the surface, with its kind (`IS-B3-GO-02`) ------------------------------------------------------------------------
+# GAME-STATE, lane season_loop. (1) one season of the realm through the transcript on a planted reader; (2) the hand-built governance world `test_in27_endings.py`
+# plants its `crowned_reeve` row on, no season played; (3) the readers on the built realm, no season played.
+
+def test_the_transcript_stops_on_an_ending_and_prints_its_kind(monkeypatch):
+    """A planted reader names `planted_won` once a season has been played, of a row whose `kinds` makes it `won`; three seasons are asked. The transcript stops at one,
+    prints the seated person's chronicle and his WHOLE `account` (one row a claim of his ledger), and its last line is `ENDING planted_won won`, once."""
+    from ..decision.sheet import account
+    from ..harness import play_surface as PS, scenarios as SC
+    monkeypatch.setitem(SC.SCENARIOS, "planted", SC.Scenario(build=build_realm, seat=None, kinds={"planted_won": "won"},
+                                                             ending=lambda w, pid, left: "planted_won" if w.tick > 0 else None))
+    lines: list = []
+    r = PS.transcript("planted", 0, 3, SEATED, out=lines.append)
+    assert (r["seasons"], r["ending"], r["kind"]) == (1, "planted_won", "won"), (r["seasons"], r["ending"], r["kind"])
+    assert [x for x in lines if x.startswith("ENDING")] == ["ENDING planted_won won"] and lines[-1] == "ENDING planted_won won", lines[-4:]
+    assert lines.index(f"content_hash {r['hash']}") < len(lines) - 1
+    held = r["world"].persons[SEATED]
+    start = next(i for i, x in enumerate(lines) if x.startswith("-- the ending"))
+    whole = [x for x in lines[start:] if x.startswith("   learned ")]
+    assert len(whole) == len(account(held, ())) == len(held.ledger) >= 1, (len(whole), len(held.ledger))
+    assert SEATED in lines[start] and f"{len(held.ledger)} claim" in lines[start], lines[start]
+
+
+def _reeve_world(monkeypatch):
+    """The governance world with `crowned_reeve` planted (`test_in27_endings.REEVE_ROW`): `p_king` confers `off_reeve` on `p_mid`, a Crown man, and the row is reached.
+    Returns `(w, reached)`; three more persons stand for the three seats: `p_other` committed to the Crown, `p_high` to the Church, `p_low` to nobody."""
+    from ..queries import world_q as Q
+    from ..state.carriers import Tenure
+    from .test_g3_not_yours import _gov_world
+    from .test_in27_endings import CHURCH, CROWN, REEVE_ROW, _fold
+    w, d = _gov_world()
+    monkeypatch.setattr(Q, "ENDINGS", REEVE_ROW)
+    w.add_tenure(Tenure("t_mid_crown", "p_mid", CROWN, "commit", 0))
+    w.add_tenure(Tenure("t_other_crown", "p_other", CROWN, "commit", 0))
+    w.add_tenure(Tenure("t_high_church", "p_high", CHURCH, "commit", 0))
+    assert _fold(w, d, Act(id="in27_cf", actor="p_king", verb="confer", via="off_crown",
+                           payload={"subject": "off_reeve", "office": "off_reeve", "to": "p_mid"})) == ["tenure.opened"]
+    return w, Q.endings_reached(w)
+
+
+def test_a_realm_ending_is_held_for_a_seat_of_the_holding_faction_and_fallen_for_another(monkeypatch):
+    """`crowned_reeve` is reached with a Crown man on the Reeve's seat. A seat with a live `commit` to the Crown reads `realm_held` (`won`); a seat committed to the
+    Church reads `realm_fallen`, and so does one committed to nobody (`lost`); nobody seated stays `realm_ended` (`drawn`; the life row reads `line_extinct` first). Each seat has no continuation (the
+    transcript's own stop test), so the reader names an ending at all; CONTROL: nothing reached names none, whoever sits."""
+    from ..harness import play_surface as PS, scenarios as SC
+    from ..queries import world_q as Q
+    w, reached = _reeve_world(monkeypatch)
+    assert [e.ending for e in reached] == ["crowned_reeve"] and len(reached[0].holds) == 1, reached
+    monkeypatch.setattr(Q, "endings_reached", lambda world: reached)
+    seats = {"p_other": ("realm_held", "won"), "p_high": ("realm_fallen", "lost"), "p_low": ("realm_fallen", "lost"), None: ("realm_ended", "drawn")}
+    for pid, (name, kind) in seats.items():
+        assert not PS.has_continuation(w, pid), f"fixture: {pid} has a continuation, so no ending is read"
+        for row in ("season", "life"):
+            got = SC.SCENARIOS[row].ending(w, pid, 1)
+            if row == "life" and pid is None:       # the life row reads his line first (`life_ending`'s own order)
+                name, kind = "line_extinct", "lost"
+            assert got == name and SC.SCENARIOS[row].kinds[got] == kind, (row, pid, got)
+    monkeypatch.setattr(Q, "endings_reached", lambda world: [])
+    assert SC.season_ending(w, "p_other", 1) is None and SC.life_ending(w, "p_other", 1) is None
+
+
+def test_line_extinct_is_lost_and_a_living_continuation_is_not_an_ending(monkeypatch):
+    """On the built realm: with nothing reached and nobody seated the season row names `line_extinct`, `lost`. With an ending reached, a seat that has a living
+    continuation is no ending (the run plays on), and the same ending is one for a seat that has none."""
+    from ..harness import scenarios as SC
+    from ..queries import world_q as Q
+    w = build_realm(0)
+    by = {p: len(Q.continuations(w, w.persons[p])) for p in sorted(w.persons)}
+    alone, heir = next(p for p, n in by.items() if n == 0), next(p for p, n in by.items() if n >= 1)
+    assert SC.season_ending(w, None, 3) == "line_extinct" and SC.SCENARIOS["season"].kinds["line_extinct"] == "lost"
+    assert SC.life_ending(w, None, 3) == "line_extinct" and SC.SCENARIOS["life"].kinds["line_extinct"] == "lost"
+    monkeypatch.setattr(Q, "endings_reached", lambda world: [Q.EndingReached("planted_end", True, (), (), ())])
+    assert SC.season_ending(w, heir, 3) is None and SC.life_ending(w, heir, 3) not in ("realm_ended", "realm_held", "realm_fallen")
+    assert SC.season_ending(w, alone, 3) == "realm_fallen" and SC.life_ending(w, alone, 3) == "realm_fallen"

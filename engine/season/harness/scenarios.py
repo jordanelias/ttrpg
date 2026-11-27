@@ -97,12 +97,30 @@ class Scenario:
                             needs="a member of engine.substrate.composition.ROLES", law="IS-B2-CORE-01 (1)")
 
 
-def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
-    """The `season` row's reader: `realm_ended` when `world_q.endings_reached(w)` is non-empty and the seat has no continuation (`play_surface.has_continuation`; with one the run
-    plays on, B34.19); `line_extinct` when the seat
-    has no person (`carry_on` found no living tie); `time` when no season is left; else `None`. In that order."""
-    if world_q.endings_reached(w) and not has_continuation(w, pid):
+def realm_ending(w: World, pid: Optional[str]) -> Optional[str]:
+    """THE REALM ENDING'S NAME, read from the seated person's side (`IS-B3-GO-02`): `None` while `world_q.endings_reached(w)` is empty or the seat has a continuation
+    (`play_surface.has_continuation`; with one the run plays on, B34.19). Else `realm_held` when one of his own live `commit`s is to the faction the reached row's
+    holders cohere under (`world_q.faction_holding` of each hold's holder), his Tenures read as `Situation.holdings` reads them (`play_surface.holdings_of`);
+    `realm_fallen` when none is; `realm_ended` with nobody seated (`pid` is `None` or no longer in the world). The names' kinds are each row's `kinds`.
+    [ASSUMPTION: a seat of the faction that holds the peninsula has won -- basis: GD-1 as `rosters.yaml: endings` quotes it names the one victory, and the roster row's
+    `under: one_faction` names the winner as a faction; the split is an amendment to `IS-B2-CORE-02`'s reader (B34.20); Jordan to correct; revert: return `realm_ended` here,
+    which every row's `kinds` holds as `drawn`.] Reads `w`, writes nothing."""
+    reached = world_q.endings_reached(w)
+    if not reached or has_continuation(w, pid):
+        return None
+    if pid not in w.persons:
         return "realm_ended"
+    held = {t.id: t for t in w.tenures if t.kind == "hold"}
+    holders = {world_q.faction_holding(w, held[h].subject) for e in reached for h in e.holds if h in held}
+    return "realm_held" if any(k == "commit" and o in holders for k, o in holdings_of(w)(pid)) else "realm_fallen"
+
+
+def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
+    """The `season` row's reader: `realm_ending(w, pid)`'s name (`realm_held`, `realm_fallen`, or `realm_ended` with nobody seated) when an ending is reached and the seat has
+    no continuation; `line_extinct` when the seat has no person (`carry_on` found no living tie); `time` when no season is left; else `None`. In that order."""
+    named = realm_ending(w, pid)
+    if named is not None:
+        return named
     if pid is None:
         return "line_extinct"
     return "time" if seasons_left <= 0 else None
@@ -110,10 +128,10 @@ def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[s
 
 #: The one mapping from a scenario's name to its row; every lane registers its own in its batch. `season` is Carin's case
 #: (`headless.build_world`) as a played scenario, seated on its first person in id order; the world is built to need no role.
-#: `IS-B3-GO-02` (B34) splits `realm_ended` by the seat's side.
+#: `realm_ended` is `realm_held` or `realm_fallen` by the seat's side (`realm_ending`, `IS-B3-GO-02`, B34.20).
 SCENARIOS: dict[str, Scenario] = {
     "season": Scenario(build=build_world, seat=lambda w: sorted(w.persons)[0], ending=season_ending,
-                       kinds={"realm_ended": "drawn", "line_extinct": "lost", "time": "drawn"}),
+                       kinds={"realm_held": "won", "realm_fallen": "lost", "realm_ended": "drawn", "line_extinct": "lost", "time": "drawn"}),
 }
 
 
@@ -454,7 +472,7 @@ SCENARIOS["inquiry"] = Scenario(build=inquiry_world, seat=lambda w: INVESTIGATOR
 # ======================================================================================
 # THE LIFE ROW (B11.79, `IS-B2-CHAR-01`): the realm as built, a person of it seated by `--person`, and four endings read off the world.
 # ======================================================================================
-LIFE_KINDS = {"fulfilled": "won", "line_extinct": "lost", "realm_ended": "drawn", "unfinished": "drawn"}
+LIFE_KINDS = {"fulfilled": "won", "line_extinct": "lost", "realm_held": "won", "realm_fallen": "lost", "realm_ended": "drawn", "unfinished": "drawn"}
 
 
 def met_ambitions(w: World, pid: Optional[str]) -> list:
@@ -468,14 +486,15 @@ def life_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str
     """THE LIFE'S ENDING, the first true of (`IS-B2-CHAR-01` (2); computed, stored nowhere, read by no chooser), or `None`:
       * `line_extinct` -- `pid` is `None`: `carry_on` found no living tie to carry the seat on (read first, since no ambition can be read of nobody);
       * `fulfilled`    -- one of his ambitions reads `met` (`met_ambitions`);
-      * `realm_ended`  -- `world_q.endings_reached(w)` is non-empty and he has no continuation (`play_surface.has_continuation`, B34.19);
+      * `realm_held`, `realm_fallen`, `realm_ended` -- `realm_ending(w, pid)`'s: `world_q.endings_reached(w)` is non-empty and he has no continuation (B34.19), named by his side (B34.20);
       * `unfinished`   -- no season is left."""
     if pid is None:
         return "line_extinct"
     if met_ambitions(w, pid):
         return "fulfilled"
-    if world_q.endings_reached(w) and not has_continuation(w, pid):
-        return "realm_ended"
+    named = realm_ending(w, pid)
+    if named is not None:
+        return named
     return "unfinished" if seasons_left <= 0 else None
 
 
@@ -485,7 +504,7 @@ def life_reading(w: World, pid: Optional[str]) -> str:
     return f"met {', '.join(met)}" if met else "no ambition met"
 
 
-#: `seat=None`: no default person; `--person` names one. [ASSUMPTION; medium; Jordan to correct] `realm_ended` is `drawn` for every seat; B34 splits it by the seat's side as `IS-B3-GO-02` states for `season`.
+#: `seat=None`: no default person; `--person` names one. A reached realm ending is named by the seat's side, as the `season` row's is (`realm_ending`, B34.20).
 SCENARIOS["life"] = Scenario(build=build_realm, seat=None, ending=life_ending, kinds=LIFE_KINDS, reading=life_reading)
 
 

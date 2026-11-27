@@ -56,7 +56,7 @@ from typing import Any, Callable, MutableMapping, Mapping, Optional, Sequence
 
 from ..data import goals as goals_data
 from ..decision.choose import TERM_NAMES
-from ..decision.sheet import account, creation_sheet, offer, situation
+from ..decision.sheet import account, chronicle, creation_sheet, offer, situation
 from ..gaps import Forbidden
 from ..loop.driver import resolvable_verbs
 from ..queries import faction_q, world_q
@@ -227,7 +227,8 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
                ask: Optional[Callable[[Any], int]] = None) -> dict:
     """Play `scenarios.SCENARIOS[name]` through `scenarios.run` with `person` seated on `take_ranked`, printing each deliberation (`deliberation_lines`), the pick, the
     `account` since his last deliberation, and once a season the host's faction line. `ask(situation) -> int` is his pick of one of the questions asked of him
-    (`development_space`'s), the first where `None`. Prints `content_hash` and, last, `ENDING <name> <kind>` where the run ended on one.
+    (`development_space`'s), the first where `None`. Prints `content_hash` and, last, `ENDING <name> <kind>` where the run ended on one (B34.20, `IS-B3-GO-02`: the kind is the row's `kinds`, from the seat's side; before it,
+    his `chronicle` and his whole `account`, and nothing of the antecedents `endings_reached` computes, which stay host-side until `reveal`, B38).
     THE STOPS (B34.19, `U5a_CORE_owed_edits` §F): the run's own, read through `scenarios.run`'s `ending`: a reached realm ending stops it only where the seat has no continuation
     (`has_continuation`; with one the ending is recorded, printed as `realm ending reached`, and the run plays on); a dead seat with no continuation stops it (`line_extinct`),
     with one the line says `re-seated`; and `seasons` stops it. No reveal is printed (B38). Returns `scenarios.run`'s dict, with `recorded`, the realm endings reached. Nothing here writes the world: the readers are `decision/sheet.py`'s."""
@@ -290,6 +291,13 @@ def transcript(name: str, seed: int, seasons: int, person: Optional[str] = None,
         out("-- the run ended")
         learned(r["seat"])
         host_line(r["seat"])
+    if r["ending"] is not None and r["seat"] in w.persons:      # AT AN ENDING (B34.20, `IS-B3-GO-02` (3)) his own chronicle and his whole account, and nothing of the world's truth
+        held = w.persons[r["seat"]]
+        c = chronicle(held, w.fixtures)
+        out(f"-- the ending · {held.id} · chronicle {len(c.ledger)} claim(s) on {len(c.beliefs)} subject(s), {len(c.threads)} thread(s) · conviction {dict(c.conviction)}"
+            f" · scar {dict(c.scar_pursuits)} · held {dict(c.scar_affiliations_held)} · history {dict(c.scar_affiliations_history)}")
+        for line in account_lines(held, ()):
+            out(line)
     out(f"{name} · seed {seed} · {r['seasons']} season(s) · tick {r['tick']} · seat {' > '.join(r['passed'])}")
     out(f"content_hash {r['hash']}")
     if r["ending"] is not None:                        # the last line, where the run ended on one (the batch gate reads it so)
