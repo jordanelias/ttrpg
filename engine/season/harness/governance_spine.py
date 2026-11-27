@@ -46,6 +46,7 @@ from typing import Callable, Iterator, Optional, Sequence
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.substrate import names as _names
 
+from ..data.geography import geography
 from ..boot.chooser import chooser
 from ..boot.realm import build_realm, place_person
 from ..data import files
@@ -739,7 +740,7 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
             return range(len(sheet.candidates))
         spent.append(True)
         return chosen
-    space = development_space(w.fixtures, mint, pick_of, verbs, draw)
+    space = development_space(w.fixtures, mint, pick_of, verbs, draw, geo=geography())
 
     def callback(p, v, s, ask_budget, auto) -> list:
         if not spent:

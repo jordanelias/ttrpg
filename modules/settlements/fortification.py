@@ -10,9 +10,10 @@ construction and held there by `manifest/registrar.py::require_entries` against 
 It takes the host's typed input record and returns a bare `float`, imports the record type and nothing
 else, never reads or writes `World`, holds no token and keeps no state.
 
-THE RULE (`H-38`'s *"`Site.condition` is the model"* applied to defence): the MEAN garrison condition over the subtree, divided by scale -- `sum / (scale * n)`, the float
-expression operand for operand. Several garrisons AVERAGE rather than sum, which keeps the value in
-`[0.0, 1.0]`. No garrison is `0.0`: an unfortified settlement, not a refusal.
+THE RULE (`H-38`'s *"`Site.condition` is the model"* applied to defence): each garrison's shortfall is `1 - condition / scale`
+(the condition clamped to `[0, scale]`); the settlement's strength is `1 - product(shortfalls)`. Several garrisons ADD in
+that sense and never lower one another, and the value stays in `[0.0, 1.0]`. No garrison is `0.0`: an unfortified settlement,
+not a refusal.
 """
 from __future__ import annotations
 
@@ -20,7 +21,9 @@ from engine.season.queries.inputs import FortInput
 
 
 def fortification(inp: FortInput) -> float:
-    """A settlement's defensive strength, `0.0` to `1.0`."""
-    if not inp.conditions:
-        return 0.0
-    return sum(inp.conditions) / (inp.scale * len(inp.conditions))
+    """A settlement's defensive strength, `0.0` to `1.0`: the complement of the product of each
+    garrison's shortfall, so a second wall never weakens the first."""
+    breach = 1.0
+    for c in inp.conditions:
+        breach *= 1.0 - max(0, min(c, inp.scale)) / inp.scale
+    return 1.0 - breach
