@@ -1312,7 +1312,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                     c0 = chunk[0]
                     sc = scene(len(out), [Candidate(c0.verb, c0.subject,
                                                     {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})], lead=c0)
-                    if sc.cost(ext) > left:
+                    if sc.cost(ext, orders) > left:
                         # B12b.04: a journey whose leg costs more than he has left is LEFT UNDONE -- his triage, not an engine's trim (S26.3: a scene
                         # over the remainder is the caller's defect, and `deliberate` refuses it). Only a priced journey can reach here: any other
                         # scene costs the plain point or the extended cost, which the strips above already brought under `left`.

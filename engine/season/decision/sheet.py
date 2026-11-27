@@ -55,9 +55,9 @@ from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
-from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
+from ..data.rosters import AFFILIATIONS, MANAGEMENT_ORDERS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, Value, _seen_index, decisiveness, deed_doer, is_deed, recognised
+from ..queries.person_q import LedgerReader, Value, _seen_index, decisiveness, is_deed, names_a_doer, recognised
 from ..state.carriers import Act, Candidate, Claim, Person, PersonInterior, Question, Scene, View, fade_of, frozen
 from .choose import TERM_NAMES, Ranked, _believed_chance, _payload_of, make_ranker, release
 from .options import ledger_weigh, own_state_declines
@@ -327,7 +327,7 @@ def offer(p: PersonInterior, v: View, fx: Any, verbs: Optional[frozenset] = None
     asked = tuple(v.questions)
 
     def cost(c: Candidate) -> int:
-        return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended)
+        return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended, MANAGEMENT_ORDERS)
 
     rows = tuple(OfferRow(copy.deepcopy(c), _occasion_of(asked, c.subject), tuple(terms_of[id(c)]),
                           None if odds is None else _believed_chance(p, c, odds), cost(c)) for c in order)
@@ -367,18 +367,13 @@ def account(p: PersonInterior, since: tuple) -> tuple:
         earlier = [(w, l, j, o) for w, l, j, o in cells[(c.subject, c.predicate)] if (w, l) < (c.when, c.lap)]
         return max(earlier, key=lambda t: t[:3])[3] if earlier else None
 
-    def names_a_doer(c: Claim) -> bool:
-        sighted = seen[4].get((c.subject, c.when, c.lap, c.chain), ()) if c.chain else seen[0].get((c.subject, c.when, c.lap), ())
-        return (c.doer is not None or getattr(c.value, "who", None) is not None
-                or any(getattr(s.value, "who", None) is not None for s in sighted) or deed_doer(c, seen) is not None)
-
     rows = []
     for c in ledger:
         if (c.when, c.lap) < tuple(since):
             continue
         prior = prior_of(c)
         changed = (prior is not None and prior.value != c.value) or is_deed(c)
-        rows.append(AccountRow(c, c.doer == p.id, prior, changed and not names_a_doer(c)))
+        rows.append(AccountRow(c, c.doer == p.id, prior, changed and not names_a_doer(c, seen)))
     return tuple(rows)
 
 

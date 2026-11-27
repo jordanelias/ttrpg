@@ -662,7 +662,7 @@ class Scene:
 
     def cost(self, extended_cost: int, orders=frozenset()) -> int:
         """Scene actions this scene spends: 0 when it carries acts and every act's verb is in `orders` (B34.10, A-104: a management order
-        is no scene -- `rosters.MANAGEMENT_ORDERS`, which DELIBERATE and `pack_scenes` pass and which ships empty, so nothing is free at control; `sheet.offer` and `probes` price a scene without it);
+        is no scene -- `rosters.MANAGEMENT_ORDERS`, which DELIBERATE and `pack_scenes` pass and which ships empty, so nothing is free at control; `sheet.offer` passes it too, `probes` prices a scene without it);
         else `extended_cost` when it fills more than one slot, else `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a
         caller sets: a scene's price is what it carries, so a play-surface callback returning one effort-2 act pays for three slots. B12b.04: PLUS each act's `leg` points beyond
         the first (`leg_of`), so a journey the chooser priced (`route_pricing` `on`) costs its leg from the scene budget.
