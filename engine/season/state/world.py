@@ -399,12 +399,14 @@ def _entity_moved(item: Any, was: dict) -> bool:
 #   what `content_hash` folds outside them   `unowned` (the Tenures no person owns: the person-owned ones ride
 #                                            on `Person.tenures`) and `log` (every Event, its receipts and
 #                                            observations);
-#   one unhashed fact the hash cannot rebuild `covers_logged` (`{event id: cover id}`, as at each Event's
-#                                            logging: a live read of the world, so decode must not re-read it).
+#   unhashed facts the hash cannot rebuild   `covers_logged` (`{event id: cover id}`, as at each Event's
+#                                            logging: a live read of the world, so decode must not re-read it) and
+#                                            `subsistence_shortfall` (the last MATTER's `{pid: {kind: units short}}`,
+#                                            read by the next barrier's `subsist_input` as `short_before`).
 # NO GENERATOR STATE: a draw is a function of its key (A-30), so a loaded world continues with the draws the
 # unbroken run would have made. NOT HELD, rebuilt or per-tick: the log's last-emission indexes (re-derived from
 # the log), the gate's receipt serials (re-registered from the receipts the log holds), `draw`, `_departed`,
-# `_subsistence_shortfall`, `_staged`, the barrier cache and the tenure shadow (all empty at a season boundary),
+# `_staged`, the barrier cache and the tenure shadow (all empty at a season boundary),
 # `manifest` (resolved by `boot`), `event_kinds` (the default roster), and the realm builder's census attributes
 # (`_office_census`, `_tie_of` and the like: reported by the harness, read by no step of the loop).
 # A `SeatId` decodes as the plain string it encodes as, and the constructors of `Office` and `Act` tag it again.
@@ -442,7 +444,7 @@ def encode(w: "World") -> bytes:
     frames = [("world_seed", w.world_seed), ("tick", w.tick), ("acts", list(w.acts)),
               ("fixtures", fixtures_digest(w.fixtures)), ("unowned", list(w._unowned)),
               ("log", list(w.log)), ("covers_logged", w._covers_logged),
-              ("places_logged", w._places_logged)]
+              ("places_logged", w._places_logged), ("subsistence_shortfall", w._subsistence_shortfall)]
     frames += [(n, getattr(w, n)) for n in w._STATE_COLLECTIONS]
     frames += [(n, list(getattr(w, n))) for n in w._STATE_SEQUENCES]
     return _canonical((_SNAPSHOT_TAG, tuple(frames)), ordered=True)
@@ -599,6 +601,8 @@ def _world_from(frames: dict, fixtures: Fixtures) -> "World":
     w._covers_logged.update(frames["covers_logged"])
     w._places_logged.clear()
     w._places_logged.update(frames["places_logged"])
+    # B12b.40: the last barrier's record is loop input (`world_q.subsist_input`'s `short_before`), so it is held, as the cover is.
+    w._subsistence_shortfall = dict(frames["subsistence_shortfall"])
     w._last_by_anchor.clear()
     w._last_by_subject.clear()
     w._last_by_place.clear()
@@ -703,7 +707,7 @@ class World:
         self._departed: dict[str, tuple] = {}
         # WHO WAS SHORT OF FOOD IN THE LAST MATTER, `{pid: {kind: units short}}`: set by `loop/matter.py`'s
         # subsistence pass (overwritten at its end), read by `harness/populated.py::census`, by tests and (B12b.40) by the NEXT
-        # barrier's `world_q.subsist_input` as `short_before`, the crossing test. Not state: the content hash does not fold it, and a loaded world holds it empty.
+        # barrier's `world_q.subsist_input` as `short_before`, the crossing test. Not state: the content hash does not fold it; the snapshot holds it (`encode`'s `subsistence_shortfall` frame).
         self._subsistence_shortfall: dict[str, dict] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success

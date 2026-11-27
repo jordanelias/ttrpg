@@ -3899,7 +3899,7 @@
           "source": "REM-50, as repaired by AM-A-04 (`workplans/valoria_master_workplan_v10_part13.md`, REM-50): a settlement's hunger, read by `world_q.hunger`",
           "open": false,
           "ordered": true,
-          "note": "The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the next draw leaves a mouth unfed); `fed` is \"under no floor\"; neither is a floor. The members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their floors (`world_q.HUNGER_FLOOR_BANDS`). The last, `empty`, is no one living there to be fed: `D == 0` and no cohort resides under the rung. `fed` and `empty` are read BY NAME (`world_q.HUNGER_FED`, `HUNGER_EMPTY`), not by position; a roster missing either, or with `starving` not first, raises at import (`world_q`'s unpack).",
+          "note": "The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the next draw leaves a mouth unfed); `fed` is \"under no floor\"; neither is a floor. The members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their floors (`world_q.HUNGER_FLOOR_BANDS`). The last, `empty`, is no one living there to be fed: `D == 0` and no cohort resides under the rung. `fed` and `empty` are read BY NAME (`world_q.HUNGER_FED`, `HUNGER_EMPTY`), not by position; a roster missing either raises at import (`world_q`'s `require_member`). `starving` is read as the roster's FIRST member (`world_q.HUNGER_STARVING`) and nothing refuses a roster that puts another band first.",
           "values": [
             "starving",
             "hungry",

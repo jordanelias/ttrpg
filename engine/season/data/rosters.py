@@ -2033,6 +2033,9 @@ if RIG_LEVELS[0] != 0 or list(RIG_LEVELS) != sorted(RIG_LEVELS):
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
+#: B12b.04: the verbs whose act is a person's journey over the road, the ones route pricing bills by leg: `decision/choose.py::pack_scenes` prices a
+#: candidate of one, and `loop/effects_migration.py::_legs` appends the legs of one. `march` is not in it (`march_postures` own an army's march).
+JOURNEY_VERBS = roster("journey_verbs")
 #: B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS -- the closed set of the names of the workings a
 #: practitioner attempts on the thread (leap, weave, pull, past_pull, lock, dissolve, mend). A thread operation is
 #: one named working, as an operation is one task performed. `data/verbs.py`'s verb loader refuses a row whose

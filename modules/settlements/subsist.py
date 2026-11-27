@@ -110,8 +110,10 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
     falls = []
     for pid in sorted(short):
         units = sum(short[pid].values())
-        step = inp.body_step * units // weight_of[pid] if inp.per_head else inp.body_step * units   # B12b.35: the Partial band's magnitude, per head under `per_head`
-        lost = int(step * sev.get(pid, 1))
+        # B12b.35: the Partial band's magnitude, per head under `per_head`. The severity multiplies BEFORE the one rounding (an `int` cut of the whole product), so a
+        # per-head loss under a severity above one is not floored first and then scaled; `per_cohort` is the product cut once, as it was.
+        raw = inp.body_step * units * sev.get(pid, 1)
+        lost = int(raw / weight_of[pid]) if inp.per_head else int(raw)
         if lost <= 0:
             continue
         after = max(0, bodies[pid] - lost)

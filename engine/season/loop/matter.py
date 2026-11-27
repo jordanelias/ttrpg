@@ -781,7 +781,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                                   fell.id if fell else None))
         # B12b.36 (`07_SE_population_census` (b), (c)): A STARVING COHORT THINS BEFORE IT DIES. `famine_loss` is the per-mille of its weight a cohort whose body stands
         # under the lowest body band's floor loses this season; 0 is THE CONTROL (no read of the floor, no write, death at body 0 as before). The cause is the
-        # `body.changed` just written (`fell`), not a log search. `Person.weight` has THIS ONE runtime writer. ⚠ THE LAYER AMBIGUITY, NAMED AND PICKED (layer-conformance B4):
+        # `body.changed` just written (`fell`), not a log search. `Person.weight` has TWO runtime writers, both at MATTER: this thinning and the regrowth below (B12b.38, `weight.changed`). ⚠ THE LAYER AMBIGUITY, NAMED AND PICKED (layer-conformance B4):
         # `04` §A.2 lists `weight` under `loop/census`; `holonic` §25 and §29 put deaths at MATTER and bar a clock at CENSUS. The cell is `[MAT, CEN]` (the write matrix),
         # the thinning is written here beside the death it defers, and CENSUS keeps individuation; `04` is not edited.
         loss = w.fixtures.get("famine_loss")

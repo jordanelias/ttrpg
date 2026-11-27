@@ -23,7 +23,7 @@ from ..queries import world_q
 from ..queries.inputs import Eater, LarderInput, SubsistInput
 from ..state.attribution import anchor_of
 from ..state.carriers import Act, Rung, Site, Tenure
-from ..state.world import World
+from ..state.world import World, decode, encode
 from engine.substrate import composition
 
 
@@ -66,6 +66,19 @@ def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_firs
             checked += 1
     assert checked >= 30, "the loop asserted nothing: no settlement carried a cohort"
     assert hist.get("starving", 0) == checked
+
+
+def test_a_saved_world_holds_the_last_barriers_shortfall_that_the_next_barrier_reads():
+    """B12b.40's `short_before` is the LAST barrier's `World._subsistence_shortfall`, so a snapshot must carry it: under `uniform` the whole realm
+    starves in season 1, and `decode(encode(w))` holds that same record (it was empty before the frame). The control is the record itself:
+    non-empty, so an empty decode could not pass."""
+    realm = build_realm(0, fixtures=UNIFORM)
+    POP.run(1, 0, w=realm)
+    held = {pid: dict(kinds) for pid, kinds in realm._subsistence_shortfall.items()}
+    assert held and all(held.values()), "no cohort was short: the round trip observed nothing"
+    back = decode(encode(realm), UNIFORM)
+    assert isinstance(back, World), repr(back)
+    assert back._subsistence_shortfall == held
 
 
 def test_i_under_ground_no_cohort_is_short_at_season_0():

@@ -1987,7 +1987,10 @@ ROUTE_PRICING_OFF, ROUTE_PRICING_ON = ROUTE_PRICING_ARMS
 #: B12b.08: `road_hazard`'s two arms, the control first (`off` draws no journey; `on` is the road's draw, B12b.09 to .12).
 ROAD_HAZARD_ARMS = ("off", "on")
 ROAD_HAZARD_OFF, ROAD_HAZARD_ON = ROAD_HAZARD_ARMS
-CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS, "road_hazard": ROAD_HAZARD_ARMS}
+#: B12b.35: `hunger_loss`'s two arms, the control first (`per_cohort` is the body step times the units short, however heavy the cohort; `per_head` divides it by the eater's weight, `modules/settlements/subsist.py`).
+HUNGER_LOSS_ARMS = ("per_cohort", "per_head")
+HUNGER_LOSS_PER_COHORT, HUNGER_LOSS_PER_HEAD = HUNGER_LOSS_ARMS
+CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS, "road_hazard": ROAD_HAZARD_ARMS, "hunger_loss": HUNGER_LOSS_ARMS}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}

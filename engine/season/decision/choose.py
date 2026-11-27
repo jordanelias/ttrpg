@@ -34,7 +34,7 @@ from typing import Any, Callable, Optional
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from ..data import goals as goals_data
-from ..data.rosters import STANCE_MAX
+from ..data.rosters import JOURNEY_VERBS, STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
@@ -69,8 +69,6 @@ NPC_EFFORTS = roster("npc_efforts")
 CHOICE_TEMPER = require_use_site("choice_temper")
 # B10.31: the use row that carries a person's own factor on the `risk` term (`nerve`); no row ships, and a site renamed there refuses here at import.
 CHOICE_EXPOSURE = require_use_site("choice_exposure")
-# B12b.04: the verbs `pack_scenes` prices by the leg's points under `route_pricing` `on` (`rosters.yaml: journey_verbs`).
-JOURNEY_VERBS = roster("journey_verbs")
 
 
 _STANCE_SCALE_LOW = 0.2   # [canonical: engine/season/data/fixtures.py §stance_scale (H-464): the gentlest swept value; 0 and STANCE_MAX are the arm's off and its control]

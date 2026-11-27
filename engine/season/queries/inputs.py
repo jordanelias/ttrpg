@@ -1240,7 +1240,7 @@ class SubsistInput:
                        today's loss, undivided. Last, with a default, as `severity` was;
       * `short_before` -- B12b.40: `((pid, (kind, ...)), ...)` sorted, the kinds each person was short of in the LAST
                        barrier (`World._subsistence_shortfall`, read before MATTER overwrites it); `()` is a first season,
-                       or a loaded world, where nobody is yet known to be short. A kind in it is no crossing this season;
+                       where nobody is yet known to be short (a loaded world holds the snapshot's record). A kind in it is no crossing this season;
       * `once_held` -- B12b.40: `((rung, (kind, ...)), ...)` sorted, the kinds each ladder rung's `stores` carries a KEY
                        for (a held-and-emptied kind keeps its key at 0): where a dearth with no drained source is reported."""
     larder: LarderInput

@@ -611,7 +611,7 @@ def test_se01_control_a_person_who_died_is_not_a_clerk_to_individuate_again():
 
 
 # --------------------------------------------------------------------------------------
-# THE CARRIED FALSIFIER: `Person.weight` written by anything but CENSUS fails; a stored
+# THE CARRIED FALSIFIER: `Person.weight` written by anything but its owners (CENSUS, and MATTER's thinning and regrowth) fails; a stored
 # aggregate where a Query is required fails.
 # --------------------------------------------------------------------------------------
 
@@ -640,9 +640,9 @@ def _bare_writes(src: str, rel: str) -> list:
     return [x for x in out if x[0] not in _OWNED[x[2]]]
 
 
-def test_se01_falsifier_no_module_but_census_writes_weight():
+def test_se01_falsifier_no_module_but_the_weight_owners_writes_weight():
     """THE SWEEP, AND ITS PLANTED FAILURE. Over every non-test module under `engine/season`, no
-    bare write to `Person.weight` stands outside `loop/census.py`. A write planted in a THIRD
+    bare write to `Person.weight` stands outside `_OWNED` (`loop/census.py`, and `loop/matter.py`'s thinning and regrowth). A write planted in a THIRD
     module (`loop/resolve.py`) must be found, in both spellings -- otherwise the clean sweep would be the sweep that cannot see."""
     scanned = 0
     found = []
@@ -653,7 +653,7 @@ def test_se01_falsifier_no_module_but_census_writes_weight():
         scanned += 1
         found += _bare_writes(path.read_text(), rel)
     assert scanned >= 50, f"the sweep read {scanned} modules; it is not reading the tree"
-    assert not found, f"a bare write outside CENSUS: {found}"
+    assert not found, f"a bare write outside the weight owners: {found}"
     planted = ("def _eff(w, p, r):\n    p.weight = 40\n"
                "    setattr(p, 'weight', 1)\n")
     assert _bare_writes(planted, "loop/resolve.py") == [

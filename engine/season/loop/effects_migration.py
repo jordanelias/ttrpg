@@ -11,7 +11,7 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 from __future__ import annotations
 
 from ..data.fixtures import ROUTE_PRICING_ON
-from ..data.rosters import ARRIVAL_ONLY_KINDS
+from ..data.rosters import ARRIVAL_ONLY_KINDS, JOURNEY_VERBS
 from ..queries.person_q import addressed_to
 from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, home_of, leg_points, order_destination, place_of, residence_of, restrained
 from ..state.carriers import Tenure, subject_of
@@ -171,17 +171,18 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
     # that HAPPEN.
     traveller = w.persons.get(who)
     if traveller is not None:
-        traveller.travel_leg = list(traveller.travel_leg) + _legs(w, origin, dest)
+        traveller.travel_leg = list(traveller.travel_leg) + _legs(w, a, origin, dest)
 
 
-def _legs(w: "World", origin: "str | None", dest: str) -> list:
+def _legs(w: "World", a: "Act", origin: "str | None", dest: str) -> list:
     """B12b.10 (`16_PESSIMIST_WR_A` edit 6; CP-T10-01): THE ENTRIES A JOURNEY APPENDS TO `Person.travel_leg`, ONE PER SCENE POINT OF ITS PRICE. `route_pricing` `off`
     (shipped): `[dest]`, today's one entry. `on`: `world_q.leg_points(origin, dest)` entries, each `dest` (the id is what the digest folds and the entry's
     length is all the budget reads: `len(travel_leg) * budget_leg_penalty`); a journey with no known start (`origin` None) or one `route` blocks reads the
     floor, one entry, as `geography.leg_price` does. ⚠ THE PRICE IS THE WORLD-SIDE `leg_points`, NOT `leg_price`: this body has the World, so a traveller who set
     out from a hearth is priced from the settlement he lives in (`ancestry`); `leg_price` is the floor 1 for him because `decision/` cannot walk it. Equal
-    wherever both resolve a settlement rung (`test_leg_price_is_pure_and_equals_route_points`)."""
-    if w.fixtures.get("route_pricing") != ROUTE_PRICING_ON or origin is None:
+    wherever both resolve a settlement rung (`test_leg_price_is_pure_and_equals_route_points`). ⚠ ONLY A `journey_verbs` ACT IS PRICED: a `march` relocates its army's claimants
+    through this body too (`_eff_march`), but an army's march is not a person's journey and the chooser never prices it, so its movers read `[dest]` as at `off`."""
+    if w.fixtures.get("route_pricing") != ROUTE_PRICING_ON or origin is None or a.verb not in JOURNEY_VERBS:
         return [dest]
     points = leg_points(w, origin, dest)
     return [dest] * (1 if points is None else points)
