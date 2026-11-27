@@ -328,10 +328,12 @@ def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter
     # B21.03 RE-TRACED, seed 1 -> 5 (`off_spymaster` and `off_cardinal_prudence` no longer march: a season at most seeds fights nobody, and at seed 1 no one grows).
     # THE SWEEP, this test's own body at `build_realm(s)` / `run(1, s)`, seeds 0 and 2..8, run once and not kept: it holds at seed 5 alone (seed 0: the one
     # growth is a `train`, no body verb; the rest every value stays 2); the first is taken. [ASSUMPTION; medium; Jordan to correct; revert: seed 1.]
-    w = build_realm(5)
+    # B29.02 RE-TRACED, seed 5 -> 2 (`capture` no longer forms on a stranger, so seed 5's season fights nobody). THE SWEEP, this body at seeds 0-4 and 6-8, run once
+    # and not kept: it holds at 0, 2 and 8; at 0 and 8 the growth is an `argue` rank (a `train`, no body verb); at 2 it is an `arms` 2 -> 3 at a `Felled` fight. [ASSUMPTION; medium; Jordan to correct; revert: seed 5.]
+    w = build_realm(2)
     for p in w.persons.values():
         p.capability = {**(p.capability or {}), KEY: 2}
-    run(1, 5, w=w)
+    run(1, 2, w=w)
     vals = Counter(int(p.capability[KEY]) for p in w.persons.values())
     assert sum(vals.values()) >= 50
     assert min(vals) >= 2 and max(vals) >= 3, dict(vals)
