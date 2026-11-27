@@ -5770,7 +5770,7 @@
             "lifepaths",
             "capabilities"
           ],
-          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of the skills a verb's `capability:` column names (`copying`, `argue`, `inquiry`; `descriptors.CAPABILITIES`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
+          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of the skills a verb's `capability:` column names (`copying`, `argue`, `inquiry`; `descriptors.CAPABILITIES`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. B18.05: `arms` is named when a starting skill is combat, defence or battle movement (3-CR2, 3-CH2, 3-HA3, 3-HA4, 3-LO1, 3-CF1; the near misses 3-GU2's Back-Alley Fighter and 3-VA2's Sea Legs sit on rows that hold another key and are not added) [ASSUMPTION; low; Jordan to correct]. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
           "cells": {
             "3-CR1": {
               "holds": [
@@ -5779,8 +5779,10 @@
               "ground": "\u2605 Courtly Grace '+1D Argue before Expert Judge in Crown territory' names the Argue act -> argue; \u2605 Read the Room '(Appraise TN 6)' -> none (:310)"
             },
             "3-CR2": {
-              "holds": [],
-              "ground": "\u2605 Riposte '(counter-Strike after successful Defence)' and \u2605 Formation Discipline '(+1 Discipline start)' are combat and formation, no key (:311)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Riposte '(counter-Strike after successful Defence)' and \u2605 Formation Discipline '(+1 Discipline start)' are combat and formation, no inquiry or argue key -> martial: arms (B18.05) (:311)"
             },
             "3-CR3": {
               "holds": [],
@@ -5803,8 +5805,10 @@
               "ground": "\u2605 Doctrinal Authority '(+3D Recall bonus in Memory genre on theology)': Memory is a style picked inside the Argue exchange and the Recall bonus is dice added to that roll (social_contest_v30.md:168,172-177) -> argue; \u2605 Liturgical Composure '(+2 Composure in Church Tribunal)' -> none (:320)"
             },
             "3-CH2": {
-              "holds": [],
-              "ground": "\u2605 Smite the Heretic '(+1D Offence ...)' and \u2605 Shield of Faith '(+1D Defence in Full Guard)' are combat, no key (:321)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Smite the Heretic '(+1D Offence ...)' and \u2605 Shield of Faith '(+1D Defence in Full Guard)' are combat, no inquiry or argue key -> martial: arms (B18.05) (:321)"
             },
             "3-CH3": {
               "holds": [],
@@ -5835,12 +5839,16 @@
               "ground": "\u2605 Stone Reader '(+1D assess terrain/fortifications)': fortifications are 'architecture', which examine reads (verb_table.yaml `examine`) -> inquiry (examine); 'terrain' alone is none (see 3-CR5); \u2605 Tunnel Fighter '(+1D Defence in confined spaces)' -> none (:331)"
             },
             "3-HA3": {
-              "holds": [],
-              "ground": "\u2605 Fortress Defender '(+1D Defence in Fortified positions)' is defence; \u2605 Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> none (:332)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Fortress Defender '(+1D Defence in Fortified positions)' is defence -> martial: arms (B18.05); \u2605 Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> no inquiry (:332)"
             },
             "3-HA4": {
-              "holds": [],
-              "ground": "\u2605 Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and \u2605 Sure-Footed '(auto-success Establish Distance)' are battle movement, no key (:333)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and \u2605 Sure-Footed '(auto-success Establish Distance)' are battle movement, no inquiry or argue key -> martial: arms (B18.05) (:333)"
             },
             "3-VA1": {
               "holds": [],
@@ -5893,8 +5901,10 @@
               "ground": "\u2605 Intuitive Threadwork '(Attunement + Spirit TN 8 Ob 3 for minor Weaving)' and \u2605 Folk Healer '(+1D Medicine)' name no key (:362)"
             },
             "3-LO1": {
-              "holds": [],
-              "ground": "\u2605 Elite Discipline '(unit Discipline floor 2)' and \u2605 Riposte are command and combat, no key (:368)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Elite Discipline '(unit Discipline floor 2)' and \u2605 Riposte are command and combat, no inquiry or argue key -> martial: arms (B18.05) (:368)"
             },
             "3-LO2": {
               "holds": [],
@@ -5909,8 +5919,10 @@
               "ground": "\u2605 Anomaly Recognition '(+1D Cognition to assess threadcut being threat/movement/constraints)' reads a creature's threat, not examine's evidence, architecture, documents or objects (the same reading as 3-HA3 and 3-LO2) -> none; \u2605 Classified Knowledge '(once/arc invoke classified info for +2D)' -> none (:371)"
             },
             "3-CF1": {
-              "holds": [],
-              "ground": "\u2605 Weapon Versatility '(switch weapon type between exchanges)' and \u2605 Riposte are combat, no key (:377)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Weapon Versatility '(switch weapon type between exchanges)' and \u2605 Riposte are combat, no inquiry or argue key -> martial: arms (B18.05) (:377)"
             },
             "3-CF2": {
               "holds": [],

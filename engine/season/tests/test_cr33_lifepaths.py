@@ -92,7 +92,7 @@ def test_the_shipped_cells_pass_the_same_loader():
 def test_the_expansion_holds_each_key_at_pool_default_and_silence_is_no_key():
     assert cast.capability_of({"id": "X", "lifepath": LIFEPATH_TO_INQUIRY}, 2) == {"inquiry": 2}
     assert cast.capability_of({"id": "X", "lifepath": LIFEPATH_TO_INQUIRY}, 5) == {"inquiry": 5}
-    assert cast.capability_of({"id": "X", "lifepath": "3-CR2"}, 2) == {}, "a lifepath that maps to none grants none"
+    assert cast.capability_of({"id": "X", "lifepath": "3-CR3"}, 2) == {},"a lifepath that maps to none grants none"
     assert cast.capability_of({}, 2) == {} and cast.capability_of({"id": "X"}, 2) == {}
     assert cast.capability_of({"id": "X", "lifepath": None}, 2) == {}
 
@@ -185,6 +185,31 @@ def test_the_lifepath_id_is_stored_nowhere_on_a_person(planted_world):
     assert LIFEPATH_TO_INQUIRY not in repr(p)
     assert not [f.name for f in dataclasses.fields(Person) if "lifepath" in f.name or "vocation" in f.name]
     assert not any(LIFEPATH_TO_INQUIRY in repr(x) for x in w.persons.values())
+
+
+MARTIAL = ("3-CR2", "3-CH2", "3-HA3", "3-HA4", "3-LO1", "3-CF1")    # B18.05 [ASSUMPTION; low; Jordan to correct]: rows whose `ground:` reads combat, defence or battle movement
+
+
+def test_a_martial_lifepath_holds_arms_at_pool_default(monkeypatch):
+    """B18.05: a person created from a martial lifepath holds `arms` at `pool_default` and `train` raises it; one created from a
+    non-martial lifepath (3-CH5, `inquiry`) holds no `arms`; a row with no lifepath holds nothing. Built through `build_realm`
+    on PLANTED rows, so the registry's own authoring is not read."""
+    rows = {cid: dict(r) for cid, r in cast.load().items()}
+    rows[PLANTED]["lifepath"] = "3-CF1"
+    monkeypatch.setattr(cast, "_CACHE", rows)
+    w = flat_fold(build_realm(0))
+    d = SeasonDriver(w)
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    default = w.fixtures.get("pool_default")
+    p, q = w.persons[P_ID], w.persons[Q_ID]
+    assert p.capability == {"arms": default} and q.capability == {}
+    assert pool.rank(p, "fight") == default and pool.rank(q, "fight") == 0
+    assert _train(w, d, P_ID, key="arms") == ["capability.raised"] and p.capability == {"arms": default + 1}
+    # the table: every martial lifepath names `arms` and only it; the authored non-martial `inquiry` template names no `arms`
+    for lp in MARTIAL:
+        assert cast.capability_of({"id": "X", "lifepath": lp}, default) == {"arms": default}, lp
+    assert "arms" not in cast.capability_of({"id": "X", "lifepath": LIFEPATH_TO_INQUIRY}, default)
+    assert "arms" not in {k for lp in R.LIFEPATHS if lp not in MARTIAL for k in R.LIFEPATH_TEMPLATES[lp]}, "arms beyond the martial rows"
 
 
 # ======================================================================================
