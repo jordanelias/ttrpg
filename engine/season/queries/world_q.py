@@ -1649,6 +1649,22 @@ def body_hazard(w: World, pid: str) -> float:
     return min(1.0, illness + age_step * max(0, age_of(w, pid)))
 
 
+def quiet_since(w: World, pid: str, kinds: tuple) -> int:
+    """B12b.38 (`07_SE_population_regrowth_B` (a)): HOW MANY SEASONS HAVE PASSED SINCE THE NEWEST Event of any of `kinds` WROTE `pid` -- `w.tick` less that Event's
+    `emitted_at` -- or since tick 0 when none has. The bodies clock's regrowth reads it (`regrow_seasons`); beside `body_hazard`, a Query over what the log holds, storing nothing.
+    THE SEASON READ IN COUNTS: a season is quiet from the tick after the Event, so one written at tick `t` reads 0 at `t` and 1 at `t + 1`; with none, the first season (tick 0) is
+    itself quiet, so it reads `w.tick + 1` (the baseline is an Event at tick -1). That makes `regrow_seasons` 2 a rise in a world's second season, as the item's test reads it.
+    The newest candidate per kind is `World.last_emission_of(kind, pid, written=True)` (the Event that WROTE the person, so a combat wound's `body.changed` counts, H-129);
+    the log is walked back to the first of them, so a person written lately costs a short walk."""
+    newest = {e for e in (w.last_emission_of(k, pid, written=True) for k in kinds) if e is not None}
+    if not newest:
+        return w.tick + 1
+    for ev in reversed(w.log):
+        if ev.id in newest:
+            return w.tick - ev.emitted_at
+    raise InstrumentDefect(f"`quiet_since`: an indexed Event of {kinds} on {pid!r} is in no log position")
+
+
 def mortal_terms(w: World, pid: str, cause: str, endurance: float) -> tuple:
     """B15.06 (`HAP_A` edit 3): `(pool, obstacle)` OF THE DRAW THAT DECIDES WHETHER A FELLED OR STRICKEN BODY DIES --
     the one owner of how hard a body is to kill, so a wound and an illness are one ladder for one quantity.

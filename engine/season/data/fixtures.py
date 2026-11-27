@@ -718,6 +718,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `famine_loss: 0`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: Fixtures famine_loss`; the source ships the arm 0 and the form of the write, so the arm is injected at the control and swept 0 / 250 / 500]
     famine_loss=0,                     # `H-49`, swept 0 (control, SHIPPED) / 250 / 500
+    # B12b.38 (`07_SE_population_regrowth_B` (a)-(c); closes CR-08's rising half): A FED, HOUSED, QUIET COHORT REGROWS. `regrow_seasons` is how many quiet, fed seasons a
+    # housed cohort waits before it grows by one head: `loop/matter.py`'s bodies clock writes `weight.changed` (+1) for a cohort at full body, fed in full this season,
+    # with room in its home (`world_q.population` under `world_q.capacity`) and no `body.changed` or `weight.changed` on it for that many seasons
+    # (`world_q.quiet_since`). 0 is THE CONTROL, SHIPPED: no read, no write, the season is today's. The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `regrow_seasons: 0`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-49 -- `site: Fixtures regrow_seasons`; the source ships the arm 0 and the form of the write, so the arm is injected at the control and swept 0 / 1 / 2]
+    regrow_seasons=0,                  # `H-49`, swept 0 (control, SHIPPED) / 1 / 2
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.

@@ -798,6 +798,32 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             emitted.extend(_crossings(w, row.pid, floors_body, was, person.body,
                                       mended.id if mended else None, rising=True))
 
+    # -- A FED, HOUSED, QUIET COHORT REGROWS (B12b.38, `07_SE_population_regrowth_B` (a)-(c); closes CR-08's rising half) ----------
+    # `regrow_seasons` 0 is THE CONTROL: no read, no write. Otherwise a cohort at full body (`condition_scale`), housed (`residence_of`), fed in full this season (not in
+    # `short_by_person`, not among `sub.falls`), with no `body.changed` or `weight.changed` written on it for `regrow_seasons` seasons (`world_q.quiet_since`) and with room
+    # in its home (`population` under `capacity`, the bound `migrate`'s `has_room` reads) grows by one head. `Person.weight` is the one field written; the count of persons is
+    # not touched. The write is MATTER's, beside the falling thinning above (`write_matrix.yaml`'s `(Person, weight)` is `[MAT, CEN]`); CENSUS writes no clock (`holonic` §29).
+    # The population is read afresh per cohort, so two cohorts of one town cannot both take its last place.
+    regrow = w.fixtures.get("regrow_seasons")
+    if regrow:
+        homes = world_q.residence_of(w)
+        fell_pids = {f.pid for f in sub.falls}
+        for pid in sorted(w.persons):
+            person = w.persons[pid]
+            home = homes.get(pid)
+            if not person.is_cohort or home is None or person.body < scale_:
+                continue
+            if pid in short_by_person or pid in fell_pids:
+                continue
+            if world_q.quiet_since(w, pid, ("body.changed", "weight.changed")) < regrow:
+                continue
+            if world_q.population(w, home, homes) >= world_q.capacity(w, home):
+                continue
+            prior = w.last_emission_of("weight.changed", pid, written=True)
+            w.write("weight", token, lambda person=person: setattr(person, "weight", person.weight + 1),
+                    record_kind="Person", fieldname="weight", driver="Event",
+                    emits="weight.changed", subject=pid, causes=[prior] if prior else [ROOT])
+
     # -- THE BODIES CLOCK: AGEING AND ILLNESS (v9 IN-34, FORCE-BODIES) ------------
     #
     # #457 D2 answered [medium; Jordan to correct]: ageing and illness are in scope, a HAZARD READER

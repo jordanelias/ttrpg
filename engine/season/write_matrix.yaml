@@ -339,7 +339,7 @@ rows:
     # ambiguity is named at the writer and picked there (layer-conformance B4); `04` is not edited.
     class:   "MATTER"
     social:  "false"
-    by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
+    by:      "W2/H-49; B12b.38 (`regrow_seasons`): Layer 1 §25 ('envelope weight -- births and deaths' at MATTER; bodies a licensed clock) and §29 (no clock at CENSUS) ground MATTER's rise of a fed, housed, quiet cohort beside B12b.36's fall. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
     emits:   "`weight.changed`"
   - kind:    "Proposition"
     field:   "*"
