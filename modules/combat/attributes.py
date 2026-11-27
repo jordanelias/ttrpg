@@ -46,8 +46,54 @@ SPEC = (
     AttributeSpec('disp', 4, 4, None, IN_FLUX),
 )
 
+# THE OTHER INPUT SLOTS (B18.02; the module declares what it can take, never who fills it). Same form as `SPEC`; the host
+# fills a slot with a NUMBER and the module never takes the name of a skill, technique or tradition. The six slot families
+# and where each is owned:
+#   attr   -- `SPEC` above.                       temper -- `SPEC`'s `disp` row (so no tuple of its own).
+#   pool   -- `PersonalCombatInput.scores` and `addends` (`core.resolution_pool`, `core.ob_from_defender`).
+#   kit    -- `PersonalCombatInput.kits` (`Combatant`'s `weapon` and `armor`).
+#   axis   -- `AXES`, below. Fed by `PersonalCombatInput.axes` ({axis: bonus}, `Combatant.skills`).
+#   lever  -- `LEVERS`, below. Fed by `PersonalCombatInput.techniques` ({ability: level}, `Combatant.equipped`), which
+#             `ability_primitives` turns into a lever's factor or bonus; no second field carries a lever value.
+# `default` is the value the engine reads for a fighter who holds none, so an empty slot is today's fight. `neutral` is None
+# (no centring literal) and `registry_key` None (no registry row names an axis or a lever yet; the row that does sets it in
+# the same change, as `disp`'s will).
+#
+# AXES: the additive sigma bonus on a defence or contest, 0.0 untrained (`Combatant.skill`; read at
+# `combat_systems.balance_eff`, `mode_sigma` and `bind_sigma`). `technique` and `grab` are read by the engine too
+# but are WITHHELD from the slot family until a sweep shows them outside the interval (R-PC-43).
+AXES = (
+    AttributeSpec('balance', 0.0, None, None, IN_FLUX),
+    AttributeSpec('parry', 0.0, None, None, IN_FLUX),
+    AttributeSpec('dodge', 0.0, None, None, IN_FLUX),
+    AttributeSpec('bind', 0.0, None, None, IN_FLUX),
+)
+
+# LEVERS: the named modulators `ability_primitives` reads. `default` 1.0 is a FACTOR (`ability_factor`, `*`; the
+# product of learned abilities, 1.0 with none) and 0.0 a BONUS (`ability_bonus`, `+`; their sum). Only `counter_success` and
+# `anti_overcommit` are read as bonuses.
+LEVERS = (
+    AttributeSpec('visual', 1.0, None, None, IN_FLUX),
+    AttributeSpec('precommit', 1.0, None, None, IN_FLUX),
+    AttributeSpec('tactile', 1.0, None, None, IN_FLUX),
+    AttributeSpec('tempo', 1.0, None, None, IN_FLUX),
+    AttributeSpec('balance', 1.0, None, None, IN_FLUX),
+    AttributeSpec('measure', 1.0, None, None, IN_FLUX),
+    AttributeSpec('leverage', 1.0, None, None, IN_FLUX),
+    AttributeSpec('counter_select', 1.0, None, None, IN_FLUX),
+    AttributeSpec('counter_success', 0.0, None, None, IN_FLUX),
+    AttributeSpec('anti_overcommit', 0.0, None, None, IN_FLUX),
+    AttributeSpec('edge_read', 1.0, None, None, IN_FLUX),
+    AttributeSpec('spine_press', 1.0, None, None, IN_FLUX),
+    AttributeSpec('edge_grab', 1.0, None, None, IN_FLUX),
+    AttributeSpec('choke_control', 1.0, None, None, IN_FLUX),
+    AttributeSpec('facing_regime', 1.0, None, None, IN_FLUX),
+)
+
 KEYS = tuple(s.key for s in SPEC)
 DEFAULT = {s.key: s.default for s in SPEC}
 NEUTRAL = {s.key: s.neutral for s in SPEC if s.neutral is not None}
 
 assert len(set(KEYS)) == len(KEYS), f"attribute spec repeats a key: {KEYS}"
+for _fam in (AXES, LEVERS):
+    assert len({s.key for s in _fam}) == len(_fam), f"a slot tuple repeats a key: {[s.key for s in _fam]}"

@@ -130,3 +130,56 @@ def test_no_length_unit_indirection_remains():
     r, s = C.WEAPONS['rapier'], C.WEAPONS['spear']
     assert math.isclose(r['head_len'] + r['grip_len'], 1.14, abs_tol=1e-9)   # rapier 1.14 m overall
     assert math.isclose(s['head_len'] + s['grip_len'], 2.01, abs_tol=1e-9)   # spear 2.01 m overall
+
+
+# ── B18.02: the slot interface (`03_PC_person_inputs_content` Part A) ───────────────────────────────────────────────
+
+def test_the_slot_tuples_are_in_the_export():
+    """The `axis` and `lever` slot tuples (`attributes.AXES`, `attributes.LEVERS`) are in the committed export's `attributes`
+    section, and each member's declared default is the value the engine computes for a fighter holding none: an untrained
+    axis reads 0.0 (`Combatant.skill`), a lever read as a factor reads 1.0 (`ability_factor`) and one read as a bonus 0.0
+    (`ability_bonus`). Every lever a learned ability targets is a declared member, with the op the default implies."""
+    from modules.combat import ability_primitives as ABIL, attributes
+    C, _S, _WP, _CFG = _mods()
+    path = os.path.join(os.path.dirname(__file__), '..', '..', 'engine', 'engine_params', 'combat_engine_v1.json')
+    slots = json.load(open(path, encoding='utf-8'))['sections']['attributes']['slots']
+    assert sorted(slots['axis']) == sorted(a.key for a in attributes.AXES)   # the file's keys are sorted
+    assert sorted(slots['lever']) == sorted(l.key for l in attributes.LEVERS)
+    fresh = C.Combatant('x')
+    for a in attributes.AXES:
+        assert slots['axis'][a.key]['default'] == a.default == fresh.skill(a.key)
+    for lv in attributes.LEVERS:
+        assert slots['lever'][lv.key]['default'] == lv.default
+        assert lv.default in (0.0, 1.0)
+        engine_reads = ABIL.ability_bonus(fresh, lv.key) if lv.default == 0.0 else ABIL.ability_factor(fresh, lv.key)
+        assert engine_reads == lv.default, f"lever {lv.key}: the engine's untrained value is {engine_reads}"
+    levers = {lv.key: lv for lv in attributes.LEVERS}
+    checked = 0
+    for name, ab in ABIL.ABILITIES.items():
+        assert ab['lever'] in levers, f"ability {name!r} targets a lever the slot tuple does not declare"
+        assert (ab['op'] == '+') == (levers[ab['lever']].default == 0.0), f"ability {name!r}: op {ab['op']} on lever {ab['lever']}"
+        checked += 1
+    assert checked >= 30
+
+
+def test_an_empty_slot_reproduces_todays_fight():
+    """One matchup, four seeds, the record equal: a fight whose slot fields are absent, given as `None` per party, or given
+    as each slot's declared default is the same fight, event for event. The control: one axis two points above its default
+    is a different fight on some seed (so the equality could have failed)."""
+    from engine.dice_engine import draw
+    from engine.season.queries.inputs import PersonalCombatInput
+    from modules.combat import attributes, fight as entry
+    base = dict(claimants=("A", "B"), ends=(4, 4), wound_quantities=("felled", "wounds", "max_wounds", "health_remaining", "health_full"),
+                kits=(("arming", "heavy"), ("arming", "heavy")))   # a mirror in heavy armour: twelve rounds, so an axis has rounds to act in
+    defaults = {a.key: a.default for a in attributes.AXES}
+    absent = PersonalCombatInput(**base)
+    nones = PersonalCombatInput(**base, techniques=(None, None), axes=(None, None), dispositions=(None, None))
+    declared = PersonalCombatInput(**base, techniques=({}, {}), axes=(dict(defaults), dict(defaults)),
+                                   dispositions=(attributes.DEFAULT['disp'], attributes.DEFAULT['disp']))
+    raised = PersonalCombatInput(**base, axes=({k: 2.0 for k in defaults}, None))
+    differs = 0
+    for seed in range(4):
+        fought = [entry.fight(r, draw.seeded(draw.H2("slot_default", seed))) for r in (absent, nones, declared, raised)]
+        assert fought[0] == fought[1] == fought[2], f"seed {seed}: an empty slot moved the fight"
+        differs += fought[3] != fought[0]
+    assert differs >= 1, "a raised axis never changed a fight: the equality above could not have failed"

@@ -27,7 +27,8 @@ tables, etc. — that a Godot port previously had to hand-transcribe (the RESIST
 never-carried gap, C6-M2/OPT-AV-15). Constants are AUTO-COLLECTED (every uppercase JSON-typeable
 module constant), not hand-listed, so a new canonical constant in the oracle cannot be silently
 left unexported. The `attributes` section (PC-14) carries modules/combat/attributes.py's spec, a dict keyed
-by attribute (default, neutral, registry_key, status); its Godot fields stay unbound (CLAUDE.md §5).
+by attribute (default, neutral, registry_key, status), plus one key `slots` holding the `axis` and `lever` slot tuples (B18.02);
+its Godot fields stay unbound (CLAUDE.md §5).
 Since B14.12 (schema 8) the export also carries the weapons a port applies those coefficients to: `weapons` (each
 record's authored fields; the baked fields are derived, not inputs), `derived` (per startable weapon, the quantities
 `workbench/catalogue.py::QUANTITIES` enumerates, computed by the oracle: the parity oracle, never an input; the probe
@@ -80,7 +81,7 @@ THREADWORK_SCHEMA_VERSION = 1  # v1 (B03.68): the `params` section (params.py's 
 MASS_BATTLE_OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'mass_battle_v1.json')
 MASS_BATTLE_SCHEMA_VERSION = 1  # v1 (B17.12): the `engine_config` section (EngineConfig's fields and their shipped values).
 
-SCHEMA_VERSION = 8  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
+SCHEMA_VERSION = 9  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
                     # v3 (B-D1 PC-07): core.COVERAGE_GAP dict -> scalar (a type change); DECISIVE_OB removed (PC-03).
                     # v4 (PC-14): added the `attributes` section (attributes.py's spec; its entries carry null).
                     # v5 (CP-T03-03): added the `kit` section (the weapon keys, the armour tiers and the Combatant's
@@ -94,6 +95,8 @@ SCHEMA_VERSION = 8  # v2 (OPT-AV-17): added the `core` section (core.py canonica
                     # `weapon_physics`, `combat_systems`, `combatant`, `ability_primitives`, `traditions` (the
                     # constants DEFINED in each module); `kit.weapons` now lists the 50 records without a `base`
                     # (it listed all 54) and `kit.forms` (form -> base) is new.
+                    # v9 (B18.02, `03_PC_person_inputs_content` Part A): the `attributes` section gained one key, `slots`
+                    # (the `axis` and `lever` slot tuples of attributes.py, each member in the attribute entry's form).
 
 
 def _typed(value, defined=False):
@@ -132,15 +135,21 @@ def _module_constants(mod):
     return out
 
 
-def _attributes_section(spec):
+def _attributes_section(spec, slots):
     """The `attributes` section (PC-14): `attributes.SPEC` as a dict keyed by attribute key, each entry its combat
     facts (`default`, `neutral`, `registry_key`, `status`); `neutral` and `registry_key` may be null. Read from the
     spec, never hand-listed, so a new spec entry is a new key here with no edit to this exporter. Godot fields stay
     UNBOUND (CLAUDE.md §5: the registry's roster is IN FLUX); the registry's names and bounds are not exported here
-    -- `registry_key` points at them."""
-    out = {}
-    for s in spec:
-        out[s.key] = {f: None if getattr(s, f) is None else _typed(getattr(s, f)) for f in s._fields if f != 'key'}
+    -- `registry_key` points at them. Beside the attribute keys sits one more, `slots` (B18.02): `{family: {member:
+    entry}}` over the module's other slot tuples (`slots`, `{"axis": attributes.AXES, "lever": attributes.LEVERS}`), each
+    entry in the attribute entry's own form. No attribute may be named `slots`."""
+    def entries(rows):
+        return {s.key: {f: None if getattr(s, f) is None else _typed(getattr(s, f)) for f in s._fields if f != 'key'}
+                for s in rows}
+    out = entries(spec)
+    if 'slots' in out:
+        raise ValueError("an attribute named `slots` collides with the section's slot families")
+    out['slots'] = {family: entries(rows) for family, rows in slots.items()}
     return out
 
 
@@ -317,7 +326,7 @@ def derive():
             # handle_rank RETIRED (morphology-rearch Phase B6, 2026-07-02): config.HANDLE_RANK is gone —
             # systems.str_demand reads weapon_physics.handling() (real per-part data) instead.
             "core": _module_constants(core),
-            "attributes": _attributes_section(attributes.SPEC),
+            "attributes": _attributes_section(attributes.SPEC, {"axis": attributes.AXES, "lever": attributes.LEVERS}),
             "kit": _kit_section(weapons, vocabulary, combatant),
             # B14.12: the weapons a port applies the coefficients to, what the oracle derives from them (the parity
             # oracle, never an input), and the constants DEFINED in the physics, tradition and wound modules.
@@ -402,7 +411,7 @@ def main(argv):
     sections = json.loads(outputs[0][1])['sections']
     print(f"Wrote {os.path.relpath(OUT_PATH, REPO_ROOT)} "
           f"(schema v{SCHEMA_VERSION}; {len(sections['cfg'])} cfg keys, {len(sections['core'])} core keys, "
-          f"{len(sections['attributes'])} attributes, {len(sections['kit']['weapons'])} weapons).")
+          f"{len(sections['attributes']) - 1} attributes + slots, {len(sections['kit']['weapons'])} weapons).")
     tw = json.loads(outputs[1][1])
     print(f"Wrote {os.path.relpath(THREADWORK_OUT_PATH, REPO_ROOT)} "
           f"(schema v{THREADWORK_SCHEMA_VERSION}; {len(tw['sections']['params'])} params).")
