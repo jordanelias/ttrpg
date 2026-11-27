@@ -17,7 +17,7 @@ from typing import Any, Optional
 from ..data import load_all
 from ..data.matrix import WriteClass
 from ..data.verbs import VERB_TABLE, opportunity_key
-from ..gaps import Forbidden
+from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Act, Event, subject_of
 from ..state.gate import Token
 from ..state.world import World
@@ -184,6 +184,19 @@ class SeasonDriver:
                 "loop/driver.py::SeasonDriver.__init__",
                 needs="a `scene_budget` of at least one",
                 law="a season with no lap is not a season (a loader-family refusal, at boot)")
+        # B12b.24 (`16_PESSIMIST_SE_B` R4; H-241's sweep arm 'True on empty treasuries'): a loader-family refusal at boot. `field_provisioning` ON
+        # bounds each side's troops by the treasury the field reads (`seam/wrappers/mass_battle.py::provision_input`: the attacker's the seat rung
+        # of `Act.via`'s office, the defender's the nearest held rung); with none of those holding one `subsistence_weight` ration every field
+        # floors at the crash floor, so the arm is refused rather than read as an army-size dial. OFF (shipped) reads nothing here.
+        if w.fixtures.get("field_provisioning"):
+            ration = {k: r for k, r in w.fixtures.get("subsistence_weight").items() if r > 0}
+            rungs = {o.rung for o in w.offices.values() if o.rung in w.rungs}
+            rungs |= {t.object for s in w.rungs
+                      if w.rungs[s].kind == world_q.HUNGER_KIND and (t := world_q.governing_hold(w, s)) and t.object in w.rungs}
+            if ration and not any(all((w.rungs[r].stores or {}).get(k, 0) >= n for k, n in ration.items()) for r in rungs):
+                raise Unspecified("`field_provisioning` is on and no treasury the field reads holds one ration", "H-241",
+                                  needs="stock at a seat rung or a held rung (07_SE_treasury_granary_B R-SE-28)",
+                                  law="IN-52: a levied treasury provisions a field")
         # OBSERVATION ONLY: the fold appends here and nothing inside it reads the list. It is a
         # thing to WATCH, not to DECIDE; giving it back as a resolver parameter is how a second
         # resolver returns.

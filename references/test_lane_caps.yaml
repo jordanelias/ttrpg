@@ -32,6 +32,7 @@ lanes:
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a requisition or transfer carries the share of the giving rung's stock it takes as a choice: with one share on the roster no candidate carries one and the amount is the fixtures', with two the one candidate becomes two differing only in amount (a share of the newest stock claim he holds about the giving rung, the fixtures' amount where he holds none), and a requisition refused for want of stock leaves the requisitioner a firsthand claim of the refusal where one taken within the stock leaves none"}
       - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a foreign settlement entry that carries stores is built holding exactly that stock at its own rung and no other rung is handed it, and with the key absent the foreign world builds as before: writing the key changes the world by that rung's stores alone"}
       - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a settlement's walls are the complement of the product of each garrison's shortfall: a ruined second garrison never lowers the first, two half-strength garrisons read three quarters, and no garrison reads nothing"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a realm whose field is provisioned from treasuries is refused at construction naming H-241 when no seat rung or held rung holds one ration, constructs where the granary stocks one, and the unprovisioned field reads no treasury"}
   engine:
     base: 1043
     warrants: []

@@ -309,7 +309,7 @@ def test_a_second_levy_into_the_same_treasury_raises_the_next_fields_troops(monk
     (`H-163` limit 3(a)): the larder's grain and the treasury's salt are planted. Levy 1 (grain 2) provisions
     one troop and the field eats it; levy 2 (grain 4) provisions two, and the next field fields two."""
     seen = _recording(monkeypatch)
-    w = _world(True, treasury_a={"salt": 10})
+    w = _world(True, treasury_a={"salt": 10}, treasury_b={"grain": 100, "salt": 100})   # B12b.24: the driver refuses the arm where no treasury holds one ration, and each march debits the defender's too, so the defender's holds enough for both marches, and the attacker's grain is what the levies fill
     w.fixtures = w.fixtures.sweep("march_cap_per_territory", 0)   # B21b.01: two marches into one territory in one tick; the cap off (control), this test is not about it
     w.rungs[LARDER].stores = {"grain": 20}
     assert [e.kind for e in _fold(w, _requisition("rq1", 2))] == ["requisition.taken"]
