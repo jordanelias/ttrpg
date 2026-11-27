@@ -467,6 +467,9 @@ def test_19_the_determination_basis_refuses_each_clause_it_needs(case):
     if case == "no seat":
         args = dict(actor=DUKE, via=None)
     elif case == "outside the ground":
+        # B21b.16: the grant is narrowed to `determine` alone, so the `determination` basis is the one asked -- a seat granting `confer` opens an OATH for a person
+        # anywhere (`retention`, `may_retain`, no ground conjunct: the offer reaches the rival seat-holder, whose ground the won offer then widens), the wider basis.
+        G.seat_hold(w, DUKE, SEAT).payload = {"remit_acts": ("determine",)}
         args = dict(actor=DUKE, via=SEAT, party=OUTSIDER)
     elif case == "no bench grant":
         hold = G.seat_hold(w, DUKE, SEAT)

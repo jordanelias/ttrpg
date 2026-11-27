@@ -1,5 +1,5 @@
 """`season.loop.effects_governance` -- office/seat lifecycle: confer, establish, release, revoke,
-pardon, convene, oblige, requisition.
+pardon, convene, oblige, retain, requisition.
 
 Holds every effect that opens or
 closes a `hold`/`oblige` Tenure on an Office or Seat, schedules a sitting, or moves a requisition into a
@@ -15,7 +15,7 @@ import math
 from dataclasses import replace
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, RIG_KEY, RIG_LEVELS, SEAT_ROW_BY_ID, SUCCESSIONS
+from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RESTRAINT_KINDS, RIG_KEY, RIG_LEVELS, SEAT_ROW_BY_ID, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import KEEPS_KEY, TERM_KEY, office_founded_by, office_named_by
@@ -567,6 +567,39 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     own way out before then."""
     seat = _operand(a, "subject")
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"oblige:{seat}:{a.id}"), a.actor, seat, "oblige",
+                since=w.tick, term=_new_oblige_term(w, a))
+    return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
+
+
+@effect_for("retain")
+def _eff_retain(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21b.16 (CP-T09-07 (a), AM-F-15; `FA §3.3` S3): THE OFFER OF SERVICE, WON -- the person the act names on `to` swears to the seat the act is
+    exercised through: a new `oblige` Tenure opens, subject HIM, object `a.via`, with `_eff_oblige`'s declared term (`oblige_term`; the edge, its upkeep
+    (`_renewals`) and its lapse at MATTER are built). The offer was a draw on the counterparty (`contests: "a standing"`, the obstacle the social
+    roll's, `rival_tie` and `opinion_of_faction` and `regard` among its terms); this body runs only on a band that writes, so a lost offer opens
+    nothing and the row emits `retain.declined`. `arrest`'s shape: Partial opens the edge as Success does.
+
+    ⚠ THE EDGE'S OWNER IS THE COUNTERPARTY, NOT THE ACTOR -- the one `oblige` opener where they differ. The precedent is `determine`'s disposal
+    (`_disposal`: an `oblige` the party it binds owns, C-1, RULED A), and the gate's own basis for it is `state/gate.py::RETENTION` (`may_retain`: the
+    actor sits in `via`, its grant carries `confer`, the edge is an OATH and not a bench's imposed one). The literal `Tenure(..., "oblige")` below is what
+    `data/verbs.py::_derive_openers_from_effects` reads, so `retain` joins `oblige` and `determine` in `_OPENERS_FROM_EFFECTS["oblige"]` (and so in
+    `stakes_ob`'s reading of what an act opens: sized 0 at `oblige`). `_eff_oblige`'s three declines are `_req_oblige`'s (`seat`, `binds`, `own_seat`,
+    `one_edge`, `banned`), asked here of the retained man because the row's typed cell cannot say `not`: a decline is `retain.refused`.
+
+    ⚠ A GUARD IS A RETAINER ALREADY AND IS NOT REACHED: the row's typed cell asks `individual` of `to` (`Person.is_cohort`), so a guard cohort
+    (`boot/realm.py::seat_guards`, a population at `weight > 1` sworn to its principal's seat as a post) is never retained from the seat it guards for;
+    this body also declines one, for a hand-built act."""
+    to = _operand(a, "to")
+    seat = a.via
+    off = w.offices.get(seat) if seat else None
+    p = w.persons.get(to)
+    if off is None or p is None or to == a.actor or off.binds not in BINDS_BASES or p.is_cohort:
+        return NO_CHANGE
+    if any(t.object == seat and t.live and t.kind in ("hold", "oblige") for t in p.tenures):
+        return NO_CHANGE                                # he holds the seat, or is already sworn to it: one edge per pair
+    if restrained(w, to, BAN_KIND, at=off.rung):
+        return NO_CHANGE                                # a banned man serves no seat within the ban's reach
+    nt = Tenure(H(w.world_seed, w.tick, to, f"oblige:{seat}:{a.id}"), to, seat, "oblige",
                 since=w.tick, term=_new_oblige_term(w, a))
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 

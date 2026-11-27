@@ -284,6 +284,19 @@ CESSION = "cession"
 # cession, the row's own eligibility (`remit:dispatch`, the entry) and the act `may_warrant` and `may_muster` read. One owner
 # of the string: it IS `WARRANT_ACT`'s value, re-named for a third reader.
 CESSION_ACT = WARRANT_ACT
+# `retention` (B21b.16, CP-T09-07 (a), AM-F-15) -- an OPENING of an `oblige` whose OBJECT is the seat exercised and whose owner is ANOTHER
+# person (the man who swears), by a seated holder whose grant carries `RETAIN_ACT` (`may_retain`). Named in the ordinary word for what it licenses
+# (to keep a man in one's service). AUTHORITY-BOUND ON `via` like `determination`, its nearest sibling: the same edge, the same object, the owner
+# another's -- but there the licence is a bench's judgment over a person on its ground, and an IMPOSED edge; here it is the seat's offer, and the oath
+# is a SWORN one (`Tenure.imposed` false, which the clause asks, so neither basis admits the other's edge). Why a basis at all, against this
+# function's body: the sworn man's opening is not `T-m` (the actor is not the owner), `renewal` pushes a term and opens nothing, and
+# `determination` reads the bench. WHAT THE GATE DOES NOT DECIDE is the contest (the offer WON, at a band that writes) and the person's own
+# standing (a seat he holds, a live oath to it already, a ban): the fold's draw and `_eff_retain`'s, as `determination` leaves the docket.
+RETENTION = "retention"
+# [ASSUMPTION; medium; Jordan to correct; revert: name another remit act here]: `confer` is the act whose grant licenses a retainer -- FA §3.3 S3's
+# own reading (*"a seat-holder `via` a seat granting `confer`"*), and the row's eligibility (`remit:confer`). One owner of the string, read by
+# `may_retain` and named by the row.
+RETAIN_ACT = "confer"
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -1131,6 +1144,24 @@ def may_cede(w: "World", actor: Optional[str], via: Optional[str], place: Option
     return yielder != actor and _committed_to(w, yielder, fac)
 
 
+def may_retain(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str]) -> bool:
+    """THE RETENTION BASIS, AS ONE PREDICATE (B21b.16, CP-T09-07 (a), AM-F-15): may `actor`, exercising `via`, open the `oblige` `party` will own to
+    that seat -- offer `party` service and have it taken?
+
+    `may_determine`'s shape, three conjuncts, each the ONE owner of its rule:
+      1. `via` is a seat the actor SITS in and its GRANT carries `RETAIN_ACT` (`_seat_grants`: the `13e` snapshot, never the office's live field,
+         and not a holder in custody);
+      2. `party` is a PERSON other than the actor (only a person owns an `oblige`, and a man does not retain himself);
+      3. `party` does not HOLD `via` (the occupant is not his own seat's obligee, `_req_oblige` clause 3's rule).
+    ⚠ WHAT IT DOES NOT DECIDE, AND WHERE THAT LIVES: that the offer was won, which is the fold's draw (a Failure writes nothing, so this is never asked of
+    it); that `party` has no oath to `via` already or no ban -- `_eff_retain`'s declines, as `_req_oblige`'s clauses 4 and 5 are for `oblige`."""
+    if not _seat_grants(w, actor, via, RETAIN_ACT):
+        return False
+    if party is None or party == actor or party not in w.persons:
+        return False
+    return not any(t.kind == "hold" and t.object == via and t.live for t in w.persons[party].tenures)
+
+
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
     """Which of an existing edge's five non-end fields the write changed; `None` for an edge the
     write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
@@ -1432,6 +1463,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                  or (closed and t.kind in RESTRAINT_KINDS))
             and may_determine(w, actor, via, t.subject)):
         return DETERMINATION
+    # B21b.16 (CP-T09-07 (a), AM-F-15): THE RETENTION. An OPENED `oblige` on the seat exercised, owned by another person, that is an OATH (not a bench's
+    # imposed edge: `determination`'s) -- by a seated holder granted `RETAIN_ACT` (`may_retain`). Opening only: the man's own way out is `release`, `T-m`.
+    if (opened and t.kind == "oblige" and via is not None and t.object == via and not t.imposed
+            and may_retain(w, actor, via, owner)):
+        return RETENTION
     # v9 SC-03a, K-52: THE WARRANT. An OPENED `detain` whose object is a SEAT and whose owner the
     # exercised seat may take into custody (`may_warrant`). Not `via`-objected as `determination`
     # is: the custody edge's object is the ISSUING seat (K-17/K-52), which the enforcement seat acts
@@ -1610,7 +1646,9 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"term has matured), {RENEWAL} (a live `oblige` edge's term pushed later, by "
               f"its seat's own seated holder exercising it), {DETERMINATION} (an edge of a "
               f"kind some arrangement disposes opened -- or a `detain`/`ban` closed -- on the "
-              f"judging seat exercised, for a person its bench's ground holds), {WARRANT} (a "
+              f"judging seat exercised, for a person its bench's ground holds), {RETENTION} (a "
+              f"sworn `oblige` to the seat exercised opened for another person, by a holder "
+              f"granted `{RETAIN_ACT}`), {WARRANT} (a "
               f"`detain` opened on a seat, for a person the exercised seat's purview reaches, by "
               f"a holder granted `{WARRANT_ACT}`), {SEIZURE} (another person's `hold` on a "
               f"Record or a Rung closed, by a holder granted `{SEIZURE_ACT}` whose exercised "

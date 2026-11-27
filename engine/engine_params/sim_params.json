@@ -3,20 +3,20 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 523,
-    "uncited": 391,
+    "total": 525,
+    "uncited": 393,
     "of_which_assumption_grade": 9
   },
-  "count": 523,
+  "count": 525,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 46,
+    "engine.season": 47,
     "mass_battle": 160,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 242,
+    "engine.season.settings": 243,
     "engine.season.realm": 9
   },
   "params": [
@@ -628,6 +628,17 @@
       "note": "[JUSTIFIED: V2 p2 §A.2 -- a debt he owes is a tie as kin and patronage are, 0.5; no document derives the size]  # [ASSUMPTION; Jordan to correct]",
       "citation": "JUSTIFIED: V2 p2 §A.2 -- a debt he owes is a tie as kin and patronage are, 0.5; no document derives the size",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.season.OPINION_MAX",
+      "name": "OPINION_MAX",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/queries/person_q.py",
+      "note": "[JUSTIFIED: `opinion`'s own range, the SUM of `opinion_terms`' three terms each on [-1, +1] (pursuit, affiliation, regard) -- the bound its docstring states, named once for the reader that scales it to a unit (`sigma.py::_opinion_hostility_of`)]",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "engine.season.PARTY_STAKE",
@@ -5115,6 +5126,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-614`, swept 0 (control, SHIPPED) / 1 / 2",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.tie_step",
+      "name": "tie_step",
+      "value": 1.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-621`, swept 0 (control) / 1 (live, SHIPPED) / 2",
       "citation": null,
       "citation_grade": null
     },
