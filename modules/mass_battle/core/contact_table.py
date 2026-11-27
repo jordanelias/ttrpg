@@ -31,7 +31,7 @@ import math
 __all__ = ['felling_chance', 'beta', 'flags', 'status', 'rounds_k', 'GRID_SKILLS']
 
 GRID_SKILLS = (1, 3, 5)
-_EPS = 1e-6        # logit's clamp: a chance of 0 or 1 is read as _EPS or 1 - _EPS
+_EPS = 1e-6        # [JUSTIFIED: logit's clamp, a chance of 0 or 1 reads as _EPS or 1 - _EPS; a numerical guard, not a game value]
 
 
 @functools.lru_cache(maxsize=None)
