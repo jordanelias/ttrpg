@@ -103,12 +103,19 @@ def test_an_unprovisioned_side_fields_nobody_and_eats_nothing():
 # 2 -- THE ADAPTER, ON A HAND-BUILT WORLD
 # ======================================================================================
 
-def _world(on: bool, treasury_a=None, treasury_b=None):
+WHOLE_RATION = ("grain", "salt")
+
+
+def _world(on: bool, treasury_a=None, treasury_b=None, kinds=WHOLE_RATION):
     """`build_realm(0)` at the arm, with the two treasuries' stores PLANTED (hand-built: `requisition`
-    executes 0 times in computed play, `H-163` limit 3(a), and the realm seeds no treasury)."""
+    executes 0 times in computed play, `H-163` limit 3(a), and the realm seeds no treasury).
+    B12b.47: `kinds` is the `field_ration_kinds` arm. The default is the larder's WHOLE ration (grain AND salt, the control the numbers of
+    this file's first blocks are read against); `kinds=None` leaves the shipped `("grain",)`."""
     # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` seeds the treasuries under `granary_seasons` 4, which the PLANTED stores here are read against (reverting `granary_seasons` or `endowment_mode` alone turns these three green)
     w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
     w.fixtures = w.fixtures.sweep("field_provisioning", on)
+    if kinds is not None:
+        w.fixtures = w.fixtures.sweep("field_ration_kinds", kinds)
     assert w.offices[SEAT].rung == TREASURY_A, "the march seat's treasury moved; re-pick the fixture"
     assert world_q.governing_hold(w, TARGET).object == TREASURY_B, "the target's held rung moved"
     if treasury_a is not None:
@@ -216,7 +223,7 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
         # B17.01: a field is told because the ration it ate is a durable write (`Drawn` debits as `Won` and `Lost` do)
         assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 1, "troops_b": 0}, seen
-        assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
+        assert w.rungs[TREASURY_A].stores == {"grain": 2}, w.rungs[TREASURY_A].stores
     else:
         # B17.16: at 1,000 troops a weight the realm's two against six are fought and told whatever the arm (at 30 a weight they were
         # under the rout floor and the march was refused); what OFF changes is what is eaten, asserted below
@@ -233,6 +240,34 @@ def test_the_shipped_arm_is_off():
         "the shipped arm moved: the flip is its own declared commit; restate this test there")
 
 
+def test_grain_only_treasury_fields_troops(monkeypatch):
+    """B12b.47 (U5d_SE §4's gate), THE `field_ration_kinds` ARM (shipped `("grain",)`, read with the supply arm ON): a treasury holding grain and
+    no salt fields troops, and the fold debits the grain it ate (grain 2 at the ration 2 fields one of the attacker's two). The control,
+    `field_ration_kinds` the larder's whole ration, fields nobody from the same treasury -- the U5d falsifier -- so the grain-only list is what
+    fielded the troop."""
+    assert tuple(DEFAULT_FIXTURES.get("field_ration_kinds")) == ("grain",)
+    seen = _recording(monkeypatch)
+    r = _provider_field(_world(True, treasury_a={"grain": 2}, kinds=None), _march_act())
+    assert seen[-1][1] == {"troops_a": 1, "troops_b": 0}, seen
+    assert r["provision"] == ((TREASURY_A, (("grain", 2),)), (TREASURY_B, ())), r["provision"]
+    w = _world(True, treasury_a={"grain": 2}, kinds=None)
+    _fold(w, _march_act())
+    assert w.rungs[TREASURY_A].stores == {}, w.rungs[TREASURY_A].stores
+    _provider_field(_world(True, treasury_a={"grain": 2}), _march_act("m_whole"))
+    assert seen[-1][1] == {"troops_a": 0, "troops_b": 0}, ("a grain-only treasury fielded troops at the whole ration", seen)
+
+
+def test_empty_treasury_side_fields_fewer_than_a_full_one(monkeypatch):
+    """B12b.47 (IN-52's falsifier), THE SUPPLY ARM ON: the attacker's empty treasury fields 0 (the crash floor lifts it, A16) where a full one
+    fields the whole of its weight 2, and the empty defender 0 where a full one fields its 6 -- so the fielded troops are bounded by the
+    treasury and not by the weight alone."""
+    seen = _recording(monkeypatch)
+    _provider_field(_world(True, kinds=None), _march_act("m_empty"))
+    _provider_field(_world(True, treasury_a={"grain": 100}, treasury_b={"grain": 100}, kinds=None), _march_act("m_full"))
+    (_, empty), (_, full) = seen
+    assert empty == {"troops_a": 0, "troops_b": 0} and full == {"troops_a": 2, "troops_b": 6}, seen
+
+
 def test_on_the_defenders_treasury_is_debited_by_its_own_fielded_troops(monkeypatch):
     """LF-3, THE DEFENDER'S HALF: grain 6 and salt 3 at the shipped ration (grain 2, salt 1) field 3 of the
     defender's 6, and the fold debits exactly that ration from the defender's treasury -- to nothing. A debit
@@ -244,7 +279,7 @@ def test_on_the_defenders_treasury_is_debited_by_its_own_fielded_troops(monkeypa
     _fold(w, _march_act())
     assert len(seen) == 1, seen
     assert seen[0][1]["troops_b"] == 3, seen
-    assert w.rungs[TREASURY_B].stores == {"grain": 0, "salt": 0}, w.rungs[TREASURY_B].stores
+    assert w.rungs[TREASURY_B].stores == {}, w.rungs[TREASURY_B].stores
 
 
 def _patch_won_recording(monkeypatch):
@@ -269,7 +304,7 @@ def test_on_a_won_march_with_movers_publishes_the_arrival_beside_a_debited_treas
     kinds = {e.kind for e in _fold(w, _march_act())}
     assert {"field.won", "army.arrived"} <= kinds, sorted(kinds)
     assert seen == [{"troops_a": 1, "troops_b": 0}], seen
-    assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
+    assert w.rungs[TREASURY_A].stores == {"grain": 2}, w.rungs[TREASURY_A].stores
 
 
 def test_on_one_treasury_for_both_sides_is_never_eaten_twice(monkeypatch):
@@ -292,7 +327,7 @@ def test_on_one_treasury_for_both_sides_is_never_eaten_twice(monkeypatch):
     assert all(units >= 0 for units in after.values()), after
     eaten = {k: dict(consumed_a).get(k, 0) + dict(consumed_b).get(k, 0) for k in ("grain", "salt")}
     assert eaten == {"grain": 6, "salt": 3}, (consumed_a, consumed_b)
-    assert after == {k: {"grain": 7, "salt": 3}[k] - eaten[k] for k in eaten}, after
+    assert after == {k: {"grain": 7, "salt": 3}[k] - eaten[k] for k in eaten if {"grain": 7, "salt": 3}[k] - eaten[k]}, after   # B12b.28: an emptied kind is dropped
 
 
 # ======================================================================================
@@ -309,15 +344,15 @@ def test_a_second_levy_into_the_same_treasury_raises_the_next_fields_troops(monk
     (`H-163` limit 3(a)): the larder's grain and the treasury's salt are planted. Levy 1 (grain 2) provisions
     one troop and the field eats it; levy 2 (grain 4) provisions two, and the next field fields two."""
     seen = _recording(monkeypatch)
-    w = _world(True, treasury_a={"salt": 10})
+    w = _world(True, treasury_a={"salt": 10}, treasury_b={"grain": 100, "salt": 100})   # B12b.24: the driver refuses the arm where no treasury holds one ration, and each march debits the defender's too, so the defender's holds enough for both marches, and the attacker's grain is what the levies fill
     w.fixtures = w.fixtures.sweep("march_cap_per_territory", 0)   # B21b.01: two marches into one territory in one tick; the cap off (control), this test is not about it
     w.rungs[LARDER].stores = {"grain": 20}
     assert [e.kind for e in _fold(w, _requisition("rq1", 2))] == ["requisition.taken"]
     assert w.rungs[TREASURY_A].stores == {"salt": 10, "grain": 2}
     _fold(w, _march_act("m1"))
-    assert w.rungs[TREASURY_A].stores == {"salt": 9, "grain": 0}, w.rungs[TREASURY_A].stores
+    assert w.rungs[TREASURY_A].stores == {"salt": 9}, w.rungs[TREASURY_A].stores
     assert [e.kind for e in _fold(w, _requisition("rq2", 4))] == ["requisition.taken"]
     _fold(w, _march_act("m2"))
     first, second = (kw["troops_a"] for _w, kw in seen)
     assert (first, second) == (1, 2), seen
-    assert w.rungs[TREASURY_A].stores == {"salt": 7, "grain": 0}, w.rungs[TREASURY_A].stores
+    assert w.rungs[TREASURY_A].stores == {"salt": 7}, w.rungs[TREASURY_A].stores

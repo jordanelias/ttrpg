@@ -402,12 +402,14 @@ def _entity_moved(item: Any, was: dict) -> bool:
 #   what `content_hash` folds outside them   `unowned` (the Tenures no person owns: the person-owned ones ride
 #                                            on `Person.tenures`) and `log` (every Event, its receipts and
 #                                            observations);
-#   one unhashed fact the hash cannot rebuild `covers_logged` (`{event id: cover id}`, as at each Event's
-#                                            logging: a live read of the world, so decode must not re-read it).
+#   unhashed facts the hash cannot rebuild   `covers_logged` (`{event id: cover id}`, as at each Event's
+#                                            logging: a live read of the world, so decode must not re-read it) and
+#                                            `subsistence_shortfall` (the last MATTER's `{pid: {kind: units short}}`,
+#                                            read by the next barrier's `subsist_input` as `short_before`).
 # NO GENERATOR STATE: a draw is a function of its key (A-30), so a loaded world continues with the draws the
 # unbroken run would have made. NOT HELD, rebuilt or per-tick: the log's last-emission indexes (re-derived from
 # the log), the gate's receipt serials (re-registered from the receipts the log holds), `draw`, `_departed`,
-# `_subsistence_shortfall`, `_staged`, the barrier cache and the tenure shadow (all empty at a season boundary),
+# `_staged`, the barrier cache and the tenure shadow (all empty at a season boundary),
 # `manifest` (resolved by `boot`), `event_kinds` (the default roster), and the realm builder's census attributes
 # (`_office_census`, `_tie_of` and the like: reported by the harness, read by no step of the loop).
 # A `SeatId` decodes as the plain string it encodes as, and the constructors of `Office` and `Act` tag it again.
@@ -446,7 +448,7 @@ def encode(w: "World", scenario: "str | None" = None) -> bytes:
     frames = [("world_seed", w.world_seed), ("tick", w.tick), ("acts", list(w.acts)),
               ("fixtures", fixtures_digest(w.fixtures)), ("scenario", scenario), ("unowned", list(w._unowned)),
               ("log", list(w.log)), ("covers_logged", w._covers_logged),
-              ("places_logged", w._places_logged)]
+              ("places_logged", w._places_logged), ("subsistence_shortfall", w._subsistence_shortfall)]
     frames += [(n, getattr(w, n)) for n in w._STATE_COLLECTIONS]
     frames += [(n, list(getattr(w, n))) for n in w._STATE_SEQUENCES]
     return _canonical((_SNAPSHOT_TAG, tuple(frames)), ordered=True)
@@ -612,6 +614,8 @@ def _world_from(frames: dict, fixtures: Fixtures) -> "World":
     w._covers_logged.update(frames["covers_logged"])
     w._places_logged.clear()
     w._places_logged.update(frames["places_logged"])
+    # B12b.40: the last barrier's record is loop input (`world_q.subsist_input`'s `short_before`), so it is held, as the cover is.
+    w._subsistence_shortfall = dict(frames["subsistence_shortfall"])
     w._last_by_anchor.clear()
     w._last_by_subject.clear()
     w._last_by_place.clear()
@@ -715,8 +719,8 @@ class World:
         # Unhashed for that reason, not because it is derived (`test_h118`'s underscore exclusion).
         self._departed: dict[str, tuple] = {}
         # WHO WAS SHORT OF FOOD IN THE LAST MATTER, `{pid: {kind: units short}}`: set by `loop/matter.py`'s
-        # subsistence pass (cleared at its start), read by `harness/populated.py::census` and by tests.
-        # An instrument's read, not state: the content hash does not fold it and the loop never reads it.
+        # subsistence pass (overwritten at its end), read by `harness/populated.py::census`, by tests and (B12b.40) by the NEXT
+        # barrier's `world_q.subsist_input` as `short_before`, the crossing test. Not state: the content hash does not fold it; the snapshot holds it (`encode`'s `subsistence_shortfall` frame).
         self._subsistence_shortfall: dict[str, dict] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
@@ -1425,7 +1429,8 @@ class World:
               via: Optional[str] = None,
               change: Optional[Change] = None,
               matured_term: Optional[str] = None,
-              observed: tuple = ()) -> Any:
+              observed: tuple = (),
+              spec: Any = None) -> Any:
         """`G4`. A WRITE IS HANDED EITHER A CLOSURE (`apply`) OR A `Change` (`change`), NEVER BOTH.
 
         A `Change` is the fold's: the subjects an effect writes, named before it runs, and the
@@ -1485,7 +1490,11 @@ class World:
         own meaning (`W-B`). The fold fills that field from a Verdict. The one writer here is MATTER's
         larder pass, which records the shortfall a drained larder left (`loop/matter.py`).
         ⚠ IT RIDES ONLY ON AN EMISSION: observations passed with no `emits=` are refused rather than
-        dropped, since a read no Event carries reaches no witness and would be lost silently."""
+        dropped, since a read no Event carries reaches no witness and would be lost silently.
+
+        `spec=` (B12b.25, 25 G-06) IS WHAT THE WRITE WAS OF, carried on the receipt the gate mints at EVERY mint site below (`Receipt.spec`, which
+        `Gate.mint` already took): the `yield` write passes its produced map and the band of the season's draw. A RECEIPT FIELD A READER MAY
+        PRINT, NEVER BRANCH ON -- no reader in the loop reads it, and `content_hash` folds `(subject, mode, driver, field, delta)` of a change, not it."""
         # G2. NO TOKEN, NO WRITE -- and nothing else is consulted first, so the refusal is
         # attributable. `isinstance` rather than duck-typing: a bare `WriteClass` has a `.value`
         # and would otherwise pass straight through to the class check, which is the pre-G2 call
@@ -1699,7 +1708,7 @@ class World:
                 # no-op check, so a receipt for a write that did not happen is never issued at all.
                 # B09.10: the field is the pair's; the mode and the delta are what the gate read
                 # (`_mode`, `_delta`).
-                before = [(s, self.gate.mint(s.id, _mode(s, b, a), driver, fieldname, _delta(s, b, a)))
+                before = [(s, self.gate.mint(s.id, _mode(s, b, a), driver, fieldname, _delta(s, b, a), spec))
                           for s, b, a in moved]
             if emits is not None:
                 # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
@@ -1741,7 +1750,7 @@ class World:
                     # MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
                     # change is a receipt the gate minted. `Receipt` subclasses `StateChange` and adds
                     # no hashed field.
-                    changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None)],
+                    changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None, spec)],
                     # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
                     # un-caused emission the root is how every Event in the `W9` artifact came to
                     # carry `causes=[ROOT]` — #353 §19.4 calls that field "the substrate of the entire

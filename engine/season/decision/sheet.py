@@ -165,7 +165,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
                       draw: Optional[Callable[[str, str], Any]] = None,
-                      ask: Optional[Callable[["Situation"], int]] = None) -> Callable[..., list]:
+                      ask: Optional[Callable[["Situation"], int]] = None,
+                      geo: Optional[dict] = None) -> Callable[..., list]:
     """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person; `p` is the
     `PersonInterior` DELIBERATE hands `choose` (B03.58), the same type, so the space cannot assign to the person.
 
@@ -180,7 +181,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     The candidate set is the same; the candidates whose `occasion` is the picked question come first, the rest after in the ranker's order (`_first_for`), the sheet's
     `question` is the one picked and the Scenes his pick packs are occasioned by it (at `ask` 0 under the `all` / `one_per_source` aggregation rules `sheet.question` is the
     synthetic aggregate `questions.py` builds, `q:agg:...`, not `situation.asked[0]`). `None`, or a pick of the first question, is the shipped ranking: the automated
-    chooser is untouched, and a space built with no `ask` is `make_chooser`'s control as before. An index outside `asked` is refused (`Forbidden`)."""
+    chooser is untouched, and a space built with no `ask` is `make_chooser`'s control as before. An index outside `asked` is refused (`Forbidden`). B12b.04: `geo` is the loaded geography (`data/geography.py::geography`) handed to `release` as `make_chooser` hands it, read only while `route_pricing` is `on`: without it the player's
+    journeys go unpriced while the world still bills their legs."""
     rank = make_ranker(fx, verbs, draw)
 
     def space(p: PersonInterior, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
@@ -211,7 +213,7 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         # automated chooser's does; `decide` stays off (a pick is no sampled order, `Ranked`'s note).
         picked = Ranked(cands[i] for i in chosen)
         picked.forgone_of = getattr(cands, "forgone_of", None)
-        return release(p, picked, n, fx, mint, q, draw)
+        return release(p, picked, n, fx, mint, q, draw, geo)
     return space
 
 

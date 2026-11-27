@@ -251,7 +251,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         weights=(weights(claimants), weights(other)),
         territory=_territory_of(w, rung),
         # Walls are a settlement's: a field fought AT a territory is a field battle in the territory's own terrain
-        # (`fortification_of` averages every garrison in a subtree and any value above 0 is WALLS, which overrides
+        # (`fortification_of` compounds every garrison in a subtree and any value above 0 is WALLS, which overrides
         # terrain), ED-IN-0306 phase 5.
         fort_level=fort,
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
@@ -295,8 +295,8 @@ def _defender_treasury(w: Any, rung: str) -> Optional[str]:
 
 def provision_input(w: Any, weight: int, treasury: Optional[str], eaten: tuple = ()) -> ProvisionInput:
     """THE PROJECTION `settlements.provision` reads (v9 IN-52), for one side: its Σ weight, its treasury's
-    `Rung.stores` in their own order (`()` for no treasury rung), the `subsistence_weight` ration sorted by
-    kind, and the `field_provisioning` fixture (`H-241`; `False`, shipped, is the control arm). Read-only.
+    `Rung.stores` in their own order (`()` for no treasury rung), the field's ration (`world_q.field_ration`: `subsistence_weight` cut to
+    `field_ration_kinds`) sorted by kind, and the `field_provisioning` fixture (`H-241`; `False`, shipped, is the control arm). Read-only.
 
     `eaten`: `((kind, units), ...)` another side has already consumed from THIS treasury in the same field
     (the defender's treasury when it is the attacker's own rung), subtracted from the projected stores so one
@@ -306,7 +306,7 @@ def provision_input(w: Any, weight: int, treasury: Optional[str], eaten: tuple =
     if eaten:
         less = dict(eaten)
         stores = tuple((kind, units - less.get(kind, 0)) for kind, units in stores)
-    ration = tuple(sorted((w.fixtures.get("subsistence_weight") or {}).items()))
+    ration = tuple(sorted(world_q.field_ration(w).items()))
     return ProvisionInput(weight, stores, ration, bool(w.fixtures.get("field_provisioning")))
 
 

@@ -112,7 +112,7 @@ def test_forgone_scores_exceed_released_lead(monkeypatch):
         scored.append((p.id, c.verb, c.subject or "", _choose.score_total(t)))
         return t
 
-    def spy_release(p, ranked, n_scenes, fx, mint, q, draw=None):
+    def spy_release(p, ranked, n_scenes, fx, mint, q, draw=None, geo=None):
         scenes = inner_release(p, ranked, n_scenes, fx, mint, q, draw)
         seg, scored[:] = dict(((v, s), sc) for _, v, s, sc in scored), []
         margin = _options.scruple(planted, axis, _options.refusal_tolerance(p, axis))

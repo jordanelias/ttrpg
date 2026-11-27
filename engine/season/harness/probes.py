@@ -1683,7 +1683,7 @@ def f19():
     raise NoProducer(
         "a demand originating from a place rather than a person", "S36.1",
         needs="a named person who wants it, and a named person who carries it",
-        law="S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `envelope`, `stake` -- arrangements, not wants",
+        law="S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `stake` --arrangements, not wants",
     )
 
 
@@ -1827,21 +1827,6 @@ def w8():
             "the act that wound the clock. NOT a MATTER-advanced `Record.stage`, which would be a "
             "FOURTH clock L5 forbids. But the stages are the PROBE'S -- S30.1 gives Record no "
             "Partition row, so the write that would store them raises (P10)")
-
-
-@probe("W9", "births and deaths move a population", "S10.3", by="construction",
-       tests="a place's population must be able to grow and shrink")
-def w9():
-    w = tiny_world()
-    r = w.rungs["S"]
-    r.envelope = [100, 200, 150, 60]
-    w.step = Step.MATTER
-    w.write("envelope", mint_token(w, WriteClass.MATTER), lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
-            record_kind="Rung", fieldname="envelope", driver="Event",
-            emits="envelope.changed", subject=r.id, causes=[ROOT])          # `W4`
-    assert r.envelope[0] == 105
-    return ("PASS: BIRTH IS ENVELOPE WEIGHT, NOT A `create`. The envelope has no ledger, no stance "
-            "and no act -- conflating them PRODUCES A DESIGN IN WHICH DEMOGRAPHY CAN CHOOSE")
 
 
 @probe("W10", "a settlement holds a level of discontent", "S10.1", by="construction",

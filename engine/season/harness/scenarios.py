@@ -43,6 +43,7 @@ import sys
 from dataclasses import dataclass, field
 from typing import Callable, Mapping, Optional
 
+from ..data.geography import geography
 from ...substrate import composition
 from ..data import goals as goals_data
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -200,7 +201,7 @@ def _play(name: str, row: Scenario, w: World, seasons: int, pick, host, person: 
     def counted(sheet):
         asked["n"] += 1
         return (take_ranked if pick is None else pick)(sheet)
-    space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw, ask=ask)
+    space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw, ask=ask, geo=geography())
     overrides = bind_seat(creation_sheet(w.persons.values(), holdings_of(w)), pid, space)
     choose = dispatching_chooser(chooser(w, verbs=verbs), overrides)
     d = SeasonDriver(w)

@@ -30,7 +30,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD, endowment_for
 from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
-                            remit_or_default, territory_id_of, territory_rung_id, title_domain)
+                            remit_or_default, settlement_rung_id, slug, territory_id_of, territory_rung_id, title_domain)
 from ..data.geography import geography
 from ..data.pursuits import temperament_pursuits
 from ..loop.effects import EFFECTS
@@ -271,9 +271,7 @@ def _load(rel):
     return load_yaml((files.REPO_ROOT / rel).read_text(encoding="utf-8"))
 
 
-def _slug(text: str) -> str:
-    """An id fragment. Lowercase, alphanumerics and underscores only."""
-    return "".join(c if c.isalnum() else "_" for c in str(text).lower()).strip("_")
+_slug = slug  # an id fragment, `data/rosters.py::slug`'s: one owner, since `settlement_rung_id` is built on it
 
 
 # ---------------------------------------------------------------------------
@@ -1044,7 +1042,7 @@ def seed_stores(w: World, geo: dict) -> None:
     draw = subsistence_draw(w)
     seasons = w.fixtures.get("granary_seasons")
     for sid in geo["settlements"]:
-        srid = f"set_{_slug(sid)}"
+        srid = settlement_rung_id(sid)
         made: dict = {}
         for site in sorted(w.sites.values(), key=lambda s: s.id):
             if site.rung == srid:
@@ -1515,7 +1513,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # either. Both hang off the realm, which the ladder permits.
         w.add_tenure(Tenure(f"t_{rid}_in", rid, duchy_of.get(holder, realm), "contain", 0))
     for sid, s in geo["settlements"].items():
-        rid = f"set_{_slug(sid)}"
+        rid = settlement_rung_id(sid)
         w.rungs[rid] = Rung(rid, "settlement")
         _index_anchor(w, anchors, sid, rid)
         w.add_tenure(Tenure(f"t_{rid}_in", rid, territory_rung_id(s["territory"]), "contain", 0))
@@ -1530,12 +1528,15 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # persons are named individuals who do not eat from a larder (`ED-IN-0255`).
     foreign_home: dict = {}
     for fac_name, place in sorted((FOREIGN_CAST if foreign else {}).items()):
-        trid, srid = territory_rung_id(place["territory"]["code"]), f"set_{_slug(place['settlement']['code'])}"
+        trid, srid = territory_rung_id(place["territory"]["code"]), settlement_rung_id(place['settlement']['code'])
         w.rungs[trid] = Rung(trid, "territory")
         _index_anchor(w, anchors, place["territory"]["code"], trid)
         w.rungs[srid] = Rung(srid, "settlement")
         _index_anchor(w, anchors, place["settlement"]["code"], srid)
         w.add_tenure(Tenure(f"t_{srid}_in", srid, trid, "contain", 0))
+        # B12b.20: the settlement entry's optional `stores:` is the foreign rung's builder seed (shipped absent: no write, no hash move).
+        if place["settlement"].get("stores"):
+            w.rungs[srid].stores = dict(place["settlement"]["stores"])
         foreign_home[fac_name] = (trid, srid)
     # A faction named in `foreign_cast` that this world did not build does not exist in it: no Proposition, no
     # member, no seat, no goal. `absent` is that set, and every site below that reads `FACTIONS` filters by it.
@@ -1553,7 +1554,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 f"settlement {sid} is type {kind!r} and `venues.yaml` has no buildings for it. "
                 f"A settlement with no building holds nobody and would vanish from the world "
                 f"silently. Known: {sorted(ven['buildings'])}")
-        srid = f"set_{_slug(sid)}"
+        srid = settlement_rung_id(sid)
         for q in ven["quarters"][kind]:
             qid = f"q_{_slug(sid)}_{q}"
             w.rungs[qid] = Rung(qid, "community")
@@ -1581,7 +1582,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         for k in endowment_for(w.fixtures, sid, geo["settlements"][sid]["territory"]):
             minted[k] = minted.get(k, 0) + 1
             s_id = f"s_{_slug(sid)}_{k}" if minted[k] == 1 else f"s_{_slug(sid)}_{k}_{minted[k]}"
-            w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
+            w.sites[s_id] = Site(s_id, settlement_rung_id(sid), k,
                                  condition=w.fixtures.get("condition_scale"))
 
     # -- a dwelling per hearth, at the hearth (`ED-SE-0055`) -----------------------------------
@@ -1618,7 +1619,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # `boot/realm.py`'s build step 11.
     for sid in geo["settlements"]:
         s_id = f"s_{_slug(sid)}_garrison"
-        w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", "garrison",
+        w.sites[s_id] = Site(s_id, settlement_rung_id(sid), "garrison",
                              condition=w.fixtures.get("condition_scale"))
 
     # -- the wound (B12a.07; `wound=True` only) ---------------------------------------------------
@@ -2256,7 +2257,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # tiers pool over `contain` edges, and would otherwise tie an NPC's want to a crowd), and
     # `tools/export_npc_roster.py`'s derivation is untouched.
     # ⚠ AND AFTER THE DWELLINGS, because the ceiling reads `capacity`, which counts them.
-    names = {f"set_{_slug(sid)}": str(s.get("name") or sid)
+    names = {settlement_rung_id(sid): str(s.get("name") or sid)
              for sid, s in geo["settlements"].items()}
     seat_cohorts(w, cohort_rows(), names, temperament_rows())
     # v9 IN-36 (IN-60's content): AFTER the population cohorts, so a guard never lands on a population row's

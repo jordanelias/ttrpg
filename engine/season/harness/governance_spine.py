@@ -47,6 +47,7 @@ from typing import Callable, Iterator, Optional, Sequence
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.substrate import names as _names
 
+from ..data.geography import geography
 from ..boot.chooser import chooser
 from ..boot.realm import build_realm, place_person
 from ..data import files
@@ -741,7 +742,7 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
         for line in _grouped_by_remit(deliberation_lines(w, sheet, verbs), rows):
             out(line)
         return chosen
-    return development_space(w.fixtures, mint, pick_of, verbs, draw)
+    return development_space(w.fixtures, mint, pick_of, verbs, draw, geo=geography())
 
 
 # ---------------------------------------------------------------------------------------------------

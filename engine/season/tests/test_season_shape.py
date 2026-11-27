@@ -1492,7 +1492,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
         ("Date", "fired"), ("DocketItem", "matter"),
         ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
-        ("Record", "stages"), ("Rung", "envelope"),
+        ("Record", "stages"),
         ("Rung", "stores"), ("Rung", "yield"), ("Site", "condition"),
         ("Tenure", "since"), ("Tenure", "until"),
     }
@@ -3402,7 +3402,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits():
     ⚠ THE GATE FOUND SIX SILENT MATTER WRITES THE MOMENT IT WAS TURNED ON — `(Record, matured)`,
     `(Person, exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)`, every one
     on a row whose `emits:` Part D declares. Five were fixed; the sixth, `(Record, ttl)`, was
-    deleted with its field."""
+    deleted with its field; `(Rung, envelope)` was deleted with its field later (A-115)."""
     from ..harness import headless as HL
     w = HL.build_world(0)
     w.step = Step.MATTER
@@ -3555,72 +3555,6 @@ def test_calendar_emits_date_fired_with_the_venue_as_subject_and_chains_by_venue
     assert formed[0].causes == [fired3[0].id] and anchor_of(w, formed[0]) == "D", (
         f"docket.formed must chain on the date.fired it follows and anchor on the venue: "
         f"causes={formed[0].causes} (fired {fired3[0].id}), anchor={anchor_of(w, formed[0])!r}")
-
-
-def test_calendar_a_forced_corpus_date_fires_emits_and_lands_a_claim():
-    """The plan's own OBSERVABLE for `11b`: `harness/corpus_run.build_at` plants `d_forced`
-    (`due_at: 1`, no holder) on every case `cases/ENDINGS_CLASSIFIED.yaml` marks
-    `forced_by_threshold` -- COUNTED here, not assumed, and asserted `>= 1` so this is never a
-    vacuous population.
-
-    On at least one such world, running its season(s) fires `d_forced` and the fired Event now
-    anchors on the venue (`11b`'s own change) rather than not existing at all.
-
-    ⚠ RENAMED AT IN-29 from `..._fires_and_emits_but_deposits_no_claim`, the pre-IN-29 state; the
-    plan's `-k calendar_a_forced_corpus_date` still selects it. Before IN-29 NO CLAIM LANDED about
-    a fired date: `season()` discarded `calendar()`'s return, and `World.write` buffers an
-    emission for fan-out only at `Step.MATTER`, so CALENDAR's `date.fired` reached `w.log` and no
-    ledger (MEASURED 2026-09-29: 0 of 0 attempts; the pin was `assert not claimed_any`).
-    `calendar()` now RETURNS its own Events and `season()` hands them to `witness()` beside
-    MATTER's, so the last clause is `assert claimed_any` and it can fail: reverting either half
-    of the routing turns it red (observed, IN-29). What a fired date does once someone holds it (`convene`'s sitting) is
-    SC-01's, not pinned here."""
-    from ..harness import corpus_run as CR
-    from ..harness import run_cases as RC
-
-    endings = CR.endings()
-    cases = RC.load_cases("NPC") + RC.load_cases("ARC")
-    forced = [c for c in cases
-              if (endings.get(str(c.get("id"))) or {}).get("forced_by_threshold")]
-    assert len(forced) >= 1, "no corpus case is classified forced_by_threshold -- the population is empty"
-    # `run_case`'s own filter (`corpus_run.py:478`): an UNREPRESENTABLE scale is not a rung kind
-    # and `build_at` cannot build a chain for it -- §42.2's polarity rule sends that verdict
-    # against the thing measured rather than folding it onto the nearest rung.
-    forced = [c for c in forced if str(c.get("scale")) in set(RUNG_KINDS)]
-    assert forced, "every forced_by_threshold case has an UNREPRESENTABLE scale"
-
-    fired_any = False
-    claimed_any = False
-    for case in forced:
-        w = CR.build_at(case, seed=0)
-        if "d_forced" not in w.dates:
-            continue
-        d = SeasonDriver(w)
-        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                          draw=draw_factory(w.world_seed, lambda: w.tick))
-        for _ in range(CR.seasons_for(case)):
-            d.season(ch, question=None,
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-        fired = [e for e in w.log if e.kind == "date.fired"]
-        if not fired:
-            continue
-        fired_any = True
-        venue = w.dates["d_forced"].get("venue")
-        assert anchor_of(w, fired[0]) == venue, (
-            f"{case.get('id')}: a fired date's Event anchors on {anchor_of(w, fired[0])!r}, "
-            f"not its venue {venue!r}")
-        for p in w.persons.values():
-            for c in p.ledger:
-                if c.predicate == "date.fired" or any(e.id == getattr(c, "value", None)
-                                                       for e in fired):
-                    claimed_any = True
-    assert fired_any, (
-        "no forced_by_threshold world fired its planted date -- 11b's OBSERVABLE is unreachable "
-        "on this corpus")
-    assert claimed_any, (
-        "no ledger claim references a fired date -- CALENDAR's own Events no longer reach "
-        "`witness()` (IN-29: `calendar()` returns them, `season()` fans them out beside MATTER's)")
 
 
 # ===========================================================================

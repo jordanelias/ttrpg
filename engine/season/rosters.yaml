@@ -1235,6 +1235,19 @@ rosters:
       roster, the `choice_sourced` line and the `Invested` band, and a march is a storm.]
     values: [storm]
 
+  amount_shares:
+    source: "proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_arc_needs.md (B12b.19; A-56)"
+    open: false
+    ordered: true
+    note: >-
+      The share of the giving rung's stock a store move takes, per-mille, spelt as a string (a closed roster's members are names). `requisition` and `transfer` carry it
+      as the choice `amount_share` (`choice_sourced`; `data/verbs.py::CHOICE_RANGES`), and `decision/options.py::_amount_of_share` turns a chosen share into the act's
+      `amount`, `max(1, stock_known x share // 1000)`, off the newest `stores:<kind>` claim he holds about the giving rung (falling back to the amount the bag already
+      carries where he holds none). One member is the control: `_fanned_choices` does not fan a one-member range, so no act is renamed and no hash moves. Authoring
+      `["250", "500", "1000"]` is the flip and a declared mover (B98, after B38: `07_SE_arc_needs` §6). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster,
+      the two `choice_sourced` lines and `_amount_of_share`.]
+    values: ["1000"]
+
   march_target_kinds:
     source: "M4, `ED-IN-0279` clause (a). What a `march` may target."
     row: H-149
@@ -2108,6 +2121,11 @@ rosters:
       available — but it is still a choice, which is what `H-11` grades.
     values: [grain, salt, timber, ore, coin]
 
+  grown_kinds:
+    source: "audits/16_PESSIMIST_SE.md F-PES-SE-07: the season factor is weather, and weather bears on what is grown."
+    note: "The matter kinds a season's factor multiplies. A kind outside the set yields at factor 1."
+    values: [grain]
+
   arms_kinds:
     source: "v11 CP-T03-03 (`-08` AM-C-04; T03 home §2): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store."
     note: >-
@@ -2248,17 +2266,19 @@ rosters:
       for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's
       timber, and the stake reuses the same magnitude so the two verbs share one scale rather than
       two. `H-166` sweeps it; `halved` and `doubled` scale every cell.
+      B12b.33: the five military works (`garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop`) also
+      cost `ore: 10`, so `ore` (a `matter_kinds` member nothing priced) has a reader. [ASSUMPTION; medium; Jordan to correct.]
     costs:
       hearth:    {grain: 10}
       community: {grain: 10}
       harbour:   {timber: 10}
       seam:      {timber: 10}
       dwelling:  {timber: 10}
-      garrison:  {timber: 10}
-      barracks:       {timber: 10}
-      archery_range:  {timber: 10}
-      stable:         {timber: 10}
-      siege_workshop: {timber: 10}
+      garrison:  {timber: 10, ore: 10}  # [ASSUMPTION; medium; Jordan to correct] B12b.33: `ore` has a reader
+      barracks:       {timber: 10, ore: 10}
+      archery_range:  {timber: 10, ore: 10}
+      stable:         {timber: 10, ore: 10}
+      siege_workshop: {timber: 10, ore: 10}
       field:     {timber: 10}      # [ASSUMPTION; JQ-6] B12a.51: the one number every fabric row holds
 
   site_endowment:
@@ -2315,11 +2335,13 @@ rosters:
     ordered: true
     note: >-
       The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the
-      next draw leaves a mouth unfed) and the last, `fed`, is "under no floor"; neither is a floor. The
-      members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their
-      floors (`world_q.HUNGER_FLOOR_BANDS`). A roster of fewer than two members cannot name `starving`
-      and `fed` and raises at import (`world_q`'s unpack).
-    values: [starving, hungry, lean, fed]
+      next draw leaves a mouth unfed); `fed` is "under no floor"; neither is a floor. The members between
+      them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their floors
+      (`world_q.HUNGER_FLOOR_BANDS`). The last, `empty`, is no one living there to be fed: `D == 0` and no
+      cohort resides under the rung. `fed` and `empty` are read BY NAME (`world_q.HUNGER_FED`,
+      `HUNGER_EMPTY`), not by position; a roster missing either raises at import (`world_q`'s `require_member`).
+      `starving` is read as the roster's FIRST member (`world_q.HUNGER_STARVING`) and nothing refuses a roster that puts another band first.
+    values: [starving, hungry, lean, fed, empty]
   seasons_of_year:
     source: "ED-IN-0332 (RULED, D-U1-10): the year is a roster; `data/fixtures.py` already speaks of \"two years at four seasons\""
     open: false
@@ -2332,6 +2354,36 @@ rosters:
       member here, in this order, and is refused at `season_factor_of` otherwise. The four names are
       `[ASSUMPTION; medium; Jordan to correct]`; the length is the ruling.
     values: [spring, summer, autumn, winter]
+  season_terms:
+    source: "CP-T10-03 (B12b.01), keyed by `seasons_of_year` (ED-IN-0332, D-U1-10: the year has one owner and this row states no length)"
+    open: false
+    note: >-
+      WHAT EACH SEASON OF THE YEAR DOES, one entry per member of `seasons_of_year` (`data/rosters.py::SEASON_TERMS`;
+      the load refuses a row whose keys are not exactly those members, or an entry lacking a number for `yield`,
+      `want`, `illness` or `hardship`). `yield` multiplies `world_q.season_factor_of`'s drawn return (its one owner);
+      `want` scales each `subsistence_weight` entry in `world_q._larder_parts`, rounded to a whole number half up, so
+      REM-50's `hunger`, `demanded` and MATTER's draw read one projection; `illness` is read by CP-T10-05; `hardship`
+      is the weather's obstacle term (read by the spell's draw, B12b.03). SHIPPED AT THE CONTROL: every multiplier 1.0
+      and `hardship` 0, so the calendar runs and moves nothing.
+      THE SWEPT ARM, not shipped, `[ASSUMPTION; medium; Jordan to correct]` (CP-T10-03): winter `yield` 0.25, `want`
+      1.5, `illness` 2.0, every other season 1.0; the `hardship` values are unstated and set by B98 if at all.
+    values:
+      spring: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+      summer: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+      autumn: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+      winter: {yield: 1.0, want: 1.0, illness: 1.0, hardship: 0}
+  season_band_factors:
+    source: "`09_WR_B_weather_with_memory_and_the_year` edit 1 (B12b.03), A-54: the season's harvest is one keyed draw on the one four-band ladder, the band choosing the factor"
+    open: false
+    note: >-
+      THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names
+      (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a
+      value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty
+      (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so
+      a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest
+      under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2).
+      `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.
+    values: {Overwhelming: 1.0, Success: 1.0, Partial: 1.0, Failure: 1.0}
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99
@@ -2490,6 +2542,9 @@ rosters:
       T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier
       territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at.
       Revert: Jordan names the homeland places.
+      OPTIONAL KEY (B12b.20): a `settlement:` entry may carry `stores: {matter kind: whole number >= 1}`, which the builder seeds as that
+      rung's `Rung.stores` (a counterparty stock for `exchange` once CR-49 names another rung). Shipped absent, so no hash moves; a
+      misspelt key or an unregistered kind refuses at load (`data/rosters.py`).
     by_faction:
       "Altonia":
         territory:  {code: "ALT"}
@@ -2983,6 +3038,8 @@ rosters:
       utter: [cites]
       reconstruct: [concluded]
       speak: [cites]
+      requisition: [amount_share]
+      transfer: [amount_share]
     # A KEY RANGED OVER THE ACTOR'S OWN LEDGER (`data/verbs.py::LEDGER_RANGES`): `key: [predicate, ...]` -- an id is in the range when a claim he holds about it
     # carries one of these predicates. `exists:Site` is the existence read the row's cell makes; `condition` the read a look at a Site makes; `condition.worn`
     # `condition.band_crossed` and `site.ruptured` (B12a.64) the kinds the world announces of a Site whose state moved (`write_matrix.yaml`, `Site.condition`).
@@ -3547,6 +3604,16 @@ rosters:
       the variants at effort 1 .. `interactions_per_scene` - 1 beside the base, scored by the same score (so by CR-17's
       believed chance, `odds_weighting`) and priced by the acts they displace; the best of base and variants is kept.
     values: ["off", "on"]
+
+  journey_verbs:
+    source: >-
+      v12 B12b.04 (CP-T10-01; `09_WR_B_weather` edit 3: "`decision/` prices a `move`/`travel` candidate"): the verbs whose act is a journey over the road.
+      [ASSUMPTION; medium; Jordan to correct; revert: `[move]` -- `migrate` is `move`'s journey and a settling, `verb_table.yaml`: both write through `_relocate`.]
+    note: >-
+      THE VERBS `decision/choose.py::pack_scenes` prices by `data/geography.py::leg_price` when `Fixtures.route_pricing` is `on`: a Candidate of one of
+      them is stamped with its leg (`carriers.LEG`) and its scene costs the leg's points. `march` is not here: an army's march is not a person's
+      journey and `march_postures` own it. At `off` nothing reads the roster's members.
+    values: [move, migrate]
 
   said_slants:
     source: >-
@@ -4395,7 +4462,11 @@ rosters:
       and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
       RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
       outside the realm and not selected), which may carry `settled: true` beside it and nothing else
-      (only the rungs with a `settlement` rung among their descendants).
+      (only the rungs with a `settlement` rung among their descendants), or `{site_band: <a band of band_floors>, of: <a
+      site_kinds member with floors, or all>}` (B12b.05: the Sites under the realm of those kinds, each compared with the band's floor;
+      ELIGIBLE when one is at or below it, and then ONE KEYED DRAW decides, `(seed, tick, row)`: the pool the Sites still above the
+      band times the fixture `site_band_pool_scale`, the obstacle those at or below plus one per band below the named one, so a Failure
+      REACHES the ending and a Partial reports it `near`; such a row carries `victory: false` and no `under:`, and needs no act).
       `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
       whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
       second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
@@ -4519,6 +4590,23 @@ rosters:
       Rung:        [stores.changed, rung.seized]
       Site:        [condition.band_crossed, site.ruptured]       # B12a.64: a rupture is a Site's standing occasion too (`world_q.CROSSING_KINDS`)
       Proposition: [proposition.uttered]
+
+  # ── B12b.13 (`09_WR_provided_arcs` edit 1; A-47, A-48, L3 clause 1, L5): THE CLOSED REGISTRY OF A PERSON'S PRIVATE TALLIES ──
+  tally_axes:
+    source: "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)"
+    note: >-
+      THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is
+      byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is
+      reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent
+      one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per
+      (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the
+      referent as a classed referent on the question he answers and marks that question `mandatory` (A-47), and the rows declaring
+      the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no
+      kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS`
+      (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial.
+      `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).
+    about_classes: [Person, Office, Rung]
+    members: {}
 
 tables:
 

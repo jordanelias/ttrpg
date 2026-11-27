@@ -38,8 +38,8 @@ from .requires import (
     ScalarThreshold, TypedRequires, WITH_STEM, build_typed_requires,
 )
 from .rosters import (
-    CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, MANAGEMENT_ORDERS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
+    AMOUNT_SHARE_KEY, AMOUNT_SHARES, CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, MANAGEMENT_ORDERS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS, TALLY_AXES,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -2104,7 +2104,24 @@ def _check_standing_occasion_opened_by(by_class, event_kinds) -> dict:
     return by_class
 
 
+def _check_tally_axes(axes, event_kinds) -> dict:
+    """B12b.13 (`rosters.yaml: tally_axes`): every kind an axis `counts` is an Event kind the loop declares (`EVENT_KINDS`), by
+    `_check_standing_occasion_opened_by`'s test, or import refuses naming the axes -- a claim of a kind no one emits is never in a
+    ledger, and the axis would read as built and be reached by nobody. The shape is `data/rosters.py::_load_tally_axes`'s.
+    A function, so a test can plant a bad kind. Returns it."""
+    unknown = {a: sorted(k for k in m["counts"] if k not in event_kinds) for a, m in axes.items()}
+    unknown = {a: ks for a, ks in unknown.items() if ks}
+    if unknown:
+        raise Unspecified(
+            f"`tally_axes` counts {unknown}, which are not Event kinds the loop declares", "rosters.yaml -- tally_axes",
+            needs="name kinds in `data/verbs.py::EVENT_KINDS`",
+            law="04 §B.13 invariant 7 -- the Event-kind roster is derived from every emission column; a claim of a kind outside it is "
+                "deposited from no one, and the tally would never be reached")
+    return axes
+
+
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
+_check_tally_axes(TALLY_AXES, EVENT_KINDS)
 _check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
 _check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
@@ -2269,7 +2286,7 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 # written on `Site.condition`) would each carry a choice nothing reads.
 SAID_KEY, SAID_RANK_KEY, IN_CONFIDENCE_KEY = "said", "said_rank", "in_confidence"
 CHOICE_RANGES = {ORDER_ROLE_KEY: tuple(ORDER_ROLES), ORDER_RETREAT_KEY: tuple(ORDER_RETREAT_AT),
-                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES), IN_CONFIDENCE_KEY: (False, True)}
+                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES), IN_CONFIDENCE_KEY: (False, True), AMOUNT_SHARE_KEY: tuple(AMOUNT_SHARES)}
 SITE_KEY = "site"
 # v12 B11.74 (R-19-03, FRES §7 (3)): `CITES_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the claim ids and Record ids the utterer HOLDS and cites for what he
 # asserts, a pick of held ids (`11_GO_player_surface_contract_B.md` §5), carried on the act's payload under its own name and stored by `_eff_utter` as
@@ -2284,7 +2301,7 @@ CITED_KEY = "cited"
 # B24.25 (EVID_B rules 1-2): `ANSWERS_KEY` IS THE FILED STAGES AN ACT ANSWERS, a tuple of their places on the case file (`Record.stages` indexes, the number an exhibit's id ends in), carried beside
 # `cites`. The act's own band is the `answered_band` of each (`queries/inputs.py::ANSWERED_STAGE`). Read by `queries/world_q.py::filings`; bound by no cell and not a choice (as `CITED_KEY`).
 ANSWERS_KEY = "answers"
-CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
+CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition", AMOUNT_SHARE_KEY: "Rung.stores",
                   SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: ("Proposition.exists", "Record.stages"),
                   CONCLUDED_KEY: CONCLUSION_KIND}
 # v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site

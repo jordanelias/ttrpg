@@ -71,7 +71,7 @@ TENURE_VECTOR = (
 TENURE_VECTOR_HASH = "2bbf9687ea938a411784490f75428672"
 
 # `Rung` is not a dataclass: its `_DECLARED` fields, sorted by name.
-RUNG_VECTOR = (b"os4:Rung8:s5:datesl0:s8:envelopel0:s2:ids5:r_fixs4:kinds10:settlement"
+RUNG_VECTOR = (b"os4:Rung7:s5:datesl0:s2:ids5:r_fixs4:kinds10:settlement"
                b"s7:recordsl0:s5:sitesl0:s6:storesm1:s5:graini3;s5:yieldm0:")
 OBSERVATION_VECTOR = b"os11:Observation3:s7:subjects3:p_xs9:predicates9:conditions5:valueU"
 
@@ -82,9 +82,9 @@ OBSERVATION_VECTOR = b"os11:Observation3:s7:subjects3:p_xs9:predicates9:conditio
 # `s8:r_aaaaaa` as bytes), Tenure ids by raw `str` (`t_aaaaa` before `t_in`), and a mapping's entries by
 # encoded bytes (`s2:bb` before `s3:aaa`, though `aaa` precedes `bb` as a `str`).
 WORLD_FRAMES = (
-    b"t3:s5:rungss8:r_aaaaaaos4:Rung8:s5:datesl0:s8:envelopel0:s2:ids8:r_aaaaaas4:kinds10:settlement"
+    b"t3:s5:rungss8:r_aaaaaaos4:Rung7:s5:datesl0:s2:ids8:r_aaaaaas4:kinds10:settlement"
     b"s7:recordsl0:s5:sitesl0:s6:storesm2:s2:bbi1;s3:aaai2;s5:yieldm0:",
-    b"t3:s5:rungss5:r_fixos4:Rung8:s5:datesl0:s8:envelopel0:s2:ids5:r_fixs4:kinds10:settlement"
+    b"t3:s5:rungss5:r_fixos4:Rung7:s5:datesl0:s2:ids5:r_fixs4:kinds10:settlement"
     b"s7:recordsl0:s5:sitesl0:s6:storesm1:s5:graini3;s5:yieldm0:",
     b"t3:s5:sitess5:s_fixos4:Site4:s2:ids5:s_fixs4:rungs5:r_fixs4:kinds7:harbours9:conditioni4;",
     b"t3:s6:docketi0;m1:s4:openF",
@@ -96,7 +96,7 @@ WORLD_FRAMES = (
     b"t6:s1:~s5:s_fixs5:writes5:act:xs9:conditioni-1;",
     b"t2:s1:^os11:Observation3:s7:subjects5:s_fixs9:predicates9:conditions5:valuei4;",
 )
-WORLD_VECTOR_HASH = "08536e53dab620fe03b2c49eeee0dfd4"
+WORLD_VECTOR_HASH = "34224716fe583b71b7f9c38a7b40dec4"
 
 
 def _tiny_world() -> World:
@@ -255,7 +255,7 @@ def test_go07_one_field_of_one_entity_moves_the_digest():
         object.__setattr__(alt, name, "changed")
         assert _entity_digest(alt) != _entity_digest(rung), f"`Rung.{name}` did not move the digest"
         checked += 1
-    assert checked == 9 + 8
+    assert checked == 9 + 7
     w1, w2 = _tiny_world(), _tiny_world()
     assert w1.content_hash() == w2.content_hash()
     w2.sites["s_fix"].condition = 3
