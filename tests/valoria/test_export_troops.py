@@ -32,7 +32,7 @@ def test_round_trip(tmp_path, monkeypatch):
     art = _artifact()
     intact = tmp_path / 'intact.json'
     intact.write_text(json.dumps(art, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    art['troops']['pike']['power'] += 1
+    art['troops']['pike']['skill'] += 1
     edited = tmp_path / 'edited.json'
     edited.write_text(json.dumps(art, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     monkeypatch.setattr(et, 'OUT', str(edited))
@@ -47,7 +47,7 @@ def test_the_module_reads_the_document_the_port_reads(tmp_path, monkeypatch):
     from modules.mass_battle.troop_types import troops_data
     assert troops_data.DATA == _artifact() == table._data()
     stale = tmp_path / 'troops_data.py'
-    stale.write_text(Path(et.OUT_PY).read_text(encoding='utf-8').replace("'power': 4,", "'power': 9,", 1), encoding='utf-8')
+    stale.write_text(Path(et.OUT_PY).read_text(encoding='utf-8').replace("'skill': 4,", "'skill': 9,", 1), encoding='utf-8')
     monkeypatch.setattr(et, 'OUT_PY', str(stale))
     assert et.main(['--check']) == 1
     stale.write_text(Path(table.__file__).with_name('troops_data.py').read_text(encoding='utf-8'), encoding='utf-8')
@@ -148,7 +148,8 @@ def test_the_transcribed_rows_read_as_the_old_tables_did():
     assert recruitment.training_site_for('levy') is None
     assert recruitment.training_site_for('knights_templar') == ('stable', 0.5) == recruitment.TRAINING_SITE['knights_templar']
     assert registry.roles_for('levy') == ['Support', 'Reserve'] == registry.roles_for('no_such_type')
-    assert table.row_of('infantry')['power'] == 4 and table.row_of('infantry')['discipline'] == 5
+    assert table.row_of('infantry')['skill'] == table.row_of('infantry')['power'] == 4      # `power` is the alias of `skill` (B19a.01)
+    assert table.row_of('infantry')['discipline'] == 5
     assert all(r['secondary'] is None for r in _artifact()['troops'].values())
 
 
