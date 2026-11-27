@@ -135,6 +135,7 @@ def test_tell_forms_for_persons_it_formed_for_none(worlds):
     assert _tell_formers(on) == 42
 
 
+@pytest.mark.shipped_pin     # asserts a golden of `_realm_goldens.py` (BUILD[0]) by a path `conftest._reads_pin` does not follow (the realm is built through the `worlds` fixture); a post-workplan gate, re-recorded at B99 (P15)
 def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_out(worlds):
     """CONTROL: `acquaintances=False` is a different realm from the shipped one (its hash differs; the shipped seed-0
     build is `_realm_goldens.py`'s); and on every person the arm's ledger, less the claims the step wrote,

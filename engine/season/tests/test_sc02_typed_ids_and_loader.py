@@ -88,6 +88,7 @@ def test_the_via_of_an_act_is_typed_as_a_seat():
 # 2 -- THE BYTE-IDENTITY CONTROL: THE WRAPPER FOLDS IDENTICAL STRINGS
 # ======================================================================================
 
+@pytest.mark.shipped_pin     # asserts a golden of `_realm_goldens.py` (BUILD[0]) by a path `conftest._reads_pin` does not follow (a function-local import of the golden); a post-workplan gate, re-recorded at B99 (P15)
 def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
     """`build_realm(0)` seats the whole governance ladder, so its offices are `SeatId`s; its
     `content_hash()` is `BUILD[0]` (`_realm_goldens.py`, the build's one owner). The string-level control beside it: the mint folds a `SeatId` exactly
