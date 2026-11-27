@@ -717,13 +717,17 @@ rosters:
       question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only).
       `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as
       `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337).
+      `Target` (B21b.18, CP-T09-09, AM-F-17 [ASSUMPTION; medium; Jordan to correct; revert: drop the value, `conspire` declares `Person`]): A SEAT-HOLDER A PLOT MAY BE
+      AGAINST, stamped by the standing occasion `queries/world_q.py::plot_targets` (a holder the asker reads below 0 by his own `person_q.legitimacy`, or the target of the
+      plot he holds) onto the question he answers, `Disputant`'s shape (no collection; named by `data/verbs.py::TARGET_CLASS`; occasion-only). `conspire` declares it.
+      It is a class of its own, not `Person`, because `Person` is shared: stamped as `Person`, `conspire` would form on every man a question names.
       `Holding` (VB-A): a rung the person holds and may found an office over, not yet founded (`world_q.holdings_to_found`); not a
       collection, stamped explicitly; `establish` declares it.
       `Founder` (B21b.08, IN-30's occasion [ASSUMPTION; medium; Jordan to correct; revert: drop the value, the stamp and `opening_set`'s founding lines]):
       A PERSON WHO HAS LEFT A FACTION AND HOLDS A SEAT OR LAND, stamped by `queries/world_q.py::creed_occasion` onto his own question, `Enemy`'s shape
       (no collection; named by `data/verbs.py::FOUNDER_CLASS`). No row declares it: `opening_set` offers the creed `utter` on it
       (`data/verbs.py::FOUNDING_VERB`, `FOUNDING_OPERANDS`).
-    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding, Founder]
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding, Founder, Target]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
@@ -751,10 +755,10 @@ rosters:
       EXCEPTION: the term skips a Record of a writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`),
       which only `writs_held`'s addressee test stamps, so a bystander who saw a writ issued is offered
       no `comply`. REVERT: put `Record` back here (with `research`'s column).
-      `Detainee`, `Enemy` and `Disputant` are members because only their standing occasions
-      (`detainees_held`, `enemies_heard`, `disputes_held`) stamp them: no collection is named so, so
+      `Detainee`, `Enemy`, `Disputant` and `Target` are members because only their standing occasions
+      (`detainees_held`, `enemies_heard`, `disputes_held`, `plot_targets`) stamp them: no collection is named so, so
       the own-referent term could never match them.
-    values: [Office, Rung, Detainee, Enemy, Disputant]
+    values: [Office, Rung, Detainee, Enemy, Disputant, Target]
 
   flow_stake_classes:
     source: "v11 CR-78 (B11-S4, `strife-00` section 5, the stamp)"
@@ -1862,9 +1866,13 @@ rosters:
       is made to elsewhere (B21b.16, CP-T09-07 (a); the names are the producer's [ASSUMPTION; medium; Jordan to correct; revert: the two members and their `bound:` cells]): `tie_step x` 1 where he holds a live oath
       to a seat, or a commit to a faction, other than the host's (`sigma.py::_rival_tie_of`), and `tie_step x` the hostile half of his `opinion_of` the host's faction in `[0, 1]`
       (`_opinion_hostility_of`), read for an act whose effect swears a man to the seat it is exercised through (`_swears_to_exercised_seat`: `retain`); his regard of the actor is the
-      existing `regard` member. Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
+      existing `regard` member. `invitee_tie_to_target` and `regard_of_target` -- what binds the man invited to a plot to the man it is against (B21b.18, CP-T09-09 (AM-F-17); the
+      names are the producer's [ASSUMPTION; medium; Jordan to correct; revert: the two members and their `bound:` cells]): `tie_step x` 1 where he holds a live oath to the plot's
+      target seat, or a commit to that seat's faction (`sigma.py::_tie_to_target_of`), and `regard_step x` the favourable half of his stance toward the target in `[0, 1]`
+      (`_regard_of_target_of`, the clamp unit `regard` reads in); read for an act whose effect opens a `commit` (`_opens_a_commit`: `conspire`), against the plot the plotter holds,
+      and 0 on the act that lays it. The plan's third name for his regard of the plotter is the existing `regard` member, as at `retain`. Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
       `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap`, `regard`,
-      `cross_chain`, `faction_power`, `rival_tie` and `opinion_of_faction` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them
+      `cross_chain`, `faction_power`, `rival_tie`, `opinion_of_faction`, `invitee_tie_to_target` and `regard_of_target` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them
       (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
       B24p.05: EVERY MEMBER IS BOUND (`bound:` below) to ONE reader, never both and never neither. `host` -- read by its function in
@@ -1883,7 +1891,7 @@ rosters:
       its `answers` name), listed only where it weighs. One reader: the proceeding's `TERMS`; the single-roll host never composes it, the answering `speak` being an
       act that proceeds.
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, rival_tie, opinion_of_faction, weary, standing, press, gravity, answer, first_heard]
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain, faction_power, rival_tie, opinion_of_faction, invitee_tie_to_target, regard_of_target, weary, standing, press, gravity, answer, first_heard]
     # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after the host's members, so the proceeding's terms follow the
     # host's in composition order; revert: the four rows and their `bound:` cells.]
     bound:
@@ -1900,6 +1908,8 @@ rosters:
       faction_power: host
       rival_tie: host
       opinion_of_faction: host
+      invitee_tie_to_target: host
+      regard_of_target: host
       weary: module
       standing: module
       press: module
@@ -5373,6 +5383,7 @@ tables:
         found:          -0.3    # reasoned: its effect demands strict ascent into the works' `at` -- a new rung on the containment ladder; `establish`'s reason read for a place, not an office, and `own`-eligible, so smaller
         march:          -0.5    # reasoned: `remit:dispatch`-eligible -- an army sent under an office's remit, `dispatch`'s own cell
         declare:        -0.5    # B21b.11 [ASSUMPTION; content, Jordan to correct]: `remit:dispatch`-eligible -- a war opened under an office's remit, `march`'s and `dispatch`'s own cell
+        conspire:        0.4    # B21b.18 [ASSUMPTION; content, Jordan to correct]: `own`-eligible, a plot against a seat's holder -- rank defied where `retain`'s and `declare`'s rank is exercised, the opposite lean at a smaller size
         retain:         -0.6    # B21b.16 [ASSUMPTION; content, Jordan to correct]: `remit:confer`-eligible -- a seat taking a man into its service under its own remit, `confer`'s -0.8 and `dispatch`'s -0.5 between: the offer is rank exercised, and the man may refuse it
         carry:          null    # carried absence: the old table refused this cell as "the lowest-magnitude, weakest-justified cell in the set"
         build:          null    # reasoned: `own`-eligible, and the row names no rank -- a works held by its maker, whoever he is
@@ -5428,6 +5439,7 @@ tables:
         give:           null    # reasoned: handing a held document on is neither a return to a past form nor a new one
         march:          null    # reasoned: the row says nothing of where the decision to march is sought
         declare:        null    # B21b.11 [ASSUMPTION; content, Jordan to correct]: the row says nothing of whether a declaration returns to or breaks a form -- considered, no lean
+        conspire:        0.3    # B21b.18 [ASSUMPTION; content, Jordan to correct]: a plot ends a holder by no form -- the end over the way, smaller than `succeed`'s -0.6 the other way
         retain:         null    # B21b.16 [ASSUMPTION; content, Jordan to correct]: the row says nothing of whether an offer of service returns to a form or breaks one -- considered, no lean
         # no source (draft §3.2, "the other 28")
         carry:          null
@@ -5471,6 +5483,7 @@ tables:
         requisition:           -0.3    # derived: rank drawing on subjects -- one's own office's take
         march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `requisition`'s reason, stronger
         declare:        -0.5    # B21b.11 [ASSUMPTION; content, Jordan to correct]: war declared for one's own faction against another, `march`'s -0.4 a notch stronger -- the act names the side before any field is fought
+        conspire:       -0.5    # B21b.18 [ASSUMPTION; content, Jordan to correct]: a plot gathers a faction's men against another's holder -- for one's own, `retain`'s -0.5
         retain:         -0.5    # B21b.16 [ASSUMPTION; content, Jordan to correct]: a man bound to one's own seat, and against a rival's tie where he has one -- for one's own, `declare`'s -0.5 (a seat's gain, not a faction's war)
         build:          null    # reasoned: beneficiary `none` -- who gains from the fabric is a world read (its `beneficiary_note`)
         found:          null    # reasoned: beneficiary `none`, for `build`'s reason
@@ -5540,6 +5553,7 @@ tables:
         requisition:           null
         march:          null
         declare:        null    # B21b.11: `null` BY DESIGN (the beneficiary column carries it, `beneficiary: none`)
+        conspire:       null    # B21b.18: `null` BY DESIGN (the beneficiary column carries it, `beneficiary: actor`)
         retain:         null    # B21b.16: `null` BY DESIGN (the beneficiary column carries it, `beneficiary: actor`)
         migrate:        null
         move:           null
@@ -5586,6 +5600,7 @@ tables:
         give:           null    # reasoned: a handover, neither a course held nor one left
         march:          null    # reasoned: the row's bands record the field's outcome, not whether the marcher would turn back
         declare:        null    # B21b.11 [ASSUMPTION; content, Jordan to correct]: the row records a decision to open a war, not whether the declarer would turn back -- considered, no lean
+        conspire:       null    # B21b.18 [ASSUMPTION; content, Jordan to correct]: the row records an invitation made, not whether the plotter would turn back -- considered, no lean
         retain:         null    # B21b.16 [ASSUMPTION; content, Jordan to correct]: the row records an offer made, not whether the offerer would turn back from it -- considered, no lean
         survey:         null    # reasoned: gathering a view commits to no course
         # no source (draft §3.5, "the other 34")
@@ -5641,6 +5656,7 @@ tables:
         found:          -0.3    # reasoned: adds a hearth to the world -- `establish`'s own reason and magnitude
         march:          -0.4    # reasoned: declared before the realm (`march.declared`) -- between `fight`'s -0.3 and `challenge`'s -0.6
         declare:        -0.4    # B21b.11 [ASSUMPTION; content, Jordan to correct]: declared before the realm (`war.declared` reaches it), `march`'s own cell
+        conspire:       null    # B21b.18 [ASSUMPTION; content, Jordan to correct]: `social`, no reach beyond the place the invitation is made (`emits_note`) -- a secret act, no lean as a display
         retain:         null    # B21b.16 [ASSUMPTION; content, Jordan to correct]: `social`, no reach beyond the place the offer is made (`emits_note`) -- a private offer, no lean as a display
         survey:          0.2    # reasoned: a private act -- it emits a kind neither broadcast channel reads (its `emits_note`)
         give:           null    # reasoned: one-to-one in presence, and broadcast by neither channel -- `tell`'s reading, not a display
@@ -5713,6 +5729,7 @@ tables:
         give:           -0.2    # reasoned: the row writes no return to the giver -- the non-ledger counterpart of `exchange` and `transfer`; mild
         march:           0.4    # reasoned: `fight`'s attempt, larger because the casualties land on many others -- defenders and one's own claimants -- for the outcome
         declare:        0.3     # B21b.11 [ASSUMPTION; content, Jordan to correct]: a war opened as the means to an end, smaller than `march`'s 0.4 because no casualty is yet caused
+        conspire:        0.5    # B21b.18 [ASSUMPTION; content, Jordan to correct]: men gathered as the means to a holder's fall -- `retain`'s 0.3, the outcome over a scruple, larger because the end is a man's seat
         retain:          0.3    # B21b.16 [ASSUMPTION; content, Jordan to correct]: a man's loyalty sought as the means to a seat's strength -- `declare`'s 0.3, the outcome over a scruple about whose service it is
         migrate:         0.4    # reasoned: `move`'s journey (`_relocate`, one body for both) and `move`'s reason, smaller for a settled choice than for flight
         survey:          0.3    # reasoned: intelligence before action -- `research`'s calculated route to a finding

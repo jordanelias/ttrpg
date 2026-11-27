@@ -619,6 +619,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
                   faction_power=_faction_power_of(w, via, subject) if seat is not None else 0)     # the holder's faction against the host's, where the act names a seat (B21.69)
     if _swears_to_exercised_seat(verb):                                         # B21b.16: an offer of service is priced by what ties the man elsewhere
         counts.update(rival_tie=_rival_tie_of(w, via, subject), opinion_of_faction=_opinion_hostility_of(w, via, subject))
+    if _opens_a_commit(verb):                                                   # B21b.18: an invitation to a plot is priced by what binds the man to its target
+        counts.update(invitee_tie_to_target=_tie_to_target_of(w, claimants[0], subject), regard_of_target=_regard_of_target_of(w, claimants[0], subject))
     # B11.68 (`IS-B2-FI-07` (3)): an INQUIRY about a trail meets its doers' covers -- the strongest, once, beside the examined Record's own quality (the larger of the two).
     concealed = max(doc.forgery_quality if doc is not None else 0.0,
                     trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
@@ -1002,11 +1004,63 @@ def _opinion_of_faction_term(fx: Any, facts: dict) -> dict:
     return _weighing("opinion_of_faction", float(facts.get("opinion_of_faction") or 0.0), fx.get("tie_step"))
 
 
+def _opens_a_commit(verb: str) -> bool:
+    """DOES AN ACT OF `verb` OPEN A `commit`, WHICH MAY BE AN INVITEE'S (B21b.18)? Read off the effects, never a verb's name, as `_swears_to_exercised_seat` is: the verb
+    opens a `commit` (`data/verbs.py::_OPENERS_FROM_EFFECTS`). Of the three that do, `commit` and `declare` are uncontested and never reach this composer, so this is
+    `conspire`'s alone today; a later verb that enlists a man in a cause reads the same two terms."""
+    return verb in _OPENERS_FROM_EFFECTS.get("commit", ())
+
+
+def _plot_of(w: Any, plotter: Optional[str]) -> Any:
+    """THE PLOT THE PLOTTER HOLDS (`world_q.plot_held`), or `None` -- for a plotter who is no person, or who holds none (the act that lays it)."""
+    p = w.persons.get(plotter) if plotter else None
+    return None if p is None else _world_q.plot_held(w, p)
+
+
+def _tie_to_target_of(w: Any, plotter: Optional[str], man: Optional[str]) -> int:
+    """`1` WHERE THE MAN INVITED TO A PLOT IS BOUND TO ITS TARGET, `0` where he is not (B21b.18, CP-T09-09; `FA §3.3` S7: *"his live `oblige` or `commit` to the target seat or
+    its faction"*). The target is the seat the plot the plotter holds names (`predicate` `plot:<seat>`): a live `oblige` of the man to that seat, or a live `commit` to the
+    faction of that seat (`gate.seat_faction`, the one owner of seat -> faction id). A count, not a sum, as `_rival_tie_of`: one tie is the term. This is the OPPOSITE reading of
+    `rival_tie`'s (a tie to a seat OTHER than the host's), so it is its own member. `0` for no plot, no man, or a man tied to neither."""
+    plot = _plot_of(w, plotter)
+    p = w.persons.get(man) if man else None
+    if plot is None or p is None:
+        return 0
+    seat = str(plot.predicate).partition(":")[2]
+    faction = seat_faction(w, seat)
+    return int(any(t.live and ((t.kind == "oblige" and t.object == seat) or (t.kind == "commit" and faction is not None and t.object == faction))
+                   for t in p.tenures))
+
+
+def _regard_of_target_of(w: Any, plotter: Optional[str], man: Optional[str]) -> float:
+    """HOW FAR THE MAN INVITED REGARDS THE PLOT'S TARGET FAVOURABLY, in `[0, 1]` (B21b.18): `clamp(stance_toward(man, target) / STANCE_MAX, 0, 1)`, the favourable half of
+    his own stance rows toward the holder the plot names (`regard`'s clamp unit, `_regard_of`'s reader of the same quantity toward the actor); his dislike of the target lowers
+    nothing (nothing lowers an obstacle, `roll.py::obstacle`). `0` for no plot or no man."""
+    plot = _plot_of(w, plotter)
+    p = w.persons.get(man) if man else None
+    return 0.0 if plot is None or p is None else max(0.0, min(1.0, stance_toward(p, plot.subject) / STANCE_MAX))
+
+
+def _invitee_tie_to_target_term(fx: Any, facts: dict) -> dict:
+    """`invitee_tie_to_target`: a man bound to the plot's target is the harder to enlist (OBS §2; B21b.18, CP-T09-09; the member's name is the producer's [ASSUMPTION; medium;
+    Jordan to correct; revert: drop the member from `rosters.yaml: obstacle_terms`]): `tie_step x` the count `_tie_to_target_of` read (`facts["invitee_tie_to_target"]`; 0 where
+    the record's builder read none). ONE STEP FOR ALL THREE TIES (`rival_tie`'s, `opinion_of_faction`'s and this), so a man's loyalties are priced on one ladder (§0.06 S)."""
+    return _weighing("invitee_tie_to_target", float(facts.get("invitee_tie_to_target") or 0), fx.get("tie_step"))
+
+
+def _regard_of_target_term(fx: Any, facts: dict) -> dict:
+    """`regard_of_target`: a man who thinks well of the plot's target is the harder to enlist (OBS §2; B21b.18, CP-T09-09; [ASSUMPTION; medium; Jordan to correct; revert: drop the
+    member from `rosters.yaml: obstacle_terms`]): `regard_step x` the favourable half of his stance toward the target, `_regard_of_target_of` (`facts["regard_of_target"]`). The step
+    is `regard`'s own (`_regard_term`): both read a stance in the clamp unit, one of the man toward the plotter, one toward the target. His regard of the plotter is the existing
+    `regard` member, never a second copy."""
+    return _weighing("regard_of_target", float(facts.get("regard_of_target") or 0.0), fx.get("regard_step"))
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
     _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _rank_gap_term, _regard_term, _reception_term,
-    _capability_term, _cross_chain_term, _faction_power_term, _rival_tie_term, _opinion_of_faction_term)},
+    _capability_term, _cross_chain_term, _faction_power_term, _rival_tie_term, _opinion_of_faction_term, _invitee_tie_to_target_term, _regard_of_target_term)},
                            "obstacle_terms", members=obstacle_bound("host"))
 
 PROCEEDING_ROLE = "social_contest.proceeding"   # the composition row whose module supplies the `bound: module` members (registered at B24p.12)

@@ -36,12 +36,12 @@ from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target, WAR_MOOD,
-    CLAIM_MOOD, claim_id,
+    CLAIM_MOOD, claim_id, plot_held, plot_id, target_seat,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
+    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
     may_warrant, may_wage, seat_faction,
 )
 from ..state.ids import H
@@ -1482,6 +1482,57 @@ def _eff_declare(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
         w.add_tenure(held)
         w.add_tenure(edge)
     return Change((Subject.entity("propositions", pid), Subject.edge(edge)), perform)
+
+
+#: The two kinds `conspire` earns, each by the subject that makes it (`Subject(earns=)`): the plot laid (the first act) and a man joined to it. The row declares both on every
+#: band that writes; spelt here once and refused at import if the row stops declaring either (the row's `Failure` kind, `plot.refused`, is no effect's).
+PLOT_LAID, PLOT_JOINED = "plot.laid", "plot.joined"
+if not {PLOT_LAID, PLOT_JOINED} <= set(VERB_TABLE["conspire"].emits_at("Success")):
+    raise Forbidden(f"`conspire`'s Won band does not declare {PLOT_LAID!r} and {PLOT_JOINED!r}", "verb_table.yaml",
+                    needs="the row's Won-band `emits:` to name the two kinds `_eff_conspire` earns", law="B21b.18 -- an effect earns only kinds its row declares")
+
+
+@effect_for("conspire")
+def _eff_conspire(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21b.18 (CP-T09-09, AM-F-17; `FA §3.3` S7): A PLOT WITH BACKERS. The plotter (`own`: any person) invites the man named on `to` to a plot against the holder of the seat
+    the act is about (`subject`, a `Target`-classed holder, `world_q.plot_targets`). The invitation was a draw on the invitee (`contests: "a standing"`, the obstacle the social
+    roll's, `invitee_tie_to_target` and `regard_of_target` among its terms); this body runs only on a band that writes, so a lost invitation opens nothing and the row emits
+    `plot.refused`.
+
+    A PLOTTER WHO HOLDS NO PLOT (`world_q.plot_held`: no live `hold` and `commit` of a plot of his own) LAYS ONE: the plot Proposition (mood OUGHT, `subject` the target's
+    holder, `predicate` `plot:<seat>` for the seat he holds that stands highest, `world_q.target_seat`) is minted through `_mint_utterance`, `_eff_utter`'s one mint, and
+    the plotter's own `commit` to it opens in the SAME write (`_commit_edge`, as `_eff_declare`'s declarer's does), so a plot is never of no man's ambition. The invitee is
+    not yet a backer: there was no plot when he was invited (`plot.laid`). A PLOTTER WHO HOLDS ONE RECRUITS: the invitee's own `commit` to it opens, under
+    `state/gate.py::RECRUITMENT` (`may_recruit`: the plotter holds and is committed to the plot; the edge is the invitee's, so `T-m` cannot admit it) (`plot.joined`). Because a
+    `commit` to an OUGHT is an ambition (`world_q.ambitions`) and an ambition's referent is tier 0, the plotter and every backer then attend to the target first, and the hostile acts
+    already on the table form on him: nothing here reads or writes the reader.
+
+    DECLINES (`NO_CHANGE` -> `plot.refused`, nothing minted and no edge opened): an operand that is no person, a cohort on either side, the plotter, the invitee and the
+    target not three men; the target holds no seat; the plot's id was already uttered; on a held plot, an invitation about another man than the plot's target, or to a man
+    already committed to it. G4 -- WHAT IT NAMES: the first act names the Proposition and the plotter's edge, the recruit the invitee's edge; each earns the one kind
+    it made. [ASSUMPTION; medium; Jordan to correct; revert: delete the row and this effect.]"""
+    target, invitee = _operand(a, "subject"), _operand(a, "to")
+    plotter, man, mark = w.persons.get(a.actor), w.persons.get(invitee), w.persons.get(target)
+    if (plotter is None or man is None or mark is None or plotter.is_cohort or man.is_cohort or len({a.actor, invitee, target}) < 3):
+        return NO_CHANGE
+    held = plot_held(w, plotter)
+    if held is None:
+        seat = target_seat(w, target)
+        pid = plot_id(a.actor, seat) if seat is not None else None
+        if seat is None or pid in w.propositions:
+            return NO_CHANGE
+        prop, hold = _mint_utterance(w, a.actor, pid, PLOT_MOOD, target, f"{PLOT_PREDICATE}:{seat}", None)
+        edge = _commit_edge(w, a.actor, pid, a.id)
+
+        def perform() -> None:
+            w.propositions[pid] = prop
+            w.add_tenure(hold)
+            w.add_tenure(edge)
+        return Change((Subject.entity("propositions", pid, earns=PLOT_LAID), Subject.edge(edge, earns=PLOT_LAID)), perform)
+    if held.subject != target or any(t.kind == "commit" and t.object == held.id and t.live for t in man.tenures):
+        return NO_CHANGE
+    joined = _commit_edge(w, invitee, held.id, a.id)
+    return Change((Subject.edge(joined, earns=PLOT_JOINED),), lambda: w.add_tenure(joined))
 
 
 @effect_for("commit")

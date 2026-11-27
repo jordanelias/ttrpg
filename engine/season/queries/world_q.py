@@ -51,7 +51,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDER_CLASS, FOUNDING_REMIT_ACTS,
+    ANSWERS_KEY, CITED_KEY, CITES_KEY, CONCLUDED_STEM, DECLARED_CLASSES, DETAINEE_CLASS, TARGET_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FILING_VERBS, FOUNDER_CLASS, FOUNDING_REMIT_ACTS,
     HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, PROCEEDS_DOCKET, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS, SEIZE_REMIT_ACTS,
     VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
@@ -69,6 +69,8 @@ from .person_q import (
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
 from .person_q import holders_named, vacant_named
+# B21b.18: how one person reads a seat-holder's standing, `plot_targets`' first reader (it had no game caller before).
+from .person_q import legitimacy
 # v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
 from .person_q import contradicts, is_cell, record as record_of
 # B24.25: `filings` derives what a cited item is as proof, what it weighs and whether it impeaches a Record, off the one owners.
@@ -85,7 +87,7 @@ from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import (  # noqa: F401 -- re-exported
     a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
-from ..state.carriers import Person, Question, Said, Site, Tenure
+from ..state.carriers import Person, Proposition, Question, Said, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
 # which may not import this module. These names are the same function objects as `state/containment`'s.
@@ -108,6 +110,8 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 from ..state.gate import sworn_to
 # B21.58 (A-20): `at_war`'s last line asks the gate's `may_wage` of each live commit's subject.
 from ..state.gate import commands_a_seated, may_admit, may_wage
+# B21b.18 (CP-T09-09): a plot's shape and its one reader live in the gate (`may_recruit` asks it too); `plot_id`, `plot_held`, `plot_targets` below compose on them.
+from ..state.gate import PLOT_PREDICATE, is_plot
 # B21b.12 (CP-T09-02 (c)): the two remit acts a seat that wages or warrants carries, the war's target set reads them (`war_fields`).
 from ..state.gate import MUSTER_ACT, SEIZURE_ACT
 from ..state.ids import H, ROOT, draw_factory
@@ -5112,6 +5116,66 @@ def disputes_held(w: World, p: Person) -> tuple:
     return tuple(r for r in held if here is not None and place_of(w, r, homes) == here)
 
 
+# --- B21b.18 (CP-T09-09, AM-F-17): A PLOT WITH BACKERS, AS AN OCCASION --------------------------------------------------------------------------------------------
+# A plot is a Proposition on the creed shape (`state/gate.py::is_plot`: mood OUGHT, `subject` the target seat's holder, `predicate` `plot:<seat>`), minted by the first
+# `conspire` (`loop/effects_information.py::_eff_conspire`) with the plotter's own `commit`. Because a `commit` to an OUGHT is an ambition (`ambitions`) and an ambition's
+# referent is tier 0 (`goal_referents`: `(prop.subject,)`), every conspirator attends to his target first with no code of its own here; what is built here is the FIRST act's
+# occasion (`plot_targets`) and the reading of a plot held (`plot_held`).
+
+
+def plot_id(plotter: str, seat: str) -> str:
+    """THE ID OF A PLOT, `plot:<plotter>:<seat>` (B21b.18): one Proposition per plotter and target seat, so a second minting of it is declined as any id already
+    uttered is (`_eff_utter`), and every man he recruits `commit`s to the one."""
+    return f"{PLOT_PREDICATE}:{plotter}:{seat}"
+
+
+def target_seat(w: World, holder: str) -> Optional[str]:
+    """THE SEAT A PLOT AGAINST `holder` NAMES: the seat he holds that stands on the highest rung kind (`RUNG_KINDS`' order), ties by id; `None` for a man who holds none
+    (a plot is against a seat's holder). [ASSUMPTION; medium; Jordan to correct; revert: the plot names every seat he holds -- `FA §3.3` S7 says *'the target seat'*
+    and a man may hold several]."""
+    best = None
+    for t in w.seat_holds(holder):
+        office = w.offices[t.object]
+        r = w.rungs.get(office.rung) if office.rung is not None else None
+        key = (RUNG_KINDS.index(r.kind) if r is not None else -1, t.object)
+        if best is None or key[0] > best[0] or (key[0] == best[0] and key[1] < best[1]):
+            best = key
+    return None if best is None else best[1]
+
+
+def plot_held(w: World, p: Person) -> Optional[Proposition]:
+    """THE PLOT `p` HOLDS, or `None` (B21b.18): the plot Proposition of his own live `hold` (the maker's, `_mint_utterance`) AND live `commit` (a plotter who has
+    `release`d his commit holds no plot: `may_recruit`'s own reading), by id when he holds several. ONE PLOT PER PLOTTER IS READ, not enforced: the plan's *'no plot
+    held'* is this read, so the first `conspire` of a man who holds none mints, and every later one recruits to the plot he holds."""
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    for t in p.tenures:
+        if t.kind == "commit" and t.live and t.object in held and is_plot(w.propositions.get(t.object)):
+            return w.propositions[t.object]
+    return None
+
+
+def plot_targets(w: World, p: Person) -> tuple:
+    """THE SEAT-HOLDERS A PLOT OF `p`'S MAY BE AGAINST, as the occasion of a `conspire` (B21b.18; CP-T09-09's *'a question about a seat-holder H for whom p's own
+    `legitimacy(p, H)` is below 0'*; [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for` and `conspire`'s `referent_class`]), each once:
+
+      * a man who HOLDS A PLOT is offered the plot's own target while that man still holds a seat, whatever he now reads of him -- he has committed, and recruits;
+      * a man who holds none is offered each man his OWN ledger names (`ledger_names`, `known_persons`: the sources `disputes_held` reads) who holds a seat and whom
+        he reads below 0: `person_q.legitimacy(p, H, window, ...)`, his stance and the deeds of H he holds claims of, at the realm's own window and scar fixtures
+        (`storybar.estimates` reads the same five). A man he reads at or above 0 is no occasion.
+    Resolver-side and read-only. `()` for a cohort (a population plots nothing: its guard sits in no choice)."""
+    if p.is_cohort:
+        return ()
+    mine = plot_held(w, p)
+    if mine is not None:
+        return (mine.subject,) if mine.subject in w.persons and mine.subject != p.id and w.seat_holds(mine.subject) else ()
+    fx = w.fixtures
+    window, shift, hold, mass = fx.get("estimate_window_seasons"), fx.get("scar_weight_shift"), fx.get("scar_hold"), fx.get("scar_primary_mass")
+    named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
+    return tuple(h for h in sorted(named)
+                 if h in w.persons and not w.persons[h].is_cohort and w.seat_holds(h)
+                 and legitimacy(p, h, window, shift, hold, mass) < 0)
+
+
 def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
@@ -5680,6 +5744,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # grievance beside him, and then the output is byte-identical. A grievance raises a question of its own when he
     # has none (the `need` head below), as a prisoner does: it is an occasion, not a context.
     held += tuple((d, DISPUTANT_CLASS) for d in disputes_held(w, p))
+    # B21b.18 (CP-T09-09, AM-F-17; [ASSUMPTION; medium; Jordan to correct; revert: drop this line]): AND THE SEAT-HOLDERS HE MAY PLOT AGAINST (`plot_targets`: one he reads
+    # below 0 by his own `legitimacy`, or the target of the plot he holds), as `Target` -- `conspire` forms on them. Empty for a man who reads no holder below 0 and holds
+    # no plot, and then the output is byte-identical.
+    held += tuple((h, TARGET_CLASS) for h in plot_targets(w, p))
     # B21b.08 (IN-30's occasion; CP-T09-01): AND, LAST, HIMSELF AS A FOUNDER where he has left a faction and holds a seat or land (`creed_occasion`), as `Founder` --
     # no collection, `Detainee`'s shape; `decision/options.py::opening_set` offers the creed `utter` on it. REVERT: drop these two lines.
     if creed_occasion(w, p):
