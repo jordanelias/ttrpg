@@ -231,7 +231,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if contexts and refs:
             if records is None:
                 records = held_record_claims(p, tick, decay)
-            memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
+            memo: dict = {"fade": (tick, decay)}   # what a reader derives from the actor alone, once per call, not once per referent (`fade`: his claims' reading, B29.02)
             # B15.08 (PHY_A A3): THE CONTEXT THAT ADMITTED A REFERENT RIDES ITS CANDIDATE (`CONTEXT_KEY`), the first of the line that holds
             # (`violence_context_of`, the one reader), for `combat_input` to read the fight's terms by (`rosters.yaml: context_terms`).
             context_of = {r: violence_context_of(p, q, r, contexts, records, memo) for r in refs}
@@ -635,7 +635,9 @@ def _crime_context(p: Person, q: Question, r: str, records: list, memo: dict) ->
     THE ADDRESSEE TEST NARROWS "A WARRANT HIS SEAT ISSUED OR HOLDS" [ASSUMPTION; medium; Jordan to correct; revert:
     drop the `addressed_to` test]: a dispensation whose `terms` is a person is a warrant to the tree
     (`warrant_sourced`), so the maker of any writ about the King held a "warrant" against him. The man a warrant charges is its addressee, not its maker."""
-    return (r in q.referents_for(DETAINEE_CLASS)
+    if "heard" not in memo:            # B29.02 (`14_VERBS_PHYSICAL_A` A2): AND A WARRANT ADDRESSED TO HIM THAT HE HAS ONLY HEARD OF, its Record left in its maker's hand (`addressed_terms`, the reading `arrest` forms on)
+        memo["heard"] = {t for k in _WARRANT_KINDS for t in addressed_terms(p, k, *memo.get("fade", (0, 0)))}
+    return (r in q.referents_for(DETAINEE_CLASS) or r in memo["heard"]
             or any(content_kind(c) in _WARRANT_KINDS and _content_answer(c, "subject") == r
                    and addressed_to(content_said(c), p.id) for c in records))
 

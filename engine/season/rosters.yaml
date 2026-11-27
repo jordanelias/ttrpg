@@ -3244,11 +3244,15 @@ rosters:
       `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's
       terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct;
       revert: restore `duel`.]
+      `capture` (14_VERBS_PHYSICAL_A A2, B29.02): ED-IN-0337 applied to the second violent row; no `duel` (a duel is `accept`'s), no `defence`
+      (a man defending himself does not take prisoners). [ASSUMPTION; medium; Jordan to correct; revert: drop the `capture` line, and `capture`
+      forms on every person a question names, as before.]
       B10.61 READING, KEPT: it reads the world's contexts (a war, a warrant, a deed done to him), none of them his own
       state, so `OwnStateReader` cannot answer it. Without it `fight` forms on 4170, 4049 and 4344 more
       (person, question) pairs at seeds 0-2, 252 of them at lap 0.
     values:
       fight: [war, crime, defence]
+      capture: [war, crime]
 
   opposed_without_prize:
     source: >-

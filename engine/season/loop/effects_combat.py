@@ -28,7 +28,9 @@ from ..data.requires import Observation
 from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import HAND_PREDICATE, held_against
-from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
+from ..queries.world_q import (
+    BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, issuing_seat, restrained, warrants_for,
+)
 from ..seam.ladder import party_degree
 from ..seam.wrappers.pool import pool_pair, untrained
 from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, WOUNDS
@@ -414,17 +416,19 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     """CP-T03-09 (`-08` AM-C-03): `fight`'s WOUNDS, AND THE BEATEN MAN TAKEN INTO A SEAT'S CUSTODY WHERE THE SCENE
     ENDED IN HIS YIELD. A named fold of `fight`, not a second fight: `_eff_kill` is called and its `Change` is the
     base (each party written by his own band, `seam/ladder.py::party_degree`), to which ONE `detain` EDGE is added,
-    the captive (the act's `subject`) -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`) -- the seat is `via`
-    itself, not an issuing seat, because no warrant is behind a capture (`_eff_arrest` reads one; PC-10b's challenge
-    Record is `accept`'s, not `capture`'s).
+    the captive (the act's `subject`) -> THE COURT WHOSE WARRANT IT IS: custody goes to the court whose warrant it is,
+    `arrest`'s rule, one owner (B29.02, `14_VERBS_PHYSICAL_A` A2): the issuing seat (`issuing_seat`) of the first warrant
+    the actor holds or was addressed and heard of (`world_q.warrants_for`) naming him whose seat's holder could close the
+    custody (`_may_close_custody`). Where no such warrant stands -- a capture in war, or on a man no warrant names -- it is the
+    seat the act is exercised through (`Act.via`), as before (PC-10b's challenge Record is `accept`'s, not `capture`'s).
 
     WHAT LICENSES THE EDGE, EACH ONE OWNER OF ITS RULE (`_eff_arrest`'s tests, minus the warrant): (1) the scene's
     `surrender` (`modules/combat/fight.py::_surrender`, lifted off the trace) names the SUBJECT as the one who
     yielded -- a yield by the actor, or none, opens nothing, and a scene in which either party was felled opens
     nothing (a felled actor holds no seat to take him into); (2) the subject is a person other than the actor and
     not already in custody (`restrained`, one live `detain` per prisoner); (3) the exercised seat may take him
-    (`may_warrant`, the gate's own predicate) AND its live holder could close the custody (`_may_close_custody`,
-    `pardon`'s basis), so an act the precondition admitted is never killed at the gate and a custody nothing could
+    (`may_warrant`, the gate's own predicate) AND the seat the custody goes to (above) has a live holder who could close it
+    (`_may_close_custody`, `pardon`'s basis), so an act the precondition admitted is never killed at the gate and a custody nothing could
     release is never opened. The gate is UNCHANGED: its `warrant` clause admits an opened `detain` whose object is
     a seat under `may_warrant`. Anything else leaves the base: the wounds `fight` would have dealt, or, where
     nobody was written, `NO_CHANGE` and `capture.refused` (the write clause) -- not `contest.undecided`.
@@ -450,9 +454,18 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # act; returning `base` keeps the capture.
     if any(PERSON_DIED in s.kinds for s in base.subjects) or restrained(w, prisoner, DETAIN_KIND):
         return base
-    if a.via is None or not may_warrant(w, a.actor, a.via, prisoner) or not _may_close_custody(w, a.via, prisoner):
+    if a.via is None or not may_warrant(w, a.actor, a.via, prisoner):
         return base
-    nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{a.via}:{a.id}"), prisoner, a.via, "detain",
+    # B29.02 (`14_VERBS_PHYSICAL_A` A2 [ASSUMPTION; medium; Jordan to correct; revert: `seat = a.via`]): CUSTODY GOES TO THE COURT WHOSE WARRANT IT IS --
+    # `_eff_arrest`'s rule (the issuing seat of the first warrant `warrants_for` reads whose holder could close the custody), read here and not
+    # re-decided; with no such warrant it is the seat the act is exercised through, as before.
+    seat = next((s for s in (issuing_seat(w, rid) for rid in warrants_for(w, a.actor, prisoner))
+                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+    if seat is None:
+        seat = a.via
+        if not _may_close_custody(w, seat, prisoner):
+            return base
+    nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{seat}:{a.id}"), prisoner, seat, "detain",
                 since=w.tick)
 
     def perform() -> None:
