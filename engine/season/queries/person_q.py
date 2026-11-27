@@ -3251,7 +3251,6 @@ def strain_carried(rattles, fx) -> float:
 BODY_KIND = "body.changed"          # the claims a person holds of a body moving: `loop/matter.py`'s emission, deposited as any event is
 STORES_KIND = "stores.changed"      # the claims he holds of a rung's stores moving
 VALUE_KINDS = ("pursuit", "stance", "belief", "body", "stores")     # the first values a player meets, in the order he meets them
-_OFFER_TERMS = {"pursuit": 0, "stance": 1}                           # an `OfferRow.terms` index: `decision/choose.py::TERM_NAMES`' first two (a test reads the pair)
 
 
 @dataclass(frozen=True)
@@ -3263,11 +3262,6 @@ class Value:
     subject: Optional[str] = None
     predicate: Optional[str] = None
     amount: Optional[float] = None
-
-    @classmethod
-    def of_offer(cls, row, which: str) -> "Value":
-        """The `pursuit` or `stance` term of an offered row (`decision/sheet.py::OfferRow`: `candidate` and `terms`), as the player met it."""
-        return cls(which, row.candidate.subject, row.candidate.verb, float(row.terms[_OFFER_TERMS[which]]))
 
 
 @dataclass(frozen=True)

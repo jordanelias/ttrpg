@@ -57,9 +57,9 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, _seen_index, decisiveness, deed_doer, is_deed, recognised
+from ..queries.person_q import LedgerReader, Value, _seen_index, decisiveness, deed_doer, is_deed, recognised
 from ..state.carriers import Act, Candidate, Claim, Person, PersonInterior, Question, Scene, View, fade_of, frozen
-from .choose import Ranked, _believed_chance, _payload_of, make_ranker, release
+from .choose import TERM_NAMES, Ranked, _believed_chance, _payload_of, make_ranker, release
 from .options import ledger_weigh, own_state_declines
 
 def describe(key: str) -> str:
@@ -252,6 +252,10 @@ class OfferRow:
     terms: tuple
     odds: Optional[float]
     cost: int
+
+    def value(self, which: str) -> Value:
+        """The `pursuit` or `stance` term of this row as the player met it, for `person_q.explain` (the index is `choose.TERM_NAMES`', its one owner)."""
+        return Value(which, self.candidate.subject, self.candidate.verb, float(self.terms[TERM_NAMES.index(which)]))
 
 
 @dataclass(frozen=True)

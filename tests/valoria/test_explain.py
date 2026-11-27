@@ -11,7 +11,6 @@ Four tests, one lane (the season loop: `explain` is read by the season's person-
 """
 import inspect
 
-from engine.season.decision.choose import TERM_NAMES
 from engine.season.decision.sheet import OfferRow
 from engine.season.harness.probes import tiny_world
 from engine.season.queries import person_q
@@ -90,11 +89,10 @@ def test_each_first_value_is_derived_from_his_own_claims():
     d = explain(ix, Value("pursuit", "p_foe", "argue"))
     assert [t[0] for t in d.terms] == ["c_refused"] and d.terms[0][4] == person_q.refused_before(ix, ("argument.refused",), "p_foe", 1, 0)
     assert explain(ix, Value("pursuit", "p_foe", "fight")).terms == (), "he holds no claim of a refusal of that verb to name"
-    # an offer's two terms are the first two of `TERM_NAMES`, and `Value.of_offer` carries the figure the player met
-    assert TERM_NAMES[:2] == ("pursuit", "stance")
+    # `OfferRow.value` carries the figure the player met, by `TERM_NAMES`' index
     row = OfferRow(Candidate("argue", "p_foe", {}), None, (0.5, -1.25, 0.0, 0.0, 0.0), None, 1)
-    assert Value.of_offer(row, "pursuit") == Value("pursuit", "p_foe", "argue", 0.5)
-    assert Value.of_offer(row, "stance") == Value("stance", "p_foe", "argue", -1.25)
+    assert row.value("pursuit") == Value("pursuit", "p_foe", "argue", 0.5)
+    assert row.value("stance") == Value("stance", "p_foe", "argue", -1.25)
     # the closed set refuses what is not a first value
     for bad in (Value("mood", "p_foe"), Value("stance", None)):
         try:
