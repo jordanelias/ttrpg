@@ -4290,7 +4290,9 @@ def kit_of(w: World, pid: str) -> tuple:
     PER COMBATANT FIELD, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores
     of the rungs the person `hold`s (his HOLDINGS, `state/gate.py::holdings_of`: a live `hold` whose object is a rung),
     ELSE of the rung he `reside`s in (`lives_in`), else the Combatant's own default
-    (`engine/substrate/combat_kit.py::DEFAULTS`, read off `Combatant.__init__` by the exporter, never copied). The
+    (`engine/substrate/combat_kit.py::DEFAULTS`, read off `Combatant.__init__` by the exporter, never copied) for armour
+    and, ONCE `arms_kinds` is non-empty, `combat_kit.UNARMED` for the weapon (B18.03: a person who holds no weapon fights
+    with none). The
     fallback is per field, as the home states it: a holder whose holdings stock armour and no weapon takes the
     holdings' armour and his residence's weapon; the residence is read only for a field his holdings leave unfilled.
     The field is the kind's, its key the kind's `key`, and the kit is READ, NEVER CONSUMED: nothing here or at the
@@ -4308,6 +4310,7 @@ def kit_of(w: World, pid: str) -> tuple:
         home = lives_in(p)
         if home in w.rungs:
             best = {**_top_arms(w, (home,)), **best}
+    kit["weapon"] = _combat_kit.UNARMED       # B18.03: a roster exists, so a person with no stocked weapon holds none
     kit.update(best)
     return kit["weapon"], kit["armor"]
 
