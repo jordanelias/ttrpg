@@ -12,7 +12,8 @@ from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 from types import SimpleNamespace
 from engine.dice_engine import draw as _draw
-from engine.dice_engine.dice_engine import Degree, degree_from_net      # the one degree ladder (A-5)
+from engine.dice_engine.dice_engine import Degree, degree_from_net, degree_label      # the one degree ladder (A-5)
+from modules.mass_battle.resolution import trace_event   # the module's one trace call: a no-op outside a `tracing()` block
 from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, net_boost, pool_of, roll_net_continuous  # the one sampler, boost and pool rule (A-5, A-6)
 from modules.mass_battle import rngsource
 
@@ -163,6 +164,7 @@ def obey(order, roller, sub, army, t, link=0, enemy_cells=()):
     key = _draw.H2(rngsource.get().key, f"obey|{t}|{army.faction}|{army.name}|{_slot(army, sub)}|{sub._order_idx}|{link}")
     net = roll_net_continuous(pool, rng=_draw.seeded(key)) + net_boost(levels, pool)
     band = degree_from_net(net, obstacle)
+    trace_event('draw', tick=t, side=army.faction, unit=getattr(sub, 'name', '?'), kind='obey', band=degree_label(net, obstacle))
     if band in (Degree.OVERWHELMING, Degree.SUCCESS):
         return _OBEYED
     return _LATE if band is Degree.PARTIAL else _NOT_CARRIED_OUT

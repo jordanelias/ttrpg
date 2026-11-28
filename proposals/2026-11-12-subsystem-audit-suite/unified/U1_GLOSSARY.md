@@ -469,6 +469,7 @@ group (A–D in `MB_LEXICON.md`, E–G in `_part2`); "D-n" a ladder decision and
 | **march**; **storm, besiege, invest, siege**; **garrison** | the verb; the march postures and their states; (tree) a place's defences | G |
 | **station** (Jordan also: base); camp | where an army stands when not marching; not a game term | G, D-11 |
 | **occupy, seize, withdraw, raze**; **aggressor, rescuer** | A-57 to A-73's land acts and parties | G |
+| **named draw** | a draw the field makes at a site the fiction names (an order obeyed, a recall, a feint seen through, a pursuit blow; later a stand, a rally, a capture), listed by name, never a draw by position; owner `modules/mass_battle/resolution.py::trace_event`, category `draw` (keys `tick, side, unit, kind, band`), until B20's report owns it | 27_MB_C §3, 27C-1 |
 
 Record of this section (MB lexicon lane, 2026-11-12): §E rows *unit*, *formation*, *cell*, *body*, *bout*,
 *rout / break*, *kit* (was *loadout / kit*), *frontage / front*, §D *post*, and §H rows `subformations` and MB

@@ -1551,6 +1551,7 @@ def pursuit_damage(pursuer, routing_unit, pool_of):
     # [canonical: params/mass_combat.md PP-233 — Pool = min(Size,Cmd)+Cmd]
     a_pool = pool_of(pursuer)
     a_net = roll_pool(a_pool)
+    trace_event('draw', tick=None, side=getattr(pursuer, 'faction', '?'), unit=getattr(pursuer, 'name', '?'), kind='pursuit', band=degree_label(a_net, 1))
 
     # Fast routing unit may rearguard at -2D Off
     # [canonical: §A.12 — "Fast may rearguard at −2D Off"]
@@ -1577,6 +1578,7 @@ def recall_check(pursuer):
     Returns True if recalled (pursuit stops).
     [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
     net = roll_pool(pursuer.command)
+    trace_event('draw', tick=None, side=getattr(pursuer, 'faction', '?'), unit=getattr(pursuer, 'name', '?'), kind='recall', band=degree_label(net, RECALL_OB))
     return net >= RECALL_OB
 
 
@@ -1586,6 +1588,7 @@ def feigned_retreat_recognized(pursuer):
     [canonical: mass_battle_v30.md §A.12 Clarification — "d10s equal to the opposing general's
      Command against Ob 2 to recognise the Feigned Retreat as a feint"]"""
     net = roll_pool(pursuer.command)
+    trace_event('draw', tick=None, side=getattr(pursuer, 'faction', '?'), unit=getattr(pursuer, 'name', '?'), kind='feint', band=degree_label(net, FEIGNED_RECOGNIZE_OB))
     return net >= FEIGNED_RECOGNIZE_OB
 
 
@@ -1595,6 +1598,7 @@ def feigned_retreat_check(pursuer):
     [canonical: PP-256 / mass_combat.md §PP-256 — pursuing-side Discipline check Ob 1; hold
      P~87% at Discipline 4, ~40% at Discipline 1]"""
     net = roll_pool(pursuer.discipline)
+    trace_event('draw', tick=None, side=getattr(pursuer, 'faction', '?'), unit=getattr(pursuer, 'name', '?'), kind='feint', band=degree_label(net, FEIGNED_RETREAT_OB))
     return net >= FEIGNED_RETREAT_OB
 
 

@@ -204,3 +204,48 @@ def test_a_fought_field_costs_the_loser_its_bodies_and_so_its_next_army():
     # WHO BLEEDS IS WHO FOUGHT: the people mustered beside the cohorts, in neither army, are not scaled by a fight
     # they were not in. (They were, before `parties["fielded"]`: the headcount path writes every mustered loser.)
     assert {p: w.persons[p].body for p in others if p in w.persons} == others, "a bystander was hurt by the fight"
+
+
+# ─── B19.06 (27C-1): every named draw that exists is traced ──────────────────────────────────────────────────
+
+def _obeying_army():
+    from modules.mass_battle.hierarchy.units import Army, Unit
+    from systems.mass_battle.sim.engine import Order
+    unit = Unit(shape="Line", troop_type="infantry", tier=2, starting_position=(25, 5), advance_dir=1, stance="balanced",
+                unit_type="melee", orders=(Order(trigger="tick:3", behavior={"stance": "hold"}),))
+    unit.name = "post"
+    return Army(name="obey", faction="A", power=4, command=4, discipline=5, discipline_start=5, morale=6, morale_start=6,
+                units=[unit])
+
+
+def test_draw_trace_names_each_draw_site_that_fired(monkeypatch):
+    """Inside `tracing()` each draw the field makes at a site the fiction names leaves one `cat == 'draw'` event carrying a unit,
+    a kind and a band: the obedience draw (`obey`), the recall (`recall`), the feint's recognition (`feint`), the pursuit blow
+    (`pursuit`). A draw with no unit or no kind is the failure (27_MB_C gate 2); outside `tracing()` nothing is recorded."""
+    from modules.mass_battle import config as mb_config, rngsource
+    from modules.mass_battle import orchestration as orch
+    from modules.mass_battle.core.contact import check_orders
+    from modules.mass_battle.resolution import tracing
+
+    monkeypatch.setitem(mb_config.ORDER_OBEY, "arm", "on")
+    monkeypatch.setattr(orch, "MB_FEIGNED_RETREAT", True)
+    pursuer = SimpleNamespace(name="chasers", faction="B", speed="Fast", routed=False, disordered=False, power=2, command=4,
+                              discipline=4, overextended=False)
+    routing = SimpleNamespace(name="fleers", faction="A", speed="Slow", routed=True, dr=0, feigned=True)
+
+    def fire():
+        with rngsource.using(draw.seeded(draw.H2("b19_06", 1))):
+            check_orders(_obeying_army(), 3, [])
+            orch.recall_check(pursuer)
+            orch.resolve_feigned_retreat(pursuer, routing)
+            orch.pursuit_damage(pursuer, routing, lambda a: 6)
+
+    with tracing() as events:
+        fire()
+    draws = [e for e in events if e["cat"] == "draw"]
+    assert {e["kind"] for e in draws} >= {"obey", "recall", "feint", "pursuit"}, draws
+    for e in draws:
+        assert e.get("unit") and e.get("kind") and e.get("band") and "side" in e and "tick" in e, e
+    assert next(e for e in draws if e["kind"] == "obey")["unit"] == "post"
+    fire()   # outside tracing(): the call is a no-op, nothing is recorded anywhere
+    assert [e for e in events if e["cat"] == "draw"] == draws
