@@ -253,7 +253,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B21c (FA) |
+| S14 | B12b (SE+WR) |
 | S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
@@ -369,7 +369,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) |
-| B21c-fa-seats | FA | ED-FA-0044..0045 (0+2) | H-628..H-632 (0+5) |
 | B21d-fa-arc | FA | ED-FA-0046..0047 (0+2) | H-633..H-641 (4+5) |
 | B21s-strife-supply | IN | ED-IN-0395..0396 (0+2) | H-642..H-646 (0+5) |
 | B22-mb-armies | MB | ED-MB-0095..0096 (0+2) | H-647..H-653 (2+5) |
@@ -432,7 +431,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 |---|---|
 
 | B12b-weather-arcs-population | `valoria_master_workplan_v12_part24.md`, `_part24_cont.md` |
-| B21c-fa-seats | `valoria_master_workplan_v12_part25.md` |
 | B19-mb-field-calibration | `valoria_master_workplan_v12_part26.md`, `_part26_cont.md`, `_part27.md`, `_part27_cont.md` |
 | B12c-material-verbs-and-valley | `valoria_master_workplan_v12_part28.md`, `_part28_cont.md` |
 | B24a-sc-outside-the-room | `valoria_master_workplan_v12_part28_cont.md` |

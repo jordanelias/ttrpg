@@ -24,7 +24,7 @@ GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
 GATE: Batch B21b-fa-war @03b3fd6e1
-GATE: Batch B21c-fa-seats
+GATE: Batch B21c-fa-seats @ce4117176cb7b66911af10aab921cd9b9f71d671
 GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning

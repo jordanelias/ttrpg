@@ -68,7 +68,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B21c (FA) |
+| S14 | B12b (SE+WR) |
 | S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
@@ -90,7 +90,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
-| B21c-fa-seats | FA | W14 | S14 | 0 | 25 | 10 (B6 P1 H2 DF1) | MOVER (behaviour 4) | 6.5 | B21b |
 | B21d-fa-arc | FA | W14 | S15 | 5 | 29 | 10 (B9 DF1) | MOVER (behaviour 4) | 6.5 | B11, B21b |
 | B21s-strife-supply | IN | W16 | S18 | 3 | 35_cont | 3 (B3) | **EQUAL** (§2.2: per entry) | 3.7 | B12c, B21, B24a +R, B29 +R |
 | B22-mb-armies | MB | W17 | S17 | 1 | 33, 33_cont | 36 (B34 P1 DF1) | MOVER (behaviour 15) | 16.9 | B00, B01, B02, B16L, B04, B05, B07, B10, B12c, B17, B19, B20, B21, B21b |
@@ -134,7 +133,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
 | B20-mb-orders | 30:514 | yes | 10 | yes | none | — |
-| B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
 | B21d-fa-arc | 29:231 | yes | 2 | yes | none | — |
 | B21s-strife-supply | 35_cont:456 | yes | 4 | yes | none | — |
 | B22-mb-armies | 33_cont:337 | yes | 14 | yes | none | — |
@@ -172,7 +170,6 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | S13 | B21b | 01, 02, 04, 06, 08, 10, 11, 12, 13, 14, 16, 18, 21, 25, 26 | — | 05 | `B21b.99` | 4 of 5 movers |
 | S14 | B12b | 12, 16, 21, 25, 28, 33, 40, 41, 42, 43, 44, 47 | 18 | — | `B12b.99` | 1 of 4 movers |
-| S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |
 | S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | 09 (R2c, K6 F14) | `B12c.99` | 1 of 5 movers |
 | S15 | B19 | 12, 13, 23, 24, 25, 26, 51, 58, 60, 61, 63, 64, 70, 67, 68 | — | — | `B19.99` | 3 of 5 movers |
 | S15 | B21d | 05, 07, 08, 09 | — | — | `B21d.99` | 4 of 5 movers |
@@ -259,7 +256,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | 47 | S15 · B18 | `CARRY_CLOSE_K` = 0 | BLOCKED (design: no value stated) — was TARGETED; part 44 governs (R2d) | `03_PC_loadout_and_carry` Gate 2 (1,000 fights per cell, disjoint-seed control) is the target, recorded; part 44 (B98.38, U9) read the source: "one new `[SIM-CALIBRATE]` coefficient in `CFG` … 0 shipped" (`:83`, `:131`), no candidate or sweep; owner: the PC workbench calibration, which no batch schedules | 28_cont2:32 | B98.38 BLOCKED |
 | 48 | S15 · B19 | `orders.obey.arm` = `off` | IN-BATCH (27C-3's commit if it ships arm R), else TARGETED | `27_MB_C` §4 arm R readings 1, 2, 4; B20's line adds MNV gate 1 (n 200) | 26:44, 30:46 | B98.39 BUILD |
 | 49 | S15 · B19 | `orders.obey.in_contact` = 0 | BLOCKED (design: no target reading) | "no magnitude sourced" (`27_MB_A` §4) | 26:44 | B98.40 BLOCKED |
-| 50 | S15 · B21c | `FILLED_BY["elected"]` keeps `CONFERRAL` (only if B21c.03 stops) | BLOCKED (design: no computed route; H-80) | CR-35 (8): "the elected narrowing waits until an election executes" | 25:31 | B98.41 BLOCKED |
+| 50 | S15 · B21c | `FILLED_BY["elected"]` keeps `CONFERRAL` (B21c.03 stopped, `Item: B21c.03` at `f5eabee`) | BLOCKED (design: no computed route; H-80) | CR-35 (8): "the elected narrowing waits until an election executes" | 25:31, expunged at `ce4117176cb7b66911af10aab921cd9b9f71d671` | B98.41 BLOCKED |
 | 51 | S15 · B21d | the four Church Influence band triggers (CI ≥ 40, 55, 60, 65 and 80) = off | BLOCKED (A-114: target past two seasons) | CI starts at 28, at most ±5 a season: no band reachable before season 3 (arithmetic on shipped values); B99 quotes it (HD-26) | 29:32 | B98.42 BLOCKED |
 | 52 † | S15 · B21d | each Turmoil and goal-row trigger (B21d.07 to .09) whose flip CR-90's two-season arm does not support = off | BLOCKED (A-114: target past two seasons) | the two-season arm reads equal by the trigger's own condition; the longer reading is B99's | 29:32 | B98.42 BLOCKED |
 | 53 | S16 · B11F1 | `wear_per_season` = 0 for `worship`, `templar_quarters`, `school` | BLOCKED (design: no target reading) | CR-106 gives no target | 29_cont:184 | B98.43 BLOCKED |

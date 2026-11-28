@@ -5114,7 +5114,7 @@
           ]
         },
         "concurring_bodies": {
-          "source": "v11 CR-37 (B21c.05; `workplans/valoria_master_workplan_v12_part25.md` B21c.05 step 2): canon's concurring body in a deposition, the Holy See.",
+          "source": "v11 CR-37 (B21c.05; `FORK:ce4117176:workplans/valoria_master_workplan_v12_part25.md` B21c.05 step 2): canon's concurring body in a deposition, the Holy See.",
           "open": false,
           "note": "THE BODIES WHOSE SEAT MAY CONCUR IN A `joint_concurrence` REVOCATION -- the `revocation_bases` member's rule (`state/gate.py::REVOCATION_RULES`) admits a revoking seat whose `Office.body` is a member here. Each member must be an `office_bodies` member (`data/rosters.py::CONCURRING_BODIES`, refused at import otherwise). Data, not a by-name outcome: a seat whose `revocation:` names `joint_concurrence` takes the same route, whichever seat it is.",
           "values": [

@@ -376,7 +376,7 @@
 | 4 | `:220` | IN | DEF-10 | "move `build_realm` out of `harness/`"; "no module owns world-gen yet" (E4:4372) | **fired: B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef** (CI-07, A-102: the builder moves to `engine/season/boot/`) | superseded, ladder step 1 (§11 C-10) |
 | 5 | `:221` | IN | DEF-11 | "loader invariant 5 (`writer:` column) … deferred. L1-3 states honest grade meanwhile" (E4:4378) | none in v12 | — |
 | 6 | `:222` | IN/CHAR | REM-30 | "HELD, decide at v12 against B04"; exit "a creation arm switched off reproduces the pre-build hash" (E5 Block C37) | B04's close | B04.99 step 4 records it: closed by ladder step 1, carried by R-04.c1's batches (B34, B22, B36); exit `test_rem30_character_sheet.py` → pass (repair lane R2a; §11 C-19 resolved) |
-| 7 | `:297` | FA | M39 | settled: "part 15's design-first item (post-freeze mover; A-76 stand-in only)" (E5 Block D5) | B21c (CR-38's design, B21c.06) or B23 (A-76's stand-in) `[ASSUMPTION: M39 is the Court Parliament residue the stand-in covers — basis: the settled text's "A-76 stand-in only"]` | — |
+| 7 | `:297` | FA | M39 | settled: "part 15's design-first item (post-freeze mover; A-76 stand-in only)" (E5 Block D5) | B23 (A-76's stand-in); CR-38's design landed in Batch B21c-fa-seats (`proposals/v12_B21c_court_parliament_bench.md`; row 79 is its build) `[ASSUMPTION: M39 is the Court Parliament residue the stand-in covers — basis: the settled text's "A-76 stand-in only"]` | — |
 | 8 | `:298` | FA | ED-640 | "a Jordan-authored Hafenmark Martial-branch rank row in `engine/season/offices.yaml`" (E4:815) | none: content | — |
 | 9 | `:299` | FA | ED-649 | "an authored Prelate seat" (E4:821) | none: content | — |
 | 10 | `:300` | FA | ED-650 | "an authored claimant row" (E4:827) | none: content | — |
@@ -458,6 +458,8 @@
 | 76 | `2026-11-13-verb-governing-attributes` §2 | IN | each verb's kind and governing-attribute corrections in `verb_table.yaml` (was `BA1.13`) | "rows he does not name keep B05.25's interim cells": Jordan names the corrections | none: Jordan's content | B05.25's interim cells stand; the 31 rows where `proposals/2026-11-05-verb-attribute-map.md` and §2 disagree are listed in PR #630's body |
 | 77 | `U5d_FA_owed_edits` §6 | FA | one purse per rung: a seat row's `treasury: <rung>` key (was `B21.70`) | "Built only when a computed `requisition` lands on a rung seating two factions": `requisition.taken` Events whose rung carries seats of two factions, realm seeds 0–2, two seasons, above 0 | a computed `requisition` on a rung seating two factions (0 at every seed at B21.99) | owner when built: "`offices.yaml` row key and `state/carriers.py::Tenure.seat_rung`'s writer"; closes R-07, H-352 |
 | 78 | `U5d_FA_owed_edits` §5 | FA | what an order orders: the closed set of term shapes, the first a demand of stores; DESIGN-FIRST (was `B21.75`) | "`06_FA_shortest_loop_B.md`'s `loop_closed` reads `answered > 0` on the built realm at two dice seeds. Until then no shape is authored" | `governance_spine play S 2 --world realm` reading `answered > 0` at two seeds (0 at every seed at B21.99; H-615 names the break) | owner when built: "`14_VERBS_BINDING_D_orders.md`'s `issue` row and `rosters.yaml: terms_sourced`"; the design `opus` with a `ners` critic, no code; closes R-27, F-FA-18, F-PES-FA-10 |
+| 79 | `:272` | FA | CR-38's build (was `B21c.07`) | "Trigger: B21c's merge (the design ratified by ED-1094 unless the PR holds it back). Until then the interim two-seat bench stands." | the merge of Batch B21c-fa-seats (closed at `ce4117176cb7b66911af10aab921cd9b9f71d671`); then an item of the first FA batch opened after it (B23 at the earliest, beside A-76's switch), or `STOPPED` if that batch has closed | what it is: the bench reading `proposals/v12_B21c_court_parliament_bench.md` chooses and the `parliamentary_debate` flip to `close: declared` (the arrangement key the design names), a declared MOVER (either route moves every determination in the realm); the design's §6 OPEN QUESTION (whether the King's sealed `council_of_state` may carry a deposition) is held back for Jordan in the PR |
+| 80 | `:273` | FA | CR-39's promotion: an emerged creed earns parliamentary standing (was `B21c.08`) | "CR-38 lands a Court Parliament bench" (row 79's build); NEEDS IN-30 (`B21b.05`) | row 79's build landing | `queries/world_q.py::promoted(w, creed)`: the creed's members hold live `hold`s on at least two territories (a count on demand, never stored); a creed whose members hold two territories sits on CR-38's bench, one holding one does not; CONTROL: CR-38's bench without the promotion term; a declared MOVER when built (H-186) |
 
 Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them) and `pool.py::score` (B01) are built by earlier batches (A28's note of what the tree lacked at its read); `world_q.passage_granted` (B23.05 builds it, checked by the patch lane).
 
@@ -476,7 +478,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) | H shifted |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) | H shifted |
-| B21c-fa-seats | FA | ED-FA-0044..0045 (0+2) | H-628..H-632 (0+5) | H shifted |
 | B21d-fa-arc | FA | ED-FA-0046..0047 (0+2) | H-633..H-641 (4+5) | H shifted |
 | B21s-strife-supply | IN | ED-IN-0395..0396 (0+2) | H-642..H-646 (0+5) | ED shifted, H shifted |
 | B22-mb-armies | MB | ED-MB-0095..0096 (0+2) | H-647..H-653 (2+5) | H shifted |
@@ -619,7 +620,6 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 |---|---|---|---|---|
 | 1 | B10 | B10.51 | `grep -c '^## Status: PROPOSED' <file>` → 1 | `test -f` + `git diff --stat` (above); the Status arm dropped (R2b noted it, out of its scope) |
 | 2 | B10 | B10.52 | `grep -c '^## Status: PROPOSED' <file>` → 1 | the same |
-| 5 | B21c | BATCH GATE | `ls <design file>` → "exists and states (1) to (6) of B21c.06" | keep `ls`; the "states" half to B21c.06's critic (it already carries `git diff --stat`) |
 | 6 | B23 | B23.01 | "the file exists and states (1) to (5)" | `test -f` + `git diff --stat` |
 | 7 | B24 | B24.12 | "the file exists and states (1) to (4), each with a falsifier and a control" | the same |
 | 8 | B24 | B24.41 | "the file exists and states (1) to (6) …" | the same |
