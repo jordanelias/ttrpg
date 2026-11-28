@@ -177,6 +177,14 @@ class Tenure:
         p = self.payload
         return p.get("seat_rung") if isinstance(p, dict) else None
 
+    @property
+    def post(self) -> Optional[str]:
+        """THE SEAT'S POST AS GRANTED (CR-32, B21c.01): the seat's `post` where it is a title or a rank-ladder post (`rosters.ladder_stamp`), written by
+        `World._grant_remit` beside `remit_acts` and `seat_rung` -- same snapshot, same `force` re-stamp, same untyped payload key -- so a person
+        reads his own standing with no `World` (`AX-2`). `None` for a Tenure carrying no such post, and for every Tenure while no ladder is declared."""
+        p = self.payload
+        return p.get("post") if isinstance(p, dict) else None
+
 
 
 

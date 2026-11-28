@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from dataclasses import MISSING as _MISSING, dataclass as _dataclass, fields as _fields
 from fractions import Fraction
-from typing import Optional
+from typing import NamedTuple, Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
@@ -227,6 +227,28 @@ def _load_offices() -> dict:
                     needs="a positive whole number of seasons, or `null`",
                     law="`Tenure.term` is `Term(tick + n, act)` and `n` is a whole number of seasons >= 1 (`_declared_term`); a seat row's "
                         "`term:` is the default that `n` takes, so a malformed one would fabricate a term nobody declared")
+    # v11 CR-32 (B21c.01): `ladders:` -- per ladder its `faction` (a `factions` member), `livery` (a bool) and `posts` (a non-empty list of distinct names, lowest
+    # first). The key must be PRESENT as a mapping; `{}` is lawful and is the control (no post is stamped, shown or ranked), an absent key is not.
+    ladders = doc.get("ladders")
+    if not isinstance(ladders, dict):
+        raise Unspecified(
+            "offices.yaml has no `ladders:` mapping", "offices.yaml -- ladders",
+            needs="give `ladders:` its rows, or `{}` for none",
+            law="CR-32 -- a declared-but-absent section is not read as an empty one")
+    for lid, row in ladders.items():
+        posts = row.get("posts") if isinstance(row, dict) else None
+        ok = (isinstance(posts, list) and posts and all(isinstance(p, str) and p for p in posts) and len(set(posts)) == len(posts)
+              and isinstance(row.get("livery"), bool))
+        if not ok:
+            raise Unspecified(
+                f"offices.yaml ladder {lid!r} is not `{{faction:, livery: <bool>, posts: [<distinct names>]}}`", "offices.yaml -- ladders",
+                needs="a faction, a boolean `livery:` and a non-empty list of distinct post names, lowest first",
+                law="CR-32 -- a ladder is names and order only (A-12)")
+        require_member(
+            row.get("faction"), roster("factions"),
+            f"offices.yaml ladder {lid!r} names `faction: {row.get('faction')!r}`, which is not a `rosters.yaml: factions` member",
+            "offices.yaml -- ladders", needs="a member of `rosters.yaml: factions`",
+            law="CR-32 -- a ladder serves a roster faction; a sub-office ladder names the member it serves")
     # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
     # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
     # defaulted: a founding that defaulted would silently found a seat the data never described.
@@ -2745,6 +2767,50 @@ def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `offices.yaml: titles: domains:`. `None` for a post
     that is not a title -- a Dicastery is an office, not a rank."""
     return TITLE_DOMAINS.get(str(post or ""))
+
+
+# v11 CR-32 (B21c.01): THE RANK LADDERS, `offices.yaml: ladders:` -- a faction's posts, lowest first. The readers below answer from the module-level
+# `LADDERS` at call time (so `{}` is the control: no post is stamped on a `hold`, shown in `marks` or ranked), and are the ONE place the shapes
+# are read: `World._grant_remit` (the stamp), `epistemic._term_marks` (the show) and `queries/person_q.rank` (the order) ask these, never the dict.
+class Ladder(NamedTuple):
+    faction: str
+    livery: bool
+    posts: tuple
+
+
+LADDERS = {lid: Ladder(row["faction"], row["livery"], tuple(row["posts"])) for lid, row in _OFFICES_DOC["ladders"].items()}
+
+
+def ladder_stamp(post) -> Optional[str]:
+    """The `post` a seat's grant carries (`Tenure.post`): the seat's own `post` where it is a ladder post or a title, else `None` -- and `None` for
+    every seat while no ladder is declared, so a world without ladders carries the grant it always did."""
+    if not LADDERS or not isinstance(post, str):
+        return None
+    return post if title_domain(post) is not None or any(post in lad.posts for lad in LADDERS.values()) else None
+
+
+def shown_post(post) -> bool:
+    """Does a witness see `post` on its holder (`marks`)? A title, and a post on a ladder whose `livery` is true; never a post only an unmarked
+    ladder names (the Riskbreakers')."""
+    if not LADDERS or not isinstance(post, str):
+        return False
+    return title_domain(post) is not None or any(lad.livery and post in lad.posts for lad in LADDERS.values())
+
+
+def ladder_ordinals(posts) -> dict:
+    """`{ladder id: ordinal}` over the ladders `posts` stand on (rank 0 first; the highest where one holds two posts of a ladder)."""
+    out: dict = {}
+    for lid, lad in LADDERS.items():
+        at = [lad.posts.index(p) for p in posts if p in lad.posts]
+        if at:
+            out[lid] = max(at)
+    return out
+
+
+def title_ordinal(posts) -> Optional[int]:
+    """The highest `rung_kinds` ordinal among the titles in `posts` (a title governs a rung kind), or `None` where none is a title."""
+    at = [RUNG_KINDS.index(d) for d in (title_domain(p) for p in posts) if d is not None]
+    return max(at) if at else None
 
 
 def refuse_a_titled_post_off_its_rung(who: str, post, kind: str, rung_id: str) -> None:

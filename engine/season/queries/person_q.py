@@ -56,7 +56,7 @@ from ..data.requires import (
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
     ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, matter_of_record, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
-    roster, roster_map, task_share,
+    roster, roster_map, task_share, ladder_ordinals, title_ordinal,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
 from .inputs import SIDE_SIGN, Item
@@ -2937,16 +2937,27 @@ def _clamp(x: float, lo: float, hi: float) -> float:
 
 
 def rank(p: Person, teller: str) -> int:
-    """`+1` if `p`'s own claims say `teller` outranks `p`, `-1` if outranked, `0` if they say
-    neither. ALWAYS `0` TODAY.
+    """`+1` if the teller outranks `p`, `-1` if `p` outranks him, `0` if neither is known (CR-32, B21c.01, `H-181`).
 
-    The ordering itself exists -- `offices.yaml: titles` maps each title to a rung kind, and
-    *"rank is the ordinal in `rung_kinds`"* -- but a hearer can only rank a teller off claims
-    the HEARER holds, and no writer in the tree deposits an `office` claim (the `person_predicates`
-    member is a vocabulary word with no producer), nor is an `office` claim's value typed as a title or a seat.
-    Comparing values nobody writes, in a shape nobody declared, would be inventing the ruling."""
-    # ABSENT: H-181 rank ordering  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
-    return 0
+    ONE SCALE, NEVER TWO. The teller's posts are the `marks` of `p`'s newest `seen` claim naming him (`epistemic._term_marks`: a title, or a post of a
+    ladder that shows livery); `p`'s own are the `post` his live `hold`s carry (`Tenure.post`, stamped by `World._grant_remit`), so `p` reads no `World`
+    (`AX-2`). The sign is the teller's ordinal minus `p`'s on the FIRST ladder of `offices.yaml: ladders:` both stand on; else, where both hold a title,
+    the ordinal of the rung kind each governs in `rung_kinds`; a post is never compared with a title; else `0`. At no ladder declared nothing is stamped
+    or shown, so every pair reads `0` as before."""
+    seen = [c for c in p.ledger if c.predicate == SEEN_PREDICATE and getattr(c.value, "who", None) == teller]
+    if not seen:
+        return 0
+    theirs = max(enumerate(seen), key=lambda ic: (ic[1].when, ic[1].lap, ic[0]))[1].value.marks or ()   # newest by (when, lap), the later-appended of a tie
+    mine = [t.post for t in p.tenures if t.live and t.kind == "hold" and t.post is not None]
+    mine_on, theirs_on = ladder_ordinals(mine), ladder_ordinals(theirs)
+    shared = next((lid for lid in mine_on if lid in theirs_on), None)
+    if shared is not None:
+        a, b = theirs_on[shared], mine_on[shared]
+    else:
+        a, b = title_ordinal(theirs), title_ordinal(mine)
+        if a is None or b is None:
+            return 0
+    return (a > b) - (a < b)
 
 
 def _is_conclusion(c) -> bool:

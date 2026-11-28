@@ -4092,8 +4092,8 @@ rows:
     kind:      "NUMBER"
     owner:     "decision/options.py -- `teller_weight`'s `relation` product"
     grade:     "assumption"
-    default:   "0.5 -- SHIPPED, AND DORMANT: `rank` reads 0 for every pair today (`H-181`), so
-      every arm of this sweep is byte-identical until an `office` claim has a writer. `0` is the
+    default:   "0.5 -- SHIPPED, AND AWAKE FROM B21c.01: `rank` reads a post-holder's ordinal off the `marks` of a sighting (`H-181`), so `0.5` moves a hearer who has seen a
+      teller hold a post; a teller never seen with one reads 0 and weighs as before. `0` is the
       control. `0.5` lets a teller who outranks the hearer reach full weight from `told_weight`
       0.5 at full regard (stance at STANCE_MAX) with a NEUTRAL `record` (`H-183`; a good record
       supplies the same factor without rank), where it ties a firsthand claim on support and
@@ -4159,28 +4159,30 @@ rows:
 
   - id:        H-181
     tier:      1
-    hole:      "RANK ORDERING -- A HEARER CANNOT RANK A TELLER FROM THE HEARER'S OWN CLAIMS, so
-      `decision/options.py::rank` reads 0 for every pair and `rank_gain` (`H-178`) is dormant. The
-      ordering exists in data (`offices.yaml` titles map each title to a rung kind; rank is the
-      ordinal in `rung_kinds`), but no writer deposits an `office` claim, and an `office` claim's
-      value is typed neither as a title nor as a seat."
+    hole:      "RANK ORDERING -- A HEARER RANKS A TELLER OFF WHAT HE HAS SEEN OF THE TELLER AND WHAT HE HOLDS HIMSELF. B21c.01 (CR-32) gave `rank` a producer:
+      a seat's grant carries its `post` (`Tenure.post`), a witness's `seen` claim carries the posts he saw (`marks`), and `rank` compares the two on one
+      scale (a ladder of `offices.yaml: ladders:` both stand on, else the title ordinal in `rung_kinds`), so `rank_gain` (`H-178`) wakes. OPEN: the ladders'
+      content (names, order, factions, which seats map to which post) is an assumption, and no `office` claim is deposited -- an actor's post reaches a hearer
+      only as a `seen` claim's mark."
     kind:      "PRODUCER"
-    owner:     "decision/options.py -- `rank`, at the field-less `ABSENT: H-181 rank ordering`
-      marker; the producer of `office` claims is unowned"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
-    unblocks:  "CAT-3's lord-over-peer clause. Trigger: any claim with predicate `office` in a
-      ledger of a shipped world, with a value resolvable to a rung kind; then rank is the sign of
-      the teller's ordinal minus the hearer's"
+    owner:     "queries/person_q.py -- `rank` (re-exported to `decision/options.py`), reading the post a seat's grant carries (`Tenure.post`, stamped
+      by `World._grant_remit`) and the posts a witness saw (`epistemic._term_marks`) against `offices.yaml: ladders:`"
+    grade:     "assumption"
+    default:   "the nine ladders as shipped, each shown (`livery`) except the Riskbreakers'; an empty `ladders:` map is the control (nothing is stamped, shown or ranked)"
+    site:      "`offices.yaml: ladders:`, read through `data/rosters.py::LADDERS` by `World._grant_remit`, `epistemic._term_marks` and `person_q.rank`"
+    sweep:     ["ladders: {} (the control)", "the nine ladders as shipped", "the nine ladders with every `livery` false"]
+    unblocks:  "CAT-3's lord-over-peer clause, now read: rank is the sign of the teller's ordinal minus the hearer's on one scale (B21c.01)"
     cite:      "LADDER RUN at `T3a`, 2026-10-01: not superseded; not irrelevant -- CAT-3 names
       the relation; no design document types an `office` claim's value; precedent: the only `office`
       claims in the tree are hand-built in tests with free strings; the architecture rules out
       reading the world's seats here (`decision/` is AX-2's island and a hearer ranks a teller off
       what the hearer holds). MEASURED at `T3a`: `build_realm(0)`, one season, zero claims with
-      predicate `office` in any ledger."
-    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
+      predicate `office` in any ledger. BUILT at B21c.01 (CR-32): the producer is the `seen` claim's `marks`, not an `office` claim. [ASSUMPTION; medium; Jordan
+      to correct; revert: an empty `ladders: {}` map in `offices.yaml`, one re-pin: the nine ladders' names and order as the archived `faction_politics_v30.md`
+      names them, each ladder's faction, and a seat mapped to a post by its `post` string alone.] FALSIFIER `engine/season/tests/test_cr32_ladders.py::
+      test_rank_reads_one_scale` (Church rank 2 told by a teller seen at rank 6 reads +1; red with the ordinal reversed); CONTROL
+      `test_empty_ladders_is_the_prior_hash` (an empty `ladders:` stamps, shows and ranks nothing)."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01; workplan v12 B21c.01 (CR-32)"
 
   - id:        H-182
     tier:      1

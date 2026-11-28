@@ -160,6 +160,28 @@ titles:
     "Family Head":      "hearth"
     Individual:         "person"
 
+# v11 CR-32 (B21c.01, H-181): A FACTION'S RANK LADDER AS POSTS ON SEATS -- NAMES AND ORDER ONLY. Per ladder: the `faction` it serves (a
+# `rosters.yaml: factions` member, refused at load otherwise), `livery` (does the ladder's archived Livery column name a visible mark; `false`
+# where every cell reads "None"), and `posts`, lowest first, the ordinal being the index (rank 0 first). Rank 0 is membership, a live `commit`, never a seat: the
+# first name is the archive's rank 0 title, kept so the ordinals read as the archive's, and no seat is held at it. A seat whose `post` is one of these names is stamped with it on its holder's `hold` (`World._grant_remit`), so the holder's own standing is
+# readable person-side (`Tenure.post`); `epistemic._term_marks` shows it to a witness where `livery` is true; `queries/person_q.py::rank` compares two
+# people on one ladder. No seat is minted for an unheld rank. Never transcribed: the archive's gates, Obs and Renown thresholds, the Initiation Gates and
+# Demotion columns. Nine ladders, 66 posts, from the archived `faction_politics_v30.md` (Part 1 §1.1-§1.4, Part 2 §2.1-§2.5; its Warden ladder is not
+# transcribed -- the Wardens are no `factions` member -- and Niflhel's is dissolved).
+# [ASSUMPTION; medium; Jordan to correct; revert: an empty `ladders: {}`, one re-pin -- basis: a sub-office ladder's faction is the roster member it serves
+# in the source (§1.1b, §1.4b); `rosters.yaml: factions` has no Riskbreaker, Inquisitor, Templar or Wardens member; the ladder keys are the plan's; the
+# Guild's last title drops "(if such exists -- ED-642)".]
+ladders:
+  crown:       {faction: Valorsmark, livery: true, posts: [Petitioner, Retainer, Crown Agent, Banneret, Crown Lieutenant, Seneschal, Inner Prince / Prince of the Realm, Crown-Adjacent / Regent-Designate]}
+  hafenmark:   {faction: Hafenmark, livery: true, posts: [Petitioner, Advocate, Burgher, Alderman, Parliamentarian, Parliamentary Chair, Chancellor, Prime Parliamentarian / Speaker-Regent]}
+  varfell:     {faction: Varfell, livery: true, posts: [Stranger, Huscarl, Thane, Lendmann, Senior Lendmann / Hersir, Jarl, Senior Jarl, High Thane / Jarl-Regent]}
+  church:      {faction: Church of Solmund, livery: true, posts: [Catechumen, Lay Confessor, Deacon, Canon, Bishop's Delegate, Prelate, Cardinal, Confessor-Presumptive]}
+  lowenritter: {faction: Löwenritter, livery: true, posts: [Squire, Knight, Knight-Sergeant, Knight-Commander, Preceptor, Marshal of the Order, Grand Master-Designate, Grand Master]}
+  riskbreaker: {faction: Valorsmark, livery: false, posts: [Candidate, Operative, Senior Operative, Squad-Leader, Field-Commander, Deputy Commander, Riskbreaker Commander]}
+  inquisitor:  {faction: Church of Solmund, livery: true, posts: [Inquisitor's Scribe, Junior Inquisitor, Inquisitor, Senior Inquisitor, Inquisitor-General, Grand Inquisitor]}
+  templar:     {faction: Church of Solmund, livery: true, posts: [Templar Postulant, Templar, Templar-Sergeant, Templar Commander, Master-Templar, Grand Master of the Temple]}
+  guild:       {faction: Guilds, livery: true, posts: [Apprentice, Journeyman, Free Master, Guild Master, Senior Guild Master, Comptroller-equivalent, Grand Guildmaster]}
+
 # v11 CR-25 (CR-11's design §1): WHAT A COMPUTED FOUNDING DECLARES -- moved here from `loop/predicates.py`'s three
 # constants (B04.23, `06_FA_office_capabilities` edit 5). The founder keeps the authority to fill and to strip the seat
 # he founds; the founded seat is filled by appointment and stripped by the rung above that holds the ground. Each value
