@@ -279,7 +279,7 @@ def test_downward_site_crossings_unchanged_by_the_upward_predicate():
 def test_field_provisioning_refused_on_empty_treasuries():
     """B12b.24 (`16_PESSIMIST_SE_B` R4, H-241's sweep arm 'True on empty treasuries'): the driver refuses `field_provisioning` True when no treasury the field
     reads (a seat rung, a held rung) holds one `subsistence_weight` ration. At `granary_seasons` 0 `build_realm(0)` stocks none, so construction refuses naming H-241;
-    at the shipped 4 it constructs; at the shipped `field_provisioning` False nothing is read, so even the empty realm constructs."""
+    at the shipped 4 it constructs; at the class default `field_provisioning` False (`DEFAULT_FIXTURES`) nothing is read, so even the empty realm constructs."""
     on = DEFAULT_FIXTURES.sweep("field_provisioning", True)
     with expect_refusal(), pytest.raises(Unspecified, match="H-241"):
         SeasonDriver(build_realm(0, fixtures=on.sweep("granary_seasons", 0)))
@@ -456,7 +456,7 @@ def test_shipped_arm_reads_below_fed_after_season_one():
     assert checked == 3
 
 
-# B12b.47 (IN-52's flip, DEF-7): THE SHIPPED REALM TURNS THE SUPPLY ARM ON (`build_realm` sweeps `field_provisioning` True when it is handed no fixtures;
+# B12b.47 (IN-52's flip, DEF-7): THE SHIPPED REALM TURNS THE SUPPLY ARM ON (`build_realm` reads `REALM_FIXTURES`, `field_provisioning` True, when it is handed no fixtures and no cap;
 # the class default and every hand-built world stay OFF). The field is the adapter's, called as `test_levy_feed.py` calls it, on the BARE realm.
 def _shipped_field(stores: dict, fixtures=None):
     """The bare `build_realm(0)` (no fixtures handed in), the march seat's treasury PLANTED at `stores`, one field's troops as the adapter hands them."""

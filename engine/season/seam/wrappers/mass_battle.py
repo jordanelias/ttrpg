@@ -8,7 +8,7 @@ the prize row names (`module_entry:`, registered in `manifest.MODULE_ENTRIES` fr
 `entry: verb_call`, `verb: march`) and lifts what comes back. The fight itself -- the Armies, the terrain
 row, the battle and its survivor-ratio grade -- is the module's, reached by string. `resolve` also asks
 `settlements.provision` (a `query` entry, through `composition.require`) how many of each side's troops
-its treasury can field, shipped OFF (`field_provisioning`, `H-241`). `loop/sides.py` is host too: it builds
+its treasury can field (`field_provisioning`, `H-241`: OFF in a hand-built world, ON in the shipped (uncapped) realm). `loop/sides.py` is host too: it builds
 the claimants the record's weights are read for.
 
 ⚠ **THE `claimants`/`subject`/`rung` SPLIT.**
@@ -296,7 +296,8 @@ def _defender_treasury(w: Any, rung: str) -> Optional[str]:
 def provision_input(w: Any, weight: int, treasury: Optional[str], eaten: tuple = ()) -> ProvisionInput:
     """THE PROJECTION `settlements.provision` reads (v9 IN-52), for one side: its Σ weight, its treasury's
     `Rung.stores` in their own order (`()` for no treasury rung), the field's ration (`world_q.field_ration`: `subsistence_weight` cut to
-    `field_ration_kinds`) sorted by kind, and the `field_provisioning` fixture (`H-241`; `False`, shipped, is the control arm). Read-only.
+    `field_ration_kinds`) sorted by kind, and the `field_provisioning` fixture (`H-241`; `False` is the control arm, OFF in a hand-built world; ON in the
+    shipped (uncapped) realm, `REALM_FIXTURES`). Read-only.
 
     `eaten`: `((kind, units), ...)` another side has already consumed from THIS treasury in the same field
     (the defender's treasury when it is the attacker's own rung), subtracted from the projected stores so one

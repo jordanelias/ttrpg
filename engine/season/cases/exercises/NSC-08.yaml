@@ -11,8 +11,11 @@ rows:
   exercises:
   - axis:military_failures
   from: "L3 clause 1's per-(person, axis) counter, `world_q.tally_reached`: the claims about the ruling authority of the axis's
-    three kinds (a field lost, a town yielded under arms, a holding handed away), each deposited by its own act in any season,
-    in the order's OWN ledger and nobody else's. At the count the question is mandatory (A-47); the ultimatum is the act drawn."
+    two kinds (a field lost, a town yielded under arms; a holding handed away is a consensual cession, `rung.ceded`, and no
+    failure), each deposited by its own act in any season, in the order's OWN ledger and nobody else's. At the count the question
+    is mandatory (A-47); the ultimatum is the act drawn. `at` counts claims, not distinct conditions (three claims of one kind
+    reach it), and the order can be reached about itself: `tally_reached` excludes no referent for being the holder, which is
+    intended."
 - need_sha: 072e498c3e69
   hardness: core
   need: "the private readiness counter must be irreversible — once a condition fires and increments it, no subsequent event can

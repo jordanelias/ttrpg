@@ -22,9 +22,11 @@ rows:
   exercises:
   - axis:rule_failures
   from: "L3 clause 1's per-(person, axis) counter, `world_q.tally_reached`: the claims of the axis's kinds about one referent in
-    her OWN ledger, deposited by unrelated acts in any order (a writ ignored, a town yielded, a holding handed away). The
-    institutional clock is CR-89's (B21d) and the loyalty value no kind about the leader carries, so two of the three named
-    sources are read through the leader's own failures, not through those subsystems."
+    her OWN ledger, deposited by unrelated acts in any order (a writ ignored, a town yielded under arms; a holding handed away is a
+    consensual cession, `rung.ceded`, and no failure). The institutional clock is CR-89's (B21d) and the loyalty value no kind about
+    the leader carries, so two of the three named sources are read through the leader's own failures, not through those
+    subsystems. `at` counts claims, not distinct conditions (three claims of one kind reach it), and she can be reached about
+    herself: `tally_reached` excludes no referent for being the holder, which is intended."
 - need_sha: 6f3d5abf8bb3
   hardness: core
   need: "each of the counter's triggering conditions must be able to fire exactly once and add a fixed amount, with no way for

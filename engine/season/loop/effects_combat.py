@@ -873,7 +873,7 @@ def _ration_debits(w: "World", res: "Resolution") -> list:
     """v9 IN-52 [ASSUMPTION LF-3, delegated-ruled]: WHAT THE FIELD EATS, `[(treasury rung, consumed), ...]`,
     attacker then defender -- the provider's `provision` key (`seam/wrappers/mass_battle.py::resolve`), the
     `settlements.provision` entry's `consumed` beside the treasury it was bounded by. A side with no
-    treasury rung, or nothing consumed, is left out. EMPTY WHILE `field_provisioning` IS OFF (shipped): the
+    treasury rung, or nothing consumed, is left out. EMPTY WHILE `field_provisioning` IS OFF (a hand-built world; ON in the shipped, uncapped realm): the
     entry consumes nothing on the control arm, so this reads no fixture of its own and the arm has one
     owner. An `Unopposed` march fought no field and its result carries no `provision`."""
     return [(rid, tuple(consumed)) for rid, consumed in (res.result.get("provision") or ())

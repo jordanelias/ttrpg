@@ -187,7 +187,8 @@ class SeasonDriver:
         # B12b.24 (`16_PESSIMIST_SE_B` R4; H-241's sweep arm 'True on empty treasuries'): a loader-family refusal at boot. `field_provisioning` ON
         # bounds each side's troops by the treasury the field reads (`seam/wrappers/mass_battle.py::provision_input`: the attacker's the seat rung
         # of `Act.via`'s office, the defender's the nearest held rung); with none of those holding one `subsistence_weight` ration every field
-        # floors at the crash floor, so the arm is refused rather than read as an army-size dial. OFF (shipped) reads nothing here.
+        # floors at the crash floor, so the arm is refused rather than read as an army-size dial. OFF (a hand-built world's; ON in the shipped, uncapped
+        # realm, `REALM_FIXTURES`) reads nothing here.
         if w.fixtures.get("field_provisioning"):
             ration = {k: r for k, r in world_q.field_ration(w).items() if r > 0}      # B12b.47: the ration the field reads, kinds cut
             rungs = {o.rung for o in w.offices.values() if o.rung in w.rungs}

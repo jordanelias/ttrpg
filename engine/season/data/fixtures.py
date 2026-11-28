@@ -953,15 +953,15 @@ DEFAULT_FIXTURES = Fixtures(
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the field's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
     # CONTROL, THE CLASS DEFAULT -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
-    # FLIPPED THE ARM IN THE SHIPPED REALM ONLY: `boot/realm.py::build_realm` sweeps it True when handed no fixtures. THE CLASS DEFAULT STAYS
+    # FLIPPED THE ARM IN THE SHIPPED REALM ONLY: `boot/realm.py::build_realm` reads `REALM_FIXTURES` when handed no fixtures and no cap. THE CLASS DEFAULT STAYS
     # False because ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and case worlds), 350 reds in 35
     # of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE (DEF-7; Jordan's 2026-10-16 wording
-    # differs): remove that sweep. Injection site: `build_realm`'s sweep, read by `seam/wrappers/mass_battle.py::provision_input`.
-    field_provisioning=False,  # `H-241`, swept False (control, the class default) / True (SHIPPED in `build_realm`) / True on empty treasuries
+    # differs): `REALM_FIXTURES = DEFAULT_FIXTURES`. Injection site: `REALM_FIXTURES`, read by `seam/wrappers/mass_battle.py::provision_input`.
+    field_provisioning=False,  # `H-241`, swept False (control, the class default) / True (SHIPPED: `REALM_FIXTURES`, the uncapped `build_realm`) / True on empty treasuries
     # U5d_SE §4 (`H-241`). WHICH OF THE LARDER'S KINDS A FIELD EATS: the ration the field reads (`world_q.field_ration`) is
     # `subsistence_weight` cut to the kinds listed here -- a kind bounds a field only if this lists it AND `subsistence_weight`
     # weights it. SHIPPED `("grain",)`: a grain-only treasury fields troops; `("grain", "salt")` is the larder's whole ration
-    # (a treasury short of salt fields nobody) and is the control. Read only under `field_provisioning`, which ships OFF.
+    # (a treasury short of salt fields nobody) and is the control. Read only under `field_provisioning`: OFF in a hand-built world, ON in the shipped (uncapped) realm.
     # [JUSTIFIED: engine/season/hole_register.yaml H-241 -- `site: Fixtures field_ration_kinds`, graded `assumption`; U5d_SE §4 ships the list at `["grain"]` and the source gives no other value]
     field_ration_kinds=("grain",),  # `H-241`, swept ("grain",) (SHIPPED) / ("grain", "salt") (the larder's whole ration, control)
     # IN-08 H3 (`ED-IN-0261`'s scar model). The scar is a COUNT per pursuit, one per observer per
@@ -2021,6 +2021,12 @@ SUBSISTENCE_X1 = {"grain": 2, "salt": 1}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
+
+#: B12b.47 (`H-241`, IN-52's flip): THE SHIPPED REALM'S FIXTURES, named once. `DEFAULT_FIXTURES` keeps `field_provisioning` False (every hand-built,
+#: test and case world reads the control); the uncapped `boot/realm.py::build_realm` reads this. Named here (after `CLOSED_ARMS`, which `sweep` reads)
+#: so that a reader of a shipped-realm snapshot (`state/world.py::decode`, whose default stays `DEFAULT_FIXTURES`) can hand the fixtures the snapshot
+#: was encoded under. [ASSUMPTION; medium; Jordan to correct; revert: `REALM_FIXTURES = DEFAULT_FIXTURES`]
+REALM_FIXTURES = DEFAULT_FIXTURES.sweep("field_provisioning", True)
 
 
 def check_season_weather(draw_table, spells) -> None:

@@ -151,23 +151,42 @@ def _formed_on_object(w, goal) -> int:
     return n
 
 
-def test_the_shipped_deck_seeds_at_six_seeds_and_a_committed_person_forms_a_candidate_on_its_goals_object():
-    """Switch on, seeds 0-5, two seasons (A-114): every card of the shipped deck loads; the drawn card's goals are minted, committed to and its
-    scales swept in; on the realm the first season deliberates over, at least one committed person forms on the goal's own question a candidate
-    whose subject is the goal's object (counted per seed, so a vacuous loop fails); and the realm plays two seasons. The candidate is read at the
-    opening, not after the run: a seat goal binds its holder at seeding, and the holder may be dead by the second season (seed 2's Comptroller
-    falls in a duel in the first), which is the world playing, not the card failing."""
-    assert tuple(c.id for c in tensions.cards()) == SHIPPED, "the six cards load from the shipped file"
-    for seed in range(6):
-        d = draw_tension(seed)
-        w = build_realm(seed, tensions=True)
-        assert dict(w.fixtures.get("territory_yield_scale")) == dict(d.yield_scale), (seed, d.card)
-        for g in d.goals:
-            assert g.id in w.propositions and any(t.kind == "commit" and t.live and t.object == g.id for t in w.tenures), (seed, g.id)
-        checked = sum(_formed_on_object(w, g) > 0 for g in d.goals)
-        assert checked >= 1, (seed, d.card, "no committed person formed a candidate on the goal's object")
-        run(2, seed, w=w)
-        assert w.tick == 2, (seed, w.tick)
+#: The card whose realm plays the two seasons (A-114): the one whose `yield_scale` the season's MATTER step reads, so the run reads the scaled yield.
+PLAYED = "tension_feldmark_famine"
+
+
+def test_every_shipped_card_seeds_and_a_committed_person_forms_a_candidate_on_its_goals_object():
+    """Switch on, EVERY card of the shipped deck, each dealt alone (`tensions.cards_replaced((card,))`) at seed = its ordinal, 0-5: the card drawn is
+    the one dealt (coverage: all six are drawn, where six equally-likely seeded draws need not reach every card); its scales are swept in at the
+    level the card ships (`w.fixtures territory_yield_scale` equal to the card's own `scales`; Feldmark's non-empty, on T5); its goals, where it has
+    any, are minted and committed to, and at least one committed person forms on the goal's own question a candidate whose subject is the goal's
+    object (counted, so a vacuous loop fails). The candidate is read at the opening, not after a run: a seat goal binds its holder at seeding, and
+    the holder may be dead by the second season, which is the world playing, not the card failing.
+    COST: the per-card checks are the opening (build + candidate formation); ONE card's realm (`PLAYED`) plays two seasons (A-114), so the test is
+    six builds and one two-season run, where it was six builds and six runs."""
+    deck = tensions.cards()
+    assert tuple(c.id for c in deck) == SHIPPED, "the six cards load from the shipped file"
+    drawn, played = [], 0
+    for seed, card in enumerate(deck):
+        with tensions.cards_replaced((card,)):
+            d = draw_tension(seed)
+            w = build_realm(seed, tensions=True)
+        drawn.append(d.card)
+        assert d.card == card.id, (seed, card.id, d.card)
+        assert dict(w.fixtures.get("territory_yield_scale")) == dict(card.scales) == dict(d.yield_scale), (seed, card.id)
+        if card.id == "tension_feldmark_famine":
+            assert set(dict(card.scales)) == {territory_rung_id("T5")}, "Feldmark's scale is the card's own, on T5"
+        if d.goals:
+            for g in d.goals:
+                assert g.id in w.propositions and any(t.kind == "commit" and t.live and t.object == g.id for t in w.tenures), (seed, g.id)
+            checked = sum(_formed_on_object(w, g) > 0 for g in d.goals)
+            assert checked >= 1, (seed, d.card, "no committed person formed a candidate on the goal's object")
+        if card.id == PLAYED:
+            run(2, seed, w=w)
+            assert w.tick == 2, (seed, w.tick)
+            played += 1
+    assert sorted(drawn) == sorted(SHIPPED), "every shipped card was drawn"
+    assert played == 1, "the played card is in the deck"
 
 
 def test_a_card_naming_a_seat_offices_lacks_is_refused_and_a_vacant_seat_seeds_its_goal_with_no_stance_row(monkeypatch, tmp_path):

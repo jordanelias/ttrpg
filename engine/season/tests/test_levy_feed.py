@@ -1,4 +1,4 @@
-"""v9 IN-52 -- THE LEVY-TO-FIELD FEED, built OFF in a hand-built world, ON in the shipped realm (B12b.47) (`field_provisioning`, `H-241`).
+"""v9 IN-52 -- THE LEVY-TO-FIELD FEED, built OFF in a hand-built world, ON in the shipped (uncapped) realm (B12b.47) (`field_provisioning`, `H-241`).
 
 A levied treasury PROVISIONS a field; it does not create troops (the design's §5, LF-1..LF-3, delegated-ruled
 [ASSUMPTION; medium; Jordan to correct]). `settlements.provision` (`modules/settlements/provision.py`,
@@ -26,7 +26,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from engine.season.data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
+from engine.season.data.fixtures import DEFAULT_FIXTURES, REALM_FIXTURES, SUBSISTENCE_X1
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.tests._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from engine.season.loop.driver import SeasonDriver, mint_token
@@ -234,11 +234,14 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
     assert dict(w.rungs[TREASURY_B].stores or {}) == before_b
 
 
-def test_the_shipped_arm_is_off():
-    """THE SHIPPED-DEFAULT ASSERTION (`H-241`): the flip moves no pinned hash while the realm fights no
-    field, so this is the observer that the arm shipped is the control."""
+def test_the_arm_is_off_in_a_hand_built_world_and_on_in_the_shipped_realm():
+    """THE SHIPPED-DEFAULT ASSERTION (`H-241`, B12b.47): the arm is OFF in a hand-built world (`DEFAULT_FIXTURES`, the class default, the
+    control every hand-built, test and case world reads) and ON in the shipped (uncapped) realm (`REALM_FIXTURES`, what `build_realm` reads
+    when handed no fixtures and no cap). The flip moves no pinned hash while the realm fights no field, so this is its observer."""
     assert DEFAULT_FIXTURES.get("field_provisioning") is False, (
-        "the shipped arm moved: the flip is its own declared commit; restate this test there")
+        "the class default moved: the hand-built worlds' arm is its own declared commit; restate this test there")
+    assert REALM_FIXTURES.get("field_provisioning") is True, (
+        "the shipped realm's arm moved: B12b.47's flip is reverted by its own declared commit; restate this test there")
 
 
 def test_grain_only_treasury_fields_troops(monkeypatch):

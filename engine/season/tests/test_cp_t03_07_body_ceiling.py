@@ -180,7 +180,10 @@ _SEASON = pathlib.Path(EC.__file__).resolve().parents[1]
 
 #: Every bare write of `body` in the season package outside `tests/` and `harness/`, by its stripped text, with how
 #: it stands to the ceiling. `lowers`: it never raises a body (a fall, a wound, a death), so the ceiling cannot bind
-#: it. `raises`: it raises a body, and its function must heal to `body_ceiling` (checked below). Anything else fails.
+#: it. `raises`: it raises a body, and its function must heal to `body_ceiling` (checked below). `relays`: the write sets
+#: the `after` its caller computed, and a caller raises through it, so EVERY module-level caller of its function must read
+#: `body_ceiling` (checked below, one level up; the caller's `condition_scale` is not checked, since the relay's caller may
+#: read it for another term). Anything else fails.
 _BODY_WRITES = {
     # `_eff_kill`'s `_wound`: the body `_harm` left, already held under the mark's ceiling (`_marks`).
     "w.persons[pid].body = body": "lowers",
@@ -192,10 +195,15 @@ _BODY_WRITES = {
     # `_eff_march` (CR-24, `field_winner_casualties: engine`): the winners' own casualties, `body` only; `win_share` is clamped
     # to `0..scale` at its one write (`min(scale, max(0, mine))`), so the write can only hold or lower a body.
     'p.body = 0 if model == "total" else max(1, int(p.body) * win_share[pid] // scale)': "lowers",
-    # `_eff_tend`: the one raiser at HEAD; `whole` is `max(p.body, p.body_ceiling)`.
+    # `_eff_tend`: a raiser; `whole` is `max(p.body, p.body_ceiling)`.
     "p.body = whole": "raises",
-    # `loop/matter.py`'s subsistence fall (`fall.body_after`, a loss), in the `setattr` form a `.body =` grep misses.
-    'lambda person=person, after=fall.body_after: setattr(person, "body", after),': "lowers",
+    # `loop/matter.py::_write_body`, the hunger pass's one body write (B12b.14), in the `setattr` form a `.body =` grep misses: it
+    # sets the `after` `matter` handed it -- the subsistence fall (`fall.body_after`, a loss) and the fed body's mend (`body_mend`,
+    # `min(max(body, body_ceiling), ...)`, a raise to the ceiling), so `matter` must read `body_ceiling`.
+    'lambda: setattr(person, "body", after),': "relays",
+    # `loop/matter.py`'s road fall (B12b.11, a Failure on the road): `max(0, was - road_step)`, a LOWERING write -- it can only hold
+    # or lower a body.
+    'lambda traveller=traveller, after=max(0, was - road_step): setattr(traveller, "body", after),': "lowers",
 }
 
 _ASSIGN = re.compile(r'^\s*(?:if [^:]+:\s*)?(?:[^;#]*;\s*)*([A-Za-z_][\w.\[\]]*\.body\s*(?:=|-=|\+=)[^=].*?)\s*(?:#.*)?$')
@@ -244,6 +252,18 @@ def _check_source(text: str, rel: str, found: list, offenders: list) -> int:
                 offenders.append(f"{rel}:{n}: raiser `{fn.name}` does not read {CEILING}")
             if any(isinstance(x, ast.Constant) and x.value == "condition_scale" for x in nodes):
                 offenders.append(f"{rel}:{n}: raiser `{fn.name}` reads condition_scale")
+        elif role == "relays":
+            raisers += 1
+            tree = tree or ast.parse(text)
+            relay = next(node for node in tree.body
+                         if isinstance(node, ast.FunctionDef) and node.lineno <= n <= node.end_lineno)
+            callers = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node is not relay
+                       and any(isinstance(x, ast.Call) and isinstance(x.func, ast.Name) and x.func.id == relay.name for x in ast.walk(node))]
+            if not callers:
+                offenders.append(f"{rel}:{n}: relay `{relay.name}` has no caller in its module: register what it is")
+            for fn in callers:
+                if not any(isinstance(x, ast.Attribute) and x.attr == CEILING for x in ast.walk(fn)):
+                    offenders.append(f"{rel}:{n}: `{fn.name}` raises through relay `{relay.name}` and does not read {CEILING}")
     return raisers
 
 

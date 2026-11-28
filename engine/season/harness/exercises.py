@@ -37,7 +37,7 @@ WHAT A TOKEN MAY BE, and what each resolves to:
                   says the carrier exists, NOT that any tally filled in a run. A token naming no
                   member is unbound, as an unknown probe is.
 
-⚠ THE KIND TOKEN IS THE WEAKEST OF THE FOUR AND ITS OLD DESCRIPTION OVERSTATED IT. This line read
+⚠ THE KIND TOKEN IS THE WEAKEST OF THE FIVE AND ITS OLD DESCRIPTION OVERSTATED IT. This line read
 *"satisfied when the kind appears in a run"*, which is what a reader of `CASELOG_*.md` would take
 a PASS on such a row to mean. It never was: `resolve` computes membership in the union of
 `emits:`/`emits_on_refusal:` over the verb table and the write matrix, so `term.matured` passes
