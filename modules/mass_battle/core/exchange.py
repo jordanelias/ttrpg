@@ -1,7 +1,7 @@
 """modules.mass_battle.core.exchange — combat-pool assembly primitives.
-(derive_command, command_base_pool, subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config +
-math + duck-typed unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
-orchestration via `from modules.mass_battle.core.exchange import *`.
+(derive_command, command_base_pool, subunit_combat_pool). Pure: depends on config + math + the column
+ledger's exhaustion reading (`percell.column_exhausted`) + duck-typed unit/atom attributes only; imports
+nothing from orchestration (no cycle). Re-imported by orchestration via `from modules.mass_battle.core.exchange import *`.
 [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base -- SUPERSEDED
 for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QUALITY_MODEL;
 `derive_command`/`command_base_pool` below remain live for whatever still reads Command
@@ -10,8 +10,9 @@ import math
 from modules.mass_battle.config import *
 from modules.mass_battle.troop_types.registry import support_weight
 from modules.mass_battle.geometry import cells_to_orig_coords
+from modules.mass_battle.percell import column_exhausted
 
-__all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_base_pool',
+__all__ = ['derive_command', 'clamp_command', 'command_base_pool',
            'subunit_combat_pool', 'pair_pool_contribution', '_pair_engaged_troops',
            'D_YIELD', 'YIELD_POOL_MULT']
 
@@ -25,16 +26,6 @@ __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_
 # enough order to give ground at all (the 0.7x tier), not the severely-degraded 0.4x tier.
 # reuses MB_SHOCK_HOLD_BRACE (0.35, the brace/shock discount idiom) verbatim, exactly as the
 # proposal doc's §5 suggested -- "traded ground at a cost", a reduced-but-nonzero combat pool.
-
-
-def _stamina_pool_penalty(stamina):
-    """Return pool penalty (negative int) based on current stamina level."""
-    if stamina <= 0:
-        return STAMINA_EXHAUSTED_POOL_PENALTY
-    for threshold, penalty in STAMINA_POOL_THRESHOLDS:
-        if stamina >= threshold:
-            return penalty
-    return STAMINA_EXHAUSTED_POOL_PENALTY
 
 
 def clamp_command(value):
@@ -89,7 +80,7 @@ def subunit_combat_pool(unit, atom):
             unit.disordered = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
-    stam_pen = _stamina_pool_penalty(atom.eff_stamina)
+    stam_pen = STAMINA_EXHAUSTED_POOL_PENALTY if column_exhausted(unit, atom) else 0   # the column ledger (B19.07)
     if POOL_QUALITY_MODEL:
         # [Jordan directive 2026-07-08: "abandon combat pools being related to the commander,
         # and instead [derive them] solely from the subunit troop type, quality and numbers" --

@@ -1,7 +1,7 @@
 """modules.mass_battle.hierarchy.units — Unit and Army dataclasses (the army/unit hierarchy).
 Stage-1 behaviour-frozen extract from orchestration.py. The DATA model + the per-object geometry/
 movement/state methods. Depends only on LOWER layers — config, geometry (_oriented/footprint_for/
-cell_speed/octagon), core.exchange (derive_command/_stamina_pool_penalty/subunit_combat_pool),
+cell_speed/octagon), core.exchange (derive_command/subunit_combat_pool),
 troop_types.registry (stats_for), percell (build_column_grid) — and never imports orchestration
 (no cycle). Re-imported by orchestration via star-import so every Unit(...)/Army(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
@@ -402,14 +402,8 @@ class Unit:
     morale: Optional[int] = None
     morale_start: Optional[int] = None
     dr: Optional[int] = None
-    # Per-subunit stamina (Jordan directive): a subunit drains and rests its OWN stamina; None INHERITS
-    # the parent Army (single-subunit / homogeneous units stay byte-exact via eff_stamina -> unit.stamina).
-    # An engaged subunit drains; a reserve subunit stays fresh -> line relief / depth-as-reserve becomes
-    # mechanically real (triplex-acies line relief; Clausewitz reserves).
-    stamina: Optional[float] = None
-    stamina_max: Optional[float] = None
-    # [A6, ED-MB-0067 Part A -- "Missile ammunition and resupply"] Per-subunit volley count, mirroring
-    # `stamina` immediately above EXACTLY: None INHERITS the parent Army's own pool (single-subunit units
+    # [A6, ED-MB-0067 Part A -- "Missile ammunition and resupply"] Per-subunit volley count:
+    # None INHERITS the parent Army's own pool (single-subunit units
     # stay byte-exact via eff_volleys -> unit.volleys), an explicit value gives a subunit its OWN
     # independent pool. Ammo belongs to the shooter, not to a column other units pass through (a column
     # position is shared across whatever units currently occupy it, so ammo tracked there could
@@ -701,48 +695,21 @@ class Unit:
     def eff_dr(self):
         return self.dr if self.dr is not None else (self._u().dr if self._u() else 1)
     @property
-    def eff_stamina(self):
-        if self.stamina is not None: return self.stamina
-        u = self._u()
-        return u.stamina if u is not None else STAMINA_MAX
-    @property
-    def eff_stamina_max(self):
-        if self.stamina_max is not None: return self.stamina_max
-        u = self._u()
-        return u.stamina_max if u is not None else STAMINA_MAX
-    def drain_stamina(self, amount):
-        # Reduce effective stamina (floor 0). Writes to own stamina if set, else routes to the inherited
-        # Army -> a single-subunit unit reproduces the old unit.stamina drain exactly (byte-exact).
-        new = max(0, self.eff_stamina - amount)
-        if self.stamina is not None: self.stamina = new
-        else:
-            u = self._u()
-            if u is not None: u.stamina = new
-    def recover_stamina(self, amount):
-        # Increase effective stamina, capped at eff_stamina_max; same own-else-inherited-Army write routing.
-        new = min(self.eff_stamina_max, self.eff_stamina + amount)
-        if self.stamina is not None: self.stamina = new
-        else:
-            u = self._u()
-            if u is not None: u.stamina = new
-    @property
     def eff_volleys(self):
-        """[A6, ED-MB-0067 Part A] Same own-else-inherited-Army pattern as eff_stamina immediately
-        above. No-parent fallback is MB_VOLLEYS_START (an unseeded lone Unit starts fresh),
-        mirroring eff_stamina's own fallback to STAMINA_MAX."""
+        """[A6, ED-MB-0067 Part A] Own-else-inherited-Army pool. No-parent fallback is
+        MB_VOLLEYS_START (an unseeded lone Unit starts fresh)."""
         if self.volleys is not None: return self.volleys
         u = self._u()
         return u.volleys if u is not None else MB_VOLLEYS_START
     def drain_volleys(self, amount):
-        # Reduce effective volleys (floor 0). Same own-else-inherited-Army write routing as drain_stamina.
+        # Reduce effective volleys (floor 0). Own-else-inherited-Army write routing, as eff_volleys.
         new = max(0.0, self.eff_volleys - amount)
         if self.volleys is not None: self.volleys = new
         else:
             u = self._u()
             if u is not None: u.volleys = new
     def resupply_volleys(self, amount):
-        # Increase effective volleys, capped at MB_VOLLEYS_START (there is no per-subunit "max" the
-        # way eff_stamina_max is separately configurable -- the cap IS the global starting count).
+        # Increase effective volleys, capped at MB_VOLLEYS_START (the cap IS the global starting count).
         new = min(MB_VOLLEYS_START, self.eff_volleys + amount)
         if self.volleys is not None: self.volleys = new
         else:
@@ -2527,11 +2494,7 @@ class Army:
     # [ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard
     #  — basis: L429 "Cavalry → Standard" in forest implies Fast default]
     speed: str = "Standard"  # "Slow" | "Standard" | "Fast"
-    # G-1: stamina (0–STAMINA_MAX). Drains per contact tick, recovers at phase boundary.
-    stamina: int = STAMINA_MAX
-    stamina_max: int = STAMINA_MAX
-    # [A6, ED-MB-0067 Part A] Army-level volley pool, mirroring `stamina` immediately above exactly
-    # -- the inherited-else-own target every unseeded (volleys=None) Unit's eff_volleys reads.
+    # [A6, ED-MB-0067 Part A] Army-level volley pool -- the inherited-else-own target every unseeded (volleys=None) Unit's eff_volleys reads.
     volleys: float = MB_VOLLEYS_START
     # Jordan directive 2026-06-02: if both provided, Command is DERIVED (Cha primary + Cog secondary).
     charisma: int = None
@@ -2588,9 +2551,7 @@ class Army:
         self.hp = float(self.hp_max)
         self.ncells = sum(len(a.cells()) for a in self.units)  # step 3: cell count for all-fight per-cell density
         self.effective_size = float(self.size)  # v16: continuous, not floored
-        self.stamina = STAMINA_MAX
-        self.stamina_max = STAMINA_MAX
-        # [A6, ED-MB-0067 Part A] Mirrors the stamina reset immediately above exactly.
+        # [A6, ED-MB-0067 Part A] The army-level volley pool resets to the starting count.
         self.volleys = MB_VOLLEYS_START
         for a in self.units:
             if a.stance == "balanced": a.stance = self.stance
@@ -2619,7 +2580,13 @@ class Army:
     def agg_discipline(self): return self._agg('eff_discipline')
     def agg_morale(self):     return self._agg('eff_morale')
     def agg_dr(self):         return self._agg('eff_dr')
-    def agg_stamina(self):    return self._agg('eff_stamina')
+    def agg_stamina(self):
+        """Troop-weighted mean stamina of the army's live column blocks (`_ColBlock.stamina`, the one ledger),
+        on the 0..STAMINA_MAX scale; STAMINA_MAX when no block is alive. The share `_fatigue_sigma` forms."""
+        blocks = [b for b in (getattr(self, 'col_grid', None) or ()) if b.alive()]
+        tot = sum(b.density for b in blocks)
+        if tot <= 0: return STAMINA_MAX
+        return sum(b.stamina * b.density for b in blocks) / tot
 
     def _broken_share(self):
         """[ED-MB-0041] Fraction of this unit's STARTING strength sitting in routed units.

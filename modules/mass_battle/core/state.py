@@ -7,6 +7,7 @@ via star-import.
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
 from modules.mass_battle.core.exchange import D_YIELD  # [ED-MB-0024] DG-2 yield discipline gate (single owner: core.exchange)
+from modules.mass_battle.percell import column_exhausted  # the one exhaustion reading (the column ledger, B19.07)
 
 __all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase']
 
@@ -84,8 +85,8 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             if frac < 0.50: loss += 1.0    # [canonical: mass_battle_v30.md §A.4 — Size<50% morale trigger] Size < 50% max -> -1
             if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
             if u.disordered: loss += 1.0       # unit formation-disordered pressure (kept unit-scoped for byte-exactness)
-            if atom.eff_stamina <= 0 and atom.eff_discipline > 0 and u.command > 0:
-                loss += 1.0 / (atom.eff_discipline * u.command)   # per-subunit exhaustion pressure
+            if column_exhausted(u, atom) and atom.eff_discipline > 0 and u.command > 0:
+                loss += 1.0 / (atom.eff_discipline * u.command)   # per-subunit exhaustion pressure, read off the column ledger
             # [ED-MB-0024, DG-2 §2.2 EMERGENT auto-entry] When the casualty-fraction trigger pushes a
             # disciplined subunit (eff_discipline >= D_YIELD, parent command > 0) toward the rout cliff, it
             # ENTERS `yielding` -- it starts giving ground in good order rather than only eroding. Sets the

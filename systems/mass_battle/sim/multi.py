@@ -16,6 +16,7 @@ import math
 
 import modules.mass_battle.hierarchy.units as _hu
 import modules.mass_battle.orchestration as _orch
+import modules.mass_battle.percell as _percell
 
 
 def between_turn_recovery(unit):
@@ -23,11 +24,11 @@ def between_turn_recovery(unit):
     [canonical: params/mass_combat.md §PP-712 — discipline persists]"""
     if unit.routed or unit.disordered:
         return
+    for b in (unit.col_grid or ()):   # the one stamina ledger (`_ColBlock.stamina`); None on the PER_CELL-off arm
+        b.stamina = min(float(_orch.STAMINA_MAX), b.stamina + _orch.BETWEEN_TURN_STAMINA_RECOVERY)
     for atom in unit.units:
-        atom.recover_stamina(_orch.BETWEEN_TURN_STAMINA_RECOVERY)
         # [A6, ED-MB-0067 Part A] Resupply at the between-turn lull. Per-subunit (Unit.resupply_volleys,
-        # capped at MB_VOLLEYS_START), same loop as stamina immediately above and the SAME reasoning: not singled
-        # out by troop type (a melee atom's volleys count is simply never read -- see fire()'s own
+        # capped at MB_VOLLEYS_START): not singled out by troop type (a melee atom's volleys count is simply never read -- see fire()'s own
         # unit_type=='ranged' gate).
         if _orch.MB_AMMO_ENABLED:
             atom.resupply_volleys(_orch.MB_VOLLEYS_RESUPPLY)
@@ -545,7 +546,7 @@ def base_combat_pool(army):
     # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
     #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
     #  ED-899/ED-1013); legacy OFF-path min(Size,Command)+Command at COMMAND_SIGMA_ENABLED=0]
-    stam_pen = _hu._stamina_pool_penalty(army.agg_stamina())
+    stam_pen = _hu.STAMINA_EXHAUSTED_POOL_PENALTY if _percell.column_exhausted(army) else 0   # the column ledger (B19.07)
     if _hu.POOL_QUALITY_MODEL:
         # [Jordan directive 2026-07-08, mirrors core.exchange.subunit_combat_pool's default
         # branch for the UNIT-level pool this pursuit/rout path uses -- see config.py's

@@ -2,7 +2,7 @@
 and resupply.
 
 `Unit.volleys`/`eff_volleys`/`drain_volleys`/`resupply_volleys` (hierarchy/units.py) -- a
-per-SUBUNIT ledger mirroring `stamina`'s own existing own-else-inherited-Army pattern exactly.
+per-SUBUNIT ledger, own-else-inherited-Army (stamina, which once shared the pattern, is the column ledger alone, B19.07).
 `orchestration.volley_phase`'s `fire()` gates on it before target selection and drains it on every
 real shot; `between_turn_recovery` resupplies it, per-subunit, at the between-turn lull.
 
@@ -153,7 +153,7 @@ def test_ammo_is_independent_of_column_identity():
 
 
 def test_eff_volleys_inherits_from_the_parent_unit_when_unseeded():
-    """Same own-else-inherited-Army pattern as eff_stamina: an unseeded subunit (volleys=None, the
+    """Own-else-inherited-Army pattern: an unseeded subunit (volleys=None, the
     dataclass default) reads the parent Army's own pool, not a fixed constant."""
     su = Unit(shape='Line', troop_type='archers', tier=2, starting_position=(SIDE_A_START_ROW, 25),
                  advance_dir=-1, stance='hold', unit_type='ranged')

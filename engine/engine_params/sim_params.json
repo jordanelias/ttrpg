@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 543,
-    "uncited": 411,
+    "total": 542,
+    "uncited": 410,
     "of_which_assumption_grade": 9
   },
-  "count": 543,
+  "count": 542,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 47,
-    "mass_battle": 163,
+    "mass_battle": 162,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
@@ -857,6 +857,17 @@
       "citation_grade": "source"
     },
     {
+      "key": "mass_battle.COMMAND_DEFAULT",
+      "name": "COMMAND_DEFAULT",
+      "value": 4,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "modules/mass_battle/config.py",
+      "note": "[canonical: sim_mb_06_v9_historical_spec.md -- T3 baseline C4 default]",
+      "citation": "sim_mb_06_v9_historical_spec.md -- T3 baseline C4 default",
+      "citation_grade": "source"
+    },
+    {
       "key": "mass_battle.DISCIPLINE_LOSS_THRESHOLD",
       "name": "DISCIPLINE_LOSS_THRESHOLD",
       "value": 1.0,
@@ -1262,6 +1273,31 @@
       "citation_grade": "source"
     },
     {
+      "key": "mass_battle.ORDER_OBEY",
+      "name": "ORDER_OBEY",
+      "value": {
+        "arm": "off",
+        "step": {
+          "keep": "none",
+          "change": 0,
+          "restrain": 1,
+          "signal": 0
+        },
+        "across": 1,
+        "unsteady": 1,
+        "in_contact": 0,
+        "reach": 13,
+        "distance": 1,
+        "signal_reach": 51
+      },
+      "kind": "table",
+      "module": "mass_battle",
+      "file": "modules/mass_battle/config.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "mass_battle.PUNCTURE_CAP",
       "name": "PUNCTURE_CAP",
       "value": 3,
@@ -1372,24 +1408,13 @@
       "citation_grade": "source"
     },
     {
-      "key": "mass_battle.STAMINA_DRAIN_PER_CONTACT_CELL",
-      "name": "STAMINA_DRAIN_PER_CONTACT_CELL",
-      "value": 1,
-      "kind": "scalar",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/config.py",
-      "note": "drain per cell in contact per tick",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "mass_battle.STAMINA_EXHAUSTED_POOL_PENALTY",
       "name": "STAMINA_EXHAUSTED_POOL_PENALTY",
       "value": -1,
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "stamina == 0: -1 die",
+      "note": "an exhausted unit (percell.column_exhausted: a column block it holds at 0) fights at -1 die",
       "citation": null,
       "citation_grade": null
     },
@@ -1403,33 +1428,6 @@
       "note": "",
       "citation": null,
       "citation_grade": null
-    },
-    {
-      "key": "mass_battle.STAMINA_POOL_THRESHOLDS",
-      "name": "STAMINA_POOL_THRESHOLDS",
-      "value": [
-        [
-          1,
-          0
-        ]
-      ],
-      "kind": "vector",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/config.py",
-      "note": "no penalty while stamina > 0",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "mass_battle.STAMINA_RECOVERY_PER_RESERVE_RANK",
-      "name": "STAMINA_RECOVERY_PER_RESERVE_RANK",
-      "value": 8,
-      "kind": "scalar",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/config.py",
-      "note": "[CALIBRATED-DEBT: per-subunit fatigue-chain recovery rate (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]",
-      "citation": "ED-1017",
-      "citation_grade": "source"
     },
     {
       "key": "mass_battle.STANCE_COMMITMENT",

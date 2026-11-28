@@ -117,7 +117,8 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     starting_position (default: staggered down the battlefield from this faction's start row — mirrors
     make_mixed_unit's own deployment-layout convenience default; CALIBRATED, not historically cited,
     see sim_verification_ledger.json), stance, instructions, troops, concentration, and per-subunit
-    power/discipline/morale/morale_start/dr/stamina/stamina_max overrides.
+    power/discipline/morale/morale_start/dr overrides. A per-unit `stamina` / `stamina_max` key is refused
+    (ValueError naming `entry_stamina`): the column ledger is the one stamina store.
 
     A canonical troop type (TROOP_TYPE_STATS) draws its §B.2 Power/Discipline/Morale presets via
     Unit.of_type unless the spec overrides them; a non-canonical type (e.g. bare 'infantry')
@@ -273,7 +274,11 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   _stance_explicit='stance' in sp,   # [MB-04] evaluated before the pop on the next line
                   stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
-        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
+        for k in ('stamina', 'stamina_max'):
+            if k in sp:
+                raise ValueError(f"build_army spec key {k!r} is refused: stamina is the column ledger "
+                                 f"(`_ColBlock.stamina`), one store; a field is entered tired by `entry_stamina`")
+        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr',
                   'volleys',  # [A6, ED-MB-0067 Part A -- F4] was missing from this tuple entirely,
                   # so an explicit per-spec override silently vanished (sp.pop never ran, kw never
                   # got the key) -- see this loop's own note below for the seed-when-absent half.

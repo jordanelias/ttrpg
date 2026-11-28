@@ -30,7 +30,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
     from modules.mass_battle.orchestration import (
         CASCADING_ENABLED, COL_WIDTH, FIELD_MOVEMENT, LANCHESTER_ENABLED, MB_CELL_DAMAGE, MB_CLOSE_RANKS,
         MB_ENVELOP_SHOCK, MB_FRONTAGE_BLEND, MB_FRONTAGE_REF, MB_NODE_COHESION, PER_CELL,
-        STAMINA_DRAIN_PER_CONTACT_CELL, UNIT_ROUT_FLOOR, TICKS_PER_PHASE, VOLLEY_LETHALITY_SCALE, _draw_friction,
+        UNIT_ROUT_FLOOR, TICKS_PER_PHASE, VOLLEY_LETHALITY_SCALE, _draw_friction,
         _engaged_cols, _is_moving_atom, _oriented, _unit_snapshot, apply_to_subunit, assign_targets,
         attribute_hp_loss, check_orders, discipline_check_cascade, distribute_casualties,
         distribute_casualties_cellwise, find_contacts, phase_boundary, resolve_cross_side_contention,
@@ -218,27 +218,6 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         # [canonical: Jordan design 2026-05-12 — same-cell contention rules]
         resolve_cross_side_contention(unit_a, unit_b)
         pairs = find_contacts(unit_a, unit_b)
-        # v20: stamina drain proportional to cells in contact (bottom-up).
-        # More front-line cells fighting = more exhaustion. Emergent from formation.
-        if pairs:
-            # Per-subunit stamina drain (Jordan directive): each ENGAGED subunit drains by ITS OWN cells in
-            # contact; a subunit not in this tick's contact set (a reserve) does not drain -> rotation. For a
-            # single-subunit unit the one subunit's contact-cells == the unit's, so unit.stamina drains
-            # identically to the old unit-level drain (byte-exact).
-            for u in [unit_a, unit_b]:
-                if u.routed:
-                    continue
-                for atom in u.units:
-                    if atom.routed or atom.disordered:
-                        continue
-                    cic = 0
-                    for p in pairs:
-                        if p.get('atom_a') is atom:
-                            cic += len(p.get('a_cells', []))
-                        elif p.get('atom_b') is atom:
-                            cic += len(p.get('b_cells', []))
-                    if cic > 0:
-                        atom.drain_stamina(cic * STAMINA_DRAIN_PER_CONTACT_CELL)
         result = (resolve_engagements_cascading(unit_a, unit_b, pairs, t=t)
                   if CASCADING_ENABLED
                   else resolve_engagements(unit_a, unit_b, pairs, t=t))
@@ -415,7 +394,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                     atom.routed = True
             _note_breaks('A' if u is unit_a else 'B', u)       # B17.03: named BEFORE `derive_rout` sweeps the rest
             u.derive_rout()   # single-subunit: fires iff old `u.morale<=0` did (byte-exact)
-        # v15: phase boundary — stamina_check, morale_check_phase, rout_resolution
+        # v15: phase boundary — morale_check_phase, rout_resolution
         # are now populated (G-1 + G-2). rally/reform/threadwork remain empty.
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1

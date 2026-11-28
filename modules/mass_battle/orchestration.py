@@ -109,23 +109,6 @@ from modules.mass_battle.resolution import *  # [Stage-1] sigma head (roll/degre
 # No morale floor — general's contribution is in the denominator.
 # [canonical: designs/provincial/mass_battle_v30.md §A.4 — "Generalship dominates"]
 
-# ─── STAMINA CONSTANTS (G-1) ────────────────────────────────────────────────
-# [ASSUMPTION: stamina constants are tuning parameters — basis: no canonical
-#  source specifies stamina values; audit G-1 identifies the mechanism gap
-#  without prescribing numbers. Validated against battery.]
-# Stamina drain proportional to cells in contact — emergent from formation.
-# Historical: front-rank rotation every 2-3 phases (12-18 ticks).
-# [ASSUMPTION: drain per contact cell is a tuning parameter]
-# Recovery at phase boundary: per reserve rank (rows behind front row).
-# Net drain/phase (6 contact ticks × 16 = 96):
-#   RF (6 reserve × 8 = 48): net −48/phase. Exhausts mid-phase 3.
-#   Line (4 reserve × 8 = 32): net −64/phase. Exhausts early phase 2.
-#   HS (3 reserve × 8 = 24): net −72/phase. Exhausts late phase 1.
-#   GL (2 reserve × 8 = 16): net −80/phase. Exhausts mid phase 1.
-# Pool penalty: only at exhaustion. The differentiation comes from WHEN each
-# formation exhausts, not how much worse they get. -1 die when exhausted =
-# small but persistent disadvantage that compounds across many ticks.
-# Deeper formations recover more → exhaust later → fight at full pool longer.
 # G-2 rout-at-threshold constants (phase-boundary morale check for exhausted units)
 # [canonical: mass_battle_v30.md §A.4 — morale floor = 1 while general present;
 #  G-2 overrides this for exhausted+damaged units at phase boundary]
@@ -142,30 +125,9 @@ from modules.mass_battle.resolution import *  # [Stage-1] sigma head (roll/degre
 
 # ─── PHASE-BOUNDARY HOOKS ───────────────────────────────────────────────────
 # Called once per phase boundary. Order is canonical:
-# stamina → morale → rout → rally → reform.
-# v15 populates stamina_check, morale_check_phase, rout_resolution.
+# discipline → morale → rout → rally → reform. (Stamina is the column ledger, `percell.update_stamina`, each tick.)
+# v15 populates morale_check_phase, rout_resolution.
 # rally_check and reform_check remain empty (future cycles).
-
-
-def _subunit_depth(atom):
-    # Rank count (rows) of ONE subunit's pattern = its internal reserve depth for stamina rotation.
-    # [canonical: audit_sim_mb_06_v14.md §G-1 — depth permits rotation]
-    pattern = CELL_PATTERN_FN[atom.shape](atom.tier)
-    return (max(r for r, c in pattern) + 1) if pattern else 1
-
-
-def stamina_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """G-1: at phase boundary, recover stamina proportional to formation depth.
-    Drain happens per-tick in run_battle; this hook handles rotation recovery.
-    [canonical: audit_sim_mb_06_v14.md §G-1 — depth permits front-rank rotation]"""
-    for u in [unit_a, unit_b]:
-        if u.routed or u.disordered:
-            continue
-        for atom in u.units:
-            depth = _subunit_depth(atom)
-            reserve_ranks = max(0, depth - 1)
-            recovery = STAMINA_RECOVERY_PER_RESERVE_RANK * reserve_ranks
-            atom.recover_stamina(recovery)
 
 
 def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -213,7 +175,6 @@ def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
 def phase_boundary(unit_a, unit_b, phase_idx):
     """Run the phase-boundary hook sequence in canonical order.
     Called every TICKS_PER_PHASE ticks within run_battle."""
-    stamina_check(unit_a, unit_b, phase_idx)
     discipline_check_phase(unit_a, unit_b, phase_idx)
     morale_check_phase(unit_a, unit_b, phase_idx)
     rout_resolution(unit_a, unit_b, phase_idx)
@@ -1327,7 +1288,7 @@ def volley_phase(unit_a, unit_b):
         # Ammunition: a subunit out of volleys stops contributing missile output entirely -- there
         # is no melee-fallback concept for a 'ranged' unit_type in this sim (confirmed by grep for a
         # stance/profile switch keyed on ammo), so "stops firing" is the whole effect.
-        # Unit.eff_volleys (own-else-inherited-Army, mirroring eff_stamina exactly) -- NOT a per-column-block
+        # Unit.eff_volleys (own-else-inherited-Army) -- NOT a per-column-block
         # ledger: ammo tracked on a column position other units could occupy would either regenerate for free
         # (MB_CLOSE_RANKS=1) or stop being metered (MB_CLOSE_RANKS=0) -- see percell._ColBlock's own note and
         # Unit.volleys' own note.
@@ -1647,4 +1608,4 @@ def discipline_check_cascade(unit):
     return net >= MORALE_CASCADE_OB
 
 
-__all__ = ['_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'phase_boundary', 'Unit', 'Army', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
+__all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'phase_boundary', 'Unit', 'Army', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']

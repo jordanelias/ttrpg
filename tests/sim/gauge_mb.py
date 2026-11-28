@@ -76,7 +76,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
                     morale_start=None, dr=1, stance='balanced', speed='Standard'):
     """Build a MULTI-subunit Army with per-subunit stats (Jordan directive: different unit
     types / troop counts per subunit). `specs` = list of dicts; each may set shape, tier, troop_type,
-    unit_type, stance, instructions, starting_position, and per-subunit power/discipline/morale/morale_start/dr/stamina/stamina_max.
+    unit_type, stance, instructions, starting_position, and per-subunit power/discipline/morale/morale_start/dr.
     Each subunit is built via Unit.of_type, so a CANONICAL troop type (TROOP_TYPE_STATS:
     levy, light_infantry, heavy_infantry, cavalry, archers, crossbow, sling, artillery, knights_templar)
     draws its §B.2 Power/Discipline/Morale presets unless the spec overrides them. A non-canonical
@@ -102,7 +102,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
         # as before. A caller-set stat still overrides the preset.
         kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
                   instructions=sp.pop('instructions', ()))
-        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max', 'volleys'):
+        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'volleys'):
             if k in sp:
                 kw[k] = sp.pop(k)
         # [A6, ED-MB-0067 Part A -- adversarial-pass round 2, F4] Same cross-subunit ammo-pool gap

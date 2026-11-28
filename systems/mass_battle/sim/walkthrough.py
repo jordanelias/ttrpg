@@ -76,7 +76,7 @@ def _snap_unit(u, d: int) -> dict:
         bf = getattr(s, '_node_facing', None)
         subs.append({'type': s.troop_type, 'routed': bool(s.routed), 'broken': bool(s.disordered), 'stance': s.eff_stance,
                      'morale': round(s.eff_morale, d), 'discipline': s.eff_discipline,
-                     'stamina': round(s.eff_stamina, d),
+                     'stamina': round(u.agg_stamina(), d),   # the army's column ledger: stamina is held per column, not per unit
                      'body_facing': None if bf is None else [round(bf[0], d), round(bf[1], d)], 'nodes': nodes})
     return {'hp': round(u.hp, d), 'morale': round(u.morale, d), 'routed': bool(u.routed), 'subs': subs}
 

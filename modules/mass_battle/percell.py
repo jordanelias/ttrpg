@@ -4,7 +4,7 @@ Depends on config + geometry."""
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 
-__all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
+__all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', 'column_exhausted', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -245,6 +245,21 @@ def _fatigue_sigma(unit, engaged_cols):
         return 0.0
     frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
     return MB_STAM_SIGMA * (frac - 1.0)
+
+def column_exhausted(unit, atom=None):
+    """The one reading of exhaustion off the column ledger (`_ColBlock.stamina`, the one stamina store, B19.07):
+    True when the lowest stamina among the live column blocks `atom`'s live cells stand in is at 0 — or, with no
+    `atom`, among all of `unit`'s live column blocks. A spent file is a spent front: the men in it have nothing
+    left, whatever the files beside them hold. No grid (PER_CELL off) or no live block reads not exhausted."""
+    grid = getattr(unit, 'col_grid', None)
+    if not grid:
+        return False
+    if atom is None:
+        blocks = [b for b in grid if b.alive()]
+    else:
+        cols = {c for _pid, (_r, c), troops in atom.iter_cells() if troops > 0}
+        blocks = [b for b in grid if b.col in cols and b.alive()]
+    return bool(blocks) and min(b.stamina for b in blocks) <= 0
 
 def _defender_depth(unit, contact_cells):
     """Increment 5: representative depth of the defender's engaged columns (charge absorption).
