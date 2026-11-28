@@ -54,6 +54,10 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
     # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
     _draw_friction(unit_a)
     _draw_friction(unit_b)
+    # [B19.12] The BOUT: each entry is one more engagement turn of these armies, and the contact draw's key carries it
+    # (`contact_draw.contact_z`, MBA §1.3 step 5: `(field, bout, tick, pair, side, "contact")`), so a later turn -- or an instrument
+    # stepping the field one tick a call -- never re-reads an earlier turn's draws at the same tick number. Both armies carry it.
+    unit_a._bout = unit_b._bout = max(getattr(unit_a, '_bout', 0), getattr(unit_b, '_bout', 0)) + 1
     ticks = 0
     current_phase = 0
     separate_all_bodies(unit_a, unit_b)   # an army is deployed clear of itself and of the enemy

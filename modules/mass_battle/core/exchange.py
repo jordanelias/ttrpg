@@ -1,31 +1,18 @@
-"""modules.mass_battle.core.exchange — combat-pool assembly primitives.
-(derive_command, command_base_pool, subunit_combat_pool). Pure: depends on config + math + the column
-ledger's exhaustion reading (`percell.column_exhausted`) + duck-typed unit/atom attributes only; imports
+"""modules.mass_battle.core.exchange — the Command clamp and derivation, and which men of a body are engaged.
+Pure: depends on config + the support falloff + the geometry's abs-to-orig map + duck-typed unit/atom attributes only; imports
 nothing from orchestration (no cycle). Re-imported by orchestration via `from modules.mass_battle.core.exchange import *`.
-[canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base -- SUPERSEDED
-for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QUALITY_MODEL;
-`derive_command`/`command_base_pool` below remain live for whatever still reads Command
-(morale, formation-hold speed, order-issuing, derive_rout), just no longer the combat pool]"""
-import math
+
+B19.12 (MBA-04 step 4): the combat pool left the melee pair, and with it the per-subunit pool, its per-pair share, the
+Command-only base pool and the yield malus: the contact draw (`core/contact_draw.py`) replaces them. Their
+routed/broken/disordered tests moved to the draw's vector builder (`contact_draw.fights`: a body with no fighting men contributes
+`m = 0`), and a yielding body's malus became the posture `retreat` (`contact_draw.commitment`). `derive_command` and `clamp_command`
+stay for whatever still reads Command (morale, formation-hold speed, order-issuing, derive_rout); `derive_command` retires with
+27A-5. `_pair_engaged_troops` stays the one owner of "which men of a body are engaged" and feeds the draw's `support_a`."""
 from modules.mass_battle.config import *
 from modules.mass_battle.troop_types.registry import support_weight
 from modules.mass_battle.geometry import cells_to_orig_coords
-from modules.mass_battle.percell import column_exhausted
 
-__all__ = ['derive_command', 'clamp_command', 'command_base_pool',
-           'subunit_combat_pool', 'pair_pool_contribution', '_pair_engaged_troops',
-           'D_YIELD', 'YIELD_POOL_MULT']
-
-# [DG-2, designs/proposals/mass_battle_fighting_withdrawal_v1.md §5, Jordan-ruled "build it now"
-# 2026-07-08] Both magnitudes below are explicitly flagged NOT independently derived, per the
-# proposal doc's own §5 -- reused from the nearest existing precedent rather than invented, and
-# disclosed as such (this repo's anti-fabrication discipline). Both are default-inert: `yielding`
-# defaults False on every Unit, so neither constant is read unless a 'yield' order fires.
-# existing disc_mult tier break (hierarchy/units.py's advance_cells: disc>=5 full speed, disc>=3
-# 0.7x, else 0.4x severely degraded) rather than inventing a new threshold -- a subunit needs
-# enough order to give ground at all (the 0.7x tier), not the severely-degraded 0.4x tier.
-# reuses MB_SHOCK_HOLD_BRACE (0.35, the brace/shock discount idiom) verbatim, exactly as the
-# proposal doc's §5 suggested -- "traded ground at a cost", a reduced-but-nonzero combat pool.
+__all__ = ['derive_command', 'clamp_command', '_pair_engaged_troops', '_pair_troops', 'D_YIELD']
 
 
 def clamp_command(value):
@@ -47,137 +34,19 @@ def derive_command(charisma, cognition):
     return clamp_command(val)
 
 
-def command_base_pool(command, pen, stam_pen):
-    """Command-only base exchange pool (the COMMAND_SIGMA branch): MULT×Command + pool advantages.
-    Module-level so the MECHANICS 'command_sigma_base' entry resolves to a real callable rather than
-    a bare constant. [canonical: Jordan canon-structure directive — base driven SOLELY by
-    Command; Size enters outcomes only via the Lanchester frontage term; MULT=2 matches
-    min(Size,Cmd)+Cmd at Size≥Cmd.]"""
-    return COMMAND_POOL_MULT * command + pen + stam_pen
+def _pair_troops(atom, contact_abs_cells):
+    """`(front, engaged)` for ONE atom in ONE pair: the troops in its contact cells, and those plus the depth-weighted troops of its
+    ranks behind the contact line (`registry.support_weight`, capped at the ranks the troop type's weapon reaches, MB-07), summed in
+    the walk's own order (so `_pair_engaged_troops` reads to the bit what it read before B19.12). The one walk of a body's
+    `cell_troops` against a contact; `_pair_engaged_troops` is `engaged`, and the contact draw's `support_a` is `engaged / front`.
 
-
-def subunit_combat_pool(unit, atom):
-    """Per-subunit combat pool. Default (POOL_QUALITY_MODEL, Jordan directive 2026-07-08): troop
-    TYPE quality (`eff_power`) x NUMBERS (`eff_size`), plus per-subunit Discipline + stamina --
-    no Command anywhere. Legacy toggle OFF: SHARED Command (the general) + per-subunit Discipline
-    + cohesion + stamina. Mirrors multi.base_combat_pool EXACTLY for a single-subunit unit
-    (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline/eff_power inherit unit) -> byte-exact
-    for the homogeneous gauge; differentiates per subunit for mixed units.
-    [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
-     mirrors Army.discipline_penalty 'fix discipline']"""
-    if unit.routed or unit.disordered or atom.routed or atom.disordered:
-        return 0
-    disc = atom.eff_discipline
-    if disc <= 0:
-        # Per-subunit disordered state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
-        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is disordered only when
-        # EVERY subunit is disordered (the whole formation is gone); a single disordered section must NOT zero
-        # its healthy siblings' pools (§A.12's cascade is inter-unit only; per-subunit "siblings fight on").
-        # Single-subunit: the lone subunit disordered => all() true => unit.disordered set exactly as before
-        # (byte-exact for the homogeneous gauge).
-        atom.disordered = True
-        if all(s.disordered for s in unit.units):
-            unit.disordered = True
-        return 0
-    pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
-    stam_pen = STAMINA_EXHAUSTED_POOL_PENALTY if column_exhausted(unit, atom) else 0   # the column ledger (B19.07)
-    if POOL_QUALITY_MODEL:
-        # [Jordan directive 2026-07-08: "abandon combat pools being related to the commander,
-        # and instead [derive them] solely from the subunit troop type, quality and numbers" --
-        # see config.py's POOL_QUALITY_MODEL comment for the full rationale/history.] Command is
-        # absent from this branch entirely. `eff_power` is the troop-TYPE quality stat
-        # (TROOP_TYPE_STATS/§B.2 -- levy=1 through knights_templar=5, §A.1's own "Power... determines
-        # dice rolled"); `eff_size` is NUMBERS (current troops / BLOCK_SIZE, already continuously
-        # degrading with casualties -- no separate cohesion multiplier needed, unlike the Command
-        # branch below, since eff_size itself IS the smoothly-shrinking quantity). `pen`/`stam_pen`
-        # (discipline/stamina) are the remaining QUALITY terms, unchanged from every other branch.
-        #
-        # [Jordan follow-up, 2026-07-08: "subunit power is the aggregate or derivation of cell
-        # power"] Correct, and this closed form already IS that aggregate: `eff_power * eff_size`
-        # equals sum-over-cells(cell_power x cell_troops) / BLOCK_SIZE whenever a subunit's cells
-        # share one troop type/power (true for every Unit today -- per-cell troop_type doesn't
-        # exist yet, see pair_pool_contribution's own docstring on this same gap). Written as the
-        # closed form for the SUBUNIT's total score (cheap, no per-cell loop needed here);
-        # `pair_pool_contribution`/`_pair_engaged_troops` below are what actually walk `cell_troops`
-        # cell-by-cell to redistribute this total across a SPECIFIC pair by real contact-cell
-        # density -- that per-cell mechanism already generalizes to true per-cell power the moment
-        # that data exists, with no change needed here.
-        raw = atom.eff_power * atom.eff_size * POOL_QUALITY_SCALE + pen + stam_pen
-    elif COMMAND_SIGMA_ENABLED:
-        raw = unit.command * (1.0 + atom.cohesion) + pen + stam_pen
-    else:
-        raw = min(atom.eff_size, unit.command) + unit.command + pen + stam_pen
-    # [DG-2, mass_battle_fighting_withdrawal_v1.md §2.3, Jordan-ruled "build it now" 2026-07-08]
-    # A yielding subunit fights at a reduced-but-nonzero pool ("traded ground at a cost", not
-    # "stopped fighting") -- gated on discipline (a subunit too disordered to give ground in order
-    # just doesn't get the malus removed; it fights at full pool as if not yielding at all, since a
-    # low-discipline 'yield' order below D_YIELD is a no-op by design, not a punishment). Default
-    # `yielding=False` on every Unit -> inert for every existing scenario.
-    # [ED-MB-0024, DG-2 §2.4 pocket exit] A POCKETED yielding body (rearward motion blocked -> holds in
-    # place, nowhere left to give ground) fights at FULL pool -- the malus is REMOVED, modeling Cannae's
-    # center pinned and fighting for its life. `pocketed` is only ever set when MB_YIELD_POCKET is on
-    # (default OFF) -> this reduces to the plain yield malus for every existing scenario.
-    if getattr(atom, 'yield_active', False) and not getattr(atom, 'pocketed', False):
-        raw *= YIELD_POOL_MULT
-    # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness friction: scale this subunit's
-    # combat score by its UNIT's once-per-battle LogNormal draw (`_friction`, set by orchestration.
-    # _draw_friction at battle start). 1.0 when MB_FRICTION is off -> byte-exact. A multiplier on the
-    # whole combat power (named friction, not CEV: ED-MB-0045 item (3)); the force-independent, once-per-battle
-    # variance it injects is what turns a certain (100%) large-advantage outcome into a decisive-but-
-    # uncertain (historically-banded) one. [grounding: config.py MB_FRICTION]
-    raw *= getattr(unit, '_friction', 1.0)
-    return max(1, math.floor(raw))
-
-
-def pair_pool_contribution(atom, contact_abs_cells, base_pool):
-    """[DG-3, ED-MB-0002, Jordan: "Combat pool for a subunit is misleading. It should be based upon
-    combat pool per cell as per troop type/quality/density, and the overall combat pool for a
-    subunit is actually just a combat score for the subunit. This is bottom-up, and it solves
-    issues with multiple engagements."]
-
-    `subunit_combat_pool()` is unchanged and stays exactly what Jordan calls it -- the subunit's
-    aggregate COMBAT SCORE (Command + discipline/stamina/cohesion). This function is the bottom-up
-    piece: it redistributes that score across a SPECIFIC contact pair by the ACTUAL troop density
-    (`atom.cell_troops`, per-cell troop count -- today the only real per-cell signal; troop_type/
-    discipline/power are still subunit-uniform, see designs/audit/2026-07-04-mass-battle-cannae-
-    gauge-audit/README.md's own confirmation that per-cell type doesn't exist yet) in the cells
-    ACTUALLY engaged with the other atom in THIS pair (`contact_abs_cells`, already pair-scoped by
-    `find_contacts`), plus depth-weighted support from ranks behind the contact line (reusing the
-    same `registry.support_weight` falloff `support_engage_frac` already uses, capped at the ranks the
-    atom's troop type's weapon reaches -- MB-07, `MB_SUPPORT_RANK_CAP`).
-
-    This replaces a flat "divide the whole subunit's pool by how many simultaneous pairs it's in"
-    approximation with an exact, troop-weighted split: a subunit fighting two enemies with an uneven
-    cell split (e.g. 70% of its cells facing one, 30% the other) correctly gives each pair roughly
-    its actual share, not a blind 50/50 -- solving RC-1(a)'s multi-front asymmetry from the bottom up
-    instead of an atom-level fudge factor.
-
-    Known accepted residual: a single cell simultaneously adjacent to TWO enemy atoms contributes its full
-    troop share to BOTH pairs (a dogpile edge case, not observed to be dense enough to matter in the gauge
-    battery)."""
-    if atom.cur_troops <= 0 or base_pool <= 0:
-        return 0.0
-    weighted_troops = _pair_engaged_troops(atom, contact_abs_cells)
-    if weighted_troops <= 0:
-        return 0.0
-    pool_per_troop = base_pool / atom.cur_troops
-    return pool_per_troop * weighted_troops
-
-
-def _pair_engaged_troops(atom, contact_abs_cells):
-    """Troop-weighted engagement magnitude for ONE atom in ONE pair -- the same "actual troops in
-    contact, plus depth-weighted support from ranks behind" quantity `pair_pool_contribution`
-    needs internally, factored out so a caller can also use it to weigh SEVERAL atoms against a
-    shared target (see orchestration.py's convergence-normalization pass: one atom split across enemies vs
-    several atoms sharing one enemy).
-
-    Iterates the atom's ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier)
-    -- see pair_pool_contribution's docstring for why."""
+    Iterates the atom's ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier): today the only real
+    per-cell signal (troop_type, discipline and power are still subunit-uniform)."""
     contact_orig = set(cells_to_orig_coords(atom, set(contact_abs_cells)))
     if not contact_orig:
-        return 0.0
+        return 0.0, 0.0
     front_r = min(r for r, c in contact_orig)
-    weighted_troops = 0.0
+    front = weighted = 0.0
     cell_troops = getattr(atom, 'cell_troops', None) or {}
     _broken = getattr(atom, 'cell_broken', None)
     for pid, troops in cell_troops.items():
@@ -192,8 +61,15 @@ def _pair_engaged_troops(atom, contact_abs_cells):
             continue
         orig_r, orig_c = pid
         if pid in contact_orig:
-            weighted_troops += troops
+            front += troops
+            weighted += troops
         elif SUPPORT_STACK_ENABLED and orig_r > front_r:
             depth = orig_r - front_r
-            weighted_troops += troops * support_weight(depth, getattr(atom, 'troop_type', None))
-    return weighted_troops
+            weighted += troops * support_weight(depth, getattr(atom, 'troop_type', None))
+    return front, weighted
+
+
+def _pair_engaged_troops(atom, contact_abs_cells):
+    """Troop-weighted engagement magnitude for ONE atom in ONE pair: the actual troops in contact plus depth-weighted support from
+    ranks behind (`_pair_troops`' second value). Read by the cascade's truncation counter (`resolve_engagements_cascading`)."""
+    return _pair_troops(atom, contact_abs_cells)[1]

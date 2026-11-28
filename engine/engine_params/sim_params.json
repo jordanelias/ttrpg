@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 541,
-    "uncited": 409,
+    "total": 543,
+    "uncited": 411,
     "of_which_assumption_grade": 9
   },
-  "count": 541,
+  "count": 543,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 47,
-    "mass_battle": 161,
+    "mass_battle": 163,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
@@ -1588,6 +1588,28 @@
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
       "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "mass_battle.EXPOSURE_BASE_SEED",
+      "name": "EXPOSURE_BASE_SEED",
+      "value": 0.1,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "modules/mass_battle/core/contact_draw.py",
+      "note": "[seed, B19.12: the troop file's `contact.exposure.base` is null (uncalibrated; MBA-08 sets it by T-1 and",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "mass_battle.POSTURE_FLOOR",
+      "name": "POSTURE_FLOOR",
+      "value": 0.25,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "modules/mass_battle/core/contact_draw.py",
+      "note": "[seed: MBA §1.4 \"floored at 0.25\" -- the troop file carries no row for it; two holders still trade]",
       "citation": null,
       "citation_grade": null
     },

@@ -1,7 +1,7 @@
 """modules.mass_battle.hierarchy.units — Unit and Army dataclasses (the army/unit hierarchy).
 Stage-1 behaviour-frozen extract from orchestration.py. The DATA model + the per-object geometry/
 movement/state methods. Depends only on LOWER layers — config, geometry (_oriented/footprint_for/
-cell_speed/octagon), core.exchange (derive_command/subunit_combat_pool),
+cell_speed/octagon), core.exchange (derive_command),
 troop_types.registry (stats_for), percell (build_column_grid) — and never imports orchestration
 (no cycle). Re-imported by orchestration via star-import so every Unit(...)/Army(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
@@ -1446,7 +1446,8 @@ inert today.
         nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
         flee = (2 * ar - nearest[0], 2 * ac - nearest[1])  # reflect through anchor -> flee vector
         # [ED-MB-0024, DG-2 §2.4] Pocket detection: rearward motion structurally blocked -> the body has
-        # nowhere left to give ground. Set live so subunit_combat_pool drops the yield malus this tick.
+        # nowhere left to give ground. Set live so the contact draw lifts the yield's `retreat` posture this tick
+        # (`core/contact_draw.py::commitment`, B19.12).
         if MB_YIELD_POCKET:
             self.pocketed = self._yield_pocketed(flee, enemy_cells)
         return flee
@@ -2526,6 +2527,10 @@ class Army:
     # on the pool). Default 0 -> inert, byte-exact for every Army no terrain row touches.
     terrain_off_d: float = 0.0
     terrain_def_d: float = 0.0
+    # [B19.12, MBA §1.4] The army's cover: the factor on the duel rounds its front men fight a tick (`exposure_d`'s `cover_d`, read
+    # by the contact draw, `core/contact_draw.py::resolve_melee_pair`). Set by `massbattle._run_and_grade` on a WALLS field from
+    # `troops.yaml: contact.exposure.cover.walls`. 1.0 -> no cover.
+    cover: float = 1.0
     # [27A-3, B19.04] The army's commander as a typed record (`queries/inputs.py::CommandRecord`) and the NAME of the unit he
     # rides with (`commander_post`; None is the army's rear centre). Both None -> no record, which reads as it does today.
     commander: Optional[object] = field(default=None, repr=False)

@@ -507,10 +507,69 @@ def check_frontage_control():
             + f" (≤{LIN_EXP_MAX}) reads {'linear' if ok else 'NOT linear'}")
 
 
+def _kept_winner(r, ua, ub):
+    """'A', 'B' or 'draw': `run_battle`'s winner, else (both standing when the ticks ran out) the side that kept the larger share."""
+    if r['winner'] in ('A', 'B'):
+        return r['winner']
+    ka, kb = ua.hp / ua.hp_max, ub.hp / ub.hp_max
+    return 'A' if ka > kb else ('B' if kb > ka else 'draw')
+
+
+def check_partition():
+    """[B19.12, `16_PESSIMIST_MB_partition_and_the_pair_rule` gate row 1, as CR-12's exit row] PARTITION on the block footprint, the
+    row the pair rule says rests on edit 4 alone: 600 men three files by two deep, as one body and as three one-file bodies, attacking
+    a block of 600 two files by three deep; the split row's share of fields won (a field drawn at the last tick is won on the share
+    kept) must lie within two standard errors of the one-body row's (`tests/valoria/test_mass_battle_partition.py` holds all three
+    footprints and both roles; this is the instrument's reading of the one that decides edit 4)."""
+    def body(row, col, adv, w, d, men, fac):
+        return Unit(shape='Line', troop_type='infantry', tier=MIRROR_TIER, troops=float(men), width=w, depth=d,
+                    starting_position=(row, col), advance_dir=adv)
+
+    def army(fac, units):
+        return Army(name=fac, faction=fac, power=4, command=4, discipline=5, discipline_start=5, morale=6, morale_start=6,
+                    units=units, dr=1, stance='balanced', speed='Standard')
+    shares = {}
+    for k in (1, 3):
+        won = 0
+        for s in range(N):
+            with rngsource.using(draw.seeded(draw.H2("lanchester_signature|partition", s + SEED_BASE))):
+                ua = army('A', [body(SIDE_A_START_ROW, 10 + i * (3 // k), -1, 3 // k, 2, 600 / k, 'A') for i in range(k)])
+                ub = army('B', [body(SIDE_B_START_ROW, 10, 1, 2, 3, 600, 'B')])
+                won += _kept_winner(run_battle(ua, ub), ua, ub) == 'A'
+        shares[k] = won / N
+    p = shares[1]
+    band = 2.0 * (max(p * (1 - p), 0.25 / N) * 2.0 / N) ** 0.5
+    ok = abs(shares[3] - shares[1]) <= band
+    return ('PARTITION (block footprint)', ok,
+            f"one body won {100 * shares[1]:.0f}%, three bodies {100 * shares[3]:.0f}% (within ±{100 * band:.1f} points)")
+
+
+@contextlib.contextmanager
+def _planted_exposure_zero():
+    """[B19.12, MBA §4.2; `04_MB_cr12_linear_law` gate, NARROWED] THE PLANTED COLLAPSE: `EXPOSURE_BASE = 0` -- no duel rounds, so no
+    melee casualties -- set where the contact draw reads it (`core/contact_draw.py`, the module the installed variant built), the way
+    `tests/valoria/test_friction.py` applies a flag, and restored unconditionally. It replaces the `MB_FRICTION_SIGMA=4` and
+    `PAY_PER_NET = 0` carriers: with nothing killed, the LINEAR row must fail as undecided."""
+    import modules.mass_battle.core.contact_draw as _cd
+    prev = _cd.EXPOSURE_BASE
+    _cd.EXPOSURE_BASE = 0.0
+    try:
+        yield
+    finally:
+        _cd.EXPOSURE_BASE = prev
+
+
+def check_planted_collapse():
+    """The control on LINEAR: under the planted `EXPOSURE_BASE = 0` the LINEAR row must FAIL. Passes iff it does."""
+    with _planted_exposure_zero():
+        name, ok, detail = check_linear()
+    return ('PLANT EXPOSURE_BASE=0', not ok, f"LINEAR {'FAILED as it must' if not ok else 'PASSED: the plant is not seen'} — {detail}")
+
+
 def run():
     assert LANCHESTER_ENABLED, "signatures require LANCHESTER_ENABLED=1"
     results = [check_linear(), check_square(), check_no_annihilation(), *check_law_exponents(),
-               check_frontage_control()]
+               check_frontage_control(), check_partition(), check_planted_collapse()]
     from modules.mass_battle import config as _mb_cfg
     print("=== P-L Lanchester signature tests (PER_CELL=%s) ===" % _mb_cfg.PER_CELL)
     allok = True

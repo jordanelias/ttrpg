@@ -32,7 +32,7 @@ import functools
 
 from engine.dice_engine import fmath
 
-__all__ = ['felling_chance', 'beta', 'flags', 'status', 'rounds_k', 'logit', 'expit', 'GRID_SKILLS']
+__all__ = ['felling_chance', 'beta', 'flags', 'status', 'value', 'duel_arm', 'rounds_k', 'logit', 'expit', 'GRID_SKILLS']
 
 GRID_SKILLS = (1, 3, 5)
 _EPS = 1e-6        # [JUSTIFIED: logit's clamp, a chance of 0 or 1 reads as _EPS or 1 - _EPS; a numerical guard, not a game value]
@@ -122,6 +122,25 @@ def flags(arm_a: str, armour_d: str, skill_a: float, skill_d: float, *, arm_d: s
         for sd in {d0, d1}:
             out.update(_pair(arm_a, armour_a, sa, arm_d, armour_d, sd)['flags'])
     return tuple(sorted(out))
+
+
+def duel_arm(arm: str) -> str:
+    """The duel weapon a troop file arm fights hand to hand with: its `duel_key`, or a missile arm's `sidearm` (the table's own `arms`
+    block). Refuses an arm the table does not name."""
+    try:
+        row = _data()['arms'][arm]
+    except KeyError:
+        raise ValueError(f'the table names no arm {arm!r} (arms {sorted(_data()["arms"])})') from None
+    return row['duel_key'] or row['sidearm']
+
+
+def value(path: str):
+    """The value of the tagged contact value at a dotted path (`status`'s path; e.g. `contact.exposure.base`). Refuses as `status` does."""
+    status(path)
+    node = _data()
+    for part in path.split('.'):
+        node = node[part]
+    return node['value']
 
 
 def status(path: str) -> str:

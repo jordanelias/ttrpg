@@ -4,7 +4,8 @@ Pre-v2, the melee Lanchester frontage term was `len(set(int_col))` over the snap
 recording (core.contact._find_contacts_standoff) -- the ONLY integer left on the live position/contact
 path (backwards_analysis.md). Stage D (ED-MB-0013) replaces it with a CONTINUOUS front-overlap width
 derived from the OBB bodies (geometry.engaged_frontage), threaded through the contact pairs as
-`a_front`/`b_front` and consumed by core.attrition._lanchester_strength's new `front_width` argument.
+`a_front`/`b_front` and consumed by core.attrition.engaged_files' `front_width` argument (B19.12: the retired
+`_lanchester_strength` re-stated as men).
 
 This file is the Stage D gate the plan (spatial_model_v2_plan.md §3 Stage D / §5) demands:
   * I1 conservation holds under the new continuous partition (the hardest check -- casualties must
@@ -15,7 +16,7 @@ This file is the Stage D gate the plan (spatial_model_v2_plan.md §3 Stage D / �
     limit (each meeting file -> ~1.0), and is fractional for offset/partial meetings (the shape-fidelity
     gain), and DEPTH-INVARIANT (depth-2 stacking does not inflate frontage -- union dedups files);
   * the grid oracle path (front_width=None) keeps the exact legacy integer count (I4);
-  * _lanchester_strength scales LINEARLY in front_width (a 2x frontage -> 2x strength);
+  * engaged_files scales LINEARLY in front_width (a 2x frontage -> 2x the men);
   * determinism (I2).
 
 Deterministic + seeded. Movement toggles saved/restored in fixtures (same discipline as
@@ -35,7 +36,7 @@ from modules.mass_battle.geometry import (  # noqa: E402
     cellbody_from, engaged_frontage, _project_interval,
     _normalize_heading, _rotate90,
 )
-from modules.mass_battle.core.attrition import _lanchester_strength  # noqa: E402
+from modules.mass_battle.core.attrition import engaged_files  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 
@@ -116,38 +117,43 @@ def test_frontage_empty_sides():
     assert engaged_frontage(B, [], (1.0, 0.0)) == 0.0
 
 
-# ─── _lanchester_strength: front_width replaces the integer, linearly ────────
+# ─── engaged_files: front_width replaces the integer, linearly (B19.12: `_lanchester_strength` re-stated as men) ────────
+
+def _front_row():
+    """One live body and the cells of its front row (one cell a file), the shape a contact's cell set takes."""
+    su = build_unit('Line', 3, 'A', 'A', 9).units[0]
+    cells = sorted(set(su.cells()))
+    row = min(r for r, _c in cells) if su.advance_dir == -1 else max(r for r, _c in cells)
+    front = [c for c in cells if c[0] == row]
+    assert len(front) >= 3, front
+    return su, front
+
 
 def test_lanchester_front_width_linear():
-    """The strength term is LINEAR in the continuous frontage: 2x frontage -> 2x strength. Confirms
-    the frontage enters exactly where the integer column count used to (no square-law amplification)."""
-    s1 = _lanchester_strength([], unit=None, front_width=1.0)
-    s2 = _lanchester_strength([], unit=None, front_width=2.0)
-    s3 = _lanchester_strength([], unit=None, front_width=2.5)
-    assert math.isclose(s2, 2.0 * s1) and math.isclose(s3, 2.5 * s1)
+    """The frontage in men is LINEAR in the continuous width: 2x frontage -> 2x the men. Confirms the frontage enters exactly where
+    the integer column count used to (no square-law amplification)."""
+    su, front = _front_row()
+    s1 = engaged_files(front, su, front_width=1.0)
+    s2 = engaged_files(front, su, front_width=2.0)
+    s3 = engaged_files(front, su, front_width=2.5)
+    assert s1 > 0 and math.isclose(s2, 2.0 * s1) and math.isclose(s3, 2.5 * s1)
 
 
 def test_lanchester_grid_fallback_byte_exact():
-    """front_width=None (the grid/OFF path) keeps the EXACT legacy integer distinct-column count -- the
-    grid oracle never sees the continuous term (I4). A frontage of exactly N files must equal what
-    N integer contact columns produced pre-Stage-D."""
-    cells = [(0, 0), (1, 0), (0, 1), (0, 2)]      # 3 distinct files (col 0,1,2); depth on col 0
-    legacy = _lanchester_strength(cells, unit=None)                 # None -> len(set(cols)) = 3
-    continuous = _lanchester_strength([], unit=None, front_width=3.0)
-    assert math.isclose(legacy, continuous)
-    assert math.isclose(legacy, 3.0 / _hu_lanchester_ref())
+    """front_width=None (the grid/OFF path) counts the contact cells' men exactly -- the grid oracle never sees the continuous term
+    (I4). A frontage of exactly N files of equal cells reads the men N integer contact files hold; a cell twice listed counts once."""
+    su, front = _front_row()
+    legacy = engaged_files(front + front[:1], su)                       # None -> the distinct cells' men
+    continuous = engaged_files(front, su, front_width=float(len(front)))
+    men = sum(su.cell_troops[o] for o in __import__('modules.mass_battle.geometry', fromlist=['x']).cells_to_orig_coords(su, front))
+    assert math.isclose(legacy, men) and math.isclose(legacy, continuous)
 
 
 def test_lanchester_zero_frontage_no_casualties():
-    """A degenerate glancing contact (front_width rounds to ~0) yields zero strength -- honest (no
-    frontage, no melee), and it can only be transient (bodies keep closing until frontage > 0), so it
-    never becomes a permanent standoff."""
-    assert _lanchester_strength([], unit=None, front_width=0.0) == 0.0
-
-
-def _hu_lanchester_ref():
-    from modules.mass_battle.config import LANCHESTER_STRENGTH_REF
-    return LANCHESTER_STRENGTH_REF
+    """A degenerate glancing contact (front_width rounds to ~0) yields zero men -- honest (no frontage, no melee), and it can only be
+    transient (bodies keep closing until frontage > 0), so it never becomes a permanent standoff."""
+    su, front = _front_row()
+    assert engaged_files(front, su, front_width=0.0) == 0.0
 
 
 # ─── live field-battle integration: pairs carry continuous frontage, I1 holds ─

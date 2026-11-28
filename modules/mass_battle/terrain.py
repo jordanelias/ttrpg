@@ -269,10 +269,10 @@ def river_crossed(origin, tid, *, geography):
     return False
 
 
-#: A.9's Walls row, the one number it gives: the DEFENDER's damage reduction rises by this much. It
-#: lands on the engine's own `Army.dr`, the quantity melee already subtracts from damage
-#: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit
-#: is an ASSUMPTION (`H-150`), not a measurement. The row's other two clauses ("no flanking; Slow cannot
+#: A.9's Walls row, the one number it gives: the DEFENDER's damage reduction rises by this much. Since B19.12 (MBA §1.4) the
+#: contact draw subtracts no DR: walls are the defender's COVER on its exposure (`troops.yaml: contact.exposure.cover.walls`),
+#: and this number is the full-wall reference the season's `walls_dr` sweep is read against (`massbattle._run_and_grade`
+#: scales the cover's deficit by `walls_dr / WALLS_DEFENDER_DR`). The row's other two clauses ("no flanking; Slow cannot
 #: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why.
 WALLS_DEFENDER_DR = 3  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Walls / fortifications | Defender +3 DR"]
 

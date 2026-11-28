@@ -20,8 +20,9 @@ import pytest  # noqa: E402
 
 import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
-from modules.mass_battle.hierarchy.units import Unit, Army, Order, D_YIELD, YIELD_POOL_MULT  # noqa: E402
-from modules.mass_battle.core.exchange import subunit_combat_pool  # noqa: E402
+from modules.mass_battle.hierarchy.units import Unit, Army, Order, D_YIELD  # noqa: E402
+from modules.mass_battle.config import STANCE_COMMITMENT  # noqa: E402
+from modules.mass_battle.core.contact_draw import commitment  # noqa: E402
 from systems.mass_battle.sim.engine import run_battle  # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
 from modules.mass_battle import rngsource  # noqa: E402
@@ -91,24 +92,23 @@ def test_yield_goal_inert_when_not_active():
 
 
 def test_yield_pool_malus_applied():
-    """A yielding, sufficiently-disciplined subunit fights at YIELD_POOL_MULT of its normal pool
-    (reduced but nonzero -- "traded ground at a cost", not "stopped fighting")."""
+    """A yielding, sufficiently-disciplined subunit fights in the posture `retreat` (B19.12, MBA-04 step 4: the retired pool malus is
+    a posture, `contact_draw.commitment`): it blunts what it suffers and what it inflicts, and still fights ("traded ground at a
+    cost", not "stopped fighting": the posture is floored in the exposure)."""
     su = _line('A', 20, -1, discipline=D_YIELD)
     u = _unit('A', 'A', su)
-    base = subunit_combat_pool(u, su)
+    base = commitment(su)
     su.yielding = True
-    yielding_pool = subunit_combat_pool(u, su)
-    assert yielding_pool < base
-    assert yielding_pool >= 1  # never zero -- still fighting
+    assert base == STANCE_COMMITMENT['balanced'] and commitment(su) == STANCE_COMMITMENT['retreat'] < base
 
 
 def test_yield_pool_malus_not_applied_below_discipline():
-    """The SAME subunit at insufficient discipline: the order is a no-op, pool unaffected."""
+    """The SAME subunit at insufficient discipline: the order is a no-op, its posture unaffected."""
     su = _line('A', 20, -1, discipline=D_YIELD - 1)
     u = _unit('A', 'A', su)
-    base = subunit_combat_pool(u, su)
+    base = commitment(su)
     su.yielding = True
-    assert subunit_combat_pool(u, su) == base
+    assert commitment(su) == base
 
 
 def test_yield_order_is_order_safe():

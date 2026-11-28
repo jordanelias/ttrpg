@@ -96,7 +96,11 @@ def _mk(orch, pos, adv, fac):
 
 
 def _dmg_b(orch, contact, def_adv, seed, t=5, def_face=None):
-    with _using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
+    """B's casualties and its subunit; `_EXPOSURE[0]` is left holding B's exposure on the contact (B19.12: the arc multiplies the
+    duel rounds B's front men fight a tick, `exposure_d`, read off the pair's `melee` trace event)."""
+    import importlib
+    tracing = importlib.import_module('modules.mass_battle.resolution').tracing
+    with _using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))), tracing() as ev:
         ub, subB = _mk(orch, (BROW, BCOL), def_adv, 'B')
         if def_face is not None:
             for cid in list(subB.cell_troops):
@@ -104,7 +108,14 @@ def _dmg_b(orch, contact, def_adv, seed, t=5, def_face=None):
         ua, suA = _mk(orch, (BROW - 3, BCOL), +1, 'A')
         pairs = contact.find_contacts(ua, ub)
         assert pairs, "no contact -- geometry setup wrong"
-        return orch.resolve_engagements(ua, ub, pairs, t=t)['dmg_b'], subB
+        dmg = orch.resolve_engagements(ua, ub, pairs, t=t)['dmg_b']
+    melee = [e for e in ev if e['cat'] == 'melee']
+    assert len(melee) == 1, melee
+    _EXPOSURE[0] = melee[0]['exp_b']
+    return dmg, subB
+
+
+_EXPOSURE = [None]
 
 
 # ─── ED-MB-0063: the arc-ratio isolation ──────────────────────────────────────
@@ -166,9 +177,13 @@ def _arc_pair(orch, contact, seed, t=5):
     body and "only the arc varies" quietly stops being true. Stated so the next author does not
     inherit the precondition silently — which is how the confound this replaces was inherited.
     """
+    # B19.12 (MBA-04): the arc is EXPOSURE, the duel rounds a front man fights a tick (MBA §1.4), not a multiplier on a count:
+    # casualties are `F x (1 - (1 - h)^(exposure x m))` plus the draw's own spread, so a doubled arc doubles the exposure exactly and
+    # the casualties by less. The pair returned is B's exposure in each arm, then B's casualties in each arm.
     green, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed, t=t, def_face=FACE_TOWARD_A)
+    e_green = _EXPOSURE[0]
     red, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed, t=t, def_face=FACE_AWAY_A)
-    return green, red
+    return (e_green, _EXPOSURE[0]), (green, red)
 
 
 def test_rear_is_exactly_double_front(mb):
@@ -176,20 +191,17 @@ def test_rear_is_exactly_double_front(mb):
     the octagon arc multiplier is EXACTLY 2.0x per seed (front faces attacker, rear turns its back;
     same dice, same contact cells, only the facing arc differs)."""
     orch, contact, C = mb
-    # B05.99 re-pin of the seed range (B05.03: the field draws the one continuous sampler, so a base-pool-4 line's frontal net
-    # reaches a casualty on fewer seeds: 1 of 0..11, 10 of 0..47): the floor and the assertion are unchanged.
+    # B19.12 re-point (MBA-04): the 2.0x is the EXPOSURE ratio, exact per seed; the casualties it buys are larger in the rear arm
+    # wherever the front took any (the draw's `z` is the same in both arms: one key, one contact).
     checked = 0
     for seed in range(48):
-        front, rear = _arc_pair(orch, contact, seed)   # body fixed; only the arc varies
-        if front > 0:
-            assert rear == pytest.approx(2.0 * front), f"seed {seed}: rear {rear} != 2x front {front}"
+        (front, rear), (c_front, c_rear) = _arc_pair(orch, contact, seed)   # body fixed; only the arc varies
+        assert front > 0 and rear == pytest.approx(2.0 * front), f"seed {seed}: rear exposure {rear} != 2x front {front}"
+        assert c_rear >= c_front, f"seed {seed}: rear casualties {c_rear} below front {c_front}"
+        if c_front > 0:
+            assert c_rear > c_front, f"seed {seed}: the doubled exposure bought no casualties ({c_front}, {c_rear})"
             checked += 1
-        else:
-            # a braced front can parry to zero; the rear then still takes the shock-stripped hit
-            assert rear >= front
-    # Measured 7 at shipped defaults (ED-MB-0063). Floor at 3 rather than 7 so a benign RNG-stream
-    # reorder is not a false red, while "the ratio was never actually observed" is still caught.
-    assert checked >= 3, "expected several seeds with a non-zero frontal exchange to pin the 2.0x ratio"
+    assert checked >= 3, "expected several seeds with a non-zero frontal exchange to observe the rear's larger casualties"
 
 
 @pytest.mark.parametrize('fractional', ['0', '1'])
@@ -216,9 +228,10 @@ def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(fractional):
 def _assert_arc_ratio_invariant(orch, contact, fractional):
     # B05.99 re-pin of the seed range (B05.03: the field draws the one continuous sampler, so a base-pool-4 line's frontal net
     # reaches a casualty on fewer seeds: 1 of 0..11, 10 of 0..47): the floor and the assertion are unchanged.
+    # B19.12: the flag no longer reaches the melee pair (there is no pool to floor); the exposure ratio holds under both settings.
     checked = 0
     for seed in range(48):
-        front, rear = _arc_pair(orch, contact, seed)
+        (front, rear), _cas = _arc_pair(orch, contact, seed)
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
                 f'MB_FRACTIONAL_POOL={fractional}, seed {seed}: rear {rear} != 2x front {front} — '
@@ -237,8 +250,11 @@ def test_front_takes_no_arc_penalty(mb):
     # B05.99 re-pin of the seed range (B05.03, the one sampler: rear>0 on 2 of 0..11, 16 of 0..47); floor and bound unchanged.
     checked = 0
     for seed in range(48):
-        front, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed)
-        rear, _ = _dmg_b(orch, contact, def_adv=+1, seed=seed)
+        # B19.12: read on the exposure (the arc's own quantity, MBA §1.4); the casualties are a draw on it.
+        _dmg_b(orch, contact, def_adv=-1, seed=seed)
+        front = _EXPOSURE[0]
+        _dmg_b(orch, contact, def_adv=+1, seed=seed)
+        rear = _EXPOSURE[0]
         # [test-critic T2] Bound front at rear/2 (i.e. front never exceeds 1.0x when rear is 2.0x): the
         # broken global-centroid variant inflated a wide line's head-on WINGS to ~1.4x, which makes front
         # EXCEED rear/2 -> caught here. (A braced front can parry to 0 while rear>0, so this is an upper
@@ -286,7 +302,7 @@ def test_rear_penalty_persists_across_reaction_window(mb):
         # old `def_adv=±1` form claimed "identical dice/contact" and was not — see that docstring.
         # B05.99 re-pin (B05.03, the one sampler): seed 3's frontal exchange is 0 at every tick now; seed 8 is the first
         # whose is not (6.0 / 12.0 at t = 1, 2, 3). Was seed=3.
-        front, rear = _arc_pair(orch, contact, seed=8, t=t)
+        (front, rear), _cas = _arc_pair(orch, contact, seed=8, t=t)   # B19.12: the exposure ratio
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
                 f"t={t}: rear {rear} should stay 2x front {front} -- a blind-arc rear strike never refuses")

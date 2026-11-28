@@ -138,16 +138,20 @@ def test_pocket_open_retreat_not_pocketed():
 
 
 def test_pocket_removes_pool_malus():
-    """subunit_combat_pool: a POCKETED yielding subunit fights at FULL pool (malus removed); a non-pocketed
-    yielding subunit keeps the YIELD_POOL_MULT malus."""
+    """A POCKETED yielding subunit fights in its own posture (the yield's `retreat` is lifted); a non-pocketed yielding subunit fights
+    in the posture `retreat` (B19.12, MBA-04 step 4: the yield malus became the posture, `contact_draw.commitment`). Read on a body
+    whose own stance is aggressive, so the two commitments differ."""
     C, X, _, U, E, _ = _reload(MB_YIELD_POCKET=True)
-    u = E.build_unit('Line', 3, 'A', 'A', 20, discipline=5)  # eff_discipline 5 >= D_YIELD -> yield_active
+    import modules.mass_battle.core.contact_draw as CD
+    u = E.build_unit('Line', 3, 'A', 'A', 20, discipline=5, stance='aggressive')  # eff_discipline 5 >= D_YIELD -> yield_active
     atom = u.units[0]
+    own = CD.commitment(atom)
     atom.yielding = True
-    yielding_pool = X.subunit_combat_pool(u, atom)   # malus applied
+    yielding_c = CD.commitment(atom)                 # the posture `retreat`
     atom.pocketed = True
-    pocketed_pool = X.subunit_combat_pool(u, atom)   # malus removed
-    assert pocketed_pool > yielding_pool, f"pocketed pool ({pocketed_pool}) must exceed malused ({yielding_pool})"
+    pocketed_c = CD.commitment(atom)                 # the yield lifted: its own posture again
+    assert own == C.STANCE_COMMITMENT['aggressive'] and yielding_c == C.STANCE_COMMITMENT['retreat']
+    assert pocketed_c == own > yielding_c, f"pocketed commitment ({pocketed_c}) must exceed the yielding one ({yielding_c})"
 
 
 def teardown_module(module):

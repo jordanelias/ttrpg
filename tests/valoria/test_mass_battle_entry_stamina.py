@@ -21,29 +21,33 @@ def test_a_unit_stamina_spec_key_is_refused(key):
     assert army.agg_stamina() == STAMINA_MAX
 
 
-def test_a_spent_column_costs_the_units_standing_in_it_one_die():
-    """The exhausted -1 die reads the column ledger (`percell.column_exhausted`): a unit loses one die when the
-    lowest live column block it stands in is at 0, and a unit standing in other columns does not."""
-    from modules.mass_battle.config import SIDE_A_START_ROW, STAMINA_EXHAUSTED_POOL_PENALTY
-    from modules.mass_battle.core.exchange import subunit_combat_pool
+def test_a_spent_column_tires_the_units_standing_in_it():
+    """The column ledger feeds the contact draw's `rounds_d` (B19.12; it fed the exhausted -1 die until the pool left the melee pair):
+    a unit whose contact files include a spent one fights at a later duel round, and a unit standing in other columns does not."""
+    from modules.mass_battle.config import SIDE_A_START_ROW
+    from modules.mass_battle.core import contact_draw as cd
     army = build_army([_spec(starting_position=(SIDE_A_START_ROW, 10)),
                        _spec(starting_position=(SIDE_A_START_ROW, 30))], 'A', 'A')
     left, right = army.units
-    cols_l, cols_r = ({c for _p, (_r, c), t in u.iter_cells() if t > 0} for u in (left, right))
-    assert cols_l and cols_r and not (cols_l & cols_r)
-    fresh = (subunit_combat_pool(army, left), subunit_combat_pool(army, right))
-    assert fresh[0] > 1 and fresh[1] > 1               # above the floor, so a lost die is visible
-    one = min(cols_l)
+    cells_l, cells_r = (sorted({c for _p, c, t in u.iter_cells() if t > 0}) for u in (left, right))
+    assert cells_l and cells_r and not ({c for _r, c in cells_l} & {c for _r, c in cells_r})
+
+    def rounds(sub, cells):
+        other = right if sub is left else left
+        return cd.contact_vector(sub, army, cells, None, other, army, cells, None, None, True, 0.1, ()).rounds_d
+    fresh = (rounds(left, cells_l), rounds(right, cells_r))
+    assert fresh == (1.0, 1.0)                         # a fresh front fights its first round
+    one = min(c for _r, c in cells_l)
     for b in army.col_grid:
         if b.col == one:
             b.stamina = 0.0                            # one file of the left unit is spent
-    assert subunit_combat_pool(army, left) == fresh[0] + STAMINA_EXHAUSTED_POOL_PENALTY
-    assert subunit_combat_pool(army, right) == fresh[1]   # control: the right unit's files are fresh
+    assert rounds(left, cells_l) > fresh[0]
+    assert rounds(right, cells_r) == fresh[1]          # control: the right unit's files are fresh
 
 
 def test_returned_stamina_below_100_after_a_fought_field():
-    """`run_battle`'s `a_stamina` / `b_stamina` are `agg_stamina()` of the column ledger, the one the fatigue
-    malus reads (step 2): after eighteen ticks of contact the number returned is below STAMINA_MAX for both sides,
+    """`run_battle`'s `a_stamina` / `b_stamina` are `agg_stamina()` of the column ledger, the one the contact
+    draw's `rounds_d` reads (step 2): after eighteen ticks of contact the number returned is below STAMINA_MAX for both sides,
     and it is the very number `agg_stamina()` reads off the armies afterwards."""
     from engine.dice_engine import draw
     from modules.mass_battle import rngsource

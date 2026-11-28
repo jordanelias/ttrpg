@@ -1,28 +1,55 @@
-"""core/contact_draw.py -- the melee pair's resolution and the pursuit, moved out of `orchestration.py` unchanged (B19.10, ED-1043).
+"""core/contact_draw.py -- the contact draw (MBA-04) and the melee pair that calls it; the pursuit.
 
-`resolve_melee_pair` is the body `resolve_engagements` ran per contact pair after the pool and the per-cell angle read; the
-pair's casualties are `_pair_a`/`_pair_b`, accumulated by the caller. `pursuit_damage` is the fast pursuer's attack on a routed
-body. `_momentum_speed`, `_cell_damage_weights` and `_accum_cell_damage` are the helpers only the pair's block calls: they
-moved with it so this module imports nothing from `orchestration` (no cycle). `orchestration` re-imports the names its callers use, so
-they are unchanged. `ContactVector` and `contact_casualties` (B19.11, MBA-04 step 1) are the contact draw itself, a pure function of
-the vector, the measured table and a handed-in `z`; nothing calls them until B19.12. A flag read here is read from THIS module's namespace: a test that flips one patches it here."""
+`ContactVector` and `contact_casualties` (B19.11, MBA-04 step 1) are the contact draw itself, a pure function of the vector, the
+measured table and a handed-in `z`. `resolve_melee_pair` (moved out of `resolve_engagements` at B19.10, ED-1043) builds the two vectors
+of one contact per tick (B19.12, MBA-04 step 2: `contact_vector`, the builder) and draws each side's casualties: the pool, the sigma
+head, the opposed degree and the degree-to-damage table left the melee pair here. Each draw's `z` is keyed `(field, bout, tick, pair, side,
+"contact")` on the field's `Draw` (`contact_z`, A-30), so it takes nothing from the field's stream and a change elsewhere never re-keys
+it. `pursuit_damage` is the fast pursuer's attack on a routed body (its own draw until MBA-04 step 5). `_momentum_speed`,
+`_cell_damage_weights` and `_accum_cell_damage` are the helpers only the pair's block calls: they moved with it so this module imports
+nothing from `orchestration` (no cycle). A flag or a value read here is read from THIS module's namespace: a test or an instrument that
+flips one (the planted `EXPOSURE_BASE = 0`, MBA §4.2) patches it here."""
 from dataclasses import dataclass
 
+from engine.dice_engine import draw as _draw  # the one keyed draw (B06): the contact draw's `z`
 from engine.dice_engine import fmath  # the one owner of `sqrt`, `powf` and the left-to-right sum
 from engine.dice_engine.dice_engine import degree_label  # the one degree ladder (A-5); the field grades nothing of its own
-from engine.dice_engine.sigma_leverage import roll_net_continuous  # the one sampler; the mu-shift is `resolution._net_boost`
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
 from modules.mass_battle.core import contact_table  # the measured felling chances the draw reads (passed in as `table`)
-from modules.mass_battle.core.attrition import _lanchester_strength
+from modules.mass_battle.core.attrition import engaged_files
+from modules.mass_battle.core.exchange import _pair_troops
+from modules.mass_battle.equipment.armour import TIERS as _ARMOUR_TIERS, dr_vs_piercing
 from modules.mass_battle.geometry import _oriented, _oriented_abs_map
 from modules.mass_battle.hierarchy.units import COL_WIDTH
-from modules.mass_battle.percell import _defender_depth, _fatigue_sigma
-from modules.mass_battle.resolution import (_charge_shock_sigma, _morale_sigma, _net_boost, _subunit_braced, _wall_prep,
+from modules.mass_battle.percell import _defender_depth, column_stamina_share
+from modules.mass_battle.resolution import (_charge_shock_sigma, _morale_sigma, _subunit_braced, _wall_prep,
                                             roll_pool, trace_event)
 from modules.mass_battle.troop_types.registry import charge_for, reach_for
+from modules.mass_battle.troop_types.table import loadout_for_names
 
-__all__ = ['ContactVector', 'contact_mu_var', 'contact_casualties', 'resolve_melee_pair', 'pursuit_damage', 'REARGUARD_PENALTY', '_momentum_speed', '_cell_damage_weights', '_accum_cell_damage']
+__all__ = ['ContactVector', 'contact_mu_var', 'contact_casualties', 'contact_vector', 'contact_z', 'fighter', 'fights',
+           'commitment', 'resolve_melee_pair', 'pursuit_damage', 'REARGUARD_PENALTY', 'EXPOSURE_BASE',
+           '_momentum_speed', '_cell_damage_weights', '_accum_cell_damage']
+
+# ─── the vector's factors (MBA §1.3 step 2, §1.4), read from the exported troop file (`references/troops.yaml: contact`) ───────────
+EXPOSURE_BASE_SEED = 0.1   # [seed, B19.12: the troop file's `contact.exposure.base` is null (uncalibrated; MBA-08 sets it by T-1 and
+#   T-2). 0.1 rounds a tick is the value at which the reference mirror field reads its pre-B19.12 casualties: the gauge's Line tier-3
+#   mirror, friction off, n 60, mean casualties 5.6% against 5.5% on the pool (0.05: 3.0%; 0.2: 10.8%). Well under one round a tick,
+#   as MBA §1.4 requires. Read only while the troop file's value is null; MBA-08 writes the calibrated value there and deletes this.]
+EXPOSURE_BASE = contact_table.value('contact.exposure.base')         # duel rounds a front man fights a tick in an even, faced contact
+if EXPOSURE_BASE is None:
+    EXPOSURE_BASE = EXPOSURE_BASE_SEED
+POSTURE_K = contact_table.value('contact.exposure.posture_k')        # posture = 1 + POSTURE_K x (cA + cB)
+COVER_WALLS = contact_table.value('contact.exposure.cover.walls')    # the defender's cover behind walls (`massbattle._run_and_grade`)
+LEVEL_INTENT_OFFENSE = contact_table.value('contact.levels.intent_offense')
+LEVEL_INTENT_DEFENSE = contact_table.value('contact.levels.intent_defense')
+LEVEL_TERRAIN_DIE = contact_table.value('contact.levels.terrain_die')
+LEVEL_CHARGE_CAP = contact_table.value('contact.levels.charge_cap')
+LEVEL_MORALE_NEAR_ROUT = contact_table.value('contact.levels.morale_near_rout')
+POSTURE_FLOOR = 0.25   # [seed: MBA §1.4 "floored at 0.25" -- the troop file carries no row for it; two holders still trade]
+FALLBACK_ARM = 'arming'   # [ASSUMPTION: a body whose troop row names no arm (the unmustered `infantry`) fights with the arming sword,
+#                           the duel's reference weapon -- basis: the troop file's `arming` arm; reversible: this name]
 
 
 def _momentum_speed(atom, contact_abs_cells):
@@ -86,259 +113,251 @@ def _accum_cell_damage(store, atom, weights, dmg):
         acc[cell] = acc.get(cell, 0.0) + dmg * (w / tot)
 
 
-def resolve_melee_pair(p, atom_a, atom_b, unit_a, unit_b, a_pool, b_pool, a_pool_raw, b_pool_raw, a_dead, b_dead,
-                       a_angle_mod, b_angle_mod, a_fixed_other, b_fixed_other, eng_counts, _atom_sides,
-                       _octagon_cell_mods, cell_dmg_a, cell_dmg_b, t=None):
-    """One contact pair's melee resolution (moved verbatim out of `resolve_engagements`, B19.10, ED-1043): the sigma head
-    and the roll, the degree, the octagon's damage multipliers, the pair's casualties and their landing on the contact cells.
-    Returns `(_pair_a, _pair_b, shocked_a, shocked_b)`: the casualties to A and to B (the caller accumulates them) and the two
-    envelopment-shock flags the pair set. `cell_dmg_a`/`cell_dmg_b` are the caller's per-cell accumulators, written in place.
-    `_octagon_cell_mods` is the caller's closure (it closes over the tick `t`)."""
-    shocked_a = shocked_b = False
+def fighter(atom):
+    """`(arm, armour, skill)` of the men of `atom` as the measured table keys them (MBA §1.1): the duel weapon of the troop row's
+    primary arm (`contact_table.duel_arm`: its `duel_key`, or a missile arm's `sidearm`), the row's armour tier, and the men's martial
+    skill (`eff_power`, the troop row's `skill` through the loader's alias until MBA-04 step 8) clipped to the table's grid [1, 5].
+    A body whose row names no kit (the unmustered `infantry`) fights with `FALLBACK_ARM`, its armour the catalogue tier its own `dr`
+    reads on the catalogue's DR scale (`equipment/armour.py::dr_vs_piercing`: none 0, light 1, medium 2, heavy 3).
+    [ASSUMPTION: skill outside [1, 5] is clipped, not refused -- basis: the table refuses it, and a field must not raise on a body the
+    order of battle allowed; reversible: refuse instead]"""
+    arm, armour = loadout_for_names(getattr(atom, 'troop_type', None))
+    if armour is None:
+        dr = atom.eff_dr
+        armour = next((t for t in _ARMOUR_TIERS if dr_vs_piercing(t) >= dr), _ARMOUR_TIERS[-1])
+    return contact_table.duel_arm(arm or FALLBACK_ARM), armour, min(max(float(atom.eff_power), 1.0), 5.0)
 
-    # === SIGMA-LEVERAGE HEAD (prototype) ===
-    # Advantages (octagon angle, puncture, encirclement, ranged-in-melee) enter as a
-    # delta-sigma net-boost on the offensive net successes (uniform impact across pool
-    # size), NOT as pool modifiers (non-uniform impact). Bare pool above = pure capacity.
-    # Spine (degree -> DAMAGE_BY_DEGREE -> casualties) unchanged.
-    # [canonical resolution: mass_combat.md §A.4 net-success exchange; sigma math:
-    #  params/core.md continuous engine + modifier_system_spec.md §2.1/§3.1]
-    ns_a = ns_b = 0.0   # legacy-path default so the mechanical trace can read these uniformly
-    if SIGMA_HEAD_ENABLED:
-        # [ED-MB-0018] Under MB_OCTAGON_DMG the octagon is a DAMAGE-RECEIVED MULTIPLIER (applied to
-        # dmg_a/dmg_b below), NOT a net-successes penalty -- so it is REMOVED from the sigma head here
-        # to avoid double-counting. The zone is still read for charge-shock / brace gating below.
-        ns_a = 0.0 if MB_OCTAGON_DMG else a_angle_mod * SIGMA_PER_D     # a_angle_mod<=0 when A flanked
-        ns_b = 0.0 if MB_OCTAGON_DMG else b_angle_mod * SIGMA_PER_D
-        if PUNCTURE_ENABLED:
-            a_mom = _momentum_speed(atom_a, p["a_cells"])
-            b_mom = _momentum_speed(atom_b, p["b_cells"])
-            a_pen = (a_mom - b_mom) if a_mom > b_mom else 0.0
-            b_pen = (b_mom - a_mom) if b_mom > a_mom else 0.0
-            if PER_CELL:
-                # Increment 5: intrinsic charge (cavalry) presses while out-momentuming; the
-                # DEFENDER's engaged-column depth absorbs the charge — deep absorbs, thin is punched through.
-                if a_pen > 0: a_pen += atom_a.charge_pen
-                if b_pen > 0: b_pen += atom_b.charge_pen
-                a_pen = max(0.0, a_pen - _defender_depth(unit_b, p["b_cells"]))
-                b_pen = max(0.0, b_pen - _defender_depth(unit_a, p["a_cells"]))
-            if a_pen > 0: ns_a += min(PUNCTURE_CAP, int(a_pen)) * SIGMA_PER_D
-            if b_pen > 0: ns_b += min(PUNCTURE_CAP, int(b_pen)) * SIGMA_PER_D
-            # Phase 3: a landed charge also delivers a DEFENDER moral shock (du Picq), gated by the
-            # defender's preparedness (facing/brace/depth/shaken). Charger A out-momentums B -> B is
-            # shocked (applied to B's offence); and vice versa. Distinct from puncture: puncture is the
-            # charger's PHYSICAL penetration (depth-absorbed, boosts charger); shock is the defender's
-            # MORAL collapse (discipline/stance/facing-gated, lowers defender). Zone = defender's octagon
-            # facing-vs-charger (b_angle_mod for B: GREEN 0 / YELLOW -1 / RED -2 via ANGLE_DEF_MOD).
-            if PER_CELL:
-                if a_pen > 0:
-                    _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:148 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
-                    ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
-                elif MB_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
-                    # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
-                    # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
-                    # fires even WITHOUT a momentum charge (the charge path's gap). elif -> mutually
-                    # exclusive with the charge path (no double-count); b_fixed_other -> provably inert
-                    # single-subunit. [canonical: Cannae 216 BC; du Picq Battle Studies -- the
-                    # unfaceable attack on a pinned line.]
-                    # [ED-MB-0075 option (2)] Flag only, here: the rear/flank damage is a CONTRIBUTING CAUSE of morale
-                    # collapse, checked against Discipline (ED-MB-0067 Part C, C2/C3), not a second combat-effectiveness
-                    # penalty. The roll-gated erosion (discipline_check_cascade against dmg / (agg_discipline x command),
-                    # the same formula the multi-unit loop's freed_attacker path uses) applies once per UNIT per TICK in
-                    # run_battle's per-tick loop, after damage commits.
-                    shocked_b = True
-                if b_pen > 0:
-                    _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:148 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
-                    ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
-                elif MB_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
-                    # A (envelopment shock), mirror of the B branch above — see its comment for the
-                    # [ED-MB-0075 option (2)] rationale: flag only, no pre-combat net-successes penalty.
-                    shocked_a = True
-                # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
-                # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
-                # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
-                # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
-                # pikes break a cavalry charge, a loose/shallow line is still ridden down.
-                # [ED-1091, Jordan-approved 2026-07-02] MB_RECOIL_FRONTAL zone-gates the recoil to the
-                # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
-                # (Burkholder 2007), so a flank/rear charge into a braced wall is not recoiled. Zone read: the defender's
-                # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
-                # [canonical: config.py:148 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
-                # [ED-1095, Jordan-ruled 2026-07-02] MB_RECOIL_CHARGER_GATE additionally requires the
-                # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
-                # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
-                # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
-                # reach_for is live: reach_for('infantry')=0.1 < reach_for('cavalry')=0.2, so a braced GENERIC-INFANTRY wall
-                # fails `reach_for(defender) >= reach_for(charger)` and MB_CHARGE_RECOIL never fires; a brace IS a hedge of
-                # set poles, so a braced defender should carry a pole-armed troop type (pike 0.3 >= 0.2 passes).
-                # [ED-MB-0041 Tier-2] CHARGER-ROLE LATCH. `a_mom > b_mom` is how the engine identifies WHO is the charger;
-                # it is not itself the cause of the recoil. The cause is a mounted body being pressed onto a hedge of set
-                # poles, and a wall does not stop repelling after one tick. Momentum is an impulse (units.py: a halted cell
-                # records 0), so the differential is true only on the tick of impact.
-                #
-                # So the ROLE is latched at impact and held while the pair stays in contact: the atom
-                # remembers which opponents it charged. Everything else about the gate is unchanged —
-                # brace, frontal zone, cavalry-only and the reach test all still have to pass every tick,
-                # so the wall stops repelling the moment it is broken, flanked or out-reached. Cleared
-                # when the pair leaves contact (below) and at the battle boundary.
-                _a_press = getattr(atom_a, '_pressing', None)
-                if _a_press is None: _a_press = atom_a._pressing = set()
-                _b_press = getattr(atom_b, '_pressing', None)
-                if _b_press is None: _b_press = atom_b._pressing = set()
-                if a_mom > b_mom: _a_press.add(id(atom_b))
-                if b_mom > a_mom: _b_press.add(id(atom_a))
-                a_charging = (a_mom > b_mom) or (id(atom_b) in _a_press)
-                b_charging = (b_mom > a_mom) or (id(atom_a) in _b_press)
-                if MB_BRACE_ENABLED:
-                    if (a_charging and _subunit_braced(atom_b, t) and (not MB_RECOIL_FRONTAL or b_angle_mod > -0.5)
-                            and (not MB_RECOIL_CHARGER_GATE or (charge_for(atom_a.troop_type) > 0
-                                                                 and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
-                        ns_a -= MB_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                    elif (b_charging and _subunit_braced(atom_a, t) and (not MB_RECOIL_FRONTAL or a_angle_mod > -0.5)
-                            and (not MB_RECOIL_CHARGER_GATE or (charge_for(atom_b.troop_type) > 0
-                                                                 and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
-                        ns_b -= MB_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
-        # [ED-MB-0018] The legacy ENCIRCLEMENT_PENALTY fires on the SAME >=2 trigger as the multi-side damage
-        # shock, so under the octagon flag it is gated off: the octagon multi-side shock is the single owner of
-        # the multi-engagement effect.
-        if not MB_OCTAGON_DMG:
-            if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
-            if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
-        if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
-        if atom_b.unit_type == 'ranged': ns_b += RANGED_MELEE_SIGMA
-        ns_a += _morale_sigma(unit_a, atom_a)    # graded morale effectiveness (du Picq): per-subunit morale
-        ns_b += _morale_sigma(unit_b, atom_b)
-        if PER_CELL:    # Increment 3: fatigue of the engaged front (depth-damped) as delta-sigma
-            ns_a += _fatigue_sigma(unit_a, set(c for r, c in p["a_cells"]))
-            ns_b += _fatigue_sigma(unit_b, set(c for r, c in p["b_cells"]))
-        # Overhang/flank pressure is delivered by the octagon flank multiplier + graded multi-side shock (B6) +
-        # the perimeter/orbital-wheel envelopment (ED-MB-0035); there is no separate envelopment sigma term.
-        if MB_INTENT_RESOLUTION:
-            # [ED-MB-0029] INTENT as an offence/defence commitment (mass_battle_v30 §A Offensive/
-            # Defensive axis). A subunit's own commitment cX (aggressive +1 / balanced 0 / hold,
-            # retreat -1) shifts its OWN offence (cX·INTENT_OFFENSE_D) and the ENEMY's offence against
-            # it (cX·INTENT_DEFENSE_D — aggressive EXPOSES, defensive BLUNTS). So A's offence net rises
-            # with A's aggression and with B's exposure, and falls when B holds: ns_a gains
-            # (cA·OFF + cB·DEF). Symmetric for B. A holding pin (cA=-1) vs a pressing foe (cB=+1) nets
-            # ~even at OFF≈DEF — the pin is NOT crushed, it survives to buy time (Cannae centre); two
-            # holders grind slowly; two aggressors trade fast and bloody. Delta-sigma (uniform-impact),
-            # like every other advantage above — NOT a raw damage multiplier. Gated; balanced=0 -> inert.
-            cA = STANCE_COMMITMENT.get(atom_a.eff_stance, 0)   # [MB-04] role keyword reads through eff_stance
-            cB = STANCE_COMMITMENT.get(atom_b.eff_stance, 0)
-            ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
-            ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
-        # [MB-05] A.9 terrain dice (`Army.terrain_off_d`/`terrain_def_d`, set by
-        # `massbattle._run_and_grade`): a side's own offence dice, less the enemy's defence dice --
-        # the same Off/Def reading as the INTENT term above. Guarded so an untouched pair adds nothing.
-        _ta = unit_a.terrain_off_d - unit_b.terrain_def_d
-        _tb = unit_b.terrain_off_d - unit_a.terrain_def_d
-        if _ta: ns_a += _ta * SIGMA_PER_D
-        if _tb: ns_b += _tb * SIGMA_PER_D
-        if MB_FRACTIONAL_POOL:
-            # [ED-MB-0032] roll the CONTINUOUS pool without flooring: the one sampler takes the pool as it is, and the
-            # one boost reads the same pool (a dead atom's net is forced to 0 below regardless, same as the integer path).
-            _apr = a_pool_raw if not a_dead else 0.0
-            _bpr = b_pool_raw if not b_dead else 0.0
-            a_net = roll_net_continuous(_apr, rng=rngsource.get()) + _net_boost(ns_a, _apr)
-            b_net = roll_net_continuous(_bpr, rng=rngsource.get()) + _net_boost(ns_b, _bpr)
-        else:
-            a_net = roll_pool(a_pool) + _net_boost(ns_a, a_pool)
-            b_net = roll_pool(b_pool) + _net_boost(ns_b, b_pool)
-    else:
-        # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
-        # [ED-MB-0018] octagon = damage multiplier under MB_OCTAGON_DMG -> not a pool penalty here
-        a_pool = max(1, a_pool + (0 if MB_OCTAGON_DMG else round(a_angle_mod)))
-        b_pool = max(1, b_pool + (0 if MB_OCTAGON_DMG else round(b_angle_mod)))
-        if PUNCTURE_ENABLED:
-            a_mom = _momentum_speed(atom_a, p["a_cells"])
-            b_mom = _momentum_speed(atom_b, p["b_cells"])
-            if a_mom > b_mom:   a_pool += min(PUNCTURE_CAP, int(a_mom - b_mom))
-            elif b_mom > a_mom: b_pool += min(PUNCTURE_CAP, int(b_mom - a_mom))
-        if not MB_OCTAGON_DMG:   # [ED-MB-0018] see the sigma-head gate above — no double-count
-            if eng_counts.get(id(atom_a), 0) >= 2: a_pool = max(1, a_pool - ENCIRCLEMENT_PENALTY)
-            if eng_counts.get(id(atom_b), 0) >= 2: b_pool = max(1, b_pool - ENCIRCLEMENT_PENALTY)
-        if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
-        if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
-        # [MB-05] A.9 terrain dice, whole dice on the pool (this path's currency) -- see the sigma head.
-        _ta = round(unit_a.terrain_off_d - unit_b.terrain_def_d)
-        _tb = round(unit_b.terrain_off_d - unit_a.terrain_def_d)
-        if _ta: a_pool = max(1, a_pool + _ta)
-        if _tb: b_pool = max(1, b_pool + _tb)
-        a_net = roll_pool(a_pool)
-        b_net = roll_pool(b_pool)
-    # `roll_pool` (the whole-die path) floors its own pool argument to a minimum of 1
-    # internally, so zeroing `a_pool`/`b_pool` above (for a routed/broken atom) has NO effect on `a_net`/
-    # `b_net`. Force the net directly here: a dead atom always resolves to the owner's `net<=0` ->
-    # "Failure" -> `DAMAGE_BY_DEGREE["Failure"]` = 0 damage.
-    if a_dead: a_net = 0
-    if b_dead: b_net = 0
-    a_deg = degree_label(a_net, max(1, b_net))
-    b_deg = degree_label(b_net, max(1, a_net))
-    # [ED-MB-0018] Octagon = DAMAGE-RECEIVED MULTIPLIER (Jordan): the arc the attacker strikes from
-    # multiplies the DEFENDER's casualties -- front 1.0x, flank 1.5x, rear 2.0x -- interpolated from the
-    # dedicated per-cell FACING-ARC (`_octagon_cell_mods`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
-    # RED). This is the pure octagon arc (local-centroid, reaction-gated), NOT the legacy
-    # `a_angle_mod`/`b_angle_mod` bundle (which also carries wrapper/pocket/roll-up pool penalties and
-    # spuriously reads a wide line's wings as flanked head-on). Under MB_OCTAGON_DMG the legacy pool
-    # angle-penalty is zeroed above, so this multiplier + MULTI-SIDE SHOCK are the single envelopment
-    # model. MULTI-SIDE SHOCK: a subunit engaged from >=2 sides has its rank-relief divided AND
-    # shock-compromised -> an extra COMPOUNDING factor (1+MULTI_SIDE_SHOCK), not a mere halving.
-    # `a_arc`/`b_arc` are each side's own exposure, scaling that side's incoming damage (dmg_a = A's).
+
+def fights(unit, atom):
+    """True when `atom` has fighting men (MBA-04 step 4: the routed / broken / disordered tests of the retired per-subunit combat pool,
+    moved here unchanged): a routed or disordered body, or one of a routed or disordered army, contributes no attacker (`m = 0`).
+    A body at Discipline 0 has lost its formation (§A.4 "Formation broken; cannot attack"): it is marked disordered HERE, and its army
+    when every one of its units is (ED-1020: a single disordered section does not zero its healthy siblings)."""
+    if unit.routed or unit.disordered or atom.routed or atom.disordered:
+        return False
+    if atom.eff_discipline <= 0:
+        atom.disordered = True
+        if all(s.disordered for s in unit.units):
+            unit.disordered = True
+        return False
+    return True
+
+
+def commitment(atom):
+    """The body's signed commitment `c` (`STANCE_COMMITMENT` through `eff_stance`, MB-04): aggressive +1, balanced 0, hold and retreat
+    -1. A yielding body (`yield_active`, not pocketed) fights in the posture `retreat` (MBA-04 step 4: the retired yield malus). 0 with
+    MB_INTENT_RESOLUTION off (the posture and the intent levels are both inert)."""
+    if not MB_INTENT_RESOLUTION:
+        return 0
+    if getattr(atom, 'yield_active', False) and not getattr(atom, 'pocketed', False):
+        return STANCE_COMMITMENT['retreat']
+    return STANCE_COMMITMENT.get(atom.eff_stance, 0)
+
+
+def contact_z(bout, t, slot_a, slot_b, side):
+    """The standard normal of one side of one contact in one tick (MBA §1.3 step 5): the field's `Draw` key re-mixed with
+    `contact|bout|tick|pair|side` (`draw.H2`) and read by `Draw.normal` on its own key. One key per purpose (A-30): it takes nothing
+    from the field's stream, so a replay reproduces the tick and no other draw re-keys it. `bout` is the army's `run_battle` count
+    (`battle_loop.run_battle` bumps it), `slot_a`/`slot_b` the two bodies' places in their armies, `side` the receiving side."""
+    key = _draw.H2(rngsource.get().key, f"contact|{bout}|{t}|{slot_a}|{slot_b}|{side}")
+    return _draw.seeded(key).normal(0.0, 1.0)
+
+
+def contact_vector(atom_d, unit_d, d_cells, d_share, atom_a, unit_a, a_cells, a_front, a_share, fight_a,
+                   exposure_d, levels_d):
+    """The matchup vector of receiving side `d` of one contact (MBA §1.1; the builder MBA-04 step 2 names, "which state is which
+    field"):
+      `arm_a`, `armour_d`, `skill_a`, `skill_d`, `arm_d`, `armour_a` -- `fighter` of the two bodies;
+      `rounds_d` -- `1 + (K - 1) x (1 - s)`, `s` the column stamina share of d's contact files (`percell.column_stamina_share`, the one
+          ledger), `K` the table's last round: a fresh front fights its first round, a spent one its K-th;
+      `support_a` -- `(front + support) / front` of the attacker in this contact (`exchange._pair_troops`: its contact cells' men and its
+          depth-weighted ranks behind, `support_weight`): 1 for a one-rank front, more where ranks behind reach; 0 for a body with no
+          fighting men (`fights`);
+      `exposure_d`, `levels_d` -- the caller's (they need both bodies' arcs, postures and the charge read of the pair);
+      `frontage` -- the men of the two fronts facing each other, counted on the ATTACKER's front: `engaged_files` of a's contact cells
+          (each at `1 / m` of the pairs it is in; on the field path a's own engaged width): each of a's front men fights one duel a
+          round against the man before him, so the felled are a's front men times the felling chance. This is the retired owner's own
+          direction (`_lanchester_strength` of A's contact set the casualties to B), re-stated as men. [ASSUMPTION: the attacker's front,
+          not the smaller of the two -- basis: a body struck obliquely by a front it does not face has a near-zero engaged width of its
+          own (the OBB overlap is per side), and the smaller of the two would spare it the blows of the front that faces it; measured
+          on the flank row's own field, the defender's losses FELL when a flanker joined. Reversible: this line];
+      `men_d` -- d's men in its contact cells at the same shares, the draw's upper clip."""
+    arm_a, armour_a, skill_a = fighter(atom_a)
+    arm_d, armour_d, skill_d = fighter(atom_d)
+    k = contact_table.rounds_k()
+    s = column_stamina_share(unit_d, {c for _r, c in d_cells})
+    front_a, engaged_a = _pair_troops(atom_a, a_cells)
+    support_a = engaged_a / front_a if fight_a and front_a > 0 else 0.0
+    men_d = engaged_files(d_cells, atom_d, None, d_share)
+    frontage = engaged_files(a_cells, atom_a, a_front, a_share)
+    return ContactVector(arm_a=arm_a, armour_d=armour_d, skill_a=skill_a, skill_d=skill_d, rounds_d=1.0 + (k - 1) * (1.0 - s),
+                         support_a=support_a, exposure_d=exposure_d, levels_d=tuple(levels_d), frontage=frontage, men_d=men_d,
+                         arm_d=arm_d, armour_a=armour_a)
+
+
+def _morale_level(unit, atom):
+    """The body's own morale as a level in skill steps (<= 0): `_morale_sigma`'s graded shape (0 at full morale, the full scale near
+    rout) scaled to `contact.levels.morale_near_rout`. It lowers what the body inflicts, as it lowered its offence net."""
+    return _morale_sigma(unit, atom) / MORALE_SIGMA_SCALE * LEVEL_MORALE_NEAR_ROUT if MORALE_SIGMA_SCALE else 0.0
+
+
+def _charge_level(defender, def_cells, zone, atom, t):
+    """A charge's moral shock on the struck body as a level in skill steps (<= 0): `_charge_shock_sigma`'s preparedness-gated shape
+    scaled to `contact.levels.charge_cap` at its cap (`MB_CHARGE_SIGMA`). It lowers what the shocked body inflicts."""
+    sig = _charge_shock_sigma(defender, def_cells, zone, atom, t)
+    return sig / MB_CHARGE_SIGMA * LEVEL_CHARGE_CAP if MB_CHARGE_SIGMA else 0.0
+
+
+def resolve_melee_pair(p, atom_a, atom_b, unit_a, unit_b, a_angle_mod, b_angle_mod, a_fixed_other, b_fixed_other, eng_counts,
+                       _atom_sides, _octagon_cell_mods, cell_dmg_a, cell_dmg_b, t=None):
+    """One contact pair's melee resolution, by the contact draw (B19.12, MBA-04 step 2): each side's casualties are the other side's
+    measured felling chance over its exposure and support, drawn once on its own key, and land on the receiving side's contact cells.
+    Returns `(cas_a, cas_b, shocked_a, shocked_b)`: the casualties to A and to B (the caller accumulates them) and the two
+    envelopment-shock flags the pair set. `cell_dmg_a`/`cell_dmg_b` are the caller's per-cell accumulators, written in place.
+    `_octagon_cell_mods` is the caller's closure (it closes over the tick `t`).
+
+    THE LEVELS (MBA §1.3 step 2), in skill steps, one step a die-equivalent (the tree's conversion: `SIGMA_PER_D` sigma a die, one die
+    a point of skill). Each is a term of the retired sigma head, kept in the role and the sign it had there: a term that raised a side's
+    offence net is a level on the OTHER side's felling chance (`on_b` collects A's offence terms, `on_a` B's). So the vector of the
+    receiving side carries every level of the contact that bears on it -- its own posture against the attacker's, the attacker's
+    terrain, morale, momentum and the shock or recoil the attacker suffered -- and there is no `levels_a` (the attacker's terms ARE
+    `levels_d`'s; the other side's are the mirror vector's). Intent (`contact.levels.intent_*`), terrain dice (`terrain_die`), charge
+    shock (`charge_cap`) and morale (`morale_near_rout`) read the troop file's seeds; the puncture and the recoil, which have no row there,
+    keep their die counts (`PUNCTURE_CAP`, `MB_CHARGE_RECOIL`) at one step a die. `RANGED_MELEE_SIGMA` is dropped (a missile troop
+    fights with its own sidearm, in the table) and `MB_STAM_SIGMA` is dropped (fatigue is `rounds_d`).
+
+    THE EXPOSURE (MBA §1.4): `EXPOSURE_BASE x posture x arc_d x crowding_d x cover_d`; `posture = 1 + POSTURE_K x (cA + cB)` floored at
+    `POSTURE_FLOOR`; `arc_d` the octagon multiplier of d's contact cells (front 1.0, flank 1.5, rear 2.0, the mean arc as the retired
+    damage multiplier read it); `crowding_d = 1 + MULTI_SIDE_SHOCK x (sides - 1)` on the faces d is struck on; `cover_d` the army's
+    `cover` (walls, `massbattle._run_and_grade`). Under MB_OCTAGON_DMG off the arc is 1 and the legacy angle and encirclement penalties
+    are levels (one step a die), as they were dice."""
+    shocked_a = shocked_b = False
+    on_a, on_b = [], []          # levels in skill steps on A's felling chance (B's offence terms) and on B's (A's offence terms)
+    fight_a, fight_b = fights(unit_a, atom_a), fights(unit_b, atom_b)
+    if not MB_OCTAGON_DMG:
+        # [ED-MB-0018] legacy path: the octagon is an angle penalty on the struck side's own offence (a_angle_mod <= 0 when A
+        # flanked) and the encirclement penalty fires on >= 2 pairs; under MB_OCTAGON_DMG both are the arc and the crowding below.
+        on_b.append(a_angle_mod)
+        on_a.append(b_angle_mod)
+        if eng_counts.get(id(atom_a), 0) >= 2: on_b.append(-ENCIRCLEMENT_PENALTY)
+        if eng_counts.get(id(atom_b), 0) >= 2: on_a.append(-ENCIRCLEMENT_PENALTY)
+    if PUNCTURE_ENABLED:
+        a_mom = _momentum_speed(atom_a, p["a_cells"])
+        b_mom = _momentum_speed(atom_b, p["b_cells"])
+        a_pen = (a_mom - b_mom) if a_mom > b_mom else 0.0
+        b_pen = (b_mom - a_mom) if b_mom > a_mom else 0.0
+        if PER_CELL:
+            # Increment 5: intrinsic charge (cavalry) presses while out-momentuming; the
+            # DEFENDER's engaged-column depth absorbs the charge — deep absorbs, thin is punched through.
+            if a_pen > 0: a_pen += atom_a.charge_pen
+            if b_pen > 0: b_pen += atom_b.charge_pen
+            a_pen = max(0.0, a_pen - _defender_depth(unit_b, p["b_cells"]))
+            b_pen = max(0.0, b_pen - _defender_depth(unit_a, p["a_cells"]))
+        if a_pen > 0: on_b.append(min(PUNCTURE_CAP, int(a_pen)))
+        if b_pen > 0: on_a.append(min(PUNCTURE_CAP, int(b_pen)))
+        # Phase 3: a landed charge also delivers a DEFENDER moral shock (du Picq), gated by the defender's preparedness
+        # (facing/brace/depth/shaken): the charger's PHYSICAL penetration (the puncture above) is distinct from the defender's
+        # MORAL collapse, which lowers what the shocked body inflicts. Zone = defender's octagon facing-vs-charger (GREEN 0 /
+        # YELLOW -1 / RED -2 via ANGLE_DEF_MOD).
+        if PER_CELL:
+            if a_pen > 0:
+                _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:148 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
+                on_a.append(_charge_level(unit_b, p["b_cells"], _zb, atom_b, t))
+            elif MB_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
+                # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on its flank/rear cannot face
+                # the new threat. [ED-MB-0075 option (2)] Flag only: a contributing cause of morale collapse, checked against
+                # Discipline once per UNIT per TICK in run_battle's loop, not a second combat-effectiveness term.
+                # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
+                shocked_b = True
+            if b_pen > 0:
+                _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:148 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
+                on_b.append(_charge_level(unit_a, p["a_cells"], _za, atom_a, t))
+            elif MB_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
+                shocked_a = True   # A (envelopment shock), mirror of the B branch above
+            # Reciprocal charge-recoil: a charge driven home into a BRACED + deep + disciplined wall shatters the charger
+            # (Courtrai/Swiss/Waterloo squares), scaled by the wall's prep (discipline x depth), gated by the 'brace' INSTRUCTION.
+            # [ED-1091] MB_RECOIL_FRONTAL: only the wall's frontal (GREEN) zone recoils. [ED-1095] MB_RECOIL_CHARGER_GATE: the
+            # charger must be a charging troop type (`charge_for > 0`) and the wall's reach >= the charger's.
+            # [ED-MB-0041 Tier-2] CHARGER-ROLE LATCH: `a_mom > b_mom` identifies the charger on the tick of impact (momentum is an
+            # impulse); the role is latched while the pair stays in contact (`_pressing`, cleared by `_expire_charger_latches`),
+            # and every other gate is re-tested each tick, so the wall stops repelling the moment it is broken, flanked or out-reached.
+            _a_press = getattr(atom_a, '_pressing', None)
+            if _a_press is None: _a_press = atom_a._pressing = set()
+            _b_press = getattr(atom_b, '_pressing', None)
+            if _b_press is None: _b_press = atom_b._pressing = set()
+            if a_mom > b_mom: _a_press.add(id(atom_b))
+            if b_mom > a_mom: _b_press.add(id(atom_a))
+            a_charging = (a_mom > b_mom) or (id(atom_b) in _a_press)
+            b_charging = (b_mom > a_mom) or (id(atom_a) in _b_press)
+            if MB_BRACE_ENABLED:
+                if (a_charging and _subunit_braced(atom_b, t) and (not MB_RECOIL_FRONTAL or b_angle_mod > -0.5)
+                        and (not MB_RECOIL_CHARGER_GATE or (charge_for(atom_a.troop_type) > 0
+                                                             and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
+                    on_b.append(-MB_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b))
+                elif (b_charging and _subunit_braced(atom_a, t) and (not MB_RECOIL_FRONTAL or a_angle_mod > -0.5)
+                        and (not MB_RECOIL_CHARGER_GATE or (charge_for(atom_b.troop_type) > 0
+                                                             and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
+                    on_a.append(-MB_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a))
+    # INTENT [ED-MB-0029]: a body's own commitment raises what it inflicts (cX x intent_offense) and what it suffers (cX x
+    # intent_defense: aggressive EXPOSES, holding BLUNTS); with the posture factor below, two holders grind slowly and two aggressors
+    # trade fast and bloody. Balanced = 0 -> inert.
+    c_a, c_b = commitment(atom_a), commitment(atom_b)
+    if c_a or c_b:
+        on_b.append(c_a * LEVEL_INTENT_OFFENSE + c_b * LEVEL_INTENT_DEFENSE)
+        on_a.append(c_b * LEVEL_INTENT_OFFENSE + c_a * LEVEL_INTENT_DEFENSE)
+    # [MB-05] A.9 terrain dice (`Army.terrain_off_d`/`terrain_def_d`, set by `massbattle._run_and_grade`): a side's own offence dice,
+    # less the enemy's defence dice. Guarded so an untouched pair adds nothing.
+    _ta = unit_a.terrain_off_d - unit_b.terrain_def_d
+    _tb = unit_b.terrain_off_d - unit_a.terrain_def_d
+    if _ta: on_b.append(_ta * LEVEL_TERRAIN_DIE)
+    if _tb: on_a.append(_tb * LEVEL_TERRAIN_DIE)
+    _ma, _mb = _morale_level(unit_a, atom_a), _morale_level(unit_b, atom_b)   # graded morale effectiveness (du Picq), per subunit
+    if _ma: on_b.append(_ma)
+    if _mb: on_a.append(_mb)
+    # [ED-MB-0018] The octagon arc of each side's contact cells (`_octagon_cell_mods`, the single owner: 0 front .. -2 rear per cell,
+    # reaction-gated) read as exposure: a man struck from the flank cannot keep his distance (MBA §1.4). The subunit scalar is the
+    # MEAN of the map (1 - arc x (RED - 1) / 2, capped at RED); under MB_CELL_DAMAGE the same map yields the per-cell allocation weights.
     _red = OCTAGON_DMG_MULT["RED"]
     _a_cw = _b_cw = None
+    arc_a = arc_b = crowd_a = crowd_b = 1.0
     if MB_OCTAGON_DMG:
-        # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN
-        # (the retired `_octagon_dmg_mod` scalar, byte-exact), and under MB_CELL_DAMAGE the SAME map also
-        # yields the per-cell allocation weights. The pair TOTAL is unchanged either way; the flag only
-        # changes WHERE those casualties land (see _cell_damage_weights).
         _a_cm = _octagon_cell_mods(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
         _b_cm = _octagon_cell_mods(atom_b, list(set(p["b_cells"])), list(set(p["a_cells"])))
         a_arc = sum(_a_cm.values()) / len(_a_cm) if _a_cm else 0.0
         b_arc = sum(_b_cm.values()) / len(_b_cm) if _b_cm else 0.0
-        _a_dmg_mult = min(_red, 1.0 - a_arc * (_red - 1.0) / 2.0)
-        _b_dmg_mult = min(_red, 1.0 - b_arc * (_red - 1.0) / 2.0)
+        arc_a = min(_red, 1.0 - a_arc * (_red - 1.0) / 2.0)
+        arc_b = min(_red, 1.0 - b_arc * (_red - 1.0) / 2.0)
         if MB_CELL_DAMAGE:
             _a_cw = _cell_damage_weights(atom_a, _a_cm, _red)
             _b_cw = _cell_damage_weights(atom_b, _b_cm, _red)
-        # MULTI-SIDE SHOCK, GRADED by the number of DISTINCT sides struck (`_atom_sides` above): the
-        # rotate-in/out relief system is progressively more compromised the more directions a body is
-        # engaged from -- 2 sides -> x1.5, 3 -> x2.0, 4 -> x2.5. Compounds on the arc AFTER the cap, so a rear pair on a 2-sided
-        # body reaches ~3.0x -- the annihilation-by-encirclement regime (du Picq / Cannae).
+        # MULTI-SIDE crowding, GRADED by the number of DISTINCT faces struck (`_atom_sides`): 2 sides x1.5, 3 x2.0, 4 x2.5.
         _na = len(_atom_sides.get(id(atom_a), ()))
         _nb = len(_atom_sides.get(id(atom_b), ()))
-        if _na >= 2: _a_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK * (_na - 1))
-        if _nb >= 2: _b_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK * (_nb - 1))
-    else:
-        _a_dmg_mult = _b_dmg_mult = 1   # int 1 (not 1.0): `X * 1` preserves X's exact type -> the
-        #                                 legacy MB_OCTAGON_DMG=0 path stays byte-exact (a float 1.0
-        #                                 would coerce integer casualties to float and move the digest)
-    if LANCHESTER_ENABLED:
-        # P-L Linear Law: casualties to X scale with the ENEMY's engaged strength in
-        # contact (frontage-capped); DAMAGE_BY_DEGREE retained as per-soldier exchange
-        # quality. Numbers-in-contact lives ONLY here under Lanchester (the run_battle
-        # opp_frac post-scaler is skipped) — one variable, one role (role-conflation, Phase 3d).
-        # [v2 Stage D, ED-MB-0013] Pass the continuous engaged frontage width (OBB front-overlap)
-        # when the FIELD_MOVEMENT contact path recorded it; p.get(...) is None on the grid/OFF path
-        # (whose pairs carry no *_front key) -> _lanchester_strength falls back to the legacy integer
-        # column count, keeping the byte-exact grid oracle untouched (I4).
-        lin_b = _lanchester_strength(p["b_cells"], unit_b, p.get("b_front"))   # B's contacting strength -> casualties to A
-        lin_a = _lanchester_strength(p["a_cells"], unit_a, p.get("a_front"))   # A's contacting strength -> casualties to B
-        _pair_a = K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
-        _pair_b = K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
-    else:
-        _pair_a = CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
-        _pair_b = CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
+        if _na >= 2: crowd_a = 1.0 + MULTI_SIDE_SHOCK * (_na - 1)
+        if _nb >= 2: crowd_b = 1.0 + MULTI_SIDE_SHOCK * (_nb - 1)
+    posture = max(POSTURE_FLOOR, 1.0 + POSTURE_K * (c_a + c_b))
+    exp_a = EXPOSURE_BASE * posture * arc_a * crowd_a * getattr(unit_a, 'cover', 1.0)
+    exp_b = EXPOSURE_BASE * posture * arc_b * crowd_b * getattr(unit_b, 'cover', 1.0)
+    a_share, b_share = p.get("a_share"), p.get("b_share")
+    vec_a = contact_vector(atom_a, unit_a, p["a_cells"], a_share, atom_b, unit_b, p["b_cells"], p.get("b_front"), b_share, fight_b,
+                           exp_a, on_a)
+    vec_b = contact_vector(atom_b, unit_b, p["b_cells"], b_share, atom_a, unit_a, p["a_cells"], p.get("a_front"), a_share, fight_a,
+                           exp_b, on_b)
+    bout = getattr(unit_a, '_bout', 0)
+    slot_a = next(i for i, u in enumerate(unit_a.units) if u is atom_a)
+    slot_b = next(i for i, u in enumerate(unit_b.units) if u is atom_b)
+    z_a = contact_z(bout, t, slot_a, slot_b, 'A')
+    z_b = contact_z(bout, t, slot_a, slot_b, 'B')
+    cas_a = contact_casualties(vec_a, contact_table, z_a)
+    cas_b = contact_casualties(vec_b, contact_table, z_b)
     if MB_CELL_DAMAGE:
-        # [ED-MB-0040] Land THIS pair's casualties on the defender's CONTACT CELLS, split by each cell's
-        # own exposure weight (troops x its own facing multiplier) — the cell is the primitive. Totals are
-        # identical to the aggregate path; only the placement differs.
-        _accum_cell_damage(cell_dmg_a, atom_a, _a_cw, _pair_a)
-        _accum_cell_damage(cell_dmg_b, atom_b, _b_cw, _pair_b)
-    trace_event('melee', a_pool=a_pool, b_pool=b_pool,
-                ns_a=round(ns_a, 3), ns_b=round(ns_b, 3),
-                a_net=round(a_net, 2), b_net=round(b_net, 2),
-                a_deg=a_deg, b_deg=b_deg)
-    return _pair_a, _pair_b, shocked_a, shocked_b
+        # [ED-MB-0040] Land THIS pair's casualties on the defender's CONTACT CELLS, split by each cell's own exposure weight
+        # (troops x its own facing multiplier) — the cell is the primitive. Unchanged by the draw (MBA §1.3 step 6).
+        _accum_cell_damage(cell_dmg_a, atom_a, _a_cw, cas_a)
+        _accum_cell_damage(cell_dmg_b, atom_b, _b_cw, cas_b)
+    trace_event('melee', exp_a=round(exp_a, 4), exp_b=round(exp_b, 4), z_a=round(z_a, 3), z_b=round(z_b, 3),
+                cas_a=round(cas_a, 2), cas_b=round(cas_b, 2))
+    return cas_a, cas_b, shocked_a, shocked_b
 
 
 REARGUARD_PENALTY = 2  # [canonical: §A.12 — "Fast may rearguard at −2D Off"]
@@ -387,8 +406,9 @@ class ContactVector:
     """The matchup vector: one contact and one receiving side `d` (the other is `a`), per tick (MBA §1.1). Every field belongs to the two bodies
     in contact; there is no side-wide value. `arm_d` and `armour_a` are the defender's arm and the attacker's armour: the table is keyed on
     the whole ordered pair of fighter types and a felling chance marginalised over either is undefined (`contact_table`'s signature).
-    `men_d` is the men of the defender in the contact cells, the draw's upper clip (§1.3 step 5). `levels_d` and `levels_a` are named
-    levels in skill steps; the draw reads `levels_d` (§1.3 step 2), `levels_a` rides for the builder's other side."""
+    `men_d` is the men of the defender in the contact cells, the draw's upper clip (§1.3 step 5). `levels_d` are the named levels in
+    skill steps that bear on the defender's felling chance (§1.3 step 2), the attacker's offence terms among them; there is no
+    `levels_a` (B19.12: the attacker's levels ARE the defender's, and the other side's are the mirror vector's; `resolve_melee_pair`)."""
     arm_a: str
     armour_d: str
     skill_a: float
@@ -397,7 +417,6 @@ class ContactVector:
     support_a: float
     exposure_d: float
     levels_d: tuple
-    levels_a: tuple
     frontage: float
     men_d: float
     arm_d: str

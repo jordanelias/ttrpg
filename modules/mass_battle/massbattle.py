@@ -19,6 +19,7 @@ from modules.mass_battle import config as _config
 from modules.mass_battle.config import (STAMINA_MAX, CELL_CAP, COMMAND_DEFAULT, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS,
                                         MIN_UNITS_PER_ARMY, ROLE_SPEC)
 from modules.mass_battle.armies import UNIT_CAP
+from modules.mass_battle.core.contact_draw import COVER_WALLS
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.orderofbattle import (OrderOfBattle, UnitRow, _SIDE_DIR, _place, class_of,
@@ -432,9 +433,9 @@ def _oob_unit(oob, weight, side, morale_start):
 def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(None, None)):
     """`run_battle` plus the finished field's typed outcome (`_grade`; `resolve_field` is its only caller).
 
-    `walls_dr` (plan position `20-v`, `H-150`): the defender DR the WALLS row adds. `None` -- the
-    default -- is A.9's own number, `terrain.WALLS_DEFENDER_DR`, read here and never copied; an int
-    overrides it for the one call (the season's `field_walls_dr` fixture, swept 3 / 0 / 1).
+    `walls_dr` (plan position `20-v`, `H-150`): the strength of the WALLS row, on A.9's DR scale. `None` -- the
+    default -- is A.9's own number, `terrain.WALLS_DEFENDER_DR`, read here and never copied, the full cover; an int
+    overrides it for the one call (the season's `field_walls_dr` fixture, swept 3 / 0 / 1: full cover, none, a third).
 
     ⚠ CAVEATS THAT BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
@@ -443,10 +444,9 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(N
     is identified and applies nothing, see below); the attacker is `unit_a`, the defender `unit_b`.
     FOREST_BROKEN's speed half is INERT -- `run_battle` never reads `.speed` (only
     `orchestration.pursuit_damage` and the multi-unit loop of `systems/mass_battle/sim/multi.py` do, and neither is reachable from here).
-    WALLS (plan position `20-iv`, the garrisoned march target) adds `terrain.WALLS_DEFENDER_DR` to the
-    DEFENDER's `dr`, read live at every melee and rout hit (`eff_dr` falls through to the Army;
-    `h_per_size`, the one field derived from `dr` at construction, has no reader), so mutating it here is
-    the same in-place shape the speed half uses. WALLS' other clauses, "no flanking; Slow cannot
+    WALLS (plan position `20-iv`, the garrisoned march target) sets the DEFENDER's `cover` (B19.12, MBA §1.4: the factor on the
+    duel rounds its front men fight a tick, read by the contact draw), scaled by `walls_dr` against `terrain.WALLS_DEFENDER_DR`;
+    mutating it here is the same in-place shape the speed half uses. WALLS' other clauses, "no flanking; Slow cannot
     advance", are NOT applied: this engine's one-subunit season units have no flank or advance order to
     forbid. UPHILL and RIVER_CROSSING (MB-05) are dice rows: their A.9 dice go onto
     `Army.terrain_off_d`/`terrain_def_d` (`terrain.py`'s constants, which say how a die reaches the
@@ -471,7 +471,14 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(N
         if unit_b.speed == 'Fast':
             unit_b.speed = 'Standard'
     elif terrain == WALLS:
-        unit_b.dr += WALLS_DEFENDER_DR if walls_dr is None else walls_dr
+        # [B19.12, MBA §1.4] Walls are the defender's COVER on the contact draw's exposure, not armour: "`WALLS_DEFENDER_DR = 3`
+        # becomes `cover: 0.5`" (`troops.yaml: contact.exposure.cover.walls`, `contact_draw.COVER_WALLS`). The season's `walls_dr`
+        # sweep keeps its arms by scaling the cover's deficit linearly: `walls_dr` 3 (A.9's, the default) is the full cover, 0 is the
+        # open field (cover 1), 1 a third of it. [ASSUMPTION: linear in the DR it replaces -- basis: the sweep's arms (3 / 0 / 1) must
+        # still read the walled field, the open field and a weaker wall; reversible: this line]. `dr` is no longer touched: the
+        # contact draw reads armour from the troop row, never a subtracted DR.
+        walls = WALLS_DEFENDER_DR if walls_dr is None else walls_dr
+        unit_b.cover = max(0.0, 1.0 - (1.0 - COVER_WALLS) * walls / WALLS_DEFENDER_DR)
     elif terrain == UPHILL:
         unit_a.terrain_off_d += UPHILL_ATTACKER_OFF_D
         unit_b.terrain_def_d += UPHILL_DEFENDER_DEF_D

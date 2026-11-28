@@ -4,7 +4,7 @@ Depends on config + geometry."""
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 
-__all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', 'column_exhausted', '_defender_depth', 'update_stamina', 'apply_to_subunit']
+__all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', 'column_stamina_share', 'column_exhausted', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -48,7 +48,7 @@ def sync_col_grid(unit):
 
     [ED-MB-0041 Tier-2] `col_grid` is built once, in `Army.__post_init__`, from the spawn footprint; this
     rebuilds its membership so a body that wheeled or drifted laterally reads live columns (an empty grid reads
-    `_fatigue_sigma` 0.0 and `_defender_depth` 0.0).
+    `column_stamina_share` 1.0 and `_defender_depth` 0.0).
 
     `depth` tracks live ranks: a column ground down from 5 ranks to 1 does not claim the
     rotation/absorption of a deep file it no longer has. Stamina and start_density are carried over for
@@ -229,22 +229,23 @@ def apply_to_subunit(unit, subunit, dmg):
     sync_col_grid(unit)
 
 
-def _fatigue_sigma(unit, engaged_cols):
-    """Increment 3: fatigue of the engaged front as a delta-sigma. 0 at full stamina, down to
-    -MB_STAM_SIGMA as the fighting columns tire. Density-weighted over the engaged columns.
+def column_stamina_share(unit, engaged_cols):
+    """The engaged front's stamina as a share `s` in [0, 1] (B19.12: the contact draw reads it as `rounds_d`, MBA §1.1): the
+    density-weighted mean of `stamina / STAMINA_MAX` over the live column blocks in `engaged_cols`, else over every live block.
+    1.0 (fresh) with no grid (PER_CELL off) or no live block. It was `_fatigue_sigma`'s share, read as a delta-sigma malus until the
+    pool left the melee pair (`MB_STAM_SIGMA` x (s - 1)); the share is the quantity, the malus is gone.
     [historical anchor: du Picq — a tiring front loses combat effectiveness; depth that can
      rotate fresh ranks forward sustains it, a thin line that cannot rotate wears out.]"""
     grid = getattr(unit, 'col_grid', None)
     if not grid:
-        return 0.0
+        return 1.0
     blocks = [b for b in grid if b.col in engaged_cols and b.alive()]
     if not blocks:
         blocks = [b for b in grid if b.alive()]
     tot = sum(b.density for b in blocks)
     if tot <= 0:
-        return 0.0
-    frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
-    return MB_STAM_SIGMA * (frac - 1.0)
+        return 1.0
+    return min(max(sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot, 0.0), 1.0)
 
 def column_exhausted(unit, atom=None):
     """The one reading of exhaustion off the column ledger (`_ColBlock.stamina`, the one stamina store, B19.07):
