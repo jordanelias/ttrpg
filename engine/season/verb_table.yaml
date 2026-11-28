@@ -1448,6 +1448,8 @@ verbs:
     beneficiary: "actor"
     governing:   [attr.body.endurance]
     governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
+    referent_class: Rung
+    referent_class_note: "B12b.12 (H-545; `16_PESSIMIST_WR_A` \"The falsifier\": the chooser formed no cross-border `move` that arrived; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): THE DESTINATION CHANNEL, `migrate`'s. FORMED ONLY ON A `Rung`-CLASSED REFERENT -- the places the question he answers stamps as `Rung` (`queries/world_q.py::places_named`: told of and not lived under; `larders_in_purview`; `holdings_to_found`), `to` binding it through the unchanged referent rule (`decision/options.py::_derive_operand`). MEASURED before (`build_realm(0)`, two seasons): every formed `move` bound `to` to a plain referent -- a person id, a Proposition, a Record, or the settlement the mover already lives in -- so each ended in the `path` refusal, the effect's same-place decline (H-140) or a lost `draw`, and no `travel.moved` was logged. The class removes those wrong-kind formations only: the cell, eligibility and refusals are unchanged. It does not make journeys happen: what moves a person to travel is H-545's open half."
     requires:    "a contain path exists, and the actor may enter the destination"
     requires_typed:
       all:
