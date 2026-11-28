@@ -71,7 +71,7 @@ def test_risk_is_zero_at_gain_zero_and_the_chance_is_not_asked():
     p = _person("p_risk_a")
     for v in exposed:
         t = _terms(p, v, 0.0, odds=odds)
-        assert len(t) == 5 and str(t[4]) == "0.0", (v, t)          # exactly 0.0, no sign of zero
+        assert len(t) == len(CH.TERM_NAMES) and str(t[4]) == "0.0", (v, t)          # exactly 0.0, no sign of zero
         assert CH.score_total(t) == t[0] + t[1] + t[2]
     assert asked == [], "the believed chance was asked at risk_gain 0"
     live = [_terms(p, v, 1.0, odds=odds)[4] for v in exposed]

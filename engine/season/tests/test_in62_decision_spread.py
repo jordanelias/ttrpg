@@ -254,11 +254,12 @@ def season_pairs():
 
 def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms(season_pairs):
     checked = 0
-    for score, (pursuit, stance, fit, aim, risk) in season_pairs:
+    for score, (pursuit, stance, fit, aim, risk, duty) in season_pairs:
         assert fit == 0.0, fit      # `confer_fit_weight` ships 0.0 (B04.22)
         assert aim == 0.0, aim      # `aim_gain` ships 0 (B10.30)
         assert risk == 0.0, risk    # `risk_gain` ships 0 (B10.31)
-        assert score == pursuit + stance, (score, pursuit, stance)
+        # `duty` (B21d.05) is a seated officer's on his faction's goal question and on `accept`, and 0.0 for every other candidate
+        assert score == ((pursuit + stance) + duty if duty else pursuit + stance), (score, pursuit, stance, duty)
         checked += 1
     assert checked >= 1000, f"a seeded realm season formed only {checked} candidates"
     assert any(t[0] != 0 for _, t in season_pairs), "no pursuit term was nonzero: the sum proved nothing"

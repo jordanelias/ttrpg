@@ -829,11 +829,12 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # kind, `claim.held` the actor's ledger), and the person-side readers of the same map
 # (`decision/options.py::_content_answer`) DERIVE operands, they ask nothing of the fold. WORLD-ONLY (below).
 # ⚠ v11 CR-87 (B10-11; the DISPUTE, `ED-IN-0337`): `dispute`: `relation` (form 5) asked of a PERSON and the
-# actor -- *does the actor hold a deed claim of `of` that his own judgement scores against him*
-# (`queries/person_q.py::holds_dispute`, over `deeds_judged`, the one owner). `challenge`'s conjunct: a duel settles a
+# actor -- *does the actor hold a wrong `of` did him* (`queries/person_q.py::holds_dispute`, the one owner: since B21d.05, CR-88 (4), the
+# deed half of `grievance_against` above zero -- each distinct deed his pursuits, kin and holdings score against him, firmed by its distinct
+# origins; a deed he approves cancels none, a told repeat adds nothing). `challenge`'s conjunct: a duel settles a
 # dispute, so a man challenges only one he holds a wrong against. `WorldReader.read` answers it off the ACTOR'S OWN
 # ledger (`claim.held`'s F8 carve-out). WORLD-ONLY (below), for `names`' reason: a witness's ledger must not gain a
-# `dispute:<actor>` reading from a refusal it saw. CR-88 re-points it to `grievance_against`. One stem; no form.
+# `dispute:<actor>` reading from a refusal it saw. One stem; no form.
 # ⚠ v12 B11.17 (`08_FI_04` §4): `stage_open`: `relation` (form 5) asked of a RECORD -- *has a declared stage of `of`
 # not yet matured*, `state/attribution.py::a_stage_unmatured`, the one owner, with a Record that declares no stage
 # open (nothing of it can lapse). `comply`'s conjunct: a writ ends when its last declared stage matures, so a

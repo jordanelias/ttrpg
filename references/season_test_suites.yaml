@@ -73,6 +73,7 @@ suites:
     - cp_t02_06_continuations
     - cr25_computed_establish
     - cr86_realm_structure
+    - cr88_duty_of_office
     - cr89_clocks
     - cr90_clock_marks
     - dispatch_sends

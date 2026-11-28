@@ -3,20 +3,20 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 553,
-    "uncited": 421,
+    "total": 556,
+    "uncited": 424,
     "of_which_assumption_grade": 9
   },
-  "count": 553,
+  "count": 556,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 47,
+    "engine.season": 48,
     "mass_battle": 163,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 268,
+    "engine.season.settings": 270,
     "engine.season.realm": 9
   },
   "params": [
@@ -617,6 +617,17 @@
       "note": "[JUSTIFIED: V2 p2 §A.2 -- `(want, hold, bond)`: the three sums a stake, a conflict and a lean are the mean of]",
       "citation": "JUSTIFIED: V2 p2 §A.2 -- `(want, hold, bond)`: the three sums a stake, a conflict and a lean are the mean of",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.season.CREED_STEP",
+      "name": "CREED_STEP",
+      "value": 1.0,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/queries/person_q.py",
+      "note": "[JUSTIFIED: one valence step -- the stance row's unit, which `deed_steps` (B10.09) and the grudge's cap (`MEMBER_BAND`) read too]",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "engine.season.OBLIGE_TIE",
@@ -55945,6 +55956,28 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-634`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.betrayal_band",
+      "name": "betrayal_band",
+      "value": 2.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-635`, swept None (control, revert) / 2.0 (the floor, SHIPPED) / 3.0 / +inf (total)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.duty_weight",
+      "name": "duty_weight",
+      "value": 1.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-635`, swept 0 (control, revert) / 0.5 / 1.0 (SHIPPED) / 2.0",
       "citation": null,
       "citation_grade": null
     },

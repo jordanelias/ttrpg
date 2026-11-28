@@ -34,12 +34,12 @@ from typing import Any, Callable, Optional
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from ..data import goals as goals_data
-from ..data.rosters import JOURNEY_VERBS, STANCE_MAX
+from ..data.rosters import CHALLENGE_KIND, JOURNEY_VERBS, RUNG_KINDS, STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data import rosters
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
-    BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
+    BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, RECORD_SUBKINDS_BY_VERB, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
     counterparty_of, prize_step,
 )
 from ..gaps import Unspecified
@@ -49,6 +49,7 @@ from ..data.matrix import Step
 # the derived Query's caller, ID-13).
 from ..queries.person_q import (
     believed_capability, cited_support, confliction, deed_align, intent_named, intent_said, ledger_weigh, refused_before, regard, stance_toward,
+    named_station, office_factions, own_station,     # B21d.05: `duty_term`'s office and station readers
 )
 from ..data.fixtures import ROUTE_PRICING_ON
 from ..data.geography import leg_price
@@ -60,6 +61,8 @@ from ..trace_log import TRACE
 from .options import VIOLENT_OPPONENT_VERBS, containing_rung_of, opening_set, project, refusal_tolerance, scruple, seat_of
 # `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
 from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
+# B21d.05: the war context's one reader (`duty_term`'s waiver of the price of `accept`), under a public name here, as the two above.
+from .options import _war_context as war_context
 from .budget import body_band_penalty
 
 STANCE_POLARITIES = roster("stance_polarities")
@@ -171,6 +174,7 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
 # into the `memo` `score_terms` reads. TUPLES, because `_stance_arm` keys the same dict by subject id
 # (a string), so no subject can collide with one of these.
 _AXIS_W, _DAMP, _AIM = ("axis_w",), ("damp",), ("aim",)
+_DUTY = ("duty",)       # B21d.05: `person_q.office_factions(p)`, filled by `duty_term` the first time it reads it in a deliberation
 
 
 def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
@@ -351,6 +355,14 @@ def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional
     gain = fx.get("aim_gain")
     if not gain >= 0:                # `not >=`, so a NaN is refused too
         raise ValueError(f"aim_gain {gain} is not >= 0: a negative gain would score a goal's business against the goal (H-477)")
+    return goal_lean(p, c, fx, memo, odds, q, gain)
+
+
+def goal_lean(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable], q: Optional[Question], gain: float) -> float:
+    """THE GOAL'S LEAN ON THE QUESTION IT RAISED, AT `gain` (B21d.05: split out of `aim_term`, its one formula, so `aim` reads it at `aim_gain` and
+    `duty` at `duty_weight`): `gain * damp * Σ_axis to_axes(goal.pursuits)[axis] * align(c.verb, axis) * odds_weight`, where `q.source` is `need`,
+    `q.about` is a row of `goals.yaml` and `p` holds a LIVE `commit` to it; 0.0 otherwise, and 0.0 at `gain` 0 with nothing read. The goal's
+    projected lean is filled into `memo[_AIM]` once per goal per deliberation, whichever term asks first."""
     if gain == 0.0 or q is None or q.source != "need":
         return 0.0
     lean = memo[_AIM]
@@ -363,6 +375,52 @@ def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional
         return 0.0
     aim = gain * memo[_DAMP] * ltr_sum(axes[ax] * align(c.verb, ax) for ax in _AXES)
     return aim * odds_weight(p, c, fx, odds) if aim != 0.0 else aim
+
+
+def answers_challenge(c: Candidate) -> bool:
+    """WHETHER `c`'s ROW ANSWERS A CHALLENGE: its cell asks a Record of the challenge kind (`RECORD_SUBKINDS_BY_VERB[c.verb] ∋ CHALLENGE_KIND`;
+    today `accept`). Read off the row's own cell, never a verb name (B21d.05, the price of `accept`)."""
+    return CHALLENGE_KIND in RECORD_SUBKINDS_BY_VERB.get(c.verb, ())
+
+
+def duty_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable], q: Optional[Question]) -> float:
+    """WHAT HOLDING AN OFFICE ADDS TO A CANDIDATE (B21d.05, CR-88 (3) restated as B10.30's `aim`, and ED-IN-0347's price of `accept`), at
+    `Fixtures duty_weight` (H-635):
+
+      * THE OFFICE'S LEAN -- `goal_lean` at `duty_weight` where `q`'s goal belongs to a faction whose seat `p` holds (`org_faction` of the goal's
+        organization in `person_q.office_factions(p)`): his faction's goal leans him on the question it raised, and on no other question, so off
+        his office's business he is himself (the v11 `goals.expected` form moved his whole vector toward the template; this reads one goal's
+        `pursuits:` on its own question). A plain member gets the goal's lean through `aim` alone, at `aim_gain`;
+      * THE PRICE OF ANSWERING A CHALLENGE -- `- duty_weight * station / (len(rung_kinds) - 1)` on a candidate that `answers_challenge`, `station`
+        his own office's rank (`person_q.own_station`, never `standing_of`; a seatless man 0), WAIVED where the challenger (`to`) is stamped `Enemy`
+        on `q` (`options._war_context`) and `p`'s ledger names him at a station at or above `p`'s own: the realm's dispute, a peer whose fall
+        could settle it (AR-52: *"a king would see no reason to duel unless the country was at the brink of war and the duel could solve it"*).
+
+    A score term, an input to the drawn choice (A-47), never a decline. Exactly `0.0` at `duty_weight` 0 -- the CONTROL -- and nothing is read
+    there; refused below 0 (a negative weight would score the faction's business against it). [ASSUMPTION; medium; Jordan to correct; revert: no
+    slot -- the office's addend folded into `aim`'s gain, and the price unbuilt.]"""
+    weight = fx.get("duty_weight")
+    if not weight >= 0:              # `not >=`, so a NaN is refused too
+        raise ValueError(f"duty_weight {weight} is not >= 0: a negative weight would score the faction's business against it (H-635)")
+    if weight == 0.0:
+        return 0.0
+    if _DUTY not in memo:
+        memo[_DUTY] = office_factions(p)
+    out = 0.0
+    # His office first: a man who holds no seat of a faction reads no question here (the question is asked only of an officer).
+    if memo[_DUTY] and q is not None and q.source == "need":
+        goal = goals_data.goal(q.about)
+        if goal is not None and goals_data.org_faction(goal.org_kind, goal.org) in memo[_DUTY]:
+            out = goal_lean(p, c, fx, memo, odds, q, weight)
+    if answers_challenge(c):
+        mine = own_station(p)
+        if mine:
+            challenger = (c.operands or {}).get("to")
+            waived = (q is not None and challenger is not None and war_context(p, q, challenger, [], {})
+                      and named_station(p.ledger, challenger) >= mine)
+            if not waived:
+                out = out - weight * mine / (len(RUNG_KINDS) - 1)
+    return out
 
 
 def nerve(p: Person, fx: "Fixtures") -> float:
@@ -421,14 +479,16 @@ def risk_term(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable])
 
 def score_total(terms: tuple) -> float:
     """A candidate's score from its `score_terms`, the one sum (`make_chooser`, `harness/interactions.py` and
-    `harness/decision_spread.py` read it here), left to right. A `fit`, an `aim` or a `risk` of `0.0` -- every candidate at the shipped
-    weight and gains -- adds nothing, not even a sign of zero, so the score is the two-term sum exactly."""
+    `harness/decision_spread.py` read it here), left to right. A `fit`, an `aim`, a `risk` or a `duty` of `0.0` -- every candidate at the shipped
+    weight and gains but a seated officer's (B21d.05) -- adds nothing, not even a sign of zero, so the score is the two-term sum exactly."""
     s = terms[0] + terms[1]
     if terms[2]:
         s = s + terms[2]
     if terms[3]:
         s = s + terms[3]
-    return s + terms[4] if terms[4] else s
+    if terms[4]:
+        s = s + terms[4]
+    return s + terms[5] if terms[5] else s
 
 
 def chosen_values(c) -> tuple:
@@ -446,7 +506,7 @@ def choice_lean(key: str, value, axis: str) -> float:
 
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
                 q: Optional[Question] = None) -> tuple:
-    """§F2's score, term by term: `(pursuit, stance, fit, aim, risk)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
+    """§F2's score, term by term: `(pursuit, stance, fit, aim, risk, duty)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
     being `0.0` at `confer_fit_weight`'s shipped `0.0`, `aim` at `aim_gain`'s and `risk` at `risk_gain`'s). `aim` is appended after `fit`, not set before it:
     `fit` was the tuple's third element before `aim` landed (B04.22), and every reader of it by index keeps it. `risk` follows `aim`, fifth, for the same reason
     (the entry's `(pursuit, stance, aim, risk)` cannot hold: slot 3 is `fit`); `TERM_NAMES` is this tuple's names in order.
@@ -462,7 +522,9 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
       * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`;
       * `aim` -- `aim_term(p, c, fx, memo, odds, q)`: the lean of the goal `q` was raised by, on that goal's own question only (B10.30);
-      * `risk` -- `risk_term(p, c, fx, odds)`: what a bodily candidate might cost its doer, by the same `odds` query (B10.31; not asked at `risk_gain` 0).
+      * `risk` -- `risk_term(p, c, fx, odds)`: what a bodily candidate might cost its doer, by the same `odds` query (B10.31; not asked at `risk_gain` 0);
+      * `duty` -- `duty_term(p, c, fx, memo, odds, q)`: what holding an office adds, his faction's goal's lean on its own question and the price of
+        answering a challenge (B21d.05, CR-88; appended sixth, after `risk`, for the reason `risk` follows `aim`).
 
     `q` is the question being answered (`View.question`); `None` -- a reading that scores a person outside `choose` -- reads `aim` 0.0.
     `odds` is the believed-odds query a View carries (`View.odds`); a reading that scores a person outside
@@ -491,7 +553,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
-    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q), risk_term(p, c, fx, odds))
+    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q), risk_term(p, c, fx, odds),
+            duty_term(p, c, fx, memo, odds, q))
 
 
 def _npc_effort_arm(fx: "Fixtures") -> str:
@@ -836,7 +899,7 @@ def score_order(cands: list, scores: dict) -> list:
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 ATTRIBUTION_EPS = 1e-9
-TERM_NAMES = ("pursuit", "stance", "fit", "aim", "risk")      # `score_terms`' tuple, in order: what `deciding_term` names
+TERM_NAMES = ("pursuit", "stance", "fit", "aim", "risk", "duty")      # `score_terms`' tuple, in order: what `deciding_term` names
 
 
 def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: float) -> dict:

@@ -445,7 +445,10 @@ def _matter_subject(w: Any, topic: Optional[str]) -> Optional[str]:
 
 def _when_consequence_held(w: Any, ctx: Any, hearer: Any, want: bool) -> bool:
     """`consequence_held: true`: the ARGUER'S own ledger holds a deed claim about the matter's subject that the HEARER'S own pursuits score against (`person_q.holds_dispute`,
-    the one owner of that judgement, asked of a copy of the hearer carrying the arguer's ledger: his pursuits, stance and scars judge, and his own ledger is never opened)."""
+    the one owner of that judgement, asked of a copy of the hearer carrying the arguer's ledger: his pursuits, stance and scars judge, and his own ledger is never opened).
+    ⚠ B21d.05 (CR-88 (4)): `holds_dispute` reads the deed half of `grievance_against`, whose holdings rule reads the judge's `tenures`, so on this copy the HEARER'S
+    own live holds feed it while the ledger is the arguer's -- a deed the arguer reports on a seat the hearer holds is done to the hearer. Re-pointed with
+    the `dispute` stem's readers, so "a deed his pursuits score against" has one reading here and there (against only, distinct deeds)."""
     arguer, subject = w.persons.get(ctx.for_id), _matter_subject(w, ctx.topic)
     if arguer is None or subject is None or arguer is hearer:
         return not want

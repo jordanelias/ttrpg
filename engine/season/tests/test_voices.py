@@ -34,10 +34,12 @@ _SUBJECT, _TO = "p_vc_subject", "p_vc_to"
 
 
 def _person():
-    """Fifteen pursuits at distinct weights (so no part is hidden by a tie), a stance on `_SUBJECT`, a live commit to the first goal."""
+    """Fifteen pursuits at distinct weights (so no part is hidden by a tie), a stance on `_SUBJECT`, a live commit to the first goal, and a seat of
+    that goal's faction (B21d.05: so the `duty` term, an officer's, is observed owning a part)."""
     goal = goals_data.goals()[0]
     p = Person(id="p_vc", name="p_vc", pursuits={e: 1.0 + 0.1 * i for i, e in enumerate(sorted(PURSUITS))}, stance=[(_SUBJECT, 3, 2), (_TO, 2, 4)])
     p.tenures.append(Tenure("t_vc", p.id, goal.id, "commit", 0))
+    p.tenures.append(Tenure("t_vc_seat", p.id, PQ.SEATS_OF_FACTION[goals_data.org_faction(goal.org_kind, goal.org)][0], "hold", 0))
     w = P.tiny_world()
     w.persons[p.id] = p
     seed_self_knowledge(w)      # B10.65: he recognises every pursuit he holds, as the realm builds him

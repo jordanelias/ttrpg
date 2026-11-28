@@ -59,6 +59,9 @@ from ..data.rosters import (
     roster, roster_map, task_share,
 )
 from ..data.rosters import clocks            # B21d.02: the clock rows `believed_clock` folds
+from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RUNG_KINDS, SEAT_ROW_BY_ID     # B21d.05: the seats, their faction and rank (`grievance_against`, `officers_named`)
+from ..data.goals import org_faction         # B21d.05: a seat's faction, the one rule (`office_factions`)
+from ..data.cast import MEMBER_BAND          # B21d.05: CR-87's one-step bound on a build-time disaffection (`grievance_against`'s grudge)
 from .clock import clock_fold                # B21d.02: the one fold of a clock
 from .clock import sittings_failed_of        # B21d.03: the breaking point's count
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
@@ -186,14 +189,142 @@ def deeds_judged_steps(p: Person, referent: str, scar_shift: float = 0.0, sworn_
 
 def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None,
                   hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> bool:
-    """v11 CR-87 (the DISPUTE, `challenge`'s conjunct; `data/requires.py`'s `dispute` stem): DOES `p` HOLD A DEED CLAIM
-    OF `referent`'s THAT HIS OWN JUDGEMENT SCORES AGAINST HIM -- `deeds_judged`' two parts summed below zero (what he
-    saw and what he was told, each by his own pursuits). Person-side; the fold asks it of the actor's own ledger.
-    CR-88 re-points the conjunct to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the
-    conjunct from `challenge`'s cell.] `counterparty_arm` is `Fixtures deed_counterparty`, passed as `regard` passes it, so the dispute and the regard weigh the
-    same deeds by one rule (B10.20, H-474; `None` is the control)."""
-    judged, told = deeds_judged(p, referent, scar_shift, sworn_bond, counterparty_arm, hold, mass)
-    return judged + told < 0
+    """v11 CR-87 (the DISPUTE, `challenge`'s conjunct; `data/requires.py`'s `dispute` stem): DOES `p` HOLD A WRONG `referent` DID HIM --
+    the deed half of `grievance_against` above zero (B21d.05, CR-88 (4): re-pointed from `deeds_judged`' net sum below zero). AGAINST ONLY: a
+    deed he approves cancels none he condemns, and one deed counts once however often it is told (`_deed_grievance`). The deed half and not
+    the total: a grudge or a rival creed alone opens no duel (they reach the duel's choice through `regard`, A-47's shape). The weigh's
+    `confidence_default` is the control's: a support is above zero iff some claim of the deed has a confidence above zero, so the answer is
+    the same at any positive `confidence_default`. Person-side; the fold asks it of the actor's own ledger. [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the conjunct from `challenge`'s cell.] `counterparty_arm` is `Fixtures deed_counterparty`, passed as `regard`
+    passes it, so the dispute and the regard weigh the same deeds by one rule (B10.20, H-474; `None` is the control). It reads `p.tenures`
+    too (a deed on a seat he holds is done to him: `harness/loops.py`'s `dispute` row declares it)."""
+    return _deed_grievance(p, referent, scar_shift, sworn_bond, counterparty_arm, hold, mass, _CONTROL_CONFIDENCE) > 0.0
+
+
+_CONTROL_CONFIDENCE = DEFAULT_FIXTURES.get("confidence_default")     # [canonical: engine/season/data/fixtures.py §confidence_default]
+
+
+def _deed_grievance(p: Person, referent: str, scar_shift: float, sworn_bond: float, counterparty_arm: Optional[str], hold: str, mass: float,
+                    confidence_default: float) -> float:
+    """B21d.05 (CR-88 (2), the deed half of `grievance_against`): `Σ over DISTINCT deed triples t of max(0, -steps(t)) · support(t)`, in stance steps.
+
+    A triple is `(subject, predicate, value)` among `attributed_deeds(p.ledger, referent)`, in ledger order. `steps` is `deed_steps` (B10.09's
+    unit), its worst claim; a paired deed whose patient is an object of `p`'s own live `hold` is read with `p` as its patient (`_bond`'s self
+    rule), so a condemned seizure of his seat weighs double. `support` is `LedgerReader._support` over the triple's claims at the weigh
+    `min(1, stored confidence / confidence_default)`: a noisy-OR over DISTINCT origins (`claim_origin`), one origin once at its highest weight
+    (ED-IN-0322: corroboration firms one deed toward its full step and stops there; only distinct deeds add up). The STORED confidence, never
+    the faded one or `teller_weight`: no fade is decided here (CR-83's measurement). LIMIT, inherited (B11.02 §10 (4)): two deeds of one kind
+    by `referent` are one triple."""
+    groups: dict = {}
+    for c in attributed_deeds(p.ledger, referent):
+        groups.setdefault((c.subject, c.predicate, c.value), []).append(c)
+    if not groups:
+        return 0.0
+    axis_w = projected_axes(p, scar_shift, hold=hold, mass=mass)
+    seen_of = functools.cache(lambda: _seen_index(p.ledger))
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    reader = LedgerReader(p.ledger, lambda c: min(1.0, c.confidence / confidence_default))
+    total = 0.0
+    for (subject, kind, _value), claims in groups.items():
+        patient = p.id if kind in PAIRED_KINDS and subject in held else None
+        wrong = max(max(0.0, 0.0 - deed_steps(p, axis_w, c, sworn_bond, counterparty_arm, seen_of, patient=patient)) for c in claims)
+        if wrong:
+            total += wrong * reader._support(claims)[0]
+    return total
+
+
+class GrievanceParts(NamedTuple):
+    """THE ADDENDS OF `grievance_against`, on one unit (the stance row's valence step), and their sum `total = (deeds + stance) + creed`."""
+    deeds: float
+    stance: float
+    creed: float
+    total: float
+
+
+def grievance_against(p: Person, q: str, fx=None) -> GrievanceParts:
+    """THE BETRAYAL READING (B21d.05, CR-88 (2); ED-IN-0322, ED-IN-0335): the wrongs `p` holds `q` did him, computed when read and stored nowhere.
+
+      * `deeds` -- `_deed_grievance`: each distinct deed of `q`'s his pursuits, kin and holdings score against him, firmed by its distinct origins;
+      * `stance` -- his stance rows toward `q` as a grudge, `min(-MEMBER_BAND, max(0, -stance_toward))`: at most ONE step, CR-87's bound on a
+        build-time disaffection (a stance row carries no provenance, K-49, so a grudge earned in play is capped alike);
+      * `creed` -- 1 where he and `q` share a faction by seat (he holds a seat of F and his own ledger names `q` holding one, `officers_named`) and
+        he holds a live `commit` to a faction Proposition (`FACTION_BY_PROP`) of another faction; else 0.
+
+    Every build-time ingredient together reads at most 2.0, and `Fixtures betrayal_band` is refused below 2.0 where it is read
+    (`decision/options.py`), so a betrayal needs deeds. NOT BUILT, the gap recorded: deeds by F's officers acting through `q`'s seat (no carrier
+    says a deed was done through another man's seat; `Seen.why` ships at chance 0.0). `fx` supplies the readers' fixtures as `regard_parts`
+    reads them (`scar_weight_shift`, `sworn_bond`, `deed_counterparty`, `scar_hold`, `scar_primary_mass`) and `confidence_default`; `None`
+    reads the controls. Person-side, no World (AX-2)."""
+    get = (lambda k: DEFAULT_FIXTURES.get(k)) if fx is None else fx.get
+    shift, sworn, arm = (0.0, 0.0, None) if fx is None else (fx.get("scar_weight_shift"), fx.get("sworn_bond"), fx.get("deed_counterparty"))
+    deeds = _deed_grievance(p, q, shift, sworn, arm, get("scar_hold"), get("scar_primary_mass"), get("confidence_default"))
+    stance = min(0.0 - MEMBER_BAND, max(0.0, 0.0 - stance_toward(p, q)))
+    creed = 0.0
+    shared = officers_named(p, office_factions(p)).get(q)
+    if shared and any(t.kind == "commit" and t.live and t.object in FACTION_BY_PROP and FACTION_BY_PROP[t.object] not in shared
+                      for t in p.tenures):
+        creed = CREED_STEP
+    return GrievanceParts(deeds, stance, creed, (deeds + stance) + creed)
+
+
+#: B21d.05: what a commitment to a rival creed adds to `grievance_against`: one valence step, the unit every addend is read on.
+CREED_STEP = 1.0   # [JUSTIFIED: one valence step -- the stance row's unit, which `deed_steps` (B10.09) and the grudge's cap (`MEMBER_BAND`) read too]
+#: B21d.05: THE MOST A PERSON'S BUILD-TIME STATE CAN READ in `grievance_against` -- the grudge's cap plus the creed's step (a stance row carries no
+#: provenance, K-49, so nothing else bounds it). `decision/options.py::betrayal_band` refuses a band below it, so a betrayal needs deeds.
+BUILD_TIME_GRIEVANCE = (0.0 - MEMBER_BAND) + CREED_STEP
+
+
+#: B21d.05: EACH FACTION'S ROSTERED SEATS -- the `offices.yaml` rows whose faction (`data/goals.py::org_faction`, the rule `Office.__post_init__` runs)
+#: is it, with its `head_seat` (`rosters.yaml: factions.head_seat`) united in, so a head seat authored under another body still binds. A seat founded
+#: in play has no row and is in none (a limit, stated: reading its faction person-side needs a carrier the hold Tenure does not hold).
+SEATS_OF_FACTION: dict = {}
+for _s in SEAT_ROW_BY_ID:
+    if (_f := org_faction("seat", _s)) is not None:
+        SEATS_OF_FACTION.setdefault(_f, set()).add(_s)
+for _f, _s in HEAD_SEAT.items():
+    SEATS_OF_FACTION.setdefault(_f, set()).add(_s)
+SEATS_OF_FACTION = {f: tuple(sorted(s)) for f, s in SEATS_OF_FACTION.items()}
+
+
+def seat_rank(seat: str) -> int:
+    """A SEAT'S RANK: the index in the ordered `rung_kinds` roster of its `offices.yaml` row's `rung:` kind (`person` 0 .. `realm`), the reading
+    `seam/wrappers/sigma.py::_rung_rank` makes World-side, here off the static row so a person-side reader holds no World. 0 for a seat with no
+    row (an unrostered or founded seat: a limit, stated). Never the seat's `modifier:` (A-12: it helps a roll and gates nothing)."""
+    rung = (SEAT_ROW_BY_ID.get(seat) or {}).get("rung")
+    kind = next(iter(rung), None) if isinstance(rung, dict) else None
+    return RUNG_KINDS.index(kind) if kind in RUNG_KINDS else 0
+
+
+def office_factions(p: Person) -> frozenset:
+    """THE FACTIONS WHOSE SEAT `p` HOLDS (B21d.05, CR-88: an office holder of F): `org_faction` of each object of his own live `hold` Tenures, the
+    ones with no faction dropped. His own Tenures only (AX-2)."""
+    return frozenset(f for t in p.tenures if t.kind == "hold" and t.live and (f := org_faction("seat", t.object)) is not None)
+
+
+def own_station(p: Person) -> int:
+    """HOW HIGH `p`'s OWN OFFICE STANDS: the greatest `seat_rank` of the objects of his live `hold` Tenures, 0 for none (B21d.05, ED-IN-0347's
+    station: an office's rank, never `standing_of`)."""
+    return max((seat_rank(t.object) for t in p.tenures if t.kind == "hold" and t.live), default=0)
+
+
+def named_station(ledger, x: str) -> int:
+    """HOW HIGH `x`'s OFFICE STANDS, AS THE HOLDER'S OWN LEDGER NAMES IT: the greatest `seat_rank` of the rostered seats `holders_named` says `x`
+    holds, 0 for none (B21d.05). World-free."""
+    return max((seat_rank(s) for s in SEAT_ROW_BY_ID if x in holders_named(ledger, s)), default=0)
+
+
+def officers_named(p: Person, factions) -> dict:
+    """`{person: frozenset(the factions of `factions` whose seat `p`'s OWN LEDGER names him holding)}` (B21d.05, CR-88 (1)'s *F's head or an F
+    office-holder*), `p` himself never named: `holders_named` over `SEATS_OF_FACTION[F]` for each F. An officer who has not heard who holds a seat
+    is not bound toward its holder by it. Inherits `holders_named`'s over-inclusion (the conferrer of a seat changed in play), which errs toward
+    loyalty and is not filtered (a filter needs the World). World-free."""
+    out: dict = {}
+    for f in sorted(factions):
+        for s in SEATS_OF_FACTION.get(f, ()):
+            for h in holders_named(p.ledger, s):
+                if h != p.id:
+                    out.setdefault(h, set()).add(f)
+    return {h: frozenset(fs) for h, fs in out.items()}
 
 
 def attributed_deeds(ledger, referent: str):
@@ -234,21 +365,24 @@ def deed_term(p: Person, axis_w: dict, c, sworn_bond: float = 0.0, counterparty_
     return lean * _toward_counterparty(p, c, lean, counterparty_arm, seen_of) if lean else lean
 
 
-def deed_steps(p: Person, axis_w: dict, c, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None, seen_of=None) -> float:
+def deed_steps(p: Person, axis_w: dict, c, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None, seen_of=None, *,
+               patient: Optional[str] = None) -> float:
     """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p` IN STANCE STEPS (B10.09, `Fixtures regard_unit` `stance`): `deed_term`'s
     sibling, the deed's alignment as a cosine -- `pursuit_cosine_axes` of the holder's projected pursuits `axis_w` against the deed
     kind's row on the axes (`align_kind`), in `[-1, +1]` -- so an unpaired deed is at most one valence step, the unit of a stance
     row. A paired deed (`PAIRED_KINDS`) is that cosine times `_bond` on the claim's patient (in `[0, 2]`, so at most two steps),
     read off the cosine's sign as `deed_term` reads `lean`'s. `0.0` where either vector is zero (`pursuit_cosine_axes` answers
     `None`: no direction to compare), and for a claim that is no deed. `sworn_bond`, `counterparty_arm` and `seen_of` are `deed_term`'s: at
-    `person_subject` an unpaired deed of a Person-subject kind is that cosine times `_bond` on the one it was done to. Person-side (AX-2)."""
+    `person_subject` an unpaired deed of a Person-subject kind is that cosine times `_bond` on the one it was done to. Person-side (AX-2).
+    `patient` (B21d.05, `grievance_against`'s holdings rule): the one a paired deed is read as done to, in place of `c.subject`; `None`, every
+    other reader's, is `c.subject` exactly."""
     if not is_deed(c):
         return 0.0
     cos = pursuit_cosine_axes(axis_w, {ax: _verbs.align_kind(c.predicate, ax) for ax in _AXES})
     if not cos:
         return 0.0
     if c.predicate in PAIRED_KINDS:
-        return cos * _bond(p, c.subject, cos, sworn_bond)
+        return cos * _bond(p, c.subject if patient is None else patient, cos, sworn_bond)
     return cos * _toward_counterparty(p, c, cos, counterparty_arm, seen_of)
 
 

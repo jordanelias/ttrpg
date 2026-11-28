@@ -2016,6 +2016,17 @@ DEFAULT_FIXTURES = Fixtures(
     breakdown_sittings=2,             # `H-634`, swept 1 / 2 (the source's, SHIPPED) / 3
     # [JUSTIFIED: engine/season/hole_register.yaml H-634 -- the source's window, "the last 3" (CR-89)]
     breakdown_window=3,               # `H-634`
+    # v12 B21d.05 (CR-88; ED-IN-0335, ED-IN-0347; `proposals/v12_B21d_duty_of_office.md` §2, §4, §6): THE DUTY OF OFFICE. `betrayal_band`: a holder of
+    # a seat of faction F forms no opponent-rule verb on a man his own ledger names on a seat of F unless `person_q.grievance_against(p, him).total`
+    # exceeds it (`decision/options.py::betrayal_band`, refused below 2.0, the most a build-time grudge and a rival creed can read). `None` is the
+    # CONTROL and the REVERT (the decline off); `+inf` is the decline at its tightest, a falsifier arm. `duty_weight`: what holding the office
+    # adds on his faction's goal's own question (`decision/choose.py::duty_term`, the `aim` dot at this weight) and the share of it an office's
+    # rank prices `accept` by; refused below 0. `0` is the CONTROL and the REVERT. Shipped by the design's reading rule (§8).
+    # [ASSUMPTION; medium; Jordan to correct; revert: betrayal_band None, duty_weight 0.0]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-635 -- the floor of the band, 2.0, is the design's ("more than his build-time state can carry"); injected and swept None / 2.0 / 3.0 / +inf]
+    betrayal_band=2.0,                # `H-635`, swept None (control, revert) / 2.0 (the floor, SHIPPED) / 3.0 / +inf (total)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-635 -- the weight of the office's binding; no document gives one, so it is injected and swept 0 / 0.5 / 1.0 / 2.0, aim_gain's points]
+    duty_weight=1.0,                  # `H-635`, swept 0 (control, revert) / 0.5 / 1.0 (SHIPPED) / 2.0
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).

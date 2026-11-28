@@ -8993,6 +8993,19 @@ rows:
     cite:      "CR-89 commit (2) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b), `:132-133`); ED-IN-0341. FALSIFIER: `engine/season/tests/test_cr89_clocks.py::test_three_planted_sittings_that_dispose_nothing_read_three_and_one_determination_makes_two`; `::test_breakdown_needs_both_believed_turmoil_and_failed_sittings`."
     source:    "workplan v12 B21d.03 (B21d's H block slot 2)"
 
+  - id:        H-635
+    tier:      1
+    hole:      "THE DUTY OF OFFICE'S TWO VALUES ARE THE DESIGN'S READING RULE, NOT MEASURED. `betrayal_band` 2.0: a holder of a seat of faction F forms no opponent-rule verb on a man his own ledger names on a seat of F unless his grievance against him (`person_q.grievance_against`: distinct deeds firmed by their distinct origins, a grudge capped at one step, a rival creed one step) exceeds it; 2.0 is the floor, the most a build-time grudge and a rival creed read together, below which the band is refused. `duty_weight` 1.0: what the office adds on the faction's goal's own question (the `aim` dot at this weight; `aim_gain` ships 0.0, so at the shipped values a goal's lean reaches seated officers only, ahead of B98's flip) and the weight of the price an office's rank (`rung_kinds` index over its top) puts on answering a challenge, waived for a peer enemy. No document gives either number."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the values (content, D-19: listed in the PR body)"
+    grade:     "assumption"
+    default:   "betrayal_band 2.0, duty_weight 1.0 [ASSUMPTION; medium; Jordan to correct; revert: betrayal_band None (the decline off), duty_weight 0.0]"
+    site:      "`engine/season/data/fixtures.py::Fixtures` betrayal_band, duty_weight; read by `decision/options.py::betrayal_band` (the duty decline in `_opening_set`, `_betrays`, `_duty_exempt`) and `decision/choose.py::duty_term` (`score_terms`' sixth element `duty`)"
+    sweep:     ["betrayal_band None (the control)", "betrayal_band 2.0 (the floor, SHIPPED)", "betrayal_band 3.0", "betrayal_band +inf (total)", "duty_weight 0 (the control)", "duty_weight 0.5", "duty_weight 1.0 (SHIPPED)", "duty_weight 2.0"]
+    unblocks:  "R-06's officer conjunct (an officer's choices read his office and his faction's goals and differ by his own grievances); B21d.06 to B21d.09 read on the tree it leaves"
+    cite:      "CR-88 (`proposals/v12_B21d_duty_of_office.md` §2, §4, §6, §8's reading rule); ED-IN-0335, ED-IN-0322, ED-IN-0347 (AR-52). FALSIFIER: `engine/season/tests/test_cr88_duty_of_office.py`. CONTROL: betrayal_band None and duty_weight 0 reproduce the pre-item seed-0 one-season realm hash (recorded at the commit)."
+    source:    "workplan v12 B21d.05 (B21d's H block slot 3)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
