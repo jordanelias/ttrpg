@@ -81,7 +81,7 @@ from ...loop.sides import sides_of
 from ...queries.inputs import ArmyMuster, FieldOrder, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
-from engine.substrate import composition
+from engine.substrate import composition, troops as _troops
 from ...state.carriers import Act
 from ...state.gate import seat_faction
 from ._entry import entry_for, played_by
@@ -234,6 +234,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
     (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was.
+    B19.22: `max_bouts` is the troop file's `deployment.max_bouts` (`engine/substrate/troops.py`), the bouts the entry fights the field in.
     B17.03: `condition_scale` is the `condition_scale` fixture, the body scale the module quantises each survivor share onto.
     CP-T04-02 (`H-361`): `orders` is each side's STANDING ORDER (`_standing_order`): the attacker's about
     `origin_place` (the settlement it marched from, `world_q.march_origin`), the defender's about `rung` (the target). A
@@ -266,7 +267,8 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         orders_of_battle=None if oobs == (None, None) else oobs,
         members=(members(claimants), members(other)),
         units=w.fixtures.get("field_units"),
-        orders=None if orders == (None, None) else orders)
+        orders=None if orders == (None, None) else orders,
+        max_bouts=_troops.MAX_BOUTS)
 
 
 def _causing_act(w: Any, causes: list) -> Any:

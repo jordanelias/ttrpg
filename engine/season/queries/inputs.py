@@ -1084,7 +1084,11 @@ class MassBattleInput:
                        entry is one number (the whole side), or a tuple of numbers, one per unit of that side's army in the order
                        the field builds them (the per-part form, so a later bout can start each unit at what the bout before left
                        it); a unit stands in columns, and a column two units stand in takes the lower entry. `(1.0, 1.0)`, the
-                       default, writes nothing: the field as it was. Refused, not ignored, where the engine keeps no column grid."""
+                       default, writes nothing: the field as it was. Refused, not ignored, where the engine keeps no column grid;
+      * `max_bouts` -- B19.22: the most bouts the field is fought in (`references/troops.yaml: deployment.max_bouts`, read by
+                       `field_input`; a whole number of at least 1). A bout is one run of the engine's battle (18 ticks); a later one is
+                       fought when the bout before ended with neither side out, after a lull that rests the columns
+                       (`orchestration.between_turn_recovery`). `1`, the default, is the field as it was: one bout, no lull."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
@@ -1104,6 +1108,7 @@ class MassBattleInput:
     pool_floor: int = 0
     obey_task: float = 0.0
     entry_stamina: tuple = (1.0, 1.0)
+    max_bouts: int = 1
 
 
 # B17.03: THE FIELD'S OUTPUT RECORD, on every arm. `modules/mass_battle/massbattle.py::resolve_field` returns one; the host adapter
@@ -1140,11 +1145,13 @@ class FieldOutcome:
     """What the mass-battle module's field returns (B17.03; A-3: no `verdict`, the host's `field_degree` reads the band off the two
     sides' flags). `ended` is `FIELD_ENDED`: `rout` when a side's army routed, `concession` when a side gave the field up,
     `time` when the ticks ran down; `ticks` is the field's ticks run. Shares are integers on the body scale, quantised at this seam
-    (A-29: the engine's floats are declared floats now; this is not an integer-state commitment)."""
+    (A-29: the engine's floats are declared floats now; this is not an integer-state commitment). `bouts` (B19.22, D-U1-11e) is how
+    many bouts the field was fought in, `1..max_bouts`; `ticks` is the sum over them. The end state is the last bout's."""
     ended: str
     ticks: int
     attacker: SideOutcome
     defender: SideOutcome
+    bouts: int = 1
 
     def __post_init__(self) -> None:
         if self.ended not in FIELD_ENDED:

@@ -102,7 +102,7 @@ def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_noth
     assert f"{module_dir}/massbattle.py" in loaded and f"{module_dir}/orchestration.py" in loaded, loaded
     checked = 0
     for seed, got, deterministic, unscoped in out:
-        assert set(got) == {"ended", "ticks", "attacker", "defender"} and got["ended"] in ("rout", "concession", "time"), got
+        assert set(got) == {"ended", "ticks", "attacker", "defender", "bouts"} and got["ended"] in ("rout", "concession", "time"), got
         assert deterministic, f"{role}: seed {seed} gave two results in one process with a field between"
         assert unscoped, f"{role}: seed {seed} left a draw source scoped after the call returned"
         checked += 1
@@ -525,3 +525,102 @@ def test_empty_sides_never_reach_run_battle(monkeypatch):
         got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", 0)))
         assert isinstance(got, FieldOutcome), (pair, got)
     assert entered == [2], entered
+
+
+# ------------------------------------------------------------------------------------------------ B19.22: bouts with lulls
+_BOUTS = 6                                  # the six-bout arm the item's gate reads; the shipped arm is `deployment.max_bouts`
+_BOUT_SEEDS = range(200)
+
+
+def _with_bouts(inp, n):
+    import dataclasses
+    return dataclasses.replace(inp, max_bouts=n)
+
+
+def test_the_wrapper_calls_the_entry_once(monkeypatch):
+    """GAME STATE · lane mass_battle. B19.22 instruction 4: the adapter calls the one entry ONCE and reads one band; the bouts are the
+    entry's loop and nothing is held on the wrapper. The input it builds carries the troop file's `deployment.max_bouts` (the shipped
+    arm); the call is wrapped to hand the entry six, and `FieldOutcome.bouts` reports how many it fought, one `run_battle` each."""
+    import importlib
+    from types import SimpleNamespace
+    from engine.season.boot.realm import build_realm
+    from engine.season.harness import probes as P
+    from engine.season.loop.driver import SeasonDriver
+    from engine.season.manifest.registrar import MODULE_ENTRIES
+    from engine.season.queries import world_q
+    from engine.season.queries.inputs import FieldOutcome
+    from engine.season.seam.wrappers import mass_battle as MB
+    from engine.season.state.carriers import Act, Tenure
+    table = importlib.import_module("modules.mass_battle.troop_types.table")
+    SeasonDriver(build_realm(0))                                    # the registrar fills `MODULE_ENTRIES` at driver construction
+    actor, seat, origin, target, attacker, defender = "p_npc_036", "off_royal_marshal", "set_s_001", "set_s_036", "fac_valorsmark", "fac_church_of_solmund"
+    w = build_realm(0)
+    for cid, rung, fac in (("c_att", origin, attacker), ("c_def", target, defender)):
+        P.plant_cohort(w, cid, rung, weight=12)
+        w.add_tenure(Tenure(f"t_{cid}_commit", cid, fac, "commit", since=0))
+    act = Act(id="m1", actor=actor, verb="march", payload={"subject": target}, via=seat)
+    w.acts.append(act)
+    real, calls, ran = MODULE_ENTRIES["mass_battle.resolve_field"], [], [0]
+    mb = importlib.import_module("modules.mass_battle.massbattle")
+    real_battle = mb.run_battle
+
+    def counting(*a, **k):
+        ran[0] += 1
+        return real_battle(*a, **k)
+
+    def fn(inp, rng, **kw):
+        calls.append(inp.max_bouts)
+        return real.fn(_with_bouts(inp, _BOUTS), rng, **kw)
+
+    monkeypatch.setattr(mb, "run_battle", counting)
+    monkeypatch.setattr(MB, "entry_for", lambda prize, module: (SimpleNamespace(fn=fn), None))
+    got = MB.resolve(w, world_q.mustered(w, origin, attacker), [act.id], "a field", subject=defender, rung=target,
+                     rng=draw.seeded(draw.H2("test_mass_battle_module", 22)))
+    assert got["status"] == "RESOLVED" and isinstance(got["result"], FieldOutcome), got
+    assert calls == [table.deployment()["max_bouts"]], f"the wrapper called the entry {len(calls)} time(s) with max_bouts {calls}"
+    assert 1 <= got["result"].bouts == ran[0] <= _BOUTS, (got["result"].bouts, ran[0])
+
+
+def test_a_bout_1_decision_equals_the_one_bout_run():
+    """GAME STATE · lane mass_battle. Gate 5's last clause: a field decided in bout 1 (a side routed or conceded) is field-for-field
+    equal at `max_bouts` 6 to the one-bout run -- no draw, no lull and no later bout touches it."""
+    from engine.season.seam.ladder import field_degree
+    from engine.season.queries.inputs import FieldOutcome
+    entry, checked, decided = _entry(), 0, 0
+    for weights in ((3.0, 3.0), (3.0, 1.0), (1.0, 3.0), (6.0, 1.0)):
+        for seed in range(40):
+            inp = _headcount_record(weights)
+            one = entry(_with_bouts(inp, 1), draw.seeded(draw.H2("test_mass_battle_module", seed)))
+            six = entry(_with_bouts(inp, _BOUTS), draw.seeded(draw.H2("test_mass_battle_module", seed)))
+            assert isinstance(one, FieldOutcome) and isinstance(six, FieldOutcome) and one.bouts == 1, (one, six)
+            checked += 1
+            if field_degree(one) != "Drawn":
+                decided += 1
+                assert six == one, (weights, seed, one, six)
+    assert checked == 160 and decided >= 10, f"vacuous: {decided} of {checked} fields were decided in bout 1"
+
+
+def test_max_bouts_lowers_the_drawn_share(monkeypatch):
+    """GAME STATE · lane mass_battle. Gate 5: `max_bouts` 6 on an even field, seeds 0 to 199 against the same seeds at 1: the share of
+    fields ending Drawn falls; and no field calls the entry's battle more than six times (`run_battle`, once a bout)."""
+    import importlib
+    from engine.season.seam.ladder import field_degree
+    mb = importlib.import_module("modules.mass_battle.massbattle")
+    real, ran = mb.run_battle, [0]
+
+    def counting(*a, **k):
+        ran[0] += 1
+        return real(*a, **k)
+
+    monkeypatch.setattr(mb, "run_battle", counting)
+    entry, inp, drawn, most = _entry(), _headcount_record((3.0, 3.0)), {}, 0
+    for n in (1, _BOUTS):
+        drawn[n] = 0
+        for seed in _BOUT_SEEDS:
+            ran[0] = 0
+            got = entry(_with_bouts(inp, n), draw.seeded(draw.H2("test_mass_battle_module", seed)))
+            assert ran[0] == got.bouts <= n, (n, seed, ran[0], got.bouts)
+            most = max(most, ran[0])
+            drawn[n] += field_degree(got) == "Drawn"
+    assert most > 1, "vacuous: no field fought a second bout"
+    assert most <= _BOUTS and drawn[_BOUTS] < drawn[1], f"drawn of 200 at one bout {drawn[1]}, at {_BOUTS} bouts {drawn[_BOUTS]}"

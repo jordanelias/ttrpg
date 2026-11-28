@@ -85,7 +85,7 @@ FATIGUE_COLUMNS = ('lull_recover',)
 DEPLOYMENT_COLUMNS = ('cell_troops', 'arm', 'scale', 'max_bouts')
 #: `deployment.scale` (B19.20): what the numbers stand for -- metres a cell is a side, seconds a tick, ticks a bout, minutes a bout and the
 #: stand-off after it. Each a whole number of at least 1. Read by the report; by no resolver. `deployment.max_bouts` (a whole number of at least 1) is
-#: the bouts a battle may run: 1 is today's field (the control).
+#: the bouts a battle may run: 1 is today's field (the control). B19.22: `engine/substrate/troops.py` hands it to `MassBattleInput.max_bouts`.
 SCALE_COLUMNS = ('cell_m', 'tick_s', 'bout_ticks', 'bout_minutes')
 DEPLOYMENT_ARMS = ('cap', 'grid')
 #: The `formations` rows (B19.18): a formation's columns, its `frontage` (`centre`: the centre line is centred alone; `whole`: centred with the side posts), a post's columns,

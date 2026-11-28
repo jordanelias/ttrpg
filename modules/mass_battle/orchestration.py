@@ -51,6 +51,7 @@
 #   pre-existing cell_last_speed. Wiring requires power × facing inputs.
 
 import math
+from modules.mass_battle.troop_types import table as _troop_table   # `between_turn_recovery`'s `fatigue.lull_recover`
 from engine.dice_engine import fmath
 from engine.dice_engine.dice_engine import degree_label  # the one degree ladder (A-5); the field grades nothing of its own
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
@@ -885,11 +886,60 @@ from modules.mass_battle.battle_loop import run_battle  # the name is re-exporte
 # [ASSUMPTION: between-turn recovery constants are tuning parameters —
 #  basis: no canonical source specifies inter-turn recovery rates]
 # [canonical: params/mass_combat.md §PP-712 — "Discipline persists between battles"]
-# (the stamina a lull returns is `fatigue.lull_recover` in `references/troops.yaml`, read by `sim/multi.py::between_turn_recovery`)
+# (the stamina a lull returns is `fatigue.lull_recover` in `references/troops.yaml`, read by `between_turn_recovery` below)
 BETWEEN_TURN_MORALE_RECOVERY = 0    # morale does NOT recover between turns
 # HP does NOT recover between turns (casualties are permanent within a battle)
 # Discipline persists (canonical PP-712)
 # [canonical: designs/provincial/mass_battle_v30.md §A.4 — "Morale reset between battles"]
+
+
+def between_turn_recovery(unit):
+    """Apply between-turn state changes: THE LULL'S RECOVERY (B19.22), the one owner. `massbattle._run_and_grade` calls it on each army
+    between two bouts of a field; `systems/mass_battle/sim/multi.py` (the workbench's multi-turn loop) re-exports it, so the oracle
+    and the game run one rule (it lived there until B19.22, which `modules/` cannot import). Rested columns regain
+    `fatigue.lull_recover` of stamina (`references/troops.yaml`); volleys are resupplied; morale recovers by
+    `BETWEEN_TURN_MORALE_RECOVERY` (0 shipped); a yielding body that has rallied returns to the line. A routed or disordered body
+    recovers nothing. Troops are never restored (casualties are permanent within a battle).
+    [canonical: params/mass_combat.md §PP-712 — discipline persists]"""
+    if unit.routed or unit.disordered:
+        return
+    for b in (unit.col_grid or ()):   # the one stamina ledger (`_ColBlock.stamina`); None on the PER_CELL-off arm
+        b.stamina = min(float(STAMINA_MAX), b.stamina + _troop_table.fatigue()['lull_recover'])
+    for atom in unit.units:
+        # [A6, ED-MB-0067 Part A] Resupply at the between-turn lull. Per-subunit (Unit.resupply_volleys,
+        # capped at MB_VOLLEYS_START): not singled out by troop type (a melee atom's volleys count is simply never read -- see fire()'s own
+        # unit_type=='ranged' gate).
+        if MB_AMMO_ENABLED:
+            atom.resupply_volleys(MB_VOLLEYS_RESUPPLY)
+    # [ED-MB-0042 sweep] Deliberately a BARE write, not unit.set_morale. Recovery is a bounded INCREMENT,
+    # not an absolute statement about the body — and once cells own the state this pool is STALE (erosion
+    # goes to the cells and never updates it), so broadcasting it downward would RE-INFLATE damaged cells
+    # to the pool's old value. The pool is kept current here for the unseeded path, which still reads it.
+    unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
+    for atom in unit.units:        # per-subunit Morale recovery (own-Morale units; inert at RECOVERY=0)
+        # [ED-MB-0058, resolving ED-MB-0046] ONE owner, both ownership kinds: `pull_morale`, the RELATIVE
+        # owner. Recovery is a bounded INCREMENT, so it must not go through `set_morale` (the ABSOLUTE writer,
+        # which sets EVERY cell to one value and would flatten per-cell morale divergence to the mean at every
+        # turn boundary). `pull_morale` caps against `eff_morale_start`, derives ONE shift from the aggregate
+        # and applies that same shift to every cell, so the body recovers by the right amount and the divergence
+        # between its cells survives. Unseeded it reduces to `min(eff_morale_start, eff_morale + R)` written to
+        # the scalar.
+        #
+        # The `or atom.cell_morale` keeps an inheriting-but-cellular body in scope; a body that is NEITHER stays
+        # out of it — the unit-pool line above is that body's recovery, and calling `pull_morale` for it would
+        # write the unit pool once per subunit and compound the increment.
+        if atom.morale is not None or atom.cell_morale:
+            atom.pull_morale(BETWEEN_TURN_MORALE_RECOVERY)
+    # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
+    # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
+    # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
+    # relieved, reformed"). Gated OFF -> inert. `pocketed` is cleared alongside (fresh next engagement).
+    if MB_YIELD_RALLY:
+        for atom in unit.units:
+            if atom.yielding and not atom.routed and not atom.disordered:
+                if atom.eff_morale >= YIELD_RALLY_MORALE_FRAC * atom.eff_morale_start:
+                    atom.yielding = False
+                    atom.pocketed = False
 
 
 # ─── PURSUIT (G-11) ─────────────────────────────────────────────────────

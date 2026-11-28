@@ -131,7 +131,7 @@ matchups: []
 
 # What tires a body (`fatigue`, a closed set of rows, each a bare number): `lull_recover` is the stamina a column block regains at
 # each between-turn lull, on the 0..STAMINA_MAX scale (B19.28: `BETWEEN_TURN_STAMINA_RECOVERY`, `orchestration.py`, deleted; its one reader
-# is `systems/mass_battle/sim/multi.py::between_turn_recovery`). The other rows (`clash_drain`, `rest`, `fast_move_drain`, `entry`) are B31.06's.
+# is `modules/mass_battle/orchestration.py::between_turn_recovery`, B19.22, which the lull between two bouts of a field calls). The other rows (`clash_drain`, `rest`, `fast_move_drain`, `entry`) are B31.06's.
 fatigue:
   lull_recover: 30         # BETWEEN_TURN_STAMINA_RECOVERY (orchestration.py), per lull (today)
 
@@ -141,7 +141,7 @@ fatigue:
 #                 over (depth x cell_troops), at least 1, unless the unit row names one
 #   arm           `cap`: today's packing (the densest a cell may be, `cell_cap`), the control arm; `grid`: the width x depth grid above
 #   scale         (B19.20) what the numbers stand for. Read by the report; by NO resolver. The 50 m tile and 5-minute turn are not adopted.
-#   max_bouts     (B19.20) the bouts a battle may run. 1 is today's field, the control; the seed for the flip is 6
+#   max_bouts     (B19.20) the bouts a battle may run. 1 is today's field, the control; the seed for the flip is 6 (B19.22: read into `MassBattleInput.max_bouts`)
 deployment:
   cell_troops: 16
   arm: cap

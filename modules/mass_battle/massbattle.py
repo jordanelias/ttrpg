@@ -21,7 +21,7 @@ from modules.mass_battle.config import (STAMINA_MAX, COMMAND_DEFAULT, MAX_TROOPS
 from modules.mass_battle.armies import UNIT_CAP
 from modules.mass_battle.core.contact_draw import COVER_WALLS
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
-from modules.mass_battle.orchestration import run_battle
+from modules.mass_battle.orchestration import run_battle, between_turn_recovery
 from modules.mass_battle.orderofbattle import (OrderOfBattle, UnitRow, _SIDE_DIR, _place, cells_for, class_of,
                                                build_unit as _build_oob_unit)
 from modules.mass_battle.troop_types.recruitment import under_arms_cap
@@ -432,7 +432,7 @@ def _oob_unit(oob, weight, side, morale_start, foe=None):
     return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start, foe=foe)
 
 
-def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(None, None)):
+def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(None, None), max_bouts=1):
     """`run_battle` plus the finished field's typed outcome (`_grade`; `resolve_field` is its only caller).
 
     `walls_dr` (plan position `20-v`, `H-150`): the strength of the WALLS row, on A.9's DR scale. `None` -- the
@@ -488,17 +488,34 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(N
         unit_a.terrain_off_d += RIVER_CROSSING_OFF_D
         unit_a.speed = SPEED_TIERS[max(0, SPEED_TIERS.index(unit_a.speed) - 1)]
 
+    ticks, broke, bouts = 0, [], 0
     with rngsource.using(rng):
-        # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
-        ran = run_battle(unit_a, unit_b, max_ticks=18)
+        # [B19.22] A FIELD IS BOUTS WITH LULLS, and this is the one loop of them (`resolve_field` is `_run_and_grade`'s only caller).
+        # A bout is `run_battle`'s one engagement turn; its draws are keyed by the bout `run_battle` counts on both armies. What
+        # the loop carries from bout to bout is the armies' troops, stamina and morale, which are the two `Army`s held in this
+        # frame -- nothing is held by the host. A later bout is fought when the one before ended with neither side out (rout or
+        # concession: the field is still drawn) and `max_bouts` is not spent; the lull between two applies the standing orders only
+        # (the decider's `CommanderAction` is B20's) and rests the columns by the ledger's one lull rule. `max_bouts` 1 is one
+        # `run_battle` and no lull: the field as it was.
+        for bout in range(1, max_bouts + 1):
+            # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
+            ran = run_battle(unit_a, unit_b, max_ticks=18)
+            bouts, ticks = bout, ticks + ran['turns']
+            broke += [b for b in ran['broke'] if b not in broke]
+            if unit_a.routed or unit_b.routed or unit_conceded(unit_a) or unit_conceded(unit_b):
+                break
+            if bout < max_bouts:
+                between_turn_recovery(unit_a)
+                between_turn_recovery(unit_b)
+    ran = dict(ran, broke=broke, turns=ticks)
 
     named = [((), ()) if namer is None else namer(army, scale) for namer, army in zip(namers, (unit_a, unit_b))]
     first = tuple(next((credit[i] for who, i in ran['broke'] if who == side and i < len(credit)), None)
                   for side, (_parts, credit) in zip('AB', named))
-    return _grade(unit_a, unit_b, scale, ran['turns'], tuple(parts for parts, _credit in named), first)
+    return _grade(unit_a, unit_b, scale, ran['turns'], tuple(parts for parts, _credit in named), first, bouts=bouts)
 
 
-def _grade(unit_a, unit_b, scale, ticks, parts=((), ()), broke_first=(None, None)):
+def _grade(unit_a, unit_b, scale, ticks, parts=((), ()), broke_first=(None, None), bouts=1):
     """A FINISHED battle's typed outcome (B17.03; B17.01's one reading, split out of `_run_and_grade` so it has one owner -- the walkthrough
     harness reads a run it has already fought through this, not a copy), and NO verdict. `unit_a` is the attacker. A side's share is its
     troops left over its troops at the start, `hp / hp_max`, quantised onto `scale` (`_share`: a side that took no casualty reads
@@ -510,7 +527,7 @@ def _grade(unit_a, unit_b, scale, ticks, parts=((), ()), broke_first=(None, None
     ended = 'rout' if unit_a.routed or unit_b.routed else (
         'concession' if unit_conceded(unit_a) or unit_conceded(unit_b) else 'time')
     return FieldOutcome(ended=ended, ticks=int(ticks), attacker=_side_outcome(unit_a, scale, parts[0], broke_first[0]),
-                        defender=_side_outcome(unit_b, scale, parts[1], broke_first[1]))
+                        defender=_side_outcome(unit_b, scale, parts[1], broke_first[1]), bouts=bouts)
 
 
 def _side_outcome(unit, scale, parts, broke_first):
@@ -595,6 +612,10 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
     here is not read. CP-T04-03: a side's `retreat_at` is each of its headcount line's units' `own_strength` retreat Order
     (`_retreat_orders`), on either `units` arm; `'none'`, or no order, is no Order. `_grade` reads the side's concession.
 
+    B19.22: THE FIELD IS BOUTS WITH LULLS. `inp.max_bouts` bounds the bouts; the loop is in `_run_and_grade` (one `run_battle` a bout, the
+    armies' troops, stamina and morale carried on the two `Army`s of this call, `orchestration.between_turn_recovery` the lull between
+    two). A later bout is fought when neither side is out after the one before. `FieldOutcome.bouts` is how many were fought.
+
     B17.03: returns a frozen `FieldOutcome` on every arm (`_run_and_grade`'s), each share an integer on `inp.condition_scale`.
     B17.04: or a refusal dict (`_refusal`: `SCALE-GAP` past `MAX_TROOPS_PER_UNIT`, `PARTY-GAP` for two sides of nobody) on which
     `run_battle` is never entered.
@@ -607,6 +628,8 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
     if cfg is not None and asdict(cfg) != asdict(_config.DEFAULT):
         raise ValueError("resolve_field: cfg is not this engine's config; build the engine from it "
                          "(systems/mass_battle/sim/variant.py) and call that engine's resolve_field")
+    if isinstance(inp.max_bouts, bool) or not isinstance(inp.max_bouts, int) or inp.max_bouts < 1:
+        raise ValueError(f"max_bouts: a whole number of at least 1; got {inp.max_bouts!r}")
     weight_a, weight_b = (sum(side) for side in inp.weights)
     if troops_a is not None:
         weight_a = troops_a
@@ -662,4 +685,4 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
     return _run_and_grade(unit_a, unit_b,
                           terrain_row_for_territory(inp.territory, inp.fort_level, crossing,
                                                     geography=inp.geography),
-                          rng, inp.condition_scale, walls_dr=inp.walls_dr, namers=namers)
+                          rng, inp.condition_scale, walls_dr=inp.walls_dr, namers=namers, max_bouts=inp.max_bouts)

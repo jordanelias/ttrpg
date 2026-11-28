@@ -188,11 +188,11 @@ _CELL_OWNED = {
             # units.py: the owners themselves.
             'self.morale = value',
             'self.morale -= amount',
-            # multi.py between_turn_recovery: the vestigial unit pool, kept current for the
+            # orchestration.py between_turn_recovery (moved from multi.py, B19.22): the vestigial unit pool, kept current for the
             # unseeded path. Deliberately NOT broadcast downward — recovery is a bounded increment and
             # the pool is stale once cells own the state; see
             # test_between_turn_recovery_does_not_re_inflate_a_damaged_body.
-            'unit.morale = min(unit.morale_start, unit.morale + _orch.BETWEEN_TURN_MORALE_RECOVERY)',
+            'unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)',
             # core/state.py: materializes the scalar so the stochastic-rout punch is local to one
             # subunit. The cells already hold this value; rewriting them would flatten genuine
             # per-cell divergence.

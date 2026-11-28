@@ -16,51 +16,7 @@ import math
 
 import modules.mass_battle.hierarchy.units as _hu
 import modules.mass_battle.orchestration as _orch
-from modules.mass_battle.troop_types import table as _troops
-
-
-def between_turn_recovery(unit):
-    """Apply between-turn state changes. Called after each engagement turn.
-    [canonical: params/mass_combat.md §PP-712 — discipline persists]"""
-    if unit.routed or unit.disordered:
-        return
-    for b in (unit.col_grid or ()):   # the one stamina ledger (`_ColBlock.stamina`); None on the PER_CELL-off arm
-        b.stamina = min(float(_orch.STAMINA_MAX), b.stamina + _troops.fatigue()['lull_recover'])
-    for atom in unit.units:
-        # [A6, ED-MB-0067 Part A] Resupply at the between-turn lull. Per-subunit (Unit.resupply_volleys,
-        # capped at MB_VOLLEYS_START): not singled out by troop type (a melee atom's volleys count is simply never read -- see fire()'s own
-        # unit_type=='ranged' gate).
-        if _orch.MB_AMMO_ENABLED:
-            atom.resupply_volleys(_orch.MB_VOLLEYS_RESUPPLY)
-    # [ED-MB-0042 sweep] Deliberately a BARE write, not unit.set_morale. Recovery is a bounded INCREMENT,
-    # not an absolute statement about the body — and once cells own the state this pool is STALE (erosion
-    # goes to the cells and never updates it), so broadcasting it downward would RE-INFLATE damaged cells
-    # to the pool's old value. The pool is kept current here for the unseeded path, which still reads it.
-    unit.morale = min(unit.morale_start, unit.morale + _orch.BETWEEN_TURN_MORALE_RECOVERY)
-    for atom in unit.units:        # per-subunit Morale recovery (own-Morale units; inert at RECOVERY=0)
-        # [ED-MB-0058, resolving ED-MB-0046] ONE owner, both ownership kinds: `pull_morale`, the RELATIVE
-        # owner. Recovery is a bounded INCREMENT, so it must not go through `set_morale` (the ABSOLUTE writer,
-        # which sets EVERY cell to one value and would flatten per-cell morale divergence to the mean at every
-        # turn boundary). `pull_morale` caps against `eff_morale_start`, derives ONE shift from the aggregate
-        # and applies that same shift to every cell, so the body recovers by the right amount and the divergence
-        # between its cells survives. Unseeded it reduces to `min(eff_morale_start, eff_morale + R)` written to
-        # the scalar.
-        #
-        # The `or atom.cell_morale` keeps an inheriting-but-cellular body in scope; a body that is NEITHER stays
-        # out of it — the unit-pool line above is that body's recovery, and calling `pull_morale` for it would
-        # write the unit pool once per subunit and compound the increment.
-        if atom.morale is not None or atom.cell_morale:
-            atom.pull_morale(_orch.BETWEEN_TURN_MORALE_RECOVERY)
-    # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
-    # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
-    # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
-    # relieved, reformed"). Gated OFF -> inert. `pocketed` is cleared alongside (fresh next engagement).
-    if _orch.MB_YIELD_RALLY:
-        for atom in unit.units:
-            if atom.yielding and not atom.routed and not atom.disordered:
-                if atom.eff_morale >= _orch.YIELD_RALLY_MORALE_FRAC * atom.eff_morale_start:
-                    atom.yielding = False
-                    atom.pocketed = False
+from modules.mass_battle.orchestration import between_turn_recovery   # B19.22: the lull's one owner is the module's; the oracle calls it
 
 
 def reset_morale_between_battles(unit):
