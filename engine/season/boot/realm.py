@@ -1461,6 +1461,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     """
     geo, ven = _load(GEOGRAPHY), _load(VENUES)
     w = World(seed, DEFAULT_FIXTURES if fixtures is None else fixtures)
+    if fixtures is None:
+        # B12b.47 (IN-52's flip, `H-241`, DEF-7): THE SHIPPED REALM FIELDS ITS TROOPS BOUNDED BY ITS TREASURY. `Fixtures.field_provisioning` stays False
+        # (every hand-built world, test, harness and case world reads the control and moves no pinned hash); the realm, which B12a stocks (the seat
+        # rung, `granary_seasons`) so that `SeasonDriver`'s B12b.24 refusal passes, turns it on here. A caller that hands its own `fixtures` (a sweep,
+        # a control) is read as handed. [ASSUMPTION; medium; Jordan to correct; revert: remove this sweep.] LF-1 is REVERTIBLE (DEF-7).
+        w.fixtures = w.fixtures.sweep("field_provisioning", True)
     if not cast_attributes:
         # The control arm holds no drawn sheet at all: the in-play mint (`loop/census.py::_individuate`) reads the same
         # range, so a person individuated mid-season would otherwise hold one.

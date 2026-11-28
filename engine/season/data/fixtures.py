@@ -952,11 +952,12 @@ DEFAULT_FIXTURES = Fixtures(
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the field's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
-    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
-    # MEASURED THE FLIP, and did not make it: ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and
-    # case worlds), 350 reds in 35 of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE at this
-    # fixture (DEF-7; Jordan's 2026-10-16 wording differs). Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
-    field_provisioning=False,  # `H-241`, swept False (control, SHIPPED) / True / True on empty treasuries
+    # CONTROL, THE CLASS DEFAULT -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
+    # FLIPPED THE ARM IN THE SHIPPED REALM ONLY: `boot/realm.py::build_realm` sweeps it True when handed no fixtures. THE CLASS DEFAULT STAYS
+    # False because ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and case worlds), 350 reds in 35
+    # of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE (DEF-7; Jordan's 2026-10-16 wording
+    # differs): remove that sweep. Injection site: `build_realm`'s sweep, read by `seam/wrappers/mass_battle.py::provision_input`.
+    field_provisioning=False,  # `H-241`, swept False (control, the class default) / True (SHIPPED in `build_realm`) / True on empty treasuries
     # U5d_SE §4 (`H-241`). WHICH OF THE LARDER'S KINDS A FIELD EATS: the ration the field reads (`world_q.field_ration`) is
     # `subsistence_weight` cut to the kinds listed here -- a kind bounds a field only if this lists it AND `subsistence_weight`
     # weights it. SHIPPED `("grain",)`: a grain-only treasury fields troops; `("grain", "salt")` is the larder's whole ration

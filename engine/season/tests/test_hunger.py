@@ -454,3 +454,51 @@ def test_shipped_arm_reads_below_fed_after_season_one():
         assert _below_fed_by_the_per_head_term(w), f"seed {seed}: no settlement reads below `fed` by the per-head term after season 2"
         checked += 1
     assert checked == 3
+
+
+# B12b.47 (IN-52's flip, DEF-7): THE SHIPPED REALM TURNS THE SUPPLY ARM ON (`build_realm` sweeps `field_provisioning` True when it is handed no fixtures;
+# the class default and every hand-built world stay OFF). The field is the adapter's, called as `test_levy_feed.py` calls it, on the BARE realm.
+def _shipped_field(stores: dict, fixtures=None):
+    """The bare `build_realm(0)` (no fixtures handed in), the march seat's treasury PLANTED at `stores`, one field's troops as the adapter hands them."""
+    from types import SimpleNamespace
+    from engine.season.seam.wrappers import mass_battle as MB
+    from . import test_levy_feed as LF
+    w = build_realm(0, fixtures=fixtures)
+    SeasonDriver(w)                                   # registers the module entries the adapter calls (and runs the B12b.24 refusal)
+    w.rungs[LF.TREASURY_A].stores = dict(stores)
+    seen: list = []
+    real = composition.require("mass_battle.resolve_field")
+
+    def fn(inp, rng, **kw):
+        seen.append((tuple(sum(s) for s in inp.weights), kw))
+        return real(inp, rng, **kw)
+    mp = pytest.MonkeyPatch()
+    try:
+        mp.setattr(MB, "entry_for", lambda prize, module: (SimpleNamespace(fn=fn), None))
+        LF._provider_field(w, LF._march_act())
+    finally:
+        mp.undo()
+    return w, seen[-1]
+
+
+def test_grain_only_treasury_fields_troops():
+    """U5d_SE §4's gate on the SHIPPED realm: a seat treasury holding grain and no salt fields troops (one whole grain ration fields one of the
+    attacker's two), and the control, the realm built on the explicit default fixtures (arm OFF), fields the whole weight whatever it holds."""
+    w0 = build_realm(0)
+    assert w0.fixtures.get("field_provisioning") is True and tuple(w0.fixtures.get("field_ration_kinds")) == ("grain",)
+    ration = world_q.field_ration(w0)
+    assert set(ration) == {"grain"} and ration["grain"] > 0, ration
+    _, (weights, kw) = _shipped_field({"grain": ration["grain"]})
+    assert weights[0] == 2 and kw["troops_a"] == 1, (weights, kw)
+    _, (cweights, ckw) = _shipped_field({"grain": ration["grain"]}, fixtures=DEFAULT_FIXTURES)
+    assert ckw["troops_a"] == cweights[0] == 2, "the control (arm off) did not field the whole weight"
+
+
+def test_empty_treasury_side_fields_fewer_than_a_full_one():
+    """IN-52's falsifier on the SHIPPED realm: with the arm on, the attacker's empty treasury fields 0 (the crash floor lifts it) where a full one
+    fields its whole weight; at the control (arm off) the empty treasury fields the whole weight too -- the bound is what differs."""
+    _, (weights, empty_kw) = _shipped_field({})
+    _, (_, full_kw) = _shipped_field({"grain": 10_000})
+    assert empty_kw["troops_a"] == 0 and full_kw["troops_a"] == weights[0] == 2, (empty_kw, full_kw)
+    _, (cweights, ckw) = _shipped_field({}, fixtures=DEFAULT_FIXTURES)
+    assert ckw["troops_a"] == cweights[0] == 2, "the control fielded fewer than the whole weight on an empty treasury"

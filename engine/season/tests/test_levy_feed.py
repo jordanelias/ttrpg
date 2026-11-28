@@ -1,4 +1,4 @@
-"""v9 IN-52 -- THE LEVY-TO-FIELD FEED, built SHIPPED OFF (`field_provisioning`, `H-241`).
+"""v9 IN-52 -- THE LEVY-TO-FIELD FEED, built OFF in a hand-built world, ON in the shipped realm (B12b.47) (`field_provisioning`, `H-241`).
 
 A levied treasury PROVISIONS a field; it does not create troops (the design's §5, LF-1..LF-3, delegated-ruled
 [ASSUMPTION; medium; Jordan to correct]). `settlements.provision` (`modules/settlements/provision.py`,

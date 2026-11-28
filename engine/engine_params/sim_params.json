@@ -53906,7 +53906,7 @@
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-241`, swept False (control, SHIPPED) / True / True on empty treasuries",
+      "note": "`H-241`, swept False (control, the class default) / True (SHIPPED in `build_realm`) / True on empty treasuries",
       "citation": null,
       "citation_grade": null
     },
