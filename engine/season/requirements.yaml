@@ -325,17 +325,20 @@ rows:
         expects: "`R-02.b  differing at a later (season, round): <m>`, m at least 1"
         holds: "yes"
         reading:
-          tree: "caacde342474d73311a799a12194e9b514fc6fa1"
-          date: "2026-11-21"
-          seed: "0, 1, 2"
+          tree: "399e10f143c927a7ce2f492dc216eeaeec13ad7e (B21d-fa-arc after B21d.09's revert; game code b3ef95215's), read with B21d.99's record edits in the working tree; the base reading on a clean `git archive fa040e476` extract"
+          date: "2026-11-28"
+          seed: "0 (`storybar --remove --base-seed 0 --seasons 2`, `PYTHONHASHSEED=0`)"
           seasons: 2
-          line: "R-02.b  differing at a later (season, round): 307"
+          line: |-
+            R-02.b  differing at a later (season, round): 95   (both trees; removed p_npc_086; base acts 1334 @fa040e476, 1329 after B21d.05 and .06)
+            removal end hashes DIFFER to the unperturbed on both trees (base c89c84d9403f3bab6a2bdf32c572f359; this tree 499b6242948e68d7b0d0dca262b42e3d); B21d.05 moved the unperturbed run's end hash (base 21131a5212a248d3328ca74862e43603 -> 87680a9897a900422bd495b47476c324)
           control: >-
-            the R-01.c replay arm reads 0 at each seed (a replay that parts would void m); seed 0 shown (m 307), seeds 1 and 2 read m 318 and 1385;
-            read on the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
+            both trees: the `[control: drive with no wrapper]` end hash EQUAL to the unperturbed, the `[replay]` arm differing 0 (a replay that parts would void m), the base world hash before = after (unmutated);
+            the removal changed 95 acts of 16 persons at (season, lap) from (0, 2) to (1, 4) on both trees, the same distribution, so B21d.05 left this reading's m and its spread equal while it moved the run
+            (the draw-seed arm differs 2119 -> 2112); the previous close's reading (@caacde3, B09) read seed 0 m 307, seeds 1 and 2 m 318 and 1385: the fall to 95 at the same seed is between that tree and fa040e476, and is not attributed here
           does_not_show: >-
-            one removed person a seed; m counts differing acts after the removal and does not say the removed choice caused each one;
-            m equals n of R-01.c at every seed, so the verdict line adds no act that R-01.c's does not count
+            seeds 1 and 2 (one seed read of the three the conjunct names); that B21d.05's duty weight is a decision that affects a later decision (m is a removal's differing acts, not a trace through a duty);
+            one removed person; m counts differing acts after the removal and does not say the removed choice caused each one; the `holds` verdict stays as written
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
 
@@ -441,27 +444,25 @@ rows:
         expects: "for each of the nine, the `BUILT OUT` block's `via` column at least 1"
         holds: "no"
         reading:
-          tree: "a39062867105f1f270c263a2043a744430e32b84"
-          date: "2026-11-25"
-          seed: "0, 1, 2 (`aperture 2 --seeds 0 1 2`, `PYTHONHASHSEED=0`, the realm worlds; the spine worlds read 0 for every verb below)"
+          tree: "399e10f143c927a7ce2f492dc216eeaeec13ad7e (B21d-fa-arc after B21d.09's revert; its game code is b3ef95215's, `git diff --stat b3ef95215 399e10f14` names one handoff file), read with B21d.99's record edits in the working tree; the before-reading on a clean `git archive fa040e476` extract (the batch's base)"
+          date: "2026-11-28"
+          seed: "0 (realm world only, `aperture 2 0`, `PYTHONHASHSEED=0`)"
           seasons: 2
           line: |-
-            BUILT OUT `via` per realm seed 0/1/2, two seasons; before (the batch's opening reading, aperture_base.log, @c21e451) -> after (this tree):
-              establish    0/0/1   -> 0/0/0   not built out
-              confer       1/1/1   -> 0/0/0   not built out (kinds no, wrote no, one no after)
-              revoke       0/0/0   -> 0/0/0   not built out
-              succeed      0/0/0   -> 0/0/0   not built out
-              dispatch     10/10/9 -> 0/0/0   BUILT OUT before, not after
-              issue        22/7/23 -> 3/0/0   BUILT OUT at seed 0 only (`clean 3 kinds yes wrote yes one yes via 3`)
-              requisition  0/0/0   -> 0/0/0   not built out
-              (the carries of other batches, for the nine) open_case 6/5/6 -> 0/0/0; determine 1/0/0 -> 0/0/0; convene 6/5/2 -> 2/1/2 BUILT OUT
-            Pooled over the three realm seeds, `via` at least 1 for `issue` and `convene` only: seven of the nine read 0.
-          control: "the same instrument on a clean `git archive c21e451` extract read the BEFORE column (aperture_base.log; `dispatch` 29 and `issue` 52 pooled there); the aperture's own CONTROL line reads `content_hash EQUAL` at every seed (the instrument observed the season without moving it); the run measured an extract of a390628, game code identical to this tree, `PYTHONHASHSEED=0`, about 8 minutes"
+            B21d-fa-arc, realm seed 0, two seasons; base @fa040e476 -> after B21d.05 and .06 (this tree). `BUILT OUT` block, the nine:
+              establish, confer, dispatch, determine, convene   `clean 0 ... via 0`, not built out, on both trees
+              issue                                             `clean 5 kinds yes wrote yes one yes via 5`, BUILT OUT, on both trees
+              revoke, succeed, requisition, open_case           no clean execution (formed 4, 5, 9, 8; attempted 0), not built out, on both trees
+              `via` at least 1: `issue` only; eight of the nine read 0 on both trees
+            Funnel totals over the 69 realm rows: attempted 1334 -> 1329, executed 784 -> 783; acts 954 -> 951; no verb whose `ex` was above 0 on the base reads 0 after (the gate's clause); `dispatch` formed 5 -> 4, `lie` ex 11 -> 15, `reconstruct` ex 49 -> 47, `tell` ex 9 -> 11
+          control: >-
+            the aperture's own CONTROL line reads `content_hash EQUAL` on both trees (the instrument observed the season without moving it);
+            the previous close's reading (@a390628, B21; realm seeds 0/1/2, a different seed span) read `issue` `via` 3/0/0, `convene` 2/1/2 and the other seven 0;
+            at seed 0 `issue` now reads 5 and `convene` 0, a change other batches' merges sit between (not attributed here); the two trees read here differ by B21d's items only
           does_not_show: >-
-            why `dispatch`, `issue` and the rest fell: not attributed here (57 commits moved the realm, the acts at seed 0, one
-            season, read 570 at the BA1.99 pin and 425 at this tree); nothing was tuned and no fixture swept. The conjunct is read as the aperture's
-            `BUILT OUT` block writes it, at two seasons (A-114): a longer span (B99's `argv`) may read otherwise. `open_case`,
-            `determine` and `convene` belong to B25 and B32, listed for the whole conjunct's sake only
+            seeds 1 and 2 (one seed read, not the previous close's three); why `issue` and `convene` moved against a390628 (other batches merged between); that B21d.05
+            moved a `via` count (it moved acts by three and `lie`, `tell`, `reconstruct`, `dispatch` by a few, none across a band); a span past two seasons (B99's `argv`);
+            `open_case`, `determine` and `convene` belong to B25 and B32, listed for the whole conjunct's sake only; `holds` stays `no`
       - id: R-04.b
         text: >-
           no second driver; the faction view is tested (`engine/mc_v18.py` absent, read in this
@@ -520,6 +521,19 @@ rows:
             the source's eight-season target (read at two, A-114); that the loop closes in the hand-built situations (the
             spine's `recall` and `vacancy` plays are B21.72's and B21.74's gate (1) and (2)); only `ordered` is above 0, at seed 0
             alone, and no writ was answered at any seed, so the exit's `persons` of at least 3 is unmet at all three
+            ALSO READ BY B21d-fa-arc (B21d.02 to .04, the two clocks as folds of the log, read world-side and by each head; this conjunct's `argv` was NOT re-run: the clocks are
+            the strategic arc's pressure and the conjunct names no clock, so this is a neighbouring reading, not its `expects`). Tree 399e10f143c927a7ce2f492dc216eeaeec13ad7e
+            (B21d.07 to .09 reverted; game code b3ef95215's), 2026-11-28, `PYTHONHASHSEED=0 python -m engine.season.harness.clocks 2 0 1 2`, realm seeds 0, 1, 2, two seasons, every trigger off:
+            the true folds end at `church_influence` 28, 31, 30 and `turmoil` 0, 0, 2 (seeds 0, 1, 2); the six heads' believed folds read 27..28, 28..30, 28..29 and 0..0 for the same two clocks,
+            so a head holds a belief that differs from the true value by person (a head at 27 where the fold reads 28) and no head believes a band; pooled 0 of 3 seeds at season 1 and at season 2
+            on every mark of the table (five Church Influence bands, three Turmoil bands, breakdown, claim, `declare`, civil war, theocratic `declare`, Church `rung.seized`, and the
+            head-believes twin of each clock mark), so no clock band is crossed in a seeded realm at two seasons (Church Influence starts at 28 with a season cap of 5: no band at 40 or above
+            can read before season 3). CONTROL: `pytest test_cr89_clocks.py test_cr90_clock_marks.py` includes `test_feeder_weights_zero_read_never_on_every_clock_mark` and
+            `test_a_planted_log_reads_its_known_seasons` (a planted log reads its known seasons; not re-run for this record); the realm hash at seed 0, one season, reads `4f556eb89403c1d0723d302971c00a2b`
+            @fa040e476 (the base) and `bfceb151d386451cb116a9a4a8575a92` @107cb201b after B21d.05 (the duty weight, not a clock), unchanged by B21d.06's switches (off) @b3ef95215.
+            DOES NOT SHOW: that a clock moves a decision (no trigger is on: `clocks 2 0 1 2` read pooled 0 of 3 on every mark at seasons 1 and 2 on both arms of each of the three flips
+            B21d.07 to .09, equal arms, and the flips were reverted, so every clock reads and nothing reads a clock); a mark reached by the 8-season or 24-season arc (B99's `argv` or Jordan's call,
+            A-114); a Turmoil breakdown or a war at any seed; the four Church Influence band triggers, which stay off through B99 (their target is past two seasons)
       - id: R-04.c3
         text: >-
           social contests and debates: `headless --world hearing` prints the same content hash
@@ -771,24 +785,23 @@ rows:
         expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, and above the `--control` arm's (pursuits = realm mean) at each seed: one half alone does not separate the two, the flattened arm clears it too"
         holds: "yes"
         reading:
-          tree: "8d32955b1365decae113b46aad793c82df1d62fe"
-          date: "2026-11-23"
-          seed: "0, 1, 2"
-          seasons: 0
-          line: "  all referents: {'draw': 243, 'pursuit': 255}; distinct tops 42; distinct tops within a faction, summed over its factions 148"
+          tree: "399e10f143c927a7ce2f492dc216eeaeec13ad7e (B21d-fa-arc after B21d.09's revert; game code b3ef95215's), read with B21d.99's record edits in the working tree; the base reading on a clean `git archive fa040e476` extract"
+          date: "2026-11-28"
+          seed: "0 (`decision_spread --decisions --seed 0`, `PYTHONHASHSEED=0`); the realm hash after one season, seed 0, for the played half"
+          seasons: "0 for the share (a built realm); 1 for the hash and the Spymaster's verbs"
+          line: |-
+            `decision_spread --decisions --seed 0`, base @fa040e476 and this tree, identical output: all referents: {'draw': 255, 'pursuit': 261} (261 of 516, 0.506); distinct tops 36; distinct tops within a faction, summed over its factions 137
+            Played, B21d.05 (an office-holder declines to turn on his own faction until his grievance clears a band; `fx.duty_weight`): realm hash at seed 0, one season, `4f556eb89403c1d0723d302971c00a2b` @fa040e476
+            -> `bfceb151d386451cb116a9a4a8575a92` @107cb201b, unchanged by B21d.06's switches (off) @b3ef95215; the seed-0 Spymaster's formed hostile verbs toward the King read {speak: 17} on the base and 0 after
           control: >-
-            seed 0 shown (255 of 498, 0.512); seeds 1 and 2 read pursuit 265 and 273 of 498 (0.532, 0.548)
-            (`--decisions --seed s`, `PYTHONHASHSEED=0`); the `--control` arm (pursuits = realm mean, and now no
-            manner offset) reads pursuit 210, 210, 211 of 498 (0.422, 0.422, 0.424), so the shipped arm exceeds it by
-            45, 55 and 62. These are B10's close's figures (c21e451f1) exactly: the share is unmoved as landed (the tops within a faction moved 142 -> 148).
-            BA1.02's ten drafted `manner:` rows are HELD BACK: with them in, seed 0 read 249 of 498 (0.500, not above
-            one half; seeds 1, 2: 259, 266; control 205, 215, 218), bisected over the item commits (BA1.01 alone reads
-            255, 265, 273); the rows are the IS-A-11 draft's table (a) `manner:` column. The `choice_temperature` swept to 0 arm of the conjunct's
-            text was not re-read
+            the share is the same on both trees because the built realm has no season played and B21d.05 acts in play: the line observes the chooser's ranking, not the duty weight, so it is a control that B21d.05 leaves the
+            built ranking alone, not a reading of it; the previous close's reading (B10's, @8d32955, seed 0) was {'draw': 243, 'pursuit': 255} (255 of 498, 0.512; seeds 1 and 2 0.532, 0.548; `--control` arm 0.422, 0.422, 0.424),
+            and the 261 of 516 here is what the merged batches between left, not attributed; `aperture 2 0` base against after, realm seed 0: attempted 1334 -> 1329, executed 784 -> 783 (acts 954 -> 951),
+            no verb with executed above 0 on the base falls to 0 (the same two runs as R-04.a's record); `fx.duty_weight` 0 and `fx.betrayal_band` at +inf are the controls (the B21d.05 test file's switches-off arm, not re-run for this record)
           does_not_show: >-
-            a built realm with no season played; the share is derived from two printed counts; seed 0 clears one half
-            by 6 of 498; whether the held-back offsets, once Jordan corrects them, keep the share above one half is not
-            measured here
+            the conjunct's own `expects` (seeds 1 and 2 and the `--control` arm were not re-read; seed 0 clears one half by 6 of 516); that the Spymaster's 17 `speak` toward the King were declined BECAUSE of the duty weight
+            and not displaced by the changed draw sequence (one seed, one office, the hash moved as a whole); that choices differ by an officer's own grievances across seeds (only seed 0's Spymaster read); a season past the first
+            for the verbs; the three flips B21d.07 to .09 moved nothing and were reverted; `holds` stays `yes` as written
       - id: R-06.e
         text: >-
           every acting person carries a pursuit vector: `decision_spread --persons`, n of n at the
