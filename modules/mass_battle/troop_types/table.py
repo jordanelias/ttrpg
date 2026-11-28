@@ -227,17 +227,10 @@ def troop_types() -> tuple:
     return tuple(_rows())
 
 
-def _with_power(row: dict) -> dict:
-    """A copy of a stat-carrying dict that also reads `power`, the alias of `skill` kept until MBA-04 deletes the last pool reader."""
-    out = dict(row)
-    out['power'] = out['skill']
-    return out
-
-
 def row_of(troop_type) -> Optional[dict]:
-    """A copy of the troop's row (with `power`, the alias of `skill`), or None; the name matched exactly."""
+    """A copy of the troop's row, or None; the name matched exactly."""
     row = _rows().get(troop_type) if isinstance(troop_type, str) else None
-    return _with_power(row) if row is not None else None
+    return dict(row) if row is not None else None
 
 
 def _lower(troop_type) -> str:
@@ -265,9 +258,8 @@ def _sites() -> dict:
 
 
 def stats_table() -> dict:
-    """`{troop type: {skill, power, discipline, morale}}` for each row with a full stat line (today's `TROOP_TYPE_STATS`);
-    `power` is the alias of `skill` (one number, two names) until the last pool reader goes (MBA-04)."""
-    return {t: _with_power({k: r[k] for k in STAT_COLUMNS}) for t, r in _rows().items() if all(r[k] is not None for k in STAT_COLUMNS)}
+    """`{troop type: {skill, discipline, morale}}` for each row with a full stat line (today's `TROOP_TYPE_STATS`)."""
+    return {t: {k: r[k] for k in STAT_COLUMNS} for t, r in _rows().items() if all(r[k] is not None for k in STAT_COLUMNS)}
 
 
 def stats_for(troop_type) -> Optional[dict]:

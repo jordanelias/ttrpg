@@ -148,7 +148,7 @@ def test_the_transcribed_rows_read_as_the_old_tables_did():
     assert recruitment.training_site_for('levy') is None
     assert recruitment.training_site_for('knights_templar') == ('stable', 0.5) == recruitment.TRAINING_SITE['knights_templar']
     assert registry.roles_for('levy') == ['Support', 'Reserve'] == registry.roles_for('no_such_type')
-    assert table.row_of('infantry')['skill'] == table.row_of('infantry')['power'] == 4      # `power` is the alias of `skill` (B19a.01)
+    assert table.row_of('infantry')['skill'] == 4
     assert table.row_of('infantry')['discipline'] == 5
     assert all(r['secondary'] is None for r in _artifact()['troops'].values())
 
@@ -172,3 +172,19 @@ def test_a_name_in_both_owners_is_refused():
         assert repr(column) in str(e.value) and 'EngineConfig' in str(e.value), column
         checked += 1
     assert checked == len(schema) >= 30
+
+
+def test_a_troop_row_has_no_power_key():
+    """The loader's `power` alias of `skill` is deleted (MBA-04 step 8): no troop row, and no stat line of a troop type,
+    reads `power`; the men's quality is `skill`."""
+    names = table.troop_types()
+    assert len(names) >= 10
+    stated = 0
+    for t in names:
+        assert 'power' not in table.row_of(t)
+        line = registry.stats_for(t)
+        if line is not None:
+            stated += 1
+            assert 'power' not in line and line['skill'] is not None
+    assert stated >= 10
+    assert all('power' not in line for line in registry.TROOP_TYPE_STATS.values())

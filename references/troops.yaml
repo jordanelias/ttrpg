@@ -130,7 +130,7 @@ fatigue:
 # One row per troop type, in `TROOP_TYPE_STATS`' order, then the unmustered body.
 #   skill, discipline, morale   today's stat line (§B.2); a row with a null among the three has no preset (`stats_for` None).
 #                               `skill` was `power`, values unchanged: the men's martial skill on the duel's `faculty` scale (B19a.01).
-#                               The loader returns `power` as an alias of `skill` until the last pool reader goes (MBA-04)
+#                               The loader returns no `power` key (the alias was deleted, B19.15).
 #   strength                    the score the carry demand is charged against (seed rule above)
 #   mounted                     speed, deployment on the flanks (today's `MOUNTED_TYPES`)
 #   charge                      charge penetration: 3 for today's `cavalry`, 0 otherwise

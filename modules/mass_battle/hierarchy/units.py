@@ -557,7 +557,7 @@ class Unit:
     @classmethod
     def of_type(cls, troop_type, shape, tier, starting_position, **kw):
         """Construct a Unit of a canonical troop type (mass_battle_v30 §B.2). The type's
-        power / discipline / morale (and morale_start = morale) are filled from
+        skill (the Subunit's `power` field) / discipline / morale (and morale_start = morale) are filled from
         TROOP_TYPE_STATS unless the caller overrides them in **kw; an unknown type fills
         nothing (fields stay None -> inherit the parent Army). This is the taxonomy's
         'stat home'. It is purely additive: callers that build Unit(...) directly are
@@ -566,7 +566,7 @@ class Unit:
         a ranged type (archers / crossbow / sling) takes unit_type='ranged' via **kw."""
         preset = stats_for(troop_type)
         if preset:
-            kw.setdefault('power', preset['power'])
+            kw.setdefault('power', preset['skill'])
             kw.setdefault('discipline', preset['discipline'])
             kw.setdefault('morale', preset['morale'])
             kw.setdefault('morale_start', preset['morale'])
