@@ -51,7 +51,7 @@ from ..data.rosters import clocks as clock_rows          # B21d.02: the clock ro
 from .clock import ClockEvent, clock_fold                # B21d.02: the one fold, and the Event as it reads one
 from .clock import SittingEvent, sittings_failed_of      # B21d.03: the breaking point's count, and the Event as it reads one
 from ..data.verbs import DISPOSAL_EVENTS                 # B21d.03: the determination's kind, `determine`'s disposal
-from ..data.rosters import TRIGGER_BANDS, band_reached, church_faction   # B21d.06: the bands the triggers read, and the Church
+from ..data.rosters import PERSON_SIDE_TRIGGERS, TRIGGER_BANDS, band_reached, church_faction   # B21d.06: the bands the triggers read, and the Church
 from ..data.arrangements import determining_arrangement                # B21d.06: the sittings breakdown counts
 from .person_q import SOVEREIGN_FACTION, believed_breakdown, believed_clock   # B21d.06: the sovereign's faction; the believed folds
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
@@ -4419,7 +4419,6 @@ def believed_bands(w: World, p: Person) -> tuple:
 
 
 #: v12 B21d.06: the triggers whose band a person-side term reads off `Question.bands` (`decision/choose.py`).
-BANDS_READ_PERSON_SIDE = ("ci_pursuit_gain_on", "ci_church_decline_on", "turmoil_violence_relief_on")
 
 
 def declare_occasion(w: World, p: Person) -> tuple:
@@ -4450,8 +4449,8 @@ def declare_occasion(w: World, p: Person) -> tuple:
 
 
 def _sworn_to_sovereign(w: World, p: Person) -> bool:
-    """IS `p` A VASSAL: does he hold a live, sworn `oblige` (`gate.is_sworn_to`) to a seat of the sovereign's faction -- the reading `faction_q.civil_war` takes of
-    CR-86's vassal edges, so a head of a foreign or independent faction (the Church's) is no vassal."""
+    """IS `p` A VASSAL: does he hold a live, sworn `oblige` (`gate.is_sworn_to`) to a seat of the sovereign's faction -- `faction_q.civil_war`'s test of CR-86's vassal edges, against `person_q.SOVEREIGN_FACTION`
+    (the highest head seat of the static rows); `civil_war` takes the factions of the realm-rung seats live, so the two name one sovereign on the shipped rows and can part when a realm-rung seat is founded in play (named, not ruled; both off while the switches ship off). So a head of a foreign or independent faction (the Church's) is no vassal."""
     return any(is_sworn_to(w, p.id, o.id) for o in w.offices.values() if seat_faction(w, o.id) == faction_prop_id(SOVEREIGN_FACTION))
 
 
@@ -6330,7 +6329,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         stamped = _stamped(head, added, w, held)
         out[:1] = [replace(stamped, mandatory=True) if reached or occasion else stamped]
     # v12 B21d.06: AND THE BANDS HE BELIEVES THE REALM IN ride the question he answers (`Question.bands`), only while a trigger reading them person-side is on.
-    if out and any(w.fixtures.get(s) for s in BANDS_READ_PERSON_SIDE):
+    if out and any(w.fixtures.get(s) for s in PERSON_SIDE_TRIGGERS):
         out[:1] = [replace(out[0], bands=believed_bands(w, p))]
     return out
 

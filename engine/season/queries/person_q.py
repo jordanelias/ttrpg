@@ -58,7 +58,7 @@ from ..data.rosters import (
     ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, matter_of_record, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map, task_share,
 )
-from ..data.rosters import clocks            # B21d.02: the clock rows `believed_clock` folds
+from ..data.rosters import band_reached, clocks            # B21d.02: the clock rows `believed_clock` folds
 from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RUNG_KINDS, SEAT_ROW_BY_ID     # B21d.05: the seats, their faction and rank (`grievance_against`, `officers_named`)
 from ..data.goals import org_faction         # B21d.05: a seat's faction, the one rule (`office_factions`)
 from ..data.cast import MEMBER_BAND          # B21d.05: CR-87's one-step bound on a build-time disaffection (`grievance_against`'s grudge)
@@ -1033,7 +1033,7 @@ def believed_clock(p: Person, name: str, of_claim: dict) -> float:
     over the Events `p` holds a claim of, each Event ONCE however many of his claims report it (distinct origins, `ED-IN-0322`). `of_claim` is
     `world_q.clock_events_by_claim(w)`, the attributed Event each deposited claim came from (a Claim names no Event; the log's `claim.deposited` does); a claim of his
     counts where it reports that Event's kind (the event-kind claim WITNESS deposits, predicate the kind). He believes less than the truth by what he never heard and
-    what his ledger evicted; a retold claim (`tell`) was deposited from the telling, not the Event, and does not reach the fold (a FOUND claim does: `world_q._by_claim` reads its trail Event). Computed when asked, stored nowhere."""
+    what his ledger evicted; a retold claim (`tell`) was deposited from the telling, not the Event, and does not reach the fold (a FOUND claim does: `world_q._by_claim` reads its trail Event). NAMED LIMIT (Lens B, `04` §C.11): the `ClockEvent` a claim maps to carries the actor's faction as the WORLD attributes it (`world_q.clock_events`, the act store), which the plan's CR-89 (1) instruction asks for and §C.11's own-ledger standard does not admit; a holder of a claim of a Church seizure counts it for the Church feeders without his ledger naming the doer. Every consumer is behind a switch that ships off (`rosters.yaml: tables.clocks.triggers`). Computed when asked, stored nowhere."""
     seen = {}
     for c in p.ledger:
         ce = of_claim.get(c.id)
@@ -1067,8 +1067,7 @@ def believed_breakdown(p: Person, arrangement: str, of_clock: dict, of_sitting: 
     disposed of nothing (`believed_sittings_failed`) [ASSUMPTION; medium; Jordan to correct; revert: Turmoil alone]. `of_clock` and `of_sitting` are
     `world_q.clock_events_by_claim(w)` and `world_q.sitting_events_by_claim(w)`. A conjunction read where used: nothing stores "broken"."""
     name, band = BREAKDOWN_BAND
-    at = next(b.at for b in clocks()[name].bands if b.name == band)
-    return (believed_clock(p, name, of_clock) >= fx.get(at)
+    return (band_reached(believed_clock(p, name, of_clock), name, band, fx)
             and believed_sittings_failed(p, arrangement, fx.get("breakdown_window"), of_sitting) >= fx.get("breakdown_sittings"))
 
 

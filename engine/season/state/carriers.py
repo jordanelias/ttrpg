@@ -541,7 +541,7 @@ class Question:
     `bands` (v12 B21d.06, CR-89 commit (3)): the clock bands the person BELIEVES the realm stands in, `((clock, band), ...)` in roster order -- his own
     believed fold (`person_q.believed_clock`) at or above each band's threshold -- stamped by `questions_for` on the question he answers (the head, as the
     standing-occasion stamps are), and only while a trigger that reads it person-side is on (`data/rosters.py::TRIGGER_BANDS`); `()` otherwise, so with every
-    trigger off nothing is read. A believed reading of his own claims (`04` §C.11's second row, the `View.odds` precedent), never the true clock; the
+    trigger off nothing is read. A believed reading of his own claims (the `View.odds` precedent), never the true clock -- though the actor's faction each claim's Event carries is the world's attribution, not his ledger's (`person_q.believed_clock`'s named limit); the
     `decision/choose.py` terms read it, since `decision/` holds no World to fold the log with."""
     id: str
     source: str

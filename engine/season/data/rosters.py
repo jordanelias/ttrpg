@@ -2680,6 +2680,9 @@ def _load_triggers(raw) -> tuple:
 #: answers to. Read by `decision/choose.py` (the person-side terms, off the bands `world_q.believed_bands` stamps on his question), `seam/wrappers/sigma.py`
 #: (the roll) and `queries/world_q.py` (the theocratic occasion).
 TRIGGER_BANDS, TRIGGER_VERBS = _load_triggers((_TABLES.get("clocks") or {}).get("triggers"))
+#: The switches whose terms `decision/choose.py` reads through the person's own believed bands (`Question.bands`), which `world_q.questions_for` stamps only while one is on: the one list
+#: both read, so a fourth person-side trigger is named here once (`_in_bands` refuses a switch not in it).
+PERSON_SIDE_TRIGGERS = ("ci_pursuit_gain_on", "ci_church_decline_on", "turmoil_violence_relief_on")
 
 
 def church_faction() -> Optional[str]:

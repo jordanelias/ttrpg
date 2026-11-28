@@ -52,7 +52,7 @@ from ..queries.person_q import (
     named_station, office_factions, own_station,     # B21d.05: `duty_term`'s office and station readers
     officers_named,                                  # B21d.06: the Church officers his own ledger names (`band_stance`)
 )
-from ..data.rosters import FACTION_BY_PROP, TRIGGER_BANDS, TRIGGER_VERBS, church_faction     # B21d.06: the bands and rows each trigger reads, and the Church
+from ..data.rosters import FACTION_BY_PROP, PERSON_SIDE_TRIGGERS, TRIGGER_BANDS, TRIGGER_VERBS, church_faction     # B21d.06: the bands and rows each trigger reads, and the Church
 from ..data.cast import MEMBER_BAND                                           # B21d.06: one valence step (`VALENCE_STEP`)
 from ..data.fixtures import ROUTE_PRICING_ON
 from ..data.geography import leg_price
@@ -155,6 +155,8 @@ def _in_bands(q: Question, switch: str, fx: "Fixtures") -> int:
     `world_q.believed_bands` stamped on his question); 0 while the switch is off, whatever the question carries."""
     if not fx.get(switch):
         return 0
+    if switch not in PERSON_SIDE_TRIGGERS:       # `q.bands` is stamped only for these: another switch would read () and silently be 0
+        raise KeyError(f"{switch} is not a person-side trigger (data/rosters.py::PERSON_SIDE_TRIGGERS)")
     return sum(1 for band in TRIGGER_BANDS[switch] if band in q.bands)
 
 

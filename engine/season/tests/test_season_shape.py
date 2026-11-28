@@ -2369,6 +2369,13 @@ def test_person_q_cannot_reach_the_world_side():
         "the asker-first Query family's home; without the module this scan is vacuous and §A.3 "
         "row 2's property is unenforced.")
     tree = ast_.parse(path.read_text(encoding="utf-8"))
+    # `queries.clock` is ALLOWED below on the ground that it imports nothing from the season package: hold that ground, or a World-side import added to it
+    # would reach `person_q` unseen (Lens B, B21d close).
+    clock_tree = ast_.parse((path.parent / "clock.py").read_text(encoding="utf-8"))
+    assert not [n.lineno for n in ast_.walk(clock_tree)
+                if (isinstance(n, ast_.ImportFrom) and (n.level > 0 or (n.module or "").startswith("engine.season")))
+                or (isinstance(n, ast_.Import) and any(a.name.startswith("engine.season") for a in n.names))], \
+        "queries/clock.py imports from the season package: `person_q` may import it only while it is a stdlib-only leaf"
 
     # ⚠ `state.world` -- THE STORE -- NOT `state` WHOLESALE, AND A FIRST VERSION OF THIS LIST GOT IT
     # WRONG IN THE DIRECTION THAT LOOKS SAFER. `from ..state.carriers import Person` is a TYPE
