@@ -4,9 +4,9 @@
 WHY THIS EXISTS (B19a.03, MBA-03). The mass-battle contact draw reads the felling chance of a man in a given duel (`h`), measured
 by `tools/calibrate_mb_contact.py` over the duel engine into `references/mb_contact/duel_grid.json`. A value the engine reads lives
 in a typed artifact behind an exporter with a blocking `--check` (CLAUDE.md §5): this tool writes
-`engine/engine_params/mb_contact.json` (the port's) and `systems/mass_battle/sim/contact_table_data.py` (the same document as a Python
+`engine/engine_params/mb_contact.json` (the port's) and `modules/mass_battle/core/contact_table_data.py` (the same document as a Python
 literal, because a registered module opens no file, A-25; the precedent is `export_troops.py`'s `troops_data.py`). The module that
-reads it is `systems/mass_battle/sim/contact_table.py`. A hand edit of either artifact fails `--check`.
+reads it is `modules/mass_battle/core/contact_table.py`. A hand edit of either artifact fails `--check`.
 
 WHAT IT HOLDS. `pairs`: for each ORDERED pair of grid fighter types `(arm, armour, skill)`, keyed `attacker>defender`, the row of
 the DEFENDER's man: `h` (K felling chances, rounds 1..K, rounded to 4 significant digits), `beta`, `flags`. A cell of the measured
@@ -53,7 +53,7 @@ if REPO not in sys.path:
 TABLE = cmc.TABLE
 TROOPS = cmc.TROOPS
 OUT = os.path.join(REPO, 'engine', 'engine_params', 'mb_contact.json')
-OUT_PY = os.path.join(REPO, 'systems', 'mass_battle', 'sim', 'contact_table_data.py')
+OUT_PY = os.path.join(REPO, 'modules', 'mass_battle', 'core', 'contact_table_data.py')
 SCHEMA_VERSION = 1
 SIG_DIGITS = 4          # `h` and `beta` are kept to this many significant digits
 EPS = 1e-6              # logit's clamp: a felling chance of 0 or 1 is read as EPS or 1 - EPS

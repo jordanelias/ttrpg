@@ -1,4 +1,4 @@
-"""The measured duel table is cooked into `engine/engine_params/mb_contact.json` and `systems/mass_battle/sim/contact_table_data.py`
+"""The measured duel table is cooked into `engine/engine_params/mb_contact.json` and `modules/mass_battle/core/contact_table_data.py`
 behind a blocking round trip, and a stale calibration and a hand edit each red it (B19a.03, MBA-03). A missing cell or an unmeasured
 duel weapon is refused by the exporter's own arm (c) and is read by no test: the arm runs at every `--check`.
 
@@ -20,7 +20,7 @@ sys.path.insert(0, ROOT)
 
 import calibrate_mb_contact as cmc  # noqa: E402
 import export_mb_contact as ex  # noqa: E402
-from systems.mass_battle.sim import contact_table  # noqa: E402
+from modules.mass_battle.core import contact_table  # noqa: E402
 
 
 @pytest.fixture

@@ -1,13 +1,12 @@
-"""systems.mass_battle.sim.contact_table -- the measured felling chances the contact draw reads, by log-odds interpolation.
+"""modules.mass_battle.core.contact_table -- the measured felling chances the contact draw reads, by log-odds interpolation.
 
 The head is the measured duel table `references/mb_contact/duel_grid.json` (written by `tools/calibrate_mb_contact.py`, which runs the
 duel engine); `tools/export_mb_contact.py` cooks it, with the troop file, into `engine/engine_params/mb_contact.json` (the port's) and
 `contact_table_data.py` beside this module (the same document as a Python literal). This module reads the second, once, on first use.
-It imports no `engine` code and nothing from `modules.combat`: it opens no file (A-25's shape) and names no other
-subsystem, so the duel engine reaches the game only through the table. IT LIVES IN `systems/` UNTIL B19's contact draw reads it:
-`modules/` holds the reachable closure of the entries only (A-25; `test_modules_reachable_closure`), and a composition row for a role
-no caller requires is not declared (`module_contracts.yaml`, ID-13). B19 moves both files to `modules/mass_battle/core/` with the
-first call (and swaps `math.log`/`math.exp` for `engine.dice_engine.fmath`, `test_fmath_one_owner`). A stale table is refused where a file may be opened, by the
+It imports nothing from `modules.combat` and opens no file (A-25's shape), so the duel engine reaches the game only through the table;
+its one outside import is `engine.dice_engine.fmath`, the owner of `log` and `exp` (`test_fmath_one_owner`). It moved here from
+`systems/mass_battle/sim/` at B19.11, when `core/contact_draw.py` became its first importer (`modules/` holds the reachable closure of
+the entries only, A-25; `test_modules_reachable_closure`). A stale table is refused where a file may be opened, by the
 exporter's `--check` (its fingerprint arm), never here.
 
 A FELLING CHANCE `h` is the chance a defender's man is taken out of the fight (felled, or yielding) in one duel round, given that
@@ -30,9 +29,10 @@ FINDING: 1.57 times at arming/light 3 against 3); this module applies no defende
 from __future__ import annotations
 
 import functools
-import math
 
-__all__ = ['felling_chance', 'beta', 'flags', 'status', 'rounds_k', 'GRID_SKILLS']
+from engine.dice_engine import fmath
+
+__all__ = ['felling_chance', 'beta', 'flags', 'status', 'rounds_k', 'logit', 'expit', 'GRID_SKILLS']
 
 GRID_SKILLS = (1, 3, 5)
 _EPS = 1e-6        # [JUSTIFIED: logit's clamp, a chance of 0 or 1 reads as _EPS or 1 - _EPS; a numerical guard, not a game value]
@@ -41,7 +41,7 @@ _EPS = 1e-6        # [JUSTIFIED: logit's clamp, a chance of 0 or 1 reads as _EPS
 @functools.lru_cache(maxsize=None)
 def _data() -> dict:
     """The exported document, imported once, on first use. The exporter's `--check` pins it equal to the JSON."""
-    from systems.mass_battle.sim.contact_table_data import CONTACT_DATA
+    from modules.mass_battle.core.contact_table_data import CONTACT_DATA
     return CONTACT_DATA
 
 
@@ -50,13 +50,13 @@ def rounds_k() -> int:
     return _data()['K']
 
 
-def _logit(p: float) -> float:
+def logit(p: float) -> float:
     p = min(max(p, _EPS), 1 - _EPS)
-    return math.log(p / (1 - p))
+    return fmath.log(p / (1 - p))
 
 
-def _expit(x: float) -> float:
-    return 1 / (1 + math.exp(-x))
+def expit(x: float) -> float:
+    return 1 / (1 + fmath.exp(-x))
 
 
 def _bracket(x: float, what: str) -> tuple:
@@ -101,9 +101,9 @@ def felling_chance(arm_a: str, armour_d: str, skill_a: float, skill_d: float, ro
     r0 = min(int(rounds_d), K - 1) if K > 1 else 1      # the round index below `rounds_d` (the last pair's lower one at K)
     r1 = min(r0 + 1, K)
     tr = rounds_d - r0 if r1 > r0 else 0.0
-    x0 = _over_skills(arm_a, armour_a, skill_a, arm_d, armour_d, skill_d, lambda p: _logit(p['h'][r0 - 1]))
-    x1 = x0 if r1 == r0 else _over_skills(arm_a, armour_a, skill_a, arm_d, armour_d, skill_d, lambda p: _logit(p['h'][r1 - 1]))
-    return _expit(x0 + tr * (x1 - x0))
+    x0 = _over_skills(arm_a, armour_a, skill_a, arm_d, armour_d, skill_d, lambda p: logit(p['h'][r0 - 1]))
+    x1 = x0 if r1 == r0 else _over_skills(arm_a, armour_a, skill_a, arm_d, armour_d, skill_d, lambda p: logit(p['h'][r1 - 1]))
+    return expit(x0 + tr * (x1 - x0))
 
 
 def beta(arm_a: str, armour_d: str, skill_a: float, skill_d: float, *, arm_d: str, armour_a: str) -> float:

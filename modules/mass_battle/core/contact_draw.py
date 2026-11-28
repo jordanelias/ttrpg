@@ -4,11 +4,16 @@
 pair's casualties are `_pair_a`/`_pair_b`, accumulated by the caller. `pursuit_damage` is the fast pursuer's attack on a routed
 body. `_momentum_speed`, `_cell_damage_weights` and `_accum_cell_damage` are the helpers only the pair's block calls: they
 moved with it so this module imports nothing from `orchestration` (no cycle). `orchestration` re-imports the names its callers use, so
-they are unchanged. A flag read here is read from THIS module's namespace: a test that flips one patches it here."""
+they are unchanged. `ContactVector` and `contact_casualties` (B19.11, MBA-04 step 1) are the contact draw itself, a pure function of
+the vector, the measured table and a handed-in `z`; nothing calls them until B19.12. A flag read here is read from THIS module's namespace: a test that flips one patches it here."""
+from dataclasses import dataclass
+
+from engine.dice_engine import fmath  # the one owner of `sqrt`, `powf` and the left-to-right sum
 from engine.dice_engine.dice_engine import degree_label  # the one degree ladder (A-5); the field grades nothing of its own
 from engine.dice_engine.sigma_leverage import roll_net_continuous  # the one sampler; the mu-shift is `resolution._net_boost`
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
+from modules.mass_battle.core import contact_table  # the measured felling chances the draw reads (passed in as `table`)
 from modules.mass_battle.core.attrition import _lanchester_strength
 from modules.mass_battle.geometry import _oriented, _oriented_abs_map
 from modules.mass_battle.hierarchy.units import COL_WIDTH
@@ -17,7 +22,7 @@ from modules.mass_battle.resolution import (_charge_shock_sigma, _morale_sigma, 
                                             roll_pool, trace_event)
 from modules.mass_battle.troop_types.registry import charge_for, reach_for
 
-__all__ = ['resolve_melee_pair', 'pursuit_damage', 'REARGUARD_PENALTY', '_momentum_speed', '_cell_damage_weights', '_accum_cell_damage']
+__all__ = ['ContactVector', 'contact_mu_var', 'contact_casualties', 'resolve_melee_pair', 'pursuit_damage', 'REARGUARD_PENALTY', '_momentum_speed', '_cell_damage_weights', '_accum_cell_damage']
 
 
 def _momentum_speed(atom, contact_abs_cells):
@@ -375,3 +380,46 @@ def pursuit_damage(pursuer, routing_unit, pool_of):
     raw_dmg = CASUALTY_SCALE * a_net * (1 + pursuer.power)
     dmg = max(0, raw_dmg - routing_unit.dr)
     return dmg
+
+
+@dataclass(frozen=True)
+class ContactVector:
+    """The matchup vector: one contact and one receiving side `d` (the other is `a`), per tick (MBA §1.1). Every field belongs to the two bodies
+    in contact; there is no side-wide value. `arm_d` and `armour_a` are the defender's arm and the attacker's armour: the table is keyed on
+    the whole ordered pair of fighter types and a felling chance marginalised over either is undefined (`contact_table`'s signature).
+    `men_d` is the men of the defender in the contact cells, the draw's upper clip (§1.3 step 5). `levels_d` and `levels_a` are named
+    levels in skill steps; the draw reads `levels_d` (§1.3 step 2), `levels_a` rides for the builder's other side."""
+    arm_a: str
+    armour_d: str
+    skill_a: float
+    skill_d: float
+    rounds_d: float
+    support_a: float
+    exposure_d: float
+    levels_d: tuple
+    levels_a: tuple
+    frontage: float
+    men_d: float
+    arm_d: str
+    armour_a: str
+
+
+def contact_mu_var(vec, table):
+    """`(mu, var)` of the defender's casualties in one tick of one contact (§1.3 steps 1-4): the felling chance `h` read from `table` at
+    `(arm_a, armour_d, skill_a, skill_d, rounds_d)`; `logit(h') = logit(h) + beta x sum(levels_d)`; `q = 1 - (1 - h')^(r x m)` with
+    `r = exposure_d`, `m = support_a`; `mu = F x q`, `var = F x q x (1 - q)` with `F = frontage`. No second variance layer (A-77)."""
+    if vec.frontage < 0 or vec.exposure_d < 0 or vec.support_a < 0:
+        raise ValueError(f'frontage, exposure_d and support_a are counts and may not be negative: {vec!r}')
+    pair = dict(arm_d=vec.arm_d, armour_a=vec.armour_a)
+    h = table.felling_chance(vec.arm_a, vec.armour_d, vec.skill_a, vec.skill_d, vec.rounds_d, **pair)
+    slope = table.beta(vec.arm_a, vec.armour_d, vec.skill_a, vec.skill_d, **pair)
+    h2 = contact_table.expit(contact_table.logit(h) + slope * fmath.ltr_sum(vec.levels_d))
+    q = 1.0 - fmath.powf(1.0 - h2, vec.exposure_d * vec.support_a)
+    return vec.frontage * q, vec.frontage * q * (1.0 - q)
+
+
+def contact_casualties(vec, table, z):
+    """The defender's casualties in one tick of one contact: `clip(mu + z x sqrt(var), 0, men_d)` (§1.3 step 5), a continuous count (A-29).
+    Pure: no RNG inside; `z` is the standard normal the keyed draw owner hands in (one key per purpose, A-30), and the vector is the only input."""
+    mu, var = contact_mu_var(vec, table)
+    return min(max(mu + z * fmath.sqrt(var), 0.0), max(vec.men_d, 0.0))
