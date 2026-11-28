@@ -391,6 +391,7 @@ def test_accept_is_priced_by_the_station_of_his_office_and_waived_only_for_a_pee
     _news(k2, C, min(s for s in _seats("Hafenmark") if _rank(s) == _rank(realm)) if any(_rank(s) == _rank(realm) for s in _seats("Hafenmark"))
           else min(s for s in SEAT_ROW_BY_ID if _rank(s) == _rank(realm) and s != realm))
     assert _accept_duty(k2, war, fx) == 0.0, "a peer enemy's duel could settle the realm's dispute: the price is waived"
+    assert _accept_duty(k2, q, fx) == -_rank(realm) / top, "a peer with no enemy stamp (no war question) pays the price: the waiver needs the war"
     assert _accept_duty(k, q, _fx(weight=0.0)) == 0.0
 
 

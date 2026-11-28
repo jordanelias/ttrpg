@@ -43,13 +43,14 @@ def _plant(w, n, kind, actor=CLERIC, verb="seize", subject="terr_T1", changed=()
     return e
 
 
-def _hold(pid, e, w, n):
+def _hold(pid, e, w, n, found=None):
     """`pid` holds a claim of `e`, deposited as WITNESS deposits one: the event-kind claim in his ledger and the
-    `claim.deposited` Event naming it, caused by `e` (`loop/witness.py::_deposit`)."""
+    `claim.deposited` Event naming it, caused by `e` (`loop/witness.py::_deposit`); `found`: the finding Event's id; as a FINDING deposits it (ED-FI-0002,
+    `_deposit(..., also=(f.id,))`), an earlier Event first (the finding) and the uncovered Event `e` second."""
     cid = f"c_cr89_{n}"
     w.persons[pid].ledger.append(Claim(cid, pid, CLERIC, e.kind, True, e.emitted_at, "firsthand", 100, "own"))
     w.log.append(Event(f"ev_dep_cr89_{n}", "claim.deposited", [apparatus_receipt(w, cid, "set", "Event", "claim_ledger")],
-                       [e.id], e.emitted_at))
+                       [found, e.id] if found else [e.id], e.emitted_at))
 
 
 def test_a_hand_built_log_folds_to_its_known_value_and_clamps_at_cap_and_range():
@@ -85,17 +86,19 @@ def test_one_planted_church_rung_seized_raises_ci_and_turmoil_by_one_weight_once
 
 
 def test_a_person_holding_claims_of_half_the_events_believes_half():
-    """Four Church seizures in the log; `HEARER` holds claims of two of them, one of the two by two claims. The world reads
-    Turmoil 4; he believes 2 -- each Event once, and none he holds no claim of."""
+    """Four Church seizures in the log; `HEARER` holds claims of two of them, one of the two by two claims, and of a third as a FOUND claim
+    (the finding Event caused the deposit first, the seizure second). The world reads Turmoil 4; he believes 3 -- each Event once, a found
+    claim counted, and none he holds no claim of."""
     w = build_realm(0)
     evs = [_plant(w, i, "rung.seized", changed=()) for i in range(4)]
     _hold(HEARER, evs[0], w, 0)
     _hold(HEARER, evs[1], w, 1)
     _hold(HEARER, evs[1], w, 2)
+    _hold(HEARER, evs[2], w, 3, found=_plant(w, 9, "claim.deposited", act=False, changed=()).id)
     assert Q.clock(w, TURMOIL) == 4
     of_claim = Q.clock_events_by_claim(w)
-    assert believed_clock(w.persons[HEARER], TURMOIL, of_claim) == 2
-    assert believed_clock(w.persons[HEARER], CI, of_claim) == 30
+    assert believed_clock(w.persons[HEARER], TURMOIL, of_claim) == 3
+    assert believed_clock(w.persons[HEARER], CI, of_claim) == 31
     assert believed_clock(w.persons[KING], TURMOIL, of_claim) == 0, "a man holding no claim believes the start"
 
 
@@ -286,7 +289,7 @@ def _check_ci_theocratic_occasion_on():
         _believe(w, head, CI, 60)
         q = Q.questions_for(w, w.persons[head])[0]
         read[on] = (q.mandatory, (CROWN, "Proposition") in q.classes)
-    assert read == {False: (False, read[False][1]), True: (True, True)}, read
+    assert read == {False: (False, False), True: (True, True)}, read
 
 
 def _check_ci_church_decline_on():
@@ -323,7 +326,7 @@ def _check_turmoil_vassal_war_on():
     """Believed breakdown: a vassal head's (Hafenmark's) head question carries the Crown's creed and is mandatory; the King, believing the same, is no vassal."""
     read = {}
     for on in (False, True):
-        for faction in ("fac_hafenmark", CROWN):
+        for faction in ("fac_hafenmark", CROWN, CHURCH):
             w = build_realm(0, fixtures=_fx(*(["turmoil_vassal_war_on"] if on else [])))
             head = _head(w, faction)
             _break_down(w, head)
@@ -331,6 +334,7 @@ def _check_turmoil_vassal_war_on():
             read[(on, faction)] = (q.mandatory, (CROWN, "Proposition") in q.classes)
     assert read[(True, "fac_hafenmark")] == (True, True) and not read[(False, "fac_hafenmark")][0], read
     assert not read[(True, CROWN)][0] and not read[(False, CROWN)][0], "the sovereign's head was occasioned against his own creed"
+    assert not read[(True, CHURCH)][0], "a head sworn to no seat of the sovereign's faction is no vassal"
 
 
 def _check_nation_functions_on():

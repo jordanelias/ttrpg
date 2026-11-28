@@ -111,7 +111,7 @@ from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_of, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
-from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
+from ..state.gate import holdings_of, in_holdings, is_sworn_to, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
@@ -4358,9 +4358,13 @@ def _by_claim(w: World, read: dict) -> dict:
     claim's id and its first cause the witnessed Event (`loop/witness.py::_deposit`). The one Claim-to-Event link the clocks and the sittings read."""
     out = {}
     for e in w.log:
-        if e.kind == _CLAIM_DEPOSITED and e.causes and e.causes[0] in read:
-            for c in e.changes:
-                out[c.subject] = read[e.causes[0]]
+        if e.kind == _CLAIM_DEPOSITED:
+            # the first cause `read` holds: a witnessed deposit names the Event alone; a FOUND one (ED-FI-0002, `_deposit(..., also=(f.id,))`) names the
+            # finding Event first and the trail Event it uncovered second, and the claim reports the second.
+            src = next((x for x in e.causes if x in read), None)
+            if src is not None:
+                for c in e.changes:
+                    out[c.subject] = read[src]
     return out
 
 
@@ -4440,9 +4444,15 @@ def declare_occasion(w: World, p: Person) -> tuple:
         (name, band), = TRIGGER_BANDS["ci_theocratic_occasion_on"]
         if band_reached(believed_clock(p, name, of_clock), name, band, fx):
             return (sovereign,)
-    if vassal and believed_breakdown(p, determining_arrangement(), of_clock, sitting_claim_index(w), fx):
+    if vassal and _sworn_to_sovereign(w, p) and believed_breakdown(p, determining_arrangement(), of_clock, sitting_claim_index(w), fx):
         return (sovereign,)
     return ()
+
+
+def _sworn_to_sovereign(w: World, p: Person) -> bool:
+    """IS `p` A VASSAL: does he hold a live, sworn `oblige` (`gate.is_sworn_to`) to a seat of the sovereign's faction -- the reading `faction_q.civil_war` takes of
+    CR-86's vassal edges, so a head of a foreign or independent faction (the Church's) is no vassal."""
+    return any(is_sworn_to(w, p.id, o.id) for o in w.offices.values() if seat_faction(w, o.id) == faction_prop_id(SOVEREIGN_FACTION))
 
 
 def occasion_open(w: World, p: Person, ambition) -> bool:

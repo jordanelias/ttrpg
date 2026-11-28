@@ -268,7 +268,7 @@ def grievance_against(p: Person, q: str, fx=None) -> GrievanceParts:
 
 
 #: B21d.05: what a commitment to a rival creed adds to `grievance_against`: one valence step, the unit every addend is read on.
-CREED_STEP = 1.0   # [JUSTIFIED: one valence step -- the stance row's unit, which `deed_steps` (B10.09) and the grudge's cap (`MEMBER_BAND`) read too]
+CREED_STEP = 0.0 - MEMBER_BAND   # [JUSTIFIED: one valence step -- the stance row's unit, which `deed_steps` (B10.09) and the grudge's cap (`MEMBER_BAND`) read too]
 #: B21d.05: THE MOST A PERSON'S BUILD-TIME STATE CAN READ in `grievance_against` -- the grudge's cap plus the creed's step (a stance row carries no
 #: provenance, K-49, so nothing else bounds it). `decision/options.py::betrayal_band` refuses a band below it, so a betrayal needs deeds.
 BUILD_TIME_GRIEVANCE = (0.0 - MEMBER_BAND) + CREED_STEP
@@ -1033,7 +1033,7 @@ def believed_clock(p: Person, name: str, of_claim: dict) -> float:
     over the Events `p` holds a claim of, each Event ONCE however many of his claims report it (distinct origins, `ED-IN-0322`). `of_claim` is
     `world_q.clock_events_by_claim(w)`, the attributed Event each deposited claim came from (a Claim names no Event; the log's `claim.deposited` does); a claim of his
     counts where it reports that Event's kind (the event-kind claim WITNESS deposits, predicate the kind). He believes less than the truth by what he never heard and
-    what his ledger evicted; a retold claim (`tell`) was deposited from the telling, not the Event, and does not reach the fold. Computed when asked, stored nowhere."""
+    what his ledger evicted; a retold claim (`tell`) was deposited from the telling, not the Event, and does not reach the fold (a FOUND claim does: `world_q._by_claim` reads its trail Event). Computed when asked, stored nowhere."""
     seen = {}
     for c in p.ledger:
         ce = of_claim.get(c.id)

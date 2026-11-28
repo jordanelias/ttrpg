@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 563,
-    "uncited": 431,
+    "total": 562,
+    "uncited": 430,
     "of_which_assumption_grade": 9
   },
-  "count": 563,
+  "count": 562,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 48,
+    "engine.season": 47,
     "mass_battle": 163,
     "characters": 5,
     "fieldwork": 15,
@@ -617,17 +617,6 @@
       "note": "[JUSTIFIED: V2 p2 §A.2 -- `(want, hold, bond)`: the three sums a stake, a conflict and a lean are the mean of]",
       "citation": "JUSTIFIED: V2 p2 §A.2 -- `(want, hold, bond)`: the three sums a stake, a conflict and a lean are the mean of",
       "citation_grade": "source"
-    },
-    {
-      "key": "engine.season.CREED_STEP",
-      "name": "CREED_STEP",
-      "value": 1.0,
-      "kind": "scalar",
-      "module": "engine.season",
-      "file": "engine/season/queries/person_q.py",
-      "note": "[JUSTIFIED: one valence step -- the stance row's unit, which `deed_steps` (B10.09) and the grudge's cap (`MEMBER_BAND`) read too]",
-      "citation": null,
-      "citation_grade": null
     },
     {
       "key": "engine.season.OBLIGE_TIE",
