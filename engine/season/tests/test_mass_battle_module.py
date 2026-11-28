@@ -383,6 +383,25 @@ def test_resolve_field_returns_a_frozen_field_outcome():
     assert fields == 16 and parts_seen == 16, (fields, parts_seen)
 
 
+def test_no_commander_reads_the_literal_four():
+    """B19.02 (27A-1): a field handed no commander record (`commanders` absent) is the field built today. The record built with
+    the defaults EQUALS the one built with `commanders=(None, None)`, `pool_add=0`, `pool_floor=0`, `obey_task=0.0` written out,
+    and the entry resolves the two to one outcome on every seed and both arms: no `command` integer (the retired 1..7 literal)
+    stands in for the absent record. The loop asserts that it asserted (CLAUDE.md §0.1 pt 2)."""
+    import dataclasses
+    entry, resolved = _entry(), 0
+    for units in ("side", "person"):
+        absent = dataclasses.replace(_headcount_record((3, 2)), units=units)
+        written = dataclasses.replace(absent, commanders=(None, None), pool_add=0, pool_floor=0, obey_task=0.0)
+        assert absent.commanders == (None, None) and (absent.pool_add, absent.pool_floor, absent.obey_task) == (0, 0, 0.0)
+        assert written == absent
+        for seed in range(8):
+            rng = lambda: draw.seeded(draw.H2("test_mass_battle_module", seed))
+            assert entry(absent, rng()) == entry(written, rng())
+            resolved += 1
+    assert resolved == 16, resolved
+
+
 def test_ended_outside_its_set_is_refused():
     """B17.03 step 1: `FieldOutcome.__post_init__` refuses an `ended` outside `'rout' | 'concession' | 'time'`. CONTROL, the
     same record built with each member of the set: it is accepted, so the refusal is the set's and not the record's."""

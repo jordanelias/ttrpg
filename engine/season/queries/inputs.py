@@ -1006,6 +1006,26 @@ class FieldOrder:
 
 
 @dataclass(frozen=True)
+class CommandRecord:
+    """B19.02 (27A-1): one commander's or one officer's typed record on the field's input; the module reads these fields and no
+    `World` (A-25). Absent (`None` on `MassBattleInput.commanders`) is a side with no record, which reads no literal `command`
+    integer (D-U1-11g: the 1..7 integer is retired).
+      * `person`  -- the person id, for the report only; the module reads nothing by it;
+      * `score`   -- the skill score in `command`, or the untrained score (`pool.py::score`);
+      * `addends` -- whole dice from the registered pool addends (practice) (D-U1-01);
+      * `levels`  -- signed sigma: the two attribute rows summed (`sigma.py::advantage_sigma`), and the `office` level of the
+                     seat the march is made through (D-U1-01; the commander only);
+      * `post`    -- the unit he rides with (the commander only); `None` is the army's rear centre;
+      * `fed_by`  -- U1 §8's reason trail rows, echoed on the report."""
+    person: str
+    score: int
+    addends: int
+    levels: float
+    post: Optional[str]
+    fed_by: tuple
+
+
+@dataclass(frozen=True)
 class MassBattleInput:
     """What the `mass_battle` module's field reads, and nothing else (plan position `31c`).
 
@@ -1053,7 +1073,13 @@ class MassBattleInput:
                        record, `modules/mass_battle/orderofbattle.py`, held here as an opaque value: `engine/`
                        imports no module code) or `None`. `None` on both sides -- the default -- is the field as
                        it was: one headcount line per side. A side with an order of battle fights as that order
-                       says; the record's headcounts are authoritative and `weights` is not read for that side."""
+                       says; the record's headcounts are authoritative and `weights` is not read for that side;
+      * `commanders` -- B19.02 (27A-1): `(attacker, defender)`, each a `CommandRecord` or `None`. `(None, None)`, the default,
+                       is both sides with no record: the field as it was;
+      * `pool_add`  -- B19.02: the obedience draw's pool addend; `0`, the default, is the field as it was;
+      * `pool_floor` -- B19.02: the obedience draw's pool floor; `0`, the default, is the field as it was;
+      * `obey_task` -- B19.02: the obedience draw's task; `0.0`, the default, is the field as it was. (No reader yet: the draw
+                       lands with B19.05; the four fields are inert here)."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
@@ -1068,6 +1094,10 @@ class MassBattleInput:
     members: tuple = ((), ())
     units: str = "side"
     orders: Optional[tuple] = None
+    commanders: tuple = (None, None)
+    pool_add: int = 0
+    pool_floor: int = 0
+    obey_task: float = 0.0
 
 
 # B17.03: THE FIELD'S OUTPUT RECORD, on every arm. `modules/mass_battle/massbattle.py::resolve_field` returns one; the host adapter
