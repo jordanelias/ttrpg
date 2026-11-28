@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 543,
-    "uncited": 411,
+    "total": 551,
+    "uncited": 419,
     "of_which_assumption_grade": 9
   },
-  "count": 543,
+  "count": 551,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 47,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 258,
+    "engine.season.settings": 266,
     "engine.season.realm": 9
   },
   "params": [
@@ -55835,6 +55835,94 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-544`, swept 50 / 100 (the source's, SHIPPED) / 150",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_assertive",
+      "name": "ci_assertive",
+      "value": 40,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_reach",
+      "name": "ci_reach",
+      "value": 55,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_mass_seizure",
+      "name": "ci_mass_seizure",
+      "value": 60,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_dominant",
+      "name": "ci_dominant",
+      "value": 65,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_ascendant",
+      "name": "ci_ascendant",
+      "value": 80,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.turmoil_tension",
+      "name": "turmoil_tension",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.turmoil_crisis",
+      "name": "turmoil_crisis",
+      "value": 7,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.turmoil_collapse",
+      "name": "turmoil_collapse",
+      "value": 9,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-633`",
       "citation": null,
       "citation_grade": null
     },

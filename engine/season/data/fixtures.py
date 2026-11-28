@@ -1989,6 +1989,25 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-544 -- `site: Fixtures road_step`, graded `assumption`; the source gives 100, a third of one body band]
     road_step=100,                    # `H-544`, swept 50 / 100 (the source's, SHIPPED) / 150
+    # v12 B21d.02 (CR-89 commit (1)): THE CLOCKS' BANDS, one threshold each, named by `rosters.yaml: tables.clocks` (a band's `at`) and checked against
+    # its clock's range by `rosters.check_clock_bands` from `load()` below. A clock at or above a band is IN it; nothing reads a band at B21d.02 (the
+    # triggers are B21d.06's, each shipped off), so these move no run. The archived values, `[ASSUMPTION; medium; Jordan to correct]`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived Church Influence band (ci_political_v30.md §2.1, CI 40 Church Assertive), injected and swept with the clock rows]
+    ci_assertive=40,                  # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (ci_political_v30.md §2.1, CI 55 Institutional Reach)]
+    ci_reach=55,                      # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (victory_v30.md:678 / ci_political_v30.md §2.1, Mass Seizure available from CI 60)]
+    ci_mass_seizure=60,               # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (ci_political_v30.md §2.1, CI 65 Church Dominant)]
+    ci_dominant=65,                   # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (ci_political_v30.md §2.1, CI 80 Church Ascendant)]
+    ci_ascendant=80,                  # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived Turmoil band (peninsular_strain_v30.md §4.3, Strain 3 Tension)]
+    turmoil_tension=3,                # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (peninsular_strain_v30.md §4.3, Strain 7 Crisis)]
+    turmoil_crisis=7,                 # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (peninsular_strain_v30.md §4.3, Strain 9 Collapse)]
+    turmoil_collapse=9,               # `H-633`
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
@@ -2032,8 +2051,9 @@ def check_season_weather(draw_table, spells) -> None:
 def load() -> None:
     """`data.load_all()`'s hook: refuse a `tables.capability_uses` row naming a Fixture this registry does not register.
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
-    from .rosters import check_capability_fixtures
+    from .rosters import check_capability_fixtures, check_clock_bands
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
+    check_clock_bands(dict(DEFAULT_FIXTURES._v))
     arm, obstacle = DEFAULT_FIXTURES.get("crisis_arm"), DEFAULT_FIXTURES.get("crisis_obstacle")
     if arm not in CRISIS_ARMS or (obstacle is not None and obstacle not in DIFFICULTY_LEVELS):
         raise Forbidden(f"`Fixtures crisis_arm` is {arm!r} and `crisis_obstacle` is {obstacle!r}", "data/fixtures.py",

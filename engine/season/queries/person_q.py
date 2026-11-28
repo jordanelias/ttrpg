@@ -58,6 +58,8 @@ from ..data.rosters import (
     ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, matter_of_record, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, MATTERS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map, task_share,
 )
+from ..data.rosters import clocks            # B21d.02: the clock rows `believed_clock` folds
+from .clock import clock_fold                # B21d.02: the one fold of a clock
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
 from .inputs import SIDE_SIGN, Item
 from ..state.ledgers import present_confidence
@@ -877,6 +879,20 @@ def has_seen(p: Person, other: str) -> bool:
     """Has `p` SEEN `other`: does his ledger hold an untold `seen` claim whose `who` is `other` (`heritage_regard` reads the same deposit)? The
     reading of a person he has laid eyes on; a person known only by report or not at all is not seen. Person-side (AX-2)."""
     return any(c.predicate == SEEN_PREDICATE and not c.chain and getattr(c.value, "who", None) == other for c in p.ledger)
+
+
+def believed_clock(p: Person, name: str, of_claim: dict) -> float:
+    """v12 B21d.02 (CR-89 commit (1)): THE CLOCK `name` AS `p` BELIEVES IT -- the one fold (`queries/clock.py::clock_fold`, the row `data/rosters.py::clocks()[name]`)
+    over the Events `p` holds a claim of, each Event ONCE however many of his claims report it (distinct origins, `ED-IN-0322`). `of_claim` is
+    `world_q.clock_events_by_claim(w)`, the attributed Event each deposited claim came from (a Claim names no Event; the log's `claim.deposited` does); a claim of his
+    counts where it reports that Event's kind (the event-kind claim WITNESS deposits, predicate the kind). He believes less than the truth by what he never heard and
+    what his ledger evicted; a retold claim (`tell`) was deposited from the telling, not the Event, and does not reach the fold. Computed when asked, stored nowhere."""
+    seen = {}
+    for c in p.ledger:
+        ce = of_claim.get(c.id)
+        if ce is not None and c.predicate == ce.kind:
+            seen[ce.event] = ce
+    return clock_fold(seen.values(), clocks()[name])
 
 
 def refused_before(p: Person, kinds: tuple, subject: str, tick: int = 0, decay: int = 0) -> int:

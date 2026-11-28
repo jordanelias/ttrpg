@@ -47,6 +47,8 @@ from ..data.rosters import (
     remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
+from ..data.rosters import clocks as clock_rows          # B21d.02: the clock rows `clock` and `clock_events_by_claim` fold
+from .clock import ClockEvent, clock_fold                # B21d.02: the one fold, and the Event as it reads one
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
 # v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
@@ -4278,6 +4280,78 @@ def casus_ground(w: World, actor: str, faction: str, rung: str) -> Optional[str]
     `loop/predicates.py::_req_utter`; read-only."""
     TRACE.query("casus_ground", "resolver")
     return next((g for g in CASUS_GROUNDS if CASUS_GROUND_READERS[g](w, actor, faction, rung)), None)
+
+
+# v12 B21d.02 (CR-89 commit (1); ED-IN-0343): THE CLOCKS, read world-side. A clock is a row (`data/rosters.py::clocks`) plus one fold
+# (`queries/clock.py::clock_fold`) over the log; these readers attribute the log's Events and hand them to it. Nothing here stores anything.
+_CLAIM_DEPOSITED = "claim.deposited"     # the kind WITNESS's one gated deposit emits, caused by the witnessed Event (`loop/witness.py::_deposit`)
+
+
+def _faction_at(w: World, pid: str, tick: int, factions) -> Optional[str]:
+    """THE FACTION `pid` WAS COMMITTED TO AT `tick` -- the one faction Proposition (`factions`) on which he held a membership `commit` live then (`since <= tick`,
+    `until` unset or after it), or `None` for none or several: `faction_holding`'s reading, taken at a past tick instead of now."""
+    p = w.persons.get(pid)
+    if p is None:
+        return None
+    facs = {t.object for t in p.tenures
+            if t.kind == "commit" and t.object in factions and t.since <= tick and (t.until is None or tick < t.until)}
+    return next(iter(facs)) if len(facs) == 1 else None
+
+
+def clock_events(w: World, events) -> list:
+    """`events` (Events of `w.log`) AS A CLOCK READS THEM: one `queries/clock.py::ClockEvent` per Event an act caused (`causing_act`), in their order; an Event no act
+    caused is left out -- nobody did it, so it moves no clock (CR-89's falsifier). `actor_faction` is the faction of the causing act's actor at the Event's tick
+    (`_faction_at`); `against` is every faction the Event acted ON, read off `Event.changes` (the channel naming what it touched, `anchor_of`'s tier 2): for a changed
+    Tenure, its object where that is a faction Proposition (a commitment made or ended on a creed), else its subject's faction at the tick where the subject is not the
+    actor (the holder of a hold the Event closed, a man arrested); for a changed Person other than the actor, his faction at the tick
+    [ASSUMPTION; medium; Jordan to correct: the reading of `against` -- `rosters.yaml: tables.clocks`' note]. Read-only."""
+    TRACE.query("clock_events", "resolver")
+    factions = faction_props(w)
+    tenure = {t.id: t for t in w.tenures}
+    out = []
+    for e in events:
+        a = causing_act(w, e)
+        if a is None:
+            continue
+        t, against = e.emitted_at, set()
+        for c in e.changes:
+            edge = tenure.get(c.subject)
+            if edge is not None:
+                if edge.object in factions:
+                    against.add(edge.object)
+                elif edge.subject != a.actor:
+                    against.add(_faction_at(w, edge.subject, t, factions))
+            elif c.subject != a.actor and c.subject in w.persons:
+                against.add(_faction_at(w, c.subject, t, factions))
+        against.discard(None)
+        out.append(ClockEvent(e.id, t, e.kind, _faction_at(w, a.actor, t, factions), frozenset(against)))
+    return out
+
+
+def clock(w: World, name: str, tick: Optional[int] = None) -> float:
+    """THE CLOCK `name` (a row of `rosters.yaml: tables.clocks`) AS THE LOG STANDS: `clock_fold` over every act-caused Event of `w.log` (`clock_events`), or over those
+    emitted at or before `tick`. Computed when asked, stored nowhere; an Event counts once because the log holds it once. A name with no row raises `KeyError`."""
+    TRACE.query("clock", "resolver")
+    row = clock_rows()[name]
+    kinds = {f.kind for f in row.feeders}
+    logged = [e for e in w.log if e.kind in kinds and (tick is None or e.emitted_at <= tick)]
+    return clock_fold(clock_events(w, logged), row)
+
+
+def clock_events_by_claim(w: World) -> dict:
+    """`{claim id: ClockEvent}` -- FOR EACH CLAIM WITNESS DEPOSITED, THE EVENT IT WAS DEPOSITED FROM, attributed (`clock_events`), where that Event is act-caused and of a
+    kind some clock's feeder names. A Claim carries no Event id; the log does: every deposit emits `claim.deposited`, its change the claim's id and its first cause the
+    witnessed Event (`loop/witness.py::_deposit`). Built once for a reader of many persons (`person_q.believed_clock`'s `of_claim`). Read-only."""
+    TRACE.query("clock_events_by_claim", "resolver")
+    kinds = {f.kind for row in clock_rows().values() for f in row.feeders}
+    fed = {e.id: e for e in w.log if e.kind in kinds}
+    attributed = {ce.event: ce for ce in clock_events(w, fed.values())}
+    out = {}
+    for e in w.log:
+        if e.kind == _CLAIM_DEPOSITED and e.causes and e.causes[0] in attributed:
+            for c in e.changes:
+                out[c.subject] = attributed[e.causes[0]]
+    return out
 
 
 def claimed_rungs(w: World, war) -> tuple:

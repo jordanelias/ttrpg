@@ -2388,7 +2388,9 @@ def test_person_q_cannot_reach_the_world_side():
     # comparator in that import-free leaf (it holds no store and reaches nothing), and `LedgerReader` reads a claim through it.
     # B24p.06: `queries.inputs` too -- the stdlib-only record leaf (its own docstring: it imports nothing from the season package), whose
     # `Item` is what `false_items` returns; it holds no store and reaches no World, as `state.ledgers` above.
-    ALLOWED = ("data", "state.carriers", "state.ledgers", "queries.inputs", "trace_log")
+    # B21d.02: `queries.clock` too -- the one fold of a clock (CR-89 (1)), pure arithmetic over Events already attributed; it imports nothing from the season
+    # package and reaches no World, as `queries.inputs` above, so `believed_clock` and `world_q.clock` are one fold over two sets of Events.
+    ALLOWED = ("data", "state.carriers", "state.ledgers", "queries.inputs", "queries.clock", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
