@@ -10,12 +10,17 @@ Duchess of Hafenmark (the first act's occasion at tick 0: he reads her below 0),
 from __future__ import annotations
 
 import functools
+from dataclasses import replace
 
 from engine.season.boot.realm import build_realm
+from engine.season.data.verbs import VERB_TABLE
+from engine.season.decision import choose as CH
 from engine.season.data.matrix import WriteClass
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q as Q
-from engine.season.state.carriers import Act, Claim, Tenure
+from engine.season.state.carriers import Act, Candidate, Claim, Tenure
+
+from .test_in53_vacancy_need import _formed
 
 PLOTTER, TARGET, TARGET_SEAT, MAN, OTHER = "p_npc_052", "p_npc_050", "off_duchess_hafenmark", "p_npc_002", "p_npc_005"
 
@@ -145,3 +150,28 @@ def test_a_conspirators_first_question_each_lap_is_about_the_target():
     tier, order = _tiers(w)
     assert tier["q:claim:c_z_target"] == 0 and tier["q:claim:c_a_other"] != 0, tier
     assert order.index("q:claim:c_z_target") < order.index("q:claim:c_a_other"), order
+
+
+def test_a_grudge_raises_a_plot_and_a_war_on_its_object(monkeypatch):
+    """B21b.30 (B10.11's column): a person holding a stance row (-1, 5) toward a seat-holder and one toward a rival creed reads `conspire` on that holder and `declare` on that
+    creed ABOVE 0 -- a plot and a war are done against their subject -- and BELOW 0 with each row's `regard_sign` replaced in-process by `1`, the loader's default for both."""
+    w = _world()
+    p = w.persons[PLOTTER]
+    p.stance = [(TARGET, -1, 5), ("fac_guilds", -1, 5)]
+    fx = w.fixtures.sweep("stance_polarity", "declared")
+    plot, war = Candidate("conspire", TARGET), Candidate("declare", "fac_guilds")
+    assert VERB_TABLE["conspire"].regard_sign == -1 and VERB_TABLE["declare"].regard_sign == -1
+    assert CH.stance_term(p, plot, fx) > 0 and CH.stance_term(p, war, fx) > 0
+    monkeypatch.setattr(CH, "VERB_TABLE", {**VERB_TABLE, **{v: replace(VERB_TABLE[v], regard_sign=1) for v in ("conspire", "declare")}})
+    assert CH.stance_term(p, plot, fx) < 0 and CH.stance_term(p, war, fx) < 0, "control failed -- the default sign does not read the grudge below 0"
+
+
+def test_a_plotter_is_never_offered_his_target_as_a_backer():
+    """B21b.30: the plotter whose `legitimacy` reads the Duchess below 0 (`plot_targets`) forms `conspire` on her with every known man but her as the invitee: none binds `to` to
+    its subject (the invitee is never the target), and others do form."""
+    w = _world()
+    p = w.persons[PLOTTER]
+    assert Q.plot_targets(w, p) == (TARGET,), "control failed -- the plotter has no occasion"
+    formed = [c for q in Q.questions_for(w, p) for c in _formed(w, PLOTTER, q) if c.verb == "conspire" and c.subject == TARGET]
+    assert any(c.operands.get("to") not in (None, TARGET) for c in formed), "no conspire formed on another invitee"
+    assert not [c for c in formed if c.operands.get("to") == c.subject], "a plotter was offered his target as a backer"

@@ -50,7 +50,7 @@
 #
 # `regard_sign:` ON A ROW (B10.11; `rosters.yaml: regard_signs`, `data/verbs.py::VerbRow.regard_sign`): `1`, `-1` or `0` -- whether a person's
 # liking for the act's subject pulls him toward the act, away from it or not at all, read by `decision/choose.py::_stance_arm`. A row naming none
-# takes `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`), else `1`; NO ROW AUTHORS ONE YET (cells are BA1's content).
+# takes `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`), else `1`; `conspire` and `declare` author `-1` (B21b.30): acts done against a subject that is not their second side.
 #
 # `public:` ON EVERY ROW (B11.65; `data/verbs.py::VerbRow.public`): `true` or `false`, REQUIRED, never derived from the verb's name -- a deed done to be
 # seen, which those present learn without a draw, as a public act in ordinary speech is one done openly. Read by `epistemic.py::notice` (B11.66): a `public`
@@ -557,6 +557,8 @@ verbs:
     source:      "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
   - verb:        "declare"
     public:      true
+    regard_sign: -1
+    regard_sign_note: "B21b.30 (CP-T09-02 (a); [ASSUMPTION; medium; Jordan to correct at BA1; revert: delete the cell]): a war is declared on a faction one reads below indifference, so a grudge toward the creed raises the act. `declare` names no prize, so the loader's default read +1 and the grudge lowered its own act."
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     eligibility_note: "B21b.11 (CP-T09-02 (a), AM-F-10; `FA §3.3` S2): `remit:dispatch`, `march`'s and `raze`'s eligibility -- the seat that musters the army is the seat that opens the war it musters for (`state/gate.py::MUSTER_ACT`, `may_wage`: the rule `world_q.at_war` asks of each commit). A guard cohort holds no seat, so a computed `declare` is a seated muster-holder's act."
@@ -1741,6 +1743,8 @@ verbs:
     source:      "v12 B21b.16 (`workplans/valoria_master_workplan_v12_part21.md`), on CP-T09-07 (a) (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md`), AM-F-15"
   - verb:        "conspire"
     public:      false
+    regard_sign: -1
+    regard_sign_note: "B21b.30 (CP-T09-09; [ASSUMPTION; medium; Jordan to correct at BA1; revert: delete the cell]): a plot is laid against the seat-holder, the row's `subject`. Its prize is contested on `to` (the invitee), not the subject, so the loader's default read +1 and the occasion (`legitimacy` below 0) lowered the plot's own score."
     stratum:     "social"
     eligibility: ["own"]
     eligibility_note: "B21b.18 (CP-T09-09, AM-F-17; `FA §3.3` S7): `own` -- *\"any person\"*: a plot is a man's, and he sits in no seat for it. A guard cohort holds no pursuit and forms no choice, and the cell refuses a cohort on either side. [ASSUMPTION; medium; Jordan to correct; revert: delete the row.]"

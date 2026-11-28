@@ -447,6 +447,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # (`VerbRow.self_counterparty_refused`, the one owner the fold asks too).
                 if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
                     continue
+                # B21b.30: AND AN ACT DONE AGAINST ITS SUBJECT IS NOT ASKED OF THE SUBJECT AS ITS SECOND SIDE. A row whose `regard_sign` is `-1` and whose
+                # counterparty is an operand other than `subject` (`conspire`'s invitee `to`) forms no Candidate binding that operand to the subject's own id: a
+                # plotter is never offered his target as a backer, and the fold's refusal of it (`_eff_conspire`: the plotter, the invitee and the target are three
+                # men) teaches nothing, the self-decline's reason. Read off the row's columns, never its name; `petition`, `retain`, `tell` and `lie` bind `to` to
+                # their subject by design and author no `-1`.
+                if (row.regard_sign == -1 and row.counterparty not in (None, "subject") and subject is not None
+                        and ops.get(row.counterparty) == subject):
+                    continue
                 # B10.59: WHAT HE CAN READ OFF HIMSELF, ASKED OF THIS CANDIDATE'S OWN BINDING (the K-3 branch above says why).
                 # B10.64, B10.65: `believes=True` -- the PERSON'S answer for a key in `SELF_BELIEVED` is his own `self:<key>` claim (read by `weigh`, so a claim he was told is
                 # graded by his regard for the teller), so the two readers differ for him alone and by design: he does not deliberately read a Thread he does not know he
