@@ -16,13 +16,13 @@ from dataclasses import asdict
 from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
 from modules.mass_battle import config as _config
-from modules.mass_battle.config import (STAMINA_MAX, CELL_CAP, COMMAND_DEFAULT, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS,
+from modules.mass_battle.config import (STAMINA_MAX, COMMAND_DEFAULT, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS,
                                         MIN_UNITS_PER_ARMY, ROLE_SPEC)
 from modules.mass_battle.armies import UNIT_CAP
 from modules.mass_battle.core.contact_draw import COVER_WALLS
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
-from modules.mass_battle.orderofbattle import (OrderOfBattle, UnitRow, _SIDE_DIR, _place, class_of,
+from modules.mass_battle.orderofbattle import (OrderOfBattle, UnitRow, _SIDE_DIR, _place, cells_for, class_of,
                                                build_unit as _build_oob_unit)
 from modules.mass_battle.troop_types.recruitment import under_arms_cap
 from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
@@ -232,8 +232,9 @@ def _retreat_orders(retreat_at):
 
 def _line_spec(role, troops):
     """The one headcount line's spec, as `orderofbattle._place` reads it: the MVP shape with the standing order's
-    `role` fields, its troops and the densest packing (`config.CELL_CAP`), no position yet."""
-    return {**_MVP_SUBUNIT_SHAPE, **_role_fields(role), 'troops': troops, 'concentration': float(CELL_CAP)}
+    `role` fields, its troops and its cells (`orderofbattle.cells_for`, B19.17: at `deployment.arm: cap` the densest packing, `config.CELL_CAP`
+    for the `infantry` row, as before; at `grid` the troop file's grid), no position yet."""
+    return {**_MVP_SUBUNIT_SHAPE, **_role_fields(role), 'troops': troops, **cells_for(_MVP_SUBUNIT_SHAPE['troop_type'], troops)}
 
 
 def _unit_counts(troops):

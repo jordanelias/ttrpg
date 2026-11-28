@@ -33,10 +33,11 @@ from modules.mass_battle.armies import DEPLOY_GAP, UNIT_CAP, _centered_line_cols
 from modules.mass_battle.config import BATTLEFIELD_SIZE, COMMAND_DEFAULT, ROLE_SPEC, cell_cap_for
 from modules.mass_battle.geometry import footprint_for
 from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
+from modules.mass_battle.troop_types import table as _troops
 from modules.mass_battle.troop_types.registry import default_role_for, is_mounted, roles_for, stats_for, unit_type_for
 
 __all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'POSTURES', 'TARGETINGS', 'class_of', 'build_unit',
-           'validate']
+           'validate', 'cells_for']
 
 #: Postures a unit may be set to (the engine's stances, `config.STANCE_SPEED_MOD`'s keys; 'retreat' is reachable only through
 #: `fall_back_at`, since a unit that STARTS retreating is not a deployment).
@@ -93,6 +94,8 @@ class UnitRow:
     target: Optional[str] = None
     fall_back_at: Optional[float] = None
     officer: Optional[object] = None          # [27A-3] the unit's officer as a typed record (`CommandRecord`), built by the host; None -> none
+    depth: Optional[int] = None               # [B19.17] the unit formation's depth in cells (rows); None -> the troop type's `depth` (`cells_for`)
+    width: Optional[int] = None               # [B19.17] its width in cells (files); None -> from the troops, the depth and `deployment.cell_troops`
 
 
 @dataclass(frozen=True)
@@ -148,6 +151,30 @@ def validate(oob: OrderOfBattle) -> None:
             raise ValueError(f"{sf.name!r}: target {sf.target!r} not in {TARGETINGS}")
         if sf.fall_back_at is not None and not 0.0 < sf.fall_back_at < 1.0:
             raise ValueError(f"{sf.name!r}: fall_back_at must be strictly between 0 and 1, got {sf.fall_back_at!r}")
+        for col in ('depth', 'width'):
+            v = getattr(sf, col)
+            if v is not None and (isinstance(v, bool) or not isinstance(v, int) or v < 1):
+                raise ValueError(f"{sf.name!r}: {col} must be a whole number of at least 1 (cells), got {v!r}")
+
+
+def cells_for(troop_type: str, troops: float, depth: Optional[int] = None, width: Optional[int] = None,
+              arm: Optional[str] = None) -> dict:
+    """B19.17: how a body of `troops` of `troop_type` is laid into cells, as the footprint keys of a `build_army` spec or a `Unit`:
+    THE ONE FUNCTION `_spec_for` AND BOTH HEADCOUNT CONSTRUCTORS (`massbattle._line_spec`) CALL. A unit formation is a grid, `depth`
+    rows by `width` files of cells (`footprint_for`'s explicit arm, which ignores the floor and the cap by design):
+
+        depth = unit's depth or the troop type's `depth`
+        width = unit's width or max(1, round(troops / (depth * deployment.cell_troops)))
+
+    `arm` (default `deployment.arm` of the troop file) is `cap`, today's packing and the control: a body that names no depth and no
+    width is passed as the densest packing its type allows (`concentration`), exactly as before; or `grid`, which lays every body
+    on the grid. A unit that names its own `depth` or `width` is laid on the grid under either arm (the unit's own formation is a
+    choice, the arm only the default for a body that makes none)."""
+    dep = _troops.deployment()
+    if (arm or dep['arm']) == 'cap' and depth is None and width is None:
+        return {'concentration': float(cell_cap_for(troop_type))}
+    d = depth or _troops.depth_of(troop_type)
+    return {'width': width or max(1, round(troops / (d * dep['cell_troops']))), 'depth': d}
 
 
 def _spec_for(sf: UnitRow, strategy: str) -> dict:
@@ -160,7 +187,7 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
     # with no role stands off as Kite, and naming a shape here would opt it out of that.
     role = sf.role or default_role_for(sf.troop_type)   # [B17.11] the troop file's `default_role` (`Kite` for `mounted_archers`)
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
-                concentration=float(cell_cap_for(sf.troop_type)))
+                **cells_for(sf.troop_type, float(sf.troops), sf.depth, sf.width))
     # POSTURE PRECEDENCE: the unit's own, then the one its role's instructions set (ShieldWall and Hold hold,
     # Push presses -- `Unit.eff_stance` reads them only while the engine stance was never written on purpose), then
     # the strategy's for its class. Always writing the strategy's posture made a role unable to set it.
@@ -185,7 +212,8 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
 def _rows_of(spec: dict) -> int:
     """Depth in rows of a spec's footprint, computed before construction (as `_spec_span` does for columns)."""
     shape = spec['shape'] if 'shape' in spec else ROLE_SPEC[spec['role']]['shape']
-    pat = footprint_for(shape, spec['troops'], spec['concentration'], spec['troop_type'])
+    pat = footprint_for(shape, spec['troops'], spec.get('concentration'), spec['troop_type'],
+                        width=spec.get('width'), depth=spec.get('depth'))
     rs = [r for r, _c in pat]
     return (max(rs) - min(rs) + 1) if rs else 1
 

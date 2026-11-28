@@ -9,7 +9,8 @@ with a blocking `--check`, one artifact. A hand edit of the JSON fails `--check`
 
 WHAT IT REFUSES. Everything `table.check` refuses (an unknown or missing column; a row naming an arm, armour tier, role
 or site kind outside its closed set; an arm whose mass is stated here and in personal combat's export; a `secondary`
-equal to the `primary`) -- the one validator, so the loader and this tool cannot disagree -- and a `site_kinds` member
+equal to the `primary`; B19.17: a `deployment` block that is not `{cell_troops: whole number >= 1, arm: cap | grid}`, a troop row whose
+`depth` is not a whole number >= 1) -- the one validator, so the loader and this tool cannot disagree -- and a `site_kinds` member
 that is not one of the season's own (`engine/engine_params/season_registries.json`, `rosters.yaml: site_kinds`).
 
 TWO ARTIFACTS, ONE DOCUMENT. `engine/engine_params/troops.json` is the port's; `modules/mass_battle/troop_types/

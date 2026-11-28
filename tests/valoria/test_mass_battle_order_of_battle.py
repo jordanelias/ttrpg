@@ -347,3 +347,35 @@ def test_a_new_row_with_a_default_role_stands_off_with_no_code_edit(new_rows):
         "an explicit shape still wins")
     plain = build_unit(_oob(('c', 'cataphracts', 300, {})), 'u', 'A', morale_start=5).units[0]
     assert plain.role is None and not plain.instructions
+
+
+# ------------------------------------------------------------------------------- depth is a lever (B19.17, gate 4)
+def test_depth_is_a_lever():
+    """Two equal heavy-infantry bodies, one `depth: 2` and one `depth: 6` (each laid on the grid rule, `orderofbattle.cells_for`, whatever
+    the troop file's `deployment.arm` says), fight the same defender on the same 200 seeds. THE CONTROL IS IN THE SAME RUN: the depth-2
+    body again, on 200 other seeds -- the spread two samples of one body show. The claim is that the win counts or the mean loss shares
+    of the two depths differ by more than the control's. THE RESULT IS RECORDED, NOT TARGETED: nothing here says which depth is better
+    or by how much, only that depth moves a field at all (if it did not, `depth` would be a column no field reads)."""
+    n, troops = 200, 600
+    deep, shallow = (_oob(('body', 'heavy_infantry', troops, {'depth': d})) for d in (6, 2))
+
+    def tally(oob, first):
+        wins, kept, checked = 0, 0.0, 0
+        for s in range(first, first + n):
+            r = massbattle.resolve_field(_record(oobs=(oob, _line('heavy_infantry', troops))),
+                                         draw.seeded(draw.H2("test_mass_battle_order_of_battle", s)))
+            wins += field_degree(r) == WON
+            kept += r.attacker.share / SCALE
+            checked += 1
+        assert checked >= 200
+        return wins, 1.0 - kept / n
+
+    for oob, depth in ((deep, 6), (shallow, 2)):      # the lever reached the footprint: `depth` rows, whatever the width
+        rows = {cell[0] for u in build_unit(oob, 'a', 'A', morale_start=5).units for cell in u.cells()}
+        assert len(rows) == depth, (depth, sorted(rows))
+    (w2, l2), (w6, l6), (wc, lc) = tally(shallow, 1000), tally(deep, 1000), tally(shallow, 5000)
+    print(f"[depth lever, n={n}] depth 2: wins {w2}, loss share {l2:.4f}; depth 6: wins {w6}, loss share {l6:.4f}; "
+          f"control (depth 2, other seeds): wins {wc}, loss share {lc:.4f}")
+    assert l2 > 0 and l6 > 0 and lc > 0, "vacuous if the lines never joined (no casualties)"
+    assert abs(w6 - w2) > abs(wc - w2) or abs(l6 - l2) > abs(lc - l2), (
+        f"depth 2 vs depth 6 moved no more than the control's own spread: wins {w2}/{w6}/{wc}, loss {l2:.4f}/{l6:.4f}/{lc:.4f}")

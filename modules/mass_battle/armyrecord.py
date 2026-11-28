@@ -13,7 +13,8 @@ THE SHAPE (`subject_matter`'s exact key set, which `rosters.yaml: record_kinds` 
     trained       ((cohort person id, troop type, count), ...)   troops raised and not yet in a unit
     units         ({name, troop_type, role, posture, target, fall_back_at, assigned}, ...)
                   where `assigned` is ((cohort person id, count), ...); a unit row may also carry `officer`, the id of the
-                  person who commands it (absent -> none; `order` sets it)
+                  person who commands it (absent -> none; `order` sets it), and `depth` and `width`, its unit formation in cells (absent ->
+                  the troop file's depth and the width its troops fill; B19.17, `orderofbattle.cells_for`)
     commander_post  the NAME of the unit the commander rides with, or None for the army's rear centre (27A-3); `validate`
                   refuses a name that is no unit of the record. A record built before the key existed validates as it did.
 
@@ -206,10 +207,18 @@ def discharge(record: dict, cohort: str, troop_type: str, count) -> dict:
 _UNSET = object()
 
 
+def _cells(name: str, v) -> Optional[int]:
+    """A unit formation's `depth` or `width` (B19.17): None, or a whole number of cells of at least 1."""
+    if v is not None and (isinstance(v, bool) or not isinstance(v, int) or v < 1):
+        raise ValueError(f"{name} must be a whole number of cells of at least 1, or None, got {v!r}")
+    return v
+
+
 def order(record: dict, name: str, *, role=_UNSET, posture=_UNSET, target=_UNSET, fall_back_at=_UNSET,
-          officer=_UNSET) -> dict:
-    """Set unit `name`'s tactics: its role (from its type's menu), posture, targeting preference, fall-back point and
-    officer (a person id, or None for none: the key is dropped from the row). A field left out is unchanged; passing None clears it. Validated as `orderofbattle.validate`
+          officer=_UNSET, depth=_UNSET, width=_UNSET) -> dict:
+    """Set unit `name`'s tactics: its role (from its type's menu), posture, targeting preference, fall-back point,
+    officer (a person id, or None for none: the key is dropped from the row) and unit formation, `depth` and `width` in cells (a whole
+    number of at least 1, or None for the troop file's: the key is dropped from the row). A field left out is unchanged; passing None clears it. Validated as `orderofbattle.validate`
     validates a unit."""
     i = _sf_index(record, name)
     sf = dict(record['units'][i])
@@ -236,6 +245,12 @@ def order(record: dict, name: str, *, role=_UNSET, posture=_UNSET, target=_UNSET
             raise ValueError(f"officer must be a person id (a non-empty string) or None, got {officer!r}")
         else:
             sf['officer'] = officer
+    for col, v in (('depth', depth), ('width', width)):
+        if v is not _UNSET:
+            if _cells(col, v) is None:
+                sf.pop(col, None)
+            else:
+                sf[col] = v
     return _replace_sf(record, i, sf)
 
 
@@ -277,6 +292,8 @@ def validate(record: dict) -> None:
             _pos(n)
         if sf.get('officer') is not None and not (isinstance(sf['officer'], str) and sf['officer'].strip()):
             raise ValueError(f"unit {sf['name']!r}: officer must be a person id, got {sf['officer']!r}")
+        for col in ('depth', 'width'):
+            _cells(f"unit {sf['name']!r}: {col}", sf.get(col))
 
 
 def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] = None) -> OrderOfBattle:
@@ -293,7 +310,8 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
         if strength > 0:
             drawn += [(sf['name'], c, t) for c, t in gave if t > 0]
             parts.append(UnitRow(sf['name'], sf['troop_type'], strength, role=sf['role'], posture=sf['posture'],
-                                 target=sf['target'], fall_back_at=sf['fall_back_at']))
+                                 target=sf['target'], fall_back_at=sf['fall_back_at'],
+                                 depth=sf.get('depth'), width=sf.get('width')))
     if not parts:
         raise ValueError("no unit has any troops assigned")
     post = record.get('commander_post')
@@ -316,7 +334,7 @@ def apply(cmd) -> dict:
                from `cohort`, no more than `recruit_limit` allows for that cohort's `weight` and `sites`
       form     args name, troop_type, role (optional)
       assign   args name, cohort, count -- a negative count releases troops back to the trained pool
-      order    args name and any of role, posture, target, fall_back_at, officer; or strategy alone, or commander_post alone, for the army
+      order    args name and any of role, posture, target, fall_back_at, officer, depth, width; or strategy alone, or commander_post alone, for the army
       validate no args -- the record unchanged if well formed
     """
     try:
@@ -359,9 +377,9 @@ def _apply(cmd) -> dict:
             if set(a) != {'commander_post'}:
                 raise ValueError("an order names a commander_post, a strategy or a unit's tactics, not more than one")
             return set_commander_post(r, a['commander_post'])
-        fields = {k: a[k] for k in ('role', 'posture', 'target', 'fall_back_at', 'officer') if k in a}
+        fields = {k: a[k] for k in ('role', 'posture', 'target', 'fall_back_at', 'officer', 'depth', 'width') if k in a}
         if not fields:
-            raise ValueError("an order sets at least one of role, posture, target, fall_back_at, officer, or a strategy or commander_post")
+            raise ValueError("an order sets at least one of role, posture, target, fall_back_at, officer, depth, width, or a strategy or commander_post")
         return order(r, a['name'], **fields)
     raise ValueError(f"unknown army command {cmd.op!r} (known: {OPS})")
 

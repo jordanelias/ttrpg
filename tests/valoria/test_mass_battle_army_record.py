@@ -141,6 +141,27 @@ def test_order_changes_only_what_it_names():
     assert c['units'][0]['posture'] is None and c['units'][0]['fall_back_at'] == 0.4
 
 
+def test_order_sets_a_units_formation_and_the_battle_row_carries_it():
+    """B19.17: the unit row's optional `depth` and `width` (cells) are set by `order`, dropped by None, refused when not a whole number
+    of at least 1, and reach the `UnitRow` the battle builds; a row that names neither reads as before (None, the troop file's)."""
+    a = A.assign(_army(), 'wall', 'c1', 60)
+    assert not {'depth', 'width'} & set(a['units'][0]) and A.to_order_of_battle(a).units[0].depth is None
+    b = A.order(a, 'wall', depth=3, width=5)
+    A.validate(b)
+    assert (b['units'][0]['depth'], b['units'][0]['width']) == (3, 5)
+    oob = A.to_order_of_battle(b)
+    assert (oob.units[0].depth, oob.units[0].width) == (3, 5)
+    assert not {'depth', 'width'} & set(A.order(b, 'wall', depth=None, width=None)['units'][0])
+    refused = 0
+    for bad in (0, -1, 2.5, True, '3'):
+        with pytest.raises(ValueError):
+            A.order(a, 'wall', depth=bad)
+        with pytest.raises(ValueError):
+            A.validate({**a, 'units': ({**a['units'][0], 'width': bad},)})
+        refused += 1
+    assert refused == 5
+
+
 def test_record_to_order_of_battle_scales_by_fitness_and_drops_the_empty():
     a = A.assign(A.assign(_army(), 'wall', 'c1', 60), 'wall', 'c2', 40)
     a = A.order(A.set_strategy(a, 'advance'), 'wall', fall_back_at=0.5)
