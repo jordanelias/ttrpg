@@ -17,6 +17,7 @@ bat.py digest + persubunit stress suite; this module exercises only the ON (defa
 """
 import contextlib  # noqa: E402
 import dataclasses  # noqa: E402
+import sys  # noqa: E402
 
 import pytest  # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
@@ -350,12 +351,14 @@ def test_multi_side_shock_is_face_based_not_pair_count(mb):
     SHOCK_SEED = 5
 
     def with_shock(shock, attackers):
-        old = orch.MULTI_SIDE_SHOCK
-        orch.MULTI_SIDE_SHOCK = shock
+        # B19.10: the constant is read where the melee pair is resolved (`core/contact_draw.py`), not in `orchestration`.
+        reader = sys.modules[orch.resolve_melee_pair.__module__]
+        old = reader.MULTI_SIDE_SHOCK
+        reader.MULTI_SIDE_SHOCK = shock
         try:
             return _pincer_dmgb(orch, contact, attackers, seed=SHOCK_SEED)
         finally:
-            orch.MULTI_SIDE_SHOCK = old
+            reader.MULTI_SIDE_SHOCK = old
 
     PINCER = [(-3, +1), (+3, -1)]          # front pinner + rear body -> faces {F, B} -> 2 sides -> SHOCK
     TWO_FRONT = [(-3, +1), (-2, +1)]       # two bodies BOTH to the front -> face {F} -> 1 side -> NO shock

@@ -44,6 +44,8 @@ if __name__ == '__main__':   # [B17.12] run as a script, the engine is built fro
     variant.install(variant.cfg_from_environ(os.environ))
 import modules.mass_battle.orchestration as _orch
 import modules.mass_battle.hierarchy.units as _hu
+import modules.mass_battle.core.contact_draw as _cd   # reads MB_ENVELOP_SHOCK where the melee pair is resolved (B19.10)
+import modules.mass_battle.core.volley as _vo   # reads MB_VOLLEY_TARGETING where the volley is resolved (B19.10)
 from systems.mass_battle.sim.engine import Unit, Army, run_battle
 from engine.dice_engine import draw  # noqa: E402
 from modules.mass_battle import rngsource  # noqa: E402
@@ -115,7 +117,7 @@ def _attacker_retained(pin, fix, shock, def_stance='hold', def_disc=_DISC,
     on identical geometry and seeds. Attacker hp is the apt metric: A and B both reduce the
     FIXED unit's offence, so the effect surfaces as the attacker losing less."""
     _orch.MB_FIXING_FLANK = fix
-    _orch.MB_ENVELOP_SHOCK = shock
+    _orch.MB_ENVELOP_SHOCK = shock; _cd.MB_ENVELOP_SHOCK = shock
     out = []
     for s in range(seeds):
         with rngsource.using(draw.seeded(draw.H2("validators", s))):
@@ -343,7 +345,7 @@ def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: vali
     """Per-seed casualties inflicted on the FAR enemy subunit. MB_VOLLEY_TARGETING toggled in-process.
     Asserts the cell==hp invariant every seed -- the split (concentrate ordered / spread the rest) must
     redistribute casualties without creating or destroying any."""
-    _orch.MB_VOLLEY_TARGETING = on
+    _orch.MB_VOLLEY_TARGETING = on; _vo.MB_VOLLEY_TARGETING = on
     losses = []
     for s in range(seeds):
         with rngsource.using(draw.seeded(draw.H2("validators", s))):

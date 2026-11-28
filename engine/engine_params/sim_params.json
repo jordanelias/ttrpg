@@ -1592,6 +1592,17 @@
       "citation_grade": null
     },
     {
+      "key": "mass_battle.REARGUARD_PENALTY",
+      "name": "REARGUARD_PENALTY",
+      "value": 2,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "modules/mass_battle/core/contact_draw.py",
+      "note": "[canonical: §A.12 — \"Fast may rearguard at −2D Off\"]",
+      "citation": "§A.12 — \"Fast may rearguard at −2D Off\"",
+      "citation_grade": "source"
+    },
+    {
       "key": "mass_battle.CELL_RADIUS",
       "name": "CELL_RADIUS",
       "value": 0.5,
@@ -1754,17 +1765,6 @@
       "file": "modules/mass_battle/orchestration.py",
       "note": "[canonical: designs/provincial/mass_battle_v30.md §A.12]",
       "citation": "designs/provincial/mass_battle_v30.md §A.12",
-      "citation_grade": "source"
-    },
-    {
-      "key": "mass_battle.REARGUARD_PENALTY",
-      "name": "REARGUARD_PENALTY",
-      "value": 2,
-      "kind": "scalar",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/orchestration.py",
-      "note": "[canonical: §A.12 — \"Fast may rearguard at −2D Off\"]",
-      "citation": "§A.12 — \"Fast may rearguard at −2D Off\"",
       "citation_grade": "source"
     },
     {
