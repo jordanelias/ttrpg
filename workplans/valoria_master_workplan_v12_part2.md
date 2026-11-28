@@ -69,7 +69,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 
 | S13 | B21b (FA) |
 | S14 | B12b (SE+WR), B21c (FA) |
-| S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
+| S15 | B12c (SE+WR), B19 (MB), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
 | S18 | B21s (IN), B23 (FA), B30 (MB), B35 (WR), **B41 (GO)** |
@@ -91,7 +91,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
 | B21c-fa-seats | FA | W14 | S14 | 0 | 25 | 10 (B6 P1 H2 DF1) | MOVER (behaviour 4) | 6.5 | B21b |
-| B21d-fa-arc | FA | W14 | S15 | 5 | 29 | 10 (B9 DF1) | MOVER (behaviour 4) | 6.5 | B11, B21b |
 | B21s-strife-supply | IN | W16 | S18 | 3 | 35_cont | 3 (B3) | **EQUAL** (§2.2: per entry) | 3.7 | B12c, B21, B24a +R, B29 +R |
 | B22-mb-armies | MB | W17 | S17 | 1 | 33, 33_cont | 36 (B34 P1 DF1) | MOVER (behaviour 15) | 16.9 | B00, B01, B02, B16L, B04, B05, B07, B10, B12c, B17, B19, B20, B21, B21b |
 | B23-land | FA | W18 | S18 | 1 | 37 | 19 (B14 P3 C1 DF1; H3: B23.07 "BUILD (HELD if …)" read as BUILD) | MOVER (behaviour 8, conditional 1) | 10.1 | B00, B01, B02, B07, B12c, B17, B19, B20, B21, B21b, B22, B26 +R1 |
@@ -135,7 +134,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
 | B20-mb-orders | 30:514 | yes | 10 | yes | none | — |
 | B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
-| B21d-fa-arc | 29:231 | yes | 2 | yes | none | — |
 | B21s-strife-supply | 35_cont:456 | yes | 4 | yes | none | — |
 | B22-mb-armies | 33_cont:337 | yes | 14 | yes | none | — |
 | B23-land | 37:359 | yes | 12 | yes | none | —, R1: B26 |
@@ -175,7 +173,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |
 | S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | 09 (R2c, K6 F14) | `B12c.99` | 1 of 5 movers |
 | S15 | B19 | 12, 13, 23, 24, 25, 26, 51, 58, 60, 61, 63, 64, 70, 67, 68 | — | — | `B19.99` | 3 of 5 movers |
-| S15 | B21d | 05, 07, 08, 09 | — | — | `B21d.99` | 4 of 5 movers |
 | S15 | B24a | 01, 04, 05, 06, 08 | — | — | `B24a.99` | 5 of 5 movers |
 | S16 | B11F1 | 02, 04, 05 | — | — | `B11F1.99` | 1 of 5 movers |
 | S16 | B20 | 05, 06, 13, 14 | — | — | `B20.99` | 2 of 5 movers |

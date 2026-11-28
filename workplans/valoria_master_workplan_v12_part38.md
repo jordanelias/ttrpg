@@ -31,7 +31,7 @@ GATE: Batch B26-fi-inquiry
 GATE: Batch B27-sc-proceedings
 GATE: Batch B28-social-verbs
 GATE: Batch B32-inst-kit
-GATE: Batch B21d-fa-arc
+GATE: Batch B21d-fa-arc @5d176712909d7d0abafdc6a9c1924ab3fa536034
 GATE: Batch B21s-strife-supply
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — A-12, A-13, A-14 (`V12_STRUCTURE.md` §2.2's B33 row): the seat facts and the economy of the institutions kit (upkeep by grade, the hands an order passes, the audit at a term's end, the debt, the obligation that moves odds, the Church's sentence by other people's answers). No conjunct of R-01 to R-09 is moved; the close re-reads the nine and prints their held counts (`IS-A-12`).

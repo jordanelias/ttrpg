@@ -5908,7 +5908,7 @@ tables:
   clocks:
     source: >-
       `proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b) (the form, the two clocks, the feeder table, the band table); workplan v12 B21d.02
-      (`workplans/valoria_master_workplan_v12_part29.md`); the archived values, reference only: `ci_political_v30.md` §2.1, §2.3, §2.4 (CI 0-100, start 28,
+      (Batch B21d-fa-arc's item B21d.02: `git log --grep 'Item: B21d.02'`; the plan block left the plan at the batch's expunge); the archived values, reference only: `ci_political_v30.md` §2.1, §2.3, §2.4 (CI 0-100, start 28,
       +/-5 a season, the bands 40/55/65/80), `victory_v30.md:678` (60), `peninsular_strain_v30.md` §4.3 (Turmoil 0-10, the bands 3/7/9).
     row: H-633
     note: >-

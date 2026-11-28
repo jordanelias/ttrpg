@@ -25,7 +25,7 @@ GATE: Batch B21c-fa-seats
 GATE: Batch B32-inst-kit
 GATE: Batch B33-inst-economy-hands
 GATE: Batch B39-procgen-and-cases
-GATE: Batch B21d-fa-arc
+GATE: Batch B21d-fa-arc @5d176712909d7d0abafdc6a9c1924ab3fa536034
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: every conjunct of R-01 to R-09, re-read on B40's closing tree (M5 closes here, `V12_STRUCTURE.md` §3; IS-A §12.1, M5 row: "all nine at B40") → all nine hold; no `status:` is edited (A-114: the one re-take that may move a row is B99). No row is moved by this batch's own items; what they serve is A-12, A-13, A-14, A-80 and the standing requirement that each subsystem plays alone (IS-A §12.1, the note under the milestone table: "A-12, A-13, A-14 (B32, B33, B40) … the standing requirement that each subsystem plays alone (B18, B27, B40)").
 EXPECTED RED UNTIL B40.99: none from an item's own tests (each is green at its commit); the realm pins in `engine/season/tests/_realm_goldens.py` and the NPC-088 headless hash move at B40.12, B40.14 to B40.20 and B40.22 to B40.25 and are re-pinned once at B40.99, so they read red from B40.12 to B40.99 under `[skip ci]`, E-1 (added by check lane K10).
