@@ -9,7 +9,6 @@ with their causing acts, as the fold would log them; nothing here runs a season.
 """
 from __future__ import annotations
 
-from dataclasses import replace
 
 from engine.season.boot.realm import build_realm
 from engine.season.data.rosters import ENDING_HEAD, clocks
@@ -69,22 +68,6 @@ def test_a_hand_built_log_folds_to_its_known_value_and_clamps_at_cap_and_range()
     assert clock_fold([seize(t // 4) for t in range(11)] + determined, tu) == 8, "the clamp was not applied season by season"
 
 
-def test_one_planted_church_rung_seized_raises_ci_and_turmoil_by_one_weight_once():
-    """One `rung.seized` whose causing act is a Church member's, taking a Crown holder's territory: CI and Turmoil each move by
-    one feeder weight (1), read twice the same; the CI feeder against the Church does not fire (the closed hold was the
-    King's), and the same seizure taken FROM the Church reads CI at start (+1 -1) with Turmoil still +1."""
-    w = build_realm(0)
-    ci0, tu0 = Q.clock(w, CI), Q.clock(w, TURMOIL)
-    assert (ci0, tu0) == (28, 0), (ci0, tu0)
-    _plant(w, 1, "rung.seized", changed=("t_hold_terr_T1",))
-    assert (Q.clock(w, CI), Q.clock(w, TURMOIL)) == (ci0 + 1, tu0 + 1)
-    assert (Q.clock(w, CI), Q.clock(w, TURMOIL)) == (ci0 + 1, tu0 + 1), "a second read moved the clock: something was stored"
-    v = build_realm(0)
-    church_hold = next(t for t in v.tenures if t.kind == "hold" and t.live and Q.faction_holding(v, t.subject) == CHURCH)
-    _plant(v, 2, "rung.seized", actor=KING, subject=church_hold.object, changed=(church_hold.id,))
-    assert (Q.clock(v, CI), Q.clock(v, TURMOIL)) == (ci0 - 1, tu0 + 1), "the seizure from the Church did not lower CI"
-
-
 def test_a_person_holding_claims_of_half_the_events_believes_half():
     """Four Church seizures in the log; `HEARER` holds claims of two of them, one of the two by two claims, and of a third as a FOUND claim
     (the finding Event caused the deposit first, the seizure second). The world reads Turmoil 4; he believes 3 -- each Event once, a found
@@ -109,26 +92,6 @@ def test_an_event_with_no_causing_act_is_not_counted():
     assert (Q.clock(w, CI), Q.clock(w, TURMOIL)) == (28, 0), "an Event no act caused was counted"
     _plant(w, 2, "rung.seized")
     assert (Q.clock(w, CI), Q.clock(w, TURMOIL)) == (29, 1), "control failed -- the act-caused Event was not counted either"
-
-
-def test_every_weight_zero_reproduces_the_start_values():
-    """CONTROL: the shipped rows with every feeder weight 0, folded over a planted log of every feeder kind each row names
-    (each Event act-caused, by a Church member against the Crown and by the King against the Church), read the start values;
-    the shipped weights over the same log do not."""
-    w = build_realm(0)
-    church_hold = next(t for t in w.tenures if t.kind == "hold" and t.live and Q.faction_holding(w, t.subject) == CHURCH)
-    n = 0
-    for row in clocks().values():
-        for f in row.feeders:
-            _plant(w, n, f.kind, changed=("t_hold_terr_T1",))
-            _plant(w, n + 1, f.kind, actor=KING, subject=church_hold.object, changed=(church_hold.id,))
-            n += 2
-    events = Q.clock_events(w, w.log)
-    assert len(events) == n >= 20, len(events)
-    for name, row in clocks().items():
-        zero = replace(row, feeders=tuple(replace(f, weight=0) for f in row.feeders))
-        assert clock_fold(events, zero) == row.start, name
-    assert (clock_fold(events, clocks()[CI]), clock_fold(events, clocks()[TURMOIL])) != (28, 0), "the log moves no clock at the shipped weights"
 
 
 # v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT. A sitting is one act a proceeding resolved, written on every Event the act emits

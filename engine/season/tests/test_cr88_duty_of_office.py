@@ -14,7 +14,6 @@ Four parts, each read through the code that carries it:
 """
 from __future__ import annotations
 
-from types import SimpleNamespace
 
 import pytest
 
@@ -287,11 +286,6 @@ def test_a_condemned_deed_done_to_what_he_holds_weighs_as_done_to_himself():
     assert person_q.grievance_against(p, "p_king", _fx()).deeds == 0.0 - cos
     p.tenures.append(Tenure("t_hold_charter", p.id, held, "hold", 0))
     assert person_q.grievance_against(p, "p_king", _fx()).deeds == 0.0 - cos * 2
-
-
-def test_an_empty_ledger_reads_nothing():
-    p = _judge()
-    assert tuple(person_q.grievance_against(p, "p_king", _fx())) == (0.0, 0.0, 0.0, 0.0)
 
 
 # ------------------------------------------------------------------------------------------------

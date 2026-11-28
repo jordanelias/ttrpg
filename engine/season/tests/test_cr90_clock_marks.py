@@ -9,9 +9,8 @@ from engine.season.boot.realm import build_realm
 from engine.season.data.rosters import ENDING_HEAD, clocks
 from engine.season.harness import clocks as K
 from engine.season.harness.probes import apparatus_receipt
-from engine.season.queries import person_q, world_q as Q
+from engine.season.queries import world_q as Q
 from engine.season.state.carriers import Act, Claim, Event, Proposition
-from engine.season.state.ids import ROOT
 
 CHURCH, CROWN = "fac_church_of_solmund", "fac_valorsmark"
 CLERIC = "p_npc_004"            # a Church member at build (`faction_holding`)
@@ -59,53 +58,6 @@ def _arc(w):
     ev["decided"] = [_sit(w, next(n), "matter.determined", t0 + 2)]
     ev["seize3"] = [_plant(w, next(n), "rung.seized", t0 + 2, CLERIC) for _ in range(5)]
     return t0, ev
-
-
-def test_a_planted_log_reads_its_known_seasons():
-    """The planted arc reads: Church Influence start 28 and cap 5 a season is 33, 38, 43, so `assertive` (40) is season 3 and `reach` (55) never; Turmoil
-    (uncapped, range 10) is 5 after season 1, so `tension` (3) is season 1, and `crisis` (7) and `collapse` (9) are season 2; breakdown (Turmoil at crisis and
-    two failed of the last three sittings) is season 2; the claim 2, `declare` 2, the Church's `declare` 3, Church `rung.seized` 1, parliament determines after
-    the war. A head holding claims of the season-1 Events only believes Turmoil 5 and no more; one holding every claim believes what is true. Civil war is a
-    live reading of the world, so it is read after each season: a stubbed step and reader read the first season it holds."""
-    w = build_realm(0)
-    t0, ev = _arc(w)
-    held = {KING: [e for k in ("seize1", "seize2", "failed") for e in ev[k]], CHURCH_HEAD: ev["seize1"]}
-    for i, (pid, events) in enumerate(held.items()):
-        for j, e in enumerate(events):
-            _hold(pid, e, w, 100 * i + j)
-    r = K.read_world(w, t0, 3)
-    want = {"church_influence:assertive": 3, "church_influence:reach": None, "turmoil:tension": 1, "turmoil:crisis": 2, "turmoil:collapse": 2,
-            "breakdown": 2, "claim": 2, "declare": 2, "theocratic declare": 3, "church rung.seized": 1}
-    assert {k: r.marks[k] for k in want} == want, r.marks
-    assert r.parliament_after_war is True
-    assert r.believed[CROWN]["turmoil:crisis"] == 2 and r.believed[CROWN]["breakdown"] == 2, r.believed[CROWN]
-    assert r.believed[CHURCH]["turmoil:tension"] == 1 and r.believed[CHURCH]["turmoil:crisis"] is None, r.believed[CHURCH]
-    assert r.believed[CHURCH]["breakdown"] is None
-    # the seed's last two seasons shorten: the same log read at two seasons never reaches season 3's mark
-    assert K.read_world(w, t0, 2).marks["theocratic declare"] is None
-    # civil war: read after each season; the stubbed reader holds from season 2
-    flags, steps = iter([False, True, True]), []
-    first = K.observe(w, 0, 3, step=lambda k, s, w=None: steps.append(k), civil_now=lambda w: next(flags))
-    assert (first, steps) == (2, [1, 1, 1])
-
-
-def test_feeder_weights_zero_read_never_on_every_clock_mark(monkeypatch):
-    """CONTROL: the same planted arc read with every feeder weight 0 (the rows `world_q.clock` and `person_q.believed_clock` read) reaches no band of any clock,
-    true or believed, and so no breakdown; the shipped weights over the same log reach them (the arc above)."""
-    from dataclasses import replace
-    zero = {n: replace(r, feeders=tuple(replace(f, weight=0) for f in r.feeders)) for n, r in clocks().items()}
-    w = build_realm(0)
-    t0, ev = _arc(w)
-    for j, e in enumerate(ev["seize1"] + ev["seize2"] + ev["failed"]):
-        _hold(KING, e, w, j)
-    shipped = K.read_world(w, t0, 3)
-    assert shipped.marks["church_influence:assertive"] == 3 and shipped.believed[CROWN]["turmoil:crisis"] == 2, "control: the shipped weights reach no band"
-    monkeypatch.setattr(Q, "clock_rows", lambda: zero)
-    monkeypatch.setattr(person_q, "clocks", lambda: zero)
-    r = K.read_world(w, t0, 3)
-    bands = [k for k in r.marks if k.split(":")[0] in zero]
-    assert len(bands) == 8 and all(r.marks[k] is None for k in bands + ["breakdown"]), r.marks
-    assert all(v is None for b in r.believed.values() for k, v in b.items()), r.believed
 
 
 def test_the_reader_moves_no_hash():

@@ -69,6 +69,15 @@ lanes:
         added: 2
         behaviour: "the governance spine prints the Offer and holds no second menu (test_governance_spine_play.py); the creation sheet shows holdings for a seat holder (test_season_shape.py)"
 
+      - batch: B21d-fa-arc
+        added: 20
+        behaviour: "test_cr88_duty_of_office.py: an office-holder forms no opponent-rule verb on his own faction's head or officers until his grievance (distinct deeds, firmed by origin, never a build-time stance) exceeds the band; the exemption follows the seat the act is exercised through and only down the chain; the accept price follows the station of his office and is waived only for a peer enemy; a condemned deed done to what he holds weighs as done to himself; the dispute reads a wrong held and not a net sum"
+      - batch: B21d-fa-arc
+        added: 14
+        behaviour: "test_cr89_clocks.py: Church Influence and Turmoil fold from attributed Events of named kinds, clamp at cap and range, count an Event once however many claims report it (a found claim included) and not an Event no act caused; a person believes the share of Events he holds claims of; sittings that dispose of nothing and the breakdown conjunction read from the log; each of the seven trigger switches moves its term only when on, and a declare trigger opens a mandatory question and decides nothing"
+      - batch: B21d-fa-arc
+        added: 1
+        behaviour: "test_cr90_clock_marks.py: reading the clock marks (the clocks instrument) moves no content hash"
   engine:
     base: 1043
     warrants:
