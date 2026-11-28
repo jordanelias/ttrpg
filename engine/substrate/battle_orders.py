@@ -22,3 +22,7 @@ ROLES = tuple(m['name'] for m in _DATA['roles'])
 
 #: The values of an order's `retreat_at` (`none`, or the share of starting strength at which the side falls back).
 RETREAT_AT = tuple(m['name'] for m in _DATA['retreat_at'])
+
+#: The order-draw block (`arm`, `step`, `across`, `unsteady`, `in_contact`, `reach`, `distance`, `signal_reach`): every
+#: number a seed, `arm: 'off'` today's certainty. Owner `modules/mass_battle/config.py::ORDER_OBEY`.
+ORDER_OBEY = _DATA['obey']

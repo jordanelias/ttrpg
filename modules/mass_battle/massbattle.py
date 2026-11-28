@@ -16,8 +16,8 @@ from dataclasses import asdict
 from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
 from modules.mass_battle import config as _config
-from modules.mass_battle.config import (CELL_CAP, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS, MIN_UNITS_PER_ARMY,
-                                        ROLE_SPEC)
+from modules.mass_battle.config import (CELL_CAP, COMMAND_DEFAULT, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS,
+                                        MIN_UNITS_PER_ARMY, ROLE_SPEC)
 from modules.mass_battle.armies import UNIT_CAP
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
@@ -118,7 +118,7 @@ _MVP_SUBUNIT_SHAPE = dict(
 #: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: they are set by
 #: `_weighted_unit` itself (morale from `_morale_start`, since plan position `20-iv`).
 _MVP_UNIT_COMMAND = dict(
-    command=4,                       # [canonical: inherited default — see GAP above]
+    command=COMMAND_DEFAULT,         # [27A-2: config.COMMAND_DEFAULT, the one owner of the literal]
     discipline=5,                    # [canonical: inherited default — see GAP above]
     discipline_start=5,              # [canonical: inherited default — see GAP above]
 )

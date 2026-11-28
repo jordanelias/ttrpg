@@ -31,7 +31,7 @@ def build() -> dict:
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from modules.mass_battle import massbattle
-    from modules.mass_battle.config import ROLE_SPEC
+    from modules.mass_battle.config import ORDER_OBEY, ROLE_SPEC
     roles, retreat_at = list(massbattle.ORDER_ROLES), list(massbattle.ORDER_RETREAT_AT)
     for name, values in (('roles', roles), ('retreat_at', retreat_at)):
         if not values or len(set(values)) != len(values):
@@ -40,11 +40,13 @@ def build() -> dict:
         raise SystemExit('[battle_orders] ORDER_ROLES is not config.ROLE_SPEC\'s names')
     return {
         '_generated': 'tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py '
-                      '(ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT, and their ORDER_*_TEXT lines)',
+                      '(ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT, and their ORDER_*_TEXT lines) and '
+                      'modules/mass_battle/config.py (ORDER_OBEY)',
         'schema_version': 2,   # v2 (B34.07): each member is {name, text}, not a bare name
         'source': 'modules/mass_battle/massbattle.py',
         'roles': _members('roles', roles, massbattle.ORDER_ROLE_TEXT),
         'retreat_at': _members('retreat_at', retreat_at, massbattle.ORDER_RETREAT_AT_TEXT),
+        'obey': ORDER_OBEY,   # 27A-2: the order-draw block, one dict, `config.ORDER_OBEY` its owner
     }
 
 

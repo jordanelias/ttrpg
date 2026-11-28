@@ -1,5 +1,5 @@
 {
-  "_generated": "tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py (ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT, and their ORDER_*_TEXT lines)",
+  "_generated": "tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py (ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT, and their ORDER_*_TEXT lines) and modules/mass_battle/config.py (ORDER_OBEY)",
   "schema_version": 2,
   "source": "modules/mass_battle/massbattle.py",
   "roles": [
@@ -77,5 +77,20 @@
       "name": "0.25",
       "text": "Fall back once the side is down to a quarter of its starting strength."
     }
-  ]
+  ],
+  "obey": {
+    "arm": "off",
+    "step": {
+      "keep": "none",
+      "change": 0,
+      "restrain": 1,
+      "signal": 0
+    },
+    "across": 1,
+    "unsteady": 1,
+    "in_contact": 0,
+    "reach": 13,
+    "distance": 1,
+    "signal_reach": 51
+  }
 }

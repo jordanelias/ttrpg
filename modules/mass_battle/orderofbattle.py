@@ -30,7 +30,7 @@ from dataclasses import dataclass
 from typing import Optional, Tuple
 
 from modules.mass_battle.armies import DEPLOY_GAP, UNIT_CAP, _centered_line_cols, _spec_span, build_army
-from modules.mass_battle.config import BATTLEFIELD_SIZE, ROLE_SPEC, cell_cap_for
+from modules.mass_battle.config import BATTLEFIELD_SIZE, COMMAND_DEFAULT, ROLE_SPEC, cell_cap_for
 from modules.mass_battle.geometry import footprint_for
 from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
 from modules.mass_battle.troop_types.registry import default_role_for, is_mounted, roles_for, stats_for, unit_type_for
@@ -69,9 +69,10 @@ _ANCHOR_COL = 25            # [canonical: armies.build_army's anchor_col default
 _MIN_COL, _MAX_COL = 1, BATTLEFIELD_SIZE - 2    # keep a 1-cell margin, as `_centered_line_cols` does
 
 #: The Army-level baseline the units inherit where a troop type sets nothing: the season adapter's own
-#: (`massbattle._SEASON_FORCE_POWER`, `_MVP_UNIT_COMMAND`). Duplicated as three literals rather than imported:
-#: `massbattle` imports THIS module, and a cycle is the worse of the two. A test pins them equal.
-_UNIT_POWER, _UNIT_COMMAND, _UNIT_DISCIPLINE = 4, 4, 5  # [canonical: sim_mb_06_v9_historical_spec.md -- T3 baseline P4/C4/D5 defaults, as massbattle._SEASON_FORCE_POWER and _MVP_UNIT_COMMAND carry them]
+#: (`massbattle._SEASON_FORCE_POWER`, `_MVP_UNIT_COMMAND`). Power and discipline are duplicated as literals rather than imported
+#: (`massbattle` imports THIS module, and a cycle is the worse of the two); command is `config.COMMAND_DEFAULT`, which
+#: both read. A test pins them equal.
+_UNIT_POWER, _UNIT_COMMAND, _UNIT_DISCIPLINE = 4, COMMAND_DEFAULT, 5  # (command: `config.COMMAND_DEFAULT`, 27A-2) [canonical: sim_mb_06_v9_historical_spec.md -- T3 baseline P4/C4/D5 defaults, as massbattle._SEASON_FORCE_POWER and _MVP_UNIT_COMMAND carry them]
 
 
 @dataclass(frozen=True)

@@ -210,7 +210,8 @@ def test_every_stat_preset_has_a_loadout_and_a_reach():
 def test_the_unit_baseline_matches_the_season_adapters():
     from modules.mass_battle import orderofbattle as ob
     assert ob._UNIT_POWER == massbattle._SEASON_FORCE_POWER
-    assert ob._UNIT_COMMAND == massbattle._MVP_UNIT_COMMAND['command']
+    from modules.mass_battle.config import COMMAND_DEFAULT
+    assert ob._UNIT_COMMAND == massbattle._MVP_UNIT_COMMAND['command'] == COMMAND_DEFAULT
     assert ob._UNIT_DISCIPLINE == massbattle._MVP_UNIT_COMMAND['discipline']
 
 
