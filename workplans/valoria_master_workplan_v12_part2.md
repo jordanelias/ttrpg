@@ -68,7 +68,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B21c (FA) |
+| S14 | B21c (FA) |
 | S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
@@ -86,7 +86,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 |---|---|---|---|---|---|---|---|---|---|
 | B11F1-flow-se | SE | W16 | S16 | 2 | 29_cont | 8 (B4 H1 C2 DF1) | MOVER (behaviour 3) | 5.7 | B12c |
 | B11F2-flow-in | IN | W17 | S17 | 2 | 32_cont | 12 (B8 P2 H2) | MOVER (conditional 1) | 7.3 | B09, B10, B11F1 |
-| B12b-weather-arcs-population | SE+WR | W14 | S14 | 0 | 24, 24_cont | 48 (B38 P7 R1 H1 C1) | MOVER (behaviour 12, encoding 1) | 21.7 | B12a |
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
@@ -129,7 +128,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 |---|---|---|---|---|---|---|
 | B11F1-flow-se | 29_cont:328 | yes | 1 | yes | none | — |
 | B11F2-flow-in | 32_cont:264 | yes | 3 | yes | none | — |
-| B12b-weather-arcs-population | 24_cont:437 | yes | 1 | yes | none | — |
 | B12c-material-verbs-and-valley | 28_cont:277 | yes | 3 | yes | none | —, R1: B15, B34 |
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
@@ -171,7 +169,6 @@ One row per batch in schedule order: the position handles (the part after the do
 |---|---|---|---|---|---|---|
 
 | S13 | B21b | 01, 02, 04, 06, 08, 10, 11, 12, 13, 14, 16, 18, 21, 25, 26 | — | 05 | `B21b.99` | 4 of 5 movers |
-| S14 | B12b | 12, 16, 21, 25, 28, 33, 40, 41, 42, 43, 44, 47 | 18 | — | `B12b.99` | 1 of 4 movers |
 | S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |
 | S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | 09 (R2c, K6 F14) | `B12c.99` | 1 of 5 movers |
 | S15 | B19 | 12, 13, 23, 24, 25, 26, 51, 58, 60, 61, 63, 64, 70, 67, 68 | — | — | `B19.99` | 3 of 5 movers |
@@ -242,13 +239,13 @@ One row per batch in schedule order: the position handles (the part after the do
 | 30 | S13 · B12a | `ending_draw` = `False` (`ending_draw_pool_step`, `ending_draw_ob` None) | BLOCKED (design: no value stated) — was TARGETED; part 44 governs (R2d) | the same file's gate (3), a planted world over 200 seeds, is the target, recorded; part 44 (B98.24, U9) read edit 3: "`[CALIBRATE: both, joint calibration, OWED §B]`", no value or sweep stated anywhere | 19:39 | B98.24 BLOCKED |
 | 31 | S13 · B12a | `arrival_report` = `off` | BLOCKED (design: no target reading) | `07_SE_kernel_repairs` D names only its test | 19:39 | B98.25 BLOCKED |
 | 32 | S13 · B16 | `APPROACH_SIGMA_K` = 0 | RETIRED (B16.08 not built, the menu ruled not shipped, `engine/season/hole_register.yaml` H-580); was BLOCKED (design: no value stated) — was TARGETED, with a ruling on the coefficient; part 44 governs (R2d) | PB §7 step 3c (the nine-cell arming mirror level within the control band, mean rounds monotone in the summed lean, the undecided share reported) is the target, recorded; part 44 (B98.26, U9) read PB: "no coefficient is chosen before the calibration batch" (`03_PC_duel_round_and_approach_B.md:163`) and §11 asks a ruling with no candidate value; owner: Jordan's ruling on the PC workbench's candidates | 23:41 | B98.26 BLOCKED |
-| 33 | S14 · B12b | `route_pricing` = off | TARGETED (direction only) | CP-T10-01's paired arm, seeds 0–2, two seasons | 24:43 | B98.27 BUILD |
-| 34 | S14 · B12b | `territory_yield_scale` = `()`, `build_realm(tensions=False)` | BLOCKED (design: no target reading) | CL-EVENTS (4): "names no target" | 24:43 | B98.28 BLOCKED |
-| 35 | S14 · B12b | `season_spell_draw` = `()` | TARGETED | `09_WR_B_weather_with_memory_and_the_year` gate (4) at two seasons, with edit 2's mean-one reading | 24:43 | B98.29 BUILD |
-| 36 | S14 · B12b | `season_terms` = 1.0 on every multiplier, `hardship` 0 | BLOCKED (content: CP-T10-03's winter values are `[ASSUMPTION; Jordan to correct]`) | — | 24:43 | B98.30 BLOCKED |
-| 37 | S14 · B12b | `amount_shares` = `["1000"]` | BLOCKED (design: no target reading) | no realm target; its precondition (CP-T08-06, B12b.26) is HELD | 24:43 | B98.31 BLOCKED |
-| 38 | S14 · B12b | `hunger_loss` = `per_cohort`, `famine_loss` = 0 | BLOCKED (design: no target reading) | "a reading at CR-22's exit, not a pass condition" | 24:43 | B98.31 BLOCKED |
-| 39 | S14 · B12b | `regrow_seasons` = 0 | BLOCKED (design: no target reading) | "a reading, not a pass condition" | 24:43 | B98.31 BLOCKED |
+| 33 | S14 · B12b | `route_pricing` = off | TARGETED (direction only) | CP-T10-01's paired arm, seeds 0–2, two seasons | 24:43, expunged at `c5ccedcef` | B98.27 BUILD |
+| 34 | S14 · B12b | `territory_yield_scale` = `()`, `build_realm(tensions=False)` | BLOCKED (design: no target reading) | CL-EVENTS (4): "names no target" | 24:43, expunged at `c5ccedcef` | B98.28 BLOCKED |
+| 35 | S14 · B12b | `season_spell_draw` = `()` | TARGETED | `09_WR_B_weather_with_memory_and_the_year` gate (4) at two seasons, with edit 2's mean-one reading | 24:43, expunged at `c5ccedcef` | B98.29 BUILD |
+| 36 | S14 · B12b | `season_terms` = 1.0 on every multiplier, `hardship` 0 | BLOCKED (content: CP-T10-03's winter values are `[ASSUMPTION; Jordan to correct]`) | — | 24:43, expunged at `c5ccedcef` | B98.30 BLOCKED |
+| 37 | S14 · B12b | `amount_shares` = `["1000"]` | BLOCKED (design: no target reading) | no realm target; its precondition (CP-T08-06, B12b.26) is HELD | 24:43, expunged at `c5ccedcef` | B98.31 BLOCKED |
+| 38 | S14 · B12b | `hunger_loss` = `per_cohort`, `famine_loss` = 0 | BLOCKED (design: no target reading) | "a reading at CR-22's exit, not a pass condition" | 24:43, expunged at `c5ccedcef` | B98.31 BLOCKED |
+| 39 | S14 · B12b | `regrow_seasons` = 0 | BLOCKED (design: no target reading) | "a reading, not a pass condition" | 24:43, expunged at `c5ccedcef` | B98.31 BLOCKED |
 | 40 | S14 · B34 | `rosters.yaml: management_orders` = `[]` | BLOCKED (content: CL-MGMT's list, held, §8) | A-104 names examples, not a list | 25_cont:37, expunged at `3d9f96ec3` | B98.32 BLOCKED |
 | 41 | S15 · B12c | `labour_mode` = `off` | BLOCKED (design: no target reading) | CP-T08-01's arms are on/off readings | 28:34 | B98.33 BLOCKED |
 | 42 | S15 · B12c | `store_spoil` = all 0 | BLOCKED (design: no target reading) | JQ-6's family | 28:34 | B98.33 BLOCKED |

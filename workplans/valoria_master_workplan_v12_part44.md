@@ -38,7 +38,7 @@ GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
 GATE: Batch B11F1-flow-se
 GATE: Batch B11F2-flow-in
 GATE: Batch B12a-world-motion-and-ground @ee641cbdd
-GATE: Batch B12b-weather-arcs-population
+GATE: Batch B12b-weather-arcs-population @c5ccedcef5d39e5409998e2187dedfe1dab02865
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
@@ -149,11 +149,11 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.24 | endings are reached by a draw: its two rows swept on the planted world | row 30; B12a.12; `09_WR_B_draws_not_thresholds` edit 3, gate (3) | BUILD (flip) | EQUAL | Batch B12a; Batch B05 |
 | B98.25 | arriving teaches the traveller the place | row 31; B12a.16; `07_SE_kernel_repairs` D | BUILD (flip) | MOVER(behaviour) | Batch B12a |
 | B98.26 | `APPROACH_SIGMA_K` stays 0: a ruling on the coefficient is owed | row 32; B16.08; PB §7 step 3c, §11 | RETIRED (B16.08 was not built, the menu was ruled not shipped: no coefficient exists, `engine/season/hole_register.yaml` H-580) | EQUAL | Batch B16 |
-| B98.27 | a journey is priced by its route | row 33; B12b.02, B12b.04; CP-T10-01 | BUILD (flip) | MOVER(behaviour) | Batch B12b |
-| B98.28 | a world is made with one tension drawn | row 34; B12b.45, B12b.46; CL-EVENTS (3), (4) | BUILD (flip) | MOVER(behaviour, the build) | Batch B12b |
-| B98.29 | the year's spell is drawn | row 35; B12b.03; `09_WR_B_weather_with_memory_and_the_year` edit 1, gate (4), edit 2 | BUILD (flip) | MOVER(behaviour) | Batch B12b |
-| B98.30 | the season's terms stay at 1.0 | row 36; B12b.01; CP-T10-03 | BLOCKED (content: the winter values are Jordan's) | EQUAL | Batch B12b |
-| B98.31 | a hungry cohort loses per head and thins before it dies; shares and regrowth stay at control | rows 37 to 39; B12b.19, B12b.35, B12b.36, B12b.38 | BUILD (flip, row 38); row 37 BLOCKED (carrier: CP-T08-06 held); row 39 BLOCKED (A-114: target past two seasons) | MOVER(behaviour) | Batch B12b |
+| B98.27 | a journey is priced by its route | row 33; B12b.02, B12b.04; CP-T10-01 | BUILD (flip) | MOVER(behaviour) | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
+| B98.28 | a world is made with one tension drawn | row 34; B12b.45, B12b.46; CL-EVENTS (3), (4) | BUILD (flip) | MOVER(behaviour, the build) | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
+| B98.29 | the year's spell is drawn | row 35; B12b.03; `09_WR_B_weather_with_memory_and_the_year` edit 1, gate (4), edit 2 | BUILD (flip) | MOVER(behaviour) | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
+| B98.30 | the season's terms stay at 1.0 | row 36; B12b.01; CP-T10-03 | BLOCKED (content: the winter values are Jordan's) | EQUAL | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
+| B98.31 | a hungry cohort loses per head and thins before it dies; shares and regrowth stay at control | rows 37 to 39; B12b.19, B12b.35, B12b.36, B12b.38 | BUILD (flip, row 38); row 37 BLOCKED (carrier: CP-T08-06 held); row 39 BLOCKED (A-114: target past two seasons) | MOVER(behaviour) | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
 | B98.32 | `management_orders` stays empty | row 40; B34.10; `IS-B3-GO-07` | BLOCKED (content: CL-MGMT's list, held) | EQUAL | Batch B34 |
 | B98.33 | hands make the yield; grain spoils in store | rows 41, 42; B12c.02, B12c.03; CP-T08-01, CP-T08-03 | BUILD (flip) | MOVER(behaviour) | Batch B12c |
 | B98.34 | prices stay at par: no computed `offer` | row 43; B12c.16, B12c.17 (HELD); CP-T08-05 | BLOCKED (carrier: no computed producer of `offer`) | EQUAL | Batch B12c |
