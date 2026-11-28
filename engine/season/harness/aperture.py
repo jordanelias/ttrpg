@@ -487,8 +487,8 @@ def scene_sources(d) -> dict:
 
 
 # ---------------------------------------------------------------------------------------------
-# BUILT OUT (IS-A-06) -- which verbs have a clean execution that emits every kind of its band and,
-# where the row declares writes, wrote. A reader over a finished run: it writes nothing and reads the
+# BUILT OUT (IS-A-06) -- which verbs have clean executions that together emit every kind of a band they
+# folded at and, where the row declares writes, one of them wrote (`built_out` states the rule). A reader over a finished run: it writes nothing and reads the
 # one act -> Events index (`_events_by_act`) the wrong-kind and refusal readers read.
 
 #: The Events a fought field leaves, and the one an unopposed march leaves: the kinds `FOUGHT FIELDS` counts.

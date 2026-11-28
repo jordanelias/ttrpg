@@ -166,7 +166,7 @@ def test_a_grudge_raises_a_plot_and_a_war_on_its_object(monkeypatch):
     assert CH.stance_term(p, plot, fx) < 0 and CH.stance_term(p, war, fx) < 0, "control failed -- the default sign does not read the grudge below 0"
 
 
-def test_a_plotter_is_never_offered_his_target_as_a_backer():
+def test_a_plotter_is_never_offered_his_target_as_a_backer(monkeypatch):
     """B21b.30: the plotter whose `legitimacy` reads the Duchess below 0 (`plot_targets`) forms `conspire` on her with every known man but her as the invitee: none binds `to` to
     its subject (the invitee is never the target), and others do form."""
     w = _world()
@@ -175,3 +175,7 @@ def test_a_plotter_is_never_offered_his_target_as_a_backer():
     formed = [c for q in Q.questions_for(w, p) for c in _formed(w, PLOTTER, q) if c.verb == "conspire" and c.subject == TARGET]
     assert any(c.operands.get("to") not in (None, TARGET) for c in formed), "no conspire formed on another invitee"
     assert not [c for c in formed if c.operands.get("to") == c.subject], "a plotter was offered his target as a backer"
+    from engine.season.decision import options as OPT
+    monkeypatch.setattr(OPT, "VERB_TABLE", {**VERB_TABLE, "conspire": replace(VERB_TABLE["conspire"], regard_sign=1)})
+    undeclined = [c for q in Q.questions_for(w, p) for c in _formed(w, PLOTTER, q) if c.verb == "conspire" and c.subject == TARGET]
+    assert [c for c in undeclined if c.operands.get("to") == c.subject], "control failed -- without the decline the target is not in the fan, so the test cannot see it"
