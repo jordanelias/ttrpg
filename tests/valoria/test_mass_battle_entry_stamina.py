@@ -39,3 +39,20 @@ def test_a_spent_column_costs_the_units_standing_in_it_one_die():
             b.stamina = 0.0                            # one file of the left unit is spent
     assert subunit_combat_pool(army, left) == fresh[0] + STAMINA_EXHAUSTED_POOL_PENALTY
     assert subunit_combat_pool(army, right) == fresh[1]   # control: the right unit's files are fresh
+
+
+def test_returned_stamina_below_100_after_a_fought_field():
+    """`run_battle`'s `a_stamina` / `b_stamina` are `agg_stamina()` of the column ledger, the one the fatigue
+    malus reads (step 2): after eighteen ticks of contact the number returned is below STAMINA_MAX for both sides,
+    and it is the very number `agg_stamina()` reads off the armies afterwards."""
+    from engine.dice_engine import draw
+    from modules.mass_battle import rngsource
+    from modules.mass_battle.battle_loop import run_battle
+    from systems.mass_battle.sim.engine import build_unit
+    a, b = build_unit('Line', 3, 'A', 'A', 9), build_unit('Line', 3, 'B', 'B', 9)
+    hp0 = (a.hp, b.hp)
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_entry_stamina", 1))):
+        res = run_battle(a, b, max_ticks=18)
+    assert a.hp < hp0[0] and b.hp < hp0[1], "no contact: the field was not fought, so the stamina reading means nothing"
+    assert res["a_stamina"] < STAMINA_MAX and res["b_stamina"] < STAMINA_MAX
+    assert (res["a_stamina"], res["b_stamina"]) == (a.agg_stamina(), b.agg_stamina())
