@@ -33,6 +33,7 @@ and are tested in `test_u8_cast_fields.py`; `knowledge` -> initial Claims is REF
 """
 import pytest
 
+from engine.season.data import files
 from engine.season.data.rosters import RUNG_KINDS
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
@@ -204,7 +205,7 @@ def test_an_eleven_actor_case_runs(monkeypatch):
 
 
 def test_a_malformed_cast_entry_refuses_at_load_and_a_good_one_loads(tmp_path, monkeypatch):
-    monkeypatch.setattr(C.files, "EXERCISES_DIR", tmp_path)
+    monkeypatch.setattr(files, "EXERCISES_DIR", tmp_path)
     (tmp_path / "X-1.yaml").write_text("case: X-1\ncast:\n- who: Someone\n  role: protagonist\n",
                                        encoding="utf-8")
     assert C.cast_overlay() == {"X-1": [{"who": "Someone", "role": "protagonist"}]}
