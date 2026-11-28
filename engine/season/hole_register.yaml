@@ -8917,15 +8917,15 @@ rows:
 
   - id:        H-546
     tier:      1
-    hole:      "THE CORPUS OVERLAY CANNOT BIND A RESTATED NEED TO A TALLY, A CLOCK OR AN ENDING. B12b.15 (`09_WR_provided_arcs` edit 4) found three `wrongly stated` rows in `proposals/2026-11-12-subsystem-audit-suite/audits/09_WR_audit.md` section 13: ARC-47 and NSC-08 (a counter that never decreases: a tally), ARC-46 (purely from the passage of time: CR-89's institutional clock, B21d), ARC-52 (a ceiling eliminates a faction with nobody declaring it: an `endings` row, Jordan's content). `rosters.yaml: tally_axes.members` ships empty (B12b.13), `harness/exercises.py::classify` has no axis token class (only probe, `H-NN`, kind and verb), and a trial binding of `tally_axes` for NSC-08 graded INSTRUMENT-ERROR (`bound=False`, on no verb-table row): the refusal works as designed. The item's gate (the ARC lane's RUNS-UNDECLARED falling) is unobservable besides: `corpus_run --seasons 2` reads 57 ARC, 46 NPC, 103 total before and after (log diff identical, about 1200 s), because the overlay is read by `run_cases.grade`, not by `corpus_run`."
+    hole:      "THE CORPUS OVERLAY CANNOT BIND A RESTATED NEED TO A CLOCK OR AN ENDING. Of the `wrongly stated` rows in `proposals/2026-11-12-subsystem-audit-suite/audits/09_WR_audit.md` section 13 (`09_WR_provided_arcs` edit 4), two cases remain unbound: ARC-46 (purely from the passage of time: CR-89's institutional clock, B21d, which no register row or roster carries yet) and ARC-52 (a ceiling eliminates a faction with nobody declaring it: an `endings` row in `rosters.yaml: endings`, Jordan's content). The tally half is bound since B12b.15: `harness/exercises.py::classify` has an `axis:<id>` token class resolved against `rosters.yaml: tally_axes` (a token naming no member is unbound, INSTRUMENT-ERROR), and ARC-47's and NSC-08's two counter rows each bind to an authored axis (`rule_failures`, `military_failures`, [ASSUMPTION]-tagged content). Each of those two cases still holds one unmapped core row the axis does not carry (ARC-47 row 3, the value disclosed by her choice; NSC-08 row 4, the two responses diverging), so both still grade NOT-ASSESSED. The overlay is read by `run_cases.grade`, not by `corpus_run`, so the gate is read off `run_cases` verdicts."
     kind:      "MEASURED-GAP"
-    owner:     "a batch that authors one `tally_axes` member and adds a token class for it to `harness/exercises.py` (B21d for ARC-46 once CR-89 lands; the `endings` row of ARC-52 is Jordan's content)"
+    owner:     "B21d for ARC-46 once CR-89 lands a carrier an `exercises:` token can name; Jordan for ARC-52's `endings` row (content)"
     grade:     "measured"
-    default:   "unbound -- the four cases grade NOT-ASSESSED (3, 3, 4 and 3 unmapped core rows); no overlay row edited; B12b.15 built nothing"
-    site:      "`engine/season/cases/exercises/*.yaml`; `engine/season/harness/exercises.py` (classify, resolve); `engine/season/rosters.yaml` tally_axes"
-    sweep:     ["unbound (SHIPPED)", "one authored tally axis plus a token class"]
-    unblocks:  "B12b.15's binding of ARC-47 and NSC-08; a gate read off `run_cases` verdicts rather than RUNS-UNDECLARED"
-    cite:      "CONTROL: seed-0 one-season realm hash f316d39f826d77961fc3a97aa63355d8 @6708bca, unchanged. FALSIFIER: the trial binding, INSTRUMENT-ERROR."
+    default:   "ARC-46 and ARC-52 unbound, NOT-ASSESSED (4 and 3 unmapped core rows); ARC-47 and NSC-08 NOT-ASSESSED with 1 unmapped core row each (3 before B12b.15)"
+    site:      "`engine/season/cases/exercises/*.yaml`; `engine/season/harness/exercises.py` (classify, resolve); `engine/season/rosters.yaml` endings"
+    sweep:     ["ARC-46 and ARC-52 unbound (SHIPPED)", "a CR-89 clock token and an authored `endings` row"]
+    unblocks:  "ARC-46's and ARC-52's restated rows in the overlay"
+    cite:      "CONTROL: seed-0 one-season realm hash e026f117d4ecf9453cb92b1856ffc549 @d5a3c5b, equal with the two axes authored (of their kinds only `dispensation.ignored` reaches a ledger: at most 1 claim about one person per holder at seed 0 over two seasons, 2 at seed 1; `at` is 3, so a longer run can reach it: content's mover). FALSIFIER: an `axis:no_such_axis` token grades INSTRUMENT-ERROR; a real axis in the same synthetic case grades DECLARED-PRESENT."
     source:    "workplan v12 B12b.15 (block slot 6)"
 
   - id:        H-547

@@ -1,0 +1,24 @@
+# NSC-08 -- B12b.15 (`09_WR_provided_arcs` edit 4; `audits/09_WR_audit.md` section 13): the two core rows a private counter
+# carries, bound to its lawful form, the authored tally axis `rosters.yaml: tally_axes.military_failures`. The case file is not
+# edited: the case states what must be simulated, this overlay says by what. Row 4 (the two responses diverge) stays undeclared:
+# it is what follows the ultimatum, which the axis only opens. [ASSUMPTION; medium; Jordan to correct; revert: delete this file]
+case: NSC-08
+rows:
+- need_sha: ca322e82205c
+  hardness: core
+  need: "a specific institutional actor must maintain a private, not-directly-visible readiness counter that increments from
+    three independently-defined failure conditions, any one of which can fire in a given period"
+  exercises:
+  - axis:military_failures
+  from: "L3 clause 1's per-(person, axis) counter, `world_q.tally_reached`: the claims about the ruling authority of the axis's
+    three kinds (a field lost, a town yielded under arms, a holding handed away), each deposited by its own act in any season,
+    in the order's OWN ledger and nobody else's. At the count the question is mandatory (A-47); the ultimatum is the act drawn."
+- need_sha: 072e498c3e69
+  hardness: core
+  need: "the private readiness counter must be irreversible — once a condition fires and increments it, no subsequent event can
+    decrement it back, even if the underlying condition that caused the increment is later resolved"
+  exercises:
+  - axis:military_failures
+  from: "WRONGLY STATED (`09_WR_audit.md` section 13), RESTATED: a tally is what the order still holds. Each deposit adds one
+    claim; claims decay and are evicted by design, so a failure nobody refreshes fades. That replaces the irreversible counter
+    and is not softened (`09_WR_provided_arcs` edit 1)."

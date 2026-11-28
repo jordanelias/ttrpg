@@ -30,6 +30,12 @@ WHAT A TOKEN MAY BE, and what each resolves to:
                   probe, and it is authored per row rather than matched.
     <kind>        an Event kind (`record.created`). Satisfied when SOME `emits:` COLUMN OF PART D
                   OR PART E DECLARES IT -- a static table lookup, NOT a run.
+    axis:AID      a member of `rosters.yaml: tally_axes` (B12b.15, `09_WR_provided_arcs` edit 4): the
+                  lawful form of a private counter. Satisfied when the member is authored -- its
+                  kinds are held to the declared Event kinds at import (`data/verbs.py::
+                  _check_tally_axes`) and `world_q.tally_reached` reads it. Static, like a kind: it
+                  says the carrier exists, NOT that any tally filled in a run. A token naming no
+                  member is unbound, as an unknown probe is.
 
 ⚠ THE KIND TOKEN IS THE WEAKEST OF THE FOUR AND ITS OLD DESCRIPTION OVERSTATED IT. This line read
 *"satisfied when the kind appears in a run"*, which is what a reader of `CASELOG_*.md` would take
@@ -212,12 +218,14 @@ if __name__ == "__main__":
 # ---------------------------------------------------------------------------
 
 def classify(token: str) -> str:
-    """Which of the four shapes a token is. Derived from the token, never from a roster of
-    names: `probe:` is prefixed, a hole id matches `H-NN`, an Event kind carries a dot, and
-    anything else is a verb -- which the resolver then checks against the table rather than
-    assuming."""
+    """Which of the five shapes a token is. Derived from the token, never from a roster of
+    names: `probe:` and `axis:` are prefixed, a hole id matches `H-NN`, an Event kind carries a
+    dot, and anything else is a verb -- which the resolver then checks against the table rather
+    than assuming."""
     if token.startswith("probe:"):
         return "probe"
+    if token.startswith("axis:"):
+        return "axis"
     # The id shape has ONE owner: `register.py`, which validates it. Re-deriving it here
     # made `H-100` classify as a hole and fail validation — CLAUDE.md §8, "never
     # re-implement a rule", one module apart.
@@ -277,6 +285,18 @@ def resolve(token: str, *, probes, verb_table, resolvable, register, matrix) -> 
             return dict(ok=True, assumed=True, bound=True, kind=what, grade=g,
                         detail=f"{token}: assumption -- rests on an injected default")
         return dict(ok=True, bound=True, kind=what, detail=f"{token}: {g}", grade=g)
+    if what == "axis":
+        # B12b.15: the closed registry's one owner is `data/rosters.py::TALLY_AXES`, read at call time (as `EFFECTS` is below), so
+        # the token is bound by what the roster holds and by nothing typed here. `bound` and `ok` coincide, as for a kind: an
+        # authored member is a carrier that exists (its kinds were held to `EVENT_KINDS` at import); a missing one names nothing.
+        from ..data.rosters import TALLY_AXES
+        aid = token.split(":", 1)[1]
+        if aid not in TALLY_AXES:
+            return dict(ok=False, bound=False, kind=what, detail=f"no `tally_axes` member {aid!r}")
+        m = TALLY_AXES[aid]
+        return dict(ok=True, bound=True, kind=what, axis=aid,
+                    detail=f"{aid}: an authored tally axis ({m['at']} of {list(m['counts'])} about one {m['about']}; "
+                           f"static, not a run)")
     if what == "kind":
         # ⚠ THE UNION OVER BOTH TABLES, NOT A HARDCODED WORD. This read
         # `token in emitted or token == "term.matured"` -- A ONE-ELEMENT KIND LIST IN A PYTHON

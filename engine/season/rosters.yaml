@@ -4668,8 +4668,8 @@ rosters:
   tally_axes:
     source: "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)"
     note: >-
-      THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is
-      byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is
+      THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY at B12b.13 (the control: `world_q.tally_reached` returns `()` and
+      `questions_for` is byte-identical); B12b.15 authors two (below), content each, tagged. `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is
       reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent
       one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per
       (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the
@@ -4679,7 +4679,23 @@ rosters:
       (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial.
       `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).
     about_classes: [Person, Office, Rung]
-    members: {}
+    # B12b.15 (`09_WR_provided_arcs` edit 4; H-546): the two axes the corpus overlay binds ARC-47's and NSC-08's private-counter rows
+    # to (`exercises:` token `axis:<id>`, `harness/exercises.py::classify`). Each counts kinds whose deposit is ABOUT THE ACTOR
+    # (`state/attribution.py::anchor_of`, tier 1: an act-caused Event anchors on who acted), so the referent is the ruler whose own
+    # acts these are, read off the holder's own ledger. `at: 3` is the cases' own "three conditions". A held claim decays and is
+    # evicted, so the tally is what the holder STILL holds, not a counter that never falls (`09_WR_audit.md` §13's restatement).
+    members:
+      # ARC-47 ("The Counter She Keeps"): what an officer holds against the leadership she serves -- his writ made and moving no one
+      # (`dispensation.ignored`, the standing that did not hold), a town he yielded under arms (`place.surrendered`) and a holding
+      # he handed away (`rung.ceded`): territory lost without a field fought. The case's loyalty trigger has no kind here: a loyalty
+      # that falls is the follower's act, and its deposit is about the follower, not the leader.
+      # [ASSUMPTION; medium; Jordan to correct; revert: delete this member and ARC-47's two `axis:rule_failures` overlay rows]
+      rule_failures: {counts: [dispensation.ignored, place.surrendered, rung.ceded], about: person, at: 3}
+      # NSC-08 ("Ehrenwall's Coup"): the military order's readiness against the ruling authority -- a field he marched to and lost
+      # (`field.lost`, `march`'s Lost band, anchored on the marcher), a town he yielded under arms, a holding he handed away. At the
+      # count the question is mandatory (A-47) and its rows on a Person are the order's to choose among: the ultimatum is an act.
+      # [ASSUMPTION; medium; Jordan to correct; revert: delete this member and NSC-08's overlay file]
+      military_failures: {counts: [field.lost, place.surrendered, rung.ceded], about: person, at: 3}
 
 tables:
 
