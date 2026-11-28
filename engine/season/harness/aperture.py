@@ -97,9 +97,10 @@ whether the practice addend (`faculty`) separates persons in one verb, beside th
 (`watched_fold`), never recomputed from `faculty`.
 
 **BUILT OUT (IS-A-06).** A verb is *built out* when it has a CLEAN execution (an act `made` and not `refused`,
-whose Events the driver's `act_of` ties to it) whose Events hold every kind of `emits_at` for the band it
-folded, and, where its row declares writes, whose Events carry a `Receipt` (the gate mints one only for
-state that moved). The block prints one line per verb with its clean count and its `via` count (clean
+whose Events the driver's `act_of` ties to it) and, at some band declaration, every kind of `emits_at` for the
+band is held by the Events of the clean acts that folded at it together, one of them having written where its row
+declares writes (its Events carry a `Receipt`, which the gate mints only for state that moved; `built_out` states
+the rule). The block prints one line per verb with its clean count and its `via` count (clean
 executions through a seat), then `built out <k> of <len(VERB_TABLE)>` and a `FOUGHT FIELDS` line. It is a
 reading, never a threshold.
 
