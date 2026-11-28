@@ -27,8 +27,8 @@ from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, WAR_MOOD,
 from ..queries.world_q import CLAIM_MOOD, casus_ground, faction_props
 from ..data.rosters import CASUS_GROUNDS     # the trace's list of the grounds asked; which holds is `casus_ground`'s
 # B21c.04 (CR-36): the resolution a `nominated` seat's confirmation reads, and the creating Act's seat (`_eff_arrest`'s reading).
-from ..data.rosters import RECORD_CONTENT, RESOLUTION_KIND, RESOLUTION_SEAT_KEY
-from ..queries.world_q import issuing_seat
+from ..data.rosters import RECORD_CONTENT, RESOLUTION_SEAT_KEY
+from ..queries.world_q import held_resolutions, issuing_seat
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
@@ -113,6 +113,11 @@ def _refuse_at(clause: str, ids: str, said: Optional[str] = None) -> Answer:
 # ---------------------------------------------------------------------------
 
 
+# The verb whose act mints a `resolution` (`loop/effects_information.py::_eff_determine`'s Record disposal site): a `resolution` another
+# verb made -- a `create_record` declaring the kind -- is no body's decision and confirms nothing.
+_NOMINATING_VERBS = frozenset({"determine"})
+
+
 def confirming_resolutions(w: "World", actor: Optional[str], via: Optional[str], seat: Optional[str], conferee: Optional[str]) -> tuple:
     """v11 CR-36 (B21c.04) step 4: THE RESOLUTIONS THAT LICENSE `actor`'S `confer` OF `seat` ON `conferee` THROUGH `via` -- the ids, in tenure
     order, of the `resolution` Records (`data/rosters.py::RESOLUTION_KIND`) on `actor`'s own live `hold` edges whose `terms` is `seat` and
@@ -126,22 +131,14 @@ def confirming_resolutions(w: "World", actor: Optional[str], via: Optional[str],
     whose revocation basis is in `CONCURRED_BASES` (the carried motion a concurring body's `revoke` needs)."""
     out = []
     addressee = RECORD_CONTENT.get("addressee")
-    for t in w.tenures:
-        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
+    for rid in held_resolutions(w, actor):
+        said = w.records[rid].subject_matter
+        if said.get(RESOLUTION_SEAT_KEY) != seat or conferee not in (said.get(addressee) or ()):
             continue
-        rec = w.records[t.object]
-        said = rec.subject_matter if isinstance(rec.subject_matter, dict) else {}
-        if rec.kind != RESOLUTION_KIND or said.get(RESOLUTION_SEAT_KEY) != seat or conferee not in (said.get(addressee) or ()):
-            continue
-        made_through = issuing_seat(w, t.object, _NOMINATING_VERBS)
+        made_through = issuing_seat(w, rid, _NOMINATING_VERBS)
         if made_through is not None and made_through != via:
-            out.append(t.object)
-    return tuple(dict.fromkeys(out))
-
-
-# The verb whose act mints a `resolution` (`loop/effects_information.py::_eff_determine`'s Record disposal site): a `resolution` another
-# verb made -- a `create_record` declaring the kind -- is no body's decision and confirms nothing.
-_NOMINATING_VERBS = frozenset({"determine"})
+            out.append(rid)
+    return tuple(out)
 
 
 @requires_predicate("confer", clauses=("office", "basis", "term", "conferee", "purview", "nomination", "self_across_chains", "held",

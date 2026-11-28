@@ -138,7 +138,10 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
         if row["disposes"] == RECORD_DISPOSAL:
             # v12 B21c.04 (CR-36): its writer mints a `resolution` (the Record disposal site); it docks, and is no `record_rows` member
             w, d = _world(**JUDGE)
-            assert _kinds(_fold(w, d, _open("oc", arrangement=name, petition=_petition(w)))) == ["case.opened"], name
+            pet = _petition(w)
+            # a Record-disposing row docks only a petition that names a seat (`open_case` declines what `_eff_determine` would decline forever)
+            w.records[pet].subject_matter["terms"] = sorted(w.offices)[0]
+            assert _kinds(_fold(w, d, _open("oc", arrangement=name, petition=pet))) == ["case.opened"], name
             minting_rows.append(name)
             continue
         w, d = _world(**JUDGE)

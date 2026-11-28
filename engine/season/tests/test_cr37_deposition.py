@@ -27,7 +27,8 @@ import pytest
 
 from ..data.rosters import OFFICES_SEATS
 from ..loop.effects_information import _docket_item
-from ..state.carriers import Act, Office, Record, Tenure
+from ..state.carriers import Act, Record, Tenure
+from ._gov_fixtures import give_by_hand as _give_by_hand, holders as _holders, seat, vacate
 from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_u7_remit import JUDGE, OPENS, _fold, _kinds, _world
 
@@ -45,28 +46,22 @@ def _shipped(sid):
     return row
 
 
-def _seat(w, sid, post, rung, remit, holder, faction=None, shipped=False, body=None):
-    row = _shipped(sid) if shipped else {"body": body}
-    off = Office(sid, post, rung, list(remit), faction=faction, conferral=row.get("conferral"), revocation=row.get("revocation"),
-                 body=row.get("body"))
-    off.scope_rung = rung
-    w.offices[sid] = off
-    if holder is not None:
-        w.add_tenure(Tenure(f"t_seat_{sid}", holder, sid, "hold", since=0))
+def _shipped_terms(sid):
+    """The seat's `conferral`, `revocation` and `body` as its shipped `offices.yaml` row declares them."""
+    row = _shipped(sid)
+    return {"conferral": row.get("conferral"), "revocation": row.get("revocation"), "body": row.get("body")}
 
 
 def _court(**fx):
     w, d = _world(**fx)
-    for t in list(w.tenures):
-        if t.kind == "hold" and t.object == "off_duke":
-            t.until = 0
-    _seat(w, THRONE, "King", "R", ["issue", "determine", "confer", "revoke", "convene"], KING, CROWN, shipped=True)
-    _seat(w, DUCHY, "Duke", "D", ["issue", "determine", "confer", "revoke", "convene"], KING, CROWN, shipped=True)
-    _seat(w, TITLE, "Heir", "R", ["issue"], HEIR, CROWN)
+    vacate(w, "off_duke")
+    seat(w, THRONE, "King", "R", ["issue", "determine", "confer", "revoke", "convene"], KING, faction=CROWN, **_shipped_terms(THRONE))
+    seat(w, DUCHY, "Duke", "D", ["issue", "determine", "confer", "revoke", "convene"], KING, faction=CROWN, **_shipped_terms(DUCHY))
+    seat(w, TITLE, "Heir", "R", ["issue"], HEIR, faction=CROWN)
     w.offices[TITLE].conferral = "appointed"
-    _seat(w, REGENT_SEAT, "Dicastery", "R", ["issue", "determine"], REGENT, CROWN)
-    _seat(w, CONFESSOR, "Confessor", "R", ["issue", "determine", "confer", "revoke", "convene"], HOLY, shipped=True)
-    _seat(w, CHANCELLOR, "Chancellor", "R", ["issue", "revoke"], OTHER, CROWN)
+    seat(w, REGENT_SEAT, "Dicastery", "R", ["issue", "determine"], REGENT, faction=CROWN)
+    seat(w, CONFESSOR, "Confessor", "R", ["issue", "determine", "confer", "revoke", "convene"], HOLY, **_shipped_terms(CONFESSOR))
+    seat(w, CHANCELLOR, "Chancellor", "R", ["issue", "revoke"], OTHER, faction=CROWN)
     w.records[PETITION] = Record(PETITION, "R", "petition", subject_matter={"terms": THRONE, "to": None, "from": "R"})
     w.add_tenure(Tenure("t_pet_deposition", OTHER, PETITION, "hold", since=0))
     w.docket.append(_docket_item(KING, ROW, PETITION))
@@ -85,30 +80,26 @@ def _resolutions(w):
     return [rid for rid, r in w.records.items() if r.kind == "resolution"]
 
 
-def _holders(w, obj):
-    return [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == obj]
-
-
-def _give_by_hand(w, rid, to):
-    """H-229's residue: the resolution's one live `hold` closes and the receiver's opens -- `give`'s two edges, written by hand."""
-    held, = [t for t in w.tenures if t.kind == "hold" and t.live and t.object == rid]
-    held.until = w.tick
-    w.add_tenure(Tenure(f"t_given_{rid}_{to}", to, rid, "hold", since=w.tick))
-
-
 def _bans_on(w, who):
     return [t for t in w.tenures if t.kind == "ban" and t.live and t.subject == who]
 
 
-def _carried(actor=REGENT, via=REGENT_SEAT, **fx):
-    """A court whose motion carried, the resolution in the motion-maker's hand. Over act ids until the draw opens (shipped draws unless `fx`)."""
+def _opening(actor=REGENT, via=REGENT_SEAT, **fx):
+    """The first act id at which the motion carries, over act ids until the draw opens (shipped draws unless `fx`)."""
     for s in SEEDS:
         w, d = _court(**fx)
-        out = _fold(w, d, _determine(f"mo{s}", actor, via))
-        if out[0].degree in OPENS:
-            rid, = _resolutions(w)
-            return w, d, rid
+        if _fold(w, d, _determine(f"mo{s}", actor, via))[0].degree in OPENS:
+            return f"mo{s}"
     raise AssertionError("no act id carried the motion")
+
+
+def _carried(actor=REGENT, via=REGENT_SEAT, key=None, **fx):
+    """A court whose motion carried at act id `key` (else `_opening`'s), the resolution in the motion-maker's hand. The world is rebuilt."""
+    w, d = _court(**fx)
+    out = _fold(w, d, _determine(key or _opening(actor, via, **fx), actor, via))
+    assert out[0].degree in OPENS, _kinds(out)
+    rid, = _resolutions(w)
+    return w, d, rid
 
 
 # --- THE ROUTE EXECUTES, READ BY BAND ---------------------------------------------------------------------------------------------------
@@ -119,8 +110,9 @@ def test_carried_motion_and_concurrence_strip_the_throne_by_band():
     or Partial the throne-hold closes, no ban opens, the King's `off_duke_valorsmark` hold stays live and the heir's `succeed` is admitted
     (IN-61); at Failure `revocation.resisted` and the King keeps the throne. Never refused: the refusal arms are below."""
     checked, bands, claimed = 0, {}, 0
+    key = _opening()
     for s in SEEDS:
-        w, d, rid = _carried()             # the same carried motion each time (the first act id that opens); the world is rebuilt, never copied
+        w, d, rid = _carried(key=key)      # the same carried motion each time (the first act id that opens); the world is rebuilt, never copied
         assert w.records[rid].subject_matter == {"terms": THRONE, "to": [KING]}
         _give_by_hand(w, rid, HOLY)
         out = _fold(w, d, _revoke(f"rv{s}"))
@@ -218,7 +210,7 @@ def test_no_route_reaches_the_confessor():
     assert _shipped(CONFESSOR)["revocation"] != "joint_concurrence"
     assert _shipped(THRONE)["revocation"] == "joint_concurrence"
     w, d = _court(**JUDGE)
-    _seat(w, "off_see_vicar", "Vicar of the See", "R", ["issue", "revoke"], OTHER, body=w.offices[CONFESSOR].body)
+    seat(w, "off_see_vicar", "Vicar of the See", "R", ["issue", "revoke"], OTHER, body=w.offices[CONFESSOR].body)
     w.records["pet_conf"] = Record("pet_conf", "R", "petition", subject_matter={"terms": CONFESSOR, "to": None, "from": "R"})
     w.add_tenure(Tenure("t_pet_conf", OTHER, "pet_conf", "hold", since=0))
     w.docket[:] = [_docket_item(HOLY, ROW, "pet_conf")]

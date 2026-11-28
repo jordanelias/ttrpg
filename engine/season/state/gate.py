@@ -228,6 +228,10 @@ RECORD_DISPOSAL = "Record"
 DISPOSABLE_KINDS = frozenset(
     {UNDECLARED_DISPOSAL} | {row["disposes"] for row in ARRANGEMENTS.values()
                              if row["disposes"] in TENURE_KINDS and row["disposes"] != SEAT_DISPOSAL})
+# The two disposals a determination makes OFF `via`, about the seat the docketed petition's `terms` name (`world_q.petition_seat`), and the
+# whole set a determination may dispose of (`loop/effects_information.py::_determinable`, `_eff_open_case`).
+PETITIONED_DISPOSALS = frozenset({SEAT_DISPOSAL, RECORD_DISPOSAL})
+DETERMINABLE_DISPOSALS = DISPOSABLE_KINDS | PETITIONED_DISPOSALS
 # `warrant` (v9 SC-03a, K-52) -- an OPENING of a `detain` on a SEAT, for a person the
 # exercised seat's purview reaches, by a seated holder whose grant carries `WARRANT_ACT`. Named for
 # the instrument that licenses an arrest, in the ordinary word. AUTHORITY-BOUND ON `via` AND READING
@@ -738,7 +742,7 @@ FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRA
              "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM, DETERMINATION}),
              "nominated": frozenset({CONFERRAL}), None: frozenset()}
 # v11 CR-36 (B21c.04): THE CONFERRAL BASES WHOSE `confer` IS A CONFIRMATION -- admitted only on a `resolution` the confirming actor holds
-# (`loop/predicates.py::confirming_resolutions`, asked by `_req_confer` and again by `_eff_confer`). Keyed by basis, `_ELECTION_ASKS_FACTION`'s
+# (`loop/predicates.py::confirming_resolutions`, asked by `_req_confer` and again by `_eff_confer`). Keyed by basis, `_ELECTION_SKIPS_FACTION`'s
 # shape; refused at import by `check_filled_by` unless every member is a rostered basis the conferral basis opens.
 CONFIRMED_BASES = frozenset({"nominated"})
 
@@ -1070,10 +1074,10 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     return sits_over(w, w.offices[via], home_of(w).get(party))
 
 
-# v11 CR-35 (B21c.02) step 1: THE CONFERRAL BASES WHOSE ELECTION ASKS THE PARTY'S FACTION. An `elected` seat is filled from its own faction
+# v11 CR-35 (B21c.02) step 1: THE CONFERRAL BASES WHOSE ELECTION SKIPS THE PARTY'S FACTION. An `elected` seat is filled from its own faction
 # (the candidate holds a live `commit` to it, and to no second faction); an `inheritance` seat's contested succession drops the clause, so a
 # claimant of any faction may be judged (Baralta's claim, RS-23's contest). Every other basis the election arm does not open (`FILLED_BY`).
-_ELECTION_ASKS_FACTION = {"elected": True, "inheritance": False}
+_ELECTION_SKIPS_FACTION = frozenset({"inheritance"})
 
 
 def may_elect(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str], seat: Optional[Office],
@@ -1104,7 +1108,7 @@ def may_elect(w: "World", actor: Optional[str], via: Optional[str], party: Optio
     fac = seat_faction(w, seat.id)
     if fac is None or seat_faction(w, via) != fac:
         return False
-    if not _ELECTION_ASKS_FACTION.get(seat.conferral, True):
+    if seat.conferral in _ELECTION_SKIPS_FACTION:
         return True
     commits = {c.object for c in w.persons[party].tenures if c.kind == "commit" and c.live}
     others = {o for o in commits - {fac} if is_faction_proposition(o, w.propositions.get(o))}

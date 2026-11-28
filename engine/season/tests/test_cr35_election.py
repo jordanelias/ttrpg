@@ -17,14 +17,17 @@ The contested succession re-uses the world with a Crown throne (`off_king`, `inh
 """
 from __future__ import annotations
 
+import functools
+
 import pytest
 
 from ..data.rosters import faction_prop_id
 from ..loop.effects_information import _docket_item
 from ..queries import world_q
 from ..state import gate as G
-from ..state.carriers import Act, Office, Proposition, Record, Tenure
+from ..state.carriers import Act, Record, Tenure
 from ..state.ids import H
+from ._gov_fixtures import commit as _commit, holders as _seat_holders, ought, seat, vacate
 from .test_u7_remit import JUDGE, OPENS, _fold, _kinds, _world
 
 CHURCH, CROWN = "Church of Solmund", "Valorsmark"
@@ -33,17 +36,7 @@ ELECTORS = {"off_cardinal_justice": "p_high", "off_senior_inquisitor": "p_low"}
 JUDGE_SEAT, KING_SEAT = "off_cardinal_justice", "off_crown_bench"
 THRONE, TITLE, REGENT_SEAT = "off_king", "off_heir", "off_regent"
 SEEDS = range(40)
-
-
-def _commit(w, who, obj, key=None):
-    w.add_tenure(Tenure(key or f"cm_{who}_{obj}", who, obj, "commit", since=0))
-
-
-def _ought(w, who, pid, subject=CANDIDATE, predicate=SEAT):
-    """`who` commits to the OUGHT `pid` (minted if absent) about `subject` naming `predicate`."""
-    if pid not in w.propositions:
-        w.propositions[pid] = Proposition(pid, "OUGHT", subject, predicate, True, 0)
-    _commit(w, who, pid)
+_ought = functools.partial(ought, subject=CANDIDATE, predicate=SEAT)       # the OUGHT naming the candidate and the seat, unless a test says otherwise
 
 
 def _petition(w, party, seat, row):
@@ -52,24 +45,14 @@ def _petition(w, party, seat, row):
     w.docket.append(_docket_item(party, row, PETITION))
 
 
-def _seat(w, sid, post, rung, remit, faction, holder, n, conferral=None):
-    off = Office(sid, post, rung, list(remit), faction=faction, conferral=conferral)
-    off.scope_rung = rung
-    w.offices[sid] = off
-    if holder is not None:
-        w.add_tenure(Tenure(f"t_seat_{n}", holder, sid, "hold", since=0))
-
-
 def _church_world(**fx):
     w, d = _world(**fx)
-    for t in list(w.tenures):
-        if t.kind == "hold" and t.object == "off_duke":
-            t.until = 0
-    _seat(w, SEAT, "Confessor", "D", ["issue", "determine", "confer", "revoke", "convene"], CHURCH, None, 0, conferral="elected")
+    vacate(w, "off_duke")
+    seat(w, SEAT, "Confessor", "D", ["issue", "determine", "confer", "revoke", "convene"], None, faction=CHURCH, conferral="elected")
     w.add_tenure(Tenure("t_old_confessor", "p_other", SEAT, "hold", since=0, until=0))        # vacated
     for n, (sid, who) in enumerate(ELECTORS.items(), start=1):
-        _seat(w, sid, "Dicastery", "D", ["issue", "determine"], CHURCH, who, n)
-    _seat(w, KING_SEAT, "Dicastery", "R", ["issue", "determine"], CROWN, "p_king", 9)
+        seat(w, sid, "Dicastery", "D", ["issue", "determine"], who, f"t_seat_{n}", faction=CHURCH)
+    seat(w, KING_SEAT, "Dicastery", "R", ["issue", "determine"], "p_king", "t_seat_9", faction=CROWN)
     _commit(w, CANDIDATE, faction_prop_id(CHURCH))
     _petition(w, CANDIDATE, SEAT, "election")
     return w, d
@@ -81,10 +64,6 @@ def _determine(key, via=JUDGE_SEAT, actor="p_high", subject=CANDIDATE):
 
 def _holds(w, who, seat):
     return any(t.kind == "hold" and t.live and t.subject == who and t.object == seat for t in w.tenures)
-
-
-def _seat_holders(w, seat):
-    return [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
 
 
 def _bare_opening(w, actor, via, party, seat):
@@ -213,13 +192,11 @@ def test_uncommitted_bench_carries_less_often():
 
 def _succession_world(held=False, **fx):
     w, d = _world(**{**JUDGE, **fx})
-    for t in list(w.tenures):
-        if t.kind == "hold" and t.object == "off_duke":
-            t.until = 0
-    _seat(w, THRONE, "King", "R", ["issue", "determine", "confer", "revoke", "convene"], CROWN, "p_king" if held else None, 1,
-          conferral="inheritance")
-    _seat(w, REGENT_SEAT, "Dicastery", "R", ["issue", "determine"], CROWN, "p_high", 2)
-    _seat(w, TITLE, "Heir", "R", ["issue"], CROWN, "p_other", 3, conferral="appointed")
+    vacate(w, "off_duke")
+    seat(w, THRONE, "King", "R", ["issue", "determine", "confer", "revoke", "convene"], "p_king" if held else None, "t_seat_1",
+         faction=CROWN, conferral="inheritance")
+    seat(w, REGENT_SEAT, "Dicastery", "R", ["issue", "determine"], "p_high", "t_seat_2", faction=CROWN)
+    seat(w, TITLE, "Heir", "R", ["issue"], "p_other", "t_seat_3", faction=CROWN, conferral="appointed")
     _commit(w, CANDIDATE, faction_prop_id(CHURCH))          # the rival is of ANY faction: the party's faction clause is dropped
     _petition(w, CANDIDATE, THRONE, "succession")
     return w, d

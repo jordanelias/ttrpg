@@ -18,7 +18,8 @@ from ..data import rosters
 from ..data.rosters import SEEN_PREDICATE
 from ..epistemic import Seen
 from ..queries.person_q import rank
-from ..state.carriers import Claim, Office, Tenure
+from ..state.carriers import Claim
+from ._gov_fixtures import seat
 from .test_in12_conceal import DUKE, WATCHER, _convene, _witness, _world
 
 CHURCH, CROWN = "Church of Solmund", "Valorsmark"
@@ -26,8 +27,7 @@ CHURCH, CROWN = "Church of Solmund", "Valorsmark"
 
 def _seat(w, who, post, faction, key):
     """Seat `who` on a new office of `post` (a hand-built seat: the hold is stamped by `add_tenure`, as every world-built one is)."""
-    w.offices[f"off_{key}"] = Office(f"off_{key}", post, None, ["issue"], faction=faction)
-    w.add_tenure(Tenure(f"t_{key}", who, f"off_{key}", "hold", since=0))
+    seat(w, f"off_{key}", post, None, ["issue"], who, f"t_{key}", faction=faction)
 
 
 def _marks_after_convening(post, faction):

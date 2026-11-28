@@ -22,7 +22,8 @@ import pytest
 from ..loop.effects_information import _docket_item
 from ..queries import world_q
 from ..queries.person_q import vacant_named
-from ..state.carriers import Act, Claim, Office, Record, Tenure
+from ..state.carriers import Act, Claim, Record, Tenure
+from ._gov_fixtures import give_by_hand as _give_by_hand, holders as _holders, seat, vacate
 from .test_u7_remit import JUDGE, OPENS, _fold, _kinds, _open, _world
 
 CROWN = "Valorsmark"
@@ -32,22 +33,12 @@ ROW = "parliamentary_debate"
 SEEDS = range(40)
 
 
-def _seat(w, sid, post, rung, remit, faction, holder, conferral=None, body=None):
-    off = Office(sid, post, rung, list(remit), faction=faction, conferral=conferral, body=body)
-    off.scope_rung = rung
-    w.offices[sid] = off
-    if holder is not None:
-        w.add_tenure(Tenure(f"t_seat_{sid}", holder, sid, "hold", since=0))
-
-
 def _court(**fx):
     w, d = _world(**fx)
-    for t in list(w.tenures):
-        if t.kind == "hold" and t.object == "off_duke":
-            t.until = 0
-    _seat(w, CLERK, "Chief Parliamentary Clerk", "D", ["issue"], None, None, conferral="nominated", body="Ministries")
-    _seat(w, KING_SEAT, "King", "R", ["issue", "determine", "confer", "revoke", "convene"], CROWN, "p_king")
-    _seat(w, REGENT_SEAT, "Dicastery", "R", ["issue", "determine"], CROWN, "p_high")
+    vacate(w, "off_duke")
+    seat(w, CLERK, "Chief Parliamentary Clerk", "D", ["issue"], None, conferral="nominated", body="Ministries")
+    seat(w, KING_SEAT, "King", "R", ["issue", "determine", "confer", "revoke", "convene"], "p_king", faction=CROWN)
+    seat(w, REGENT_SEAT, "Dicastery", "R", ["issue", "determine"], "p_high", faction=CROWN)
     w.records[PETITION] = Record(PETITION, "Hh", "petition", subject_matter={"terms": CLERK, "to": None, "from": "Hh"})
     w.add_tenure(Tenure("t_pet", NOMINEE, PETITION, "hold", since=0))
     w.docket.append(_docket_item(NOMINEE, ROW, PETITION))
@@ -64,21 +55,6 @@ def _confer(key, to=NOMINEE, actor="p_king", via=KING_SEAT):
 
 def _resolutions(w):
     return {rid: r for rid, r in w.records.items() if r.kind == "resolution"}
-
-
-def _holder(w, rid):
-    return [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == rid]
-
-
-def _give_by_hand(w, rid, to):
-    """H-229's residue: the resolution's one live `hold` closes and the receiver's opens -- `give`'s two edges, written by hand."""
-    held, = [t for t in w.tenures if t.kind == "hold" and t.live and t.object == rid]
-    held.until = w.tick
-    w.add_tenure(Tenure(f"t_given_{rid}", to, rid, "hold", since=w.tick))
-
-
-def _clerk_holders(w):
-    return [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == CLERK]
 
 
 def _nominated(key, **fx):
@@ -108,7 +84,7 @@ def test_nominee_is_confirmed_on_a_held_resolution():
             continue
         (rid, rec), = made.items()
         assert rec.subject_matter == {"terms": CLERK, "to": [NOMINEE]}, rec.subject_matter
-        assert _holder(w, rid) == ["p_high"]
+        assert _holders(w,rid) == ["p_high"]
         assert world_q.issuing_seat(w, rid) == REGENT_SEAT
         assert not world_q.docketed(w, NOMINEE), "the matter stayed on the docket"
         nominated += 1
@@ -116,7 +92,7 @@ def test_nominee_is_confirmed_on_a_held_resolution():
         got = _fold(w, d, _confer(f"cf{s}"))
         assert "confer.refused" not in _kinds(got), _kinds(got)
         if got[0].degree in OPENS or got[0].degree == "Partial":
-            assert _clerk_holders(w) == [NOMINEE], (s, got[0].degree)
+            assert _holders(w,CLERK) == [NOMINEE], (s, got[0].degree)
             seated += 1
     assert checked >= 40
     assert nominated >= 1 and seated >= 1, (nominated, seated)
@@ -153,7 +129,7 @@ def test_confirmation_refusals(arm):
     assert "confer.refused" not in _kinds(_fold(w, d, act))
     w, d, act = _arm(arm)
     assert _kinds(_fold(w, d, act)) == ["confer.refused"], arm
-    assert _clerk_holders(w) == [], arm
+    assert _holders(w,CLERK) == [], arm
 
 
 def test_a_nominated_vacancy_is_offered_only_to_a_resolution_holder():
@@ -180,7 +156,7 @@ def test_a_petition_naming_no_seat_is_not_docked_for_a_seat_row():
     for row in (ROW, "election"):
         for terms, docks in ((CLERK, True), ("off_nowhere", False)):
             w, d = _world(**JUDGE)
-            _seat(w, CLERK, "Chief Parliamentary Clerk", "D", ["issue"], None, None, conferral="nominated", body="Ministries")
+            seat(w, CLERK, "Chief Parliamentary Clerk", "D", ["issue"], None, conferral="nominated", body="Ministries")
             w.records["pet_x"] = Record("pet_x", "Hh", "petition", subject_matter={"terms": terms, "to": None, "from": "Hh"})
             w.add_tenure(Tenure("t_pet_x", NOMINEE, "pet_x", "hold", since=0))
             out = _fold(w, d, _open(f"oc_{row}_{docks}", subject=NOMINEE, arrangement=row, petition="pet_x"))

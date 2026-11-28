@@ -727,11 +727,18 @@ def petitioned_seat(w: World, matter: Optional[str], disposes: str = SEAT_DISPOS
         row = ARRANGEMENTS.get(item.get(DOCKET_ARRANGEMENT))
         if row is None or row["disposes"] != disposes:
             continue
-        rec = w.records.get(item.get(DOCKET_PETITION))
-        said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
-        seat = said.get(ABOUT_KEYS.get(rec.kind)) if rec is not None else None
-        return seat if isinstance(seat, str) and seat in w.offices else None
+        return petition_seat(w, item.get(DOCKET_PETITION))
     return None
+
+
+def petition_seat(w: World, petition: Optional[str]) -> Optional[str]:
+    """THE OFFICE A PETITION'S `terms` NAME -- the about-key content (`person_q.ABOUT_KEYS`) of Record `petition` where it is an Office id;
+    else `None` (no such Record, content that is no dict, or terms naming no Office). The one reader `petitioned_seat` asks per docket item
+    and `loop/effects_information.py::_eff_open_case` asks before it docks a seat-filling or resolution-minting row."""
+    rec = w.records.get(petition)
+    said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+    seat = said.get(ABOUT_KEYS.get(rec.kind)) if rec is not None else None
+    return seat if isinstance(seat, str) and seat in w.offices else None
 
 
 def proceeding_row(w: World, act) -> tuple:
@@ -1114,15 +1121,16 @@ def declared_votes_by_member(w: World, matter: str, row: dict) -> dict:
     venue = place_of(w, matter)
     if venue is None:
         return {}
-    kind, signed = (petitioned_seat(w, matter) if row["disposes"] == SEAT_DISPOSAL else row["disposes"]), {}
-    if kind is None:
+    named = petitioned_seat(w, matter) if row["disposes"] == SEAT_DISPOSAL else row["disposes"]    # the predicate a counted commit names
+    if named is None:
         return {}
+    signed = {}
     for member in dict.fromkeys(judging_set(w, venue, matter)):
         p = w.persons.get(member)
         if p is None:
             continue
         n = sum((1 if w.propositions[i].value else -1) for i in ambitions(w, p)
-                if w.propositions[i].subject == matter and w.propositions[i].predicate == kind)
+                if w.propositions[i].subject == matter and w.propositions[i].predicate == named)
         if n:
             signed[member] = n
     return signed
@@ -4466,11 +4474,18 @@ def vacancies(w: World, p: Person) -> tuple:
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:
         return ()
-    held = [w.records[t.object] for t in p.tenures if t.kind == "hold" and t.live and t.object in w.records]
-    resolved = {r.subject_matter.get(RESOLUTION_SEAT_KEY) for r in held if r.kind == RESOLUTION_KIND and isinstance(r.subject_matter, dict)}
-    return tuple(o for o in sorted(ledger_names(p.ledger))
-                 if o in w.offices and vacant_named(p.ledger, o) and (w.offices[o].conferral not in CONFIRMED_BASES or o in resolved)
-                 and any(may_fill(w, p.id, s, w.offices[o]) for s in seats))
+    out, resolved = [], None        # the held resolutions' seats, read the first time a confirmed seat is met
+    for o in sorted(ledger_names(p.ledger)):
+        if o not in w.offices or not vacant_named(p.ledger, o):
+            continue
+        if w.offices[o].conferral in CONFIRMED_BASES:
+            if resolved is None:
+                resolved = {w.records[r].subject_matter.get(RESOLUTION_SEAT_KEY) for r in held_resolutions(w, p.id)}
+            if o not in resolved:
+                continue
+        if any(may_fill(w, p.id, s, w.offices[o]) for s in seats):
+            out.append(o)
+    return tuple(out)
 
 
 def recalls(w: World, p: Person) -> tuple:
@@ -4744,6 +4759,19 @@ def warrants_for(w: World, actor: str, named: str, verb: str = "arrest") -> tupl
     if p is not None:
         out.extend(rid for rid in addressed_records(w, p, kind) if w.records[rid].subject_matter.get(key) == named)
     return tuple(dict.fromkeys(out))
+
+
+def held_resolutions(w: World, person: Optional[str]) -> tuple:
+    """THE RESOLUTIONS `person` HOLDS (v11 CR-36, B21c.04) -- the ids, in tenure order and each once, of the Records of `RESOLUTION_KIND` on
+    his own live `hold` edges whose content is a dict (`RESOLUTION_SEAT_KEY` names the seat). `()` for no such person. Read by `vacancies`
+    (the seats a conferrer may confirm) and `loop/predicates.py::confirming_resolutions` (which of them licenses a conferee)."""
+    p = w.persons.get(person)
+    if p is None:
+        return ()
+    return tuple(dict.fromkeys(
+        t.object for t in p.tenures
+        if t.kind == "hold" and t.live and t.subject == person and t.object in w.records
+        and w.records[t.object].kind == RESOLUTION_KIND and isinstance(w.records[t.object].subject_matter, dict)))
 
 
 def warrants_heard(w: World, p: Person) -> tuple:

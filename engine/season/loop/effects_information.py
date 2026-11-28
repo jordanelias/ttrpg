@@ -36,12 +36,12 @@ from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
      siege_pressed_by, slot_for, warrants_for, works_for, works_target, WAR_MOOD,
-    CLAIM_MOOD, claim_id, petitioned_seat, plot_held, plot_id, target_seat,
+    CLAIM_MOOD, claim_id, petition_seat, petitioned_seat, plot_held, plot_id, target_seat,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, RECORD_DISPOSAL, SEAT_DISPOSAL, UNDECLARED_DISPOSAL, Change, Subject, may_cede,
+    DETERMINABLE_DISPOSALS, NO_CHANGE, PETITIONED_DISPOSALS, PLOT_MOOD, PLOT_PREDICATE, RECORD_DISPOSAL, SEAT_DISPOSAL, UNDECLARED_DISPOSAL, Change, Subject, may_cede,
     may_determine, may_seize,
     may_warrant, may_wage, seat_faction,
 )
@@ -206,7 +206,7 @@ def _determinable(row_id: str) -> bool:
     `disposes:` is `SEAT_DISPOSAL`, the `hold` a determination opens on the seat the docketed petition names (`election`, `succession`).
     v11 CR-36 (B21c.04): or `RECORD_DISPOSAL`, the `resolution` a determination mints (`parliamentary_debate`, `council_of_state`)."""
     row = ARRANGEMENTS[row_id]
-    return row["disposes"] in DISPOSABLE_KINDS | {SEAT_DISPOSAL, RECORD_DISPOSAL} and row["close"] != "consent"
+    return row["disposes"] in DETERMINABLE_DISPOSALS and row["close"] != "consent"
 
 
 def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0, case=None) -> dict:
@@ -480,12 +480,8 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         return NO_CHANGE
     # v11 CR-35/CR-36: A ROW THAT FILLS A SEAT OR MINTS A RESOLUTION ABOUT ONE docks only a petition whose `terms` name an Office -- else
     # `_eff_determine` (through `petitioned_seat`) declines the matter forever, the wedge `_determinable`'s docstring promises never to dock.
-    if arrangement is not None and ARRANGEMENTS[arrangement]["disposes"] in (SEAT_DISPOSAL, RECORD_DISPOSAL):
-        rec = w.records.get(petition) if petition is not None else None
-        said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
-        terms = said.get(ABOUT_KEYS.get(rec.kind)) if rec is not None else None
-        if not (isinstance(terms, str) and terms in w.offices):
-            return NO_CHANGE
+    if arrangement is not None and ARRANGEMENTS[arrangement]["disposes"] in PETITIONED_DISPOSALS and petition_seat(w, petition) is None:
+        return NO_CHANGE
     # B24p.24: THE OPENER'S ARRANGEMENT -- he arranges the sitting of the case he opens, `rig` a `rig_levels` member (a level outside it, or one that
     # is no number, is declined like a bad arrangement: the item would carry a rig no builder can read).
     if isinstance(rig, bool) or not isinstance(rig, (int, float)) or rig not in RIG_LEVELS:
