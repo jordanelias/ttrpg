@@ -49,3 +49,16 @@ cast:
   role: delegate she may hand administrative work to
   # who_acts[4]: "a retained clerk/deputy she may delegate to". No office: the case names no
   # institution the post belongs to.
+# B12b.21 `world:` -- `harness/corpus_run.py::world_overlay` says what each key does. The third core need turns on it: "the settlement itself
+# must be able to generate demands (a dispute, a SHORTFALL, an ambition)", and a case world with three anonymous people and a larder never
+# runs short. A cohort of six (seated through `seat_cohorts`, so it needs the six dwellings below), a larder of 8 grain and 4 salt that six
+# heads draw down, and the one food-producing Site the first draft named (`harbour`; the uniform endowment's `seam` is not named, so it is
+# not minted).
+# [ASSUMPTION; medium; Jordan to correct -- the weight, the two amounts and the Site set are content the case's text does not give;
+#  revert: delete this `world:` block]
+world:
+  cohort: {weight: 6}
+  stores: {grain: 8, salt: 4}
+  sites:
+    - harbour
+    - {kind: dwelling, count: 6}

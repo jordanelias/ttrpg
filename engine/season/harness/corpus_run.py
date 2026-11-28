@@ -51,7 +51,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_ENDOWMENT
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import GRADED_TASKS, PURSUIT_AXES, RUNG_KINDS, refuse_a_titled_post_off_its_rung
+from ..data.rosters import GRADED_TASKS, PURSUIT_AXES, RUNG_KINDS, SITE_KINDS, refuse_a_titled_post_off_its_rung, roster
 from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unspecified
@@ -64,7 +64,7 @@ from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from . import probes as P
 from . import run_cases as R
-from ..boot.realm import _check_office, _exercise_docs, _rescales_once, seed_pursuits, wants_of   # moved to `boot/` (B03c.01): the builder reads them too
+from ..boot.realm import _check_office, _exercise_docs, _rescales_once, seat_cohorts, seed_pursuits, wants_of  # moved to `boot/` (B03c.01): the builder reads them too
 RESCALES = _rescales_once()   # the one dict the builder reads, read here at import as before the move
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
@@ -296,6 +296,102 @@ def _check_cast(where: str, entries: list) -> None:
 
 CAST = cast_overlay()
 
+# B12b.21 (`07_SE_arc_needs` (a)): THE KEYS A CASE FILE'S `world:` BLOCK MAY CARRY. Closed, like `CAST_KEYS`.
+WORLD_KEYS = ("cohort", "stores", "sites")
+COHORT_KEYS = ("weight",)
+COUNTED_SITE_KEYS = ("kind", "count")
+
+
+def _check_world(where: str, block) -> None:
+    """A case's `world:` block, validated AT LOAD. See `world_overlay` for what each key means; this refuses, by name, an unknown key, a
+    `cohort:` that is not exactly `{weight}` with an int weight above 1 (S9: a cohort is more than one head), a `sites:` entry that is
+    not a `site_kinds` member (bare) or exactly `{kind, count}` with a positive int count, a kind named twice (one id each), and a
+    `stores:` that is not a mapping of `matter_kinds` member -> positive int. A block that names nothing refuses too: an author who wrote
+    it believes something was seated."""
+    if not isinstance(block, dict) or not block:
+        raise SystemExit(f"{where}: `world:` is {block!r}, not a non-empty mapping of {list(WORLD_KEYS)}")
+    extra = sorted(set(block) - set(WORLD_KEYS))
+    if extra:
+        raise SystemExit(f"{where}: `world:` has keys nothing reads: {extra} (the closed set is {list(WORLD_KEYS)})")
+    cohort = block.get("cohort")
+    if "cohort" in block:
+        wt = cohort.get("weight") if isinstance(cohort, dict) else None
+        if not isinstance(cohort, dict) or set(cohort) != set(COHORT_KEYS) or isinstance(wt, bool) or not isinstance(wt, int) or wt <= 1:
+            raise SystemExit(f"{where}: `world: cohort:` is exactly {{weight}}, an int above 1 (a cohort is more than one head) -- {cohort!r}")
+    if "stores" in block:
+        stores = block["stores"]
+        if not isinstance(stores, dict) or not stores:
+            raise SystemExit(f"{where}: `world: stores:` is a non-empty mapping of matter kind -> amount -- {stores!r}")
+        for k, n in stores.items():
+            if not isinstance(k, str) or k not in roster("matter_kinds"):
+                raise SystemExit(f"{where}: `world: stores:` names {k!r}, which is not a matter_kinds member")
+            if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+                raise SystemExit(f"{where}: `world: stores:` holds {n!r} of {k!r}, not a positive int (stores: omit a kind it does not hold)")
+    if "sites" in block:
+        if not isinstance(block["sites"], list):
+            raise SystemExit(f"{where}: `world: sites:` is a list of kinds or `{{kind, count}}` entries -- {block['sites']!r}")
+        seen: set = set()
+        for kind, count in _site_plan(block):
+            if not isinstance(kind, str) or kind not in SITE_KINDS:
+                raise SystemExit(f"{where}: `world: sites:` names {kind!r}, which is not a site_kinds member")
+            if isinstance(count, bool) or not isinstance(count, int) or count < 1:
+                raise SystemExit(f"{where}: `world: sites:` gives {kind!r} a count of {count!r}, not a positive int")
+            if kind in seen:
+                raise SystemExit(f"{where}: `world: sites:` names {kind!r} twice (one entry a kind: `{{kind: {kind}, count: n}}` says how many)")
+            seen.add(kind)
+
+
+def _site_plan(block: dict) -> list:
+    """`[(kind, count), ...]` a `world:` block's `sites:` mints, in authored order; the endowment's own kinds, one each, where it has no
+    `sites:`. An entry is a kind name (one Site) or `{kind, count}` (`count` Sites); the one place an entry's two halves are split, read by
+    `_check_world` at load and by `build_at`."""
+    if "sites" not in block:
+        return [(k, 1) for k in SITE_ENDOWMENT["uniform"]]
+    out = []
+    for e in block["sites"]:
+        if isinstance(e, dict):
+            if set(e) != set(COUNTED_SITE_KEYS):
+                raise SystemExit(f"`world: sites:` entry {e!r} is exactly {{kind, count}}")
+            out.append((e["kind"], e["count"]))
+        else:
+            out.append((e, 1))
+    return out
+
+
+def world_overlay() -> dict:
+    """B12b.21. The corpus's per-case `world:` authoring, `{case_id: block}` -- an OVERLAY read off the same `cases/exercises/*.yaml`
+    `cast_overlay` reads, for the same reason (the chain's case files are evidence this repo does not own).
+
+    ⚠ THE BLOCK IS `{cohort?, stores?, sites?}` (`WORLD_KEYS`), AND EACH KEY IS A BUILDER'S WRITE AT THE CASE'S OWN RUNG (the deepest non-person
+    rung, `build_at`'s `chain[0]`); a case with no block is built as before.
+      * `cohort: {weight: n}` seats one cohort there THROUGH `boot/realm.py::seat_cohorts`, the one owner of what a cohort is, so its
+        ceiling stands: a weight above the rung's `capacity` (the dwelling Sites it holds, floor 1) refuses `Forbidden`. A cohort of
+        weight 6 therefore needs six dwellings, which is what `sites:` is for.
+      * `stores: {kind: amount}` is that rung's larder at build (`Rung.stores`), each kind a `matter_kinds` member, each amount a positive int.
+      * `sites: [kind | {kind: <kind>, count: <n>}, ...]` REPLACES the uniform endowment (`harbour`, `seam`): the Sites the place has, `[]` a
+        place that makes no food. A bare name mints one Site (id `s_<kind>`, as the endowment does); `{kind, count}` mints `count`
+        (`s_<kind>_1` .. `s_<kind>_<count>`). A kind is named once.
+    ⚠ A MALFORMED BLOCK REFUSES AT LOAD (`_check_world`), as does a file carrying `world:` with no non-empty string `case:` and a `case:`
+    another file's `world:` already claimed. A `world:` on a `person`-scale case refuses at BUILD (`build_at`), the first place the case's
+    scale is known: the corpus's person-scale worlds stay rooms."""
+    out: dict = {}
+    files_of: dict = {}
+    for f, doc in _exercise_docs():
+        if "world" not in doc:
+            continue
+        case = doc.get("case")
+        if not isinstance(case, str) or not case.strip():
+            raise SystemExit(f"{f.name}: carries a `world:` but no non-empty string `case:` (found {case!r}) -- the block would be dropped without a sound")
+        if case in files_of:
+            raise SystemExit(f"{f.name}: `case: {case}` is already the case of {files_of[case]}'s `world:` -- the later file would silently replace the earlier one")
+        files_of[case] = f.name
+        _check_world(f.name, doc["world"])
+        out[case] = doc["world"]
+    return out
+
+
+WORLD = world_overlay()
+
 
 def seating(case: dict) -> tuple:
     """`(seated, waiting)` -- THE ONE RESOLVER OF A CASE'S `cast:` (plan position `17`), `build_at`'s
@@ -386,9 +482,14 @@ def build_at(case: dict, seed: int = 0) -> World:
         w.add_tenure(Tenure(f"t_{lower}_in_{upper}", ids[lower], ids[upper], "contain", 0))
     # B12a.51: a case world is the `uniform` endowment (`harbour`, `seam`), the control; looping every producing kind would mint a `field` here
     # the day `site_yield` holds the row, which is a Site no case ever carried.
-    for kind in SITE_ENDOWMENT["uniform"]:
-        w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
-                                      condition=w.fixtures.get("condition_scale"))
+    # B12b.21: a case's `world: sites:` replaces that endowment (`world_overlay`); a case with no block mints it as before, one id a kind.
+    block = WORLD.get(str(case.get("id"))) or {}
+    if block and (scale == "person" or not chain):
+        raise SystemExit(f"case {case.get('id')!r}: a `world:` block on a `scale: {scale}` case -- the corpus's person-scale worlds stay rooms")
+    for kind, count in _site_plan(block):
+        for n in range(1, count + 1):
+            sid = f"s_{kind}" if count == 1 else f"s_{kind}_{n}"
+            w.sites[sid] = Site(sid, ids[chain[0]], kind, condition=w.fixtures.get("condition_scale"))
     seated, _waiting = seating(case)
     pids = seat_ids(len(seated))
     by_pid = dict(zip(pids, seated))      # the entry each seated person stands for; the floor has none
@@ -541,6 +642,12 @@ def build_at(case: dict, seed: int = 0) -> World:
         prop = Proposition(f"prop_{pid}", "OUGHT", about, predicate, True, 0)
         w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
+    # B12b.21: THE CASE'S OWN `world:` LARDER AND COHORT, after the cast, at the rung the cast lives at. The cohort goes through
+    # `seat_cohorts` (its ceiling stands); it is no cast member, so the rotation above never named it.
+    if "stores" in block:
+        w.rungs[ids[chain[0]]].stores = dict(block["stores"])
+    if "cohort" in block:
+        seat_cohorts(w, [{"rung": ids[chain[0]], "weight": block["cohort"]["weight"]}])
     return w
 
 
