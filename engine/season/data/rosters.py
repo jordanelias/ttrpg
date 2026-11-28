@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from dataclasses import MISSING as _MISSING, dataclass as _dataclass, fields as _fields
 from fractions import Fraction
-from typing import Optional
+from typing import NamedTuple, Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
@@ -227,6 +227,28 @@ def _load_offices() -> dict:
                     needs="a positive whole number of seasons, or `null`",
                     law="`Tenure.term` is `Term(tick + n, act)` and `n` is a whole number of seasons >= 1 (`_declared_term`); a seat row's "
                         "`term:` is the default that `n` takes, so a malformed one would fabricate a term nobody declared")
+    # v11 CR-32 (B21c.01): `ladders:` -- per ladder its `faction` (a `factions` member), `livery` (a bool) and `posts` (a non-empty list of distinct names, lowest
+    # first). The key must be PRESENT as a mapping; `{}` is lawful and is the control (no post is stamped, shown or ranked), an absent key is not.
+    ladders = doc.get("ladders")
+    if not isinstance(ladders, dict):
+        raise Unspecified(
+            "offices.yaml has no `ladders:` mapping", "offices.yaml -- ladders",
+            needs="give `ladders:` its rows, or `{}` for none",
+            law="CR-32 -- a declared-but-absent section is not read as an empty one")
+    for lid, row in ladders.items():
+        posts = row.get("posts") if isinstance(row, dict) else None
+        ok = (isinstance(posts, list) and posts and all(isinstance(p, str) and p for p in posts) and len(set(posts)) == len(posts)
+              and isinstance(row.get("livery"), bool))
+        if not ok:
+            raise Unspecified(
+                f"offices.yaml ladder {lid!r} is not `{{faction:, livery: <bool>, posts: [<distinct names>]}}`", "offices.yaml -- ladders",
+                needs="a faction, a boolean `livery:` and a non-empty list of distinct post names, lowest first",
+                law="CR-32 -- a ladder is names and order only (A-12)")
+        require_member(
+            row.get("faction"), roster("factions"),
+            f"offices.yaml ladder {lid!r} names `faction: {row.get('faction')!r}`, which is not a `rosters.yaml: factions` member",
+            "offices.yaml -- ladders", needs="a member of `rosters.yaml: factions`",
+            law="CR-32 -- a ladder serves a roster faction; a sub-office ladder names the member it serves")
     # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
     # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
     # defaulted: a founding that defaulted would silently found a seat the data never described.
@@ -738,6 +760,18 @@ if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY
             "`reserve` and `general` are not keys")
 ORDER_ROLES = roster("order_roles", ordered=True)
 ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
+# v11 CR-36 (B21c.04): THE `record_kinds` MEMBER A BODY'S RESOLUTION IS -- `terms` the seat it names, the addressee key (`content.addressee`)
+# the person it names. Named once here, `ORDER_KIND`'s shape, for the mint (`loop/effects_information.py::_eff_determine`) and the read
+# (`loop/predicates.py::confirming_resolutions`). Refused at import if the roster stops carrying exactly those two keys: the mint would write a
+# key set the constructor refuses, and the confirmation would match nothing forever.
+RESOLUTION_KIND = "resolution"
+RESOLUTION_SEAT_KEY = "terms"
+if set(RECORD_KIND_KEYS.get(RESOLUTION_KIND, ())) != {RESOLUTION_SEAT_KEY, RECORD_CONTENT.get("addressee")}:
+    raise Unspecified(
+        f"record kind {RESOLUTION_KIND!r} does not carry exactly {RESOLUTION_SEAT_KEY!r} and the addressee key "
+        f"({RECORD_KIND_KEYS.get(RESOLUTION_KIND)!r})", "rosters.yaml -- record_kinds",
+        needs=f"a `{RESOLUTION_KIND}: [terms, to]` row, or the determination's Record disposal and `confer`'s confirmation retired",
+        law="v11 CR-36 -- a resolution names the seat and the nominee, and nothing else")
 # THE TWO ROSTERS OF WHO LEARNS A DOCUMENT'S CONTENT WITHOUT HOLDING IT, one shape: `{record_kinds member: verbs whose mint of
 # that kind the roster covers}`. `read_to_addressee` (B11 lane A) is "put to the addressee's face": the content reaches a witness
 # the document is ADDRESSED TO. `proclaimed` (B21.17, A-21) is "made public": the content reaches EVERYONE who learns of the
@@ -2102,6 +2136,14 @@ if set(FACTION_CREED) != {"mood", "predicate"} or not all(isinstance(v, str) and
         law="B21b.05 (IN-30) -- a creed Proposition is identified by its mood and predicate alone; any other key would be read by nothing")
 
 
+def is_faction_proposition(pid: str, prop=None) -> bool:
+    """IS `pid` A FACTION? (B21b.05, IN-30; the test moved here at B21c.02 so `state/gate.py`, which may not import `queries/`, asks the same
+    one.) A rostered faction id (`FACTION_BY_PROP`), or -- `prop` being the world's Proposition under `pid`, or `None` -- one of the creed
+    shape (`FACTION_CREED`): an EMERGED faction. `queries/world_q.py::faction_props` is this test over the world's Propositions."""
+    return pid in FACTION_BY_PROP or (prop is not None and prop.mood == FACTION_CREED["mood"]
+                                      and prop.predicate == FACTION_CREED["predicate"])
+
+
 def factions_compatible(a: str, b: str) -> bool:
     """MAY ONE PERSON BELONG TO BOTH `a` AND `b`? (B21.63, `16_PESSIMIST_FA_B` edit 3.) The two are FACTION NAMES, the roster's own
     (`FACTION_BY_PROP` turns a Proposition id into one). THE DEFAULT IS INCOMPATIBLE for two different rostered factions, and a
@@ -2112,6 +2154,14 @@ def factions_compatible(a: str, b: str) -> bool:
 
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
+# v11 CR-37 (B21c.05): THE BODIES WHOSE SEAT MAY CONCUR IN A JOINT-CONCURRENCE REVOCATION (`rosters.yaml: concurring_bodies`), read by
+# `state/gate.py::REVOCATION_RULES`. Refused at import when a member is no `office_bodies` member: a body no seat can belong to would
+# make the basis strippable by nobody, silently.
+CONCURRING_BODIES = roster("concurring_bodies")
+for _body in CONCURRING_BODIES:
+    require_member(_body, BODY_FACTION, f"rosters.yaml `concurring_bodies` names {_body!r}, which is not an `office_bodies` member",
+                   "rosters.yaml -- concurring_bodies", law="v11 CR-37 -- a concurring body is a body a seat can belong to",
+                   needs="a member of `office_bodies.faction`")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
 #: `{faction name: {territory: {code}, settlement: {code}}}` -- the factions whose persons and
 #: places exist only in a world built with `build_realm(foreign=True)` (v9 IN-36). A member of `FACTIONS` in
@@ -2745,6 +2795,50 @@ def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `offices.yaml: titles: domains:`. `None` for a post
     that is not a title -- a Dicastery is an office, not a rank."""
     return TITLE_DOMAINS.get(str(post or ""))
+
+
+# v11 CR-32 (B21c.01): THE RANK LADDERS, `offices.yaml: ladders:` -- a faction's posts, lowest first. The readers below answer from the module-level
+# `LADDERS` at call time (so `{}` is the control: no post is stamped on a `hold`, shown in `marks` or ranked), and are the ONE place the shapes
+# are read: `World._grant_remit` (the stamp), `epistemic._term_marks` (the show) and `queries/person_q.rank` (the order) ask these, never the dict.
+class Ladder(NamedTuple):
+    faction: str
+    livery: bool
+    posts: tuple
+
+
+LADDERS = {lid: Ladder(row["faction"], row["livery"], tuple(row["posts"])) for lid, row in _OFFICES_DOC["ladders"].items()}
+
+
+def ladder_stamp(post) -> Optional[str]:
+    """The `post` a seat's grant carries (`Tenure.post`): the seat's own `post` where it is a ladder post or a title, else `None` -- and `None` for
+    every seat while no ladder is declared, so a world without ladders carries the grant it always did."""
+    if not LADDERS or not isinstance(post, str):
+        return None
+    return post if title_domain(post) is not None or any(post in lad.posts for lad in LADDERS.values()) else None
+
+
+def shown_post(post) -> bool:
+    """Does a witness see `post` on its holder (`marks`)? A title, and a post on a ladder whose `livery` is true; never a post only an unmarked
+    ladder names (the Riskbreakers')."""
+    if not LADDERS or not isinstance(post, str):
+        return False
+    return title_domain(post) is not None or any(lad.livery and post in lad.posts for lad in LADDERS.values())
+
+
+def ladder_ordinals(posts) -> dict:
+    """`{ladder id: ordinal}` over the ladders `posts` stand on (rank 0 first; the highest where one holds two posts of a ladder)."""
+    out: dict = {}
+    for lid, lad in LADDERS.items():
+        at = [lad.posts.index(p) for p in posts if p in lad.posts]
+        if at:
+            out[lid] = max(at)
+    return out
+
+
+def title_ordinal(posts) -> Optional[int]:
+    """The highest `rung_kinds` ordinal among the titles in `posts` (a title governs a rung kind), or `None` where none is a title."""
+    at = [RUNG_KINDS.index(d) for d in (title_domain(p) for p in posts) if d is not None]
+    return max(at) if at else None
 
 
 def refuse_a_titled_post_off_its_rung(who: str, post, kind: str, rung_id: str) -> None:

@@ -728,15 +728,16 @@ def test_sc03a_an_open_case_under_a_seeded_arrangement_names_that_row_and_the_pe
 
 
 def test_sc03a_open_case_declines_an_arrangement_it_cannot_dispose_and_a_malformed_operand():
-    """COR2/COR6: a docket item naming a row whose `disposes:` is not a Tenure kind (a `Record`, or
-    `none`) would wedge the matter -- `determine` declines it forever and `docketed` blocks a second
+    """COR2/COR6: a docket item naming a row whose `disposes:` no determination writes (`none`, `yield`;
+    a `Record` row mints since B21c.04) would wedge the matter -- `determine` declines it forever and `docketed` blocks a second
     `open_case`. So `open_case` DECLINES it up front (`case.refused`), and the matter stays openable
     (CONTROL: the same matter opened with no arrangement executes). A list-valued arrangement or a
     dict-valued petition (unhashable) is declined, never raised.
     Mutation: drop the `disposes` test in `_eff_open_case` (red: the Record row dockets); drop the
     `isinstance` guards (red: `TypeError` out of the fold)."""
     w, d = _world()
-    record_rows = [n for n, r in sorted(ARRANGEMENTS.items()) if r["disposes"] not in G.DISPOSABLE_KINDS]
+    # B21c.02: a seat-filling row docks (`_determinable`); B21c.04: so does a `Record`-disposing row (its determination mints a `resolution`)
+    record_rows = [n for n, r in sorted(ARRANGEMENTS.items()) if r["disposes"] not in G.DISPOSABLE_KINDS | {G.SEAT_DISPOSAL, G.RECORD_DISPOSAL}]
     assert record_rows, "fixture: no seeded row disposes a non-Tenure kind"
     for i, row in enumerate(record_rows):
         assert _kinds(_fold(w, d, _open(f"oc{i}", arrangement=row))) == ["case.refused"], row
@@ -1191,9 +1192,11 @@ def test_sc03b_determine_is_a_contested_row_keyed_on_the_four_ladder_bands():
     # only on an edge the write opens, so `Tenure.degree` alone at Partial was unbuildable).
     # v9 SC-02 `22b` step 24: the two MOVING bands add the determiner's own `Person.pursuits` (and its
     # `pursuit.moved`) after the three disposal pairs; `Partial`, the held matter, moves nothing.
+    # v12 B21c.04 (CR-36): the two OPENING bands also declare `Record.exists`, LAST (a `disposes: Record` row's `resolution` mint); `Partial`
+    # does not, so a Partial on such a row mints nothing.
     assert row.writes_at("Failure") == () and row.writes_at("Partial") == tuple(
-        p for p in row.writes_at("Success") if p != "Person.pursuits")
-    assert row.writes_at("Success")[-1] == row.writes_at("Overwhelming")[-1] == "Person.pursuits"
+        p for p in row.writes_at("Success") if p not in ("Person.pursuits", "Record.exists"))
+    assert row.writes_at("Success")[-2:] == row.writes_at("Overwhelming")[-2:] == ("Person.pursuits", "Record.exists")
     assert "Tenure.degree" in row.writes_at("Success") and "Tenure.degree" in row.writes_at("Overwhelming")
     assert row.writes_at("Success")[0] == "Tenure.since"        # the opening is the first pair, the effect's
     assert row.emits_at("Failure") == ("matter.undetermined",)

@@ -12,12 +12,15 @@ The world is `test_u7_remit.py`'s (`probes.tiny_world`) with the Duke's seat end
 
 from __future__ import annotations
 
+import functools
+
 import pytest
 
 from ..data import arrangements as A
 from ..data.verbs import VERB_TABLE
 from ..queries import world_q
-from ..state.carriers import Office, Proposition, Tenure
+from ..state.carriers import Proposition
+from ._gov_fixtures import ought, seat, vacate
 from .test_u7_remit import JUDGE, PARTY, _determine, _fold, _kinds, _world
 
 ROW = "excommunication_deliberation"
@@ -29,23 +32,15 @@ JUDGE_SEAT = "off_cs1"
 def _church_world(row=ROW, **fx):
     """`tiny_world` with its Duke's hold ended and three Church seats on `D`; the accused `p_mid` docketed under `row`."""
     w, d = _world(**{**JUDGE, **fx})
-    for t in list(w.tenures):
-        if t.kind == "hold" and t.object == "off_duke":
-            t.until = 0
-    for n, (seat, who) in enumerate(SEATS.items()):
-        off = Office(seat, "Dicastery", "D", ["issue", "determine"], faction=CHURCH)
-        off.scope_rung = "D"
-        w.offices[seat] = off
-        w.add_tenure(Tenure(f"t_hold_{n}", who, seat, "hold", since=0))
+    vacate(w, "off_duke")
+    for n, (sid, who) in enumerate(SEATS.items()):
+        seat(w, sid, "Dicastery", "D", ["issue", "determine"], who, f"t_hold_{n}", faction=CHURCH)
     w.docket.append({"date": None, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: row,
                      world_q.DOCKET_PETITION: None})
     return w, d
 
 
-def _commit(w, who, prop_id, subject=PARTY, predicate="ban", mood="OUGHT", until=None, key=None):
-    if prop_id not in w.propositions:
-        w.propositions[prop_id] = Proposition(prop_id, mood, subject, predicate, True, 0)
-    w.add_tenure(Tenure(key or f"cm_{who}_{prop_id}", who, prop_id, "commit", since=0, until=until))
+_commit = functools.partial(ought, subject=PARTY, predicate="ban")      # an OUGHT that the party be banned, unless a test says otherwise
 
 
 def _vote_against(w, who, until=None):

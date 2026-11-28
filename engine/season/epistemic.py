@@ -48,7 +48,7 @@ from .data.requires import Observation
 from .data.rosters import (
     CLAIM_SUBJECT_RULES, COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
     REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, RUNG_KINDS, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
-    WITNESS_CHANNELS, require_member, roster)
+    WITNESS_CHANNELS, require_member, roster, shown_post)
 from .data.verbs import DEED_KINDS, EVENT_KINDS, VERB_TABLE
 from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act, live_cover
@@ -972,12 +972,17 @@ def _term_marks(w: "World", e: "Event", act, pid: str) -> Optional[tuple]:
     `()` for one whose is not -- `()` meaning *seen, and nothing describable* -- and `None` where there is no
     actor to see. Public at co-location, with no concealment, and deposited TRUE and verbatim like `who`.
 
+    CR-32 (B21c.01): AFTER the heritage, the SORTED posts of the actor's live `hold`s that a witness can see (`rosters.shown_post`: a title, or a post
+    of a ladder whose `livery` is true; the Riskbreakers' ladder shows nothing), as each `hold` carries it (`Tenure.post`). At no ladder declared no post
+    is stamped, so the answer is the heritage alone as before.
+
     ⚠ The case of a witness holding `marks` with `who` `None` (`R8` case (2)) is unreachable: the only
     channel that shows marks shows `who` too."""
     actor = w.persons.get(act.actor) if act is not None else None
     if actor is None:
         return None
-    return (actor.heritage,) if actor.heritage is not None else ()
+    posts = sorted({t.post for t in actor.tenures if t.live and t.kind == "hold" and shown_post(t.post)})
+    return ((actor.heritage,) if actor.heritage is not None else ()) + tuple(posts)
 
 
 def _term_who(w: "World", e: "Event", act, pid: str) -> Optional[str]:

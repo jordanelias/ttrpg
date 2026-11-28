@@ -176,7 +176,8 @@ def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
     three kinds, where the flat row (the control) emitted `confer.refused` for all three."""
     from .test_g3_not_yours import _gov_world
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
-    assert declared == ("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"), declared
+    # v12 B21c.04 (CR-36) adds `nomination` (a `nominated` seat with no confirming resolution), keyed `confer.refused`
+    assert declared == ("office", "basis", "term", "conferee", "purview", "nomination", "self_across_chains", "held", "displacement"), declared
     shipped = VERB_TABLE["confer"]
     assert shipped.refusals_by_clause, "the shipped confer row is flat: B21.80 keys it"
     assert shipped.precondition_evaluable(PR.REQUIRES_PREDICATES), "the shipped row's keys are not the predicate's clauses"
@@ -273,7 +274,8 @@ def test_a_refused_revoke_says_which_clause_refused_in_its_kind(monkeypatch):
     actor's ledger holds a claim keyed by each."""
     from .test_g3_not_yours import _SUCCESS, _gov_world
     declared = PR.REQUIRES_PREDICATES["revoke"].clauses
-    assert declared == ("office", "disposal", "authority", "keeps", "held"), declared
+    # v12 B21c.05 (CR-37) adds `concurrence` (a seat needing a carried motion, no resolution held), keyed `revoke.no_resolution`
+    assert declared == ("office", "disposal", "authority", "keeps", "held", "concurrence"), declared
     shipped = VERB_TABLE["revoke"]
     assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
     kinds = [shipped.refusals_by_clause[c] for c in declared]

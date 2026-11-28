@@ -29,8 +29,8 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.requires import Observation
 from ..data.rosters import (
-    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
-    SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
+    BAN_KIND, CONCURRING_BODIES, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
+    SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id, is_faction_proposition,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure, in_custody
@@ -215,9 +215,23 @@ BENCH_BASIS = "determine"
 # split, below), so *the kind the docketed row disposes* is the effect's to read, and the gate bounds
 # it by *a kind some row disposes* -- derived from `arrangements.yaml`, never listed here.
 UNDECLARED_DISPOSAL = "oblige"
+# v11 CR-35 (B21c.02): THE KIND A ROW DISPOSES WHEN IT FILLS A SEAT -- `election` and `succession` (`arrangements.yaml`) dispose a `hold`, and
+# the determination opens it on the seat the docketed petition's `terms` name (`world_q.petitioned_seat`), NEVER on the seat exercised: the
+# gate's election arm (`may_elect`) is its basis. So it is NOT a member of `DISPOSABLE_KINDS`, the kinds a determination opens ON `via`:
+# were it one, the clause below would admit a bench installing someone in its own seat, which no effect writes (the planted falsifier
+# `test_u7_remit.py` names). `loop/effects_information.py::_determinable` admits a row disposing either.
+SEAT_DISPOSAL = "hold"
+# v11 CR-36 (B21c.04): THE `disposes:` A ROW DECLARES WHEN ITS DETERMINATION MINTS A DOCUMENT (`parliamentary_debate`, `council_of_state`):
+# not a Tenure kind, so not a `DISPOSABLE_KINDS` member; `loop/effects_information.py::_eff_determine` mints a `resolution` into the
+# determiner's hand under it, and `_determinable` admits it. The gate admits that mint as any mint (the maker's own `hold`, `T-m`).
+RECORD_DISPOSAL = "Record"
 DISPOSABLE_KINDS = frozenset(
     {UNDECLARED_DISPOSAL} | {row["disposes"] for row in ARRANGEMENTS.values()
-                             if row["disposes"] in TENURE_KINDS})
+                             if row["disposes"] in TENURE_KINDS and row["disposes"] != SEAT_DISPOSAL})
+# The two disposals a determination makes OFF `via`, about the seat the docketed petition's `terms` name (`world_q.petition_seat`), and the
+# whole set a determination may dispose of (`loop/effects_information.py::_determinable`, `_eff_open_case`).
+PETITIONED_DISPOSALS = frozenset({SEAT_DISPOSAL, RECORD_DISPOSAL})
+DETERMINABLE_DISPOSALS = DISPOSABLE_KINDS | PETITIONED_DISPOSALS
 # `warrant` (v9 SC-03a, K-52) -- an OPENING of a `detain` on a SEAT, for a person the
 # exercised seat's purview reaches, by a seated holder whose grant carries `WARRANT_ACT`. Named for
 # the instrument that licenses an arrest, in the ordinary word. AUTHORITY-BOUND ON `via` AND READING
@@ -620,7 +634,19 @@ def seated_on_the_same_rung(w: "World", seat: Office, off: Office) -> bool:
 
 REVOCATION_RULES = {"rung_above_same_faction": lambda w, actor, seat, off: seated_on_the_rung_above(w, seat, off),
                     "rung_above_in_holdings": seated_on_the_rung_above_in_holdings,
-                    "same_rung_same_faction": lambda w, actor, seat, off: seated_on_the_same_rung(w, seat, off)}
+                    "same_rung_same_faction": lambda w, actor, seat, off: seated_on_the_same_rung(w, seat, off),
+                    # v11 CR-37 (B21c.05) step 3: the revoking seat belongs to a body named in `rosters.yaml: concurring_bodies` (the Holy
+                    # See). STRUCTURAL, as ruling (3) is; the motion half is the record conjunct (`CONCURRED_BASES`, below), not here.
+                    "joint_concurrence": lambda w, actor, seat, off: seat.body in CONCURRING_BODIES}
+# v11 CR-37 (B21c.05) step 4: THE REVOCATION BASES WHOSE `revoke` NEEDS A CARRIED MOTION -- admitted only where the revoking actor holds a
+# live `resolution` naming the seat and its current holder, made by a determination through a seat other than `via`
+# (`loop/predicates.py::confirming_resolutions`, CR-36's reader, asked by `_req_revoke` and again by `_eff_revoke`). The gate reads Tenures
+# and never a Record's content (K-52), so the conjunct is the precondition's and the effect's. Keyed by basis, `CONFIRMED_BASES`' shape.
+CONCURRED_BASES = frozenset({"joint_concurrence"})
+if not CONCURRED_BASES <= set(REVOCATION_BASES):
+    raise Unspecified(
+        f"concurred revocation bases {sorted(CONCURRED_BASES)} are not all `revocation_bases` members", "state/gate.py -- CONCURRED_BASES",
+        needs="name only rostered revocation bases", law="v11 CR-37 -- a conjunct keyed on a basis no seat can declare reaches nothing")
 # ⚠ REFUSED AT IMPORT, NOT IN THE FOLD. A member with no rule, or a rule for no member, is drift
 # between data and code; raised from inside `_req_revoke` it would escape the fold (the `13f`
 # lesson), and dispatched by fall-through it would run a new basis as some other one.
@@ -656,8 +682,11 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
 # `revocation` is `null`); were one revocable, the deposed heir is not banned from a seat he never held
 # by appointment [ASSUMPTION; medium; Jordan to correct; revert: drop the key -- the import check then
 # refuses `inheritance` until it has one].
+#
+# v11 CR-36 (B21c.04): `nominated` -> a `ban`, as `appointed`: a confirmed nominee is an appointee
+# [ASSUMPTION; medium; Jordan to correct; revert: None].
 REVOCATION_DISPOSAL = {"appointed": BAN_KIND, "elected": None, "annex": None, "inheritance": None,
-                       None: None}
+                       "nominated": BAN_KIND, None: None}
 
 
 def check_revocation_disposal() -> None:
@@ -700,12 +729,26 @@ check_revocation_disposal()
 # (`filled_by`, or this module's attribute), `REVOCATION_DISPOSAL`'s rule, so an in-place mutation
 # reaches every reader [ASSUMPTION; medium; Jordan to correct; revert: no `FILLED_BY` (every basis
 # passes `confer`); the claim opens the throne only].
-FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRAL}),
-             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM}), None: frozenset()}
+# v11 CR-35 (B21c.02): `elected` and `inheritance` GAIN THE DETERMINATION'S ELECTION ARM (`determination`, `may_elect`): an elected seat
+# is filled by its faction's bench, and a vacant throne by a bench ruling between claimants (the contested succession). `elected` KEEPS
+# `conferral` here: dropping it is CR-35 (8)'s measured narrowing (B21c.03), not this item's. [ASSUMPTION; medium; Jordan to correct;
+# revert: drop `DETERMINATION` from both -- no seat is filled by a bench.] `has_filler` and `check_successions` do not count the arm: an
+# electorate may be empty (a seat whose faction holds no other judging seat stays vacant once vacated), and no computed docket item names
+# an election (REACH 0), so neither the found-a-seat precondition nor the import check moves on it.
+# v11 CR-36 (B21c.04): `nominated` IS FILLED BY THE CONFERRAL BASIS -- the confirming seat's `confer`. The gate reads Tenures and never a
+# Record's content (K-52), so the confirmation (a held `resolution` naming seat and conferee, made through another seat) is the
+# precondition's and the effect's (`loop/predicates.py::confirming_resolutions`), not a conjunct here.
+FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRAL, DETERMINATION}),
+             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM, DETERMINATION}),
+             "nominated": frozenset({CONFERRAL}), None: frozenset()}
+# v11 CR-36 (B21c.04): THE CONFERRAL BASES WHOSE `confer` IS A CONFIRMATION -- admitted only on a `resolution` the confirming actor holds
+# (`loop/predicates.py::confirming_resolutions`, asked by `_req_confer` and again by `_eff_confer`). Keyed by basis, `_ELECTION_SKIPS_FACTION`'s
+# shape; refused at import by `check_filled_by` unless every member is a rostered basis the conferral basis opens.
+CONFIRMED_BASES = frozenset({"nominated"})
 
 # The gate bases that OPEN a `hold` on a seat -- what a `FILLED_BY` value may name. Every other basis
 # refuses a seat-hold opening by construction (`T-m`'s seat carve-out; `handover` is non-seat only).
-_SEAT_OPENERS = frozenset({CONFERRAL, CLAIM})
+_SEAT_OPENERS = frozenset({CONFERRAL, CLAIM, DETERMINATION})
 
 
 def check_filled_by() -> None:
@@ -730,6 +773,12 @@ def check_filled_by() -> None:
             "state/gate.py -- FILLED_BY",
             needs=f"each conferral basis maps to a non-empty subset of {sorted(_SEAT_OPENERS)}",
             law="v10 IN-61 (RS-27) -- a seat is filled by a basis that can open its `hold`, or by nothing")
+    stray = sorted(b for b in CONFIRMED_BASES if b not in CONFERRAL_BASES or CONFERRAL not in FILLED_BY.get(b, ()))
+    if stray:
+        raise Unspecified(
+            f"confirmed bases {stray!r} are not rostered conferral bases the conferral basis opens", "state/gate.py -- CONFIRMED_BASES",
+            needs="name only `conferral_bases` members whose `FILLED_BY` value holds `conferral`",
+            law="v11 CR-36 -- a confirmation is a `confer`; a basis `confer` cannot fill confirms nothing")
 
 
 check_filled_by()
@@ -761,7 +810,7 @@ def check_successions() -> None:
                   for k in SUCCESSIONS if k in rows
                   and CLAIM not in FILLED_BY.get(rows[k].get("conferral"), ()))
     bad += sorted(f"{i} (conferral {r.get('conferral')!r}): no title passes it"
-                  for i, r in rows.items() if FILLED_BY.get(r.get("conferral")) == frozenset({CLAIM})
+                  for i, r in rows.items() if FILLED_BY.get(r.get("conferral"), frozenset()) & {CONFERRAL, CLAIM} == {CLAIM}
                   and i not in SUCCESSIONS)
     if bad:
         raise Unspecified(
@@ -881,6 +930,14 @@ def may_revoke(w: "World", actor: Optional[str], via: Optional[str], off: Office
     if off.revocation not in REVOCATION_BASES:
         return False
     return REVOCATION_RULES[off.revocation](w, actor, w.offices[via], off)
+
+
+def may_dismiss(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:
+    """MAY `actor`, EXERCISING `via`, DISMISS THE HOLDER OF `off` ON HIS OWN AUTHORITY? `may_revoke`, less the seats whose basis is in
+    `CONCURRED_BASES`: such a seat is strippable only with a carried motion (the record conjunct `_req_revoke` and `_eff_revoke` ask),
+    so the concurring seat does not command its holder. A-22 class (ii)'s one reader (`commands_a_seated`, `world_q.recalls`,
+    `boot/realm.py::seed_command_knowledge`); `may_revoke` stays the gate's write basis."""
+    return may_revoke(w, actor, via, off) and off.revocation not in CONCURRED_BASES
 
 
 def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:
@@ -1008,12 +1065,54 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     arrangement row disposes (`DISPOSABLE_KINDS`) and CLOSES `detain`/`ban` only
     (`RESTRAINT_KINDS`), and this predicate, the authority half, is asked unchanged for both. The clause sits BEFORE the `if seat is None`
     branch, so a disposal edge on the judging seat is judged here and never reaches `T-o`/`conferral`
-    (which claim every seat-`hold`); a `hold` is not a `DISPOSABLE_KIND` and no row disposes one."""
+    (which claim every seat-`hold`); a `hold` is not a `DISPOSABLE_KIND`: the rows that dispose one (`SEAT_DISPOSAL`) open it on ANOTHER
+    seat, by `may_elect` (CR-35, B21c.02)."""
     if not _seat_grants(w, actor, via, BENCH_BASIS):
         return False
     if party is None or party == actor or party not in w.persons:
         return False
     return sits_over(w, w.offices[via], home_of(w).get(party))
+
+
+# v11 CR-35 (B21c.02) step 1: THE CONFERRAL BASES WHOSE ELECTION SKIPS THE PARTY'S FACTION. An `elected` seat is filled from its own faction
+# (the candidate holds a live `commit` to it, and to no second faction); an `inheritance` seat's contested succession drops the clause, so a
+# claimant of any faction may be judged (Baralta's claim, RS-23's contest). Every other basis the election arm does not open (`FILLED_BY`).
+_ELECTION_SKIPS_FACTION = frozenset({"inheritance"})
+
+
+def may_elect(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str], seat: Optional[Office],
+              besides: Optional[Tenure] = None) -> bool:
+    """THE DETERMINATION'S ELECTION ARM, AS ONE PREDICATE (v11 CR-35 step 1, B21c.02): may `actor`, exercising `via`, open a `hold` on `seat`
+    for `party` -- fill a seat by the bench's determination?
+
+    `may_determine`'s first two conjuncts, then the seat's: (1) `via` is a judging seat the actor sits in, not detained (`_seat_grants` of
+    `BENCH_BASIS`); (2) `party` is a person other than the actor, and may sit -- composed on `may_sit` itself (B21.60), which
+    `may_determine` does not ask; (3) `seat` is not `via`, and has no live
+    `hold` but `besides` (one per object -- the opened edge itself, when the gate asks after the write); (4) `FILLED_BY[seat.conferral]`
+    names `determination`; (5) `via`'s faction is `seat`'s (`seat_faction`, both sides) -- the electorate is the seat's own faction's bench;
+    (6) for an `elected` seat the party holds a LIVE `commit` to that faction's Proposition and none to a second faction Proposition
+    (`is_faction_proposition`, the one test) -- `may_muster`'s shape: the gate reads the Tenure and may not import `queries/`. The
+    contested succession (`inheritance`) drops (6).
+    NO CONTAINMENT WALK (`judging_set`'s electorate, step 3): an elector judges where he sits, and the seat filled is his faction's wherever
+    the candidate stands -- `may_determine`'s third conjunct (the bench's ground holds the party) is the disposal-on-`via` rule, not this.
+    TWO READERS, `may_fill`'s shape: the precondition's `bench` stem asks it BEFORE the write (`besides` `None`) and `tenure_write_basis`
+    AFTER (`besides` the opened edge), so the fold refuses (`determine.refused`) what the gate would raise."""
+    if seat is None or not _seat_grants(w, actor, via, BENCH_BASIS) or via == seat.id:
+        return False
+    if party is None or party == actor or not may_sit(w, party):
+        return False
+    if DETERMINATION not in filled_by(seat):
+        return False
+    if any(t is not besides and t.kind == "hold" and t.object == seat.id and t.live for t in w.tenures):
+        return False
+    fac = seat_faction(w, seat.id)
+    if fac is None or seat_faction(w, via) != fac:
+        return False
+    if seat.conferral in _ELECTION_SKIPS_FACTION:
+        return True
+    commits = {c.object for c in w.persons[party].tenures if c.kind == "commit" and c.live}
+    others = {o for o in commits - {fac} if is_faction_proposition(o, w.propositions.get(o))}
+    return fac in commits and not others
 
 
 def may_warrant(w: "World", actor: Optional[str], via: Optional[str],
@@ -1145,15 +1244,15 @@ def may_admit(w: "World", person: Optional[str], faction: Optional[str]) -> bool
 
 def commands_a_seated(w: "World", actor: Optional[str], via: Optional[str], person: Optional[str]) -> bool:
     """DOES `via` COMMAND `person` BY THE FIRST TWO OF A-22's CLASSES (B21.59)? (i) he is SWORN to the seat (a live `oblige`,
-    `sworn_to`), wherever he lives; (ii) he holds a seat OTHER than `via` that `actor`, exercising `via`, may revoke
-    (`may_revoke`), so whom a seat may order and whom it may dismiss are one relation. The third class, an unseated person in
+    `sworn_to`), wherever he lives; (ii) he holds a seat OTHER than `via` that `actor`, exercising `via`, may dismiss
+    (`may_dismiss`), so whom a seat may order and whom it may dismiss are one relation. The third class, an unseated person in
     its land, is `world_q.commands`' own (it reads where he stands). ONE BODY, TWO READERS: `world_q.commands` composes on it
     and `may_levy` asks it of a SEATED cohort (the A-22 arm), so neither keeps a second copy of the two disjuncts."""
     if person is None or via not in w.offices or person not in w.persons:
         return False
     if is_sworn_to(w, person, via):
         return True
-    return any(may_revoke(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
+    return any(may_dismiss(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
 
 
 def may_levy(w: "World", actor: Optional[str], via: Optional[str], cohort: Optional[str], faction: Optional[str]) -> bool:
@@ -1162,7 +1261,7 @@ def may_levy(w: "World", actor: Optional[str], via: Optional[str], cohort: Optio
     `MUSTER_ACT`, he is not in custody); `seat_faction(via) == faction`; `purview_reaches(via's seat, the rung the cohort LIVES
     in)` (`lives_in`, his own `reside` edge). A-22: the basis is command over the unseated on the seat's ground, so a cohort that
     holds a seat is levied through `via` only if the seat commands him (`commands_a_seated`: sworn to it, or a holder of a seat it
-    may revoke) -- living on its ground is not enough.
+    may dismiss) -- living on its ground is not enough.
 
     ⚠ NOT HERE: the entry's fifth conjunct, `world_q.raisable_by` (the faction governs where the cohort lives, or the cohort is
     committed to it) -- a Query, which `state/` may not import (`04` §A.2). `_eff_recruit` and `harness/military_menu.py::
@@ -1393,7 +1492,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   the effect declines one -- one live disposal of a kind per person and seat,
                   `_req_oblige`'s rule). The term an opening carries is the opening act's
                   declaration (T-n), as `_eff_oblige`'s is, so it is the edge's own and not a write
-                  this basis judges.
+                  this basis judges. AND (v11 CR-35, B21c.02) ITS ELECTION ARM: an OPENING of a
+                  `hold` on a seat OTHER than `via`, by `may_elect` -- a bench of the seat's faction
+                  filling it (`election`), or ruling between claimants to a vacant throne
+                  (`succession`).
       `warrant`   an OPENING of a `detain` whose OBJECT is a seat, owned by a person other than
                   the actor, by `may_warrant` -- `via` a seat the actor sits in, granted
                   `WARRANT_ACT`, whose purview reaches where the prisoner is. v9 SC-03a, K-52;
@@ -1550,6 +1652,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
             and ((opened and t.kind in DISPOSABLE_KINDS)
                  or (closed and t.kind in RESTRAINT_KINDS))
             and may_determine(w, actor, via, t.subject)):
+        return DETERMINATION
+    # v11 CR-35 (B21c.02) step 1: THE ELECTION ARM -- the same basis, the other object. An OPENED `hold` on a SEAT OTHER THAN `via`, for a
+    # person `may_elect` admits (the seat vacant but for this edge, its basis opened by the determination, `via` of the seat's faction, and,
+    # for an `elected` seat, the party committed to that faction alone). Asked before `conferral` claims the seat-hold below, so a bench that
+    # also holds `confer` over the seat is judged as the bench it acts as.
+    if (opened and seat is not None and via is not None and t.object != via
+            and may_elect(w, actor, via, t.subject, seat, besides=t)):
         return DETERMINATION
     # B21b.16 (CP-T09-07 (a), AM-F-15): THE RETENTION. An OPENED `oblige` on the seat exercised, owned by another person, that is an OATH (not a bench's
     # imposed edge: `determination`'s) -- by a seated holder granted `RETAIN_ACT` (`may_retain`). Opening only: the man's own way out is `release`, `T-m`.

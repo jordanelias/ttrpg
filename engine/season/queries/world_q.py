@@ -41,8 +41,9 @@ from ..data.rosters import (
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ALL_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     DECLARED, GROWN_KINDS, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    RESOLUTION_KIND, RESOLUTION_SEAT_KEY,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TALLY_AXES, TENURE_KINDS, TITLE_DOMAINS,
-    FACTION_CREED, faction_prop_id, factions_compatible, settlement_rung_id,
+    FACTION_CREED, faction_prop_id, factions_compatible, is_faction_proposition, settlement_rung_id,
     CASUS_GROUNDS,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
@@ -71,6 +72,8 @@ from .person_q import (
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
 from .person_q import holders_named, vacant_named
+# v11 CR-35 (B21c.02): the seat a docketed election names is its petition's about-key (`petitioned_seat`).
+from .person_q import ABOUT_KEYS
 # B21b.18: how one person reads a seat-holder's standing, `plot_targets`' first reader (it had no game caller before).
 from .person_q import legitimacy
 # v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
@@ -102,7 +105,7 @@ from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-
 from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_of, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, CONFIRMED_BASES, SEAT_DISPOSAL, may_determine, may_dismiss, may_elect, may_fill, may_revoke, purview_of, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
 from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
@@ -711,6 +714,33 @@ def docketed_under(w: World, matter: Optional[str]) -> set:
     return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
 
 
+def petitioned_seat(w: World, matter: Optional[str], disposes: str = SEAT_DISPOSAL) -> Optional[str]:
+    """v11 CR-35 (B21c.02) step 5: THE SEAT A DOCKETED ELECTION OR CONTESTED SUCCESSION IS ABOUT -- for the first item `docketed` lists for
+    `matter` whose arrangement row `disposes:` a `hold` (`state/gate.py::SEAT_DISPOSAL`), the `terms` of the petition it names
+    (`DOCKET_PETITION`; `person_q.ABOUT_KEYS`, the one owner of a Record kind's about-key) where they name an Office; else `None`. The seat is
+    the petition's terms: no ninth operand, no payload key. Read by `judging_set` (the electorate), `declared_votes_by_member` (what a vote
+    names), the precondition's `bench` stem and `_eff_determine` (where the `hold` opens), so the four cannot name two seats. `None` for
+    every computed item (`open_case` writes no arrangement, `H-80`), so no realm reading moves on it.
+    v11 CR-36 (B21c.04): `disposes` asks the same of a row disposing another kind -- `_eff_determine` passes `RECORD_DISPOSAL` for the seat a
+    nomination's `resolution` names; the four readers above keep the default, so the electorate rule never reads a nomination."""
+    for item in docketed(w, matter):
+        row = ARRANGEMENTS.get(item.get(DOCKET_ARRANGEMENT))
+        if row is None or row["disposes"] != disposes:
+            continue
+        return petition_seat(w, item.get(DOCKET_PETITION))
+    return None
+
+
+def petition_seat(w: World, petition: Optional[str]) -> Optional[str]:
+    """THE OFFICE A PETITION'S `terms` NAME -- the about-key content (`person_q.ABOUT_KEYS`) of Record `petition` where it is an Office id;
+    else `None` (no such Record, content that is no dict, or terms naming no Office). The one reader `petitioned_seat` asks per docket item
+    and `loop/effects_information.py::_eff_open_case` asks before it docks a seat-filling or resolution-minting row."""
+    rec = w.records.get(petition)
+    said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+    seat = said.get(ABOUT_KEYS.get(rec.kind)) if rec is not None else None
+    return seat if isinstance(seat, str) and seat in w.offices else None
+
+
 def proceeding_row(w: World, act) -> tuple:
     """B24p.16: THE PROCEEDING AN ACT OF A VERB THAT PROCEEDS OPENS -- `(row dict, form, move, item)`, the first entry of the verb row's `proceeds` whose
     `when` holds (RD §D.1). `hearer: cohort` asks `is_cohort` of the person the act addresses (the row's `opponent_operand`, as the fold names its
@@ -1043,14 +1073,26 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     (`may_determine`) asks both of the seat a determination is exercised through, and a bench
     listed here by one reading and admitted there by another is the disagreement §8 forbids.
     `test_field_deletions.py`/`test_stress_proceedings_rehost.py` pin them, and `ancestry` stays
-    trace-free."""
+    trace-free.
+
+    v11 CR-35 (B21c.02) step 3: `matter` IS WIRED FOR A ROW DISPOSING `hold`. Where the docket hears `matter` under such a row
+    (`petitioned_seat` names its seat S), the bench is THE ELECTORATE: the live holders of a seat granted `BENCH_BASIS` whose faction is S's
+    (`seat_faction`, the one owner), S excluded -- and NO CONTAINMENT WALK (`venue` is not read): the seat is his faction's wherever the
+    candidate stands, the reading the gate's election arm (`may_elect`) takes. Every other matter (every computed one) is benched as before."""
     TRACE.query("judging_set", "resolver")
+    elected = petitioned_seat(w, matter)
+    faction = seat_faction(w, elected) if elected is not None else None
     seats: list[str] = []
     for t in w.tenures:
         if t.kind != "hold" or not t.live or BENCH_BASIS not in t.granted_acts:
             continue
         off = w.offices.get(t.object)
-        if off is None or not sits_over(w, off, venue):
+        if off is None:
+            continue
+        if elected is not None:
+            if off.id == elected or faction is None or seat_faction(w, off.id) != faction:
+                continue
+        elif not sits_over(w, off, venue):
             continue
         if restrained(w, t.subject, DETAIN_KIND):      # B21.11: a detained holder exercises no seat, `may_determine` asks the same (`_seat_grants`)
             continue
@@ -1071,17 +1113,24 @@ def declared_votes_by_member(w: World, matter: str, row: dict) -> dict:
     (`boot/realm.py`'s creed Propositions), so a member's loyal creed counts for nobody unless the leader is the one on trial -- and then only if the
     creed's predicate names the disposal, which it does not. `names` is equality with the kind [ASSUMPTION; medium; Jordan to correct; revert: any
     Proposition about the party]. A commit is public where it is a `commit` edge, which every edge is here [HOOK: no edge carries a privacy]. A matter
-    with no place has no bench: `{}`."""
+    with no place has no bench: `{}`.
+    v11 CR-35 (B21c.02) step 7, A-14 (the vote is a draw on the voter; this is where his track starts, never a second count): FOR A ROW
+    DISPOSING `hold` the predicate names THE VACANT SEAT -- an elector's commit counts only if it is to an OUGHT whose subject is the candidate
+    and whose predicate is the seat the docketed petition's terms name (`petitioned_seat`) [ASSUMPTION; medium; Jordan to correct; revert: any
+    Proposition about the party]; a row whose petition names no seat reads `{}`."""
     venue = place_of(w, matter)
     if venue is None:
         return {}
-    kind, signed = row["disposes"], {}
+    named = petitioned_seat(w, matter) if row["disposes"] == SEAT_DISPOSAL else row["disposes"]    # the predicate a counted commit names
+    if named is None:
+        return {}
+    signed = {}
     for member in dict.fromkeys(judging_set(w, venue, matter)):
         p = w.persons.get(member)
         if p is None:
             continue
         n = sum((1 if w.propositions[i].value else -1) for i in ambitions(w, p)
-                if w.propositions[i].subject == matter and w.propositions[i].predicate == kind)
+                if w.propositions[i].subject == matter and w.propositions[i].predicate == named)
         if n:
             signed[member] = n
     return signed
@@ -3200,9 +3249,7 @@ def faction_props(w: World) -> frozenset:
     `commit` (`members`). A roster id whose Proposition the world lacks (a foreign faction not seated) is still in
     the set, as `FACTION_BY_PROP` always answered; a caller that needs the Proposition tests `w.propositions` too.
     ⚠ NO `TRACE.query` ROW: `faction_holding` reads it on `endings_reached`'s route, which must write none."""
-    mood, predicate = FACTION_CREED["mood"], FACTION_CREED["predicate"]
-    return frozenset(FACTION_BY_PROP).union(pid for pid, q in w.propositions.items()
-                                            if q.mood == mood and q.predicate == predicate)
+    return frozenset(FACTION_BY_PROP).union(pid for pid, q in w.propositions.items() if is_faction_proposition(pid, q))
 
 
 def faction_holding(w: World, subject: str) -> "str | None":
@@ -3631,7 +3678,7 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
     Read-only; three classes, one disjunct each, every one composed on the relation that already owns it:
 
       (i)   THE SWORN -- a live `oblige` to this seat (`establishment_of`), wherever he lives;
-      (ii)  THE HOLDER OF A SEAT THIS SEAT MAY REVOKE -- `may_revoke` over each seat he holds other than `via`
+      (ii)  THE HOLDER OF A SEAT THIS SEAT MAY DISMISS -- `may_dismiss` over each seat he holds other than `via`
             itself, so whom a seat may order and whom it may dismiss are one relation;
       (iii) AN UNSEATED PERSON IN ITS LAND -- he holds no seat and the seat's purview reaches the place he lives
             (`purview_reaches` of `place_of`).
@@ -3643,7 +3690,7 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
 
     ⚠ CALLERS: `issue`'s `basis: command` (B21.20, `WorldReader.read`'s `command` stem); `_req_dispatch` (B21.21);
     `writs_addressed`'s terms clause (B21.22: a decree forms an answer only for an addressee the seat commands). `actor` is
-    asked only by `may_revoke`, which refuses an actor not seated in `via`; the sworn and the land disjuncts read
+    asked only by `may_dismiss` (through `may_revoke`), which refuses an actor not seated in `via`; the sworn and the land disjuncts read
     the seat `via` names alone, as `purview_reaches` does (`04:332`: purview is asked of the seat exercised)."""
     TRACE.query("commands", "resolver")
     if via not in w.offices:
@@ -4419,27 +4466,40 @@ def vacancies(w: World, p: Person) -> tuple:
     (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
     it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
     there at the cost of a scene (H-207). A seat he holds himself is refused as
-    a no-op by `_req_confer` (conferring a seat on its own holder)."""
+    a no-op by `_req_confer` (conferring a seat on its own holder).
+    v11 CR-36: A SEAT WHOSE BASIS IS IN `CONFIRMED_BASES` (`nominated`) is offered only to a conferrer who HOLDS a live `resolution` whose `terms`
+    is that seat (`RESOLUTION_KIND`, `RESOLUTION_SEAT_KEY`), so no `confer` forms that `_req_confer`'s `nomination` conjunct refuses for want of
+    any resolution; which resolution licenses which conferee is the fold's (`loop/predicates.py::confirming_resolutions`)."""
     seats = [t.object for t in p.tenures
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:
         return ()
-    return tuple(o for o in sorted(ledger_names(p.ledger))
-                 if o in w.offices and vacant_named(p.ledger, o) and any(may_fill(w, p.id, s, w.offices[o]) for s in seats))
+    out, resolved = [], None        # the held resolutions' seats, read the first time a confirmed seat is met
+    for o in sorted(ledger_names(p.ledger)):
+        if o not in w.offices or not vacant_named(p.ledger, o):
+            continue
+        if w.offices[o].conferral in CONFIRMED_BASES:
+            if resolved is None:
+                resolved = {w.records[r].subject_matter.get(RESOLUTION_SEAT_KEY) for r in held_resolutions(w, p.id)}
+            if o not in resolved:
+                continue
+        if any(may_fill(w, p.id, s, w.offices[o]) for s in seats):
+            out.append(o)
+    return tuple(out)
 
 
 def recalls(w: World, p: Person) -> tuple:
     """THE RECALL OCCASION (B21.23, `06_FA_decree_binds` edit 4; rulings A-24, A-47), `vacancies`' shape: for each person `other`
     whose `person_q.suspicions` in `p`'s own ledger has reached `Fixtures recall_suspicion`, `other` (stamped `Person`) and each seat
-    he holds that `may_revoke` admits through one of `p`'s own seats (stamped `Office`), in that order, each person's seats by id.
+    he holds that `may_dismiss` admits through one of `p`'s own seats (stamped `Office`), in that order, each person's seats by id.
     Suspicion counts only the answers of persons the writ's issuing seat commands (`commands`, the A-22 basis `writs_addressed`
     asks): `admit` hands it the command basis, so a writ to someone the seat does not command enters no count. `()` at
     `recall_suspicion: None` (the revert), for a person with no seat of his own, and for nearly everyone else.
 
     ⚠ IT OPENS THE ISSUER'S QUESTION AND DECIDES NOTHING (A-24, A-47): the recall itself is `revoke`'s resistible draw, the fold's. It
-    asks the gate's own `may_revoke`, so it names no SEAT the gate would refuse to have stripped through that seat. THE PERSON IS
-    NAMED EITHER WAY (the edit's own words: *"the person and each seat he holds that `may_revoke` admits"*): a defier none of whose
-    seats `p` may strip is an occasion with no `revoke` candidate on him. Resolver-side and read-only, as `vacancies`."""
+    asks the gate's own `may_dismiss` (`may_revoke`, less a seat strippable only with a carried motion), so it names no SEAT the gate
+    would refuse to have stripped through that seat. THE PERSON IS NAMED EITHER WAY (the edit's own words: *"the person and each seat
+    he holds that `may_revoke` admits"*): a defier none of whose seats `p` may strip is an occasion with no `revoke` candidate on him. Resolver-side and read-only, as `vacancies`."""
     threshold = w.fixtures.get("recall_suspicion")
     if threshold is None:
         return ()
@@ -4453,7 +4513,7 @@ def recalls(w: World, p: Person) -> tuple:
     for other, n in suspicions(p, commanded).items():
         if n < threshold or other not in w.persons:
             continue
-        seats = sorted({t.object for t in w.seat_holds(other) if any(may_revoke(w, p.id, s, w.offices[t.object]) for s in mine)})
+        seats = sorted({t.object for t in w.seat_holds(other) if any(may_dismiss(w, p.id, s, w.offices[t.object]) for s in mine)})
         out += [other, *seats]
     return tuple(out)
 
@@ -4699,6 +4759,19 @@ def warrants_for(w: World, actor: str, named: str, verb: str = "arrest") -> tupl
     if p is not None:
         out.extend(rid for rid in addressed_records(w, p, kind) if w.records[rid].subject_matter.get(key) == named)
     return tuple(dict.fromkeys(out))
+
+
+def held_resolutions(w: World, person: Optional[str]) -> tuple:
+    """THE RESOLUTIONS `person` HOLDS (v11 CR-36, B21c.04) -- the ids, in tenure order and each once, of the Records of `RESOLUTION_KIND` on
+    his own live `hold` edges whose content is a dict (`RESOLUTION_SEAT_KEY` names the seat). `()` for no such person. Read by `vacancies`
+    (the seats a conferrer may confirm) and `loop/predicates.py::confirming_resolutions` (which of them licenses a conferee)."""
+    p = w.persons.get(person)
+    if p is None:
+        return ()
+    return tuple(dict.fromkeys(
+        t.object for t in p.tenures
+        if t.kind == "hold" and t.live and t.subject == person and t.object in w.records
+        and w.records[t.object].kind == RESOLUTION_KIND and isinstance(w.records[t.object].subject_matter, dict)))
 
 
 def warrants_heard(w: World, p: Person) -> tuple:
@@ -6474,7 +6547,14 @@ class WorldReader:
             # `may_determine`, the `determination` basis whole: the seat is a judging seat the ACTOR
             # sits in, and its bench's ground holds the subject's home. Actor-relative through
             # `seat_hold`, which is why this reader holds the one actor it was built for.
-            return UNKNOWN if arg not in w.offices else may_determine(w, self._actor, arg, subject)
+            # v11 CR-35 (B21c.02): a matter docketed under a row disposing `hold` is judged by the gate's ELECTION arm instead
+            # (`may_elect` of the seat its petition names), so the fold refuses what that arm would raise.
+            if arg not in w.offices:
+                return UNKNOWN
+            elected = petitioned_seat(w, subject)
+            if elected is not None:
+                return may_elect(w, self._actor, arg, subject, w.offices[elected])
+            return may_determine(w, self._actor, arg, subject)
         if stem == "bench.size":
             # `determine`'s quorum, the LEFT side: how many persons sit on the bench for the
             # subject's place -- `judging_set`, the one owner of the bench (`H-32`). Distinct

@@ -43,12 +43,13 @@ def _seen_marks(heritage):
 # ======================================================================================
 
 def test_a_co_located_witness_sees_the_actors_heritage_true_beside_who():
-    assert _seen_marks(SOUTH) == ((SOUTH,), DUKE)
-    assert _seen_marks("altonian") == (("altonian",), DUKE)
+    # CR-32 (B21c.01): the heritage first, then the posts a witness sees on the actor; the probe Duke holds the title `Duke` through `off_duke`
+    assert _seen_marks(SOUTH) == ((SOUTH, "Duke"), DUKE)
+    assert _seen_marks("altonian") == (("altonian", "Duke"), DUKE)
 
 
 def test_an_unauthored_actor_reads_nothing_describable():
-    assert _seen_marks(None) == ((), DUKE)
+    assert _seen_marks(None) == (("Duke",), DUKE), "no heritage: the posts alone (CR-32), `()` where he holds none"
 
 
 # ======================================================================================

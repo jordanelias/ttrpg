@@ -40,6 +40,8 @@ from .test_sc01_obstacle_ceiling import _module
 T2_FIRST_VALUES = {"arbitration": "plain", "examination": "plain", "negotiation": "plain",
                    "parliamentary_debate": "routine", "council_of_state": "routine", "legal_trial": "routine",
                    "tribunal": "demanding", "excommunication_deliberation": "demanding", "inquisition_hearing": "hard"}
+#: v12 B21c.02 (CR-35 step 4): the two seat-filling rows carry `council_of_state`'s level, the same one layer (`interposed: [procedure]`).
+CR35_STANDARDS = {"election": "routine", "succession": "routine"}
 #: T1 row values at commit 2 (T13 edit 7): `interrogate` `demanding`, every other rolled row (the inquiries with them) `routine`.
 COMMIT_2_DIFFICULTY = {verb: ("demanding" if verb in ("interrogate", "establish") else "routine") for verb in TOF.ROLLED}   # `establish`: B21.09
 #: Two opposite temperaments, as the pursuits a person holds (the realm's projection target).
@@ -94,7 +96,7 @@ def test_planted_grid_moves_the_single_rolls_cells():
         assert ob1 > ob0 and abs((o1 - o0) - rate * (a1 - a0)) < 1e-9, read
 
     # arrest, B24p.99 (was `speak`; the roll is read through `arrest`, still on the single roll): under each of the nine rows, docketed; T2's standard is the row's level's size, and the four levels compose four obstacles
-    assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items()} == {**{row: "plain" for row in ARR.ARRANGEMENTS}, **T2_FIRST_VALUES}   # B24p.03: the four new rows are `plain` and not T2's
+    assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items()} == {**{row: "plain" for row in ARR.ARRANGEMENTS}, **T2_FIRST_VALUES, **CR35_STANDARDS}   # B24p.03: the four new rows are `plain` and not T2's
     by_level: dict = {}
     for row, level in T2_FIRST_VALUES.items():
         h, _d = R._judging_world()

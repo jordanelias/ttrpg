@@ -39,7 +39,7 @@ from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.requires import UNKNOWN, Observation
 from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
-    COVERT_KINDS, HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS)
+    COVERT_KINDS, HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, ladder_stamp)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..trace_log import TRACE
 from .attribution import actor_of, anchor_of, cover_at_logging
@@ -1212,6 +1212,11 @@ class World:
         # `World.content_hash`, so this key alone moves the digest of every world holding a seat -- a
         # declared, structural hash move, the `Office.establishment` deletion's shape.
         stamp = {"remit_acts": grant, "seat_rung": off.rung}
+        # CR-32 (B21c.01): AND THE SEAT'S POST, where it is a title or a rank-ladder post (`rosters.ladder_stamp`; nothing while `offices.yaml: ladders:` is
+        # empty, so a world without ladders carries the two keys above and no third), read person-side by `Tenure.post` -- same snapshot, same re-stamp.
+        post = ladder_stamp(off.post)
+        if post is not None:
+            stamp["post"] = post
         # ⚠ KEY-SCOPED, NOT WHOLE-FIELD. A whole-field `if t.payload is not None: return` would make
         # the grant FIRST-WRITER-WINS on a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
         # seated holder whose `granted_acts` was `()`, indistinguishable from an office that grants
@@ -1224,8 +1229,10 @@ class World:
         if not isinstance(t.payload, dict):
             return False
         if "remit_acts" in t.payload and (
-                not force or (t.granted_acts, t.seat_rung) == (grant, off.rung)):
+                not force or (t.granted_acts, t.seat_rung, t.post) == (grant, off.rung, post)):
             return False
+        if post is None:
+            t.payload.pop("post", None)       # a re-stamp onto a post that is no longer a title or ladder post drops the stale key
         t.payload.update(stamp)
         return True
 

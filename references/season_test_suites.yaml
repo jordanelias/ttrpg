@@ -72,6 +72,10 @@ suites:
     - cp_t02_02_seat_ids
     - cp_t02_06_continuations
     - cr25_computed_establish
+    - cr32_ladders
+    - cr35_election
+    - cr36_nomination
+    - cr37_deposition
     - cr86_realm_structure
     - dispatch_sends
     - fa_decree_binds

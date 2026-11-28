@@ -194,7 +194,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - COST and TIER: calibration; `sonnet`, high; `opus` reads (a) and (b) (U8). LANDS IT: B98's producer; `Item: B98.40`, `[skip ci]` (if it runs).
 
 ### B98.41 — an elected seat keeps its conferral fallback · row 50; B21c.03; CR-35 (8); H-80 · BLOCKED (design: no computed route; H-80) · HASH EQUAL
-- SOURCE: part 2 §4 row 50; part 25's `DIALS AT CONTROL` line: "`FILLED_BY["elected"]` keeps `CONFERRAL` if B21c.03 STOPS …; target: 'the elected narrowing waits until an election executes' (CR-35 (8)), which H-80 keeps unreachable".
+- SOURCE: part 2 §4 row 50; part 25's `DIALS AT CONTROL` line (part 25, expunged at `ce4117176cb7b66911af10aab921cd9b9f71d671`; B21c.03 stopped, `Item: B21c.03` at `f5eabee`): "`FILLED_BY["elected"]` keeps `CONFERRAL` if B21c.03 STOPS …; target: 'the elected narrowing waits until an election executes' (CR-35 (8)), which H-80 keeps unreachable".
 - SETTING: `FILLED_BY["elected"]` (B21c.03's owner), only if B21c.03 stopped.
 - INSTRUCTION: read B21c.03's commit or its STOPPED record: if it did not stop, this position records "not a member" and closes; else flip nothing.
 - OWNER OF THE TARGET: an election that executes in computed play (H-80).

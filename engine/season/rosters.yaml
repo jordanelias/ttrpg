@@ -235,6 +235,13 @@ rosters:
       # Not a `record_sourced_operands` kind: an order answers no operand. [ASSUMPTION; medium; Jordan to correct; revert:
       # add the omitted keys back with their home wiring.]
       standing_order: [at, role, retreat_at]
+      # A BODY'S WRITTEN DECISION, HELD AS A DOCUMENT, as a council's resolution is (v11 CR-36, B21c.04). Minted by
+      # `loop/effects_information.py::_eff_determine` through `_mint_document`, the one mint, under a `disposes: Record` row
+      # (`parliamentary_debate`, `council_of_state`) at Overwhelming or Success, into the DETERMINING actor's hand (ED-IN-0292 (1)):
+      # `terms` is the docketed petition's `terms` (the seat) and `to` the party (the nominee), stored as an id list (`content.addressee`).
+      # Read by `loop/predicates.py::confirming_resolutions` (`confer` on a `nominated` seat). Not a `record_sourced_operands` kind: no
+      # computed act forms on it (H-80, H-229). [ASSUMPTION; medium; Jordan to correct; revert: drop the kind and the mint site.]
+      resolution:   [terms, to]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -3890,19 +3897,28 @@ rosters:
       `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate
       asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test
       `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis).
-      ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
-      declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
-      election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
-      two seats fillable by nothing.
+      v11 CR-35 (B21c.02, H-217 closed) ANSWERS WHICH ACT FILLS AN `elected` SEAT: `determine`, under the `election`
+      arrangement (`arrangements.yaml`), by a judging seat of the seat's own faction -- the gate's election arm,
+      `state/gate.py::may_elect`, which `FILLED_BY` names for `elected` (and for `inheritance`: the contested
+      succession, the `succession` row). `elected` KEEPS `conferral` beside it until CR-35 (8)'s measured narrowing
+      (B21c.03). `annex` is still filled by `confer` alone: no annexation act exists, and none is ruled.
       v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *"designated heir is
       not a verb but a status or title. the heir still has to claim their throne"*. A seat declaring it
       is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH
-      GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (the first
-      narrowing: `inheritance` to the claim basis alone; the other three keep `conferral`), and what a
+      GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (`inheritance`:
+      `claim` and `determination`; `elected`: `conferral` and `determination`; `nominated`, `appointed` and `annex`: `conferral`), and what a
       revocation of one costs is `REVOCATION_DISPOSAL["inheritance"]` (nothing); both are refused at import
       unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two
       mappings' keys, `successions` and `off_king`'s basis (back to `null`).]
-    values: [appointed, elected, annex, inheritance]
+      v11 CR-36 (B21c.04) ADDS A FIFTH, `nominated` -- NAMED BY ONE BODY, THEN CONFIRMED BY ANOTHER SEAT. `open: false` admits
+      it because this is the design change that note requires (E3 Block 1 item 3's DECISION: "a `nominated` seat by `confer` on a
+      body's held `resolution`"). A seat declaring it is filled by `confer` (`FILLED_BY["nominated"]`, the conferral basis), and
+      `confer` on it is admitted only when the confirming actor HOLDS a live `resolution` (`record_kinds`, minted by a determination
+      under a `disposes: Record` row) naming the seat and the conferee, made through a seat other than the conferring one
+      (`loop/predicates.py::confirming_resolutions`). Revoked, a confirmed nominee is banned as an appointee is
+      (`REVOCATION_DISPOSAL["nominated"]`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, both mappings' keys,
+      and `off_parliamentary_clerk` back to `appointed`.]
+    values: [appointed, elected, annex, inheritance, nominated]
 
   successions:
     source: >-
@@ -3958,7 +3974,7 @@ rosters:
     source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."
     open: false
     note: >-
-      ⚠ THREE VALUES. `rung_above_in_holdings` (JORDAN, 2026-10-12: *"it's not ONLY based on hierarchy of rungs,
+      ⚠ FOUR VALUES. `rung_above_in_holdings` (JORDAN, 2026-10-12: *"it's not ONLY based on hierarchy of rungs,
       but also where it is placed in holdings"*): the seat's rung is one of the revoker's HOLDINGS and the
       revoker sits on the rung directly above; a seat whose rung nobody holds is stripped by nobody, its
       holder resigns. `rung_above_same_faction`, the one value ED-IN-0256 ruled: the holder of a seat on the rung DIRECTLY ABOVE the
@@ -3971,7 +3987,23 @@ rosters:
       ⚠ THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule
       is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`), which refuses at IMPORT if a member here has no rule there or the reverse, so
       the roster cannot grow a value the resolver silently treats as another.
-    values: [rung_above_same_faction, rung_above_in_holdings, same_rung_same_faction]
+      v11 CR-37 (B21c.05): `joint_concurrence` -- a seat stripped only when one body's carried motion and a second body's act agree. The
+      revoking seat belongs to a body named in `concurring_bodies` (below; the gate's rule), AND (`state/gate.py::CONCURRED_BASES`) the
+      revoking actor holds a live `resolution` naming the seat and its current holder, made by a determination through a seat other than the
+      revoking one (`loop/predicates.py::confirming_resolutions`, asked by `_req_revoke` and again by `_eff_revoke`; the gate reads no Record,
+      K-52). `off_king` declares it (the throne, CR-37); no other shipped row does. [ASSUMPTION; medium; Jordan to correct; revert: drop the
+      member, its rule and `concurring_bodies`, `off_king` back to null.]
+    values: [rung_above_same_faction, rung_above_in_holdings, same_rung_same_faction, joint_concurrence]
+
+  concurring_bodies:
+    source: "v11 CR-37 (B21c.05; `FORK:ce4117176:workplans/valoria_master_workplan_v12_part25.md` B21c.05 step 2): canon's concurring body in a deposition, the Holy See."
+    open: false
+    note: >-
+      THE BODIES WHOSE SEAT MAY CONCUR IN A `joint_concurrence` REVOCATION -- the `revocation_bases` member's rule
+      (`state/gate.py::REVOCATION_RULES`) admits a revoking seat whose `Office.body` is a member here. Each member must be an
+      `office_bodies` member (`data/rosters.py::CONCURRING_BODIES`, refused at import otherwise). Data, not a by-name outcome: a
+      seat whose `revocation:` names `joint_concurrence` takes the same route, whichever seat it is.
+    values: ["Holy See"]
 
   binds_bases:
     source: "`ARCH §B.7`'s ratified `Seat :=` line, `remit(acts[], binds)`, and `ARCH F.17`'s own resolution of *how a person joins an establishment* -- *\"`oblige`'s `requires` reads the seat's `binds`\"*. r2 `05_LEDGER_AND_BUILD.md` §A.1.5 RULED (b). Plan position `17a`."
@@ -4234,6 +4266,7 @@ rosters:
       - {id: "tenure:oblige"}
       - {id: "tenure:detain"}
       - {id: "tenure:ban"}
+      - {id: "tenure:hold"}       # v11 CR-35 (B21c.02): the seat-`hold` an `election` or `succession` opens
       - {id: "office:contested"}
       - {id: "precedent"}
       - {id: "legitimacy+"}

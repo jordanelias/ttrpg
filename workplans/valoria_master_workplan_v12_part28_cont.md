@@ -288,7 +288,7 @@ Reconciled: 2026-11-12, A-115/A-116 lane: B12c.30 was BLOCKED (SE design: which 
 ## Batch B24a-sc-outside-the-room · lane SC · wave W15 · step S15 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B24a-sc-outside-the-room
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
-GATE: Batch B21c-fa-seats
+GATE: Batch B21c-fa-seats @ce4117176cb7b66911af10aab921cd9b9f71d671
 GATE: Batch B24p-sc-proceeding @ba108d1
 GATE: Batch B24-sc-hearing @d04348d6e
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py social`: the plea's dominance test and every even-match reading this batch takes are read as a curve over generated pairs, never one even-matchup number; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")

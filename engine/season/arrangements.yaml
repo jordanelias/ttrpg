@@ -58,10 +58,9 @@
 # row -- keep the key the source writes. ⚠ v10 SC-04 SEEDED IT (`negotiation`, `disposal: mutual`,
 # `disposes: oblige`, whose opener `_eff_oblige` exists since plan position `17a`; the last block of
 # `arrangements:`) -- NINE rows. Its envoys variant (`interposed: [person, pair]`, §E.2: "the ONLY
-# change") is not a row of its own here. NO `succession` ROW (`disposes: hold`) YET -- CR-35's: `loop/effects_information.py::_disposal`
-# has no `hold` site, so `determine` opens nothing under it and C-1's report would name the row --
-# `test_arrangements.py::test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold`
-# goes red the day a `determine` site opens a `hold`, which is the signal the row can be seeded.
+# change") is not a row of its own here. v11 CR-35 (B21c.02) SEEDED `election` AND `succession` (`disposes: hold`), the last block of
+# `arrangements:`: `loop/effects_information.py::_disposal` has its `hold` site, opened on the seat the docketed petition names, so C-1's
+# report is empty (`test_u7_remit.py` asserts it empty; the tripwire it replaced is retired).
 
 speech_kinds:
   # `19_PLAN.md` step 7: "the roster the design promised and never wrote... Ten members; the two
@@ -287,6 +286,14 @@ disposal:
     Partial:      ["tenure:oblige", "docket:adjourned"]
     Failure:      ["record:acquittal", "legitimacy-"]
     impasse:      ["docket:adjourned"]
+  # v11 CR-35 (B21c.02): a seat filled by a bench (`election`, `succession`). `oblige`'s writes with the seat-`hold` for the surety
+  # [ASSUMPTION; medium; Jordan to correct; revert: no `hold` key and no hold-disposing row -- the loader refuses the one without the other].
+  hold:
+    Overwhelming: ["tenure:hold", "regard+", "precedent"]
+    Success:      ["tenure:hold", "regard+"]
+    Partial:      ["docket:adjourned"]
+    Failure:      ["grievance", "docket:other_forum"]
+    impasse:      ["docket:other_forum"]
   Record:
     Overwhelming: ["record:decree", "faction+", "precedent", "legitimacy+"]
     Success:      ["record:decree", "faction+"]
@@ -636,3 +643,50 @@ arrangements:
     disposes:           oblige
     disposal_reach:     room
     standard:           plain
+
+  # ════════════════════════════════════════════════════════════════════════════════════════════════════
+  # v11 CR-35 (B21c.02) step 4, SC-04's residue (H-217 closed): THE TWO ROWS THAT FILL A SEAT. Each `disposes: hold`, so a determination under
+  # it opens the `hold` on the seat the docketed petition's `terms` name (`world_q.petitioned_seat`; `loop/effects_information.py::_disposal`'s
+  # `hold` literal), by the gate's election arm (`state/gate.py::may_elect`). The bench is the electorate (`world_q.judging_set` with the
+  # matter: the live judging seats of the seat's faction, the seat excluded, no containment walk). `election` fills an `elected` seat from
+  # its faction; `succession` decides a vacant inherited seat between claimants of any faction (the contested succession). Seeded at
+  # `close: declared` directly, `quorum: 1`, `venue_min_rank: hearth`; every other key is `council_of_state`'s, transcribed
+  # (no `inherits:` mechanism, that row's reason). [ASSUMPTION; medium; Jordan to correct; revert: no rows.] REACH 0: a computed `open_case`
+  # writes `DOCKET_ARRANGEMENT` and `DOCKET_PETITION` as `None`, so no computed docket item names either row.
+  - id:               election
+    rite:               default
+    turns:              [2, 4]
+    authority:          polity
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] `council_of_state`'s
+    close:              declared
+    quorum:             1
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      true
+    appeal_basis:       none
+    interposed:         [procedure]
+    admits:             []
+    disposes:           hold
+    disposal_reach:     realm
+    standard:           routine
+
+  - id:               succession
+    rite:               default
+    turns:              [2, 4]
+    authority:          polity
+    reason_lean:        -0.1    # [ASSUMPTION; Jordan to correct; revert: 0] `council_of_state`'s
+    close:              declared
+    quorum:             1
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      true
+    appeal_basis:       none
+    interposed:         [procedure]
+    admits:             []
+    disposes:           hold
+    disposal_reach:     realm
+    standard:           routine

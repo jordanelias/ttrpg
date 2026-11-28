@@ -102,7 +102,7 @@ from ...queries.inputs import (SIDE_SIGN, SIDES, Card, Choice, Input, Item, Marg
                                is_answered, is_filed, is_first, other_side)
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.faction_q import weight as faction_weight
-from ...queries.world_q import admitted_kinds, ambitions, case_file_for, declared_votes_by_member, docketed_row, faction_holding, faction_of, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of, side_of
+from ...queries.world_q import admitted_kinds, ambitions, case_file_for, declared_votes_by_member, docketed_row, faction_holding, faction_of, hold_force, judging_set, petitioned_seat, place_of, presence, proofs, rattled_since, reception, residence_of, side_of
 from ...state.carriers import EFFORT, Said, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, across_chains, seat_faction, sits_over
 from ...state.ids import draw_factory
@@ -1739,9 +1739,12 @@ def _rite_of(fx: Any, verb: str, row: dict, effort: int, regime: dict, strife: d
 def _bench_of(w: Any, venue: Optional[str], topic: Optional[str], authority: str) -> list:
     """Who may sit at `venue`: `judging_set`'s holders, each kept where a seat he holds that sits over the venue (the grant and the containment
     `judging_set` asks) has a faction the authority maps from (`AUTHORITY_BY_FACTION`: the office's own faction, never the seat's proposition
-    id); `parties` and `none` seat nobody by office. A holder who is gone sits empty."""
+    id); `parties` and `none` seat nobody by office. A holder who is gone sits empty.
+    v11 CR-35 (B21c.02): A MATTER WHOSE DOCKETED PETITION NAMES A SEAT (`petitioned_seat`: an `election` or `succession`) SITS ITS ELECTORATE
+    AS `judging_set` NAMES IT -- the seat's own faction's judging seats, with no containment walk -- and is not narrowed again here by the
+    venue or by the row's authority, which would undo the electorate's rule."""
     ids = [p for p in dict.fromkeys(judging_set(w, venue, topic)) if p in w.persons]
-    if authority in ("parties", "none"):
+    if authority in ("parties", "none") or petitioned_seat(w, topic) is not None:
         return ids
     return [p for p in ids if any(t.kind == "hold" and t.live and BENCH_BASIS in t.granted_acts and t.object in w.offices
                                   and sits_over(w, w.offices[t.object], venue)
