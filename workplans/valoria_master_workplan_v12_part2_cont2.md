@@ -477,7 +477,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) | H shifted |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) | H shifted |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) | H shifted |
-| B21b-fa-war | FA | ED-FA-0042..0043 (0+2) | H-620..H-627 (3+5) | H shifted |
 | B21c-fa-seats | FA | ED-FA-0044..0045 (0+2) | H-628..H-632 (0+5) | H shifted |
 | B21d-fa-arc | FA | ED-FA-0046..0047 (0+2) | H-633..H-641 (4+5) | H shifted |
 | B21s-strife-supply | IN | ED-IN-0395..0396 (0+2) | H-642..H-646 (0+5) | ED shifted, H shifted |

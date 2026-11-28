@@ -20,7 +20,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B21b-fa-war
+GATE: Batch B21b-fa-war @03b3fd6e1
 GATE: Batch B21c-fa-seats
 GATE: Batch B32-inst-kit
 GATE: Batch B33-inst-economy-hands

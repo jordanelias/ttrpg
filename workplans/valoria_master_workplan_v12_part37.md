@@ -24,7 +24,7 @@ GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B21b-fa-war
+GATE: Batch B21b-fa-war @03b3fd6e1
 GATE: Batch B22-mb-armies
 GATE: Batch B26-fi-inquiry
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -72,11 +72,11 @@ EST: 10.5 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this block's 20 p
 | B23.09 | which end state passes the land; the order of the `Won` fold; one end state per battle | AGG "Exact edits", "Tests" | BUILD | EQUAL | B23.04 |
 | B23.10 | who defends reads leave; the covenant arm and the seized-town `raze` gates | RES-V §2 edit 1 (the leave arm), §2 and §3 gates | BUILD | EQUAL | B23.05, B23.04 |
 | B23.11 | the field's rulings placed on their lines | UMR §2 | POINTER | — | B23.09 |
-| B23.12 | the acts that give a march its occasion | `IS-B3-FA-04` (A-74, A-103) | BUILD | EQUAL at control (MOVER if a claim is held, `UNDECIDED` 5) | B23.02; Batch B21b (B21b.13) |
+| B23.12 | the acts that give a march its occasion | `IS-B3-FA-04` (A-74, A-103) | BUILD | EQUAL at control (MOVER if a claim is held, `UNDECIDED` 5) | B23.02; Batch B21b @03b3fd6e1 (B21b.13) |
 | B23.13 | `marshal` forms on a front | BIND-E commit E1 | BUILD | MOVER(behaviour) | Batch B22 |
 | B23.14 | `surrender` forms on a besieged place and is drawn; it leaves `contest_owed` | BIND-E commit E2; B07's `contest_owed` rule | BUILD | MOVER(behaviour) | B23.13; Batch B21 (`_provisional_term`) |
 | B23.15 | the two war seats' acts leave the withheld list | BIND-E commit E3 | POINTER | — | Batch B22 (B22.34) |
-| B23.16 | a treaty binds its signer; a successor re-seals | A2-23 (intake `:292`) | BUILD | EQUAL | Batch B21b (B21b.14) |
+| B23.16 | a treaty binds its signer; a successor re-seals | A2-23 (intake `:292`) | BUILD | EQUAL | Batch B21b @03b3fd6e1 (B21b.14) |
 | B23.17 | `give` of a place a person holds forms | H-229 (intake `:293`) | BUILD | MOVER(behaviour) | B23.02 |
 | B23.18 | the loser's grudge names the victor | H-342 (intake `:525`) | BUILD | MOVER(behaviour) | B23.09 |
 | B23.R1 | the integrated reading of the mass battle, after B23 | `IS-MB-05` | READING | — | B23.18 |

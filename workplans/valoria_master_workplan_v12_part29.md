@@ -16,7 +16,7 @@
 INVOCATION: /methodology-execute Batch B21d-fa-arc
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
 GATE: Batch B11-fi-readers @8e30e94629ea3a9f6f28b8542021226283bcaadc
-GATE: Batch B21b-fa-war
+GATE: Batch B21b-fa-war @03b3fd6e1
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none of its own — carried v11 positions (the intake §3's row `B21d-fa-arc`; `V12_STRUCTURE.md` §2.2: "R-04, R-02, R-06 contributors per entry"). CR-89 is an R-04 and R-02 contributor, CR-88 an R-06 contributor, CR-90 an instrument that moves no row. The close re-reads R-02, R-04 and R-06 and states their conjuncts' readings beside the previous close's (`reading @<sha>`); no row moves by this batch's say-so and no `status:` is edited (A-114)
 BATCH GATE (read once, on the closing tree; `PYTHONHASHSEED=0` on every seeded command; no reading past two seasons, D-17):
@@ -57,7 +57,7 @@ EST: 8.5 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 10 po
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
 | B21d.01 | the duty of office and the cost of betrayal: the design | CR-88 (design), with `02_CHAR_goal_lean_on_its_own_question` edit 4 | DESIGN-FIRST | EQUAL | Batch B11 (B11.02), Batch B10 (B10.30) |
-| B21d.02 | the two clocks as rows and one fold of the log, read world-side and person-side | CR-89 commit (1) | BUILD | EQUAL | Batch B11 (B11.04), Batch B21b (B21b.11 to B21b.13) |
+| B21d.02 | the two clocks as rows and one fold of the log, read world-side and person-side | CR-89 commit (1) | BUILD | EQUAL | Batch B11 (B11.04), Batch B21b @03b3fd6e1 (B21b.11 to B21b.13) |
 | B21d.03 | the breaking point: sittings that dispose of nothing | CR-89 commit (2) | BUILD | EQUAL | B21d.02 |
 | B21d.04 | the instrument: the first season of each mark, per seed | CR-90 | BUILD | EQUAL — PROBE: serial barrier, in no set | B21d.03 |
 | B21d.05 | an office-holder declines to turn on his own faction until his grievance clears a band | CR-88 (build) | BUILD | MOVER(behaviour; GATE reads aperture) | B21d.01, B21d.04 |
