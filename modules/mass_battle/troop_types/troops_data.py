@@ -66,7 +66,7 @@ DATA = {'_generated': 'tools/export_troops.py -- do not hand-edit; edit referenc
                          'profile': {'foot': {'value': 1.0, 'status': 'seed'}, 'mounted': {'value': 1.6, 'status': 'seed'}}}},
  'matchups': [],
  'fatigue': {'lull_recover': 30},
- 'deployment': {'cell_troops': 16, 'arm': 'cap'},
+ 'deployment': {'cell_troops': 16, 'arm': 'cap', 'scale': {'cell_m': 4, 'tick_s': 4, 'bout_ticks': 18, 'bout_minutes': 30}, 'max_bouts': 1},
  'formations': {'line': {'opening_rows': 3,
                          'frontage': 'centre',
                          'posts': {'centre': {'rank_line': 0, 'across': 'centre'},

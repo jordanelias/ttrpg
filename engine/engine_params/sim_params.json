@@ -51405,7 +51405,14 @@
         },
         "deployment": {
           "cell_troops": 16,
-          "arm": "cap"
+          "arm": "cap",
+          "scale": {
+            "cell_m": 4,
+            "tick_s": 4,
+            "bout_ticks": 18,
+            "bout_minutes": 30
+          },
+          "max_bouts": 1
         },
         "formations": {
           "line": {

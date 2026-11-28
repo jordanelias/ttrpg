@@ -132,9 +132,17 @@ fatigue:
 #   cell_troops   the troops a cell holds at deployment. SEED: the tier table's density at 400 troops (25 cells). `width` = the body's troops
 #                 over (depth x cell_troops), at least 1, unless the unit row names one
 #   arm           `cap`: today's packing (the densest a cell may be, `cell_cap`), the control arm; `grid`: the width x depth grid above
+#   scale         (B19.20) what the numbers stand for. Read by the report; by NO resolver. The 50 m tile and 5-minute turn are not adopted.
+#   max_bouts     (B19.20) the bouts a battle may run. 1 is today's field, the control; the seed for the flip is 6
 deployment:
   cell_troops: 16
   arm: cap
+  scale:
+    cell_m: 4              # 16 men at about 3 ft of front and of depth each: four files by four ranks (MV F1)
+    tick_s: 4              # one cell at an ordinary marching pace (MV M3; snippet tier: a seed)
+    bout_ticks: 18         # a bout is one clash, about seventy seconds. States `config.ROUTE_BUDGET_TICKS` (3 x TICKS_PER_PHASE); that constant is the head, nothing here reads it
+    bout_minutes: 30       # a bout and the stand-off before the next, as the report tells it
+  max_bouts: 1
 
 # The army's formation, one row per named formation (B19.18; `orderofbattle.place_posts` is the one reader: the season's `_place` and the harness's
 # `build_envelopment` / `build_refused_flank` both call it). An army's strategy names its formation (`line` unless the strategy is another row's name);

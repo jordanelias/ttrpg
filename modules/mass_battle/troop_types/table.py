@@ -22,7 +22,7 @@ site kind that is not a member of its closed set; an arm whose mass is stated bo
 combat's export; a `secondary` equal to the `primary`; (B19a.01) an arm with neither a `duel_key` nor a `sidearm`, a `duel_key` or
 `sidearm` that is not a key of personal combat's weapon export, a `duel_key_status` outside its closed set, a `contact` value with
 no `status` (a null value is admitted only for `exposure.base`), a `matchups` row naming a class, a situation, a `closes` or a
-`status` outside its closed set; (B19.28) a `fatigue` row that is not a number of at least 0, or a column outside `FATIGUE_COLUMNS`; (B19.17) a `deployment` column outside `DEPLOYMENT_COLUMNS`, a `cell_troops` that is not a whole number of at least 1, an `arm` outside `DEPLOYMENT_ARMS`, a troop row whose `depth` is not a whole number of at least 1; a column (or section) name that is also a field of `config.EngineConfig`
+`status` outside its closed set; (B19.28) a `fatigue` row that is not a number of at least 0, or a column outside `FATIGUE_COLUMNS`; (B19.17) a `deployment` column outside `DEPLOYMENT_COLUMNS`, a `cell_troops` that is not a whole number of at least 1, an `arm` outside `DEPLOYMENT_ARMS`, a troop row whose `depth` is not a whole number of at least 1; (B19.20) a `deployment.scale` row outside `SCALE_COLUMNS` or not a whole number of at least 1, a `deployment.max_bouts` that is not; a column (or section) name that is also a field of `config.EngineConfig`
 (B17.12: a NAME is the troop file's or the config's, never both; a value copied under another name is not seen). The mass check reads
 `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as DATA, never an import of `modules/combat/`.
 `check` is the one validator. It opens that export, so it runs where a file may be opened -- the exporter, on what it
@@ -73,7 +73,11 @@ STAT_COLUMNS = ('skill', 'discipline', 'morale')
 FATIGUE_COLUMNS = ('lull_recover',)
 #: The `deployment` rows (B19.17): `cell_troops`, the troops a cell holds at deployment (a whole number of at least 1), and `arm`, one of
 #: `DEPLOYMENT_ARMS` (`cap` is today's packing and the control; `grid` lays a body as a width x depth grid, `orderofbattle.cells_for`).
-DEPLOYMENT_COLUMNS = ('cell_troops', 'arm')
+DEPLOYMENT_COLUMNS = ('cell_troops', 'arm', 'scale', 'max_bouts')
+#: `deployment.scale` (B19.20): what the numbers stand for -- metres a cell is a side, seconds a tick, ticks a bout, minutes a bout and the
+#: stand-off after it. Each a whole number of at least 1. Read by the report; by no resolver. `deployment.max_bouts` (a whole number of at least 1) is
+#: the bouts a battle may run: 1 is today's field (the control).
+SCALE_COLUMNS = ('cell_m', 'tick_s', 'bout_ticks', 'bout_minutes')
 DEPLOYMENT_ARMS = ('cap', 'grid')
 #: The `formations` rows (B19.18): a formation's columns, its `frontage` (`centre`: the centre line is centred alone; `whole`: centred with the side posts), a post's columns,
 #: where a post stands `across` the field, and the unit classes `default_post` names (`orderofbattle.class_of`'s). `line` is the row an army with no other formation takes.
@@ -206,7 +210,7 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
     if combat_weapons is None:
         combat_weapons = combat_weapon_keys()
     for column in (HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + CONTACT_COLUMNS + EXPOSURE_COLUMNS + LEVEL_COLUMNS
-                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + FATIGUE_COLUMNS + DEPLOYMENT_COLUMNS + FORMATION_COLUMNS + POST_COLUMNS + TROOP_COLUMNS):
+                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + FATIGUE_COLUMNS + DEPLOYMENT_COLUMNS + SCALE_COLUMNS + FORMATION_COLUMNS + POST_COLUMNS + TROOP_COLUMNS):
         if column.upper() in config_names:
             raise TroopFileError(f"troop file: the name {column!r} is a column here and a field of `EngineConfig` "
                                  f"(`config.py`); a value has one owner, never both")
@@ -250,6 +254,10 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
     if isinstance(dep['cell_troops'], bool) or not isinstance(dep['cell_troops'], int) or dep['cell_troops'] < 1:
         raise TroopFileError(f"deployment.cell_troops: a whole number of at least 1 is required; got {dep['cell_troops']!r}")
     _member('deployment', dep['arm'], DEPLOYMENT_ARMS, 'arm', nullable=False)
+    _columns('deployment.scale', dep['scale'], SCALE_COLUMNS, SCALE_COLUMNS)
+    for key, value in list(dep['scale'].items()) + [('max_bouts', dep['max_bouts'])]:
+        if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+            raise TroopFileError(f"deployment.{key}: a whole number of at least 1 is required; got {value!r}")
     _check_formations(data['formations'])
     for name, row in data['troops'].items():
         where = f"troops.{name}"
@@ -388,8 +396,10 @@ def fatigue() -> dict:
 
 
 def deployment() -> dict:
-    """The `deployment` block as a fresh dict, `{cell_troops, arm}` (B19.17)."""
-    return dict(_data()['deployment'])
+    """The `deployment` block as a fresh dict, `{cell_troops, arm, scale, max_bouts}` (B19.17; `scale` and `max_bouts` B19.20; `scale` is a copy)."""
+    block = dict(_data()['deployment'])
+    block['scale'] = dict(block['scale'])
+    return block
 
 
 def formations() -> tuple:

@@ -507,10 +507,10 @@ stored duration.
 | person | **exchange** | one attack attempt and its defence; about 1 to 2 s, an estimate | `exchanges` | `wrapper.engagement` (T) |
 | person | **round** | closing, 1 to 4 exchanges, separation; about 4 to 10 s, an indicator (A-101) | one `engagement` call | `wrapper.engagement` (T) |
 | person | **fight** | up to 12 rounds | `max_rounds` (T) | `wrapper.fight` (T) |
-| battle | **field tick** | about 4 s | `troops.yaml: deployment.scale.tick_s` (P*) | MB lexicon D-7 |
+| battle | **field tick** | about 4 s | `troops.yaml: deployment.scale.tick_s` (T, B19.20; read by the report, no resolver) | MB lexicon D-7 |
 | battle | **engine phase** | 6 field ticks | `TICKS_PER_PHASE` (T) | MB lexicon D-7 |
-| battle | **bout** | 18 field ticks, about 70 s; two windows (a duel round may be called at a window) | `bout_ticks` (P*) | MB lexicon D-7 |
-| battle | **battle** | one or more bouts, a lull between | `max_bouts` of the field (P*) | MB lexicon D-7 |
+| battle | **bout** | 18 field ticks, about 70 s; two windows (a duel round may be called at a window) | `troops.yaml: deployment.scale.bout_ticks` (T, B19.20; states `ROUTE_BUDGET_TICKS`, which stays the head) | MB lexicon D-7 |
+| battle | **battle** | one or more bouts, a lull between | `troops.yaml: deployment.max_bouts` (T, B19.20; 1 is today's field) | MB lexicon D-7 |
 | season | **lap** | one pass of DELIBERATE, RESOLVE, WITNESS; `scene_budget` of them a season | `Claim.lap` (T) | `state/carriers.py` (T) |
 | season | **season** | one turn of the loop | `tick` | `loop/driver.py` (T) |
 | year | **year** | four seasons | `seasons_of_year` | §D |

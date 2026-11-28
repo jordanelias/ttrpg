@@ -91,6 +91,9 @@ def test_the_other_refusals_are_named():
         ('a site kind outside the set', lambda d: d['troops']['pike'].update(training_site='forge'), 'forge'),
         ('a secondary equal to the primary', lambda d: d['troops']['pike'].update(secondary='pike'), 'equals the primary'),
         ('an arm of a class that is not one', lambda d: d['arms']['bow'].update(**{'class': 'whip'}), 'whip'),
+        ('a scale row that is not a whole number', lambda d: d['deployment']['scale'].update(tick_s=0.5), 'deployment.tick_s'),
+        ('a scale row outside the set', lambda d: d['deployment']['scale'].update(tile_m=50), 'tile_m'),
+        ('max_bouts below 1', lambda d: d['deployment'].update(max_bouts=0), 'deployment.max_bouts'),
     ]
     checked = 0
     for what, mutate, needle in cases:
