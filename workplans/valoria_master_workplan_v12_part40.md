@@ -32,7 +32,7 @@ GATE: Batch B23-land
 GATE: Batch B27-sc-proceedings
 GATE: Batch B28-social-verbs
 GATE: Batch B32-inst-kit
-GATE: Batch B34-go-surface
+GATE: Batch B34-go-surface @3d9f96ec3581dd042899b1f9d9586481608a970a
 GATE: Batch B36-wr-story-instruments
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: re-read R-05 (`riot`, if `U5d_SE_cohort_heavy_moves_and_caste`'s row lands in the second half) → `built out n of n` at 69 (`IS_A_NINE_part2.md` §12.2, row B38); `NULL SCENES` asserted 0 (clause C9 of `30_WR_E`, the second half; `IS-A-07`'s line); no `status:` edited (A-114). Otherwise none of the nine: the batch serves A-80 to A-91 (momentum and entrenchment, no still scene, regimes and their opinions, the pull of one's own, the houses' cores and the cast on the opinion axes) and A-24, A-32, A-33, A-46, A-64 (`IS_A_NINE_part2.md` §12, M5)

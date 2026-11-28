@@ -60,12 +60,12 @@ from ..state.attribution import actor_of, anchor_of, causing_act, event_by_id, l
 from ..state.carriers import Act, Claim, Office, Proposition, Question, Rung, Tenure, generated_attributes
 from ..state.gate import DISPOSABLE_KINDS, UNDECLARED_DISPOSAL
 from ..state.ids import H, draw_factory
-from ..state.world import World
+from ..state.world import SnapshotRefused, World, decode
 from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .carin import build_world
 from .governance_spine import ACCUSED, ACCUSER, HEARING_ENDINGS, build_hearing, hearing_ending, sitting_events, sitting_exchanges, sitting_writes
-from .play_surface import board, carry_on, dispatching_chooser
+from .play_surface import board, carry_on, creation_lines, deliberation_lines, dispatching_chooser, has_continuation
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
 ENDING_KINDS = ("won", "lost", "drawn")
@@ -98,11 +98,33 @@ class Scenario:
                             needs="a member of engine.substrate.composition.ROLES", law="IS-B2-CORE-01 (1)")
 
 
-def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
-    """The `season` row's reader: `realm_ended` when `world_q.endings_reached(w)` is non-empty; `line_extinct` when the seat
-    has no person (`carry_on` found no living tie); `time` when no season is left; else `None`. In that order."""
-    if world_q.endings_reached(w):
+def realm_ending(w: World, pid: Optional[str]) -> Optional[str]:
+    """THE REALM ENDING'S NAME, read from the seated person's side (`IS-B3-GO-02`): `None` while `world_q.endings_reached(w)` is empty or the seat has a continuation
+    (`play_surface.has_continuation`; with one the run plays on, B34.19). Only a reached row with `EndingReached.victory` names a holding side: `realm_ended` where none
+    does (a reached `theocracy` is `victory: false`, nobody's win) or with nobody seated (`pid` is `None` or no longer in the world). Else `realm_held` when one of his own live
+    `commit`s is to the faction the reached victory rows'
+    holders cohere under (`world_q.faction_holding` of each hold's holder), his Tenures read as `Situation.holdings` reads them (`decision/sheet.py::holdings_pairs`);
+    `realm_fallen` when none is. The names' kinds are each row's `kinds`.
+    [ASSUMPTION: a seat of the faction that holds the peninsula has won -- basis: GD-1 as `rosters.yaml: endings` quotes it names the one victory, and the roster row's
+    `under: one_faction` names the winner as a faction; the split is an amendment to `IS-B2-CORE-02`'s reader (B34.20); Jordan to correct; revert: return `realm_ended` here,
+    which every row's `kinds` holds as `drawn`.] Reads `w`, writes nothing."""
+    reached = world_q.endings_reached(w)
+    if not reached or has_continuation(w, pid):
+        return None
+    victories = [e for e in reached if e.victory]
+    if not victories or pid not in w.persons:
         return "realm_ended"
+    held = {t.id: t for t in w.tenures if t.kind == "hold"}
+    holders = {world_q.faction_holding(w, held[h].subject) for e in victories for h in e.holds if h in held}
+    return "realm_held" if any(t.kind == "commit" and t.live and t.subject == pid and t.object in holders for t in w.tenures) else "realm_fallen"
+
+
+def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
+    """The `season` row's reader: `realm_ending(w, pid)`'s name (`realm_held`, `realm_fallen`, or `realm_ended` with nobody seated) when an ending is reached and the seat has
+    no continuation; `line_extinct` when the seat has no person (`carry_on` found no living tie); `time` when no season is left; else `None`. In that order."""
+    named = realm_ending(w, pid)
+    if named is not None:
+        return named
     if pid is None:
         return "line_extinct"
     return "time" if seasons_left <= 0 else None
@@ -110,19 +132,20 @@ def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[s
 
 #: The one mapping from a scenario's name to its row; every lane registers its own in its batch. `season` is Carin's case
 #: (`headless.build_world`) as a played scenario, seated on its first person in id order; the world is built to need no role.
-#: `IS-B3-GO-02` (B34) splits `realm_ended` by the seat's side.
+#: `realm_ended` is `realm_held` or `realm_fallen` by the seat's side (`realm_ending`, `IS-B3-GO-02`, B34.20).
 SCENARIOS: dict[str, Scenario] = {
     "season": Scenario(build=build_world, seat=lambda w: sorted(w.persons)[0], ending=season_ending,
-                       kinds={"realm_ended": "drawn", "line_extinct": "lost", "time": "drawn"}),
+                       kinds={"realm_held": "won", "realm_fallen": "lost", "realm_ended": "drawn", "line_extinct": "lost", "time": "drawn"}),
 }
 
 
 def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None,
         host=None, person: Optional[str] = None, on_build: Optional[Callable[[World], None]] = None,
-        tie: Optional[Callable[[tuple], object]] = None) -> dict:
+        tie: Optional[Callable[[tuple], object]] = None, ask: Optional[Callable[[object], int]] = None) -> dict:
     """Play `SCENARIOS[name]` at `seed` for at most `seasons` seasons and stop at the first season whose end `ending`
     names one. `pick(sheet) -> indices` decides for the seated person (`person`, else the row's `seat`); `None` takes the
-    shipped ranking whole. `tie(offer) -> Continuation` decides, between seasons, whom the seat passes to when he is dead and
+    shipped ranking whole. `ask(situation) -> int` is his pick of one of the questions asked of him (`development_space`'s, B34.16); `None` is the first.
+    `tie(offer) -> Continuation` decides, between seasons, whom the seat passes to when he is dead and
     `play_surface.carry_on` offers his living ties (B11.79, `IS-B2-CHAR-01` (3)); `None` takes the first, `carry_on`'s own
     recorded revert. `host` is `SeasonDriver.season`'s own (`queries/inputs.py::PlayHost`). `on_build(w)` is called once with
     the built world before any season: a client that prints beside `pick` (the command line's board) keeps it; it is handed the
@@ -135,7 +158,6 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     bound at the end (`None` once his line is extinct) and `passed` the persons the seat has been, in order (the first is the one he
     began as). An ending whose name the row's `kinds` does not hold is REFUSED, not labelled. A row with no `seat` and no `person`
     is REFUSED before it is built."""
-    from . import aperture                                     # lazy: aperture imports harness modules a row may import in turn
     row = SCENARIOS[name]
     if person is None and row.seat is None:
         raise Forbidden(f"scenario {name!r} has no default seat and no person was given", "harness/scenarios.py::run",
@@ -143,6 +165,34 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     w = row.build(seed)
     if on_build is not None:
         on_build(w)
+    return _play(name, row, w, seasons, pick, host, person, tie, ask)
+
+
+def resume(snapshot: bytes, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None, host=None,
+           person: Optional[str] = None, tie: Optional[Callable[[tuple], object]] = None,
+           ask: Optional[Callable[[object], int]] = None) -> "dict | SnapshotRefused":
+    """Continue a saved run for at most `seasons` more (`IS-B3-GO-03`): `state.world.decode` the `snapshot`, look the name it holds up in `SCENARIOS`, and play `run`'s loop
+    (`_play`) from the decoded world, with no `build`. A snapshot `decode` refuses comes back as `decode`'s own `SnapshotRefused`; a snapshot whose name is not a key of
+    `SCENARIOS` (a world no scenario built holds `None`) comes back as `SnapshotRefused("scenario", ...)`: by value, as `decode`'s refusals are, since the port loads saves.
+    The seat is not saved: it is the row's `seat` of the decoded world, or `person`, the client's own choice (`run`'s; a row with no `seat` refuses a call with no `person`).
+    `tie` and `ask` are `run`'s, forwarded to `_play` as `run` forwards them (`None` for each, the default, is the first continuation and the first question).
+    The returned dict is `run`'s; its `premise` is the acts the snapshot held, so the run's own are the others, and `seasons` counts those played since the resume."""
+    got = decode(snapshot)
+    if isinstance(got, SnapshotRefused):
+        return got
+    w, name = got
+    if name not in SCENARIOS:
+        return SnapshotRefused("scenario", ", ".join(sorted(SCENARIOS)), str(name))
+    row = SCENARIOS[name]
+    if person is None and row.seat is None:
+        raise Forbidden(f"scenario {name!r} has no default seat and no person was given", "harness/scenarios.py::resume",
+                        needs="`person`: a `CreationRow.id` of the saved world", law="IS-B3-GO-03 -- the seat is not saved")
+    return _play(name, row, w, seasons, pick, host, person, tie, ask)
+
+
+def _play(name: str, row: Scenario, w: World, seasons: int, pick, host, person: Optional[str], tie, ask) -> dict:
+    """`run`'s loop over a built or decoded world `w` (`run`'s body after `build`; `resume`'s too): the one place a scenario's seasons are played."""
+    from . import aperture                                     # lazy: aperture imports harness modules a row may import in turn
     premise = frozenset(a.id for a in w.acts)
     verbs = resolvable_verbs() if row.verbs is None else row.verbs
     pid = row.seat(w) if person is None else person
@@ -153,7 +203,7 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
     def counted(sheet):
         asked["n"] += 1
         return (take_ranked if pick is None else pick)(sheet)
-    space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw, geo=geography())
+    space = development_space(w.fixtures, mint, counted, verbs=verbs, draw=draw, ask=ask, geo=geography())
     overrides = bind_seat(creation_sheet(w.persons.values()), pid, space)
     choose = dispatching_chooser(chooser(w, verbs=verbs), overrides)
     d = SeasonDriver(w)
@@ -453,7 +503,7 @@ SCENARIOS["inquiry"] = Scenario(build=inquiry_world, seat=lambda w: INVESTIGATOR
 # ======================================================================================
 # THE LIFE ROW (B11.79, `IS-B2-CHAR-01`): the realm as built, a person of it seated by `--person`, and four endings read off the world.
 # ======================================================================================
-LIFE_KINDS = {"fulfilled": "won", "line_extinct": "lost", "realm_ended": "drawn", "unfinished": "drawn"}
+LIFE_KINDS = {"fulfilled": "won", "line_extinct": "lost", "realm_held": "won", "realm_fallen": "lost", "realm_ended": "drawn", "unfinished": "drawn"}
 
 
 def met_ambitions(w: World, pid: Optional[str]) -> list:
@@ -467,14 +517,15 @@ def life_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str
     """THE LIFE'S ENDING, the first true of (`IS-B2-CHAR-01` (2); computed, stored nowhere, read by no chooser), or `None`:
       * `line_extinct` -- `pid` is `None`: `carry_on` found no living tie to carry the seat on (read first, since no ambition can be read of nobody);
       * `fulfilled`    -- one of his ambitions reads `met` (`met_ambitions`);
-      * `realm_ended`  -- `world_q.endings_reached(w)` is non-empty;
+      * `realm_held`, `realm_fallen`, `realm_ended` -- `realm_ending(w, pid)`'s: `world_q.endings_reached(w)` is non-empty and he has no continuation (B34.19), named by his side (B34.20);
       * `unfinished`   -- no season is left."""
     if pid is None:
         return "line_extinct"
     if met_ambitions(w, pid):
         return "fulfilled"
-    if world_q.endings_reached(w):
-        return "realm_ended"
+    named = realm_ending(w, pid)
+    if named is not None:
+        return named
     return "unfinished" if seasons_left <= 0 else None
 
 
@@ -484,7 +535,7 @@ def life_reading(w: World, pid: Optional[str]) -> str:
     return f"met {', '.join(met)}" if met else "no ambition met"
 
 
-#: `seat=None`: no default person; `--person` names one. [ASSUMPTION; medium; Jordan to correct] `realm_ended` is `drawn` for every seat; B34 splits it by the seat's side as `IS-B3-GO-02` states for `season`.
+#: `seat=None`: no default person; `--person` names one. A reached realm ending is named by the seat's side, as the `season` row's is (`realm_ending`, B34.20).
 SCENARIOS["life"] = Scenario(build=build_realm, seat=None, ending=life_ending, kinds=LIFE_KINDS, reading=life_reading)
 
 
@@ -538,7 +589,7 @@ def played_host(person: str, read: Callable[[str], str] = input, out: Callable[[
             raise SystemExit(f"{at} is not in the options 0..{len(view.options) - 1}")
         o = view.options[at]
         return Choice(o.move, o.ground, o.item, o.relation)
-    return PlayHost(frozenset({person}), None, deciders={PROCEEDING_ROLE: decide})
+    return PlayHost(frozenset({person}), deciders={PROCEEDING_ROLE: decide})
 
 
 def board_lines(w: World, pid: str) -> list:
@@ -606,8 +657,11 @@ def _picker(a: argparse.Namespace, world: Optional[Callable[[], World]] = None) 
         if world is not None:
             for line in board_lines(world(), sheet.person_id):
                 print(f"   {line}")
-        for i, c in enumerate(sheet.candidates):
-            print(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip())
+            for line in deliberation_lines(world(), sheet, SCENARIOS[a.name].verbs):    # B34.04: the one printer of the asked rows and the offer (`play_surface`'s)
+                print(line)
+        else:
+            for i, c in enumerate(sheet.candidates):
+                print(f"   [{i}] {c.verb} {c.subject if c.subject is not None else ''}".rstrip())
         text = next_line("pick (indices, blank = take the ranking): ")
         chosen = [int(t) for t in text.replace(",", " ").split()] if text.strip() else list(take_ranked(sheet))
         print(f"   pick {chosen}")
@@ -624,8 +678,9 @@ def main(argv=None) -> int:
     row = SCENARIOS[a.name]
     if row.seat is None and a.person is None:                  # a row with no default seat: the creation sheet is the pick list, and the run does not start
         print(f"{a.name} has no default seat; pass --person with one of:")
-        for c in creation_sheet(row.build(a.seed).persons.values()):
-            print(f"   {c.id} · {c.name} · pursuits {dict(c.pursuits)}")
+        w = row.build(a.seed)
+        for line in creation_lines(w):
+            print(line)
         return 2
     built: list = []
     pick = _picker(a, lambda: built[0])

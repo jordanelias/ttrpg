@@ -3303,6 +3303,14 @@
             "interview": "14_VERBS_SOCIAL2_C_case_question_confession"
           }
         },
+        "management_orders": {
+          "source": "Jordan's A-104 (*\"menu orders, which are management orders like 'assign this' or 'fire this person' or 'raise army' or whatever do not cost scene budget because they are not scenes. however, these CAN prompt scenes after being performed.\"*); workplan v12 B34.10 (`IS-B3-GO-07`).",
+          "note": "[BLOCKED: CONTENT -- CL-MGMT's list, A-104. Loading it is a declared hash mover, re-pinned once at that commit.]",
+          "keys": [
+            "verb_table"
+          ],
+          "orders": []
+        },
         "task_fraction": {
           "source": "`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` \"The resolution, decided\" 4: `{Failure: 0, Partial: 0.5, Success: 1, Overwhelming: 1}`; `U5c_VERBS_residue` \u00a71 edit 3 (one name, one set of first values).",
           "row": "H-164",

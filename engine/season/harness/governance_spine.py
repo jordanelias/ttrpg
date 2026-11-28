@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import re
 import sys
 from collections import Counter
 from typing import Callable, Iterator, Optional, Sequence
@@ -53,8 +54,6 @@ from ..data import files
 from ..data.matrix import Step, WriteClass, matrix_row
 from ..data.rosters import FACTION_BY_PROP, RESTRAINT_KINDS, SUCCESSIONS, load_yaml, remit_or_default
 from ..data.verbs import REFUSAL_KINDS, VERB_TABLE
-from ..decision.choose import make_ranker
-from ..decision.options import seat_of
 from ..decision.sheet import development_space
 from ..gaps import Forbidden
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
@@ -67,7 +66,7 @@ from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from .heir_hears import holder as _holder_of
-from .play_surface import dispatching_chooser
+from .play_surface import deliberation_lines, dispatching_chooser
 
 # ⚠ THE ANCHOR IS `data/files.py`, NOT A LOCAL `__file__`. That module is the package's single
 # path owner for DATA FILES. ⚠ An earlier version of this comment stated the invariant as
@@ -290,7 +289,7 @@ def census(w: World) -> dict:
     }
 
 # ---------------------------------------------------------------------------------------------------
-# B21.72 -- A SCENARIO THAT PLAYS (`06_FA_playable_scenario`): situation, digest, offered, play.
+# B21.72 -- A SCENARIO THAT PLAYS (`06_FA_playable_scenario`): situation, digest, play (the player's offer is `play_surface`'s print, B34.09).
 # ---------------------------------------------------------------------------------------------------
 
 # ⚠ THE SEAT A SUCCESSION SCENARIO PASSES, NAMED FROM THE SOVEREIGN'S OWN SEAT (`<his office id>_<this>`), NEVER A LITERAL ID. No act
@@ -494,26 +493,6 @@ def digest(w: World, since: int) -> list:
     return lines
 
 
-def offered(p, v, s, ask_budget, auto, *, rank: Callable) -> list:
-    """FOR THE PLAYER'S DELIBERATION: the seat-gated candidates `opening_set` formed, as `rank` (the `make_ranker` call `development_space` reads) ordered
-    them, grouped by the remit act that opens each, every one with the seat it would be exercised through. The index in front is the one `pick` takes.
-    The shape of a `play_surface` callback (`s`, `ask_budget` and `auto` are the seam's and are not read); `rank` is the one added keyword. [`IS-B3-FA-02` deletes
-    this at B34.]"""
-    groups: dict = {}
-    for i, c in enumerate(rank(p, v)):
-        row = VERB_TABLE.get(c.verb)
-        gates = [e.partition(":")[2] for e in (row.eligibility if row is not None else ()) if e.startswith("remit:")]
-        to = {k: x for k, x in (c.operands or {}).items() if isinstance(x, str) and k != "via"}
-        said = " ".join(f"{k}={x}" for k, x in sorted(to.items()))
-        seat = seat_of(p, c)
-        line = f"    [{i}] " + " ".join(x for x in (c.verb, c.subject or "", said, f"through {seat}" if seat else "") if x)
-        # a verb no seat's remit gates (`succeed`: the title-holder's own claim) is offered too, under the heading that says so
-        for act in gates or [None]:
-            groups.setdefault(act, []).append(line)
-    return [line for act in sorted(groups, key=lambda a: (a is None, a or ""))
-            for line in ((f"  by the remit to {act}:" if act else "  as himself, through no seat's remit:"), *groups[act])]
-
-
 @contextlib.contextmanager
 def _successions_set(mapping: dict) -> Iterator[None]:
     """`SUCCESSIONS` changed IN PLACE for one run and put back: the three readers (`state/gate.py`, `decision/options.py`, `loop/effects_governance.py`) hold
@@ -659,7 +638,7 @@ def play(seed: int, seasons: int, situation: Optional[str] = None, player: Optio
          out: Callable[[str], None] = print, *, world: str = "spine") -> dict:
     """Builds the spine, makes `situation`, and runs up to `seasons` seasons with `dispatching_chooser(auto, {player: callback})`, printing the digest and
     each faction's standing after every season, then `loop_closed`'s line. `pick=None` is the shipped chooser for everyone: the run is `populated.run`'s on the
-    same world (the control). A `pick` (indices into the offer `offered` prints) is spent at the player's FIRST deliberation, through `development_space`; after
+    same world (the control). A `pick` (indices into the offer the callback prints) is spent at the player's FIRST deliberation, through `development_space`; after
     it the player takes the shipped order (`take_ranked`), so he acts as himself. `pick=()` shows the offer and takes nothing. Stops at the first of: the player
     holds no seat (`recall`: `LINGER_AFTER_UNSEATED` seasons after the one he was first found without it); `world_q.endings_reached` is non-empty; the season
     count. `SUCCESSIONS` is the scenario's for the run and restored after it, a run that raises included.
@@ -726,28 +705,43 @@ def _run(w: World, seasons: int, verbs, overrides: Optional[dict], out: Callable
     return {"world": w, "ended": ended, "seasons": ran, "acts": [], "loop": loop}
 
 
+def _grouped_by_remit(lines: list, cands: tuple) -> list:
+    """`deliberation_lines`' offer-row lines (`   [i] ...`) regrouped under the remit act whose gate opens each row: the act is read off the row's verb row,
+    `VERB_TABLE[c.verb].eligibility`'s `remit:<act>` cells, on `sheet.candidates[i]` (the sheet's own order, which `deliberation_lines` prints as `[i]`; a row two acts gate stands under both; a verb no seat's remit gates, `succeed`'s
+    own claim, stands under the heading that says so). A PRINT: the lines are `play_surface`'s own, only their order and a heading are added; every other line
+    (the situation, the asked rows, the withheld verbs) keeps its place."""
+    at = lambda ln: re.match(r"   \[(\d+)\] ", ln)
+    first = next((k for k, ln in enumerate(lines) if at(ln)), len(lines))
+    mine = [(int(at(ln).group(1)), ln) for ln in lines if at(ln)]
+    groups: dict = {}
+    for i, ln in mine:
+        row = VERB_TABLE.get(cands[i].verb)
+        for act in [e.partition(":")[2] for e in (row.eligibility if row is not None else ()) if e.startswith("remit:")] or [None]:
+            groups.setdefault(act, []).append("  " + ln)
+    out = lines[:first]
+    for act in sorted(groups, key=lambda a: (a is None, a or "")):
+        out += [f"  by the remit to {act}:" if act else "  as himself, through no seat's remit:", *groups[act]]
+    return out + [ln for ln in lines[first:] if not at(ln)]
+
+
 def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Callable:
-    """The player's `play_surface` callback: `offered` printed, then `chosen` through `development_space` at the first deliberation, the shipped order after.
+    """The player's `play_surface` callback: at the first deliberation the `Offer` printed through `play_surface.deliberation_lines` (its asked rows, and every row
+    with its occasion, terms, believed odds and cost) and grouped by remit act, then `chosen` through `development_space`, the shipped order after. The spine holds
+    no menu of its own (B34.09).
     ⚠ The act-id mint and the draw are `boot/chooser.py::chooser`'s own two lines, repeated: that function builds them inside and exposes neither, and a
     space built on a different mint or draw is a different candidate set (`development_space`'s docstring)."""
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     draw = draw_factory(w.world_seed, lambda: w.tick)
-    rank = make_ranker(w.fixtures, verbs, draw)
     spent = []
 
     def pick_of(sheet) -> Sequence[int]:
         if spent:
             return range(len(sheet.candidates))
         spent.append(True)
+        for line in _grouped_by_remit(deliberation_lines(w, sheet, verbs), sheet.candidates):
+            out(line)
         return chosen
-    space = development_space(w.fixtures, mint, pick_of, verbs, draw, geo=geography())
-
-    def callback(p, v, s, ask_budget, auto) -> list:
-        if not spent:
-            for line in offered(p, v, s, ask_budget, auto, rank=rank):
-                out(line)
-        return space(p, v, s, ask_budget, auto)
-    return callback
+    return development_space(w.fixtures, mint, pick_of, verbs, draw, geo=geography())
 
 
 # ---------------------------------------------------------------------------------------------------

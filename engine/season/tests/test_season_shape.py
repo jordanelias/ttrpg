@@ -10225,3 +10225,24 @@ def test_a_witnessed_recovery_clears_a_believed_wound(monkeypatch):
     w.step = Step.WITNESS
     d.witness(mint_token(w, WriteClass.INTERIOR), out)
     assert not [c for c in w.persons[A].ledger[before:] if c.predicate == "body"], "a refused tend deposited a body claim"
+
+
+def test_creation_sheet_shows_holdings_for_a_seat_holder():
+    """B34.06 (fidelity gate 4): `creation_sheet` on a built realm shows his live Tenures on a seat holder's row, read off `Person.tenures`, and takes no `World`
+    (`decision/` stays World-free: the path scan above)."""
+    from ..boot.realm import build_realm
+    from ..decision.sheet import creation_sheet, holdings_pairs
+
+    assert list(inspect.signature(creation_sheet).parameters) == ["persons"]
+    w = build_realm(0)
+    rows = {r.id: r for r in creation_sheet(w.persons.values())}
+    holders = [pid for pid, p in w.persons.items() if any(t.kind == "hold" and t.live for t in p.tenures)]
+    assert holders, "setup: the built realm seats no holder"
+    for pid in holders:
+        assert any(kind == "hold" for kind, _ in rows[pid].holdings), f"{pid} holds a seat and his row shows none: {rows[pid].holdings}"
+    assert ("hold", "off_senior_inquisitor") in rows["p_npc_004"].holdings
+    assert all(isinstance(h, tuple) and len(h) == 2 for r in rows.values() for h in r.holdings)
+    # a row answers what its person holds and nothing else: a person with no seat shows no `hold`
+    assert any(not any(kind == "hold" for kind, _ in r.holdings) for r in rows.values()), "every row shows a seat: the reader is not reading his own"
+    # the row IS `Situation.holdings`' spelling over the person's own Tenures, and the aggregate `w.tenures` filtered by subject says the same
+    assert all(r.holdings == holdings_pairs(w.persons[pid].tenures) == holdings_pairs([t for t in w.tenures if t.subject == pid]) for pid, r in rows.items())

@@ -87,9 +87,9 @@ def test_scripted_player_reproduces_auto_hash():
         inp, _card = _build(w, ("p_low",), row=A.ARRANGEMENTS["negotiation"], subject="p_mid", verb="argue", effort=2)
         npc = S._npc_decider(w, inp)          # the decider the room gives him: the host's pick is his, asked for the mover
         auto = M.P.proceed(inp, M._key("neg", seed), deciders={p.id: npc for p in inp.room})
-        mirror = PlayHost(frozenset({"p_low"}), None, deciders={S.PROCEEDING_ROLE: lambda view: npc(view, SimpleNamespace(id=view.mover))})
+        mirror = PlayHost(frozenset({"p_low"}), deciders={S.PROCEEDING_ROLE: lambda view: npc(view, SimpleNamespace(id=view.mover))})
         played = M.P.proceed(inp, M._key("neg", seed), deciders={**{p.id: npc for p in inp.room}, **S._played_by(w, mirror, inp)["deciders"]})
-        silent = PlayHost(frozenset({"p_low"}), None, deciders={S.PROCEEDING_ROLE: lambda view: Choice("rest")})
+        silent = PlayHost(frozenset({"p_low"}), deciders={S.PROCEEDING_ROLE: lambda view: Choice("rest")})
         rested = M.P.proceed(inp, M._key("neg", seed), deciders={**{p.id: npc for p in inp.room}, **S._played_by(w, silent, inp)["deciders"]})
         assert _digest(played) == _digest(auto), seed
         moved += _digest(rested) != _digest(auto)

@@ -38,7 +38,7 @@ from .requires import (
     ScalarThreshold, TypedRequires, WITH_STEM, build_typed_requires,
 )
 from .rosters import (
-    AMOUNT_SHARE_KEY, AMOUNT_SHARES, CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    AMOUNT_SHARE_KEY, AMOUNT_SHARES, CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, MANAGEMENT_ORDERS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS, TALLY_AXES,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -727,13 +727,14 @@ def _check_resolution_classes(rows: dict) -> None:
     row has `contests:`), `task` (a `graded_tasks` route), `bookkeeping` (a `bookkeeping_verbs` member), and the fourth,
     `contest` owed to the lane named (`contest_owed`). A row that writes or emits a finding (a kind `rosters.yaml:
     inquiry_modules.findings` keys) and is in none, or any row in two, is refused naming it; so is a `contest_owed` member
-    that declares `contests:` (its verb leaves the roster in that commit), a roster member that is no verb row, a
+    that declares `contests:` (its verb leaves the roster in that commit), a roster member (including a `management_orders` member, B34.10) that is no verb row, a
     `bookkeeping` row with no `why:`, and a `bookkeeping` row whose `writes:` touch another's body, holding or stores
     (`_bookkeeping_cells_touched`) unless it declares `brute:` (UNDECIDED (10): the loader's column for a write with no roll),
     or that emits a finding. The loader's refusal per data family (CLAUDE.md §0.05), not a tree-wide guard."""
     findings = frozenset(roster_map("inquiry_modules", "findings"))
     bad = [f"`{name}` names {v!r}, which is no verb row"
-           for name, members in (("bookkeeping_verbs", BOOKKEEPING_VERBS), ("contest_owed", CONTEST_OWED))
+           for name, members in (("bookkeeping_verbs", BOOKKEEPING_VERBS), ("contest_owed", CONTEST_OWED),
+                             ("management_orders", MANAGEMENT_ORDERS))     # B34.10 (A-104): a management order is a verb row
            for v in members if v not in rows]
     bad += [f"`bookkeeping_verbs` {v!r} has no `why:` line" for v, r in BOOKKEEPING_VERBS.items()
             if not (isinstance(r, dict) and str(r.get("why") or "").strip())]

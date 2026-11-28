@@ -36,6 +36,7 @@ from engine.dice_engine.fmath import ltr_sum
 from ..data import goals as goals_data
 from ..data.rosters import JOURNEY_VERBS, STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
+from ..data import rosters
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
     BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
@@ -1273,14 +1274,17 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     # construction and every season using `make_chooser` would refuse itself. The row and the
     # packer are the same mechanism seen from two sides.
     ext = fx.get("extended_scene_cost")
+    orders = rosters.MANAGEMENT_ORDERS      # B34.10 (A-104): read once per call, the name `Scene.cost` reads: a scene of nothing but these costs 0; the list ships empty
 
     def fill(cands) -> list:
         """Consecutive runs of `cands`, each filling at most `width` interaction slots (a Candidate at effort `e`
-        fills `1 + e`, `Scene.slots`'s own count). With every effort 0 this is the slice by `width`."""
+        fills `1 + e`, `Scene.slots`'s own count). With every effort 0 this is the slice by `width`.
+        NO MIXED SCENE (B34.10): a management order is a run of its own, so it never makes a priced scene free
+        and never rides in one at a price. With `orders` empty the extra test never fires."""
         runs, cur, used = [], [], 0
         for c in cands:
             need = 1 + (c.operands or {}).get(EFFORT, 0)
-            if cur and used + need > width:
+            if cur and (used + need > width or c.verb in orders or cur[0].verb in orders):
                 runs.append(cur)
                 cur, used = [], 0
             cur.append(c)
@@ -1292,8 +1296,13 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     def take(chunks) -> list:
         out, left = [], n_scenes
         for chunk in chunks:
+            # B34.10: a management order is released at a spent budget too (it costs none), so a spent one skips past the priced
+            # chunks and still reaches the orders ranked after them; with `orders` empty every chunk is priced and this is the `break` it was.
             if left <= 0:
-                break
+                if not orders:
+                    break
+                if not all(c.verb in orders for c in chunk):
+                    continue
             # THE PRICE IS `Scene.cost`'s, ASKED OF THE BUILT SCENE: the slots it fills, not the number of acts.
             # An extension the person cannot afford is taken as a PLAIN scene rather than
             # skipped: they still pursue the opportunity, with less in it. Skipping would be the

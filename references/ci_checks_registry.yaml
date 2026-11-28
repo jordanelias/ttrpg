@@ -321,7 +321,7 @@ ci_checks:
     level: 5
     subject: game
     posture: harden
-    role: "Module -> typed-JSON: engine/engine_params/battle_orders.json must match modules/mass_battle/massbattle.py's ORDER_ROLES (config.ROLE_SPEC's names) and ORDER_RETREAT_AT (--check mode). It is the writer for engine/substrate/battle_orders.py, the sole runtime reader, which engine/season/rosters.yaml's order_roles and order_retreat_at point at (from_battle_orders) so the season spells no role."
+    role: "Module -> typed-JSON: engine/engine_params/battle_orders.json must match modules/mass_battle/massbattle.py's ORDER_ROLES (config.ROLE_SPEC's names) and ORDER_RETREAT_AT, each member exported as {name, text} with its line of text from ORDER_ROLE_TEXT and ORDER_RETREAT_AT_TEXT (--check mode). It is the writer for engine/substrate/battle_orders.py, the sole runtime reader, which engine/season/rosters.yaml's order_roles and order_retreat_at point at (from_battle_orders) so the season spells no role."
     ci_job: ""
     notes: "WIRED locally only (valoria_local.py --staged, blocking): engine/season/tests/test_cp_t04_02_marshal.py, which ran the --check in the season job, is retired, and NO CI step runs it; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by CP-T04-02 -- add `v python3 tools/export_battle_orders.py --check` beside export_game_constants there."
 

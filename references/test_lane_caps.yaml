@@ -43,6 +43,31 @@ lanes:
       - {batch: B29-pc-custody, added: 1, behaviour: "an officer a warrant is addressed to, who has only heard of it, forms arrest on the man it names (on a question with no plain referent too) and on no other, the arrest folds to arrest.made and opens a detain, and a warrant addressed to a third man forms none for him"}
       - {batch: B29-pc-custody, added: 1, behaviour: "capture forms on a person under war or crime and on no stranger, and its custody goes to the issuing seat of the warrant whose court could close it, not to the seat the act is exercised through"}
       - {batch: B21b-fa-war, added: 43, behaviour: "a faction's identity is read by one owner (`faction_props`); a person is offered a creed to join only for one he reads above his own and above indifference; a seated muster-holder declares a war on a rival he reads below indifference or one a wound or a held claim to a territory turns him toward, an own-faction or already-at-war declare is refused, and only a declare's own commit makes a war; a claim to a territory is a Proposition whose grounds the roster names; a sworn man's seat grants and refuses by the oath (`retain` and `conspire` each weigh the new obstacle terms and a plot is laid, joined or refused by what the gate admits); an oblige purview and a regent's seat on the same rung read the one `purview_of`; a seat is conferred only by what every live holder grants; a march is capped and seized by what it reaches"}
+      - batch: B34-go-surface
+        added: 15
+        behaviour: "the player surface in test_play_surface.py: the transcript's hash equals the plain run's (seeds 0-2), the offer rows follow make_ranker and the printed order and terms are the chooser's, withheld rows are own-state only, the prior teller is unattributed, a swept scene_budget gives the seat its scenes, a picked question ranks first, the stop rules (no-continuation stops, a continuation plays on, a killed seat continues under the heir) and the ending's kind (victory rows only)"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "test_play_surface_own_outcome.py: the doer holds his own act's outcome, and every act he resolved has an own account row"
+      - batch: B34-go-surface
+        added: 3
+        behaviour: "test_explain.py: a fact no claim of his holds is in no derivation, the five first values derive from his own claims, and unattributed is a change no claim of his names a doer"
+      - batch: B34-go-surface
+        added: 3
+        behaviour: "test_seat_holders_from_ledger.py: a creation row marks cohorts and holdings; all chances at 1.0 reproduce today's referents; the shipped holder_known_chance leaves some goal-named seats unheard (H-758)"
+      - batch: B34-go-surface
+        added: 4
+        behaviour: "test_management_orders.py: an order scene costs nothing and a priced scene is unchanged, an order never shares a scene with a priced act, a spent budget may still order, an order opens a scene next lap"
+      - batch: B34-go-surface
+        added: 8
+        behaviour: "test_scene_contract.py: an echo decider equals none, empty deciders hash-equal no host, a deviating decider moves a played module, apply=False goes through seam.contest; the roll fixture's terms sum to the obstacle, printed odds match the realised bands, effort moves odds, every band is reached and writes"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "test_go07_canonical_digest.py: a snapshot names its scenario and resume refuses an unknown one; a resumed run reaches the ending the unbroken run reaches"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "the governance spine prints the Offer and holds no second menu (test_governance_spine_play.py); the creation sheet shows holdings for a seat holder (test_season_shape.py)"
+
   engine:
     base: 1043
     warrants:
@@ -53,6 +78,10 @@ lanes:
           the module's log-odds interpolation lands inside the measured interval, game state). The exporter's blocking `--check` for the table
           the contact draw reads: `test_round_trip_is_clean`, `test_a_hand_edit_fails_check`, `test_a_changed_duel_engine_fails_check` (a stale
           calibration cannot ship); `export_mb_contact.py` is not yet a CI step, so these are its only CI exerciser until the workflow line lands.
+      - batch: B34-go-surface
+        added: 1
+        behaviour: "every closed choice set is exported with a name and a line of text, and both exporters refuse a member with none (test_engine_params_bridge.py)"
+
   combat:
     base: 497
     warrants:

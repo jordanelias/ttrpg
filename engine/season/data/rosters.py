@@ -881,6 +881,10 @@ def armed_route_off(verb: str, fixtures) -> bool:
     `UNROUTED_BAND` read). `graded_route` answers `None` exactly for these, so the fold asks this, the one place the predicate lives."""
     route = GRADED_TASKS.get(verb)
     return bool(route and route.get("armed_by") and fixtures.get(route["armed_by"]) != "on")
+# B34.10 (`IS-B3-GO-07`, A-104): the verbs that are MANAGEMENT ORDERS -- an order a seat gives from its desk, costing no scene.
+# `Scene.cost(extended)` is the one price and reads this roster itself; `pack_scenes` and DELIBERATE read it by this name too. Ships empty (the control); a member that
+# is no `verb_table.yaml` row is refused at load by `data/verbs.py::_check_resolution_classes`. Read as a list: `roster()` refuses an empty set.
+MANAGEMENT_ORDERS = frozenset(roster_list("management_orders", "orders"))
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
 # ED-IN-0306 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.

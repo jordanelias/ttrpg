@@ -1620,6 +1620,21 @@ rosters:
       challenge: "14_VERBS_SOCIAL1_D_grievance_and_settlement"
       interview: "14_VERBS_SOCIAL2_C_case_question_confession"
 
+  # B34.10 (`IS-B3-GO-07`, A-104): THE ORDERS A SEAT GIVES FROM ITS DESK, WHICH COST NO SCENE. A closed set of verb names, each a
+  # `verb_table.yaml` row (refused at load by `data/verbs.py::_check_resolution_classes`). `Scene.cost` prices a scene whose every act is
+  # a member at 0, and `decision/choose.py::pack_scenes` puts each in a scene of its own, so an order is never a priced scene's rider.
+  # SHIPS EMPTY (the control: today's prices, the realm hash equal). The members are CL-MGMT's list, which is HELD -- A-104 names
+  # examples, not a list; read as `roster_list` because `roster()` refuses an empty `values:`.
+  management_orders:
+    source: >-
+      Jordan's A-104 (*"menu orders, which are management orders like 'assign this' or 'fire this person' or 'raise army' or
+      whatever do not cost scene budget because they are not scenes. however, these CAN prompt scenes after being performed."*);
+      workplan v12 B34.10 (`IS-B3-GO-07`).
+    note: >-
+      [BLOCKED: CONTENT -- CL-MGMT's list, A-104. Loading it is a declared hash mover, re-pinned once at that commit.]
+    keys: [verb_table]
+    orders: []
+
   # B07.02 (18-A edit 5; `U5c_VERBS_residue` §1 edit 3): THE ONE SHARE TABLE A DRAWN ACT'S BAND READS -- band -> the fraction of
   # the effect that lands. Every magnitude effect (`tend`, `work`, `restore`, `requisition`, `train`, `recruit`) and the
   # travel rows read it through `data/rosters.py::task_share`, and no effect names a band (`test_no_effect_names_a_band`).
