@@ -21,6 +21,7 @@ What each test proves, and the failure it can observe:
 import pytest
 import yaml
 
+from engine.season.data import files
 from engine.season.boot.realm import rescales, wants_of
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
@@ -191,7 +192,7 @@ def test_q4_fires_for_more_propositions_on_a_four_seat_cast_than_on_the_floor(mo
 # ---------------------------------------------------------------------------
 
 def _load(tmp_path, monkeypatch, entries):
-    monkeypatch.setattr(C.files, "EXERCISES_DIR", tmp_path)
+    monkeypatch.setattr(files, "EXERCISES_DIR", tmp_path)
     (tmp_path / "X-1.yaml").write_text(yaml.safe_dump({"case": "X-1", "cast": entries}),
                                        encoding="utf-8")
     return C.cast_overlay()
@@ -317,7 +318,7 @@ def test_a_cast_that_is_not_a_list_refuses_at_load_instead_of_being_dropped(
 
 def _write_files(tmp_path, monkeypatch, **docs):
     """`{file stem: doc}` written into a throwaway exercises directory the loader is pointed at."""
-    monkeypatch.setattr(C.files, "EXERCISES_DIR", tmp_path)
+    monkeypatch.setattr(files, "EXERCISES_DIR", tmp_path)
     for stem, doc in docs.items():
         (tmp_path / f"{stem}.yaml").write_text(yaml.safe_dump(doc), encoding="utf-8")
 
@@ -387,7 +388,7 @@ def test_the_real_scale_overlays_all_still_load():
     everything, or refused nothing because it saw nothing, cannot pass)."""
     real = rescales()
     independent = sorted(
-        doc["case"] for f in sorted(C.files.EXERCISES_DIR.glob("*.yaml"))
+        doc["case"] for f in sorted(files.EXERCISES_DIR.glob("*.yaml"))
         for doc in [yaml.safe_load(f.read_text(encoding="utf-8")) or {}]
         if doc.get("case") and isinstance(doc.get("scale"), dict))
     assert sorted(real) == independent and len(real) >= 1, (len(real), len(independent))
@@ -399,7 +400,7 @@ def test_the_real_overlays_all_still_load_and_a_good_file_is_not_refused(tmp_pat
     everything cannot pass), and a valid list-shaped file loads."""
     real = C.cast_overlay()
     independent = sorted(
-        doc["case"] for f in sorted(C.files.EXERCISES_DIR.glob("*.yaml"))
+        doc["case"] for f in sorted(files.EXERCISES_DIR.glob("*.yaml"))
         for doc in [yaml.safe_load(f.read_text(encoding="utf-8")) or {}]
         if doc.get("case") and isinstance(doc.get("cast"), list))
     assert sorted(real) == independent and len(real) >= 13, (sorted(real), independent)
