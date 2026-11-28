@@ -36,9 +36,9 @@ import sys
 from typing import Callable, NamedTuple, Optional
 
 from ..boot.realm import build_realm
-from ..data.arrangements import PREFERRED_ARRANGEMENT, determining_arrangement  # noqa: F401 -- B21d.06: moved to `data/arrangements.py`, its one owner; re-exported
+from ..data.arrangements import determining_arrangement   # B21d.06: moved to `data/arrangements.py`, its one owner
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.rosters import church_faction, clocks  # `church_faction`: B21d.06 moved it to `data/rosters.py`, its one owner; re-exported
+from ..data.rosters import church_faction, clocks  # `church_faction`: B21d.06 moved it to `data/rosters.py`, its one owner
 from ..data.verbs import DISPOSAL_EVENTS
 from ..gaps import Ungraded
 from ..queries import faction_q, person_q, world_q
@@ -157,7 +157,7 @@ def armed(names):
         try:
             cur = fx.get(n)
         except Ungraded:
-            raise SystemExit(f"--arm {n}: no `Fixtures` field of that name. The trigger switches are `data/fixtures.py::CLOCK_TRIGGERS`.")
+            raise SystemExit(f"--arm {n}: no `Fixtures` field of that name. A trigger switch is a bool `Fixtures` field named `*_on`.")
         if not isinstance(cur, bool):
             raise SystemExit(f"--arm {n}: `Fixtures {n}` is {cur!r}, not a switch (a bool).")
         fx = fx.sweep(n, True)

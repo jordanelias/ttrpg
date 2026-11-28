@@ -206,7 +206,7 @@ def test_breakdown_needs_both_believed_turmoil_and_failed_sittings():
 import pytest
 
 from engine.season.data import goals as goals_data
-from engine.season.data.fixtures import CLOCK_TRIGGERS, DEFAULT_FIXTURES
+from engine.season.data.fixtures import DEFAULT_FIXTURES
 from engine.season.decision.choose import deliberation_memo, score_terms, stance_term
 from engine.season.decision.options import seat_of
 from engine.season.loop.driver import SeasonDriver, mint_token
@@ -355,7 +355,7 @@ _CHECKS = {"ci_pursuit_gain_on": _check_ci_pursuit_gain_on, "ci_mu_shift_on": _c
            "nation_functions_on": _check_nation_functions_on}
 
 
-@pytest.mark.parametrize("switch", CLOCK_TRIGGERS)
+@pytest.mark.parametrize("switch", sorted(_CHECKS))
 def test_switch_moves_its_term_only_when_on(switch):
     """Each switch, planted at its band: its term moves with the switch on and reads as it did with it off (`test_<switch>_moves_its_term_only_when_on`, the
     seven made one parametrised test: one shape, a check each). Every switch ships off."""

@@ -702,14 +702,12 @@ def _betrays(p: Person, r: str, fx: "Fixtures", band: float, lifted: dict) -> bo
     return lifted[r]
 
 
-def _duty_exempt(p: Person, verb: str, r: str, st: Optional[str], binds: frozenset, memo: dict) -> bool:
+def _duty_exempt(p: Person, verb: str, r: str, st: str, binds: frozenset, memo: dict) -> bool:
     """THE OFFICE ACTING DOWN ITS OWN CHAIN (B21d.05, the design's §2): the act on `r`, bound by the factions `binds`, is exempt where it goes through
     a seat (`seat_of`, the seat `pack_scenes` puts on `Act.via`, none in custody) whose faction is the only one binding `r` and whose rank exceeds
     `r`'s station as `p`'s ledger names it -- the King's arrest of a duke. Up or across the chain it is not (`may_warrant` is purview, not
     command). The seat is one `exercisable_seats` gave, so its grant is read from the hold Tenure's snapshot, never `offices.yaml`.
     [ASSUMPTION; medium; Jordan to correct; revert: no exemption, every opponent verb declined.]"""
-    if st is None:
-        return False
     seat = seat_of(p, Candidate(verb, r, operands={VIA: st}))
     if seat is None or binds != {org_faction("seat", seat)}:
         return False

@@ -2055,9 +2055,6 @@ DEFAULT_FIXTURES = Fixtures(
     nation_functions_on=False,        # `H-636`, swept False (control, SHIPPED) / True
 )
 
-#: v12 B21d.06: THE SEVEN TRIGGER SWITCHES, in the source's band order. `harness/clocks.py --arm` names them; each is a `Fixtures` bool above.
-CLOCK_TRIGGERS = ("ci_pursuit_gain_on", "ci_mu_shift_on", "ci_theocratic_occasion_on", "ci_church_decline_on",
-                  "turmoil_violence_relief_on", "turmoil_vassal_war_on", "nation_functions_on")
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")

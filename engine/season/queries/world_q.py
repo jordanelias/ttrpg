@@ -4432,9 +4432,9 @@ def declare_occasion(w: World, p: Person) -> tuple:
     is his choice, and whether the act passes is its fold's (A-47). Read-only; `()` with both switches off, nothing read."""
     fx = w.fixtures
     theocratic, vassal = fx.get("ci_theocratic_occasion_on"), fx.get("turmoil_vassal_war_on")
-    sovereign = faction_prop_id(SOVEREIGN_FACTION) if SOVEREIGN_FACTION is not None else None
-    if not (theocratic or vassal) or sovereign is None:
+    if not (theocratic or vassal) or SOVEREIGN_FACTION is None:
         return ()
+    sovereign = faction_prop_id(SOVEREIGN_FACTION)
     headed = {f for f in faction_props(w) if head(w, f) == p.id}
     if not headed or sovereign in headed:
         return ()

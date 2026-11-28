@@ -631,6 +631,7 @@ def parse(doc) -> tuple:
 
 
 _CACHE: Optional[tuple] = None
+_SHIPPED: Optional[tuple] = None    # `(rows, goals())`, keyed to the `_CACHE` it filtered by identity: a test that swaps or clears the rows re-filters
 
 
 def goals() -> tuple:
@@ -639,8 +640,11 @@ def goals() -> tuple:
 
     Raises `Unspecified` rather than returning `()` if the file is absent: a world built from a
     silently missing goals file is a world with no goals wearing a successful load's clothes."""
+    global _SHIPPED
     rows = _rows()
-    return rows if not any(g.switch for g in rows) else tuple(g for g in rows if g.switch is None)
+    if _SHIPPED is None or _SHIPPED[0] is not rows:      # the filter is built once per cached row set, not per call (`opinion_of` asks twice)
+        _SHIPPED = (rows, rows if not any(g.switch for g in rows) else tuple(g for g in rows if g.switch is None))
+    return _SHIPPED[1]
 
 
 def switched(fx=None) -> tuple:
