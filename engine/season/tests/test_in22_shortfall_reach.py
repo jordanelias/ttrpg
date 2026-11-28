@@ -30,7 +30,7 @@ seat] -- `H-158`'s two remedies, and this is the eligibility one.
 
 from __future__ import annotations
 
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import CHANNEL_CLAIM_SOURCE
 from ..data.verbs import VERB_TABLE
@@ -50,6 +50,10 @@ from .test_territorial_subsistence import CONTROL_ARM, LIVE_ARMS, SHIPPED_ARM
 GOVERNORS = (S.REEVE, S.FAR_REEVE)
 
 
+# B12b.44: `scarce.governed` is sized at the x1 arm (grain 2, salt 1), so every world in this file plants it.
+X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)
+
+
 def _recorded(w) -> dict:
     """What MATTER recorded at the hungry larder: `{predicate: units}`, off the log."""
     return {o.predicate: o.value for e in w.log for o in e.observed
@@ -61,7 +65,7 @@ def _held(w, pid) -> dict:
             if c.subject == S.HUNGRY and str(c.predicate).partition(":")[0] == SHORTFALL_PREDICATE}
 
 
-def _one_season(fixtures=DEFAULT_FIXTURES):
+def _one_season(fixtures=X1):
     # `steward_holds=False`: nobody HOLDS the hungry town, so the document channel admits nobody to
     # its larder write and the only route left to a person not standing there is the one under test.
     w = S.governed(fixtures=fixtures, steward_holds=False)
@@ -73,7 +77,7 @@ def test_in22_the_world_isolates_purview_as_the_only_difference():
     """THE PRECONDITION, ASSERTED SO THE FALSIFIER CANNOT PASS FOR ANOTHER REASON: neither reeve
     stands at the hungry town or holds it, both hold a live seat with a rung, and exactly one seat's
     purview contains the town."""
-    w = S.governed(steward_holds=False)
+    w = S.governed(fixtures=X1, steward_holds=False)
     assert S.HUNGRY not in {world_q.place_of(w, g) for g in GOVERNORS}
     assert not [t for t in w.tenures if t.live and t.object == S.HUNGRY and t.kind == "hold"]
     for g, seat in ((S.REEVE, S.REEVE_SEAT), (S.FAR_REEVE, S.FAR_SEAT)):
@@ -139,13 +143,13 @@ def test_in22_the_governors_questions_for_holds_the_claim_and_a_transfer_forms_f
 
 
 def test_in22_control_the_none_arm_deposits_nothing_to_a_governor():
-    w = _one_season(DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    w = _one_season(X1.sweep("observation_deposit_mode", "none"))
     assert _recorded(w), "the record was still made; only its deposit is the arm's"
     assert _held(w, S.REEVE) == {} and _held(w, S.FAR_REEVE) == {}
 
 
 def test_in22_control_the_route_rides_the_seat_channel_and_is_off_under_presence_only():
-    w = _one_season(DEFAULT_FIXTURES.sweep("fan_out_mode", "presence_only"))
+    w = _one_season(X1.sweep("fan_out_mode", "presence_only"))
     assert _recorded(w)
     assert _held(w, S.REEVE) == {}
     assert _held(w, S.POPULACE), "presence still admits the people standing at the larder"
@@ -155,7 +159,7 @@ def test_in22_an_acts_reads_do_not_reach_a_governor():
     """ACTORLESS ONLY. The steward's executed `transfer` out of the granary carries the fold's reads of
     the granary's stores, and the granary lies inside the reeve's purview -- yet those reads stay the
     steward's (`H-122`'s `actor` arm). Asserted that the transfer EXECUTED, or the absence is vacuous."""
-    w = S.governed(seed=4)   # seed re-picked at B06.99: the stream changed (was 0; seeds 1..8 scanned, 4 is the first where the steward transfers)
+    w = S.governed(seed=4, fixtures=X1)   # seed re-picked at B06.99: the stream changed (was 0; seeds 1..8 scanned, 4 is the first where the steward transfers)
     d = _season(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     real = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
@@ -191,7 +195,7 @@ def _paying_run(acting=(S.REEVE,), between=None):
     the CONTROL twin: the same world and the same two barriers, nobody acting. `between(w)`, if
     given, runs after the question is read and before season 2. Returns `(world, question,
     season-2 acts, season-2 Events)`."""
-    w = S.governed(steward_holds=False)
+    w = S.governed(fixtures=X1, steward_holds=False)
     d = _season(w)
     q = S.shortfall_question(w, S.REEVE)
     assert q is not None, "the reeve holds no shortfall question; nothing below is observed"
@@ -256,7 +260,7 @@ def test_in22_control_an_unseated_giver_still_gives_from_where_he_stands_with_no
     before -- `exercised_seat` is `None` and `from` is his own containing rung. The steward (no seat)
     in `scarce.build`, against the reeve (seated) in `scarce.governed`, on the same verb row."""
     row = VERB_TABLE["transfer"]
-    w = S.build()
+    w = S.build(fixtures=X1)
     steward = w.persons[S.STEWARD]
     assert exercised_seat(steward, row) is None
     _season(w)
@@ -265,7 +269,7 @@ def test_in22_control_an_unseated_giver_still_gives_from_where_he_stands_with_no
     (cand,) = [c for c in opening_set(steward, View(steward.id, [], 99, q), q, w.fixtures)
                if c.verb == "transfer"]
     assert cand.operands["from"] == S.GRANARY, cand.operands
-    g = S.governed()
+    g = S.governed(fixtures=X1)
     reeve = g.persons[S.REEVE]
     assert exercised_seat(reeve, row) == S.REEVE_SEAT
     assert treasury_of(reeve, S.REEVE_SEAT) == g.offices[S.REEVE_SEAT].rung == S.MARCH
@@ -277,7 +281,7 @@ def test_in22_a_seat_granting_no_issue_exercises_nothing_and_its_holder_gives_as
     from his own home. Built by removing the cause -- the builder's remit, before seating stamps the
     grant -- not by editing the result."""
     monkeypatch.setattr(S, "REEVE_REMIT", [])
-    w = S.governed(steward_holds=False)
+    w = S.governed(fixtures=X1, steward_holds=False)
     reeve = w.persons[S.REEVE]
     assert exercised_seat(reeve, VERB_TABLE["transfer"]) is None
     _season(w)
@@ -363,7 +367,7 @@ def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
     confidence is 100 at the control gain 0 and 63 at the shipped 0.5. Asserted per held claim, and that one was held."""
     got = {}
     for gain in (0.0, 0.5):
-        w = _one_season(DEFAULT_FIXTURES.sweep("refraction_gain", gain))
+        w = _one_season(X1.sweep("refraction_gain", gain))
         held = [c for c in w.persons[S.REEVE].ledger if c.subject == S.HUNGRY
                 and str(c.predicate).partition(":")[0] == SHORTFALL_PREDICATE]
         assert held, f"the reeve holds no shortfall claim at gain {gain}; nothing is observed"
@@ -384,7 +388,7 @@ def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
 
 
 def _armed(step):
-    return _one_season(DEFAULT_FIXTURES.sweep("body_step", step))
+    return _one_season(X1.sweep("body_step", step))
 
 
 def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor_in_purview():

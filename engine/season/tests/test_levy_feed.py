@@ -26,7 +26,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from engine.season.data.fixtures import DEFAULT_FIXTURES
+from engine.season.data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.tests._dispatch_realm import realm_seating_dispatch as build_realm   # B21.03: the march seat holds `dispatch`
 from engine.season.loop.driver import SeasonDriver, mint_token
@@ -112,7 +112,8 @@ def _world(on: bool, treasury_a=None, treasury_b=None, kinds=WHOLE_RATION):
     B12b.47: `kinds` is the `field_ration_kinds` arm. The default is the larder's WHOLE ration (grain AND salt, the control the numbers of
     this file's first blocks are read against); `kinds=None` leaves the shipped `("grain",)`."""
     # B12a.99: pinned to the `uniform` endowment arm (every settlement a harbour and a seam, as B12a.54's `test_hunger.py`): the shipped `ground` seeds the treasuries under `granary_seasons` 4, which the PLANTED stores here are read against (reverting `granary_seasons` or `endowment_mode` alone turns these three green)
-    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform"))
+    # B12b.44: the PLANTED stores are sized at the x1 ration (grain 2, salt 1); the shipped arm is x5, so the world plants x1.
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("endowment_mode", "uniform").sweep("subsistence_weight", SUBSISTENCE_X1))
     w.fixtures = w.fixtures.sweep("field_provisioning", on)
     if kinds is not None:
         w.fixtures = w.fixtures.sweep("field_ration_kinds", kinds)
@@ -272,10 +273,10 @@ def test_on_the_defenders_treasury_is_debited_by_its_own_fielded_troops(monkeypa
     """LF-3, THE DEFENDER'S HALF: grain 6 and salt 3 at the shipped ration (grain 2, salt 1) field 3 of the
     defender's 6, and the fold debits exactly that ration from the defender's treasury -- to nothing. A debit
     dropping the defender's side (index 1 of the provision) leaves its stores untouched."""
-    assert dict(build_realm(0).fixtures.get("subsistence_weight")) == {"grain": 2, "salt": 1}, (
-        "the shipped ration moved; re-derive this test's numbers")
     seen = _recording(monkeypatch)
     w = _world(True, treasury_b={"grain": 6, "salt": 3})
+    assert dict(w.fixtures.get("subsistence_weight")) == {"grain": 2, "salt": 1}, (
+        "the planted ration moved; re-derive this test's numbers")
     _fold(w, _march_act())
     assert len(seen) == 1, seen
     assert seen[0][1]["troops_b"] == 3, seen

@@ -14,7 +14,7 @@ import pytest
 
 from ..harness import populated as POP
 from ..boot.realm import build_realm, place_person
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
 from ..data.matrix import WriteClass
 from ..gaps import Unspecified, expect_refusal
 from ..harness import scarce as S
@@ -49,6 +49,7 @@ def test_settlement_with_no_cohort_reads_empty():
 
 
 UNIFORM = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
+X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)    # B12b.44: the planted worlds below are sized at the x1 arm (grain 2, salt 1)
 
 
 def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_first_yield():
@@ -146,7 +147,7 @@ def _seasons(w: World, seasons: int) -> dict:
 
 
 def _arm(draw: bool, **rows):
-    f = DEFAULT_FIXTURES.sweep("hunger_severity_draw", draw)
+    f = X1.sweep("hunger_severity_draw", draw)
     for name, value in rows.items():
         f = f.sweep(name, value)
     return f
@@ -218,7 +219,7 @@ def test_the_arm_refuses_a_row_that_is_not_the_ladders(row, bad):
 
 # B12b.14 (`09_WR_provided_arcs` edit 2, `H-211`): A FED BODY MENDS, BEHIND `body_mend`. One cohort at weight 2 (want 6: grain 4, salt 2) in one settlement.
 def _mend_world(mend: bool, body: int = 495, stores=(("grain", 1000), ("salt", 1000)), ceiling: int | None = None, site_condition: int | None = None) -> World:
-    w = World(world_seed=0, fixtures=DEFAULT_FIXTURES.sweep("body_mend", mend))
+    w = World(world_seed=0, fixtures=X1.sweep("body_mend", mend))
     w.rungs["R"], w.rungs["T"], w.rungs["S"] = Rung("R", "realm"), Rung("T", "territory"), Rung("S", "settlement")
     w.add_tenure(Tenure("t_T", "T", "R", "contain", since=0))
     w.add_tenure(Tenure("t_S", "S", "T", "contain", since=0))
@@ -412,3 +413,44 @@ def test_tend_refused_on_an_unfed_cohort():
     place_person(fed, "tender", "tender", "S", body=PLANTED_BODY)
     assert _tend(fed, "c0") == (["body.tended"], scale), "the fed control was not tended: the plant cannot see the refusal"
     assert _tend(short, "tender") == (["body.tended"], scale), "a weight-1 person was refused for a hunger he does not have"
+
+
+# B12b.44 (CR-22, H-11): HUNGER BINDS. The per-head weights ship at x5, chosen by the reading rule on `H-11` under its reading (a): a settlement
+# counts as below `fed` only where the per-head term makes it so, i.e. it reads `fed` once the term is dropped (want = `Person.weight`, every
+# kind's weight 1). The dropped-term reading is taken on the same world at the same stores (the fixture swept for the read only; `hunger` and
+# `subsistence_draw` write nothing): settlements that hold no eaten store of their own (they eat from the treasury above, REM-50's limit 1) read
+# below `fed` under any weight, and this is what keeps them out of the count.
+def _below_fed(w) -> set:
+    """The settlements REM-50 reads below `fed` (not `fed`, not `empty`), from the next draw, as `census`' `hunger_by_settlement` counts them."""
+    draw = world_q.subsistence_draw(w)
+    return {r for r in sorted(w.rungs) if w.rungs[r].kind == world_q.HUNGER_KIND
+            and world_q.hunger(w, r, draw)[0] not in (world_q.HUNGER_FED, world_q.HUNGER_EMPTY)}
+
+
+def _below_fed_by_the_per_head_term(w) -> set:
+    shipped, fixtures = _below_fed(w), w.fixtures
+    w.fixtures = fixtures.sweep("subsistence_weight", {k: 1 for k in fixtures.get("subsistence_weight")})
+    try:
+        dropped = _below_fed(w)
+    finally:
+        w.fixtures = fixtures
+    return shipped - dropped
+
+
+def test_shipped_arm_reads_below_fed_after_season_one():
+    """The exit at two seasons (A-114), seeds 0-2, the shipped realm: after season 2 at least one settlement reads below `fed` that the dropped
+    per-head term reads `fed` (reading (a)); and, the season-0 floor rule, no cohort's body crosses a `band_floors.body` floor in season 1. At x1
+    the count is 0 at every seed (B12b.44's reading: the below-`fed` set is the same with the term dropped), so the assertion can fail."""
+    floors = DEFAULT_FIXTURES.get("band_floors")["body"].values()
+    checked = 0
+    for seed in (0, 1, 2):
+        w = build_realm(seed)
+        before = {pid: p.body for pid, p in w.persons.items() if p.is_cohort}
+        POP.run(1, seed, w=w)
+        crossed = [pid for pid, b in before.items()
+                   if pid not in w.persons or any(b >= f > w.persons[pid].body for f in floors)]
+        assert crossed == [], f"seed {seed}: a cohort's body crossed a floor (or it died) in season 1 at the shipped arm: {crossed}"
+        POP.run(1, seed, w=w)
+        assert _below_fed_by_the_per_head_term(w), f"seed {seed}: no settlement reads below `fed` by the per-head term after season 2"
+        checked += 1
+    assert checked == 3

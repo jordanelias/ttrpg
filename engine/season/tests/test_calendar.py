@@ -15,7 +15,7 @@ from fractions import Fraction
 
 import pytest
 
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import SEASONS_OF_YEAR, SEASON_TERMS
@@ -24,7 +24,8 @@ from ..queries import world_q
 from ..state.carriers import Person, Rung, Tenure
 from ..state.world import World
 
-WEIGHTS = DEFAULT_FIXTURES.get("subsistence_weight")
+X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)      # B12b.44: the town is sized at the x1 arm (grain 2, salt 1)
+WEIGHTS = X1.get("subsistence_weight")
 TOWN, COHORT = "set_town", "p_town_folk"
 WINTER = len(SEASONS_OF_YEAR) - 1
 # CP-T10-03's swept arm, `[ASSUMPTION; medium; Jordan to correct]`: winter only.
@@ -32,7 +33,7 @@ SWEPT = {s: {"yield": 1.0, "want": 1.0, "illness": 1.0, "hardship": 0} for s in 
 SWEPT[SEASONS_OF_YEAR[WINTER]] = {"yield": 0.25, "want": 1.5, "illness": 2.0, "hardship": 0}
 
 
-def _town(weight: int = 2, stores=None, tick: int = 0, fixtures=DEFAULT_FIXTURES) -> World:
+def _town(weight: int = 2, stores=None, tick: int = 0, fixtures=X1) -> World:
     w = World(0, fixtures)
     for rid, kind, st in (("r_realm", "realm", None), ("terr_town", "territory", None),
                           (TOWN, "settlement", dict(stores if stores is not None else {"grain": 20, "salt": 20}))):

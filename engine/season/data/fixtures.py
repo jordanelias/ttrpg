@@ -2008,6 +2008,9 @@ ROAD_HAZARD_OFF, ROAD_HAZARD_ON = ROAD_HAZARD_ARMS
 HUNGER_LOSS_ARMS = ("per_cohort", "per_head")
 HUNGER_LOSS_PER_COHORT, HUNGER_LOSS_PER_HEAD = HUNGER_LOSS_ARMS
 CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS, "road_hazard": ROAD_HAZARD_ARMS, "hunger_loss": HUNGER_LOSS_ARMS}
+#: B12b.44 (CR-22, `H-11`): `subsistence_weight`'s x1 arm, THE CONTROL, as `DIFFICULTY_OB_CONTROL` is `H-424`'s. The shipped x5 is `rosters.yaml`'s row;
+#: a test whose scenario is sized at grain 2, salt 1 plants this through `DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)`.
+SUBSISTENCE_X1 = {"grain": 2, "salt": 1}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}

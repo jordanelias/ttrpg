@@ -13,7 +13,7 @@ planted. Each season is read from the world's own people and log, so the writer 
 from __future__ import annotations
 
 from ..boot.realm import place_person
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
 from ..harness import probes as P
 from ..harness import scarce
 from ..loop.driver import SeasonDriver
@@ -25,9 +25,12 @@ from engine.substrate import composition
 BODY, LIGHT, HEAVY = 1000, 2, 20
 
 
+X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)      # B12b.44: these plants are sized at the x1 arm (grain 2, salt 1)
+
+
 def _falls(hunger_loss):
     """`{pid: body lost}` for the two cohorts planted, from the real `subsist` entry over the real projection."""
-    fx = DEFAULT_FIXTURES.sweep("hunger_severity_draw", False)
+    fx = X1.sweep("hunger_severity_draw", False)
     fx = fx if hunger_loss is None else fx.sweep("hunger_loss", hunger_loss)
     w = World(world_seed=0, fixtures=fx)
     w.rungs["R"], w.rungs["T"] = Rung("R", "realm"), Rung("T", "territory")
@@ -58,7 +61,7 @@ def test_per_cohort_is_the_control():
 def _famine(weight, body, seasons, famine_loss):
     """`scarce.build` under `hunger_loss per_head` with the one cohort's weight and body planted and the drained-larder draw's loss fixed (no severity draw),
     run `seasons` seasons with no chooser. Returns `(world, [(weight, body, demanded units) or None per season])`; `None` is a cohort that is gone."""
-    fx = (DEFAULT_FIXTURES.sweep("famine_loss", famine_loss).sweep("hunger_loss", "per_head")
+    fx = (X1.sweep("famine_loss", famine_loss).sweep("hunger_loss", "per_head")
           .sweep("hunger_severity_draw", False))
     w = scarce.build(0, fx)
     w.persons[scarce.POPULACE].weight, w.persons[scarce.POPULACE].body = weight, body

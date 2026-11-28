@@ -2385,9 +2385,13 @@ rosters:
       timber, ore and coin are stored and not eaten. They are registered in `matter_kinds` and
       absent here, so a draw against them raises — which is the refusal above doing its job on
       the very first kind somebody adds to a larder by mistake.
+      ⚠ B12b.44 (CR-22): THE x5 ARM SHIPS, chosen by the reading rule on `H-11` (the arms, the rule
+      and its reading (a) are that row's `cite:`). x1 (grain 2, salt 1) is the control; tests whose
+      scenarios are sized at it plant it (`data/fixtures.py::SUBSISTENCE_X1`).
+      [ASSUMPTION; medium; Jordan to correct; revert: x1, grain 2, salt 1]
     weights:
-      grain: 2
-      salt:  1
+      grain: 10
+      salt:  5
   hunger_bands:
     source: "REM-50, as repaired by AM-A-04 (`workplans/valoria_master_workplan_v10_part13.md`, REM-50): a settlement's hunger, read by `world_q.hunger`"
     open: false

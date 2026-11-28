@@ -21,6 +21,7 @@ import hashlib
 
 import pytest
 
+from ..data.fixtures import SUBSISTENCE_X1
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import SEASONS_OF_YEAR
@@ -76,7 +77,7 @@ OPENING = {"grain": 30, "salt": 15}
 
 
 def _town(table, seed: int = 0) -> World:
-    w = World(seed, DEFAULT.sweep("season_factor_draw", table))
+    w = World(seed, DEFAULT.sweep("season_factor_draw", table).sweep("subsistence_weight", SUBSISTENCE_X1))   # B12b.44: the town is sized at the x1 arm
     scale = w.fixtures.get("condition_scale")
     for rid, kind, stores in (("r_realm", "realm", None), ("terr_town", "territory", None),
                               (TOWN, "settlement", dict(OPENING))):
