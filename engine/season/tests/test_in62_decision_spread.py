@@ -1,6 +1,6 @@
 """v9 IN-62 -- ONE OWNER OF THE SCORE'S TERMS, AND THE READING THAT ATTRIBUTES A DECISION TO ONE OF THEM.
 
-`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit, aim, risk)` owns the formula and
+`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit, aim, risk, duty)` owns the formula and
 `make_chooser`'s `score` adds its five terms (`fit` is 0.0 at `confer_fit_weight`'s shipped 0.0, `aim` at `aim_gain`'s, `risk` at `risk_gain`'s); `harness/decision_spread.py::attribute_top` says which
 term decided a top. Five claims, each executed and each able to fail:
 

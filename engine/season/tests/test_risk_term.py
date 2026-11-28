@@ -1,5 +1,5 @@
 """B10.31 (`02_CHAR_what_an_act_risks` edits 1-5) -- WHAT AN ACT RISKS: `decision/choose.py::score_terms`' `risk`, the tuple's fifth element
-(`(pursuit, stance, fit, aim, risk)`), on a candidate whose row contests a prize `rosters.yaml: bodily_prizes` lists. Lane: the season loop.
+(`(pursuit, stance, fit, aim, risk, duty)`), on a candidate whose row contests a prize `rosters.yaml: bodily_prizes` lists. Lane: the season loop.
 
     risk = - risk_gain * exposed * (1 - chance) * (1 + body_band_penalty) * nerve
 

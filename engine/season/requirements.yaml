@@ -797,7 +797,7 @@ rows:
             the share is the same on both trees because the built realm has no season played and B21d.05 acts in play: the line observes the chooser's ranking, not the duty weight, so it is a control that B21d.05 leaves the
             built ranking alone, not a reading of it; the previous close's reading (B10's, @8d32955, seed 0) was {'draw': 243, 'pursuit': 255} (255 of 498, 0.512; seeds 1 and 2 0.532, 0.548; `--control` arm 0.422, 0.422, 0.424),
             and the 261 of 516 here is what the merged batches between left, not attributed; `aperture 2 0` base against after, realm seed 0: attempted 1334 -> 1329, executed 784 -> 783 (acts 954 -> 951),
-            no verb with executed above 0 on the base falls to 0 (the same two runs as R-04.a's record); `fx.duty_weight` 0 and `fx.betrayal_band` at +inf are the controls (the B21d.05 test file's switches-off arm, not re-run for this record)
+            no verb with executed above 0 on the base falls to 0 (the same two runs as R-04.a's record); `fx.duty_weight` 0 and `fx.betrayal_band` None are the controls (read at the B21d.05 commit, 107cb201b: seed-0 one-season hash 4f556eb8… as at the base; not re-run for this record, and the dispute re-point stays on in that arm)
           does_not_show: >-
             the conjunct's own `expects` (seeds 1 and 2 and the `--control` arm were not re-read; seed 0 clears one half by 6 of 516); that the Spymaster's 17 `speak` toward the King were declined BECAUSE of the duty weight
             and not displaced by the changed draw sequence (one seed, one office, the hash moved as a whole); that choices differ by an officer's own grievances across seeds (only seed 0's Spymaster read); a season past the first
