@@ -304,7 +304,7 @@ def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
     BOTH cross the terms on the same beat and both fail their yield roll (`_ALWAYS`): the one situation `_terms_yielder`'s tie branch exists for."""
     A, B = C.Combatant('A', weapon='arming'), C.Combatant('B', weapon='arming')
 
-    def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0):
+    def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0, **kw):   # B18.09: `play_round` passes `switching=`
         A_.apply_wound(damage_A); B_.apply_wound(damage_B)
         return None, False, 'terms'
     monkeypatch.setattr(wrapper, 'engagement', _both_cross)

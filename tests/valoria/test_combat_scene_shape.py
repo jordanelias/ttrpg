@@ -24,7 +24,7 @@ from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop import effects_combat
 from engine.season.queries import person_q
-from engine.season.queries.inputs import PersonalCombatInput, PlayHost, SceneShape
+from engine.season.queries.inputs import DECIDE_ROLE, PersonalCombatInput, PlayHost, SceneShape
 from engine.season.seam.wrappers import combat
 from engine.season.state.carriers import Act
 from modules.combat import fight as entry
@@ -115,6 +115,7 @@ def _fought(aid, seed=1003, host=None, world=None, fan=None, witness=False, obs=
         return SimpleNamespace(fn=fn), refusal
     w = world or P.tiny_world()
     if world is None:
+        w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; both live at `Hh` and keep the arming sword these readings were made with
         w.world_seed = seed
         if fan is not None:
             w.fixtures = w.fixtures.sweep("fan_out_mode", fan)
@@ -204,7 +205,7 @@ def test_played_and_automated_scenes_carry_equal_observations():
         def decide(view):
             calls.append(view.round)
             return "engage"
-        host = PlayHost(frozenset(w.persons), decide) if played else None
+        host = PlayHost(frozenset(w.persons), deciders={DECIDE_ROLE: decide}) if played else None
         acts = [Act(id=f"b1415_{i}", actor=x, verb="fight", payload={"subject": y}) for i, (x, y) in enumerate(pairs)]
         md = w.fixtures.get("contest_max_depth")
         declared = d.resolve(mint_token(w, WriteClass.ACTS), acts, md)

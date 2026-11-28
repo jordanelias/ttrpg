@@ -68,8 +68,8 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B21c (FA), B34 (GO) |
-| S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
+| S14 | B12b (SE+WR), B21c (FA) |
+| S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
 | S18 | B21s (IN), B23 (FA), B30 (MB), B35 (WR), **B41 (GO)** |
@@ -88,7 +88,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B11F2-flow-in | IN | W17 | S17 | 2 | 32_cont | 12 (B8 P2 H2) | MOVER (conditional 1) | 7.3 | B09, B10, B11F1 |
 | B12b-weather-arcs-population | SE+WR | W14 | S14 | 0 | 24, 24_cont | 48 (B38 P7 R1 H1 C1) | MOVER (behaviour 12, encoding 1) | 21.7 | B12a |
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
-| B18-pc-content | PC | W14 | S15 | 7 | 28_cont2 | 10 (B9 C1) | MOVER (behaviour 4) | 6.5 | B00, B01, B01a (B01a.05), B02, B14, B15, B16, B17 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
 | B21c-fa-seats | FA | W14 | S14 | 0 | 25 | 10 (B6 P1 H2 DF1) | MOVER (behaviour 4) | 6.5 | B21b |
@@ -105,7 +104,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B31-mb-loadout-economy | MB | W16 → **W18** | S19 | 4 | 39_cont | 21 (B17 P2 C1 DF1) | MOVER (behaviour 5) | 10.9 | B00, B01, B02, B16L, B17, B18, B19, B20 +R, B22 +R |
 | B32-inst-kit | FA | W17 | S17 | 0 | 34, 34_cont | 33 (B31 P1 BL1) | MOVER (behaviour 16, encoding 1) | 15.7 | B00, B01, B02, B04, B05, B07, B20, B21, B21b, B21c, B24, B24a, B25, B27 |
 | B33-inst-economy-hands | FA | W18 | S19 | 2 | 38, 38_cont | 52 (B41 P2 H1 BL2 C6; +B33.49, B33.50 lane D4; +B33.51 B, V2 fold) | MOVER (behaviour 15, encoding 8; B33.05 +R2d) | 23.3 | B00, B01, B02, B04, B05, B07, B12c, B21, B21d +R, B21s +R, B24, B25, B26, B27, B28, B32 |
-| B34-go-surface | GO | W14 | S14 | 0 | 25_cont | 22 (B20 P1 R1) | MOVER (behaviour 3) | 11.3 | B00, B01, B02, B03, B10, B16 +R, B21, B24 |
 | B35-wr-thread | WR | W18 | S18 | 0 | 36, 36_cont | 31 (B25 P1 R1 H1 DF3; H3: + B35.30, B35.28 BLOCKED → HELD) | MOVER (behaviour 11, encoding 3) | 14.9 | B00, B01, B02, B03, B05, B09, B11, B12c, B32, B34 |
 | B36-wr-story-instruments | WR | W19 | S19 | 0 | 39 | 18 (B18) | **MOVER (behaviour 1)** (§2.2: EQUAL) | 9.7 | B00, B01, B02, B03, B09, B12c, B27, B34, B35 |
 | B37-happenings | IN | W16 | S16 | 3 | 32 | 19 (B14 P1 R2 C2) | MOVER (behaviour 4) | 10.1 | B00, B01, B02, B05, B10, B11, B12c, B15, B16, B21, B29 +R |
@@ -134,7 +132,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B12b-weather-arcs-population | 24_cont:437 | yes | 1 | yes | none | — |
 | B12c-material-verbs-and-valley | 28_cont:277 | yes | 3 | yes | none | —, R1: B15, B34 |
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
-| B18-pc-content | 28_cont2:218 | yes | 8 | yes | none | B01a (B01a.05) |
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
 | B20-mb-orders | 30:514 | yes | 10 | yes | none | — |
 | B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
@@ -151,7 +148,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B31-mb-loadout-economy | 39_cont:419 | yes | 9 | yes | none | — |
 | B32-inst-kit | 34_cont:220 | yes | 14 | yes | none | — |
 | B33-inst-economy-hands | 38_cont:622 | yes | 16 | yes | none | B21d, B21s |
-| B34-go-surface | 25_cont:483 | yes | 8 | yes | none | — |
 | B35-wr-thread | 36_cont:363 | yes | 10 | yes | none | — |
 | B36-wr-story-instruments | 39:457 | yes | 9 | yes | none | — |
 | B37-happenings | 32:415 | yes | 11 | yes | none | B29 |
@@ -177,9 +173,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | S13 | B21b | 01, 02, 04, 06, 08, 10, 11, 12, 13, 14, 16, 18, 21, 25, 26 | — | 05 | `B21b.99` | 4 of 5 movers |
 | S14 | B12b | 12, 16, 21, 25, 28, 33, 40, 41, 42, 43, 44, 47 | 18 | — | `B12b.99` | 1 of 4 movers |
 | S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |
-| S14 | B34 | 01, 23, 24 | — | — | `B34.99` | 4 of 4 movers |
 | S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | 09 (R2c, K6 F14) | `B12c.99` | 1 of 5 movers |
-| S15 | B18 | 04, 05, 08, 09 | — | — | `B18.99` | 2 of 5 movers |
 | S15 | B19 | 12, 13, 23, 24, 25, 26, 51, 58, 60, 61, 63, 64, 70, 67, 68 | — | — | `B19.99` | 3 of 5 movers |
 | S15 | B21d | 05, 07, 08, 09 | — | — | `B21d.99` | 4 of 5 movers |
 | S15 | B24a | 01, 04, 05, 06, 08 | — | — | `B24a.99` | 5 of 5 movers |
@@ -255,7 +249,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | 37 | S14 · B12b | `amount_shares` = `["1000"]` | BLOCKED (design: no target reading) | no realm target; its precondition (CP-T08-06, B12b.26) is HELD | 24:43 | B98.31 BLOCKED |
 | 38 | S14 · B12b | `hunger_loss` = `per_cohort`, `famine_loss` = 0 | BLOCKED (design: no target reading) | "a reading at CR-22's exit, not a pass condition" | 24:43 | B98.31 BLOCKED |
 | 39 | S14 · B12b | `regrow_seasons` = 0 | BLOCKED (design: no target reading) | "a reading, not a pass condition" | 24:43 | B98.31 BLOCKED |
-| 40 | S14 · B34 | `rosters.yaml: management_orders` = `[]` | BLOCKED (content: CL-MGMT's list, held, §8) | A-104 names examples, not a list | 25_cont:37 | B98.32 BLOCKED |
+| 40 | S14 · B34 | `rosters.yaml: management_orders` = `[]` | BLOCKED (content: CL-MGMT's list, held, §8) | A-104 names examples, not a list | 25_cont:37, expunged at `3d9f96ec3` | B98.32 BLOCKED |
 | 41 | S15 · B12c | `labour_mode` = `off` | BLOCKED (design: no target reading) | CP-T08-01's arms are on/off readings | 28:34 | B98.33 BLOCKED |
 | 42 | S15 · B12c | `store_spoil` = all 0 | BLOCKED (design: no target reading) | JQ-6's family | 28:34 | B98.33 BLOCKED |
 | 43 | S15 · B12c | `price_base` all equal, `price_horizon` = 0 | BLOCKED (carrier: no computed producer of `offer`) while B12c.17 is HELD; TARGETED only if its trigger fires — part 44 governs (B98.34 flips nothing and stops if B12c.17 has landed; R2d) | CP-T08-05: across seeds a rung in dearth receives more grain by `exchange` than one in surplus, two seasons | 28:34 | B98.34 BLOCKED |

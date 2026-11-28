@@ -349,4 +349,9 @@ CFG = dict(
   # ── B14.18 (U5b_PC_residue §1 item 2): the scale of the read's logistic in read_contest, p_read = logistic((read_d-read_a)/READ_SCALE);
   # was the literal 1.0 (byte-identical), now carried by the export so a sweep can fit it. [SIM-CALIBRATE]
   READ_SCALE=1.0,
+
+  # ── B18.07 (`03_PC_loadout_and_carry` item 3): a fighter short of what he carries closes more slowly, close_rate x 1/(1 + K*short),
+  # `short` the Strength points he is under the carry demand (`PersonalCombatInput.short`, read through `combatant.short`). 0.0 is the control: the
+  # factor is exactly 1.0 and a fight moves not at all. The stamina half of the penalty has no coefficient (ACT_WEIGHT/D_WT, as the harness's). [SIM-CALIBRATE]
+  CARRY_CLOSE_K=0.0,
 )

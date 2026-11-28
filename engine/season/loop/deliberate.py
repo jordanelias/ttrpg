@@ -43,6 +43,7 @@ from ..state.ids import H
 from typing import Any, Callable
 from .. import decision
 from ..data.matrix import Step
+from ..data import rosters
 from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
@@ -160,7 +161,9 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # tail is not kept: the next lap asks again, over what the person then reads.
         # -------------------------------------------------------------------
         scenes: list = []
-        if b > 0:
+        # B34.10 (A-104): a person with the season's budget spent is still asked while a management order exists, since an order costs
+        # no scene (`Scene.cost`) and `pack_scenes` skips every priced chunk at a remainder of 0. The list ships empty: then this is `b > 0`.
+        if b > 0 or rosters.MANAGEMENT_ORDERS:
             produced = choose(me, v, s, ask_budget)
             # `W17`. THE BUDGETED UNIT IS THE SCENE (Jordan, 2026-09-02), so the bound below
             # counts scenes and the interaction bound is a SEPARATE check. A bare `Act` is one

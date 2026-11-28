@@ -104,7 +104,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - COST and TIER: calibration; `sonnet`, high; `opus` reads (a) and (b) (U8). LANDS IT: B98's producer; `Item: B98.31`, `[skip ci]`.
 
 ### B98.32 — `management_orders` stays empty · row 40; B34.10; `IS-B3-GO-07` · BLOCKED (content: CL-MGMT's list, held) · HASH EQUAL
-- SOURCE: part 2 §4 row 40; B34's `DIALS AT CONTROL` line (part 25_cont): "set by: none in v12 (the list is CL-MGMT's content, held …); target: none stated (A-104 names examples, not a list)"; part 2 §8 (CL-MGMT held).
+- SOURCE: part 2 §4 row 40; B34's `DIALS AT CONTROL` line (part 25_cont, expunged at `3d9f96ec3`): "set by: none in v12 (the list is CL-MGMT's content, held …); target: none stated (A-104 names examples, not a list)"; part 2 §8 (CL-MGMT held).
 - SETTING: `engine/season/rosters.yaml` (`management_orders`) = `[]` (B34.10).
 - INSTRUCTION: none. OWNER: Jordan's list, through CL-MGMT when its trigger fires (part 2 §8); listed in the PR body.
 - GATE: `ROW(engine/season/rosters.yaml, management_orders)` on the closing tree → `[]` (R2). B99 QUOTES: no management order is offered; R-04's management conjunct reads at this.

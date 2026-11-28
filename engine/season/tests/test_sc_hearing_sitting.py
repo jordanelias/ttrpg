@@ -184,7 +184,7 @@ def test_the_hearing_decider_picks_a_legal_move_by_a_draw(monkeypatch):
     assert sigma._played_by(w, None, inp) == {}                                                # CONTROL, shipped: no role listed, the sitting is automatic
     w, _d = _world(sitting_exchanges=1, npc_decider_roles=("social_contest.proceeding",))
     assert set(sigma._played_by(w, None, inp)["deciders"]) == {p.id for p in inp.room if p.side}
-    assert sigma._played_by(w, PlayHost(frozenset({me.id}), None), inp)["deciders"].keys() == {p.id for p in inp.room if p.side} - {me.id}   # a person the host plays is not the NPC's
+    assert sigma._played_by(w, PlayHost(frozenset({me.id})), inp)["deciders"].keys() == {p.id for p in inp.room if p.side} - {me.id}   # a person the host plays is not the NPC's
     moves, grounds = dict(inp.rite.moves)["for"], [g for g, _, _ in inp.grounds]
     assert len(moves) > 2 and len(grounds) > 1
     options = tuple(Option(m, g, None, "raises", 0.0, 0.5) for m in moves for g in (grounds if m in ("argue", "press") else (None,)))
@@ -278,7 +278,7 @@ def _sit(seed, hand=(3, 3), decide=None):
     act = Act(id="t:det", actor=G.ACCUSER, verb="determine", via=G.ACCUSER_SEAT, payload={"subject": G.ACCUSED, "to": G.ACCUSED})
     depth = w.fixtures.get("contest_max_depth")
     out = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=depth)
-    host = decide if isinstance(decide, PlayHost) else None if decide is None else PlayHost(frozenset({G.ACCUSER}), None,
+    host = decide if isinstance(decide, PlayHost) else None if decide is None else PlayHost(frozenset({G.ACCUSER}),
                                                                                          deciders={sigma.PROCEEDING_ROLE: decide})
     sigma._resolve_proceeding = lambda *a, **k: got.setdefault("r", real(*a, **k))
     try:
@@ -350,7 +350,7 @@ def test_scripted_player_echoing_the_npc_reproduces_the_auto_hash(monkeypatch):
 
     built, real = {}, sigma._npc_decider
     monkeypatch.setattr(sigma, "_npc_decider", lambda w, inp: built.__setitem__("npc", real(w, inp)) or built["npc"])   # the room's own, rebuilt for each sitting
-    host = lambda f: PlayHost(frozenset({ACCUSER}), None, deciders={sigma.PROCEEDING_ROLE: f})
+    host = lambda f: PlayHost(frozenset({ACCUSER}), deciders={sigma.PROCEEDING_ROLE: f})
     checked = 0
     for seed in (1, 4):
         auto = S.run("hearing", seed, 1)["hash"]

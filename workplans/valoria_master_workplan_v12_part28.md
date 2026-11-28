@@ -1,10 +1,10 @@
-# Workplan v12 — part 28: batches B12c-material-verbs-and-valley, B24a-sc-outside-the-room, B18-pc-content
+# Workplan v12 — part 28: batches B12c-material-verbs-and-valley, B24a-sc-outside-the-room
 
 ## Status: RATIFIED, ED-IN-0362 (a body part of workplan v12, drafted under `master/workplan_v12/`; adopted 2026-11-15 as the one active plan; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
 ## Written against: the working tree at `fe09cdd` (branch `ccr-62958c70-0kjhsw`), read 2026-11-12; author lane A28 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2, with the errata of `V12_STRUCTURE_part4.md` and the orchestrator's routing (`H2_NOTES.md`; E-8 placements relayed to this lane). Every item is written against the tree as the batches before it leave it; a symbol absent at `fe09cdd` names the batch that makes it.
 
-**What this part holds.** Three batches of step S15, in §2.1's order: `B12c-material-verbs-and-valley` (SE+WR; U3 §1 item 13 steps 20–25, `IS-B3-SE-05`, `IS-B3-SE-06`'s build, `IS-B3-SE-01`, the intake entries routed to it), `B24a-sc-outside-the-room` (SC; v11's CR-58 to CR-64 as the intake §3 narrows them, and CR-67), `B18-pc-content` (PC; U3 §1 item 18). Each batch is one block with one close, in the form of `V12_STRUCTURE_part2.md` §5.2 and §5.3 as `_part4` amends them. A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
+**What this part holds.** Two batches of step S15 (a third, `B18-pc-content`, closed and left the plan), in §2.1's order: `B12c-material-verbs-and-valley` (SE+WR; U3 §1 item 13 steps 20–25, `IS-B3-SE-05`, `IS-B3-SE-06`'s build, `IS-B3-SE-01`, the intake entries routed to it), `B24a-sc-outside-the-room` (SC; v11's CR-58 to CR-64 as the intake §3 narrows them, and CR-67). Each batch is one block with one close, in the form of `V12_STRUCTURE_part2.md` §5.2 and §5.3 as `_part4` amends them. A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
 
 **Words.** `unified/U1_GLOSSARY.md`; a person's numbers are an attribute, a skill and its skill score, a derived score (A-98); armies are an army, a unit, an army formation, a unit formation (A-99); a *lap* is one pass of the season's scene budget and a *round* is one engagement of a fight (A-101); the riposte's code id is `finalblow_riposte`. Copied source text that says `round` for the season's pass carries `NAMES:` (B04, PCR-4); copied text that says `faculty` for a skill score is corrected and says so (A-98, A-112); `harness/populated.py` is `boot/realm.py` after B03c (`NAMES:`).
 
@@ -16,7 +16,7 @@
 INVOCATION: /methodology-execute Batch B12c-material-verbs-and-valley
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SE.md, Open table; `registers/handoffs/HANDOFF_WR.md` carries one pointer row `Batch B12c-material-verbs-and-valley — IN FLIGHT (row in HANDOFF_SE.md)`, deleted at the same expunge (D-21)
 GATE: Batch B12b-weather-arcs-population
-GATE: Batch B34-go-surface
+GATE: Batch B34-go-surface @3d9f96ec3581dd042899b1f9d9586481608a970a
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c6 → `test_valley.py` passes and the valley's policies read as B12c.28's gate states; `found`, `build`, `work` built out (`aperture 2 --seeds 0 1 2`, four seasons in the source, A-114); `BUILT OUT` for `restore`, `work`, `sabotage`, `exchange`, `requisition`, `found`, `build` (IS-A §12.2 B12 row; `IS-A-08`: a verb of this batch not built out at the close is a failed gate). B12's row of the map is this batch's (`V12_STRUCTURE.md` §3); no `status:` is edited (A-114).

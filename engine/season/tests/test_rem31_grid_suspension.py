@@ -41,7 +41,7 @@ from engine.season.boot.realm import build_realm
 from engine.season.loop import deliberate as deliberate_mod
 from engine.season.loop import driver as driver_mod
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs
-from engine.season.queries.inputs import PlayHost
+from engine.season.queries.inputs import DECIDE_ROLE, PlayHost
 from engine.season.state.carriers import Act
 from engine.season.state.ids import H, draw_factory
 
@@ -71,7 +71,7 @@ def _season(played=None, decider=None, callback=_scripted, shuffle=False):
     host, choose = None, auto
     if played is not None:
         choose = dispatching_chooser(auto, {pid: callback for pid in played})
-        host = PlayHost(frozenset(played), decider(w, record))
+        host = PlayHost(frozenset(played), deciders={DECIDE_ROLE: decider(w, record)})
     real_mint, real_order = driver_mod.mint_token, deliberate_mod.deliberation_order
 
     def counting_mint(world, wclass):
@@ -102,7 +102,7 @@ def _round(played=None, decider=None):
     w = build_realm(SEED)
     d = SeasonDriver(w)
     record = dict(calls=[], mints=0)
-    host = None if played is None else PlayHost(frozenset(played), decider(w, record))
+    host = None if played is None else PlayHost(frozenset(played), deciders={DECIDE_ROLE: decider(w, record)})
     real_mint = driver_mod.mint_token
 
     def counting_mint(world, wclass):

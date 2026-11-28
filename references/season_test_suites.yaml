@@ -143,6 +143,7 @@ suites:
     - in23_legitimacy_stability
     - information_cluster
     - notice_draw
+    - play_surface_own_outcome
     - playable_inquiry
     - rival_teller
     - rumour
@@ -212,8 +213,10 @@ suites:
     - in68_goal_seeding
     - in70_opinion_at_read
     - interactions_log
+    - management_orders
     - manner_offsets
     - offer
+    - play_surface
     - refusal_memory
     - regard_unit
     - relations
@@ -221,6 +224,7 @@ suites:
     - risk_term
     - scar_stock
     - scruple
+    - seat_holders_from_ledger
     - staged_goals
     - temper
     - u1_capability_surface
@@ -259,6 +263,7 @@ suites:
     - sc02_typed_ids_and_loader
     - scale_of_rung
     - scenarios_runner
+    - scene_contract
     - scene_sequence
     - scene_store
     - season_shape

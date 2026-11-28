@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, Mapping, NamedTuple, Optional
 
+from ..data import rosters
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
@@ -661,10 +662,15 @@ class Scene:
         return sum(1 + effort_of(a) for a in self.acts)
 
     def cost(self, extended_cost: int) -> int:
-        """Scene actions this scene spends: `extended_cost` when it fills more than one slot, else
-        `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a caller sets: a scene's price is
-        what it carries, so a play-surface callback returning one effort-2 act pays for three slots. B12b.04: PLUS each act's `leg` points beyond
-        the first (`leg_of`), so a journey the chooser priced (`route_pricing` `on`) costs its leg from the scene budget."""
+        """Scene actions this scene spends: 0 when it carries acts and every act's verb is in `rosters.MANAGEMENT_ORDERS` (B34.10, A-104: a management order
+        is no scene; the roster is read HERE, at call time, by the one price owner, and no caller passes anything; it ships empty, so nothing is free at control);
+        else `extended_cost` when it fills more than one slot, else `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a
+        caller sets: a scene's price is what it carries, so a play-surface callback returning one effort-2 act pays for three slots. B12b.04: PLUS each act's `leg` points beyond
+        the first (`leg_of`), so a journey the chooser priced (`route_pricing` `on`) costs its leg from the scene budget.
+        THE ONE PRICE OWNER: no caller computes a price of its own."""
+        orders = rosters.MANAGEMENT_ORDERS
+        if orders and self.acts and all(a.verb in orders for a in self.acts):
+            return 0
         base = extended_cost if self.slots > 1 else self.PLAIN_COST
         return base + sum(leg_of(a) - 1 for a in self.acts)       # B12b.04: a journey's legs beyond the first point; no act carries one while `route_pricing` is `off`
 

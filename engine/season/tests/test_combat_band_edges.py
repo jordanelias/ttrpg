@@ -326,6 +326,7 @@ def test_the_swept_fixture_reaches_the_fold():
     degrees, kinds = {}, {}
     for arm in (None, "max_wounds"):
         w = P.tiny_world()
+        w.rungs["Hh"].stores = {"arms_sword": 1}   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; both live at `Hh` and keep the arming sword this fixture was swept with
         w.step = Step.RESOLVE
         w.fixtures = DEFAULT_FIXTURES.sweep("combat_wounded_above", arm)
         d = SeasonDriver(w)

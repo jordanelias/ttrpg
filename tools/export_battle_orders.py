@@ -40,12 +40,27 @@ def build() -> dict:
         raise SystemExit('[battle_orders] ORDER_ROLES is not config.ROLE_SPEC\'s names')
     return {
         '_generated': 'tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py '
-                      '(ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT)',
-        'schema_version': 1,
+                      '(ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT, and their ORDER_*_TEXT lines)',
+        'schema_version': 2,   # v2 (B34.07): each member is {name, text}, not a bare name
         'source': 'modules/mass_battle/massbattle.py',
-        'roles': roles,
-        'retreat_at': retreat_at,
+        'roles': _members('roles', roles, massbattle.ORDER_ROLE_TEXT),
+        'retreat_at': _members('retreat_at', retreat_at, massbattle.ORDER_RETREAT_AT_TEXT),
     }
+
+
+def _members(label, names, texts) -> list:
+    """A closed set as `{name, text}` members, in the set's order; refuses a member with no line of text, a blank
+    line, and a line for a name the set does not hold (a second list the set would not govern)."""
+    stray = sorted(set(texts) - set(names))
+    if stray:
+        raise SystemExit(f'[battle_orders] {label} text names {stray!r}, which are not members')
+    out = []
+    for n in names:
+        t = texts.get(n)
+        if not isinstance(t, str) or not t.strip():
+            raise SystemExit(f'[battle_orders] {label} member {n!r} has no text')
+        out.append({'name': n, 'text': t})
+    return out
 
 
 def main(argv):

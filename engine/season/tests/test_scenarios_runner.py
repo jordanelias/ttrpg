@@ -69,7 +69,7 @@ def test_a_played_season_replays_from_its_script(tmp_path):
 
 def test_the_run_stops_on_an_ending_or_a_dead_seat_with_no_continuation(monkeypatch):
     """Two planted worlds. (1) The seat dies before the first season and the headless world holds no tie to carry his line on:
-    `line_extinct`, after the one season. (2) `endings_reached` is non-empty at build: `realm_ended`, before any season."""
+    `line_extinct`, after the one season. (2) `endings_reached` is non-empty at build and holds no holder of his faction: `realm_fallen`, before any season."""
     row = SC.SCENARIOS["season"]
     dead = []
 
@@ -84,9 +84,9 @@ def test_the_run_stops_on_an_ending_or_a_dead_seat_with_no_continuation(monkeypa
     assert dead and dead[0] not in out["world"].persons
     assert (out["ending"], out["kind"]) == ("line_extinct", "lost") and out["seasons"] == 1
 
-    monkeypatch.setattr(SC.world_q, "endings_reached", lambda w: [object()])
+    monkeypatch.setattr(SC.world_q, "endings_reached", lambda w: [world_q.EndingReached("planted_end", True, (), (), ())])
     out = SC.run("season", 0, 2)
-    assert (out["ending"], out["kind"], out["seasons"], out["seat_deliberations"]) == ("realm_ended", "drawn", 0, 0)
+    assert (out["ending"], out["kind"], out["seasons"], out["seat_deliberations"]) == ("realm_fallen", "lost", 0, 0)
 
 
 # --- the two per-row checks (B11.05 left them for the first registered row) ---------------------------------------------
@@ -101,7 +101,7 @@ def test_every_ending_name_a_reader_can_return_has_a_kind(monkeypatch):
         for planted in (False, True):
             with monkeypatch.context() as mp:      # undone before the next row: a planted pass must not reach the rows after it
                 if planted:
-                    mp.setattr(SC.world_q, "endings_reached", lambda w: [object()])
+                    mp.setattr(SC.world_q, "endings_reached", lambda w: [world_q.EndingReached("planted_end", True, (), (), ())])
                 for who, left in ((pid, 1), (pid, 0), (None, 1)):
                     got = row.ending(w, who, left)
                     if got is not None:

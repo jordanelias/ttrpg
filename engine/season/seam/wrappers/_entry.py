@@ -10,7 +10,7 @@ by module, not through the `manifest` package. `registrar.py` imports only `gaps
 imports `data/` and `gaps`; neither imports `seam/`, so no import here closes a loop back into it."""
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Callable, Optional
 
 from ...manifest.registrar import MODULE_ENTRIES
 from ...manifest.registry import resolve as prize_row
@@ -31,3 +31,12 @@ def entry_for(prize: Any, module: str, module_entry: Any = None) -> tuple:
                       why=f"{who} names module entry "
                           f"{role!r}, which MODULE_ENTRIES does not hold -- the registrar fills it "
                           f"at SeasonDriver construction")
+
+
+def played_by(host: Any, role: str, parties: Any) -> Optional[Callable]:
+    """THE PARTY TEST, ONCE (B34.15; `01_CORE` edit 2): the host's decider for `role` when the host plays one of `parties`, else `None` (AUTOMATED).
+    `None` too for no host, and for a host with no decider for the role (`PlayHost.decider_for`): a client may play fights and leave hearings to the engine.
+    A provider passes the result as `decide=` to its entry only when it is not `None`, so the AUTOMATED call is byte-identical to the call before a host existed."""
+    if host is None or not any(p in host.persons for p in parties):
+        return None
+    return host.decider_for(role)

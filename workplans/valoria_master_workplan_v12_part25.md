@@ -1,10 +1,10 @@
-# Workplan v12 — part 25: batches B21c-fa-seats and B34-go-surface
+# Workplan v12 — part 25: batch B21c-fa-seats
 
 ## Status: RATIFIED, ED-IN-0362 (a body part of workplan v12, drafted under `master/workplan_v12/`; adopted 2026-11-15 as the one active plan; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
 ## Written against: the working tree of branch `ccr-62958c70-0kjhsw`, read 2026-11-12; author lane A25 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2. Every item is written against the tree as the batches before it leave it; a symbol not in the tree today names the batch that makes it. Line numbers into files edited at or before B03a are dropped and the symbol kept (`V12_STRUCTURE_part2.md` §5.4).
 
-**What this part holds.** Two batches, in execution order: `B21c-fa-seats` (FA: the v11 seat positions CR-32, CR-35 to CR-39 with H-90, H-181, H-217, carried by the intake `:266`), then `B34-go-surface` (GO: the player's four readings, the scene pair's contract, the transcript runner, and the instruction items `IS-B3-FA-02`, `IS-B3-GO-02`, `-03`, `-07`, `IS-DICE-01`, `IS-PC-01` step 6, `IS-MB-01` step 4). B34's items continue in `valoria_master_workplan_v12_part25_cont.md`. Each batch is one block with one close, in the form of `V12_STRUCTURE_part2.md` §5.2 and §5.3 as amended by `V12_STRUCTURE_part4.md` (E-1 to E-15). A part cites another part's batch or item by handle only.
+**What this part holds.** One batch, `B21c-fa-seats` (FA: the v11 seat positions CR-32, CR-35 to CR-39 with H-90, H-181, H-217, carried by the intake `:266`). The batch is one block with one close, in the form of `V12_STRUCTURE_part2.md` §5.2 and §5.3 as amended by `V12_STRUCTURE_part4.md` (E-1 to E-15). A part cites another part's batch or item by handle only.
 
 **Words.** `unified/U1_GLOSSARY.md`. A person's numbers are an attribute, a skill and its skill score, a derived score (A-98); identifiers such as `capability` stay in backticks. A *lap* is one pass of the season's scene budget; a *round* is one engagement of a fight (A-101). Source text that says `round` for the season's pass, `CombatTurnView` or `TURN_CHOICES` is copied and corrected by a `NAMES:` line (`V12_STRUCTURE_part2.md` §5.10): every item here lands after B04, B13, B16 and B03c.
 

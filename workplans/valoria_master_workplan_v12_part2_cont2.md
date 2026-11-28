@@ -474,7 +474,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) | ED shifted |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) | same |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
-| B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) | H shifted |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) | H shifted |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) | H shifted |
 | B21c-fa-seats | FA | ED-FA-0044..0045 (0+2) | H-628..H-632 (0+5) | H shifted |
@@ -492,7 +491,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B31-mb-loadout-economy | MB | ED-MB-0099..0100 (0+2) | H-734..H-738 (0+5) | H shifted |
 | B32-inst-kit | FA | ED-FA-0050..0051 (0+2) | H-739..H-745 (2+5) | H shifted |
 | B33-inst-economy-hands | FA | ED-FA-0052..0053 (0+2) | H-746..H-757 (7+5) | H shifted |
-| B34-go-surface | GO | ED-GO-0005..0006 (0+2) | H-758..H-763 (1+5) | H shifted |
 | B35-wr-thread | WR | ED-WR-0013..0014 (0+2) | H-764..H-770 (2+5) | H shifted |
 | B36-wr-story-instruments | WR | ED-WR-0015..0016 (0+2) | H-771..H-775 (0+5) | H shifted |
 | B37-happenings | IN | ED-IN-0397..0398 (0+2) | H-776..H-788 (8+5) | ED shifted, H shifted |

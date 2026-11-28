@@ -45,6 +45,8 @@ def _world():
     """`tiny_world` (p_high holds `off_duke` and stands at `S`), plus `p_near`, who also stands at `S`;
     the rest stand at `Hh` or `R`."""
     w = P.tiny_world()
+    for rung in ("Hh", "S"):   # B18.04: a roster exists, so a person with no stocked weapon fights unarmed; the readings were made with the arming sword
+        w.rungs[rung].stores = {"arms_sword": 1}
     w.persons["p_near"] = Person("p_near", "a neighbour")
     w.rungs["p_near"] = Rung("p_near", "person")
     w.add_tenure(Tenure("t_near_in", "p_near", "S", "contain", 0))

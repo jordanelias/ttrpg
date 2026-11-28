@@ -1620,6 +1620,21 @@ rosters:
       challenge: "14_VERBS_SOCIAL1_D_grievance_and_settlement"
       interview: "14_VERBS_SOCIAL2_C_case_question_confession"
 
+  # B34.10 (`IS-B3-GO-07`, A-104): THE ORDERS A SEAT GIVES FROM ITS DESK, WHICH COST NO SCENE. A closed set of verb names, each a
+  # `verb_table.yaml` row (refused at load by `data/verbs.py::_check_resolution_classes`). `Scene.cost` prices a scene whose every act is
+  # a member at 0, and `decision/choose.py::pack_scenes` puts each in a scene of its own, so an order is never a priced scene's rider.
+  # SHIPS EMPTY (the control: today's prices, the realm hash equal). The members are CL-MGMT's list, which is HELD -- A-104 names
+  # examples, not a list; read as `roster_list` because `roster()` refuses an empty `values:`.
+  management_orders:
+    source: >-
+      Jordan's A-104 (*"menu orders, which are management orders like 'assign this' or 'fire this person' or 'raise army' or
+      whatever do not cost scene budget because they are not scenes. however, these CAN prompt scenes after being performed."*);
+      workplan v12 B34.10 (`IS-B3-GO-07`).
+    note: >-
+      [BLOCKED: CONTENT -- CL-MGMT's list, A-104. Loading it is a declared hash mover, re-pinned once at that commit.]
+    keys: [verb_table]
+    orders: []
+
   # B07.02 (18-A edit 5; `U5c_VERBS_residue` §1 edit 3): THE ONE SHARE TABLE A DRAWN ACT'S BAND READS -- band -> the fraction of
   # the effect that lands. Every magnitude effect (`tend`, `work`, `restore`, `requisition`, `train`, `recruit`) and the
   # travel rows read it through `data/rosters.py::task_share`, and no effect names a band (`test_no_effect_names_a_band`).
@@ -2142,7 +2157,9 @@ rosters:
       ⚠ THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what
       a row looks like, so starting the registry with exactly them is the least-invented content
       available — but it is still a choice, which is what `H-11` grades.
-    values: [grain, salt, timber, ore, coin]
+      B18.04 adds the seven ARMS KINDS (second line of `values`, their own members; `arms_kinds` maps each). [ASSUMPTION; low; Jordan to correct.]
+    values: [grain, salt, timber, ore, coin,
+             arms_dagger, arms_spear, arms_sword, arms_longsword, harness_light, harness_mail, harness_plate]
 
   grown_kinds:
     source: "audits/16_PESSIMIST_SE.md F-PES-SE-07: the season factor is weather, and weather bears on what is grown."
@@ -2161,10 +2178,20 @@ rosters:
       (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here.
       `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the
       stores of the rungs the person holds, else of his residence, else the Combatant's own default.
-      ⚠ EMPTY ON PURPOSE: which arms exist, which key each sets and how they rank is Jordan's content and is not
-      invented here (`-08` AM-C-04). While `kinds:` is empty `kit_of` returns the Combatant default for everyone and
-      every fight is dealt exactly as before the mechanism existed.
-    kinds: {}
+      ⚠ B18.04 LANDS SEVEN KINDS, every value `[ASSUMPTION; low; Jordan to correct]`: which arms exist, which key each
+      sets and how they rank is Jordan's content (`-08` AM-C-04). A kind is admitted only with its row of the roster
+      census (`balance.census`) in the commit that admits it: no cell beyond 95% against the kinds already admitted,
+      or its answering kind admitted with it (`arms_spear` stands with `harness_mail` and `harness_plate`, which
+      answer it at the medium and heavy tiers). With `kinds:` emptied `kit_of` returns the Combatant default for
+      everyone and every fight is dealt exactly as before the mechanism existed (the Gate-4 control).
+    kinds:
+      arms_dagger: {field: weapon, key: dagger, rank: 1}
+      arms_spear: {field: weapon, key: spear, rank: 2}
+      arms_sword: {field: weapon, key: arming, rank: 3}
+      arms_longsword: {field: weapon, key: longsword, rank: 4}
+      harness_light: {field: armor, key: light, rank: 1}
+      harness_mail: {field: armor, key: medium, rank: 2}
+      harness_plate: {field: armor, key: heavy, rank: 3}
 
   arms_at_build:
     source: "v11 CP-T03-03 (`-08` AM-C-04): the arms a rung is built holding, by the rung's kind [ASSUMPTION; medium; Jordan to correct]."
@@ -2173,9 +2200,18 @@ rosters:
       `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key
       an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number;
       refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm`
-      is the one seeder (`seed_arms`). ⚠ EMPTY ON PURPOSE, as `arms_kinds` is: the inventory is Jordan's content, so
-      no rung is built holding arms and `build_realm`'s world is unchanged.
-    kinds: {}
+      is the one seeder (`seed_arms`). ⚠ B18.04 SEEDS FIVE RUNG KINDS, every count `[ASSUMPTION; low; Jordan to correct]`
+      (the inventory is Jordan's content): a household's own knife (`hearth`), a settlement's armoury (`settlement`),
+      a seat-holder's own holding (`territory`), and the arms of a duchy's or the realm's seat (`duchy`, `realm`).
+      Two kinds of one field are never stocked on one rung kind unless the higher rank is also the stronger arm, so
+      `arms_kinds`' rank never overrules the engine's measured order. With `kinds:` emptied no rung is built holding
+      arms and `build_realm`'s world is unchanged.
+    kinds:
+      hearth: {arms_dagger: 1}
+      settlement: {arms_spear: 2, harness_light: 2}
+      territory: {arms_sword: 2, harness_mail: 1}
+      duchy: {arms_longsword: 1, harness_plate: 1}
+      realm: {arms_longsword: 1, harness_plate: 1}
 
   wear_per_season:
     source: "#353 §22 assigns `wear per site kind` to params; no in-chain table exists. `H-07`."
@@ -4814,25 +4850,28 @@ tables:
       3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain
       and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to
       3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5.
+      B18.05: `arms` is named when a starting skill is combat, defence or battle movement (3-CR2, 3-CH2, 3-HA3, 3-HA4,
+      3-LO1, 3-CF1; the near misses 3-GU2's Back-Alley Fighter, 3-VA2's Sea Legs and 3-HA2's Tunnel Fighter sit on rows that hold another key
+      and are not added) [ASSUMPTION; low; Jordan to correct].
       CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters:
       lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row.
       [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one
       re-pin); the key mapping is content.]
     cells:
       3-CR1: {holds: [argue], ground: "★ Courtly Grace '+1D Argue before Expert Judge in Crown territory' names the Argue act -> argue; ★ Read the Room '(Appraise TN 6)' -> none (:310)"}
-      3-CR2: {holds: [], ground: "★ Riposte '(counter-Strike after successful Defence)' and ★ Formation Discipline '(+1 Discipline start)' are combat and formation, no key (:311)"}
+      3-CR2: {holds: [arms], ground: "★ Riposte '(counter-Strike after successful Defence)' and ★ Formation Discipline '(+1 Discipline start)' are combat and formation, no inquiry or argue key -> martial: arms (B18.05) (:311)"}
       3-CR3: {holds: [], ground: "★ Schoenland Contacts '(+1D DA involving Schoenland)' is a domain action and ★ Haggler's Nerve '(-1 strain in private negotiation)' a strain; neither names Argue or an inquiry (:312)"}
       3-CR4: {holds: [inquiry], ground: "★ Paper Trail '(+1D institutional records)' names records -> inquiry (research); ★ Procedural Objection '(force Regroup or +1 Ob once/contest)' names no Argue -> none (:313)"}
       3-CR5: {holds: [], ground: "★ Harvest Leverage '(+1D on DA involving food supply)' is a domain action; ★ Seasons Reader '(+1D Cognition for weather/terrain/agriculture)' is a domain knowledge bonus naming no assessment -> none (:314)"}
       3-CH1: {holds: [argue], ground: "★ Doctrinal Authority '(+3D Recall bonus in Memory genre on theology)': Memory is a style picked inside the Argue exchange and the Recall bonus is dice added to that roll (social_contest_v30.md:168,172-177) -> argue; ★ Liturgical Composure '(+2 Composure in Church Tribunal)' -> none (:320)"}
-      3-CH2: {holds: [], ground: "★ Smite the Heretic '(+1D Offence ...)' and ★ Shield of Faith '(+1D Defence in Full Guard)' are combat, no key (:321)"}
+      3-CH2: {holds: [arms], ground: "★ Smite the Heretic '(+1D Offence ...)' and ★ Shield of Faith '(+1D Defence in Full Guard)' are combat, no inquiry or argue key -> martial: arms (B18.05) (:321)"}
       3-CH3: {holds: [], ground: "★ Sermon Delivery '(+1 Piety Track on Revealing win before Crowd)' names no Argue; ★ Folk Trust '(-1 Ob DA involving common population)' is a domain action -> none (:322)"}
       3-CH4: {holds: [inquiry], ground: "★ Forbidden Knowledge '(once/arc suppressed document recall)' and ★ Paper Trail '(+1D institutional records)' name documents and records -> inquiry (research) (:323)"}
       3-CH5: {holds: [inquiry], ground: "★ Inquisitorial Method '(+1D Investigation targeting heresy/Thread practice/Einhir activity)' names Investigation -> inquiry; ★ Suppressed Exposure '(TS +3 ...)' is a Thread Sensitivity gain -> none (:324)"}
       3-HA1: {holds: [argue], ground: "★ Constitutional Precedent '(-1 Audience Resistance when citing constitutional clause)' moves the Argue contest's Persuasion Track parameter (social_contest_v30.md:102) by a Recall citation (:177) -> argue; ★ Procedural Objection (a Regroup) -> none (:330)"}
       3-HA2: {holds: [inquiry], ground: "★ Stone Reader '(+1D assess terrain/fortifications)': fortifications are 'architecture', which examine reads (verb_table.yaml `examine`) -> inquiry (examine); 'terrain' alone is none (see 3-CR5); ★ Tunnel Fighter '(+1D Defence in confined spaces)' -> none (:331)"}
-      3-HA3: {holds: [], ground: "★ Fortress Defender '(+1D Defence in Fortified positions)' is defence; ★ Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> none (:332)"}
-      3-HA4: {holds: [], ground: "★ Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and ★ Sure-Footed '(auto-success Establish Distance)' are battle movement, no key (:333)"}
+      3-HA3: {holds: [arms], ground: "★ Fortress Defender '(+1D Defence in Fortified positions)' is defence -> martial: arms (B18.05); ★ Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> no inquiry (:332)"}
+      3-HA4: {holds: [arms], ground: "★ Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and ★ Sure-Footed '(auto-success Establish Distance)' are battle movement, no inquiry or argue key -> martial: arms (B18.05) (:333)"}
       3-VA1: {holds: [], ground: "★ Dead Drop '(establish covert channel, -1 Ob Intel ops)' and ★ Smooth Liar '(-1 strain when using Obscuring)' name no key; Shadow Work '(+1D surveillance/counter-intel)' is the THIRD (spark) skill, not held at creation (:339)"}
       3-VA2: {holds: [inquiry], ground: "★ Sea Legs '(+1D Defence on water)' is defence -> none; ★ Coastal Navigation '(+1D navigation/recon on western coast)': recon of a place is surveil (verb_table.yaml `surveil`: observe a location, person or faction operation) -> inquiry (surveil) (:340)"}
       3-VA3: {holds: [inquiry], ground: "★ Artefact Authentication '(+2D assess Einhir objects)' names assessing and authenticating a thing -> inquiry (examine); ★ Black Market Contacts '(+1D underground networks)' -> none (:341)"}
@@ -4843,11 +4882,11 @@ tables:
       3-RE1: {holds: [argue], ground: "★ Incendiary Rhetoric '(+2D Argue before Crowd, Revealing, social justice)' names the Argue act -> argue; ★ Underground Distribution '(-1 Ob Restoration DA)' -> none (:360)"}
       3-RE2: {holds: [argue], ground: "★ Community Voice '(+1D Argue before Crowd for common people)' (its text is printed at 3-VA2, :340) names the Argue act -> argue; ★ Solidarity '(+1D Community Weaving)' -> none (:361)"}
       3-RE3: {holds: [], ground: "★ Intuitive Threadwork '(Attunement + Spirit TN 8 Ob 3 for minor Weaving)' and ★ Folk Healer '(+1D Medicine)' name no key (:362)"}
-      3-LO1: {holds: [], ground: "★ Elite Discipline '(unit Discipline floor 2)' and ★ Riposte are command and combat, no key (:368)"}
+      3-LO1: {holds: [arms], ground: "★ Elite Discipline '(unit Discipline floor 2)' and ★ Riposte are command and combat, no inquiry or argue key -> martial: arms (B18.05) (:368)"}
       3-LO2: {holds: [], ground: "★ Eagle Eyes '(Cognition roll to reveal one element of opposing Phase 1)' is a battle-phase reveal, ★ Know the Enemy identifies forces -> none (:369)"}
       3-LO3: {holds: [], ground: "★ Deniable Action '(Spirit roll to deflect evidence trail)' and ★ Smooth Liar name no key (:370)"}
       3-LO4: {holds: [], ground: "★ Anomaly Recognition '(+1D Cognition to assess threadcut being threat/movement/constraints)' reads a creature's threat, not examine's evidence, architecture, documents or objects (the same reading as 3-HA3 and 3-LO2) -> none; ★ Classified Knowledge '(once/arc invoke classified info for +2D)' -> none (:371)"}
-      3-CF1: {holds: [], ground: "★ Weapon Versatility '(switch weapon type between exchanges)' and ★ Riposte are combat, no key (:377)"}
+      3-CF1: {holds: [arms], ground: "★ Weapon Versatility '(switch weapon type between exchanges)' and ★ Riposte are combat, no inquiry or argue key -> martial: arms (B18.05) (:377)"}
       3-CF2: {holds: [], ground: "★ Field Medicine '(-1 Ob stabilise)' and ★ Folk Healer name medicine, no key (:378)"}
       3-CF3: {holds: [], ground: "★ Wide Network '(+1D in up to 3 previously-operated territories)' and ★ Haggler's Nerve name no key (:379)"}
       3-CF4: {holds: [inquiry], ground: "★ Textual Memory '(recall previously-handled documents)' and ★ Paper Trail '(+1D institutional records)' name documents and records -> inquiry (research); the Knot (an author whose work you copied) names copying but no starting skill does, so copying is NOT held (:380)"}

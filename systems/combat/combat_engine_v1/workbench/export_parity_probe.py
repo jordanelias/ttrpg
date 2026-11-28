@@ -15,7 +15,7 @@ records and nothing else; the real file is barred by the import finder below, so
 ImportError and not a silent read. The scalar constants of the export (`cfg`, `weapon_physics`, `combatant`) are
 written over the oracle's own, so a drifted value cannot hide behind an identical module copy.
 
-    python systems/combat/combat_engine_v1/workbench/export_parity_probe.py            # exit 0 and the 50-weapons line
+    python systems/combat/combat_engine_v1/workbench/export_parity_probe.py            # exit 0 and the weapons line (the startable count)
     python systems/combat/combat_engine_v1/workbench/export_parity_probe.py --plant [WEAPON]
         # the planted control: one exported mass edited in an in-memory COPY (default `longsword`); prints the weapon
         # and exits 1. The file on disk is never written.

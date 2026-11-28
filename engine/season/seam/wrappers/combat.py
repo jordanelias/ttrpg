@@ -86,13 +86,13 @@ from ...gaps import Forbidden, Unspecified
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
 from ...queries import person_q
-from ...queries.inputs import CombatOutcome, MortalResult, PartyWounds, PersonalCombatInput, PlayHost
+from ...queries.inputs import DECIDE_ROLE, CombatOutcome, MortalResult, PartyWounds, PersonalCombatInput, PlayHost
 from ...queries.world_q import home_of, kit_of, mortal_terms, stakes_of
 from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
 from ...state.ids import draw_factory
 from ..ladder import COMBAT_BANDS, party_degree
-from ._entry import entry_for
+from ._entry import entry_for, played_by
 from ._estimate import rng_of, samples_of
 from .pool import FIGHT_DICE_SITE, addends_of, pool_pair, score
 from .sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE, WOUNDS, _held_at
@@ -102,6 +102,8 @@ assert _END_KEY, "descriptors names no Endurance attribute: party_end would read
 # The fight's default for `end` is the combat module's, read once from its typed export through `substrate/combat_kit.py`
 # (the artifact's one reader; section `attributes`); the registry's `default: 1` is the sheet scale's floor, a different fact.
 _END_DEFAULT = combat_kit.END_DEFAULT
+_STRENGTH_KEY = attribute_key("Strength")  # the registry key of `strength` (B18.07): the figure `short` is taken against, the one the module maps to `Combatant.strength`
+assert _STRENGTH_KEY, "descriptors names no Strength attribute: party_short would read the default for every person"
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
@@ -112,7 +114,7 @@ def _probe() -> tuple:
     `combat.fight` resolves; its RAISE is translated to a named reason. `composition.require` caches a success
     itself, and the resolution is lazy, so the tracer still imports where the engine tree is absent."""
     try:
-        return composition.require("combat.fight"), ""
+        return composition.require(DECIDE_ROLE), ""
     except Exception as e:                  # a real load failure is a NAMED gap
         return None, f"{type(e).__name__}: {e}"
 
@@ -165,7 +167,18 @@ def party_end(person: Any, fx: Any) -> int:
     return max(1, base_end - bands)
 
 
-_MORTAL_SITE = require_use_site("mortal")     # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
+def party_short(person: Any, kit: tuple) -> tuple:
+    """A party's `PersonalCombatInput.short` entry (B18.07): `(short with the primary in hand, short with the secondary in hand)`, each the
+    Strength points under `combat_kit.carry_demand` he is, `combat_kit.shortfall`, the one rule, evaluated here because the module imports
+    nothing of the carry rule. His Strength is the one the module will build him at: the authored `attr.body.strength` he HOLDS, else the combat
+    export's default (`STRENGTH_DEFAULT`, as `party_end` reads Endurance); `kit` is `kit_of`'s `(primary, secondary, armor)` (B18.08), and the
+    pairing is `combat_kit.short_pair`'s: with the primary in hand he carries the secondary, and the reverse. A kit with no secondary
+    carries nothing, so the first is the harness's alone, the charge `act_cost` always made, and the second is `None`."""
+    primary, secondary, armour = kit
+    return combat_kit.short_pair(primary, secondary, armour, person.attributes.get(_STRENGTH_KEY, combat_kit.STRENGTH_DEFAULT))
+
+
+_MORTAL_SITE = require_use_site("mortal")    # the `capability_use_sites` site whose `edge` rows `_mortal_operands` reads (B15.07)
 _MORTAL_PURPOSE = "fight.mortal"              # the mortal draw's purpose in its key (PHY_A A3, A-30): one draw per felled party per tick
 
 
@@ -289,7 +302,7 @@ def _fight_score(w: Any, p: Any, verb: str) -> int:
 
 
 def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
-    """THE BELIEVER'S OWN PICTURE OF ANOTHER PERSON FOR A FIGHT (B14.24; `U5b_PC_residue` §8 item 1): `((weapon, armor), person)`, `person` standing in
+    """THE BELIEVER'S OWN PICTURE OF ANOTHER PERSON FOR A FIGHT (B14.24; `U5b_PC_residue` §8 item 1): `((weapon, secondary, armor), person)`, `person` standing in
     for him where the fight reads his body (`party_end`, `_carried_of`: `body`, `body_ceiling`, `attributes`). What the believer's ledger gives:
       * HIS KIT -- per field, his latest claim at `person_q.KIT_CLAIM + field`, else the world's where he has SEEN him (`person_q.has_seen`), else the
         Combatant's own default (`combat_kit.DEFAULTS`): a person who knows nothing of the opponent's kit gets the default kit, never the true one;
@@ -299,9 +312,12 @@ def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
     revert: none needed, read-only]: the B14.24 item is the kit and the wounds. Reads `believer`'s ledger and the world only where the ledger says he has seen him."""
     other = w.persons[pid]
     seen = person_q.has_seen(believer, pid)
-    held = dict(zip(("weapon", "armor"), kit_of(w, pid))) if seen else dict(combat_kit.DEFAULTS)
+    held = dict(zip(("weapon", "secondary", "armor"), kit_of(w, pid))) if seen else {**combat_kit.DEFAULTS, "secondary": None}
     at = (w.tick, w.fixtures.claim_decay())          # B09.01: his claims are read faded at this tick, never as stored
-    kit = tuple(held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    weapon, armor = (held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    # B18.08: no claim names a secondary, so he has the world's where he has SEEN him (never the default's: none); a claim of a weapon that is the very one he
+    # carries leaves nothing carried.
+    kit = (weapon, None if held["secondary"] == weapon else held["secondary"], armor)
     wound = person_q.believed_body(believer, pid, *at)
     scale = w.fixtures.get("condition_scale")
     if wound is not None:
@@ -320,8 +336,8 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
 
     Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
     and, for each party's `kits` entry, what his rungs store (`world_q.kit_of`, CP-T03-03: his holdings, else his
-    residence; the Combatant default for a person who holds no arms, which is everyone while `rosters.yaml:
-    arms_kinds` is empty), and each party's authored `Person.attributes` (PC-06 K-1), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    residence; the Combatant default for a person who holds no arms while `rosters.yaml:
+    arms_kinds` is empty, else `combat_kit.UNARMED`, B18.03), and each party's authored `Person.attributes` (PC-06 K-1), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
@@ -370,6 +386,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         ends=(party_end(ba, w.fixtures), party_end(bb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(ka, kb),
+        short=(party_short(pa, ka), party_short(pb, kb)),   # B18.07: each party's shortfall against what he carries, the DEALT person's Strength (the module builds him from `pa`/`pb`'s attributes) at the kit fought with
         scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
         pool_add=pool_add, pool_floor=pool_floor,
@@ -542,9 +559,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     a decider), named here as that row's departure (B4, third disposition) and picked for the reason A-25 gives.
     IT IS WHERE THE DRIVER SUSPENDS, AND THE ONLY PLACE. `None` -- every RESOLVE
     call, and every season run without a host -- is AUTOMATED, today's call exactly. With a host, the mode
-    is a PARTY TEST (A-25): a fight either of whose claimants the host plays (`PlayHost.persons`) hands the
-    host's decider to the module entry, which forwards it to the engine's own turn loop; every other fight
-    stays AUTOMATED. The suspension is a CALL-OUT, not a return: the scene runs inside this frame with the
+    is a PARTY TEST (A-25, `_entry.py::played_by`, the one place it is made): a fight either of whose claimants the host plays (`PlayHost.persons`)
+    and for which it has a decider for the entry's role (`PlayHost.decider_for`) hands that decider to the module entry, which forwards it to the
+    engine's own turn loop; every other fight stays AUTOMATED. The suspension is a CALL-OUT, not a return: the scene runs inside this frame with the
     ENCOUNTER token held below it in the driver's argument expression (minted once), the typed record `inp`
     and the `seed` built by the same lines in both modes, and nothing serialized. The decider is handed
     no `World` and no token, and is written not to reach `World.write` or `World.new_draw` -- a CONVENTION
@@ -597,10 +614,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return refusal
     # THE PARTY TEST (REM-31). The AUTOMATED call is byte-identical: the keyword is passed only when a played
     # person is a claimant, so the two other entries' shared `(inp, rng)` shape is untouched.
-    if host is not None and any(c in host.persons for c in (a_id, b_id)):
-        got = entry.fn(inp, rng, decide=host.decide)
-    else:
-        got = entry.fn(inp, rng)
+    decide = played_by(host, DECIDE_ROLE, (a_id, b_id))
+    got = entry.fn(inp, rng) if decide is None else entry.fn(inp, rng, decide=decide)
     # B15.07: a felled party's `felled` and `wounds` are the module's mortal-wound draw's (`got.mortal`), mapped, never computed here
     _wounds = {pid: _wound_state(got.wounds.get(pid), got.mortal.get(pid)) for pid in (a_id, b_id)}
 

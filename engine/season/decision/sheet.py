@@ -57,10 +57,10 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, decisiveness, recognised
-from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
-from .choose import Ranked, make_ranker, release
-from .options import ledger_weigh
+from ..queries.person_q import LedgerReader, Value, _seen_index, decisiveness, is_deed, names_a_doer, recognised
+from ..state.carriers import Act, Candidate, Claim, Person, PersonInterior, Question, Scene, View, fade_of, frozen
+from .choose import TERM_NAMES, Ranked, _believed_chance, _payload_of, make_ranker, release
+from .options import ledger_weigh, own_state_declines
 
 def describe(key: str) -> str:
     """The gloss of a skill or an attribute: the leaf's text, no `World` (B04.02, DEF Edit 1). A skill is read by
@@ -91,18 +91,22 @@ class CreationRow:
     reads it and picks an `id`."""
     id: str
     name: str
+    cohort: bool             # `Person.is_cohort`, the carrier's own predicate, copied: a population row, not a single person
     capability: Mapping
     pursuits: Mapping
     conviction: Mapping
     attributes: Mapping
+    holdings: tuple          # ((tenure kind, object id), ...): his own live Tenures, `holdings_pairs(p.tenures)`, the pairs `Situation.holdings` shows
 
 
 def creation_sheet(persons: Iterable[Person]) -> tuple:
     """The creation sheet: one `CreationRow` per seated person, in id order (a pick list, not a ranking).
-    `persons` is what the caller already holds (`w.persons.values()` before the first season); this
-    function takes no `World` and writes nothing."""
-    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(recognised(p, p.pursuits)),
-                             frozen(p.conviction), frozen(p.attributes))
+    `persons` is what the caller already holds (`w.persons.values()` before the first season). A row's `holdings` are
+    `holdings_pairs(p.tenures)` (a seat's place in the world is the first thing a player weighs): every person Tenure is
+    appended to its subject's `Person.tenures` (`state/world.py::add_tenure`), the list `Situation` and `DevelopmentSheet`
+    read, so no World and no caller's reader is needed. Writes nothing."""
+    return tuple(CreationRow(p.id, p.name, p.is_cohort, frozen(p.capability), frozen(recognised(p, p.pursuits)),
+                             frozen(p.conviction), frozen(p.attributes), holdings_pairs(p.tenures))
                  for p in sorted(persons, key=lambda q: q.id))
 
 
@@ -153,12 +157,20 @@ class DevelopmentSheet:
     heritage: Optional[str]
     tenures: tuple
     decisiveness: float          # derived, B10.27: `person_q.decisiveness(p, fx.get("scar_weight_shift"))`
+    asked_index: int = 0         # B34.16: the place in `View.questions` of the question the sheet is ranked for (`question` is that question; 0 is the shipped ranking)
+
+
+def holdings_pairs(tenures: Sequence[Any]) -> tuple:
+    """`((tenure kind, object id), ...)` of the LIVE Tenures in `tenures`, in the order given: the one spelling of what a person holds that `DevelopmentSheet.tenures`,
+    `Situation.holdings` and `CreationRow.holdings` all show, so the three are equal."""
+    return tuple((t.kind, t.object) for t in tenures if t.live)
 
 
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
                       draw: Optional[Callable[[str, str], Any]] = None,
+                      ask: Optional[Callable[["Situation"], int]] = None,
                       geo: Optional[dict] = None) -> Callable[..., list]:
     """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person; `p` is the
     `PersonInterior` DELIBERATE hands `choose` (B03.58), the same type, so the space cannot assign to the person.
@@ -168,8 +180,13 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     candidates through `release` -- the same step, the same `fx`/`mint`/`draw` the automated chooser
     uses -- so a player's act has the automated act's shape. `auto` (the delegate) is not called: the
     sheet already carries what it would rank. Build it with the arguments the caller gave
-    `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control. B12b.04: `geo` is the loaded geography
-    (`data/geography.py::geography`) handed to `release` as `make_chooser` hands it, read only while `route_pricing` is `on`: without it the player's
+    `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control.
+
+    `ask(situation) -> int` (B34.16) is his pick of one of the questions asked of him, an index into `situation.asked` (`View.questions`, in attention order).
+    A pick past the first RANKS ON THAT QUESTION (`rank` over the View `_asked_on` rebuilds on it, as `opening_set` reads its referents from `View.question`): the
+    candidates are the ones the picked question forms, the sheet's `question` is the one picked and the Scenes his pick packs are occasioned by it (at `ask` 0 under the `all` / `one_per_source` aggregation rules `sheet.question` is the
+    synthetic aggregate `questions.py` builds, `q:agg:...`, not `situation.asked[0]`). `None`, or a pick of the first question, is the shipped ranking: the automated
+    chooser is untouched, and a space built with no `ask` is `make_chooser`'s control as before. An index outside `asked` is refused (`Forbidden`). B12b.04: `geo` is the loaded geography (`data/geography.py::geography`) handed to `release` as `make_chooser` hands it, read only while `route_pricing` is `on`: without it the player's
     journeys go unpriced while the world still bills their legs."""
     rank = make_ranker(fx, verbs, draw)
 
@@ -177,13 +194,20 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         q = getattr(v, "question", None)
         if q is None:
             return []
-        cands = rank(p, v)
         n = ask_budget()
+        at = 0
+        if ask is not None:
+            at = int(ask(situation(p, v, lambda: n)))
+            if not 0 <= at < max(len(v.questions), 1):
+                raise Forbidden(f"{p.id}'s pick of question {at} is not one of the {len(v.questions)} asked of him", "IN-47 rule 1", law=_LAW)
+        if at > 0:
+            q = v.questions[at]
+        cands = rank(p, _asked_on(v, q) if at > 0 else v)
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
                                  frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
-                                 tuple((t.kind, t.object) for t in p.tenures if t.live),
-                                 decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")))
+                                 holdings_pairs(p.tenures),
+                                 decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")), at)
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "
@@ -200,6 +224,159 @@ def take_ranked(sheet: DevelopmentSheet) -> range:
     """The pick that takes the shipped ranking whole -- the development space's CONTROL: seated with it,
     the player's person decides exactly as `make_chooser` would (same scenes, same `content_hash`)."""
     return range(len(sheet.candidates))
+
+
+# ---------------------------------------------------------------------------------------------------
+# SITUATION AND OFFER (B34.02) -- what is in front of him and what he may do. Readers: no act, no write, no draw of their own.
+# ---------------------------------------------------------------------------------------------------
+
+def _occasion_of(asked: Sequence[Question], subject: Optional[str]) -> Optional[str]:
+    """The id of the first of `asked` that names `subject` among its referents (plain or classed): a candidate's occasion, `OfferRow.occasion`'s one owner. `None` for no subject, or a subject no question names (a standing candidate)."""
+    if subject is None:
+        return None
+    return next((a.id for a in asked if subject in a.referents or subject in {r for r, _ in a.classes}), None)
+
+
+def _asked_on(v: View, q: Question) -> View:
+    """`v` rebuilt on the question `q` (one of `v.questions`): `View` is a slotted class, not a dataclass, and `opening_set` reads the referents from `View.question`,
+    so a pick of a later question ranks on this View. Same holder, ids, questions and odds query; `k` is the ids it already holds."""
+    return View(v.holder, list(v.claim_ids), max(len(v.claim_ids), 1), q, v.questions, v.odds)
+
+
+@dataclass(frozen=True)
+class AskedRow:
+    """One question that demands his attention, as `View.questions` carries it (`questions_for`'s, in `attention_key` order), and the claim of HIS
+    that its `about` names where that is one of his own (`None` otherwise: a seat, a record, a place)."""
+    question: Question
+    claim: Optional[Claim]
+
+
+@dataclass(frozen=True)
+class Situation:
+    """WHAT IS IN FRONT OF HIM NOW: his budget, his own fields (copies, as `DevelopmentSheet`'s), what he holds, and the questions asked of him.
+    `holdings` is `((tenure kind, object id), ...)` of his own live Tenures -- the same read `DevelopmentSheet.tenures` makes (`OwnStateReader` answers
+    `held_by` of one object and enumerates nothing, so the person's own `tenures` are read here as they are there). `asked` is `View.questions`,
+    which `questions_for` sorted by `attention_key`: no second generator. Lane 28's readings (who occupies him, which petitions wait) join in B28."""
+    person_id: str
+    budget: int
+    body: int
+    capability: Mapping
+    pursuits: Mapping
+    stance: tuple
+    conviction: Mapping
+    scar: Mapping
+    holdings: tuple
+    asked: tuple
+
+
+def situation(p: PersonInterior, v: View, ask_budget: Callable[[], int]) -> Situation:
+    """The `Situation` of `p` at the deliberation `v` was built for; `ask_budget()` is the season remainder, as the chooser asks it. Writes nothing."""
+    mine = {c.id: c for c in p.ledger}
+    return Situation(p.id, ask_budget(), p.body, frozen(p.capability), frozen(recognised(p, p.pursuits)), tuple(p.stance),
+                     frozen(p.conviction), frozen(p.scar), holdings_pairs(p.tenures),
+                     tuple(AskedRow(q, mine.get(q.about)) for q in v.questions))
+
+
+@dataclass(frozen=True)
+class OfferRow:
+    """One candidate he may take, in `make_ranker`'s order. `candidate` is a deep copy; `occasion` the id of the first `asked` question that names
+    `candidate.subject` among its referents (plain or classed), `None` for a standing candidate; `terms` the `score_terms` tuple the chooser summed
+    (`make_ranker`'s `watch` hook is its one source); `odds` what he BELIEVES of the bands the verb writes in (`choose._believed_chance`, the one ask:
+    a chance, or `None` where nothing prices the candidate), which may be wrong; `cost` in `Scene.cost`'s unit."""
+    candidate: Candidate
+    occasion: Optional[str]
+    terms: tuple
+    odds: Optional[float]
+    cost: int
+
+    def value(self, which: str) -> Value:
+        """The `pursuit` or `stance` term of this row as the player met it, for `person_q.explain` (the index is `choose.TERM_NAMES`', its one owner)."""
+        return Value(which, self.candidate.subject, self.candidate.verb, float(self.terms[TERM_NAMES.index(which)]))
+
+
+@dataclass(frozen=True)
+class WithheldRow:
+    """A verb his OWN state declined (`opening_set`'s own-state decline, shown): `unmet` names the own-state conjunct of its cell that read False."""
+    verb: str
+    subject: Optional[str]
+    unmet: str
+
+
+@dataclass(frozen=True)
+class Offer:
+    rows: tuple          # make_ranker's order
+    withheld: tuple      # own-state declines only
+
+
+def offer(p: PersonInterior, v: View, fx: Any, verbs: Optional[frozenset] = None,
+          draw: Optional[Callable[[str, str], Any]] = None, asked_index: int = 0) -> Offer:
+    """WHAT HE MAY DO: the rows `make_ranker(fx, verbs, draw)` orders for him, each with the terms its `watch` hook reported, his believed odds and its
+    cost, and the verbs his own state withheld. `fx`, `verbs` and `draw` are the ones the chooser was built with (`rank` needs `fx`; a different `verbs`
+    or `draw` is a different offer, as `development_space` says); the source's `offer(p, v)` has no way to reach them. Forms nothing, ranks nothing of its
+    own, and writes nothing. A View with no question offers nothing. `asked_index` is `DevelopmentSheet.asked_index`: the rows in the order `development_space`
+    gave that pick (ranked on `v.questions[asked_index]`, as `development_space` does), so `[i]` is the index a pick names."""
+    q = getattr(v, "question", None)
+    if q is None:
+        return Offer((), ())
+    if asked_index > 0:
+        q = v.questions[asked_index]
+        v = _asked_on(v, q)
+    watched: list = []
+    order = make_ranker(fx, verbs, draw, lambda _p, _q, ranked, terms, sampled: watched.append((ranked, terms)))(p, v)
+    terms_of = {id(c): t for c, t in zip(*watched[-1])} if watched else {}
+    odds = getattr(v, "odds", None)
+    extended = fx.get("extended_scene_cost")
+    asked = tuple(v.questions)
+
+    def cost(c: Candidate) -> int:
+        return Scene(f"offer:{c.verb}", p.id, [Act(f"offer:{c.verb}", p.id, c.verb, payload=_payload_of(c))]).cost(extended)
+
+    rows = tuple(OfferRow(copy.deepcopy(c), _occasion_of(asked, c.subject), tuple(terms_of[id(c)]),
+                          None if odds is None else _believed_chance(p, c, odds), cost(c)) for c in order)
+    withheld = tuple(WithheldRow(*d) for d in dict.fromkeys(own_state_declines(p, v, q, fx)) if verbs is None or d[0] in verbs)
+    return Offer(rows, withheld)
+
+
+# ---------------------------------------------------------------------------------------------------
+# ACCOUNT (B34.03) -- what he has learned since a point, from his own ledger and nothing else. No act, no write.
+# ---------------------------------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class AccountRow:
+    """One claim he holds that landed at or after `since`, as he holds it. `own` is `claim.doer == holder`, the echo of his own deed (WITNESS stamps `doer` only
+    where the witness is the actor, so it leaks nothing a channel withholds). `prior` is the claim he holds on the same `(subject, predicate)` cell that landed
+    latest before this one (a later `(when, lap)` than any other, a later place in his ledger on a tie), `None` where he holds none -- a quantity is trackable only for
+    a person who holds claims about it. `unattributed` is a change he can see (`prior` differs in value, or the claim is an event-kind deposit, `person_q.is_deed`)
+    for which no claim of his names a doer: no `doer` on it, no `Seen.who` on the sighting it landed with (his own, or the one its telling carried), no `deed_doer`
+    answer. `claim.teller`, `claim.hops` and `claim.chain` say who told him, at how many removes."""
+    claim: Claim
+    own: bool
+    prior: Optional[Claim]
+    unattributed: bool
+
+
+def account(p: PersonInterior, since: tuple) -> tuple:
+    """THE PERSON'S OWN RECORD OF WHAT HE LEARNED SINCE `since` -- `(tick, lap)`, `world_q.landing_floor`'s own key: one `AccountRow` per claim of his ledger with
+    `(when, lap) >= since`, in the order he holds them. Reads `p.ledger` and nothing else; writes nothing. ANOTHER PERSON'S REASONS ARE SHOWN EXACTLY HERE: as the claims
+    he holds about that person's deeds, tellings and commitments, with their sources. A value no claim of his holds is in no row."""
+    ledger = tuple(p.ledger)
+    cells: dict = {}
+    for i, c in enumerate(ledger):
+        cells.setdefault((c.subject, c.predicate), []).append((c.when, c.lap, i, c))
+    seen = _seen_index(ledger)
+
+    def prior_of(c: Claim) -> Optional[Claim]:
+        earlier = [(w, l, j, o) for w, l, j, o in cells[(c.subject, c.predicate)] if (w, l) < (c.when, c.lap)]
+        return max(earlier, key=lambda t: t[:3])[3] if earlier else None
+
+    rows = []
+    for c in ledger:
+        if (c.when, c.lap) < tuple(since):
+            continue
+        prior = prior_of(c)
+        changed = (prior is not None and prior.value != c.value) or is_deed(c)
+        rows.append(AccountRow(c, c.doer == p.id, prior, changed and not names_a_doer(c, seen)))
+    return tuple(rows)
 
 
 # ---------------------------------------------------------------------------------------------------

@@ -76,9 +76,9 @@ def test_a_saved_world_holds_the_last_barriers_shortfall_that_the_next_barrier_r
     POP.run(1, 0, w=realm)
     held = {pid: dict(kinds) for pid, kinds in realm._subsistence_shortfall.items()}
     assert held and all(held.values()), "no cohort was short: the round trip observed nothing"
-    back = decode(encode(realm), UNIFORM)
-    assert isinstance(back, World), repr(back)
-    assert back._subsistence_shortfall == held
+    back = decode(encode(realm), UNIFORM)             # B34.21: `decode` returns `Decoded(world, scenario)`, a refusal as a value
+    assert isinstance(getattr(back, "world", None), World), repr(back)
+    assert back.world._subsistence_shortfall == held
 
 
 def test_i_under_ground_no_cohort_is_short_at_season_0():

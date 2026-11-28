@@ -3303,6 +3303,14 @@
             "interview": "14_VERBS_SOCIAL2_C_case_question_confession"
           }
         },
+        "management_orders": {
+          "source": "Jordan's A-104 (*\"menu orders, which are management orders like 'assign this' or 'fire this person' or 'raise army' or whatever do not cost scene budget because they are not scenes. however, these CAN prompt scenes after being performed.\"*); workplan v12 B34.10 (`IS-B3-GO-07`).",
+          "note": "[BLOCKED: CONTENT -- CL-MGMT's list, A-104. Loading it is a declared hash mover, re-pinned once at that commit.]",
+          "keys": [
+            "verb_table"
+          ],
+          "orders": []
+        },
         "task_fraction": {
           "source": "`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` \"The resolution, decided\" 4: `{Failure: 0, Partial: 0.5, Success: 1, Overwhelming: 1}`; `U5c_VERBS_residue` \u00a71 edit 3 (one name, one set of first values).",
           "row": "H-164",
@@ -3730,13 +3738,20 @@
         "matter_kinds": {
           "source": "#353 \u00a710.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*",
           "row": "H-11",
-          "note": "\u26a0 OPEN MEANS ADDABLE, NOT UNCHECKED \u2014 and this file is the registry \u00a710.4 asks for. #353 forbids *a closed set in a source file*; it does not license a lookup that answers for a kind nobody registered. Both halves hold here: add a kind by adding a row, and a draw against an unregistered kind raises. \u26a0 THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what a row looks like, so starting the registry with exactly them is the least-invented content available \u2014 but it is still a choice, which is what `H-11` grades.",
+          "note": "\u26a0 OPEN MEANS ADDABLE, NOT UNCHECKED \u2014 and this file is the registry \u00a710.4 asks for. #353 forbids *a closed set in a source file*; it does not license a lookup that answers for a kind nobody registered. Both halves hold here: add a kind by adding a row, and a draw against an unregistered kind raises. \u26a0 THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what a row looks like, so starting the registry with exactly them is the least-invented content available \u2014 but it is still a choice, which is what `H-11` grades. B18.04 adds the seven ARMS KINDS (second line of `values`, their own members; `arms_kinds` maps each). [ASSUMPTION; low; Jordan to correct.]",
           "values": [
             "grain",
             "salt",
             "timber",
             "ore",
-            "coin"
+            "coin",
+            "arms_dagger",
+            "arms_spear",
+            "arms_sword",
+            "arms_longsword",
+            "harness_light",
+            "harness_mail",
+            "harness_plate"
           ]
         },
         "grown_kinds": {
@@ -3748,13 +3763,69 @@
         },
         "arms_kinds": {
           "source": "v11 CP-T03-03 (`-08` AM-C-04; T03 home \u00a72): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store.",
-          "note": "`kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there: `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key` a member of THAT FIELD'S closed set in the same module (the typed `kit` section of `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole number, unique among the kinds of one field; refused whole at import otherwise (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here. `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the stores of the rungs the person holds, else of his residence, else the Combatant's own default. \u26a0 EMPTY ON PURPOSE: which arms exist, which key each sets and how they rank is Jordan's content and is not invented here (`-08` AM-C-04). While `kinds:` is empty `kit_of` returns the Combatant default for everyone and every fight is dealt exactly as before the mechanism existed.",
-          "kinds": {}
+          "note": "`kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there: `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key` a member of THAT FIELD'S closed set in the same module (the typed `kit` section of `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole number, unique among the kinds of one field; refused whole at import otherwise (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here. `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the stores of the rungs the person holds, else of his residence, else the Combatant's own default. \u26a0 B18.04 LANDS SEVEN KINDS, every value `[ASSUMPTION; low; Jordan to correct]`: which arms exist, which key each sets and how they rank is Jordan's content (`-08` AM-C-04). A kind is admitted only with its row of the roster census (`balance.census`) in the commit that admits it: no cell beyond 95% against the kinds already admitted, or its answering kind admitted with it (`arms_spear` stands with `harness_mail` and `harness_plate`, which answer it at the medium and heavy tiers). With `kinds:` emptied `kit_of` returns the Combatant default for everyone and every fight is dealt exactly as before the mechanism existed (the Gate-4 control).",
+          "kinds": {
+            "arms_dagger": {
+              "field": "weapon",
+              "key": "dagger",
+              "rank": 1
+            },
+            "arms_spear": {
+              "field": "weapon",
+              "key": "spear",
+              "rank": 2
+            },
+            "arms_sword": {
+              "field": "weapon",
+              "key": "arming",
+              "rank": 3
+            },
+            "arms_longsword": {
+              "field": "weapon",
+              "key": "longsword",
+              "rank": 4
+            },
+            "harness_light": {
+              "field": "armor",
+              "key": "light",
+              "rank": 1
+            },
+            "harness_mail": {
+              "field": "armor",
+              "key": "medium",
+              "rank": 2
+            },
+            "harness_plate": {
+              "field": "armor",
+              "key": "heavy",
+              "rank": 3
+            }
+          }
         },
         "arms_at_build": {
           "source": "v11 CP-T03-03 (`-08` AM-C-04): the arms a rung is built holding, by the rung's kind [ASSUMPTION; medium; Jordan to correct].",
-          "note": "`kinds:` maps a RUNG KIND to the stores that kind of rung is seeded with when a realm is built: `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number; refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm` is the one seeder (`seed_arms`). \u26a0 EMPTY ON PURPOSE, as `arms_kinds` is: the inventory is Jordan's content, so no rung is built holding arms and `build_realm`'s world is unchanged.",
-          "kinds": {}
+          "note": "`kinds:` maps a RUNG KIND to the stores that kind of rung is seeded with when a realm is built: `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number; refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm` is the one seeder (`seed_arms`). \u26a0 B18.04 SEEDS FIVE RUNG KINDS, every count `[ASSUMPTION; low; Jordan to correct]` (the inventory is Jordan's content): a household's own knife (`hearth`), a settlement's armoury (`settlement`), a seat-holder's own holding (`territory`), and the arms of a duchy's or the realm's seat (`duchy`, `realm`). Two kinds of one field are never stocked on one rung kind unless the higher rank is also the stronger arm, so `arms_kinds`' rank never overrules the engine's measured order. With `kinds:` emptied no rung is built holding arms and `build_realm`'s world is unchanged.",
+          "kinds": {
+            "hearth": {
+              "arms_dagger": 1
+            },
+            "settlement": {
+              "arms_spear": 2,
+              "harness_light": 2
+            },
+            "territory": {
+              "arms_sword": 2,
+              "harness_mail": 1
+            },
+            "duchy": {
+              "arms_longsword": 1,
+              "harness_plate": 1
+            },
+            "realm": {
+              "arms_longsword": 1,
+              "harness_plate": 1
+            }
+          }
         },
         "wear_per_season": {
           "source": "#353 \u00a722 assigns `wear per site kind` to params; no in-chain table exists. `H-07`.",
@@ -5830,7 +5901,7 @@
             "lifepaths",
             "capabilities"
           ],
-          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of the skills a verb's `capability:` column names (`copying`, `argue`, `inquiry`; `descriptors.CAPABILITIES`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
+          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of the skills a verb's `capability:` column names (`copying`, `argue`, `inquiry`; `descriptors.CAPABILITIES`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. B18.05: `arms` is named when a starting skill is combat, defence or battle movement (3-CR2, 3-CH2, 3-HA3, 3-HA4, 3-LO1, 3-CF1; the near misses 3-GU2's Back-Alley Fighter, 3-VA2's Sea Legs and 3-HA2's Tunnel Fighter sit on rows that hold another key and are not added) [ASSUMPTION; low; Jordan to correct]. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
           "cells": {
             "3-CR1": {
               "holds": [
@@ -5839,8 +5910,10 @@
               "ground": "\u2605 Courtly Grace '+1D Argue before Expert Judge in Crown territory' names the Argue act -> argue; \u2605 Read the Room '(Appraise TN 6)' -> none (:310)"
             },
             "3-CR2": {
-              "holds": [],
-              "ground": "\u2605 Riposte '(counter-Strike after successful Defence)' and \u2605 Formation Discipline '(+1 Discipline start)' are combat and formation, no key (:311)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Riposte '(counter-Strike after successful Defence)' and \u2605 Formation Discipline '(+1 Discipline start)' are combat and formation, no inquiry or argue key -> martial: arms (B18.05) (:311)"
             },
             "3-CR3": {
               "holds": [],
@@ -5863,8 +5936,10 @@
               "ground": "\u2605 Doctrinal Authority '(+3D Recall bonus in Memory genre on theology)': Memory is a style picked inside the Argue exchange and the Recall bonus is dice added to that roll (social_contest_v30.md:168,172-177) -> argue; \u2605 Liturgical Composure '(+2 Composure in Church Tribunal)' -> none (:320)"
             },
             "3-CH2": {
-              "holds": [],
-              "ground": "\u2605 Smite the Heretic '(+1D Offence ...)' and \u2605 Shield of Faith '(+1D Defence in Full Guard)' are combat, no key (:321)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Smite the Heretic '(+1D Offence ...)' and \u2605 Shield of Faith '(+1D Defence in Full Guard)' are combat, no inquiry or argue key -> martial: arms (B18.05) (:321)"
             },
             "3-CH3": {
               "holds": [],
@@ -5895,12 +5970,16 @@
               "ground": "\u2605 Stone Reader '(+1D assess terrain/fortifications)': fortifications are 'architecture', which examine reads (verb_table.yaml `examine`) -> inquiry (examine); 'terrain' alone is none (see 3-CR5); \u2605 Tunnel Fighter '(+1D Defence in confined spaces)' -> none (:331)"
             },
             "3-HA3": {
-              "holds": [],
-              "ground": "\u2605 Fortress Defender '(+1D Defence in Fortified positions)' is defence; \u2605 Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> none (:332)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Fortress Defender '(+1D Defence in Fortified positions)' is defence -> martial: arms (B18.05); \u2605 Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> no inquiry (:332)"
             },
             "3-HA4": {
-              "holds": [],
-              "ground": "\u2605 Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and \u2605 Sure-Footed '(auto-success Establish Distance)' are battle movement, no key (:333)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and \u2605 Sure-Footed '(auto-success Establish Distance)' are battle movement, no inquiry or argue key -> martial: arms (B18.05) (:333)"
             },
             "3-VA1": {
               "holds": [],
@@ -5953,8 +6032,10 @@
               "ground": "\u2605 Intuitive Threadwork '(Attunement + Spirit TN 8 Ob 3 for minor Weaving)' and \u2605 Folk Healer '(+1D Medicine)' name no key (:362)"
             },
             "3-LO1": {
-              "holds": [],
-              "ground": "\u2605 Elite Discipline '(unit Discipline floor 2)' and \u2605 Riposte are command and combat, no key (:368)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Elite Discipline '(unit Discipline floor 2)' and \u2605 Riposte are command and combat, no inquiry or argue key -> martial: arms (B18.05) (:368)"
             },
             "3-LO2": {
               "holds": [],
@@ -5969,8 +6050,10 @@
               "ground": "\u2605 Anomaly Recognition '(+1D Cognition to assess threadcut being threat/movement/constraints)' reads a creature's threat, not examine's evidence, architecture, documents or objects (the same reading as 3-HA3 and 3-LO2) -> none; \u2605 Classified Knowledge '(once/arc invoke classified info for +2D)' -> none (:371)"
             },
             "3-CF1": {
-              "holds": [],
-              "ground": "\u2605 Weapon Versatility '(switch weapon type between exchanges)' and \u2605 Riposte are combat, no key (:377)"
+              "holds": [
+                "arms"
+              ],
+              "ground": "\u2605 Weapon Versatility '(switch weapon type between exchanges)' and \u2605 Riposte are combat, no inquiry or argue key -> martial: arms (B18.05) (:377)"
             },
             "3-CF2": {
               "holds": [],
