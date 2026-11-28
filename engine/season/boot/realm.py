@@ -1466,6 +1466,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # range, so a person individuated mid-season would otherwise hold one.
         w.fixtures = w.fixtures.sweep("generated_attribute_range", None)
     tension = draw_tension(seed) if tensions else None
+    if tension is not None:
+        goals_data.plant(tension.goals)
     if tension is not None and tension.yield_scale:
         w.fixtures = w.fixtures.sweep("territory_yield_scale", tension.yield_scale)
 

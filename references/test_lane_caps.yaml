@@ -73,6 +73,9 @@ lanes:
       - batch: B12b-weather-arcs-population
         added: 4
         behaviour: "test_tensions.py: the Tensions loader refuses a card with a firing key, an effect kind off the roster, a goal row goals' own parser rejects (with goals' own law string) and a goal id goals.yaml already carries; a drawn card and its choose_one picks are a function of the world seed and vary across seeds, and an effectless card is the realm it was; every goal row of the drawn card is minted as a Proposition with at least one person committed, at six seeds; a scaled territory's season factor is its unscaled factor times the scale and an unscaled one is untouched, on the drawn arm and on the control arm's per-rung read"
+      - batch: B12b-weather-arcs-population
+        added: 2
+        behaviour: "test_tensions.py (B12b.46, the six shipped cards): at seeds 0-5 the drawn card's goals are minted, committed to and its scales swept in, a committed person forms on the goal's own question a candidate whose subject is the goal's object (a rung goal's rung, a seat_holders goal's holders), and the realm plays two seasons; a card naming a seat offices.yaml lacks is refused when the realm draws it, and a seat_holders goal seeded on a built but vacant seat mints its commit and no stance row where the held seat writes one"
 
   engine:
     base: 1043

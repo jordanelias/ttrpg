@@ -7042,7 +7042,192 @@
       }
     },
     "engine/season/tensions.yaml": {
-      "tensions": []
+      "tensions": [
+        {
+          "id": "tension_royal_crisis",
+          "text": "the succession is in question, and a faction outside the Crown means to see a royal seat emptied",
+          "source": "conflict_architecture_proposal.md:135 (archived, intent): \"| 1 | **Royal Crisis** | T1 Crown-Church friction + succession | One Royal family member assassinated (sub-roll for target) |\". The archive's sub-roll for the target is the seat's `choose_one`; the assassination is an outcome and is the people's, not the card's. [ASSUMPTION; medium; Jordan to correct; revert: the row goes]",
+          "effects": [
+            {
+              "kind": "goal",
+              "goal": {
+                "id": "goal_tension_royal_crisis",
+                "org": {
+                  "faction": {
+                    "choose_one": [
+                      "Varfell",
+                      "Restoration Movement",
+                      "Hafenmark"
+                    ]
+                  }
+                },
+                "text": "the holder of a royal seat should be brought down",
+                "object": {
+                  "kind": "seat_holders",
+                  "seats": [
+                    {
+                      "choose_one": [
+                        "off_king",
+                        "off_widow_regent",
+                        "off_heir"
+                      ]
+                    }
+                  ]
+                },
+                "stance": -1,
+                "pursuits": {
+                  "liberty": 0.5,
+                  "reputation": 0.5
+                },
+                "source": "tensions.yaml tension_royal_crisis (B12b.46). The plotters (Varfell, the Restoration Movement, Hafenmark) and the targets (the King, the widow-regent, the Heir) are each one keyed pick. [ASSUMPTION; medium; Jordan to correct -- the plotters, the targets, the weights; revert: the card's row goes]"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tension_feldmark_famine",
+          "text": "the Crown's breadbasket is failing, and Feldmark yields three quarters of what it should for as long as the world lasts",
+          "source": "conflict_architecture_proposal.md:136 (archived, intent): \"| 2 | **Feldmark Famine** | T5 Crown breadbasket | Prosperity collapse in Crown's food supply \u2192 economic crisis |\". The collapse and the crisis are outcomes; the card keeps the strain, a lean harvest on T5 (Feldmark, `valoria_geography_v30.yaml` `sub: Breadbasket`). [ASSUMPTION; medium; Jordan to correct -- the scale 0.75; revert: 1.0]",
+          "effects": [
+            {
+              "kind": "yield_scale",
+              "territory": "T5",
+              "scale": 0.75
+            }
+          ]
+        },
+        {
+          "id": "tension_cardinal_independence",
+          "text": "a Cardinal looks past the Holy See to the Crown's own capital, as a see of his to govern",
+          "source": "conflict_architecture_proposal.md:137 (archived, intent): \"| 3 | **Cardinal Independence** | T1 + T9 Church internal | Rogue Cardinal unilaterally appoints bishop-governor in Crown settlement |\". The appointment is an outcome; the card keeps the Cardinal's attention on the Crown's seat settlement (Valorsplatz, `set_s_001`). [ASSUMPTION; medium; Jordan to correct -- which Cardinal; revert: the row goes]",
+          "effects": [
+            {
+              "kind": "goal",
+              "goal": {
+                "id": "goal_tension_cardinal_independence",
+                "org": {
+                  "seat": "off_cardinal_prudence"
+                },
+                "text": "Valorsplatz should answer to the Cardinal's own hand",
+                "object": {
+                  "kind": "rung",
+                  "rung": "set_s_001"
+                },
+                "pursuits": {
+                  "doctrine": 0.4,
+                  "reputation": 0.4,
+                  "individuality": 0.2
+                },
+                "source": "tensions.yaml tension_cardinal_independence (B12b.46). The Cardinal of Prudence, the seat once bodied as the temporal affairs (`offices.yaml` off_cardinal_prudence's note: \"body remapped from `Dicastery for Temporal Affairs`\"); attention only, no stance. [ASSUMPTION; medium; Jordan to correct -- which Cardinal, the weights; revert: the card's row goes]"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tension_guild_fracture",
+          "text": "the Guild is splitting, and its Comptroller's eye is on the market at Gransol",
+          "source": "conflict_architecture_proposal.md:138 (archived, intent): \"| 4 | **Guild Fracture** | T8 Hafenmark-Guild friction | S017 Guild schism \u2192 Market Quarter becomes contested |\". The Market Quarter is a district of Gransol (S-018, PP-726's collapse; S-017 is Holzbr\u00fcck), so the rung is `set_s_018`; the schism and the contest are the people's. [ASSUMPTION; medium; Jordan to correct; revert: the row goes]",
+          "effects": [
+            {
+              "kind": "goal",
+              "goal": {
+                "id": "goal_tension_guild_fracture",
+                "org": {
+                  "seat": "off_guild_comptroller"
+                },
+                "text": "the market at Gransol should be the Guild's to order",
+                "object": {
+                  "kind": "rung",
+                  "rung": "set_s_018"
+                },
+                "pursuits": {
+                  "wealth": 0.5,
+                  "individuality": 0.3,
+                  "community": 0.2
+                },
+                "source": "tensions.yaml tension_guild_fracture (B12b.46). [ASSUMPTION; medium; Jordan to correct -- the seat, the rung, the weights; revert: the card's row goes]"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tension_einhir_incident",
+          "text": "an Einhir confrontation is brewing in Varfell's highlands and southern fjords, and the Restoration's leader is drawn to it",
+          "source": "conflict_architecture_proposal.md:139 (archived, intent): \"| 5 | **Einhir Incident** | T4 + T13 Varfell-RM friction | Public Einhir cultural confrontation forces all factions to declare position |\". The confrontation and the declarations are the people's; the card keeps the leader's attention on T4 (Grauwald) and T13 (Oastad), one goal row each, no stance. [ASSUMPTION; medium; Jordan to correct; revert: the row goes]",
+          "effects": [
+            {
+              "kind": "goal",
+              "goal": {
+                "id": "goal_tension_einhir_grauwald",
+                "org": {
+                  "seat": "off_restoration_leader"
+                },
+                "text": "the Einhir of Grauwald should be seen and heard",
+                "object": {
+                  "kind": "rung",
+                  "rung": "terr_T4"
+                },
+                "pursuits": {
+                  "community": 0.5,
+                  "liberty": 0.3,
+                  "virtue": 0.2
+                },
+                "source": "tensions.yaml tension_einhir_incident (B12b.46), T4. [ASSUMPTION; medium; Jordan to correct -- the seat, the weights; revert: the card's row goes]"
+              }
+            },
+            {
+              "kind": "goal",
+              "goal": {
+                "id": "goal_tension_einhir_oastad",
+                "org": {
+                  "seat": "off_restoration_leader"
+                },
+                "text": "the Einhir of Oastad should be seen and heard",
+                "object": {
+                  "kind": "rung",
+                  "rung": "terr_T13"
+                },
+                "pursuits": {
+                  "community": 0.5,
+                  "liberty": 0.3,
+                  "virtue": 0.2
+                },
+                "source": "tensions.yaml tension_einhir_incident (B12b.46), T13. [ASSUMPTION; medium; Jordan to correct -- the seat, the weights; revert: the card's row goes]"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tension_ministry_crisis",
+          "text": "the Crown's Ministries are failing, and the Church's man at court means to see their chief clerk out",
+          "source": "conflict_architecture_proposal.md:140 (archived, intent): \"| 6 | **Ministry Crisis** | T14 Crown-L\u00f6wenritter + Crown governance | Ministry bureaucracy collapses \u2192 Crown governance vacuum \u2192 Church fills |\". The collapse and the vacuum are outcomes; the card keeps the Church's side against the Ministries' one seat (`off_parliamentary_clerk`, body `Ministries`). [ASSUMPTION; medium; Jordan to correct -- whether to keep this card at all; revert: the row goes]",
+          "effects": [
+            {
+              "kind": "goal",
+              "goal": {
+                "id": "goal_tension_ministry_crisis",
+                "org": {
+                  "seat": "off_archbishops_rep"
+                },
+                "text": "the Ministries' chief clerk should give way to the Church's counsel",
+                "object": {
+                  "kind": "seat_holders",
+                  "seats": [
+                    "off_parliamentary_clerk"
+                  ]
+                },
+                "stance": -1,
+                "pursuits": {
+                  "doctrine": 0.4,
+                  "stability": 0.4,
+                  "stewardship": 0.2
+                },
+                "source": "tensions.yaml tension_ministry_crisis (B12b.46). The Church seat is the Archbishop's Representative, the Church's seat at T1 (`offices.yaml` off_archbishops_rep, faction Church of Solmund). [ASSUMPTION; medium; Jordan to correct -- the Church seat, the weights, the card; revert: the card's row goes]"
+              }
+            }
+          ]
+        }
+      ]
     },
     "engine/season/verb_table.yaml": {
       "verbs": [
