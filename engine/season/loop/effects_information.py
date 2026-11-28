@@ -728,6 +728,9 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         seat = petitioned_seat(w, party, RECORD_DISPOSAL)
         if seat is None or (res is not None and _MINTED not in VERB_TABLE[a.verb].writes_at(res.degree)):
             return NO_CHANGE
+        said = a.payload if isinstance(a.payload, dict) else {}
+        if (said.get("record") or f"rec:{a.id}") in w.records:      # `_mint_document`'s id: a taken one would be overwritten, as `open_case` and `create_record` decline
+            return NO_CHANGE
         made = _mint_document(w, a, RESOLUTION_KIND, {RESOLUTION_SEAT_KEY: seat, RECORD_CONTENT["addressee"]: party}, _seat_rung(w, a))
     elif any(t.kind == kind and t.subject == party and t.object == seat and t.live
              for t in w.tenures):

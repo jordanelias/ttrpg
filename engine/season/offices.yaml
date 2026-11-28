@@ -166,7 +166,7 @@ titles:
 # first name is the archive's rank 0 title, kept so the ordinals read as the archive's, and no seat is held at it. A seat whose `post` is one of these names is stamped with it on its holder's `hold` (`World._grant_remit`), so the holder's own standing is
 # readable person-side (`Tenure.post`); `epistemic._term_marks` shows it to a witness where `livery` is true; `queries/person_q.py::rank` compares two
 # people on one ladder. No seat is minted for an unheld rank. Never transcribed: the archive's gates, Obs and Renown thresholds, the Initiation Gates and
-# Demotion columns. Nine ladders, 66 posts, from the archived `faction_politics_v30.md` (Part 1 §1.1-§1.4, Part 2 §2.1-§2.5; its Warden ladder is not
+# Demotion columns. The ladders, from the archived `faction_politics_v30.md` (Part 1 §1.1-§1.4, Part 2 §2.1-§2.5; its Warden ladder is not
 # transcribed -- the Wardens are no `factions` member -- and Niflhel's is dissolved).
 # [ASSUMPTION; medium; Jordan to correct; revert: an empty `ladders: {}`, one re-pin -- basis: a sub-office ladder's faction is the roster member it serves
 # in the source (§1.1b, §1.4b); `rosters.yaml: factions` has no Riskbreaker, Inquisitor, Templar or Wardens member; the ladder keys are the plan's; the

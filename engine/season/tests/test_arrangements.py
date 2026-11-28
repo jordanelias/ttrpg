@@ -334,7 +334,9 @@ def test_the_hold_disposing_rows_are_opened_by_determine(monkeypatch):
     seat (the gate's election arm opens it on another), and `_determinable` admits the rows, so `open_case` may dock them.
 
     OBSERVED: the shipped report is empty and both seeded rows dispose `hold`. CONTROL: with `determine` struck from `hold`'s derived
-    openers, C-1 names exactly the two rows, so the empty report is the `_disposal` site's doing."""
+    openers, C-1 names exactly the two rows. ⚠ SINCE B21c.04 THE OPENER MAP NO LONGER ISOLATES THE `_disposal` SITE: `_eff_determine` also
+    reaches `_mint_document` -> `_makers_hold`'s `"hold"` literal, so `determine` stays a derived `hold` opener were the `_disposal` literal
+    removed (observed). That the `hold` opens on the petition's seat is observed by `test_cr35_election.py`, which runs the fold."""
     from ..data.verbs import _OPENERS_FROM_EFFECTS
     from ..loop.effects_information import _determinable
     from ..state.gate import DISPOSABLE_KINDS, SEAT_DISPOSAL
