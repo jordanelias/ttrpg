@@ -27,7 +27,7 @@ from ..queries.person_q import BOND_STEM, DUTY_TAKEN, SELF_STEM, holds_self_key,
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, demanded, enclosing_territory,
                                home_of as home_of_q, landing_floor, members, subsistence_draw, treasury_above)
 from ..gaps import Forbidden, Unowned, Unspecified
-from ..data.fixtures import DEFAULT_FIXTURES, REALM_FIXTURES, SITE_YIELD, endowment_for
+from ..data.fixtures import DEFAULT_FIXTURES, REALM_SWEEP, SITE_YIELD, endowment_for
 from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTION_CREED, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
@@ -1463,12 +1463,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     geo, ven = _load(GEOGRAPHY), _load(VENUES)
     # B12b.47 (IN-52's flip, `H-241`, DEF-7): THE SHIPPED REALM FIELDS ITS TROOPS BOUNDED BY ITS TREASURY. `Fixtures.field_provisioning` stays False
     # (every hand-built world, test, harness and case world reads the control and moves no pinned hash); the uncapped realm, which B12a stocks (the
-    # seat rung, `granary_seasons`) so that `SeasonDriver`'s B12b.24 refusal passes, reads `REALM_FIXTURES` (the one sweep, named once). A capped realm
+    # seat rung, `granary_seasons`) so that `SeasonDriver`'s B12b.24 refusal passes, reads `DEFAULT_FIXTURES.sweep(*REALM_SWEEP)`, which is `REALM_FIXTURES` (the one sweep, named once). A capped realm
     # is a reduced harness realm whose treasuries are not the shipped ones (it would trip that refusal) and reads `DEFAULT_FIXTURES`; a caller that
     # hands its own `fixtures` (a sweep, a control) is read as handed. [ASSUMPTION; medium; Jordan to correct; revert: `REALM_FIXTURES = DEFAULT_FIXTURES`.]
     # LF-1 is REVERTIBLE (DEF-7).
     if fixtures is None:
-        fixtures = REALM_FIXTURES if cap is None else DEFAULT_FIXTURES
+        fixtures = DEFAULT_FIXTURES.sweep(*REALM_SWEEP) if cap is None else DEFAULT_FIXTURES
     w = World(seed, fixtures)
     if not cast_attributes:
         # The control arm holds no drawn sheet at all: the in-play mint (`loop/census.py::_individuate`) reads the same

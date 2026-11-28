@@ -7,14 +7,102 @@
 # Lanes are assigned in conftest.py; `process` is the leftover lane and is meant to reach zero.
 lanes:
   season_loop:
-    base: 3393
-    warrants: []
+    base: 3219
+    warrants:
+      - {batch: B18-pc-content, added: 2, behaviour: "a person with no stocked weapon fights unarmed once the arms roster is non-empty, and a person who stocks one is the kit he was; with the roster emptied kit_of is the default for everyone"}
+      - {batch: B18-pc-content, added: 2, behaviour: "the loader refuses a shipped arms kind outside rung_kinds and a weapon or armour key outside the weapons export, which no other test observes"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the six martial lifepaths hold arms at pool_default, no other lifepath names it, and a person built on one can train it"}
+      - {batch: B18-pc-content, added: 1, behaviour: "kit_of returns the two highest-ranked distinct weapon kinds a person's rungs stock as primary and secondary, and the carry of the secondary rides the input's short pair"}
+      - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a season's want term scales each per-head weight where the draw is projected, so a cohort's demand, REM-50's cover and MATTER's drain agree at a winter tick and a salt weight of 1 under 1.5 is 2; the yield term scales the drawn season factor only with the draw on; at the shipped terms the projection is the bare weights every tick"}
+      - {batch: B12b-weather-arcs-population, added: 6, behaviour: "a journey between two settlements is priced by the cheapest path over the settlement graph, each step the ground of the settlement entered, at the leg unit's scene points with a floor of one; a settlement inside a pass nested in a mountain costs the pass's price and one in the mountain's interior may not be entered; a journey into a foreign territory is still blocked"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a journey the chooser prices under route pricing costs its leg's points from the scene budget, far above near and equal to the world-side leg points, one point at the shipped off arm, and a journey over the person's remainder is left undone"}
+      - {batch: B12b-weather-arcs-population, added: 5, behaviour: "a region's spell term over a year is one value for every territory under one parent rung and moves with the year and the region, and a spell with no season table or a season table that is not one entry per season of the year is refused"}
+      - {batch: B12b-weather-arcs-population, added: 5, behaviour: "an ending over the condition of Sites is reached by one keyed draw: never while no selected Site is at or below the band, at most seeds but not all when every one is, at fewer seeds when one in three is, with the same answer on two calls and no draw ordinal moved; the loader refuses it beside a faction or a victory flag"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "(its off-arm hash control retired at the B12b remainder close) a journey's arrival on the road is one keyed draw that its borders set: forty journeys of three borders do not all end alike and two seeds read two tallies, a road of four borders fails more often than a road of one, and with the road's arm off the realm's season reads the same hash whatever the road's three sizing rows hold"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "the people on the road are those whose last journey entered a territory other than the one they set out from, a journey inside one territory or with no leg listing nobody, and each one's obstacle is the road's level plus one step for the journey's points, each entered territory whose season draw landed Failure and each entered territory a field was fought in this tick or the last, with the pool his move faculty gives"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a journey appends one travel leg per scene point of its price when route pricing is on, so a four-point journey leaves a hold-less person a lap budget of one, and the one entry it was when the arm is off"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "with the road's arm on a traveller's leg list loses one entry a barrier (one `travel.ended` each) where the arm off clears it whole; each degree of the road's draw writes its own row: Failure drops the body by the road step caused by his move and a body under the step dies through `person.died` with nothing more written, Partial leaves the leg and emits one `travel.delayed`, Overwhelming's `travel.ended` carries the stock of where he stands"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a person whose own ledger holds at least an authored axis's count of claims of its kinds about one referent has that referent among his classed referents and the question he answers is marked mandatory; with one claim fewer he is offered nothing, and a person holding none is offered nothing though another holds the count about the same man"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "with a fed cohort's mend on, a cohort fully rationed from just under a body floor steps up by the body step, crosses the floor upward with the crossing anchored on it, stops at its ceiling and takes no rise on a half ration; with the mend off the same body stays put and no crossing is emitted, and the count of a site's crossings over three seasons is the same with the mend on or off"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a requisition or transfer carries the share of the giving rung's stock it takes as a choice: with one share on the roster no candidate carries one and the amount is the fixtures', with two the one candidate becomes two differing only in amount (a share of the newest stock claim he holds about the giving rung, the fixtures' amount where he holds none), and a requisition refused for want of stock leaves the requisitioner a firsthand claim of the refusal where one taken within the stock leaves none"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a foreign settlement entry that carries stores is built holding exactly that stock at its own rung and no other rung is handed it, and with the key absent the foreign world builds as before: writing the key changes the world by that rung's stores alone"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a settlement's walls are the complement of the product of each garrison's shortfall: a ruined second garrison never lowers the first, two half-strength garrisons read three quarters, and no garrison reads nothing"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a realm whose field is provisioned from treasuries is refused at construction naming H-241 when no seat rung or held rung holds one ration, constructs where the granary stocks one, and the unprovisioned field reads no treasury"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a season's yield write carries on its receipt what the rung produced as sorted pairs and the band its territory's weather draw landed in, with no band at the control arm"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a build that pays a works' whole price from the payer's stores leaves no zero key of a paid kind in them, and a build that leaves one unit of a paid kind leaves that kind at one"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a hungry cohort's body falls by the body step times its units short divided by its weight where the loss is per head, so a weight-20 cohort short the same per head loses what a weight-2 one does and the weight-2 loss halves; at the shipped per-cohort arm the weight-20 cohort loses ten times the weight-2 one's"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "under famine_loss a cohort whose body stands under the lowest body floor thins by that share of its weight each season, each thinning caused by the body write and its demanded falling with it, one over the floor thins not at all, a cohort at body 0 dies only at weight 1, and at famine_loss 0 it dies at body 0 as before"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a settlement no cohort resides under reads the hunger band empty, a settlement a cohort resides under whose cohort wants nothing still reads fed, and the one with cohort and need reads starving"}
+      - {batch: B12b-weather-arcs-population, added: 4, behaviour: "with the regrowth arm on, a cohort at full body, housed, fed in full and quiet for the set seasons gains one head with one weight.changed and no person added or removed; it gains none at capacity until a dwelling is built and then exactly one, none in a short season, and a cohort thinned by famine returns a head once it is fed and whole; with the arm 0 nothing is written"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a world saved after a season in which cohorts went short loads holding the same record of who was short of what, which the next season's crossing test reads"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a rung too short for its claimants is shared in proportion to want so two cohorts of one size each take half and fall alike, the odd unit goes to a cohort that varies over season keys, and the takes always sum to what the rung held"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "a dearth is reported once, in the season the town first goes unfed: a granary emptied to its last unit reports at the granary rung (not the settlement) the first unfed season and not again while the dearth lasts, a ladder that never held the kind reports once at its first rung on the first short cohort's body write and then nothing, a cohort fed every season reports nothing, and with the body step at 0 there is no write to carry it"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort that starves after one exact season's stock was drawn falls citing the last stores write at the rung it was short at, and its death cites that fall, not the seed or an earlier death"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "a cohort the larder cannot feed in full is refused a tend at the fed clause and its body stays, the same cohort fully fed is tended to the scale, and a weight-1 person who is no eater is tended"}
+      - {batch: B12b-weather-arcs-population, added: 2, behaviour: "with the supply arm on, a treasury holding grain and no salt fields troops at the grain ration and the fold debits the grain it ate where the larder's whole ration fields nobody from it, and a side with an empty treasury fields fewer troops than one with a full treasury"}
+      - {batch: B12b-weather-arcs-population, added: 3, behaviour: "a case world built from a world block seats a cohort of the stated weight through the one cohort seater, holds the stated larder and exactly the Sites the block names (a counted kind minted that many times), and a season played over it leaves the shortfall as a claim in the cast's ledgers; the block refuses an unknown key, a weight that is no int above one, a kind outside the site roster, a count that is no positive int and a person-scale case, and a cohort heavier than the dwellings minted; a case with no block, or one naming the endowment's own kinds, is the world it was and the stores key writes that rung's stores alone"}
+      - {batch: B12b-weather-arcs-population, added: 1, behaviour: "at the shipped per-head weights the realm after two seasons at seeds 0-2 holds a settlement whose larder cover falls below a hunger floor and reads fed once each head's need is dropped to one unit a kind, and no cohort's body crosses a body floor in the first season"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "an officer a warrant is addressed to, who has only heard of it, forms arrest on the man it names (on a question with no plain referent too) and on no other, the arrest folds to arrest.made and opens a detain, and a warrant addressed to a third man forms none for him"}
+      - {batch: B29-pc-custody, added: 1, behaviour: "capture forms on a person under war or crime and on no stranger, and its custody goes to the issuing seat of the warrant whose court could close it, not to the seat the act is exercised through"}
+      - {batch: B21b-fa-war, added: 2, behaviour: "a person's grudge toward a seat-holder and toward a rival creed raises a `conspire` on that holder and a `declare` on that creed (below 0 under the default sign), and a plotter whose `legitimacy` reads the holder below 0 forms `conspire` on him with other invitees and never with the holder himself as the backer"}
+      - {batch: B21b-fa-war, added: 43, behaviour: "a faction's identity is read by one owner (`faction_props`); a person is offered a creed to join only for one he reads above his own and above indifference; a seated muster-holder declares a war on a rival he reads below indifference or one a wound or a held claim to a territory turns him toward, an own-faction or already-at-war declare is refused, and only a declare's own commit makes a war; a claim to a territory is a Proposition whose grounds the roster names; a sworn man's seat grants and refuses by the oath (`retain` and `conspire` each weigh the new obstacle terms and a plot is laid, joined or refused by what the gate admits); an oblige purview and a regent's seat on the same rung read the one `purview_of`; a seat is conferred only by what every live holder grants; a march is capped and seized by what it reaches"}
+      - batch: B34-go-surface
+        added: 15
+        behaviour: "the player surface in test_play_surface.py: the transcript's hash equals the plain run's (seeds 0-2), the offer rows follow make_ranker and the printed order and terms are the chooser's, withheld rows are own-state only, the prior teller is unattributed, a swept scene_budget gives the seat its scenes, a picked question ranks first, the stop rules (no-continuation stops, a continuation plays on, a killed seat continues under the heir) and the ending's kind (victory rows only)"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "test_play_surface_own_outcome.py: the doer holds his own act's outcome, and every act he resolved has an own account row"
+      - batch: B34-go-surface
+        added: 3
+        behaviour: "test_explain.py: a fact no claim of his holds is in no derivation, the five first values derive from his own claims, and unattributed is a change no claim of his names a doer"
+      - batch: B34-go-surface
+        added: 3
+        behaviour: "test_seat_holders_from_ledger.py: a creation row marks cohorts and holdings; all chances at 1.0 reproduce today's referents; the shipped holder_known_chance leaves some goal-named seats unheard (H-758)"
+      - batch: B34-go-surface
+        added: 4
+        behaviour: "test_management_orders.py: an order scene costs nothing and a priced scene is unchanged, an order never shares a scene with a priced act, a spent budget may still order, an order opens a scene next lap"
+      - batch: B34-go-surface
+        added: 8
+        behaviour: "test_scene_contract.py: an echo decider equals none, empty deciders hash-equal no host, a deviating decider moves a played module, apply=False goes through seam.contest; the roll fixture's terms sum to the obstacle, printed odds match the realised bands, effort moves odds, every band is reached and writes"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "test_go07_canonical_digest.py: a snapshot names its scenario and resume refuses an unknown one; a resumed run reaches the ending the unbroken run reaches"
+      - batch: B34-go-surface
+        added: 2
+        behaviour: "the governance spine prints the Offer and holds no second menu (test_governance_spine_play.py); the creation sheet shows holdings for a seat holder (test_season_shape.py)"
+      - batch: B12b-weather-arcs-population
+        added: 4
+        behaviour: "test_tensions.py: the Tensions loader refuses a card with a firing key, an effect kind off the roster, a goal row goals' own parser rejects (with goals' own law string) and a goal id goals.yaml already carries; a drawn card and its choose_one picks are a function of the world seed and vary across seeds, and an effectless card is the realm it was; every goal row of the drawn card is minted as a Proposition with at least one person committed, at six seeds; a scaled territory's season factor is its unscaled factor times the scale and an unscaled one is untouched, on the drawn arm and on the control arm's per-rung read"
+      - batch: B12b-weather-arcs-population
+        added: 2
+        behaviour: "test_tensions.py (B12b.46, the six shipped cards): at seeds 0-5 the drawn card's goals are minted, committed to and its scales swept in, a committed person forms on the goal's own question a candidate whose subject is the goal's object (a rung goal's rung, a seat_holders goal's holders), and the realm plays two seasons; a card naming a seat offices.yaml lacks is refused when the realm draws it, and a seat_holders goal seeded on a built but vacant seat mints its commit and no stance row where the held seat writes one"
+      - batch: B12b-weather-arcs-population
+        added: 2
+        behaviour: "test_hunger.py (B12b.47, the supply arm flipped in the shipped realm): on the bare build_realm a seat treasury holding one grain ration fields one of the attacker's two where the realm built on the explicit default fixtures fields both, and an empty treasury fields 0 where a full one fields the whole weight"
+      - batch: B12b-weather-arcs-population
+        added: 1
+        behaviour: "test_go07_canonical_digest.py (B12b close, the life save): a game saved from the shipped realm (built under REALM_FIXTURES, the supply arm on) resumes through scenarios.resume without the client naming its fixtures, where it came back SnapshotRefused(fixtures_digest) before; the control is that decode under other fixtures still refuses."
+
   engine:
-    base: 1048
-    warrants: []
+    base: 1043
+    warrants:
+      - batch: B19a-mb-contact-instrument
+        added: 4
+        behaviour: >-
+          tests/valoria/test_export_mb_contact.py. The measured duel table read at the twelve check cells (`test_interpolation_hits_the_check_cells`:
+          the module's log-odds interpolation lands inside the measured interval, game state). The exporter's blocking `--check` for the table
+          the contact draw reads: `test_round_trip_is_clean`, `test_a_hand_edit_fails_check`, `test_a_changed_duel_engine_fails_check` (a stale
+          calibration cannot ship); `export_mb_contact.py` is not yet a CI step, so these are its only CI exerciser until the workflow line lands.
+      - batch: B34-go-surface
+        added: 1
+        behaviour: "every closed choice set is exported with a name and a line of text, and both exporters refuse a member with none (test_engine_params_bridge.py)"
+
   combat:
-    base: 500
-    warrants: []
+    base: 497
+    warrants:
+      - {batch: B18-pc-content, added: 1, behaviour: "a fight with every input slot absent, None or at its declared default is the same fight, event for event, and a raised axis is a different one"}
+      - {batch: B18-pc-content, added: 1, behaviour: "the harness term the fight charges as stamina is the one the host computes from the carry rule at every armour tier and Strength, and a shortfall slows the close once CARRY_CLOSE_K is above 0"}
+      - {batch: B18-pc-content, added: 1, behaviour: "a switch swaps the weapon and costs one ACT_THRESHOLD together at the round's first closed beat and a round that never closes changes nothing, the default rule fires on a closed measure only, and a decider answering engage plays the same fight as none"}
   mass_battle:
     base: 324
     warrants: []
@@ -29,5 +117,10 @@ lanes:
     warrants: []
 tools:
   files:
-    base: 57
-    warrants: []
+    base: 55
+    warrants:
+      - batch: B19a-mb-contact-instrument
+        added: 2
+        behaviour: >-
+          tools/export_mb_contact.py (blocking in tools/valoria_local.py; registered in ci_checks_registry.yaml) and
+          tools/calibrate_mb_contact.py (run by hand at a calibration pass; imported by the exporter for the grid and the engine fingerprint).

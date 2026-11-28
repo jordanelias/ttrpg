@@ -2026,7 +2026,8 @@ DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "cont
 #: test and case world reads the control); the uncapped `boot/realm.py::build_realm` reads this. Named here (after `CLOSED_ARMS`, which `sweep` reads)
 #: so that a reader of a shipped-realm snapshot (`state/world.py::decode`, whose default stays `DEFAULT_FIXTURES`) can hand the fixtures the snapshot
 #: was encoded under. [ASSUMPTION; medium; Jordan to correct; revert: `REALM_FIXTURES = DEFAULT_FIXTURES`]
-REALM_FIXTURES = DEFAULT_FIXTURES.sweep("field_provisioning", True)
+REALM_SWEEP = ("field_provisioning", True)    # the one override the shipped realm makes of the default (`build_realm` applies it to the module's `DEFAULT_FIXTURES` at call time, so a test that patches that name still steers the build)
+REALM_FIXTURES = DEFAULT_FIXTURES.sweep(*REALM_SWEEP)
 #: the hand-built tests' control arm as a Fixtures value (`DEFAULT_FIXTURES` at the x1 per-head weights): one sweep, not one per test file.
 X1_FIXTURES = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)
 
