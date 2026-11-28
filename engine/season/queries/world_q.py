@@ -41,6 +41,7 @@ from ..data.rosters import (
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ALL_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_BENCH, ENDING_CARD, ENDING_EXCHANGE, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HEAD_SEAT, HUNGER_BANDS,
     DECLARED, GROWN_KINDS, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    RESOLUTION_KIND, RESOLUTION_SEAT_KEY,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TALLY_AXES, TENURE_KINDS, TITLE_DOMAINS,
     FACTION_CREED, faction_prop_id, factions_compatible, is_faction_proposition, settlement_rung_id,
     CASUS_GROUNDS,
@@ -104,7 +105,7 @@ from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-
 from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, SEAT_DISPOSAL, may_determine, may_elect, may_fill, may_revoke, purview_of, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, CONFIRMED_BASES, SEAT_DISPOSAL, may_determine, may_dismiss, may_elect, may_fill, may_revoke, purview_of, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
 from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
@@ -3669,7 +3670,7 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
     Read-only; three classes, one disjunct each, every one composed on the relation that already owns it:
 
       (i)   THE SWORN -- a live `oblige` to this seat (`establishment_of`), wherever he lives;
-      (ii)  THE HOLDER OF A SEAT THIS SEAT MAY REVOKE -- `may_revoke` over each seat he holds other than `via`
+      (ii)  THE HOLDER OF A SEAT THIS SEAT MAY DISMISS -- `may_dismiss` over each seat he holds other than `via`
             itself, so whom a seat may order and whom it may dismiss are one relation;
       (iii) AN UNSEATED PERSON IN ITS LAND -- he holds no seat and the seat's purview reaches the place he lives
             (`purview_reaches` of `place_of`).
@@ -3681,7 +3682,7 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
 
     ⚠ CALLERS: `issue`'s `basis: command` (B21.20, `WorldReader.read`'s `command` stem); `_req_dispatch` (B21.21);
     `writs_addressed`'s terms clause (B21.22: a decree forms an answer only for an addressee the seat commands). `actor` is
-    asked only by `may_revoke`, which refuses an actor not seated in `via`; the sworn and the land disjuncts read
+    asked only by `may_dismiss` (through `may_revoke`), which refuses an actor not seated in `via`; the sworn and the land disjuncts read
     the seat `via` names alone, as `purview_reaches` does (`04:332`: purview is asked of the seat exercised)."""
     TRACE.query("commands", "resolver")
     if via not in w.offices:
@@ -4457,27 +4458,33 @@ def vacancies(w: World, p: Person) -> tuple:
     (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
     it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
     there at the cost of a scene (H-207). A seat he holds himself is refused as
-    a no-op by `_req_confer` (conferring a seat on its own holder)."""
+    a no-op by `_req_confer` (conferring a seat on its own holder).
+    v11 CR-36: A SEAT WHOSE BASIS IS IN `CONFIRMED_BASES` (`nominated`) is offered only to a conferrer who HOLDS a live `resolution` whose `terms`
+    is that seat (`RESOLUTION_KIND`, `RESOLUTION_SEAT_KEY`), so no `confer` forms that `_req_confer`'s `nomination` conjunct refuses for want of
+    any resolution; which resolution licenses which conferee is the fold's (`loop/predicates.py::confirming_resolutions`)."""
     seats = [t.object for t in p.tenures
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:
         return ()
+    held = [w.records[t.object] for t in p.tenures if t.kind == "hold" and t.live and t.object in w.records]
+    resolved = {r.subject_matter.get(RESOLUTION_SEAT_KEY) for r in held if r.kind == RESOLUTION_KIND and isinstance(r.subject_matter, dict)}
     return tuple(o for o in sorted(ledger_names(p.ledger))
-                 if o in w.offices and vacant_named(p.ledger, o) and any(may_fill(w, p.id, s, w.offices[o]) for s in seats))
+                 if o in w.offices and vacant_named(p.ledger, o) and (w.offices[o].conferral not in CONFIRMED_BASES or o in resolved)
+                 and any(may_fill(w, p.id, s, w.offices[o]) for s in seats))
 
 
 def recalls(w: World, p: Person) -> tuple:
     """THE RECALL OCCASION (B21.23, `06_FA_decree_binds` edit 4; rulings A-24, A-47), `vacancies`' shape: for each person `other`
     whose `person_q.suspicions` in `p`'s own ledger has reached `Fixtures recall_suspicion`, `other` (stamped `Person`) and each seat
-    he holds that `may_revoke` admits through one of `p`'s own seats (stamped `Office`), in that order, each person's seats by id.
+    he holds that `may_dismiss` admits through one of `p`'s own seats (stamped `Office`), in that order, each person's seats by id.
     Suspicion counts only the answers of persons the writ's issuing seat commands (`commands`, the A-22 basis `writs_addressed`
     asks): `admit` hands it the command basis, so a writ to someone the seat does not command enters no count. `()` at
     `recall_suspicion: None` (the revert), for a person with no seat of his own, and for nearly everyone else.
 
     ⚠ IT OPENS THE ISSUER'S QUESTION AND DECIDES NOTHING (A-24, A-47): the recall itself is `revoke`'s resistible draw, the fold's. It
-    asks the gate's own `may_revoke`, so it names no SEAT the gate would refuse to have stripped through that seat. THE PERSON IS
-    NAMED EITHER WAY (the edit's own words: *"the person and each seat he holds that `may_revoke` admits"*): a defier none of whose
-    seats `p` may strip is an occasion with no `revoke` candidate on him. Resolver-side and read-only, as `vacancies`."""
+    asks the gate's own `may_dismiss` (`may_revoke`, less a seat strippable only with a carried motion), so it names no SEAT the gate
+    would refuse to have stripped through that seat. THE PERSON IS NAMED EITHER WAY (the edit's own words: *"the person and each seat
+    he holds that `may_revoke` admits"*): a defier none of whose seats `p` may strip is an occasion with no `revoke` candidate on him. Resolver-side and read-only, as `vacancies`."""
     threshold = w.fixtures.get("recall_suspicion")
     if threshold is None:
         return ()
@@ -4491,7 +4498,7 @@ def recalls(w: World, p: Person) -> tuple:
     for other, n in suspicions(p, commanded).items():
         if n < threshold or other not in w.persons:
             continue
-        seats = sorted({t.object for t in w.seat_holds(other) if any(may_revoke(w, p.id, s, w.offices[t.object]) for s in mine)})
+        seats = sorted({t.object for t in w.seat_holds(other) if any(may_dismiss(w, p.id, s, w.offices[t.object]) for s in mine)})
         out += [other, *seats]
     return tuple(out)
 

@@ -478,6 +478,14 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if petition is not None and not (
             isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
         return NO_CHANGE
+    # v11 CR-35/CR-36: A ROW THAT FILLS A SEAT OR MINTS A RESOLUTION ABOUT ONE docks only a petition whose `terms` name an Office -- else
+    # `_eff_determine` (through `petitioned_seat`) declines the matter forever, the wedge `_determinable`'s docstring promises never to dock.
+    if arrangement is not None and ARRANGEMENTS[arrangement]["disposes"] in (SEAT_DISPOSAL, RECORD_DISPOSAL):
+        rec = w.records.get(petition) if petition is not None else None
+        said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+        terms = said.get(ABOUT_KEYS.get(rec.kind)) if rec is not None else None
+        if not (isinstance(terms, str) and terms in w.offices):
+            return NO_CHANGE
     # B24p.24: THE OPENER'S ARRANGEMENT -- he arranges the sitting of the case he opens, `rig` a `rig_levels` member (a level outside it, or one that
     # is no number, is declined like a bad arrangement: the item would carry a rig no builder can read).
     if isinstance(rig, bool) or not isinstance(rig, (int, float)) or rig not in RIG_LEVELS:
@@ -707,7 +715,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     made = None
     if kind == SEAT_DISPOSAL:
         seat = petitioned_seat(w, party)
-        if seat is None or any(t.kind == kind and t.object == seat and t.live for t in w.tenures):
+        if (seat is None or any(t.kind == kind and t.object == seat and t.live for t in w.tenures)
+                or restrained(w, party, BAN_KIND, at=w.offices[seat].rung)):      # a ban bars the conferee's standing, as `_eff_confer`'s
             return NO_CHANGE
     elif kind == RECORD_DISPOSAL:
         # v11 CR-36 (B21c.04) step 3: THE RECORD DISPOSAL SITE. A row that `disposes: Record` mints, through `_mint_document` (the one

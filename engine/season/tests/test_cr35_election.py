@@ -160,6 +160,21 @@ def test_election_refusals(arm):
     assert _seat_holders(w, SEAT) == holders, arm
 
 
+def test_a_banned_candidate_is_not_elected():
+    """A BAN IS THE CONFEREE'S STANDING, AT ELECTION AS AT `confer` AND `succeed`: the candidate banned by a seat whose purview reaches the
+    elected seat's rung (the Crown bench, scope `R`, over `D`) -> a determination at a band that opens seats nobody (`_eff_determine`
+    declines, as `_eff_confer` does). CONTROL (one edge away): the same determination with no ban seats him."""
+    for banned in (False, True):
+        w, d = _church_world(**JUDGE)
+        _ought(w, "p_high", "prop_elect")
+        if banned:
+            w.add_tenure(Tenure("t_ban_candidate", CANDIDATE, KING_SEAT, "ban", since=0))
+            assert world_q.restrained(w, CANDIDATE, world_q.BAN_KIND, at=w.offices[SEAT].rung)
+        out = _fold(w, d, _determine(f"ban{banned}"))
+        assert out[0].degree in OPENS, (banned, _kinds(out))
+        assert _seat_holders(w, SEAT) == ([] if banned else [CANDIDATE]), (banned, _kinds(out))
+
+
 # --- A-14: THE VOTE IS A DRAW, READ AS SHARES ----------------------------------------------------------------------------------------
 
 def _row(rid):

@@ -928,6 +928,14 @@ def may_revoke(w: "World", actor: Optional[str], via: Optional[str], off: Office
     return REVOCATION_RULES[off.revocation](w, actor, w.offices[via], off)
 
 
+def may_dismiss(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:
+    """MAY `actor`, EXERCISING `via`, DISMISS THE HOLDER OF `off` ON HIS OWN AUTHORITY? `may_revoke`, less the seats whose basis is in
+    `CONCURRED_BASES`: such a seat is strippable only with a carried motion (the record conjunct `_req_revoke` and `_eff_revoke` ask),
+    so the concurring seat does not command its holder. A-22 class (ii)'s one reader (`commands_a_seated`, `world_q.recalls`,
+    `boot/realm.py::seed_command_knowledge`); `may_revoke` stays the gate's write basis."""
+    return may_revoke(w, actor, via, off) and off.revocation not in CONCURRED_BASES
+
+
 def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:
     """THE CONFERRAL BASIS, AS ONE PREDICATE: may `actor`, exercising `via`, open (or re-grant) a
     `hold` on the seat `off` FOR SOMEBODY ELSE?
@@ -1074,7 +1082,8 @@ def may_elect(w: "World", actor: Optional[str], via: Optional[str], party: Optio
     for `party` -- fill a seat by the bench's determination?
 
     `may_determine`'s first two conjuncts, then the seat's: (1) `via` is a judging seat the actor sits in, not detained (`_seat_grants` of
-    `BENCH_BASIS`); (2) `party` is a person other than the actor who may sit (`may_sit`, B21.60); (3) `seat` is not `via`, and has no live
+    `BENCH_BASIS`); (2) `party` is a person other than the actor, and may sit -- composed on `may_sit` itself (B21.60), which
+    `may_determine` does not ask; (3) `seat` is not `via`, and has no live
     `hold` but `besides` (one per object -- the opened edge itself, when the gate asks after the write); (4) `FILLED_BY[seat.conferral]`
     names `determination`; (5) `via`'s faction is `seat`'s (`seat_faction`, both sides) -- the electorate is the seat's own faction's bench;
     (6) for an `elected` seat the party holds a LIVE `commit` to that faction's Proposition and none to a second faction Proposition
@@ -1231,15 +1240,15 @@ def may_admit(w: "World", person: Optional[str], faction: Optional[str]) -> bool
 
 def commands_a_seated(w: "World", actor: Optional[str], via: Optional[str], person: Optional[str]) -> bool:
     """DOES `via` COMMAND `person` BY THE FIRST TWO OF A-22's CLASSES (B21.59)? (i) he is SWORN to the seat (a live `oblige`,
-    `sworn_to`), wherever he lives; (ii) he holds a seat OTHER than `via` that `actor`, exercising `via`, may revoke
-    (`may_revoke`), so whom a seat may order and whom it may dismiss are one relation. The third class, an unseated person in
+    `sworn_to`), wherever he lives; (ii) he holds a seat OTHER than `via` that `actor`, exercising `via`, may dismiss
+    (`may_dismiss`), so whom a seat may order and whom it may dismiss are one relation. The third class, an unseated person in
     its land, is `world_q.commands`' own (it reads where he stands). ONE BODY, TWO READERS: `world_q.commands` composes on it
     and `may_levy` asks it of a SEATED cohort (the A-22 arm), so neither keeps a second copy of the two disjuncts."""
     if person is None or via not in w.offices or person not in w.persons:
         return False
     if is_sworn_to(w, person, via):
         return True
-    return any(may_revoke(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
+    return any(may_dismiss(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
 
 
 def may_levy(w: "World", actor: Optional[str], via: Optional[str], cohort: Optional[str], faction: Optional[str]) -> bool:
@@ -1248,7 +1257,7 @@ def may_levy(w: "World", actor: Optional[str], via: Optional[str], cohort: Optio
     `MUSTER_ACT`, he is not in custody); `seat_faction(via) == faction`; `purview_reaches(via's seat, the rung the cohort LIVES
     in)` (`lives_in`, his own `reside` edge). A-22: the basis is command over the unseated on the seat's ground, so a cohort that
     holds a seat is levied through `via` only if the seat commands him (`commands_a_seated`: sworn to it, or a holder of a seat it
-    may revoke) -- living on its ground is not enough.
+    may dismiss) -- living on its ground is not enough.
 
     ⚠ NOT HERE: the entry's fifth conjunct, `world_q.raisable_by` (the faction governs where the cohort lives, or the cohort is
     committed to it) -- a Query, which `state/` may not import (`04` §A.2). `_eff_recruit` and `harness/military_menu.py::

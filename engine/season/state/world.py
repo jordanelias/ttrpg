@@ -1231,6 +1231,8 @@ class World:
         if "remit_acts" in t.payload and (
                 not force or (t.granted_acts, t.seat_rung, t.post) == (grant, off.rung, post)):
             return False
+        if post is None:
+            t.payload.pop("post", None)       # a re-stamp onto a post that is no longer a title or ladder post drops the stale key
         t.payload.update(stamp)
         return True
 

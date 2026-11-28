@@ -688,7 +688,7 @@ def _req_revoke(w: "World", a: "Act") -> Answer:
     remit verb follows (`loop/resolve.py::_eligible` asks `state/gate.py::_seat_grants`, and `may_revoke` the
     basis), not a collision between Part E and Jordan's 2026-09-02 *"so long as"*.
 
-    B21.82: THE ANSWER IS `Answer(ok, clause)`, the clause one of the five declared on the decorator, in branch order:
+    B21.82: THE ANSWER IS `Answer(ok, clause)`, the clause one of the six declared on the decorator, in branch order:
     `office` (the act names no office the world holds), `disposal` (the conferral basis has no revocation disposal),
     `authority` (the seat exercised has no revocation authority over the seat), `keeps` (the `keeps` operand is no list of
     acts), `held` (a seat nobody holds) and, v11 CR-37 (B21c.05), `concurrence` (a seat whose basis is in `CONCURRED_BASES` revoked by an

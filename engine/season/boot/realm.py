@@ -38,7 +38,7 @@ from ..data.requires import KNOWN_PERSON_CLAIM
 from ..epistemic import CHANNEL_PREDICATES, claim_subjects
 from ..state.carriers import (Act, Claim, Event, Office, Person, Proposition, Rung, Site, StateChange, Tenure,
                               generated_attributes)
-from ..state.gate import NO_CHANGE, may_revoke, seat_faction, sworn_to
+from ..state.gate import NO_CHANGE, may_dismiss, seat_faction, sworn_to
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 
@@ -897,7 +897,7 @@ def seed_seat_news(w: World) -> list:
 
 def seed_command_knowledge(w: World) -> list:
     """WHAT A SEAT'S HOLDER KNOWS AT THE START OF WHOM HIS SEAT COMMANDS (B21.55 repair; A-22): a lord knows who is sworn to him
-    and who sits in the seats he may revoke. `queries/person_q.py::commanded_read` forms `issue` and `dispatch` from his own ledger
+    and who sits in the seats he may dismiss. `queries/person_q.py::commanded_read` forms `issue` and `dispatch` from his own ledger
     alone (AX-2), and a realm seeded with oaths as Tenures on the sworn men gave that ledger nothing to read. For every live `hold`
     on a seat, its holder takes, at the seated edge's `since` (season 0 for every seeded edge):
 
@@ -905,7 +905,7 @@ def seed_command_knowledge(w: World) -> list:
         claim `(sworn man, duty.taken, True)` -- the event-kind claim `loop/witness.py` deposits for a witnessed oath (its
         `Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", ...)`, the kind `oblige`'s own row emits, the subject the man
         who swore), so a built oath and a played one read the same;
-      * per live `hold` on ANOTHER seat that he, exercising this one, may revoke (`state/gate.py::may_revoke`, A-22 class (ii)'s
+      * per live `hold` on ANOTHER seat that he, exercising this one, may dismiss (`state/gate.py::may_dismiss`, A-22 class (ii)'s
         rule), the claim `(that seat, hold, its holder)` -- the shape `state/gate.py::Subject.seat` observes (predicate the edge's
         own kind);
       * and, for a sworn man he does not yet know (`person_q.known_persons`), the `exists:Person` reading `seed_acquaintances`
@@ -933,7 +933,7 @@ def seed_command_knowledge(w: World) -> list:
         for o in holds:
             cid = f"c_holder_{lord}_{o.id}"
             if (o.object == via or o.subject == lord or cid in written
-                    or not may_revoke(w, lord, via, w.offices[o.object])):
+                    or not may_dismiss(w, lord, via, w.offices[o.object])):
                 continue
             p.ledger.append(Claim(cid, lord, o.object, o.kind, o.subject, o.since, "firsthand", conf, "own"))
             written.append(cid)

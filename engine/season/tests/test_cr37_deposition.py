@@ -196,6 +196,20 @@ def test_a_planted_single_signer_is_refused():
     assert _holders(w, THRONE) == [KING]
 
 
+def test_the_concurring_seat_does_not_command_the_king():
+    """A-22 class (ii) IS DISMISSAL WITHOUT A MOTION: the Confessor's seat may close the throne-hold at the gate (`may_revoke`, the write
+    basis, kept) but strips it only with a carried motion (`CONCURRED_BASES`), so he does not command the King (`world_q.commands`, through
+    `state/gate.py::may_dismiss`). CONTROL (one basis away): a seat on a non-concurred basis (`same_rung_same_faction` on the heir's title)
+    is commanded by the seat that may revoke it."""
+    from ..queries import world_q
+    from ..state.gate import may_revoke
+    w, _ = _court()
+    assert may_revoke(w, HOLY, CONFESSOR, w.offices[THRONE])
+    assert not world_q.commands(w, HOLY, CONFESSOR, KING)
+    w.offices[TITLE].revocation = "same_rung_same_faction"
+    assert world_q.commands(w, KING, THRONE, HEIR)
+
+
 @pytest.mark.usefixtures("seat_at_success")
 def test_no_route_reaches_the_confessor():
     """A-36: THE CONFESSOR LEAVES ONLY BY DEATH OR RESIGNATION. The shipped `off_confessor` row does not declare `joint_concurrence`; a

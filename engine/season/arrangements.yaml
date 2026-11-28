@@ -650,7 +650,7 @@ arrangements:
   # `hold` literal), by the gate's election arm (`state/gate.py::may_elect`). The bench is the electorate (`world_q.judging_set` with the
   # matter: the live judging seats of the seat's faction, the seat excluded, no containment walk). `election` fills an `elected` seat from
   # its faction; `succession` decides a vacant inherited seat between claimants of any faction (the contested succession). Seeded at
-  # `close: declared` directly, `quorum: 1` (swept {1, 2}), `venue_min_rank: hearth`; every other key is `council_of_state`'s, transcribed
+  # `close: declared` directly, `quorum: 1`, `venue_min_rank: hearth`; every other key is `council_of_state`'s, transcribed
   # (no `inherits:` mechanism, that row's reason). [ASSUMPTION; medium; Jordan to correct; revert: no rows.] REACH 0: a computed `open_case`
   # writes `DOCKET_ARRANGEMENT` and `DOCKET_PETITION` as `None`, so no computed docket item names either row.
   - id:               election

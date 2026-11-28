@@ -11,7 +11,7 @@ THE WORLD is `test_u7_remit.py`'s (`probes.tiny_world`: R > D > S > Hh) with the
   * the vacant clerk's seat `off_parliamentary_clerk` (`conferral: nominated`, rung `D`, no faction, as the realm row);
   * the King's seat `off_king` (Crown, scope `R`, remit `determine` and `confer`, held by p_king) and the Widow Regent's `off_regent` (Crown,
     scope `R`, remit `determine`, held by p_high): the nominating bench `judging_set` lists for `parliamentary_debate` (the interim two-seat
-    bench, CR-38);
+    bench, CR-38); the Regent's seat is HAND-BUILT with `determine` -- the shipped Widow Regent's hold carries none (B21.16);
   * the nominee p_mid holding the petition `pet_clerk` (terms the clerk's seat), docketed under `parliamentary_debate`.
 The hand-built `give` (H-229's residue) moves the resolution's `hold` from the Regent to the King by hand: the delivery is not under test.
 """
@@ -21,8 +21,9 @@ import pytest
 
 from ..loop.effects_information import _docket_item
 from ..queries import world_q
-from ..state.carriers import Act, Office, Record, Tenure
-from .test_u7_remit import JUDGE, OPENS, _fold, _kinds, _world
+from ..queries.person_q import vacant_named
+from ..state.carriers import Act, Claim, Office, Record, Tenure
+from .test_u7_remit import JUDGE, OPENS, _fold, _kinds, _open, _world
 
 CROWN = "Valorsmark"
 CLERK, PETITION, NOMINEE, OTHER = "off_parliamentary_clerk", "pet_clerk", "p_mid", "p_other"
@@ -153,6 +154,39 @@ def test_confirmation_refusals(arm):
     w, d, act = _arm(arm)
     assert _kinds(_fold(w, d, act)) == ["confer.refused"], arm
     assert _clerk_holders(w) == [], arm
+
+
+def test_a_nominated_vacancy_is_offered_only_to_a_resolution_holder():
+    """`world_q.vacancies` OFFERS A `nominated` SEAT ONLY TO A CONFERRER WHO HOLDS A `resolution` NAMING IT: the King, told the clerk's seat
+    is empty and granted `confer` over it, is offered nothing while he holds no resolution; once the Regent's carried nomination is in his
+    hand (the hand-built `give`), he is offered the seat (CONTROL, one edge away)."""
+    w, d = _court(**JUDGE)
+    king = w.persons["p_king"]
+    king.ledger.append(Claim("c_clerk_empty", "p_king", CLERK, "tenure.closed", True, w.tick, "firsthand", 1.0, "own"))
+    assert vacant_named(king.ledger, CLERK)
+    assert CLERK not in world_q.vacancies(w, king)
+    out = _fold(w, d, _determine("n_vac"))
+    assert out[0].degree in OPENS, _kinds(out)
+    (rid, _), = _resolutions(w).items()
+    _give_by_hand(w, rid, "p_king")
+    assert CLERK in world_q.vacancies(w, king)
+
+
+def test_a_petition_naming_no_seat_is_not_docked_for_a_seat_row():
+    """`open_case` DOCKS NO MATTER `_eff_determine` WOULD DECLINE FOREVER: under a row that mints a resolution (`parliamentary_debate`) or
+    fills a seat (`election`), a petition whose `terms` name no Office is not docked; CONTROL (one value away): `terms` the clerk's seat is.
+    `test_u7_remit.py`'s world, whose Duke's seat opens cases."""
+    checked = 0
+    for row in (ROW, "election"):
+        for terms, docks in ((CLERK, True), ("off_nowhere", False)):
+            w, d = _world(**JUDGE)
+            _seat(w, CLERK, "Chief Parliamentary Clerk", "D", ["issue"], None, None, conferral="nominated", body="Ministries")
+            w.records["pet_x"] = Record("pet_x", "Hh", "petition", subject_matter={"terms": terms, "to": None, "from": "Hh"})
+            w.add_tenure(Tenure("t_pet_x", NOMINEE, "pet_x", "hold", since=0))
+            out = _fold(w, d, _open(f"oc_{row}_{docks}", subject=NOMINEE, arrangement=row, petition="pet_x"))
+            assert bool(world_q.docketed(w, NOMINEE)) is docks, (row, terms, _kinds(out))
+            checked += 1
+    assert checked == 4
 
 
 def test_a_failed_nomination_mints_nothing():
