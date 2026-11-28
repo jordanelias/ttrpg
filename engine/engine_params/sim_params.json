@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 556,
-    "uncited": 424,
+    "total": 563,
+    "uncited": 431,
     "of_which_assumption_grade": 9
   },
-  "count": 556,
+  "count": 563,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 48,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 270,
+    "engine.season.settings": 277,
     "engine.season.realm": 9
   },
   "params": [
@@ -55978,6 +55978,83 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-635`, swept 0 (control, revert) / 0.5 / 1.0 (SHIPPED) / 2.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_pursuit_gain_on",
+      "name": "ci_pursuit_gain_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_mu_shift_on",
+      "name": "ci_mu_shift_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_theocratic_occasion_on",
+      "name": "ci_theocratic_occasion_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ci_church_decline_on",
+      "name": "ci_church_decline_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.turmoil_violence_relief_on",
+      "name": "turmoil_violence_relief_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.turmoil_vassal_war_on",
+      "name": "turmoil_vassal_war_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.nation_functions_on",
+      "name": "nation_functions_on",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-636`, swept False (control, SHIPPED) / True",
       "citation": null,
       "citation_grade": null
     },

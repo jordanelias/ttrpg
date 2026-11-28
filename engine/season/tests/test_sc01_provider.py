@@ -257,8 +257,9 @@ def test_the_shipped_table_brings_no_edge_and_the_channel_names_capability():
     # (read off the roster and compared member by member: a literal copy of the whole roster would be the duplicate
     # `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) refuses)
     sources = tuple(rosters.roster("advantage_sources", ordered=True))
-    assert sources[:2] == ("effort", "capability") and len(sources) == 6
-    assert sources[2:] == ("proofs", "favour", "office", "wounds")
+    # B21d.06 re-pin: `church_reach` (CI >= reach's mu-shift, shipped off) joined the roster before `wounds`; was six members
+    assert sources[:2] == ("effort", "capability") and len(sources) == 7
+    assert sources[2:] == ("proofs", "favour", "office", "church_reach", "wounds")
     assert set(sigma.ADVANTAGE_SOURCES) == set(sources)
     w, act = _edge_world()
     inp, odds = _true_odds(w, act, 0.0)

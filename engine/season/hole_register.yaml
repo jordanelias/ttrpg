@@ -9006,6 +9006,19 @@ rows:
     cite:      "CR-88 (`proposals/v12_B21d_duty_of_office.md` §2, §4, §6, §8's reading rule); ED-IN-0335, ED-IN-0322, ED-IN-0347 (AR-52). FALSIFIER: `engine/season/tests/test_cr88_duty_of_office.py`. CONTROL: betrayal_band None and duty_weight 0 reproduce the pre-item seed-0 one-season realm hash (recorded at the commit)."
     source:    "workplan v12 B21d.05 (B21d's H block slot 3)"
 
+  - id:        H-636
+    tier:      1
+    hole:      "EACH CLOCK BAND'S TRIGGER IS BUILT AND SHIPPED OFF, AND HOW EACH READS ITS BAND IS THE BUILDER'S, NOT MEASURED. Seven `Fixtures` switches, all False; on, each reads the band off the person's OWN believed fold (never the true clock), the Church read as the faction the `church_influence` row's feeders name, the sovereign as the faction whose head seat ranks highest. CI >= assertive: a Church member's `seize`/`establish`/`open_case` gain, in the `pursuit` term, the row read as aligned one step on every axis he weighs (`damp * sum |axis_w|`). CI >= reach: one level, the smallest `LEVEL_SIGMA` name, for the Church side of a social roll against a non-Church person (a mu-shift; listed among the act's levels only where it brings one). CI >= mass seizure: the Church head's next question carries the sovereign's creed and is mandatory. CI >= dominant / ascendant: a non-Church man's opponent-rule verb on a Church officer his own ledger names loses one valence step per band in the `stance` term. Turmoil >= tension: on a violent row a NEGATIVE stance term (regard's restraint) is relieved by k/3 for k Turmoil bands believed. Believed breakdown: a vassal head's next question carries the sovereign's creed (no claim) and is mandatory. `nation_functions`: one goal per head seat on the realm's rung, seeded only while on, its question raised at believed Turmoil >= tension, the rung a `Rung` occasion. No document gives a magnitude for any of them."
+    kind:      "ASSUMPTION"
+    owner:     "Jordan, who corrects each reading (content, D-19: listed in the PR body); B21d.07 to B21d.09 flip the three a two-season run can reach on CR-90's reading; the four CI flips are B98's (BLOCKED, A-114: target past two seasons)"
+    grade:     "assumption"
+    default:   "every switch False (the control: every hash is what it was) [ASSUMPTION; medium; Jordan to correct; revert: each switch False, and for `nation_functions` no row]"
+    site:      "`engine/season/data/fixtures.py::Fixtures` ci_pursuit_gain_on, ci_mu_shift_on, ci_theocratic_occasion_on, ci_church_decline_on, turmoil_violence_relief_on, turmoil_vassal_war_on, nation_functions_on; the bands each reads `data/rosters.py::TRIGGER_BANDS`; read by `decision/choose.py::band_pursuit_gain`, `band_stance`; `seam/wrappers/sigma.py::_church_reach_of` (`advantage_sources: church_reach`); `queries/world_q.py::declare_occasion`, `believed_bands`, `occasion_open`, `occasion_referents` (from `questions_for`); `engine/season/goals.yaml` `nation_functions` (`data/goals.py::switched`)"
+    sweep:     ["every switch False (SHIPPED, the control)", "each switch True alone (B21d.07 to B21d.09, B98)", "every switch True"]
+    unblocks:  "B21d.07 to B21d.09 (each flip on CR-90's reading); B98's four CI dials"
+    cite:      "CR-89 commit (3) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b) band table, (e)); A-47, A-103 (`master/eval/E2.md:37`); ED-IN-0343, ED-IN-0345; CR-91 (4), (5). FALSIFIER: `engine/season/tests/test_cr89_clocks.py::test_switch_moves_its_term_only_when_on`, `::test_two_heads_at_war_convene_at_believed_turmoil_three_only_with_the_row_on`, `::test_a_declare_trigger_opens_a_mandatory_question_and_decides_nothing`. CONTROL: every switch off reproduces B21d.05's seed-0 one-season realm hash."
+    source:    "workplan v12 B21d.06 (B21d's H block slot 4)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

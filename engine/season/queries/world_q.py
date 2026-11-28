@@ -51,6 +51,9 @@ from ..data.rosters import clocks as clock_rows          # B21d.02: the clock ro
 from .clock import ClockEvent, clock_fold                # B21d.02: the one fold, and the Event as it reads one
 from .clock import SittingEvent, sittings_failed_of      # B21d.03: the breaking point's count, and the Event as it reads one
 from ..data.verbs import DISPOSAL_EVENTS                 # B21d.03: the determination's kind, `determine`'s disposal
+from ..data.rosters import TRIGGER_BANDS, band_reached, church_faction   # B21d.06: the bands the triggers read, and the Church
+from ..data.arrangements import determining_arrangement                # B21d.06: the sittings breakdown counts
+from .person_q import SOVEREIGN_FACTION, believed_breakdown, believed_clock   # B21d.06: the sovereign's faction; the believed folds
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
 # v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
@@ -4395,6 +4398,76 @@ def sitting_events_by_claim(w: World) -> dict:
     return _by_claim(w, {se.event: se for se in sitting_events(w, w.log)})
 
 
+# v12 B21d.06 (CR-89 commit (3); A-47, A-103): THE BAND TRIGGERS, read world-side for the person, off HIS OWN BELIEVED folds (never `clock`, the true one).
+# Each is gated by its `Fixtures` switch (shipped off), and off nothing below is read. The two claim-to-Event maps are barrier indexes
+# (`queries/cache.py::clock_claim_index`, `sitting_claim_index`): `questions_for` runs at barrier 2, once per person, over one log.
+def believed_bands(w: World, p: Person) -> tuple:
+    """THE CLOCK BANDS `p` BELIEVES THE REALM STANDS IN, `((clock, band), ...)` in roster order: each band whose threshold his own believed fold
+    (`person_q.believed_clock`) is at or above (`rosters.band_reached`). Computed when asked, stored nowhere; `questions_for` stamps it on his head
+    question (`Question.bands`) while a trigger reading it person-side is on (`TRIGGER_BANDS`' person-side three)."""
+    from .cache import clock_claim_index
+    of_claim, fx = clock_claim_index(w), w.fixtures
+    out = []
+    for name, row in clock_rows().items():
+        v = believed_clock(p, name, of_claim)
+        out.extend((name, b.name) for b in row.bands if band_reached(v, name, b.name, fx))
+    return tuple(out)
+
+
+#: v12 B21d.06: the triggers whose band a person-side term reads off `Question.bands` (`decision/choose.py`).
+BANDS_READ_PERSON_SIDE = ("ci_pursuit_gain_on", "ci_church_decline_on", "turmoil_violence_relief_on")
+
+
+def declare_occasion(w: World, p: Person) -> tuple:
+    """THE `declare` A BAND OCCASIONS (CR-89 (3), CR-91 (4), (5); A-47, A-103): `(the sovereign's creed,)` -- the `Proposition` `declare` forms on
+    (`faction_prop_id` of `person_q.SOVEREIGN_FACTION`) -- where `p` heads a faction (`head`) that is not the sovereign's and
+      * `ci_theocratic_occasion_on`: that faction is the Church (`rosters.church_faction`) and his believed CI is at the band the trigger reads; or
+      * `turmoil_vassal_war_on`: he believes the realm broken (`person_q.believed_breakdown` over `arrangements.determining_arrangement()`'s sittings),
+        the vassal head's war, occasioned WITHOUT A CLAIM (A-103: a claim is an occasion, never a gate; this is another occasion);
+    else `()`. AN OCCASION ONLY: `questions_for` stamps it on his head question and marks that question mandatory (B10.71's rule); whether he declares
+    is his choice, and whether the act passes is its fold's (A-47). Read-only; `()` with both switches off, nothing read."""
+    fx = w.fixtures
+    theocratic, vassal = fx.get("ci_theocratic_occasion_on"), fx.get("turmoil_vassal_war_on")
+    sovereign = faction_prop_id(SOVEREIGN_FACTION) if SOVEREIGN_FACTION is not None else None
+    if not (theocratic or vassal) or sovereign is None:
+        return ()
+    headed = {f for f in faction_props(w) if head(w, f) == p.id}
+    if not headed or sovereign in headed:
+        return ()
+    from .cache import clock_claim_index, sitting_claim_index
+    of_clock = clock_claim_index(w)
+    if theocratic and church_faction() in headed:
+        (name, band), = TRIGGER_BANDS["ci_theocratic_occasion_on"]
+        if band_reached(believed_clock(p, name, of_clock), name, band, fx):
+            return (sovereign,)
+    if vassal and believed_breakdown(p, determining_arrangement(), of_clock, sitting_claim_index(w), fx):
+        return (sovereign,)
+    return ()
+
+
+def occasion_open(w: World, p: Person, ambition) -> bool:
+    """IS THE AMBITION'S QUESTION RAISED NOW (B21d.06, a goal row's `occasion: {clock, band}`): `p`'s believed fold of the clock at or above the band.
+    `True` for every goal that carries no `occasion:` (every row but the switched `nation_functions`), so Q4 is unchanged for them."""
+    goal = _goals.goal(ambition)
+    if goal is None or goal.occasion is None:
+        return True
+    from .cache import clock_claim_index
+    name, band = goal.occasion
+    return band_reached(believed_clock(p, name, clock_claim_index(w)), name, band, w.fixtures)
+
+
+def occasion_referents(w: World, p: Person, standing: list) -> tuple:
+    """THE REFERENTS OF HIS STANDING AMBITIONS WHOSE GOAL CARRIES AN `occasion:` (B21d.06), each once, in order -- stamped by `questions_for` as their own
+    class (`_stamped`, `World.class_of`), so the realm's rung of `nation_functions` is a `Rung` `convene` forms on. `standing` is the ambitions that
+    raised a question (their `occasion_open` already held). `()` where none carries one -- every shipped world."""
+    out = []
+    for pid in standing:
+        goal = _goals.goal(pid)
+        if goal is not None and goal.occasion is not None:
+            out.extend(r for r in goal_referents(w, p, w.propositions[pid]) if r is not None)
+    return tuple(dict.fromkeys(out))
+
+
 def claimed_rungs(w: World, war) -> tuple:
     """THE RUNGS A WAR WAS DECLARED ON A CLAIM TO (B21b.13, CR-91 (2); [ASSUMPTION; medium; Jordan to correct]): the `value`s of the claims to a territory
     (`CLAIM_MOOD`) of the war's declaring faction (its `subject`) uttered no later than the war (`Proposition.when`) whose rung the other party (`value`) holds
@@ -6050,7 +6123,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         # B10.71 (U5a `CHAR` §3 (a)): nor has a want he BELIEVES met (`believed_met`, his own ledger), where either reads met
         # [ASSUMPTION; medium; Jordan to correct; revert: drop `believed_met` -- the world's aim state alone gates it].
         # And a row opening `mandatory` marks the question of its last stage (`opens_mandatory`; sorted first below).
-        if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid):
+        # v12 B21d.06: and a goal row carrying `occasion:` raises it only while he believes the clock at the band (`occasion_open`; `True` for every other row).
+        if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid) and occasion_open(w, p, pid):
             out.append(Question(f"q:need:{pid}", "need", refs, pid, mandatory=opens_mandatory(w, p, pid)))
             standing.append(pid)
 
@@ -6189,6 +6263,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # THE RIVAL CREEDS A SEATED MUSTER-HOLDER READS BELOW INDIFFERENCE (`war_targets`), as `Proposition` -- `declare` forms on them (and `commit` and `argue`, the declared widening).
     heard_props = propositions_heard(w, p)
     founding = holdings_to_found(w, p)
+    occasion = declare_occasion(w, p)      # v12 B21d.06: the band-occasioned `declare`'s referent, `()` with both switches off
     added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told) + warrants_heard(w, p)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
@@ -6206,6 +6281,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              # B21b.13 (CR-91 (2); [ASSUMPTION; medium; Jordan to correct]): AND THE CREEDS OF THE FACTIONS HOLDING THE RUNGS HE HOLDS A CLAIM TO (`claim_creeds`), as
              # `Proposition` -- a held claim to a territory is `declare`'s occasion. (c)'s branch for a war declared on a claim is inside `war_fields`. REVERT: drop the term.
              + claim_creeds(w, p)
+             # v12 B21d.06 (CR-89 (3); A-47, A-103; [ASSUMPTION; medium; Jordan to correct; revert: each switch off]): AND THE REFERENTS OF HIS AMBITIONS
+             # RAISED AT A BELIEVED BAND (`occasion_referents`: `nation_functions`' realm rung, as `Rung`), AND THE SOVEREIGN'S CREED WHERE A BAND OCCASIONS HIS
+             # `declare` (`declare_occasion`, as `Proposition`) -- which also marks the question mandatory, below. `()` with every switch off.
+             + occasion_referents(w, p, standing) + occasion
              + reached)
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
@@ -6239,7 +6318,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         first = added[0] if added else held[0][0]
         head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
         stamped = _stamped(head, added, w, held)
-        out[:1] = [replace(stamped, mandatory=True) if reached else stamped]
+        out[:1] = [replace(stamped, mandatory=True) if reached or occasion else stamped]
+    # v12 B21d.06: AND THE BANDS HE BELIEVES THE REALM IN ride the question he answers (`Question.bands`), only while a trigger reading them person-side is on.
+    if out and any(w.fixtures.get(s) for s in BANDS_READ_PERSON_SIDE):
+        out[:1] = [replace(out[0], bands=believed_bands(w, p))]
     return out
 
 

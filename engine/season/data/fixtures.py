@@ -2027,7 +2027,37 @@ DEFAULT_FIXTURES = Fixtures(
     betrayal_band=2.0,                # `H-635`, swept None (control, revert) / 2.0 (the floor, SHIPPED) / 3.0 / +inf (total)
     # [JUSTIFIED: engine/season/hole_register.yaml H-635 -- the weight of the office's binding; no document gives one, so it is injected and swept 0 / 0.5 / 1.0 / 2.0, aim_gain's points]
     duty_weight=1.0,                  # `H-635`, swept 0 (control, revert) / 0.5 / 1.0 (SHIPPED) / 2.0
+    # v12 B21d.06 (CR-89 commit (3); A-47, A-103; ED-IN-0343, ED-IN-0345): EACH CLOCK BAND'S TRIGGER, ONE SWITCH EACH, ALL SHIPPED OFF. A switch off reads
+    # nothing and moves nothing (every hash is what it was); on, the band it names is read off the PERSON'S OWN BELIEVED clock (`person_q.believed_clock`),
+    # never the true one, through a term that already exists. The bands' thresholds are B21d.02's fixtures above (`ci_*`, `turmoil_*`, H-633). "The Church"
+    # is the one faction the `church_influence` row's feeders name (`data/rosters.py::church_faction`), never a name in code. Each flip is its own commit
+    # on CR-90's reading (B21d.07 to B21d.09; the four CI bands are B98's). [ASSUMPTION; medium; Jordan to correct; revert: each switch False]
+    #   `ci_pursuit_gain_on`        CI >= assertive: a Church member's `seize`, `establish`, `open_case` gain, in the `pursuit` term, the row read as aligned one step on every axis he weighs (`decision/choose.py::band_pursuit_gain`).
+    #   `ci_mu_shift_on`            CI >= reach: the Church side of a social roll against a non-Church party takes one named level (`advantage_sources: church_reach`, a mu-shift; never an Ob term).
+    #   `ci_theocratic_occasion_on` CI >= mass_seizure: the Church head's next question carries the sovereign's creed (`declare`'s referent) and is mandatory (B10.71); he decides.
+    #   `ci_church_decline_on`      CI >= dominant, >= ascendant: a non-Church man's opponent-rule verb on a Church officer his ledger names loses one valence step per band (`stance`).
+    #   `turmoil_violence_relief_on` Turmoil >= tension: on a violent row the restraint of regard (a NEGATIVE stance term) is relieved by one share per Turmoil band of the row's bands (CR-87's cost).
+    #   `turmoil_vassal_war_on`     believed breakdown (Turmoil >= crisis and failed sittings): a vassal head's next question carries the sovereign's creed, no claim needed, and is mandatory.
+    #   `nation_functions_on`       every head seat carries the `goals.yaml` row `nation_functions` (seeded at build only while on: `data/goals.py::switched`), its question raised at Turmoil >= tension.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- a band's trigger, shipped off (CR-89 commit (3): "each shipped off"); a switch, not a number, swept False (SHIPPED, the control) / True]
+    ci_pursuit_gain_on=False,         # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- CI >= reach's mu-shift, shipped off; swept False (SHIPPED) / True]
+    ci_mu_shift_on=False,             # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- CI >= mass seizure's occasion (CR-91 (5)), shipped off; swept False (SHIPPED) / True]
+    ci_theocratic_occasion_on=False,  # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- CI >= dominant / ascendant's decline weight, shipped off; swept False (SHIPPED) / True]
+    ci_church_decline_on=False,       # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- Turmoil >= tension's relief of CR-87's violence cost, shipped off; swept False (SHIPPED) / True]
+    turmoil_violence_relief_on=False, # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- Turmoil >= crisis with breakdown's occasion (CR-91 (4)), shipped off; swept False (SHIPPED) / True]
+    turmoil_vassal_war_on=False,      # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- the head seats' `nation_functions` goal row, shipped off (CR-89: "revert: no row"); swept False (SHIPPED) / True]
+    nation_functions_on=False,        # `H-636`, swept False (control, SHIPPED) / True
 )
+
+#: v12 B21d.06: THE SEVEN TRIGGER SWITCHES, in the source's band order. `harness/clocks.py --arm` names them; each is a `Fixtures` bool above.
+CLOCK_TRIGGERS = ("ci_pursuit_gain_on", "ci_mu_shift_on", "ci_theocratic_occasion_on", "ci_church_decline_on",
+                  "turmoil_violence_relief_on", "turmoil_vassal_war_on", "nation_functions_on")
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")

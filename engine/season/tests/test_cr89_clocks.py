@@ -194,3 +194,212 @@ def test_breakdown_needs_both_believed_turmoil_and_failed_sittings():
     broken = {pid: believed_breakdown(w.persons[pid], ROW, of_clock, of_sitting, fx) for pid in (HEARER, CLERIC, KING)}
     assert broken == {HEARER: True, CLERIC: False, KING: False}, broken
     assert w.content_hash() == before, "asking for breakdown wrote something"
+
+
+# v12 B21d.06 (CR-89 commit (3); A-47, A-103): EACH BAND'S TRIGGER, ONE `Fixtures` SWITCH EACH, SHIPPED OFF. On, a trigger reads the band off the person's OWN
+# believed fold, never the true clock, through a term that already exists; off, it reads nothing. The beliefs are planted as B21d.02's tests plant them: act-caused
+# feeder Events and the claims WITNESS would deposit of them. `office.established` by a Church member feeds CI alone (at most 5 a season, the cap); `march.declared`
+# feeds Turmoil alone (uncapped). Nothing here runs a season.
+import pytest
+
+from engine.season.data import goals as goals_data
+from engine.season.data.fixtures import CLOCK_TRIGGERS, DEFAULT_FIXTURES
+from engine.season.decision.choose import deliberation_memo, score_terms, stance_term
+from engine.season.decision.options import seat_of
+from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.data.matrix import WriteClass
+from engine.season.seam.wrappers import sigma
+from engine.season.state.carriers import Candidate, Question
+from engine.dice_engine.fmath import ltr_sum
+from engine.season.data.pursuits import _AXES
+
+from .test_in53_vacancy_need import _formed
+
+REALM = "r_valoria"             # the realm's rung, where `nation_functions` convenes
+_N = iter(range(10_000, 99_999))
+
+
+def _fx(*on):
+    fx = DEFAULT_FIXTURES
+    for name in on:
+        fx = fx.sweep(name, True)
+    return fx
+
+
+def _believe(w, pid, name, value):
+    """Make `pid` believe the clock `name` at `value` from its start, by act-caused feeder Events he holds a claim of: CI by `office.established` of a Church member,
+    five a season (the cap), Turmoil by `march.declared`, all in one season."""
+    start = clocks()[name].start
+    kind = "office.established" if name == CI else "march.declared"
+    for i in range(int(value - start)):
+        n = next(_N)
+        e = _plant(w, n, kind, verb="establish", tick=(i // 5 if name == CI else 0))
+        _hold(pid, e, w, n)
+
+
+def _break_down(w, pid):
+    """`pid` believes breakdown: Turmoil at the crisis band (5 marches + 2 failed sittings' `matter.undetermined`) and two failed sittings of `ROW`."""
+    for e in [_plant(w, n, "march.declared") for n in [next(_N) for _ in range(5)]] + [_sit(w, next(_N), ["matter.undetermined"])[0] for _ in range(2)]:
+        _hold(pid, e, w, next(_N))
+
+
+def _head(w, faction):
+    return Q.head(w, faction)
+
+
+def _check_ci_pursuit_gain_on():
+    """CI >= assertive: a Church member's `seize` scores more in the `pursuit` term by the row read as aligned one step on every axis he weighs
+    (`damp * Σ|axis_w|`, his term's own unit); a non-Church man's does not move."""
+    read = {}
+    for on in (False, True):
+        for pid in (CLERIC, KING):
+            w = build_realm(0, fixtures=_fx(*(["ci_pursuit_gain_on"] if on else [])))
+            _believe(w, pid, CI, 40)
+            me, q = w.persons[pid], Q.questions_for(w, w.persons[pid])[0]
+            memo = deliberation_memo(me, w.fixtures)
+            unit = memo[("damp",)] * ltr_sum(abs(memo[("axis_w",)][ax]) for ax in _AXES)
+            read[(on, pid)] = (score_terms(me, Candidate("seize", "terr_T1"), w.fixtures, memo, None, q)[0], unit)
+    assert read[(True, CLERIC)][1] > 0
+    assert read[(True, CLERIC)][0] == read[(False, CLERIC)][0] + read[(True, CLERIC)][1], read
+    assert read[(True, KING)][0] == read[(False, KING)][0], "a man not of the Church gained"
+
+
+def _check_ci_mu_shift_on():
+    """CI >= reach: the Church member's social roll against the King takes one more named level FOR him (a larger `leverage`, the mu-shift) and the
+    obstacle's terms are untouched (never an Ob reduction)."""
+    read = {}
+    for on in (False, True):
+        w = build_realm(0, fixtures=_fx(*(["ci_mu_shift_on"] if on else [])))
+        _believe(w, CLERIC, CI, 55)
+        inp = sigma.contest_input(w, [CLERIC], verb="arrest", subject=KING)
+        read[on] = (inp.leverage, inp.obstacle_operands)
+    assert read[True][0] > read[False][0], read
+    assert read[True][1] == read[False][1], "the obstacle moved: the trigger is an Ob term"
+
+
+def _check_ci_theocratic_occasion_on():
+    """CI >= mass seizure: the Church head's head question carries the Crown's creed and is mandatory; off, it is not marked."""
+    read = {}
+    for on in (False, True):
+        w = build_realm(0, fixtures=_fx(*(["ci_theocratic_occasion_on"] if on else [])))
+        head = _head(w, CHURCH)
+        _believe(w, head, CI, 60)
+        q = Q.questions_for(w, w.persons[head])[0]
+        read[on] = (q.mandatory, (CROWN, "Proposition") in q.classes)
+    assert read == {False: (False, read[False][1]), True: (True, True)}, read
+
+
+def _check_ci_church_decline_on():
+    """CI >= ascendant (two bands, dominant and ascendant): the King's `fight` on a Church officer his ledger names loses two valence steps in the `stance`
+    term; the Church member's own `fight` on him does not move (he is of the Church)."""
+    read = {}
+    for on in (False, True):
+        for pid, subject in ((KING, CLERIC), (HEARER, CLERIC)):
+            w = build_realm(0, fixtures=_fx(*(["ci_church_decline_on"] if on else [])))
+            _believe(w, pid, CI, 80)
+            me, q = w.persons[pid], Q.questions_for(w, w.persons[pid])[0]
+            read[(on, pid)] = stance_term(me, Candidate("fight", subject), w.fixtures, {}, q)
+    assert read[(True, KING)] == read[(False, KING)] - 2.0, read
+    assert read[(True, HEARER)] == read[(False, HEARER)], "a Church member was weighed against his own Church"
+
+
+def _check_turmoil_violence_relief_on():
+    """Turmoil >= tension (one band of three): on a violent row whose stance term is a RESTRAINT (negative: he regards the man), the term is relieved by one
+    third; a grudge's pull (positive) is CR-87's bound, untouched."""
+    read = {}
+    for on in (False, True):
+        w = build_realm(0, fixtures=_fx(*(["turmoil_violence_relief_on"] if on else [])))
+        _believe(w, KING, TURMOIL, 3)
+        me, q = w.persons[KING], Q.questions_for(w, w.persons[KING])[0]
+        read[on] = {s: stance_term(me, Candidate("fight", s), w.fixtures, {}, q) for s in sorted(w.persons) if s != KING}
+    restrained = [s for s, t in read[False].items() if t < 0]
+    pulled = [s for s, t in read[False].items() if t > 0]
+    assert restrained, "no subject the King is restrained from -- the check observes nothing"
+    assert all(read[True][s] == read[False][s] * (1.0 - 1 / 3) for s in restrained), [(s, read[False][s], read[True][s]) for s in restrained]
+    assert all(read[True][s] == read[False][s] for s in pulled)
+
+
+def _check_turmoil_vassal_war_on():
+    """Believed breakdown: a vassal head's (Hafenmark's) head question carries the Crown's creed and is mandatory; the King, believing the same, is no vassal."""
+    read = {}
+    for on in (False, True):
+        for faction in ("fac_hafenmark", CROWN):
+            w = build_realm(0, fixtures=_fx(*(["turmoil_vassal_war_on"] if on else [])))
+            head = _head(w, faction)
+            _break_down(w, head)
+            q = Q.questions_for(w, w.persons[head])[0]
+            read[(on, faction)] = (q.mandatory, (CROWN, "Proposition") in q.classes)
+    assert read[(True, "fac_hafenmark")] == (True, True) and not read[(False, "fac_hafenmark")][0], read
+    assert not read[(True, CROWN)][0] and not read[(False, CROWN)][0], "the sovereign's head was occasioned against his own creed"
+
+
+def _check_nation_functions_on():
+    """Every head seat's holder holds a live commit to a `nation_functions` goal with the switch on (seeded at build); none with it off."""
+    read = {}
+    for on in (False, True):
+        w = build_realm(0, fixtures=_fx(*(["nation_functions_on"] if on else [])))
+        heads = {f: h for f in sorted(Q.faction_props(w)) if (h := Q.head(w, f)) is not None}
+        read[on] = {h: sorted(t.object for t in w.persons[h].tenures if t.kind == "commit" and t.live
+                              and (g := goals_data.goal(t.object)) is not None and g.switch == "nation_functions_on") for h in heads.values()}
+    assert all(v == [] for v in read[False].values()), read[False]
+    assert len(read[True]) >= 6 and all(len(v) == 1 for v in read[True].values()), read[True]
+
+
+_CHECKS = {"ci_pursuit_gain_on": _check_ci_pursuit_gain_on, "ci_mu_shift_on": _check_ci_mu_shift_on,
+           "ci_theocratic_occasion_on": _check_ci_theocratic_occasion_on, "ci_church_decline_on": _check_ci_church_decline_on,
+           "turmoil_violence_relief_on": _check_turmoil_violence_relief_on, "turmoil_vassal_war_on": _check_turmoil_vassal_war_on,
+           "nation_functions_on": _check_nation_functions_on}
+
+
+@pytest.mark.parametrize("switch", CLOCK_TRIGGERS)
+def test_switch_moves_its_term_only_when_on(switch):
+    """Each switch, planted at its band: its term moves with the switch on and reads as it did with it off (`test_<switch>_moves_its_term_only_when_on`, the
+    seven made one parametrised test: one shape, a check each). Every switch ships off."""
+    assert DEFAULT_FIXTURES.get(switch) is False, f"{switch} does not ship off"
+    _CHECKS[switch]()
+
+
+def test_two_heads_at_war_convene_at_believed_turmoil_three_only_with_the_row_on():
+    """Hafenmark's head declares war on the Crown (the shipped fold); both heads then believe Turmoil 3. With `nation_functions_on` both form `convene` at the
+    realm's rung; with it off neither does; with it on at believed Turmoil 2 neither does (the row's question is raised at the tension band)."""
+    read = {}
+    for on, turmoil in ((False, 3), (True, 3), (True, 2)):
+        w = build_realm(0, fixtures=_fx(*(["nation_functions_on"] if on else [])))
+        d = SeasonDriver(w)
+        duchess, king = _head(w, "fac_hafenmark"), _head(w, CROWN)
+        q = Question("q:need:war", "need", (CROWN,), CROWN, classes=((CROWN, "Proposition"),))
+        cand = next(c for c in _formed(w, duchess, q) if c.verb == "declare" and c.subject == CROWN)
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [Act("a_war", duchess, "declare", payload={"subject": CROWN}, via=seat_of(w.persons[duchess], cand))],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        w.log.extend(out)
+        assert Q.at_war(w, "fac_hafenmark", CROWN), "the planted war is not live"
+        for pid in (duchess, king):
+            _believe(w, pid, TURMOIL, turmoil)
+        read[(on, turmoil)] = {pid: any(c.verb == "convene" and c.subject == REALM for c in _formed(w, pid, Q.questions_for(w, w.persons[pid])[0]))
+                               for pid in (duchess, king)}
+    assert read[(True, 3)] == {pid: True for pid in read[(True, 3)]}, read
+    assert not any(read[(False, 3)].values()), read
+    assert not any(read[(True, 2)].values()), read
+
+
+def test_a_declare_trigger_opens_a_mandatory_question_and_decides_nothing():
+    """A-47: at believed breakdown with `turmoil_vassal_war_on`, the vassal head's head question is the off-arm question marked mandatory with the Crown's creed
+    stamped -- nothing else about it moves; `declare` on the creed is one candidate among others he forms; forming it wrote nothing (the hash), executed no
+    `declare` (no `war.declared`, no WAR Proposition)."""
+    slate = {}
+    for on in (False, True):
+        w = build_realm(0, fixtures=_fx(*(["turmoil_vassal_war_on"] if on else [])))
+        head = _head(w, "fac_hafenmark")
+        _break_down(w, head)
+        before, logged = w.content_hash(), len(w.log)
+        qs = Q.questions_for(w, w.persons[head])
+        assert w.content_hash() == before and len(w.log) == logged, "forming the question wrote something"
+        assert not any(p.mood == Q.WAR_MOOD for p in w.propositions.values()) and not any(e.kind == "war.declared" for e in w.log)
+        slate[on] = (qs, _formed(w, head, qs[0]))
+    (off_q, off_c), (on_q, on_c) = slate[False], slate[True]
+    assert on_q[0].mandatory and not off_q[0].mandatory
+    assert on_q[0].id == off_q[0].id and on_q[0].referents == off_q[0].referents, "the trigger chose another question"
+    assert set(on_q[0].classes) - set(off_q[0].classes) <= {(CROWN, "Proposition")}, "the trigger stamped more than the creed"
+    assert (CROWN, "Proposition") in on_q[0].classes
+    assert any(c.verb == "declare" and c.subject == CROWN for c in on_c), "the occasion formed no declare"
+    assert len({(c.verb, c.subject) for c in on_c}) > 1, "the declare is his only act: the trigger decided it"

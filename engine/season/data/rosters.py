@@ -2648,6 +2648,54 @@ def clocks() -> dict:
     return _CLOCKS
 
 
+def _load_triggers(raw) -> tuple:
+    """v12 B21d.06 (CR-89 commit (3)): `rosters.yaml: tables.clocks.triggers` -> `(TRIGGER_BANDS, TRIGGER_VERBS)`: `{switch: ((clock, band), ...)}` and
+    `{switch: (verb, ...)}` (only the triggers naming `verbs:`). Refused at load: a row that is no mapping, a key beyond `bands`/`verbs`, `bands:` that is
+    not a non-empty list of `[clock, band]` pairs, `verbs:` that is not a non-empty list of names. Whether each band exists and each switch is registered
+    is `check_clock_bands`' (it needs the clock rows and the fixtures); whether each verb is a row, `decision/choose.py`'s. `{}` for no block."""
+    bands, verbs, bad = {}, {}, []
+    for switch, row in (raw or {}).items():
+        if not isinstance(row, dict) or set(row) - {"bands", "verbs"} or "bands" not in row:
+            bad.append(f"{switch!r}: {row!r} is not `{{bands: [...], verbs: [...]}}`")
+            continue
+        pairs = row["bands"]
+        if not (isinstance(pairs, list) and pairs and all(isinstance(b, list) and len(b) == 2 and all(isinstance(x, str) for x in b) for b in pairs)):
+            bad.append(f"{switch!r}: `bands:` {pairs!r} is not a list of [clock, band] pairs")
+            continue
+        bands[switch] = tuple(tuple(b) for b in pairs)
+        if "verbs" in row:
+            vs = row["verbs"]
+            if not (isinstance(vs, list) and vs and all(isinstance(v, str) for v in vs)):
+                bad.append(f"{switch!r}: `verbs:` {vs!r} is not a list of verb names")
+                continue
+            verbs[switch] = tuple(vs)
+    if bad:
+        raise Unspecified("`rosters.yaml: tables.clocks.triggers` refused: " + "; ".join(bad), "rosters.yaml -- tables.clocks.triggers",
+                          needs="`<switch>: {bands: [[clock, band], ...], verbs: [verb, ...]}`",
+                          law="CR-89 (3) (B21d.06) -- a trigger names the bands it reads; one that names none reads nothing")
+    return bands, verbs
+
+
+#: v12 B21d.06: THE BANDS EACH BAND-READING TRIGGER READS, and the rows a trigger leans toward (`_load_triggers`): the one owner of which band a switch
+#: answers to. Read by `decision/choose.py` (the person-side terms, off the bands `world_q.believed_bands` stamps on his question), `seam/wrappers/sigma.py`
+#: (the roll) and `queries/world_q.py` (the theocratic occasion).
+TRIGGER_BANDS, TRIGGER_VERBS = _load_triggers((_TABLES.get("clocks") or {}).get("triggers"))
+
+
+def church_faction() -> Optional[str]:
+    """THE CHURCH, structurally (v12 B21d.04's reading, moved here as its one owner at B21d.06): the faction Proposition id the `church_influence` row's
+    feeders name as an actor's faction, read from the row and named nowhere in code; `None` where they name none (or several)."""
+    named = {f.actor_faction for f in clocks()["church_influence"].feeders} - {None}
+    return next(iter(named)) if len(named) == 1 else None
+
+
+def band_reached(value: float, clock: str, band: str, fx) -> bool:
+    """Is a clock reading `value` at or above `clock`'s band `band` -- its threshold the `Fixtures` field the band's `at` names (`fx`)? A band no row carries
+    raises (`StopIteration`); `check_clock_bands` refuses one at load."""
+    at = next(b.at for b in clocks()[clock].bands if b.name == band)
+    return value >= fx.get(at)
+
+
 def check_clock_bands(fixtures: dict) -> None:
     """Refuse, naming the row, a clock band whose `at` is no registered Fixture (`fixtures` is `{name: shipped value}`), whose threshold lies outside
     its clock's range, or that is not above the band before it. Called by `fixtures.py::load`, where both modules are loaded
@@ -2663,6 +2711,10 @@ def check_clock_bands(fixtures: dict) -> None:
                 bad.append(f"clock {row.name!r} band {b.name!r}: {v!r} is not above the band before it ({prev!r})")
             else:
                 prev = v
+    named = {(name, b.name) for name, row in clocks().items() for b in row.bands}
+    bad += [f"trigger {switch!r} reads the band {band!r}, which no clock row carries" for switch, bands in TRIGGER_BANDS.items()
+            for band in bands if band not in named]
+    bad += [f"trigger {switch!r} is no registered `Fixtures` switch" for switch in TRIGGER_BANDS if not isinstance(fixtures.get(switch), bool)]
     if bad:
         raise Unspecified("`rosters.yaml: tables.clocks` bands refused: " + "; ".join(bad), "data/fixtures.py",
                           needs="each band's `at` a `Fixtures` number inside the clock's range, ascending",

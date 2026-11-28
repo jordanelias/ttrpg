@@ -34,12 +34,18 @@
 #             along. Refused on an `orientation` row -- it mints no Proposition, so no one can be committed to
 #             it. No shipped row carries one.
 #   source:   a provenance string (`offices.yaml`'s `source:` precedent).
+#   switch:   (v12 B21d.06) a `Fixtures` bool, carried by every row of the top-level `switched_goals:` and by no row of `goals:`.
+#             The row is SHIPPED OFF: held apart from the realm's goals and seeded only while the switch is on (`data/goals.py::switched`).
+#   occasion: optional (v12 B21d.06): `{clock: <clocks row>, band: <its band>}`. The goal raises its question only while its holder
+#             believes the clock at or above the band, and its referents ride that question as occasions of their own class.
+#   for_each: optional (v12 B21d.06): `head_seat` -- the row stands for one goal per head seat, `<id>:<seat>` on `org: {seat: <seat>}`;
+#             it names no `org:` or `derives:` and needs a `switch:`.
 #
 # TOP-LEVEL `goal_stages:` (CL-THRUST B2.2), optional; a missing key reads as `[]`. One row is authored (B10.73, at the
 # end of this file). A list of rows `{id, for, stages}` and an optional `opens: mandatory | ordinary` (B10.71, default
 # `ordinary`); a row carries no `source:` key, so its provenance is the comment above it. The loader (`data/goals.py`)
 # refuses a key beyond those (and any
-# top-level key but `goals` and `goal_stages`, so a stray `ladders:` is refused, not read as no stages), and the
+# top-level key but `goals`, `switched_goals` (v12 B21d.06) and `goal_stages`, so a stray `ladders:` is refused, not read as no stages), and the
 # stage `deadline` and the row keys `closing`, `successor` and `deal` are NOT part of the schema.
 #   id:       unique.
 #   for:      a non-empty list of goal ids of this file. Never an `orientation` goal; a goal is in at most one row.
@@ -493,6 +499,30 @@ goals:
       NPC-090's own row: "Enforces ancient trade treaties"; stability .80, wealth .10 (the instrument of the
       empire's aim "pressed here through the ancient trade treaties", ED-IN-0293 (10)). An orientation: it
       mints no Proposition. [ASSUMPTION; medium; Jordan to correct -- the weights.]
+
+# ======================================================================================================
+# v12 B21d.06 (CR-89 commit (3)): THE ROWS SHIPPED OFF, one top-level key apart from `goals:` (`data/goals.py::switched`, the loader's
+# off arm): each names its `switch:`, a `Fixtures` bool, and is seeded only while it is on, so with every switch off no reader of the
+# realm's goals sees it and the realm is what it was.
+switched_goals:
+  # ---- every head seat (v12 B21d.06, CR-89 commit (3) / CR-91 (e)), SHIPPED OFF -------------------------------------------
+  # `for_each: head_seat` stands the row for one goal per head seat (`rosters.yaml: factions.head_seat`), `nation_functions:<seat>` on
+  # `org: {seat: <seat>}`; `switch: nation_functions_on` holds it apart from the realm's goals (`data/goals.py::switched`), seeded only
+  # while the switch is on; `occasion:` raises its question only while the holder BELIEVES Turmoil at the tension band, and the realm's
+  # rung rides that question as an occasion (`Rung`: `convene` forms on it).
+  - id: nation_functions
+    for_each: head_seat
+    switch: nation_functions_on
+    occasion: {clock: turmoil, band: tension}
+    text: the nation functions -- its estates sit and determine while the realm is troubled
+    object: {kind: rung, rung: r_valoria}
+    pursuits: {stability: 0.5, justice: 0.3, stewardship: 0.2}
+    source: >-
+      `proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (e) ("every head seat carries a goal row `nation_functions` in
+      `data/goals.py`'s shape (a pursuit toward `convene` and `argue` at the realm venue, weighted by believed Turmoil)"); workplan v12
+      B21d.06. The weights lean on `convene` and `argue` through the goal's own question (B10.30's `aim`, CR-88's `duty`); "weighted by
+      believed Turmoil" is read as raised at the tension band. [ASSUMPTION; medium; Jordan to correct -- the weights, the band and the
+      venue; revert: no row (`nation_functions_on` off).]
 
 # ======================================================================================================
 # B10.73 (D-19: drafted early, landed at its batch, ratified at its merge): ARC-47 / NSC-08, Ehrenwall.

@@ -2239,8 +2239,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # unless a `release` ends it, while a `seat_holders` referent follows the seat (IN-67). `goals=False`
     # builds the control arm.
     # v9 FA-06: the world that seats an organization no row is about REFUSES (`goals_complete`).
+    # v12 B21d.06: AND THE ROWS SHIPPED OFF WHOSE SWITCH IS ON in this world's fixtures (`goals_data.switched`, the loader's off arm), after the realm's
+    # own; every switch off (the shipped fixtures) adds nothing, so the build is what it was.
     w._goal_census = seed_goals(
-        w, tuple(g for g in goals_data.goals() if goals_data.org_faction(g.org_kind, g.org) not in absent)
+        w, tuple(g for g in goals_data.goals() + goals_data.switched(w.fixtures) if goals_data.org_faction(g.org_kind, g.org) not in absent)
         if goals else (), w._office_census["authored"],
         {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None,
         complete=goals and goals_complete)

@@ -50,7 +50,10 @@ from ..data.matrix import Step
 from ..queries.person_q import (
     believed_capability, cited_support, confliction, deed_align, intent_named, intent_said, ledger_weigh, refused_before, regard, stance_toward,
     named_station, office_factions, own_station,     # B21d.05: `duty_term`'s office and station readers
+    officers_named,                                  # B21d.06: the Church officers his own ledger names (`band_stance`)
 )
+from ..data.rosters import FACTION_BY_PROP, TRIGGER_BANDS, TRIGGER_VERBS, church_faction     # B21d.06: the bands and rows each trigger reads, and the Church
+from ..data.cast import MEMBER_BAND                                           # B21d.06: one valence step (`VALENCE_STEP`)
 from ..data.fixtures import ROUTE_PRICING_ON
 from ..data.geography import leg_price
 from ..state.carriers import EFFORT, LEG, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
@@ -59,6 +62,7 @@ from ..trace_log import TRACE
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
 from .options import VIOLENT_OPPONENT_VERBS, containing_rung_of, opening_set, project, refusal_tolerance, scruple, seat_of
+from .options import subject_is_opponent     # B21d.06: the opponent rule `band_stance`'s Church decline reads
 # `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
 from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
 # B21d.05: the war context's one reader (`duty_term`'s waiver of the price of `accept`), under a public name here, as the two above.
@@ -78,7 +82,7 @@ CHOICE_EXPOSURE = require_use_site("choice_exposure")
 _STANCE_SCALE_LOW = 0.2   # [canonical: engine/season/data/fixtures.py §stance_scale (H-464): the gentlest swept value; 0 and STANCE_MAX are the arm's off and its control]
 
 
-def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
+def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None, q: Optional[Question] = None) -> float:
     """§F2's SECOND TERM, by `Fixtures.stance_polarity` (v9 IN-18 `G2`, `H-194`).
 
       * `legacy` (CONTROL; shipped until CR-16, which ships `declared`): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
@@ -103,7 +107,10 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     term carries ABOVE §F2's, and `0` -- the CONTROL (`1` ships, H-202) -- returns the arm's value
     untouched. It scales the SIGNED term, so under `declared` a grudge pulls `fight` on its object
     up and `tell` about it down, both harder. A negative or NaN `g` raises: below 0 the term is damped
-    towards nothing and below -1 its sign flips, which is G2's polarity and not this gain."""
+    towards nothing and below -1 its sign flips, which is G2's polarity and not this gain.
+
+    `q` (v12 B21d.06): the question answered; where it carries believed bands (`Question.bands`) the two stance triggers apply (`band_stance`). `None`, or
+    a question with no bands -- every question while those switches are off -- returns the value above untouched."""
     # ABSENT: H-195 holder  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     g = fx.get("stance_gain")
     if not g >= 0:                   # `not >=`, so a NaN is refused too
@@ -126,8 +133,68 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
         if not h >= 0:
             raise ValueError(f"hostile_stance_gain {h} is not >= 0: a negative weight would invert the "
                              "grudge's sign on a violent row, which is G2's polarity, not this bound (CR-87)")
-        return h * t
-    return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
+        out = h * t
+    else:
+        out = (1.0 + g) * t          # at g == 0 this is 1.0 * t: exact for every float
+    return band_stance(p, c, fx, q, out) if getattr(q, "bands", ()) else out
+
+
+#: v12 B21d.06 (CR-89 (3), CI >= assertive): THE ROWS A CHURCH MEMBER'S BELIEVED ASSERTIVE BAND LEANS HIM TOWARD, `rosters.yaml: tables.clocks.triggers`' (`TRIGGER_VERBS`),
+#: refused at import against the verb table.
+CI_GAIN_VERBS = TRIGGER_VERBS.get("ci_pursuit_gain_on", ())
+if set(CI_GAIN_VERBS) - set(VERB_TABLE):
+    raise Unspecified(f"`tables.clocks.triggers.ci_pursuit_gain_on.verbs` names {sorted(set(CI_GAIN_VERBS) - set(VERB_TABLE))!r}, which the verb table does not hold",
+                      "rosters.yaml -- tables.clocks.triggers", needs="verb rows of `verb_table.yaml`", law="B21d.06 -- a trigger leans a person toward rows that exist")
+#: v12 B21d.06: ONE VALENCE STEP, the unit a band's weight is read in -- the stance row's step (`data/cast.py::MEMBER_BAND`, its one owner, as
+#: `person_q.grievance_against` reads it).
+VALENCE_STEP = 0.0 - MEMBER_BAND
+
+
+def _in_bands(q: Question, switch: str, fx: "Fixtures") -> int:
+    """How many of the bands `switch` reads (`data/rosters.py::TRIGGER_BANDS`) the person believes the realm stands in (`q.bands`, his own believed folds
+    `world_q.believed_bands` stamped on his question); 0 while the switch is off, whatever the question carries."""
+    if not fx.get(switch):
+        return 0
+    return sum(1 for band in TRIGGER_BANDS[switch] if band in q.bands)
+
+
+def _of_church(p: Person) -> bool:
+    """Is `p` of the Church (`rosters.church_faction`, the one faction the `church_influence` row names): his own live `commit` to its creed. Person-side."""
+    church = church_faction()
+    return church is not None and any(t.kind == "commit" and t.live and t.object == church for t in p.tenures)
+
+
+def band_pursuit_gain(p: Person, c: Candidate, fx: "Fixtures", q: Optional[Question], axis_w: dict, damp: float) -> float:
+    """v12 B21d.06 (CR-89 (3); `Fixtures ci_pursuit_gain_on`, H-636): WHAT A CHURCH MEMBER'S BELIEVED ASSERTIVE BAND ADDS TO THE `pursuit` TERM of a row
+    of `CI_GAIN_VERBS` -- the row read as if aligned one step (`+1`, the alignment cells' bound) on every axis he weighs: `damp * Σ_axis |axis_w[axis]|`,
+    the most his own pursuits can put on any row, so the gain is in his term's own unit. `0.0` off, for a man not of the Church, off those rows, and where
+    he does not believe the band (`q.bands`). An input to the drawn choice (A-47). [ASSUMPTION; medium; Jordan to correct; revert: the switch off]"""
+    if q is None or c.verb not in CI_GAIN_VERBS or not _in_bands(q, "ci_pursuit_gain_on", fx) or not _of_church(p):
+        return 0.0
+    return damp * ltr_sum(abs(axis_w[ax]) for ax in _AXES)
+
+
+def band_stance(p: Person, c: Candidate, fx: "Fixtures", q: Question, t: float) -> float:
+    """v12 B21d.06 (CR-89 (3); H-636): `stance_term`'s value `t` with the two believed-band triggers that read the `stance` term, each `t` unchanged while
+    its switch is off:
+
+      * `turmoil_violence_relief_on` -- on a VIOLENT row against its subject (`VIOLENT_OPPONENT_VERBS`), a NEGATIVE term -- the restraint his regard for
+        the man puts on violence, CR-87's cost -- is relieved by one share per Turmoil band he believes the realm in, of the bands the trigger reads:
+        `t * (1 - k / n)`; a grudge's pull (positive) stays CR-87's bound;
+      * `ci_church_decline_on` -- an opponent-rule row (`subject_is_opponent`) whose subject his OWN ledger names on a Church seat (`officers_named`), for a
+        man not of the Church, loses `VALENCE_STEP` per CI band he believes reached of the two (dominant, ascendant): opposing the Church costs more as it rises.
+
+    Inputs to the drawn choice, never a decline (A-47). [ASSUMPTION; medium; Jordan to correct; revert: each switch off]"""
+    k = _in_bands(q, "turmoil_violence_relief_on", fx)
+    if k and t < 0 and c.verb in VIOLENT_OPPONENT_VERBS:
+        t = t * (1.0 - k / len(TRIGGER_BANDS["turmoil_violence_relief_on"]))
+    n = _in_bands(q, "ci_church_decline_on", fx)
+    row = VERB_TABLE.get(c.verb)
+    if n and row is not None and subject_is_opponent(row) and c.subject and not _of_church(p):
+        church = FACTION_BY_PROP.get(church_faction())
+        if church is not None and c.subject in officers_named(p, (church,)):
+            t = t - n * VALENCE_STEP
+    return t
 
 
 def _bounded(v: float, clamp: bool) -> float:
@@ -519,7 +586,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
         `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`), and
         `admission_weight` the factor a remembered refusal puts on it (exactly 1.0 at `refusal_memory` `0.0`, B09.03);
-      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
+      * `stance` -- `stance_term(p, c, fx, memo, q)`, by `Fixtures.stance_polarity`, at gain `1 + g` (and, where `q` carries believed bands, B21d.06's
+        two stance triggers, `band_stance`);
       * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`;
       * `aim` -- `aim_term(p, c, fx, memo, odds, q)`: the lean of the goal `q` was raised by, on that goal's own question only (B10.30);
       * `risk` -- `risk_term(p, c, fx, odds)`: what a bodily candidate might cost its doer, by the same `odds` query (B10.31; not asked at `risk_gain` 0);
@@ -547,13 +615,19 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(choice_lean(k, v, ax) for k, v in chosen) for ax in _AXES)
         if by_choice != 0.0:
             pursuit += by_choice
+    # v12 B21d.06: a Church member's believed assertive band on a row of `CI_GAIN_VERBS` (`band_pursuit_gain`), priced by `odds_weight` with the verb's own
+    # lean; added only where it moves the term, so with the switch off `pursuit` is the very float above.
+    if getattr(q, "bands", ()):
+        gain = band_pursuit_gain(p, c, fx, q, axis_w, damp)
+        if gain != 0.0:
+            pursuit += gain
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
         pursuit *= admission_weight(p, c, fx)
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
-    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q), risk_term(p, c, fx, odds),
+    return (pursuit, stance_term(p, c, fx, memo, q), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q), risk_term(p, c, fx, odds),
             duty_term(p, c, fx, memo, odds, q))
 
 

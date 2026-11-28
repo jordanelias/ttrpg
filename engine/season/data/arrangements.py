@@ -485,3 +485,15 @@ def abridged(row: dict) -> dict:
 def in_form(arrangement: dict, form: str) -> dict:
     """A `proceeds:` entry's arrangement in its `form`: `abridged(row)` for `form: abridged`, the row itself otherwise."""
     return abridged(arrangement) if form == "abridged" else arrangement
+
+
+#: v12 B21d.04's reading, moved here as its one owner at B21d.06 (`harness/clocks.py` and `queries/world_q.py`'s vassal occasion both read it).
+PREFERRED_ARRANGEMENT = "parliamentary_debate"
+
+
+def determining_arrangement() -> str:
+    """THE ARRANGEMENT BREAKDOWN COUNTS SITTINGS OF (CR-89 (2)): `parliamentary_debate` where `arrangements.yaml` carries it, else the first row whose bench's
+    basis is `determine` (a sitting that can determine)."""
+    if PREFERRED_ARRANGEMENT in ARRANGEMENTS:
+        return PREFERRED_ARRANGEMENT
+    return next(i for i, r in ARRANGEMENTS.items() if r["bench_basis"] == "determine")

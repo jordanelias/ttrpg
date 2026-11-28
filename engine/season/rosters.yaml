@@ -4623,7 +4623,13 @@ rosters:
       `body_ceiling`, and one FOR him per `wound_step` the person he acts on has lost, each side at most `wound_levels_max`
       (`sigma._wound_levels`); never an obstacle term and never a die. A person subject's body is read only by the true input: a believer's
       own body is his to know, another's is not (`believed_input`). A `wound_level` of None is the control: the source brings no level.
-    values: [effort, capability, proofs, favour, office, wounds]
+      `church_reach` (v12 B21d.06, CR-89 commit (3), CI >= reach; `Fixtures ci_mu_shift_on`, H-636, SHIPPED OFF): one level, the smallest
+      `LEVEL_SIGMA` name, FOR the roller where he is of the Church (`data/rosters.py::church_faction`) against a person who is not, AGAINST him
+      where the person is of the Church and he is not -- each only where that Church party's own BELIEVED CI is at the band
+      (`sigma._church_reach_of`); a believer's estimate counts only his own side. Off, it brings no level and is NOT LISTED among
+      the act's levels (they reach the content hash; `sigma._church_reach_levels` returns `None`), so the record is the one it was.
+      [ASSUMPTION; medium; Jordan to correct; revert: the switch off]
+    values: [effort, capability, proofs, favour, office, church_reach, wounds]
 
   # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
   thread_operations:
@@ -5968,4 +5974,16 @@ tables:
           - {name: tension,  at: turmoil_tension}
           - {name: crisis,   at: turmoil_crisis}
           - {name: collapse, at: turmoil_collapse}
+    # v12 B21d.06 (CR-89 commit (3); A-47, A-103): THE BANDS EACH TRIGGER THAT READS A BAND BY NAME READS, and the rows a trigger leans toward. A key is a
+    # `Fixtures` switch (shipped off, H-636); `bands:` its `[clock, band]` pairs, each a band of a row above; `verbs:` (optional) the verb rows it leans a
+    # person toward. Loaded by `data/rosters.py::_load_triggers`; a band no row carries and a switch `Fixtures` does not register are refused at
+    # `check_clock_bands`, a verb the verb table does not hold at `decision/choose.py`'s import. Two triggers are not here: `turmoil_vassal_war_on` reads
+    # breakdown (`person_q.believed_breakdown`), and `nation_functions_on` the goal row's `occasion:` (`goals.yaml`).
+    # [ASSUMPTION; medium; Jordan to correct: the band each reads is the plan reference's band table; revert: each switch off]
+    triggers:
+      ci_pursuit_gain_on:         {bands: [[church_influence, assertive]], verbs: [seize, establish, open_case]}
+      ci_mu_shift_on:             {bands: [[church_influence, reach]]}
+      ci_theocratic_occasion_on:  {bands: [[church_influence, mass_seizure]]}
+      ci_church_decline_on:       {bands: [[church_influence, dominant], [church_influence, ascendant]]}
+      turmoil_violence_relief_on: {bands: [[turmoil, tension], [turmoil, crisis], [turmoil, collapse]]}
 

@@ -536,13 +536,20 @@ class Question:
     `mandatory` (B10.71, A-47): the question a person may not pass over for another -- `questions_for` sorts it first, ahead of
     `attention_key`, and sets it only on the `need` question of an ambition whose `goal_stages` row says `opens: mandatory`
     while he stands on the row's last stage. It opens a scene and DECIDES NOTHING: which act he takes is the chooser's draw.
-    Not hashed, as the rest of a Question is not."""
+    Not hashed, as the rest of a Question is not.
+
+    `bands` (v12 B21d.06, CR-89 commit (3)): the clock bands the person BELIEVES the realm stands in, `((clock, band), ...)` in roster order -- his own
+    believed fold (`person_q.believed_clock`) at or above each band's threshold -- stamped by `questions_for` on the question he answers (the head, as the
+    standing-occasion stamps are), and only while a trigger that reads it person-side is on (`data/rosters.py::TRIGGER_BANDS`); `()` otherwise, so with every
+    trigger off nothing is read. A believed reading of his own claims (`04` §C.11's second row, the `View.odds` precedent), never the true clock; the
+    `decision/choose.py` terms read it, since `decision/` holds no World to fold the log with."""
     id: str
     source: str
     referents: tuple
     about: str = ""
     classes: tuple = ()
     mandatory: bool = False
+    bands: tuple = ()
 
     def referents_for(self, cls: Optional[str]) -> tuple:
         """THE REFERENTS A ROW DECLARING `cls` FORMS ON: the plain `referents` for `None` (a row

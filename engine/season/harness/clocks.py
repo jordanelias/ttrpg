@@ -36,32 +36,18 @@ import sys
 from typing import Callable, NamedTuple, Optional
 
 from ..boot.realm import build_realm
-from ..data.arrangements import ARRANGEMENTS
-from ..data.rosters import clocks
+from ..data.arrangements import PREFERRED_ARRANGEMENT, determining_arrangement  # noqa: F401 -- B21d.06: moved to `data/arrangements.py`, its one owner; re-exported
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import church_faction, clocks  # `church_faction`: B21d.06 moved it to `data/rosters.py`, its one owner; re-exported
 from ..data.verbs import DISPOSAL_EVENTS
 from ..gaps import Ungraded
 from ..queries import faction_q, person_q, world_q
 from ..queries.clock import sittings_failed_of
 from . import populated
 
-PREFERRED_ARRANGEMENT = "parliamentary_debate"
 WAR_KIND, SEIZED_KIND = "war.declared", "rung.seized"
 NEVER = "never"
 SINGLE_MARKS = ("breakdown", "claim", "declare", "civil war", "theocratic declare", "church rung.seized")
-
-
-def determining_arrangement() -> str:
-    """THE ARRANGEMENT BREAKDOWN COUNTS SITTINGS OF: `parliamentary_debate` where `arrangements.yaml` carries it, else the first row whose bench's basis is
-    `determine` (a sitting that can determine)."""
-    if PREFERRED_ARRANGEMENT in ARRANGEMENTS:
-        return PREFERRED_ARRANGEMENT
-    return next(i for i, r in ARRANGEMENTS.items() if r["bench_basis"] == "determine")
-
-
-def church_faction() -> Optional[str]:
-    """The faction the `church_influence` row's feeders name as an actor's faction -- the one the clock row calls the Church, read from the row and named nowhere here."""
-    named = {f.actor_faction for f in clocks()["church_influence"].feeders} - {None}
-    return next(iter(named), None)
 
 
 def heads(w) -> dict:
@@ -162,25 +148,28 @@ def observe(w, seed: int, seasons: int, step: Callable = populated.run, civil_no
     return first
 
 
-def _arm(w, names) -> None:
-    """Throw each named switch ON for `w`. A name with no `Fixtures` field, or a field that is no switch, raises `SystemExit` naming it."""
+def armed(names):
+    """The shipped `Fixtures` with each named switch ON. A name with no `Fixtures` field, or a field that is no switch (a bool), raises `SystemExit` naming it.
+    B21d.06: the switches are thrown BEFORE the realm is built (`build_realm(fixtures=)`), since `nation_functions_on` is read at the build (its goal row
+    is seeded only while on); every other switch is read at run time, where before and after the build are the same."""
+    fx = DEFAULT_FIXTURES
     for n in names:
         try:
-            cur = w.fixtures.get(n)
+            cur = fx.get(n)
         except Ungraded:
-            raise SystemExit(f"--arm {n}: no `Fixtures` field of that name. The trigger switches (`ci_*_on`, `turmoil_*_on`, `nation_functions_on`) are "
-                             f"added by B21d.06; until a field exists the only arm is the default, every trigger off.")
+            raise SystemExit(f"--arm {n}: no `Fixtures` field of that name. The trigger switches are `data/fixtures.py::CLOCK_TRIGGERS`.")
         if not isinstance(cur, bool):
             raise SystemExit(f"--arm {n}: `Fixtures {n}` is {cur!r}, not a switch (a bool).")
-        w.fixtures = w.fixtures.sweep(n, True)
+        fx = fx.sweep(n, True)
+    return fx
 
 
 def measure(seasons: int, seeds: tuple, arm: tuple = ()) -> dict:
     """Build, run and read each seed (`{seed: Reading}`). `arm` names the switches on."""
     out = {}
+    fx = armed(arm)
     for s in seeds:
-        w = build_realm(s)
-        _arm(w, arm)
+        w = build_realm(s, fixtures=fx)
         t0 = w.tick
         civil = observe(w, s, seasons)
         out[s] = read_world(w, t0, seasons, civil)

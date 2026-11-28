@@ -295,6 +295,18 @@ def seat_rank(seat: str) -> int:
     return RUNG_KINDS.index(kind) if kind in RUNG_KINDS else 0
 
 
+def _sovereign_faction() -> Optional[str]:
+    """v12 B21d.06 (CR-91's "the sovereign's faction", the target of a vassal's war and the theocratic one): the faction whose head seat stands HIGHEST --
+    the one `HEAD_SEAT` row whose seat's `seat_rank` is greatest, by name -- or `None` where two tie (no one sovereign). Read off the static rows."""
+    ranks = {f: seat_rank(s) for f, s in HEAD_SEAT.items()}
+    top = [f for f, r in ranks.items() if r == max(ranks.values(), default=None)]
+    return top[0] if len(top) == 1 else None
+
+
+#: v12 B21d.06: THE SOVEREIGN'S FACTION, by name (`_sovereign_faction`); `world_q.faction_prop_id` gives its creed.
+SOVEREIGN_FACTION = _sovereign_faction()
+
+
 def office_factions(p: Person) -> frozenset:
     """THE FACTIONS WHOSE SEAT `p` HOLDS (B21d.05, CR-88: an office holder of F): `org_faction` of each object of his own live `hold` Tenures, the
     ones with no faction dropped. His own Tenures only (AX-2)."""
