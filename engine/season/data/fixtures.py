@@ -566,6 +566,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `season_factor_draw: ()`, which reads no row]
     # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures season_endurance`, graded `assumption`; the source's pool is the place's endurance and no document gives a place one, so it is injected at 0 (the pool is `pool_add`) and swept 0 (SHIPPED) / 2 / 4]
     season_endurance=0,               # `H-26`, swept 0 (SHIPPED) / 2 / 4
+    # B12b.45 (CL-EVENTS commit (3)): THE TENSION'S SCALE ON A TERRITORY'S SEASON FACTOR, `((territory rung id, scale), ...)`, read by `world_q.season_factor_of`, which
+    # multiplies its factor by the territory's scale on every return path (a territory not listed, and no territory, read 1.0). `()` is the control and SHIPS: no card
+    # sets one. `boot/realm.py::build_realm(tensions=True)` sweeps a NEW Fixtures value carrying the drawn card's scales (`data/tensions.py`), never a mutation of this default.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `()`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures territory_yield_scale`, graded `assumption`; a card's scale is a drawn world-gen term the source states no value for, so it is injected empty and the cards (`tensions.yaml`) carry the numbers]
+    territory_yield_scale=(),         # `H-26`, `()` (control, SHIPPED) / a card's `yield_scale` rows
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,

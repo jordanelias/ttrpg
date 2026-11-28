@@ -70,6 +70,9 @@ lanes:
       - batch: B34-go-surface
         added: 2
         behaviour: "the governance spine prints the Offer and holds no second menu (test_governance_spine_play.py); the creation sheet shows holdings for a seat holder (test_season_shape.py)"
+      - batch: B12b-weather-arcs-population
+        added: 4
+        behaviour: "test_tensions.py: the Tensions loader refuses a card with a firing key, an effect kind off the roster, a goal row goals' own parser rejects (with goals' own law string) and a goal id goals.yaml already carries; a drawn card and its choose_one picks are a function of the world seed and vary across seeds, and an effectless card is the realm it was; every goal row of the drawn card is minted as a Proposition with at least one person committed, at six seeds; a scaled territory's season factor is its unscaled factor times the scale and an unscaled one is untouched, on the drawn arm and on the control arm's per-rung read"
 
   engine:
     base: 1043

@@ -2776,6 +2776,18 @@ rosters:
       two relations and nothing else: which commits follow is IN-68's seeding rule, not a definition.
     values: [establishes, influences]
 
+  tension_effects:
+    source: "B12b.45 (CL-EVENTS commit (3), the Tensions receiver) -- what a card of `engine/season/tensions.yaml` may do at the world's making."
+    open: false
+    note: >-
+      A TENSION is a strain drawn at the world's making that sets some people's aims, as a tension in a household is there before anyone acts
+      on it. One card is drawn, equally likely, by `boot/realm.py::build_realm(tensions=True)` and read once, at build; it fires nothing later
+      and writes no standing, seat, tenure or stance. The closed set of what a card may do, read by `data/tensions.py` (the ONE loader), which
+      refuses an effect `kind:` off this list. `goal` -- one goals.yaml row, seeded beside the file's own rows (`seed_goals`), so the people it
+      binds attend to it. `yield_scale` -- a territory's season factor scaled for the world's life (`Fixtures territory_yield_scale`). A
+      third kind is a new reader, a design change and not a table edit.
+    values: [goal, yield_scale]
+
   thrust_axes:
     source: "CL-THRUST B2.1 (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §2.1; B10-05) -- what a goal row's optional `axis:` may name: the lines a thrust runs along, each with its opposite pole where it has one."
     open: false

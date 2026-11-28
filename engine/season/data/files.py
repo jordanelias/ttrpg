@@ -116,6 +116,10 @@ COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
 # Read through `data/goals.py`, the ONE loader. Anchored here for the same reason every sibling
 # registry above is: one path owner, never a local `__file__`.
 GOALS_YAML = PACKAGE_DIR / "goals.yaml"
+# `tensions.yaml` -- B12b.45 (CL-EVENTS commit (3)): the Tensions deck, one card drawn at world-gen by
+# `boot/realm.py::build_realm(tensions=True)`. Read through `data/tensions.py`, the ONE loader, and carried
+# by `tools/export_season_registries.py` (GO-09). Anchored here for the same reason every sibling is.
+TENSIONS_YAML = PACKAGE_DIR / "tensions.yaml"
 
 # The degree sweep's two arm modules (plus their shared `sweep_core`), once imported by source in two
 # tests, both retired (nothing reads this path now). Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so

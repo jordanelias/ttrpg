@@ -3985,10 +3985,10 @@
         "subsistence_weight": {
           "source": "`H-11` \u2014 *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*.",
           "row": "H-11",
-          "note": "\u26a0 THE WEIGHTS ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL. #353 states the SHAPE \u2014 a draw from the containing rung's stores, scaled per kind \u2014 and supplies no numbers, so this is an injected default with a `site:` and a sweep, exactly as `wear_per_season` beside it. \u26a0 A KIND WITH NO WEIGHT IS NOT A KIND WITH WEIGHT ZERO. A missing row RAISES rather than drawing nothing, for `wear`'s reason: a silent zero is a person who eats nothing and never starves, which is a plausible wrong answer that no test would ever surface. \u26a0 ONLY `grain` AND `salt` CARRY A WEIGHT, and that is deliberate rather than an omission: timber, ore and coin are stored and not eaten. They are registered in `matter_kinds` and absent here, so a draw against them raises \u2014 which is the refusal above doing its job on the very first kind somebody adds to a larder by mistake.",
+          "note": "\u26a0 THE WEIGHTS ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL. #353 states the SHAPE \u2014 a draw from the containing rung's stores, scaled per kind \u2014 and supplies no numbers, so this is an injected default with a `site:` and a sweep, exactly as `wear_per_season` beside it. \u26a0 A KIND WITH NO WEIGHT IS NOT A KIND WITH WEIGHT ZERO. A missing row RAISES rather than drawing nothing, for `wear`'s reason: a silent zero is a person who eats nothing and never starves, which is a plausible wrong answer that no test would ever surface. \u26a0 ONLY `grain` AND `salt` CARRY A WEIGHT, and that is deliberate rather than an omission: timber, ore and coin are stored and not eaten. They are registered in `matter_kinds` and absent here, so a draw against them raises \u2014 which is the refusal above doing its job on the very first kind somebody adds to a larder by mistake. \u26a0 B12b.44 (CR-22): THE x5 ARM SHIPS, chosen by the reading rule on `H-11` (the arms, the rule and its reading (a) are that row's `cite:`). x1 (grain 2, salt 1) is the control; tests whose scenarios are sized at it plant it (`data/fixtures.py::SUBSISTENCE_X1`). [ASSUMPTION; medium; Jordan to correct; revert: x1, grain 2, salt 1]",
           "weights": {
-            "grain": 2,
-            "salt": 1
+            "grain": 10,
+            "salt": 5
           }
         },
         "hunger_bands": {
@@ -4050,12 +4050,12 @@
         "season_band_factors": {
           "source": "`09_WR_B_weather_with_memory_and_the_year` edit 1 (B12b.03), A-54: the season's harvest is one keyed draw on the one four-band ladder, the band choosing the factor",
           "open": false,
-          "note": "THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2). `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.",
+          "note": "THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT (1.25, 1.0, 0.8, 0.4) (B12b.43), the set whose long-run mean harvest factor is one at the shipped pool (`season_endurance` 0, hardship 0, no spell): the ladder lands Overwhelming 0.380, Success 0.382, Partial 0.127, Failure 0.110 there, so the set sums to 1.003 (a forcing moves variance, not the long-run mean), band order kept. A hardship or a spell moves the band mix and the mean with it (B98). `[ASSUMPTION; medium; Jordan to correct; revert: 1.0 on every band, the control's value]`.",
           "values": {
-            "Overwhelming": 1.0,
+            "Overwhelming": 1.25,
             "Success": 1.0,
-            "Partial": 1.0,
-            "Failure": 1.0
+            "Partial": 0.8,
+            "Failure": 0.4
           }
         },
         "factions": {
@@ -4203,6 +4203,15 @@
           "values": [
             "establishes",
             "influences"
+          ]
+        },
+        "tension_effects": {
+          "source": "B12b.45 (CL-EVENTS commit (3), the Tensions receiver) -- what a card of `engine/season/tensions.yaml` may do at the world's making.",
+          "open": false,
+          "note": "A TENSION is a strain drawn at the world's making that sets some people's aims, as a tension in a household is there before anyone acts on it. One card is drawn, equally likely, by `boot/realm.py::build_realm(tensions=True)` and read once, at build; it fires nothing later and writes no standing, seat, tenure or stance. The closed set of what a card may do, read by `data/tensions.py` (the ONE loader), which refuses an effect `kind:` off this list. `goal` -- one goals.yaml row, seeded beside the file's own rows (`seed_goals`), so the people it binds attend to it. `yield_scale` -- a territory's season factor scaled for the world's life (`Fixtures territory_yield_scale`). A third kind is a new reader, a design change and not a table edit.",
+          "values": [
+            "goal",
+            "yield_scale"
           ]
         },
         "thrust_axes": {
@@ -5715,13 +5724,32 @@
         },
         "tally_axes": {
           "source": "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)",
-          "note": "THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the referent as a classed referent on the question he answers and marks that question `mandatory` (A-47), and the rows declaring the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS` (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial. `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).",
+          "note": "THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY at B12b.13 (the control: `world_q.tally_reached` returns `()` and `questions_for` is byte-identical); B12b.15 authors two (below), content each, tagged. `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the referent as a classed referent on the question he answers and marks that question `mandatory` (A-47), and the rows declaring the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS` (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial. `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).",
           "about_classes": [
             "Person",
             "Office",
             "Rung"
           ],
-          "members": {}
+          "members": {
+            "rule_failures": {
+              "counts": [
+                "dispensation.ignored",
+                "place.surrendered",
+                "rung.ceded"
+              ],
+              "about": "person",
+              "at": 3
+            },
+            "military_failures": {
+              "counts": [
+                "field.lost",
+                "place.surrendered",
+                "rung.ceded"
+              ],
+              "about": "person",
+              "at": 3
+            }
+          }
         }
       },
       "tables": {
@@ -7012,6 +7040,9 @@
           }
         }
       }
+    },
+    "engine/season/tensions.yaml": {
+      "tensions": []
     },
     "engine/season/verb_table.yaml": {
       "verbs": [
@@ -9228,6 +9259,8 @@
             "attr.body.endurance"
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
+          "referent_class": "Rung",
+          "referent_class_note": "B12b.12 (H-545; `16_PESSIMIST_WR_A` \"The falsifier\": the chooser formed no cross-border `move` that arrived; [ASSUMPTION; medium; Jordan to correct; revert: delete this column]): THE DESTINATION CHANNEL, `migrate`'s. FORMED ONLY ON A `Rung`-CLASSED REFERENT -- the places the question he answers stamps as `Rung` (`queries/world_q.py::places_named`: told of and not lived under; `larders_in_purview`; `holdings_to_found`), `to` binding it through the unchanged referent rule (`decision/options.py::_derive_operand`). MEASURED before (`build_realm(0)`, two seasons): every formed `move` bound `to` to a plain referent -- a person id, a Proposition, a Record, or the settlement the mover already lives in -- so each ended in the `path` refusal, the effect's same-place decline (H-140) or a lost `draw`, and no `travel.moved` was logged. The class removes those wrong-kind formations only: the cell, eligibility and refusals are unchanged. It does not make journeys happen: what moves a person to travel is H-545's open half.",
           "requires": "a contain path exists, and the actor may enter the destination",
           "requires_typed": {
             "all": [

@@ -1,0 +1,27 @@
+# `engine/season/tensions.yaml` -- WORLD-GEN CONTENT: the Tensions deck. B12b.45 (CL-EVENTS commit (3)); the loader is `data/tensions.py`, the ONE
+# reader, which refuses every key outside the schema below. `boot/realm.py::build_realm(tensions=True)` draws ONE card, equally likely, at the
+# world's making; it is read once at build and by no step of the season loop, and it adds no World field. `tensions=False` (the default) draws
+# nothing, and `tensions: []` is the shipped state: the realm is the realm it was.
+#
+# A TENSION is a strain drawn at the world's making that sets some people's aims (`rosters.yaml: tension_effects`' note). It is the world's
+# starting weather, not an event: it names no date and fires on no condition, so nothing in it can be late, missed or answered.
+#
+# CARD SCHEMA (one card = one row):
+#   id:       the card's id. Unique.
+#   text:     what the strain is, for display.
+#   source:   a provenance string (`goals.yaml`'s precedent).
+#   effects:  a list, possibly empty, of effects, each `{kind: <tension_effects member>, ...}` and the kind's own keys:
+#               goal         -> `goal: <a goals.yaml row, whole>`. It is parsed TOGETHER WITH `goals.yaml`'s rows by `data/goals.py::parse`,
+#                               so its id, org, seats and `derives` resolve in one pass under the one validator; its id may not be a
+#                               `goals.yaml` id. It is seeded by `boot/realm.py::seed_goals` beside `goals.yaml`'s own rows.
+#               yield_scale  -> `territory: <geography territory code>`, `scale: <number > 0>`: the territory's season factor is multiplied by
+#                               it for the world's life (`Fixtures territory_yield_scale`, read by `world_q.season_factor_of`). A territory
+#                               is scaled once per card.
+#   choose_one:  not a card key. Anywhere a value stands in an effect's goal row, `{choose_one: [a, b, ...]}` stands for ONE of the listed
+#               values, picked at the draw by the factory keyed on (the card's id, the list's ordinal in the card). A list may not be empty,
+#               and every combination of picks must load: the loader parses them all.
+#
+# NOT DATA OF A CARD (M20's line applied to a card), each refused by name at its key: a date, a deadline or a firing condition (`fires_at`,
+# `deadline`, `when`), an outcome, a write to standing, a seat, a tenure or a stance of a person, and the keys `closing`, `successor` and `deal`.
+# A card says what is strained; what anyone does about it is the people's.
+tensions: []
