@@ -213,7 +213,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     armies = _summary(example)
     armies['seed'] = seed
     from modules.mass_battle import config as cfg
-    consts = {'volley_scale': cfg.VOLLEY_LETHALITY_SCALE, 'k_square': cfg.K_SQUARE, 'k_linear': cfg.K_LINEAR,
+    consts = {'volley_scale': cfg.VOLLEY_LETHALITY_SCALE, 'k_square': cfg.K_SQUARE,
               'ticks_per_phase': cfg.TICKS_PER_PHASE, 'rout_onset': cfg.ROUT_ONSET_FRAC, 'rout_cap': cfg.ROUT_CAP_FRAC,
               'rout_floor': cfg.UNIT_ROUT_FLOOR, 'cascade_frac': cfg.ROUT_CASCADE_FRAC}
     data = {'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax'], 'grade': run['grade'],

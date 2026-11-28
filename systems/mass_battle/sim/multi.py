@@ -16,7 +16,6 @@ import math
 
 import modules.mass_battle.hierarchy.units as _hu
 import modules.mass_battle.orchestration as _orch
-import modules.mass_battle.percell as _percell
 from modules.mass_battle.troop_types import table as _troops
 
 
@@ -213,6 +212,10 @@ def unit_in_reserve(unit):
     return any('reserve' in getattr(a, 'instructions', ()) for a in unit.units)
 
 
+# damage a freed attacker's degree pays, by power (the table `config.DAMAGE_BY_DEGREE` held until B19.14; this is its one reader)
+_DEGREE_DAMAGE = {"Overwhelming": lambda p: 1 + p, "Success": lambda p: p, "Partial": lambda p: 1, "Failure": lambda p: 0}
+
+
 def freed_attacker_damage(freed_unit, target_unit):
     """Freed unit attacks target from the flank.
     The freed unit rolls its full pool. Target defends at -1D (flank).
@@ -231,7 +234,7 @@ def freed_attacker_damage(freed_unit, target_unit):
     b_net = _orch.roll_pool(b_pool)
     a_deg = _orch.degree_label(a_net, max(1, b_net))
     # [canonical: params/mass_combat.md PP-233 — Damage = successes × (1+Power)]
-    dmg = _orch.CASUALTY_SCALE * max(0, _orch.DAMAGE_BY_DEGREE[a_deg](freed_unit.power) - target_unit.dr)
+    dmg = _orch.CASUALTY_SCALE * max(0, _DEGREE_DAMAGE[a_deg](freed_unit.power) - target_unit.dr)
     return dmg
 
 
@@ -539,31 +542,18 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
     }
 
 
+# the scale the pool carried as `POOL_QUALITY_SCALE` (0.8) until B19.14 deleted that constant: a workbench value, read only below
+_POOL_SCALE = 0.8
+
+
 def base_combat_pool(army):
     if army.routed or army.disordered: return 0
     pen = army.discipline_penalty()
     if pen == -99: army.disordered = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 disordered-formation flag]
-    # Pool uses continuous effective_size (float), floored for dice count.
-    # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
-    #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
-    #  ED-899/ED-1013); legacy OFF-path min(Size,Command)+Command at COMMAND_SIGMA_ENABLED=0]
-    stam_pen = _hu.STAMINA_EXHAUSTED_POOL_PENALTY if _percell.column_exhausted(army) else 0   # the column ledger (B19.07)
-    if _hu.POOL_QUALITY_MODEL:
-        # [Jordan directive 2026-07-08, mirrors core.exchange.subunit_combat_pool's default
-        # branch for the UNIT-level pool this pursuit/rout path uses -- see config.py's
-        # POOL_QUALITY_MODEL comment.] No Command: troop-type quality (`power`) x numbers
-        # (`effective_size`, the continuously-degrading quantity).
-        raw = army.power * army.effective_size * _hu.POOL_QUALITY_SCALE + pen + stam_pen
-    elif _hu.COMMAND_SIGMA_ENABLED:
-        # SMOOTH POOLS (Jordan 2026-06-15): 2*command at FULL strength (size-decoupled per ED-899),
-        # degrading SMOOTHLY with own casualties to command at annihilation via cohesion=hp/hp_max.
-        # Cohesion is a FRACTION (not headcount) -> per-capita effectiveness size-independent -> Lanchester
-        # exponent stays ~1 (ED-899 preserved). The smooth own-casualty degradation dilutes the discipline
-        # term so it can no longer dominate and bias the mirror (the flat-2*command pool was the defect).
-        cohesion = army.hp / army.hp_max if army.hp_max else 0.0
-        raw = army.command * (1.0 + cohesion) + pen + stam_pen
-    else:
-        raw = min(army.effective_size, army.command) + army.command + pen + stam_pen
+    # The pursuit/rout path's pool: troop-type quality (`power`) x numbers (`effective_size`, continuously degrading), floored for
+    # the dice count. The module holds no pool (B19.12), so this is the workbench loop's own; the Command-driven branches, the
+    # exhausted-column die and the config switches that chose between them are gone (B19.14).
+    raw = army.power * army.effective_size * _POOL_SCALE + pen
     # ED-MB-0022: an OVEREXTENDED pursuer (failed the PP-256 Feigned Retreat Discipline check)
     # re-engages at a bounded pool penalty. Gated by MB_FEIGNED_RETREAT (default ON). `.overextended` is set
     # only via resolve_feigned_retreat, which requires the feigning unit's `.feigned` (the 'feign_retreat'

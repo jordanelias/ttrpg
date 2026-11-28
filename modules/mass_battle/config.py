@@ -2,7 +2,7 @@
 from dataclasses import dataclass, fields as _fields
 from modules.mass_battle.troop_types import table as _troops   # the troop file's reader: a data file, imports nothing of this package, so no cycle
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MIN_CELLS_PER_UNIT', 'MIN_UNITS_PER_ARMY', 'MIN_ARMY_TROOPS', 'MB_TROOP_DENSITY_CAP', 'cell_cap_for', 'UNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'COMMAND_DEFAULT', 'ORDER_OBEY', 'command_span', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY', 'D_YIELD', 'YIELD_POOL_MULT', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT', 'MB_ROLE_INSTRUCTIONS', 'REFORM_CHECK_ENABLED', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', 'MB_FIXING_FLANK', 'MB_ENVELOP_SHOCK', 'MB_VOLLEY_TARGETING', 'MB_CONVERGENCE_NORM']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MIN_CELLS_PER_UNIT', 'MIN_UNITS_PER_ARMY', 'MIN_ARMY_TROOPS', 'MB_TROOP_DENSITY_CAP', 'cell_cap_for', 'UNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D','MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR','MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_SQUARE','LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED','CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'COMMAND_DEFAULT', 'ORDER_OBEY', 'command_span', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY', 'D_YIELD','MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT', 'MB_ROLE_INSTRUCTIONS', 'REFORM_CHECK_ENABLED', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', 'MB_FIXING_FLANK', 'MB_ENVELOP_SHOCK', 'MB_VOLLEY_TARGETING', 'MB_CONVERGENCE_NORM']
 
 @dataclass(frozen=True)
 class EngineConfig:
@@ -43,7 +43,6 @@ class EngineConfig:
     MB_YIELD_POCKET: bool = True
     YIELD_POCKET_REACH: float = 3.0
     MB_INTENT_RESOLUTION: bool = True
-    MB_FRACTIONAL_POOL: bool = True
     SIGMA_HEAD_ENABLED: bool = True
     MORALE_FIX: bool = True
     MB_FRICTION: bool = True
@@ -71,19 +70,13 @@ class EngineConfig:
     MB_VOLLEYS_START: float = 10.0
     MB_VOLLEYS_RESUPPLY: float = 3.0
     LANCHESTER_ENABLED: bool = True
-    K_LINEAR: float = 12.0
     K_SQUARE: float = 0.25
-    LANCHESTER_STRENGTH_REF: float = 4.0
     LANCHESTER_DENSITY_REF: float = 100.0
     COMMAND_SIGMA_ENABLED: bool = True
-    COMMAND_POOL_MULT: float = 2.0
     CMD_CHA_WEIGHT: float = 2.0
     CMD_COG_WEIGHT: float = 1.0
-    POOL_QUALITY_MODEL: bool = True
-    POOL_QUALITY_SCALE: float = 0.8
     # the yield pool, once core/exchange.py's own process-variable reads
     D_YIELD: int = 3
-    YIELD_POOL_MULT: float = 0.35
     # movement, contact and facing, once hierarchy/units.py's own process-variable reads
     MB_ENVELOP_PATH: bool = True
     MB_SWEEP: bool = True
@@ -126,7 +119,6 @@ def rebind(cfg):
 # The constants below were defined where they are read (core/exchange.py, hierarchy/units.py, orchestration.py), each a
 # switch or coefficient of one mechanism; they are EngineConfig fields now, and every consumer reads them from here.
 D_YIELD = DEFAULT.D_YIELD
-YIELD_POOL_MULT = DEFAULT.YIELD_POOL_MULT
 MB_ENVELOP_PATH = DEFAULT.MB_ENVELOP_PATH
 MB_SWEEP = DEFAULT.MB_SWEEP
 FIELD_MOVEMENT = DEFAULT.FIELD_MOVEMENT
@@ -248,7 +240,7 @@ SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
 SUPPORT_WEIGHT_FLOOR = 0.3  # [CALIBRATED-DEBT: cell-support-stacking floor (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 # [MB-07 / MB-07r, J-18 (A), ED-MB-0041] SUPPORT RANK CAP: support counts only from the ranks a troop type's weapon
 # reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. ON by default; the pool magnitude is
-# recalibrated to the cap (POOL_QUALITY_SCALE below). '0' is the control arm: the uncapped stack, exactly
+# recalibrated to the cap. '0' is the control arm: the uncapped stack, exactly
 # (tests/valoria/test_mass_battle_support_rank_cap.py).
 MB_SUPPORT_RANK_CAP = DEFAULT.MB_SUPPORT_RANK_CAP
 PUNCTURE_ENABLED = True
@@ -259,7 +251,6 @@ TICKS_PER_PHASE = 6  # [CALIBRATED-DEBT: engine tick-resolution granularity — 
 BLOCK_SIZE = 100  # [canonical: designs/provincial/mass_battle_v30.md §A.3 — Company scale]
 CASUALTY_SCALE = DEFAULT.CASUALTY_SCALE  # D-B: per-tick lethality. Default 4 = even units take ~3 turns to resolve (playable). TUNING.
 STAMINA_MAX = 100
-STAMINA_EXHAUSTED_POOL_PENALTY = -1  # an exhausted unit (percell.column_exhausted: a column block it holds at 0) fights at -1 die
 # [ED-MB-0031, Jordan 2026-07-23: "routs would occur as early as 15% losses with 30% the upper hand."]
 # STOCHASTIC ROUT BREAKPOINT: the canonical §A.4 casualty→morale steps don't even fire until 50% losses,
 # so units grind to ~58% casualties before breaking — far past the historical break point. This models the
@@ -385,19 +376,8 @@ STANCE_COMMITMENT = {"aggressive": 1, "balanced": 0, "hold": -1, "retreat": -1} 
 # intent_probe casualty differential — flagged calibration-debt per §5.]
 INTENT_OFFENSE_D = 0.5  # die-equivalents a full-commitment stance shifts its OWN offence net (aggressive +, hold -)
 INTENT_DEFENSE_D = 1.0  # die-equivalents a full DEFENSIVE commitment blunts the enemy's offence against it (aggressive instead EXPOSES: + to enemy)
-# [ED-MB-0032, Jordan directive 2026-07-23: "pool must be fractional."] The combat pool
-# (eff_power·eff_size·SCALE·engage_frac) is a CONTINUOUS quantity, but the whole-die path floors it to an
-# integer die count before rolling (math.floor(a_pool_raw)) — discarding the fractional remainder and
-# injecting quantization. Gated on, the pool goes to the one sampler as it is (`roll_net_continuous` takes a
-# fractional pool as the fraction it is; one rule below one die is the owner's, DOE §1 rows 4-5) and the
-# one boost reads the same pool. Gated OFF (moves goldens when on): the pool is still floored to a whole die count, but it is rolled by the
-# SAME sampler (`resolution.roll_pool` is `roll_net_continuous`, not d10 faces), so the off arm is a floored-pool control, no longer a d10 grid oracle.
-MB_FRACTIONAL_POOL = DEFAULT.MB_FRACTIONAL_POOL
-DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
-                     "Partial": lambda p: 1,        "Failure": lambda p: 0}
 SIGMA_HEAD_ENABLED = DEFAULT.SIGMA_HEAD_ENABLED   # toggle via SIGMA_HEAD env; default ON
 SIGMA_PER_D = 0.2            # [class-B sim-tunable] sigma-units per die-equivalent of a legacy pool modifier  # [CALIBRATED-DEBT: sigma-head/pool-modifier conversion rate — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
-RANGED_MELEE_SIGMA = -1.0    # [class-B sim-tunable] ranged-in-melee disadvantage as delta-sigma (replaces pool//3)
 MORALE_FIX = DEFAULT.MORALE_FIX   # toggle; OFF reproduces the pre-fix sigma prototype exactly
 
 # [ED-MB-0016 — DG-6 resolution: scale-invariant combat friction] Per-battle, per-side multiplicative
@@ -441,7 +421,6 @@ MB_NODE_COHESION = DEFAULT.MB_NODE_COHESION   # step 2: node-relational cohesion
 MB_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 MB_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this per tick  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 MB_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
-MB_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 MB_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = MB_STAMINA_DRAIN/(1+MB_DEPTH_ROTATE*(depth-1))
 MB_FRONTAGE_BLEND  = 0.0    # Incr4 contact-fraction: 0=pure width (more cols=more men), 1=pure frontage (depth-neutral)
 MB_FRONTAGE_REF    = 7.0    # reference frontage (columns) for the width term normalization  # [canonical: tests/coverage_matrix_archive.md §"PER_CELL Increment 4" — depth-aware contact-fraction width-term normalization; CALIBRATED, not independently historically cited]
@@ -574,9 +553,7 @@ MB_VOLLEYS_RESUPPLY = DEFAULT.MB_VOLLEYS_RESUPPLY
 # rout system; does NOT replace it (battles still end by rout ~30%, not annihilation).
 # OFF reproduces the pre-P-L flat-scale term EXACTLY (A/B). All coefficients class-B sim-tunable, Jordan-vetoable.
 LANCHESTER_ENABLED = DEFAULT.LANCHESTER_ENABLED   # default ON post-validation; OFF = pre-P-L flat scale
-K_LINEAR  = DEFAULT.K_LINEAR   # [canonical: mb_lanchester_design.md §3a/§5 — melee linear coeff, rescopes CASUALTY_SCALE; class-B]
 K_SQUARE  = DEFAULT.K_SQUARE  # [canonical: mb_lanchester_design.md §3b/§5 — volley square-law coeff; class-B]
-LANCHESTER_STRENGTH_REF = DEFAULT.LANCHESTER_STRENGTH_REF  # [JUSTIFIED: mb_lanchester_design.md §3a grounds the LINEAR LAW but contains no reference-frontage concept and no value (ED-MB-0041 verified); §6 states "Coefficient values are sim-tuned at implementation — not pre-decided here". Magnitude fitted; NOTE it is degenerate with K_LINEAR (casualties scale as K_LINEAR/STRENGTH_REF) and should be collapsed into it]
 LANCHESTER_DENSITY_REF = DEFAULT.LANCHESTER_DENSITY_REF  # [Jordan directive 2026-06-03] all-fight reference troops/cell; density factor = min(tpc,CELL_CAP)/this
 
 # ─── COMMAND-ONLY SIGMA-LEVERAGE BASE (Jordan canon-structure directive 2026-06-02) ───
@@ -589,7 +566,6 @@ LANCHESTER_DENSITY_REF = DEFAULT.LANCHESTER_DENSITY_REF  # [Jordan directive 202
 # OFF reproduces the canonical Size-based pool EXACTLY (A/B). Command becomes DERIVED from
 # Charisma (primary weight) + Cognition (secondary weight). All class-B sim-tunable, Jordan-vetoable.
 COMMAND_SIGMA_ENABLED = DEFAULT.COMMAND_SIGMA_ENABLED  # default ON per directive; OFF = canonical Size-based pool
-COMMAND_POOL_MULT = DEFAULT.COMMAND_POOL_MULT  # [canonical: Jordan directive 2026-06-02 — Command-only base = MULT×Command; =2 matches min(Size,Command)+Command at Size≥Command; class-B]
 CMD_CHA_WEIGHT = DEFAULT.CMD_CHA_WEIGHT  # [canonical: Jordan directive 2026-06-02 — Charisma PRIMARY weight in derived Command; class-B]
 CMD_COG_WEIGHT = DEFAULT.CMD_COG_WEIGHT  # [canonical: Jordan directive 2026-06-02 — Cognition SECONDARY weight in derived Command; class-B]
 
@@ -621,47 +597,6 @@ def command_span(score):
     from modules.mass_battle.core.exchange import clamp_command
     return clamp_command(COMMAND_DEFAULT if score is None else score)
 
-# ─── POOL-QUALITY MODEL (Jordan directive 2026-07-08: "abandon combat pools being related to the
-# commander, and instead [derive them] solely from the subunit troop type, quality and numbers") ───
-# Supersedes the 2026-06-02 Command-only directive above for the BASE pool term (the discipline/
-# stamina penalties and the yield malus are untouched -- those were never Command-derived). The
-# general/Command still exists in the model (morale, formation-hold speed gate, order-issuing,
-# derive_rout's "Command 0 -> unit routs" condition) -- only the RAW COMBAT POOL stops reading it.
-# New base term: `eff_power` (troop TYPE quality -- TROOP_TYPE_STATS/§B.2, the stat §A.1 itself
-# already names "determines dice rolled") multiplied by `eff_size` (NUMBERS -- current troops /
-# BLOCK_SIZE, continuously degrading with casualties). Deliberately a PRODUCT, not the historical
-# `min(Size,X)+X` shape PP-233/the Command-only directive both used: the 2026-06-02 comment block
-# above records that THAT min-capped shape was the original reason Size was pulled out of the pool
-# (it measured an emergent exponent ~1.7 against the Lanchester linear law's p~1, because per-capita
-# effectiveness degraded once Size fell below the capping stat). A plain product is p=1 by
-# construction -- "strength = quality x numbers", the Lanchester Linear Law's own premise -- so it
-# should not reintroduce that specific defect, though numbers now ALSO enters `_lanchester_strength`
-# separately (a different quantity: the ENEMY's contact-frontage-capped engaged troops, not this
-# atom's own total) -- whether the two compound into a new emergent exponent is an empirical
-# question for `lanchester_signature.py`, not assumed either way here. OFF reproduces the Command-
-# driven models above exactly (A/B, both COMMAND_SIGMA_ENABLED branches still reachable when this is
-# off). Class-B sim-tunable, Jordan-vetoable/further-patchable per his own "continue testing and
-# patching" direction.
-POOL_QUALITY_MODEL = DEFAULT.POOL_QUALITY_MODEL  # default ON per 2026-07-08 directive; OFF = Command-driven (COMMAND_SIGMA_ENABLED branches)
-# [CALIBRATED, 2026-07-08] `eff_power x eff_size` alone reaches ~16 at the canonical T3-infantry
-# baseline (power=4, eff_size=4 at full strength) vs the Command-driven baseline's ~8 (command=4,
-# full cohesion) -- this constant renormalizes the NEW formula's baseline to reproduce that SAME
-# historical magnitude at that SAME reference point, so `pen`/`stam_pen`'s existing (unscaled)
-# discipline/stamina penalties keep roughly the same relative weight, and the engine's other
-# magnitude-tuned constants (degree thresholds, DAMAGE_BY_DEGREE, Lanchester coefficients) are not
-# fed a pool an order of magnitude outside the range they were tuned against. A uniform scale does
-# not change the WIN/LOSS ratio, only the absolute pool magnitude, so it cannot fix the melee
-# exponent (lanchester_signature.py's LAW-EXPONENTS check measures p~1.65-1.7 against its <=1.4 bar at
-# every scale tried; the Command-driven baseline already fails it): a not-yet-closed follow-up.
-# [MB-07r, J-18 (A)] 0.8, the MB-07 support rank cap's own recalibration: the cap cuts the battery's
-# reference body (tier-3 infantry Line, one rank of support) to 0.40 of its troops engaged where the
-# uncapped stack engaged 0.70, so the scale that holds that body's pool at the 0.5 anchor above is
-# 0.5 x 0.70 / 0.40 = 0.875. 0.8 is a CHOICE FITTED TO A TEST, not a derived value: the two candidates'
-# gaps on the 16-seed braced-charge fixture of test_mass_battle_support_rank_cap.py are the same size
-# as that fixture's seed noise, so the ordering assertion is not independent evidence for 0.8 over
-# 0.875. It is the default of every non-golden fight; it bites a season field once
-# the troops a weight (B17.01 deleted `field_troops_per_weight`; `TROOPS_PER_WEIGHT`, B17.16) are under the unit floor (at 1 every subunit routs on tick 1, H-361).
-POOL_QUALITY_SCALE = DEFAULT.POOL_QUALITY_SCALE
 
 # ─── P-C COMPOSITIONAL-FORMATION ROLES (data; the instruction→primitive wiring is
 # hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES, MB-04; see pc_formation_design.md §3.5/§9.1).

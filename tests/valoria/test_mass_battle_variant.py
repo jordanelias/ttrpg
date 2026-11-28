@@ -68,8 +68,8 @@ def test_the_variant_reader_takes_a_workbench_scripts_variables():
     """The module is deaf to the process (the subprocess falsifier is in test_field_golden_pins); the variant reader is not:
     `cfg_from_environ` is how a workbench script turns its caller's variables into a config, and `SIGMA_HEAD` is the one
     field whose variable is not its own name."""
-    flipped = variant.cfg_from_environ({'PER_CELL': '0', 'SIGMA_HEAD': '0', 'K_LINEAR': '5', 'MB_VOLLEYS_START': '7', 'JUNK': 'x'})
-    assert (flipped.PER_CELL, flipped.SIGMA_HEAD_ENABLED, flipped.K_LINEAR, flipped.MB_VOLLEYS_START) == (False, False, 5.0, 7.0)
-    assert dataclasses.replace(flipped, PER_CELL=True, SIGMA_HEAD_ENABLED=True, K_LINEAR=config.DEFAULT.K_LINEAR,
+    flipped = variant.cfg_from_environ({'PER_CELL': '0', 'SIGMA_HEAD': '0', 'K_SQUARE': '5', 'MB_VOLLEYS_START': '7', 'JUNK': 'x'})
+    assert (flipped.PER_CELL, flipped.SIGMA_HEAD_ENABLED, flipped.K_SQUARE, flipped.MB_VOLLEYS_START) == (False, False, 5.0, 7.0)
+    assert dataclasses.replace(flipped, PER_CELL=True, SIGMA_HEAD_ENABLED=True, K_SQUARE=config.DEFAULT.K_SQUARE,
                                MB_VOLLEYS_START=config.DEFAULT.MB_VOLLEYS_START) == config.DEFAULT   # nothing else moved
     assert variant.cfg_from_environ({}) == config.DEFAULT

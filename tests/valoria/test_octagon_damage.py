@@ -33,7 +33,7 @@ def _using(rng):
 
 
 _MB_CFG = {'PER_CELL': True, 'MB_REFUSE': True, 'LANCHESTER_ENABLED': True,
-           'MB_OCTAGON_DMG': True, 'MB_FRACTIONAL_POOL': True}
+           'MB_OCTAGON_DMG': True}
 
 
 def _load_mb(**overrides):
@@ -204,8 +204,7 @@ def test_rear_is_exactly_double_front(mb):
     assert checked >= 3, "expected several seeds with a non-zero frontal exchange to observe the rear's larger casualties"
 
 
-@pytest.mark.parametrize('fractional', ['0', '1'])
-def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(fractional):
+def test_arc_ratio_holds_with_the_body_held_fixed():
     """THE REAL FALSIFIER FOR THE ED-MB-0063 ISOLATION (critic finding D).
 
     "7 of 12 seeds gave exactly 2.0x" is weak evidence and was over-sold as strong. Once the body
@@ -221,11 +220,11 @@ def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(fractional):
     starts to matter again, and this test goes red on one parameter and not the other. That is a
     failure mode "7 of 12" cannot see at all.
     """
-    with _mb_modules(MB_FRACTIONAL_POOL=fractional) as (orch, contact, _):
-        _assert_arc_ratio_invariant(orch, contact, fractional)
+    with _mb_modules() as (orch, contact, _):
+        _assert_arc_ratio_invariant(orch, contact)
 
 
-def _assert_arc_ratio_invariant(orch, contact, fractional):
+def _assert_arc_ratio_invariant(orch, contact):
     # B05.99 re-pin of the seed range (B05.03: the field draws the one continuous sampler, so a base-pool-4 line's frontal net
     # reaches a casualty on fewer seeds: 1 of 0..11, 10 of 0..47): the floor and the assertion are unchanged.
     # B19.12: the flag no longer reaches the melee pair (there is no pool to floor); the exposure ratio holds under both settings.
@@ -234,11 +233,11 @@ def _assert_arc_ratio_invariant(orch, contact, fractional):
         (front, rear), _cas = _arc_pair(orch, contact, seed)
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
-                f'MB_FRACTIONAL_POOL={fractional}, seed {seed}: rear {rear} != 2x front {front} — '
+                f'seed {seed}: rear {rear} != 2x front {front} — '
                 f'the arc ratio still depends on the flag, so the arms are not yet one experiment')
             checked += 1
     assert checked >= 3, (
-        f'MB_FRACTIONAL_POOL={fractional}: only {checked} seeds produced a non-zero frontal '
+        f'only {checked} seeds produced a non-zero frontal '
         f'exchange, so the invariance was not actually observed')
 
 

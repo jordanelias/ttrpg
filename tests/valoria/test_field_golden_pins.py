@@ -57,9 +57,8 @@ _NON_SOURCE_PINS = {'PYTHONHASHSEED'}
 # unpinned fails that test until someone classifies it deliberately (§0.1 #5; the
 # missing direction the A1b critic pass named B1).
 _KNOWN_INERT = {
-    # dead while POOL_QUALITY_MODEL=1 (pinned); derive_command needs charisma/cognition
-    # the battery never sets:
-    'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT',
+    # derive_command needs charisma/cognition the battery never sets:
+    'COMMAND_SIGMA_ENABLED', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT',
     # needs an explicit order/target the battery never issues:
     'MB_VOLLEY_TARGETING',
     # [MEASURED-INERT 2026-07-30, ED-MB-0061] needs yielding=True, which the battery never orders.
@@ -71,7 +70,7 @@ _KNOWN_INERT = {
     # a bat.py digest at the shipped defaults. Note this is a claim about the BATTERY only — MB_YIELD_RALLY
     # is demonstrably NOT behaviourless in general (test_dg2_yield_residuals fails at the new defaults).
     'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC',
-    'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'D_YIELD', 'YIELD_POOL_MULT',
+    'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'D_YIELD',
     # no-ops while MB_FACING_MODEL is pinned '0':
     'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
     # [MEASURED-INERT 2026-07-30, ED-MB-0061] needs an overextended state the battery never produces;
@@ -132,11 +131,11 @@ def _same(pin, value):
 #
 # ⚠ THIS SET MUST BE EMPTY AFTER THE RE-BASE. It is transition debt with a defined end, not a
 # permanent exemption — that is the whole difference between this and simply deleting the guard.
-# Only the TEN of the fifteen that are actually PINNED can diverge from a pin. The other five
+# Only the NINE of the fifteen that are actually PINNED can diverge from a pin (the tenth, MB_FRACTIONAL_POOL, was deleted at B19.14). The other five
 # (MB_FEIGNED_RETREAT, MB_RESERVE_COMMIT, MB_YIELD_EMERGENT/POCKET/RALLY) live in _KNOWN_INERT, and
 # that is its own problem — see test_known_inert_reasons_are_not_self_referential below.
 _PENDING_REBASE = {
-    'MB_CELL_DAMAGE', 'MB_CELL_MORALE', 'MB_CLOSE_RANKS', 'MB_FRACTIONAL_POOL', 'MB_FRICTION',
+    'MB_CELL_DAMAGE', 'MB_CELL_MORALE', 'MB_CLOSE_RANKS', 'MB_FRICTION',
     'MB_INTENT_RESOLUTION', 'MB_TROOP_DENSITY_CAP', 'FIELD_CONTACT', 'MB_FACING_MODEL',
     'REFORM_CHECK_ENABLED',
 }
@@ -159,8 +158,8 @@ def test_pending_rebase_set_is_exactly_the_transition():
     assert not undeclared, (
         f"pin/default divergence that is NOT declared — a default was flipped without deciding the "
         f"golden question: {sorted(undeclared)}")
-    assert len(_PENDING_REBASE) == 10, (
-        "Jordan's 2026-07-29 ruling flipped 15 flags, but only these TEN are pinned and can therefore "
+    assert len(_PENDING_REBASE) == 9, (
+        "Jordan's 2026-07-29 ruling flipped 15 flags, but only these NINE are pinned and can therefore "
         "diverge from a pin. A different size means the transition changed shape and the re-base scope "
         "needs re-deciding, not silent editing.")
 
@@ -201,7 +200,7 @@ def test_no_unclassified_env_reads():
     # and the inert list must not rot: every member is still a field of the config
     ghost = {n for n in _KNOWN_INERT if n not in defaults}
     assert not ghost, f"_KNOWN_INERT members that are no longer config fields (rot): {sorted(ghost)}"
-    assert len(defaults) >= 90 and _KNOWN_INERT <= set(defaults)     # the sweep is not vacuous
+    assert len(defaults) >= 83 and _KNOWN_INERT <= set(defaults)     # the sweep is not vacuous
 
 
 def test_the_engine_reads_no_process_variable():
@@ -245,7 +244,7 @@ def test_an_exported_variable_moves_no_constant():
     assert read == shipped
     seen = variant.cfg_from_environ(flipped)
     moved = [f.name for f in fields(config.EngineConfig) if getattr(seen, f.name) != shipped[f.name]]
-    assert len(moved) == len(shipped) >= 90, "the control: the variant reader takes every variable"
+    assert len(moved) == len(shipped) >= 83, "the control: the variant reader takes every variable"
 
 
 def test_mode_selectors_cover_every_out_of_budget_golden_mode():

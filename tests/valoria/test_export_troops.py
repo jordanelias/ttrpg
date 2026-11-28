@@ -161,7 +161,7 @@ def test_a_name_in_both_owners_is_refused():
     from dataclasses import fields
     from modules.mass_battle import config
     names = {f.name for f in fields(config.EngineConfig)}
-    assert len(names) >= 90 and 'PER_CELL' in names
+    assert len(names) >= 83 and 'PER_CELL' in names
     data = _artifact()
     table.check(data, config_names=names)                       # the control: no shared name
     schema = (table.HEADER_KEYS + table.ROLE_COLUMNS + table.ARM_COLUMNS + table.CLASS_COLUMNS + table.TROOP_COLUMNS)

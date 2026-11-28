@@ -629,7 +629,7 @@ class Unit:
                 # [ED-MB-0042] A UNIFORM body returns its cells' value EXACTLY. The weighted mean of N equal values is
                 # mathematically that value, but in floats it is off by an ulp (15 cells at 6.0 ->
                 # 5.999999999999999), and `_morale_sigma` divides by morale_start, so a body at full morale would
-                # report a sigma of -1.8e-16 instead of 0 -- enough to cross a DAMAGE_BY_DEGREE boundary. This
+                # report a sigma of -1.8e-16 instead of 0 -- enough to cross a degree-ladder boundary. This
                 # returns the arithmetically correct answer where the float mean cannot.
                 #
                 # [ED-MB-0051 / plan-v2 A2] Relation to the consumer-side guard: THIS is an EXACTNESS fix. Where
