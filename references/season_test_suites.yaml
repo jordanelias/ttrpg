@@ -74,6 +74,7 @@ suites:
     - cr25_computed_establish
     - cr86_realm_structure
     - cr89_clocks
+    - cr90_clock_marks
     - dispatch_sends
     - fa_decree_binds
     - fa_dismissal
