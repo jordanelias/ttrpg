@@ -576,6 +576,7 @@ def parse(doc) -> tuple:
             _refuse(Forbidden, gid, "more than one row carries this id",
                     "one row per `id` (it is the Proposition id the row mints)")
     goal_ids = set(ids)
+    templates = {row["id"] for row in rows if "for_each" in row}      # a `for_each` row's own id names no goal (its goals are `<id>:<seat>`)
     out = []
     for row in rows:
         gid = row["id"]
@@ -595,7 +596,7 @@ def parse(doc) -> tuple:
             require_member(derives_kind, roster("goal_derivations"),
                            f"goal {gid!r}: derivation kind {derives_kind!r} is not rostered",
                            f"goals.yaml -- {gid}", law=_LAW)
-            if not _in(derives_from, goal_ids):
+            if not _in(derives_from, goal_ids) or derives_from in templates:
                 _refuse(Unspecified, gid, f"`derives.from: {derives_from!r}` is no goal of this file",
                         "the id of a goal row")
         text = _text(gid, row, "text")

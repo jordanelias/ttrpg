@@ -4359,9 +4359,9 @@ def _by_claim(w: World, read: dict) -> dict:
     out = {}
     for e in w.log:
         if e.kind == _CLAIM_DEPOSITED:
-            # the first cause `read` holds: a witnessed deposit names the Event alone; a FOUND one (ED-FI-0002, `_deposit(..., also=(f.id,))`) names the
-            # finding Event first and the trail Event it uncovered second, and the claim reports the second.
-            src = next((x for x in e.causes if x in read), None)
+            # the LAST cause `read` holds: a witnessed deposit names the Event alone; a FOUND one (ED-FI-0002, `_deposit(..., also=(f.id,))`) names the
+            # finding Event first and the trail Event it uncovered second, and the claim reports the second (so where both are in `read`, the second).
+            src = next((x for x in reversed(e.causes) if x in read), None)
             if src is not None:
                 for c in e.changes:
                     out[c.subject] = read[src]
