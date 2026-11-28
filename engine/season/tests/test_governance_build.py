@@ -1702,7 +1702,8 @@ def test_13d_i_the_revocation_basis_is_a_rostered_value_and_gates_the_rule():
         seen.append(_may_revoke(w, "c_king", "off_duke"))
         assert seen[-1] is expected, (basis, seen[-1])
     assert seen == [False, False, True], seen
-    assert set(REVOCATION_BASES) == {_RUNG_ABOVE, "rung_above_in_holdings", "same_rung_same_faction"}, sorted(REVOCATION_BASES)   # B21b.25 added the third
+    # B21b.25 added the third; RE-RECORDED AT v11 CR-37 (B21c.05): the fourth, the throne's (`test_cr37_deposition.py` runs the route)
+    assert set(REVOCATION_BASES) == {_RUNG_ABOVE, "rung_above_in_holdings", "same_rung_same_faction", "joint_concurrence"}, sorted(REVOCATION_BASES)
     with pytest.raises(Unspecified):
         Office("off_x", "Reeve", "S", [], faction="Crown", revocation="purview")
     assert Office("off_y", "Reeve", "S", [], faction="Crown", revocation=_RUNG_ABOVE).revocation

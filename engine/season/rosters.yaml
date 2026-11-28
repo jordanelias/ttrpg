@@ -3987,7 +3987,23 @@ rosters:
       ⚠ THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule
       is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`), which refuses at IMPORT if a member here has no rule there or the reverse, so
       the roster cannot grow a value the resolver silently treats as another.
-    values: [rung_above_same_faction, rung_above_in_holdings, same_rung_same_faction]
+      v11 CR-37 (B21c.05): `joint_concurrence` -- a seat stripped only when one body's carried motion and a second body's act agree. The
+      revoking seat belongs to a body named in `concurring_bodies` (below; the gate's rule), AND (`state/gate.py::CONCURRED_BASES`) the
+      revoking actor holds a live `resolution` naming the seat and its current holder, made by a determination through a seat other than the
+      revoking one (`loop/predicates.py::confirming_resolutions`, asked by `_req_revoke` and again by `_eff_revoke`; the gate reads no Record,
+      K-52). `off_king` declares it (the throne, CR-37); no other shipped row does. [ASSUMPTION; medium; Jordan to correct; revert: drop the
+      member, its rule and `concurring_bodies`, `off_king` back to null.]
+    values: [rung_above_same_faction, rung_above_in_holdings, same_rung_same_faction, joint_concurrence]
+
+  concurring_bodies:
+    source: "v11 CR-37 (B21c.05; `workplans/valoria_master_workplan_v12_part25.md` B21c.05 step 2): canon's concurring body in a deposition, the Holy See."
+    open: false
+    note: >-
+      THE BODIES WHOSE SEAT MAY CONCUR IN A `joint_concurrence` REVOCATION -- the `revocation_bases` member's rule
+      (`state/gate.py::REVOCATION_RULES`) admits a revoking seat whose `Office.body` is a member here. Each member must be an
+      `office_bodies` member (`data/rosters.py::CONCURRING_BODIES`, refused at import otherwise). Data, not a by-name outcome: a
+      seat whose `revocation:` names `joint_concurrence` takes the same route, whichever seat it is.
+    values: ["Holy See"]
 
   binds_bases:
     source: "`ARCH §B.7`'s ratified `Seat :=` line, `remit(acts[], binds)`, and `ARCH F.17`'s own resolution of *how a person joins an establishment* -- *\"`oblige`'s `requires` reads the seat's `binds`\"*. r2 `05_LEDGER_AND_BUILD.md` §A.1.5 RULED (b). Plan position `17a`."

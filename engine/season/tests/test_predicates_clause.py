@@ -274,7 +274,8 @@ def test_a_refused_revoke_says_which_clause_refused_in_its_kind(monkeypatch):
     actor's ledger holds a claim keyed by each."""
     from .test_g3_not_yours import _SUCCESS, _gov_world
     declared = PR.REQUIRES_PREDICATES["revoke"].clauses
-    assert declared == ("office", "disposal", "authority", "keeps", "held"), declared
+    # v12 B21c.05 (CR-37) adds `concurrence` (a seat needing a carried motion, no resolution held), keyed `revoke.no_resolution`
+    assert declared == ("office", "disposal", "authority", "keeps", "held", "concurrence"), declared
     shipped = VERB_TABLE["revoke"]
     assert shipped.refusals_by_clause and shipped.precondition_evaluable(PR.REQUIRES_PREDICATES)
     kinds = [shipped.refusals_by_clause[c] for c in declared]

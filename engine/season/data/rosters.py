@@ -2154,6 +2154,14 @@ def factions_compatible(a: str, b: str) -> bool:
 
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
+# v11 CR-37 (B21c.05): THE BODIES WHOSE SEAT MAY CONCUR IN A JOINT-CONCURRENCE REVOCATION (`rosters.yaml: concurring_bodies`), read by
+# `state/gate.py::REVOCATION_RULES`. Refused at import when a member is no `office_bodies` member: a body no seat can belong to would
+# make the basis strippable by nobody, silently.
+CONCURRING_BODIES = roster("concurring_bodies")
+for _body in CONCURRING_BODIES:
+    require_member(_body, BODY_FACTION, f"rosters.yaml `concurring_bodies` names {_body!r}, which is not an `office_bodies` member",
+                   "rosters.yaml -- concurring_bodies", law="v11 CR-37 -- a concurring body is a body a seat can belong to",
+                   needs="a member of `office_bodies.faction`")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
 #: `{faction name: {territory: {code}, settlement: {code}}}` -- the factions whose persons and
 #: places exist only in a world built with `build_realm(foreign=True)` (v9 IN-36). A member of `FACTIONS` in

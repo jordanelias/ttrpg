@@ -29,7 +29,7 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.requires import Observation
 from ..data.rosters import (
-    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
+    BAN_KIND, CONCURRING_BODIES, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
     SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id, is_faction_proposition,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -630,7 +630,19 @@ def seated_on_the_same_rung(w: "World", seat: Office, off: Office) -> bool:
 
 REVOCATION_RULES = {"rung_above_same_faction": lambda w, actor, seat, off: seated_on_the_rung_above(w, seat, off),
                     "rung_above_in_holdings": seated_on_the_rung_above_in_holdings,
-                    "same_rung_same_faction": lambda w, actor, seat, off: seated_on_the_same_rung(w, seat, off)}
+                    "same_rung_same_faction": lambda w, actor, seat, off: seated_on_the_same_rung(w, seat, off),
+                    # v11 CR-37 (B21c.05) step 3: the revoking seat belongs to a body named in `rosters.yaml: concurring_bodies` (the Holy
+                    # See). STRUCTURAL, as ruling (3) is; the motion half is the record conjunct (`CONCURRED_BASES`, below), not here.
+                    "joint_concurrence": lambda w, actor, seat, off: seat.body in CONCURRING_BODIES}
+# v11 CR-37 (B21c.05) step 4: THE REVOCATION BASES WHOSE `revoke` NEEDS A CARRIED MOTION -- admitted only where the revoking actor holds a
+# live `resolution` naming the seat and its current holder, made by a determination through a seat other than `via`
+# (`loop/predicates.py::confirming_resolutions`, CR-36's reader, asked by `_req_revoke` and again by `_eff_revoke`). The gate reads Tenures
+# and never a Record's content (K-52), so the conjunct is the precondition's and the effect's. Keyed by basis, `CONFIRMED_BASES`' shape.
+CONCURRED_BASES = frozenset({"joint_concurrence"})
+if not CONCURRED_BASES <= set(REVOCATION_BASES):
+    raise Unspecified(
+        f"concurred revocation bases {sorted(CONCURRED_BASES)} are not all `revocation_bases` members", "state/gate.py -- CONCURRED_BASES",
+        needs="name only rostered revocation bases", law="v11 CR-37 -- a conjunct keyed on a basis no seat can declare reaches nothing")
 # ⚠ REFUSED AT IMPORT, NOT IN THE FOLD. A member with no rule, or a rule for no member, is drift
 # between data and code; raised from inside `_req_revoke` it would escape the fold (the `13f`
 # lesson), and dispatched by fall-through it would run a new basis as some other one.

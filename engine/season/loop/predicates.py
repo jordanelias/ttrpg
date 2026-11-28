@@ -38,8 +38,8 @@ from ..trace_log import TRACE
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    CONFIRMED_BASES, REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
-    may_revoke, may_sit, may_wage, purview_reaches, seat_hold, seated_on_the_rung_above)
+    CONCURRED_BASES, CONFIRMED_BASES, REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings,
+    may_claim, may_fill, may_revoke, may_sit, may_wage, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -121,7 +121,9 @@ def confirming_resolutions(w: "World", actor: Optional[str], via: Optional[str],
     (`world_q.issuing_seat`: the `via` of the act that caused the Event first naming the Record), because a Record carries no field naming
     its maker (the step-6 SITE check): a Record no logged Event names -- a hand-planted one -- has no readable creating Act and licenses
     nothing. `warrants_for`'s shape (`warrant_sourced`), read world-side because the gate never reads a Record's content (K-52).
-    Asked by `_req_confer` (`nomination`) and again by `_eff_confer` (the decline), for a seat whose basis is in `CONFIRMED_BASES`."""
+    Asked by `_req_confer` (`nomination`) and again by `_eff_confer` (the decline), for a seat whose basis is in `CONFIRMED_BASES`; and
+    (v11 CR-37, B21c.05) by `_req_revoke` (`concurrence`) and again by `_eff_revoke`, `conferee` then the seat's current holder, for a seat
+    whose revocation basis is in `CONCURRED_BASES` (the carried motion a concurring body's `revoke` needs)."""
     out = []
     addressee = RECORD_CONTENT.get("addressee")
     for t in w.tenures:
@@ -659,7 +661,7 @@ def _req_interrogate(w: "World", a: "Act") -> bool:
                    f"{a.actor} on {subj!r}")
 
 
-@requires_predicate("revoke", clauses=("office", "disposal", "authority", "keeps", "held"))
+@requires_predicate("revoke", clauses=("office", "disposal", "authority", "keeps", "held", "concurrence"))
 def _req_revoke(w: "World", a: "Act") -> Answer:
     """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
 
@@ -689,7 +691,9 @@ def _req_revoke(w: "World", a: "Act") -> Answer:
     B21.82: THE ANSWER IS `Answer(ok, clause)`, the clause one of the five declared on the decorator, in branch order:
     `office` (the act names no office the world holds), `disposal` (the conferral basis has no revocation disposal),
     `authority` (the seat exercised has no revocation authority over the seat), `keeps` (the `keeps` operand is no list of
-    acts) and `held` (a seat nobody holds). The five short names are one per `_refuse` phrase [ASSUMPTION; medium; Jordan to
+    acts), `held` (a seat nobody holds) and, v11 CR-37 (B21c.05), `concurrence` (a seat whose basis is in `CONCURRED_BASES` revoked by an
+    actor holding no live `resolution` naming it and its current holder, made by a determination through a seat other than `via`:
+    `confirming_resolutions`, CR-36's reader, asked again by `_eff_revoke`). The short names are one per `_refuse` phrase [ASSUMPTION; medium; Jordan to
     correct -- basis: B09.18's `confer` names are single words; revert: the phrases themselves]; `keeps` is the branch
     (B21.69) the workplan entry did not list, named for its operand."""
     obj = office_named_by(a)               # `office`, else the computed act's `subject` (B21.13)
@@ -717,9 +721,16 @@ def _req_revoke(w: "World", a: "Act") -> Answer:
     keeps = d.get(KEEPS_KEY)
     if KEEPS_KEY in d and not (isinstance(keeps, (list, tuple)) and all(isinstance(x, str) for x in keeps)):
         return _refuse_at("keeps", f"{a.actor} on {obj!r}", "a revoke whose `keeps` is no list of acts")
-    if any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
-        return ADMITTED
-    return _refuse_at("held", f"{a.actor} on {obj!r}", "a revoke of a seat nobody holds")
+    holders = [t.subject for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
+    if not holders:
+        return _refuse_at("held", f"{a.actor} on {obj!r}", "a revoke of a seat nobody holds")
+    # v11 CR-37 (B21c.05) step 4: THE RECORD CONJUNCT -- a seat whose revocation basis needs a carried motion (`CONCURRED_BASES`) is
+    # stripped only by an actor holding a live `resolution` naming it and its current holder, made through another seat
+    # (`confirming_resolutions`); `revoke.no_resolution` otherwise (asked again in `_eff_revoke`).
+    if off.revocation in CONCURRED_BASES and not any(confirming_resolutions(w, a.actor, a.via, obj, h) for h in holders):
+        return _refuse_at("concurrence", f"{a.actor} via {a.via!r} on {obj!r}",
+                          "a revoke of a seat needing a carried motion, with no resolution held naming it and its holder made through another seat")
+    return ADMITTED
 
 
 @requires_predicate("dispatch")

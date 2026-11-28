@@ -209,7 +209,7 @@ seats:
     remit_acts: [issue, determine, confer, revoke, convene, dispatch]
     modifier:   minor   # B05.23, T13 edit 5 (T4, A-12): a bench seat (its `determine` grant seats its holder on the bench `world_q.judging_set` reads) -- one level for an act through it before its own bench [ASSUMPTION; medium; Jordan to correct; revert: no `modifier:`]
     conferral:  inheritance   # v10 IN-61 (RS-27): claimed by the holder of `rosters.yaml: successions`' title (`off_heir`), never conferred [ASSUMPTION; medium; Jordan to correct; revert: null]
-    revocation: null   # no rung above the realm
+    revocation: joint_concurrence   # v11 CR-37 (B21c.05): no rung above the realm, so the throne is stripped by the Holy See's concurrence with a carried motion (`rosters.yaml: revocation_bases`); no ban opens (`inheritance`), the throne falls vacant to IN-61's claim or CR-35's contested route, and the deposed King keeps `off_duke_valorsmark` [ASSUMPTION; medium; Jordan to correct; revert: null, depose PARKED]
     holder:     "NPC-020"
     obligees:   ["NPC-070", "NPC-050", "NPC-052"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split. CR-86 (ED-IN-0342): the Duchess of Hafenmark (NPC-050) and the Duke of Varfell (NPC-052) are the King's vassals, sworn by the same path
     source:     "systems/world/reference/worldbuilding_v30.md:24"

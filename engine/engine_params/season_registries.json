@@ -1906,7 +1906,7 @@
           ],
           "modifier": "minor",
           "conferral": "inheritance",
-          "revocation": null,
+          "revocation": "joint_concurrence",
           "holder": "NPC-020",
           "obligees": [
             "NPC-070",
@@ -5105,11 +5105,20 @@
         "revocation_bases": {
           "source": "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`).",
           "open": false,
-          "note": "\u26a0 THREE VALUES. `rung_above_in_holdings` (JORDAN, 2026-10-12: *\"it's not ONLY based on hierarchy of rungs, but also where it is placed in holdings\"*): the seat's rung is one of the revoker's HOLDINGS and the revoker sits on the rung directly above; a seat whose rung nobody holds is stripped by nobody, its holder resigns. `rung_above_same_faction`, the one value ED-IN-0256 ruled: the holder of a seat on the rung DIRECTLY ABOVE the seat's own rung, in the SAME faction -- structural, NOT a rank comparison, and applied to every seat alike. `same_rung_same_faction` (B21b.25, IN-48's early dismissal of a regent, a seat conferred over a domain on the SAME rung as the title seat): the holder of ANY other seat on the revoked seat's own rung, of its faction, whose grant carries `revoke` -- the principal's seat is one such sibling, not the only one, and no seat is named by its conferrer (`Tenure.conferrer` is not a field). Only a seat that DECLARES it reaches it: no shipped row does. A seat with NO declared basis (`None`) is revocable by nobody, which is what r2's `none` meant; it needs no member of its own. \u26a0 THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`), which refuses at IMPORT if a member here has no rule there or the reverse, so the roster cannot grow a value the resolver silently treats as another.",
+          "note": "\u26a0 THREE VALUES. `rung_above_in_holdings` (JORDAN, 2026-10-12: *\"it's not ONLY based on hierarchy of rungs, but also where it is placed in holdings\"*): the seat's rung is one of the revoker's HOLDINGS and the revoker sits on the rung directly above; a seat whose rung nobody holds is stripped by nobody, its holder resigns. `rung_above_same_faction`, the one value ED-IN-0256 ruled: the holder of a seat on the rung DIRECTLY ABOVE the seat's own rung, in the SAME faction -- structural, NOT a rank comparison, and applied to every seat alike. `same_rung_same_faction` (B21b.25, IN-48's early dismissal of a regent, a seat conferred over a domain on the SAME rung as the title seat): the holder of ANY other seat on the revoked seat's own rung, of its faction, whose grant carries `revoke` -- the principal's seat is one such sibling, not the only one, and no seat is named by its conferrer (`Tenure.conferrer` is not a field). Only a seat that DECLARES it reaches it: no shipped row does. A seat with NO declared basis (`None`) is revocable by nobody, which is what r2's `none` meant; it needs no member of its own. \u26a0 THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`), which refuses at IMPORT if a member here has no rule there or the reverse, so the roster cannot grow a value the resolver silently treats as another. v11 CR-37 (B21c.05): `joint_concurrence` -- a seat stripped only when one body's carried motion and a second body's act agree. The revoking seat belongs to a body named in `concurring_bodies` (below; the gate's rule), AND (`state/gate.py::CONCURRED_BASES`) the revoking actor holds a live `resolution` naming the seat and its current holder, made by a determination through a seat other than the revoking one (`loop/predicates.py::confirming_resolutions`, asked by `_req_revoke` and again by `_eff_revoke`; the gate reads no Record, K-52). `off_king` declares it (the throne, CR-37); no other shipped row does. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, its rule and `concurring_bodies`, `off_king` back to null.]",
           "values": [
             "rung_above_same_faction",
             "rung_above_in_holdings",
-            "same_rung_same_faction"
+            "same_rung_same_faction",
+            "joint_concurrence"
+          ]
+        },
+        "concurring_bodies": {
+          "source": "v11 CR-37 (B21c.05; `workplans/valoria_master_workplan_v12_part25.md` B21c.05 step 2): canon's concurring body in a deposition, the Holy See.",
+          "open": false,
+          "note": "THE BODIES WHOSE SEAT MAY CONCUR IN A `joint_concurrence` REVOCATION -- the `revocation_bases` member's rule (`state/gate.py::REVOCATION_RULES`) admits a revoking seat whose `Office.body` is a member here. Each member must be an `office_bodies` member (`data/rosters.py::CONCURRING_BODIES`, refused at import otherwise). Data, not a by-name outcome: a seat whose `revocation:` names `joint_concurrence` takes the same route, whichever seat it is.",
+          "values": [
+            "Holy See"
           ]
         },
         "binds_bases": {
@@ -10132,6 +10141,9 @@
             ],
             "held": [
               "revoke.no_holder"
+            ],
+            "concurrence": [
+              "revoke.no_resolution"
             ],
             "write": [
               "revoke.refused"
