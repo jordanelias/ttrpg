@@ -106,7 +106,7 @@ def _centered_line_cols(specs, anchor_col, gap=DEPLOY_GAP):
 
 def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit]
                morale_start=None, dr=1, stance='balanced', speed='Standard', anchor_col=25,
-               officers=()):
+               officers=(), commander=None, commander_post=None):
     """Faction→ARMY adapter: construct a MULTI-subunit Army from a list of per-subunit spec dicts.
     `gauge_mb.make_mixed_unit` already proves the data model supports independently-placed/typed/tasked
     units, but that constructor is gauge-harness-local; this is the public, workbench-facing
@@ -169,7 +169,11 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     says, in BOTH the empty- and non-empty-officers case), and against the general's own (clamped) Command ONLY
     when officers are actually used — enforcing the Command ladder unconditionally would raise on existing
     single-tier armies built with more direct units than their Command (several exist in this package's own
-    tests/gauges). An idle officer contributes to neither `counts` nor the general's Command check."""
+    tests/gauges). An idle officer contributes to neither `counts` nor the general's Command check.
+
+    commander, commander_post: [27A-3, B19.04] Default None. The army's commander as a typed record and the name of the unit he
+    rides with; stored on the Army and read by nothing here (the obedience draw, 27A-4, reads them). A spec's 'officer_record'
+    is forwarded to its Unit the same way."""
     # [ED-1090] UNIT_CAP is module-level (see its definition above build_unit) so other callers
     # (Army Configuration Mode's UI) read the single source rather than duplicating the literal.
     # isinstance(o, Officer) would be the direct check, but several tests in this package reload
@@ -276,7 +280,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   'troops', 'concentration', 'orders',
                   'target_condition',  # [ED-IN-0306] was missing from this tuple, so a spec's targeting preference silently vanished (the 'volleys' omission above, again); a Unit field since class-B targeting
                   'width', 'depth', 'distribution',  # [ED-MB-0025/0026] explicit grid + density gradient
-                  'officer'):  # [A3, ED-MB-0067 Part A / ED-MB-0073] already validated above this loop;
+                  'officer', 'officer_record'):  # [27A-3, B19.04: `officer_record`, the typed record of the officer; `officer` stays the NAME `officers=` counts] [A3, ED-MB-0067 Part A / ED-MB-0073] already validated above this loop;
                   # forwarded the same generic way as every other per-subunit override in this tuple.
             if k in sp:
                 kw[k] = sp.pop(k)
@@ -305,6 +309,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     return Army(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                units=subs, dr=dr, stance=stance, speed=speed, officers=officer_objs)
+                units=subs, dr=dr, stance=stance, speed=speed, officers=officer_objs,
+                commander=commander, commander_post=commander_post)
 
 

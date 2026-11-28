@@ -445,6 +445,12 @@ class Unit:
     # never executes for any existing Unit (byte-exact).
     orders: Tuple[Order, ...] = ()
     _order_idx: int = 0
+    # [27A-3, B19.04] The tick a late-carried order falls due (`check_orders`, 27A-4); declared beside `_order_idx` with the same
+    # default and, like it, never reset: a Unit is built per engagement.
+    _order_due: int = 0
+    # [27A-3, B19.04] The typed record of the officer who carries this unit's orders (`queries/inputs.py::CommandRecord`, built by
+    # the host from the unit row's `officer` column); None -> the unit has none and its commander gives its orders.
+    officer_record: Optional[object] = field(default=None, repr=False)
     # [MB-04] True once the stance was WRITTEN on purpose (an Order's `stance` behavior, or a build spec's
     # `stance` key), including 'balanced': eff_stance then never lets a role keyword override it.
     _stance_explicit: bool = field(default=False, repr=False)
@@ -2552,6 +2558,10 @@ class Army:
     # on the pool). Default 0 -> inert, byte-exact for every Army no terrain row touches.
     terrain_off_d: float = 0.0
     terrain_def_d: float = 0.0
+    # [27A-3, B19.04] The army's commander as a typed record (`queries/inputs.py::CommandRecord`) and the NAME of the unit he
+    # rides with (`commander_post`; None is the army's rear centre). Both None -> no record, which reads as it does today.
+    commander: Optional[object] = field(default=None, repr=False)
+    commander_post: Optional[str] = None
 
     def __post_init__(self):
         # [canonical: Jordan directive 2026-06-02] Command DERIVED from Charisma (primary) +

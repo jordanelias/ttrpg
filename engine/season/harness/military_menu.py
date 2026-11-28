@@ -108,7 +108,7 @@ def cohorts_raisable(w, person: str) -> tuple:
 def _empty_army(faction: str, strategy: str = "line") -> dict:
     """The content an army is minted with (`_army_mintable` checks it is well formed and empty). The key set is
     `rosters.yaml: record_kinds.army`; `line` is the neutral strategy, which `order_unit` changes."""
-    return {"faction": faction, "strategy": strategy, "trained": (), "units": ()}
+    return {"faction": faction, "strategy": strategy, "trained": (), "units": (), "commander_post": None}
 
 
 def menu(w, actor: str) -> MilitaryMenu:

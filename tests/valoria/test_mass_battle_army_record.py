@@ -161,6 +161,15 @@ def test_validate_rejects_a_malformed_record():
             A.validate(bad)
 
 
+def test_commander_post_naming_no_unit_is_refused():
+    """27A-3: the commander's post is a unit's name on the record, and a record carries the post or does not."""
+    a = _army()
+    A.validate({**a, 'commander_post': 'wall'})                 # control: a post that names a unit of the record
+    A.validate({k: v for k, v in a.items() if k != 'commander_post'})   # a record without the key validates as before
+    with pytest.raises(ValueError, match="no unit"):
+        A.validate({**a, 'commander_post': 'nobody'})
+
+
 # ----------------------------------------------------------------- the record reaches the battle
 def _field(oob_a, oob_b, seed=7):
     return massbattle.resolve_field(MassBattleInput(

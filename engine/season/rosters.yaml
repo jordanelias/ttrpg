@@ -208,13 +208,13 @@ rosters:
       # anchors on THAT PERSON and not on the cover's id (`state/attribution.py::cover_at_logging`); who acted is still the actor's.
       cover:        [terms, as]
       # (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
-      # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
+      # `PersonId[] at weight`): A FACTION'S ARMY. Its five keys (`commander_post`, 27A-3, last) are `modules/mass_battle/armyrecord.py::KEYS`
       # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
       # operation on it, and the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`) call it
       # through the `mass_battle.army` composition row. MINTED by `create_record` (`kind: army`); CHANGED by the
       # four verbs, the one kind whose `subject_matter` is written after the mint (the `(Record, subject_matter)`
       # matrix row). Not a `record_sourced_operands` kind: an army answers no operand.
-      army:         [faction, strategy, trained, units]
+      army:         [faction, strategy, trained, units, commander_post]
       # A STANDING CHALLENGE TO A DUEL (H-240 route (1)), minted by `challenge`
       # (`loop/effects_information.py::_eff_challenge`) into the challenger's hand. `terms` is whom it
       # challenges (`read_from`: the act's `subject`) and `to` the same person as its ADDRESSEE (so

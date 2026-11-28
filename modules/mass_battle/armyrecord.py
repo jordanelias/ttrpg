@@ -12,7 +12,10 @@ THE SHAPE (`subject_matter`'s exact key set, which `rosters.yaml: record_kinds` 
     strategy      an `orderofbattle.STRATEGIES` key
     trained       ((cohort person id, troop type, count), ...)   troops raised and not yet in a unit
     units         ({name, troop_type, role, posture, target, fall_back_at, assigned}, ...)
-                  where `assigned` is ((cohort person id, count), ...)
+                  where `assigned` is ((cohort person id, count), ...); a unit row may also carry `officer`, the id of the
+                  person who commands it (absent -> none; `order` sets it)
+    commander_post  the NAME of the unit the commander rides with, or None for the army's rear centre (27A-3); `validate`
+                  refuses a name that is no unit of the record. A record built before the key existed validates as it did.
 
 A TROOP IS A HEADCOUNT OF A COHORT: `trained` and `assigned` name the cohort `Person` the people are drawn from and how
 many, so the season can check the army never holds more of a cohort than its weight allows (this module checks the
@@ -32,19 +35,22 @@ from modules.mass_battle.orderofbattle import POSTURES, STRATEGIES, TARGETINGS, 
 from modules.mass_battle.troop_types.recruitment import TRAINING_SITE, recruit_limit
 from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS, roles_for, stats_for
 
-__all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'release', 'order', 'set_strategy',
+__all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'release', 'order', 'set_strategy', 'set_commander_post',
            'validate', 'to_order_of_battle', 'apply', 'OPS', 'fielded', 'disband', 'discharge', 'cohort_claims', 'options']
 
 #: `subject_matter`'s exact key set. `engine/season/rosters.yaml: record_kinds.values.army` mirrors it and a test pins
 #: the two equal.
-KEYS = ('faction', 'strategy', 'trained', 'units')
+KEYS = ('faction', 'strategy', 'trained', 'units', 'commander_post')
+
+#: The keys a record may omit (27A-3: a record built before the key existed is still whole).
+_OPTIONAL_KEYS = ('commander_post',)
 
 
 def new(faction: str, strategy: str = 'line') -> dict:
     """An empty army record for `faction`."""
     if strategy not in STRATEGIES:
         raise ValueError(f"unknown strategy {strategy!r} (known: {sorted(STRATEGIES)})")
-    return {'faction': faction, 'strategy': strategy, 'trained': (), 'units': ()}
+    return {'faction': faction, 'strategy': strategy, 'trained': (), 'units': (), 'commander_post': None}
 
 
 def _type(troop_type: str) -> str:
@@ -200,9 +206,10 @@ def discharge(record: dict, cohort: str, troop_type: str, count) -> dict:
 _UNSET = object()
 
 
-def order(record: dict, name: str, *, role=_UNSET, posture=_UNSET, target=_UNSET, fall_back_at=_UNSET) -> dict:
-    """Set unit `name`'s tactics: its role (from its type's menu), posture, targeting preference and
-    fall-back point. A field left out is unchanged; passing None clears it. Validated as `orderofbattle.validate`
+def order(record: dict, name: str, *, role=_UNSET, posture=_UNSET, target=_UNSET, fall_back_at=_UNSET,
+          officer=_UNSET) -> dict:
+    """Set unit `name`'s tactics: its role (from its type's menu), posture, targeting preference, fall-back point and
+    officer (a person id, or None for none: the key is dropped from the row). A field left out is unchanged; passing None clears it. Validated as `orderofbattle.validate`
     validates a unit."""
     i = _sf_index(record, name)
     sf = dict(record['units'][i])
@@ -222,6 +229,13 @@ def order(record: dict, name: str, *, role=_UNSET, posture=_UNSET, target=_UNSET
         if fall_back_at is not None and not 0.0 < fall_back_at < 1.0:
             raise ValueError(f"fall_back_at must be strictly between 0 and 1, got {fall_back_at!r}")
         sf['fall_back_at'] = fall_back_at
+    if officer is not _UNSET:
+        if officer is None:
+            sf.pop('officer', None)
+        elif not isinstance(officer, str) or not officer.strip():
+            raise ValueError(f"officer must be a person id (a non-empty string) or None, got {officer!r}")
+        else:
+            sf['officer'] = officer
     return _replace_sf(record, i, sf)
 
 
@@ -232,11 +246,18 @@ def set_strategy(record: dict, strategy: str) -> dict:
     return {**record, 'strategy': strategy}
 
 
+def set_commander_post(record: dict, post: Optional[str]) -> dict:
+    """The record with the commander riding with unit `post` (None: the army's rear centre). Refuses a name that is no unit."""
+    if post is not None and not any(sf['name'] == post for sf in record['units']):
+        raise ValueError(f"commander_post {post!r} names no unit of the record")
+    return {**record, 'commander_post': post}
+
+
 def validate(record: dict) -> None:
     """Refuse a record that is not well formed: wrong key set, an unknown strategy or troop type, a non-positive
     count, a duplicate unit name, or more than `UNIT_CAP` units. Raises ValueError."""
-    if tuple(sorted(record)) != tuple(sorted(KEYS)):
-        raise ValueError(f"army record keys {sorted(record)} are not {sorted(KEYS)}")
+    if not set(KEYS) - set(_OPTIONAL_KEYS) <= set(record) <= set(KEYS):
+        raise ValueError(f"army record keys {sorted(record)} are not {sorted(KEYS)} (optional: {sorted(_OPTIONAL_KEYS)})")
     if record['strategy'] not in STRATEGIES:
         raise ValueError(f"unknown strategy {record['strategy']!r}")
     for c, t, n in record['trained']:
@@ -247,10 +268,15 @@ def validate(record: dict) -> None:
         raise ValueError("duplicate unit name")
     if len(names) > UNIT_CAP:
         raise ValueError(f"more than {UNIT_CAP} units")
+    post = record.get('commander_post')
+    if post is not None and post not in names:
+        raise ValueError(f"commander_post {post!r} names no unit of the record (units: {names})")
     for sf in record['units']:
         _type(sf['troop_type'])
         for _c, n in sf['assigned']:
             _pos(n)
+        if sf.get('officer') is not None and not (isinstance(sf['officer'], str) and sf['officer'].strip()):
+            raise ValueError(f"unit {sf['name']!r}: officer must be a person id, got {sf['officer']!r}")
 
 
 def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] = None) -> OrderOfBattle:
@@ -270,7 +296,9 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
                                  target=sf['target'], fall_back_at=sf['fall_back_at']))
     if not parts:
         raise ValueError("no unit has any troops assigned")
-    return OrderOfBattle(tuple(parts), record['strategy'], tuple(drawn))
+    post = record.get('commander_post')
+    return OrderOfBattle(tuple(parts), record['strategy'], tuple(drawn),
+                         commander_post=post if post in {p.name for p in parts} else None)
 
 
 #: The commands `apply` runs: one per season verb (`recruit`, `form_unit`, `assign_troops`, `order_unit`) and
@@ -288,7 +316,7 @@ def apply(cmd) -> dict:
                from `cohort`, no more than `recruit_limit` allows for that cohort's `weight` and `sites`
       form     args name, troop_type, role (optional)
       assign   args name, cohort, count -- a negative count releases troops back to the trained pool
-      order    args name and any of role, posture, target, fall_back_at; or strategy alone, for the army
+      order    args name and any of role, posture, target, fall_back_at, officer; or strategy alone, or commander_post alone, for the army
       validate no args -- the record unchanged if well formed
     """
     try:
@@ -327,9 +355,13 @@ def _apply(cmd) -> dict:
             if set(a) != {'strategy'}:
                 raise ValueError("an order names a strategy or a unit's tactics, not both")
             return set_strategy(r, a['strategy'])
-        fields = {k: a[k] for k in ('role', 'posture', 'target', 'fall_back_at') if k in a}
+        if 'commander_post' in a:
+            if set(a) != {'commander_post'}:
+                raise ValueError("an order names a commander_post, a strategy or a unit's tactics, not more than one")
+            return set_commander_post(r, a['commander_post'])
+        fields = {k: a[k] for k in ('role', 'posture', 'target', 'fall_back_at', 'officer') if k in a}
         if not fields:
-            raise ValueError("an order sets at least one of role, posture, target, fall_back_at, or a strategy")
+            raise ValueError("an order sets at least one of role, posture, target, fall_back_at, officer, or a strategy or commander_post")
         return order(r, a['name'], **fields)
     raise ValueError(f"unknown army command {cmd.op!r} (known: {OPS})")
 

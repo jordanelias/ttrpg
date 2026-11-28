@@ -92,6 +92,7 @@ class UnitRow:
     posture: Optional[str] = None
     target: Optional[str] = None
     fall_back_at: Optional[float] = None
+    officer: Optional[object] = None          # [27A-3] the unit's officer as a typed record (`CommandRecord`), built by the host; None -> none
 
 
 @dataclass(frozen=True)
@@ -103,6 +104,8 @@ class OrderOfBattle:
     units: Tuple[UnitRow, ...]
     strategy: str = 'line'
     drawn: Tuple[Tuple[str, str, float], ...] = ()
+    commander: Optional[object] = None        # [27A-3] the commander as a typed record (`CommandRecord`), built by the host; None -> none
+    commander_post: Optional[str] = None      # [27A-3] the name of the unit he rides with; None is the army's rear centre
 
     @property
     def cohorts(self) -> Tuple[str, ...]:
@@ -126,6 +129,8 @@ def validate(oob: OrderOfBattle) -> None:
         raise ValueError("an order of battle needs at least one unit")
     if len(oob.units) > UNIT_CAP:
         raise ValueError(f"{len(oob.units)} units exceeds the cap of {UNIT_CAP}")
+    if oob.commander_post is not None and oob.commander_post not in {sf.name for sf in oob.units}:
+        raise ValueError(f"commander_post {oob.commander_post!r} names no unit of the order of battle")
     seen = set()
     for sf in oob.units:
         if sf.name in seen:
@@ -170,6 +175,8 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
         spec['shape'] = 'Line'
     if sf.target is not None:
         spec['target_condition'] = sf.target
+    if sf.officer is not None:
+        spec['officer_record'] = sf.officer
     if sf.fall_back_at is not None:
         spec['orders'] = [Order(f'own_strength:{sf.fall_back_at}', {'stance': 'retreat'})]
     return spec
@@ -247,4 +254,5 @@ def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
     classes = [class_of(sf.troop_type) for sf in oob.units]
     _place(specs, classes, side)
     return build_army(specs, name, side, power=_UNIT_POWER, command=_UNIT_COMMAND, discipline=_UNIT_DISCIPLINE,
-                      morale=morale_start, morale_start=morale_start)
+                      morale=morale_start, morale_start=morale_start,
+                      commander=oob.commander, commander_post=oob.commander_post)
