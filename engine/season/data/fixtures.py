@@ -549,7 +549,10 @@ DEFAULT_FIXTURES = Fixtures(
     # SWITCH of one keyed draw on the one four-band ladder (`world_q.season_factor_of`: pool the place's endurance, obstacle the season's
     # `hardship` plus the year's spell, the band choosing a factor of `rosters.yaml: season_band_factors`), keyed on (world_seed, tick,
     # territory rung id); its ENTRIES are read by nothing, and it is refused unless it holds one entry per season of the year (`seasons_of_year`).
-    season_factor_draw=(),            # `H-26`, swept () (control, SHIPPED) / a table of one entry per season (the drawn form on)
+    # B12b.43 (CL-EVENTS (2)): THE DRAWN FORM SHIPS LIVE. The table is the switch and its entries are read by nothing (the factor of a draw is
+    # `rosters.yaml: season_band_factors[band]`, set at mean one by the sweep); it holds one entry per season of the year, which `check_season_weather`
+    # refuses at load otherwise. [ASSUMPTION; medium; Jordan to correct; revert: `()`, the control: nothing drawn, the bare constant]
+    season_factor_draw=((0.5, 1.0, 2.0),) * 4,   # `H-26`, swept () (control) / a table of one entry per season (the drawn form on, SHIPPED)
     # B12b.03 (R-27): THE YEAR'S SPELL, a run of weather over a region (a territory's parent rung) for a year: the equally likely OBSTACLE TERMS one draw
     # keyed on (world_seed, year, region) picks from, shared by every territory under the region for the whole year and added to the season's
     # `hardship` in `world_q.season_factor_of`. `()` is the control: no spell (a term of 0), nothing drawn. A spell with no `season_factor_draw` is
@@ -563,6 +566,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `season_factor_draw: ()`, which reads no row]
     # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures season_endurance`, graded `assumption`; the source's pool is the place's endurance and no document gives a place one, so it is injected at 0 (the pool is `pool_add`) and swept 0 (SHIPPED) / 2 / 4]
     season_endurance=0,               # `H-26`, swept 0 (SHIPPED) / 2 / 4
+    # B12b.45 (CL-EVENTS commit (3)): THE TENSION'S SCALE ON A TERRITORY'S SEASON FACTOR, `((territory rung id, scale), ...)`, read by `world_q.season_factor_of`, which
+    # multiplies its factor by the territory's scale on every return path (a territory not listed, and no territory, read 1.0). `()` is the control and SHIPS: no card
+    # sets one. `boot/realm.py::build_realm(tensions=True)` sweeps a NEW Fixtures value carrying the drawn card's scales (`data/tensions.py`), never a mutation of this default.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `()`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-26 -- `site: Fixtures territory_yield_scale`, graded `assumption`; a card's scale is a drawn world-gen term the source states no value for, so it is injected empty and the cards (`tensions.yaml`) carry the numbers]
+    territory_yield_scale=(),         # `H-26`, `()` (control, SHIPPED) / a card's `yield_scale` rows
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
     subsistence_weight=SUBSISTENCE_WEIGHTS,
@@ -943,15 +952,16 @@ DEFAULT_FIXTURES = Fixtures(
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the field's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
-    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
-    # MEASURED THE FLIP, and did not make it: ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and
-    # case worlds), 350 reds in 35 of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE at this
-    # fixture (DEF-7; Jordan's 2026-10-16 wording differs). Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
-    field_provisioning=False,  # `H-241`, swept False (control, SHIPPED) / True / True on empty treasuries
+    # CONTROL, THE CLASS DEFAULT -- every field is Σ weight, as before the feed. B12b.47 BUILT THE RATION'S KINDS (`field_ration_kinds`, below) and
+    # FLIPPED THE ARM IN THE SHIPPED REALM ONLY: `boot/realm.py::build_realm` reads `REALM_FIXTURES` when handed no fixtures and no cap. THE CLASS DEFAULT STAYS
+    # False because ON, the B12b.24 refusal fires at every world built with no stocked treasury (hand-built and case worlds), 350 reds in 35
+    # of the 58 test files that construct one (`hole_register.yaml` H-241's cite). LF-1 is REVERTIBLE (DEF-7; Jordan's 2026-10-16 wording
+    # differs): `REALM_FIXTURES = DEFAULT_FIXTURES`. Injection site: `REALM_FIXTURES`, read by `seam/wrappers/mass_battle.py::provision_input`.
+    field_provisioning=False,  # `H-241`, swept False (control, the class default) / True (SHIPPED: `REALM_FIXTURES`, the uncapped `build_realm`) / True on empty treasuries
     # U5d_SE §4 (`H-241`). WHICH OF THE LARDER'S KINDS A FIELD EATS: the ration the field reads (`world_q.field_ration`) is
     # `subsistence_weight` cut to the kinds listed here -- a kind bounds a field only if this lists it AND `subsistence_weight`
     # weights it. SHIPPED `("grain",)`: a grain-only treasury fields troops; `("grain", "salt")` is the larder's whole ration
-    # (a treasury short of salt fields nobody) and is the control. Read only under `field_provisioning`, which ships OFF.
+    # (a treasury short of salt fields nobody) and is the control. Read only under `field_provisioning`: OFF in a hand-built world, ON in the shipped (uncapped) realm.
     # [JUSTIFIED: engine/season/hole_register.yaml H-241 -- `site: Fixtures field_ration_kinds`, graded `assumption`; U5d_SE §4 ships the list at `["grain"]` and the source gives no other value]
     field_ration_kinds=("grain",),  # `H-241`, swept ("grain",) (SHIPPED) / ("grain", "salt") (the larder's whole ration, control)
     # IN-08 H3 (`ED-IN-0261`'s scar model). The scar is a COUNT per pursuit, one per observer per
@@ -2005,9 +2015,21 @@ ROAD_HAZARD_OFF, ROAD_HAZARD_ON = ROAD_HAZARD_ARMS
 HUNGER_LOSS_ARMS = ("per_cohort", "per_head")
 HUNGER_LOSS_PER_COHORT, HUNGER_LOSS_PER_HEAD = HUNGER_LOSS_ARMS
 CLOSED_ARMS = {"evidence_from": EVIDENCE_ARMS, "route_pricing": ROUTE_PRICING_ARMS, "road_hazard": ROAD_HAZARD_ARMS, "hunger_loss": HUNGER_LOSS_ARMS}
+#: B12b.44 (CR-22, `H-11`): `subsistence_weight`'s x1 arm, THE CONTROL, as `DIFFICULTY_OB_CONTROL` is `H-424`'s. The shipped x5 is `rosters.yaml`'s row;
+#: a test whose scenario is sized at grain 2, salt 1 plants this through `DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)`.
+SUBSISTENCE_X1 = {"grain": 2, "salt": 1}
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
 DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
+
+#: B12b.47 (`H-241`, IN-52's flip): THE SHIPPED REALM'S FIXTURES, named once. `DEFAULT_FIXTURES` keeps `field_provisioning` False (every hand-built,
+#: test and case world reads the control); the uncapped `boot/realm.py::build_realm` reads this. Named here (after `CLOSED_ARMS`, which `sweep` reads)
+#: so that a reader of a shipped-realm snapshot (`state/world.py::decode`, whose default stays `DEFAULT_FIXTURES`) can hand the fixtures the snapshot
+#: was encoded under. [ASSUMPTION; medium; Jordan to correct; revert: `REALM_FIXTURES = DEFAULT_FIXTURES`]
+REALM_SWEEP = ("field_provisioning", True)    # the one override the shipped realm makes of the default (`build_realm` applies it to the module's `DEFAULT_FIXTURES` at call time, so a test that patches that name still steers the build)
+REALM_FIXTURES = DEFAULT_FIXTURES.sweep(*REALM_SWEEP)
+#: the hand-built tests' control arm as a Fixtures value (`DEFAULT_FIXTURES` at the x1 per-head weights): one sweep, not one per test file.
+X1_FIXTURES = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)
 
 
 def check_season_weather(draw_table, spells) -> None:

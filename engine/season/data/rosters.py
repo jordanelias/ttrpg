@@ -1602,7 +1602,8 @@ def _load_tally_axes(members: dict, about_classes) -> dict:
     return out
 
 
-#: B12b.13: `{axis: {counts, about, at}}`, the closed registry L3 clause 1 asks for; `{}` as shipped. Read by `queries/world_q.py::tally_reached`.
+#: B12b.13: `{axis: {counts, about, at}}`, the closed registry L3 clause 1 asks for; `{}` as B12b.13 shipped it, two members from B12b.15.
+#: Read by `queries/world_q.py::tally_reached`, and by `harness/exercises.py::resolve` for an `axis:<id>` overlay token.
 TALLY_AXES = _load_tally_axes(roster_map("tally_axes", "members"), roster_list("tally_axes", "about_classes"))
 for _c in roster_list("tally_axes", "about_classes"):
     require_member(_c, REFERENT_CLASSES, f"`tally_axes.about_classes` names {_c!r}, which is no referent class",

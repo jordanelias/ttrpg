@@ -8,3 +8,31 @@ scale:
     and the institution''s own reach is realm-wide): `who_acts` names ''the acting faction''s leadership''
     addressing ''open triggers'' that fire ''across different subsystems'' -- faction-wide scope, realm
     reach.'
+# B12b.15 (`09_WR_provided_arcs` edit 4; `audits/09_WR_audit.md` section 13): the two core rows a private counter carries, bound to
+# its lawful form, the authored tally axis `rosters.yaml: tally_axes.rule_failures`. The case file is not edited: the case states
+# what must be simulated, this overlay says by what. Row 3 (the value hidden, disclosed by her choice) stays undeclared: the tally
+# is her own ledger, but a disclosure is an act this binding does not name. [ASSUMPTION; medium; Jordan to correct; revert: delete
+# the `rows:` block]
+rows:
+- need_sha: 8fbe8c8fc828
+  hardness: core
+  need: "a hidden counter, invisible to players by default, must be able to accumulate from three unrelated conditions triggering
+    independently, in any order, across different subsystems (an institutional-standing clock, an individual's loyalty value, and
+    a territorial-control rule)"
+  exercises:
+  - axis:rule_failures
+  from: "L3 clause 1's per-(person, axis) counter, `world_q.tally_reached`: the claims of the axis's kinds about one referent in
+    her OWN ledger, deposited by unrelated acts in any order (a writ ignored, a town yielded under arms; a holding handed away is a
+    consensual cession, `rung.ceded`, and no failure). The institutional clock is CR-89's (B21d) and the loyalty value no kind about
+    the leader carries, so two of the three named sources are read through the leader's own failures, not through those
+    subsystems. `at` counts claims, not distinct conditions (three claims of one kind reach it), and she can be reached about
+    herself: `tally_reached` excludes no referent for being the holder, which is intended."
+- need_sha: 6f3d5abf8bb3
+  hardness: core
+  need: "each of the counter's triggering conditions must be able to fire exactly once and add a fixed amount, with no way for
+    the counter to decrease once incremented"
+  exercises:
+  - axis:rule_failures
+  from: "WRONGLY STATED (`09_WR_audit.md` section 13), RESTATED: a tally is what she still holds. Each deposit adds one claim;
+    claims decay and are evicted by design, so a grievance nobody refreshes fades. That replaces the never-decreasing counter
+    and is not softened (`09_WR_provided_arcs` edit 1)."

@@ -15,7 +15,7 @@ from fractions import Fraction
 
 import pytest
 
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, X1_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import SEASONS_OF_YEAR, SEASON_TERMS
@@ -24,7 +24,8 @@ from ..queries import world_q
 from ..state.carriers import Person, Rung, Tenure
 from ..state.world import World
 
-WEIGHTS = DEFAULT_FIXTURES.get("subsistence_weight")
+X1 = X1_FIXTURES      # B12b.44: the town is sized at the x1 arm (grain 2, salt 1)
+WEIGHTS = X1.get("subsistence_weight")
 TOWN, COHORT = "set_town", "p_town_folk"
 WINTER = len(SEASONS_OF_YEAR) - 1
 # CP-T10-03's swept arm, `[ASSUMPTION; medium; Jordan to correct]`: winter only.
@@ -32,7 +33,7 @@ SWEPT = {s: {"yield": 1.0, "want": 1.0, "illness": 1.0, "hardship": 0} for s in 
 SWEPT[SEASONS_OF_YEAR[WINTER]] = {"yield": 0.25, "want": 1.5, "illness": 2.0, "hardship": 0}
 
 
-def _town(weight: int = 2, stores=None, tick: int = 0, fixtures=DEFAULT_FIXTURES) -> World:
+def _town(weight: int = 2, stores=None, tick: int = 0, fixtures=X1) -> World:
     w = World(0, fixtures)
     for rid, kind, st in (("r_realm", "realm", None), ("terr_town", "territory", None),
                           (TOWN, "settlement", dict(stores if stores is not None else {"grain": 20, "salt": 20}))):
@@ -98,10 +99,12 @@ def test_hunger_cover_falls_in_winter_on_unchanged_stores(monkeypatch):
 def test_yield_term_scales_the_drawn_factor_only_when_the_draw_is_on(monkeypatch):
     """`yield` multiplies `season_factor_of`'s drawn return; an empty `season_factor_draw` returns the bare `season_factor` whatever the season says."""
     monkeypatch.setattr(world_q, "SEASON_TERMS", SWEPT)
+    monkeypatch.setattr(world_q, "SEASON_BAND_FACTORS", dict.fromkeys(world_q.SEASON_BAND_FACTORS, 1.0))     # B12b.43: the shipped bands are not all 1.0; this reads the term alone
     on = DEFAULT_FIXTURES.sweep("season_factor_draw", ((1.0,),) * len(SEASONS_OF_YEAR))
+    off = DEFAULT_FIXTURES.sweep("season_factor_draw", ())
     assert world_q.season_factor_of(_town(tick=0, fixtures=on)) == 1.0
     assert world_q.season_factor_of(_town(tick=WINTER, fixtures=on)) == 0.25
-    assert world_q.season_factor_of(_town(tick=WINTER)) == DEFAULT_FIXTURES.get("season_factor")
+    assert world_q.season_factor_of(_town(tick=WINTER, fixtures=off)) == DEFAULT_FIXTURES.get("season_factor")
 
 
 def test_shipped_terms_are_the_identity():

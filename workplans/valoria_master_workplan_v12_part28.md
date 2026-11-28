@@ -15,7 +15,7 @@
 ## Batch B12c-material-verbs-and-valley · lane SE+WR · wave W15 · step S15 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B12c-material-verbs-and-valley
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SE.md, Open table; `registers/handoffs/HANDOFF_WR.md` carries one pointer row `Batch B12c-material-verbs-and-valley — IN FLIGHT (row in HANDOFF_SE.md)`, deleted at the same expunge (D-21)
-GATE: Batch B12b-weather-arcs-population
+GATE: Batch B12b-weather-arcs-population @c5ccedcef5d39e5409998e2187dedfe1dab02865
 GATE: Batch B34-go-surface @3d9f96ec3581dd042899b1f9d9586481608a970a
 GATE: Batch B15-pc-calibration @3a1f7fdbdf5d2b893e9327f3c3b6c905b2edfe64
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -56,10 +56,10 @@ EST: 15 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this block's 32 pos
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B12c.01 | one grain for Prosperity: `starting_pros` deleted | CR-40 (intake `:312`) | BUILD | EQUAL | Batch B12b |
-| B12c.02 | hands make the yield: `labour`, `site_crew`, `labour_mode` off | CP-T08-01 (intake `:313`) as AM-E-12 repairs it | BUILD | EQUAL; BARRIER (reads a probe) | Batch B12b |
+| B12c.01 | one grain for Prosperity: `starting_pros` deleted | CR-40 (intake `:312`) | BUILD | EQUAL | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
+| B12c.02 | hands make the yield: `labour`, `site_crew`, `labour_mode` off | CP-T08-01 (intake `:313`) as AM-E-12 repairs it | BUILD | EQUAL; BARRIER (reads a probe) | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 |
 | B12c.03 | stores spoil, all rates 0 | CP-T08-03 (intake `:314`) | BUILD | EQUAL; BARRIER (reads a probe) | B12c.02 |
-| B12c.04 | the family's draw: `graded_amount`, `_rise`/`_fall` by band, the shapes note, three obstacle members, four classes | `14_VERBS_MATERIAL_A` §2 rows 2 (`watch_step`), 3–7 | BUILD | EQUAL | Batch B12b (B07's `graded_tasks`, `task_fraction`; B05's `obstacle_terms`) |
+| B12c.04 | the family's draw: `graded_amount`, `_rise`/`_fall` by band, the shapes note, three obstacle members, four classes | `14_VERBS_MATERIAL_A` §2 rows 2 (`watch_step`), 3–7 | BUILD | EQUAL | Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 (B07's `graded_tasks`, `task_fraction`; B05's `obstacle_terms`) |
 | B12c.05 | a wear of zero emits nothing | `14_VERBS_MATERIAL_A` §7 step 2 (`07_SE_kernel_repairs` §3) | POINTER | — | — |
 | B12c.06 | `tend` is offered to a believer and drawn | `14_VERBS_MATERIAL_A` §6 | BUILD | MOVER(behaviour) | B12c.04 |
 | B12c.07 | `restore` is offered at a fabric known worn, and drawn | `14_VERBS_MATERIAL_A` §3 | BUILD | MOVER(behaviour) | B12c.06 |

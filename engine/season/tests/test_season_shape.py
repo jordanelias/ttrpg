@@ -5682,7 +5682,14 @@ def _h79_bailiff_subjects(seed: int = 0) -> dict:
         # add the SAME subjects to every arm and dilute exactly the difference this measures.
         # MEASURED at the `R8.1` commit, `build_world(0)`, 2 seasons: over the whole ledger
         # actor 17 / both 18 / per_change 14 (the relation inverted); without `seen` 7 / 18 / 14.
-        out[rule] = {c.subject for c in w.persons[HL.BAILIFF].ledger if c.predicate != SEEN_PREDICATE}
+        # ⚠ B12b.12 (H-545): A SITTING'S CLAIMS ARE EXCLUDED FOR THE SAME REASON. `loop/witness.py` deposits them (the
+        # `SITTING_PREDICATES`) about the person the sitting's fact names, whatever `claim_subject_rule` says, so they too add the
+        # same subject to every arm. Once `move` forms only on a place (`referent_class: Rung`), Carin's scenes no longer go to
+        # refused wrong-kind moves, and under `per_change` her only non-`seen` claim in the bailiff's ledger at seed 1 is a
+        # `sitting:shown` (measured, run once, not kept).
+        from ..data.rosters import SITTING_PREDICATES
+        ungoverned = {SEEN_PREDICATE, *SITTING_PREDICATES.values()}
+        out[rule] = {c.subject for c in w.persons[HL.BAILIFF].ledger if c.predicate not in ungoverned}
     return out
 
 
@@ -7749,8 +7756,17 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
 
     MUTATION (run 2026-09-04): drop the `if o.value is UNKNOWN ... continue` guard in `witness` —
     3 `condition = UNKNOWN` claims and 3 `contain.path:* = UNKNOWN` claims land, and this goes RED
-    on the second assertion. Restored, GREEN."""
+    on the second assertion. Restored, GREEN.
+
+    ⚠ B12b.12 (H-545): THE UNREADABLE OBSERVATION IS NOW HAND-BUILT. The chooser's own UNKNOWN reads were `move`s whose `to`
+    bound a non-place (a person, a Record), and `move`'s `referent_class: Rung` ends that formation, so the computed seasons
+    alone read none at any headless seed 0-5 (measured). One hand-built `work` on a person, `H-121`'s own case (`condition`
+    of a non-Site), goes through RESOLVE and WITNESS as the driver sends a season's Events, so the deposit rule is still
+    asked of a real fold's UNKNOWN read."""
+    from ..data.matrix import WriteClass
     from ..harness import headless as HL
+    from ..harness.probes import Act_
+    from ..loop.driver import mint_token
     w = HL.build_world(0, DEFAULT_FIXTURES.sweep("observation_deposit_mode", "total"))
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -7759,6 +7775,10 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
                  None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
+    probe = Act_(w, w.persons[HL.CARIN], "work", key="unreadable", payload={"site": HL.BAILIFF})
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [probe], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
     unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is UNKNOWN]
     assert unknown, (
         "the run produced NO unreadable observation, so this scan cannot observe the deposit it "

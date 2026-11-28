@@ -194,6 +194,7 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See `arcs/arc_expansion_v30.md`. |
 | Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See `systems/_architecture/reference/scale_transitions_v30.md` §4. |
 | Zoom Out | — | Scale transition from smaller (personal/scene) to larger (faction/territorial) scale. Reverse of Zoom In. |
+| Tension | — | A strain drawn at the world's making that sets some people's aims, as a tension in a household is there before anyone acts on it. One card of `engine/season/tensions.yaml` is drawn at world generation (`build_realm(tensions=True)`); the closed set of what a card may do is `rosters.yaml: tension_effects` (its note is the owner of this definition). |
 | Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See `systems/npcs/reference/npc_roster_v30.md` for named Cardinals (Prudence, Justice, Gifts, Temperance). |
 
 ---

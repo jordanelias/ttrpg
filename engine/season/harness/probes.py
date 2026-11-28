@@ -1472,7 +1472,7 @@ def f10():
     # ⚠ THE HALF THAT CARRIES THE CLAIM IS `granted == 1`, AND IT IS STILL EXACT: a second grant
     # would be the larder minting grain, which is precisely what this probe exists to refuse. The
     # conservation clause below is the other half and is exact in both directions.
-    assert len(granted) == 1 and len(refused) >= 1 and hearth.stores["grain"] >= 0, (
+    assert len(granted) == 1 and len(refused) >= 1 and hearth.stores.get("grain", 0) >= 0, (
         f"granted={[e.kind for e in granted]} refused={[e.kind for e in refused]}")
     # ⚠ CONSERVATION, WITH A CONTROL, ADDED BY THE `W-C` ADVERSARIAL PASS -- AND THIS PROBE WAS
     # SITTING ON THE FAILURE IT COULD NOT OBSERVE (§0.1 point 2). Its pre-`W-C` payload named
@@ -1492,7 +1492,7 @@ def f10():
         f"at {_mass(control)}. §E3 gives `transfer` TWO `(Rung, stores)` writes, one per side, so "
         "a granted transfer is net zero over the world -- a difference here means matter was "
         "minted or ANNIHILATED, which is what a one-sided effect does")
-    return (f"PASS: granted={len(granted)}, refused={len(refused)}, larder={hearth.stores['grain']} (never "
+    return (f"PASS: granted={len(granted)}, refused={len(refused)}, larder={hearth.stores.get('grain', 0)} (never "
             f"negative), total store mass {_mass(w)} == the no-act control's {_mass(control)}. "
             "THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
             "never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's "

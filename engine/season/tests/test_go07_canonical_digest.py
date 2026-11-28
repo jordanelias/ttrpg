@@ -317,14 +317,14 @@ def _after_two_seasons(seed: int) -> World:
 
 
 def test_snapshot_round_trip_hash_equal_and_the_decoded_world_runs_the_same_next_season():
-    """`decode(encode(w))` hashes as `w` does, at seeds 0, 1 and 2 after two seasons. At seed 0 it is also the control that the act store and
+    """`decode(encode(w), w.fixtures)` hashes as `w` does, at seeds 0, 1 and 2 after two seasons. At seed 0 it is also the control that the act store and
     the tick came back: one more season on the decoded world equals the same season on the original (the third season is each copy's own
     control run, compared with the other, not a reading of the game past the two-season cap). One test, so the seed-0 two-season world is
     built once, not once per assertion (it was two tests that each built it)."""
     checked = 0
     for seed in (0, 1, 2):
         w = _after_two_seasons(seed)
-        back, named = decode(encode(w))
+        back, named = decode(encode(w), w.fixtures)       # the shipped realm is built under `REALM_FIXTURES`, not `decode`'s default (B12b.47)
         assert isinstance(back, World) and named is None, f"seed {seed}: the snapshot did not decode: {back!r}"
         assert back.content_hash() == w.content_hash(), f"seed {seed}: a field of state did not round-trip"
         assert back.world_seed == w.world_seed and back.tick == w.tick and len(back.acts) == len(w.acts) > 0
@@ -402,3 +402,16 @@ def test_a_resumed_run_reaches_the_ending_the_unbroken_run_reaches():
     assert len(got["world"].acts) > acts_at_save, "the resumed season played no act: the equality below observes nothing"
     assert (got["hash"], got["ending"], got["kind"], got["tick"]) == (whole["hash"], whole["ending"], whole["kind"], whole["tick"])
     assert whole["ending"] == "time" and got["seasons"] == 1
+
+
+def test_the_shipped_realms_saved_game_resumes_without_the_client_naming_its_fixtures():
+    """A `life` save is the headline scenario's, built by `build_realm(seed)` under `REALM_FIXTURES` (the supply arm on); `resume` tries the two fixtures a row builds
+    under, so the port's load path need not know which row it saved. The refusal it excludes is `SnapshotRefused("fixtures_digest")` (a save the port could not load);
+    the control is a world saved under `REALM_FIXTURES` and read under other fixtures, which still refuses."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..harness import scenarios as SC
+    w = SC.SCENARIOS["life"].build(0)
+    assert w.fixtures is not DEFAULT_FIXTURES and w.fixtures.get("field_provisioning"), "the shipped realm is not built under REALM_FIXTURES"
+    got = SC.resume(encode(w, "life"), 0, person="p_npc_001")
+    assert not isinstance(got, SnapshotRefused), repr(got)
+    assert isinstance(decode(encode(w, "life")), SnapshotRefused), "the control: the default `decode` must still refuse a world built under other fixtures"

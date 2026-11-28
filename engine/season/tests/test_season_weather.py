@@ -3,10 +3,11 @@
 The draw is `world_q.season_factor_of`, read at the yield step in `loop/matter.py`; B12b.03 made it ONE keyed draw on the four-band ladder (pool
 the place's endurance, obstacle the season's `hardship` plus the year's spell, the band choosing a factor of `rosters.yaml: season_band_factors`),
 and a non-empty `season_factor_draw` (one entry per season of the year, `()` = off) is its switch. Each test asks the real MATTER barrier, never a
-re-derivation of the arithmetic; the band factors and hardship are PLANTED here (the shipped factors are all 1.0, the control).
+re-derivation of the arithmetic; the band factors and hardship are PLANTED here (the shipped factors are (1.25, 1.0, 0.8, 0.4) since B12b.43;
+the degenerate control plants every band at 1.0).
 
 THE FALSIFIERS, each with the failure it would show:
-  * CONTROL: on the one-town world, a declared all-1.0 table (the draw ON but degenerate) reads the same as
+  * CONTROL: on the one-town world, the draw ON with every band factor planted at 1.0 (on but degenerate) reads the same as
     no table over two seasons -- a draw that perturbed the arithmetic when it multiplies by 1.0 would move it
     (the realm's own hashes are `_realm_goldens.py`'s);
   * DROUGHT: every band at 0.5 leaves the larder below the control arm's after the same barriers,
@@ -21,6 +22,7 @@ import hashlib
 
 import pytest
 
+from ..data.fixtures import SUBSISTENCE_X1
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import SEASONS_OF_YEAR
@@ -41,8 +43,10 @@ def _digest(w) -> tuple:
 
 # H-26's switch, as tables: a year of four seasons each time. The entries are read by nothing; the draw's size is `season_band_factors`.
 YEAR = 4
-UNIT = ((1.0,),) * YEAR                        # the draw on (the shipped band factors are all 1.0: degenerate at the control value)
-#: Planted band factors (the shipped ones are 1.0): a drought is every band at 0.5; the spread reads three values over the four bands.
+UNIT = ((1.0,),) * YEAR                        # the draw on: degenerate only with `ONE_BANDS` planted (its entries are read by nothing)
+#: Planted band factors (the shipped ones are (1.25, 1.0, 0.8, 0.4) since B12b.43): every band at 1.0 is the degenerate control; a drought is every
+#: band at 0.5; the spread reads three values over the four bands.
+ONE_BANDS = {"Overwhelming": 1.0, "Success": 1.0, "Partial": 1.0, "Failure": 1.0}
 DROUGHT_BANDS = {"Overwhelming": 0.5, "Success": 0.5, "Partial": 0.5, "Failure": 0.5}
 SPREAD_BANDS = {"Overwhelming": 2.0, "Success": 1.0, "Partial": 0.5, "Failure": 0.5}
 #: Planted hardship by season, so every band has support (pool 6 at the shipped `pool_add`, hardship 0 clears the obstacle in most draws).
@@ -50,7 +54,7 @@ HARDSHIP = (0, 2, 4, 6)
 
 
 def _plant(monkeypatch, bands, hardship=None):
-    """Plant the band factors (and, where given, the season's hardship) the shipped control sets to 1.0 and 0."""
+    """Plant the band factors (shipped (1.25, 1.0, 0.8, 0.4) since B12b.43) and, where given, the season's hardship (shipped 0)."""
     monkeypatch.setattr(world_q, "SEASON_BAND_FACTORS", bands)
     if hardship is not None:
         monkeypatch.setattr(world_q, "SEASON_TERMS", {s: {**t, "hardship": h} for (s, t), h in zip(world_q.SEASON_TERMS.items(), hardship)})
@@ -76,7 +80,7 @@ OPENING = {"grain": 30, "salt": 15}
 
 
 def _town(table, seed: int = 0) -> World:
-    w = World(seed, DEFAULT.sweep("season_factor_draw", table))
+    w = World(seed, DEFAULT.sweep("season_factor_draw", table).sweep("subsistence_weight", SUBSISTENCE_X1))   # B12b.44: the town is sized at the x1 arm
     scale = w.fixtures.get("condition_scale")
     for rid, kind, stores in (("r_realm", "realm", None), ("terr_town", "territory", None),
                               (TOWN, "settlement", dict(OPENING))):
@@ -112,9 +116,10 @@ THREAD_READ_WITHHELD_EVENTS_1 = (9429, "3b533875fb37d0b01a8c13868953cba075313c63
 
 
 
-def test_in21_a_table_of_ones_reads_the_same_as_no_table():
-    """The draw ON but degenerate at 1.0: base * 1.0 is the bare constant. Compared on the one-town
-    world (`content_hash` folds state and the log, not fixtures), over two seasons, exactly."""
+def test_in21_a_table_of_ones_reads_the_same_as_no_table(monkeypatch):
+    """The draw ON but degenerate, every band factor planted at 1.0 (the shipped factors are not, since B12b.43): base * 1.0 is the bare constant.
+    Compared on the one-town world (`content_hash` folds state and the log, not fixtures), over two seasons, exactly."""
+    _plant(monkeypatch, ONE_BANDS)
     off, unit = _town(()), _town(UNIT)
     assert _seasons(off, 2) == _seasons(unit, 2)
     assert off.content_hash() == unit.content_hash(), "a table of 1.0 moved the hash"
@@ -186,10 +191,9 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
 
 
 def test_season_of_year_reads_zero_to_three_at_shipped_fixtures():
-    """The year is `rosters.yaml: seasons_of_year`, read by `season_of_year` at the shipped fixtures (no
-    `season_factor_draw` declared): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`."""
+    """The year is `rosters.yaml: seasons_of_year`, read by `season_of_year` at the shipped fixtures (`season_factor_draw` live since B12b.43, which the
+    clock does not read): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`; the clock does not read the table."""
     w = build_realm(0)
-    assert not w.fixtures.get("season_factor_draw"), "fixture: the shipped realm declares a weather table"
     read = []
     for t in range(5):
         w.tick = t
@@ -207,4 +211,6 @@ def test_nonempty_season_factor_draw_of_wrong_length_is_refused():
     assert "season_factor_draw" in str(e.value) and str(len(wrong)) in str(e.value) \
         and str(len(SEASONS_OF_YEAR)) in str(e.value), str(e.value)
     # The right length is not refused (non-vacuity: the refusal is the length, not the table).
-    assert world_q.season_factor_of(_town(UNIT)) == DEFAULT.get("season_factor")
+    w = _town(UNIT)
+    band = world_q.season_band_of(w)
+    assert world_q.season_factor_of(w) == DEFAULT.get("season_factor") * world_q.SEASON_BAND_FACTORS[band] * world_q.season_term(w, "yield")

@@ -1566,6 +1566,13 @@ def season_band_of(w: World, territory: Optional[str] = None) -> Optional[str]:
     return DEGREE_LABEL[degree_from_net(_sigma_leverage.roll_net_continuous(pool, rng=draw), season_term(w, "hardship") + season_spell(w, territory))]
 
 
+def territory_yield_scale_of(w: World, territory: Optional[str] = None) -> float:
+    """B12b.45 (CL-EVENTS commit (3)): THE SCALE A TENSION CARD PUT ON `territory`'s season factor, `Fixtures territory_yield_scale`'s row for that
+    territory rung (`((rung id, scale), ...)`), and 1.0 for a territory no row names and for no territory (`None`). THE ONE READ of the fixture: the
+    unscaled factor is multiplied by exactly 1.0, so the shipped `()` moves nothing."""
+    return dict(w.fixtures.get("territory_yield_scale")).get(territory, 1.0)
+
+
 def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     """v9 IN-21 / `H-26`: the multiplier on this season's `yield` in `territory`. THE ONE OWNER of the
     term MATTER's yield step scales by.
@@ -1583,16 +1590,18 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
         site `settlement_effect` yet), made a pool by the one rule `pool_of`; the OBSTACLE is the season's
         `hardship` (`season_terms`) plus the spell; the roll is keyed `(world_seed, tick, territory, "season_factor")`;
       * the band the net clears the obstacle by chooses `season_band_factors[band]`, and the return is
-        `season_factor` times it times the season's `yield` term.
+        `season_factor` times it times the season's `yield` term;
+      * on EVERY return path the result is multiplied by the territory's scale (`territory_yield_scale_of`, B12b.45: a Tensions card's, 1.0 where none).
 
     Their season draws are independent (the key holds the territory); their spell term is shared when they
     share a parent rung. `territory` is a `territory` rung's id (`enclosing_territory`'s answer); `None` is a
     place that lies in none (a Site at the realm or a duchy) and keys the draw on `"world"`."""
     base = w.fixtures.get("season_factor")
     band = season_band_of(w, territory)       # `None` at the control: nothing drawn, the bare constant
+    scale = territory_yield_scale_of(w, territory)       # B12b.45: a Tensions card's scale, 1.0 where none names the territory
     if band is None:
-        return base
-    return base * SEASON_BAND_FACTORS[band] * season_term(w, "yield")
+        return base * scale
+    return base * SEASON_BAND_FACTORS[band] * season_term(w, "yield") * scale
 
 
 def _site_rungs(w: World) -> list:
@@ -1611,11 +1620,11 @@ def season_factors_by_rung(w: World) -> tuple:
     in one territory read one factor (the draw is keyed on the territory, so asking twice agrees); with
     `season_factor_draw` at `()` every rung reads the bare constant and nothing is drawn -- and no
     containment walk is made for it either (the answer would be discarded), nor, with the draw on, more than
-    one `season_factor_of` per territory."""
+    one `season_factor_of` per territory. A territory scale (B12b.45) makes the answer differ by territory, so the shortcut is for `()` alone."""
     rungs = _site_rungs(w)
     if not rungs:
         return ()
-    if not w.fixtures.get("season_factor_draw"):
+    if not w.fixtures.get("season_factor_draw") and not w.fixtures.get("territory_yield_scale"):
         base = season_factor_of(w)
         return tuple((rid, base) for rid in rungs)
     by_territory: dict = {}

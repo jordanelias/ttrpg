@@ -253,7 +253,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S13 | B21b (FA) |
-| S14 | B12b (SE+WR), B21c (FA) |
+| S14 | B21c (FA) |
 | S15 | B12c (SE+WR), B19 (MB), B21d (FA), B24a (SC) |
 | S16 | B11F1 (SE), B20 (MB), B25 (FI), B27 (SC), B37 (IN) |
 | S17 | B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B32 (FA), B37p (WR) |
@@ -268,7 +268,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | **M0 · ground** | B04 | B00, B01, B02, B03, B03a, B13, B16M, B04 | R-01, R-02 (on the new instruments), R-03 | all three hold; the other six print their held counts for the first time |
 | **M1 · every outcome is drawn** | B08 | B05 (B08 landed at `3cf56673c`) | R-03 (with R-03.c); R-09.a, .c, .d, .e | R-09 short of R-09.b only |
 | **M2 · persons** | BA1 | — (BA1 landed at `ce61cbf30`) | R-06, R-08, R-09; R-07 if R-07.c reads with its receipt | R-06, R-08, R-09 hold; R-07 holds or is one conjunct short |
-| **M3 · every verb** | B35 | B12a (landed at `ee641cbdd`), B12b, B12c, B21b (landed at `03b3fd6e1`), B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
+| **M3 · every verb** | B35 | B12a (landed at `ee641cbdd`), B12b (landed at `c5ccedcef`), B12c, B21b (landed at `03b3fd6e1`), B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
 | **M4 · every scale** | B36 | B16, B19, B20, B24 (landed at `d04348d6e`), B30, B34 (landed at `3d9f96ec3`), B36 | R-04 | every R-04 conjunct holds |
 | **M5 · the rulings beyond the nine, and the carried positions** | B40 | B18, B31, B33, B37, B38, B39, B40, B41, B11F1, B11F2, B21d, B21s, B37p | none new; R-05 re-read at B38, R-06.e and R-09.b at B39, all nine at B40 | all nine hold |
 | **the settings, then the re-take** | B99 | B98, B99 | all nine, on B98's closing tree (the settings as set) | `m1_acceptance --summary` row 3 reads what the readings say |
@@ -365,7 +365,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 |---|---|---|---|
 | B11F1-flow-se | SE | ED-SE-0057..0058 (0+2) | H-499..H-505 (2+5) |
 | B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) |
-| B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
 | B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) |
@@ -431,7 +430,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
 
-| B12b-weather-arcs-population | `valoria_master_workplan_v12_part24.md`, `_part24_cont.md` |
 | B21c-fa-seats | `valoria_master_workplan_v12_part25.md` |
 | B19-mb-field-calibration | `valoria_master_workplan_v12_part26.md`, `_part26_cont.md`, `_part27.md`, `_part27_cont.md` |
 | B12c-material-verbs-and-valley | `valoria_master_workplan_v12_part28.md`, `_part28_cont.md` |

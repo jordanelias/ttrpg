@@ -46,7 +46,7 @@ from typing import Callable, Mapping, Optional
 from ..data.geography import geography
 from ...substrate import composition
 from ..data import goals as goals_data
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, REALM_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import COVERT_KINDS, SEEN_PREDICATE, faction_prop_id
 from ..data.verbs import CONCLUDED_STEM
@@ -170,14 +170,20 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
 
 def resume(snapshot: bytes, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None, host=None,
            person: Optional[str] = None, tie: Optional[Callable[[tuple], object]] = None,
-           ask: Optional[Callable[[object], int]] = None) -> "dict | SnapshotRefused":
+           ask: Optional[Callable[[object], int]] = None, fixtures: Optional[Fixtures] = None) -> "dict | SnapshotRefused":
     """Continue a saved run for at most `seasons` more (`IS-B3-GO-03`): `state.world.decode` the `snapshot`, look the name it holds up in `SCENARIOS`, and play `run`'s loop
     (`_play`) from the decoded world, with no `build`. A snapshot `decode` refuses comes back as `decode`'s own `SnapshotRefused`; a snapshot whose name is not a key of
     `SCENARIOS` (a world no scenario built holds `None`) comes back as `SnapshotRefused("scenario", ...)`: by value, as `decode`'s refusals are, since the port loads saves.
     The seat is not saved: it is the row's `seat` of the decoded world, or `person`, the client's own choice (`run`'s; a row with no `seat` refuses a call with no `person`).
     `tie` and `ask` are `run`'s, forwarded to `_play` as `run` forwards them (`None` for each, the default, is the first continuation and the first question).
-    The returned dict is `run`'s; its `premise` is the acts the snapshot held, so the run's own are the others, and `seasons` counts those played since the resume."""
-    got = decode(snapshot)
+    The returned dict is `run`'s; its `premise` is the acts the snapshot held, so the run's own are the others, and `seasons` counts those played since the resume.
+    `fixtures` is forwarded to `decode`: the fixtures the saved world was built under, which the snapshot holds only as a digest. Left `None`, the two a scenario row
+    builds under are tried in turn: `DEFAULT_FIXTURES` (every hand-built row), then `REALM_FIXTURES` (`life`: `build_realm(seed)`, uncapped), so a client need not know which
+    row it saved; a snapshot neither accepts comes back as the first's `SnapshotRefused("fixtures_digest", ...)`."""
+    got = decode(snapshot, DEFAULT_FIXTURES if fixtures is None else fixtures)
+    if fixtures is None and isinstance(got, SnapshotRefused) and got.reason == "fixtures_digest":
+        again = decode(snapshot, REALM_FIXTURES)
+        got = again if not isinstance(again, SnapshotRefused) else got
     if isinstance(got, SnapshotRefused):
         return got
     w, name = got

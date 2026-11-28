@@ -18,7 +18,7 @@ import pytest
 
 from ..boot.realm import _slug, build_realm
 from ..data import fixtures as FX
-from ..data.fixtures import DEFAULT_FIXTURES, endowment_for
+from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1, endowment_for
 from ..data.geography import geography
 from ..data.rosters import roster
 from ..gaps import Forbidden, Ungraded, expect_refusal
@@ -116,7 +116,8 @@ def _bands(w) -> dict:
 def test_ground_reaches_produce_the_settlements_do_not_share_one_band():
     """THE SOURCE'S FALSIFIER: under `ground`, after the first yield, the realm's settlements sit in more than one hunger band (a
     territory of fields yields grain and a territory of seams yields none); under `uniform` they still share one."""
-    ground, uniform = build_realm(0, fixtures=GROUND), build_realm(0, fixtures=UNIFORM)
+    x1 = ("subsistence_weight", SUBSISTENCE_X1)                         # B12b.44: the one-band uniform realm is sized at the x1 arm
+    ground, uniform = build_realm(0, fixtures=GROUND.sweep(*x1)), build_realm(0, fixtures=UNIFORM.sweep(*x1))
     run(1, 0, w=ground)
     run(1, 0, w=uniform)
     g, u = _bands(ground), _bands(uniform)
@@ -129,7 +130,8 @@ def test_ground_reaches_produce_the_settlements_do_not_share_one_band():
 def _ground_with(granary_seasons: int):
     # `hunger_severity_draw` False: "every seam cohort fell" would otherwise hold only if no keyed severity draw of the 10 or more is Overwhelming (multiple 0,
     # no fall; about 8% each at the shipped rows), green by luck of the draw; `test_territorial_subsistence.py` pins it the same way.
-    return GROUND.sweep("granary_seasons", granary_seasons).sweep("hunger_severity_draw", False)
+    # B12b.44: the harbour towns' own Sites cover both kinds at the x1 arm (grain 2, salt 1), so the plant names it.
+    return GROUND.sweep("granary_seasons", granary_seasons).sweep("hunger_severity_draw", False).sweep("subsistence_weight", SUBSISTENCE_X1)
 
 
 def _cohorts_by_settlement(w) -> dict:

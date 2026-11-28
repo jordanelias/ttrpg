@@ -31,7 +31,7 @@ from __future__ import annotations
 import pytest
 
 from ..data.rosters import STANCE_VALENCE_SCALE
-from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
+from ..data.fixtures import DEFAULT_FIXTURES, REALM_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
 from ..decision import assemble, choose as CH
@@ -110,7 +110,7 @@ def test_r01_control_with_witness_cut_no_act_is_so_occasioned(monkeypatch):
 @pytest.mark.parametrize("seed", SEEDS)
 def test_r02_withholding_what_acts_observe_changes_later_acts_at_the_shipped_budget(seed):
     _w, shipped = _play(seed)
-    _w, withheld = _play(seed, DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    _w, withheld = _play(seed, REALM_FIXTURES.sweep("observation_deposit_mode", "none"))
     a, b = _sequence(shipped), _sequence(withheld)
     assert a and b, "an arm resolved no act: the comparison below would read an empty season"
     assert a != b, f"seed {seed}: cutting observation deposits left the resolved sequence unchanged"
@@ -136,7 +136,7 @@ def _not_the_top(seed: int, fx: Fixtures | None = None) -> tuple[int, int]:
 @pytest.mark.parametrize("seed", SEEDS)
 def test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temperature(seed):
     shipped, deliberated = _not_the_top(seed)
-    zero, zero_deliberated = _not_the_top(seed, DEFAULT_FIXTURES.sweep("choice_temperature", 0.0))
+    zero, zero_deliberated = _not_the_top(seed, REALM_FIXTURES.sweep("choice_temperature", 0.0))
     assert deliberated > 0 and zero_deliberated > 0, "an arm deliberated over no strict top: the counts below read nothing"
     assert shipped > 0, f"seed {seed}: no deliberation chose other than its leading candidate at the shipped temperature"
     assert zero == 0, f"seed {seed}: {zero} deliberations chose other than the leading candidate at zero temperature"

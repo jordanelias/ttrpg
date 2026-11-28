@@ -1,11 +1,9 @@
 """v10 CL-EVENTS (1) -- FORCE-WEATHER IS PER TERRITORY: `world_q.season_factor_of` is keyed on
 `(world_seed, tick, territory rung id)` and `ProduceInput.factor` carries the factor per rung (M16 (b)).
 
-This file holds the KEY and the INTERFACE; the arm stays `season_factor_draw = ()` (commit (2), B12b.43, is the
-live arm), so every test that needs a draw sweeps it on a world of its own, the way `test_season_weather.py`
-does, with the band factors planted (the shipped ones are all 1.0). B12b.03 adds the SPELL's key: the year and the
-parent rung. The control is that file's `BASE_HASHES` / `BASE_EVENTS` (the realm, arm off, reads the pre-change hash),
-which this change leaves unedited.
+This file holds the KEY and the INTERFACE; the arm ships live since B12b.43, and every test here sweeps it (a table, or `()` for the
+control) on a world of its own, the way `test_season_weather.py` does, with the band factors planted. B12b.03 adds the SPELL's key: the
+year and the parent rung.
 
 THE FALSIFIERS, each with the failure it would show:
   * KEY: with the arm swept on, two territories at one tick draw different factors at some seed. A key that
@@ -227,7 +225,7 @@ def test_spell_table_without_season_table_refused():
     with pytest.raises(Unspecified) as e:
         check_season_weather((), SPELLS)
     assert "season_spell_draw" in str(e.value)
-    w = World(0, DEFAULT.sweep("season_spell_draw", SPELLS))      # a swept arm is refused where it is read
+    w = World(0, DEFAULT.sweep("season_factor_draw", ()).sweep("season_spell_draw", SPELLS))      # a swept arm is refused where it is read
     with pytest.raises(Unspecified):
         world_q.season_factor_of(w)
     check_season_weather(SPREAD, SPELLS)           # non-vacuity: the table beside it is not refused
@@ -241,13 +239,14 @@ def test_season_table_length_must_equal_the_year():
 
 def test_ore_and_timber_ignore_the_weather():
     """B12b.22 (`16_PESSIMIST_SE_B` edit 1): the season's factor multiplies the GROWN kinds only. The realm at seed 0, MATTER's yield
-    step alone for two seasons, the weather arm on (bands planted, the shipped ones are 1.0) against the arm off: ore and timber
+    step alone for two seasons, the weather arm on (bands planted) against the arm off (`()`, swept: the shipped arm is live since B12b.43): ore and timber
     yield equal the arm-off yield rung for rung and season for season; grain differs. FALSIFIER: ore following the weather
     (`f = factor[rung]` for every kind) reads a differing ore and reddens the second assertion."""
     import copy
     from ..boot.realm import build_realm
 
     base = build_realm(0)
+    base.fixtures = base.fixtures.sweep("season_factor_draw", ())
     on = copy.deepcopy(base)
     on.fixtures = on.fixtures.sweep("season_factor_draw", SPREAD)
     seen = {k: 0 for k in ("ore", "timber", "grain")}

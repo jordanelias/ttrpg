@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 543,
-    "uncited": 411,
+    "total": 545,
+    "uncited": 413,
     "of_which_assumption_grade": 9
   },
-  "count": 543,
+  "count": 545,
   "by_module": {
     "engine.dice_engine": 13,
-    "engine.season": 47,
+    "engine.season": 48,
     "mass_battle": 163,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
     "engine.season.settings": 258,
-    "engine.season.realm": 9
+    "engine.season.realm": 10
   },
   "params": [
     {
@@ -216,6 +216,20 @@
       "module": "engine.season",
       "file": "engine/season/data/cast.py",
       "note": "[JUSTIFIED: B10.62 edit 2 -- \"valence is -1 or +1\": a relation's side, its size is the weight's; STANCE_VALENCE_SCALE bounds the row type, not this]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.SUBSISTENCE_X1",
+      "name": "SUBSISTENCE_X1",
+      "value": {
+        "grain": 2,
+        "salt": 1
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/data/fixtures.py",
+      "note": "",
       "citation": null,
       "citation_grade": null
     },
@@ -53309,17 +53323,6 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.season_factor_draw",
-      "name": "season_factor_draw",
-      "value": [],
-      "kind": "vector",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "`H-26`, swept () (control, SHIPPED) / a table of one entry per season (the drawn form on)",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "engine.season.settings.season_spell_draw",
       "name": "season_spell_draw",
       "value": [],
@@ -53338,6 +53341,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-26`, swept 0 (SHIPPED) / 2 / 4",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.territory_yield_scale",
+      "name": "territory_yield_scale",
+      "value": [],
+      "kind": "vector",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-26`, `()` (control, SHIPPED) / a card's `yield_scale` rows",
       "citation": null,
       "citation_grade": null
     },
@@ -53892,7 +53906,7 @@
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-241`, swept False (control, SHIPPED) / True / True on empty treasuries",
+      "note": "`H-241`, swept False (control, the class default) / True (SHIPPED: `REALM_FIXTURES`, the uncapped `build_realm`) / True on empty treasuries",
       "citation": null,
       "citation_grade": null
     },
@@ -55929,6 +55943,17 @@
     {
       "key": "engine.season.realm.wound",
       "name": "wound",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/boot/realm.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.tensions",
+      "name": "tensions",
       "value": false,
       "kind": "scalar",
       "module": "engine.season.realm",

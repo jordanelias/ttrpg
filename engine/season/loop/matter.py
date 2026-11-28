@@ -600,7 +600,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # v9 IN-21 / `H-26`: ONE draw per season per TERRITORY, keyed on the clock and the territory's rung id
     # (v10 CL-EVENTS (1), M16 (b)), owned by `world_q.season_factor_of`; `season_factors_by_rung` is its
     # per-rung reading, `((rung, factor), ...)` for every rung a Site stands on, which `ProduceInput.factor`
-    # carries to `settlements.produce`. With `season_factor_draw` empty (the shipped control) every rung
+    # carries to `settlements.produce`. With `season_factor_draw` empty (the control arm; live since B12b.43) every rung
     # reads the bare `season_factor` and nothing is drawn.
     factor = world_q.season_factors_by_rung(w)
     scale_ = w.fixtures.get("condition_scale")

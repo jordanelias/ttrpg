@@ -258,7 +258,7 @@ EST: 5 h [estimate: 0.4 h × 6 positions + 2.5 h, E-15; §2.2's 4 h]
 | B37p.02 | harm to a man's kin weighs on him as harm to himself | CP-T10-09 (AM-F-03) | BUILD | MOVER(behaviour) | B37p.01 |
 | B37p.03 | an estate passes by its heir's claim | CP-T10-07 (AM-F-02, AM-F-20) | BUILD | MOVER(encoding) | B37p.01; Batch B21 (BIND_C `succeed`) |
 | B37p.04 | `tend` heals a share of the headroom; its refusal names its clause | CP-T10-04 items 3, 4 | BUILD | MOVER(behaviour) | Batch B12a (B12a.69) |
-| B37p.05 | the wounded mend over seasons, and the mend is seen | CP-T10-04 items 0–2 (AM-F-06); `U5d_WR_owed_edits` §3 (the recovery half) | BUILD | MOVER(behaviour) | B37p.04; Batch B12b (B12b.14, B12b.01) |
+| B37p.05 | the wounded mend over seasons, and the mend is seen | CP-T10-04 items 0–2 (AM-F-06); `U5d_WR_owed_edits` §3 (the recovery half) | BUILD | MOVER(behaviour) | B37p.04; Batch B12b @c5ccedcef5d39e5409998e2187dedfe1dab02865 (B12b.14, B12b.01) |
 | B37p.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B37p.01 to B37p.05 |
 
 Placement (§5.6): no member names these ids (the batch has no proposal members); each entry's own text orders it ("after CP-T10-06" for -07 and -09); the rest at the tail in the intake's order (-06, -07, -09, -04), -09 moved before -07 because it is one clause and -07 adds the batch's encoding mover, which goes last among the movers it does not depend on (`V12_STRUCTURE_part2.md` §5.9: EQUAL and smaller movers first where the source's order allows).

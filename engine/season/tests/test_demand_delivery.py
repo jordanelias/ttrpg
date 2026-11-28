@@ -44,7 +44,7 @@ from __future__ import annotations
 
 import pytest
 
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, X1_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import (
     REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS,
@@ -62,12 +62,12 @@ from ..queries import world_q
 from ..state.carriers import Act, Claim, Person, Question, Rung, Tenure, View
 from ..state.ids import H, draw_factory
 
-WEIGHTS = DEFAULT_FIXTURES.get("subsistence_weight")
+X1 = X1_FIXTURES      # B12b.44: the tests that plant it are sized at the x1 arm (grain 2, salt 1)
 
 
-def _want(weight: int) -> dict:
+def _want(weight: int, fixtures=DEFAULT_FIXTURES) -> dict:
     """What a person of this weight eats a season, recomputed from the fixture rather than copied."""
-    return {k: wt * weight for k, wt in sorted(WEIGHTS.items()) if wt * weight > 0}
+    return {k: wt * weight for k, wt in sorted(fixtures.get("subsistence_weight").items()) if wt * weight > 0}
 
 
 def _matter(w):
@@ -171,14 +171,14 @@ def test_19d_a_larder_that_was_never_stocked_reports_its_first_dearth_once_and_i
     """THE CROSSING, NOT THE STATE (`loop/matter.py`, `H-160`, REWRITTEN BY D-69 at B12b.40). An empty larder is not drawn, so no larder write carries the gap;
     the ladder's first rung reports it ONCE, in the season it is first short, on the first short cohort's body write. The next season the same person is
     still short, `_subsistence_shortfall` still says so, and nothing is reported again."""
-    w = S.build()
+    w = S.build(fixtures=X1)
     w.rungs[S.HUNGRY].stores = {}
     _, emitted = _matter(w)
-    assert _shortfalls(emitted) == [(S.HUNGRY, f"{SHORTFALL_PREDICATE}:{k}", v) for k, v in sorted(_want(S.COHORT_WEIGHT).items())]
-    assert w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT)
+    assert _shortfalls(emitted) == [(S.HUNGRY, f"{SHORTFALL_PREDICATE}:{k}", v) for k, v in sorted(_want(S.COHORT_WEIGHT, X1).items())]
+    assert w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT, X1)
     w.tick += 1
     _, again = _matter(w)
-    assert _shortfalls(again) == [] and w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT)
+    assert _shortfalls(again) == [] and w._subsistence_shortfall[S.POPULACE] == _want(S.COHORT_WEIGHT, X1)
 
 
 @pytest.mark.parametrize("build,seasons", [(P.tiny_world, 3), (lambda: HL.build_world(0), 3)])
@@ -220,7 +220,7 @@ def _held(w, pid, subject=S.HUNGRY) -> dict:
 
 
 def test_19d_the_holder_who_was_elsewhere_holds_the_shortfall_and_so_do_the_hungry():
-    w = S.build()
+    w = S.build(fixtures=X1)
     need, got = world_q.demanded(w, S.HUNGRY), world_q.delivered(w, S.HUNGRY)
     _season(w)
     want = {f"{SHORTFALL_PREDICATE}:{k}": need[k] - got[k] for k in need if need[k] > got[k]}
@@ -233,7 +233,7 @@ def test_19d_the_holder_who_was_elsewhere_holds_the_shortfall_and_so_do_the_hung
 
 
 def test_19d_control_without_the_hold_the_steward_learns_nothing():
-    w = S.build(steward_holds=False)
+    w = S.build(fixtures=X1, steward_holds=False)
     _season(w)
     assert _held(w, S.STEWARD) == {}
     assert not [c for c in w.persons[S.STEWARD].ledger if c.subject == S.HUNGRY], (
@@ -242,7 +242,7 @@ def test_19d_control_without_the_hold_the_steward_learns_nothing():
 
 
 def test_19d_the_none_arm_deposits_no_shortfall():
-    w = S.build(fixtures=DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    w = S.build(fixtures=X1.sweep("observation_deposit_mode", "none"))
     _season(w)
     assert _held(w, S.STEWARD) == {} and _held(w, S.POPULACE) == {}
     assert _shortfalls(w.log), "the record was still made; only its deposit is the arm's"
@@ -409,8 +409,8 @@ def test_19d_the_next_season_delivers_more_where_the_steward_holds_the_town():
     """THE OBSERVABLE G3 IS FOR: `delivered` at the hungry town rises the season after a shortfall is
     seen by someone who can answer it. CONTROL: the same world without the `hold` edge. Nobody who
     can give ever learns of the dearth, and nothing arrives."""
-    treated = S.run(3, seed=4)   # seed re-picked at B06.99: the stream changed (was 0)
-    control = S.run(3, w=S.build(seed=4, steward_holds=False))
+    treated = S.run(3, w=S.build(seed=4, fixtures=X1))   # seed re-picked at B06.99: the stream changed (was 0)
+    control = S.run(3, w=S.build(seed=4, fixtures=X1, steward_holds=False))
     sent = [t for s in treated["seasons"] for t in s["transfers"]
             if t["claim_sourced"] and t["outcome"] == "transfer.made"]
     assert sent, treated["seasons"]

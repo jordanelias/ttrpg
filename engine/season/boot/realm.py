@@ -22,11 +22,12 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
+from ..data import tensions as tensions_data
 from ..queries.person_q import BOND_STEM, DUTY_TAKEN, SELF_STEM, holds_self_key, known_persons
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, demanded, enclosing_territory,
                                home_of as home_of_q, landing_floor, members, subsistence_draw, treasury_above)
 from ..gaps import Forbidden, Unowned, Unspecified
-from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD, endowment_for
+from ..data.fixtures import DEFAULT_FIXTURES, REALM_SWEEP, SITE_YIELD, endowment_for
 from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTION_CREED, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
@@ -1372,10 +1373,23 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
     return n
 
 
+def draw_tension(world_seed: int, cards: tuple | None = None):
+    """B12b.45 (CL-EVENTS commit (3)): THE WORLD'S TENSION, or `None` over an empty deck. ONE card, equally likely, by the factory every other world-gen
+    draw keys on, `draw_factory(world_seed, lambda: 0)("world", "tension")`, and each of its `choose_one` lists by the same factory keyed on the card's id and
+    the list's ordinal (`(card id, "choose_one:<ordinal>")`). A function of the seed alone: it reads no World and writes none, so asking twice agrees.
+    `cards` (default: `tensions.yaml`, `data/tensions.py::cards`) is the deck."""
+    deck = tensions_data.cards() if cards is None else cards
+    if not deck:
+        return None
+    draw = draw_factory(world_seed, lambda: 0)
+    card = draw("world", "tension").pick(deck)
+    return tensions_data.resolve(card, lambda cid, i, options: draw(cid, f"choose_one:{i}").pick(options))
+
+
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
                 guards: bool = True, acquaintances: bool = True, cast_attributes: bool = True,
-                fixtures=None, wound: bool = False) -> World:
+                fixtures=None, wound: bool = False, tensions: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
 
     `wound` (B12a.07) mints the Calamity's source: the one Site `valoria_geography_v30.yaml` T15's `wound:` row names
@@ -1383,7 +1397,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     `False` (the default) is the CONTROL ARM: no row is read and the realm is byte-identical to the build without it.
     [ASSUMPTION; medium; Jordan to correct; revert: delete the row] The row's kind, `harbour`, is a kind the roster holds.
 
-    `fixtures` (None: `DEFAULT_FIXTURES`) is the injection point of a sweep: `fixtures=DEFAULT_FIXTURES.sweep("generated_attribute_range", (2, 2))` builds the world H-856's control reads.
+    `tensions` (B12b.45, CL-EVENTS commit (3)) draws ONE card of `tensions.yaml` (`draw_tension`: equally likely, keyed on the world seed) and applies it at the
+    world's making: its `goal` effects' rows join `goals.yaml`'s in the one `seed_goals` call, and its `yield_scale` effects ride a NEW `Fixtures` value by `.sweep` (the shared
+    default is never mutated). A card is a world-gen draw, read once here by no step of the season loop, and adds no World field. `False` (the default) is the CONTROL ARM,
+    and so is `True` over an empty deck or a card with no effects: the realm is byte-identical to the build without it.
+
+    `fixtures` (None: `REALM_FIXTURES`, `field_provisioning` on, when `cap` is None -- the shipped realm; `DEFAULT_FIXTURES` when capped, a reduced harness realm whose
+    treasuries are not the shipped ones) is the injection point of a sweep: `fixtures=DEFAULT_FIXTURES.sweep("generated_attribute_range", (2, 2))` builds the world H-856's control reads.
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
     (`data/cast.py::attributes_of`), over the sheet `state/carriers.py::generated_attributes` DRAWS (`Fixtures
     generated_attribute_range`, B01a.01) for every key a row does not author, and seats a drawn sheet on every other
@@ -1441,11 +1461,24 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     exist, wearing a schema's clothes"*.
     """
     geo, ven = _load(GEOGRAPHY), _load(VENUES)
-    w = World(seed, DEFAULT_FIXTURES if fixtures is None else fixtures)
+    # B12b.47 (IN-52's flip, `H-241`, DEF-7): THE SHIPPED REALM FIELDS ITS TROOPS BOUNDED BY ITS TREASURY. `Fixtures.field_provisioning` stays False
+    # (every hand-built world, test, harness and case world reads the control and moves no pinned hash); the uncapped realm, which B12a stocks (the
+    # seat rung, `granary_seasons`) so that `SeasonDriver`'s B12b.24 refusal passes, reads `DEFAULT_FIXTURES.sweep(*REALM_SWEEP)`, which is `REALM_FIXTURES` (the one sweep, named once). A capped realm
+    # is a reduced harness realm whose treasuries are not the shipped ones (it would trip that refusal) and reads `DEFAULT_FIXTURES`; a caller that
+    # hands its own `fixtures` (a sweep, a control) is read as handed. [ASSUMPTION; medium; Jordan to correct; revert: `REALM_FIXTURES = DEFAULT_FIXTURES`.]
+    # LF-1 is REVERTIBLE (DEF-7).
+    if fixtures is None:
+        fixtures = DEFAULT_FIXTURES.sweep(*REALM_SWEEP) if cap is None else DEFAULT_FIXTURES
+    w = World(seed, fixtures)
     if not cast_attributes:
         # The control arm holds no drawn sheet at all: the in-play mint (`loop/census.py::_individuate`) reads the same
         # range, so a person individuated mid-season would otherwise hold one.
         w.fixtures = w.fixtures.sweep("generated_attribute_range", None)
+    tension = draw_tension(seed) if tensions else None
+    if tension is not None:
+        goals_data.plant(tension.goals)
+    if tension is not None and tension.yield_scale:
+        w.fixtures = w.fixtures.sweep("territory_yield_scale", tension.yield_scale)
 
     # -- the canonical layers -------------------------------------------------
     realm = "r_valoria"
@@ -2239,8 +2272,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # unless a `release` ends it, while a `seat_holders` referent follows the seat (IN-67). `goals=False`
     # builds the control arm.
     # v9 FA-06: the world that seats an organization no row is about REFUSES (`goals_complete`).
+    # B12b.45: the drawn Tension's goal rows are seeded beside the file's own, in the one call (`derives` resolves across both).
     w._goal_census = seed_goals(
-        w, tuple(g for g in goals_data.goals() if goals_data.org_faction(g.org_kind, g.org) not in absent)
+        w, tuple(g for g in goals_data.goals() + (tension.goals if tension is not None else ())
+                 if goals_data.org_faction(g.org_kind, g.org) not in absent)
         if goals else (), w._office_census["authored"],
         {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None,
         complete=goals and goals_complete)

@@ -2385,9 +2385,13 @@ rosters:
       timber, ore and coin are stored and not eaten. They are registered in `matter_kinds` and
       absent here, so a draw against them raises — which is the refusal above doing its job on
       the very first kind somebody adds to a larder by mistake.
+      ⚠ B12b.44 (CR-22): THE x5 ARM SHIPS, chosen by the reading rule on `H-11` (the arms, the rule
+      and its reading (a) are that row's `cite:`). x1 (grain 2, salt 1) is the control; tests whose
+      scenarios are sized at it plant it (`data/fixtures.py::SUBSISTENCE_X1`).
+      [ASSUMPTION; medium; Jordan to correct; revert: x1, grain 2, salt 1]
     weights:
-      grain: 2
-      salt:  1
+      grain: 10
+      salt:  5
   hunger_bands:
     source: "REM-50, as repaired by AM-A-04 (`workplans/valoria_master_workplan_v10_part13.md`, REM-50): a settlement's hunger, read by `world_q.hunger`"
     open: false
@@ -2438,11 +2442,12 @@ rosters:
       THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names
       (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a
       value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty
-      (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so
-      a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest
-      under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2).
-      `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.
-    values: {Overwhelming: 1.0, Success: 1.0, Partial: 1.0, Failure: 1.0}
+      (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT (1.25, 1.0, 0.8, 0.4) (B12b.43), the
+      set whose long-run mean harvest factor is one at the shipped pool (`season_endurance` 0, hardship 0, no spell): the ladder lands
+      Overwhelming 0.380, Success 0.382, Partial 0.127, Failure 0.110 there, so the set sums to 1.003 (a forcing moves variance, not the
+      long-run mean), band order kept. A hardship or a spell moves the band mix and the mean with it (B98).
+      `[ASSUMPTION; medium; Jordan to correct; revert: 1.0 on every band, the control's value]`.
+    values: {Overwhelming: 1.25, Success: 1.0, Partial: 0.8, Failure: 0.4}
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99
@@ -2770,6 +2775,18 @@ rosters:
       faction's goal made specific). `influences` -- they commit to both. The roster names the
       two relations and nothing else: which commits follow is IN-68's seeding rule, not a definition.
     values: [establishes, influences]
+
+  tension_effects:
+    source: "B12b.45 (CL-EVENTS commit (3), the Tensions receiver) -- what a card of `engine/season/tensions.yaml` may do at the world's making."
+    open: false
+    note: >-
+      A TENSION is a strain drawn at the world's making that sets some people's aims, as a tension in a household is there before anyone acts
+      on it. One card is drawn, equally likely, by `boot/realm.py::build_realm(tensions=True)` and read once, at build; it fires nothing later
+      and writes no standing, seat, tenure or stance. The closed set of what a card may do, read by `data/tensions.py` (the ONE loader), which
+      refuses an effect `kind:` off this list. `goal` -- one goals.yaml row, seeded beside the file's own rows (`seed_goals`), so the people it
+      binds attend to it. `yield_scale` -- a territory's season factor scaled for the world's life (`Fixtures territory_yield_scale`). A
+      third kind is a new reader, a design change and not a table edit.
+    values: [goal, yield_scale]
 
   thrust_axes:
     source: "CL-THRUST B2.1 (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §2.1; B10-05) -- what a goal row's optional `axis:` may name: the lines a thrust runs along, each with its opposite pole where it has one."
@@ -4668,8 +4685,8 @@ rosters:
   tally_axes:
     source: "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)"
     note: >-
-      THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY (the control: `world_q.tally_reached` returns `()` and `questions_for` is
-      byte-identical). `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is
+      THE AXES A PERSON KEEPS A TALLY ON, shipped EMPTY at B12b.13 (the control: `world_q.tally_reached` returns `()` and
+      `questions_for` is byte-identical); B12b.15 authors two (below), content each, tagged. `members: {<axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}}`: an axis is
       reached, for a person, by the referent about which his OWN ledger holds at least `at` claims of the `counts` kinds, the referent
       one of the `about` class (`World.class_of`). A claim of the person's own ledger and nobody else's: the count is per
       (person, axis), never summed across holders (L3 clause 2). Reaching the count FORCES NO ACT (L5): `questions_for` stamps the
@@ -4677,9 +4694,30 @@ rosters:
       the referent's class form on it for the chooser's draw. Loaded by `data/rosters.py::_load_tally_axes` (`counts` non-empty, no
       kind twice; `about` one of the three; `at` a whole number above 0), `counts` held at import to `data/verbs.py::EVENT_KINDS`
       (`_check_tally_axes`). The members are CONTENT, authored design-first per arc, not a dial.
+      `at` counts CLAIMS, not distinct conditions (three claims of one kind reach it as three kinds would), and a person can be reached
+      about himself: `world_q.tally_reached` excludes no referent for being the holder, which is intended (a man's own ledger holds his
+      own failures, and the question it opens is his to answer).
       `about` is spelled lower-case and read as the `referent_classes` member of that name (`about_classes` lists the three it may be).
     about_classes: [Person, Office, Rung]
-    members: {}
+    # B12b.15 (`09_WR_provided_arcs` edit 4; H-546): the two axes the corpus overlay binds ARC-47's and NSC-08's private-counter rows
+    # to (`exercises:` token `axis:<id>`, `harness/exercises.py::classify`). Each counts kinds whose deposit is ABOUT THE ACTOR
+    # (`state/attribution.py::anchor_of`, tier 1: an act-caused Event anchors on who acted), so the referent is the ruler whose own
+    # acts these are, read off the holder's own ledger. `at: 3` is the cases' own "three conditions". A held claim decays and is
+    # evicted, so the tally is what the holder STILL holds, not a counter that never falls (`09_WR_audit.md` §13's restatement).
+    # `rung.ceded` is in neither member: it is the CONSENSUAL cession (`give` on a Rung, `loop/effects_information.py`'s `_eff_give`), which
+    # `world_q.sworn_holdings` forms as a REWARD to a sworn man, so it is no failure of the one who gave.
+    members:
+      # ARC-47 ("The Counter She Keeps"): what an officer holds against the leadership she serves -- his writ made and moving no one
+      # (`dispensation.ignored`, the standing that did not hold) and a town he yielded under arms (`place.surrendered`): territory
+      # lost without a field fought. The case's loyalty trigger has no kind here: a loyalty that falls is the follower's act, and its
+      # deposit is about the follower, not the leader.
+      # [ASSUMPTION; medium; Jordan to correct; revert: delete this member and ARC-47's two `axis:rule_failures` overlay rows]
+      rule_failures: {counts: [dispensation.ignored, place.surrendered], about: person, at: 3}
+      # NSC-08 ("Ehrenwall's Coup"): the military order's readiness against the ruling authority -- a field he marched to and lost
+      # (`field.lost`, `march`'s Lost band, anchored on the marcher) and a town he yielded under arms. At the count the question is
+      # mandatory (A-47) and its rows on a Person are the order's to choose among: the ultimatum is an act.
+      # [ASSUMPTION; medium; Jordan to correct; revert: delete this member and NSC-08's overlay file]
+      military_failures: {counts: [field.lost, place.surrendered], about: person, at: 3}
 
 tables:
 

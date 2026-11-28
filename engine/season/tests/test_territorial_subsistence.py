@@ -48,6 +48,7 @@ from pathlib import Path
 import pytest
 
 from ..data import files
+from ..data.fixtures import SUBSISTENCE_X1
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import PURSUITS, table
 from ..data.requires import SHORTFALL_PREDICATE
@@ -111,9 +112,10 @@ def _matter(w):
     return d.matter(mint_token(w, WriteClass.MATTER), [])
 
 
-def _want(weight: int) -> dict:
-    """What a person of this weight eats a season, recomputed from the fixture rather than copied."""
-    return {k: wt * weight for k, wt in sorted(WEIGHTS.items()) if wt * weight > 0}
+def _want(weight: int, fixtures=None) -> dict:
+    """What a person of this weight eats a season, recomputed from the fixture rather than copied (`fixtures`: the world's, where it plants an arm)."""
+    weights = WEIGHTS if fixtures is None else fixtures.get("subsistence_weight")
+    return {k: wt * weight for k, wt in sorted(weights.items()) if wt * weight > 0}
 
 
 @pytest.fixture(scope="module")
@@ -294,7 +296,7 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
     every settlement's `demanded` exceeds its `delivered`. Nothing here empties a store. PINNED TO `endowment_mode` `uniform` (B12a.54): under `ground`
     a harbour town holds stock at build and is not in dearth. PINNED TO `hunger_severity_draw` `False` (B12a.62): the fall asserted is `arm x shortfall`, the
     undrawn arm's arithmetic."""
-    w = build_realm(0, fixtures=UNIFORM_FLAT_FALL)
+    w = build_realm(0, fixtures=UNIFORM_FLAT_FALL.sweep("subsistence_weight", SUBSISTENCE_X1))   # B12b.44: sized at the x1 arm
     w.fixtures = w.fixtures.sweep("body_step", arm)
     pairs = _holder_and_cohort_pairs(w)
     assert pairs, "no office-holder lives under a settlement with a cohort; the falsifier is vacuous"
@@ -314,7 +316,7 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
         assert holder not in w._subsistence_shortfall
         assert w.persons[cohort].body < before[cohort], (
             f"{cohort}, the population of {rung}, is in the same dearth and its body did not move")
-        assert w._subsistence_shortfall[cohort] == _want(w.persons[cohort].weight), (
+        assert w._subsistence_shortfall[cohort] == _want(w.persons[cohort].weight, w.fixtures), (
             "the cohort's shortfall is not its whole weighted want on an empty ladder")
         lost = arm * sum(w._subsistence_shortfall[cohort].values())
         assert w.persons[cohort].body == max(0, before[cohort] - lost), (
@@ -370,7 +372,7 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     from .test_b11a_scores_and_obstacle import revert_b11a_scores
     revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    w = build_realm(0, fixtures=NO_GRANARY_FLAT_FALL)
+    w = build_realm(0, fixtures=NO_GRANARY_FLAT_FALL.sweep("subsistence_weight", SUBSISTENCE_X1))   # B12b.44: sized at the x1 arm
     assert w.fixtures.get("body_step") == SHIPPED_ARM and SHIPPED_ARM in LIVE_ARMS, (
         "this test reads the SHIPPED default, unswept")
     scale = w.fixtures.get("condition_scale")
@@ -394,7 +396,7 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     assert checked == len(short) and fell >= 1, (checked, fell)
     lowest = min(w.persons[pid].body for pid in cohorts)
     # the home's falsifier, re-derived at the shipped step: the lowest cohort stands at scale - step * (its want)
-    assert lowest == scale - SHIPPED_ARM * max(sum(_want(cohorts[pid].weight).values()) for pid in short), (
+    assert lowest == scale - SHIPPED_ARM * max(sum(_want(cohorts[pid].weight, w.fixtures).values()) for pid in short), (
         f"the lowest cohort body is {lowest}")
     assert lowest < scale
 
@@ -421,7 +423,7 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     barrier is exactly `before - drawn + produced` -- so the draw moved real units out of real
     larders, not merely a number in a record. PINNED TO `endowment_mode` `uniform` (B12a.54): its first draw finds no stock anywhere and its second is in
     surplus only where every larder began empty."""
-    w = build_realm(0, fixtures=UNIFORM)
+    w = build_realm(0, fixtures=UNIFORM.sweep("subsistence_weight", SUBSISTENCE_X1))   # B12b.44: the second draw's surplus is sized at the x1 arm
     _matter(w)
     w.tick += 1
     seen: list = []
