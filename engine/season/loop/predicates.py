@@ -38,7 +38,7 @@ from ..trace_log import TRACE
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    CONCURRED_BASES, CONFIRMED_BASES, REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings,
+    BENCH_BASIS, CONCURRED_BASES, CONFIRMED_BASES, REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings,
     may_claim, may_fill, may_revoke, may_sit, may_wage, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
@@ -115,7 +115,7 @@ def _refuse_at(clause: str, ids: str, said: Optional[str] = None) -> Answer:
 
 # The verb whose act mints a `resolution` (`loop/effects_information.py::_eff_determine`'s Record disposal site): a `resolution` another
 # verb made -- a `create_record` declaring the kind -- is no body's decision and confirms nothing.
-_NOMINATING_VERBS = frozenset({"determine"})
+_NOMINATING_VERBS = frozenset({BENCH_BASIS})
 
 
 def confirming_resolutions(w: "World", actor: Optional[str], via: Optional[str], seat: Optional[str], conferee: Optional[str]) -> tuple:
