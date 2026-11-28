@@ -1079,7 +1079,12 @@ class MassBattleInput:
       * `pool_add`  -- B19.02: the obedience draw's pool addend; `0`, the default, is the field as it was;
       * `pool_floor` -- B19.02: the obedience draw's pool floor; `0`, the default, is the field as it was;
       * `obey_task` -- B19.02: the obedience draw's task; `0.0`, the default, is the field as it was. (No reader yet: the draw
-                       lands with B19.05; the four fields are inert here)."""
+                       lands with B19.05; the four fields are inert here);
+      * `entry_stamina` -- B19.28: `(attacker, defender)`, each side's share of full stamina at the start, in `[0, 1]`. A side's
+                       entry is one number (the whole side), or a tuple of numbers, one per unit of that side's army in the order
+                       the field builds them (the per-part form, so a later bout can start each unit at what the bout before left
+                       it); a unit stands in columns, and a column two units stand in takes the lower entry. `(1.0, 1.0)`, the
+                       default, writes nothing: the field as it was. Refused, not ignored, where the engine keeps no column grid."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
@@ -1098,6 +1103,7 @@ class MassBattleInput:
     pool_add: int = 0
     pool_floor: int = 0
     obey_task: float = 0.0
+    entry_stamina: tuple = (1.0, 1.0)
 
 
 # B17.03: THE FIELD'S OUTPUT RECORD, on every arm. `modules/mass_battle/massbattle.py::resolve_field` returns one; the host adapter

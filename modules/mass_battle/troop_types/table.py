@@ -22,7 +22,7 @@ site kind that is not a member of its closed set; an arm whose mass is stated bo
 combat's export; a `secondary` equal to the `primary`; (B19a.01) an arm with neither a `duel_key` nor a `sidearm`, a `duel_key` or
 `sidearm` that is not a key of personal combat's weapon export, a `duel_key_status` outside its closed set, a `contact` value with
 no `status` (a null value is admitted only for `exposure.base`), a `matchups` row naming a class, a situation, a `closes` or a
-`status` outside its closed set; a column (or section) name that is also a field of `config.EngineConfig`
+`status` outside its closed set; (B19.28) a `fatigue` row that is not a number of at least 0, or a column outside `FATIGUE_COLUMNS`; a column (or section) name that is also a field of `config.EngineConfig`
 (B17.12: a NAME is the troop file's or the config's, never both; a value copied under another name is not seen). The mass check reads
 `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as DATA, never an import of `modules/combat/`.
 `check` is the one validator. It opens that export, so it runs where a file may be opened -- the exporter, on what it
@@ -37,14 +37,14 @@ from typing import Optional
 
 __all__ = ['TroopFileError', 'check', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
            'stats_for', 'is_mounted', 'roles_for', 'training_site_for', 'loadout_for_names', 'cell_cap_of',
-           'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
+           'fatigue', 'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
 
 _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engine_v1.json')
 
 #: The keys the exporter adds to the file's own; the loader accepts and ignores them.
 META_KEYS = ('_generated', 'schema_version', 'source')
-HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'contact', 'matchups', 'troops')
+HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'contact', 'matchups', 'fatigue', 'troops')
 ROLE_COLUMNS = ('shape', 'instructions')
 ARM_COLUMNS = ('class', 'mass_kg', 'duel_key', 'duel_key_status', 'sidearm')
 CLASS_COLUMNS = ('reach', 'support_ranks')
@@ -68,6 +68,8 @@ NULLABLE_VALUE = 'contact.exposure.base'
 TROOP_COLUMNS = ('skill', 'discipline', 'morale', 'strength', 'mounted', 'charge', 'wheel', 'default_role', 'cell_cap',
                  'ranks', 'primary', 'secondary', 'armour', 'roles', 'training_site', 'min_site_condition', 'upkeep')
 STAT_COLUMNS = ('skill', 'discipline', 'morale')
+#: The `fatigue` rows (B19.28: `lull_recover` only; B31.06 adds the rest). Each is a bare number, never null.
+FATIGUE_COLUMNS = ('lull_recover',)
 
 
 class TroopFileError(ValueError):
@@ -155,7 +157,7 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
     if combat_weapons is None:
         combat_weapons = combat_weapon_keys()
     for column in (HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + CONTACT_COLUMNS + EXPOSURE_COLUMNS + LEVEL_COLUMNS
-                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + TROOP_COLUMNS):
+                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + FATIGUE_COLUMNS + TROOP_COLUMNS):
         if column.upper() in config_names:
             raise TroopFileError(f"troop file: the name {column!r} is a column here and a field of `EngineConfig` "
                                  f"(`config.py`); a value has one owner, never both")
@@ -190,6 +192,10 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
                                  f"combat's export; keep it in one place")
     _check_contact(data['contact'], arms, tiers)
     _check_matchups(data['matchups'])
+    _columns('fatigue', data['fatigue'], FATIGUE_COLUMNS, FATIGUE_COLUMNS)
+    for key, value in data['fatigue'].items():
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+            raise TroopFileError(f"fatigue.{key}: a number of at least 0 is required; got {value!r}")
     for name, row in data['troops'].items():
         where = f"troops.{name}"
         _columns(where, row, TROOP_COLUMNS, TROOP_COLUMNS)
@@ -325,6 +331,11 @@ def cell_cap_of(troop_type) -> Optional[int]:
     density flag and the fallthrough to `CELL_CAP` are `config.cell_cap_for`'s."""
     row = _rows().get(troop_type) if isinstance(troop_type, str) else None
     return row['cell_cap'] if row is not None else None
+
+
+def fatigue() -> dict:
+    """The `fatigue` block as a fresh dict, `{row: number}` (B19.28: `lull_recover`, the stamina a column block regains at a between-turn lull)."""
+    return dict(_data()['fatigue'])
 
 
 def charge_of(troop_type) -> int:

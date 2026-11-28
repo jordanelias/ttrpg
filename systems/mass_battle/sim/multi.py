@@ -17,6 +17,7 @@ import math
 import modules.mass_battle.hierarchy.units as _hu
 import modules.mass_battle.orchestration as _orch
 import modules.mass_battle.percell as _percell
+from modules.mass_battle.troop_types import table as _troops
 
 
 def between_turn_recovery(unit):
@@ -25,7 +26,7 @@ def between_turn_recovery(unit):
     if unit.routed or unit.disordered:
         return
     for b in (unit.col_grid or ()):   # the one stamina ledger (`_ColBlock.stamina`); None on the PER_CELL-off arm
-        b.stamina = min(float(_orch.STAMINA_MAX), b.stamina + _orch.BETWEEN_TURN_STAMINA_RECOVERY)
+        b.stamina = min(float(_orch.STAMINA_MAX), b.stamina + _troops.fatigue()['lull_recover'])
     for atom in unit.units:
         # [A6, ED-MB-0067 Part A] Resupply at the between-turn lull. Per-subunit (Unit.resupply_volleys,
         # capped at MB_VOLLEYS_START): not singled out by troop type (a melee atom's volleys count is simply never read -- see fire()'s own

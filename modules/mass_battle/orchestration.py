@@ -1480,7 +1480,7 @@ from modules.mass_battle.battle_loop import run_battle  # the name is re-exporte
 # [ASSUMPTION: between-turn recovery constants are tuning parameters —
 #  basis: no canonical source specifies inter-turn recovery rates]
 # [canonical: params/mass_combat.md §PP-712 — "Discipline persists between battles"]
-BETWEEN_TURN_STAMINA_RECOVERY = 30  # partial rest during disengagement
+# (the stamina a lull returns is `fatigue.lull_recover` in `references/troops.yaml`, read by `sim/multi.py::between_turn_recovery`)
 BETWEEN_TURN_MORALE_RECOVERY = 0    # morale does NOT recover between turns
 # HP does NOT recover between turns (casualties are permanent within a battle)
 # Discipline persists (canonical PP-712)
@@ -1608,4 +1608,4 @@ def discipline_check_cascade(unit):
     return net >= MORALE_CASCADE_OB
 
 
-__all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'phase_boundary', 'Unit', 'Army', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
+__all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'phase_boundary', 'Unit', 'Army', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_MORALE_RECOVERY', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']

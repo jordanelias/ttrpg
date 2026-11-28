@@ -65,6 +65,7 @@ DATA = {'_generated': 'tools/export_troops.py -- do not hand-edit; edit referenc
                                                           'heavy': {'value': 0.1, 'status': 'seed'}}},
                          'profile': {'foot': {'value': 1.0, 'status': 'seed'}, 'mounted': {'value': 1.6, 'status': 'seed'}}}},
  'matchups': [],
+ 'fatigue': {'lull_recover': 30},
  'troops': {'levy': {'skill': 1,
                      'discipline': 1,
                      'morale': 2,

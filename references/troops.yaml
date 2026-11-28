@@ -121,6 +121,12 @@ contact:
 # `d` range over `table.MATCHUP_CLASSES`, `situation` over `table.SITUATIONS`, `closes` over `table.CLOSES`, `status` over `table.STATUSES`.
 matchups: []
 
+# What tires a body (`fatigue`, a closed set of rows, each a bare number): `lull_recover` is the stamina a column block regains at
+# each between-turn lull, on the 0..STAMINA_MAX scale (B19.28: `BETWEEN_TURN_STAMINA_RECOVERY`, `orchestration.py`, deleted; its one reader
+# is `systems/mass_battle/sim/multi.py::between_turn_recovery`). The other rows (`clash_drain`, `rest`, `fast_move_drain`, `entry`) are B31.06's.
+fatigue:
+  lull_recover: 30         # BETWEEN_TURN_STAMINA_RECOVERY (orchestration.py), per lull (today)
+
 # One row per troop type, in `TROOP_TYPE_STATS`' order, then the unmustered body.
 #   skill, discipline, morale   today's stat line (§B.2); a row with a null among the three has no preset (`stats_for` None).
 #                               `skill` was `power`, values unchanged: the men's martial skill on the duel's `faculty` scale (B19a.01).

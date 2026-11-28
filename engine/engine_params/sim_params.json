@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 542,
-    "uncited": 410,
+    "total": 541,
+    "uncited": 409,
     "of_which_assumption_grade": 9
   },
-  "count": 542,
+  "count": 541,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 47,
-    "mass_battle": 162,
+    "mass_battle": 161,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
@@ -1735,17 +1735,6 @@
       "citation_grade": null
     },
     {
-      "key": "mass_battle.BETWEEN_TURN_STAMINA_RECOVERY",
-      "name": "BETWEEN_TURN_STAMINA_RECOVERY",
-      "value": 30,
-      "kind": "scalar",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/orchestration.py",
-      "note": "partial rest during disengagement",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "mass_battle.FREED_ATTACKER_FLANK_PENALTY",
       "name": "FREED_ATTACKER_FLANK_PENALTY",
       "value": 1,
@@ -2324,6 +2313,9 @@
           }
         },
         "matchups": [],
+        "fatigue": {
+          "lull_recover": 30
+        },
         "troops": {
           "levy": {
             "skill": 1,

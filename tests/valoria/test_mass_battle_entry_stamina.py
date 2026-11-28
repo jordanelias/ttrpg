@@ -56,3 +56,58 @@ def test_returned_stamina_below_100_after_a_fought_field():
     assert a.hp < hp0[0] and b.hp < hp0[1], "no contact: the field was not fought, so the stamina reading means nothing"
     assert res["a_stamina"] < STAMINA_MAX and res["b_stamina"] < STAMINA_MAX
     assert (res["a_stamina"], res["b_stamina"]) == (a.agg_stamina(), b.agg_stamina())
+
+
+# ---- B19.28: a field may be entered tired -- `MassBattleInput.entry_stamina` ----------------------------------------------
+
+def _mirror(**extra):
+    """A mirror field: two headcount sides of the one weight on open ground (`resolve_field`'s own record, hand-built)."""
+    import yaml
+    from engine.season.data import files
+    from engine.season.queries.inputs import MassBattleInput
+    with open(files.GEOGRAPHY_YAML, encoding="utf-8") as f:
+        geo = yaml.safe_load(f)
+    return MassBattleInput(weights=((3.0,), (3.0,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
+                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo, condition_scale=100,
+                           members=(("a",), ("b",)), **extra)
+
+
+def _fight(inp, seed):
+    from engine.dice_engine import draw
+    from modules.mass_battle.massbattle import resolve_field
+    return resolve_field(inp, draw.seeded(draw.H2("test_mass_battle_entry_stamina_b1928", seed)))
+
+
+def test_entry_stamina_half_loses_more(monkeypatch):
+    """A side entered at half stamina loses a mirror field more often than the side entered fresh (`CR D3`). 100 seeds, friction pinned
+    off (`MB_FRICTION`: the per-side log-normal draw would otherwise swamp a stamina share of this size), the attacker's entry the one
+    thing that differs. `lost` is the attacker ending below the defender's share. The gap must clear twice the standard error of the
+    difference of two shares of 100, and the loop asserts it fought every seed."""
+    import dataclasses
+    import modules.mass_battle.orchestration as orch
+    monkeypatch.setattr(orch, "MB_FRICTION", False)
+    n, tired, fresh, checked = 100, 0, 0, 0
+    for seed in range(n):
+        for entry, is_tired in (((0.5, 1.0), True), ((1.0, 1.0), False)):
+            got = _fight(dataclasses.replace(_mirror(), entry_stamina=entry), seed)
+            lost = got.attacker.share < got.defender.share
+            tired += lost and is_tired
+            fresh += lost and not is_tired
+            checked += 1
+    sampling_band = 2 * (2 * 0.25 * n) ** 0.5       # 2 s.e. of a difference of two win counts, p = 1/2, n each
+    assert checked >= 100 and checked == 2 * n
+    assert tired - fresh > sampling_band, (tired, fresh, sampling_band)
+
+
+def test_default_equals_omitted(monkeypatch):
+    """`entry_stamina=(1.0, 1.0)` is the field with the argument omitted, field for field: the whole `FieldOutcome` equal, seed for seed (12 seeds: the arms are one code path, and a fight is 0.2 s)."""
+    import dataclasses
+    import modules.mass_battle.orchestration as orch
+    monkeypatch.setattr(orch, "MB_FRICTION", False)
+    checked = 0
+    for seed in range(12):
+        omitted = _fight(_mirror(), seed)
+        stated = _fight(dataclasses.replace(_mirror(), entry_stamina=(1.0, 1.0)), seed)
+        assert stated == omitted, seed
+        checked += 1
+    assert checked >= 12

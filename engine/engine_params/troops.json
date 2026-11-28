@@ -332,6 +332,9 @@
     }
   },
   "matchups": [],
+  "fatigue": {
+    "lull_recover": 30
+  },
   "troops": {
     "levy": {
       "skill": 1,

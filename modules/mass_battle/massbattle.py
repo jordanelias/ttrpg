@@ -16,7 +16,7 @@ from dataclasses import asdict
 from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
 from modules.mass_battle import config as _config
-from modules.mass_battle.config import (CELL_CAP, COMMAND_DEFAULT, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS,
+from modules.mass_battle.config import (STAMINA_MAX, CELL_CAP, COMMAND_DEFAULT, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS,
                                         MIN_UNITS_PER_ARMY, ROLE_SPEC)
 from modules.mass_battle.armies import UNIT_CAP
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
@@ -328,6 +328,32 @@ def _person_unit(name, weights, members, side, morale_start=_MORALE_START_BASE, 
     return _line_army(name, _cut(_person_troops(weights, fed))[0], side, morale_start, role, retreat_at)
 
 
+def _enter_tired(army, entry):
+    """B19.28: a side enters the field at `entry` of full stamina, written to the column ledger (`_ColBlock.stamina`, the one store).
+    `entry` is one share in `[0, 1]` for the whole side, or a tuple of them, one per unit of the army in `army.units` order (the
+    per-part form); a column that two units stand in takes the lower of their shares. `1.0` -- the default -- writes nothing, so the
+    field as it was is reproduced exactly. Refused, never ignored: a share outside `[0, 1]`, a tuple not one per unit, and any entry
+    below 1.0 where the army has no column grid (the `PER_CELL` off arm keeps no stamina)."""
+    shares = tuple(entry) if isinstance(entry, (tuple, list)) else (entry,) * len(army.units)
+    if len(shares) != len(army.units):
+        raise ValueError(f"entry_stamina: {len(shares)} shares for an army of {len(army.units)} units")
+    for share in shares:
+        if isinstance(share, bool) or not isinstance(share, (int, float)) or not 0.0 <= share <= 1.0:
+            raise ValueError(f"entry_stamina: a share is a number in [0, 1]; got {share!r}")
+    if all(share == 1.0 for share in shares):
+        return
+    if not army.col_grid:
+        raise ValueError("entry_stamina below 1.0 where the engine keeps no column grid (PER_CELL off): the field has no stamina to enter tired")
+    lowest = {}
+    for unit, share in zip(army.units, shares):
+        for _pid, (_row, col), troops in unit.iter_cells():
+            if troops > 0:
+                lowest[col] = min(share, lowest.get(col, 1.0))
+    for block in army.col_grid:
+        if block.col in lowest:
+            block.stamina = STAMINA_MAX * lowest[block.col]
+
+
 def _share(left, start, scale):
     """B17.03: THE ONE QUANTISER, a survivor count as an integer on the body scale: `round(scale x left / start)`, `start` floored at
     1 as `_grade`'s ratio always was, clamped to `0..scale`. It is where the engine's floats meet the host's integers, so a side
@@ -613,6 +639,8 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
     refused = _refusal(unit_a, unit_b)
     if refused is not None:
         return refused
+    for army, entry in zip((unit_a, unit_b), inp.entry_stamina):
+        _enter_tired(army, entry)
     # [27A-4, B19.05] The obedience draw's inputs ride on the armies: a side's commander record (a record the order of battle already
     # gave is kept when the input has none) and the three scalars the draw reads. `(None, None)`, 0, 0, 0.0 is the field as it was.
     for army, record in zip((unit_a, unit_b), inp.commanders):
