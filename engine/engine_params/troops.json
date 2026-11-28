@@ -141,35 +141,80 @@
       "mass_kg": 2.0,
       "duel_key": null,
       "duel_key_status": "none",
-      "sidearm": "dagger"
+      "sidearm": "dagger",
+      "range": [
+        2,
+        8
+      ],
+      "range_stated": [
+        2,
+        40
+      ],
+      "volleys": 10
     },
     "crossbow": {
       "class": "missile",
       "mass_kg": 4.0,
       "duel_key": null,
       "duel_key_status": "none",
-      "sidearm": "dagger"
+      "sidearm": "dagger",
+      "range": [
+        2,
+        8
+      ],
+      "range_stated": [
+        2,
+        40
+      ],
+      "volleys": 10
     },
     "sling": {
       "class": "missile",
       "mass_kg": 0.8,
       "duel_key": null,
       "duel_key_status": "none",
-      "sidearm": "dagger"
+      "sidearm": "dagger",
+      "range": [
+        2,
+        8
+      ],
+      "range_stated": [
+        2,
+        8
+      ],
+      "volleys": 10
     },
     "javelin": {
       "class": "missile",
       "mass_kg": 2.5,
       "duel_key": null,
       "duel_key_status": "none",
-      "sidearm": "dagger"
+      "sidearm": "dagger",
+      "range": [
+        2,
+        8
+      ],
+      "range_stated": [
+        1,
+        6
+      ],
+      "volleys": 10
     },
     "siege": {
       "class": "missile",
       "mass_kg": 0.0,
       "duel_key": null,
       "duel_key_status": "none",
-      "sidearm": "dagger"
+      "sidearm": "dagger",
+      "range": [
+        2,
+        8
+      ],
+      "range_stated": [
+        2,
+        8
+      ],
+      "volleys": 10
     }
   },
   "classes": {

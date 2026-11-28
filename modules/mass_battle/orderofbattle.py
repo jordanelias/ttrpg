@@ -73,10 +73,14 @@ def formation_of(strategy: str) -> str:
 # that time (a levy line took no casualties at all). The single headcount line it replaces started on the same cells --
 # a battle already joined -- so this keeps the field a fight and leaves room for the missile troops' opening volley.
 # [ASSUMPTION; medium; Jordan to correct: 3 rows is the smallest gap measured to join every melee type in one turn.]
+#: The FLOOR of the opening distance (was `_APPROACH_ROWS`, 3): what `opening_rows: auto` falls to when no missile arm out-ranges it, so two armies
+#: with no missiles start three rows apart as they always did. The row (`formations.<name>.opening_rows`) is the head where it is a whole number.
+APPROACH_ROWS = 3
 _A_FRONT_ROW = 27   # [canonical: ED-IN-0306 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct]
 _SIDE_DIR = {'A': -1, 'B': 1}
 _ANCHOR_COL = 25            # [canonical: armies.build_army's anchor_col default, ED-MB-0017] the field's centre column
 _MIN_COL, _MAX_COL = 1, BATTLEFIELD_SIZE - 2    # keep a 1-cell margin, as `_centered_line_cols` does
+_MIN_ROW = 1                # and the same margin at the back of B's rearmost line: the cap of the `auto` opening distance
 
 #: The Army-level baseline the units inherit where a troop type sets nothing: the season adapter's own
 #: (`massbattle._SEASON_FORCE_POWER`, `_MVP_UNIT_COMMAND`). Power and discipline are duplicated as literals rather than imported
@@ -339,10 +343,11 @@ def subformations(oob: OrderOfBattle) -> Tuple[Tuple[str, Tuple[str, ...]], ...]
                  for post in _troops.formation(oob.formation)['posts'] if post in posts)
 
 
-def _place(specs: list, classes: list, side: str, explicit: Optional[list] = None, formation: str = 'line') -> None:
+def _place(specs: list, classes: list, side: str, explicit: Optional[list] = None, formation: str = 'line', foe: tuple = ()) -> None:
     """Write `starting_position` into each spec, in place, by the army's formation row (`place_posts`; the rule in the module docstring is the
     `line` row). Leaves the layout one centred line on the first row (`build_army` places the lot) if it does not fit the field.
-    `explicit[i]` is the post unit `i` names, or None for its class's default."""
+    `explicit[i]` is the post unit `i` names, or None for its class's default. `foe` is the troop types of the OTHER army: the approach rule reads
+    the missile arms on either side (`opening_rows: auto`; A's row does not depend on it, so B's call is the one that reads it)."""
     names = _posts_for(classes, explicit or [None] * len(specs), formation)
     f = _troops.formation(formation)
     frame = f['posts']
@@ -352,8 +357,14 @@ def _place(specs: list, classes: list, side: str, explicit: Optional[list] = Non
     if side == 'A':
         row = _A_FRONT_ROW + ahead
     else:
-        # B's front face is its LAST row: put the deepest front unit's face `opening_rows` short of A's.
-        row = (_A_FRONT_ROW - f['opening_rows'] - 1) - (depth - 1) - ahead
+        # B's front face is its LAST row: put the deepest front unit's face `opening` short of A's.
+        opening = f['opening_rows']
+        if opening == _troops.OPENING_AUTO:
+            # The approach rule: the longest missile `range[1]` on either side, floor `APPROACH_ROWS`, capped so B's rearmost line stands on the field.
+            opening = max(APPROACH_ROWS, _troops.missile_reach([sp['troop_type'] for sp in specs] + list(foe)))
+            rearmost = min(r for r, _c in place_posts(specs, names, formation, side, _A_FRONT_ROW - opening - 1 - (depth - 1) - ahead).values())
+            opening = max(APPROACH_ROWS, opening - max(0, _MIN_ROW - rearmost))
+        row = (_A_FRONT_ROW - opening - 1) - (depth - 1) - ahead
     pos = place_posts(specs, names, formation, side, row)
     for i, (r, c) in pos.items():
         cmin, cmax = _spec_span(specs[i])
@@ -366,20 +377,21 @@ def _place(specs: list, classes: list, side: str, explicit: Optional[list] = Non
         specs[i]['starting_position'] = p
 
 
-def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
+def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int, foe: Optional[OrderOfBattle] = None):
     """The `Army` for `oob` on `side` ('A' attacker, 'B' defender): `armies.build_army` over one spec per
     unit, placed by `_place`. `morale_start` is the side's season morale, applied to every subunit
     (`build_army` gives each its own copy). Army-level power/command/discipline are the season adapter's baseline;
     the TROOP TYPE's own stats override them per subunit (`Unit.of_type`). [ASSUMPTION; medium; Jordan to correct:
     the side's morale is every subunit's start, so a troop type's own morale preset (levy 2, knights 6) does not apply
     -- in the season morale is a fact about the SIDE (stance, loyalty, battle history, `massbattle._morale_start`);
-    revert: pass no `morale` here so `Unit.of_type`'s preset applies.]"""
+    revert: pass no `morale` here so `Unit.of_type`'s preset applies.] `foe` is the army it will meet (None: one with no missile troops), read
+    only by the approach rule of a formation whose `opening_rows` is `auto`."""
     if side not in _SIDE_DIR:
         raise ValueError(f"side must be 'A' or 'B', got {side!r}")
     validate(oob)
     specs = [_spec_for(sf, oob.strategy) for sf in oob.units]
     classes = [class_of(sf.troop_type) for sf in oob.units]
-    _place(specs, classes, side, [sf.post for sf in oob.units], oob.formation)
+    _place(specs, classes, side, [sf.post for sf in oob.units], oob.formation, tuple(u.troop_type for u in foe.units) if foe is not None else ())
     army = build_army(specs, name, side, power=_UNIT_POWER, command=_UNIT_COMMAND, discipline=_UNIT_DISCIPLINE,
                       morale=morale_start, morale_start=morale_start,
                       commander=oob.commander, commander_post=oob.commander_post)

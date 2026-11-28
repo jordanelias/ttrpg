@@ -33,7 +33,8 @@ import pytest
 
 import modules.mass_battle.orchestration as _orch
 from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_VOLLEYS_START,
-                                             MB_VOLLEYS_RESUPPLY, MB_KITE_STANDOFF, VOLLEY_MAX_RANGE)
+                                             MB_VOLLEYS_RESUPPLY, MB_KITE_STANDOFF)
+from modules.mass_battle.troop_types.table import volley_range
 from systems.mass_battle.sim.engine import build_army
 from modules.mass_battle.hierarchy.units import Unit, Army
 from modules.mass_battle.orchestration import volley_phase
@@ -218,7 +219,7 @@ def test_kiter_closes_to_melee_once_out_of_ammo():
     Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
          morale=6, morale_start=6, units=[su])
     ar, ac = su._node_anchor
-    assert MB_KITE_STANDOFF < 6 < VOLLEY_MAX_RANGE, \
+    assert MB_KITE_STANDOFF < 6 < volley_range('archers')[1], \
         "control: this distance must fall inside the OLD (ammo-blind) in-band volley window"
     enemy_cells = [(ar, ac - 6)]
     assert su.eff_volleys > 0
@@ -226,3 +227,115 @@ def test_kiter_closes_to_melee_once_out_of_ammo():
     su.volleys = 0.0
     assert su._kite_goal(enemy_cells) is None, \
         "out of ammo, far_bound must fall back to melee reach -- 6 is far beyond reach_for('archers') -> close in (None)"
+
+
+# ─── B19.21: a missile arm's reach is its own column (`references/troops.yaml: arms.<key>.range`) ──────────────
+# Each test below sets the SOURCED ranges (`range_stated`: javelin [1, 6], bow and crossbow [2, 40]) in the loaded document, in this
+# process only, so it reads the flipped data (B19.24) and is green at the control ([2, 8] for every arm) all the same.
+
+def _with_arm_ranges(monkeypatch, opening_rows=None, **ranges):
+    """The loaded troop file with `arms.<key>.range` set for each key given (and `formations.line.opening_rows`, if given), as the one document
+    `table` reads."""
+    import copy
+    from modules.mass_battle.troop_types import table
+    doc = copy.deepcopy(table._data())
+    for arm, rng in ranges.items():
+        doc['arms'][arm]['range'] = list(rng)
+    if opening_rows is not None:
+        doc['formations']['line']['opening_rows'] = opening_rows
+    table.check(doc)
+    monkeypatch.setattr(table, '_data', lambda: doc)
+    return doc
+
+
+def _shooter(troop_type, row=SIDE_A_START_ROW, col=25):
+    su = Unit(shape='Line', troop_type=troop_type, tier=2, starting_position=(row, col), advance_dir=-1,
+              stance='hold', unit_type='ranged')
+    return Army(name='A_shooters', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+                morale=6, morale_start=6, units=[su])
+
+
+def _foe_at(shooter, distance, col=25):
+    """An enemy body whose nearest cell is exactly `distance` from the shooter's (`volley._atom_distance`)."""
+    from modules.mass_battle.core.volley import _atom_distance
+    for back in range(0, 60):
+        foe = _target(row=SIDE_A_START_ROW - back, col=col)
+        if _atom_distance(shooter.units[0], foe.units[0]) == distance:
+            return foe
+    raise AssertionError(f"no row puts an enemy body exactly {distance} cells off")
+
+
+def _shots(shooter, foe, seed):
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_ammo", seed))):
+        return volley_phase(shooter, foe)['shots']
+
+
+def test_javelin_range_is_six(monkeypatch):
+    """CLASS game-state, lane mass_battle. A javelin body does not shoot at an enemy seven cells off; a bow body does (gate 4).
+    THE CONTROL IS THE SAME ENEMY: the javelin body does shoot it at six, and the bow body's ammunition falls by the shot it fired, so the
+    silence at seven is the arm's range and not a body that cannot fire."""
+    _with_arm_ranges(monkeypatch, javelin=(1, 6), bow=(2, 40))
+    jav, bow = _shooter('skirmishers'), _shooter('archers')
+    assert _shots(jav, _foe_at(jav, 7), 4_210_001) == 0, "a javelin body shot an enemy seven cells off"
+    assert jav.units[0].eff_volleys == pytest.approx(MB_VOLLEYS_START), "a javelin body that did not shoot spent a volley"
+    assert _shots(jav, _foe_at(jav, 6), 4_210_002) == 1, "control: the javelin body does not shoot at six"
+    assert jav.units[0].eff_volleys == pytest.approx(MB_VOLLEYS_START - 1)
+    assert _shots(bow, _foe_at(bow, 7), 4_210_003) == 1, "a bow body did not shoot an enemy seven cells off"
+    assert bow.units[0].eff_volleys == pytest.approx(MB_VOLLEYS_START - 1)
+
+
+def test_a_body_in_contact_does_not_volley(monkeypatch):
+    """CLASS game-state, lane mass_battle. An archer body with no switch order whose only enemy is in contact (one cell off, inside its arm's
+    least range) fires nothing: its volley count after the tick is zero and its stock is unspent (gate 3). THE CONTROL IS THE SAME BODY: at
+    its arm's least range it fires, so the silence is the contact and not a body out of ammunition. NOT OBSERVED, because the mechanism is not
+    in the tree: `04_MB_unit_loadout_and_weapon_in_hand_B.md`'s rule 'as amended' (a body in contact does not volley at ANOTHER body in
+    range); today a body in contact with one enemy body can still shoot a second one, and no test here says it cannot."""
+    from modules.mass_battle.troop_types import table
+    _with_arm_ranges(monkeypatch, bow=(3, 40))      # least 3, not the stated 2, so the arm's column and not the old one band (2) is what is read
+    least = table.volley_range('archers')[0]
+    assert least == 3
+    archers = _shooter('archers')
+    for near in (1, least - 1):                     # in contact, and inside the least range
+        assert _shots(archers, _foe_at(archers, near), 4_210_004 + near) == 0, f"a body with an enemy {near} cell(s) off volleyed"
+        assert archers.units[0].eff_volleys == pytest.approx(MB_VOLLEYS_START), "a body in contact spent a volley"
+    assert _shots(archers, _foe_at(archers, least), 4_210_005) == 1, "control: the body does not shoot at its arm's least range"
+    assert archers.units[0].eff_volleys == pytest.approx(MB_VOLLEYS_START - 1)
+
+
+def _volleys_before_contact(oob_a, oob_b, n, first):
+    """Per field of `n` seeds: the 'volley' events the engine traced before its first 'melee' event (the first pair in contact)."""
+    from engine.season.queries.inputs import MassBattleInput
+    from modules.mass_battle import massbattle
+    from modules.mass_battle.resolution import tracing
+    rec = MassBattleInput(weights=((10,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
+                          loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=1.0, orders_of_battle=(oob_a, oob_b))
+    out = []
+    for s in range(first, first + n):
+        with tracing() as events:
+            massbattle.resolve_field(rec, draw.seeded(draw.H2("test_mass_battle_ammo", s)))
+        seen = 0
+        for e in events:
+            if e['cat'] == 'melee':
+                break
+            seen += e['cat'] == 'volley'
+        out.append(seen)
+    return out
+
+
+def test_bows_shoot_before_contact(monkeypatch):
+    """CLASS game-state, lane mass_battle. Bows at their stated [2, 40] against foot, n 200: volley events before the first contact are above
+    zero in every field, and above the control's (gate 2). THE CONTROL IS THE SAME 200 SEEDS on the shipped data ([2, 8], three rows apart).
+    The stated world is the flipped one: `opening_rows: auto` too (B19.24 and B19.25 flip the two, and the opening is what puts the bows out of
+    reach of the enemy at the start). DEVIATION FROM THE GATE'S TEXT, measured: the gate says the control's bows shoot 'at most two ticks'
+    worth' before contact; the tree's control fires FOUR (the archers stand seven cells from the enemy line from the first tick, inside
+    [2, 8]), so the bound is read against the stated world's count, not against two."""
+    from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow
+    bows = OrderOfBattle((UnitRow('wall', 'heavy_infantry', 300), UnitRow('bows', 'archers', 200)))
+    foot = OrderOfBattle((UnitRow('wall', 'heavy_infantry', 500),))
+    n = 200
+    control = _volleys_before_contact(bows, foot, n, 7_000)
+    _with_arm_ranges(monkeypatch, opening_rows='auto', bow=(2, 40))
+    stated = _volleys_before_contact(bows, foot, n, 7_000)
+    assert len(control) == len(stated) == n
+    assert min(stated) > 0, f"a field where the bows shot nothing before contact at [2, 40]: {sorted(set(stated))}"
+    assert max(control) < min(stated), f"the stated bows shot no more before contact than the control's: {sorted(set(control))} vs {sorted(set(stated))}"

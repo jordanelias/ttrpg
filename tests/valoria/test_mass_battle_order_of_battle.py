@@ -436,3 +436,52 @@ def test_subformations_group_units_by_post():
                ('c', 'heavy_infantry', 100, {'post': 'left'}))
     assert subformations(oob) == (('centre', ('b',)), ('left', ('a', 'c')))
     assert 'subformations' not in OrderOfBattle.__dataclass_fields__          # read, not stored
+
+
+# ------------------------------------------------------------------------- the opening distance (B19.21)
+def _with_table(monkeypatch, arm_ranges=(), opening_rows=None):
+    """The loaded troop file with some `arms.<key>.range` and `formations.line.opening_rows` set, as the one document `table` reads."""
+    import copy
+    from modules.mass_battle.troop_types import table
+    doc = copy.deepcopy(table._data())
+    for arm, rng in arm_ranges:
+        doc['arms'][arm]['range'] = list(rng)
+    if opening_rows is not None:
+        doc['formations']['line']['opening_rows'] = opening_rows
+    table.check(doc)
+    monkeypatch.setattr(table, '_data', lambda: doc)
+
+
+def _opening_between(oob_a, oob_b):
+    """(clear rows between the two foremost faces, the lowest row any cell of B stands on, the highest row any cell of A stands on),
+    each army built by `build_unit` against the other as `massbattle` builds them."""
+    a = build_unit(oob_a, 'a', 'A', morale_start=5, foe=oob_b)
+    b = build_unit(oob_b, 'b', 'B', morale_start=5, foe=oob_a)
+    front_a = min(c[0] for u in a.units for c in u.cells() if u.troop_type == 'heavy_infantry')
+    front_b = max(c[0] for u in b.units for c in u.cells() if u.troop_type == 'heavy_infantry')
+    return (front_a - front_b - 1, min(c[0] for u in b.units for c in u.cells()), max(c[0] for u in a.units for c in u.cells()))
+
+
+def test_opening_rows_auto_is_the_longest_missile_range_with_a_floor(monkeypatch):
+    """CLASS game-state, lane mass_battle. With `opening_rows: auto` two armies start the longest `range[1]` among the missile arms on EITHER
+    side apart, floor 3, capped so both lines fit the field. THE CONTROLS: the value `3` as shipped keeps three rows whatever the arms
+    carry (the rule is behind the value `auto`), and two armies with no missiles start three rows apart with `auto` as well."""
+    from modules.mass_battle.config import BATTLEFIELD_SIZE
+    wall = ('wall', 'heavy_infantry', 400, {})
+    plain = _oob(wall)
+    with_bows = _oob(wall, ('bows', 'archers', 200, {}))
+    with_javelins = _oob(wall, ('darts', 'skirmishers', 200, {}))
+    with_slings = _oob(wall, ('slings', 'sling', 200, {}))
+    ranges = [('bow', (2, 5)), ('javelin', (1, 6)), ('sling', (2, 2))]
+    _with_table(monkeypatch, arm_ranges=ranges, opening_rows=3)
+    assert _opening_between(with_bows, plain)[0] == 3, "control: the value 3 gave way to a missile arm's range"
+    _with_table(monkeypatch, arm_ranges=ranges, opening_rows='auto')
+    assert _opening_between(plain, plain)[0] == 3, "control: two armies with no missiles are not three rows apart"
+    assert _opening_between(with_bows, plain)[0] == 5, "bows on the attacker's side only: not the bow's range[1]"
+    assert _opening_between(plain, with_bows)[0] == 5, "bows on the defender's side only: not the bow's range[1]"
+    assert _opening_between(with_bows, with_javelins)[0] == 6, "bows against javelins: not the longest range[1] of either side"
+    assert _opening_between(with_slings, plain)[0] == 3, "a range shorter than the floor moved the opening below it"
+    _with_table(monkeypatch, arm_ranges=[('bow', (2, 40))], opening_rows='auto')
+    gap, b_low, a_high = _opening_between(with_bows, plain)
+    assert 3 < gap < 40, f"a 40-cell bow was not capped to the field: {gap}"
+    assert b_low <= 1 and a_high <= BATTLEFIELD_SIZE - 2, f"the cap left room it could have used or went off the field: B from row {b_low}, A to row {a_high}"

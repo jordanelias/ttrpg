@@ -14,6 +14,7 @@ from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 from modules.mass_battle.core.exchange import *
 from modules.mass_battle.troop_types.registry import *
+from modules.mass_battle.troop_types.table import volley_range, volleys_of   # [B19.21] a body's volley reach and stock are its arm's columns
 from modules.mass_battle.percell import *
 from modules.mass_battle.resolution import *
 
@@ -709,8 +710,8 @@ class Unit:
             u = self._u()
             if u is not None: u.volleys = new
     def resupply_volleys(self, amount):
-        # Increase effective volleys, capped at MB_VOLLEYS_START (the cap IS the global starting count).
-        new = min(MB_VOLLEYS_START, self.eff_volleys + amount)
+        # Increase effective volleys, capped at the arm's own starting stock (B19.21: `volleys_of`, was the one global `MB_VOLLEYS_START`).
+        new = min(volleys_of(self.troop_type), self.eff_volleys + amount)
         if self.volleys is not None: self.volleys = new
         else:
             u = self._u()
@@ -1398,7 +1399,7 @@ inert today.
 
         A kiter attacks then flees on countering (Jordan's gate-2 ruling, verbatim: 'Kite is a
         behaviour of attacking an opponent then fleeing upon countering'). Reuses MB_KITE_STANDOFF/
-        VOLLEY_MAX_RANGE/reach_for exactly as the legacy per-cell block does (advance_cells
+        the arm's greatest volley range/reach_for exactly as the legacy per-cell block does (advance_cells
         ~L903-910) -- no new magnitude.
 
         Matches the legacy 'toward'/'away'/in-band semantics precisely, not just approximately:
@@ -1423,7 +1424,7 @@ inert today.
         ar, ac = self._node_anchor
         nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
         d = fmath.hypot(nearest[0] - ar, nearest[1] - ac)
-        far_bound = (VOLLEY_MAX_RANGE if self.unit_type == 'ranged' and self.eff_volleys > 0
+        far_bound = (volley_range(self.troop_type)[1] if self.unit_type == 'ranged' and self.eff_volleys > 0
                      else reach_for(self.troop_type))
         if d < MB_KITE_STANDOFF:
             return (2 * ar - nearest[0], 2 * ac - nearest[1])  # too close -> flee (reflect through anchor)
@@ -1763,16 +1764,16 @@ inert today.
         # with ranged weapons like a bow but can still be executed by cavalry with spears/lances."]
         # No longer gated on unit_type=='ranged' -- kite is weapon-independent steering; ONLY
         # volley fire itself (a separate gate, orchestration.volley_phase) requires a ranged
-        # weapon. The "far" edge of the band still uses VOLLEY_MAX_RANGE for a ranged kiter
+        # weapon. The "far" edge of the band still uses the arm's greatest volley range for a ranged kiter
         # (unchanged, exact prior behaviour), but for a melee kiter (a lance/spear cavalry
-        # executing a hit-and-run) VOLLEY_MAX_RANGE would be meaningless -- reuses the already-
+        # executing a hit-and-run) a volley range would be meaningless -- reuses the already-
         # grounded PP-290 reach_for(troop_type) primitive instead (troop_types.registry) rather
         # than inventing a new melee-standoff magnitude: hover just past where its own weapon
         # can no longer threaten, not a volley-specific distance. NOTE: this block is unreachable on the default
         # node/field path (the early return above fires first); it runs only when MB_NODE_COHESION is off.
         kite_mode = None
         if MB_KITE_ENABLED and 'kite' in self.instructions and enemy_cells:
-            far_bound = VOLLEY_MAX_RANGE if self.unit_type == 'ranged' else reach_for(self.troop_type)
+            far_bound = volley_range(self.troop_type)[1] if self.unit_type == 'ranged' else reach_for(self.troop_type)
             mine = self.cells()
             if mine:
                 d = min((fmath.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec))) for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field (byte-exact OFF)

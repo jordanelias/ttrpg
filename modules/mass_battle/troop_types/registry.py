@@ -64,7 +64,7 @@ REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) —
 # [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22] FRONT-FACE weapon reach, in lattice units (COL_WIDTH=1.0
 # pitch), feeding the front-reach body (hierarchy/units.cell_bodies_for -> geometry.reach_reaches). The Jordan-ruled
 # weapon-class map is the troop file's `classes` (non-pole melee 0.1, pole/spear 0.2, PIKE 0.3, a missile arm used hand
-# to hand 0.1; a missile troop's projectile band is VOLLEY_MAX_RANGE, handled separately); [B17.11] a troop
+# to hand 0.1; a missile troop's projectile band is its arm's `range`, handled separately); [B17.11] a troop
 # type's reach is that of the class of the arm in hand, read through the loader, not kept per type. NOTE (flagged for
 # Jordan): the 0.1/0.2/0.3 scale is a FINER differentiation than PP-290's Short<=1m (0.5) / Long<=3m (1.5)
 # meter-grounding above -- P-DEC-1 is the newer, explicit ruling and governs the field OBB model; whether the two scales

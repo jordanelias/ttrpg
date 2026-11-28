@@ -18,7 +18,7 @@ The reach values feed geometry.reach_reaches (contact) and resolve_toi_and_commi
     fires; reach only shifts WHEN contact fires) — a disclosed finding, documented here so a future
     reader knows reach is a charge/brace lever, not a standing-melee one, in this engine.
 
-Facing-away cells get no reach bonus (I7); ranged volley range is reach-independent (VOLLEY_MAX_RANGE).
+Facing-away cells get no reach bonus (I7); ranged volley range is reach-independent (the arm's `range`).
 Deterministic + seeded; movement toggles saved/restored in the field_path fixture.
 """
 import math
@@ -36,7 +36,7 @@ from modules.mass_battle.troop_types.registry import reach_for, stats_for, unit_
 from modules.mass_battle.equipment import loadout_for  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
-from modules.mass_battle.config import VOLLEY_MAX_RANGE  # noqa: E402
+from modules.mass_battle.troop_types.table import volley_range  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
@@ -158,11 +158,11 @@ def test_standing_melee_reach_independent(field_path, uncapped):
 # ─── I7: facing gate + ranged independence ───────────────────────────────────
 
 def test_ranged_volley_range_reach_independent():
-    """Ranged units' projectile range is VOLLEY_MAX_RANGE, independent of the (melee sidearm) reach_for
+    """Ranged units' projectile range is the arm's `range[1]`, independent of the (melee sidearm) reach_for
     value — so shrinking archers' melee reach to 0.1 does not touch their volley reach."""
     assert unit_type_for('archers') == 'ranged'
     assert reach_for('archers') == 0.1          # melee sidearm only
-    assert VOLLEY_MAX_RANGE > reach_for('archers')  # the projectile band is the governing range
+    assert volley_range('archers')[1] > reach_for('archers')  # the projectile band is the governing range
 
 
 # ─── I1 / I2 with a pike unit on the field path ──────────────────────────────

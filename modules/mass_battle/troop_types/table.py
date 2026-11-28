@@ -22,7 +22,7 @@ site kind that is not a member of its closed set; an arm whose mass is stated bo
 combat's export; a `secondary` equal to the `primary`; (B19a.01) an arm with neither a `duel_key` nor a `sidearm`, a `duel_key` or
 `sidearm` that is not a key of personal combat's weapon export, a `duel_key_status` outside its closed set, a `contact` value with
 no `status` (a null value is admitted only for `exposure.base`), a `matchups` row naming a class, a situation, a `closes` or a
-`status` outside its closed set; (B19.28) a `fatigue` row that is not a number of at least 0, or a column outside `FATIGUE_COLUMNS`; (B19.17) a `deployment` column outside `DEPLOYMENT_COLUMNS`, a `cell_troops` that is not a whole number of at least 1, an `arm` outside `DEPLOYMENT_ARMS`, a troop row whose `depth` is not a whole number of at least 1; (B19.20) a `deployment.scale` row outside `SCALE_COLUMNS` or not a whole number of at least 1, a `deployment.max_bouts` that is not; a column (or section) name that is also a field of `config.EngineConfig`
+`status` outside its closed set; (B19.28) a `fatigue` row that is not a number of at least 0, or a column outside `FATIGUE_COLUMNS`; (B19.17) a `deployment` column outside `DEPLOYMENT_COLUMNS`, a `cell_troops` that is not a whole number of at least 1, an `arm` outside `DEPLOYMENT_ARMS`, a troop row whose `depth` is not a whole number of at least 1; (B19.20) a `deployment.scale` row outside `SCALE_COLUMNS` or not a whole number of at least 1, a `deployment.max_bouts` that is not; (B19.21) a missile arm without `range`, `range_stated` (each `[least, greatest]`, whole, 1 <= least <= greatest) or `volleys` (above 0), any other arm with one of them, a `formations.<name>.opening_rows` that is neither a whole number of at least 1 nor `auto`; a column (or section) name that is also a field of `config.EngineConfig`
 (B17.12: a NAME is the troop file's or the config's, never both; a value copied under another name is not seen). The mass check reads
 `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as DATA, never an import of `modules/combat/`.
 `check` is the one validator. It opens that export, so it runs where a file may be opened -- the exporter, on what it
@@ -38,7 +38,7 @@ from typing import Optional
 
 __all__ = ['TroopFileError', 'check', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
            'stats_for', 'is_mounted', 'roles_for', 'training_site_for', 'loadout_for_names', 'cell_cap_of',
-           'fatigue', 'deployment', 'formations', 'formation', 'depth_of', 'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
+           'fatigue', 'deployment', 'formations', 'formation', 'depth_of', 'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'volley_range', 'volleys_of', 'missile_reach', 'DEFAULT_MISSILE_ARM', 'OPENING_AUTO', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
 
 _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engine_v1.json')
@@ -47,7 +47,16 @@ COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engi
 META_KEYS = ('_generated', 'schema_version', 'source')
 HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'contact', 'matchups', 'fatigue', 'deployment', 'formations', 'troops')
 ROLE_COLUMNS = ('shape', 'instructions')
-ARM_COLUMNS = ('class', 'mass_kg', 'duel_key', 'duel_key_status', 'sidearm')
+ARM_COLUMNS = ('class', 'mass_kg', 'duel_key', 'duel_key_status', 'sidearm', 'range', 'range_stated', 'volleys')
+#: (B19.21) The columns a MISSILE arm (an arm of the `classes` row `MISSILE_CLASS`) must carry, and no other arm may: its volley's `range` (the
+#: least and the greatest distance in cells a body shoots at), the sourced `range_stated` beside it, and the `volleys` a body starts with.
+MISSILE_CLASS = 'missile'
+VOLLEY_COLUMNS = ('range', 'range_stated', 'volleys')
+#: The arm a `ranged` body shoots as when its own primary arm is not a missile arm (the unmustered `infantry`, which has none): a closed-set member,
+#: no number of its own.
+DEFAULT_MISSILE_ARM = 'bow'
+#: `formations.<name>.opening_rows` is a whole number of rows or this: the rule `orderofbattle` reads (the longest missile `range[1]`, floor 3).
+OPENING_AUTO = 'auto'
 CLASS_COLUMNS = ('reach', 'support_ranks')
 #: What a `contact` value, a `matchups` row and its first tick may be named (MBA §1.3, §1.4, §3.1, §3.2).
 CONTACT_COLUMNS = ('exposure', 'levels', 'K', 'missile')
@@ -173,6 +182,29 @@ def _whole(where, v, least):
         raise TroopFileError(f"{where}: a whole number of at least {least} is required; got {v!r}")
 
 
+def _check_volley(where: str, arm: dict) -> None:
+    """(B19.21) A missile arm carries `range`, `range_stated` (each `[least, greatest]`, whole numbers, 1 <= least <= greatest) and `volleys`
+    (a number above 0); an arm of any other class carries none of the three."""
+    if arm['class'] != MISSILE_CLASS:
+        for k in VOLLEY_COLUMNS:
+            if k in arm:
+                raise TroopFileError(f"{where}: `{k}` on an arm of class {arm['class']!r}; only a {MISSILE_CLASS} arm volleys")
+        return
+    for k in VOLLEY_COLUMNS:
+        if k not in arm:
+            raise TroopFileError(f"{where}: a {MISSILE_CLASS} arm needs `{k}`")
+    for k in ('range', 'range_stated'):
+        span = arm[k]
+        if not isinstance(span, (list, tuple)) or len(span) != 2:
+            raise TroopFileError(f"{where}.{k}: [least, greatest] is required; got {span!r}")
+        _whole(f"{where}.{k}[0]", span[0], 1)
+        _whole(f"{where}.{k}[1]", span[1], 1)
+        if span[0] > span[1]:
+            raise TroopFileError(f"{where}.{k}: the least {span[0]} is above the greatest {span[1]}")
+    if isinstance(arm['volleys'], bool) or not isinstance(arm['volleys'], (int, float)) or arm['volleys'] <= 0:
+        raise TroopFileError(f"{where}.volleys: a number above 0 is required; got {arm['volleys']!r}")
+
+
 def _check_formations(rows: dict) -> None:
     """Each formation names its columns, a `frontage` and posts of its closed sets, a first line with a post across the centre, and a
     `default_post` that gives every class a post the formation has; and `line` is there."""
@@ -181,7 +213,8 @@ def _check_formations(rows: dict) -> None:
     for name, row in rows.items():
         where = f"formations.{name}"
         _columns(where, row, FORMATION_COLUMNS, FORMATION_COLUMNS)
-        _whole(f"{where}.opening_rows", row['opening_rows'], 1)
+        if row['opening_rows'] != OPENING_AUTO:
+            _whole(f"{where}.opening_rows", row['opening_rows'], 1)
         _member(where, row['frontage'], FRONTAGES, 'frontage', nullable=False)
         posts = row['posts']
         if not isinstance(posts, dict) or not posts:
@@ -243,6 +276,9 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
         if 'mass_kg' in arm and name in combat_weapons:
             raise TroopFileError(f"{where}: mass stated twice -- `mass_kg` here and the key {name!r} in personal "
                                  f"combat's export; keep it in one place")
+        _check_volley(where, arm)
+    if DEFAULT_MISSILE_ARM not in arms or arms[DEFAULT_MISSILE_ARM]['class'] != MISSILE_CLASS:
+        raise TroopFileError(f"arms: {DEFAULT_MISSILE_ARM!r} (the arm a ranged body of no missile arm shoots as) is not a missile arm of the file")
     _check_contact(data['contact'], arms, tiers)
     _check_matchups(data['matchups'])
     _columns('fatigue', data['fatigue'], FATIGUE_COLUMNS, FATIGUE_COLUMNS)
@@ -453,6 +489,37 @@ def reach_of(troop_type) -> Optional[float]:
     fallthrough to the melee default is `registry.reach_for`'s."""
     cls = _class_row(troop_type)
     return cls['reach'] if cls is not None else None
+
+
+def _missile_arm(troop_type) -> Optional[str]:
+    """The troop's primary arm where that is a missile arm, else None (an unknown type, a falsy one, a row with no arm)."""
+    row = _rows().get(_lower(troop_type)) if troop_type else None
+    arm = row['primary'] if row is not None else None
+    return arm if arm is not None and _data()['arms'][arm]['class'] == MISSILE_CLASS else None
+
+
+def _volley_arm(troop_type) -> dict:
+    """The arm row a `ranged` body of this type shoots as: its own missile arm, else `DEFAULT_MISSILE_ARM`'s."""
+    return _data()['arms'][_missile_arm(troop_type) or DEFAULT_MISSILE_ARM]
+
+
+def volley_range(troop_type) -> tuple:
+    """`(least, greatest)` cell distance at which a body of this type shoots (B19.21: the primary arm's `range`; the unmustered body and an
+    unknown type shoot as `DEFAULT_MISSILE_ARM`). Read at every shot, so a document swapped in-process is the one read."""
+    least, greatest = _volley_arm(troop_type)['range']
+    return (least, greatest)
+
+
+def volleys_of(troop_type) -> float:
+    """The volleys a body of this type starts with (B19.21: the primary arm's `volleys`; `DEFAULT_MISSILE_ARM`'s for any other)."""
+    return float(_volley_arm(troop_type)['volleys'])
+
+
+def missile_reach(troop_types) -> int:
+    """The longest `range[1]` among the missile arms the given troop types carry as their primary arm; 0 where none carries one
+    (the `auto` opening distance's input: a body that shoots only because its type is not a missile type adds none)."""
+    arms = _data()['arms']
+    return max([arms[a]['range'][1] for a in map(_missile_arm, troop_types) if a is not None], default=0)
 
 
 def support_ranks_of(troop_type) -> Optional[int]:

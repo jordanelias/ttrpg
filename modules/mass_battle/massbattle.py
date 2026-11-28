@@ -414,7 +414,7 @@ def _cohort_namer(oob):
 _HEADCOUNT_LINE_TYPE = 'light_infantry'
 
 
-def _oob_unit(oob, weight, side, morale_start):
+def _oob_unit(oob, weight, side, morale_start, foe=None):
     """The Army for a side when the field carries orders of battle (ED-IN-0306). `oob` None -> a single
     `_HEADCOUNT_LINE_TYPE` `UnitRow`, so both sides deploy by the same rule. Its size is the most the side's
     `weight` could put under arms, `under_arms_cap(weight)` (`troop_types/recruitment.py`), NOT the bare weight:
@@ -422,13 +422,14 @@ def _oob_unit(oob, weight, side, morale_start):
     so a side left at its weight would meet a hundred troops with twelve. [ASSUMPTION; medium; Jordan to correct;
     revert: `max(float(weight), _MIN_TROOPS)`, and a headcount side is a tenth the army it could muster.]
     Built with `faction` 'A'/'B', the engine's deployment convention, rather than `_weighted_unit`'s side names:
-    the sides must start on opposite rows, which the single-line path's shared (8, 12) never needed."""
+    the sides must start on opposite rows, which the single-line path's shared (8, 12) never needed. `foe` is the other side's order of battle
+    (None for a headcount side, which carries no missile arm), read by the approach rule of an `auto` formation."""
     if oob is None:
         # B17.16: the headcount line is cut into units as every headcount side is (`_cut`), named `line`, `line_2`, ...
         sizes, _owners = _cut([max(float(under_arms_cap(weight)), _MIN_TROOPS)])
         oob = OrderOfBattle(tuple(UnitRow('line' if i == 0 else f'line_{i + 1}', _HEADCOUNT_LINE_TYPE, t)
                                   for i, t in enumerate(sizes)))
-    return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start)
+    return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start, foe=foe)
 
 
 def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(None, None)):
@@ -640,8 +641,8 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
         # ED-IN-0306: a side with an order of battle fights as that order says. Its headcounts are authoritative,
         # so `troops_a`/`troops_b` (the provisioning feed) are not applied to it -- recruiting is what bounds an
         # order of battle's size (phase 2), and scaling it here would silently overrule that.
-        unit_a = _oob_unit(oob_a, weight_a, 'A', morale_a)
-        unit_b = _oob_unit(oob_b, weight_b, 'B', morale_b)
+        unit_a = _oob_unit(oob_a, weight_a, 'A', morale_a, oob_b)
+        unit_b = _oob_unit(oob_b, weight_b, 'B', morale_b, oob_a)
         # B17.03: an army's parts are its cohorts; a headcount side facing one names none.
         namers = tuple(None if oob is None else _cohort_namer(oob) for oob in (oob_a, oob_b))
     refused = _refusal(unit_a, unit_b)

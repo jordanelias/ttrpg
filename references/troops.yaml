@@ -13,9 +13,9 @@
 # `MOUNTED_TYPES`, `TROOP_TYPE_DENSITY_CAP`, `TROOP_TYPE_ROLES`, `ROLE_SPEC`, `TROOP_LOADOUT`, `TRAINING_SITE` -- row for
 # row, so no read of any of them moved. Every `secondary` is null, so no field computes anything from a second weapon.
 # Read by nothing yet: `strength`, `upkeep`, `secondary` (a later stage). `depth` (was `ranks`) and `deployment` are read (B19.17). `charge`, `wheel`, `default_role`, `arms` and
-# `classes` are read (`troop_types/table.py`, `registry.py`: the four name tests and `reach_for`, B17.11). An arm carries no
-# `range` or `volleys`: the volley's reach and count are `VOLLEY_MIN_RANGE`, `VOLLEY_MAX_RANGE` and `MB_VOLLEYS_START`
-# in `config.py`, their one owner, until a reader of this file moves them here.
+# `classes` are read (`troop_types/table.py`, `registry.py`: the four name tests and `reach_for`, B17.11). A missile arm carries its
+# volley's `range` (least and greatest cell distance), its `range_stated` (the sourced reach, the flip's value) and its `volleys` (the
+# stock a body starts with): B19.21 moved them here from `VOLLEY_MIN_RANGE`, `VOLLEY_MAX_RANGE` and `MB_VOLLEYS_START` (`config.py`).
 #
 # CONTENT FOR JORDAN (authored seeds, not decisions of this file): every `mass_kg` is a seed at memory grade; every
 # `strength` is the smallest whole number at or above the carry demand of the row's own armour (personal combat's
@@ -67,12 +67,20 @@ arms:
   spear:       {class: pole,                   duel_key: spear,   duel_key_status: exact}   # mass from personal combat's export (its key `spear`)
   arming:      {class: non_pole,               duel_key: arming,  duel_key_status: exact}   # mass from personal combat's export (its key `arming`)
   pike:        {class: pike,     mass_kg: 3.5, duel_key: spear,   duel_key_status: proxy}
-  bow:         {class: missile,  mass_kg: 2.0, duel_key: null, duel_key_status: none, sidearm: dagger}
-  crossbow:    {class: missile,  mass_kg: 4.0, duel_key: null, duel_key_status: none, sidearm: dagger}
-  sling:       {class: missile,  mass_kg: 0.8, duel_key: null, duel_key_status: none, sidearm: dagger}
-  javelin:     {class: missile,  mass_kg: 2.5, duel_key: null, duel_key_status: none, sidearm: dagger}
-  siege:       {class: missile,  mass_kg: 0.0, duel_key: null, duel_key_status: none, sidearm: dagger}   # crew-served: not carried
+  bow:         {class: missile,  mass_kg: 2.0, duel_key: null, duel_key_status: none, sidearm: dagger, range: [2, 8], range_stated: [2, 40], volleys: 10}
+  crossbow:    {class: missile,  mass_kg: 4.0, duel_key: null, duel_key_status: none, sidearm: dagger, range: [2, 8], range_stated: [2, 40], volleys: 10}
+  sling:       {class: missile,  mass_kg: 0.8, duel_key: null, duel_key_status: none, sidearm: dagger, range: [2, 8], range_stated: [2, 8], volleys: 10}
+  javelin:     {class: missile,  mass_kg: 2.5, duel_key: null, duel_key_status: none, sidearm: dagger, range: [2, 8], range_stated: [1, 6], volleys: 10}
+  siege:       {class: missile,  mass_kg: 0.0, duel_key: null, duel_key_status: none, sidearm: dagger, range: [2, 8], range_stated: [2, 8], volleys: 10}   # crew-served: not carried
 
+# A missile arm's volley (B19.21; `table.volley_range`, `table.volleys_of`, read by `core/volley.py`, `hierarchy/units.py`, `armies.py`):
+#   range         the least and the greatest distance, in cells, at which a body shoots (a body nearer than the least is in contact and does
+#                 not shoot). THE CONTROL: [2, 8] for every arm, the engine's `VOLLEY_MIN_RANGE` and `VOLLEY_MAX_RANGE` (a fitted pair, no source)
+#   range_stated  the sourced reach, beside `range` so the flip (B19.24) is one key: javelin [1, 6] (20-25 m for the heaviest javelins, ACOUP);
+#                 bow and crossbow [2, 40] (about 200 m, some say 300 for the longbow; W-CRE); sling and siege [2, 8], NOT ESTABLISHED, today's
+#                 value kept. Read by nothing until the flip
+#   volleys       the volleys a body of the arm starts with (today's `MB_VOLLEYS_START`, 10 for every arm until Jordan sets one)
+# A body whose primary arm is not a missile arm (a `ranged` body of the unmustered `infantry`) shoots as `table.DEFAULT_MISSILE_ARM`.
 # The ruled P-DEC-1 map (ED-MB-0014), authored once.
 classes:
   non_pole: {reach: 0.1, support_ranks: 1}
@@ -147,7 +155,9 @@ deployment:
 # The army's formation, one row per named formation (B19.18; `orderofbattle.place_posts` is the one reader: the season's `_place` and the harness's
 # `build_envelopment` / `build_refused_flank` both call it). An army's strategy names its formation (`line` unless the strategy is another row's name);
 # a unit stands at a POST of it, `post` on the unit row, else the one `default_post` gives its class.
-#   opening_rows  the clear rows between the two armies' foremost faces at the start (the MB "opening distance"; was `_APPROACH_ROWS`)
+#   opening_rows  the clear rows between the two armies' foremost faces at the start (the MB "opening distance"; was `_APPROACH_ROWS`): a whole
+#                 number, or `auto` (B19.21): the longest `range[1]` among the missile arms on either side, capped so both lines fit the field,
+#                 floor 3 (`orderofbattle.APPROACH_ROWS`). Every row is `3` at the control, so no field reads `auto` yet
 #   frontage      `centre`: the centre line is centred alone and the side posts stand outside it; `whole`: it is centred with the side posts
 #   posts         name -> where it stands:
 #     rank_line   which line behind the first (0 the first); a line stands one clear row behind the depth of the line in front of it

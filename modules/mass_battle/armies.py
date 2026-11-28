@@ -5,7 +5,7 @@ per-subunit spec dicts (`build_army`), with the frontage-aware deployment geomet
 `mass_battle` row's note); a season-facing order-of-battle builder (`orderofbattle.py`) needs this constructor,
 and a module may not reach into `systems/` (the harness and workbench tree), so this module is its one owner
 (`systems/mass_battle/sim/engine.py` re-imports every name below)."""
-from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
+from modules.mass_battle.config import BATTLEFIELD_SIZE, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
 from modules.mass_battle.core.exchange import clamp_command
 from modules.mass_battle.troop_types import table as _troops
 from modules.mass_battle.troop_types.registry import default_role_for, role_allowed, roles_for, unit_type_for
@@ -310,7 +310,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         # the morale defaulting immediately above (DG-4); a melee subunit's ammo count is never read for combat, so
         # only the SHOOTER's own pool is isolated.
         if kw.get('volleys') is None and kw['unit_type'] == 'ranged':
-            kw['volleys'] = MB_VOLLEYS_START
+            kw['volleys'] = _troops.volleys_of(tt)   # [B19.21] the stock of the arm in hand
         subs.append(Unit.of_type(tt, shape, tier, pos, **kw))
     return Army(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,

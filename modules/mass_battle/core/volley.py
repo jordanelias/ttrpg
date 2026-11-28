@@ -6,6 +6,7 @@ unchanged. A flag read here is read from THIS module's namespace: a test that fl
 from engine.dice_engine import fmath
 from modules.mass_battle.config import *
 from modules.mass_battle.resolution import roll_pool, trace_event
+from modules.mass_battle.troop_types.table import volley_range
 
 __all__ = ['volley_phase', '_roll_volley_pool', '_atom_distance', '_volley_density_mult']
 
@@ -98,6 +99,8 @@ def volley_phase(unit_a, unit_b):
         if MB_AMMO_ENABLED and shooter_atom.eff_volleys <= 0:
             return 0, None, False
         target_atoms = target_unit.units
+        # [B19.21] The shooter's reach is its own arm's `range` (`references/troops.yaml: arms.<key>.range`), no longer one band for every arm.
+        least, greatest = volley_range(shooter_atom.troop_type)
         # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when
         # in range, else the nearest -- so archers can be directed at a flanker / priority unit. Gated by
         # MB_VOLLEY_TARGETING + an explicit order; default (no order) = nearest (the exact prior logic) ->
@@ -110,20 +113,20 @@ def volley_phase(unit_a, unit_b):
                 _ordered = target_atoms[_oti]
             elif getattr(shooter_atom, 'target_condition', None) == 'weakest':
                 _cand = [t for t in target_atoms
-                         if VOLLEY_MIN_RANGE <= _atom_distance(shooter_atom, t) <= VOLLEY_MAX_RANGE]
+                         if least <= _atom_distance(shooter_atom, t) <= greatest]
                 if _cand:
                     _ordered = min(_cand, key=lambda t: sum(t.cell_troops.values()) if t.cell_troops else 0)
         best_target = None
         best_dist = float('inf')
         was_ordered = False
-        if _ordered is not None and VOLLEY_MIN_RANGE <= _atom_distance(shooter_atom, _ordered) <= VOLLEY_MAX_RANGE:
+        if _ordered is not None and least <= _atom_distance(shooter_atom, _ordered) <= greatest:
             best_target = _ordered
             best_dist = _atom_distance(shooter_atom, _ordered)
             was_ordered = True
         else:
             for t in target_atoms:
                 d = _atom_distance(shooter_atom, t)
-                if VOLLEY_MIN_RANGE <= d <= VOLLEY_MAX_RANGE and d < best_dist:
+                if least <= d <= greatest and d < best_dist:
                     best_dist = d
                     best_target = t
         if best_target is None:
