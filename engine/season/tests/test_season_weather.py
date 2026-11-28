@@ -187,9 +187,8 @@ def test_in21_the_factor_is_keyed_on_the_seed_and_the_season_of_the_year_is_read
 
 def test_season_of_year_reads_zero_to_three_at_shipped_fixtures():
     """The year is `rosters.yaml: seasons_of_year`, read by `season_of_year` at the shipped fixtures (no
-    `season_factor_draw` declared): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`."""
+    `season_factor_draw` live since B12b.43): five ticks read 0, 1, 2, 3, 0 and the answer is never `None`; the clock does not read the table."""
     w = build_realm(0)
-    assert not w.fixtures.get("season_factor_draw"), "fixture: the shipped realm declares a weather table"
     read = []
     for t in range(5):
         w.tick = t
@@ -207,4 +206,4 @@ def test_nonempty_season_factor_draw_of_wrong_length_is_refused():
     assert "season_factor_draw" in str(e.value) and str(len(wrong)) in str(e.value) \
         and str(len(SEASONS_OF_YEAR)) in str(e.value), str(e.value)
     # The right length is not refused (non-vacuity: the refusal is the length, not the table).
-    assert world_q.season_factor_of(_town(UNIT)) == DEFAULT.get("season_factor")
+    assert world_q.season_factor_of(_town(UNIT)) in {DEFAULT.get("season_factor") * f for f in world_q.SEASON_BAND_FACTORS.values()}

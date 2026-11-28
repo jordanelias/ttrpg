@@ -2438,11 +2438,12 @@ rosters:
       THE FACTOR EACH BAND OF THE SEASON'S DRAW MULTIPLIES THE YIELD BY, keyed by the ladder's four band names
       (`dice_engine.DEGREE_LABEL`'s values; `data/rosters.py::SEASON_BAND_FACTORS`, whose load refuses any other key set or a
       value that is no non-negative number). Read by `world_q.season_factor_of` ONLY when `season_factor_draw` is non-empty
-      (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT 1.0 ON EVERY BAND, the control, so
-      a live table moves variance nowhere until the sweep sets the four (`[CALIBRATE]`, B12b.43: the long-run mean harvest
-      under the live arm read against the control's, the target a mean of one, `09_WR_B_weather` edit 2).
-      `[ASSUMPTION; medium; Jordan to correct]` for the shipped control.
-    values: {Overwhelming: 1.0, Success: 1.0, Partial: 1.0, Failure: 1.0}
+      (the switch of the drawn form); at the control `()` nothing here is read. SHIPPED AT (1.25, 1.0, 0.8, 0.4) (B12b.43), the
+      set whose long-run mean harvest factor is one at the shipped pool (`season_endurance` 0, hardship 0, no spell): the ladder lands
+      Overwhelming 0.380, Success 0.382, Partial 0.127, Failure 0.110 there, so the set sums to 1.003 (a forcing moves variance, not the
+      long-run mean), band order kept. A hardship or a spell moves the band mix and the mean with it (B98).
+      `[ASSUMPTION; medium; Jordan to correct; revert: 1.0 on every band, the control's value]`.
+    values: {Overwhelming: 1.25, Success: 1.0, Partial: 0.8, Failure: 0.4}
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99

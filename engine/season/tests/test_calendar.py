@@ -98,10 +98,12 @@ def test_hunger_cover_falls_in_winter_on_unchanged_stores(monkeypatch):
 def test_yield_term_scales_the_drawn_factor_only_when_the_draw_is_on(monkeypatch):
     """`yield` multiplies `season_factor_of`'s drawn return; an empty `season_factor_draw` returns the bare `season_factor` whatever the season says."""
     monkeypatch.setattr(world_q, "SEASON_TERMS", SWEPT)
+    monkeypatch.setattr(world_q, "SEASON_BAND_FACTORS", dict.fromkeys(world_q.SEASON_BAND_FACTORS, 1.0))     # B12b.43: the shipped bands are not all 1.0; this reads the term alone
     on = DEFAULT_FIXTURES.sweep("season_factor_draw", ((1.0,),) * len(SEASONS_OF_YEAR))
+    off = DEFAULT_FIXTURES.sweep("season_factor_draw", ())
     assert world_q.season_factor_of(_town(tick=0, fixtures=on)) == 1.0
     assert world_q.season_factor_of(_town(tick=WINTER, fixtures=on)) == 0.25
-    assert world_q.season_factor_of(_town(tick=WINTER)) == DEFAULT_FIXTURES.get("season_factor")
+    assert world_q.season_factor_of(_town(tick=WINTER, fixtures=off)) == DEFAULT_FIXTURES.get("season_factor")
 
 
 def test_shipped_terms_are_the_identity():

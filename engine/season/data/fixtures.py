@@ -549,7 +549,10 @@ DEFAULT_FIXTURES = Fixtures(
     # SWITCH of one keyed draw on the one four-band ladder (`world_q.season_factor_of`: pool the place's endurance, obstacle the season's
     # `hardship` plus the year's spell, the band choosing a factor of `rosters.yaml: season_band_factors`), keyed on (world_seed, tick,
     # territory rung id); its ENTRIES are read by nothing, and it is refused unless it holds one entry per season of the year (`seasons_of_year`).
-    season_factor_draw=(),            # `H-26`, swept () (control, SHIPPED) / a table of one entry per season (the drawn form on)
+    # B12b.43 (CL-EVENTS (2)): THE DRAWN FORM SHIPS LIVE. The table is the switch and its entries are read by nothing (the factor of a draw is
+    # `rosters.yaml: season_band_factors[band]`, set at mean one by the sweep); it holds one entry per season of the year, which `check_season_weather`
+    # refuses at load otherwise. [ASSUMPTION; medium; Jordan to correct; revert: `()`, the control: nothing drawn, the bare constant]
+    season_factor_draw=((0.5, 1.0, 2.0),) * 4,   # `H-26`, swept () (control) / a table of one entry per season (the drawn form on, SHIPPED)
     # B12b.03 (R-27): THE YEAR'S SPELL, a run of weather over a region (a territory's parent rung) for a year: the equally likely OBSTACLE TERMS one draw
     # keyed on (world_seed, year, region) picks from, shared by every territory under the region for the whole year and added to the season's
     # `hardship` in `world_q.season_factor_of`. `()` is the control: no spell (a term of 0), nothing drawn. A spell with no `season_factor_draw` is
