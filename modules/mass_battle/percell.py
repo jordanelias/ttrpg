@@ -274,19 +274,36 @@ def _defender_depth(unit, contact_cells):
         return 0.0
     return sum(b.depth for b in blocks) / len(blocks)
 
+def _drain_scale(unit, pairs):
+    """{absolute column: the tick's drain multiple} for `unit`'s engaged columns (B19.13, MBA §1.4): `exposure_d / EXPOSURE_BASE` of the
+    contact each column stands in, which `resolve_melee_pair` leaves on the pair (`stamina_scale_a` / `_b`); a column in several pairs
+    (a flank and a front at once) takes the mean of them, and a pair not resolved this tick carries none and reads 1."""
+    sums = {}
+    sub_ids = {id(a) for a in unit.units}
+    for p in pairs:
+        for atom, cells, key in (("atom_a", "a_cells", "stamina_scale_a"), ("atom_b", "b_cells", "stamina_scale_b")):
+            if id(p.get(atom)) in sub_ids:
+                x = p.get(key, 1.0)
+                for c in {c for (_r, c) in p.get(cells, [])}:
+                    tot, n = sums.get(c, (0.0, 0))
+                    sums[c] = (tot + x, n + 1)
+    return {c: tot / n for c, (tot, n) in sums.items()}
+
 def update_stamina(unit, pairs):
     """Increment 3: drain stamina of engaged columns (damped by depth — deeper rotates fresh
-    ranks forward, so it tires slower), rest non-engaged columns. Depth is the fatigue counter."""
+    ranks forward, so it tires slower), rest non-engaged columns. Depth is the fatigue counter.
+    B19.13: the drain is scaled by the contact's `exposure_d / EXPOSURE_BASE` (`_drain_scale`)."""
     grid = getattr(unit, 'col_grid', None)
     if not grid:
         return
     eng = _engaged_cols(unit, pairs)
     joined = len(eng) > 0
+    scale = _drain_scale(unit, pairs)
     for b in grid:
         if not b.alive():
             continue
         if b.col in eng:
-            drain = MB_STAMINA_DRAIN / (1.0 + MB_DEPTH_ROTATE * (b.depth - 1))  # deeper -> slower drain
+            drain = scale.get(b.col, 1.0) * MB_STAMINA_DRAIN / (1.0 + MB_DEPTH_ROTATE * (b.depth - 1))  # deeper -> slower drain
             b.stamina = max(0.0, b.stamina - drain)
         else:
             # Only GENUINE reserves recover: a column not adjacent to any engaged column (truly behind the

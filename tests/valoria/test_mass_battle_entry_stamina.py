@@ -115,3 +115,65 @@ def test_default_equals_omitted(monkeypatch):
         assert stated == omitted, seed
         checked += 1
     assert checked >= 12
+
+
+# ---- B19.13: the column's drain scales with the exposure of its contact (MBA-04 step 6) -----------------------------------
+
+def _tired_after_six_ticks(face, seed):
+    """B's column stamina (its `agg_stamina()`) after six ticks of one contact with A, B turned to `face` (toward A = struck front,
+    68 degrees off = struck on the flank). One body a side, the same footprint; only B's facing differs. Every tick is resolved at the
+    one `t`, so B's wheel clock does not tick and the arc it was struck at holds for the six ticks (the drain is the thing under test,
+    not the wheel). Returns (B's stamina, B's exposure on the contact, B's engaged-column drain per tick before the arc)."""
+    import importlib
+    from modules.mass_battle import orchestration as orch, rngsource
+    from modules.mass_battle.core import contact
+    from modules.mass_battle.hierarchy.units import Army, Unit
+    from modules.mass_battle.percell import update_stamina
+    resolution = importlib.import_module('modules.mass_battle.resolution')
+
+    def body(pos, adv, fac):
+        su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=pos, advance_dir=adv)
+        return Army(name=fac, faction=fac, power=4, command=4, discipline=5, discipline_start=5, morale=6, morale_start=6, units=[su], dr=1), su
+    with rngsource.using(draw_seeded(seed)), resolution.tracing() as ev:
+        ub, sub_b = body((25, 12), -1, 'B')
+        for cid in list(sub_b.cell_troops):
+            sub_b.cell_facing_vec[cid] = face
+        ua, _ = body((22, 12), +1, 'A')
+        pairs = contact.find_contacts(ua, ub)
+        assert pairs, "no contact: the geometry is wrong"
+        for _ in range(6):
+            orch.resolve_engagements(ua, ub, pairs, t=5)
+            update_stamina(ua, pairs)
+            update_stamina(ub, pairs)
+    melee = [e for e in ev if e['cat'] == 'melee']
+    return ub.agg_stamina(), melee[0]['exp_b'], ub
+
+
+_FLANK = (-0.3746, 0.9272)   # B turned 68 degrees off the attacker: the octagon's flank read, `arc_d` 1.5 on the contact
+
+
+def draw_seeded(seed):
+    from engine.dice_engine import draw
+    return draw.seeded(draw.H2("test_mass_battle_entry_stamina_b1913", seed))
+
+
+def test_a_flank_contact_drains_faster_than_a_frontal_one():
+    """Two equal columns struck by the one attacker, one front (`arc_d` 1.0) and one on the flank (`arc_d` 1.5): after six ticks the
+    flank column's stamina share is lower (the drain is scaled by `exposure_d / EXPOSURE_BASE`, MBA §1.4). Control, on the same runs:
+    the frontal contact is at `exposure_d = EXPOSURE_BASE` (no posture, arc 1, no crowding, no cover) and drains exactly the
+    `MB_STAMINA_DRAIN` it drained before the edit."""
+    from modules.mass_battle.config import MB_DEPTH_ROTATE, MB_STAMINA_DRAIN
+    from modules.mass_battle.core.contact_draw import EXPOSURE_BASE
+    checked = 0
+    for seed in range(100):
+        front, e_front, ub_front = _tired_after_six_ticks((-1.0, 0.0), seed)
+        flank, e_flank, _ = _tired_after_six_ticks(_FLANK, seed)
+        assert e_flank == pytest.approx(1.5 * e_front), (seed, e_front, e_flank)       # the arc is the only difference
+        assert flank < front, (seed, front, flank)
+        if seed == 0:
+            assert e_front == EXPOSURE_BASE                                              # the control contact
+            engaged = [b for b in ub_front.col_grid if b.stamina < STAMINA_MAX]
+            assert engaged and all(b.stamina == STAMINA_MAX - 6 * MB_STAMINA_DRAIN / (1.0 + MB_DEPTH_ROTATE * (b.depth - 1))
+                                   for b in engaged)
+        checked += 1
+    assert checked >= 100

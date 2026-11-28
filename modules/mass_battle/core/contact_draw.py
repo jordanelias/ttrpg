@@ -338,6 +338,11 @@ def resolve_melee_pair(p, atom_a, atom_b, unit_a, unit_b, a_angle_mod, b_angle_m
     posture = max(POSTURE_FLOOR, 1.0 + POSTURE_K * (c_a + c_b))
     exp_a = EXPOSURE_BASE * posture * arc_a * crowd_a * getattr(unit_a, 'cover', 1.0)
     exp_b = EXPOSURE_BASE * posture * arc_b * crowd_b * getattr(unit_b, 'cover', 1.0)
+    # [B19.13, MBA-04 step 6] The pair carries each side's exposure on the contact, as a multiple of the base, to the column ledger
+    # (`percell.update_stamina` scales the tick's drain by it, MBA §1.4): a man in a hot contact tires faster. At `EXPOSURE_BASE = 0`
+    # (the plant) the ratio is 1 `[ASSUMPTION: no division by the planted zero -- the plant empties the draw, not the ledger]`.
+    p["stamina_scale_a"] = exp_a / EXPOSURE_BASE if EXPOSURE_BASE else 1.0
+    p["stamina_scale_b"] = exp_b / EXPOSURE_BASE if EXPOSURE_BASE else 1.0
     a_share, b_share = p.get("a_share"), p.get("b_share")
     vec_a = contact_vector(atom_a, unit_a, p["a_cells"], a_share, atom_b, unit_b, p["b_cells"], p.get("b_front"), b_share, fight_b,
                            exp_a, on_a)
