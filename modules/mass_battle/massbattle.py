@@ -613,6 +613,12 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
     refused = _refusal(unit_a, unit_b)
     if refused is not None:
         return refused
+    # [27A-4, B19.05] The obedience draw's inputs ride on the armies: a side's commander record (a record the order of battle already
+    # gave is kept when the input has none) and the three scalars the draw reads. `(None, None)`, 0, 0, 0.0 is the field as it was.
+    for army, record in zip((unit_a, unit_b), inp.commanders):
+        if record is not None:
+            army.commander = record
+        army.obey_pool_add, army.obey_pool_floor, army.obey_task = inp.pool_add, inp.pool_floor, inp.obey_task
     # No territory: `river_crossed` answers False and the lookup OPEN_FLAT. WALLS outranks a crossing
     # (`terrain_row_for_territory`), so a fortified field does not derive one.
     crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=inp.geography)

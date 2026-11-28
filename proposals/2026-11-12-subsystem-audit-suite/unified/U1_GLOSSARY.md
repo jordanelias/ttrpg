@@ -439,6 +439,8 @@ group (A–D in `MB_LEXICON.md`, E–G in `_part2`); "D-n" a ladder decision and
 | host, company, banner, battalion, regiment, retinue, van | not game terms | A, C, D-20 |
 | **commander**; **officer** | the holder of the army Record; the leader of a unit (one may lead several, C5) | B, D-5 |
 | **command span** | the number of units one leader can keep in hand, read from his `command` skill score by one table, owner `modules/mass_battle/config.py::command_span` (never called "command" in prose) | D-U1-11g; 27_MB_A §6, 27A-2 |
+| **obedience draw** | the draw by which a unit carries out an order it has been given: at once, late, or not at all; owner `modules/mass_battle/core/contact.py::obey` (rejected: "order check", "command roll") | 27_MB_A §4, 27A-4 |
+| **distance step** | the whole number of cells in one `reach` between the commander's post and a unit, beyond the first, each of which raises the obedience draw's obstacle; owner `modules/mass_battle/config.py::ORDER_OBEY['reach']` (a degree is a "band", never a distance) | 27_MB_A §4, 27A-4 |
 | general, captain, marshal, constable | not army roles (*marshal* is a verb and a canon seat title) | B |
 | **command**; **command basis** | the skill by which an order takes effect (skill score plus attributes, A-59, A-7, A-98); whom a seat may order (A-22) | B |
 | **order**, **standing order**, **signal**, **window** | an instruction to a unit; one given in advance (an order given before the battle that the unit carries out when its trigger comes, as an army's standing orders are; the Record kind is `rosters.yaml: record_kinds.standing_order`, owner `data/rosters.py::ORDER_KIND`; "standing order of battle" is rejected); one fired to release others; a moment in a bout to act | B, C, D-14; L1-3 |

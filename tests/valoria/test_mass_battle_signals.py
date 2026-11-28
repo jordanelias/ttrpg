@@ -149,3 +149,63 @@ def test_fire_signal_rejects_a_non_string_value():
         Order(trigger='immediate', behavior={'fire_signal': 5})
     with pytest.raises(ValueError, match="string"):
         Order(trigger='immediate', behavior={'fire_signal': ['advance']})
+
+
+# ─── B19.05 (27A-4): the obedience draw on a signal ──────────────────────────────────────────────────────────
+
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import config as _mb_config, rngsource  # noqa: E402
+
+
+def _army_on(orders_per_unit):
+    """An Army whose unit i holds `orders_per_unit[i]`, none with an officer or a commander record (the default roller)."""
+    units = [Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 5 + 3 * i), advance_dir=1,
+                  stance='balanced', unit_type='melee', orders=tuple(o)) for i, o in enumerate(orders_per_unit)]
+    return Army(name='sig', faction='A', power=4, command=4, discipline=5, discipline_start=5, morale=6, morale_start=6,
+                units=units)
+
+
+def _check(army, seed, t=1):
+    with rngsource.using(draw.seeded(draw.H2("b19_05_signals", seed))):
+        check_orders(army, t, [])
+
+
+def test_a_unit_on_two_signals_can_misread_and_on_one_cannot(monkeypatch):
+    """A unit holding orders on two different signals can answer the wrong one (it applies the other order, now, and the one
+    signalled stays pending); a unit on one signal is only ever on time, late or not carried out, never misread."""
+    monkeypatch.setitem(_mb_config.ORDER_OBEY, 'arm', 'on')
+    misread = late_or_not = checked = 0
+    for seed in range(400):
+        two = _army_on([[Order('signal:a', {'stance': 'hold'}), Order('signal:b', {'stance': 'aggressive'})]])
+        two.fired_signals.add('a')
+        _check(two, seed)
+        su = two.units[0]
+        if su.stance == 'aggressive':               # the other signal's order was answered
+            assert su._order_idx == 0 and len(su.orders) == 1 and su.orders[0].trigger == 'signal:a'
+            misread += 1
+        one = _army_on([[Order('signal:a', {'stance': 'hold'})]])
+        one.fired_signals.add('a')
+        _check(one, seed)
+        s1 = one.units[0]
+        assert s1.stance in ('balanced', 'hold') and len(s1.orders) == 1, "a unit on one signal has no other order to answer"
+        late_or_not += s1._order_idx == 0
+        checked += 1
+    assert checked >= 400
+    assert misread > 0, "a unit on two signals never misread in 400 fields"
+    assert late_or_not > 0, "a unit on one signal was never late or not carried out"
+
+
+def test_more_units_on_one_signal_answer_together_less_often(monkeypatch):
+    """The across-units term: one signal waited on by eight units is obeyed less often, per unit, than by three."""
+    monkeypatch.setitem(_mb_config.ORDER_OBEY, 'arm', 'on')
+
+    def obeyed_share(n):
+        got = 0
+        for seed in range(300):
+            a = _army_on([[Order('signal:go', {'stance': 'hold'})] for _ in range(n)])
+            a.fired_signals.add('go')
+            _check(a, seed)
+            got += a.units[0]._order_idx == 1
+        return got / 300
+
+    assert obeyed_share(3) > obeyed_share(8) + 0.2

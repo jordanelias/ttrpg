@@ -10,6 +10,11 @@ from engine.dice_engine import fmath
 import modules.mass_battle.hierarchy.units as _u
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
+from types import SimpleNamespace
+from engine.dice_engine import draw as _draw
+from engine.dice_engine.dice_engine import Degree, degree_from_net      # the one degree ladder (A-5)
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, net_boost, pool_of, roll_net_continuous  # the one sampler, boost and pool rule (A-5, A-6)
+from modules.mass_battle import rngsource
 
 __all__ = ['check_orders', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom']
 
@@ -52,6 +57,145 @@ def _visible_enemy_cells(sub, enemy_cells):
     return out
 
 
+# ─── THE OBEDIENCE DRAW (27A-4) ──────────────────────────────────────────────────────────────────────────────
+# Whether a fired order takes effect: at once, late, or not at all (27_MB_A section 4). Read at call time off `ORDER_OBEY` (config's
+# one dict; `arm: off` is today's certainty). Every number there is a seed; the form is what is decided.
+
+_OBEYED, _LATE, _NOT_CARRIED_OUT = 'obeyed', 'late', 'not carried out'
+#: The record a side with no commander record is rolled on: `COMMAND_DEFAULT` as the score, no dice added, no levels (27A control).
+_DEFAULT_ROLLER = SimpleNamespace(person='', score=COMMAND_DEFAULT, addends=0, levels=0.0, post=None, fed_by=())
+_PSEUDO_FIELDS = ('fire_signal', 'feign_retreat')    # order keys that are not a posture (see `check_orders`)
+
+
+def _holds(sub, key, value):
+    """True when `sub` is already in the posture `key: value` an order would set."""
+    return (sub.eff_stance if key == 'stance' else getattr(sub, key, None)) == value
+
+
+def _order_kind(order, sub):
+    """The kind of an order, the key of `ORDER_OBEY['step']` (26_MASS_BATTLE_maneuver_orders section 1): `keep` (the posture it sets is the
+    one the unit holds: nothing is asked), `restrain` (a signalled halt: `stance: hold` on a signal), `signal` (any other change
+    on a signal) or `change`. The triggers `enemy_broken` and `in_lull`, and a `recall` order, do not exist here (B20), so
+    `restrain` is reached by a signalled halt only."""
+    posture = {k: v for k, v in order.behavior.items() if k not in _PSEUDO_FIELDS}
+    if all(_holds(sub, k, v) for k, v in posture.items()):
+        return 'keep'
+    if order.trigger.startswith('signal:'):
+        return 'restrain' if posture.get('stance') == 'hold' else 'signal'
+    return 'change'
+
+
+def _slot(army, sub):
+    return next(i for i, u in enumerate(army.units) if u is sub)
+
+
+def _post_cell(army, name):
+    """Where the commander is: the centroid of the unit named `name`, or, with none, the army's rear centre (the rearmost unit's
+    row, the mean column of the units)."""
+    if name is not None:
+        for u in army.units:
+            if u.name == name:
+                return u.centroid()
+        raise ValueError(f"commander_post {name!r} names no unit of the army {army.name!r}")
+    cells = [u.centroid() for u in army.units]
+    adv = army.units[0].advance_dir
+    return (min((r for r, _c in cells), key=lambda r: r * adv), sum(c for _r, c in cells) / len(cells))
+
+
+def _distance_steps(roller, sub, army):
+    """A distance step: the whole number of `obey.reach` cells between the roller's post and the unit's centroid, beyond the
+    first. An officer is with his unit: none."""
+    if roller is sub.officer_record and roller is not None:
+        return 0
+    post = _post_cell(army, roller.post if roller.post is not None else army.commander_post)
+    here = sub.centroid()
+    return max(0, int(fmath.hypot(here[0] - post[0], here[1] - post[1]) / ORDER_OBEY['reach']) - 1)
+
+
+def _in_contact(sub, enemy_cells):
+    """True when one of the unit's cells has an enemy cell on it or beside it."""
+    enemy = set(enemy_cells)
+    return any((r + dr, c + dc) in enemy for r, c in sub.cells() for dr in (-1, 0, 1) for dc in (-1, 0, 1))
+
+
+def _obey_terms(order, roller, sub, army, enemy_cells):
+    """`(pool, levels, obstacle)` of the draw (27_MB_A section 4), or None when the order's kind asks nothing (`step: none`)."""
+    spec = ORDER_OBEY
+    step = spec['step'][_order_kind(order, sub)]
+    if step == 'none':
+        return None
+    signalled = order.trigger.startswith('signal:')
+    waiting = sum(1 for u in army.units if any(o.trigger == order.trigger for o in u.orders[u._order_idx:])) if signalled else 0
+    obstacle = (army.obey_task + step
+                + (spec['distance'] * _distance_steps(roller, sub, army) if spec['distance'] else 0)
+                + spec['across'] * max(0, waiting - 3)
+                + (spec['unsteady'] if sub.eff_discipline <= 1 else 0)
+                + (spec['in_contact'] if spec['in_contact'] and _in_contact(sub, enemy_cells) else 0))
+    # A-25 [ASSUMPTION as the source marks it]: a body with Discipline 4 or more raises its roller by a `minor` level.
+    levels = roller.levels + (LEVEL_SIGMA['minor'] if sub.eff_discipline >= 4 else 0.0)
+    return pool_of(roller.score, roller.addends, army.obey_pool_add, army.obey_pool_floor), levels, obstacle
+
+
+def _roller_for(army, sub, source):
+    """The persons who give `sub` an order, one draw each (27_MB_A section 3: an order is drawn once for each person who has to
+    pass it on to the unit). A `standing` order or a `signal`: the unit's officer, else the commander. An `improvised` one: the
+    commander, then, for an officered unit, the officer once more. A side with no commander record rolls `_DEFAULT_ROLLER`."""
+    if source not in ('standing', 'signal', 'improvised'):
+        raise ValueError(f"_roller_for: source {source!r} is not standing, signal or improvised")
+    commander = army.commander if army.commander is not None else _DEFAULT_ROLLER
+    officer = sub.officer_record
+    if officer is None:
+        return (commander,)
+    return (commander, officer) if source == 'improvised' else (officer,)
+
+
+def obey(order, roller, sub, army, t, link=0, enemy_cells=()):
+    """Whether `roller`, passing `order` to `sub`, gets it carried out: 'obeyed', 'late' or 'not carried out' (27_MB_A section 4).
+    At `arm: off`, and for an order that asks nothing (`keep`), 'obeyed' with NO draw consumed. Otherwise one draw on the one sampler and
+    the one ladder, keyed on (the field's key, tick, army, unit, order, link) and purpose `obey` (A-30), so the draws do not depend
+    on who issued the order or on any other draw the field makes."""
+    if ORDER_OBEY['arm'] != 'on':
+        return _OBEYED
+    terms = _obey_terms(order, roller, sub, army, enemy_cells)
+    if terms is None:
+        return _OBEYED
+    pool, levels, obstacle = terms
+    key = _draw.H2(rngsource.get().key, f"obey|{t}|{army.faction}|{army.name}|{_slot(army, sub)}|{sub._order_idx}|{link}")
+    net = roll_net_continuous(pool, rng=_draw.seeded(key)) + net_boost(levels, pool)
+    band = degree_from_net(net, obstacle)
+    if band in (Degree.OVERWHELMING, Degree.SUCCESS):
+        return _OBEYED
+    return _LATE if band is Degree.PARTIAL else _NOT_CARRIED_OUT
+
+
+def _verdict(order, sub, army, t, enemy_cells):
+    """`obey` over every link of the order; the first that does not obey stops it. `(verdict, that link's roller)`."""
+    source = 'signal' if order.trigger.startswith('signal:') else 'standing'
+    for link, roller in enumerate(_roller_for(army, sub, source)):
+        verdict = obey(order, roller, sub, army, t, link, enemy_cells)
+        if verdict != _OBEYED:
+            return verdict, roller
+    return _OBEYED, None
+
+
+def _obey_blocked(sub, t):
+    """True while an order the draw left not carried out is in the phase it was left in: it is drawn again at most once a phase."""
+    return bool(sub._obey_block) and t >= sub._obey_block and (t - 1) // TICKS_PER_PHASE == (sub._obey_block - 1) // TICKS_PER_PHASE
+
+
+def _misread(sub, order):
+    """The one case the data can express: `order` came by signal and the unit holds another pending order on a DIFFERENT signal. That
+    order is taken off the queue and returned, to be answered now; `order` stays pending. None when there is none."""
+    if not order.trigger.startswith('signal:'):
+        return None
+    for j in range(sub._order_idx + 1, len(sub.orders)):
+        other = sub.orders[j]
+        if other.trigger.startswith('signal:') and other.trigger != order.trigger:
+            sub.orders = sub.orders[:j] + sub.orders[j + 1:]
+            return other
+    return None
+
+
 def check_orders(unit, t, enemy_cells):
     """[Stage C] Fire each subunit's pending orders (Unit.orders, a Tuple[Order,...]) whose trigger
     condition is met this tick. Called once per tick per side, BEFORE assign_targets (an order's
@@ -72,13 +216,25 @@ def check_orders(unit, t, enemy_cells):
     Retreat before the unit's normal rout check runs -- the order-writable path that mechanic (fully
     built in orchestration.py) was missing.
 
+    [27A-4, B19.05] An order whose trigger holds is then DRAWN (`obey`) when `ORDER_OBEY['arm']` is 'on': obeyed -> applied now; late
+    -> held `1 +` distance steps ticks (`Unit._order_due`), or, for an order on a signal while the unit holds another pending order on a
+    different signal, MISREAD (the other is answered now, `_misread`); not carried out -> stays pending, not drawn again in the same
+    phase (`Unit._obey_block`). Each link that has to pass the order on draws once (`_roller_for`). At 'off' nothing is drawn.
+
     Byte-exact: Unit.orders defaults to () -- the while loop body never executes for any existing
-    Unit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
+    Unit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0; and `arm: off` applies every fired
+    order as before."""
     for sub in unit.units:
         while sub._order_idx < len(sub.orders):
             order = sub.orders[sub._order_idx]
             fired = False
-            if order.trigger == 'immediate':
+            carried = bool(sub._order_due) and t >= sub._order_due      # [27A-4] a late order, now due: applied without a new draw
+            if sub._order_due and not carried:
+                break                                                    # a late order is still on its way
+            if carried:
+                sub._order_due = 0
+                fired = True
+            elif order.trigger == 'immediate':
                 fired = True
             elif order.trigger.startswith('tick:'):
                 fired = t >= int(order.trigger.split(':', 1)[1])
@@ -116,62 +272,84 @@ def check_orders(unit, t, enemy_cells):
                 fired = name in unit.fired_signals
             if not fired:
                 break
-            for k, v in order.behavior.items():
-                if k == 'fire_signal':
-                    # [A4, ED-MB-0067 Part A] Not a real Unit attribute -- a PSEUDO-field consumed here directly, adding
-                    # the name to the ISSUING Army's fired_signals set (per-Army, see Army.fired_signals' own note) instead of
-                    # being setattr-ed onto the subunit. This is the one real, order-writable path to fire a 'signal:'
-                    # trigger from inside a battle: once THIS order's own trigger condition is met (any kind), it releases
-                    # every other pending order (on any subunit of this same Army) watching for the same name -- WITHIN THIS
-                    # SAME tick's check_orders call if that other subunit's own turn through the `for sub in unit.units`
-                    # loop below has not yet been taken, otherwise on the next call. Unit ITERATION ORDER decides which of
-                    # the two happens, and no messenger latency is modelled (out of scope for A4) -- so "at most one tick's
-                    # delay, never more" is the honest guarantee, not "always next call".
-                    unit.fired_signals.add(v)
-                    continue
-                if k == 'feign_retreat':
-                    # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately above: not a real Unit
-                    # attribute, so it is set on the ISSUING ARMY instead -- PP-256's Feigned Retreat is an Army-wide tactic
-                    # (Army.feigned), not a per-subunit one. This is the trigger for PP-256's resolution machinery
-                    # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat, all in orchestration.py).
-                    unit.feigned = bool(v)
-                    continue
-                if k == 'stance':
-                    sub._stance_explicit = True   # [MB-04] an Order's stance (even 'balanced') beats a role keyword
-                setattr(sub, k, v)
-            # [A1, ED-MB-0067 Part A] Clamp a freshly-assigned route to Jordan's ruled path-length
-            # budget (0.5*speed*max-ticks) THE MOMENT it is assigned, using the sub-unit's position
-            # at THIS tick as the route's start point -- see Unit._clamp_route_to_budget. Applying
-            # this here (not inside _resolve_route_goal, which reads the route fresh every tick
-            # without re-deriving it) means the budget is a fixed planning bound set at order-issue
-            # time, not one that silently grows if the sub-unit is later shoved backward by combat
-            # contention. Inert whenever 'route' is not one of the fields this order sets.
-            #
-            # The resume index is resolved ONCE here (`order.behavior.get('_route_idx', 0)`, not read back off
-            # `sub._route_idx` after setattr already applied it) and threaded explicitly into BOTH the clamp call
-            # (`start_idx=`, so a resume-partway order's already-passed legs are never measured against the budget)
-            # and the cursor assignment immediately after, so the two can never disagree about which index this
-            # order resumes at.
-            if 'route' in order.behavior:
-                _resume_idx = order.behavior.get('_route_idx', 0)
-                sub.route = sub._clamp_route_to_budget(sub.route, start_idx=_resume_idx)
-                sub._route_idx = _resume_idx
-                # [F2] A fresh/re-issued route must not inherit a stalled-waypoint tick count left over from whatever
-                # the sub-unit was previously chasing (see _resolve_route_goal's stall-breaker): an index COLLISION (old
-                # and new route resuming at the same idx) would otherwise carry the old count onto an unrelated
-                # waypoint.
-                sub._route_wait_ticks = 0
-                sub._route_wait_idx = _resume_idx
-            # [ED-1095] Track when 'brace' most recently BECAME present via an order (vs. having been
-            # present since construction, stamped 0 in __post_init__) -- resolution._subunit_braced
-            # requires a full tick since this stamp before treating the subunit as braced. Reset to -1
-            # on removal so a later re-brace gets its own fresh delay rather than reusing a stale stamp.
-            if 'brace' in sub.instructions:
-                if sub._brace_since_tick < 0:
-                    sub._brace_since_tick = t
-            else:
-                sub._brace_since_tick = -1
+            if not carried and ORDER_OBEY['arm'] == 'on':
+                if _obey_blocked(sub, t):
+                    break
+                verdict, roller = _verdict(order, sub, unit, t, enemy_cells)
+                if verdict == _NOT_CARRIED_OUT:
+                    sub._obey_block = t
+                    break
+                if verdict == _LATE:
+                    answered = _misread(sub, order)
+                    if answered is None:
+                        sub._order_due = t + 1 + (_distance_steps(roller, sub, unit) if ORDER_OBEY['distance'] else 0)
+                    else:
+                        _apply_order(unit, sub, answered, t)
+                    break
+            _apply_order(unit, sub, order, t)
             sub._order_idx += 1
+
+
+def _apply_order(unit, sub, order, t):
+    """Apply one fired order's behaviour to `sub` (the one site an order takes effect; `check_orders` calls it once the order is
+    due, obeyed, late or misread). Its body is the loop that was inline in `check_orders`, unmoved but for its indent."""
+    for k, v in order.behavior.items():
+        if k == 'fire_signal':
+            # [A4, ED-MB-0067 Part A] Not a real Unit attribute -- a PSEUDO-field consumed here directly, adding
+            # the name to the ISSUING Army's fired_signals set (per-Army, see Army.fired_signals' own note) instead of
+            # being setattr-ed onto the subunit. This is the one real, order-writable path to fire a 'signal:'
+            # trigger from inside a battle: once THIS order's own trigger condition is met (any kind), it releases
+            # every other pending order (on any subunit of this same Army) watching for the same name -- WITHIN THIS
+            # SAME tick's check_orders call if that other subunit's own turn through the `for sub in unit.units`
+            # loop below has not yet been taken, otherwise on the next call. Unit ITERATION ORDER decides which of
+            # the two happens, and no messenger latency is modelled (out of scope for A4) -- so "at most one tick's
+            # delay, never more" is the honest guarantee, not "always next call".
+            unit.fired_signals.add(v)
+            continue
+        if k == 'feign_retreat':
+            # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately above: not a real Unit
+            # attribute, so it is set on the ISSUING ARMY instead -- PP-256's Feigned Retreat is an Army-wide tactic
+            # (Army.feigned), not a per-subunit one. This is the trigger for PP-256's resolution machinery
+            # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat, all in orchestration.py).
+            unit.feigned = bool(v)
+            continue
+        if k == 'stance':
+            sub._stance_explicit = True   # [MB-04] an Order's stance (even 'balanced') beats a role keyword
+        setattr(sub, k, v)
+    # [A1, ED-MB-0067 Part A] Clamp a freshly-assigned route to Jordan's ruled path-length
+    # budget (0.5*speed*max-ticks) THE MOMENT it is assigned, using the sub-unit's position
+    # at THIS tick as the route's start point -- see Unit._clamp_route_to_budget. Applying
+    # this here (not inside _resolve_route_goal, which reads the route fresh every tick
+    # without re-deriving it) means the budget is a fixed planning bound set at order-issue
+    # time, not one that silently grows if the sub-unit is later shoved backward by combat
+    # contention. Inert whenever 'route' is not one of the fields this order sets.
+    #
+    # The resume index is resolved ONCE here (`order.behavior.get('_route_idx', 0)`, not read back off
+    # `sub._route_idx` after setattr already applied it) and threaded explicitly into BOTH the clamp call
+    # (`start_idx=`, so a resume-partway order's already-passed legs are never measured against the budget)
+    # and the cursor assignment immediately after, so the two can never disagree about which index this
+    # order resumes at.
+    if 'route' in order.behavior:
+        _resume_idx = order.behavior.get('_route_idx', 0)
+        sub.route = sub._clamp_route_to_budget(sub.route, start_idx=_resume_idx)
+        sub._route_idx = _resume_idx
+        # [F2] A fresh/re-issued route must not inherit a stalled-waypoint tick count left over from whatever
+        # the sub-unit was previously chasing (see _resolve_route_goal's stall-breaker): an index COLLISION (old
+        # and new route resuming at the same idx) would otherwise carry the old count onto an unrelated
+        # waypoint.
+        sub._route_wait_ticks = 0
+        sub._route_wait_idx = _resume_idx
+    # [ED-1095] Track when 'brace' most recently BECAME present via an order (vs. having been
+    # present since construction, stamped 0 in __post_init__) -- resolution._subunit_braced
+    # requires a full tick since this stamp before treating the subunit as braced. Reset to -1
+    # on removal so a later re-brace gets its own fresh delay rather than reusing a stale stamp.
+    if 'brace' in sub.instructions:
+        if sub._brace_since_tick < 0:
+            sub._brace_since_tick = t
+    else:
+        sub._brace_since_tick = -1
+
+
 
 
 def assign_targets(unit_a, unit_b):

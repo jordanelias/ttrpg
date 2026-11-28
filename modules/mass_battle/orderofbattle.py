@@ -253,6 +253,9 @@ def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
     specs = [_spec_for(sf, oob.strategy) for sf in oob.units]
     classes = [class_of(sf.troop_type) for sf in oob.units]
     _place(specs, classes, side)
-    return build_army(specs, name, side, power=_UNIT_POWER, command=_UNIT_COMMAND, discipline=_UNIT_DISCIPLINE,
+    army = build_army(specs, name, side, power=_UNIT_POWER, command=_UNIT_COMMAND, discipline=_UNIT_DISCIPLINE,
                       morale=morale_start, morale_start=morale_start,
                       commander=oob.commander, commander_post=oob.commander_post)
+    for unit, sf in zip(army.units, oob.units):   # [27A-4, B19.05] the row's name rides on the unit `commander_post` names
+        unit.name = sf.name
+    return army

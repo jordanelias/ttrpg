@@ -451,6 +451,11 @@ class Unit:
     # [27A-3, B19.04] The typed record of the officer who carries this unit's orders (`queries/inputs.py::CommandRecord`, built by
     # the host from the unit row's `officer` column); None -> the unit has none and its commander gives its orders.
     officer_record: Optional[object] = field(default=None, repr=False)
+    # [27A-4, B19.05] The unit's row name (`UnitRow.name`), which `Army.commander_post` names: the obedience draw measures the commander's
+    # distance from the unit so named. None for a unit built without one. And the tick of the last draw that left an order not carried
+    # out (`check_orders`: that order is not drawn again in the same phase); 0 = none.
+    name: Optional[str] = field(default=None, repr=False)
+    _obey_block: int = 0
     # [MB-04] True once the stance was WRITTEN on purpose (an Order's `stance` behavior, or a build spec's
     # `stance` key), including 'balanced': eff_stance then never lets a role keyword override it.
     _stance_explicit: bool = field(default=False, repr=False)
@@ -2562,6 +2567,11 @@ class Army:
     # rides with (`commander_post`; None is the army's rear centre). Both None -> no record, which reads as it does today.
     commander: Optional[object] = field(default=None, repr=False)
     commander_post: Optional[str] = None
+    # [27A-4, B19.05] The obedience draw's three input scalars (`MassBattleInput.pool_add`, `.pool_floor`, `.obey_task`), which
+    # `massbattle.resolve_field` sets; 0 / 0 / 0.0 is the field as it was.
+    obey_pool_add: int = 0
+    obey_pool_floor: int = 0
+    obey_task: float = 0.0
 
     def __post_init__(self):
         # [canonical: Jordan directive 2026-06-02] Command DERIVED from Charisma (primary) +
