@@ -85,6 +85,7 @@ def mechanics_selftest():
 # ─── ARMY CONSTRUCTION moved to modules/mass_battle/armies.py (the module closure): re-imported, not copied. ───
 from modules.mass_battle.armies import (UNIT_CAP, DEPLOY_GAP, ENVELOP_WING_GAP, REFUSE_ECHELON,
                                         _spec_span, _centered_line_cols, build_army)
+from modules.mass_battle.orderofbattle import place_posts   # [B19.18] the one reader of a formation row (the season's `_place` calls it too)
 
 
 def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type=None,
@@ -161,56 +162,23 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     to freeze position, no separate position-pinning mechanism needed. Used by the frozen-vs-wheeling
     gauge ablation to settle DG-5 (is a genuine maneuver-timing race live, or was RC-1's accounting
     layer sufficient on its own) -- an instrumentation-only toggle, not a design change."""
-    # [ED-MB-0017] SYMMETRIC deployment (fixes P-2). The centre is bowed FORWARD on the field-centre
-    # anchor (the convex crescent apex); the wings are split to OPPOSITE flanks — left wings well left of
-    # the centre, right wings well right — so `_envelop_goal` sends each around the OPPOSITE flank
-    # (`ac < enemy-centre` -> wrap left; `ac > enemy-centre` -> wrap right), i.e. the two wings wheel in
-    # MIRROR (opposite rotational sense), the load-bearing invariant of a double envelopment
-    # (Cannae research §1/§5). Pre-fix, `build_army`'s `15 + i*4` put both wings to the RIGHT of centre,
-    # so both wrapped the same flank — no ring ever formed.
-    advance_dir = -1 if faction == 'A' else 1
+    # [ED-MB-0017] SYMMETRIC deployment (fixes P-2). The centre is bowed FORWARD on the field-centre anchor (the convex crescent apex); the
+    # wings are split to OPPOSITE flanks -- left wings well left of the centre, right wings well right -- so `_envelop_goal` sends each
+    # around the OPPOSITE flank (`ac < enemy-centre` -> wrap left; `ac > enemy-centre` -> wrap right), i.e. the two wings wheel in MIRROR,
+    # the load-bearing invariant of a double envelopment (Cannae research §1/§5). [B19.18] The placement is the `envelopment` row of
+    # `references/troops.yaml: formations` read by `orderofbattle.place_posts` (the season's `_place` calls the same function): the centre at
+    # the `centre` post (the apex, `forward` rows ahead of the flank line), the wings alternately at `left` and `right` (wide of the centre's
+    # ACTUAL span, so a caller-placed centre is flanked where it stands [ED-MB-0025]); an EXPLICIT `starting_position` is honoured as given.
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    APEX = 2  # [canonical: Cannae research §1 — centre apex ~2-4 rank-units forward of the flank line]
     center = [dict(sp) for sp in center_specs]
     n_center = len(center)
-    c_spans = [_spec_span(sp) for sp in center]
-    # [ED-MB-0025 wing-placement fix] The wings must flank the centre's ACTUAL column. Previously the
-    # wing boundaries (c_left/c_right) were derived from `_centered_line_cols(center, 25)` — a phantom
-    # field-centre-anchored placement — even when the caller PRE-SET the centre's starting_position (as
-    # the gauge's `_envelop_army` does, at the enemy's column). The wings then wrapped a centre that
-    # wasn't there (landed cols 21/27 while the centre sat at col 9), so no ring ever formed around the
-    # real body. Now: honour a pre-set centre column and place wings relative to THAT; only fall back to
-    # the field-centre placement for centres with no explicit position (production/bat.py path unchanged).
-    default_cols = _centered_line_cols(center, 25)  # field-centre anchor (BATTLEFIELD_SIZE 50)
-    c_cols = []
-    for sp, dcol in zip(center, default_cols):
-        if 'starting_position' in sp:
-            c_cols.append(sp['starting_position'][1])            # honour caller's real centre placement
-        else:
-            sp['starting_position'] = (start_row + APEX * advance_dir, dcol)  # apex forward (field-centre)
-            c_cols.append(dcol)
-    c_left = min(col + s[0] for col, s in zip(c_cols, c_spans))
-    c_right = max(col + s[1] for col, s in zip(c_cols, c_spans))
-    left_x = c_left - ENVELOP_WING_GAP    # right boundary of the left wing group (grows leftward)
-    right_x = c_right + ENVELOP_WING_GAP  # left boundary of the right wing group (grows rightward)
-    wings = []
-    for i, sp0 in enumerate(wing_specs):
-        sp = dict(sp0)
+    wings = [dict(sp0) for sp0 in wing_specs]
+    for sp in wings:
         sp.setdefault('stance', 'hold')
-        cmin, cmax = _spec_span(sp)
-        # [ED-MB-0025] Honour an EXPLICIT wing position if the caller gave one (explicit-placement
-        # directive); only auto-compute the flank-split placement when none is supplied. Previously this
-        # was an unconditional assignment that silently discarded a caller's `starting_position`.
-        if 'starting_position' not in sp:
-            if i % 2 == 0:  # left wing: place its RIGHT edge at left_x, then extend further left
-                col = int(round(left_x - cmax))
-                left_x = (col + cmin) - ENVELOP_WING_GAP
-            else:           # right wing: place its LEFT edge at right_x, then extend further right
-                col = int(round(right_x - cmin))
-                right_x = (col + cmax) + ENVELOP_WING_GAP
-            sp['starting_position'] = (start_row, col)  # wings at the flank base line, behind the apex
-        wings.append(sp)
     specs = center + wings
+    posts = ['centre'] * n_center + ['left' if i % 2 == 0 else 'right' for i in range(len(wings))]
+    for i, pos in place_posts(specs, posts, 'envelopment', faction, start_row).items():
+        specs[i]['starting_position'] = pos
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
     if not freeze_wings:
@@ -239,40 +207,20 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     once an enemy actually closes to that range, matching the historical "declines general engagement,
     holds if directly pressed" doctrine. Reuses Stage C's existing enemy_range order trigger; no new
     mechanic. Same LC-8 retirement note as build_envelopment (see its docstring) applies here."""
-    # [ED-MB-0017] OBLIQUE deployment (fixes P-3). Lay strong + refused across one centred frontage
-    # (so no lateral overlap), then push the REFUSED units ECHELONED BACK by REFUSE_ECHELON rows —
-    # out of contact range while the strong wing engages (Leuctra/Leuthen research §2/§4). Strong units
-    # take the left of the line and lead at the front; refused take the right and trail rearward: the
-    # diagonal "staircase" of an oblique order. Pre-fix, `build_refused_flank` never moved the refused
-    # wing at all — it sat level with the strong wing AND overlapped it (P-3, "makes no sense").
-    advance_dir = -1 if faction == 'A' else 1
+    # [ED-MB-0017] OBLIQUE deployment (fixes P-3): strong + refused across one centred frontage (no lateral overlap), the REFUSED units
+    # abutting the strong wing on its right and ECHELONED BACK out of contact range while the strong wing engages (Leuctra/Leuthen research
+    # §2/§4). [B19.18] The placement is the `refused_flank` row of `references/troops.yaml: formations` read by `orderofbattle.place_posts`:
+    # the strong units at `centre`, the refused at `right` (`forward` -6, `gap` 0), against the strong wing's ACTUAL span [ED-MB-0025]; an
+    # EXPLICIT `starting_position` is honoured as given.
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     strong = [dict(sp) for sp in strong_specs]
     refused = [dict(sp) for sp in refused_specs]
     n_strong = len(strong)
-    all_specs = strong + refused
-    # [ED-MB-0025 wing-placement fix, sibling of build_envelopment] Honour an EXPLICIT starting_position
-    # and anchor the REFUSED wing on the strong wing's ACTUAL column span, not a phantom field-centre.
-    # Previously every column came from `_centered_line_cols(all_specs, 25)` (field-centre) applied via
-    # setdefault, so a caller pre-setting the strong wing at col 9 (the `_envelop_army`/`_refused_army`
-    # idiom) but leaving the refused spec unset placed the refused wing at ~col 26 — nowhere near the
-    # strong wing, breaking the oblique "staircase" the function documents.
-    default_cols = _centered_line_cols(all_specs, 25)          # field-centre fallback for un-placed specs
-    resolved_cols = [sp['starting_position'][1] if 'starting_position' in sp else default_cols[i]
-                     for i, sp in enumerate(all_specs)]
-    for i, sp in enumerate(strong):
-        sp.setdefault('starting_position', (start_row, resolved_cols[i]))                  # strong: front line
-    # refused wing echeloned BACK, its default column just to the RIGHT of the strong wing's real span
-    s_right = max(resolved_cols[i] + _spec_span(all_specs[i])[1] for i in range(n_strong))
-    _next = s_right + DEPLOY_GAP
-    for j, sp in enumerate(refused):
+    for sp in refused:
         sp.setdefault('stance', 'hold')
-        if 'starting_position' not in sp:
-            cmin, cmax = _spec_span(sp)
-            col = int(round(_next - cmin))
-            _next = col + cmax + DEPLOY_GAP
-            sp['starting_position'] = (start_row - REFUSE_ECHELON * advance_dir, col)       # refused: echeloned BACK
-    specs = all_specs
+    specs = strong + refused
+    for i, pos in place_posts(specs, ['centre'] * n_strong + ['right'] * len(refused), 'refused_flank', faction, start_row).items():
+        specs[i]['starting_position'] = pos
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
     for atom in unit.units[n_strong:]:

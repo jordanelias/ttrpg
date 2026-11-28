@@ -7,6 +7,7 @@ and a module may not reach into `systems/` (the harness and workbench tree), so 
 (`systems/mass_battle/sim/engine.py` re-imports every name below)."""
 from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
 from modules.mass_battle.core.exchange import clamp_command
+from modules.mass_battle.troop_types import table as _troops
 from modules.mass_battle.troop_types.registry import default_role_for, role_allowed, roles_for, unit_type_for
 from modules.mass_battle.hierarchy.units import Officer, Unit, Army
 from modules.mass_battle.geometry import CELL_PATTERN_FN, footprint_for
@@ -39,7 +40,7 @@ UNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command — videogame cap 
 # anchor, symmetric wings for envelopment, and an echeloned-rear refused wing.
 DEPLOY_GAP = 1        # [canonical: pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent units; a coherent line (hoplite ~0) not the wide manipular quincunx]
 ENVELOP_WING_GAP = 3  # [canonical: pathing_deployment_diagnosis.md §3 / Cannae research §1 — wings sit WIDE of the centre's flanks (columns, refused slightly), clear of its frontage]
-REFUSE_ECHELON = 6    # [canonical: pathing_deployment_diagnosis.md §2 / Leuctra research §2 — refused wing echeloned back so it cannot reach contact when the strong wing does (depth-ratio-grounded offset in rows)]
+REFUSE_ECHELON = -_troops.formation('refused_flank')['posts']['right']['forward']   # B19.18: the troop file's row owns it (six rows back) [canonical: pathing_deployment_diagnosis.md §2 / Leuctra research §2 — refused wing echeloned back so it cannot reach contact when the strong wing does (depth-ratio-grounded offset in rows)]
 
 
 def _spec_span(sp):

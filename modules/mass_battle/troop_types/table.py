@@ -30,6 +30,7 @@ derives from the YAML, before either artifact is written -- and never inside a f
 """
 from __future__ import annotations
 
+import copy
 import functools
 import json
 import os
@@ -37,14 +38,14 @@ from typing import Optional
 
 __all__ = ['TroopFileError', 'check', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
            'stats_for', 'is_mounted', 'roles_for', 'training_site_for', 'loadout_for_names', 'cell_cap_of',
-           'fatigue', 'deployment', 'depth_of', 'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
+           'fatigue', 'deployment', 'formations', 'formation', 'depth_of', 'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
 
 _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engine_v1.json')
 
 #: The keys the exporter adds to the file's own; the loader accepts and ignores them.
 META_KEYS = ('_generated', 'schema_version', 'source')
-HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'contact', 'matchups', 'fatigue', 'deployment', 'troops')
+HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'contact', 'matchups', 'fatigue', 'deployment', 'formations', 'troops')
 ROLE_COLUMNS = ('shape', 'instructions')
 ARM_COLUMNS = ('class', 'mass_kg', 'duel_key', 'duel_key_status', 'sidearm')
 CLASS_COLUMNS = ('reach', 'support_ranks')
@@ -74,6 +75,15 @@ FATIGUE_COLUMNS = ('lull_recover',)
 #: `DEPLOYMENT_ARMS` (`cap` is today's packing and the control; `grid` lays a body as a width x depth grid, `orderofbattle.cells_for`).
 DEPLOYMENT_COLUMNS = ('cell_troops', 'arm')
 DEPLOYMENT_ARMS = ('cap', 'grid')
+#: The `formations` rows (B19.18): a formation's columns, its `frontage` (`centre`: the centre line is centred alone; `whole`: centred with the side posts), a post's columns,
+#: where a post stands `across` the field, and the unit classes `default_post` names (`orderofbattle.class_of`'s). `line` is the row an army with no other formation takes.
+FORMATION_COLUMNS = ('opening_rows', 'frontage', 'posts', 'default_post')
+FRONTAGES = ('centre', 'whole')
+POST_COLUMNS = ('rank_line', 'across', 'forward', 'gap')
+POST_REQUIRED = ('rank_line', 'across')
+ACROSS = ('centre', 'left', 'right', 'wide_left', 'wide_right')
+POST_CLASSES = ('melee', 'ranged', 'mounted')
+DEFAULT_FORMATION = 'line'
 
 
 class TroopFileError(ValueError):
@@ -154,6 +164,41 @@ def _check_matchups(rows: list) -> None:
         _columns(f"{where}.first_tick", row['first_tick'], FIRST_TICK_COLUMNS, FIRST_TICK_COLUMNS)
 
 
+def _whole(where, v, least):
+    if isinstance(v, bool) or not isinstance(v, int) or v < least:
+        raise TroopFileError(f"{where}: a whole number of at least {least} is required; got {v!r}")
+
+
+def _check_formations(rows: dict) -> None:
+    """Each formation names its columns, a `frontage` and posts of its closed sets, a first line with a post across the centre, and a
+    `default_post` that gives every class a post the formation has; and `line` is there."""
+    if DEFAULT_FORMATION not in rows:
+        raise TroopFileError(f"formations: the row {DEFAULT_FORMATION!r} is required (an army with no other formation takes it)")
+    for name, row in rows.items():
+        where = f"formations.{name}"
+        _columns(where, row, FORMATION_COLUMNS, FORMATION_COLUMNS)
+        _whole(f"{where}.opening_rows", row['opening_rows'], 1)
+        _member(where, row['frontage'], FRONTAGES, 'frontage', nullable=False)
+        posts = row['posts']
+        if not isinstance(posts, dict) or not posts:
+            raise TroopFileError(f"{where}.posts: a mapping of post name to its row is required; got {posts!r}")
+        for post, p in posts.items():
+            pw = f"{where}.posts.{post}"
+            _columns(pw, p, POST_COLUMNS, POST_REQUIRED)
+            _whole(f"{pw}.rank_line", p['rank_line'], 0)
+            _member(pw, p['across'], ACROSS, 'across', nullable=False)
+            if 'forward' in p and (isinstance(p['forward'], bool) or not isinstance(p['forward'], int)):
+                raise TroopFileError(f"{pw}.forward: a whole number of rows is required; got {p['forward']!r}")
+            if 'gap' in p:
+                _whole(f"{pw}.gap", p['gap'], 0)
+        if not any(p['rank_line'] == 0 and p['across'] == 'centre' for p in posts.values()):
+            raise TroopFileError(f"{where}.posts: no post across the centre on rank_line 0 (the first line has nothing to stand on)")
+        _columns(f"{where}.default_post", row['default_post'], POST_CLASSES, POST_CLASSES)
+        for cls, given in row['default_post'].items():
+            for post in (given if isinstance(given, list) else [given]):
+                _member(f"{where}.default_post.{cls}", post, posts, 'post', nullable=False)
+
+
 def check(data: dict, combat_weapons=None, config_names=()) -> None:
     """Refuse a troop file that breaks a rule above. `combat_weapons` is the roster's key set (read from the export by
     default); `config_names` is the `EngineConfig` field names, which the caller supplies (`tools/export_troops.py` reads them:
@@ -161,7 +206,7 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
     if combat_weapons is None:
         combat_weapons = combat_weapon_keys()
     for column in (HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + CONTACT_COLUMNS + EXPOSURE_COLUMNS + LEVEL_COLUMNS
-                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + FATIGUE_COLUMNS + DEPLOYMENT_COLUMNS + TROOP_COLUMNS):
+                   + MISSILE_COLUMNS + MATCHUP_COLUMNS + FIRST_TICK_COLUMNS + FATIGUE_COLUMNS + DEPLOYMENT_COLUMNS + FORMATION_COLUMNS + POST_COLUMNS + TROOP_COLUMNS):
         if column.upper() in config_names:
             raise TroopFileError(f"troop file: the name {column!r} is a column here and a field of `EngineConfig` "
                                  f"(`config.py`); a value has one owner, never both")
@@ -205,6 +250,7 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
     if isinstance(dep['cell_troops'], bool) or not isinstance(dep['cell_troops'], int) or dep['cell_troops'] < 1:
         raise TroopFileError(f"deployment.cell_troops: a whole number of at least 1 is required; got {dep['cell_troops']!r}")
     _member('deployment', dep['arm'], DEPLOYMENT_ARMS, 'arm', nullable=False)
+    _check_formations(data['formations'])
     for name, row in data['troops'].items():
         where = f"troops.{name}"
         _columns(where, row, TROOP_COLUMNS, TROOP_COLUMNS)
@@ -344,6 +390,16 @@ def fatigue() -> dict:
 def deployment() -> dict:
     """The `deployment` block as a fresh dict, `{cell_troops, arm}` (B19.17)."""
     return dict(_data()['deployment'])
+
+
+def formations() -> tuple:
+    """Every formation's name, in the file's order (B19.18)."""
+    return tuple(_data()['formations'])
+
+
+def formation(name: str) -> dict:
+    """The formation row `name` as a deep copy (`opening_rows`, `frontage`, `posts`, `default_post`); KeyError for a name that is none (B19.18)."""
+    return copy.deepcopy(_data()['formations'][name])
 
 
 def depth_of(troop_type) -> int:

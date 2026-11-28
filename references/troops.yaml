@@ -136,6 +136,47 @@ deployment:
   cell_troops: 16
   arm: cap
 
+# The army's formation, one row per named formation (B19.18; `orderofbattle.place_posts` is the one reader: the season's `_place` and the harness's
+# `build_envelopment` / `build_refused_flank` both call it). An army's strategy names its formation (`line` unless the strategy is another row's name);
+# a unit stands at a POST of it, `post` on the unit row, else the one `default_post` gives its class.
+#   opening_rows  the clear rows between the two armies' foremost faces at the start (the MB "opening distance"; was `_APPROACH_ROWS`)
+#   frontage      `centre`: the centre line is centred alone and the side posts stand outside it; `whole`: it is centred with the side posts
+#   posts         name -> where it stands:
+#     rank_line   which line behind the first (0 the first); a line stands one clear row behind the depth of the line in front of it
+#     across      `centre`: in the centre line; `left` / `right`: outside its edge, clear of it by the deploy gap; `wide_left` / `wide_right`:
+#                 outside it by the wing gap (`armies.ENVELOP_WING_GAP`)
+#     forward     optional, rows toward the enemy from the line (negative: back), default 0
+#     gap         optional, the empty columns between the post and what it stands beside, instead of the `across` term's own
+#   default_post  class (`melee`, `ranged`, `mounted`) -> a post, or a list of posts the units of that class take in turn
+formations:
+  line:                       # today's rule, transcribed: the control
+    opening_rows: 3           # [ASSUMPTION; medium; Jordan to correct] the smallest gap measured to join every melee type in one turn
+    frontage: centre
+    posts:
+      centre:  {rank_line: 0, across: centre}
+      rear:    {rank_line: 1, across: centre}     # one clear row behind the centre's depth
+      left:    {rank_line: 0, across: left}
+      right:   {rank_line: 0, across: right}
+      reserve: {rank_line: 2, across: centre}
+    default_post: {melee: centre, ranged: rear, mounted: [left, right]}   # alternating, as now
+  envelopment:                # the harness's `build_envelopment` (the Cannae pattern): the centre bowed forward, the wings wide of it. The wings' hold-then-wheel is a standing order, not a row.
+    opening_rows: 3
+    frontage: centre
+    posts:
+      centre: {rank_line: 0, across: centre, forward: 2}   # the apex, two rows forward of the flank line
+      rear:   {rank_line: 1, across: centre}
+      left:   {rank_line: 0, across: wide_left}
+      right:  {rank_line: 0, across: wide_right}
+    default_post: {melee: centre, ranged: rear, mounted: [left, right]}
+  refused_flank:              # the harness's `build_refused_flank` (Leuctra): the strong wing at the front, the refused wing beside it and echeloned back
+    opening_rows: 3
+    frontage: whole
+    posts:
+      centre: {rank_line: 0, across: centre}
+      rear:   {rank_line: 1, across: centre}
+      right:  {rank_line: 0, across: right, gap: 0, forward: -6}   # abutting the strong wing, six rows back
+    default_post: {melee: centre, ranged: rear, mounted: right}
+
 # One row per troop type, in `TROOP_TYPE_STATS`' order, then the unmustered body.
 #   skill, discipline, morale   today's stat line (§B.2); a row with a null among the three has no preset (`stats_for` None).
 #                               `skill` was `power`, values unchanged: the men's martial skill on the duel's `faculty` scale (B19a.01).

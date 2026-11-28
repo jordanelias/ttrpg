@@ -270,7 +270,7 @@ def _weighted_unit(name, weight, side, morale_start=_MORALE_START_BASE, role=Non
 
     B17.01: `troops = max(under_arms_cap(weight), _MIN_TROOPS)`, the one weight -> troops owner (`_oob_unit`'s size
     too). It is built with `faction` `side` ('A' the attacker, 'B' the defender) and placed by `orderofbattle._place`
-    as an order of battle's line is, so a headcount field starts `_APPROACH_ROWS` apart as an army field does.
+    as an order of battle's line is, so a headcount field starts the `line` formation's `opening_rows` apart as an army field does.
 
     `_MVP_SUBUNIT_SHAPE`'s `tier=2` is still passed because `Unit.__post_init__` requires SOME
     tier even in continuous mode; it is inert here (troops overrides it). `concentration` is set

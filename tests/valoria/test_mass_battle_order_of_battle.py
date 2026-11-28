@@ -379,3 +379,52 @@ def test_depth_is_a_lever():
     assert l2 > 0 and l6 > 0 and lc > 0, "vacuous if the lines never joined (no casualties)"
     assert abs(w6 - w2) > abs(wc - w2) or abs(l6 - l2) > abs(lc - l2), (
         f"depth 2 vs depth 6 moved no more than the control's own spread: wins {w2}/{w6}/{wc}, loss {l2:.4f}/{l6:.4f}/{lc:.4f}")
+
+
+# ------------------------------------------------------------------------------- a unit's post, the army's formation (B19.18)
+def _cols(unit):
+    return [cell[1] for cell in unit.cells()]
+
+
+def test_a_left_post_starts_left_of_the_front():
+    """A unit posted `left` in `line` starts left of the centre line's left edge, level with it, on either side. THE CONTROL: the same two
+    units with no post, the one named last: it stands in the centre line, to the RIGHT of the other, so the post (and not the unit's order
+    in the list) put it left. A post the formation has no row for is refused at the boundary."""
+    posted = _oob(('wall', 'heavy_infantry', 500, {}), ('hook', 'spearmen', 300, {'post': 'left'}))
+    plain = _oob(('wall', 'heavy_infantry', 500, {}), ('hook', 'spearmen', 300, {}))
+    for side in ('A', 'B'):
+        wall, hook = build_unit(posted, 'u', side, morale_start=5).units
+        assert max(_cols(hook)) < min(_cols(wall)), (side, "the left post is not left of the front's left edge")
+        assert hook.starting_position[0] == wall.starting_position[0]
+        wall, hook = build_unit(plain, 'u', side, morale_start=5).units
+        assert min(_cols(hook)) > max(_cols(wall)), (side, "the control: with no post the second unit stands to the right")
+    with pytest.raises(ValueError):
+        validate(_oob(('hook', 'spearmen', 300, {'post': 'flank_guard'})))
+
+
+def test_envelopment_row_equals_the_harness_builder():
+    """An army with `formation: envelopment` starts with both wings wide of the centre (the left wing left of it and the right wing right of
+    it, a clear gap each), and the harness's own `build_envelopment`, given the same specs, starts every unit on the same cells -- compared
+    relative to the centre's row, since the season and the harness base their rows differently. THE CONTROL: the same army in `line` is not
+    the envelopment's shape, so the equality is not a property of any two layouts."""
+    from systems.mass_battle.sim.engine import build_envelopment
+    from modules.mass_battle.orderofbattle import _spec_for
+    oob = OrderOfBattle((UnitRow('centre', 'heavy_infantry', 500), UnitRow('lw', 'light_cavalry', 200, post='left'),
+                         UnitRow('rw', 'light_cavalry', 200, post='right')), 'line', formation='envelopment')
+    specs = [_spec_for(sf, 'line') for sf in oob.units]
+
+    def shape(units):
+        base = units[0].starting_position[0]
+        return [sorted((cell[0] - base, cell[1]) for cell in u.cells()) for u in units]
+
+    checked = 0
+    for side in ('A', 'B'):
+        season = build_unit(oob, 'u', side, morale_start=5)
+        centre, lw, rw = season.units
+        assert max(_cols(lw)) < min(_cols(centre)) - 1 and min(_cols(rw)) > max(_cols(centre)) + 1, "the wings are not wide of the centre"
+        harness = build_envelopment([specs[0]], specs[1:], 'h', side)
+        assert shape(season.units) == shape(harness.units), side
+        line = build_unit(OrderOfBattle(oob.units, 'line'), 'u', side, morale_start=5)
+        assert shape(line.units) != shape(harness.units), "the control: `line` is not the envelopment"
+        checked += 1
+    assert checked == 2
