@@ -322,29 +322,3 @@ def test_a_negotiation_reaches_eff_oblige_the_opener_of_the_kind_it_disposes(mon
     assert [t.object for t in edges] == ["off_dicastery"] and "duty.taken" in {e.kind for e in w.log}
     monkeypatch.setitem(_OPENERS_FROM_EFFECTS, "oblige", ())
     assert _verbs.arrangements_without_a_disposal_opener() == ["arbitration", "negotiation", "audience"]
-
-
-def test_the_hold_disposing_rows_are_opened_by_determine(monkeypatch):
-    """RE-RECORDED AT v12 B21c.02 (v11 CR-35 (9), H-217 closed). This was the tripwire
-    `test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold`: a planted `succession` row (`disposes: hold`) loaded,
-    and C-1's report named it because no `determine` site opened a `hold`. It went red as designed the day the site existed:
-    `loop/effects_information.py::_disposal` now constructs the seat-`hold` literal (on the seat the docketed petition names), the derived
-    opener map reads `determine` beside `hold`, and the two rows it unblocked are SEEDED -- `election` and `succession`, each `disposes: hold`,
-    `close: declared`. `hold` is still no `state/gate.py::DISPOSABLE_KINDS` member (`SEAT_DISPOSAL`): a bench never opens one on its own
-    seat (the gate's election arm opens it on another), and `_determinable` admits the rows, so `open_case` may dock them.
-
-    OBSERVED: the shipped report is empty and both seeded rows dispose `hold`. CONTROL: with `determine` struck from `hold`'s derived
-    openers, C-1 names exactly the two rows. ⚠ SINCE B21c.04 THE OPENER MAP NO LONGER ISOLATES THE `_disposal` SITE: `_eff_determine` also
-    reaches `_mint_document` -> `_makers_hold`'s `"hold"` literal, so `determine` stays a derived `hold` opener were the `_disposal` literal
-    removed (observed). That the `hold` opens on the petition's seat is observed by `test_cr35_election.py`, which runs the fold."""
-    from ..data.verbs import _OPENERS_FROM_EFFECTS
-    from ..loop.effects_information import _determinable
-    from ..state.gate import DISPOSABLE_KINDS, SEAT_DISPOSAL
-    seeded = sorted(n for n, r in A.ARRANGEMENTS.items() if r["disposes"] == "hold")
-    assert seeded == ["election", "succession"], seeded
-    assert all(A.ARRANGEMENTS[n]["close"] == "declared" and _determinable(n) for n in seeded)
-    assert SEAT_DISPOSAL == "hold" and "hold" not in DISPOSABLE_KINDS
-    assert "determine" in (_OPENERS_FROM_EFFECTS.get("hold") or ()), _OPENERS_FROM_EFFECTS.get("hold")
-    assert _verbs.arrangements_without_a_disposal_opener() == []
-    monkeypatch.setitem(_OPENERS_FROM_EFFECTS, "hold", tuple(v for v in _OPENERS_FROM_EFFECTS["hold"] if v != "determine"))
-    assert _verbs.arrangements_without_a_disposal_opener() == seeded

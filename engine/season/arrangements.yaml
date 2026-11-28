@@ -60,7 +60,7 @@
 # `arrangements:`) -- NINE rows. Its envoys variant (`interposed: [person, pair]`, §E.2: "the ONLY
 # change") is not a row of its own here. v11 CR-35 (B21c.02) SEEDED `election` AND `succession` (`disposes: hold`), the last block of
 # `arrangements:`: `loop/effects_information.py::_disposal` has its `hold` site, opened on the seat the docketed petition names, so C-1's
-# report is empty (`test_arrangements.py::test_the_hold_disposing_rows_are_opened_by_determine`, the tripwire re-recorded).
+# report is empty (`test_u7_remit.py` asserts it empty; the tripwire it replaced is retired).
 
 speech_kinds:
   # `19_PLAN.md` step 7: "the roster the design promised and never wrote... Ten members; the two

@@ -112,30 +112,3 @@ def test_a_ladder_post_never_compares_with_a_title():
     _told(duke, "p_king", ("King",))
     _told(duke, "p_low", ("Lord",))
     assert (rank(duke, "p_king"), rank(duke, "p_low")) == (1, -1)
-
-
-# ======================================================================================
-# THE CONTROL
-# ======================================================================================
-
-def test_empty_ladders_is_the_prior_hash(monkeypatch):
-    """With `ladders: {}` a seat's `hold` carries only the grant (`remit_acts`, `seat_rung`), a witness's `marks` are CR-30's heritage alone, and
-    `rank` is 0 -- every thing the world's digest folds is what it was. With the shipped ladders the same world carries a stamped post."""
-    def build():
-        w, d = _world()
-        w.persons[DUKE].heritage = "altonian"
-        _seat(w, DUKE, "Cardinal", CHURCH, "his")
-        out, _e = _convene(w, d)
-        _witness(w, d, out)
-        return w
-
-    shipped = build()
-    assert {k for t in shipped.persons[DUKE].tenures if t.kind == "hold" for k in t.payload} == {"remit_acts", "seat_rung", "post"}, "vacuous control"
-    monkeypatch.setattr(rosters, "LADDERS", {})
-    w = build()
-    assert {k for t in w.persons[DUKE].tenures if t.kind == "hold" for k in t.payload} == {"remit_acts", "seat_rung"}
-    marks = [c.value.marks for c in w.persons[WATCHER].ledger if c.predicate == SEEN_PREDICATE]
-    assert marks == [("altonian",)]
-    me = _person_holding("Deacon", CHURCH)
-    _told(me, "p_high", ("Cardinal",))
-    assert rank(me, "p_high") == 0

@@ -69,6 +69,10 @@ lanes:
         added: 2
         behaviour: "the governance spine prints the Offer and holds no second menu (test_governance_spine_play.py); the creation sheet shows holdings for a seat holder (test_season_shape.py)"
 
+      - {batch: B21c-fa-seats, added: 5, behaviour: "a witness of a ladder-post holder's act holds that post in its marks where the ladder shows livery and none where it does not; rank reads the sign of the teller's ordinal against the hearer's on one scale (a post ladder or the title ordinal) and never across the two"}
+      - {batch: B21c-fa-seats, added: 8, behaviour: "a vacant elected seat is filled by its faction's bench through determine and refused for a non-faction candidate, a judge outside the faction, a held seat, a second-faction commit or a banned candidate; an uncommitted bench carries less often than a committed one; a contested succession seats a rival and declines once the heir has claimed"}
+      - {batch: B21c-fa-seats, added: 7, behaviour: "a nominee is confirmed by a second seat only on a resolution a determine through another seat minted, a failed nomination mints nothing, a nominated vacancy is offered only to a holder of its resolution, and a petition naming no seat is not docked under a seat or Record row"}
+      - {batch: B21c-fa-seats, added: 6, behaviour: "the throne is stripped by the Holy See's revoke only on a carried motion minted through another seat, resisted at Failure, refused for any other body, a former king or a planted single signer; the Confessor is reached by no route and the concurring seat does not command the king (seven tests, one offset by a retired tripwire the same close)"}
   engine:
     base: 1043
     warrants:
