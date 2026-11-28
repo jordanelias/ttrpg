@@ -313,8 +313,8 @@ def _check_world(where: str, block) -> None:
     extra = sorted(set(block) - set(WORLD_KEYS))
     if extra:
         raise SystemExit(f"{where}: `world:` has keys nothing reads: {extra} (the closed set is {list(WORLD_KEYS)})")
-    cohort = block.get("cohort")
     if "cohort" in block:
+        cohort = block["cohort"]
         wt = cohort.get("weight") if isinstance(cohort, dict) else None
         if not isinstance(cohort, dict) or set(cohort) != set(COHORT_KEYS) or isinstance(wt, bool) or not isinstance(wt, int) or wt <= 1:
             raise SystemExit(f"{where}: `world: cohort:` is exactly {{weight}}, an int above 1 (a cohort is more than one head) -- {cohort!r}")

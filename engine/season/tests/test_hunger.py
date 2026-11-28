@@ -14,7 +14,7 @@ import pytest
 
 from ..harness import populated as POP
 from ..boot.realm import build_realm, place_person
-from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
+from ..data.fixtures import DEFAULT_FIXTURES, X1_FIXTURES
 from ..data.matrix import WriteClass
 from ..gaps import Unspecified, expect_refusal
 from ..harness import scarce as S
@@ -49,7 +49,7 @@ def test_settlement_with_no_cohort_reads_empty():
 
 
 UNIFORM = DEFAULT_FIXTURES.sweep("endowment_mode", "uniform")
-X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)    # B12b.44: the planted worlds below are sized at the x1 arm (grain 2, salt 1)
+X1 = X1_FIXTURES    # B12b.44: the planted worlds below are sized at the x1 arm (grain 2, salt 1)
 
 
 def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_first_yield():

@@ -2027,6 +2027,8 @@ DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "cont
 #: so that a reader of a shipped-realm snapshot (`state/world.py::decode`, whose default stays `DEFAULT_FIXTURES`) can hand the fixtures the snapshot
 #: was encoded under. [ASSUMPTION; medium; Jordan to correct; revert: `REALM_FIXTURES = DEFAULT_FIXTURES`]
 REALM_FIXTURES = DEFAULT_FIXTURES.sweep("field_provisioning", True)
+#: the hand-built tests' control arm as a Fixtures value (`DEFAULT_FIXTURES` at the x1 per-head weights): one sweep, not one per test file.
+X1_FIXTURES = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)
 
 
 def check_season_weather(draw_table, spells) -> None:

@@ -30,7 +30,7 @@ seat] -- `H-158`'s two remedies, and this is the eligibility one.
 
 from __future__ import annotations
 
-from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
+from ..data.fixtures import DEFAULT_FIXTURES, X1_FIXTURES
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import CHANNEL_CLAIM_SOURCE
 from ..data.verbs import VERB_TABLE
@@ -51,7 +51,7 @@ GOVERNORS = (S.REEVE, S.FAR_REEVE)
 
 
 # B12b.44: `scarce.governed` is sized at the x1 arm (grain 2, salt 1), so every world in this file plants it.
-X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)
+X1 = X1_FIXTURES
 
 
 def _recorded(w) -> dict:

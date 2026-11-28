@@ -15,7 +15,7 @@ from fractions import Fraction
 
 import pytest
 
-from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
+from ..data.fixtures import DEFAULT_FIXTURES, X1_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import SEASONS_OF_YEAR, SEASON_TERMS
@@ -24,7 +24,7 @@ from ..queries import world_q
 from ..state.carriers import Person, Rung, Tenure
 from ..state.world import World
 
-X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)      # B12b.44: the town is sized at the x1 arm (grain 2, salt 1)
+X1 = X1_FIXTURES      # B12b.44: the town is sized at the x1 arm (grain 2, salt 1)
 WEIGHTS = X1.get("subsistence_weight")
 TOWN, COHORT = "set_town", "p_town_folk"
 WINTER = len(SEASONS_OF_YEAR) - 1

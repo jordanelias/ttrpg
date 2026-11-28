@@ -13,7 +13,7 @@ planted. Each season is read from the world's own people and log, so the writer 
 from __future__ import annotations
 
 from ..boot.realm import place_person
-from ..data.fixtures import DEFAULT_FIXTURES, SUBSISTENCE_X1
+from ..data.fixtures import DEFAULT_FIXTURES, X1_FIXTURES
 from ..harness import probes as P
 from ..harness import scarce
 from ..loop.driver import SeasonDriver
@@ -25,7 +25,7 @@ from engine.substrate import composition
 BODY, LIGHT, HEAVY = 1000, 2, 20
 
 
-X1 = DEFAULT_FIXTURES.sweep("subsistence_weight", SUBSISTENCE_X1)      # B12b.44: these plants are sized at the x1 arm (grain 2, salt 1)
+X1 = X1_FIXTURES      # B12b.44: these plants are sized at the x1 arm (grain 2, salt 1)
 
 
 def _falls(hunger_loss):
