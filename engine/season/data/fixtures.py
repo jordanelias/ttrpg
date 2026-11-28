@@ -2052,7 +2052,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- Turmoil >= crisis with breakdown's occasion (CR-91 (4)), shipped off; swept False (SHIPPED) / True]
     turmoil_vassal_war_on=False,      # `H-636`, swept False (control, SHIPPED) / True
     # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- the head seats' `nation_functions` goal row, shipped off (CR-89: "revert: no row"); swept False (SHIPPED) / True]
-    nation_functions_on=True,        # `H-636`, swept False (control, SHIPPED) / True
+    nation_functions_on=False,        # `H-636`, swept False (control, SHIPPED) / True
 )
 
 #: v12 B21d.06: THE SEVEN TRIGGER SWITCHES, in the source's band order. `harness/clocks.py --arm` names them; each is a `Fixtures` bool above.
