@@ -34,6 +34,7 @@ from modules.mass_battle.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-00
 from systems.mass_battle.sim.engine import (Unit, Army, run_battle,
                                 SIDE_A_START_ROW, SIDE_B_START_ROW, LANCHESTER_ENABLED)
 import modules.mass_battle.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
+import modules.mass_battle.orchestration as _orch  # [B19.09] observed (not altered) by _melee_pair_counter below
 from engine.dice_engine import draw  # noqa: E402
 from modules.mass_battle import rngsource  # noqa: E402
 
@@ -230,6 +231,17 @@ BIG_CV = 9.0   # [JUSTIFIED: sentinel for "no conservation at any p"; a magnitud
 #     balanced + kite     : melee engagements   0, volley loss a=49.97  b=243.53   ← pure volley
 # `balanced` alone closes to contact and mixes the melee law into a square-law test, which is exactly
 # what this check must not do. `balanced + kite` holds the band and exchanges only fire.
+#
+# [B19.09, `04_MB_cr12_linear_law` step 1] ...for an 18-tick rout-on battle only. Over the no-rout
+# TRAJECTORY the band broke: the kiters spend their MB_VOLLEYS_START stock (one volley per firing tick)
+# by about tick 12, and an empty kiter closes to melee by design (`Unit._kite_goal`'s `eff_volleys > 0`
+# test, F7 / ED-MB-0067). Measured seeds 0-1 at PER_CELL=0, shipped stock: first melee pair at tick 14,
+# 21 and 69 melee ticks; stocked: 0 melee ticks, the band held at distance 5 to the floor. The cause is the
+# empty quiver, not the field's width, so a wider field or a `hold` screen would not hold it (the screen
+# would itself be the melee pair). The trajectory therefore stocks each shooter for its whole window
+# (`_trajectory`, TRAJ_TICKS volleys: it fires at most once a tick), as the morale pin and `_rout_disabled`
+# remove the other mechanisms that end the pure-attrition regime early; and `_melee_pair_counter` makes
+# the precondition observed, not assumed: one melee pair in the volley trajectory and the row is INVALID.
 VOLLEY_STANCE = 'balanced'
 VOLLEY_INSTRUCTIONS = ('kite',)
 
@@ -248,6 +260,42 @@ def _rout_disabled():
         yield
     finally:
         _state.MB_STOCHASTIC_ROUT = prev
+
+
+@contextlib.contextmanager
+def _melee_pair_counter(diag):
+    """[B19.09] Count the melee pairs the engine resolves inside the block, into `diag`.
+
+    Wraps the two resolvers on `orchestration`, where `run_battle` looks them up AT CALL TIME (its own
+    docstring: a patch there is seen), and counts the `pairs` each tick hands them: the contacts the
+    tick resolves as melee. Pure observation: the wrapped call's arguments and result pass through
+    untouched. Only the outermost call counts, so a cascading resolver that calls the plain one is one
+    tick, not two. Counting the resolver's INPUT, not a trace event inside it, keeps the count honest
+    when the melee pair's body is rewritten (B19.10-B19.12 move and replace it; the resolvers stay).
+    Restores unconditionally.
+    """
+    names = ('resolve_engagements_cascading', 'resolve_engagements')
+    saved = {n: getattr(_orch, n) for n in names}
+    depth = [0]
+
+    def _wrap(fn):
+        def counted(unit_a, unit_b, pairs, *args, **kwargs):
+            if depth[0] == 0 and pairs:
+                diag['melee_ticks'] += 1
+                diag['melee_pairs'] += len(pairs)
+            depth[0] += 1
+            try:
+                return fn(unit_a, unit_b, pairs, *args, **kwargs)
+            finally:
+                depth[0] -= 1
+        return counted
+    for n in names:
+        setattr(_orch, n, _wrap(saved[n]))
+    try:
+        yield diag
+    finally:
+        for n in names:
+            setattr(_orch, n, saved[n])
 
 
 def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions=()):
@@ -286,13 +334,19 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
             ub = _mk('Line', small_tier, 'B', unit_type, stance, instructions)
             ub.set_morale(NO_ROUT_MORALE)
             ub.morale_start = NO_ROUT_MORALE
+            # [B19.09] A shooter's stock for the whole window (see the note above VOLLEY_STANCE): its
+            # single subunit inherits the Army's pool, and it fires at most once a tick. Ranged only, so
+            # the melee arm is untouched.
+            if unit_type == 'ranged':
+                ua.volleys = ub.volleys = float(TRAJ_TICKS)
             # [ED-MB-0050 / A6a] Floor against BLOCK_SIZE, the engine's annihilation threshold, not
             # against a fraction of it — see TRAJ_FLOOR_BLOCKS.
             hp_floor = TRAJ_FLOOR_BLOCKS * BLOCK_SIZE
             tr = []
             routed_here = False
             for _ in range(TRAJ_TICKS):
-                run_battle(ua, ub, max_ticks=1)
+                with _melee_pair_counter(diag):
+                    run_battle(ua, ub, max_ticks=1)
                 tr.append((ua.hp, ub.hp))
                 # [ED-MB-0049 / A5a falsifier] The pin's WHOLE PURPOSE is "no rout, pure attrition".
                 # Record whether it held, per trajectory, instead of assuming it. `checked` is the
@@ -322,11 +376,25 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
 
 
 def _new_diag():
-    return {'checked': 0, 'routed_trajectories': 0, 'ticks': [], 'fit_window': 0}
+    return {'checked': 0, 'routed_trajectories': 0, 'ticks': [], 'fit_window': 0,
+            'melee_ticks': 0, 'melee_pairs': 0}
 
 
 def _best_exponent(A, B):
-    """Scan p for the exponent that best conserves A^p − B^p; return (p, cv, identifiable).
+    """Scan p for the exponent that best conserves A^p − c·B^p, c free; return (p, lof, identifiable, c).
+
+    [B19.09, `04_MB_cr12_linear_law` step 1] The fit was `A^p − B^p`, equal coefficients, and so could
+    not tell a linear law with a rate edge from a super-linear one: under an EXACT linear law in which
+    the bigger body kills faster (more columns in contact), A falls slower than B, and only p > 1 makes
+    the equal-coefficient difference constant (the design's synthetic, 7:5 columns: 1.45 / 1.35 / 1.30
+    as B falls to 300 / 200 / 100). With c free the rate ratio lives in c and the law's SHAPE in p: for
+    each p, c is the least-squares slope of A^p on B^p, and `lof` = 1 − r² of that line is the share of
+    A^p's variation the conserved line does not explain. Scale-free (no division by the conserved
+    quantity, which a free c can drive to zero), and exactly 0 for a law of that exponent at any c.
+    Chosen over normalising each side's loss rate by its engaged columns because it needs no reading of
+    the engine's contact geometry (whose definition B19.12 rewrites as `engaged_files`) and because it
+    absorbs every rate edge, not only frontage: quality, arc and support move c, never p.
+    A line of non-positive slope (one side gaining as the other loses) conserves nothing: BIG_CV.
 
     [ED-MB-0050 / A6a] `identifiable` is the third return value and it is the point of this repair.
     An argmin that lands on a grid ENDPOINT is not an estimate — it is the statement "the objective
@@ -335,19 +403,25 @@ def _best_exponent(A, B):
     got quoted in a handoff. The scan now reports whether the optimum is interior, and
     `check_law_exponents` refuses to pass on a non-identifiable fit however favourable its value.
     """
-    import statistics
     pts = [(a, b) for a, b in zip(A, B) if a > 0 and b > 0][1:]
     grid = []
     p = FIT_P_LO
-    while p <= FIT_P_HI:
-        C = [a**p - b**p for a, b in pts]
-        m = statistics.mean(C)
-        grid.append((round(p, 2), statistics.pstdev(C) / abs(m) if m else BIG_CV))
+    while p <= FIT_P_HI and len(pts) > 2:
+        X = [b**p for _, b in pts]
+        Y = [a**p for a, _ in pts]
+        mx, my = statistics.fmean(X), statistics.fmean(Y)
+        sxx = sum((x - mx) ** 2 for x in X)
+        syy = sum((y - my) ** 2 for y in Y)
+        sxy = sum((x - mx) * (y - my) for x, y in zip(X, Y))
+        if sxx > 0 and syy > 0 and sxy > 0:
+            grid.append((round(p, 2), max(0.0, 1 - sxy * sxy / (sxx * syy)), sxy / sxx))
+        else:
+            grid.append((round(p, 2), BIG_CV, None))
         p += FIT_P_STEP
     if not grid:
-        return None, BIG_CV, False
+        return None, BIG_CV, False, None
     i = min(range(len(grid)), key=lambda k: grid[k][1])
-    return grid[i][0], grid[i][1], 0 < i < len(grid) - 1
+    return grid[i][0], grid[i][1], 0 < i < len(grid) - 1 and grid[i][1] < BIG_CV, grid[i][2]
 
 
 def check_law_exponents():
@@ -359,37 +433,93 @@ def check_law_exponents():
     fitted on trajectories that ROUTED is fitted on truncated data and is not an estimate of
     anything — so the precondition is reported next to the number, never assumed behind it (G4:
     verify the instrument before quoting its number).
+
+    [B19.09] Two rows, not one: the melee and the volley exponent are separate verdicts (the melee bar
+    is read after B19.12; the volley row has its own validity). The volley row reads INVALID, never
+    PASS or FAIL, when its trajectory resolved a melee pair, or when the counter saw no melee pair in
+    the melee arm either (a counter that cannot see presence cannot report absence).
     """
     dm, dv = _new_diag(), _new_diag()
     # [ED-MB-0050 / A6a] Both repairs applied here: rout genuinely disabled for the fit window, and
     # the volley arm using a scenario in which an exchange actually occurs.
     with _rout_disabled():
-        pm, cvm, idm = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'melee', 'balanced',
-                                                   diag=dm))
-        pv, cvv, idv = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'ranged', VOLLEY_STANCE,
-                                                   diag=dv, instructions=VOLLEY_INSTRUCTIONS))
+        pm, lm, idm, cm = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'melee', 'balanced',
+                                                      diag=dm))
+        pv, lv, idv, cv = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'ranged', VOLLEY_STANCE,
+                                                      diag=dv, instructions=VOLLEY_INSTRUCTIONS))
     # Identifiability gates the verdict, not just the presentation: a fit whose optimum sits on a
     # grid endpoint carries no information about the exponent, so it can neither pass nor be quoted.
-    ok = idm and idv and pm <= LIN_EXP_MAX and pv >= SQ_EXP_MIN
-    def _fmt(name, p, cv, ident, bar):
-        return (f"{name} p={p:.2f} {bar} cv={cv:.5f} "
-                f"[{'identifiable' if ident else 'NOT IDENTIFIABLE — argmin on a grid endpoint'}]")
-    return ('LAW EXPONENTS (linear/square)', ok,
-            _fmt('melee', pm, cvm, idm, f"(≤{LIN_EXP_MAX} linear)") + '  ' +
-            _fmt('volley', pv, cvv, idv, f"(≥{SQ_EXP_MIN} square)"),
-            {'melee': dm, 'volley': dv})
+    melee_row = ('LAW EXPONENT (melee)', idm and pm <= LIN_EXP_MAX,
+                 _fmt_fit(pm, lm, idm, cm, f"(≤{LIN_EXP_MAX} linear)"), {'melee': dm})
+    if dv['melee_ticks'] or not dm['melee_ticks']:
+        why = (f"{dv['melee_pairs']} melee pairs on {dv['melee_ticks']} ticks of the volley trajectory"
+               if dv['melee_ticks'] else "the counter saw no melee pair in the melee arm either")
+        volley_row = ('LAW EXPONENT (volley)', 'INVALID',
+                      f"INVALID — {why}; the fit is not a volley law and is not quoted", {'volley': dv})
+    else:
+        volley_row = ('LAW EXPONENT (volley)', idv and pv >= SQ_EXP_MIN,
+                      _fmt_fit(pv, lv, idv, cv, f"(≥{SQ_EXP_MIN} square)"), {'volley': dv})
+    return melee_row, volley_row
+
+
+def _fmt_fit(p, lof, ident, c, bar):
+    if p is None:
+        return "no fit (fewer than three usable points)"
+    return (f"p={p:.2f} {bar} c={c if c is None else round(c, 3)} lof={lof:.2e} "
+            f"[{'identifiable' if ident else 'NOT IDENTIFIABLE — argmin on a grid endpoint'}]")
+
+
+def check_frontage_control():
+    """[B19.09] The fit's own control: an EXACT linear law with the trajectory pair's frontage edge must
+    read "linear".
+
+    Built from the melee arm's own pair (`_mk`, BIG_TIER v MIRROR_TIER): each side's starting hp and its
+    columns. Each step A loses one hp per column of B and B one per column of A, so A − (w_B/w_A)·B is
+    conserved exactly: the linear law, with the bigger front killing faster. Read through `_best_exponent`
+    on every window from the start to each block boundary down to the trajectory floor (BLOCK_SIZE,
+    TRAJ_FLOOR_BLOCKS), since the engine's fit window ends wherever its first seed hits the floor. The
+    row passes only if every window is identifiable and at or below LIN_EXP_MAX. The step size is the
+    synthetic's time unit, not a game magnitude: the law's shape does not depend on it.
+    """
+    ua = _mk('Line', BIG_TIER, 'A')
+    ub = _mk('Line', MIRROR_TIER, 'B')
+    wa = len({c for sub in ua.units for (_, c) in sub.cells()})
+    wb = len({c for sub in ub.units for (_, c) in sub.cells()})
+    a, b = float(ua.hp_max), float(ub.hp_max)
+    floor = TRAJ_FLOOR_BLOCKS * BLOCK_SIZE
+    A, B = [a], [b]
+    while b - wa > floor - 1e-9:
+        a, b = a - wb, b - wa
+        A.append(a)
+        B.append(b)
+    readings, ok = [], True
+    end = B[0] - BLOCK_SIZE
+    while end >= floor:
+        reached = [i for i, x in enumerate(B) if x <= end + 1e-9]
+        n = reached[0] + 1 if reached else len(B)   # the last window ends at the last step above the floor
+        p, _lof, ident, _c = _best_exponent(A[:n], B[:n])
+        ok = ok and ident and p is not None and p <= LIN_EXP_MAX
+        readings.append(f"→{B[n - 1]:.0f} p={p:.2f}{'' if ident else ' (NOT IDENTIFIABLE)'}")
+        end -= BLOCK_SIZE
+    ok = ok and bool(readings)
+    return ('FRONTAGE CONTROL (synthetic)', ok,
+            f"exact linear law, {wa}:{wb} columns, B {B[0]:.0f} " + ', '.join(readings)
+            + f" (≤{LIN_EXP_MAX}) reads {'linear' if ok else 'NOT linear'}")
 
 
 def run():
     assert LANCHESTER_ENABLED, "signatures require LANCHESTER_ENABLED=1"
-    results = [check_linear(), check_square(), check_no_annihilation(), check_law_exponents()]
+    results = [check_linear(), check_square(), check_no_annihilation(), *check_law_exponents(),
+               check_frontage_control()]
     from modules.mass_battle import config as _mb_cfg
     print("=== P-L Lanchester signature tests (PER_CELL=%s) ===" % _mb_cfg.PER_CELL)
     allok = True
     for row in results:
         name, ok, detail = row[0], row[1], row[2]
-        allok = allok and ok
-        print(f"  [{'PASS' if ok else 'FAIL'}] {name:26} {detail}")
+        # [B19.09] A row's verdict is PASS, FAIL or a named status (INVALID); only PASS passes.
+        status = ok if isinstance(ok, str) else ('PASS' if ok else 'FAIL')
+        allok = allok and status == 'PASS'
+        print(f"  [{status}] {name:28} {detail}")
         # [ED-MB-0049 / A5a] The precondition diagnostic, printed BESIDE the number it qualifies.
         # A rout-truncated fit is not an estimate; quoting the exponent without this line is how
         # `melee p=2.50` entered the record as an engine property (G4).
@@ -403,8 +533,10 @@ def run():
                   f"{d['routed_trajectories']}/{n} trajectories routed, "
                   f"fit window {d['fit_window']} ticks "
                   f"(min/median/max per-seed ticks "
-                  f"{min(d['ticks'])}/{statistics.median(d['ticks']):.0f}/{max(d['ticks'])})")
-    print(f"  => {'ALL PASS' if allok else 'FAILURES PRESENT'} ({sum(1 for r in results if r[1])}/{len(results)})")
+                  f"{min(d['ticks'])}/{statistics.median(d['ticks']):.0f}/{max(d['ticks'])}); "
+                  f"melee pairs {d['melee_pairs']} on {d['melee_ticks']} ticks")
+    npass = sum(1 for r in results if r[1] is True)
+    print(f"  => {'ALL PASS' if allok else 'FAILURES PRESENT'} ({npass}/{len(results)})")
     return allok
 
 
