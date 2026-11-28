@@ -37,7 +37,7 @@ from modules.mass_battle.troop_types import table as _troops
 from modules.mass_battle.troop_types.registry import default_role_for, is_mounted, roles_for, stats_for, unit_type_for
 
 __all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'POSTURES', 'TARGETINGS', 'class_of', 'build_unit',
-           'validate', 'cells_for', 'place_posts', 'formation_of']
+           'validate', 'cells_for', 'place_posts', 'formation_of', 'subformations']
 
 #: Postures a unit may be set to (the engine's stances, `config.STANCE_SPEED_MOD`'s keys; 'retreat' is reachable only through
 #: `fall_back_at`, since a unit that STARTS retreating is not a deployment).
@@ -325,6 +325,18 @@ def _posts_for(classes: list, explicit: list, formation: str) -> list:
         for i in (behind or range(len(names))):
             names[i] = first
     return names
+
+
+def subformations(oob: OrderOfBattle) -> Tuple[Tuple[str, Tuple[str, ...]], ...]:
+    """B19.19: `((post, (unit name, ...)), ...)`, a SUBFORMATION per post of the army formation that has a unit, the posts in the order of the
+    formation row's `posts`, the units at each in line order. READ over the unit rows (a unit is a row; nothing is stored): each unit's post is
+    the one it names, else its class's `default_post`, exactly as `_posts_for` deploys it. Units at one post that name different officers are
+    still one subformation. [ASSUMPTION, reversible: D-1 of the lexicon]"""
+    if not oob.units:
+        return ()
+    posts = _posts_for([class_of(u.troop_type) for u in oob.units], [u.post for u in oob.units], oob.formation)
+    return tuple((post, tuple(u.name for u, p in zip(oob.units, posts) if p == post))
+                 for post in _troops.formation(oob.formation)['posts'] if post in posts)
 
 
 def _place(specs: list, classes: list, side: str, explicit: Optional[list] = None, formation: str = 'line') -> None:

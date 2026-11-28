@@ -430,7 +430,7 @@ group (A–D in `MB_LEXICON.md`, E–G in `_part2`); "D-n" a ladder decision and
 | **realm, faction** | the kingdom; a house, Church or movement that may raise one army | §1.3 |
 | **army** | a faction's one fighting force, its men in units under the commander who holds its Record | A; engine `hierarchy.units.Army` (T; L2-1, landed; was `Unit`): one side's army as the battle engine fields it |
 | **side** (attacker, defender) | the men on one side of one battle | A, G |
-| **subformation** | the units at one post of the army formation, fighting by one set of tactics (Jordan's word, A-59, A-94) | A, D-1 |
+| **subformation** | the units at one post of the army formation, fighting by one set of tactics (Jordan's word, A-59, A-94); `orderofbattle.subformations` (T; B19.19) reads it over the unit rows, nothing stored | A, D-1 |
 | **unit** | a row of the army Record: men of one troop type with an officer and orders | A, D-2; L1-1, L1-2, L2-1 (engine `hierarchy.units.Unit`, landed; was `Subunit`): one unit as the battle engine fields it, the row the army Record holds |
 | **cell**; **rank, file** | the smallest square of the field and its men; period words for lines of men (the engine's are cell rows and cell columns) | §1.3, A, C |
 | **squad** | a handful of named characters on a small grid, below a unit | A |

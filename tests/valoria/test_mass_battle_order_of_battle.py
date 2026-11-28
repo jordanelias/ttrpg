@@ -22,7 +22,7 @@ from modules.mass_battle import massbattle
 from modules.mass_battle.config import TROOP_TYPE_ROLES
 from modules.mass_battle.equipment import loadout_for
 from modules.mass_battle.orderofbattle import (STRATEGIES, OrderOfBattle, UnitRow, build_unit, class_of,
-                                               validate)
+                                               subformations, validate)
 from modules.mass_battle.troop_types.registry import (MOUNTED_TYPES, is_mounted, reach_for, stats_for,
                                                       support_ranks_for, unit_type_for)
 
@@ -428,3 +428,11 @@ def test_envelopment_row_equals_the_harness_builder():
         assert shape(line.units) != shape(harness.units), "the control: `line` is not the envelopment"
         checked += 1
     assert checked == 2
+
+
+def test_subformations_group_units_by_post():
+    """B19.19: a subformation is READ over the unit rows (nothing is stored): the units at one post, the posts in the formation's order."""
+    oob = _oob(('a', 'heavy_infantry', 100, {'post': 'left'}), ('b', 'heavy_infantry', 100, {'post': 'centre'}),
+               ('c', 'heavy_infantry', 100, {'post': 'left'}))
+    assert subformations(oob) == (('centre', ('b',)), ('left', ('a', 'c')))
+    assert 'subformations' not in OrderOfBattle.__dataclass_fields__          # read, not stored
