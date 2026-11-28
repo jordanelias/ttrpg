@@ -49,7 +49,7 @@ GATE: Batch B19a-mb-contact-instrument @32b6dd0ea
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance @8aa171f30738e1b6b645157d5e437a0b9c375849
-GATE: Batch B21b-fa-war
+GATE: Batch B21b-fa-war @03b3fd6e1
 GATE: Batch B21c-fa-seats
 GATE: Batch B21d-fa-arc
 GATE: Batch B21s-strife-supply

@@ -15,7 +15,7 @@
 ## Batch B21c-fa-seats · lane FA · wave W14 · step S14 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B21c-fa-seats
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
-GATE: Batch B21b-fa-war
+GATE: Batch B21b-fa-war @03b3fd6e1
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none moved — carried v11 positions (the intake §3 row B21c; `V12_STRUCTURE.md` §2.2). Each entry's own R line is a contributor: R-04.a (`confer`, `determine`, `revoke`: CR-35 to CR-37, each a hand-built mechanism whose realm reach is 0 while H-80 holds, so no conjunct is expected to move), R-07 and R-04 (CR-32). The close re-reads R-04.a and quotes it `reading @<sha>` against B12b's after-reading; `status:` is not edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):

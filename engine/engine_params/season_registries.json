@@ -7925,6 +7925,8 @@
         {
           "verb": "declare",
           "public": true,
+          "regard_sign": -1,
+          "regard_sign_note": "B21b.30 (CP-T09-02 (a); [ASSUMPTION; medium; Jordan to correct at BA1; revert: delete the cell]): a war is declared on a faction one reads below indifference, so a grudge toward the creed raises the act. `declare` names no prize, so the loader's default read +1 and the grudge lowered its own act.",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -9743,6 +9745,8 @@
         {
           "verb": "conspire",
           "public": false,
+          "regard_sign": -1,
+          "regard_sign_note": "B21b.30 (CP-T09-09; [ASSUMPTION; medium; Jordan to correct at BA1; revert: delete the cell]): a plot is laid against the seat-holder, the row's `subject`; the cell also carries `opening_set`'s decline of the subject as the invitee, so the revert is the cell and that decline. Its prize is contested on `to` (the invitee), not the subject, so the loader's default read +1 and the occasion (`legitimacy` below 0) lowered the plot's own score.",
           "stratum": "social",
           "eligibility": [
             "own"

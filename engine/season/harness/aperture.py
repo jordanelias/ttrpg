@@ -97,9 +97,10 @@ whether the practice addend (`faculty`) separates persons in one verb, beside th
 (`watched_fold`), never recomputed from `faculty`.
 
 **BUILT OUT (IS-A-06).** A verb is *built out* when it has a CLEAN execution (an act `made` and not `refused`,
-whose Events the driver's `act_of` ties to it) whose Events hold every kind of `emits_at` for the band it
-folded, and, where its row declares writes, whose Events carry a `Receipt` (the gate mints one only for
-state that moved). The block prints one line per verb with its clean count and its `via` count (clean
+whose Events the driver's `act_of` ties to it) and, at some band declaration, every kind of `emits_at` for the
+band is held by the Events of the clean acts that folded at it together, one of them having written where its row
+declares writes (its Events carry a `Receipt`, which the gate mints only for state that moved; `built_out` states
+the rule). The block prints one line per verb with its clean count and its `via` count (clean
 executions through a seat), then `built out <k> of <len(VERB_TABLE)>` and a `FOUGHT FIELDS` line. It is a
 reading, never a threshold.
 
@@ -487,8 +488,8 @@ def scene_sources(d) -> dict:
 
 
 # ---------------------------------------------------------------------------------------------
-# BUILT OUT (IS-A-06) -- which verbs have a clean execution that emits every kind of its band and,
-# where the row declares writes, wrote. A reader over a finished run: it writes nothing and reads the
+# BUILT OUT (IS-A-06) -- which verbs have clean executions that together emit every kind of a band they
+# folded at and, where the row declares writes, one of them wrote (`built_out` states the rule). A reader over a finished run: it writes nothing and reads the
 # one act -> Events index (`_events_by_act`) the wrong-kind and refusal readers read.
 
 #: The Events a fought field leaves, and the one an unopposed march leaves: the kinds `FOUGHT FIELDS` counts.
@@ -507,53 +508,75 @@ def _carries_a_receipt(events) -> bool:
     return any(isinstance(c, Receipt) for e in events for c in e.changes)
 
 
-def _kinds_held(row, events) -> bool:
-    """Do `events` hold every kind of `row.emits_at(band)` for the band the act folded: the `degree` of its
-    LAST Event that carries a degree the row keys (`march`'s `Declared` at RESOLVE, then the field's band at
-    ENCOUNTER), or the row's one undivided list when it keys none. A keyed row whose Events name no declared
-    band cannot say which band it folded and reads False, which is the polarity `emits_at` itself keeps."""
-    got = {e.kind for e in events}
+def _band_declaration(row, events):
+    """The DECLARATION of the band the act folded at -- `row.emits_at(band)` as a sorted tuple -- or None.
+    The band is the `degree` of the act's LAST Event that carries a degree the row keys (`march`'s `Declared`
+    at RESOLVE, then the field's band at ENCOUNTER), or the row's one undivided list when it keys none. A
+    keyed row whose Events name no declared band cannot say which band it folded and reads None (it joins no
+    declaration), which is the polarity `emits_at` itself keeps. A row declares a band as the kinds its acts
+    MAY earn, per subject or on a condition, so whether the kinds are HELD is asked of the acts that folded
+    at one declaration together (`built_out`), never of one act."""
     if not row.emits_by_degree:
-        return set(row.emits_at(None)) <= got
+        return tuple(sorted(row.emits_at(None)))
     bands = [e.degree for e in events if e.degree in row.emits_by_degree]
-    return bool(bands) and set(row.emits_at(bands[-1])) <= got
+    return tuple(sorted(row.emits_at(bands[-1]))) if bands else None
 
 
 def built_out(w, d, rows) -> dict:
     """`{verb: {"clean", "kinds", "wrote", "one", "via"}}` for EVERY verb of `VERB_TABLE`, sorted, zeros included.
     `rows` is `corpus_run.attempts(w, n)`; a CLEAN execution is an act `made` and not `refused` (the
     instrument's `ex - both`) whose Events `d.act_of` ties to it -- an act and an Event placed in the log
-    by hand are never tied, so a hand-built execution never counts. Per verb:
+    by hand are never tied, so a hand-built execution never counts.
+
+    THE RULE (`[ASSUMPTION; medium; Jordan to correct; revert: the per-act rule, `_kinds_held` as at
+    8f317ec02]`): every kind of a band is emitted by SOME clean act that folded at it, and one of them wrote.
+    A row declares a band as the kinds its acts MAY earn, per subject or on a condition (`conspire`'s
+    `_eff_conspire` earns the one kind its write made, `march`'s `person.died` is "earned only by a loser that
+    arm kills"), never as kinds every act emits, so a verb's clean acts are grouped by the declaration of the
+    band each folded at (`_band_declaration`: `row.emits_at(band)`) and bands declaring the same kinds pool.
+    Per verb:
 
       clean   the count of clean executions
-      kinds   True where the Events caused by ONE clean act include every kind of `emits_at` for its band
+      kinds   True where, at some declaration, the Events of the clean acts that folded at it together include
+              every kind of that declaration
       wrote   True where the row writes nothing in any band (`not row.writes`, the union over its bands), or where one clean act's
               Events carry a Receipt (`_carries_a_receipt`)
-      one     True where ONE clean act did both: its Events hold every kind AND (the row writes nothing, or
-              its Events carry a Receipt). `kinds` and `wrote` are each read over any clean act, so they
-              can be True through two different acts; `one` cannot
+      one     True where, at a declaration whose kinds are all held, ONE clean act that folded at it emitted at
+              least one of its kinds AND (the row writes nothing, or its Events carry a Receipt). `kinds` and
+              `wrote` are each read over any clean act, so they can be True through different acts; `one`
+              names an act that wrote and emitted at the declaration `kinds` read
       via     the clean executions whose `Act.via` is set (a seat exercised)
 
-    A verb is BUILT OUT when `is_built_out`: `clean >= 1` and `one` (a made, kinds-holding, writing act)."""
+    A verb is BUILT OUT when `is_built_out`: `clean >= 1` and `one`."""
     by_act = _events_by_act(w, d)
     out = {v: {"clean": 0, "kinds": False, "wrote": not row.writes, "one": False, "via": 0}
            for v, row in sorted(VERB_TABLE.items())}
+    at: dict = {v: {} for v in out}      # verb -> declaration -> [kinds emitted by its acts, a writer emitted one]
     for a, made, no in rows:
         events = [e for _, e in by_act.get(a.id, ())]
         if not made or no or not events:
             continue
         row, c = VERB_TABLE[a.verb], out[a.verb]
         c["clean"] += 1
-        kinds, receipt = _kinds_held(row, events), _carries_a_receipt(events)
-        c["kinds"] = c["kinds"] or kinds
+        decl, receipt = _band_declaration(row, events), _carries_a_receipt(events)
         c["wrote"] = c["wrote"] or receipt
-        c["one"] = c["one"] or (kinds and (receipt or not row.writes))
         c["via"] += a.via is not None
+        if decl is None:
+            continue
+        entry, got = at[a.verb].setdefault(decl, [set(), False]), {e.kind for e in events}
+        entry[0] |= got
+        entry[1] = entry[1] or bool((got & set(decl) or not decl) and (receipt or not row.writes))
+    for v, per in at.items():
+        for decl, (held, writer) in per.items():
+            if set(decl) <= held:
+                out[v]["kinds"] = True
+                out[v]["one"] = out[v]["one"] or writer
     return out
 
 
 def is_built_out(c: dict) -> bool:
-    """One `built_out` verb row's verdict: a clean execution that, itself, held its kinds and wrote."""
+    """One `built_out` verb row's verdict: a clean execution, and at a declaration whose kinds the clean
+    acts that folded at it hold, one of them wrote (the rule is `built_out`'s)."""
     return c["clean"] >= 1 and c["one"]
 
 
@@ -802,8 +825,9 @@ def built_out_lines(m: dict) -> list:
     """The BUILT OUT block of one world's `report`: one line per verb of `VERB_TABLE`, zeros included,
     sorted, then the total and the FOUGHT FIELDS line. A reading, never a threshold."""
     rows = m["built_out"]
-    out = ["\n  BUILT OUT (a verb with a clean execution -- made, not refused -- whose Events hold every kind "
-           "of its band and which wrote where its row declares writes, in ONE execution (`one`: `kinds` and `wrote` can each be yes through different acts); `via` = clean executions through a seat)"]
+    out = ["\n  BUILT OUT (a verb with a clean execution -- made, not refused -- where every kind of a band is emitted "
+           "by some clean act that folded at it, and one of them wrote where its row declares writes "
+           "(`one`: `kinds` and `wrote` can each be yes through different acts); `via` = clean executions through a seat)"]
     for v in sorted(rows):
         c = rows[v]
         out.append(f"    {v:<16} clean {c['clean']:>4}  kinds {'yes' if c['kinds'] else 'no ':<3}  "

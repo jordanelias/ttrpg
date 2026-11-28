@@ -90,7 +90,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
-| B21b-fa-war | FA | W13 | S13 | 0 | 21, 21_cont | 28 (B21 P6 DF1; H3: B21b.07, .17 "BUILD (reading)" read as BUILD) | MOVER (behaviour 15, conditional 1) | 13.7 | B11, B21 |
 | B21c-fa-seats | FA | W14 | S14 | 0 | 25 | 10 (B6 P1 H2 DF1) | MOVER (behaviour 4) | 6.5 | B21b |
 | B21d-fa-arc | FA | W14 | S15 | 5 | 29 | 10 (B9 DF1) | MOVER (behaviour 4) | 6.5 | B11, B21b |
 | B21s-strife-supply | IN | W16 | S18 | 3 | 35_cont | 3 (B3) | **EQUAL** (§2.2: per entry) | 3.7 | B12c, B21, B24a +R, B29 +R |
@@ -135,7 +134,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
 | B20-mb-orders | 30:514 | yes | 10 | yes | none | — |
-| B21b-fa-war | 21_cont:182 | yes | 2 | yes | none | — |
 | B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
 | B21d-fa-arc | 29:231 | yes | 2 | yes | none | — |
 | B21s-strife-supply | 35_cont:456 | yes | 4 | yes | none | — |
