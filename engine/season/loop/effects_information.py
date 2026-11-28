@@ -468,8 +468,8 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     arrangement, petition = d.get(DOCKET_ARRANGEMENT), d.get(DOCKET_PETITION)
     rig = d.get(RIG_KEY, 0)
     # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
-    # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
-    # (`DISPOSABLE_KINDS`) and that is not a `consent` row (`_determinable`) -- else the matter would dock and `determine` decline it forever, and
+    # `in ARRANGEMENTS` would raise) whose `disposes:` is a kind `determine` can open
+    # (`DETERMINABLE_DISPOSALS`) and that is not a `consent` row (`_determinable`) -- else the matter would dock and `determine` decline it forever, and
     # `docketed` would block any second `open_case` (a wedge). `None` -- every computed case -- is
     # the realm's path, unchanged.
     if arrangement is not None and not (
