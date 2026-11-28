@@ -122,17 +122,24 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     real fold: the matter is docketed under the row, a strong judge determines it, and ONE live edge of
     exactly the row's kind appears, owned by the party, on the seat exercised, graded at the band the
     contest decided, and no edge of any other disposal kind. The loop asserts it asserted (seven rows).
-    THE HALF THAT IS STILL OPEN: the two `Record`-disposing rows (`parliamentary_debate`, `council_of_state`)
-    have no writer -- `open_case` REFUSES to dock under them (`case.refused`), asserted below, so the gap is
-    observed and not skipped."""
-    from ..state.gate import DISPOSABLE_KINDS, SEAT_DISPOSAL
+    THE HALF THAT WAS OPEN, CLOSED AT v12 B21c.04 (CR-36): the two `Record`-disposing rows (`parliamentary_debate`,
+    `council_of_state`) now have a writer -- a determination under one mints a `resolution` into the determiner's
+    hand (`test_cr36_nomination.py` runs it through the real fold) -- so `open_case` DOCKS under them
+    (`case.opened`), asserted below. The rows disposing `none` or `yield`, and the `consent` row, still refuse."""
+    from ..state.gate import DISPOSABLE_KINDS, RECORD_DISPOSAL, SEAT_DISPOSAL
     disposal_kinds = ("oblige", "detain", "ban")
-    checked, record_rows, seat_rows = 0, [], []
+    checked, record_rows, seat_rows, minting_rows = 0, [], [], []
     for name, row in sorted(A.ARRANGEMENTS.items()):
         if row["disposes"] == SEAT_DISPOSAL:
             # v12 B21c.02 (CR-35): a seat-filling row's writer opens the `hold` on the seat its petition names, not on the seat exercised --
             # `test_cr35_election.py` runs it through the real fold; it has a writer, so it is no `record_rows` member either
             seat_rows.append(name)
+            continue
+        if row["disposes"] == RECORD_DISPOSAL:
+            # v12 B21c.04 (CR-36): its writer mints a `resolution` (the Record disposal site); it docks, and is no `record_rows` member
+            w, d = _world(**JUDGE)
+            assert _kinds(_fold(w, d, _open("oc", arrangement=name, petition=_petition(w)))) == ["case.opened"], name
+            minting_rows.append(name)
             continue
         w, d = _world(**JUDGE)
         if row["disposes"] not in DISPOSABLE_KINDS or row["close"] == "consent":      # B24.31: a `consent` row is no determination's (`_determinable`)
@@ -160,9 +167,10 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
             name, [(t.kind, t.subject) for t in w.tenures if t.object == SEAT])
         checked += 1
     assert checked == 7, checked      # B24p.03: `audience` (disposes `oblige`) is the seventh; B24.31: `negotiation` (a `consent` close, its agreement each party's own act) left the eight
-    # B24p.03: the rows disposing a non-Tenure kind are `conversation`, `rally` (`none`) and `interrogation` (`yield`) beside the two `Record` rows
-    assert record_rows == ["conversation", "council_of_state", "interrogation", "negotiation", "parliamentary_debate", "rally"], record_rows
+    # B24p.03: the rows disposing a non-Tenure kind are `conversation`, `rally` (`none`) and `interrogation` (`yield`); B21c.04: the two `Record` rows mint
+    assert record_rows == ["conversation", "interrogation", "negotiation", "rally"], record_rows
     assert seat_rows == ["election", "succession"], seat_rows
+    assert minting_rows == ["council_of_state", "parliamentary_debate"], minting_rows
 
 
 def test_st15_an_adjudicator_acts_as_a_seat_and_a_private_opinion_is_not_a_determination():

@@ -2101,7 +2101,7 @@
           "remit_acts": [
             "issue"
           ],
-          "conferral": "appointed",
+          "conferral": "nominated",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-008",
           "obligees": [],
@@ -2629,6 +2629,10 @@
               "at",
               "role",
               "retreat_at"
+            ],
+            "resolution": [
+              "terms",
+              "to"
             ]
           },
           "content": {
@@ -5059,12 +5063,13 @@
         "conferral_bases": {
           "source": "JORDAN, ED-IN-0256 ruling (2), 2026-09-18, VERBATIM: *\"appointed, elected, annex\"* -- HOW A SEAT IS FILLED. Plan position `13d-i`.",
           "open": false,
-          "note": "\u26a0 THE VALUES ARE THE RULING'S, THE SHAPE IS r2's (`proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md` \u00a7A.4). r2 spelled this roster `[confer, determine, succeed]`, keyed on the ACT that opens the hold; that list predates ED-IN-0256 and is superseded by it. The two vocabularies do not correspond by name, so no r2 seat's value carries over -- a seat's basis is authored against THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit. READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis). v11 CR-35 (B21c.02, H-217 closed) ANSWERS WHICH ACT FILLS AN `elected` SEAT: `determine`, under the `election` arrangement (`arrangements.yaml`), by a judging seat of the seat's own faction -- the gate's election arm, `state/gate.py::may_elect`, which `FILLED_BY` names for `elected` (and for `inheritance`: the contested succession, the `succession` row). `elected` KEEPS `conferral` beside it until CR-35 (8)'s measured narrowing (B21c.03). `annex` is still filled by `confer` alone: no annexation act exists, and none is ruled. v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *\"designated heir is not a verb but a status or title. the heir still has to claim their throne\"*. A seat declaring it is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (the first narrowing: `inheritance` to the claim basis alone; the other three keep `conferral`), and what a revocation of one costs is `REVOCATION_DISPOSAL[\"inheritance\"]` (nothing); both are refused at import unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two mappings' keys, `successions` and `off_king`'s basis (back to `null`).]",
+          "note": "\u26a0 THE VALUES ARE THE RULING'S, THE SHAPE IS r2's (`proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md` \u00a7A.4). r2 spelled this roster `[confer, determine, succeed]`, keyed on the ACT that opens the hold; that list predates ED-IN-0256 and is superseded by it. The two vocabularies do not correspond by name, so no r2 seat's value carries over -- a seat's basis is authored against THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit. READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis). v11 CR-35 (B21c.02, H-217 closed) ANSWERS WHICH ACT FILLS AN `elected` SEAT: `determine`, under the `election` arrangement (`arrangements.yaml`), by a judging seat of the seat's own faction -- the gate's election arm, `state/gate.py::may_elect`, which `FILLED_BY` names for `elected` (and for `inheritance`: the contested succession, the `succession` row). `elected` KEEPS `conferral` beside it until CR-35 (8)'s measured narrowing (B21c.03). `annex` is still filled by `confer` alone: no annexation act exists, and none is ruled. v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *\"designated heir is not a verb but a status or title. the heir still has to claim their throne\"*. A seat declaring it is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (the first narrowing: `inheritance` to the claim basis alone; the other three keep `conferral`), and what a revocation of one costs is `REVOCATION_DISPOSAL[\"inheritance\"]` (nothing); both are refused at import unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two mappings' keys, `successions` and `off_king`'s basis (back to `null`).] v11 CR-36 (B21c.04) ADDS A FIFTH, `nominated` -- NAMED BY ONE BODY, THEN CONFIRMED BY ANOTHER SEAT. `open: false` admits it because this is the design change that note requires (E3 Block 1 item 3's DECISION: \"a `nominated` seat by `confer` on a body's held `resolution`\"). A seat declaring it is filled by `confer` (`FILLED_BY[\"nominated\"]`, the conferral basis), and `confer` on it is admitted only when the confirming actor HOLDS a live `resolution` (`record_kinds`, minted by a determination under a `disposes: Record` row) naming the seat and the conferee, made through a seat other than the conferring one (`loop/predicates.py::confirming_resolutions`). Revoked, a confirmed nominee is banned as an appointee is (`REVOCATION_DISPOSAL[\"nominated\"]`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, both mappings' keys, and `off_parliamentary_clerk` back to `appointed`.]",
           "values": [
             "appointed",
             "elected",
             "annex",
-            "inheritance"
+            "inheritance",
+            "nominated"
           ]
         },
         "successions": {
@@ -7676,6 +7681,9 @@
             "purview": [
               "confer.unauthorized"
             ],
+            "nomination": [
+              "confer.refused"
+            ],
             "self_across_chains": [
               "confer.across_chains"
             ],
@@ -7920,14 +7928,16 @@
               "DocketItem.matter",
               "Tenure.degree",
               "Record.stages",
-              "Person.pursuits"
+              "Person.pursuits",
+              "Record.exists"
             ],
             "Success": [
               "Tenure.since",
               "DocketItem.matter",
               "Tenure.degree",
               "Record.stages",
-              "Person.pursuits"
+              "Person.pursuits",
+              "Record.exists"
             ],
             "Partial": [
               "Tenure.since",
@@ -7937,6 +7947,7 @@
             ],
             "Failure": []
           },
+          "resolution_note": "v11 CR-36 (B21c.04): `Record.exists` is declared on the two bands at which a row that `disposes: Record` (`parliamentary_debate`, `council_of_state`) MINTS a `resolution` into the determiner's hand (`_eff_determine`'s Record disposal site, through `_mint_document`; the band check reads this column). Check-only beside the edge on every other row, as `Record.stages` is; appended LAST so the first pair, against which every receipt is minted, stays `Tenure.since`. `Partial` does not declare it: the disposal table's `Record` row adjourns at Partial (`docket:adjourned`), so a Partial on such a row mints nothing and declines. [ASSUMPTION; medium; Jordan to correct; revert: drop the pair and the mint site.]",
           "pursuits_note": "v9 SC-02 `22b` step 24 (`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` step 24, *conviction moves by consequence*; the plan's `convictions` is `(Person, pursuits)` since `ED-IN-0261` item 1): `Overwhelming` and `Success` ALSO write the DETERMINER'S OWN `Person.pursuits`, check-only beside the edge (the same effect, `_eff_determine`, moves each held pursuit by `pursuit_shift x DEGREE_STEP[band] x pursuit_lean(determine, pursuit)`, `queries/person_q.py::consequence_pursuits`), earning `pursuit.moved` only when a pursuit moved. `Partial` (the held matter) moves nothing and so declares nothing. `Failure` (the plan: *moves the determiner AGAINST their own axis*) is NOT BUILT (`hole_register.yaml` H-221): a write there gives the failed hearing's Event a change, so its witnessed claim leaves the party for the judge, the scar runs on an act that did nothing, and a judge holding no leaning pursuit would refuse instead of failing. [ASSUMPTION; medium; Jordan to correct; revert: drop `Person.pursuits` and `pursuit.moved` from both bands, `pursuit_shift = 0`.]",
           "writes_note": "v9 SC-03b: DEGREE-KEYED, on `04_VERBS.md` \u00a7B.2's row (design intent; the code decides). `Tenure.degree` is written (H-162): a CONTESTED act carries a degree (`loop/resolve.py::_fold`), an uncontested one does not. `loop/effects_information.py::_eff_determine` opens the kind the docketed arrangement `disposes:` (v9 SC-03a: `oblige`, `detain` or `ban`; an `oblige` when the docket names no row) owned by the party on the seat exercised, admitted at the gate under the `determination` basis (`state/gate.py::may_determine`), and sets the opened edge's `degree` to the band the contest decided (`Resolution.degree`). `Overwhelming`, `Success` and `Partial` declare the SAME three pairs: `Tenure.since` is the first (the opening, `21_RECONCILIATION.md:575`'s observable); `DocketItem.matter` and `Tenure.degree` are check-only (the same effect takes the matter off the docket and grades the edge it opened). `Partial` opens the disposal graded `Partial` (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:2070`, the plan's SOURCE: *Partial convicts under the one `Partial` rule*; `arrest` reads it the same way, `:1588`). `04_VERBS.md` \u00a7B.2 writes `Partial: Tenure.degree` alone, which the gate makes unbuildable: THE GATE ADMITS A `Tenure.degree` WRITE ONLY ON AN EDGE THE WRITE OPENED (`determination` asks `opened` first, `state/gate.py`'s `determination` basis (`opened` asked first): authority to bind is not authority to re-grade, `test_19_determination_opens_only_a_disposed_kind_and_closes_only_a_restraint`), so a Partial that wrote only a degree has no edge to grade. The declared column therefore names what the one effect body does. [ASSUMPTION; medium; Jordan to correct; revert: `Partial: [Tenure.degree]`, which under-names the opening.] B24.14 (HEAR_B edit 7): `Record.stages` is declared on the three bands a sitting can write at -- a determination that entered or struck items appends them to the docket item's case file (`_eff_determine`, check-only beside the edge as `DocketItem.matter` is); it is written only then, and a `Partial` that opened the edge with no item listed leaves the file as it was. `Failure`: `[]` -- the bench did not carry the matter, nothing opens, the matter stays on the docket, `matter.undetermined`.",
           "emits": {
@@ -11913,7 +11924,8 @@
           "kind": "Record",
           "field": "exists",
           "steps": [
-            "RES"
+            "RES",
+            "ENC"
           ],
           "class": "ACTS",
           "social": "true",

@@ -23,8 +23,8 @@ from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
     DEGREE_STEP, task_share,
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_AS, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
-    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
-    SUBTREE_OCCUPATION_KINDS, forge_quality_at,
+    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RESOLUTION_KIND, RESOLUTION_SEAT_KEY,
+    RIG_KEY, RIG_LEVELS, STAKES_KEY, SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
 from ..data.verbs import CITES_KEY, VERB_TABLE
@@ -41,7 +41,8 @@ from ..queries.world_q import (
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, SEAT_DISPOSAL, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
+    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, RECORD_DISPOSAL, SEAT_DISPOSAL, UNDECLARED_DISPOSAL, Change, Subject, may_cede,
+    may_determine, may_seize,
     may_warrant, may_wage, seat_faction,
 )
 from ..state.ids import H
@@ -51,6 +52,9 @@ from .effects_shared import _new_oblige_term, _operand, effect_for, occupying_fa
 # v9 SC-02 `22b` step 24: the kind a pursuit write earns, read off its matrix row (`write_matrix.yaml`
 # `(Person, pursuits)`, `emits:`), never spelt here; a row emitting other than one kind fails at import.
 PURSUIT_MOVED, = matrix_row("Person", "pursuits").emits
+# v11 CR-36 (B21c.04): the pair a mint writes (`write_matrix.yaml` `(Record, exists)`); `_eff_determine` mints a `resolution` only at a
+# band whose `writes:` declare it, so which bands mint is the verb table's column, never spelt here.
+_MINTED = "Record.exists"
 
 
 @effect_for("create_record")
@@ -199,9 +203,10 @@ def _determinable(row_id: str) -> bool:
     not `consent`. A `consent` row's agreement is each party's own (`close: consent`: nothing is adjudicated, `bench_basis: none`), so an edge a bench opened on it would be opened under
     the judge's act, not the act of the party it binds; its `oblige` is opened by that party's own act (the `oblige` verb, `own`-eligible, `_eff_oblige`). `open_case` asks it before it docks
     and `_eff_determine` before it opens, so a matter is never docked for a determination that declines it forever. v11 CR-35 (B21c.02): or its
-    `disposes:` is `SEAT_DISPOSAL`, the `hold` a determination opens on the seat the docketed petition names (`election`, `succession`)."""
+    `disposes:` is `SEAT_DISPOSAL`, the `hold` a determination opens on the seat the docketed petition names (`election`, `succession`).
+    v11 CR-36 (B21c.04): or `RECORD_DISPOSAL`, the `resolution` a determination mints (`parliamentary_debate`, `council_of_state`)."""
     row = ARRANGEMENTS[row_id]
-    return (row["disposes"] in DISPOSABLE_KINDS or row["disposes"] == SEAT_DISPOSAL) and row["close"] != "consent"
+    return row["disposes"] in DISPOSABLE_KINDS | {SEAT_DISPOSAL, RECORD_DISPOSAL} and row["close"] != "consent"
 
 
 def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0, case=None) -> dict:
@@ -580,8 +585,9 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         opener map reads `determine` beside each and C-1's report stays empty. An item naming NO row
         -- every computed case -- disposes `state/gate.py::UNDECLARED_DISPOSAL`, the `oblige` the
         bullet below argues, so every world without a declared arrangement determines as before.
-        A row disposing a `Record` or `none` DECLINES: a Record disposal is not on this row's
-        `writes:`, and is unbuilt (named, not guessed). So does a docket naming two rows for one
+        A row disposing a `Record` MINTS a `resolution` into the determiner's hand (v11 CR-36,
+        B21c.04: the Record disposal site below; `Record.exists` is on the opening bands' `writes:`).
+        A row disposing `none` DECLINES, and so does a docket naming two rows for one
         matter (only a hand-planted docket can), rather than choose between them. The bullet below
         is the `oblige` case's reasoning:
       * KIND `oblige`. Five of `arrangements.yaml`'s seven seeded rows dispose a Tenure kind (`oblige`
@@ -698,20 +704,36 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     kind = ARRANGEMENTS[row]["disposes"] if row is not None else UNDECLARED_DISPOSAL
     # v11 CR-35 (B21c.02): A SEAT-FILLING ROW OPENS ITS `hold` ON THE SEAT THE DOCKETED PETITION NAMES (`petitioned_seat`), not on the seat
     # exercised, and declines where that seat is held by anyone (one per object: a claim that executed first takes it) or names no seat.
+    made = None
     if kind == SEAT_DISPOSAL:
         seat = petitioned_seat(w, party)
         if seat is None or any(t.kind == kind and t.object == seat and t.live for t in w.tenures):
             return NO_CHANGE
+    elif kind == RECORD_DISPOSAL:
+        # v11 CR-36 (B21c.04) step 3: THE RECORD DISPOSAL SITE. A row that `disposes: Record` mints, through `_mint_document` (the one
+        # mint), a `resolution` whose `terms` is the docketed petition's `terms` (the seat) and whose addressee is the party (the nominee),
+        # HELD BY THE DETERMINING ACTOR -- ED-IN-0292 (1), RULED NO, bars minting a newborn Record's hold to anyone else; delivery is a
+        # `give`. At the bands whose `writes:` name `Record.exists` (Overwhelming, Success) or an uncontested hand-built call; a band that
+        # does not (Partial: the disposal table's `docket:adjourned`) declines, and the matter stays docketed. Declines where the petition
+        # names no seat. The creating Act's seat (`world_q.issuing_seat`) is what `confer`'s confirmation reads: the receipt names the Record.
+        seat = petitioned_seat(w, party, RECORD_DISPOSAL)
+        if seat is None or (res is not None and _MINTED not in VERB_TABLE[a.verb].writes_at(res.degree)):
+            return NO_CHANGE
+        made = _mint_document(w, a, RESOLUTION_KIND, {RESOLUTION_SEAT_KEY: seat, RECORD_CONTENT["addressee"]: party}, _seat_rung(w, a))
     elif any(t.kind == kind and t.subject == party and t.object == seat and t.live
              for t in w.tenures):
         return NO_CHANGE
-    nt = _disposal(w, a, party, seat, kind, res.degree if res is not None else None)
-    if nt is None:
+    nt = _disposal(w, a, party, seat, kind, res.degree if res is not None else None) if made is None else None
+    if nt is None and made is None:
         return NO_CHANGE
     items = docketed(w, party)
     judge = w.persons.get(a.actor)
     moved, case, listed = None, None, ()
-    subjects = (Subject.edge(nt),)        # a hand-built call with no contest: the edge, as before
+    rid = made.subjects[0].id if made is not None else None
+
+    def _named(earns=None):
+        return Subject.edge(nt, earns=earns) if made is None else Subject.entity("records", rid, earns=earns)
+    subjects = (_named(),)                # a hand-built call with no contest: the edge (or the minted resolution), as before
     if res is not None:
         if judge is not None:
             moved = consequence_pursuits(judge, a.verb, res.degree, w.fixtures.get("pursuit_shift"))
@@ -720,7 +742,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         # -- so a judge whose pursuits did not move (the `0` control arm) would publish a
         # move that did not happen. The pursuit subject alone earns `pursuit.moved`.
         band_kind, = (k for k in VERB_TABLE[a.verb].emits_at(res.degree) if k != PURSUIT_MOVED)
-        subjects = (Subject.edge(nt, earns=band_kind),)
+        subjects = (_named(band_kind),)
         if moved is not None:
             subjects += (Subject.entity("persons", a.actor, earns=PURSUIT_MOVED,
                                         fields=("pursuits",)),)
@@ -736,7 +758,10 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             subjects += (Subject.entity("records", case, earns=band_kind, fields=("stages",)),)
 
     def perform() -> None:
-        w.add_tenure(nt)
+        if made is None:
+            w.add_tenure(nt)
+        else:
+            made.apply()
         for item in items:
             item["matter"] = None
         if moved is not None:

@@ -26,6 +26,9 @@ from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, WAR_MOOD,
 # B21b.13 (CR-91 (1)): a claim to a territory's mood, the faction test, and the ground reader `_req_utter` asks.
 from ..queries.world_q import CLAIM_MOOD, casus_ground, faction_props
 from ..data.rosters import CASUS_GROUNDS     # the trace's list of the grounds asked; which holds is `casus_ground`'s
+# B21c.04 (CR-36): the resolution a `nominated` seat's confirmation reads, and the creating Act's seat (`_eff_arrest`'s reading).
+from ..data.rosters import RECORD_CONTENT, RESOLUTION_KIND, RESOLUTION_SEAT_KEY
+from ..queries.world_q import issuing_seat
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
@@ -35,7 +38,7 @@ from ..trace_log import TRACE
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
+    CONFIRMED_BASES, REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
     may_revoke, may_sit, may_wage, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
@@ -110,7 +113,37 @@ def _refuse_at(clause: str, ids: str, said: Optional[str] = None) -> Answer:
 # ---------------------------------------------------------------------------
 
 
-@requires_predicate("confer", clauses=("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"))
+def confirming_resolutions(w: "World", actor: Optional[str], via: Optional[str], seat: Optional[str], conferee: Optional[str]) -> tuple:
+    """v11 CR-36 (B21c.04) step 4: THE RESOLUTIONS THAT LICENSE `actor`'S `confer` OF `seat` ON `conferee` THROUGH `via` -- the ids, in tenure
+    order, of the `resolution` Records (`data/rosters.py::RESOLUTION_KIND`) on `actor`'s own live `hold` edges whose `terms` is `seat` and
+    whose addressee list names `conferee`, and whose CREATING ACT was a determination exercised through a seat other than `via` (the
+    two-seat clause: one body names, another seat confirms). The creating Act is read as `_eff_arrest` reads a warrant's
+    (`world_q.issuing_seat`: the `via` of the act that caused the Event first naming the Record), because a Record carries no field naming
+    its maker (the step-6 SITE check): a Record no logged Event names -- a hand-planted one -- has no readable creating Act and licenses
+    nothing. `warrants_for`'s shape (`warrant_sourced`), read world-side because the gate never reads a Record's content (K-52).
+    Asked by `_req_confer` (`nomination`) and again by `_eff_confer` (the decline), for a seat whose basis is in `CONFIRMED_BASES`."""
+    out = []
+    addressee = RECORD_CONTENT.get("addressee")
+    for t in w.tenures:
+        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
+            continue
+        rec = w.records[t.object]
+        said = rec.subject_matter if isinstance(rec.subject_matter, dict) else {}
+        if rec.kind != RESOLUTION_KIND or said.get(RESOLUTION_SEAT_KEY) != seat or conferee not in (said.get(addressee) or ()):
+            continue
+        made_through = issuing_seat(w, t.object, _NOMINATING_VERBS)
+        if made_through is not None and made_through != via:
+            out.append(t.object)
+    return tuple(dict.fromkeys(out))
+
+
+# The verb whose act mints a `resolution` (`loop/effects_information.py::_eff_determine`'s Record disposal site): a `resolution` another
+# verb made -- a `create_record` declaring the kind -- is no body's decision and confirms nothing.
+_NOMINATING_VERBS = frozenset({"determine"})
+
+
+@requires_predicate("confer", clauses=("office", "basis", "term", "conferee", "purview", "nomination", "self_across_chains", "held",
+                                       "displacement"))
 def _req_confer(w: "World", a: "Act") -> Answer:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
     object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
@@ -133,8 +166,9 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis.
 
-    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the eight declared on the decorator -- `office`, `basis`,
-    `term` (B21.01: the act declares a term that is no positive whole number), `conferee`, `purview` (G3's `may_fill`), `self_across_chains`
+    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of those declared on the decorator -- `office`, `basis`,
+    `term` (B21.01: the act declares a term that is no positive whole number), `conferee`, `purview` (G3's `may_fill`), `nomination` (v11 CR-36,
+    B21c.04: a `nominated` seat with no confirming resolution held, `confirming_resolutions`), `self_across_chains`
     (B21.61: the conferrer seats himself on a seat of another faction than the seat he exercises), `held` (1-per-object: the seat is held and the conferral is to its own holder or
     displaces one who carries a live `commit`) and `displacement` (T-o over the incumbent). The trace phrase beside each is the
     sentence the REM-14 rows have always carried."""
@@ -165,6 +199,11 @@ def _req_confer(w: "World", a: "Act") -> Answer:
         # G3: the seat exercised does not reach the seat conferred
         return _refuse_at("purview", f"{a.actor} via {a.via!r} on {obj!r}",
                           "a confer the seat exercised does not reach the office conferred")
+    # v11 CR-36 (B21c.04) step 4: A `nominated` SEAT IS CONFERRED ONLY AS A CONFIRMATION -- the actor holds a resolution naming the seat and
+    # the conferee, made through another seat (`confirming_resolutions`); `confer.refused` otherwise (asked again in `_eff_confer`).
+    if off.conferral in CONFIRMED_BASES and not confirming_resolutions(w, a.actor, a.via, obj, conferee):
+        return _refuse_at("nomination", f"{a.actor} via {a.via!r} on {obj!r} to {conferee!r}",
+                          "a confer of a nominated seat with no resolution held naming it and the conferee, made through another seat")
     # B21.61 (`16_PESSIMIST_FA_B` edit 2, A-105): NO SELF-CONFERRAL ACROSS CHAINS OF SEATS. A conferrer seating HIMSELF on a seat of another
     # faction than the seat he exercises is refused (`Office.faction`, the resolved faction); inside one chain it is admitted as before, and a
     # conferral on another person across chains is priced, not refused (`rosters.yaml: obstacle_terms`' `cross_chain`).

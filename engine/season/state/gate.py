@@ -221,6 +221,10 @@ UNDECLARED_DISPOSAL = "oblige"
 # were it one, the clause below would admit a bench installing someone in its own seat, which no effect writes (the planted falsifier
 # `test_u7_remit.py` names). `loop/effects_information.py::_determinable` admits a row disposing either.
 SEAT_DISPOSAL = "hold"
+# v11 CR-36 (B21c.04): THE `disposes:` A ROW DECLARES WHEN ITS DETERMINATION MINTS A DOCUMENT (`parliamentary_debate`, `council_of_state`):
+# not a Tenure kind, so not a `DISPOSABLE_KINDS` member; `loop/effects_information.py::_eff_determine` mints a `resolution` into the
+# determiner's hand under it, and `_determinable` admits it. The gate admits that mint as any mint (the maker's own `hold`, `T-m`).
+RECORD_DISPOSAL = "Record"
 DISPOSABLE_KINDS = frozenset(
     {UNDECLARED_DISPOSAL} | {row["disposes"] for row in ARRANGEMENTS.values()
                              if row["disposes"] in TENURE_KINDS and row["disposes"] != SEAT_DISPOSAL})
@@ -662,8 +666,11 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
 # `revocation` is `null`); were one revocable, the deposed heir is not banned from a seat he never held
 # by appointment [ASSUMPTION; medium; Jordan to correct; revert: drop the key -- the import check then
 # refuses `inheritance` until it has one].
+#
+# v11 CR-36 (B21c.04): `nominated` -> a `ban`, as `appointed`: a confirmed nominee is an appointee
+# [ASSUMPTION; medium; Jordan to correct; revert: None].
 REVOCATION_DISPOSAL = {"appointed": BAN_KIND, "elected": None, "annex": None, "inheritance": None,
-                       None: None}
+                       "nominated": BAN_KIND, None: None}
 
 
 def check_revocation_disposal() -> None:
@@ -712,8 +719,16 @@ check_revocation_disposal()
 # revert: drop `DETERMINATION` from both -- no seat is filled by a bench.] `has_filler` and `check_successions` do not count the arm: an
 # electorate may be empty (a seat whose faction holds no other judging seat stays vacant once vacated), and no computed docket item names
 # an election (REACH 0), so neither the found-a-seat precondition nor the import check moves on it.
+# v11 CR-36 (B21c.04): `nominated` IS FILLED BY THE CONFERRAL BASIS -- the confirming seat's `confer`. The gate reads Tenures and never a
+# Record's content (K-52), so the confirmation (a held `resolution` naming seat and conferee, made through another seat) is the
+# precondition's and the effect's (`loop/predicates.py::confirming_resolutions`), not a conjunct here.
 FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRAL, DETERMINATION}),
-             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM, DETERMINATION}), None: frozenset()}
+             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM, DETERMINATION}),
+             "nominated": frozenset({CONFERRAL}), None: frozenset()}
+# v11 CR-36 (B21c.04): THE CONFERRAL BASES WHOSE `confer` IS A CONFIRMATION -- admitted only on a `resolution` the confirming actor holds
+# (`loop/predicates.py::confirming_resolutions`, asked by `_req_confer` and again by `_eff_confer`). Keyed by basis, `_ELECTION_ASKS_FACTION`'s
+# shape; refused at import by `check_filled_by` unless every member is a rostered basis the conferral basis opens.
+CONFIRMED_BASES = frozenset({"nominated"})
 
 # The gate bases that OPEN a `hold` on a seat -- what a `FILLED_BY` value may name. Every other basis
 # refuses a seat-hold opening by construction (`T-m`'s seat carve-out; `handover` is non-seat only).
@@ -742,6 +757,12 @@ def check_filled_by() -> None:
             "state/gate.py -- FILLED_BY",
             needs=f"each conferral basis maps to a non-empty subset of {sorted(_SEAT_OPENERS)}",
             law="v10 IN-61 (RS-27) -- a seat is filled by a basis that can open its `hold`, or by nothing")
+    stray = sorted(b for b in CONFIRMED_BASES if b not in CONFERRAL_BASES or CONFERRAL not in FILLED_BY.get(b, ()))
+    if stray:
+        raise Unspecified(
+            f"confirmed bases {stray!r} are not rostered conferral bases the conferral basis opens", "state/gate.py -- CONFIRMED_BASES",
+            needs="name only `conferral_bases` members whose `FILLED_BY` value holds `conferral`",
+            law="v11 CR-36 -- a confirmation is a `confer`; a basis `confer` cannot fill confirms nothing")
 
 
 check_filled_by()

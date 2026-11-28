@@ -713,16 +713,18 @@ def docketed_under(w: World, matter: Optional[str]) -> set:
     return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
 
 
-def petitioned_seat(w: World, matter: Optional[str]) -> Optional[str]:
+def petitioned_seat(w: World, matter: Optional[str], disposes: str = SEAT_DISPOSAL) -> Optional[str]:
     """v11 CR-35 (B21c.02) step 5: THE SEAT A DOCKETED ELECTION OR CONTESTED SUCCESSION IS ABOUT -- for the first item `docketed` lists for
     `matter` whose arrangement row `disposes:` a `hold` (`state/gate.py::SEAT_DISPOSAL`), the `terms` of the petition it names
     (`DOCKET_PETITION`; `person_q.ABOUT_KEYS`, the one owner of a Record kind's about-key) where they name an Office; else `None`. The seat is
     the petition's terms: no ninth operand, no payload key. Read by `judging_set` (the electorate), `declared_votes_by_member` (what a vote
     names), the precondition's `bench` stem and `_eff_determine` (where the `hold` opens), so the four cannot name two seats. `None` for
-    every computed item (`open_case` writes no arrangement, `H-80`), so no realm reading moves on it."""
+    every computed item (`open_case` writes no arrangement, `H-80`), so no realm reading moves on it.
+    v11 CR-36 (B21c.04): `disposes` asks the same of a row disposing another kind -- `_eff_determine` passes `RECORD_DISPOSAL` for the seat a
+    nomination's `resolution` names; the four readers above keep the default, so the electorate rule never reads a nomination."""
     for item in docketed(w, matter):
         row = ARRANGEMENTS.get(item.get(DOCKET_ARRANGEMENT))
-        if row is None or row["disposes"] != SEAT_DISPOSAL:
+        if row is None or row["disposes"] != disposes:
             continue
         rec = w.records.get(item.get(DOCKET_PETITION))
         said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}

@@ -18,10 +18,10 @@ from typing import Optional
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RESTRAINT_KINDS, RIG_KEY, RIG_LEVELS, SEAT_ROW_BY_ID, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
-from ..loop.predicates import KEEPS_KEY, TERM_KEY, office_founded_by, office_named_by
+from ..loop.predicates import KEEPS_KEY, TERM_KEY, confirming_resolutions, office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_ARRANGER, restrained
 from ..state.carriers import Tenure, Term, subject_of
-from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
+from ..state.gate import (CONFIRMED_BASES, NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
                           passes_a_seat, revocation_disposal)
 from ..state.ids import H
 
@@ -123,6 +123,10 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # (#453 K-53). B21.02: the ban bars only a seat within the banning seat's reach -- `restrained`
     # asked `at` `obj`'s rung [ASSUMPTION; medium; Jordan to correct; revert: drop the argument].
     if restrained(w, to, BAN_KIND, at=w.offices[obj].rung):
+        return NO_CHANGE
+    # v11 CR-36 (B21c.04) step 4, THE DECLINE: a `nominated` seat is conferred only on a resolution the actor holds naming it and `to`, made
+    # through another seat -- `_req_confer`'s `nomination` clause asked again, so an act that skipped the precondition seats nobody.
+    if w.offices[obj].conferral in CONFIRMED_BASES and not confirming_resolutions(w, a.actor, a.via, obj, to):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     # IN-10 (b) (#453 §7.2/§9.6 `:1382`, `:2071`): A SEAT-HOLD MAY CARRY A TERM -- regency, the

@@ -1723,15 +1723,18 @@ def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
     # RE-RECORDED AT v10 IN-61 (RS-27): every member still passes the MEMBERSHIP test, and `_req_confer`
     # now admits exactly the members `state/gate.py::FILLED_BY` opens by `conferral` -- `inheritance` is a
     # member `confer` refuses (a throne is claimed, never conferred). Was: every member admitted by both.
-    from ..state.gate import CONFERRAL, FILLED_BY
+    # RE-RECORDED AT v11 CR-36 (B21c.04): `nominated` is opened by `conferral` and still refused here -- its `confer` is a confirmation
+    # (`CONFIRMED_BASES`), and this act holds no resolution (`_req_confer`'s `nomination` clause; `test_cr36_nomination.py` runs the route).
+    from ..state.gate import CONFERRAL, CONFIRMED_BASES, FILLED_BY
     checked = refused = 0
     for basis in sorted(CONFERRAL_BASES):
         off.conferral = basis
+        admits = CONFERRAL in FILLED_BY[basis] and basis not in CONFIRMED_BASES
         assert _preds.has_conferral_basis(off), basis
-        assert bool(_preds._req_confer(w, conf)) is (CONFERRAL in FILLED_BY[basis]), basis
+        assert bool(_preds._req_confer(w, conf)) is admits, basis
         checked += 1
-        refused += CONFERRAL not in FILLED_BY[basis]
-    assert checked == len(CONFERRAL_BASES) >= 4 and refused == 1, (checked, refused)
+        refused += not admits
+    assert checked == len(CONFERRAL_BASES) >= 5 and refused == 2, (checked, refused)
     for basis in (None, "something-not-on-the-roster", "the duke's remit (harness fixture)", ""):
         off.conferral = basis
         assert not _preds.has_conferral_basis(off), f"{basis!r} passed the basis test"

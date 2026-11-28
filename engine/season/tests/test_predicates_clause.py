@@ -176,7 +176,8 @@ def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
     three kinds, where the flat row (the control) emitted `confer.refused` for all three."""
     from .test_g3_not_yours import _gov_world
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
-    assert declared == ("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"), declared
+    # v12 B21c.04 (CR-36) adds `nomination` (a `nominated` seat with no confirming resolution), keyed `confer.refused`
+    assert declared == ("office", "basis", "term", "conferee", "purview", "nomination", "self_across_chains", "held", "displacement"), declared
     shipped = VERB_TABLE["confer"]
     assert shipped.refusals_by_clause, "the shipped confer row is flat: B21.80 keys it"
     assert shipped.precondition_evaluable(PR.REQUIRES_PREDICATES), "the shipped row's keys are not the predicate's clauses"

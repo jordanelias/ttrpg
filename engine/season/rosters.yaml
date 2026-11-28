@@ -235,6 +235,13 @@ rosters:
       # Not a `record_sourced_operands` kind: an order answers no operand. [ASSUMPTION; medium; Jordan to correct; revert:
       # add the omitted keys back with their home wiring.]
       standing_order: [at, role, retreat_at]
+      # A BODY'S WRITTEN DECISION, HELD AS A DOCUMENT, as a council's resolution is (v11 CR-36, B21c.04). Minted by
+      # `loop/effects_information.py::_eff_determine` through `_mint_document`, the one mint, under a `disposes: Record` row
+      # (`parliamentary_debate`, `council_of_state`) at Overwhelming or Success, into the DETERMINING actor's hand (ED-IN-0292 (1)):
+      # `terms` is the docketed petition's `terms` (the seat) and `to` the party (the nominee), stored as an id list (`content.addressee`).
+      # Read by `loop/predicates.py::confirming_resolutions` (`confer` on a `nominated` seat). Not a `record_sourced_operands` kind: no
+      # computed act forms on it (H-80, H-229). [ASSUMPTION; medium; Jordan to correct; revert: drop the kind and the mint site.]
+      resolution:   [terms, to]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -3903,7 +3910,15 @@ rosters:
       revocation of one costs is `REVOCATION_DISPOSAL["inheritance"]` (nothing); both are refused at import
       unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two
       mappings' keys, `successions` and `off_king`'s basis (back to `null`).]
-    values: [appointed, elected, annex, inheritance]
+      v11 CR-36 (B21c.04) ADDS A FIFTH, `nominated` -- NAMED BY ONE BODY, THEN CONFIRMED BY ANOTHER SEAT. `open: false` admits
+      it because this is the design change that note requires (E3 Block 1 item 3's DECISION: "a `nominated` seat by `confer` on a
+      body's held `resolution`"). A seat declaring it is filled by `confer` (`FILLED_BY["nominated"]`, the conferral basis), and
+      `confer` on it is admitted only when the confirming actor HOLDS a live `resolution` (`record_kinds`, minted by a determination
+      under a `disposes: Record` row) naming the seat and the conferee, made through a seat other than the conferring one
+      (`loop/predicates.py::confirming_resolutions`). Revoked, a confirmed nominee is banned as an appointee is
+      (`REVOCATION_DISPOSAL["nominated"]`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, both mappings' keys,
+      and `off_parliamentary_clerk` back to `appointed`.]
+    values: [appointed, elected, annex, inheritance, nominated]
 
   successions:
     source: >-

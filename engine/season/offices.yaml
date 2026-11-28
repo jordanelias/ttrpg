@@ -339,7 +339,10 @@ seats:
     body:       "Ministries"
     faction:    null
     remit_acts: [issue]
-    conferral:  appointed
+    # v11 CR-36 (B21c.04): named by a body (a determination under `parliamentary_debate` mints the `resolution`), confirmed by another seat's
+    # `confer` [ASSUMPTION; medium; Jordan to correct; revert: appointed]. The nominating bench is that row's `judging_set` (at a realm venue
+    # the King and the Widow Regent: the interim two-seat bench, CR-38).
+    conferral:  nominated
     revocation: rung_above_same_faction
     holder:     "NPC-008"
     obligees:   []

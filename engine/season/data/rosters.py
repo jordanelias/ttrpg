@@ -760,6 +760,18 @@ if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY
             "`reserve` and `general` are not keys")
 ORDER_ROLES = roster("order_roles", ordered=True)
 ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
+# v11 CR-36 (B21c.04): THE `record_kinds` MEMBER A BODY'S RESOLUTION IS -- `terms` the seat it names, the addressee key (`content.addressee`)
+# the person it names. Named once here, `ORDER_KIND`'s shape, for the mint (`loop/effects_information.py::_eff_determine`) and the read
+# (`loop/predicates.py::confirming_resolutions`). Refused at import if the roster stops carrying exactly those two keys: the mint would write a
+# key set the constructor refuses, and the confirmation would match nothing forever.
+RESOLUTION_KIND = "resolution"
+RESOLUTION_SEAT_KEY = "terms"
+if set(RECORD_KIND_KEYS.get(RESOLUTION_KIND, ())) != {RESOLUTION_SEAT_KEY, RECORD_CONTENT.get("addressee")}:
+    raise Unspecified(
+        f"record kind {RESOLUTION_KIND!r} does not carry exactly {RESOLUTION_SEAT_KEY!r} and the addressee key "
+        f"({RECORD_KIND_KEYS.get(RESOLUTION_KIND)!r})", "rosters.yaml -- record_kinds",
+        needs=f"a `{RESOLUTION_KIND}: [terms, to]` row, or the determination's Record disposal and `confer`'s confirmation retired",
+        law="v11 CR-36 -- a resolution names the seat and the nominee, and nothing else")
 # THE TWO ROSTERS OF WHO LEARNS A DOCUMENT'S CONTENT WITHOUT HOLDING IT, one shape: `{record_kinds member: verbs whose mint of
 # that kind the roster covers}`. `read_to_addressee` (B11 lane A) is "put to the addressee's face": the content reaches a witness
 # the document is ADDRESSED TO. `proclaimed` (B21.17, A-21) is "made public": the content reaches EVERYONE who learns of the
