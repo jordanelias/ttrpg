@@ -79,6 +79,9 @@ lanes:
       - batch: B12b-weather-arcs-population
         added: 2
         behaviour: "test_hunger.py (B12b.47, the supply arm flipped in the shipped realm): on the bare build_realm a seat treasury holding one grain ration fields one of the attacker's two where the realm built on the explicit default fixtures fields both, and an empty treasury fields 0 where a full one fields the whole weight"
+      - batch: B12b-weather-arcs-population
+        added: 1
+        behaviour: "test_go07_canonical_digest.py (B12b close, the life save): a game saved from the shipped realm (built under REALM_FIXTURES, the supply arm on) resumes through scenarios.resume without the client naming its fixtures, where it came back SnapshotRefused(fixtures_digest) before; the control is that decode under other fixtures still refuses."
 
   engine:
     base: 1043

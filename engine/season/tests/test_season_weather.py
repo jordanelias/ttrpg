@@ -211,4 +211,6 @@ def test_nonempty_season_factor_draw_of_wrong_length_is_refused():
     assert "season_factor_draw" in str(e.value) and str(len(wrong)) in str(e.value) \
         and str(len(SEASONS_OF_YEAR)) in str(e.value), str(e.value)
     # The right length is not refused (non-vacuity: the refusal is the length, not the table).
-    assert world_q.season_factor_of(_town(UNIT)) in {DEFAULT.get("season_factor") * f for f in world_q.SEASON_BAND_FACTORS.values()}
+    w = _town(UNIT)
+    band = world_q.season_band_of(w)
+    assert world_q.season_factor_of(w) == DEFAULT.get("season_factor") * world_q.SEASON_BAND_FACTORS[band] * world_q.season_term(w, "yield")

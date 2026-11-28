@@ -402,3 +402,16 @@ def test_a_resumed_run_reaches_the_ending_the_unbroken_run_reaches():
     assert len(got["world"].acts) > acts_at_save, "the resumed season played no act: the equality below observes nothing"
     assert (got["hash"], got["ending"], got["kind"], got["tick"]) == (whole["hash"], whole["ending"], whole["kind"], whole["tick"])
     assert whole["ending"] == "time" and got["seasons"] == 1
+
+
+def test_the_shipped_realms_saved_game_resumes_without_the_client_naming_its_fixtures():
+    """A `life` save is the headline scenario's, built by `build_realm(seed)` under `REALM_FIXTURES` (the supply arm on); `resume` tries the two fixtures a row builds
+    under, so the port's load path need not know which row it saved. The refusal it excludes is `SnapshotRefused("fixtures_digest")` (a save the port could not load);
+    the control is a world saved under `REALM_FIXTURES` and read under other fixtures, which still refuses."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..harness import scenarios as SC
+    w = SC.SCENARIOS["life"].build(0)
+    assert w.fixtures is not DEFAULT_FIXTURES and w.fixtures.get("field_provisioning"), "the shipped realm is not built under REALM_FIXTURES"
+    got = SC.resume(encode(w, "life"), 0, person="p_npc_001")
+    assert not isinstance(got, SnapshotRefused), repr(got)
+    assert isinstance(decode(encode(w, "life")), SnapshotRefused), "the control: the default `decode` must still refuse a world built under other fixtures"
