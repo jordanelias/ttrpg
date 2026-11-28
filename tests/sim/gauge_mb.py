@@ -30,6 +30,7 @@ import sys, os, statistics
 
 # import the package exactly as bat.py (the G5 digest harness) does
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # [B19.01] the repo root, so `python tests/sim/gauge_mb.py` finds `systems`, `modules`, `engine` without a caller's PYTHONPATH
 if __name__ == '__main__':   # [B17.12] a run from the command line builds the engine from the toggles its caller exported
     from systems.mass_battle.sim import variant
     variant.install(variant.cfg_from_environ(os.environ))
@@ -566,7 +567,386 @@ def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sampl
     print(f"  => casualty-realism pass {cb}/{len(tests)}")
     return nb
 
+# ═════════════════════════════════════════════════════════════════════════════════════════════════
+# THE "RESULTS" BLOCK (B19.01; proposals/.../26_MASS_BATTLE_calibration_targets.md §1-§2).
+#
+# The win-share block above is untouched. This block reads RESULTS -- who loses how much, how often a field is
+# decided -- as ratios and orderings (never a historical percentage against an engine loss: history counts the dead,
+# the engine counts men lost to the fight, so only a ratio of two engine losses has no unit). Each scenario is built
+# through the season's own constructors and fought by the season's own entry: the order of battle is the army record's
+# (`troop_types/presets.plan` -> `armyrecord.apply` -> `armyrecord.to_order_of_battle`), the field is
+# `massbattle.resolve_field` over a `MassBattleInput`, and a side's band is `ladder.field_degree`'s. It writes nothing
+# tracked. A reading outside a TARGET is reported with its scenario and seeds; the band is NOT moved to fit; a failed
+# flag or ordering is a finding about a mechanism, not a number to tune. No band here gates a merge.
+#
+#   PYTHONHASHSEED=0 python tests/sim/gauge_mb.py --results [--n N] [--only T-2,T-9] [--jobs J]
+#
+# `--n` defaults to the source's 400 (its floor: "n at least 400 seeded fields per scenario"); `--only` and `--jobs`
+# change which rows run and on how many processes, never what a seed draws, so a same-seed table is the same table.
+# A row whose mechanism is not in the tree prints "no mechanism", never a number; the probe for each is below.
+# ═════════════════════════════════════════════════════════════════════════════════════════════════
+RESULTS_N = 400                 # [canonical: calibration targets §1 -- "n at least 400 seeded fields per scenario"]
+RESULTS_SEED = "gauge_mb_results"   # the seeded key: field `s` of every scenario draws from H2(RESULTS_SEED, s), so arms share seeds
+
+# (id, reading, lo, hi, band as printed, source and tier, status of the band). THE ONLY PLACE A BAND IS WRITTEN:
+# a reading is judged against these rows and never against a literal in the code that reads it.
+RESULTS = [
+    ('T-1', "the winner's share lost in a decided even field (median)", None, 0.10,
+     'reported; flag if median > 0.10', 'CR A1 [D]; CR A11 [D]', 'flag (the unit differs)'),
+    ('T-2', "loser's loss / winner's loss, even field, no pursuit possible", 1.7, 5.2,
+     '1.7 to 5.2 (centre near 3)', 'Krentz (CR A1, A2 [D])', 'target'),
+    ('T-3', "loser's loss with mounted pursuit / without, same seeds", 2.0, 5.0,
+     '2 to 5', 'CR A1, A6 [D]', 'target; wide on purpose'),
+    ('T-4', "share of even fields decided within 1 bout, and within max_bouts", None, None,
+     'reported; the second must exceed the first', 'CR C1 [D]', 'ordering only'),
+    ('T-5', "share of decided fields where the loser broke below the casualty floor", None, None,
+     '> 0 with stand_draw on; 0 with it off', 'CR D5 [D]', 'ordering against the control'),
+    ('T-6', "horse charging frontally: unbraced foot > braced pole-armed foot > 0; shaken foot highest", None, None,
+     'the ordering', 'MV H1-H3 [T]; rows C1, C2, C5', 'ordering'),
+    ('T-7', "no scenario's win share is 0 or 1", 0.0, 1.0,
+     'every share inside (0, 1)', 'the standing rule', 'target'),
+    ('T-8', "fresh against tired: entry_stamina 0.5 against 1.0", None, None,
+     'loses more often than the mirror, by more than the sampling band', 'CR D3 [D]', 'ordering'),
+    ('T-9', "numbers: win share of the larger side at 2:1 and 3:1", None, 1.0,
+     'rises with the ratio; below 1', 'CR D8 [T]', 'ordering'),
+    ('T-10', "of men lost in flight under mounted pursuit, the share captured (mean)", 0.2, 0.8,
+     '0.2 to 0.8 as a mean, not constant across seeds', 'CR A6, section B', 'flag; three battles'),
+]
+_BAND = {r[0]: (r[2], r[3]) for r in RESULTS}
+
+_SPEAR_UNIT = 300       # troops in one spear unit of the even-foot and numbers scenarios (a unit is at least 4 cells of 50: 200)
+_EVEN_FOOT_UNITS = 4    # two equal spear armies of 4 x 300 = 1200 troops (an army is at least MIN_ARMY_TROOPS = 1000)
+_PRESET_WEIGHT = 20     # "the preset army of a weight-20 faction": one cohort of weight 20 with a full Site of every kind
+_CHARGE_HORSE, _CHARGE_FOOT = 200, 400
+_SHAKEN_STANCE = -3.0   # the season's shaken: a side's morale start is 5 + its mean stance toward its faction, clamped to 1..7 (-3 -> 2)
+_SEAT_Z = 2.0           # the sampling band of a seat-symmetry control: z standard errors of the difference of two shares of n
+
+
+def _results_inputs():
+    """The pieces every scenario shares, built once per process by the season's own owners: the condition scale, the geography
+    and the preset order of battle of a weight-20 faction (`presets.plan` -> `armyrecord.apply` -> `to_order_of_battle`)."""
+    import yaml
+    from engine.season.data import files
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.queries.inputs import ArmyCommand, ArmyPresetQuery
+    from modules.mass_battle import armyrecord
+    from modules.mass_battle.troop_types import presets, recruitment
+    scale = DEFAULT_FIXTURES.get("condition_scale")
+    with open(files.GEOGRAPHY_YAML, encoding="utf-8") as f:
+        geo = yaml.safe_load(f)
+    sites = {kind: float(scale) for kind, _floor in recruitment.TRAINING_SITE.values()}
+    plan = presets.plan(ArmyPresetQuery("fac_results", (("c0", _PRESET_WEIGHT, sites),), scale, ()))
+    verb_op = {'recruit': 'recruit', 'form_unit': 'form', 'assign_troops': 'assign'}
+    rec = armyrecord.new("fac_results")
+    for verb, payload in plan:
+        args = dict(payload)
+        if verb == 'recruit':
+            args.update(weight=_PRESET_WEIGHT, sites=sites, full=scale)
+        rec = armyrecord.apply(ArmyCommand(rec, verb_op[verb], args))
+    return scale, geo, armyrecord.to_order_of_battle(rec)
+
+
+_SHARED = {}
+
+
+def _shared():
+    if not _SHARED:
+        _SHARED['v'] = _results_inputs()
+    return _SHARED['v']
+
+
+def _no_horse(oob):
+    """The same order of battle with every mounted unit (and the cohort draws that fed it) taken out."""
+    import dataclasses
+    from modules.mass_battle.orderofbattle import class_of
+    keep = tuple(u for u in oob.units if class_of(u.troop_type) != 'mounted')
+    names = {u.name for u in keep}
+    return dataclasses.replace(oob, units=keep, drawn=tuple(d for d in oob.drawn if d[0] in names))
+
+
+def _spears(k):
+    from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow
+    return OrderOfBattle(tuple(UnitRow(f'spear_{i + 1}', 'spearmen', float(_SPEAR_UNIT)) for i in range(k)))
+
+
+def _line(troop_type, troops, role=None):
+    from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow
+    return OrderOfBattle((UnitRow(troop_type, troop_type, float(troops), role=role),))
+
+
+def _scenario(key):
+    """`(attacker's order, defender's order, stances)` for one scenario key. The attacker is the scenario's SUBJECT (the horse, the
+    larger side); on an even scenario the seats are the two sides and the control is that their win shares are equal."""
+    _scale, _geo, preset = _shared()
+    horse = lambda: _line('cavalry', _CHARGE_HORSE, role='Shock')
+    even = (0.0, 0.0)
+    return {
+        'foot':             (_spears(_EVEN_FOOT_UNITS), _spears(_EVEN_FOOT_UNITS), even),
+        'combined':         (preset, preset, even),
+        'combined_nohorse': (_no_horse(preset), _no_horse(preset), even),
+        'charge_levy':      (horse(), _line('levy', _CHARGE_FOOT), even),
+        'charge_pike':      (horse(), _line('pike', _CHARGE_FOOT, role='ShieldWall'), even),
+        'charge_shaken':    (horse(), _line('spearmen', _CHARGE_FOOT), (0.0, _SHAKEN_STANCE)),
+        'charge_control':   (horse(), horse(), even),
+        'numbers_1':        (_spears(1), _spears(1), even),
+        'numbers_2':        (_spears(2), _spears(1), even),
+        'numbers_3':        (_spears(3), _spears(1), even),
+    }[key]
+
+
+# per-scenario cost, heaviest first, so the pool is not left waiting on the 20,000-troop armies
+SCENARIOS = ('combined', 'combined_nohorse', 'foot', 'charge_levy', 'charge_pike', 'charge_shaken', 'charge_control',
+             'numbers_1', 'numbers_2', 'numbers_3')
+EVEN_SCENARIOS = ('foot', 'combined', 'combined_nohorse', 'charge_control', 'numbers_1')   # the seats are the two sides: gate 3's control
+_ROW_SCENARIOS = {
+    'T-1': ('foot', 'combined', 'combined_nohorse'), 'T-2': ('foot', 'combined_nohorse'),
+    'T-3': ('combined', 'combined_nohorse'), 'T-4': ('foot', 'combined'),
+    'T-6': ('charge_levy', 'charge_pike', 'charge_shaken', 'charge_control'), 'T-7': SCENARIOS,
+    'T-9': ('numbers_1', 'numbers_2', 'numbers_3'),
+}
+
+import collections
+Fld = collections.namedtuple('Fld', 'band a_loss b_loss ended ticks')   # one fought field: the band `field_degree` reads, each side's share lost
+
+
+def _fight(args):
+    """Fields `lo..hi-1` of one scenario, in seed order. Runs in a worker; draws only from its own seeded rng."""
+    from engine.season.queries.inputs import FieldOutcome, MassBattleInput
+    from engine.season.seam.ladder import field_degree
+    from modules.mass_battle import massbattle
+    key, lo, hi = args
+    scale, geo, _preset = _shared()
+    oob_a, oob_b, stances = _scenario(key)
+    inp = MassBattleInput(weights=((1.0,), (1.0,)), territory=None, fort_level=0.0, stances=stances, walls_dr=None, origin=None,
+                          loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo, condition_scale=scale,
+                          orders_of_battle=(oob_a, oob_b))
+    out = []
+    for s in range(lo, hi):
+        r = massbattle.resolve_field(inp, draw.seeded(draw.H2(RESULTS_SEED, s)))
+        if not isinstance(r, FieldOutcome):
+            raise RuntimeError(f"{key} seed {s}: the field was refused, not fought: {r!r}")
+        out.append(Fld(field_degree(r), 1 - r.attacker.share / scale, 1 - r.defender.share / scale, r.ended, r.ticks))
+    return key, lo, out
+
+
+def _fight_all(keys, n, jobs):
+    """{scenario: [Fld per seed 0..n-1]}. The same seeds in every scenario; a chunk's place in the answer is its seed, so the
+    process count changes the clock and never the table."""
+    import multiprocessing
+    chunk = 10
+    tasks = [(k, lo, min(n, lo + chunk)) for k in SCENARIOS if k in keys for lo in range(0, n, chunk)]
+    done = {k: {} for k in keys}
+    if jobs <= 1:
+        results = map(_fight, tasks)
+    else:
+        pool = multiprocessing.get_context('fork').Pool(jobs)
+        results = pool.imap_unordered(_fight, tasks)
+    try:
+        for key, lo, flds in results:
+            done[key][lo] = flds
+    finally:
+        if jobs > 1:
+            pool.close(); pool.join()
+    return {k: [f for lo in sorted(done[k]) for f in done[k][lo]] for k in done}
+
+
+def _decided(flds):
+    """`(winner_loss, loser_loss)` per decided field -- the band is `field_degree`'s, the attacker's own Won or Lost."""
+    from engine.season.data.rosters import LOST, WON
+    return [((f.a_loss, f.b_loss) if f.band == WON else (f.b_loss, f.a_loss)) for f in flds if f.band in (WON, LOST)]
+
+
+def _win_share(flds, seat='A'):
+    from engine.season.data.rosters import LOST, WON
+    return sum(f.band == (WON if seat == 'A' else LOST) for f in flds) / len(flds)
+
+
+def _seat_symmetry(flds):
+    """Gate 3: on an even scenario the attacker's seat and the defender's win equally often, to within `_SEAT_Z` standard errors
+    of the difference of two shares of n. Returns (a share, b share, |difference|, band, inside)."""
+    a, b, n = _win_share(flds, 'A'), _win_share(flds, 'B'), len(flds)
+    band = _SEAT_Z * ((a + b - (a - b) ** 2) / n) ** 0.5
+    return a, b, abs(a - b), band, abs(a - b) <= band
+
+
+def _median(xs):
+    return statistics.median(xs) if xs else None
+
+
+def _ratio(flds):
+    """Loser's loss / winner's loss over a scenario's decided fields: the ratio of means, then the median of the per-field ratios
+    (fields in which the winner lost nothing have no ratio and are counted out of the second). None if nothing was decided."""
+    d = _decided(flds)
+    if not d or statistics.mean(w for w, _l in d) == 0:
+        return None
+    each = [l / w for w, l in d if w > 0]
+    return statistics.mean(l for _w, l in d) / statistics.mean(w for w, _l in d), _median(each), len(d), len(each)
+
+
+def _t3_reading(with_horse, without):
+    """T-3: loser's loss with mounted pursuit / loser's loss without, same seeds. A pure function of the two arms' fields."""
+    lw = [l for _w, l in _decided(with_horse)]
+    lo = [l for _w, l in _decided(without)]
+    if not lw or not lo or statistics.mean(lo) == 0:
+        return None
+    return statistics.mean(lw) / statistics.mean(lo)
+
+
+# ── the probes: is the mechanism a row reads in the tree? (a row without one prints "no mechanism", never a number) ──────────
+def _in_tree(name):
+    """True when `name` is a field of the field's input/output records, a name in `modules.mass_battle.config`, or a key of
+    `references/troops.yaml` (the three places a calibrated mechanism's knob lives)."""
+    import dataclasses
+    from engine.season.queries import inputs
+    import modules.mass_battle.config as cfg
+    fields = {f.name for rec in (inputs.MassBattleInput, inputs.FieldOutcome, inputs.SideOutcome) for f in dataclasses.fields(rec)}
+    if name in fields or any(n.lower() == name.lower() for n in dir(cfg)):
+        return True
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'references', 'troops.yaml'), encoding='utf-8') as f:
+        return name in f.read()
+
+
+def _pursuit_in_the_field(seeds=5):
+    """T-3's mechanism: is `orchestration.pursuit_damage` reached from `resolve_field`? Counted over the charge fields, the ones in
+    which a body of foot breaks with horse standing (the season's pursuit has to be there if it is anywhere)."""
+    from modules.mass_battle import massbattle, orchestration
+    from engine.season.queries.inputs import MassBattleInput
+    scale, geo, _preset = _shared()
+    real, calls = orchestration.pursuit_damage, [0]
+    def counting(*a, **k):
+        calls[0] += 1
+        return real(*a, **k)
+    orchestration.pursuit_damage = counting
+    try:
+        for key in ('charge_levy', 'charge_shaken'):
+            oob_a, oob_b, stances = _scenario(key)
+            inp = MassBattleInput(weights=((1.0,), (1.0,)), territory=None, fort_level=0.0, stances=stances, walls_dr=None, origin=None,
+                                  loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo, condition_scale=scale,
+                                  orders_of_battle=(oob_a, oob_b))
+            for s in range(seeds):
+                massbattle.resolve_field(inp, draw.seeded(draw.H2(RESULTS_SEED, s)))
+    finally:
+        orchestration.pursuit_damage = real
+    return calls[0] > 0
+
+
+def _pct(x):
+    return 'n/a' if x is None else f'{100 * x:.1f}%'
+
+
+def run_results(n=RESULTS_N, only=None, jobs=None, out=print):
+    """Print the ten rows of the results table with the reading, the band, n and the same-run control; write nothing tracked.
+    `only` is a set of row ids (None is all ten). Returns {row id: (verdict, reading)} for the caller that wants the numbers."""
+    jobs = jobs or os.cpu_count() or 1
+    want = set(only) if only else {r[0] for r in RESULTS}
+    keys = set()
+    for rid in want:
+        keys |= set(_ROW_SCENARIOS.get(rid, ()))
+    t0 = __import__('time').time()
+    S = _fight_all(keys, n, jobs) if keys else {}
+    ids = [r[0] for r in RESULTS if r[0] in want]
+    rows = {r[0]: r for r in RESULTS}
+    seeds = f'seeds H2("{RESULTS_SEED}", 0..{n - 1})'
+    got = {}
+    out(f"\n----- RESULTS (calibration targets T-1..T-10)  n={n} fields per scenario, {seeds}; a reading outside a target is reported, never moved to -----")
+    if n < RESULTS_N:
+        out(f"  !! n={n} is below the source's {RESULTS_N}: this table is not the baseline")
+    out(f"  {'id':5} {'verdict':14} reading  [band; status]   control")
+
+    def line(rid, verdict, text, control=''):
+        r = rows[rid]
+        got[rid] = (verdict, text)
+        out(f"  {rid:5} {verdict:14} {text}  [{r[4]}; {r[6]}]" + (f"\n  {'':5} {'':14} control: {control}" if control else ''))
+
+    def seat_controls(names):
+        parts, ok = [], True
+        for k in names:
+            a, b, d, band, inside = _seat_symmetry(S[k])
+            ok &= inside
+            parts.append(f"{k} A {_pct(a)} / B {_pct(b)} |d|={100 * d:.1f}pp band {100 * band:.1f}pp {'in' if inside else 'OUT'}")
+        return '; '.join(parts), ok
+
+    def verdict_target(rid, v):
+        lo, hi = _BAND[rid]
+        return 'NO-READING' if v is None else ('IN-BAND' if (lo is None or v >= lo) and (hi is None or v <= hi) else 'OUT-OF-BAND')
+
+    if 'T-1' in want:
+        sc = ('foot', 'combined', 'combined_nohorse')
+        meds = {k: _median([w for w, _l in _decided(S[k])]) for k in sc}
+        text = '; '.join(f"{k} median {'n/a (none decided)' if meds[k] is None else f'{meds[k]:.3f}'} of {len(_decided(S[k]))} decided" for k in sc)
+        flagged = [k for k in sc if meds[k] is not None and meds[k] > _BAND['T-1'][1]]
+        ctrl, _ok = seat_controls(sc)
+        line('T-1', 'FLAG' if flagged else ('NO-READING' if all(m is None for m in meds.values()) else 'ok'),
+             text + (f" -- over {_BAND['T-1'][1]}: {', '.join(flagged)}" if flagged else ''), ctrl)
+    if 'T-2' in want:
+        sc = ('foot', 'combined_nohorse')
+        reads = {k: _ratio(S[k]) for k in sc}
+        text = '; '.join(f"{k} " + ('n/a (none decided or winner lost nothing)' if reads[k] is None else
+                         f"{reads[k][0]:.2f} (median per field {reads[k][1]:.2f}, {reads[k][2]} decided)") for k in sc)
+        vs = [verdict_target('T-2', None if reads[k] is None else reads[k][0]) for k in sc]
+        ctrl, _ok = seat_controls(sc)
+        line('T-2', 'OUT-OF-BAND' if 'OUT-OF-BAND' in vs else ('NO-READING' if 'NO-READING' in vs else 'IN-BAND'), text, ctrl)
+    if 'T-3' in want:
+        if not _pursuit_in_the_field():
+            line('T-3', 'no mechanism', "pursuit_damage is not reached from resolve_field (0 calls over 10 charge fields), so a with/without-horse ratio would read the horse's presence, not its pursuit")
+        else:
+            v = _t3_reading(S['combined'], S['combined_nohorse'])
+            line('T-3', verdict_target('T-3', v), f"combined with horse / without: {'n/a' if v is None else f'{v:.2f}'} ({len(_decided(S['combined']))} / {len(_decided(S['combined_nohorse']))} decided)",
+                 'the no-horse arm of the same seeds is the denominator')
+    if 'T-4' in want:
+        parts = []
+        for k in ('foot', 'combined'):
+            parts.append(f"{k}: decided in the one engagement {_pct(len(_decided(S[k])) / len(S[k]))} ({len(_decided(S[k]))}/{len(S[k])}); within max_bouts: "
+                         + ('no mechanism (max_bouts is not in the tree)' if not _in_tree('max_bouts') else 'mechanism present, reading not written'))
+        ctrl, _ok = seat_controls(('foot', 'combined'))
+        line('T-4', 'reported', '; '.join(parts), ctrl)
+    if 'T-5' in want:
+        line('T-5', 'no mechanism' if not _in_tree('stand_draw') else 'unread', "stand_draw is not in the tree" if not _in_tree('stand_draw') else 'mechanism present, reading not written')
+    if 'T-6' in want:
+        ws = {k: _win_share(S[k]) for k in ('charge_levy', 'charge_pike', 'charge_shaken', 'charge_control')}
+        ordering = ws['charge_levy'] > ws['charge_pike'] > 0
+        shaken_highest = ws['charge_shaken'] > ws['charge_levy']
+        a, b, d, band, inside = _seat_symmetry(S['charge_control'])
+        text = (f"horse win share v unbraced levy {_pct(ws['charge_levy'])}, v braced pike {_pct(ws['charge_pike'])}, v shaken spear "
+                f"(morale start 2) {_pct(ws['charge_shaken'])}; unbraced > braced > 0: {'holds' if ordering else 'FAILS'}; shaken highest: {'holds' if shaken_highest else 'FAILS'}")
+        line('T-6', 'ORDER-HOLDS' if ordering and shaken_highest else 'ORDER-FAILS', text,
+             f"horse v horse A {_pct(a)} / B {_pct(b)} |d|={100 * d:.1f}pp band {100 * band:.1f}pp {'in' if inside else 'OUT'}")
+    if 'T-7' in want:
+        shares = {k: _win_share(S[k]) for k in SCENARIOS}
+        bad = [k for k, v in shares.items() if not 0.0 < v < 1.0]
+        line('T-7', 'OUT-OF-BAND' if bad else 'IN-BAND',
+             'subject (attacker-seat) win share: ' + ', '.join(f"{k} {_pct(v)}" for k, v in shares.items())
+             + (f" -- 0 or 1: {', '.join(bad)}" if bad else ''), f"n = {n} per scenario")
+    if 'T-8' in want:
+        has = _in_tree('entry_stamina')
+        line('T-8', 'no mechanism' if not has else 'unread', 'MassBattleInput.entry_stamina is not in the tree' if not has else 'mechanism present, reading not written')
+    if 'T-9' in want:
+        ws = [_win_share(S[k]) for k in ('numbers_1', 'numbers_2', 'numbers_3')]
+        rises = ws[0] < ws[1] < ws[2] and ws[2] < 1.0
+        line('T-9', 'ORDER-HOLDS' if rises else 'ORDER-FAILS',
+             f"larger side's win share 1:1 {_pct(ws[0])}, 2:1 {_pct(ws[1])}, 3:1 {_pct(ws[2])}; rises and stays below 1: {'holds' if rises else 'FAILS'}",
+             'the 300 v 300 field is the 1:1 arm; its seats: ' + seat_controls(('numbers_1',))[0])
+    if 'T-10' in want:
+        has = _in_tree('captured')
+        line('T-10', 'no mechanism' if not has else 'unread', 'no record of the field carries a captured share' if not has else 'mechanism present, reading not written')
+    if keys:
+        _ctrl, _ok = seat_controls([k for k in EVEN_SCENARIOS if k in S])
+        out(f"  gate 3, side symmetry of every even scenario: {'all inside' if _ok else 'OUTSIDE for at least one'}  ({_ctrl})")
+    out(f"  ({len(ids)} rows, {len(keys)} scenarios x {n} fields)")
+    print(f"  [clock, not part of the table] {jobs} process(es), {__import__('time').time() - t0:.0f}s", file=sys.stderr)
+    return got
+
+
+def _results_main(argv):
+    def opt(flag, default=None, cast=str):
+        return cast(argv[argv.index(flag) + 1]) if flag in argv else default
+    only = opt('--only')
+    return run_results(n=opt('--n', RESULTS_N, int), only=only.split(',') if only else None, jobs=opt('--jobs', None, int))
+
+
 if __name__=='__main__':
+    if '--results' in sys.argv:
+        _results_main(sys.argv); sys.exit(0)
     # Cavalry rows are PER_CELL=1-only (engine gates charge_pen + speed mult on PER_CELL). Read the
     # RESOLVED config value (modules.mass_battle.config.PER_CELL), not a second, independently-defaulted
     # os.environ.get -- the latter drifted out of sync with config.PER_CELL's own default the moment
