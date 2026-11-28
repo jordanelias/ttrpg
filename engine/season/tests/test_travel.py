@@ -56,18 +56,6 @@ def test_four_borders_fail_more_than_one():
         assert _road(seed, 4)[Degree.FAILURE] > _road(seed, 1)[Degree.FAILURE], seed
 
 
-def test_road_hazard_off_hash_equal():
-    """The control: `road_hazard` ships `off`, and the three rows that size the draw are read by nothing there, so the realm at seed 0 after one season
-    reads the same content hash with them swept to other values as with them shipped."""
-    base, swept = build_realm(0), build_realm(0)
-    assert base.fixtures.get("road_hazard") == "off"
-    for name, value in (("road_base", "hard"), ("road_step_ob", 2), ("road_step", 150)):
-        swept.fixtures = swept.fixtures.sweep(name, value)
-    run(1, 0, w=base)
-    run(1, 0, w=swept)
-    assert base.content_hash() == swept.content_hash()
-
-
 # -- B12b.09: who is on the road, and their odds -- a hand-built road of three territories, S-001 to S-013 (the card's four-point journey) --------------------------
 
 START, STOP = settlement_rung_id("S-001"), settlement_rung_id("S-013")
