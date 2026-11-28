@@ -40,7 +40,7 @@ from .requires import (
 from .rosters import (
     AMOUNT_SHARE_KEY, AMOUNT_SHARES, CONTEXT_KEY, COVERT_KINDS, DEGREE_BANDS, DIFFICULTY_LEVELS, LOOK_READS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, MANAGEMENT_ORDERS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, PROCEEDING_MOVES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS, TALLY_AXES,
-    SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
+    SCRUPLE_OVERRIDDEN, check_clock_kinds, is_event_kind, refusing_pole,
     STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -2000,6 +2000,7 @@ def _derive_kind_verb() -> tuple:
 
 
 KIND_VERB, EMITTED_KINDS = _derive_kind_verb()
+check_clock_kinds(EMITTED_KINDS)     # B21d.02: a clock feeder of a kind no verb row emits is refused here, where the kinds are known (`rosters` may not import this module)
 
 # Every kind some row emits ON REFUSAL (`emits_on_refusal:`), read off the table as `EMITTED_KINDS`
 # is. A refusal reports an act that did not happen, so its claim is no deed

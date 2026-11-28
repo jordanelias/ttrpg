@@ -76,7 +76,8 @@ def aggregate_questions(qs: list, rule: str):
     # IN-53: the classed referents (`Question.classes`, a partition beside `referents`) are UNIONED
     # like the referents -- a seat offered as an Office is still one. `first` returns `qs[0]` as is.
     classes = tuple(sorted({rc for q in qs for rc in q.classes}))
-    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about, classes)
+    # v12 B21d.06: the believed bands ride the head question (`questions_for`), so the merge keeps the head's.
+    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about, classes, bands=qs[0].bands)
 
 
 def view_ids(p: Person, q: Any, k: int, rule: str) -> list:

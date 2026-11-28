@@ -19,11 +19,13 @@ from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over
 from ..data.verbs import VERB_TABLE, align, align_kind
 from ..queries.person_q import crisis_weights, is_deed, knows_self, regard_parts
 from ..state.carriers import Candidate, Claim, Question
-from .choose import _DAMP, TERM_NAMES, admission_weight, choice_lean, chosen_values, odds_weight, score_terms
+from .choose import _DAMP, TERM_NAMES, admission_weight, answers_challenge, choice_lean, chosen_values, odds_weight, score_terms
+from .choose import _AXIS_W, band_pursuit_gain       # B21d.06: the assertive band's gain, owned by the Church
+from ..data.rosters import church_faction
 
 # The terms of `score_terms`' tuple that name an owner here, in the tuple's order. A term added to `score_terms` leaves this shorter than the
 # tuple and `score_parts` refuses, until the new term names its owner below. `test_voices.py` ties it to `choose.TERM_NAMES`.
-ATTRIBUTED_TERMS = ("pursuit", "stance", "fit", "aim", "risk")
+ATTRIBUTED_TERMS = ("pursuit", "stance", "fit", "aim", "risk", "duty")
 
 # The share of the total's size a dissenting part must reach to be heard. A display parameter of the surface: it changes what is shown, never what is chosen.
 HEARD_FLOOR = 0.5   # [canonical: proposals/2026-11-12-subsystem-audit-suite/proposals/02_CHAR_voices_and_the_room.md §Exact edits 3 ([ASSUMPTION; medium; GO and Jordan to correct])]
@@ -53,7 +55,7 @@ def _order(part: ScorePart) -> tuple:
     return (-abs(part.pull), part.owner, part.kind)
 
 
-def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], total: float) -> list:
+def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], total: float, q: Optional[Question] = None) -> list:
     """B10.64: a pursuit he does not recognise (`knows_self`) is owned `UNRECOGNISED`; its pull is the same. `damp * Σ_axis to_axes({e: w_e})[axis] * align(c.verb, axis) * odds_weight * admission_weight` for each held pursuit `e`, `w_e` from
     `crisis_weights(p, scar_weight_shift, scar_hold, scar_primary_mass)`, the weights `choose.project` reads. The candidate's CHOICE VALUES (`choice_sourced` keys its operands carry,
     B10.56) add their own cells to each pursuit's pull, as `score_terms` adds them to the term. A candidate whose pursuit term is exactly 0.0 is not asked the
@@ -71,6 +73,10 @@ def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], to
             pull += memo[_DAMP] * ltr_sum(axes[ax] * ltr_sum(choice_lean(k, v, ax) for k, v in chosen) for ax in _AXES)
         if pull != 0.0:
             parts.append(ScorePart("pursuit", e if knows_self(p, e) else UNRECOGNISED, pull * factor_o * factor_a))
+    # v12 B21d.06: a Church member's believed assertive band (`choose.band_pursuit_gain`) is owned by the Church, the faction it leans him for.
+    gain = band_pursuit_gain(p, c, fx, q, memo[_AXIS_W], memo[_DAMP]) if getattr(q, "bands", ()) else 0.0
+    if gain != 0.0:
+        parts.append(ScorePart("pursuit", church_faction() or "", gain * factor_o * factor_a))
     return parts
 
 
@@ -79,15 +85,16 @@ def score_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable] = None
 
     The pursuit term is split by held pursuit (`_pursuit_parts`); the stance term is one part owned by `c.subject`; `fit` one owned by the
     person the row seats (`operands["to"]`); `aim` one owned by the goal the question `q` was raised by; `risk` one owned by the prize the row
-    contests. The parts sum to `score_total` of the terms within summation reorder, at a person with no manner offset (`_pursuit_parts`)."""
+    contests; `duty` (B21d.05) one owned by the challenge it answers where it prices one (`choose.answers_challenge`), else by the goal `q` was raised by. The parts sum to `score_total` of the terms within summation reorder, at a person with no manner offset (`_pursuit_parts`)."""
     terms = score_terms(p, c, fx, memo, odds, q)
     if len(terms) != len(ATTRIBUTED_TERMS) or TERM_NAMES != ATTRIBUTED_TERMS:
         raise ValueError(f"score_terms returns {TERM_NAMES}, but only {ATTRIBUTED_TERMS} name an owner: a new term must name its owner here")
     by = dict(zip(TERM_NAMES, terms))
     row = VERB_TABLE.get(c.verb)
-    parts = _pursuit_parts(p, c, fx, memo, odds, by["pursuit"])
+    parts = _pursuit_parts(p, c, fx, memo, odds, by["pursuit"], q)
     for kind, owner in (("stance", c.subject or ""), ("fit", (c.operands or {}).get("to") or c.subject or ""),
-                        ("aim", q.about if q is not None else ""), ("risk", row.contests if row is not None else "")):
+                        ("aim", q.about if q is not None else ""), ("risk", row.contests if row is not None else ""),
+                        ("duty", (c.subject or "") if answers_challenge(c) else (q.about if q is not None else ""))):
         if by[kind] != 0.0:
             parts.append(ScorePart(kind, owner, by[kind]))
     return tuple(sorted(parts, key=_order))

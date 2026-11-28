@@ -8967,6 +8967,58 @@ rows:
     cite:      "CONTROL: control rows above, two-season seed-0 hash 7f9ec20ae8f8a9960c59506451878053 @b49ed08. FALSIFIER: edit 2's own, fired. Sweep runtime 41-52 s per two-season cell. The control hashes in this row were read with `PYTHONHASHSEED=0`, `build_realm(seed)` then `populated.run(k, seed, w=w)` on the pre-merge tree (b49ed08 / 5e21eba), before main's B16.99 moved seeds 0 and 2; the merged tree's values are in `_realm_goldens.py`."
     source:    "workplan v12 B12b.43 (block slot 9)"
 
+  - id:        H-633
+    tier:      1
+    hole:      "THE TWO CLOCKS' VALUES ARE THE ARCHIVED ONES, NOT MEASURED. Church Influence 0-100, start 28, season cap +/-5; Turmoil 0-10, start 0, uncapped; every feeder weight 1 per Event; the bands CI 40 assertive, 55 reach, 60 mass seizure, 65 dominant, 80 ascendant and Turmoil 3 tension, 7 crisis, 9 collapse. The feeder rows read WIDER than the source's table where its clauses (through a seat, at a venue, on realm soil, by a non-member) have no column in the feeder shape, and `against` is read off the Event's changes (`world_q.clock_events`); the source's peace row is not carried (its kind is UNVERIFIED there). Nothing reads a clock or a band at B21d.02, so no run moves."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the values (content, D-19: listed in the PR body, not B98's); B21d.06 to B21d.09 build and flip the band triggers on CR-90's reading"
+    grade:     "assumption"
+    default:   "the archived values above [ASSUMPTION; medium; Jordan to correct; revert: per-kind weights from the archived tables (CR-89), and for a band the archived threshold it names]"
+    site:      "`engine/season/rosters.yaml: tables.clocks` (range, start, season_cap, feeders' weight) and `engine/season/data/fixtures.py::Fixtures` ci_assertive, ci_reach, ci_mass_seizure, ci_dominant, ci_ascendant, turmoil_tension, turmoil_crisis, turmoil_collapse; folded by `queries/clock.py::clock_fold`"
+    sweep:     ["every feeder weight 0 (the control: each clock at its start)", "every feeder weight 1 (SHIPPED)", "every feeder weight 2"]
+    unblocks:  "B21d.03 (breakdown reads believed Turmoil at the crisis band), B21d.04 (CR-90's instrument reads each band's first crossing), B21d.06 (each band's trigger)"
+    cite:      "CR-89 commit (1) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b)); ED-IN-0343, ED-IN-0345; archived: ci_political_v30.md §2.1, §2.3, §2.4; victory_v30.md:678; peninsular_strain_v30.md §4.3. CONTROL: `engine/season/tests/test_cr89_clocks.py::test_every_weight_zero_reproduces_the_start_values`."
+    source:    "workplan v12 B21d.02 (B21d's H block slot 1)"
+
+  - id:        H-634
+    tier:      1
+    hole:      "BREAKDOWN IS A CONJUNCTION WITH THE SOURCE'S COUNT, NOT MEASURED: believed Turmoil at or above the crisis band AND at least 2 of the last 3 sittings of the named arrangement the person knows of disposed of nothing. A sitting is one act a proceeding resolved (every Event it emits carries the proceeding's head, `Event.ending`); it disposes of nothing when none of its Events is `determine`'s disposal kind (`data/verbs.py::DISPOSAL_EVENTS`, `matter.determined`). A refusal before any sitting (`determine.refused` at the `quorum` clause, Fixture `bench_quorum`; `convene.refused`) carries no proceeding and is not counted, a narrowing of the source's `convene.refused` at `bench_quorum`. Nothing reads breakdown at B21d.03, so no run moves."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the count, the window and the conjunction (content, D-19: listed in the PR body); B21d.06 builds the trigger that reads it, B21d.08 flips it"
+    grade:     "assumption"
+    default:   "breakdown_sittings 2, breakdown_window 3, the conjunction with Turmoil [ASSUMPTION; medium; Jordan to correct; revert: Turmoil alone]"
+    site:      "`engine/season/data/fixtures.py::Fixtures` breakdown_sittings, breakdown_window; read by `queries/person_q.py::believed_breakdown` (over `believed_sittings_failed` and `believed_clock`); counted by `queries/clock.py::sittings_failed_of`, world-side `queries/world_q.py::sittings_failed`"
+    sweep:     ["breakdown_sittings 1", "breakdown_sittings 2 (SHIPPED)", "breakdown_sittings 3", "Turmoil alone (the revert)"]
+    unblocks:  "B21d.04 (CR-90's instrument reads the first breakdown), B21d.06 and B21d.08 (Turmoil at crisis with breakdown occasions a vassal head's war)"
+    cite:      "CR-89 commit (2) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b), `:132-133`); ED-IN-0341. FALSIFIER: `engine/season/tests/test_cr89_clocks.py::test_three_planted_sittings_that_dispose_nothing_read_three_and_one_determination_makes_two`; `::test_breakdown_needs_both_believed_turmoil_and_failed_sittings`."
+    source:    "workplan v12 B21d.03 (B21d's H block slot 2)"
+
+  - id:        H-635
+    tier:      1
+    hole:      "THE DUTY OF OFFICE'S TWO VALUES ARE THE DESIGN'S READING RULE, NOT MEASURED. `betrayal_band` 2.0: a holder of a seat of faction F forms no opponent-rule verb on a man his own ledger names on a seat of F unless his grievance against him (`person_q.grievance_against`: distinct deeds firmed by their distinct origins, a grudge capped at one step, a rival creed one step) exceeds it; 2.0 is the floor, the most a build-time grudge and a rival creed read together, below which the band is refused. `duty_weight` 1.0: what the office adds on the faction's goal's own question (the `aim` dot at this weight; `aim_gain` ships 0.0, so at the shipped values a goal's lean reaches seated officers only, ahead of B98's flip) and the weight of the price an office's rank (`rung_kinds` index over its top) puts on answering a challenge, waived for a peer enemy. No document gives either number."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the values (content, D-19: listed in the PR body)"
+    grade:     "assumption"
+    default:   "betrayal_band 2.0, duty_weight 1.0 [ASSUMPTION; medium; Jordan to correct; revert: betrayal_band None (the decline off), duty_weight 0.0]"
+    site:      "`engine/season/data/fixtures.py::Fixtures` betrayal_band, duty_weight; read by `decision/options.py::betrayal_band` (the duty decline in `_opening_set`, `_betrays`, `_duty_exempt`) and `decision/choose.py::duty_term` (`score_terms`' sixth element `duty`)"
+    sweep:     ["betrayal_band None (the control)", "betrayal_band 2.0 (the floor, SHIPPED)", "betrayal_band 3.0", "betrayal_band +inf (total)", "duty_weight 0 (the control)", "duty_weight 0.5", "duty_weight 1.0 (SHIPPED)", "duty_weight 2.0"]
+    unblocks:  "R-06's officer conjunct (an officer's choices read his office and his faction's goals and differ by his own grievances); B21d.06 to B21d.09 read on the tree it leaves"
+    cite:      "CR-88 (`proposals/v12_B21d_duty_of_office.md` §2, §4, §6, §8's reading rule); ED-IN-0335, ED-IN-0322, ED-IN-0347 (AR-52). FALSIFIER: `engine/season/tests/test_cr88_duty_of_office.py`. CONTROL: betrayal_band None and duty_weight 0 reproduce the pre-item seed-0 one-season realm hash (recorded at the commit). THE DISPUTE RE-POINT HAS NO SWITCH: `person_q.holds_dispute` now reads a wrong HELD (a distinct deed against him or what he holds) and not the net sum, and its other two consumers move with it, `seam/wrappers/sigma.py::_when_consequence_held` (the `consequence` ground of an argue roll) and `queries/world_q.py::disputes_held` (the Disputant stamp), beside `challenge`'s dispute conjunct the plan declares; so the control above (duty_weight 0, betrayal_band None) leaves the re-point on and its equality covers the decline and the duty term only."
+    source:    "workplan v12 B21d.05 (B21d's H block slot 3)"
+
+  - id:        H-636
+    tier:      1
+    hole:      "EACH CLOCK BAND'S TRIGGER IS BUILT AND SHIPPED OFF, AND HOW EACH READS ITS BAND IS THE BUILDER'S, NOT MEASURED. Seven `Fixtures` switches, all False; on, each reads the band off the person's OWN believed fold (never the true clock), the Church read as the faction the `church_influence` row's feeders name, the sovereign as the faction whose head seat ranks highest. CI >= assertive: a Church member's `seize`/`establish`/`open_case` gain, in the `pursuit` term, the row read as aligned one step on every axis he weighs (`damp * sum |axis_w|`). CI >= reach: one level, the smallest `LEVEL_SIGMA` name, for the Church side of a social roll against a non-Church person (a mu-shift; listed among the act's levels only where it brings one). CI >= mass seizure: the Church head's next question carries the sovereign's creed and is mandatory. CI >= dominant / ascendant: a non-Church man's opponent-rule verb on a Church officer his own ledger names loses one valence step per band in the `stance` term. Turmoil >= tension: on a violent row a NEGATIVE stance term (regard's restraint) is relieved by k/3 for k Turmoil bands believed. Believed breakdown: a vassal head's next question carries the sovereign's creed (no claim) and is mandatory. `nation_functions`: one goal per head seat on the realm's rung, seeded only while on, its question raised at believed Turmoil >= tension, the rung a `Rung` occasion. No document gives a magnitude for any of them."
+    kind:      "ASSUMPTION"
+    owner:     "Jordan, who corrects each reading (content, D-19: listed in the PR body); B21d.07 to B21d.09 flip the three a two-season run can reach on CR-90's reading; the four CI flips are B98's (BLOCKED, A-114: target past two seasons)"
+    grade:     "assumption"
+    default:   "every switch False (the control: every hash is what it was) [ASSUMPTION; medium; Jordan to correct; revert: each switch False, and for `nation_functions` no row]"
+    site:      "`engine/season/data/fixtures.py::Fixtures` ci_pursuit_gain_on, ci_mu_shift_on, ci_theocratic_occasion_on, ci_church_decline_on, turmoil_violence_relief_on, turmoil_vassal_war_on, nation_functions_on; the bands each reads `data/rosters.py::TRIGGER_BANDS`; read by `decision/choose.py::band_pursuit_gain`, `band_stance`; `seam/wrappers/sigma.py::_church_reach_of` (`advantage_sources: church_reach`); `queries/world_q.py::declare_occasion`, `believed_bands`, `occasion_open`, `occasion_referents` (from `questions_for`); `engine/season/goals.yaml` `nation_functions` (`data/goals.py::switched`)"
+    sweep:     ["every switch False (SHIPPED, the control)", "each switch True alone (B21d.07 to B21d.09, B98)", "every switch True"]
+    unblocks:  "B21d.07 to B21d.09 (each flip on CR-90's reading); B98's four CI dials"
+    cite:      "CR-89 commit (3) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b) band table, (e)); A-47, A-103 (`master/eval/E2.md:37`); ED-IN-0343, ED-IN-0345; CR-91 (4), (5). FALSIFIER: `engine/season/tests/test_cr89_clocks.py::test_switch_moves_its_term_only_when_on`, `::test_two_heads_at_war_convene_at_believed_turmoil_three_only_with_the_row_on`, `::test_a_declare_trigger_opens_a_mandatory_question_and_decides_nothing`. CONTROL: every switch off reproduces B21d.05's seed-0 one-season realm hash."
+    source:    "workplan v12 B21d.06 (B21d's H block slot 4)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

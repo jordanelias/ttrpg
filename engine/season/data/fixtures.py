@@ -1989,7 +1989,72 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `road_hazard = off`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-544 -- `site: Fixtures road_step`, graded `assumption`; the source gives 100, a third of one body band]
     road_step=100,                    # `H-544`, swept 50 / 100 (the source's, SHIPPED) / 150
+    # v12 B21d.02 (CR-89 commit (1)): THE CLOCKS' BANDS, one threshold each, named by `rosters.yaml: tables.clocks` (a band's `at`) and checked against
+    # its clock's range by `rosters.check_clock_bands` from `load()` below. A clock at or above a band is IN it; nothing reads a band at B21d.02 (the
+    # triggers are B21d.06's, each shipped off), so these move no run. The archived values, `[ASSUMPTION; medium; Jordan to correct]`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived Church Influence band (ci_political_v30.md §2.1, CI 40 Church Assertive), injected and swept with the clock rows]
+    ci_assertive=40,                  # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (ci_political_v30.md §2.1, CI 55 Institutional Reach)]
+    ci_reach=55,                      # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (victory_v30.md:678 / ci_political_v30.md §2.1, Mass Seizure available from CI 60)]
+    ci_mass_seizure=60,               # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (ci_political_v30.md §2.1, CI 65 Church Dominant)]
+    ci_dominant=65,                   # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (ci_political_v30.md §2.1, CI 80 Church Ascendant)]
+    ci_ascendant=80,                  # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived Turmoil band (peninsular_strain_v30.md §4.3, Strain 3 Tension)]
+    turmoil_tension=3,                # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (peninsular_strain_v30.md §4.3, Strain 7 Crisis)]
+    turmoil_crisis=7,                 # `H-633`
+    # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (peninsular_strain_v30.md §4.3, Strain 9 Collapse)]
+    turmoil_collapse=9,               # `H-633`
+    # v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT'S COUNT -- a person believes the realm's order broken when his believed Turmoil is
+    # at or above `turmoil_crisis` and at least `breakdown_sittings` of the last `breakdown_window` sittings he knows of disposed of nothing
+    # (`queries/person_q.py::believed_breakdown`). Nothing reads it at B21d.03 (B21d.06's trigger, shipped off, is the first), so these move no run.
+    # [ASSUMPTION; medium; Jordan to correct; revert: Turmoil alone]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-634 -- the source's "2 of the last 3" (CR-89), injected and swept]
+    breakdown_sittings=2,             # `H-634`, swept 1 / 2 (the source's, SHIPPED) / 3
+    # [JUSTIFIED: engine/season/hole_register.yaml H-634 -- the source's window, "the last 3" (CR-89)]
+    breakdown_window=3,               # `H-634`
+    # v12 B21d.05 (CR-88; ED-IN-0335, ED-IN-0347; `proposals/v12_B21d_duty_of_office.md` §2, §4, §6): THE DUTY OF OFFICE. `betrayal_band`: a holder of
+    # a seat of faction F forms no opponent-rule verb on a man his own ledger names on a seat of F unless `person_q.grievance_against(p, him).total`
+    # exceeds it (`decision/options.py::betrayal_band`, refused below 2.0, the most a build-time grudge and a rival creed can read). `None` is the
+    # CONTROL and the REVERT (the decline off); `+inf` is the decline at its tightest, a falsifier arm. `duty_weight`: what holding the office
+    # adds on his faction's goal's own question (`decision/choose.py::duty_term`, the `aim` dot at this weight) and the share of it an office's
+    # rank prices `accept` by; refused below 0. `0` is the CONTROL and the REVERT. Shipped by the design's reading rule (§8).
+    # [ASSUMPTION; medium; Jordan to correct; revert: betrayal_band None, duty_weight 0.0]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-635 -- the floor of the band, 2.0, is the design's ("more than his build-time state can carry"); injected and swept None / 2.0 / 3.0 / +inf]
+    betrayal_band=2.0,                # `H-635`, swept None (control, revert) / 2.0 (the floor, SHIPPED) / 3.0 / +inf (total)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-635 -- the weight of the office's binding; no document gives one, so it is injected and swept 0 / 0.5 / 1.0 / 2.0, aim_gain's points]
+    duty_weight=1.0,                  # `H-635`, swept 0 (control, revert) / 0.5 / 1.0 (SHIPPED) / 2.0
+    # v12 B21d.06 (CR-89 commit (3); A-47, A-103; ED-IN-0343, ED-IN-0345): EACH CLOCK BAND'S TRIGGER, ONE SWITCH EACH, ALL SHIPPED OFF. A switch off reads
+    # nothing and moves nothing (every hash is what it was); on, the band it names is read off the PERSON'S OWN BELIEVED clock (`person_q.believed_clock`),
+    # never the true one, through a term that already exists. The bands' thresholds are B21d.02's fixtures above (`ci_*`, `turmoil_*`, H-633). "The Church"
+    # is the one faction the `church_influence` row's feeders name (`data/rosters.py::church_faction`), never a name in code. Each flip is its own commit
+    # on CR-90's reading (B21d.07 to B21d.09; the four CI bands are B98's). [ASSUMPTION; medium; Jordan to correct; revert: each switch False]
+    #   `ci_pursuit_gain_on`        CI >= assertive: a Church member's `seize`, `establish`, `open_case` gain, in the `pursuit` term, the row read as aligned one step on every axis he weighs (`decision/choose.py::band_pursuit_gain`).
+    #   `ci_mu_shift_on`            CI >= reach: the Church side of a social roll against a non-Church party takes one named level (`advantage_sources: church_reach`, a mu-shift; never an Ob term).
+    #   `ci_theocratic_occasion_on` CI >= mass_seizure: the Church head's next question carries the sovereign's creed (`declare`'s referent) and is mandatory (B10.71); he decides.
+    #   `ci_church_decline_on`      CI >= dominant, >= ascendant: a non-Church man's opponent-rule verb on a Church officer his ledger names loses one valence step per band (`stance`).
+    #   `turmoil_violence_relief_on` Turmoil >= tension: on a violent row the restraint of regard (a NEGATIVE stance term) is relieved by one share per Turmoil band of the row's bands (CR-87's cost).
+    #   `turmoil_vassal_war_on`     believed breakdown (Turmoil >= crisis and failed sittings): a vassal head's next question carries the sovereign's creed, no claim needed, and is mandatory.
+    #   `nation_functions_on`       every head seat carries the `goals.yaml` row `nation_functions` (seeded at build only while on: `data/goals.py::switched`), its question raised at Turmoil >= tension.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- a band's trigger, shipped off (CR-89 commit (3): "each shipped off"); a switch, not a number, swept False (SHIPPED, the control) / True]
+    ci_pursuit_gain_on=False,         # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- CI >= reach's mu-shift, shipped off; swept False (SHIPPED) / True]
+    ci_mu_shift_on=False,             # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- CI >= mass seizure's occasion (CR-91 (5)), shipped off; swept False (SHIPPED) / True]
+    ci_theocratic_occasion_on=False,  # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- CI >= dominant / ascendant's decline weight, shipped off; swept False (SHIPPED) / True]
+    ci_church_decline_on=False,       # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- Turmoil >= tension's relief of CR-87's violence cost, shipped off; swept False (SHIPPED) / True]
+    turmoil_violence_relief_on=False, # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- Turmoil >= crisis with breakdown's occasion (CR-91 (4)), shipped off; swept False (SHIPPED) / True]
+    turmoil_vassal_war_on=False,      # `H-636`, swept False (control, SHIPPED) / True
+    # [JUSTIFIED: engine/season/hole_register.yaml H-636 -- the head seats' `nation_functions` goal row, shipped off (CR-89: "revert: no row"); swept False (SHIPPED) / True]
+    nation_functions_on=False,        # `H-636`, swept False (control, SHIPPED) / True
 )
+
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
 EVIDENCE_ARMS = ("ledger", "case_file")
@@ -2032,8 +2097,9 @@ def check_season_weather(draw_table, spells) -> None:
 def load() -> None:
     """`data.load_all()`'s hook: refuse a `tables.capability_uses` row naming a Fixture this registry does not register.
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
-    from .rosters import check_capability_fixtures
+    from .rosters import check_capability_fixtures, check_clock_bands
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
+    check_clock_bands(dict(DEFAULT_FIXTURES._v))
     arm, obstacle = DEFAULT_FIXTURES.get("crisis_arm"), DEFAULT_FIXTURES.get("crisis_obstacle")
     if arm not in CRISIS_ARMS or (obstacle is not None and obstacle not in DIFFICULTY_LEVELS):
         raise Forbidden(f"`Fixtures crisis_arm` is {arm!r} and `crisis_obstacle` is {obstacle!r}", "data/fixtures.py",

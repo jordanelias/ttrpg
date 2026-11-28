@@ -27,6 +27,9 @@ line, `data/pursuits.py` one layer down):
     into this loader's own refusal) that asks no `WORLD_ONLY_STEMS` and no `LEDGER_DERIVED_STEMS` stem,
     because the stage is read PERSON-SIDE off claims in the ledger, and `pursuits` through `data/pursuits.py::pursuit`. A key outside those is refused, not
     dropped. A row is attached to the goals it is `for:` (`Goal.stages`); nothing here reads it yet.
+  * v12 B21d.06: a top-level `switched_goals:` list, the rows SHIPPED OFF, each naming its `switch:` (a `Fixtures` bool; a `goals:` row names
+    none): parsed by the same row check, held apart from `goals()` and seeded only while on (`switched`); on any row, `occasion: {clock, band}` (a band of a `rosters.yaml: tables.clocks` row) and `for_each: head_seat` (one goal per head seat,
+    `<id>:<seat>`; it names no `org:` or `derives:` and needs a `switch:`).
 
 ⚠ A RUNG REFERENT IS NOT CHECKED HERE. A rung exists only once the realm is built, so `rung:` is
 validated at seeding (IN-68), where the rung index is. This loader asks only that it be a name.
@@ -100,7 +103,11 @@ class Goal:
     reader does not mutate them. `org_kind` is the one key `org:` carried (`faction`, `body` or
     `seat`) and `org` its name; `derives_from`/`derives_kind` are both `None` for an underived goal.
     `axis` is the row's optional `thrust_axes` member and `stages` the `goal_stages` row that names this
-    goal in its `for:` (CL-THRUST B2.1/B2.2); both `None` for every shipped row."""
+    goal in its `for:` (CL-THRUST B2.1/B2.2); both `None` for every shipped row.
+    v12 B21d.06 (CR-89 commit (3)): `switch` is the row's optional `switch:`, a `Fixtures` bool -- a row SHIPPED OFF, held apart from `goals()`
+    (`switched`) and seeded only while its switch is on; `occasion` the row's optional `occasion: {clock, band}`, as `(clock, band)` -- the goal raises
+    its question only while its holder BELIEVES the clock at or above the band (`world_q.occasion_open`), and its referents ride that question as
+    occasions of their own class (`world_q.occasion_referents`). Both `None` for every row that does not carry the key."""
     id: str
     org_kind: str
     org: str
@@ -113,6 +120,8 @@ class Goal:
     source: str
     axis: Optional[str] = None
     stages: Optional[GoalStages] = None
+    switch: Optional[str] = None
+    occasion: Optional[tuple] = None
 
 
 def _where(gid, label: str) -> str:
@@ -478,6 +487,62 @@ def _goal_stages(doc: dict, goals: tuple) -> tuple:
     return tuple(replace(g, stages=by_row[g.id]) if g.id in by_row else g for g in goals)
 
 
+# v12 B21d.06: the top-level key of the rows shipped off (`switched`). roster-exempt: MECHANISM, the file's own grammar, as `_STAGES_KEY` is.
+_SWITCHED_KEY = "switched_goals"
+_SWITCH_LAW = ("CR-89 commit (3) (v12 B21d.06) -- a row shipped off names the `Fixtures` switch that carries it, and a row read only while its holder "
+               "believes a clock band names a band a clock row carries")
+#: v12 B21d.06: the one value `for_each:` takes -- every head seat (`rosters.yaml: factions.head_seat`). roster-exempt: MECHANISM, the key's one spelling.
+FOR_EACH_HEAD_SEAT = "head_seat"
+
+
+def _switch(gid, row: dict) -> Optional[str]:
+    """The row's optional `switch:`: a `Fixtures` field whose shipped value is a bool (the row is carried only while it is on). `None` where absent."""
+    if "switch" not in row:
+        return None
+    from .fixtures import DEFAULT_FIXTURES
+    name = row["switch"]
+    try:
+        shipped = DEFAULT_FIXTURES.get(name) if isinstance(name, str) else None
+    except Exception:            # an unregistered field raises `Ungraded`; refused below, naming the row
+        shipped = None
+    if not isinstance(shipped, bool):
+        _refuse(Unspecified, gid, f"`switch: {name!r}` is no `Fixtures` switch", "the name of a `Fixtures` bool (`data/fixtures.py`)", _SWITCH_LAW)
+    return name
+
+
+def _occasion(gid, row: dict) -> Optional[tuple]:
+    """The row's optional `occasion: {clock, band}` as `(clock, band)`, refused unless the clock row (`rosters.yaml: tables.clocks`) carries the band."""
+    if "occasion" not in row:
+        return None
+    from .rosters import clocks
+    raw = row["occasion"]
+    clock, band = (raw.get("clock"), raw.get("band")) if isinstance(raw, dict) and set(raw) == {"clock", "band"} else (None, None)
+    if clock not in clocks() or band not in {b.name for b in clocks()[clock].bands}:
+        _refuse(Unspecified, gid, f"`occasion: {raw!r}` names no band of a clock row", "`occasion: {clock: <clock row>, band: <its band>}`", _SWITCH_LAW)
+    return clock, band
+
+
+def _for_each(gid, row: dict, seats: dict, goal_ids: set, axes) -> list:
+    """`for_each: head_seat` -- the row as one goal per head seat, in the roster's order: `<id>:<seat>` on `org: {seat: <seat>}`, every other key the
+    row's. Refused: another value, an `org:` beside it, a `derives:` (a row standing for many seats derives from no one parent), or no `switch:` (a row
+    for every head seat is a design change shipped off, CR-89's "revert: no row")."""
+    from .rosters import HEAD_SEAT
+    if row["for_each"] != FOR_EACH_HEAD_SEAT or "org" in row or "derives" in row or "switch" not in row:
+        _refuse(Forbidden, gid, f"`for_each: {row['for_each']!r}` with keys {sorted(map(str, row))}",
+                f"`for_each: {FOR_EACH_HEAD_SEAT}`, a `switch:`, and no `org:` or `derives:`", _SWITCH_LAW)
+    text, source = _text(gid, row, "text"), _text(gid, row, "source")
+    obj = _object(gid, row.get("object"), seats, goal_ids)
+    stance, pursuits = _stance(gid, row), _pursuits(gid, row.get("pursuits"))
+    switch, occasion = _switch(gid, row), _occasion(gid, row)
+    out = []
+    for seat in dict.fromkeys(HEAD_SEAT.values()):
+        sid = f"{gid}:{seat}"
+        org_kind, org = _org(sid, {"seat": seat}, seats)
+        out.append(Goal(id=sid, org_kind=org_kind, org=org, text=text, object=dict(obj), stance=stance, pursuits=dict(pursuits),
+                        derives_from=None, derives_kind=None, source=source, axis=_axis(sid, row, obj, axes), switch=switch, occasion=occasion))
+    return out
+
+
 def parse(doc) -> tuple:
     """`doc` (a parsed `goals.yaml`) as `Goal`s in file order; raise on the first row that breaks the
     schema. `goals: []` is the shipped state and loads to `()`; an absent `goal_stages:` is `[]`."""
@@ -485,11 +550,19 @@ def parse(doc) -> tuple:
     if not isinstance(rows, list):
         raise Unspecified("goals.yaml has no `goals:` list", "goals.yaml",
                           needs="`goals: []` or a list of goal rows", law=_LAW)
-    stray = sorted(str(k) for k in doc if k not in ("goals", _STAGES_KEY))
+    stray = sorted(str(k) for k in doc if k not in ("goals", _STAGES_KEY, _SWITCHED_KEY))
     if stray:
         raise Forbidden(f"goals.yaml carries the top-level key(s) {stray}", "goals.yaml",
-                        needs=f"`goals:` and `{_STAGES_KEY}:` only (the stage rows are `{_STAGES_KEY}`, "
+                        needs=f"`goals:`, `{_SWITCHED_KEY}:` and `{_STAGES_KEY}:` only (the stage rows are `{_STAGES_KEY}`, "
                               f"not `ladders`)", law=_STAGES_LAW)
+    # v12 B21d.06: THE LOADER'S OFF ARM -- `switched_goals:`, the rows SHIPPED OFF, each naming its `switch:` (and a `goals:` row naming none), parsed by
+    # the same row check and held apart from `goals()` by that key (`switched`). Absent is `[]`.
+    shipped_off = doc.get(_SWITCHED_KEY, [])
+    if not isinstance(shipped_off, list) or any(not isinstance(r, dict) or "switch" not in r for r in shipped_off) \
+            or any(isinstance(r, dict) and "switch" in r for r in rows):
+        raise Forbidden(f"goals.yaml `{_SWITCHED_KEY}:` is not a list of rows each naming a `switch:`, or a `goals:` row names one", "goals.yaml",
+                        needs=f"a row shipped off under `{_SWITCHED_KEY}:` with its `switch:`; a `goals:` row with none", law=_SWITCH_LAW)
+    rows = rows + shipped_off
     seats = SEAT_ROW_BY_ID
     axes = _thrust_axes()
     _aim_kinds()
@@ -503,9 +576,15 @@ def parse(doc) -> tuple:
             _refuse(Forbidden, gid, "more than one row carries this id",
                     "one row per `id` (it is the Proposition id the row mints)")
     goal_ids = set(ids)
+    templates = {row["id"] for row in rows if "for_each" in row}      # a `for_each` row's own id names no goal (its goals are `<id>:<seat>`)
     out = []
     for row in rows:
         gid = row["id"]
+        # v12 B21d.06: `for_each: head_seat` -- the row stands for one goal per head seat (`rosters.yaml: factions.head_seat`, the one roster of them),
+        # each `<id>:<seat>` on `org: {seat: <seat>}`; the row names no `org:` of its own. Every other key is the row's, read once and copied.
+        if "for_each" in row:
+            out.extend(_for_each(gid, row, seats, goal_ids, axes))
+            continue
         org_kind, org = _org(gid, row.get("org"), seats)
         derives_from = derives_kind = None
         if "derives" in row:
@@ -517,7 +596,7 @@ def parse(doc) -> tuple:
             require_member(derives_kind, roster("goal_derivations"),
                            f"goal {gid!r}: derivation kind {derives_kind!r} is not rostered",
                            f"goals.yaml -- {gid}", law=_LAW)
-            if not _in(derives_from, goal_ids):
+            if not _in(derives_from, goal_ids) or derives_from in templates:
                 _refuse(Unspecified, gid, f"`derives.from: {derives_from!r}` is no goal of this file",
                         "the id of a goal row")
         text = _text(gid, row, "text")
@@ -527,7 +606,7 @@ def parse(doc) -> tuple:
         out.append(Goal(
             id=gid, org_kind=org_kind, org=org, text=text, object=obj, stance=stance, pursuits=pursuits,
             derives_from=derives_from, derives_kind=derives_kind, source=source,
-            axis=_axis(gid, row, obj, axes)))
+            axis=_axis(gid, row, obj, axes), switch=_switch(gid, row), occasion=_occasion(gid, row)))
     by_id = {g.id: g for g in out}
     for g in out:
         seen, cur = {g.id}, g
@@ -552,13 +631,32 @@ def parse(doc) -> tuple:
 
 
 _CACHE: Optional[tuple] = None
+_SHIPPED: Optional[tuple] = None    # `(rows, goals())`, keyed to the `_CACHE` it filtered by identity: a test that swaps or clears the rows re-filters
 
 
 def goals() -> tuple:
-    """Every goal, in file order, read once and kept.
+    """Every goal, in file order, read once and kept -- LESS THE ROWS SHIPPED OFF (v12 B21d.06: a row carrying `switch:` is `switched`'s, so no reader
+    of the realm's goals -- `expected`, the completeness law, `goal_named_seats` -- sees it, and with every switch off the realm is as it was).
 
     Raises `Unspecified` rather than returning `()` if the file is absent: a world built from a
     silently missing goals file is a world with no goals wearing a successful load's clothes."""
+    global _SHIPPED
+    rows = _rows()
+    if _SHIPPED is None or _SHIPPED[0] is not rows:      # the filter is built once per cached row set, not per call (`opinion_of` asks twice)
+        _SHIPPED = (rows, rows if not any(g.switch for g in rows) else tuple(g for g in rows if g.switch is None))
+    return _SHIPPED[1]
+
+
+def switched(fx=None) -> tuple:
+    """v12 B21d.06 (CR-89 commit (3)): THE LOADER'S OFF ARM -- the rows that carry a `switch:`, in file order; with `fx` (a `Fixtures`), only those whose
+    switch is ON there. `boot/realm.py` seeds `switched(w.fixtures)` beside `goals()`, so a row shipped off mints nothing and commits no one while its
+    switch is off. `goal(id)` answers for them either way (an id no Proposition carries is read by nothing)."""
+    rows = tuple(g for g in _rows() if g.switch)
+    return rows if fx is None else tuple(g for g in rows if fx.get(g.switch))
+
+
+def _rows() -> tuple:
+    """Every parsed row, the switched ones included, read once and kept (`goals()`'s cache)."""
     global _CACHE
     if _CACHE is None:
         try:
@@ -601,12 +699,12 @@ def plant(rows: tuple) -> None:
     """Hold `rows` (`Goal`s from `parse`) for `goal(id)` to answer: the goals of a scenario world (`harness/scenarios.py`). Idempotent
     for one row planted twice; refuses an id `goals.yaml` already carries."""
     for g in rows:
-        if any(f.id == g.id for f in goals()):
+        if any(f.id == g.id for f in _rows()):
             raise Forbidden(f"goal {g.id!r}: the id is a `goals.yaml` row's", _where(g.id, "goal"),
                             needs="an id `goals.yaml` does not carry", law="B11.70 -- a scenario goal never shadows a realm goal")
         _SCENARIO_ROWS[g.id] = g
 
 
 def goal(goal_id: str) -> Optional[Goal]:
-    """The goal under `goal_id`: `goals.yaml`'s, else a scenario world's (`plant`), or `None`."""
-    return next((g for g in goals() if g.id == goal_id), _SCENARIO_ROWS.get(goal_id))
+    """The goal under `goal_id`: `goals.yaml`'s (a switched row's too, B21d.06), else a scenario world's (`plant`), or `None`."""
+    return next((g for g in _rows() if g.id == goal_id), _SCENARIO_ROWS.get(goal_id))

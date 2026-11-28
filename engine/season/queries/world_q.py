@@ -47,6 +47,13 @@ from ..data.rosters import (
     remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
+from ..data.rosters import clocks as clock_rows          # B21d.02: the clock rows `clock` and `clock_events_by_claim` fold
+from .clock import ClockEvent, clock_fold                # B21d.02: the one fold, and the Event as it reads one
+from .clock import SittingEvent, sittings_failed_of      # B21d.03: the breaking point's count, and the Event as it reads one
+from ..data.verbs import DISPOSAL_EVENTS                 # B21d.03: the determination's kind, `determine`'s disposal
+from ..data.rosters import PERSON_SIDE_TRIGGERS, TRIGGER_BANDS, band_reached, church_faction   # B21d.06: the bands the triggers read, and the Church
+from ..data.arrangements import determining_arrangement                # B21d.06: the sittings breakdown counts
+from .person_q import SOVEREIGN_FACTION, believed_breakdown, believed_clock   # B21d.06: the sovereign's faction; the believed folds
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
 # v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
@@ -104,7 +111,7 @@ from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_of, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
-from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
+from ..state.gate import holdings_of, in_holdings, is_sworn_to, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
@@ -4280,6 +4287,209 @@ def casus_ground(w: World, actor: str, faction: str, rung: str) -> Optional[str]
     return next((g for g in CASUS_GROUNDS if CASUS_GROUND_READERS[g](w, actor, faction, rung)), None)
 
 
+# v12 B21d.02 (CR-89 commit (1); ED-IN-0343): THE CLOCKS, read world-side. A clock is a row (`data/rosters.py::clocks`) plus one fold
+# (`queries/clock.py::clock_fold`) over the log; these readers attribute the log's Events and hand them to it. Nothing here stores anything.
+_CLAIM_DEPOSITED = "claim.deposited"     # the kind WITNESS's one gated deposit emits, caused by the witnessed Event (`loop/witness.py::_deposit`)
+
+
+def _faction_at(w: World, pid: str, tick: int, factions) -> Optional[str]:
+    """THE FACTION `pid` WAS COMMITTED TO AT `tick` -- the one faction Proposition (`factions`) on which he held a membership `commit` live then (`since <= tick`,
+    `until` unset or after it), or `None` for none or several: `faction_holding`'s reading, taken at a past tick instead of now."""
+    p = w.persons.get(pid)
+    if p is None:
+        return None
+    facs = {t.object for t in p.tenures
+            if t.kind == "commit" and t.object in factions and t.since <= tick and (t.until is None or tick < t.until)}
+    return next(iter(facs)) if len(facs) == 1 else None
+
+
+def clock_events(w: World, events) -> list:
+    """`events` (Events of `w.log`) AS A CLOCK READS THEM: one `queries/clock.py::ClockEvent` per Event an act caused (`causing_act`), in their order; an Event no act
+    caused is left out -- nobody did it, so it moves no clock (CR-89's falsifier). `actor_faction` is the faction of the causing act's actor at the Event's tick
+    (`_faction_at`); `against` is every faction the Event acted ON, read off `Event.changes` (the channel naming what it touched, `anchor_of`'s tier 2): for a changed
+    Tenure, its object where that is a faction Proposition (a commitment made or ended on a creed), else its subject's faction at the tick where the subject is not the
+    actor (the holder of a hold the Event closed, a man arrested); for a changed Person other than the actor, his faction at the tick
+    [ASSUMPTION; medium; Jordan to correct: the reading of `against` -- `rosters.yaml: tables.clocks`' note]. Read-only."""
+    TRACE.query("clock_events", "resolver")
+    factions = faction_props(w)
+    tenure = {t.id: t for t in w.tenures}
+    out = []
+    for e in events:
+        a = causing_act(w, e)
+        if a is None:
+            continue
+        t, against = e.emitted_at, set()
+        for c in e.changes:
+            edge = tenure.get(c.subject)
+            if edge is not None:
+                if edge.object in factions:
+                    against.add(edge.object)
+                elif edge.subject != a.actor:
+                    against.add(_faction_at(w, edge.subject, t, factions))
+            elif c.subject != a.actor and c.subject in w.persons:
+                against.add(_faction_at(w, c.subject, t, factions))
+        against.discard(None)
+        out.append(ClockEvent(e.id, t, e.kind, _faction_at(w, a.actor, t, factions), frozenset(against)))
+    return out
+
+
+def clock(w: World, name: str, tick: Optional[int] = None) -> float:
+    """THE CLOCK `name` (a row of `rosters.yaml: tables.clocks`) AS THE LOG STANDS: `clock_fold` over every act-caused Event of `w.log` (`clock_events`), or over those
+    emitted at or before `tick`. Computed when asked, stored nowhere; an Event counts once because the log holds it once. A name with no row raises `KeyError`."""
+    TRACE.query("clock", "resolver")
+    row = clock_rows()[name]
+    kinds = {f.kind for f in row.feeders}
+    logged = [e for e in w.log if e.kind in kinds and (tick is None or e.emitted_at <= tick)]
+    return clock_fold(clock_events(w, logged), row)
+
+
+def clock_events_by_claim(w: World) -> dict:
+    """`{claim id: ClockEvent}` -- FOR EACH CLAIM WITNESS DEPOSITED, THE EVENT IT WAS DEPOSITED FROM, attributed (`clock_events`), where that Event is act-caused and of a
+    kind some clock's feeder names. A Claim carries no Event id; the log does: every deposit emits `claim.deposited`, its change the claim's id and its first cause the
+    witnessed Event (`loop/witness.py::_deposit`). Built once for a reader of many persons (`person_q.believed_clock`'s `of_claim`). Read-only."""
+    TRACE.query("clock_events_by_claim", "resolver")
+    kinds = {f.kind for row in clock_rows().values() for f in row.feeders}
+    fed = {e.id: e for e in w.log if e.kind in kinds}
+    return _by_claim(w, {ce.event: ce for ce in clock_events(w, fed.values())})
+
+
+def _by_claim(w: World, read: dict) -> dict:
+    """`{claim id: read[event id]}` for each claim WITNESS deposited from an Event `read` holds: every deposit emits `claim.deposited`, its change the
+    claim's id and its first cause the witnessed Event (`loop/witness.py::_deposit`). The one Claim-to-Event link the clocks and the sittings read."""
+    out = {}
+    for e in w.log:
+        if e.kind == _CLAIM_DEPOSITED:
+            # the LAST cause `read` holds: a witnessed deposit names the Event alone; a FOUND one (ED-FI-0002, `_deposit(..., also=(f.id,))`) names the
+            # finding Event first and the trail Event it uncovered second, and the claim reports the second (so where both are in `read`, the second).
+            src = next((x for x in reversed(e.causes) if x in read), None)
+            if src is not None:
+                for c in e.changes:
+                    out[c.subject] = read[src]
+    return out
+
+
+# v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT, read world-side. A SITTING is one act a proceeding resolved: the proceeding is written
+# on EVERY Event the act emits (`loop/resolve.py::_proceeding_ending`, B24p.20), its head naming the arrangement (`ending_arrangement`), so its Events are
+# the ones whose first cause is that act. It DISPOSES OF NOTHING when none of them is the determination, the kind `determine`'s disposal earns
+# (`data/verbs.py::DISPOSAL_EVENTS`): `matter.undetermined` (the Failure band), a refusal after the sitting, an adjournment. A refusal BEFORE any sitting
+# (`determine.refused` at the `quorum` clause, the Fixture `bench_quorum`; `convene.refused`) carries no proceeding and is no sitting.
+_DETERMINATION = DISPOSAL_EVENTS["determine"]
+
+
+def sitting_events(w: World, events) -> list:
+    """`events` (Events of `w.log`) AS THE BREAKING POINT READS THEM: one `queries/clock.py::SittingEvent` per Event a proceeding wrote (its ending has
+    a head), in their order; every other Event is left out. Read-only."""
+    TRACE.query("sitting_events", "resolver")
+    out = []
+    for e in events:
+        row = ending_arrangement(e)
+        if row is not None and e.causes:
+            out.append(SittingEvent(e.id, e.causes[0], e.emitted_at, e.kind, row, e.kind == _DETERMINATION))
+    return out
+
+
+def sittings_failed(w: World, arrangement: str, window: int) -> int:
+    """OF THE LAST `window` SITTINGS OF `arrangement` IN THE LOG, HOW MANY DISPOSED OF NOTHING (`queries/clock.py::sittings_failed_of` over
+    `sitting_events(w, w.log)`). Computed when asked, stored nowhere."""
+    TRACE.query("sittings_failed", "resolver")
+    return sittings_failed_of(sitting_events(w, w.log), arrangement, window)
+
+
+def sitting_events_by_claim(w: World) -> dict:
+    """`{claim id: SittingEvent}` -- for each claim WITNESS deposited from an Event a proceeding wrote, that Event as `sitting_events` reads it
+    (`_by_claim`). Built once for a reader of many persons (`person_q.believed_sittings_failed`'s `of_claim`). Read-only."""
+    TRACE.query("sitting_events_by_claim", "resolver")
+    return _by_claim(w, {se.event: se for se in sitting_events(w, w.log)})
+
+
+def clock_claim_index(w: World) -> dict:
+    """v12 B21d.06: the barrier-scoped `{claim id: ClockEvent}` map (`clock_events_by_claim`, B21d.02's one owner of the Claim-to-Event link), built once per
+    barrier from one scan of the log, for the band triggers `questions_for` reads off each person's believed fold (barrier 2, once per person). Built only
+    when a trigger is on, so with every switch off nothing is read. It lives here and not in `queries/cache.py`, which imports this module: a function-local
+    import back would be a cycle the import-cycle test counts.
+
+    VALID FOR THE SAME REASON AND ONLY WHERE `cache.presence_index` IS: `questions_for` runs at barrier 2, after WITNESS (which discards at its entry and
+    deposits after), and nothing between writes the log; a direct caller that plants Events or claims between two asks must `w.discard_caches()`."""
+    return w.cache_at_barrier("clock_claims", lambda: clock_events_by_claim(w))
+
+
+def sitting_claim_index(w: World) -> dict:
+    """`clock_claim_index`'s sibling for the sittings breakdown counts (`sitting_events_by_claim`); same lifetime, same caveat."""
+    return w.cache_at_barrier("sitting_claims", lambda: sitting_events_by_claim(w))
+
+
+# v12 B21d.06 (CR-89 commit (3); A-47, A-103): THE BAND TRIGGERS, read world-side for the person, off HIS OWN BELIEVED folds (never `clock`, the true one).
+# Each is gated by its `Fixtures` switch (shipped off), and off nothing below is read. The two claim-to-Event maps are barrier indexes
+# (`clock_claim_index`, `sitting_claim_index`, below): `questions_for` runs at barrier 2, once per person, over one log.
+def believed_bands(w: World, p: Person) -> tuple:
+    """THE CLOCK BANDS `p` BELIEVES THE REALM STANDS IN, `((clock, band), ...)` in roster order: each band whose threshold his own believed fold
+    (`person_q.believed_clock`) is at or above (`rosters.band_reached`). Computed when asked, stored nowhere; `questions_for` stamps it on his head
+    question (`Question.bands`) while a trigger reading it person-side is on (`TRIGGER_BANDS`' person-side three)."""
+    of_claim, fx = clock_claim_index(w), w.fixtures
+    out = []
+    for name, row in clock_rows().items():
+        v = believed_clock(p, name, of_claim)
+        out.extend((name, b.name) for b in row.bands if band_reached(v, name, b.name, fx))
+    return tuple(out)
+
+
+#: v12 B21d.06: the triggers whose band a person-side term reads off `Question.bands` (`decision/choose.py`).
+
+
+def declare_occasion(w: World, p: Person) -> tuple:
+    """THE `declare` A BAND OCCASIONS (CR-89 (3), CR-91 (4), (5); A-47, A-103): `(the sovereign's creed,)` -- the `Proposition` `declare` forms on
+    (`faction_prop_id` of `person_q.SOVEREIGN_FACTION`) -- where `p` heads a faction (`head`) that is not the sovereign's and
+      * `ci_theocratic_occasion_on`: that faction is the Church (`rosters.church_faction`) and his believed CI is at the band the trigger reads; or
+      * `turmoil_vassal_war_on`: he believes the realm broken (`person_q.believed_breakdown` over `arrangements.determining_arrangement()`'s sittings),
+        the vassal head's war, occasioned WITHOUT A CLAIM (A-103: a claim is an occasion, never a gate; this is another occasion);
+    else `()`. AN OCCASION ONLY: `questions_for` stamps it on his head question and marks that question mandatory (B10.71's rule); whether he declares
+    is his choice, and whether the act passes is its fold's (A-47). Read-only; `()` with both switches off, nothing read."""
+    fx = w.fixtures
+    theocratic, vassal = fx.get("ci_theocratic_occasion_on"), fx.get("turmoil_vassal_war_on")
+    if not (theocratic or vassal) or SOVEREIGN_FACTION is None:
+        return ()
+    sovereign = faction_prop_id(SOVEREIGN_FACTION)
+    headed = {f for f in faction_props(w) if head(w, f) == p.id}
+    if not headed or sovereign in headed:
+        return ()
+    of_clock = clock_claim_index(w)
+    if theocratic and church_faction() in headed:
+        (name, band), = TRIGGER_BANDS["ci_theocratic_occasion_on"]
+        if band_reached(believed_clock(p, name, of_clock), name, band, fx):
+            return (sovereign,)
+    if vassal and _sworn_to_sovereign(w, p) and believed_breakdown(p, determining_arrangement(), of_clock, sitting_claim_index(w), fx):
+        return (sovereign,)
+    return ()
+
+
+def _sworn_to_sovereign(w: World, p: Person) -> bool:
+    """IS `p` A VASSAL: does he hold a live, sworn `oblige` (`gate.is_sworn_to`) to a seat of the sovereign's faction -- `faction_q.civil_war`'s test of CR-86's vassal edges, against `person_q.SOVEREIGN_FACTION`
+    (the highest head seat of the static rows); `civil_war` takes the factions of the realm-rung seats live, so the two name one sovereign on the shipped rows and can part when a realm-rung seat is founded in play (named, not ruled; both off while the switches ship off). So a head of a foreign or independent faction (the Church's) is no vassal."""
+    return any(is_sworn_to(w, p.id, o.id) for o in w.offices.values() if seat_faction(w, o.id) == faction_prop_id(SOVEREIGN_FACTION))
+
+
+def occasion_open(w: World, p: Person, ambition) -> bool:
+    """IS THE AMBITION'S QUESTION RAISED NOW (B21d.06, a goal row's `occasion: {clock, band}`): `p`'s believed fold of the clock at or above the band.
+    `True` for every goal that carries no `occasion:` (every row but the switched `nation_functions`), so Q4 is unchanged for them."""
+    goal = _goals.goal(ambition)
+    if goal is None or goal.occasion is None:
+        return True
+    name, band = goal.occasion
+    return band_reached(believed_clock(p, name, clock_claim_index(w)), name, band, w.fixtures)
+
+
+def occasion_referents(w: World, p: Person, standing: list) -> tuple:
+    """THE REFERENTS OF HIS STANDING AMBITIONS WHOSE GOAL CARRIES AN `occasion:` (B21d.06), each once, in order -- stamped by `questions_for` as their own
+    class (`_stamped`, `World.class_of`), so the realm's rung of `nation_functions` is a `Rung` `convene` forms on. `standing` is the ambitions that
+    raised a question (their `occasion_open` already held). `()` where none carries one -- every shipped world."""
+    out = []
+    for pid in standing:
+        goal = _goals.goal(pid)
+        if goal is not None and goal.occasion is not None:
+            out.extend(r for r in goal_referents(w, p, w.propositions[pid]) if r is not None)
+    return tuple(dict.fromkeys(out))
+
+
 def claimed_rungs(w: World, war) -> tuple:
     """THE RUNGS A WAR WAS DECLARED ON A CLAIM TO (B21b.13, CR-91 (2); [ASSUMPTION; medium; Jordan to correct]): the `value`s of the claims to a territory
     (`CLAIM_MOOD`) of the war's declaring faction (its `subject`) uttered no later than the war (`Proposition.when`) whose rung the other party (`value`) holds
@@ -5935,7 +6145,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         # B10.71 (U5a `CHAR` §3 (a)): nor has a want he BELIEVES met (`believed_met`, his own ledger), where either reads met
         # [ASSUMPTION; medium; Jordan to correct; revert: drop `believed_met` -- the world's aim state alone gates it].
         # And a row opening `mandatory` marks the question of its last stage (`opens_mandatory`; sorted first below).
-        if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid):
+        # v12 B21d.06: and a goal row carrying `occasion:` raises it only while he believes the clock at the band (`occasion_open`; `True` for every other row).
+        if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid) and occasion_open(w, p, pid):
             out.append(Question(f"q:need:{pid}", "need", refs, pid, mandatory=opens_mandatory(w, p, pid)))
             standing.append(pid)
 
@@ -6074,6 +6285,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # THE RIVAL CREEDS A SEATED MUSTER-HOLDER READS BELOW INDIFFERENCE (`war_targets`), as `Proposition` -- `declare` forms on them (and `commit` and `argue`, the declared widening).
     heard_props = propositions_heard(w, p)
     founding = holdings_to_found(w, p)
+    occasion = declare_occasion(w, p)      # v12 B21d.06: the band-occasioned `declare`'s referent, `()` with both switches off
     added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told) + warrants_heard(w, p)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
@@ -6091,6 +6303,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              # B21b.13 (CR-91 (2); [ASSUMPTION; medium; Jordan to correct]): AND THE CREEDS OF THE FACTIONS HOLDING THE RUNGS HE HOLDS A CLAIM TO (`claim_creeds`), as
              # `Proposition` -- a held claim to a territory is `declare`'s occasion. (c)'s branch for a war declared on a claim is inside `war_fields`. REVERT: drop the term.
              + claim_creeds(w, p)
+             # v12 B21d.06 (CR-89 (3); A-47, A-103; [ASSUMPTION; medium; Jordan to correct; revert: each switch off]): AND THE REFERENTS OF HIS AMBITIONS
+             # RAISED AT A BELIEVED BAND (`occasion_referents`: `nation_functions`' realm rung, as `Rung`), AND THE SOVEREIGN'S CREED WHERE A BAND OCCASIONS HIS
+             # `declare` (`declare_occasion`, as `Proposition`) -- which also marks the question mandatory, below. `()` with every switch off.
+             + occasion_referents(w, p, standing) + occasion
              + reached)
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
@@ -6124,7 +6340,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         first = added[0] if added else held[0][0]
         head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
         stamped = _stamped(head, added, w, held)
-        out[:1] = [replace(stamped, mandatory=True) if reached else stamped]
+        out[:1] = [replace(stamped, mandatory=True) if reached or occasion else stamped]
+    # v12 B21d.06: AND THE BANDS HE BELIEVES THE REALM IN ride the question he answers (`Question.bands`), only while a trigger reading them person-side is on.
+    if out and any(w.fixtures.get(s) for s in PERSON_SIDE_TRIGGERS):
+        out[:1] = [replace(out[0], bands=believed_bands(w, p))]
     return out
 
 

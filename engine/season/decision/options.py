@@ -49,7 +49,9 @@ from ..queries.person_q import (
     held_cites, is_cell as _is_cell, ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
+    BUILD_TIME_GRIEVANCE, grievance_against, named_station, office_factions, officers_named, seat_rank,      # B21d.05: the duty decline's readers
 )
+from ..data.goals import org_faction         # B21d.05: a seat's faction (`_duty_exempt`), the one rule
 from ..state.carriers import Act, Candidate, Claim, Person, Question, Record, View, fade_of, in_custody
 from ..trace_log import TRACE
 
@@ -166,6 +168,12 @@ def _opening_set(p: Person, v: View, q: Question, fx: "Fixtures", declined: Opti
             f"`Fixtures withheld_verbs` names {sorted(withheld - VERB_TABLE.keys())}, which the verb table "
             "lacks", "H-156", needs="`verb_table.yaml` verbs only",
             law="IN-26 -- a withheld verb is one the table forms; a name it lacks withholds nothing")
+    # B21d.05: the duty decline's band, read and held to its floor once per call; what it derives from the actor alone is read at most once per
+    # call and only when a row needs it (`duty`: whom his ledger names on his faction's seats; `lifted`: grievance per referent; `memo_duty`).
+    band = betrayal_band(fx)
+    duty: Optional[dict] = None
+    lifted: dict = {}
+    memo_duty: dict = {}
     for verb, row in sorted(VERB_TABLE.items()):
         if verb in withheld:
             continue
@@ -265,6 +273,8 @@ def _opening_set(p: Person, v: View, q: Question, fx: "Fixtures", declined: Opti
         # question carries and widens nothing (§F1 clause 3 stands).
         if verb in OWN_STANCE_DECLINES:
             refs = tuple(r for r in refs if held_against(p, r))
+        # v12 B21d.05 (CR-88 (1)): THE DUTY DECLINE is of this decline's shape and is read in the subject loop below, per referent and per seat, after
+        # every widening (B29.01's heard warrant adds referents below) and where the seat the act goes through is known.
         # v11 CR-87 (`rosters.yaml: violence_contexts`, ED-IN-0337): A VERB A PERSON FORMS ONLY ON A SUBJECT HE
         # HOLDS A CONTEXT OF VIOLENCE AGAINST -- `fight` (war, crime, duel, defence; `violence_context_of`). His
         # own Tenures, ledger and the question he answers, no World. It NARROWS and widens nothing.
@@ -434,6 +444,23 @@ def _opening_set(p: Person, v: View, q: Question, fx: "Fixtures", declined: Opti
             # fold admits it only for a docketed party). The column is the row's own, never a verb name.
             if opposes_subject and subject == p.id and not row.subject_may_be_self:
                 continue
+            # v12 B21d.05 (CR-88 (1), ED-IN-0335; `proposals/v12_B21d_duty_of_office.md` §2): THE DUTY DECLINE. A person holding a seat of faction F
+            # forms no opponent-rule verb (`subject_is_opponent`, the row's own columns: no roster, no verb named) on a man his OWN ledger names holding
+            # a seat of F (`person_q.officers_named`), unless his grievance against him exceeds `Fixtures betrayal_band` (`_betrays`). A bound referent
+            # keeps only the seats that exempt the act -- a seat of F that outranks him, down its chain (`_duty_exempt`); none, and the candidate is
+            # declined and shown with its reason (B34.02's shape). An act done as himself (`seats` empty) is never exempt. His own Tenures and ledger,
+            # no World; it NARROWS and widens nothing. `band` None (the control) reads nothing.
+            duty_seats = seats
+            if band is not None and opposes_subject:
+                if duty is None:
+                    duty = officers_named(p, office_factions(p))
+                binds = duty.get(subject)
+                if binds and not _betrays(p, subject, fx, band, lifted):
+                    duty_seats = tuple(st for st in seats if _duty_exempt(p, verb, subject, st, binds, memo_duty))
+                    if not duty_seats:
+                        if declined is not None:
+                            declined.append((verb, subject, DUTY_UNMET))
+                        continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
             # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
             # exist first -- asking it of an unbound cell is what made the person read a
@@ -458,7 +485,7 @@ def _opening_set(p: Person, v: View, q: Question, fx: "Fixtures", declined: Opti
                     fanned = people
                 if records is None:
                     records = held_record_claims(p, tick, decay)
-            bagged = [(st, ops) for st in (seats or (None,))
+            bagged = [(st, ops) for st in (duty_seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=fanned,
                                               records=records, tick=tick)]
             if vocations:                   # IN-12 step 9: one bag per vocation carried (above)
@@ -647,6 +674,46 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     against a disliked opponent scores higher, not lower). B11 lane A: OR the row is listed in `rosters.yaml: opposed_without_prize` (`challenge`:
     no prize, done against the man it calls out)."""
     return row.opposed_to_subject(OPPOSED_WITHOUT_PRIZE)
+
+
+#: B21d.05: what a duty-declined candidate's `unmet` says (`own_state_declines`, B34.02's surface): the decline is his own office, not a conjunct of the row.
+DUTY_UNMET = "duty: his own faction's officer, and no grievance past the band"
+
+#: B21d.05: the least legal `Fixtures betrayal_band` -- the most a person's build-time state can read in `grievance_against` (a grudge one step,
+#: a rival creed one step: `person_q.BUILD_TIME_GRIEVANCE`, its owner), so a band below it would let a build-time stance and a creed alone lift the
+#: decline (CR-88 (2)).
+BETRAYAL_FLOOR = BUILD_TIME_GRIEVANCE
+
+
+def betrayal_band(fx: "Fixtures") -> Optional[float]:
+    """`Fixtures betrayal_band` (H-635), held to its floor where it is read: `None` (the control and the revert: the duty decline is off and
+    reads nothing), or a number at or above `BETRAYAL_FLOOR` (`+inf` is legal: the decline at its tightest). Below the floor, or NaN, refuses."""
+    band = fx.get("betrayal_band")
+    if band is not None and not band >= BETRAYAL_FLOOR:          # `not >=`, so a NaN is refused too
+        raise ValueError(f"betrayal_band {band} is below {BETRAYAL_FLOOR}: a build-time grudge and a rival creed alone would lift the duty "
+                         "decline, which CR-88 forbids (H-635)")
+    return band
+
+
+def _betrays(p: Person, r: str, fx: "Fixtures", band: float, lifted: dict) -> bool:
+    """Does `p`'s grievance against `r` exceed `band` (strictly, CR-88 (1))? Read once per referent per call (`lifted`)."""
+    if r not in lifted:
+        lifted[r] = grievance_against(p, r, fx).total > band
+    return lifted[r]
+
+
+def _duty_exempt(p: Person, verb: str, r: str, st: str, binds: frozenset, memo: dict) -> bool:
+    """THE OFFICE ACTING DOWN ITS OWN CHAIN (B21d.05, the design's §2): the act on `r`, bound by the factions `binds`, is exempt where it goes through
+    a seat (`seat_of`, the seat `pack_scenes` puts on `Act.via`, none in custody) whose faction is the only one binding `r` and whose rank exceeds
+    `r`'s station as `p`'s ledger names it -- the King's arrest of a duke. Up or across the chain it is not (`may_warrant` is purview, not
+    command). The seat is one `exercisable_seats` gave, so its grant is read from the hold Tenure's snapshot, never `offices.yaml`.
+    [ASSUMPTION; medium; Jordan to correct; revert: no exemption, every opponent verb declined.]"""
+    seat = seat_of(p, Candidate(verb, r, operands={VIA: st}))
+    if seat is None or binds != {org_faction("seat", seat)}:
+        return False
+    if r not in memo:
+        memo[r] = named_station(p.ledger, r)
+    return seat_rank(seat) > memo[r]
 
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:

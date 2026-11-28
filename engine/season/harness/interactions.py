@@ -304,7 +304,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
             row["candidates"].append({
                 "verb": c.verb, "subject": c.subject, "to": ops.get("to"),
                 "hostile": is_hostile(c.verb, ("subject",)) and c.subject in w.persons,
-                "pursuit": t[0], "stance": t[1], "fit": t[2], "aim": t[3], "risk": t[4], "score": CH.score_total(t), "p_first": prob[id(c)],
+                "pursuit": t[0], "stance": t[1], "fit": t[2], "aim": t[3], "risk": t[4], "duty": t[5], "score": CH.score_total(t), "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
         r = CH.deciding_term(cands, terms, sampled[0] if sampled else None, tau)

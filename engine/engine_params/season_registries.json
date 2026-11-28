@@ -1625,6 +1625,28 @@
           "source": "NPC-090's own row: \"Enforces ancient trade treaties\"; stability .80, wealth .10 (the instrument of the empire's aim \"pressed here through the ancient trade treaties\", ED-IN-0293 (10)). An orientation: it mints no Proposition. [ASSUMPTION; medium; Jordan to correct -- the weights.]"
         }
       ],
+      "switched_goals": [
+        {
+          "id": "nation_functions",
+          "for_each": "head_seat",
+          "switch": "nation_functions_on",
+          "occasion": {
+            "clock": "turmoil",
+            "band": "tension"
+          },
+          "text": "the nation functions -- its estates sit and determine while the realm is troubled",
+          "object": {
+            "kind": "rung",
+            "rung": "r_valoria"
+          },
+          "pursuits": {
+            "stability": 0.5,
+            "justice": 0.3,
+            "stewardship": 0.2
+          },
+          "source": "`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (e) (\"every head seat carries a goal row `nation_functions` in `data/goals.py`'s shape (a pursuit toward `convene` and `argue` at the realm venue, weighted by believed Turmoil)\"); workplan v12 B21d.06. The weights lean on `convene` and `argue` through the goal's own question (B10.30's `aim`, CR-88's `duty`); \"weighted by believed Turmoil\" is read as raised at the tension band. [ASSUMPTION; medium; Jordan to correct -- the weights, the band and the venue; revert: no row (`nation_functions_on` off).]"
+        }
+      ],
       "goal_stages": [
         {
           "id": "stages_lowenritter_throne_security",
@@ -5654,13 +5676,14 @@
           "cite": "CP-T01-05",
           "open": true,
           "ordered": true,
-          "note": "THE ONLY DOOR INTO THE SOCIAL ROLL'S SIGMA TERM. `seam/wrappers/sigma.py::contest_input` sums the named levels each member returns for the act and hands the sum to `levels_to_net_sigma`; with no member contributing (the shipped chooser forms no `effort`) the term is 0.0 and the roll is as it was. A later source (a threat, a held secret, a held finding, a bribe) is a ROW HERE plus its function in `sigma.ADVANTAGE_SOURCES`, never a flat bonus on the net and never an inline re-derivation of `net_boost`. `seam/wrappers/sigma.py` refuses at import a member with no function and a function with no member, so the roster is the closed set and the table is its binding. `effort`: an act carrying `effort` e in its payload (0, 1 or 2) contributes e levels named by the `effort_level` fixture (`Fixtures`, shipped `moderate`) and fills `1 + e` of its scene's interaction slots (`state/carriers.py::Scene.slots`), so effort's whole cost is the acts the person does not take in that scene. [ASSUMPTION; medium; Jordan to correct; revert: delete this row and `sigma.ADVANTAGE_SOURCES`' `effort` entry -- the channel then sums to 0.0 and `Scene.slots` counts every act as one slot]. `capability` (B05.10, MAP \u00a7G edit 6): the `edge` rows of `tables.capability_uses` at the act's site, read by ONE function (`sigma._capability_levels`), so a skill, an attribute or a trait becomes a level on the roll by a ROW and never by a function per trait. THE CHANNEL IS SIGNED: each member returns `(levels for the roller, levels against him)`; `levels_to_net_sigma` takes both lists. A row's count is once when held (`per: held`), once per rank (`per: rank`) or the signed steps of the held value from its scale's mid-point (`per: mid`: above counts for the side named, below against; an unauthored value is the mid-point, zero steps); `against: true` flips the sign, so it counts against the ROLLER. No `edge` row ships at the social roll (B05.25: the roller's attributes are in his dice, averaged, and the opponent's is the opposition's), so the member returns no level and the roll is as it was. `proofs` (B05.17, PES-A edit 1): one `proof_level` per whole unit of `world_q.proofs(speaker, opponent, venue)` (the remove-weighted, unmirrored sum, rounded half up). `favour`: one `favour_level` per whole unit of `reception_gain x reception` where that is positive. Both are FOR the roller only (the defender list waits on cited items, B24); a hostile bench is not here but the obstacle's `reception` member. A fixture of None is the control: the source brings no level. `office` (B05.20, U1-D, D-U1-01a): the one level named by the `modifier:` of the seat an act is exercised through (`Act.via`), where the prize row says `heard_by: bench` and that seat sits over the room (`state/gate.py::sits_over`); FOR the roller only (the defender column is struck, OBS \u00a73). A seat declaring none, an act through no seat and a prize no bench hears bring no level; no shipped row authors a `modifier:` (the bench seats' first values land with B05.23). `wounds` (B05.60, ADV Edits B to D; A-8): one `wound_level` AGAINST the roller per `wound_step` of body his person has lost below his `body_ceiling`, and one FOR him per `wound_step` the person he acts on has lost, each side at most `wound_levels_max` (`sigma._wound_levels`); never an obstacle term and never a die. A person subject's body is read only by the true input: a believer's own body is his to know, another's is not (`believed_input`). A `wound_level` of None is the control: the source brings no level.",
+          "note": "THE ONLY DOOR INTO THE SOCIAL ROLL'S SIGMA TERM. `seam/wrappers/sigma.py::contest_input` sums the named levels each member returns for the act and hands the sum to `levels_to_net_sigma`; with no member contributing (the shipped chooser forms no `effort`) the term is 0.0 and the roll is as it was. A later source (a threat, a held secret, a held finding, a bribe) is a ROW HERE plus its function in `sigma.ADVANTAGE_SOURCES`, never a flat bonus on the net and never an inline re-derivation of `net_boost`. `seam/wrappers/sigma.py` refuses at import a member with no function and a function with no member, so the roster is the closed set and the table is its binding. `effort`: an act carrying `effort` e in its payload (0, 1 or 2) contributes e levels named by the `effort_level` fixture (`Fixtures`, shipped `moderate`) and fills `1 + e` of its scene's interaction slots (`state/carriers.py::Scene.slots`), so effort's whole cost is the acts the person does not take in that scene. [ASSUMPTION; medium; Jordan to correct; revert: delete this row and `sigma.ADVANTAGE_SOURCES`' `effort` entry -- the channel then sums to 0.0 and `Scene.slots` counts every act as one slot]. `capability` (B05.10, MAP \u00a7G edit 6): the `edge` rows of `tables.capability_uses` at the act's site, read by ONE function (`sigma._capability_levels`), so a skill, an attribute or a trait becomes a level on the roll by a ROW and never by a function per trait. THE CHANNEL IS SIGNED: each member returns `(levels for the roller, levels against him)`; `levels_to_net_sigma` takes both lists. A row's count is once when held (`per: held`), once per rank (`per: rank`) or the signed steps of the held value from its scale's mid-point (`per: mid`: above counts for the side named, below against; an unauthored value is the mid-point, zero steps); `against: true` flips the sign, so it counts against the ROLLER. No `edge` row ships at the social roll (B05.25: the roller's attributes are in his dice, averaged, and the opponent's is the opposition's), so the member returns no level and the roll is as it was. `proofs` (B05.17, PES-A edit 1): one `proof_level` per whole unit of `world_q.proofs(speaker, opponent, venue)` (the remove-weighted, unmirrored sum, rounded half up). `favour`: one `favour_level` per whole unit of `reception_gain x reception` where that is positive. Both are FOR the roller only (the defender list waits on cited items, B24); a hostile bench is not here but the obstacle's `reception` member. A fixture of None is the control: the source brings no level. `office` (B05.20, U1-D, D-U1-01a): the one level named by the `modifier:` of the seat an act is exercised through (`Act.via`), where the prize row says `heard_by: bench` and that seat sits over the room (`state/gate.py::sits_over`); FOR the roller only (the defender column is struck, OBS \u00a73). A seat declaring none, an act through no seat and a prize no bench hears bring no level; no shipped row authors a `modifier:` (the bench seats' first values land with B05.23). `wounds` (B05.60, ADV Edits B to D; A-8): one `wound_level` AGAINST the roller per `wound_step` of body his person has lost below his `body_ceiling`, and one FOR him per `wound_step` the person he acts on has lost, each side at most `wound_levels_max` (`sigma._wound_levels`); never an obstacle term and never a die. A person subject's body is read only by the true input: a believer's own body is his to know, another's is not (`believed_input`). A `wound_level` of None is the control: the source brings no level. `church_reach` (v12 B21d.06, CR-89 commit (3), CI >= reach; `Fixtures ci_mu_shift_on`, H-636, SHIPPED OFF): one level, the smallest `LEVEL_SIGMA` name, FOR the roller where he is of the Church (`data/rosters.py::church_faction`) against a person who is not, AGAINST him where the person is of the Church and he is not -- each only where that Church party's own BELIEVED CI is at the band (`sigma._church_reach_of`); a believer's estimate counts only his own side. Off, it brings no level and is NOT LISTED among the act's levels (they reach the content hash; `sigma._church_reach_levels` returns `None`), so the record is the one it was. [ASSUMPTION; medium; Jordan to correct; revert: the switch off]",
           "values": [
             "effort",
             "capability",
             "proofs",
             "favour",
             "office",
+            "church_reach",
             "wounds"
           ]
         },
@@ -7008,6 +7031,296 @@
               "succeed": null,
               "examine": null,
               "thread_read": null
+            }
+          }
+        },
+        "clocks": {
+          "source": "`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b) (the form, the two clocks, the feeder table, the band table); workplan v12 B21d.02 (Batch B21d-fa-arc's item B21d.02: `git log --grep 'Item: B21d.02'`; the plan block left the plan at the batch's expunge); the archived values, reference only: `ci_political_v30.md` \u00a72.1, \u00a72.3, \u00a72.4 (CI 0-100, start 28, +/-5 a season, the bands 40/55/65/80), `victory_v30.md:678` (60), `peninsular_strain_v30.md` \u00a74.3 (Turmoil 0-10, the bands 3/7/9).",
+          "row": "H-633",
+          "note": "A ROW is one clock: `range: [lo, hi]`, `start`, `season_cap` (the most one season's Events move it either way; `null` uncapped), `feeders` and `bands`. The FOLD: from `start`, season by season (an Event's season is its `emitted_at`), add the signed weight of every feeder each Event matches, cap that season's sum at `season_cap` either way, then clamp the total to `range`. A FEEDER is `{kind, sign, weight, actor_faction, against}`: the Event's kind; `+1` raises, `-1` lowers; `weight` per Event; `actor_faction` the faction of the Event's causing act's actor AT THE EVENT'S TICK (his live membership `commit` then); `against` a faction the Event acted ON -- the faction whose `commit` edge it changed (a commitment made or ended on that creed), or the faction, at the tick, of a person other than the actor whose edge it changed (the holder of a hold it closed, the man arrested) [ASSUMPTION; medium; Jordan to correct: the reading of `against` -- basis: the source names the key and no reading; `Event.changes` is the one channel naming what an Event touched (`anchor_of`'s tier 2)]. `any` matches every Event of the kind. An Event no act caused is NOT COUNTED (nobody did it). No row names a person or seat. THE FEEDERS are the source's table as this shape can carry it. The shape has no venue, seat, soil or 'not' clause, so these rows read WIDER than the table [ASSUMPTION; medium; Jordan to correct]: CI's `office.established`, `remit.changed`, `case.opened`, `matter.determined` 'through a Church seat' read as by a Church member; `commitment.made` 'by a non-member' as any commitment to the Church creed; `petition.carried` 'to a Church seat' and `matter.determined` 'against a Church party at a secular venue' as acted on the Church; `proposition.uttered` 'of the Church creed' as uttered by a Church member; `arrest.made` 'through a secular seat' as any arrest of a Church member; Turmoil's `field.won`/`field.lost` 'on realm soil', `person.died` 'of a seat-holder', and the sitting kinds 'at `parliamentary_debate`' as any. NOT CARRIED: the source's peace or alliance row (its kind is marked UNVERIFIED there); a passive per-season increment; a stored phase or one-shot flag; the archived P = ((CI-60)/40)^3.3 (CR-90's reference only). Weights 1 per Event, CI start 28 and season cap 5, Turmoil start 0 and uncapped: the archived values [ASSUMPTION; medium; Jordan to correct; revert: per-kind weights from the archived tables]. BANDS name a `Fixtures` field each (the threshold), in ascending order; no band triggers anything at B21d.02.",
+          "rows": {
+            "church_influence": {
+              "range": [
+                0,
+                100
+              ],
+              "start": 28,
+              "season_cap": 5,
+              "feeders": [
+                {
+                  "kind": "rung.seized",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "Church of Solmund",
+                  "against": "any"
+                },
+                {
+                  "kind": "office.established",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "Church of Solmund",
+                  "against": "any"
+                },
+                {
+                  "kind": "remit.changed",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "Church of Solmund",
+                  "against": "any"
+                },
+                {
+                  "kind": "case.opened",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "Church of Solmund",
+                  "against": "any"
+                },
+                {
+                  "kind": "matter.determined",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "Church of Solmund",
+                  "against": "any"
+                },
+                {
+                  "kind": "commitment.made",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "Church of Solmund"
+                },
+                {
+                  "kind": "petition.carried",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "Church of Solmund"
+                },
+                {
+                  "kind": "proposition.uttered",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "Church of Solmund",
+                  "against": "any"
+                },
+                {
+                  "kind": "rung.seized",
+                  "sign": -1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "Church of Solmund"
+                },
+                {
+                  "kind": "arrest.made",
+                  "sign": -1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "Church of Solmund"
+                },
+                {
+                  "kind": "matter.determined",
+                  "sign": -1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "Church of Solmund"
+                },
+                {
+                  "kind": "commitment.ended",
+                  "sign": -1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "Church of Solmund"
+                }
+              ],
+              "bands": [
+                {
+                  "name": "assertive",
+                  "at": "ci_assertive"
+                },
+                {
+                  "name": "reach",
+                  "at": "ci_reach"
+                },
+                {
+                  "name": "mass_seizure",
+                  "at": "ci_mass_seizure"
+                },
+                {
+                  "name": "dominant",
+                  "at": "ci_dominant"
+                },
+                {
+                  "name": "ascendant",
+                  "at": "ci_ascendant"
+                }
+              ]
+            },
+            "turmoil": {
+              "range": [
+                0,
+                10
+              ],
+              "start": 0,
+              "season_cap": null,
+              "feeders": [
+                {
+                  "kind": "rung.seized",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "field.won",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "field.lost",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "rung.razed",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "person.died",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "arrest.resisted",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "march.declared",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "matter.undetermined",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "contest.undecided",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "convene.refused",
+                  "sign": 1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "matter.determined",
+                  "sign": -1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                },
+                {
+                  "kind": "succession.claimed",
+                  "sign": -1,
+                  "weight": 1,
+                  "actor_faction": "any",
+                  "against": "any"
+                }
+              ],
+              "bands": [
+                {
+                  "name": "tension",
+                  "at": "turmoil_tension"
+                },
+                {
+                  "name": "crisis",
+                  "at": "turmoil_crisis"
+                },
+                {
+                  "name": "collapse",
+                  "at": "turmoil_collapse"
+                }
+              ]
+            }
+          },
+          "triggers": {
+            "ci_pursuit_gain_on": {
+              "bands": [
+                [
+                  "church_influence",
+                  "assertive"
+                ]
+              ],
+              "verbs": [
+                "seize",
+                "establish",
+                "open_case"
+              ]
+            },
+            "ci_mu_shift_on": {
+              "bands": [
+                [
+                  "church_influence",
+                  "reach"
+                ]
+              ]
+            },
+            "ci_theocratic_occasion_on": {
+              "bands": [
+                [
+                  "church_influence",
+                  "mass_seizure"
+                ]
+              ]
+            },
+            "ci_church_decline_on": {
+              "bands": [
+                [
+                  "church_influence",
+                  "dominant"
+                ],
+                [
+                  "church_influence",
+                  "ascendant"
+                ]
+              ]
+            },
+            "turmoil_violence_relief_on": {
+              "bands": [
+                [
+                  "turmoil",
+                  "tension"
+                ],
+                [
+                  "turmoil",
+                  "crisis"
+                ],
+                [
+                  "turmoil",
+                  "collapse"
+                ]
+              ]
             }
           }
         }

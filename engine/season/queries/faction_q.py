@@ -187,12 +187,12 @@ def subordinates(w: World, seat: str) -> list:
 
 
 def civil_war(w: World, a: str, b: str) -> bool:
-    """IS THE WAR BETWEEN `a` AND `b` A CIVIL WAR? (B21b.13, CR-91 (4); [ASSUMPTION; medium; Jordan to correct; revert: delete this function, nothing reads it
-    before B21d].) `world_q.at_war(w, a, b)`, AND both factions' heads (`head`) hold a live, sworn `oblige` (`gate.is_sworn_to`: an imposed one is no oath) to a seat
+    """IS THE WAR BETWEEN `a` AND `b` A CIVIL WAR? (B21b.13, CR-91 (4); [ASSUMPTION; medium; Jordan to correct; revert: delete this function and `harness/clocks.py`'s
+    civil-war mark, its one reader].) `world_q.at_war(w, a, b)`, AND both factions' heads (`head`) hold a live, sworn `oblige` (`gate.is_sworn_to`: an imposed one is no oath) to a seat
     of the SOVEREIGN'S faction -- the faction (`gate.seat_faction`) of a seat sitting at the realm's rung (`world_q.REALM_KIND`) -- one sovereign for both (CR-86's
     vassal edges: the Duchess of Hafenmark and the Duke of Varfell are sworn to `off_king`). A war between two parties of one realm, read and never stored. A war
     the sovereign's own faction wages against a vassal is no civil war by this reading (the sovereign's head is sworn to no seat of his own): the source's sentence
-    is 'both heads under the sovereign's purview'. `False` for a faction with no head, and for `a == b`. Its consumer, the breakdown clause, is CR-89 commit (3) (B21d)."""
+    is 'both heads under the sovereign's purview'. `False` for a faction with no head, and for `a == b`. Its one reader is `harness/clocks.py` (CR-90's civil-war mark); breakdown (`person_q.believed_breakdown`) reads sittings, not this."""
     TRACE.query("civil_war", "resolver")
     if a == b or not at_war(w, a, b):
         return False

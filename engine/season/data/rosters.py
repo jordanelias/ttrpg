@@ -2540,8 +2540,197 @@ def check_capability_fixtures(fixtures: dict) -> None:
     _load_capability_uses((_TABLES.get("capability_uses") or {}).get("rows"), fixtures)
 
 
+# ---------------------------------------------------------------------------
+# v12 B21d.02 (CR-89 commit (1); ED-IN-0343): THE CLOCKS -- `rosters.yaml: tables.clocks`, a running total folded from the log's
+# Events of named kinds and never stored. This loader keeps the rows' shape and refuses a bad one; what a row MEANS is the fold's,
+# `queries/clock.py::clock_fold`, and the attribution an Event carries into it is `queries/world_q.py::clock_events`'.
+# ---------------------------------------------------------------------------
+_ANY_FACTION = "any"     # roster-exempt: this loader's own grammar, the token a feeder writes for "every faction" (no member is spelt here)
+
+
+@_dataclass(frozen=True)
+class ClockFeeder:
+    """One feeder: an Event of `kind` moves its clock by `sign * weight`. `actor_faction` and `against` are faction Proposition ids
+    (`faction_prop_id`), `None` for `any`."""
+    kind: str
+    sign: int
+    weight: float
+    actor_faction: Optional[str]
+    against: Optional[str]
+
+
+@_dataclass(frozen=True)
+class ClockBand:
+    """One band: `name`, and `at`, the `Fixtures` field holding its threshold (`check_clock_bands`)."""
+    name: str
+    at: str
+
+
+@_dataclass(frozen=True)
+class ClockRow:
+    """One clock as `clock_fold` reads it."""
+    name: str
+    lo: float
+    hi: float
+    start: float
+    season_cap: Optional[float]
+    feeders: tuple
+    bands: tuple
+
+
+def _load_clocks(rows, kinds, factions) -> dict:
+    """`rosters.yaml: tables.clocks.rows` -> `{name: ClockRow}`, refused at load naming the row (B21d.02 step 3): a feeder `kind` outside `kinds`
+    (`data/verbs.py::EMITTED_KINDS`), a `sign` outside {+1, -1}, a faction outside `factions` (`rosters: factions`) and not `any`, a `weight` that is
+    no number or is below 0, a `start` outside `range`, a `range` that is not two ascending numbers, a `season_cap` that is neither `null` nor a number
+    not below 0, a band with no `name` or `at`. A function so a test can plant a bad row and watch it refuse."""
+    bad, out = [], {}
+    if not isinstance(rows, dict) or not rows:
+        raise Unspecified("`rosters.yaml: tables.clocks.rows` is absent or empty", "rosters.yaml",
+                          needs="a mapping of clock name to its row", law="CR-89 (1) -- a clock is a roster row plus one fold")
+
+    def _faction(v, where):
+        if v == _ANY_FACTION:
+            return None
+        if v not in factions:
+            bad.append(f"{where}: {v!r} is neither `{_ANY_FACTION}` nor one of `rosters: factions` {sorted(factions)}")
+            return None
+        return faction_prop_id(v)
+
+    for name, row in rows.items():
+        if not isinstance(row, dict):
+            bad.append(f"clock {name!r}: {row!r} is not a mapping")
+            continue
+        rng, start, cap = row.get("range"), row.get("start"), row.get("season_cap")
+        if not (isinstance(rng, list) and len(rng) == 2 and all(is_number(x) for x in rng) and rng[0] < rng[1]):
+            bad.append(f"clock {name!r}: range {rng!r} is not two ascending numbers")
+            continue
+        if not is_number(start) or not rng[0] <= start <= rng[1]:
+            bad.append(f"clock {name!r}: start {start!r} is outside range {rng}")
+        if cap is not None and (not is_number(cap) or cap < 0):
+            bad.append(f"clock {name!r}: season_cap {cap!r} is neither null nor a number not below 0")
+        feeders = []
+        for i, f in enumerate(row.get("feeders") or ()):
+            where = f"clock {name!r} feeder {i}"
+            if not isinstance(f, dict) or set(f) != {"kind", "sign", "weight", "actor_faction", "against"}:
+                bad.append(f"{where}: {f!r} is not `{{kind, sign, weight, actor_faction, against}}`")
+                continue
+            if kinds is not None and f["kind"] not in kinds:
+                bad.append(f"{where}: kind {f['kind']!r} is no Event kind any verb row emits (`EMITTED_KINDS`)")
+            if isinstance(f["sign"], bool) or f["sign"] not in (1, -1):    # a feeder raises or lowers: the two directions are the shape
+                bad.append(f"{where}: sign {f['sign']!r} is not +1 or -1")
+            if not is_number(f["weight"]) or f["weight"] < 0:
+                bad.append(f"{where}: weight {f['weight']!r} is no number not below 0")
+            feeders.append(ClockFeeder(f["kind"], f["sign"], f["weight"], _faction(f["actor_faction"], where), _faction(f["against"], where)))
+        bands = []
+        for i, b in enumerate(row.get("bands") or ()):
+            if not isinstance(b, dict) or not (isinstance(b.get("name"), str) and b["name"]) or not (isinstance(b.get("at"), str) and b["at"]):
+                bad.append(f"clock {name!r} band {i}: {b!r} names no `name` and `at`")
+                continue
+            bands.append(ClockBand(b["name"], b["at"]))
+        out[name] = ClockRow(name, rng[0], rng[1], start, cap, tuple(feeders), tuple(bands))
+    if bad:
+        raise Unspecified("`rosters.yaml: tables.clocks` refused: " + "; ".join(bad), "rosters.yaml",
+                          needs="a row per clock: `range`, `start` inside it, `season_cap`, feeders of emitted kinds signed +1/-1, named bands",
+                          law="CR-89 (1) (B21d.02 step 3) -- a feeder of a kind nothing emits, or a start the range refuses, folds to a number nobody can reach")
+    return out
+
+
+_CLOCKS: Optional[dict] = None
+
+
+def clocks() -> dict:
+    """THE CLOCK ROWS, `{name: ClockRow}`, loaded and refused once. The one refusal that needs `data/verbs.py::EMITTED_KINDS` (a feeder naming a kind no verb
+    row emits) is `check_clock_kinds`, which `verbs` asks of itself at its own import: `verbs` imports this module, so this module names it nowhere."""
+    global _CLOCKS
+    if _CLOCKS is None:
+        _CLOCKS = _load_clocks((_TABLES.get("clocks") or {}).get("rows"), None, roster("factions"))
+    return _CLOCKS
+
+
+def check_clock_kinds(kinds) -> None:
+    """Refuse a clock feeder whose `kind` is outside `kinds` (`data/verbs.py::EMITTED_KINDS`): `verbs` calls it once its own table is derived."""
+    _load_clocks((_TABLES.get("clocks") or {}).get("rows"), kinds, roster("factions"))
+
+
+def _load_triggers(raw) -> tuple:
+    """v12 B21d.06 (CR-89 commit (3)): `rosters.yaml: tables.clocks.triggers` -> `(TRIGGER_BANDS, TRIGGER_VERBS)`: `{switch: ((clock, band), ...)}` and
+    `{switch: (verb, ...)}` (only the triggers naming `verbs:`). Refused at load: a row that is no mapping, a key beyond `bands`/`verbs`, `bands:` that is
+    not a non-empty list of `[clock, band]` pairs, `verbs:` that is not a non-empty list of names. Whether each band exists and each switch is registered
+    is `check_clock_bands`' (it needs the clock rows and the fixtures); whether each verb is a row, `decision/choose.py`'s. `{}` for no block."""
+    bands, verbs, bad = {}, {}, []
+    for switch, row in (raw or {}).items():
+        if not isinstance(row, dict) or set(row) - {"bands", "verbs"} or "bands" not in row:
+            bad.append(f"{switch!r}: {row!r} is not `{{bands: [...], verbs: [...]}}`")
+            continue
+        pairs = row["bands"]
+        if not (isinstance(pairs, list) and pairs and all(isinstance(b, list) and len(b) == 2 and all(isinstance(x, str) for x in b) for b in pairs)):
+            bad.append(f"{switch!r}: `bands:` {pairs!r} is not a list of [clock, band] pairs")
+            continue
+        bands[switch] = tuple(tuple(b) for b in pairs)
+        if "verbs" in row:
+            vs = row["verbs"]
+            if not (isinstance(vs, list) and vs and all(isinstance(v, str) for v in vs)):
+                bad.append(f"{switch!r}: `verbs:` {vs!r} is not a list of verb names")
+                continue
+            verbs[switch] = tuple(vs)
+    if bad:
+        raise Unspecified("`rosters.yaml: tables.clocks.triggers` refused: " + "; ".join(bad), "rosters.yaml -- tables.clocks.triggers",
+                          needs="`<switch>: {bands: [[clock, band], ...], verbs: [verb, ...]}`",
+                          law="CR-89 (3) (B21d.06) -- a trigger names the bands it reads; one that names none reads nothing")
+    return bands, verbs
+
+
+#: v12 B21d.06: THE BANDS EACH BAND-READING TRIGGER READS, and the rows a trigger leans toward (`_load_triggers`): the one owner of which band a switch
+#: answers to. Read by `decision/choose.py` (the person-side terms, off the bands `world_q.believed_bands` stamps on his question), `seam/wrappers/sigma.py`
+#: (the roll) and `queries/world_q.py` (the theocratic occasion).
+TRIGGER_BANDS, TRIGGER_VERBS = _load_triggers((_TABLES.get("clocks") or {}).get("triggers"))
+#: The switches whose terms `decision/choose.py` reads through the person's own believed bands (`Question.bands`), which `world_q.questions_for` stamps only while one is on: the one list
+#: both read, so a fourth person-side trigger is named here once (`_in_bands` refuses a switch not in it).
+PERSON_SIDE_TRIGGERS = ("ci_pursuit_gain_on", "ci_church_decline_on", "turmoil_violence_relief_on")
+
+
+def church_faction() -> Optional[str]:
+    """THE CHURCH, structurally (v12 B21d.04's reading, moved here as its one owner at B21d.06): the faction Proposition id the `church_influence` row's
+    feeders name as an actor's faction, read from the row and named nowhere in code; `None` where they name none (or several)."""
+    named = {f.actor_faction for f in clocks()["church_influence"].feeders} - {None}
+    return next(iter(named)) if len(named) == 1 else None
+
+
+def band_reached(value: float, clock: str, band: str, fx) -> bool:
+    """Is a clock reading `value` at or above `clock`'s band `band` -- its threshold the `Fixtures` field the band's `at` names (`fx`)? A band no row carries
+    raises (`StopIteration`); `check_clock_bands` refuses one at load."""
+    at = next(b.at for b in clocks()[clock].bands if b.name == band)
+    return value >= fx.get(at)
+
+
+def check_clock_bands(fixtures: dict) -> None:
+    """Refuse, naming the row, a clock band whose `at` is no registered Fixture (`fixtures` is `{name: shipped value}`), whose threshold lies outside
+    its clock's range, or that is not above the band before it. Called by `fixtures.py::load`, where both modules are loaded
+    (`check_capability_fixtures`' reason)."""
+    bad = []
+    for row in clocks().values():
+        prev = None
+        for b in row.bands:
+            v = fixtures.get(b.at)
+            if b.at not in fixtures or not is_number(v) or not row.lo <= v <= row.hi:
+                bad.append(f"clock {row.name!r} band {b.name!r}: `Fixtures {b.at}` is {v!r}, not a registered number inside {row.lo}..{row.hi}")
+            elif prev is not None and v <= prev:
+                bad.append(f"clock {row.name!r} band {b.name!r}: {v!r} is not above the band before it ({prev!r})")
+            else:
+                prev = v
+    named = {(name, b.name) for name, row in clocks().items() for b in row.bands}
+    bad += [f"trigger {switch!r} reads the band {band!r}, which no clock row carries" for switch, bands in TRIGGER_BANDS.items()
+            for band in bands if band not in named]
+    bad += [f"trigger {switch!r} is no registered `Fixtures` switch" for switch in TRIGGER_BANDS if not isinstance(fixtures.get(switch), bool)]
+    if bad:
+        raise Unspecified("`rosters.yaml: tables.clocks` bands refused: " + "; ".join(bad), "data/fixtures.py",
+                          needs="each band's `at` a `Fixtures` number inside the clock's range, ascending",
+                          law="CR-89 (1) (B21d.02 step 3) -- a band is a fixture; one nothing registers is read by nothing")
+
+
 def load() -> tuple:
-    """`data.load_all()`'s hook: force the lazy uses table so a bad row refuses at driver construction."""
+    """`data.load_all()`'s hook: force the lazy uses table and the clock rows so a bad row refuses at driver construction."""
+    clocks()
     return capability_uses()
 
 

@@ -110,8 +110,9 @@ STEM_READS = {
     # B21.63: `admitted_to` -- the live commits to a faction and to the admission Proposition that names a joiner (an `OUGHT`), and the seats that admit
     "admitted":     _TENURE + (("Proposition.exists", "?"), ("Office.exists", "?")),
     "claim.held":   (("Person.claim_ledger", "+"),),
-    # v11 CR-87: `person_q.holds_dispute` -- the actor's own deed claims, judged by his own pursuits (`deeds_judged`)
-    "dispute":      (("Person.claim_ledger", "?"),),
+    # v11 CR-87: `person_q.holds_dispute` -- the actor's own deed claims, judged by his own pursuits; B21d.05 (CR-88 (4)): the deed half of
+    # `grievance_against`, which also reads his own live `hold` Tenures (a deed on what he holds is done to him)
+    "dispute":      (("Person.claim_ledger", "?"),) + _TENURE,
     "rank":         (("Rung.exists", "?"),),
     "purview":      (("Office.exists", "?"),) + _TENURE,
     "command":      (("Office.exists", "?"),) + _TENURE,   # B21.20: `world_q.commands`, over oaths, seat holds and place

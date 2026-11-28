@@ -72,6 +72,7 @@ from engine.dice_engine.draw import Draw
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from engine.dice_engine.sigma_leverage import level as sigma_level, levels_to_net_sigma, record_odds
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA          # B21d.06: `CHURCH_REACH_LEVEL`, the table's smallest name
 from engine.substrate import composition, descriptors
 
 from ...data.affiliations import AFFILIATION_CEILING
@@ -79,6 +80,8 @@ from ...data.fixtures import CASE_FILE_ARM
 from ...decision.decider import decides_for, make_decider
 from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged, in_form
 from ...data.rosters import FAULT_LEVELS, GRADED_TASKS, STANCE_MAX
+from ...data.rosters import TRIGGER_BANDS, band_reached, church_faction    # B21d.06: the band `church_reach` reads, and the Church
+from ...queries.person_q import believed_clock                              # B21d.06: the Church party's own believed CI
 from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
                              RUNG_KINDS, matter_of_record)
 from ...data.rosters import ACT_WHEN_KEYS, FACTION_BY_PROP, capability_rows, obstacle_bound, require_use_site, roster, when_holds
@@ -381,6 +384,48 @@ def _wound_levels(fx: Any, operands: dict) -> tuple:
     return [level] * n_subject, [level] * n_actor
 
 
+# ---------------------------------------------------------------------------------------------
+# THE `church_reach` SOURCE (v12 B21d.06, CR-89 commit (3): CI >= reach, "a sigma-leverage mu-shift for the Church's side where a Church party is opposed (never
+# an Ob reduction)"; `Fixtures ci_mu_shift_on`, H-636, shipped off): ONE named level, the smallest of `LEVEL_SIGMA` (`CHURCH_REACH_LEVEL`), FOR the roller where
+# he is of the Church and opposes a person who is not, AGAINST him where the person he acts on is of the Church and he is not -- each side only where THAT
+# Church party's own believed CI is at the band (`rosters.TRIGGER_BANDS`), read by `_church_reach_of`. The operand is `(levels for, levels against)` as
+# counts; `(0, 0)` with the switch off, and then nothing is read. [ASSUMPTION; medium; Jordan to correct; revert: the switch off]
+# ---------------------------------------------------------------------------------------------
+CHURCH_REACH = "church_reach"      # the roster member (`rosters.yaml: advantage_sources`) and its operand key
+#: the level one band's reach brings: the smallest `LEVEL_SIGMA` name, read off the table by its own order (no level is spelled here).
+CHURCH_REACH_LEVEL = min(LEVEL_SIGMA, key=LEVEL_SIGMA.get)
+
+
+def _church_reach_of(w: Any, actor: str, subject: Optional[str], own_only: bool = False) -> tuple:
+    """`(n for the roller, n against him)` of the `church_reach` source for `actor` acting on `subject`: 1 for the side that is of the Church
+    (`rosters.church_faction`, `faction_holding`) when the other is a person who is not, and that side's own believed CI (`person_q.believed_clock` over
+    `world_q.clock_events_by_claim`) is at the band `ci_mu_shift_on` reads. `own_only` (the believer's estimate, `odds_of`): the subject's belief is not
+    his to know, so the against-side is 0. `(0, 0)` with the switch off, for a non-person subject, and where neither side is of the Church."""
+    fx = w.fixtures
+    if not fx.get("ci_mu_shift_on") or not subject or subject == actor or subject not in w.persons:
+        return 0, 0
+    church = church_faction()
+    mine, theirs = faction_holding(w, actor) == church, faction_holding(w, subject) == church
+    if church is None or mine == theirs:
+        return 0, 0
+    if theirs and own_only:
+        return 0, 0
+    (name, band), = TRIGGER_BANDS["ci_mu_shift_on"]
+    believer = w.persons[actor if mine else subject]
+    reached = band_reached(believed_clock(believer, name, _world_q.clock_events_by_claim(w)), name, band, fx)
+    return (int(reached), 0) if mine else (0, int(reached))
+
+
+def _church_reach_levels(fx: Any, operands: dict) -> Optional[tuple]:
+    """THE `church_reach` SOURCE: `(levels for the roller, levels against him)`, `CHURCH_REACH_LEVEL` once per count of `operands["church_reach"]` -- or
+    `None`, NOT LISTED, where it brings none: the levels `resolve` returns reach the content hash, so a member added after the record's shape was pinned is
+    listed only where it weighs (the obstacle's `rank_gap` precedent, `_weighing`), and with the switch off the record is the one it was."""
+    n_for, n_against = operands.get(CHURCH_REACH, (0, 0))
+    if not (n_for or n_against):
+        return None
+    return [CHURCH_REACH_LEVEL] * n_for, [CHURCH_REACH_LEVEL] * n_against
+
+
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
 # returns the named levels it brings to an act, `fn(fixtures, operands) -> (levels for the roller, levels against him)`, each a
 # list of level names. THE ROSTER IS
@@ -402,15 +447,16 @@ def _bound_to(binding: dict, roster_name: str, law: str = "OBS §1 -- the roster
 
 
 ADVANTAGE_SOURCES = _bound_to({EFFORT: _effort_levels, CAPABILITY: _capability_levels, "proofs": _proof_levels, "favour": _favour_levels,
-                               OFFICE: _office_levels, WOUNDS: _wound_levels}, "advantage_sources",
+                               OFFICE: _office_levels, WOUNDS: _wound_levels, CHURCH_REACH: _church_reach_levels}, "advantage_sources",
                               law="CP-T01-05 -- the roster is the only door into the social roll's sigma term")
 
 
 def advantage_levels(fx: Any, operands: dict) -> tuple:
     """`((source, levels for the roller, levels against him), ...)`: every `advantage_sources` member's named levels for this act, in roster order
-    (a source with nothing to say carries two empty lists). THE ONE CALL OF EVERY SOURCE: `advantage_sigma` sums these and `resolve`'s `levels` counts
+    (a source with nothing to say carries two empty lists, but one that returns `None` -- `church_reach`, B21d.06 -- is not listed). THE ONE CALL OF EVERY SOURCE: `advantage_sigma` sums these and `resolve`'s `levels` counts
     them (OBS §5), so the sigma rolled and the levels recorded cannot disagree."""
-    return tuple((name, *ADVANTAGE_SOURCES[name](fx, operands)) for name in roster("advantage_sources", ordered=True))
+    return tuple((name, *got) for name in roster("advantage_sources", ordered=True)
+                 if (got := ADVANTAGE_SOURCES[name](fx, operands)) is not None)      # B21d.06: `None` is a source listed only where it weighs (`church_reach`)
 
 
 def advantage_sigma(fx: Any, operands: dict) -> float:
@@ -445,7 +491,10 @@ def _matter_subject(w: Any, topic: Optional[str]) -> Optional[str]:
 
 def _when_consequence_held(w: Any, ctx: Any, hearer: Any, want: bool) -> bool:
     """`consequence_held: true`: the ARGUER'S own ledger holds a deed claim about the matter's subject that the HEARER'S own pursuits score against (`person_q.holds_dispute`,
-    the one owner of that judgement, asked of a copy of the hearer carrying the arguer's ledger: his pursuits, stance and scars judge, and his own ledger is never opened)."""
+    the one owner of that judgement, asked of a copy of the hearer carrying the arguer's ledger: his pursuits, stance and scars judge, and his own ledger is never opened).
+    ⚠ B21d.05 (CR-88 (4)): `holds_dispute` reads the deed half of `grievance_against`, whose holdings rule reads the judge's `tenures`, so on this copy the HEARER'S
+    own live holds feed it while the ledger is the arguer's -- a deed the arguer reports on a seat the hearer holds is done to the hearer. Re-pointed with
+    the `dispute` stem's readers, so "a deed his pursuits score against" has one reading here and there (against only, distinct deeds)."""
     arguer, subject = w.persons.get(ctx.for_id), _matter_subject(w, ctx.topic)
     if arguer is None or subject is None or arguer is hearer:
         return not want
@@ -487,16 +536,17 @@ def _backed(w: Any, hearer: Any, ctx: Any) -> Optional[tuple]:
 
 
 def _advantage_operands(effort: int, edge: tuple, room_terms: dict, office: Optional[str] = None, regard: Optional[float] = None,
-                        body: Optional[tuple] = None, subject_body: Optional[tuple] = None) -> dict:
+                        body: Optional[tuple] = None, subject_body: Optional[tuple] = None, reach: tuple = (0, 0)) -> dict:
     """WHAT THE ACT BRINGS, named once: `contest_input` and `believed_input` both reach the sources through here, so they cannot diverge.
     `office` is `_seat_modifier`'s answer for the seat the act is exercised through (B05.20), the host's own read, `None` for none. `regard` is
     `_regard_of`'s answer (B05.21), the counterparty's signed stance in the clamp unit, `None` where no one person stands alone opposite.
     `body` is `(body, body_ceiling)` of the actor and `subject_body` the same of a person subject (B05.60, the `wounds` source's operands); a
-    subject whose body is not the reader's to know (`believed_input`) is `None`, which reads as nothing lost."""
+    subject whose body is not the reader's to know (`believed_input`) is `None`, which reads as nothing lost. `reach` is `_church_reach_of`'s counts (B21d.06),
+    `(0, 0)` for none."""
     body_op = {} if body is None else {"body": body[0], "body_ceiling": body[1]}
     subject_op = {} if subject_body is None else {"subject_body": subject_body[0], "subject_body_ceiling": subject_body[1]}
     return {EFFORT: effort, EDGE: edge, "proofs": room_terms.get("proofs", 0.0), "reception": room_terms.get("reception", 0.0), OFFICE: office,
-            "regard": regard, **body_op, **subject_op}
+            "regard": regard, CHURCH_REACH: reach, **body_op, **subject_op}
 
 
 def _body_of(person: Any) -> Optional[tuple]:
@@ -614,6 +664,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     office = _seat_modifier(w, via, room)                                       # the seat's own level, where its bench is over the room (B05.20)
     regard = _regard_of(w, claimants[0], subject, room)                         # the counterparty's stance toward the actor, signed, in the clamp unit (B05.21)
     bodies = (_body_of(actor), _body_of(other))                                 # the `wounds` source's operands: his own body, and a person subject's (B05.60)
+    reach = _church_reach_of(w, claimants[0], subject)                          # the `church_reach` source's counts (B21d.06; `(0, 0)` with the switch off)
     counts = dict(rank_gap=_rank_gap_of(w, via, subject),                       # the subject's rank above the exercised seat (B21.09)
                   cross_chain=int(across_chains(w, via, seat)),                 # the named seat is of another chain than the exercised one (B21.61)
                   faction_power=_faction_power_of(w, via, subject) if seat is not None else 0)     # the holder's faction against the host's, where the act names a seat (B21.69)
@@ -626,8 +677,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
                     trail_concealment(w, examined, claimants[0]) if examined is not None and (GRADED_TASKS.get(verb) or {}).get("form") == FORM_INQUIRY else 0.0)
     inp = _frame(fx, pool, opposition, concealed, room_terms, effort, verb, edge, circumstance, office,
                  docketed=docketed, heard=room is not None, regard=regard, bodies=bodies, counts=counts,
-                 exhibits=_exhibits_of(w, case) if case is not None else (), side=_side_of(claimants[0], subject))
-    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
+                 exhibits=_exhibits_of(w, case) if case is not None else (), side=_side_of(claimants[0], subject), reach=reach)
+    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies, reach=reach)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
     chosen.update({id(r): (value, _circumstance_ob(fx, r, value)) for r, key, value in circumstance})
@@ -1109,7 +1160,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
            regard: Optional[float] = None, bodies: tuple = (None, None), counts: Optional[dict] = None,
-           exhibits: tuple = (), side: str = "for") -> SocialContestInput:
+           exhibits: tuple = (), side: str = "for", reach: tuple = (0, 0)) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -1122,7 +1173,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         ceiling_form=fx.get("ceiling_form"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
+        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies, reach=reach)),      # the one place the operands are named
         forgery_quality=forgery_quality,
         exhibits=exhibits, proof_level=fx.get("proof_level"), side=side, evidence_cap=fx.get("evidence_cap"),     # B24.21: the four the roll's `proof_levels` reads, carried RAW; leverage, never an obstacle operand
         **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
@@ -1177,7 +1228,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                    pool: float, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
                    effort: int = 0, office: Optional[str] = None, docketed: Optional[dict] = None,
-                   tick: int = 0, exhibits: tuple = ()) -> Optional[SocialContestInput]:
+                   tick: int = 0, exhibits: tuple = (), reach: tuple = (0, 0)) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
 
     AX-2: it reads `p` (his own ledger) and the fixtures, never the World; the
@@ -1260,7 +1311,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"), proofs=room["proofs"])
     return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance, office,
-                  docketed=docketed, heard=heard, bodies=(_body_of(p), None), exhibits=exhibits, side=_side_of(p.id, subject))      # his own body is his to know; another person's is not without a claim (B05.60)
+                  docketed=docketed, heard=heard, bodies=(_body_of(p), None), exhibits=exhibits, side=_side_of(p.id, subject),      # his own body is his to know; another person's is not without a claim (B05.60)
+                  reach=reach)      # B21d.06: the caller's `_church_reach_of(own_only=True)` -- his own Church's reach, never the other side's belief
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
@@ -1388,7 +1440,8 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
                          room=believed_room if case is None or believed_room is None else {**believed_room, "proofs": 0.0},
                          heard=room is not None, effort=effort, office=_seat_modifier(w, act.via, room),
                          docketed=_docketed_row(w, subject), tick=w.tick,
-                         exhibits=_exhibits_of(w, case, known=believer) if case is not None else ())
+                         exhibits=_exhibits_of(w, case, known=believer) if case is not None else (),
+                         reach=_church_reach_of(w, believer.id, subject, own_only=True))
     return None if inp is None else _odds_of_input(inp)
 
 

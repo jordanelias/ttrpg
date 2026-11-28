@@ -1,5 +1,5 @@
 """B10.31 (`02_CHAR_what_an_act_risks` edits 1-5) -- WHAT AN ACT RISKS: `decision/choose.py::score_terms`' `risk`, the tuple's fifth element
-(`(pursuit, stance, fit, aim, risk)`), on a candidate whose row contests a prize `rosters.yaml: bodily_prizes` lists. Lane: the season loop.
+(`(pursuit, stance, fit, aim, risk, duty)`), on a candidate whose row contests a prize `rosters.yaml: bodily_prizes` lists. Lane: the season loop.
 
     risk = - risk_gain * exposed * (1 - chance) * (1 + body_band_penalty) * nerve
 
@@ -71,7 +71,7 @@ def test_risk_is_zero_at_gain_zero_and_the_chance_is_not_asked():
     p = _person("p_risk_a")
     for v in exposed:
         t = _terms(p, v, 0.0, odds=odds)
-        assert len(t) == 5 and str(t[4]) == "0.0", (v, t)          # exactly 0.0, no sign of zero
+        assert len(t) == len(CH.TERM_NAMES) and str(t[4]) == "0.0", (v, t)          # exactly 0.0, no sign of zero
         assert CH.score_total(t) == t[0] + t[1] + t[2]
     assert asked == [], "the believed chance was asked at risk_gain 0"
     live = [_terms(p, v, 1.0, odds=odds)[4] for v in exposed]

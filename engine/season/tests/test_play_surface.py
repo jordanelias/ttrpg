@@ -33,6 +33,7 @@ from ..boot.realm import build_realm
 from ..data import files
 from ..data.requires import OWN_STATE_STEMS
 from ..data.verbs import VERB_TABLE
+from ..decision import options as O
 from ..decision.choose import _payload_of, _writing_bands
 from ..harness import populated as POP
 from ..harness import probes as P
@@ -219,6 +220,10 @@ def test_withheld_rows_are_own_state_only():
 
     def per_person(p, v, ranked, terms):
         for r in _offer(p, v).withheld:
+            if r.unmet == O.DUTY_UNMET:     # B21d.05: the duty decline, his own seat and his own ledger (`decision/options.py`), not a conjunct of the row
+                assert O.subject_is_opponent(VERB_TABLE[r.verb]), (p.id, r.verb, r.unmet)
+                checked[0] += 1
+                continue
             stems = set(VERB_TABLE[r.verb].requires_typed.stems()) if VERB_TABLE[r.verb].requires_typed is not None else set()
             own = stems & OWN_STATE_STEMS
             assert own, (p.id, r.verb, "withheld, but its cell asks no own-state stem", sorted(stems))

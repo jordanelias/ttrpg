@@ -395,7 +395,9 @@ def test_the_levels_are_the_sources_the_leverage_sums():
     fx = DEFAULT_FIXTURES
     operands = {"proofs": 2.5, "reception": 1.4}
     levels = sigma.advantage_levels(fx, operands)
-    assert tuple(n for n, _, _ in levels) == roster("advantage_sources", ordered=True) and [n for n, _, _ in levels][-4:] == ["proofs", "favour", "office", "wounds"], levels
+    # B21d.06: `church_reach` is listed only where it brings a level (its switch ships off; the levels reach the content hash), so here it is not.
+    assert tuple(n for n, _, _ in levels) == tuple(m for m in roster("advantage_sources", ordered=True) if m != "church_reach") \
+        and [n for n, _, _ in levels][-4:] == ["proofs", "favour", "office", "wounds"], levels
     by = {n: (f, a) for n, f, a in levels}
     assert by["proofs"] == (["minor"] * 3, []) and by["favour"] == (["major"] * 1, []), by                  # 2.5 and 1.4 round half up
     assert sigma.advantage_sigma(fx, operands) == 3 * 0.25 + 1.0
