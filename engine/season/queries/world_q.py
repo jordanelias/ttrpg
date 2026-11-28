@@ -4402,14 +4402,29 @@ def sitting_events_by_claim(w: World) -> dict:
     return _by_claim(w, {se.event: se for se in sitting_events(w, w.log)})
 
 
+def clock_claim_index(w: World) -> dict:
+    """v12 B21d.06: the barrier-scoped `{claim id: ClockEvent}` map (`clock_events_by_claim`, B21d.02's one owner of the Claim-to-Event link), built once per
+    barrier from one scan of the log, for the band triggers `questions_for` reads off each person's believed fold (barrier 2, once per person). Built only
+    when a trigger is on, so with every switch off nothing is read. It lives here and not in `queries/cache.py`, which imports this module: a function-local
+    import back would be a cycle the import-cycle test counts.
+
+    VALID FOR THE SAME REASON AND ONLY WHERE `cache.presence_index` IS: `questions_for` runs at barrier 2, after WITNESS (which discards at its entry and
+    deposits after), and nothing between writes the log; a direct caller that plants Events or claims between two asks must `w.discard_caches()`."""
+    return w.cache_at_barrier("clock_claims", lambda: clock_events_by_claim(w))
+
+
+def sitting_claim_index(w: World) -> dict:
+    """`clock_claim_index`'s sibling for the sittings breakdown counts (`sitting_events_by_claim`); same lifetime, same caveat."""
+    return w.cache_at_barrier("sitting_claims", lambda: sitting_events_by_claim(w))
+
+
 # v12 B21d.06 (CR-89 commit (3); A-47, A-103): THE BAND TRIGGERS, read world-side for the person, off HIS OWN BELIEVED folds (never `clock`, the true one).
 # Each is gated by its `Fixtures` switch (shipped off), and off nothing below is read. The two claim-to-Event maps are barrier indexes
-# (`queries/cache.py::clock_claim_index`, `sitting_claim_index`): `questions_for` runs at barrier 2, once per person, over one log.
+# (`clock_claim_index`, `sitting_claim_index`, below): `questions_for` runs at barrier 2, once per person, over one log.
 def believed_bands(w: World, p: Person) -> tuple:
     """THE CLOCK BANDS `p` BELIEVES THE REALM STANDS IN, `((clock, band), ...)` in roster order: each band whose threshold his own believed fold
     (`person_q.believed_clock`) is at or above (`rosters.band_reached`). Computed when asked, stored nowhere; `questions_for` stamps it on his head
     question (`Question.bands`) while a trigger reading it person-side is on (`TRIGGER_BANDS`' person-side three)."""
-    from .cache import clock_claim_index
     of_claim, fx = clock_claim_index(w), w.fixtures
     out = []
     for name, row in clock_rows().items():
@@ -4437,7 +4452,6 @@ def declare_occasion(w: World, p: Person) -> tuple:
     headed = {f for f in faction_props(w) if head(w, f) == p.id}
     if not headed or sovereign in headed:
         return ()
-    from .cache import clock_claim_index, sitting_claim_index
     of_clock = clock_claim_index(w)
     if theocratic and church_faction() in headed:
         (name, band), = TRIGGER_BANDS["ci_theocratic_occasion_on"]
@@ -4460,7 +4474,6 @@ def occasion_open(w: World, p: Person, ambition) -> bool:
     goal = _goals.goal(ambition)
     if goal is None or goal.occasion is None:
         return True
-    from .cache import clock_claim_index
     name, band = goal.occasion
     return band_reached(believed_clock(p, name, clock_claim_index(w)), name, band, w.fixtures)
 

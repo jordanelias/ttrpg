@@ -2614,7 +2614,7 @@ def _load_clocks(rows, kinds, factions) -> dict:
             if not isinstance(f, dict) or set(f) != {"kind", "sign", "weight", "actor_faction", "against"}:
                 bad.append(f"{where}: {f!r} is not `{{kind, sign, weight, actor_faction, against}}`")
                 continue
-            if f["kind"] not in kinds:
+            if kinds is not None and f["kind"] not in kinds:
                 bad.append(f"{where}: kind {f['kind']!r} is no Event kind any verb row emits (`EMITTED_KINDS`)")
             if isinstance(f["sign"], bool) or f["sign"] not in (1, -1):    # a feeder raises or lowers: the two directions are the shape
                 bad.append(f"{where}: sign {f['sign']!r} is not +1 or -1")
@@ -2639,13 +2639,17 @@ _CLOCKS: Optional[dict] = None
 
 
 def clocks() -> dict:
-    """THE CLOCK ROWS, `{name: ClockRow}`, loaded and refused once. Lazy, because the kinds a feeder may name are `data/verbs.py::EMITTED_KINDS`,
-    derived from the verb table, and `verbs` imports this module: it is read here at the first call, never at this module's import."""
+    """THE CLOCK ROWS, `{name: ClockRow}`, loaded and refused once. The one refusal that needs `data/verbs.py::EMITTED_KINDS` (a feeder naming a kind no verb
+    row emits) is `check_clock_kinds`, which `verbs` asks of itself at its own import: `verbs` imports this module, so this module names it nowhere."""
     global _CLOCKS
     if _CLOCKS is None:
-        from .verbs import EMITTED_KINDS
-        _CLOCKS = _load_clocks((_TABLES.get("clocks") or {}).get("rows"), EMITTED_KINDS, roster("factions"))
+        _CLOCKS = _load_clocks((_TABLES.get("clocks") or {}).get("rows"), None, roster("factions"))
     return _CLOCKS
+
+
+def check_clock_kinds(kinds) -> None:
+    """Refuse a clock feeder whose `kind` is outside `kinds` (`data/verbs.py::EMITTED_KINDS`): `verbs` calls it once its own table is derived."""
+    _load_clocks((_TABLES.get("clocks") or {}).get("rows"), kinds, roster("factions"))
 
 
 def _load_triggers(raw) -> tuple:
