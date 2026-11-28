@@ -60,6 +60,7 @@ from ..data.rosters import (
 )
 from ..data.rosters import clocks            # B21d.02: the clock rows `believed_clock` folds
 from .clock import clock_fold                # B21d.02: the one fold of a clock
+from .clock import sittings_failed_of        # B21d.03: the breaking point's count
 from ..state.carriers import Claim, Person, PersonInterior, Said, fade_of
 from .inputs import SIDE_SIGN, Item
 from ..state.ledgers import present_confidence
@@ -893,6 +894,36 @@ def believed_clock(p: Person, name: str, of_claim: dict) -> float:
         if ce is not None and c.predicate == ce.kind:
             seen[ce.event] = ce
     return clock_fold(seen.values(), clocks()[name])
+
+
+def believed_sittings_failed(p: Person, arrangement: str, window: int, of_claim: dict) -> int:
+    """v12 B21d.03 (CR-89 commit (2)): OF THE LAST `window` SITTINGS OF `arrangement` THAT `p` KNOWS OF, HOW MANY HE KNOWS DISPOSED OF NOTHING -- the one
+    count (`queries/clock.py::sittings_failed_of`) over the sittings' Events he holds a claim of, each Event once (`believed_clock`'s reading). `of_claim` is
+    `world_q.sitting_events_by_claim(w)`; a claim of his counts where it reports that Event's kind (`believed_clock`'s rule). A sitting he knows of only by
+    an Event that is not its determination reads to him as one that decided nothing. His sittings are ordered by tick, within a tick by his ledger's order.
+    Computed when asked, stored nowhere."""
+    seen = {}
+    for c in p.ledger:
+        se = of_claim.get(c.id)
+        if se is not None and c.predicate == se.kind:
+            seen.setdefault(se.event, se)
+    return sittings_failed_of(sorted(seen.values(), key=lambda se: se.tick), arrangement, window)
+
+
+#: v12 B21d.03: THE BAND BREAKDOWN READS -- the clock and the band of `rosters.yaml: tables.clocks` (B21d.02's roster) at or above which believed
+#: Turmoil is in crisis; the threshold is that band's Fixture (`turmoil_crisis`, H-633).
+BREAKDOWN_BAND = ("turmoil", "crisis")
+
+
+def believed_breakdown(p: Person, arrangement: str, of_clock: dict, of_sitting: dict, fx) -> bool:
+    """v12 B21d.03 (CR-89 commit (2); ED-IN-0341): DOES `p` BELIEVE THE REALM'S ORDER HAS BROKEN -- his believed Turmoil (`believed_clock`) at or above
+    the crisis band (`BREAKDOWN_BAND`) AND, of the last `fx breakdown_window` sittings of `arrangement` he knows of, at least `fx breakdown_sittings`
+    disposed of nothing (`believed_sittings_failed`) [ASSUMPTION; medium; Jordan to correct; revert: Turmoil alone]. `of_clock` and `of_sitting` are
+    `world_q.clock_events_by_claim(w)` and `world_q.sitting_events_by_claim(w)`. A conjunction read where used: nothing stores "broken"."""
+    name, band = BREAKDOWN_BAND
+    at = next(b.at for b in clocks()[name].bands if b.name == band)
+    return (believed_clock(p, name, of_clock) >= fx.get(at)
+            and believed_sittings_failed(p, arrangement, fx.get("breakdown_window"), of_sitting) >= fx.get("breakdown_sittings"))
 
 
 def refused_before(p: Person, kinds: tuple, subject: str, tick: int = 0, decay: int = 0) -> int:

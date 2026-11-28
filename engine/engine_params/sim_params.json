@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 132,
-    "total": 551,
-    "uncited": 419,
+    "total": 553,
+    "uncited": 421,
     "of_which_assumption_grade": 9
   },
-  "count": 551,
+  "count": 553,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 47,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 266,
+    "engine.season.settings": 268,
     "engine.season.realm": 9
   },
   "params": [
@@ -55923,6 +55923,28 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-633`",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.breakdown_sittings",
+      "name": "breakdown_sittings",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-634`, swept 1 / 2 (the source's, SHIPPED) / 3",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.breakdown_window",
+      "name": "breakdown_window",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-634`",
       "citation": null,
       "citation_grade": null
     },

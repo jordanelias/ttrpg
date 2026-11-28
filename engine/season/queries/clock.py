@@ -11,6 +11,10 @@ THE FOLD: from `row.start`, season by season in order of `ClockEvent.tick`, add 
 matches (its `kind`; its `actor_faction` unless the feeder's is `None`, "any"; a faction in its `against` unless the feeder's is
 `None`), cap that season's sum at `row.season_cap` either way (`None`: uncapped), then clamp the running total to
 `[row.lo, row.hi]`. An Event counts once per feeder it matches; the caller passes each Event once.
+
+v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT'S COUNT lives beside the fold for the same reason -- both sides read it
+(`world_q.sittings_failed` over the log, `person_q.believed_sittings_failed` over what a person holds), and `person_q` may not import `world_q`.
+`sittings_failed_of` takes sittings' Events ALREADY READ (`SittingEvent`, `world_q.sitting_events` their one reader) and counts; it reads no world.
 """
 from __future__ import annotations
 
@@ -49,3 +53,30 @@ def clock_fold(events: Iterable[ClockEvent], row) -> float:
             step = max(-row.season_cap, min(row.season_cap, step))
         value = max(row.lo, min(row.hi, value + step))
     return value
+
+
+class SittingEvent(NamedTuple):
+    """ONE EVENT OF A SITTING AS THE BREAKING POINT READS IT: `event`, its id; `sitting`, the act whose proceeding it was written by (`Event.causes[0]`:
+    a sitting is one act, and every Event the act emits carries it); `tick`, its `emitted_at`; `kind`; `arrangement`, the row the sitting was held under
+    (the head of `Event.ending`); `determined`, whether this Event is the determination (`data/verbs.py::DISPOSAL_EVENTS["determine"]`)."""
+    event: str
+    sitting: str
+    tick: int
+    kind: str
+    arrangement: str
+    determined: bool
+
+
+def sittings_failed_of(events: Iterable[SittingEvent], arrangement: str, window: int) -> int:
+    """OF THE LAST `window` SITTINGS OF `arrangement` AMONG `events`, HOW MANY DISPOSED OF NOTHING -- a sitting disposes of nothing when none of its
+    Events (here) is the determination. Sittings are ordered by their first Event's tick, then by the order `events` gives them (the log's). Pure: no
+    world, no store; `window` 0 reads 0."""
+    first: dict = {}
+    disposed: dict = {}
+    for n, e in enumerate(events):
+        if e.arrangement != arrangement:
+            continue
+        first.setdefault(e.sitting, (e.tick, n))
+        disposed[e.sitting] = disposed.get(e.sitting, False) or e.determined
+    last = sorted(first, key=first.get)[-window:] if window > 0 else []
+    return sum(1 for s in last if not disposed[s])

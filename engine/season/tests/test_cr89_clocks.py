@@ -12,11 +12,11 @@ from __future__ import annotations
 from dataclasses import replace
 
 from engine.season.boot.realm import build_realm
-from engine.season.data.rosters import clocks
+from engine.season.data.rosters import ENDING_HEAD, clocks
 from engine.season.harness.probes import apparatus_receipt
 from engine.season.queries import world_q as Q
 from engine.season.queries.clock import ClockEvent, clock_fold
-from engine.season.queries.person_q import believed_clock
+from engine.season.queries.person_q import believed_breakdown, believed_clock, believed_sittings_failed
 from engine.season.state.carriers import Act, Claim, Event
 from engine.season.state.ids import ROOT
 
@@ -126,3 +126,71 @@ def test_every_weight_zero_reproduces_the_start_values():
         zero = replace(row, feeders=tuple(replace(f, weight=0) for f in row.feeders))
         assert clock_fold(events, zero) == row.start, name
     assert (clock_fold(events, clocks()[CI]), clock_fold(events, clocks()[TURMOIL])) != (28, 0), "the log moves no clock at the shipped weights"
+
+
+# v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT. A sitting is one act a proceeding resolved, written on every Event the act emits
+# (`Event.ending`'s head names the arrangement, `loop/resolve.py::_proceeding_ending`); it disposes nothing when none of its Events is the
+# determination (`data/verbs.py::DISPOSAL_EVENTS["determine"]`). `world_q.sittings_failed` counts those among an arrangement's last `window` sittings
+# in the log; `person_q.believed_sittings_failed` the same over the sittings `p` holds a claim of; `person_q.believed_breakdown` is the conjunction.
+ROW = "parliamentary_debate"
+
+
+def _sit(w, n, kinds, arrangement=ROW, tick=None):
+    """Log ONE SITTING of `arrangement` as the fold writes one: an act (`determine` by the King) and one Event per kind of `kinds`, each caused by the
+    act and carrying the proceeding's head (`ENDING_HEAD`, the arrangement). Returns the Events."""
+    tick = w.tick if tick is None else tick
+    a = Act(f"a_sit_{n}", KING, "determine", payload={"subject": HEARER})
+    w.acts.append(a)
+    head = ((ENDING_HEAD, arrangement, "full", "closed", None),)
+    out = [Event(f"ev_sit_{n}_{k}", k, [], [a.id], tick, ending=head) for k in kinds]
+    w.log.extend(out)
+    return out
+
+
+def test_three_planted_sittings_that_dispose_nothing_read_three_and_one_determination_makes_two():
+    """Three sittings of one arrangement, each ending `matter.undetermined`, read 3 of the last 3; a `matter.determined` in the second sitting makes it
+    2; a sitting of another arrangement and an Event with no proceeding move neither; a fourth sitting that determined pushes the first out of the window
+    (1). The person twin: `HEARER` holding claims of sittings 1 and 3 believes 2, of 1 only believes 1, and a man holding none believes 0."""
+    w = build_realm(0)
+    assert Q.sittings_failed(w, ROW, 3) == 0, "a built realm with no sitting read a failed one"
+    s1, s2, s3 = (_sit(w, i, ["matter.undetermined"]) for i in range(3))
+    _sit(w, 9, ["matter.undetermined"], arrangement="council_of_state")
+    _plant(w, 9, "matter.undetermined")                       # act-caused, but no proceeding wrote it: no sitting
+    assert Q.sittings_failed(w, ROW, 3) == 3
+    w.log.append(Event("ev_sit_1_det", "matter.determined", [], list(s2[0].causes), w.tick, ending=s2[0].ending))
+    assert Q.sittings_failed(w, ROW, 3) == 2, "a determination in the sitting did not dispose of it"
+    assert Q.sittings_failed(w, "council_of_state", 3) == 1
+    _sit(w, 4, ["matter.determined"], tick=w.tick + 1)
+    assert Q.sittings_failed(w, ROW, 3) == 1, "the window did not drop the oldest sitting"
+    assert Q.sittings_failed(w, ROW, 4) == 2
+    _hold(HEARER, s1[0], w, 10)
+    _hold(HEARER, s3[0], w, 11)
+    _hold(CLERIC, s1[0], w, 12)
+    of_claim = Q.sitting_events_by_claim(w)
+    assert believed_sittings_failed(w.persons[HEARER], ROW, 3, of_claim) == 2
+    assert believed_sittings_failed(w.persons[CLERIC], ROW, 3, of_claim) == 1
+    assert believed_sittings_failed(w.persons[KING], ROW, 3, of_claim) == 0, "a man holding no claim believes a failed sitting"
+
+
+def test_breakdown_needs_both_believed_turmoil_and_failed_sittings():
+    """Believed breakdown is believed Turmoil at the crisis band (7) AND two failed sittings of the last three he knows of. The failed sittings'
+    `matter.undetermined` feed Turmoil too (one log). `HEARER`: 5 seizures + 2 failed sittings = Turmoil 7, 2 failed -> broken. `CLERIC`: 7 seizures + 1
+    failed sitting = Turmoil 8, 1 failed -> not. `KING`: 4 seizures + 2 failed sittings = Turmoil 6, 2 failed -> not. Nothing is stored: the world reads
+    the same before and after asking."""
+    w = build_realm(0)
+    fx = w.fixtures
+    assert (fx.get("breakdown_sittings"), fx.get("breakdown_window"), fx.get("turmoil_crisis")) == (2, 3, 7)
+    seized = [_plant(w, 100 + i, "rung.seized") for i in range(7)]
+    failed = [_sit(w, 200 + i, ["matter.undetermined"])[0] for i in range(2)]
+    n = iter(range(300, 400))
+    for pid, seen in ((HEARER, seized[:5] + failed), (CLERIC, seized + failed[:1]), (KING, seized[:4] + failed)):
+        for e in seen:
+            _hold(pid, e, w, next(n))
+    of_clock, of_sitting = Q.clock_events_by_claim(w), Q.sitting_events_by_claim(w)
+    read = {pid: (believed_clock(w.persons[pid], TURMOIL, of_clock), believed_sittings_failed(w.persons[pid], ROW, 3, of_sitting))
+            for pid in (HEARER, CLERIC, KING)}
+    assert read == {HEARER: (7, 2), CLERIC: (8, 1), KING: (6, 2)}, read
+    before = w.content_hash()
+    broken = {pid: believed_breakdown(w.persons[pid], ROW, of_clock, of_sitting, fx) for pid in (HEARER, CLERIC, KING)}
+    assert broken == {HEARER: True, CLERIC: False, KING: False}, broken
+    assert w.content_hash() == before, "asking for breakdown wrote something"

@@ -8980,6 +8980,19 @@ rows:
     cite:      "CR-89 commit (1) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b)); ED-IN-0343, ED-IN-0345; archived: ci_political_v30.md §2.1, §2.3, §2.4; victory_v30.md:678; peninsular_strain_v30.md §4.3. CONTROL: `engine/season/tests/test_cr89_clocks.py::test_every_weight_zero_reproduces_the_start_values`."
     source:    "workplan v12 B21d.02 (B21d's H block slot 1)"
 
+  - id:        H-634
+    tier:      1
+    hole:      "BREAKDOWN IS A CONJUNCTION WITH THE SOURCE'S COUNT, NOT MEASURED: believed Turmoil at or above the crisis band AND at least 2 of the last 3 sittings of the named arrangement the person knows of disposed of nothing. A sitting is one act a proceeding resolved (every Event it emits carries the proceeding's head, `Event.ending`); it disposes of nothing when none of its Events is `determine`'s disposal kind (`data/verbs.py::DISPOSAL_EVENTS`, `matter.determined`). A refusal before any sitting (`determine.refused` at the `quorum` clause, Fixture `bench_quorum`; `convene.refused`) carries no proceeding and is not counted, a narrowing of the source's `convene.refused` at `bench_quorum`. Nothing reads breakdown at B21d.03, so no run moves."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the count, the window and the conjunction (content, D-19: listed in the PR body); B21d.06 builds the trigger that reads it, B21d.08 flips it"
+    grade:     "assumption"
+    default:   "breakdown_sittings 2, breakdown_window 3, the conjunction with Turmoil [ASSUMPTION; medium; Jordan to correct; revert: Turmoil alone]"
+    site:      "`engine/season/data/fixtures.py::Fixtures` breakdown_sittings, breakdown_window; read by `queries/person_q.py::believed_breakdown` (over `believed_sittings_failed` and `believed_clock`); counted by `queries/clock.py::sittings_failed_of`, world-side `queries/world_q.py::sittings_failed`"
+    sweep:     ["breakdown_sittings 1", "breakdown_sittings 2 (SHIPPED)", "breakdown_sittings 3", "Turmoil alone (the revert)"]
+    unblocks:  "B21d.04 (CR-90's instrument reads the first breakdown), B21d.06 and B21d.08 (Turmoil at crisis with breakdown occasions a vassal head's war)"
+    cite:      "CR-89 commit (2) (`proposals/2026-11-05-unified-design-and-build-plan.md` Part 3 (b), `:132-133`); ED-IN-0341. FALSIFIER: `engine/season/tests/test_cr89_clocks.py::test_three_planted_sittings_that_dispose_nothing_read_three_and_one_determination_makes_two`; `::test_breakdown_needs_both_believed_turmoil_and_failed_sittings`."
+    source:    "workplan v12 B21d.03 (B21d's H block slot 2)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

@@ -49,6 +49,8 @@ from ..data.rosters import (
 )
 from ..data.rosters import clocks as clock_rows          # B21d.02: the clock rows `clock` and `clock_events_by_claim` fold
 from .clock import ClockEvent, clock_fold                # B21d.02: the one fold, and the Event as it reads one
+from .clock import SittingEvent, sittings_failed_of      # B21d.03: the breaking point's count, and the Event as it reads one
+from ..data.verbs import DISPOSAL_EVENTS                 # B21d.03: the determination's kind, `determine`'s disposal
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
 # v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
@@ -4345,13 +4347,52 @@ def clock_events_by_claim(w: World) -> dict:
     TRACE.query("clock_events_by_claim", "resolver")
     kinds = {f.kind for row in clock_rows().values() for f in row.feeders}
     fed = {e.id: e for e in w.log if e.kind in kinds}
-    attributed = {ce.event: ce for ce in clock_events(w, fed.values())}
+    return _by_claim(w, {ce.event: ce for ce in clock_events(w, fed.values())})
+
+
+def _by_claim(w: World, read: dict) -> dict:
+    """`{claim id: read[event id]}` for each claim WITNESS deposited from an Event `read` holds: every deposit emits `claim.deposited`, its change the
+    claim's id and its first cause the witnessed Event (`loop/witness.py::_deposit`). The one Claim-to-Event link the clocks and the sittings read."""
     out = {}
     for e in w.log:
-        if e.kind == _CLAIM_DEPOSITED and e.causes and e.causes[0] in attributed:
+        if e.kind == _CLAIM_DEPOSITED and e.causes and e.causes[0] in read:
             for c in e.changes:
-                out[c.subject] = attributed[e.causes[0]]
+                out[c.subject] = read[e.causes[0]]
     return out
+
+
+# v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT, read world-side. A SITTING is one act a proceeding resolved: the proceeding is written
+# on EVERY Event the act emits (`loop/resolve.py::_proceeding_ending`, B24p.20), its head naming the arrangement (`ending_arrangement`), so its Events are
+# the ones whose first cause is that act. It DISPOSES OF NOTHING when none of them is the determination, the kind `determine`'s disposal earns
+# (`data/verbs.py::DISPOSAL_EVENTS`): `matter.undetermined` (the Failure band), a refusal after the sitting, an adjournment. A refusal BEFORE any sitting
+# (`determine.refused` at the `quorum` clause, the Fixture `bench_quorum`; `convene.refused`) carries no proceeding and is no sitting.
+_DETERMINATION = DISPOSAL_EVENTS["determine"]
+
+
+def sitting_events(w: World, events) -> list:
+    """`events` (Events of `w.log`) AS THE BREAKING POINT READS THEM: one `queries/clock.py::SittingEvent` per Event a proceeding wrote (its ending has
+    a head), in their order; every other Event is left out. Read-only."""
+    TRACE.query("sitting_events", "resolver")
+    out = []
+    for e in events:
+        row = ending_arrangement(e)
+        if row is not None and e.causes:
+            out.append(SittingEvent(e.id, e.causes[0], e.emitted_at, e.kind, row, e.kind == _DETERMINATION))
+    return out
+
+
+def sittings_failed(w: World, arrangement: str, window: int) -> int:
+    """OF THE LAST `window` SITTINGS OF `arrangement` IN THE LOG, HOW MANY DISPOSED OF NOTHING (`queries/clock.py::sittings_failed_of` over
+    `sitting_events(w, w.log)`). Computed when asked, stored nowhere."""
+    TRACE.query("sittings_failed", "resolver")
+    return sittings_failed_of(sitting_events(w, w.log), arrangement, window)
+
+
+def sitting_events_by_claim(w: World) -> dict:
+    """`{claim id: SittingEvent}` -- for each claim WITNESS deposited from an Event a proceeding wrote, that Event as `sitting_events` reads it
+    (`_by_claim`). Built once for a reader of many persons (`person_q.believed_sittings_failed`'s `of_claim`). Read-only."""
+    TRACE.query("sitting_events_by_claim", "resolver")
+    return _by_claim(w, {se.event: se for se in sitting_events(w, w.log)})
 
 
 def claimed_rungs(w: World, war) -> tuple:

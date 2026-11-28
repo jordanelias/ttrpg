@@ -2008,6 +2008,14 @@ DEFAULT_FIXTURES = Fixtures(
     turmoil_crisis=7,                 # `H-633`
     # [JUSTIFIED: engine/season/hole_register.yaml H-633 -- the archived band (peninsular_strain_v30.md §4.3, Strain 9 Collapse)]
     turmoil_collapse=9,               # `H-633`
+    # v12 B21d.03 (CR-89 commit (2); ED-IN-0341): THE BREAKING POINT'S COUNT -- a person believes the realm's order broken when his believed Turmoil is
+    # at or above `turmoil_crisis` and at least `breakdown_sittings` of the last `breakdown_window` sittings he knows of disposed of nothing
+    # (`queries/person_q.py::believed_breakdown`). Nothing reads it at B21d.03 (B21d.06's trigger, shipped off, is the first), so these move no run.
+    # [ASSUMPTION; medium; Jordan to correct; revert: Turmoil alone]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-634 -- the source's "2 of the last 3" (CR-89), injected and swept]
+    breakdown_sittings=2,             # `H-634`, swept 1 / 2 (the source's, SHIPPED) / 3
+    # [JUSTIFIED: engine/season/hole_register.yaml H-634 -- the source's window, "the last 3" (CR-89)]
+    breakdown_window=3,               # `H-634`
 )
 
 #: `Fixtures evidence_from`'s two arms, the control first (the loader's refusal reads it; `sigma.py::_filed_case` reads the setting).
