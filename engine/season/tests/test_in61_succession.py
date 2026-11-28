@@ -307,14 +307,17 @@ def test_a_computed_or_hand_built_establish_of_an_unfillable_inheritance_seat_is
 
 def test_the_shipped_mappings_pass_their_import_checks():
     """CONTROL for the refusals below: the shipped `FILLED_BY`, `REVOCATION_DISPOSAL` and `successions`
-    pass, and `FILLED_BY` carries the first narrowing exactly (`inheritance` -> the claim basis alone)."""
+    pass, and `FILLED_BY` carries the first narrowing exactly (`inheritance` -> the claim basis, never `conferral`). RE-RECORDED AT v12
+    B21c.02 (v11 CR-35): `elected` and `inheritance` gain the determination's election arm (`determination`, `may_elect`); `elected` keeps
+    `conferral` until CR-35 (8) (B21c.03)."""
     G.check_filled_by()
     G.check_revocation_disposal()
     G.check_successions()
     assert set(G.FILLED_BY) == set(CONFERRAL_BASES) | {None} and "inheritance" in CONFERRAL_BASES
     assert G.FILLED_BY[None] == frozenset(), "a seat declaring no basis is filled by something"
-    assert G.FILLED_BY["inheritance"] == {G.CLAIM}
-    assert all(G.FILLED_BY[b] == {G.CONFERRAL} for b in ("appointed", "elected", "annex"))
+    assert G.FILLED_BY["inheritance"] == {G.CLAIM, G.DETERMINATION}
+    assert G.FILLED_BY["elected"] == {G.CONFERRAL, G.DETERMINATION}
+    assert all(G.FILLED_BY[b] == {G.CONFERRAL} for b in ("appointed", "annex"))
     assert G.REVOCATION_DISPOSAL["inheritance"] is None
 
 

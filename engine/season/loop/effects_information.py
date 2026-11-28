@@ -36,12 +36,12 @@ from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_CASE, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     adjourned_by, case_file_for, faction_holding, filings, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
      siege_pressed_by, slot_for, warrants_for, works_for, works_target, WAR_MOOD,
-    CLAIM_MOOD, claim_id, plot_held, plot_id, target_seat,
+    CLAIM_MOOD, claim_id, petitioned_seat, plot_held, plot_id, target_seat,
 )
 from ..state.carriers import Proposition, Record, Tenure, is_clock_stage
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
+    DISPOSABLE_KINDS, NO_CHANGE, PLOT_MOOD, PLOT_PREDICATE, SEAT_DISPOSAL, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
     may_warrant, may_wage, seat_faction,
 )
 from ..state.ids import H
@@ -198,9 +198,10 @@ def _determinable(row_id: str) -> bool:
     """B24.31 (NEG edit 5, C-07) -- WHETHER A DETERMINATION MAY DISPOSE OF `row_id`: its `disposes:` is a Tenure kind `determine` can open (`DISPOSABLE_KINDS`) AND its close is
     not `consent`. A `consent` row's agreement is each party's own (`close: consent`: nothing is adjudicated, `bench_basis: none`), so an edge a bench opened on it would be opened under
     the judge's act, not the act of the party it binds; its `oblige` is opened by that party's own act (the `oblige` verb, `own`-eligible, `_eff_oblige`). `open_case` asks it before it docks
-    and `_eff_determine` before it opens, so a matter is never docked for a determination that declines it forever."""
+    and `_eff_determine` before it opens, so a matter is never docked for a determination that declines it forever. v11 CR-35 (B21c.02): or its
+    `disposes:` is `SEAT_DISPOSAL`, the `hold` a determination opens on the seat the docketed petition names (`election`, `succession`)."""
     row = ARRANGEMENTS[row_id]
-    return row["disposes"] in DISPOSABLE_KINDS and row["close"] != "consent"
+    return (row["disposes"] in DISPOSABLE_KINDS or row["disposes"] == SEAT_DISPOSAL) and row["close"] != "consent"
 
 
 def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0, case=None) -> dict:
@@ -600,7 +601,10 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         (C-1's load check, REPORTED) reads: `arbitration` leaves that report with this line.
         REJECTED: a `hold` on a seat -- `04 §B.7`'s *"conferral: ... determine by <judging seats>"*,
         a determination FILLING a seat -- because a computed act carries one referent and that
-        reading needs two (whom, and which seat): `confer`'s 100% refusal at `★` is that trap.
+        reading needs two (whom, and which seat): `confer`'s 100% refusal at `★` is that trap. v11 CR-35 (B21c.02) answers it for a
+        row that `disposes: hold`: the second referent is the docketed petition's `terms` (`world_q.petitioned_seat`), and the `hold` opens
+        on THAT seat (`_disposal`'s `hold` literal), by the gate's election arm (`may_elect`) -- a hand-built route while no computed
+        docket item names an arrangement (`H-80`).
       * OWNED BY THE SUBJECT, the party the matter names -- C-1's owner, and `_eff_oblige`'s edge
         shape exactly (`subject` a person, `object` a seat).
       * ON THE SEAT EXERCISED (`via`) -- *"via the seat"*: the party is bound to the bench that bound
@@ -692,8 +696,14 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if row is not None and (row not in ARRANGEMENTS or not _determinable(row)):
         return NO_CHANGE                  # a hand-planted item naming no row `open_case` admits, or a `consent` row (B24.31: no edge under the judge's act)
     kind = ARRANGEMENTS[row]["disposes"] if row is not None else UNDECLARED_DISPOSAL
-    if any(t.kind == kind and t.subject == party and t.object == seat and t.live
-           for t in w.tenures):
+    # v11 CR-35 (B21c.02): A SEAT-FILLING ROW OPENS ITS `hold` ON THE SEAT THE DOCKETED PETITION NAMES (`petitioned_seat`), not on the seat
+    # exercised, and declines where that seat is held by anyone (one per object: a claim that executed first takes it) or names no seat.
+    if kind == SEAT_DISPOSAL:
+        seat = petitioned_seat(w, party)
+        if seat is None or any(t.kind == kind and t.object == seat and t.live for t in w.tenures):
+            return NO_CHANGE
+    elif any(t.kind == kind and t.subject == party and t.object == seat and t.live
+             for t in w.tenures):
         return NO_CHANGE
     nt = _disposal(w, a, party, seat, kind, res.degree if res is not None else None)
     if nt is None:
@@ -861,6 +871,10 @@ def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,
         return Tenure(tid, party, seat, "detain", since=w.tick, degree=degree)
     if kind == BAN_KIND:
         return Tenure(tid, party, seat, "ban", since=w.tick, degree=degree)
+    if kind == SEAT_DISPOSAL:
+        # v11 CR-35 (B21c.02) step 2, moved here from IN-61: the seat-`hold` an election or a contested succession opens -- `seat` is the
+        # seat FILLED (the petition's `terms`), never the bench's; `World.add_tenure` stamps its grant; the gate's election arm admits it.
+        return Tenure(tid, party, seat, "hold", since=w.tick, degree=degree)
     return None
 
 

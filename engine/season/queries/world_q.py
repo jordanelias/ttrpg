@@ -42,7 +42,7 @@ from ..data.rosters import (
     DECLARED, GROWN_KINDS, INVESTED, SEASONS_OF_YEAR, SEASON_BAND_FACTORS, SEASON_TERMS,
     MARCH_TARGET_KINDS, MATTERS, matter_of_record, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TALLY_AXES, TENURE_KINDS, TITLE_DOMAINS,
-    FACTION_CREED, faction_prop_id, factions_compatible, settlement_rung_id,
+    FACTION_CREED, faction_prop_id, factions_compatible, is_faction_proposition, settlement_rung_id,
     CASUS_GROUNDS,
     remove_distance, require_member, require_mortal_cause,
     roster_map,
@@ -71,6 +71,8 @@ from .person_q import (
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v12 B11.08: who holds a seat, and whether it is empty, as the ASKER's own claims say (`08_FI_01`); and the existence reading `questions_for` asks of a person subject.
 from .person_q import holders_named, vacant_named
+# v11 CR-35 (B21c.02): the seat a docketed election names is its petition's about-key (`petitioned_seat`).
+from .person_q import ABOUT_KEYS
 # B21b.18: how one person reads a seat-holder's standing, `plot_targets`' first reader (it had no game caller before).
 from .person_q import legitimacy
 # v12 B11.78: `contradicted_tellers` pairs a told cell against a fresh firsthand one by `record`'s own step (`contradicts`) and reads the teller's `record`.
@@ -102,7 +104,7 @@ from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-
 from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_of, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, SEAT_DISPOSAL, may_determine, may_elect, may_fill, may_revoke, purview_of, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
 from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
@@ -711,6 +713,24 @@ def docketed_under(w: World, matter: Optional[str]) -> set:
     return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
 
 
+def petitioned_seat(w: World, matter: Optional[str]) -> Optional[str]:
+    """v11 CR-35 (B21c.02) step 5: THE SEAT A DOCKETED ELECTION OR CONTESTED SUCCESSION IS ABOUT -- for the first item `docketed` lists for
+    `matter` whose arrangement row `disposes:` a `hold` (`state/gate.py::SEAT_DISPOSAL`), the `terms` of the petition it names
+    (`DOCKET_PETITION`; `person_q.ABOUT_KEYS`, the one owner of a Record kind's about-key) where they name an Office; else `None`. The seat is
+    the petition's terms: no ninth operand, no payload key. Read by `judging_set` (the electorate), `declared_votes_by_member` (what a vote
+    names), the precondition's `bench` stem and `_eff_determine` (where the `hold` opens), so the four cannot name two seats. `None` for
+    every computed item (`open_case` writes no arrangement, `H-80`), so no realm reading moves on it."""
+    for item in docketed(w, matter):
+        row = ARRANGEMENTS.get(item.get(DOCKET_ARRANGEMENT))
+        if row is None or row["disposes"] != SEAT_DISPOSAL:
+            continue
+        rec = w.records.get(item.get(DOCKET_PETITION))
+        said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+        seat = said.get(ABOUT_KEYS.get(rec.kind)) if rec is not None else None
+        return seat if isinstance(seat, str) and seat in w.offices else None
+    return None
+
+
 def proceeding_row(w: World, act) -> tuple:
     """B24p.16: THE PROCEEDING AN ACT OF A VERB THAT PROCEEDS OPENS -- `(row dict, form, move, item)`, the first entry of the verb row's `proceeds` whose
     `when` holds (RD §D.1). `hearer: cohort` asks `is_cohort` of the person the act addresses (the row's `opponent_operand`, as the fold names its
@@ -1043,14 +1063,26 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     (`may_determine`) asks both of the seat a determination is exercised through, and a bench
     listed here by one reading and admitted there by another is the disagreement §8 forbids.
     `test_field_deletions.py`/`test_stress_proceedings_rehost.py` pin them, and `ancestry` stays
-    trace-free."""
+    trace-free.
+
+    v11 CR-35 (B21c.02) step 3: `matter` IS WIRED FOR A ROW DISPOSING `hold`. Where the docket hears `matter` under such a row
+    (`petitioned_seat` names its seat S), the bench is THE ELECTORATE: the live holders of a seat granted `BENCH_BASIS` whose faction is S's
+    (`seat_faction`, the one owner), S excluded -- and NO CONTAINMENT WALK (`venue` is not read): the seat is his faction's wherever the
+    candidate stands, the reading the gate's election arm (`may_elect`) takes. Every other matter (every computed one) is benched as before."""
     TRACE.query("judging_set", "resolver")
+    elected = petitioned_seat(w, matter)
+    faction = seat_faction(w, elected) if elected is not None else None
     seats: list[str] = []
     for t in w.tenures:
         if t.kind != "hold" or not t.live or BENCH_BASIS not in t.granted_acts:
             continue
         off = w.offices.get(t.object)
-        if off is None or not sits_over(w, off, venue):
+        if off is None:
+            continue
+        if elected is not None:
+            if off.id == elected or faction is None or seat_faction(w, off.id) != faction:
+                continue
+        elif not sits_over(w, off, venue):
             continue
         if restrained(w, t.subject, DETAIN_KIND):      # B21.11: a detained holder exercises no seat, `may_determine` asks the same (`_seat_grants`)
             continue
@@ -1071,11 +1103,17 @@ def declared_votes_by_member(w: World, matter: str, row: dict) -> dict:
     (`boot/realm.py`'s creed Propositions), so a member's loyal creed counts for nobody unless the leader is the one on trial -- and then only if the
     creed's predicate names the disposal, which it does not. `names` is equality with the kind [ASSUMPTION; medium; Jordan to correct; revert: any
     Proposition about the party]. A commit is public where it is a `commit` edge, which every edge is here [HOOK: no edge carries a privacy]. A matter
-    with no place has no bench: `{}`."""
+    with no place has no bench: `{}`.
+    v11 CR-35 (B21c.02) step 7, A-14 (the vote is a draw on the voter; this is where his track starts, never a second count): FOR A ROW
+    DISPOSING `hold` the predicate names THE VACANT SEAT -- an elector's commit counts only if it is to an OUGHT whose subject is the candidate
+    and whose predicate is the seat the docketed petition's terms name (`petitioned_seat`) [ASSUMPTION; medium; Jordan to correct; revert: any
+    Proposition about the party]; a row whose petition names no seat reads `{}`."""
     venue = place_of(w, matter)
     if venue is None:
         return {}
-    kind, signed = row["disposes"], {}
+    kind, signed = (petitioned_seat(w, matter) if row["disposes"] == SEAT_DISPOSAL else row["disposes"]), {}
+    if kind is None:
+        return {}
     for member in dict.fromkeys(judging_set(w, venue, matter)):
         p = w.persons.get(member)
         if p is None:
@@ -3200,9 +3238,7 @@ def faction_props(w: World) -> frozenset:
     `commit` (`members`). A roster id whose Proposition the world lacks (a foreign faction not seated) is still in
     the set, as `FACTION_BY_PROP` always answered; a caller that needs the Proposition tests `w.propositions` too.
     ⚠ NO `TRACE.query` ROW: `faction_holding` reads it on `endings_reached`'s route, which must write none."""
-    mood, predicate = FACTION_CREED["mood"], FACTION_CREED["predicate"]
-    return frozenset(FACTION_BY_PROP).union(pid for pid, q in w.propositions.items()
-                                            if q.mood == mood and q.predicate == predicate)
+    return frozenset(FACTION_BY_PROP).union(pid for pid, q in w.propositions.items() if is_faction_proposition(pid, q))
 
 
 def faction_holding(w: World, subject: str) -> "str | None":
@@ -6474,7 +6510,14 @@ class WorldReader:
             # `may_determine`, the `determination` basis whole: the seat is a judging seat the ACTOR
             # sits in, and its bench's ground holds the subject's home. Actor-relative through
             # `seat_hold`, which is why this reader holds the one actor it was built for.
-            return UNKNOWN if arg not in w.offices else may_determine(w, self._actor, arg, subject)
+            # v11 CR-35 (B21c.02): a matter docketed under a row disposing `hold` is judged by the gate's ELECTION arm instead
+            # (`may_elect` of the seat its petition names), so the fold refuses what that arm would raise.
+            if arg not in w.offices:
+                return UNKNOWN
+            elected = petitioned_seat(w, subject)
+            if elected is not None:
+                return may_elect(w, self._actor, arg, subject, w.offices[elected])
+            return may_determine(w, self._actor, arg, subject)
         if stem == "bench.size":
             # `determine`'s quorum, the LEFT side: how many persons sit on the bench for the
             # subject's place -- `judging_set`, the one owner of the bench (`H-32`). Distinct

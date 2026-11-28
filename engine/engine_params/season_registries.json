@@ -559,6 +559,27 @@
             "docket:adjourned"
           ]
         },
+        "hold": {
+          "Overwhelming": [
+            "tenure:hold",
+            "regard+",
+            "precedent"
+          ],
+          "Success": [
+            "tenure:hold",
+            "regard+"
+          ],
+          "Partial": [
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "grievance",
+            "docket:other_forum"
+          ],
+          "impasse": [
+            "docket:other_forum"
+          ]
+        },
         "Record": {
           "Overwhelming": [
             "record:decree",
@@ -937,6 +958,56 @@
           "disposes": "oblige",
           "disposal_reach": "room",
           "standard": "plain"
+        },
+        {
+          "id": "election",
+          "rite": "default",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "polity",
+          "reason_lean": -0.1,
+          "close": "declared",
+          "quorum": 1,
+          "bench_basis": "determine",
+          "floor": "closed",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": true,
+          "appeal_basis": "none",
+          "interposed": [
+            "procedure"
+          ],
+          "admits": [],
+          "disposes": "hold",
+          "disposal_reach": "realm",
+          "standard": "routine"
+        },
+        {
+          "id": "succession",
+          "rite": "default",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "polity",
+          "reason_lean": -0.1,
+          "close": "declared",
+          "quorum": 1,
+          "bench_basis": "determine",
+          "floor": "closed",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": true,
+          "appeal_basis": "none",
+          "interposed": [
+            "procedure"
+          ],
+          "admits": [],
+          "disposes": "hold",
+          "disposal_reach": "realm",
+          "standard": "routine"
         }
       ]
     },
@@ -1684,6 +1755,128 @@
           "Community Leader": "community",
           "Family Head": "hearth",
           "Individual": "person"
+        }
+      },
+      "ladders": {
+        "crown": {
+          "faction": "Valorsmark",
+          "livery": true,
+          "posts": [
+            "Petitioner",
+            "Retainer",
+            "Crown Agent",
+            "Banneret",
+            "Crown Lieutenant",
+            "Seneschal",
+            "Inner Prince / Prince of the Realm",
+            "Crown-Adjacent / Regent-Designate"
+          ]
+        },
+        "hafenmark": {
+          "faction": "Hafenmark",
+          "livery": true,
+          "posts": [
+            "Petitioner",
+            "Advocate",
+            "Burgher",
+            "Alderman",
+            "Parliamentarian",
+            "Parliamentary Chair",
+            "Chancellor",
+            "Prime Parliamentarian / Speaker-Regent"
+          ]
+        },
+        "varfell": {
+          "faction": "Varfell",
+          "livery": true,
+          "posts": [
+            "Stranger",
+            "Huscarl",
+            "Thane",
+            "Lendmann",
+            "Senior Lendmann / Hersir",
+            "Jarl",
+            "Senior Jarl",
+            "High Thane / Jarl-Regent"
+          ]
+        },
+        "church": {
+          "faction": "Church of Solmund",
+          "livery": true,
+          "posts": [
+            "Catechumen",
+            "Lay Confessor",
+            "Deacon",
+            "Canon",
+            "Bishop's Delegate",
+            "Prelate",
+            "Cardinal",
+            "Confessor-Presumptive"
+          ]
+        },
+        "lowenritter": {
+          "faction": "L\u00f6wenritter",
+          "livery": true,
+          "posts": [
+            "Squire",
+            "Knight",
+            "Knight-Sergeant",
+            "Knight-Commander",
+            "Preceptor",
+            "Marshal of the Order",
+            "Grand Master-Designate",
+            "Grand Master"
+          ]
+        },
+        "riskbreaker": {
+          "faction": "Valorsmark",
+          "livery": false,
+          "posts": [
+            "Candidate",
+            "Operative",
+            "Senior Operative",
+            "Squad-Leader",
+            "Field-Commander",
+            "Deputy Commander",
+            "Riskbreaker Commander"
+          ]
+        },
+        "inquisitor": {
+          "faction": "Church of Solmund",
+          "livery": true,
+          "posts": [
+            "Inquisitor's Scribe",
+            "Junior Inquisitor",
+            "Inquisitor",
+            "Senior Inquisitor",
+            "Inquisitor-General",
+            "Grand Inquisitor"
+          ]
+        },
+        "templar": {
+          "faction": "Church of Solmund",
+          "livery": true,
+          "posts": [
+            "Templar Postulant",
+            "Templar",
+            "Templar-Sergeant",
+            "Templar Commander",
+            "Master-Templar",
+            "Grand Master of the Temple"
+          ]
+        },
+        "guild": {
+          "faction": "Guilds",
+          "livery": true,
+          "posts": [
+            "Apprentice",
+            "Journeyman",
+            "Free Master",
+            "Guild Master",
+            "Senior Guild Master",
+            "Comptroller-equivalent",
+            "Grand Guildmaster"
+          ]
         }
       },
       "founding": {
@@ -4866,7 +5059,7 @@
         "conferral_bases": {
           "source": "JORDAN, ED-IN-0256 ruling (2), 2026-09-18, VERBATIM: *\"appointed, elected, annex\"* -- HOW A SEAT IS FILLED. Plan position `13d-i`.",
           "open": false,
-          "note": "\u26a0 THE VALUES ARE THE RULING'S, THE SHAPE IS r2's (`proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md` \u00a7A.4). r2 spelled this roster `[confer, determine, succeed]`, keyed on the ACT that opens the hold; that list predates ED-IN-0256 and is superseded by it. The two vocabularies do not correspond by name, so no r2 seat's value carries over -- a seat's basis is authored against THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit. READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis). \u26a0 NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no election or annexation verb exists; narrowing `confer` to `appointed` would leave the other two seats fillable by nothing. v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *\"designated heir is not a verb but a status or title. the heir still has to claim their throne\"*. A seat declaring it is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (the first narrowing: `inheritance` to the claim basis alone; the other three keep `conferral`), and what a revocation of one costs is `REVOCATION_DISPOSAL[\"inheritance\"]` (nothing); both are refused at import unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two mappings' keys, `successions` and `off_king`'s basis (back to `null`).]",
+          "note": "\u26a0 THE VALUES ARE THE RULING'S, THE SHAPE IS r2's (`proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md` \u00a7A.4). r2 spelled this roster `[confer, determine, succeed]`, keyed on the ACT that opens the hold; that list predates ED-IN-0256 and is superseded by it. The two vocabularies do not correspond by name, so no r2 seat's value carries over -- a seat's basis is authored against THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit. READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis). v11 CR-35 (B21c.02, H-217 closed) ANSWERS WHICH ACT FILLS AN `elected` SEAT: `determine`, under the `election` arrangement (`arrangements.yaml`), by a judging seat of the seat's own faction -- the gate's election arm, `state/gate.py::may_elect`, which `FILLED_BY` names for `elected` (and for `inheritance`: the contested succession, the `succession` row). `elected` KEEPS `conferral` beside it until CR-35 (8)'s measured narrowing (B21c.03). `annex` is still filled by `confer` alone: no annexation act exists, and none is ruled. v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *\"designated heir is not a verb but a status or title. the heir still has to claim their throne\"*. A seat declaring it is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (the first narrowing: `inheritance` to the claim basis alone; the other three keep `conferral`), and what a revocation of one costs is `REVOCATION_DISPOSAL[\"inheritance\"]` (nothing); both are refused at import unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two mappings' keys, `successions` and `off_king`'s basis (back to `null`).]",
           "values": [
             "appointed",
             "elected",
@@ -5309,6 +5502,9 @@
             },
             {
               "id": "tenure:ban"
+            },
+            {
+              "id": "tenure:hold"
             },
             {
               "id": "office:contested"

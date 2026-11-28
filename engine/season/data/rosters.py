@@ -2124,6 +2124,14 @@ if set(FACTION_CREED) != {"mood", "predicate"} or not all(isinstance(v, str) and
         law="B21b.05 (IN-30) -- a creed Proposition is identified by its mood and predicate alone; any other key would be read by nothing")
 
 
+def is_faction_proposition(pid: str, prop=None) -> bool:
+    """IS `pid` A FACTION? (B21b.05, IN-30; the test moved here at B21c.02 so `state/gate.py`, which may not import `queries/`, asks the same
+    one.) A rostered faction id (`FACTION_BY_PROP`), or -- `prop` being the world's Proposition under `pid`, or `None` -- one of the creed
+    shape (`FACTION_CREED`): an EMERGED faction. `queries/world_q.py::faction_props` is this test over the world's Propositions."""
+    return pid in FACTION_BY_PROP or (prop is not None and prop.mood == FACTION_CREED["mood"]
+                                      and prop.predicate == FACTION_CREED["predicate"])
+
+
 def factions_compatible(a: str, b: str) -> bool:
     """MAY ONE PERSON BELONG TO BOTH `a` AND `b`? (B21.63, `16_PESSIMIST_FA_B` edit 3.) The two are FACTION NAMES, the roster's own
     (`FACTION_BY_PROP` turns a Proposition id into one). THE DEFAULT IS INCOMPATIBLE for two different rostered factions, and a

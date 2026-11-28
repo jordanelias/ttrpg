@@ -512,8 +512,8 @@ def test_a_docketed_matter_before_a_bench_reads_its_rows_standard_and_the_shippe
     shows `standard` at that level's size (`difficulty_ob`); under a `plain` row, and with nothing docketed, no `standard` is listed. The
     nine shipped rows carry T2's first values (commit 2, B05.23; `test_sc_tuning_tables.T2_FIRST_VALUES`). FALSIFIER: a non-`plain` row whose
     term list lacks `standard`, or a `plain` one that lists it."""
-    from .test_sc_tuning_tables import T2_FIRST_VALUES
-    assert len(ARR.ARRANGEMENTS) == 13 and {k: r["standard"] for k, r in ARR.ARRANGEMENTS.items()} == {**{k: "plain" for k in ARR.ARRANGEMENTS}, **T2_FIRST_VALUES}   # B24p.03: four new rows, each `plain`
+    from .test_sc_tuning_tables import CR35_STANDARDS, T2_FIRST_VALUES
+    assert len(ARR.ARRANGEMENTS) == 15 and {k: r["standard"] for k, r in ARR.ARRANGEMENTS.items()} == {**{k: "plain" for k in ARR.ARRANGEMENTS}, **T2_FIRST_VALUES, **CR35_STANDARDS}   # B24p.03: four new rows, each `plain`; B21c.02: two `routine`
     sizes = DEFAULT_FIXTURES.get("difficulty_ob")
     assert "standard" not in _speak_terms(R._judging_world()[0])                                # nothing docketed
     row = "arbitration"

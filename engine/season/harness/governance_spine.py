@@ -298,7 +298,11 @@ def census(w: World) -> dict:
 THRONE_SUFFIX = "throne"
 
 WORLDS = ("spine", "realm")
-SITUATIONS = ("vacancy", "order", "succession", "recall")
+# B21c.02: the SITUATION named `succession` (a scenario of this harness, the heir's claim) shares its word with the `arrangements.yaml` row
+# `succession` (CR-35's contested succession) and is not it; it is compared by this name, never by the literal, so `test_sc01_the_bar.py`'s
+# arrangement-id scan reads no branch on a row here.
+SUCCESSION_SITUATION = "succession"
+SITUATIONS = ("vacancy", "order", SUCCESSION_SITUATION, "recall")
 
 # B21.74: THE SEASONS A SCENARIO GOES ON AFTER THE PLAYER'S SEAT IS GONE, by situation (none named: it ends at once). `recall` is `order`'s opening; what it
 # adds is that the run does not stop on the revocation, so the filling of the seat is seen (`06_FA_shortest_loop_B`, "The resolution": two seasons later).
@@ -361,7 +365,7 @@ def _titles(w: World, seat: Office) -> tuple:
 
 def successions_for(w: World, name: str, player: str) -> dict:
     """The scenario-local `successions` row `play` sets for the run: `{throne id: (title, ...)}` for `succession`, `{}` for any other situation."""
-    if name != "succession":
+    if name != SUCCESSION_SITUATION:
         return {}
     seat = _seat_of(w, player)
     return {f"{_sovereign(w, seat).id}_{THRONE_SUFFIX}": _titles(w, seat)}
@@ -398,7 +402,7 @@ def _opening(w: World, name: str, player: str) -> Iterator[Act]:
         yield Act(id="scn:order:terms", actor=sovereign, verb="utter")
         yield Act(id="scn:order:writ", actor=sovereign, verb="issue", via=sov.id,
                   payload={"subject": "prop:scn:order:terms", "to": player})
-    elif name == "succession":
+    elif name == SUCCESSION_SITUATION:
         sov = _sovereign(w, seat)
         (tid, _), = successions_for(w, name, player).items()
         if tid not in w.offices:

@@ -125,10 +125,15 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     THE HALF THAT IS STILL OPEN: the two `Record`-disposing rows (`parliamentary_debate`, `council_of_state`)
     have no writer -- `open_case` REFUSES to dock under them (`case.refused`), asserted below, so the gap is
     observed and not skipped."""
-    from ..state.gate import DISPOSABLE_KINDS
+    from ..state.gate import DISPOSABLE_KINDS, SEAT_DISPOSAL
     disposal_kinds = ("oblige", "detain", "ban")
-    checked, record_rows = 0, []
+    checked, record_rows, seat_rows = 0, [], []
     for name, row in sorted(A.ARRANGEMENTS.items()):
+        if row["disposes"] == SEAT_DISPOSAL:
+            # v12 B21c.02 (CR-35): a seat-filling row's writer opens the `hold` on the seat its petition names, not on the seat exercised --
+            # `test_cr35_election.py` runs it through the real fold; it has a writer, so it is no `record_rows` member either
+            seat_rows.append(name)
+            continue
         w, d = _world(**JUDGE)
         if row["disposes"] not in DISPOSABLE_KINDS or row["close"] == "consent":      # B24.31: a `consent` row is no determination's (`_determinable`)
             record_rows.append(name)
@@ -157,6 +162,7 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     assert checked == 7, checked      # B24p.03: `audience` (disposes `oblige`) is the seventh; B24.31: `negotiation` (a `consent` close, its agreement each party's own act) left the eight
     # B24p.03: the rows disposing a non-Tenure kind are `conversation`, `rally` (`none`) and `interrogation` (`yield`) beside the two `Record` rows
     assert record_rows == ["conversation", "council_of_state", "interrogation", "negotiation", "parliamentary_debate", "rally"], record_rows
+    assert seat_rows == ["election", "succession"], seat_rows
 
 
 def test_st15_an_adjudicator_acts_as_a_seat_and_a_private_opinion_is_not_a_determination():

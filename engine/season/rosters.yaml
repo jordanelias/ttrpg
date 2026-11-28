@@ -3890,10 +3890,11 @@ rosters:
       `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate
       asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test
       `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis).
-      ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
-      declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
-      election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
-      two seats fillable by nothing.
+      v11 CR-35 (B21c.02, H-217 closed) ANSWERS WHICH ACT FILLS AN `elected` SEAT: `determine`, under the `election`
+      arrangement (`arrangements.yaml`), by a judging seat of the seat's own faction -- the gate's election arm,
+      `state/gate.py::may_elect`, which `FILLED_BY` names for `elected` (and for `inheritance`: the contested
+      succession, the `succession` row). `elected` KEEPS `conferral` beside it until CR-35 (8)'s measured narrowing
+      (B21c.03). `annex` is still filled by `confer` alone: no annexation act exists, and none is ruled.
       v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *"designated heir is
       not a verb but a status or title. the heir still has to claim their throne"*. A seat declaring it
       is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH
@@ -4234,6 +4235,7 @@ rosters:
       - {id: "tenure:oblige"}
       - {id: "tenure:detain"}
       - {id: "tenure:ban"}
+      - {id: "tenure:hold"}       # v11 CR-35 (B21c.02): the seat-`hold` an `election` or `succession` opens
       - {id: "office:contested"}
       - {id: "precedent"}
       - {id: "legitimacy+"}

@@ -30,7 +30,7 @@ from ..data.matrix import MATRIX, WriteClass
 from ..data.requires import Observation
 from ..data.rosters import (
     BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, FACTION_BY_PROP, HEAD_SEAT, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES,
-    SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
+    SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id, is_faction_proposition,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure, in_custody
@@ -215,9 +215,15 @@ BENCH_BASIS = "determine"
 # split, below), so *the kind the docketed row disposes* is the effect's to read, and the gate bounds
 # it by *a kind some row disposes* -- derived from `arrangements.yaml`, never listed here.
 UNDECLARED_DISPOSAL = "oblige"
+# v11 CR-35 (B21c.02): THE KIND A ROW DISPOSES WHEN IT FILLS A SEAT -- `election` and `succession` (`arrangements.yaml`) dispose a `hold`, and
+# the determination opens it on the seat the docketed petition's `terms` name (`world_q.petitioned_seat`), NEVER on the seat exercised: the
+# gate's election arm (`may_elect`) is its basis. So it is NOT a member of `DISPOSABLE_KINDS`, the kinds a determination opens ON `via`:
+# were it one, the clause below would admit a bench installing someone in its own seat, which no effect writes (the planted falsifier
+# `test_u7_remit.py` names). `loop/effects_information.py::_determinable` admits a row disposing either.
+SEAT_DISPOSAL = "hold"
 DISPOSABLE_KINDS = frozenset(
     {UNDECLARED_DISPOSAL} | {row["disposes"] for row in ARRANGEMENTS.values()
-                             if row["disposes"] in TENURE_KINDS})
+                             if row["disposes"] in TENURE_KINDS and row["disposes"] != SEAT_DISPOSAL})
 # `warrant` (v9 SC-03a, K-52) -- an OPENING of a `detain` on a SEAT, for a person the
 # exercised seat's purview reaches, by a seated holder whose grant carries `WARRANT_ACT`. Named for
 # the instrument that licenses an arrest, in the ordinary word. AUTHORITY-BOUND ON `via` AND READING
@@ -700,12 +706,18 @@ check_revocation_disposal()
 # (`filled_by`, or this module's attribute), `REVOCATION_DISPOSAL`'s rule, so an in-place mutation
 # reaches every reader [ASSUMPTION; medium; Jordan to correct; revert: no `FILLED_BY` (every basis
 # passes `confer`); the claim opens the throne only].
-FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRAL}),
-             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM}), None: frozenset()}
+# v11 CR-35 (B21c.02): `elected` and `inheritance` GAIN THE DETERMINATION'S ELECTION ARM (`determination`, `may_elect`): an elected seat
+# is filled by its faction's bench, and a vacant throne by a bench ruling between claimants (the contested succession). `elected` KEEPS
+# `conferral` here: dropping it is CR-35 (8)'s measured narrowing (B21c.03), not this item's. [ASSUMPTION; medium; Jordan to correct;
+# revert: drop `DETERMINATION` from both -- no seat is filled by a bench.] `has_filler` and `check_successions` do not count the arm: an
+# electorate may be empty (a seat whose faction holds no other judging seat stays vacant once vacated), and no computed docket item names
+# an election (REACH 0), so neither the found-a-seat precondition nor the import check moves on it.
+FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRAL, DETERMINATION}),
+             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM, DETERMINATION}), None: frozenset()}
 
 # The gate bases that OPEN a `hold` on a seat -- what a `FILLED_BY` value may name. Every other basis
 # refuses a seat-hold opening by construction (`T-m`'s seat carve-out; `handover` is non-seat only).
-_SEAT_OPENERS = frozenset({CONFERRAL, CLAIM})
+_SEAT_OPENERS = frozenset({CONFERRAL, CLAIM, DETERMINATION})
 
 
 def check_filled_by() -> None:
@@ -761,7 +773,7 @@ def check_successions() -> None:
                   for k in SUCCESSIONS if k in rows
                   and CLAIM not in FILLED_BY.get(rows[k].get("conferral"), ()))
     bad += sorted(f"{i} (conferral {r.get('conferral')!r}): no title passes it"
-                  for i, r in rows.items() if FILLED_BY.get(r.get("conferral")) == frozenset({CLAIM})
+                  for i, r in rows.items() if FILLED_BY.get(r.get("conferral"), frozenset()) & {CONFERRAL, CLAIM} == {CLAIM}
                   and i not in SUCCESSIONS)
     if bad:
         raise Unspecified(
@@ -1008,12 +1020,53 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     arrangement row disposes (`DISPOSABLE_KINDS`) and CLOSES `detain`/`ban` only
     (`RESTRAINT_KINDS`), and this predicate, the authority half, is asked unchanged for both. The clause sits BEFORE the `if seat is None`
     branch, so a disposal edge on the judging seat is judged here and never reaches `T-o`/`conferral`
-    (which claim every seat-`hold`); a `hold` is not a `DISPOSABLE_KIND` and no row disposes one."""
+    (which claim every seat-`hold`); a `hold` is not a `DISPOSABLE_KIND`: the rows that dispose one (`SEAT_DISPOSAL`) open it on ANOTHER
+    seat, by `may_elect` (CR-35, B21c.02)."""
     if not _seat_grants(w, actor, via, BENCH_BASIS):
         return False
     if party is None or party == actor or party not in w.persons:
         return False
     return sits_over(w, w.offices[via], home_of(w).get(party))
+
+
+# v11 CR-35 (B21c.02) step 1: THE CONFERRAL BASES WHOSE ELECTION ASKS THE PARTY'S FACTION. An `elected` seat is filled from its own faction
+# (the candidate holds a live `commit` to it, and to no second faction); an `inheritance` seat's contested succession drops the clause, so a
+# claimant of any faction may be judged (Baralta's claim, RS-23's contest). Every other basis the election arm does not open (`FILLED_BY`).
+_ELECTION_ASKS_FACTION = {"elected": True, "inheritance": False}
+
+
+def may_elect(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str], seat: Optional[Office],
+              besides: Optional[Tenure] = None) -> bool:
+    """THE DETERMINATION'S ELECTION ARM, AS ONE PREDICATE (v11 CR-35 step 1, B21c.02): may `actor`, exercising `via`, open a `hold` on `seat`
+    for `party` -- fill a seat by the bench's determination?
+
+    `may_determine`'s first two conjuncts, then the seat's: (1) `via` is a judging seat the actor sits in, not detained (`_seat_grants` of
+    `BENCH_BASIS`); (2) `party` is a person other than the actor who may sit (`may_sit`, B21.60); (3) `seat` is not `via`, and has no live
+    `hold` but `besides` (one per object -- the opened edge itself, when the gate asks after the write); (4) `FILLED_BY[seat.conferral]`
+    names `determination`; (5) `via`'s faction is `seat`'s (`seat_faction`, both sides) -- the electorate is the seat's own faction's bench;
+    (6) for an `elected` seat the party holds a LIVE `commit` to that faction's Proposition and none to a second faction Proposition
+    (`is_faction_proposition`, the one test) -- `may_muster`'s shape: the gate reads the Tenure and may not import `queries/`. The
+    contested succession (`inheritance`) drops (6).
+    NO CONTAINMENT WALK (`judging_set`'s electorate, step 3): an elector judges where he sits, and the seat filled is his faction's wherever
+    the candidate stands -- `may_determine`'s third conjunct (the bench's ground holds the party) is the disposal-on-`via` rule, not this.
+    TWO READERS, `may_fill`'s shape: the precondition's `bench` stem asks it BEFORE the write (`besides` `None`) and `tenure_write_basis`
+    AFTER (`besides` the opened edge), so the fold refuses (`determine.refused`) what the gate would raise."""
+    if seat is None or not _seat_grants(w, actor, via, BENCH_BASIS) or via == seat.id:
+        return False
+    if party is None or party == actor or not may_sit(w, party):
+        return False
+    if DETERMINATION not in filled_by(seat):
+        return False
+    if any(t is not besides and t.kind == "hold" and t.object == seat.id and t.live for t in w.tenures):
+        return False
+    fac = seat_faction(w, seat.id)
+    if fac is None or seat_faction(w, via) != fac:
+        return False
+    if not _ELECTION_ASKS_FACTION.get(seat.conferral, True):
+        return True
+    commits = {c.object for c in w.persons[party].tenures if c.kind == "commit" and c.live}
+    others = {o for o in commits - {fac} if is_faction_proposition(o, w.propositions.get(o))}
+    return fac in commits and not others
 
 
 def may_warrant(w: "World", actor: Optional[str], via: Optional[str],
@@ -1393,7 +1446,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   the effect declines one -- one live disposal of a kind per person and seat,
                   `_req_oblige`'s rule). The term an opening carries is the opening act's
                   declaration (T-n), as `_eff_oblige`'s is, so it is the edge's own and not a write
-                  this basis judges.
+                  this basis judges. AND (v11 CR-35, B21c.02) ITS ELECTION ARM: an OPENING of a
+                  `hold` on a seat OTHER than `via`, by `may_elect` -- a bench of the seat's faction
+                  filling it (`election`), or ruling between claimants to a vacant throne
+                  (`succession`).
       `warrant`   an OPENING of a `detain` whose OBJECT is a seat, owned by a person other than
                   the actor, by `may_warrant` -- `via` a seat the actor sits in, granted
                   `WARRANT_ACT`, whose purview reaches where the prisoner is. v9 SC-03a, K-52;
@@ -1550,6 +1606,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
             and ((opened and t.kind in DISPOSABLE_KINDS)
                  or (closed and t.kind in RESTRAINT_KINDS))
             and may_determine(w, actor, via, t.subject)):
+        return DETERMINATION
+    # v11 CR-35 (B21c.02) step 1: THE ELECTION ARM -- the same basis, the other object. An OPENED `hold` on a SEAT OTHER THAN `via`, for a
+    # person `may_elect` admits (the seat vacant but for this edge, its basis opened by the determination, `via` of the seat's faction, and,
+    # for an `elected` seat, the party committed to that faction alone). Asked before `conferral` claims the seat-hold below, so a bench that
+    # also holds `confer` over the seat is judged as the bench it acts as.
+    if (opened and seat is not None and via is not None and t.object != via
+            and may_elect(w, actor, via, t.subject, seat, besides=t)):
         return DETERMINATION
     # B21b.16 (CP-T09-07 (a), AM-F-15): THE RETENTION. An OPENED `oblige` on the seat exercised, owned by another person, that is an OATH (not a bench's
     # imposed edge: `determination`'s) -- by a seated holder granted `RETAIN_ACT` (`may_retain`). Opening only: the man's own way out is `release`, `T-m`.

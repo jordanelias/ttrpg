@@ -736,7 +736,7 @@ def test_sc03a_open_case_declines_an_arrangement_it_cannot_dispose_and_a_malform
     Mutation: drop the `disposes` test in `_eff_open_case` (red: the Record row dockets); drop the
     `isinstance` guards (red: `TypeError` out of the fold)."""
     w, d = _world()
-    record_rows = [n for n, r in sorted(ARRANGEMENTS.items()) if r["disposes"] not in G.DISPOSABLE_KINDS]
+    record_rows = [n for n, r in sorted(ARRANGEMENTS.items()) if r["disposes"] not in G.DISPOSABLE_KINDS | {G.SEAT_DISPOSAL}]   # B21c.02: a seat-filling row docks (`_determinable`)
     assert record_rows, "fixture: no seeded row disposes a non-Tenure kind"
     for i, row in enumerate(record_rows):
         assert _kinds(_fold(w, d, _open(f"oc{i}", arrangement=row))) == ["case.refused"], row

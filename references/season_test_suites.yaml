@@ -73,6 +73,7 @@ suites:
     - cp_t02_06_continuations
     - cr25_computed_establish
     - cr32_ladders
+    - cr35_election
     - cr86_realm_structure
     - dispatch_sends
     - fa_decree_binds
